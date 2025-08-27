@@ -1,57 +1,178 @@
 <template>
-  <div id="tags-view-container" class="tags-view-container">
-    <scroll-pane ref="scrollPaneRef" class="tags-view-wrapper" @scroll="handleScroll">
-      <router-link
-        v-for="tag in visitedViews"
-        :key="tag.path"
-        :data-path="tag.path"
-        :class="isActive(tag) ? 'active' : ''"
-        :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
-        class="tags-view-item"
-        :style="activeStyle(tag)"
-        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
-        @contextmenu.prevent="openMenu(tag, $event)"
+  <div 
+    id="tags-view-container" 
+    class="flex items-center h-8 w-full shadow-sm"
+    style="background: var(--tags-bg, #fff); 
+           border-bottom: 1px solid var(--tags-item-border, #d8dce5);"
+  >
+    <!-- 标签滚动区域 -->
+    <div class="flex-1 overflow-hidden">
+      <scroll-pane 
+        ref="scrollPaneRef" 
+        class="h-full" 
+        @scroll="handleScroll"
       >
-        {{ tag.title }}
-        <span v-if="!isAffix(tag)" @click.prevent.stop="closeSelectedTag(tag)" class="close-btn">
-          <Close class="el-icon-close" />
-        </span>
-      </router-link>
-    </scroll-pane>
-    <ul v-show="visible" :style="{ left: left + 'px', top: top + 'px' }" class="contextmenu">
-      <li @click="refreshSelectedTag(selectedTag)">
-        <RefreshRight style="width: 1em; height: 1em;" /> 刷新页面
-      </li>
-      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">
-        <Close style="width: 1em; height: 1em;" /> 关闭当前
-      </li>
-      <li @click="closeOthersTags">
-        <CircleClose style="width: 1em; height: 1em;" /> 关闭其他
-      </li>
-      <li v-if="!isFirstView()" @click="closeLeftTags">
-        <Back style="width: 1em; height: 1em;" /> 关闭左侧
-      </li>
-      <li v-if="!isLastView()" @click="closeRightTags">
-        <Right style="width: 1em; height: 1em;" /> 关闭右侧
-      </li>
-      <li @click="closeAllTags(selectedTag)">
-        <CircleClose style="width: 1em; height: 1em;" /> 全部关闭
-      </li>
-    </ul>
+        <router-link
+          v-for="tag in visitedViews"
+          :key="tag.path"
+          :data-path="tag.path"
+          :class="[
+            'inline-flex items-center relative h-6 px-2 mx-1 first:ml-4 last:mr-4',
+            'border rounded text-xs cursor-pointer no-underline whitespace-nowrap',
+            'transition-all duration-200 ease-in-out hover:shadow-sm hover:-translate-y-px',
+            isActive(tag) ? 'text-white border-transparent shadow-sm' : ''
+          ]"
+          @mouseenter="e => {
+            if (!isActive(tag)) {
+              e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)'
+            }
+          }"
+          @mouseleave="e => {
+            if (!isActive(tag)) {
+              e.target.style.backgroundColor = 'var(--tags-item-bg, #fff)'
+            }
+          }"
+          :style="isActive(tag) ? { 
+            background: theme, 
+            borderColor: theme,
+            color: '#fff'
+          } : {
+            color: 'var(--tags-item-text, #495060)',
+            background: 'var(--tags-item-bg, #fff)',
+            borderColor: 'var(--tags-item-border, #d8dce5)'
+          }"
+          :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+          @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+          @dblclick="!isAffix(tag) ? closeSelectedTag(tag) : ''"
+          :title="tag.title.length > 10 ? tag.title : ''"
+        >
+          <span 
+            v-if="isActive(tag)" 
+            class="inline-block w-2 h-2 bg-white rounded-full mr-1 
+                   animate-pulse"
+          ></span>
+          <span class="flex-1 overflow-hidden text-ellipsis">
+            {{ tag.title }}
+          </span>
+          <span 
+            v-if="!isAffix(tag)" 
+            @click.prevent.stop="closeSelectedTag(tag)" 
+            class="flex items-center justify-center w-4 h-4 ml-1 
+                   rounded-full opacity-60 hover:opacity-100 
+                   transition-all duration-200 group"
+            :style="isActive(tag) ? {
+              color: '#fff'
+            } : {
+              color: 'var(--tags-item-text, #495060)'
+            }"
+            @mouseenter="e => {
+              if (isActive(tag)) {
+                e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+              } else {
+                e.target.style.backgroundColor = 'var(--tags-close-hover, rgba(0, 0, 0, 0.1))'
+              }
+            }"
+            @mouseleave="e => {
+              e.target.style.backgroundColor = 'transparent'
+            }"
+          >
+            <Close class="w-3 h-3" />
+          </span>
+        </router-link>
+      </scroll-pane>
+    </div>
+    
+    <!-- 右侧操作区域 -->
+    <div 
+      class="flex items-center gap-1 px-3"
+      style="border-left: 1px solid var(--tags-item-border, #d8dce5);"
+    >
+      <!-- 刷新当前页面按钮 -->
+      <div 
+        class="flex items-center justify-center w-6 h-6 rounded cursor-pointer 
+               transition-all duration-200" 
+        style="color: var(--tags-item-text, #495060);"
+        @click="refreshSelectedTag($route)" 
+        @mouseenter="e => {
+          e.target.style.color = 'var(--el-color-primary, #409eff)'
+          e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)'
+        }"
+        @mouseleave="e => {
+          e.target.style.color = 'var(--tags-item-text, #495060)'
+          e.target.style.backgroundColor = 'transparent'
+        }"
+        title="刷新当前页面 (Ctrl+R)"
+      >
+        <el-icon class="text-sm"><RefreshRight /></el-icon>
+      </div>
+      
+      <!-- 更多操作下拉菜单 -->
+      <el-dropdown trigger="click" @command="handleCommand">
+        <div 
+          class="flex items-center justify-center w-6 h-6 rounded cursor-pointer 
+                 transition-all duration-200" 
+          style="color: var(--tags-item-text, #495060);"
+          @mouseenter="e => {
+            e.target.style.color = 'var(--el-color-primary, #409eff)'
+            e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)'
+          }"
+          @mouseleave="e => {
+            e.target.style.color = 'var(--tags-item-text, #495060)'
+            e.target.style.backgroundColor = 'transparent'
+          }"
+          title="更多操作"
+        >
+          <el-icon class="text-sm"><MoreFilled /></el-icon>
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="refresh" :icon="RefreshRight">
+              刷新页面
+            </el-dropdown-item>
+            <el-dropdown-item 
+              v-if="visitedViews.length > 1"
+              command="closeOthers" 
+              :icon="CircleClose"
+            >
+              关闭其他标签
+            </el-dropdown-item>
+            <el-dropdown-item 
+              v-if="!isFirstView()"
+              command="closeLeft" 
+              :icon="Back"
+            >
+              关闭左侧标签
+            </el-dropdown-item>
+            <el-dropdown-item 
+              v-if="!isLastView()"
+              command="closeRight" 
+              :icon="Right"
+            >
+              关闭右侧标签
+            </el-dropdown-item>
+            <el-dropdown-item 
+              v-if="visitedViews.length > 1"
+              command="closeAll" 
+              :icon="CircleClose"
+            >
+              关闭所有标签
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+
   </div>
 </template>
 
 <script setup>
+import { MoreFilled, RefreshRight, CircleClose, Close, Back, Right } from '@element-plus/icons-vue'
 import ScrollPane from './ScrollPane'
 import { getNormalPath } from '@/utils/ruoyi'
 import useTagsViewStore from '@/store/modules/tagsView'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
 
-const visible = ref(false);
-const top = ref(0);
-const left = ref(0);
-const selectedTag = ref({});
 const affixTags = ref([]);
 const scrollPaneRef = ref(null);
 
@@ -67,16 +188,15 @@ watch(route, () => {
   addTags()
   moveToCurrentTag()
 })
-watch(visible, (value) => {
-  if (value) {
-    document.body.addEventListener('click', closeMenu)
-  } else {
-    document.body.removeEventListener('click', closeMenu)
-  }
-})
+
 onMounted(() => {
   initTags()
   addTags()
+  document.addEventListener('keydown', handleGlobalKeydown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleGlobalKeydown)
 })
 
 function isActive(r) {
@@ -92,16 +212,18 @@ function activeStyle(tag) {
 function isAffix(tag) {
   return tag.meta && tag.meta.affix
 }
-function isFirstView() {
+function isFirstView(view) {
   try {
-    return selectedTag.value.fullPath === '/index' || selectedTag.value.fullPath === visitedViews.value[1].fullPath
+    const target = view || { fullPath: route.fullPath }
+    return target.fullPath === '/index' || target.fullPath === visitedViews.value[1]?.fullPath
   } catch (err) {
     return false
   }
 }
-function isLastView() {
+function isLastView(view) {
   try {
-    return selectedTag.value.fullPath === visitedViews.value[visitedViews.value.length - 1].fullPath
+    const target = view || { fullPath: route.fullPath }
+    return target.fullPath === visitedViews.value[visitedViews.value.length - 1]?.fullPath
   } catch (err) {
     return false
   }
@@ -163,29 +285,65 @@ function refreshSelectedTag(view) {
   }
 }
 function closeSelectedTag(view) {
-  proxy.$tab.closePage(view).then(({ visitedViews }) => {
-    if (isActive(view)) {
-      toLastView(visitedViews, view)
-    }
-  })
+  // 添加关闭动画
+  const tagElement = document.querySelector(`[data-path="${view.path}"]`)
+  if (tagElement) {
+    tagElement.style.transform = 'scale(0.8)'
+    tagElement.style.opacity = '0'
+    
+    setTimeout(() => {
+      proxy.$tab.closePage(view).then(({ visitedViews }) => {
+        if (isActive(view)) {
+          toLastView(visitedViews, view)
+        }
+      })
+    }, 150)
+  } else {
+    // 如果找不到元素，直接关闭
+    proxy.$tab.closePage(view).then(({ visitedViews }) => {
+      if (isActive(view)) {
+        toLastView(visitedViews, view)
+      }
+    })
+  }
 }
 function closeRightTags() {
-  proxy.$tab.closeRightPage(selectedTag.value).then(visitedViews => {
+  const currentTag = {
+    path: route.path,
+    query: route.query,
+    fullPath: route.fullPath,
+    name: route.name,
+    meta: route.meta
+  }
+  proxy.$tab.closeRightPage(currentTag).then(visitedViews => {
     if (!visitedViews.find(i => i.fullPath === route.fullPath)) {
       toLastView(visitedViews)
     }
   })
 }
 function closeLeftTags() {
-  proxy.$tab.closeLeftPage(selectedTag.value).then(visitedViews => {
+  const currentTag = {
+    path: route.path,
+    query: route.query,
+    fullPath: route.fullPath,
+    name: route.name,
+    meta: route.meta
+  }
+  proxy.$tab.closeLeftPage(currentTag).then(visitedViews => {
     if (!visitedViews.find(i => i.fullPath === route.fullPath)) {
       toLastView(visitedViews)
     }
   })
 }
 function closeOthersTags() {
-  router.push(selectedTag.value).catch(() => { });
-  proxy.$tab.closeOtherPage(selectedTag.value).then(() => {
+  const currentTag = {
+    path: route.path,
+    query: route.query,
+    fullPath: route.fullPath,
+    name: route.name,
+    meta: route.meta
+  }
+  proxy.$tab.closeOtherPage(currentTag).then(() => {
     moveToCurrentTag()
   })
 }
@@ -212,136 +370,62 @@ function toLastView(visitedViews, view) {
     }
   }
 }
-function openMenu(tag, e) {
-  const menuMinWidth = 105
-  const offsetLeft = proxy.$el.getBoundingClientRect().left // container margin left
-  const offsetWidth = proxy.$el.offsetWidth // container width
-  const maxLeft = offsetWidth - menuMinWidth // left boundary
-  const l = e.clientX - offsetLeft + 15 // 15: margin right
-
-  if (l > maxLeft) {
-    left.value = maxLeft
-  } else {
-    left.value = l
-  }
-
-  top.value = e.clientY
-  visible.value = true
-  selectedTag.value = tag
-}
-function closeMenu() {
-  visible.value = false
-}
 function handleScroll() {
-  closeMenu()
+  // 滚动时可以添加其他逻辑
+}
+
+// 全局快捷键处理
+function handleGlobalKeydown(e) {
+  // Ctrl+W 关闭当前标签
+  if (e.ctrlKey && e.key === 'w') {
+    e.preventDefault()
+    const currentTag = visitedViews.value.find(tag => tag.path === route.path)
+    if (currentTag && !isAffix(currentTag)) {
+      closeSelectedTag(currentTag)
+    }
+  }
+  
+  // Ctrl+R 刷新当前页面
+  if (e.ctrlKey && e.key === 'r') {
+    e.preventDefault()
+    refreshSelectedTag(route)
+  }
+  
+  // Ctrl+Shift+T 重新打开最近关闭的标签（预留）
+  if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+    e.preventDefault()
+    // TODO: 实现重新打开逻辑
+    console.log('重新打开最近关闭的标签')
+  }
+}
+
+// 处理右侧操作按钮命令
+function handleCommand(command) {
+  const currentTag = {
+    path: route.path,
+    query: route.query,
+    fullPath: route.fullPath,
+    name: route.name,
+    meta: route.meta
+  }
+  
+  switch (command) {
+    case 'refresh':
+      refreshSelectedTag(currentTag)
+      break
+    case 'closeOthers':
+      closeOthersTags()
+      break
+    case 'closeLeft':
+      closeLeftTags()
+      break
+    case 'closeRight':
+      closeRightTags()
+      break
+    case 'closeAll':
+      closeAllTags(currentTag)
+      break
+  }
 }
 </script>
 
-<style lang="scss" scoped>
-.tags-view-container {
-  height: 34px;
-  width: 100%;
-  background: var(--tags-bg, #fff);
-  border-bottom: 1px solid var(--tags-item-border, #d8dce5);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
-  .tags-view-wrapper {
-    .tags-view-item {
-      display: inline-flex;
-      align-items: center;
-      position: relative;
-      cursor: pointer;
-      height: 26px;
-      line-height: 26px;
-      border: 1px solid var(--tags-item-border, #d8dce5);
-      color: var(--tags-item-text, #495060);
-      background: var(--tags-item-bg, #fff);
-      padding: 0 8px;
-      font-size: 12px;
-      margin-left: 5px;
-      margin-top: 4px;
-
-      &:first-of-type {
-        margin-left: 15px;
-      }
-
-      &:last-of-type {
-        margin-right: 15px;
-      }
-
-      &.active {
-        background-color: #42b983;
-        color: #fff;
-        border-color: #42b983;
-
-        &::before {
-          content: '';
-          background: #fff;
-          display: inline-block;
-          width: 8px;
-          height: 8px;
-          border-radius: 50%;
-          position: relative;
-          margin-right: 5px;
-        }
-      }
-    }
-  }
-  .contextmenu {
-    margin: 0;
-    background: var(--el-bg-color-overlay, #fff);
-    z-index: 3000;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--tags-item-text, #333);
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
-    border: 1px solid var(--el-border-color-light, #e4e7ed);
-
-    li {
-      margin: 0;
-      padding: 7px 16px;
-      cursor: pointer;
-
-      &:hover {
-        background: var(--tags-item-hover, #eee);
-      }
-    }
-  }
-}
-</style>
-
-<style lang="scss">
-//reset element css of el-icon-close
-.tags-view-wrapper {
-  .tags-view-item {
-    .close-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 4px;
-      padding: 2px;
-      border-radius: 50%;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
-      
-      &:hover {
-        background-color: var(--tags-close-hover, #b4bccc);
-      }
-    }
-    
-    .el-icon-close {
-      width: 12px;
-      height: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &:hover {
-        color: #fff;
-      }
-    }
-  }
-}
-</style>
