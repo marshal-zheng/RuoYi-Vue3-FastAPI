@@ -1,0 +1,245 @@
+#!/bin/bash
+
+# RuoYi-Vue3-FastAPI 一键启动脚本
+# 适用于 macOS 系统
+
+set -e  # 遇到错误立即退出
+
+echo "🚀 RuoYi-Vue3-FastAPI 一键启动脚本"
+echo "======================================"
+
+# 颜色定义
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# 检查是否为 macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    echo -e "${RED}❌ 此脚本仅支持 macOS 系统${NC}"
+    exit 1
+fi
+
+# 检查 Homebrew
+echo -e "${BLUE}📦 检查 Homebrew...${NC}"
+if ! command -v brew &> /dev/null; then
+    echo -e "${YELLOW}⚠️  Homebrew 未安装，正在安装...${NC}"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+    echo -e "${GREEN}✅ Homebrew 已安装${NC}"
+fi
+
+# 检查并安装系统依赖
+echo -e "${BLUE}🔧 检查系统依赖...${NC}"
+
+# 检查 MySQL
+if ! brew list mysql &> /dev/null; then
+    echo -e "${YELLOW}📥 安装 MySQL...${NC}"
+    brew install mysql
+else
+    echo -e "${GREEN}✅ MySQL 已安装${NC}"
+fi
+
+# 检查 Redis
+if ! brew list redis &> /dev/null; then
+    echo -e "${YELLOW}📥 安装 Redis...${NC}"
+    brew install redis
+else
+    echo -e "${GREEN}✅ Redis 已安装${NC}"
+fi
+
+# 检查 Node.js
+if ! command -v node &> /dev/null; then
+    echo -e "${YELLOW}📥 安装 Node.js...${NC}"
+    brew install node
+else
+    echo -e "${GREEN}✅ Node.js 已安装${NC}"
+fi
+
+# 检查 Python3
+if ! command -v python3 &> /dev/null; then
+    echo -e "${YELLOW}📥 安装 Python3...${NC}"
+    brew install python
+else
+    echo -e "${GREEN}✅ Python3 已安装${NC}"
+fi
+
+# 启动服务
+echo -e "${BLUE}🚀 启动系统服务...${NC}"
+brew services start mysql
+brew services start redis
+
+# 等待服务启动
+echo -e "${YELLOW}⏳ 等待服务启动...${NC}"
+sleep 5
+
+# 检查 MySQL 连接
+echo -e "${BLUE}🔍 检查 MySQL 连接...${NC}"
+if ! mysql -u root -e "SELECT 1" &> /dev/null; then
+    echo -e "${YELLOW}⚙️  初始化 MySQL...${NC}"
+    mysqld --initialize-insecure
+    brew services restart mysql
+    sleep 5
+fi
+
+# 创建数据库
+echo -e "${BLUE}🗄️  配置数据库...${NC}"
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`ruoyi-fastapi\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# 导入数据
+if [ -f "ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql" ]; then
+    echo -e "${BLUE}📊 导入数据库数据...${NC}"
+    mysql -u root ruoyi-fastapi < ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql
+    echo -e "${GREEN}✅ 数据库数据导入完成${NC}"
+else
+    echo -e "${RED}❌ 数据库文件不存在${NC}"
+    exit 1
+fi
+
+# 验证 Redis 连接
+echo -e "${BLUE}🔍 检查 Redis 连接...${NC}"
+if redis-cli ping | grep -q PONG; then
+    echo -e "${GREEN}✅ Redis 连接正常${NC}"
+else
+    echo -e "${RED}❌ Redis 连接失败${NC}"
+    exit 1
+fi
+
+# 设置后端环境
+echo -e "${BLUE}🐍 配置后端环境...${NC}"
+cd ruoyi-fastapi-backend
+
+# 创建虚拟环境
+if [ ! -d "venv" ]; then
+    echo -e "${YELLOW}📦 创建 Python 虚拟环境...${NC}"
+    python3 -m venv venv
+fi
+
+# 激活虚拟环境并安装依赖
+echo -e "${BLUE}📥 安装后端依赖...${NC}"
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+
+echo -e "${GREEN}✅ 后端依赖安装完成${NC}"
+
+# 配置后端数据库连接
+echo -e "${BLUE}⚙️  配置后端数据库连接...${NC}"
+if [ -f ".env.dev" ]; then
+    # 修改数据库密码为空（因为我们初始化MySQL时没有设置密码）
+    sed -i '' "s/DB_PASSWORD = 'mysqlroot'/DB_PASSWORD = ''/g" .env.dev
+    # 修改后端端口为8000（与前端代理配置一致）
+    sed -i '' "s/APP_PORT = 9099/APP_PORT = 8000/g" .env.dev
+    echo -e "${GREEN}✅ 后端配置已更新${NC}"
+else
+    echo -e "${RED}❌ 后端配置文件不存在${NC}"
+    exit 1
+fi
+
+# 返回项目根目录
+cd ..
+
+# 设置前端环境
+echo -e "${BLUE}🎨 配置前端环境...${NC}"
+cd ruoyi-fastapi-frontend
+
+# 修正前端代理配置
+echo -e "${BLUE}⚙️  配置前端代理...${NC}"
+if [ -f "vite.config.js" ]; then
+    # 修改代理端口为8000
+    sed -i '' "s/target: 'http:\/\/127.0.0.1:9099'/target: 'http:\/\/127.0.0.1:8000'/g" vite.config.js
+    echo -e "${GREEN}✅ 前端代理配置已更新${NC}"
+fi
+
+# 检查是否已安装依赖
+if [ ! -d "node_modules" ]; then
+    echo -e "${BLUE}📥 安装前端依赖...${NC}"
+    if command -v yarn &> /dev/null; then
+        yarn install
+    else
+        npm install
+    fi
+else
+    echo -e "${GREEN}✅ 前端依赖已安装${NC}"
+fi
+
+# 返回项目根目录
+cd ..
+
+# 创建启动脚本
+echo -e "${BLUE}📝 创建启动脚本...${NC}"
+cat > start_servers.sh << 'EOF'
+#!/bin/bash
+
+# 启动服务脚本
+echo "🚀 启动 RuoYi-Vue3-FastAPI 项目"
+echo "=============================="
+
+# 检查服务状态
+echo "🔍 检查服务状态..."
+if ! brew services list | grep mysql | grep -q started; then
+    echo "启动 MySQL..."
+    brew services start mysql
+fi
+
+if ! brew services list | grep redis | grep -q started; then
+    echo "启动 Redis..."
+    brew services start redis
+fi
+
+# 启动后端
+echo "🐍 启动后端服务..."
+cd ruoyi-fastapi-backend
+source venv/bin/activate
+python app.py &
+BACKEND_PID=$!
+echo "后端服务已启动 (PID: $BACKEND_PID)"
+cd ..
+
+# 等待后端启动
+sleep 3
+
+# 启动前端
+echo "🎨 启动前端服务..."
+cd ruoyi-fastapi-frontend
+if command -v yarn &> /dev/null; then
+    yarn dev &
+else
+    npm run dev &
+fi
+FRONTEND_PID=$!
+echo "前端服务已启动 (PID: $FRONTEND_PID)"
+cd ..
+
+echo ""
+echo "🎉 项目启动完成！"
+echo "前端地址: http://localhost:80"
+echo "后端地址: http://localhost:8000"
+echo ""
+echo "按 Ctrl+C 停止所有服务"
+
+# 等待用户中断
+trap 'echo "\n🛑 正在停止服务..."; kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit' INT
+wait
+EOF
+
+chmod +x start_servers.sh
+
+echo ""
+echo -e "${GREEN}🎉 环境配置完成！${NC}"
+echo -e "${BLUE}📋 使用说明：${NC}"
+echo -e "  • 运行 ${YELLOW}./start_servers.sh${NC} 启动项目"
+echo -e "  • 前端地址: ${YELLOW}http://localhost:80${NC}"
+echo -e "  • 后端地址: ${YELLOW}http://localhost:8000${NC}"
+echo -e "  • 默认账号: ${YELLOW}admin${NC} 密码: ${YELLOW}admin123${NC}"
+echo ""
+echo -e "${YELLOW}💡 提示: 首次运行可能需要等待几分钟来下载依赖${NC}"
+echo ""
+
+# 询问是否立即启动
+read -p "是否现在启动项目？(y/n): " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    ./start_servers.sh
+fi
