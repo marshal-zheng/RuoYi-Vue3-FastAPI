@@ -1,26 +1,87 @@
 import { titleCase } from '@/utils/index';
 import { trigger } from './config';
+
+// 文件大小单位映射接口
+interface Units {
+  [key: string]: string;
+}
+
+// 正则验证规则接口
+interface RegRule {
+  pattern: string;
+  message: string;
+}
+
+// 选项接口
+interface Option {
+  label: string;
+  value: any;
+  disabled?: boolean;
+}
+
+// Props配置接口
+interface PropsConfig {
+  props: {
+    value?: string;
+    label?: string;
+    children?: string;
+    [key: string]: any;
+  };
+}
+
+// 表单元素接口
+interface FormElement {
+  vModel?: string;
+  tag: string;
+  label?: string;
+  placeholder?: string;
+  defaultValue?: any;
+  multiple?: boolean;
+  required?: boolean;
+  regList?: RegRule[];
+  options?: Option[];
+  dataType?: string;
+  props?: PropsConfig;
+  action?: string;
+  'auto-upload'?: boolean;
+  fileSize?: number;
+  sizeUnit?: string;
+  accept?: string;
+  valueKey?: string;
+  labelKey?: string;
+  childrenKey?: string;
+  children?: FormElement[];
+}
+
+// 表单配置接口
+interface FormConfig {
+  fields: FormElement[];
+  formRef: string;
+  formModel: string;
+  formRules: string;
+}
+
 // 文件大小设置
-const units = {
+const units: Units = {
   KB: '1024',
   MB: '1024 / 1024',
   GB: '1024 / 1024 / 1024',
 };
+
 /**
- * @name: 生成js需要的数据
- * @description: 生成js需要的数据
- * @param {*} conf
- * @param {*} type 弹窗或表单
- * @return {*}
+ * 生成js需要的数据
+ * @param conf - 表单配置
+ * @param type - 弹窗或表单类型
+ * @returns 生成的JavaScript代码字符串
  */
-export function makeUpJs(conf, type) {
+export function makeUpJs(conf: FormConfig, type: string): string {
   conf = JSON.parse(JSON.stringify(conf));
-  const dataList = [];
-  const ruleList = [];
-  const optionsList = [];
-  const propsList = [];
-  const methodList = [];
-  const uploadVarList = [];
+  const dataList: string[] = [];
+  const ruleList: string[] = [];
+  const optionsList: string[] = [];
+  const propsList: string[] = [];
+  const methodList: string[] = [];
+  const uploadVarList: string[] = [];
 
   conf.fields.forEach(el => {
     buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList);
@@ -39,20 +100,19 @@ export function makeUpJs(conf, type) {
 
   return script;
 }
+
 /**
- * @name: 生成参数
- * @description: 生成参数，包括表单数据表单验证数据，多选选项数据，上传数据等
- * @return {*}
+ * 生成参数，包括表单数据表单验证数据，多选选项数据，上传数据等
  */
 function buildAttributes(
-  el,
-  dataList,
-  ruleList,
-  optionsList,
-  methodList,
-  propsList,
-  uploadVarList
-) {
+  el: FormElement,
+  dataList: string[],
+  ruleList: string[],
+  optionsList: string[],
+  methodList: string[],
+  propsList: string[],
+  uploadVarList: string[]
+): void {
   buildData(el, dataList);
   buildRules(el, ruleList);
 
@@ -89,16 +149,15 @@ function buildAttributes(
     });
   }
 }
+
 /**
- * @name: 生成表单数据formData
- * @description: 生成表单数据formData
- * @param {*} conf
- * @param {*} dataList 数据列表
- * @return {*}
+ * 生成表单数据formData
+ * @param conf - 表单元素配置
+ * @param dataList - 数据列表
  */
-function buildData(conf, dataList) {
+function buildData(conf: FormElement, dataList: string[]): void {
   if (conf.vModel === undefined) return;
-  let defaultValue;
+  let defaultValue: string;
   if (typeof conf.defaultValue === 'string' && !conf.multiple) {
     defaultValue = `'${conf.defaultValue}'`;
   } else {
@@ -106,16 +165,15 @@ function buildData(conf, dataList) {
   }
   dataList.push(`${conf.vModel}: ${defaultValue},`);
 }
+
 /**
- * @name: 生成表单验证数据rule
- * @description: 生成表单验证数据rule
- * @param {*} conf
- * @param {*} ruleList 验证数据列表
- * @return {*}
+ * 生成表单验证数据rule
+ * @param conf - 表单元素配置
+ * @param ruleList - 验证数据列表
  */
-function buildRules(conf, ruleList) {
+function buildRules(conf: FormElement, ruleList: string[]): void {
   if (conf.vModel === undefined) return;
-  const rules = [];
+  const rules: string[] = [];
   if (trigger[conf.tag]) {
     if (conf.required) {
       const type = Array.isArray(conf.defaultValue) ? "type: 'array'," : '';
@@ -141,14 +199,13 @@ function buildRules(conf, ruleList) {
     ruleList.push(`${conf.vModel}: [${rules.join(',')}],`);
   }
 }
+
 /**
- * @name: 生成选项数据
- * @description: 生成选项数据，单选多选下拉等
- * @param {*} conf
- * @param {*} optionsList 选项数据列表
- * @return {*}
+ * 生成选项数据，单选多选下拉等
+ * @param conf - 表单元素配置
+ * @param optionsList - 选项数据列表
  */
-function buildOptions(conf, optionsList) {
+function buildOptions(conf: FormElement, optionsList: string[]): void {
   if (conf.vModel === undefined) return;
   if (conf.dataType === 'dynamic') {
     conf.options = [];
@@ -156,50 +213,48 @@ function buildOptions(conf, optionsList) {
   const str = `const ${conf.vModel}Options = ref(${JSON.stringify(conf.options)})`;
   optionsList.push(str);
 }
+
 /**
- * @name: 生成方法
- * @description: 生成方法
- * @param {*} methodName 方法名
- * @param {*} model
- * @param {*} methodList 方法列表
- * @return {*}
+ * 生成方法
+ * @param methodName - 方法名
+ * @param model - 模型名
+ * @param methodList - 方法列表
  */
-function buildOptionMethod(methodName, model, methodList) {
+function buildOptionMethod(methodName: string, model: string, methodList: string[]): void {
   const str = `function ${methodName}() {
     // TODO 发起请求获取数据
     ${model}.value
   }`;
   methodList.push(str);
 }
+
 /**
- * @name: 生成表单组件需要的props设置
- * @description: 生成表单组件需要的props设置，如；级联组件
- * @param {*} conf
- * @param {*} propsList
- * @return {*}
+ * 生成表单组件需要的props设置，如级联组件
+ * @param conf - 表单元素配置
+ * @param propsList - props列表
  */
-function buildProps(conf, propsList) {
+function buildProps(conf: FormElement, propsList: string[]): void {
   if (conf.dataType === 'dynamic') {
-    conf.valueKey !== 'value' && (conf.props.props.value = conf.valueKey);
-    conf.labelKey !== 'label' && (conf.props.props.label = conf.labelKey);
-    conf.childrenKey !== 'children' && (conf.props.props.children = conf.childrenKey);
+    conf.valueKey !== 'value' && (conf.props!.props.value = conf.valueKey);
+    conf.labelKey !== 'label' && (conf.props!.props.label = conf.labelKey);
+    conf.childrenKey !== 'children' && (conf.props!.props.children = conf.childrenKey);
   }
   const str = `
   // props设置
-  const ${conf.vModel}Props = ref(${JSON.stringify(conf.props.props)})`;
+  const ${conf.vModel}Props = ref(${JSON.stringify(conf.props!.props)})`;
   propsList.push(str);
 }
+
 /**
- * @name: 生成上传组件的相关内容
- * @description: 生成上传组件的相关内容
- * @param {*} conf
- * @return {*}
+ * 生成上传组件的相关内容
+ * @param conf - 表单元素配置
+ * @returns 上传前验证函数字符串
  */
-function buildBeforeUpload(conf) {
-  const unitNum = units[conf.sizeUnit];
+function buildBeforeUpload(conf: FormElement): string {
+  const unitNum = units[conf.sizeUnit!];
   let rightSizeCode = '';
   let acceptCode = '';
-  const returnList = [];
+  const returnList: string[] = [];
   if (conf.fileSize) {
     rightSizeCode = `let isRightSize = file.size / ${unitNum} < ${conf.fileSize}
     if(!isRightSize){
@@ -216,10 +271,9 @@ function buildBeforeUpload(conf) {
   }
   const str = `
   /**
-   * @name: 上传之前的文件判断
-   * @description: 上传之前的文件判断，判断文件大小文件类型等
-   * @param {*} file
-   * @return {*}
+   * 上传之前的文件判断
+   * @param file - 上传的文件
+   * @returns 是否通过验证
    */  
   function ${conf.vModel}BeforeUpload(file) {
     ${rightSizeCode}
@@ -228,24 +282,41 @@ function buildBeforeUpload(conf) {
   }`;
   return returnList.length ? str : '';
 }
+
 /**
- * @name: 生成提交表单方法
- * @description: 生成提交表单方法
- * @param {Object} conf vModel 表单ref
- * @return {*}
+ * 生成提交表单方法
+ * @param conf - 表单元素配置
+ * @returns 提交上传函数字符串
  */
-function buildSubmitUpload(conf) {
+function buildSubmitUpload(conf: FormElement): string {
   const str = `function submitUpload() {
     this.$refs['${conf.vModel}'].submit()
   }`;
   return str;
 }
+
 /**
- * @name: 组装js代码
- * @description: 组装js代码方法
- * @return {*}
+ * 组装js代码
+ * @param conf - 表单配置
+ * @param type - 类型
+ * @param data - 数据
+ * @param rules - 验证规则
+ * @param selectOptions - 选项
+ * @param uploadVar - 上传变量
+ * @param props - 属性
+ * @param methods - 方法
+ * @returns 完整的JavaScript代码字符串
  */
-function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, methods) {
+function buildexport(
+  conf: FormConfig,
+  type: string,
+  data: string,
+  rules: string,
+  selectOptions: string,
+  uploadVar: string,
+  props: string,
+  methods: string
+): string {
   let str = `
     const { proxy } = getCurrentInstance()
     const ${conf.formRef} = ref()
@@ -276,33 +347,25 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
       // 弹窗确认回调
       const emit = defineEmits(['confirm'])
       /**
-       * @name: 弹窗打开后执行
-       * @description: 弹窗打开后执行方法
-       * @return {*}
+       * 弹窗打开后执行
        */
       function onOpen(){
 
       }
       /**
-       * @name: 弹窗关闭时执行
-       * @description: 弹窗关闭方法，重置表单
-       * @return {*}
+       * 弹窗关闭时执行，重置表单
        */
       function onClose(){
         ${conf.formRef}.value.resetFields()
       }
       /**
-       * @name: 弹窗取消
-       * @description: 弹窗取消方法
-       * @return {*}
+       * 弹窗取消
        */
       function close(){
         dialogVisible.value = false
       }
       /**
-       * @name: 弹窗表单提交
-       * @description: 弹窗表单提交方法
-       * @return {*}
+       * 弹窗表单提交
        */
       function handelConfirm(){
         ${conf.formRef}.value.validate((valid) => {
@@ -318,9 +381,7 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
   } else {
     str += `
     /**
-     * @name: 表单提交
-     * @description: 表单提交方法
-     * @return {*}
+     * 表单提交
      */
     function submitForm() {
       ${conf.formRef}.value.validate((valid) => {
@@ -329,9 +390,7 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
       })
     }
     /**
-     * @name: 表单重置
-     * @description: 表单重置方法
-     * @return {*}
+     * 表单重置
      */
     function resetForm() {
       ${conf.formRef}.value.resetFields()
@@ -340,3 +399,5 @@ function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, m
   }
   return str;
 }
+
+export type { FormElement, FormConfig, RegRule, Option, PropsConfig, Units };

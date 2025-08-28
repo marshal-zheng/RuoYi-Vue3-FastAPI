@@ -1,4 +1,231 @@
-export const formConf = {
+// 表单配置接口
+export interface FormConfig {
+  formRef: string;
+  formModel: string;
+  size: 'large' | 'default' | 'small';
+  labelPosition: 'left' | 'right' | 'top';
+  labelWidth: number;
+  formRules: string;
+  gutter: number;
+  disabled: boolean;
+  span: number;
+  formBtns: boolean;
+}
+
+// 正则验证规则接口
+export interface RegRule {
+  pattern: string;
+  message: string;
+}
+
+// 选项接口
+export interface Option {
+  label: string;
+  value: string | number;
+  disabled?: boolean;
+}
+
+// 级联选择器属性接口
+export interface CascaderProps {
+  props: {
+    multiple?: boolean;
+    value?: string;
+    label?: string;
+    children?: string;
+  };
+}
+
+// 自动调整大小接口
+export interface Autosize {
+  minRows: number;
+  maxRows: number;
+}
+
+// 样式接口
+export interface ComponentStyle {
+  width?: string;
+}
+
+// 基础组件配置接口
+export interface BaseComponent {
+  label: string;
+  tag: string;
+  tagIcon: string;
+  placeholder?: string;
+  defaultValue: any;
+  span: number;
+  labelWidth: number | null;
+  style?: ComponentStyle;
+  disabled: boolean;
+  required: boolean;
+  regList: RegRule[];
+  changeTag: boolean;
+  document: string;
+}
+
+// 输入组件接口
+export interface InputComponent extends BaseComponent {
+  type: 'text' | 'textarea' | 'password';
+  clearable?: boolean;
+  prepend?: string;
+  append?: string;
+  'prefix-icon'?: string;
+  'suffix-icon'?: string;
+  maxlength?: number | null;
+  'show-word-limit'?: boolean;
+  readonly?: boolean;
+  'show-password'?: boolean;
+  autosize?: Autosize;
+}
+
+// 数字输入组件接口
+export interface InputNumberComponent extends BaseComponent {
+  min?: number;
+  max?: number;
+  step?: number;
+  'step-strictly'?: boolean;
+  precision?: number;
+  'controls-position'?: string;
+}
+
+// 选择组件接口
+export interface SelectComponent extends BaseComponent {
+  clearable: boolean;
+  filterable: boolean;
+  multiple: boolean;
+  options: Option[];
+  dataType?: 'static' | 'dynamic';
+  labelKey?: string;
+  valueKey?: string;
+  childrenKey?: string;
+}
+
+// 级联选择器组件接口
+export interface CascaderComponent extends BaseComponent {
+  props: CascaderProps;
+  'show-all-levels': boolean;
+  clearable: boolean;
+  filterable: boolean;
+  options: Option[];
+  dataType: 'static' | 'dynamic';
+  labelKey: string;
+  valueKey: string;
+  childrenKey: string;
+  separator: string;
+}
+
+// 单选框组组件接口
+export interface RadioGroupComponent extends BaseComponent {
+  optionType: 'default' | 'button';
+  border: boolean;
+  size: 'large' | 'default' | 'small';
+  options: Option[];
+}
+
+// 多选框组组件接口
+export interface CheckboxGroupComponent extends BaseComponent {
+  optionType: 'default' | 'button';
+  border: boolean;
+  size: 'large' | 'default' | 'small';
+  options: Option[];
+}
+
+// 开关组件接口
+export interface SwitchComponent extends BaseComponent {
+  'active-text': string;
+  'inactive-text': string;
+  'active-color': string | null;
+  'inactive-color': string | null;
+  'active-value': boolean | string | number;
+  'inactive-value': boolean | string | number;
+}
+
+// 滑块组件接口
+export interface SliderComponent extends BaseComponent {
+  min: number;
+  max: number;
+  step: number;
+  'show-stops': boolean;
+  range: boolean;
+}
+
+// 时间选择器组件接口
+export interface TimePickerComponent extends BaseComponent {
+  clearable: boolean;
+  format: string;
+  'value-format': string;
+  'is-range'?: boolean;
+  'range-separator'?: string;
+  'start-placeholder'?: string;
+  'end-placeholder'?: string;
+}
+
+// 日期选择器组件接口
+export interface DatePickerComponent extends BaseComponent {
+  type: 'date' | 'daterange' | 'datetime' | 'datetimerange' | 'week' | 'month' | 'year';
+  clearable: boolean;
+  format: string;
+  'value-format': string;
+  readonly: boolean;
+  'range-separator'?: string;
+  'start-placeholder'?: string;
+  'end-placeholder'?: string;
+}
+
+// 评分组件接口
+export interface RateComponent extends BaseComponent {
+  max: number;
+  'allow-half': boolean;
+  'show-text': boolean;
+  'show-score': boolean;
+}
+
+// 颜色选择器组件接口
+export interface ColorPickerComponent extends BaseComponent {
+  'show-alpha': boolean;
+  'color-format': string;
+  size: 'large' | 'default' | 'small';
+  span: number;
+}
+
+// 上传组件接口
+export interface UploadComponent extends BaseComponent {
+  action: string;
+  accept: string;
+  name: string;
+  'auto-upload': boolean;
+  showTip: boolean;
+  buttonText: string;
+  fileSize: number;
+  sizeUnit: 'KB' | 'MB' | 'GB';
+  'list-type': 'text' | 'picture' | 'picture-card';
+  multiple: boolean;
+  tip: string;
+  span: number;
+}
+
+// 布局组件接口
+export interface LayoutComponent {
+  layout: 'rowFormItem' | 'colFormItem';
+  tagIcon: string;
+  label: string;
+  layoutTree?: boolean;
+  children?: any[];
+  document: string;
+  type?: string;
+  justify?: string;
+  align?: string;
+  changeTag?: boolean;
+  labelWidth?: number | null;
+  tag?: string;
+  span?: number;
+  default?: string;
+  icon?: string;
+  size?: string;
+  disabled?: boolean;
+}
+
+export const formConf: FormConfig = {
   formRef: 'formRef',
   formModel: 'formData',
   size: 'default',
@@ -11,7 +238,7 @@ export const formConf = {
   formBtns: true,
 };
 
-export const inputComponents = [
+export const inputComponents: InputComponent[] = [
   {
     label: '单行文本',
     tag: 'el-input',
@@ -103,10 +330,10 @@ export const inputComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/input-number',
-  },
+  } as any,
 ];
 
-export const selectComponents = [
+export const selectComponents: (SelectComponent | CascaderComponent | RadioGroupComponent | CheckboxGroupComponent | SwitchComponent | SliderComponent | TimePickerComponent | DatePickerComponent | RateComponent | ColorPickerComponent | UploadComponent)[] = [
   {
     label: '下拉选择',
     tag: 'el-select',
@@ -134,7 +361,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/select',
-  },
+  } as SelectComponent,
   {
     label: '级联选择',
     tag: 'el-cascader',
@@ -156,16 +383,8 @@ export const selectComponents = [
     required: true,
     options: [
       {
-        id: 1,
-        value: 1,
         label: '选项1',
-        children: [
-          {
-            id: 2,
-            value: 2,
-            label: '选项1-1',
-          },
-        ],
+        value: 1,
       },
     ],
     dataType: 'dynamic',
@@ -176,7 +395,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/cascader',
-  },
+  } as CascaderComponent,
   {
     label: '单选框组',
     tag: 'el-radio-group',
@@ -203,7 +422,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/radio',
-  },
+  } as RadioGroupComponent,
   {
     label: '多选框组',
     tag: 'el-checkbox-group',
@@ -230,7 +449,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/checkbox',
-  },
+  } as CheckboxGroupComponent,
   {
     label: '开关',
     tag: 'el-switch',
@@ -250,7 +469,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/switch',
-  },
+  } as SwitchComponent,
   {
     label: '滑块',
     tag: 'el-slider',
@@ -268,7 +487,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/slider',
-  },
+  } as SliderComponent,
   {
     label: '时间选择',
     tag: 'el-time-picker',
@@ -286,7 +505,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/time-picker',
-  },
+  } as TimePickerComponent,
   {
     label: '时间范围',
     tag: 'el-time-picker',
@@ -307,7 +526,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/time-picker',
-  },
+  } as TimePickerComponent,
   {
     label: '日期选择',
     tag: 'el-date-picker',
@@ -327,7 +546,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/date-picker',
-  },
+  } as DatePickerComponent,
   {
     label: '日期范围',
     tag: 'el-date-picker',
@@ -349,7 +568,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/date-picker',
-  },
+  } as DatePickerComponent,
   {
     label: '评分',
     tag: 'el-rate',
@@ -367,7 +586,7 @@ export const selectComponents = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/rate',
-  },
+  } as RateComponent,
   {
     label: '颜色选择',
     tag: 'el-color-picker',
@@ -381,8 +600,9 @@ export const selectComponents = [
     size: 'default',
     regList: [],
     changeTag: true,
+    span: 24,
     document: 'https://element-plus.org/zh-CN/component/color-picker',
-  },
+  } as ColorPickerComponent,
   {
     label: '上传',
     tag: 'el-upload',
@@ -406,10 +626,11 @@ export const selectComponents = [
     document: 'https://element-plus.org/zh-CN/component/upload',
     tip: '只能上传不超过 2MB 的文件',
     style: { width: '100%' },
-  },
+    span: 24,
+  } as UploadComponent,
 ];
 
-export const layoutComponents = [
+export const layoutComponents: LayoutComponent[] = [
   {
     layout: 'rowFormItem',
     tagIcon: 'row',
@@ -439,7 +660,7 @@ export const layoutComponents = [
 ];
 
 // 组件rule的触发方式，无触发方式的组件不生成rule
-export const trigger = {
+export const trigger: Record<string, string> = {
   'el-input': 'blur',
   'el-input-number': 'blur',
   'el-select': 'change',
