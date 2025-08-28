@@ -1,4 +1,18 @@
-export default {
+/// <reference types="vite/client" />
+
+interface SettingsConfig {
+  title: string
+  sideTheme: string
+  showSettings: boolean
+  topNav: boolean
+  tagsView: boolean
+  fixedHeader: boolean
+  sidebarLogo: boolean
+  dynamicTitle: boolean
+  errorLog: string | string[]
+}
+
+const settings: SettingsConfig = {
   /**
    * 网页标题
    */
@@ -45,3 +59,5 @@ export default {
    */
   errorLog: 'production'
 }
+
+export default settings

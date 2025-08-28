@@ -1,7 +1,7 @@
 import { designTokens } from './src/theme/tokens.js'
+import type { Config } from 'tailwindcss'
 
-/** @type {import('tailwindcss').Config} */
-export default {
+const config: Config = {
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}"
@@ -171,3 +171,5 @@ export default {
     }
   ],
 }
+
+export default config

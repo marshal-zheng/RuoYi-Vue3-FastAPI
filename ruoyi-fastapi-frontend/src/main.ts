@@ -76,7 +76,7 @@ directive(app)
 app.use(ElementPlus, {
   locale: locale,
   // 支持 large、default、small
-  size: Cookies.get('size') || 'default'
+  size: (Cookies.get('size') as 'large' | 'default' | 'small') || 'default'
 })
 
 app.mount('#app')

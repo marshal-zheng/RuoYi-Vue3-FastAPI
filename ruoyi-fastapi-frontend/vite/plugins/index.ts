@@ -1,12 +1,14 @@
 import vue from '@vitejs/plugin-vue'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import type { PluginOption } from 'vite'
 
 import createAutoImport from './auto-import'
 import createSvgIcon from './svg-icon'
 import createCompression from './compression'
 import createSetupExtend from './setup-extend'
 
-export default function createVitePlugins(viteEnv, isBuild = false) {
-    const vitePlugins = [vue()]
+export default function createVitePlugins(viteEnv: Record<string, string>, isBuild: boolean = false): PluginOption[] {
+    const vitePlugins: PluginOption[] = [vue(), vueJsx({})]
     vitePlugins.push(createAutoImport())
 	vitePlugins.push(createSetupExtend())
     vitePlugins.push(createSvgIcon(isBuild))

@@ -8,16 +8,38 @@ import { isRelogin } from '@/utils/request'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
+import type { RouteLocationNormalized, NavigationGuardNext, RouteRecordRaw } from 'vue-router'
+
+// 定义路由元信息接口
+interface RouteMeta {
+  title?: string
+  icon?: string
+  noCache?: boolean
+  link?: string
+}
+
+// 定义动态路由接口
+interface DynamicRoute {
+  name?: string
+  path: string
+  hidden?: boolean
+  redirect?: string
+  component?: any
+  query?: string
+  alwaysShow?: boolean
+  meta?: RouteMeta
+  children?: DynamicRoute[]
+}
 
 NProgress.configure({ showSpinner: false })
 
-const whiteList = ['/login', '/register']
+const whiteList: string[] = ['/login', '/register']
 
-const isWhiteList = (path) => {
+const isWhiteList = (path: string): boolean => {
   return whiteList.some(pattern => isPathMatch(pattern, path))
 }
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
   NProgress.start()
   if (getToken()) {
     to.meta.title && useSettingsStore().setTitle(to.meta.title)
@@ -33,16 +55,16 @@ router.beforeEach((to, from, next) => {
         // 判断当前用户是否已拉取完user_info信息
         useUserStore().getInfo().then(() => {
           isRelogin.show = false
-          usePermissionStore().generateRoutes().then(accessRoutes => {
+          usePermissionStore().generateRoutes().then((accessRoutes: DynamicRoute[]) => {
             // 根据roles权限生成可访问的路由表
-            accessRoutes.forEach(route => {
+            accessRoutes.forEach((route: DynamicRoute) => {
               if (!isHttp(route.path)) {
-                router.addRoute(route) // 动态添加可访问路由表
+                router.addRoute(route as RouteRecordRaw) // 动态添加可访问路由表
               }
             })
             next({ ...to, replace: true }) // hack方法 确保addRoutes已完成
           })
-        }).catch(err => {
+        }).catch((err: Error) => {
           useUserStore().logOut().then(() => {
             ElMessage.error(err)
             next({ path: '/' })
