@@ -1,15 +1,15 @@
 /// <reference types="vite/client" />
 
 interface SettingsConfig {
-  title: string
-  sideTheme: string
-  showSettings: boolean
-  topNav: boolean
-  tagsView: boolean
-  fixedHeader: boolean
-  sidebarLogo: boolean
-  dynamicTitle: boolean
-  errorLog: string | string[]
+  title: string;
+  sideTheme: string;
+  showSettings: boolean;
+  topNav: boolean;
+  tagsView: boolean;
+  fixedHeader: boolean;
+  sidebarLogo: boolean;
+  dynamicTitle: boolean;
+  errorLog: string | string[];
 }
 
 const settings: SettingsConfig = {
@@ -57,7 +57,7 @@ const settings: SettingsConfig = {
    * The default is only used in the production env
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
-  errorLog: 'production'
-}
+  errorLog: 'production',
+};
 
-export default settings
+export default settings;

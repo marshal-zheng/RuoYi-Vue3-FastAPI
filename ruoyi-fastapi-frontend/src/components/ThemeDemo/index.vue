@@ -39,7 +39,7 @@
     <!-- 按钮组件对比 -->
     <div class="theme-section">
       <h2 class="text-xl font-semibold text-theme-primary-text mb-4">按钮组件对比</h2>
-      
+
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Element Plus 按钮 -->
         <div class="theme-card p-6">
@@ -72,13 +72,19 @@
               <button class="theme-button danger">Danger</button>
             </div>
             <div class="flex flex-wrap gap-2">
-              <button class="px-4 py-2 border border-primary-500 text-primary-500 rounded-base hover:bg-primary-50 transition-colors">
+              <button
+                class="px-4 py-2 border border-primary-500 text-primary-500 rounded-base hover:bg-primary-50 transition-colors"
+              >
                 Plain
               </button>
-              <button class="px-4 py-2 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors">
+              <button
+                class="px-4 py-2 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors"
+              >
                 Round
               </button>
-              <button class="w-10 h-10 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors flex items-center justify-center">
+              <button
+                class="w-10 h-10 bg-primary-500 text-white rounded-full hover:bg-primary-600 transition-colors flex items-center justify-center"
+              >
                 +
               </button>
             </div>
@@ -90,7 +96,7 @@
     <!-- 表单组件对比 -->
     <div class="theme-section">
       <h2 class="text-xl font-semibold text-theme-primary-text mb-4">表单组件对比</h2>
-      
+
       <div class="grid md:grid-cols-2 gap-6">
         <!-- Element Plus 表单 -->
         <div class="theme-card p-6">
@@ -117,17 +123,17 @@
           <form class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-theme-secondary-text mb-1">用户名</label>
-              <input 
+              <input
                 v-model="tailwindForm.username"
-                class="theme-input w-full" 
+                class="theme-input w-full"
                 placeholder="请输入用户名"
               />
             </div>
             <div>
               <label class="block text-sm font-medium text-theme-secondary-text mb-1">邮箱</label>
-              <input 
+              <input
                 v-model="tailwindForm.email"
-                class="theme-input w-full" 
+                class="theme-input w-full"
                 placeholder="请输入邮箱"
               />
             </div>
@@ -147,7 +153,7 @@
     <!-- 卡片布局示例 -->
     <div class="theme-section">
       <h2 class="text-xl font-semibold text-theme-primary-text mb-4">卡片布局示例</h2>
-      
+
       <div class="grid md:grid-cols-3 gap-6">
         <!-- Element Plus 卡片 -->
         <el-card shadow="hover">
@@ -176,7 +182,9 @@
               使用 Tailwind CSS 构建的卡片，通过工具类快速实现样式。
             </p>
             <div class="flex justify-end">
-              <button class="px-3 py-1.5 bg-primary-500 text-white text-sm rounded-base hover:bg-primary-600 transition-colors">
+              <button
+                class="px-3 py-1.5 bg-primary-500 text-white text-sm rounded-base hover:bg-primary-600 transition-colors"
+              >
                 操作
               </button>
             </div>
@@ -206,8 +214,10 @@
       <h2 class="text-xl font-semibold text-theme-primary-text mb-4">主题切换演示</h2>
       <div class="theme-card p-6">
         <div class="flex items-center justify-between mb-4">
-          <span class="text-theme-primary-text">当前主题：{{ isDark ? '暗黑模式' : '亮色模式' }}</span>
-          <el-switch 
+          <span class="text-theme-primary-text"
+            >当前主题：{{ isDark ? '暗黑模式' : '亮色模式' }}</span
+          >
+          <el-switch
             v-model="isDark"
             @change="toggleTheme"
             active-text="暗黑"
@@ -224,38 +234,38 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { Plus } from '@element-plus/icons-vue'
+import { ref, onMounted } from 'vue';
+import { Plus } from '@element-plus/icons-vue';
 
 // 表单数据
 const form = ref({
   username: '',
   email: '',
-  status: ''
-})
+  status: '',
+});
 
 const tailwindForm = ref({
   username: '',
   email: '',
-  status: ''
-})
+  status: '',
+});
 
 // 主题切换
-const isDark = ref(false)
+const isDark = ref(false);
 
-const toggleTheme = (value) => {
-  const html = document.documentElement
+const toggleTheme = value => {
+  const html = document.documentElement;
   if (value) {
-    html.classList.add('dark')
+    html.classList.add('dark');
   } else {
-    html.classList.remove('dark')
+    html.classList.remove('dark');
   }
-}
+};
 
 // 初始化主题
 onMounted(() => {
-  isDark.value = document.documentElement.classList.contains('dark')
-})
+  isDark.value = document.documentElement.classList.contains('dark');
+});
 </script>
 
 <style scoped>
@@ -271,4 +281,3 @@ onMounted(() => {
   }
 }
 </style>
-

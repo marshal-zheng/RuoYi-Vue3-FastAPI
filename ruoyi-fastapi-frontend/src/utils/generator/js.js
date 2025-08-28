@@ -1,11 +1,11 @@
-import { titleCase } from '@/utils/index'
-import { trigger } from './config'
+import { titleCase } from '@/utils/index';
+import { trigger } from './config';
 // 文件大小设置
 const units = {
   KB: '1024',
   MB: '1024 / 1024',
   GB: '1024 / 1024 / 1024',
-}
+};
 /**
  * @name: 生成js需要的数据
  * @description: 生成js需要的数据
@@ -14,25 +14,17 @@ const units = {
  * @return {*}
  */
 export function makeUpJs(conf, type) {
-  conf = JSON.parse(JSON.stringify(conf))
-  const dataList = []
-  const ruleList = []
-  const optionsList = []
-  const propsList = []
-  const methodList = []
-  const uploadVarList = []
+  conf = JSON.parse(JSON.stringify(conf));
+  const dataList = [];
+  const ruleList = [];
+  const optionsList = [];
+  const propsList = [];
+  const methodList = [];
+  const uploadVarList = [];
 
-  conf.fields.forEach((el) => {
-    buildAttributes(
-      el,
-      dataList,
-      ruleList,
-      optionsList,
-      methodList,
-      propsList,
-      uploadVarList
-    )
-  })
+  conf.fields.forEach(el => {
+    buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList);
+  });
 
   const script = buildexport(
     conf,
@@ -43,9 +35,9 @@ export function makeUpJs(conf, type) {
     uploadVarList.join('\n'),
     propsList.join('\n'),
     methodList.join('\n')
-  )
-  
-  return script
+  );
+
+  return script;
 }
 /**
  * @name: 生成参数
@@ -60,21 +52,21 @@ function buildAttributes(
   methodList,
   propsList,
   uploadVarList
-){
-  buildData(el, dataList)
-  buildRules(el, ruleList)
+) {
+  buildData(el, dataList);
+  buildRules(el, ruleList);
 
   if (el.options && el.options.length) {
-    buildOptions(el, optionsList)
+    buildOptions(el, optionsList);
     if (el.dataType === 'dynamic') {
-      const model = `${el.vModel}Options`
-      const options = titleCase(model)
-      buildOptionMethod(`get${options}`, model, methodList)
+      const model = `${el.vModel}Options`;
+      const options = titleCase(model);
+      buildOptionMethod(`get${options}`, model, methodList);
     }
   }
 
   if (el.props && el.props.props) {
-    buildProps(el, propsList)
+    buildProps(el, propsList);
   }
 
   if (el.action && el.tag === 'el-upload') {
@@ -84,25 +76,17 @@ function buildAttributes(
       const ${el.vModel}Action = ref('${el.action}')
       // 上传文件列表
       const ${el.vModel}fileList =  ref([])`
-    )
-    methodList.push(buildBeforeUpload(el))
+    );
+    methodList.push(buildBeforeUpload(el));
     if (!el['auto-upload']) {
-      methodList.push(buildSubmitUpload(el))
+      methodList.push(buildSubmitUpload(el));
     }
   }
 
   if (el.children) {
-    el.children.forEach((el2) => {
-      buildAttributes(
-        el2,
-        dataList,
-        ruleList,
-        optionsList,
-        methodList,
-        propsList,
-        uploadVarList
-      )
-    })
+    el.children.forEach(el2 => {
+      buildAttributes(el2, dataList, ruleList, optionsList, methodList, propsList, uploadVarList);
+    });
   }
 }
 /**
@@ -113,14 +97,14 @@ function buildAttributes(
  * @return {*}
  */
 function buildData(conf, dataList) {
-  if (conf.vModel === undefined) return
-  let defaultValue
+  if (conf.vModel === undefined) return;
+  let defaultValue;
   if (typeof conf.defaultValue === 'string' && !conf.multiple) {
-    defaultValue = `'${conf.defaultValue}'`
+    defaultValue = `'${conf.defaultValue}'`;
   } else {
-    defaultValue = `${JSON.stringify(conf.defaultValue)}`
+    defaultValue = `${JSON.stringify(conf.defaultValue)}`;
   }
-  dataList.push(`${conf.vModel}: ${defaultValue},`)
+  dataList.push(`${conf.vModel}: ${defaultValue},`);
 }
 /**
  * @name: 生成表单验证数据rule
@@ -130,33 +114,31 @@ function buildData(conf, dataList) {
  * @return {*}
  */
 function buildRules(conf, ruleList) {
-  if (conf.vModel === undefined) return
-  const rules = []
+  if (conf.vModel === undefined) return;
+  const rules = [];
   if (trigger[conf.tag]) {
     if (conf.required) {
-      const type = Array.isArray(conf.defaultValue) ? "type: 'array'," : ''
+      const type = Array.isArray(conf.defaultValue) ? "type: 'array'," : '';
       let message = Array.isArray(conf.defaultValue)
         ? `请至少选择一个${conf.vModel}`
-        : conf.placeholder
-      if (message === undefined) message = `${conf.label}不能为空`
+        : conf.placeholder;
+      if (message === undefined) message = `${conf.label}不能为空`;
       rules.push(
-        `{ required: true, ${type} message: '${message}', trigger: '${
-          trigger[conf.tag]
-        }' }`
-      )
+        `{ required: true, ${type} message: '${message}', trigger: '${trigger[conf.tag]}' }`
+      );
     }
     if (conf.regList && Array.isArray(conf.regList)) {
-      conf.regList.forEach((item) => {
+      conf.regList.forEach(item => {
         if (item.pattern) {
           rules.push(
             `{ pattern: new RegExp(${item.pattern}), message: '${
               item.message
             }', trigger: '${trigger[conf.tag]}' }`
-          )
+          );
         }
-      })
+      });
     }
-    ruleList.push(`${conf.vModel}: [${rules.join(',')}],`)
+    ruleList.push(`${conf.vModel}: [${rules.join(',')}],`);
   }
 }
 /**
@@ -167,12 +149,12 @@ function buildRules(conf, ruleList) {
  * @return {*}
  */
 function buildOptions(conf, optionsList) {
-  if (conf.vModel === undefined) return
+  if (conf.vModel === undefined) return;
   if (conf.dataType === 'dynamic') {
-    conf.options = []
+    conf.options = [];
   }
-  const str = `const ${conf.vModel}Options = ref(${JSON.stringify(conf.options)})`
-  optionsList.push(str)
+  const str = `const ${conf.vModel}Options = ref(${JSON.stringify(conf.options)})`;
+  optionsList.push(str);
 }
 /**
  * @name: 生成方法
@@ -186,8 +168,8 @@ function buildOptionMethod(methodName, model, methodList) {
   const str = `function ${methodName}() {
     // TODO 发起请求获取数据
     ${model}.value
-  }`
-  methodList.push(str)
+  }`;
+  methodList.push(str);
 }
 /**
  * @name: 生成表单组件需要的props设置
@@ -198,15 +180,14 @@ function buildOptionMethod(methodName, model, methodList) {
  */
 function buildProps(conf, propsList) {
   if (conf.dataType === 'dynamic') {
-    conf.valueKey !== 'value' && (conf.props.props.value = conf.valueKey)
-    conf.labelKey !== 'label' && (conf.props.props.label = conf.labelKey)
-    conf.childrenKey !== 'children' &&
-      (conf.props.props.children = conf.childrenKey)
+    conf.valueKey !== 'value' && (conf.props.props.value = conf.valueKey);
+    conf.labelKey !== 'label' && (conf.props.props.label = conf.labelKey);
+    conf.childrenKey !== 'children' && (conf.props.props.children = conf.childrenKey);
   }
   const str = `
   // props设置
-  const ${conf.vModel}Props = ref(${JSON.stringify(conf.props.props)})`
-  propsList.push(str)
+  const ${conf.vModel}Props = ref(${JSON.stringify(conf.props.props)})`;
+  propsList.push(str);
 }
 /**
  * @name: 生成上传组件的相关内容
@@ -215,23 +196,23 @@ function buildProps(conf, propsList) {
  * @return {*}
  */
 function buildBeforeUpload(conf) {
-  const unitNum = units[conf.sizeUnit]
-  let rightSizeCode = ''
-  let acceptCode = ''
-  const returnList = []
+  const unitNum = units[conf.sizeUnit];
+  let rightSizeCode = '';
+  let acceptCode = '';
+  const returnList = [];
   if (conf.fileSize) {
     rightSizeCode = `let isRightSize = file.size / ${unitNum} < ${conf.fileSize}
     if(!isRightSize){
       proxy.$modal.msgError('文件大小超过 ${conf.fileSize}${conf.sizeUnit}')
-    }`
-    returnList.push('isRightSize')
+    }`;
+    returnList.push('isRightSize');
   }
   if (conf.accept) {
     acceptCode = `let isAccept = new RegExp('${conf.accept}').test(file.type)
     if(!isAccept){
       proxy.$modal.msgError('应该选择${conf.accept}类型的文件')
-    }`
-    returnList.push('isAccept')
+    }`;
+    returnList.push('isAccept');
   }
   const str = `
   /**
@@ -244,8 +225,8 @@ function buildBeforeUpload(conf) {
     ${rightSizeCode}
     ${acceptCode}
     return ${returnList.join('&&')}
-  }`
-  return returnList.length ? str : ''
+  }`;
+  return returnList.length ? str : '';
 }
 /**
  * @name: 生成提交表单方法
@@ -256,24 +237,15 @@ function buildBeforeUpload(conf) {
 function buildSubmitUpload(conf) {
   const str = `function submitUpload() {
     this.$refs['${conf.vModel}'].submit()
-  }`
-  return str
+  }`;
+  return str;
 }
 /**
  * @name: 组装js代码
  * @description: 组装js代码方法
  * @return {*}
  */
-function buildexport(
-  conf,
-  type,
-  data,
-  rules,
-  selectOptions,
-  uploadVar,
-  props,
-  methods
-) {
+function buildexport(conf, type, data, rules, selectOptions, uploadVar, props, methods) {
   let str = `
     const { proxy } = getCurrentInstance()
     const ${conf.formRef} = ref()
@@ -295,9 +267,9 @@ function buildexport(
     ${props}
 
     ${methods}
-  `
-  
-  if(type === 'dialog') {
+  `;
+
+  if (type === 'dialog') {
     str += `
       // 弹窗设置
       const dialogVisible = defineModel()
@@ -342,7 +314,7 @@ function buildexport(
           emit('confirm')
         })
       }
-    `
+    `;
   } else {
     str += `
     /**
@@ -364,7 +336,7 @@ function buildexport(
     function resetForm() {
       ${conf.formRef}.value.resetFields()
     }
-    `
+    `;
   }
-  return str
+  return str;
 }

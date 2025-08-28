@@ -1,12 +1,12 @@
 <template>
-   <div>
-      <div>我是数据监控</div>
-      <!-- <i-frame v-model:src="url"></i-frame> -->
-   </div>
+  <div>
+    <div>我是数据监控</div>
+    <!-- <i-frame v-model:src="url"></i-frame> -->
+  </div>
 </template>
 
 <script setup>
-import iFrame from '@/components/iFrame'
+import iFrame from '@/components/iFrame';
 
 import { ref } from 'vue';
 

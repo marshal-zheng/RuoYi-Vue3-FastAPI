@@ -1,21 +1,36 @@
 <template>
   <div class="top-right-btn" :style="style">
     <el-row>
-      <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="showSearch ? '隐藏搜索' : '显示搜索'"
+        placement="top"
+        v-if="search"
+      >
         <el-button circle icon="Search" @click="toggleSearch()" />
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="刷新" placement="top">
         <el-button circle icon="Refresh" @click="refresh()" />
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
-        <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'"/>
-        <el-dropdown trigger="click" :hide-on-click="false" style="padding-left: 12px" v-if="showColumnsType == 'checkbox'">
+        <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'" />
+        <el-dropdown
+          trigger="click"
+          :hide-on-click="false"
+          style="padding-left: 12px"
+          v-if="showColumnsType == 'checkbox'"
+        >
           <el-button circle icon="Menu" />
           <template #dropdown>
             <el-dropdown-menu>
               <template v-for="item in columns" :key="item.key">
                 <el-dropdown-item>
-                  <el-checkbox :checked="item.visible" @change="checkboxChange($event, item.label)" :label="item.label" />
+                  <el-checkbox
+                    :checked="item.visible"
+                    @change="checkboxChange($event, item.label)"
+                    :label="item.label"
+                  />
                 </el-dropdown-item>
               </template>
             </el-dropdown-menu>
@@ -53,21 +68,21 @@ const props = defineProps({
   /* 显隐列类型（transfer穿梭框、checkbox复选框） */
   showColumnsType: {
     type: String,
-    default: "checkbox",
+    default: 'checkbox',
   },
   /* 右外边距 */
   gutter: {
     type: Number,
     default: 10,
   },
-})
+});
 
 const emits = defineEmits(['update:showSearch', 'queryTable']);
 
 // 显隐数据
 const value = ref([]);
 // 弹出层标题
-const title = ref("显示/隐藏");
+const title = ref('显示/隐藏');
 // 是否显示弹出层
 const open = ref(false);
 
@@ -81,12 +96,12 @@ const style = computed(() => {
 
 // 搜索
 function toggleSearch() {
-  emits("update:showSearch", !props.showSearch);
+  emits('update:showSearch', !props.showSearch);
 }
 
 // 刷新
 function refresh() {
-  emits("queryTable");
+  emits('queryTable');
 }
 
 // 右侧列表元素变化
@@ -115,10 +130,9 @@ if (props.showColumnsType == 'transfer') {
 function checkboxChange(event, label) {
   props.columns.filter(item => item.label == label)[0].visible = event;
 }
-
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.el-transfer__button) {
   border-radius: 50%;
   display: block;
