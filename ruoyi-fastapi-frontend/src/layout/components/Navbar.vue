@@ -122,105 +122,105 @@ function toggleTheme() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .navbar {
   height: 50px;
   overflow: hidden;
   position: relative;
   background: var(--navbar-bg);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
 
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
+.navbar .hamburger-container {
+  line-height: 46px;
+  height: 100%;
+  float: left;
+  cursor: pointer;
+  transition: background 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
 
-    &:hover {
-      background: rgba(0, 0, 0, 0.025);
-    }
-  }
+.navbar .hamburger-container:hover {
+  background: rgba(0, 0, 0, 0.025);
+}
 
-  .breadcrumb-container {
-    float: left;
-  }
+.navbar .breadcrumb-container {
+  float: left;
+}
 
-  .topmenu-container {
-    position: absolute;
-    left: 50px;
-  }
+.navbar .topmenu-container {
+  position: absolute;
+  left: 50px;
+}
 
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
-  }
+.navbar .errLog-container {
+  display: inline-block;
+  vertical-align: top;
+}
 
-  .right-menu {
-    float: right;
-    height: 100%;
-    line-height: 50px;
-    display: flex;
+.navbar .right-menu {
+  float: right;
+  height: 100%;
+  line-height: 50px;
+  display: flex;
+}
 
-    &:focus {
-      outline: none;
-    }
+.navbar .right-menu:focus {
+  outline: none;
+}
 
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      color: var(--navbar-text);
-      vertical-align: text-bottom;
+.navbar .right-menu .right-menu-item {
+  display: inline-block;
+  padding: 0 8px;
+  height: 100%;
+  font-size: 18px;
+  color: var(--navbar-text);
+  vertical-align: text-bottom;
+}
 
-      &.hover-effect {
-        cursor: pointer;
-        transition: background 0.3s;
+.navbar .right-menu .right-menu-item.hover-effect {
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-        &:hover {
-          background: rgba(0, 0, 0, 0.025);
-        }
-      }
+.navbar .right-menu .right-menu-item.hover-effect:hover {
+  background: rgba(0, 0, 0, 0.025);
+}
 
-      &.theme-switch-wrapper {
-        display: flex;
-        align-items: center;
+.navbar .right-menu .right-menu-item.theme-switch-wrapper {
+  display: flex;
+  align-items: center;
+}
 
-        svg {
-          transition: transform 0.3s;
+.navbar .right-menu .right-menu-item.theme-switch-wrapper svg {
+  transition: transform 0.3s;
+}
 
-          &:hover {
-            transform: scale(1.15);
-          }
-        }
-      }
-    }
+.navbar .right-menu .right-menu-item.theme-switch-wrapper svg:hover {
+  transform: scale(1.15);
+}
 
-    .avatar-container {
-      margin-right: 40px;
+.navbar .right-menu .avatar-container {
+  margin-right: 40px;
+}
 
-      .avatar-wrapper {
-        margin-top: 5px;
-        position: relative;
+.navbar .right-menu .avatar-container .avatar-wrapper {
+  margin-top: 5px;
+  position: relative;
+}
 
-        .user-avatar {
-          cursor: pointer;
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
+.navbar .right-menu .avatar-container .avatar-wrapper .user-avatar {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
 
-        i {
-          cursor: pointer;
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
-    }
-  }
+.navbar .right-menu .avatar-container .avatar-wrapper i {
+  cursor: pointer;
+  position: absolute;
+  right: -20px;
+  top: 25px;
+  font-size: 12px;
 }
 </style>

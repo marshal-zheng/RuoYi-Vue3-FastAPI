@@ -7,7 +7,8 @@ import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
 import locale from 'element-plus/es/locale/lang/zh-cn';
 
-import '@/assets/styles/index.scss'; // global css
+import '@/assets/styles/theme.module.css'; // 统一主题源文件
+import '@/assets/styles/index.css'; // global css
 
 import App from './App';
 import store from './store';

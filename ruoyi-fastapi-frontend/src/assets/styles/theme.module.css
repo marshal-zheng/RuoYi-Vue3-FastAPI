@@ -1,0 +1,760 @@
+@import "tailwindcss";
+
+/* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
+@theme {
+  /* 主色 */
+  --color-primary-50:  #e3f2fd;
+  --color-primary-100: #bbdefb;
+  --color-primary-200: #90caf9;
+  --color-primary-300: #64b5f6;
+  --color-primary-400: #42a5f5;
+  --color-primary-500: #409eff;
+  --color-primary-600: #2196f3;
+  --color-primary-700: #1976d2;
+  --color-primary-800: #1565c0;
+  --color-primary-900: #0d47a1;
+
+  /* 功能色 - Success */
+  --color-success-50:  #f0f9ff;
+  --color-success-100: #e0f2fe;
+  --color-success-200: #bae6fd;
+  --color-success-300: #7dd3fc;
+  --color-success-400: #38bdf8;
+  --color-success-500: #67c23a;
+  --color-success-600: #0284c7;
+  --color-success-700: #0369a1;
+  --color-success-800: #075985;
+  --color-success-900: #0c4a6e;
+
+  /* 功能色 - Warning */
+  --color-warning-50:  #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #e6a23c;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  /* 功能色 - Danger */
+  --color-danger-50:  #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-200: #fecaca;
+  --color-danger-300: #fca5a5;
+  --color-danger-400: #f87171;
+  --color-danger-500: #f56c6c;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  /* 功能色 - Info */
+  --color-info-50:  #f8fafc;
+  --color-info-100: #f1f5f9;
+  --color-info-200: #e2e8f0;
+  --color-info-300: #a8abb2;
+  --color-info-400: #888b97;
+  --color-info-500: #909399;
+  --color-info-600: #606266;
+  --color-info-700: #464c5b;
+  --color-info-800: #2d3748;
+  --color-info-900: #1a202c;
+
+  /* 灰阶（对齐 EP 的文本/边框语义） */
+  --color-gray-50:  #fafafa;
+  --color-gray-100: #f5f5f5;
+  --color-gray-200: #ebeef5;
+  --color-gray-300: #dcdfe6;
+  --color-gray-400: #c0c4cc;
+  --color-gray-500: #909399;
+  --color-gray-600: #606266;
+  --color-gray-700: #464c5b;
+  --color-gray-800: #303133;
+  --color-gray-900: #1d1e1f;
+
+  /* 表面/背景 */
+  --color-surface:   #ffffff;
+  --color-surface-2: #f8f9fa;
+  --color-overlay:   #ffffff;
+}
+
+/* 2) 默认/暗黑主题赋值 + 一次性映射到 Element Plus */
+@layer theme {
+  :root {
+    /* Element Plus 变量映射：与 Tailwind 同源 */
+    --el-color-primary: var(--color-primary-500);
+    --el-color-primary-light-3: var(--color-primary-300);
+    --el-color-primary-light-5: var(--color-primary-200);
+    --el-color-primary-light-7: var(--color-primary-100);
+    --el-color-primary-light-8: var(--color-primary-50);
+    --el-color-primary-light-9: var(--color-primary-50);
+    --el-color-primary-dark-2: var(--color-primary-700);
+
+    --el-color-success: var(--color-success-500);
+    --el-color-success-light-3: var(--color-success-300);
+    --el-color-success-light-5: var(--color-success-200);
+    --el-color-success-light-7: var(--color-success-100);
+    --el-color-success-light-8: var(--color-success-50);
+    --el-color-success-light-9: var(--color-success-50);
+    --el-color-success-dark-2: var(--color-success-700);
+
+    --el-color-warning: var(--color-warning-500);
+    --el-color-warning-light-3: var(--color-warning-300);
+    --el-color-warning-light-5: var(--color-warning-200);
+    --el-color-warning-light-7: var(--color-warning-100);
+    --el-color-warning-light-8: var(--color-warning-50);
+    --el-color-warning-light-9: var(--color-warning-50);
+    --el-color-warning-dark-2: var(--color-warning-700);
+
+    --el-color-danger: var(--color-danger-500);
+    --el-color-danger-light-3: var(--color-danger-300);
+    --el-color-danger-light-5: var(--color-danger-200);
+    --el-color-danger-light-7: var(--color-danger-100);
+    --el-color-danger-light-8: var(--color-danger-50);
+    --el-color-danger-light-9: var(--color-danger-50);
+    --el-color-danger-dark-2: var(--color-danger-700);
+
+    --el-color-info: var(--color-info-500);
+    --el-color-info-light-3: var(--color-info-300);
+    --el-color-info-light-5: var(--color-info-200);
+    --el-color-info-light-7: var(--color-info-100);
+    --el-color-info-light-8: var(--color-info-50);
+    --el-color-info-light-9: var(--color-info-50);
+    --el-color-info-dark-2: var(--color-info-700);
+
+    --el-bg-color:          var(--color-surface);
+    --el-bg-color-page:     var(--color-surface-2);
+    --el-bg-color-overlay:  var(--color-overlay);
+
+    --el-text-color-primary:    var(--color-gray-800);
+    --el-text-color-regular:    var(--color-gray-700);
+    --el-text-color-secondary:  var(--color-gray-600);
+    --el-text-color-placeholder:var(--color-gray-500);
+    --el-text-color-disabled:   var(--color-gray-400);
+
+    --el-border-color:           var(--color-gray-300);
+    --el-border-color-light:     var(--color-gray-300);
+    --el-border-color-lighter:   var(--color-gray-200);
+    --el-border-color-extra-light: var(--color-gray-200);
+    --el-border-color-dark:      var(--color-gray-400);
+    --el-border-color-darker:    var(--color-gray-500);
+
+    --el-fill-color:           var(--color-gray-100);
+    --el-fill-color-light:     var(--color-gray-50);
+    --el-fill-color-lighter:   var(--color-gray-50);
+    --el-fill-color-extra-light: var(--color-gray-50);
+    --el-fill-color-dark:      var(--color-gray-200);
+    --el-fill-color-darker:    var(--color-gray-300);
+    --el-fill-color-blank:     transparent;
+
+    /* 可选：圆角/阴影 */
+    --el-border-radius-base: 4px;
+    --el-border-radius-small: 2px;
+    --el-border-radius-round: 20px;
+    --el-border-radius-circle: 100%;
+    
+    --el-box-shadow: 0 12px 32px 4px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.08);
+    --el-box-shadow-light: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+    --el-box-shadow-base: 0 2px 4px rgba(0,0,0,.12), 0 0 6px rgba(0,0,0,.04);
+    --el-box-shadow-dark: 0 4px 8px rgba(0,0,0,.12), 0 2px 4px rgba(0,0,0,.08);
+
+    /* 过渡动画 */
+    --el-transition-duration: 0.3s;
+    --el-transition-duration-fast: 0.2s;
+
+    /* Layout and component variables */
+    --sidebar-width: 200px;
+    --base-sidebar-width: 200px;
+    --navbar-height: 50px;
+    --footer-height: 60px;
+    
+    /* Component-specific variables that extend Element Plus */
+    --navbar-bg: var(--el-bg-color);
+    --navbar-text: var(--el-text-color-primary);
+    --navbar-hover: rgba(0, 0, 0, 0.1);
+    --sidebar-bg: var(--el-bg-color);
+    --sidebar-text: var(--el-text-color-regular);
+    --sidebar-active-bg: var(--el-color-primary-light-9);
+    --sidebar-active-text: var(--el-color-primary);
+    --blockquote-bg: var(--el-bg-color-page);
+    --blockquote-border: var(--el-border-color);
+    --blockquote-text: var(--el-text-color-regular);
+    --cron-border: var(--el-border-color);
+    --splitpanes-bg: var(--el-bg-color);
+    --splitpanes-border: var(--el-border-color);
+    --splitpanes-splitter-bg: var(--el-border-color-light);
+    --splitpanes-splitter-hover-bg: var(--el-border-color);
+    --splitpanes-default-bg: #141414;
+    
+    /* TagsView variables */
+    --tags-bg: var(--el-bg-color);
+    --tags-item-bg: var(--el-bg-color);
+    --tags-item-text: var(--el-text-color-regular);
+    --tags-item-border: var(--el-border-color-light);
+    --tags-item-hover: var(--el-fill-color-light);
+    --tags-close-hover: rgba(0, 0, 0, 0.1);
+  }
+
+  /* 暗黑主题覆盖（class 或 data-attr 任选其一或同时支持） */
+  html.dark,
+  [data-theme="dark"] {
+    --color-surface:   #141414;
+    --color-surface-2: #1d1e1f;
+    --color-overlay:   #1d1e1f;
+
+    /* 灰阶反转/加强 */
+    --color-gray-900: #ffffff;
+    --color-gray-800: #d0d0d0;
+    --color-gray-700: #909399;
+    --color-gray-600: #a8abb2;
+    --color-gray-500: #434343;
+    --color-gray-400: #434343;
+    --color-gray-300: #434343;
+    --color-gray-200: #2d2d2d;
+    --color-gray-100: #262626;
+    --color-gray-50:  #1a1a1a;
+
+    /* 暗黑模式下的色彩方案 */
+    color-scheme: dark;
+  }
+
+  /* Dark theme overrides */
+  [data-theme='dark'] {
+    --el-bg-color: #1a1a1a;
+    --el-bg-color-page: #0a0a0a;
+    --el-bg-color-overlay: #1d1e1f;
+    --el-text-color-primary: #e5eaf3;
+    --el-text-color-regular: #cfd3dc;
+    --el-text-color-secondary: #a3a6ad;
+    --el-text-color-placeholder: #8d9095;
+    --el-text-color-disabled: #6c6e72;
+    --el-border-color: #4c4d4f;
+    --el-border-color-light: #414243;
+    --el-border-color-lighter: #363637;
+    --el-border-color-extra-light: #2b2b2c;
+    --el-border-color-dark: #58585b;
+    --el-border-color-darker: #636466;
+    --el-fill-color: #303133;
+    --el-fill-color-light: #262727;
+    --el-fill-color-lighter: #1d1d1d;
+    --el-fill-color-extra-light: #191919;
+    --el-fill-color-dark: #39393a;
+    --el-fill-color-darker: #424243;
+    --el-fill-color-blank: transparent;
+    
+    /* Component-specific dark theme overrides */
+     --navbar-hover: rgba(255, 255, 255, 0.1);
+     --splitpanes-default-bg: #141414;
+     
+     /* TagsView dark theme overrides */
+     --tags-close-hover: rgba(255, 255, 255, 0.1);
+   }
+ }
+
+/* Export variables for JavaScript usage */
+:export {
+  /* Layout variables */
+  sideBarWidth: var(--sidebar-width);
+  
+  /* Theme colors */
+  blue: var(--blue-600);
+  lightBlue: var(--slate-600);
+  red: var(--red-600);
+  pink: var(--pink-600);
+  green: var(--green-600);
+  tiffany: var(--cyan-600);
+  yellow: var(--yellow-600);
+  panGreen: var(--green-600);
+  colorPrimary: var(--blue-600);
+  colorSuccess: var(--green-600);
+  colorWarning: var(--yellow-600);
+  colorDanger: var(--red-600);
+  colorInfo: var(--gray-600);
+  
+  /* Menu variables */
+  menuText: var(--el-text-color-regular);
+  menuActiveText: var(--el-color-primary);
+  menuBg: var(--el-bg-color);
+  menuHover: var(--el-bg-color-overlay);
+  menuLightBg: var(--el-bg-color);
+  menuLightHover: var(--el-bg-color-overlay);
+  menuLightText: var(--el-text-color-primary);
+  menuLightActiveText: var(--el-color-primary);
+}
+
+/* 3) 语义组件类 - Tailwind v4 CSS-first 方案 */
+@layer components {
+  /* 主题卡片组件 */
+  .theme-card {
+    @apply bg-[--el-bg-color] border border-[--el-border-color-light] rounded-[4px] shadow-[var(--el-box-shadow-light)] transition;
+  }
+  
+  /* Element Plus 兼容组件类 */
+  .el-card {
+    @apply bg-[--el-bg-color] border border-[--el-border-color-light] rounded-[4px] shadow-[var(--el-box-shadow-light)];
+  }
+  
+  /* 主题按钮组件 */
+  .theme-button {
+    @apply rounded-[4px] font-medium transition border;
+  }
+  
+  /* Element Plus 按钮变体 */
+  .el-button-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white border-primary-500 hover:border-primary-600;
+  }
+  
+  .el-button-success {
+    @apply bg-success-500 hover:bg-success-600 text-white border-success-500 hover:border-success-600;
+  }
+  
+  .el-button-warning {
+    @apply bg-warning-500 hover:bg-warning-600 text-white border-warning-500 hover:border-warning-600;
+  }
+  
+  .el-button-danger {
+    @apply bg-danger-500 hover:bg-danger-600 text-white border-danger-500 hover:border-danger-600;
+  }
+  
+  .el-button-info {
+    @apply bg-info-500 hover:bg-info-600 text-white border-info-500 hover:border-info-600;
+  }
+  
+  /* 主题输入框组件 */
+  .theme-input {
+    @apply px-3 py-2 border border-[--el-border-color] rounded-[4px] bg-[--el-bg-color] text-[--el-text-color-primary] transition;
+  }
+
+  /* Triangle utilities - CSS border-based shapes */
+  .triangle-up {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid currentColor;
+  }
+
+  .triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid currentColor;
+  }
+
+  .triangle-left {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid currentColor;
+  }
+
+  .triangle-right {
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 10px solid currentColor;
+  }
+
+  /* Triangle size variants */
+  .triangle-sm {
+    border-width: 5px;
+  }
+
+  .triangle-md {
+    border-width: 10px;
+  }
+
+  .triangle-lg {
+    border-width: 15px;
+  }
+
+  .triangle-xl {
+    border-width: 20px;
+  }
+
+  /* Triangle color variants using theme colors */
+  .triangle-primary {
+    color: var(--color-primary);
+  }
+
+  .triangle-success {
+    color: var(--color-success);
+  }
+
+  .triangle-warning {
+    color: var(--color-warning);
+  }
+
+  .triangle-danger {
+    color: var(--color-danger);
+  }
+
+  .triangle-info {
+    color: var(--color-info);
+  }
+
+  /* Modern button components using Tailwind utilities */
+  .btn-base {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
+  }
+
+  .btn-warning {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-current transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent text-current hover:bg-current hover:text-white;
+  }
+
+  /* Button size variants */
+  .btn-sm {
+    @apply px-3 py-1.5 text-xs;
+  }
+
+  .btn-lg {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-full {
+    @apply w-full;
+  }
+
+  /* Animated color buttons with border effects */
+  .color-btn {
+    @apply relative inline-block px-9 py-3.5 text-white text-sm rounded-lg border-none outline-none transition-all duration-[600ms] overflow-hidden;
+  }
+
+  .color-btn:hover {
+    @apply bg-white;
+  }
+
+  .color-btn::before,
+  .color-btn::after {
+    content: '';
+    @apply absolute h-0.5 w-0 transition-all duration-[400ms];
+  }
+
+  .color-btn::before {
+    @apply top-0 right-0;
+  }
+
+  .color-btn::after {
+    @apply bottom-0 left-0;
+  }
+
+  .color-btn:hover::before,
+  .color-btn:hover::after {
+    @apply w-full transition-all duration-[600ms];
+  }
+
+  /* Custom scrollbar styles - Tailwind doesn't provide scrollbar utilities */
+  .custom-scrollbar::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+@layer utilities {
+  /* Custom utility classes that work with Tailwind */
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .backdrop-blur-xs {
+    backdrop-filter: blur(2px);
+  }
+  
+  /* Vue transition utilities */
+  /* Fade transition */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.28s;
+  }
+  
+  .fade-enter,
+  .fade-leave-active {
+    opacity: 0;
+  }
+  
+  /* Fade transform transition */
+  .fade-transform--move,
+  .fade-transform-leave-active,
+  .fade-transform-enter-active {
+    transition: all 0.5s;
+  }
+  
+  .fade-transform-enter {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  
+  .fade-transform-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  
+  /* Breadcrumb transition */
+  .breadcrumb-enter-active,
+  .breadcrumb-leave-active {
+    transition: all 0.5s;
+  }
+  
+  .breadcrumb-enter,
+  .breadcrumb-leave-active {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  
+  .breadcrumb-move {
+    transition: all 0.5s;
+  }
+  
+  .breadcrumb-leave-active {
+    position: absolute;
+  }
+  
+  /* Slide transitions */
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-up-enter {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  
+  .slide-up-leave-to {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  
+  .slide-down-enter-active,
+  .slide-down-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-down-enter {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  
+  .slide-down-leave-to {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  
+  .slide-left-enter-active,
+  .slide-left-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-left-enter {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  
+  .slide-left-leave-to {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  
+  .slide-right-enter-active,
+  .slide-right-leave-active {
+    transition: all 300ms;
+  }
+  
+  .slide-right-enter {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+  
+  .slide-right-leave-to {
+    opacity: 0;
+    transform: translateX(1rem);
+  }
+  
+  /* Scale transitions */
+  .scale-enter-active,
+  .scale-leave-active {
+    transition: all 200ms;
+  }
+  
+  .scale-enter {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  
+  .scale-leave-to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  
+  /* Bounce transition */
+  .bounce-enter-active {
+    animation: bounce-in 0.5s;
+  }
+  
+  .bounce-leave-active {
+    animation: bounce-in 0.5s reverse;
+  }
+  
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  /* Flip transition */
+  .flip-enter-active,
+  .flip-leave-active {
+    transition: all 300ms;
+  }
+  
+  .flip-enter {
+    opacity: 0;
+    transform: rotateY(-90deg);
+  }
+  
+  .flip-leave-to {
+    opacity: 0;
+    transform: rotateY(90deg);
+  }
+  
+  /* Zoom transition */
+  .zoom-enter-active,
+  .zoom-leave-active {
+    transition: all 200ms;
+  }
+  
+  .zoom-enter {
+    opacity: 0;
+    transform: scale(0);
+  }
+  
+  .zoom-leave-to {
+    opacity: 0;
+    transform: scale(0);
+  }
+  
+  /* List transitions */
+  .list-enter-active,
+  .list-leave-active {
+    transition: all 300ms;
+  }
+  
+  .list-enter {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  
+  .list-leave-to {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  
+  .list-move {
+    transition: transform 300ms;
+  }
+  
+  /* Stagger list animations */
+  .stagger-item {
+    transition: all 300ms;
+  }
+  
+  .stagger-item:nth-child(1) { transition-delay: 0ms; }
+  .stagger-item:nth-child(2) { transition-delay: 50ms; }
+  .stagger-item:nth-child(3) { transition-delay: 100ms; }
+  .stagger-item:nth-child(4) { transition-delay: 150ms; }
+  .stagger-item:nth-child(5) { transition-delay: 200ms; }
+  .stagger-item:nth-child(6) { transition-delay: 250ms; }
+  .stagger-item:nth-child(7) { transition-delay: 300ms; }
+  .stagger-item:nth-child(8) { transition-delay: 350ms; }
+  .stagger-item:nth-child(9) { transition-delay: 400ms; }
+  .stagger-item:nth-child(10) { transition-delay: 450ms; }
+  
+  /* Page transitions */
+  .page-enter-active,
+  .page-leave-active {
+    transition: all 300ms;
+  }
+  
+  .page-enter {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  
+  .page-leave-to {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  
+  /* Modal transitions */
+  .modal-enter-active,
+  .modal-leave-active {
+    transition: all 200ms;
+  }
+  
+  .modal-enter {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  
+  .modal-leave-to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  
+  /* Drawer transitions */
+  .drawer-enter-active,
+  .drawer-leave-active {
+    transition: transform 300ms;
+  }
+  
+  .drawer-enter {
+    transform: translateX(100%);
+  }
+  
+  .drawer-leave-to {
+    transform: translateX(100%);
+  }
+}

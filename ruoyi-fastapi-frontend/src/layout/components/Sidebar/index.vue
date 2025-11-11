@@ -27,7 +27,7 @@
 <script setup>
 import Logo from './Logo';
 import SidebarItem from './SidebarItem';
-import variables from '@/assets/styles/variables.module.scss';
+import variables from '@/assets/styles/theme.module.css';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
@@ -68,38 +68,36 @@ const activeMenu = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .sidebar-container {
   background-color: v-bind(getMenuBackground);
+}
 
-  .scrollbar-wrapper {
-    background-color: v-bind(getMenuBackground);
-  }
+.sidebar-container .scrollbar-wrapper {
+  background-color: v-bind(getMenuBackground);
+}
 
-  .el-menu {
-    border: none;
-    height: 100%;
-    width: 100% !important;
+.sidebar-container .el-menu {
+  border: none;
+  height: 100%;
+  width: 100% !important;
+}
 
-    .el-menu-item,
-    .el-sub-menu__title {
-      &:hover {
-        background-color: var(--menu-hover, rgba(0, 0, 0, 0.06)) !important;
-      }
-    }
+.sidebar-container .el-menu .el-menu-item:hover,
+.sidebar-container .el-menu .el-sub-menu__title:hover {
+  background-color: var(--menu-hover, rgba(0, 0, 0, 0.06)) !important;
+}
 
-    .el-menu-item {
-      color: v-bind(getMenuTextColor);
+.sidebar-container .el-menu .el-menu-item {
+  color: v-bind(getMenuTextColor);
+}
 
-      &.is-active {
-        color: var(--menu-active-text, #409eff);
-        background-color: var(--menu-hover, rgba(0, 0, 0, 0.06)) !important;
-      }
-    }
+.sidebar-container .el-menu .el-menu-item.is-active {
+  color: var(--menu-active-text, #409eff);
+  background-color: var(--menu-hover, rgba(0, 0, 0, 0.06)) !important;
+}
 
-    .el-sub-menu__title {
-      color: v-bind(getMenuTextColor);
-    }
-  }
+.sidebar-container .el-menu .el-sub-menu__title {
+  color: v-bind(getMenuTextColor);
 }
 </style>

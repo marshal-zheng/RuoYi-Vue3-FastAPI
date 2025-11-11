@@ -16,7 +16,7 @@
 <script setup>
 import logo from '@/assets/logo/logo.png';
 import useSettingsStore from '@/store/modules/settings';
-import variables from '@/assets/styles/variables.module.scss';
+import variables from '@/assets/styles/theme.module.css';
 
 defineProps({
   collapse: {
@@ -46,8 +46,8 @@ const getLogoTextColor = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-@import '@/assets/styles/variables.module.scss';
+<style scoped>
+@import '@/assets/styles/theme.module.css';
 
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
@@ -66,39 +66,37 @@ const getLogoTextColor = computed(() => {
   background: v-bind(getLogoBackground);
   text-align: center;
   overflow: hidden;
+}
 
-  & .sidebar-logo-link {
-    height: 100%;
-    width: 100%;
+.sidebar-logo-container .sidebar-logo-link {
+  height: 100%;
+  width: 100%;
+}
 
-    & .sidebar-logo {
-      width: 32px;
-      height: 32px;
-      vertical-align: middle;
-      margin-right: 12px;
-    }
+.sidebar-logo-container .sidebar-logo-link .sidebar-logo {
+  width: 32px;
+  height: 32px;
+  vertical-align: middle;
+  margin-right: 12px;
+}
 
-    & .sidebar-title {
-      display: inline-block;
-      margin: 0;
-      color: v-bind(getLogoTextColor);
-      font-weight: 600;
-      line-height: 50px;
-      font-size: 14px;
-      font-family:
-        Avenir,
-        Helvetica Neue,
-        Arial,
-        Helvetica,
-        sans-serif;
-      vertical-align: middle;
-    }
-  }
+.sidebar-logo-container .sidebar-logo-link .sidebar-title {
+  display: inline-block;
+  margin: 0;
+  color: v-bind(getLogoTextColor);
+  font-weight: 600;
+  line-height: 50px;
+  font-size: 14px;
+  font-family:
+    Avenir,
+    Helvetica Neue,
+    Arial,
+    Helvetica,
+    sans-serif;
+  vertical-align: middle;
+}
 
-  &.collapse {
-    .sidebar-logo {
-      margin-right: 0px;
-    }
-  }
+.sidebar-logo-container.collapse .sidebar-logo {
+  margin-right: 0px;
 }
 </style>

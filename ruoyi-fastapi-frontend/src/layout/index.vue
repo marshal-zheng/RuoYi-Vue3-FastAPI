@@ -72,20 +72,24 @@ function setLayout() {
 }
 </script>
 
-<style lang="scss" scoped>
-@import '@/assets/styles/mixin.scss';
-@import '@/assets/styles/variables.module.scss';
+<style scoped>
+@import '@/assets/styles/theme.module.css';
 
 .app-wrapper {
-  @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
+}
 
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
-  }
+.app-wrapper::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+.app-wrapper.mobile.openSidebar {
+  position: fixed;
+  top: 0;
 }
 
 .drawer-bg {
@@ -103,7 +107,7 @@ function setLayout() {
   top: 0;
   right: 0;
   z-index: 9;
-  width: calc(100% - #{$base-sidebar-width});
+  width: calc(100% - var(--base-sidebar-width));
   transition: width 0.28s;
 }
 

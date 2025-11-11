@@ -51,65 +51,61 @@ watch(key, (val) => {
   }
 })
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .icon-ul {
   margin: 0;
   padding: 0;
   font-size: 0;
-
-  li {
-    list-style-type: none;
-    text-align: center;
-    font-size: 14px;
-    display: inline-flex;
-    width: 16.66%;
-    box-sizing: border-box;
-    height: 108px;
-    padding: 6px 6px 6px 6px;
-    cursor: pointer;
-    overflow: hidden;
-    align-items: center;
-    justify-content: center;
-
-    &:hover {
-      background: #f2f2f2;
-    }
-
-    &.active-item {
-      background: #e1f3fb;
-      color: #7a6df0
-    }
-
-    i {
-      font-size: 30px;
-      line-height: 50px;
-      margin-bottom: 10px;
-    }
-  }
 }
 
-.icon-dialog {
-  :deep() {
-    .el-dialog {
-      border-radius: 8px;
-      margin-bottom: 0;
-      margin-top: 4vh !important;
-      display: flex;
-      flex-direction: column;
-      max-height: 92vh;
-      overflow: hidden;
-      box-sizing: border-box;
+.icon-ul li {
+  list-style-type: none;
+  text-align: center;
+  font-size: 14px;
+  display: inline-flex;
+  width: 16.66%;
+  box-sizing: border-box;
+  height: 108px;
+  padding: 6px 6px 6px 6px;
+  cursor: pointer;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
 
-      .el-dialog__header {
-        padding-top: 14px;
-      }
+.icon-ul li:hover {
+  background: #f2f2f2;
+}
 
-      .el-dialog__body {
-        margin: 0 20px 20px 20px;
-        padding: 0;
-        overflow: auto;
-      }
-    }
-  }
+.icon-ul li.active-item {
+  background: #e1f3fb;
+  color: #7a6df0;
+}
+
+.icon-ul li i {
+  font-size: 30px;
+  line-height: 50px;
+  margin-bottom: 10px;
+}
+
+.icon-dialog :deep(.el-dialog) {
+  border-radius: 8px;
+  margin-bottom: 0;
+  margin-top: 4vh !important;
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.icon-dialog :deep(.el-dialog .el-dialog__header) {
+  padding-top: 14px;
+}
+
+.icon-dialog :deep(.el-dialog .el-dialog__body) {
+  margin: 0 20px 20px 20px;
+  padding: 0;
+  overflow: auto;
 }
 </style>

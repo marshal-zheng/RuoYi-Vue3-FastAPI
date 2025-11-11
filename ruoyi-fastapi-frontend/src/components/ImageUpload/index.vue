@@ -202,8 +202,8 @@ function listToString(list, separator) {
 }
 </script>
 
-<style scoped lang="scss">
-// .el-upload--picture-card 控制加号部分
+<style scoped>
+/* .el-upload--picture-card 控制加号部分 */
 :deep(.hide .el-upload--picture-card) {
   display: none;
 }

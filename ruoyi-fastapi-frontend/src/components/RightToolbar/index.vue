@@ -132,15 +132,17 @@ function checkboxChange(event, label) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 :deep(.el-transfer__button) {
   border-radius: 50%;
   display: block;
   margin-left: 0px;
 }
+
 :deep(.el-transfer__button:first-child) {
   margin-bottom: 10px;
 }
+
 :deep(.el-dropdown-menu__item) {
   line-height: 30px;
   padding: 0 17px;

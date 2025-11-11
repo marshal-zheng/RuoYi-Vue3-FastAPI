@@ -1,192 +1,164 @@
-<p align="center">
-	<img alt="logo" src="https://oscimg.oschina.net/oscnet/up-d3d0a9303e11d522a06cd263f3079027715.png">
-</p>
-<h1 align="center" style="margin: 30px 0 30px; font-weight: bold;">RuoYi-Vue3-FastAPI v1.6.2</h1>
-<h4 align="center">基于RuoYi-Vue3+FastAPI前后端分离的快速开发框架</h4>
-<p align="center">
-	<a href="https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI/stargazers"><img src="https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI/badge/star.svg?theme=dark"></a>
-    <a href="https://github.com/insistence/RuoYi-Vue3-FastAPI"><img src="https://img.shields.io/github/stars/insistence/RuoYi-Vue3-FastAPI?style=social"></a>
-	<a href="https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI"><img src="https://img.shields.io/badge/RuoYiVue3FastAPI-v1.6.2-brightgreen.svg"></a>
-	<a href="https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
-    <img src="https://img.shields.io/badge/python-≥3.9-blue">
-    <img src="https://img.shields.io/badge/MySQL-≥5.7-blue">
-</p>
+# RuoYi-Vue3-FastAPI
 
-## 平台简介
+基于 Vue3 + FastAPI 前后端分离的快速开发框架
 
-RuoYi-Vue3-FastAPI是一套全部开源的快速开发平台，毫无保留给个人及企业免费使用。
+## 技术栈
 
-* 前端采用Vue3、Element Plus，基于<u>[RuoYi-Vue3](https://github.com/yangzongzhuan/RuoYi-Vue3)</u>前端项目修改。
-* 后端采用FastAPI、sqlalchemy、MySQL（PostgreSQL）、Redis、OAuth2 & Jwt。
-* 权限认证使用OAuth2 & Jwt，支持多终端认证系统。
-* 支持加载动态权限菜单，多方式轻松权限控制。
-* Vue2版本：
-  - Gitte仓库地址：https://gitee.com/insistence2022/RuoYi-Vue-FastAPI
-  - GitHub仓库地址：https://github.com/insistence/RuoYi-Vue-FastAPI
-* 纯Python版本：
-  - Gitte仓库地址：https://gitee.com/insistence2022/dash-fastapi-admin
-  - GitHub仓库地址：https://github.com/insistence/Dash-FastAPI-Admin
-* 特别鸣谢：<u>[RuoYi-Vue3](https://github.com/yangzongzhuan/RuoYi-Vue3)</u>
+### 前端
+- Vue 3
+- Element Plus
+- TypeScript
+- Vite
 
-## 内置功能
+### 后端
+- FastAPI
+- SQLAlchemy
+- MySQL / PostgreSQL
+- Redis
+- OAuth2 & JWT
 
-1.  用户管理：用户是系统操作者，该功能主要完成系统用户配置。
-2.  角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。
-3.  菜单管理：配置系统菜单，操作权限，按钮权限标识等。
-4.  部门管理：配置系统组织机构（公司、部门、小组）。
-5.  岗位管理：配置系统用户所属担任职务。
-6.  字典管理：对系统中经常使用的一些较为固定的数据进行维护。
-7.  参数管理：对系统动态配置常用参数。
-8.  通知公告：系统通知公告信息发布维护。
-9.  操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。
-10. 登录日志：系统登录日志记录查询包含登录异常。
-11. 在线用户：当前系统中活跃用户状态监控。
-12. 定时任务：在线（添加、修改、删除）任务调度包含执行结果日志。
-13. 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。
-14. 缓存监控：对系统的缓存信息查询，命令统计等。
-15. 在线构建器：拖动表单元素生成相应的HTML代码。
-16. 系统接口：根据业务代码自动生成相关的api接口文档。
-17. 代码生成：配置数据库表信息一键生成前后端代码（python、sql、vue、js），支持下载。
+## 系统要求
 
-## 演示图
+- Python ≥ 3.9
+- MySQL ≥ 5.7 或 PostgreSQL
+- Node.js ≥ 16
+- Redis
 
-<table>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/login.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/dashboard.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/user.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/role.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/menu.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/dept.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/post.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/dict.png"/></td>
-    </tr>	 
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/config.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/notice.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/operLog.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/loginLog.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/online.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/job.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/server.png"/></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/cache.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/cacheList.png"></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/form.png"></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/api.png"></td>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/gen.png"/></td>
-    </tr>
-    <tr>
-        <td><img src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/profile.png"/></td>
-    </tr>
-</table>
+## 核心功能
 
-## 在线体验
-- *账号：admin*
-- *密码：admin123*
-- 演示地址：<a href="https://vfadmin.insistence.tech">vfadmin管理系统<a>
+### 权限管理
+- **用户管理**：系统用户配置和管理
+- **角色管理**：角色菜单权限分配、数据范围权限划分
+- **菜单管理**：系统菜单、操作权限、按钮权限配置
+- **部门管理**：组织机构管理（公司、部门、小组）
+- **岗位管理**：用户岗位职务配置
 
-## 项目开发及发布相关
+### 系统管理
+- **字典管理**：系统固定数据维护
+- **参数管理**：系统动态参数配置
+- **通知公告**：系统公告信息发布
 
-### 开发
+### 日志监控
+- **操作日志**：系统操作日志记录和查询
+- **登录日志**：登录日志记录，包含异常登录
+- **在线用户**：活跃用户状态监控
+- **服务监控**：CPU、内存、磁盘等系统信息监控
+- **缓存监控**：Redis 缓存信息查询和统计
 
-```bash
-# 克隆项目
-git clone https://gitee.com/insistence2022/RuoYi-Vue3-FastAPI.git
+### 开发工具
+- **定时任务**：在线任务调度管理，包含执行日志
+- **代码生成**：根据数据库表一键生成前后端代码
+- **系统接口**：自动生成 API 接口文档
+- **表单构建**：可视化表单设计器
 
-# 进入项目根目录
-cd RuoYi-Vue3-FastAPI
-```
+## 快速开始
 
-#### 前端
+### 前端启动
+
 ```bash
 # 进入前端目录
 cd ruoyi-fastapi-frontend
 
 # 安装依赖
-npm install 或 yarn --registry=https://registry.npmmirror.com
-
-# 建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题
+npm install
+# 或使用国内镜像
 npm install --registry=https://registry.npmmirror.com
 
-# 启动服务
-npm run dev 或 yarn dev
+# 启动开发服务器
+npm run dev
 ```
 
-#### 后端
+前端默认运行在 `http://localhost:80`
+
+### 后端启动
+
+#### 1. 安装依赖
+
 ```bash
 # 进入后端目录
 cd ruoyi-fastapi-backend
 
-# 如果使用的是MySQL数据库，请执行以下命令安装项目依赖环境
-pip3 install -r requirements.txt
-# 如果使用的是PostgreSQL数据库，请执行以下命令安装项目依赖环境
-pip3 install -r requirements-pg.txt
+# MySQL 数据库
+pip install -r requirements.txt
 
-# 配置环境
-在.env.dev文件中配置开发环境的数据库和redis
-
-# 运行sql文件
-1.新建数据库ruoyi-fastapi(默认，可修改)
-2.如果使用的是MySQL数据库，使用命令或数据库连接工具运行sql文件夹下的ruoyi-fastapi.sql；如果使用的是PostgreSQL数据库，使用命令或数据库连接工具运行sql文件夹下的ruoyi-fastapi-pg.sql
-
-# 运行后端
-python3 app.py --env=dev
+# PostgreSQL 数据库
+pip install -r requirements-pg.txt
 ```
 
-#### 访问
-```bash
-# 默认账号密码
-账号：admin
-密码：admin123
+#### 2. 配置环境
 
-# 浏览器访问
-地址：http://localhost:80
+编辑 `.env.dev` 文件，配置数据库和 Redis 连接信息：
+
+```env
+# 数据库配置
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_USER=root
+DATABASE_PASSWORD=your_password
+DATABASE_NAME=ruoyi-fastapi
+
+# Redis 配置
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=
 ```
 
-### 发布
+#### 3. 初始化数据库
 
-#### 前端
 ```bash
-# 构建测试环境
-npm run build:stage 或 yarn build:stage
+# 创建数据库
+mysql -u root -p -e "CREATE DATABASE `ruoyi-fastapi` DEFAULT CHARACTER SET utf8mb4;"
+
+# 导入 SQL 文件
+# MySQL
+mysql -u root -p ruoyi-fastapi < sql/ruoyi-fastapi.sql
+
+# PostgreSQL
+psql -U postgres -d ruoyi-fastapi -f sql/ruoyi-fastapi-pg.sql
+```
+
+#### 4. 启动后端服务
+
+```bash
+# 开发环境
+python app.py --env=dev
+
+# 生产环境
+python app.py --env=prod
+```
+
+后端 API 文档访问：`http://localhost:8000/docs`
+
+### 默认账号
+
+- 用户名：`admin`
+- 密码：`admin123`
+
+## 生产部署
+
+### 前端构建
+
+```bash
+cd ruoyi-fastapi-frontend
 
 # 构建生产环境
-npm run build:prod 或 yarn build:prod
+npm run build:prod
+
+# 构建测试环境
+npm run build:stage
 ```
 
-#### 后端
+构建产物在 `dist` 目录下，可部署到 Nginx 等 Web 服务器。
+
+### 后端部署
+
+1. 编辑 `.env.prod` 配置生产环境参数
+2. 使用生产级 ASGI 服务器（如 Gunicorn + Uvicorn）：
+
 ```bash
-# 配置环境
-在.env.prod文件中配置生产环境的数据库和redis
-
-# 运行后端
-python3 app.py --env=prod
+gunicorn app:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
 ```
 
-## 交流与赞助
-如果有对本项目及FastAPI感兴趣的朋友，欢迎加入知识星球一起交流学习，让我们一起变得更强。如果你觉得这个项目帮助到了你，你可以请作者喝杯咖啡表示鼓励☕。扫描下面微信二维码添加微信备注VF-Admin即可进群。
-<table>
-    <tr>
-        <td><img alt="zsxq" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/zsxq.jpg"></td>
-        <td><img alt="zanzhu" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/zanzhu.jpg"></td>
-    </tr>
-    <tr>
-        <td><img alt="wxcode" src="https://gitee.com/insistence2022/RuoYi-Vue-FastAPI/raw/master/demo-pictures/wxcode.jpg"></td>
-    </tr>
-</table>
+## License
+
+MIT License

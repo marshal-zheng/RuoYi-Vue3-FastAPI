@@ -1,7 +1,10 @@
 import { defineConfig, loadEnv } from 'vite'
 import type { UserConfig, ConfigEnv } from 'vite'
 import path from 'path'
+import tailwindcss from '@tailwindcss/vite'
 import createVitePlugins from './vite/plugins'
+
+const baseUrl = 'http://127.0.0.1:8000' 
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
@@ -17,6 +20,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     // 例如 https://www.ruoyi.vip/。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 https://www.ruoyi.vip/admin/，则设置 baseUrl 为 /admin/。
     base: VITE_APP_ENV === 'production' ? '/' : '/',
     plugins: isTest ? [] : [
+      tailwindcss(),
       ...createVitePlugins(env, command === 'build')
     ],
     resolve: {
@@ -36,13 +40,15 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       host: true,
       open: true,
       proxy: {
-        // https://cn.vitejs.dev/config/#server-proxy
-        '/dev-api': {
-          target: 'http://127.0.0.1:8000',
-          changeOrigin: true,
-          rewrite: (p) => p.replace(/^\/dev-api/, '')
-        }
+      // https://cn.vitejs.dev/config/#server-proxy
+      '/dev-api': {
+        target: baseUrl,
+        changeOrigin: true,
+        // 将 /dev-api 重写为 /prod-api（演示环境使用）
+        // 请求 /dev-api/xxx 会转发为 https://vue.ruoyi.vip/prod-api/xxx
+        rewrite: (p) => p.replace(/^\/dev-api/, '')
       }
+    }
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file
     css: {

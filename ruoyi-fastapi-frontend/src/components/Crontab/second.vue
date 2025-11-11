@@ -124,7 +124,7 @@ function onRadioChange() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .el-input-number--small,
 .el-select,
 .el-select--small {

@@ -151,7 +151,7 @@ function closeDialog() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .user-info-head {
   position: relative;
   display: inline-block;

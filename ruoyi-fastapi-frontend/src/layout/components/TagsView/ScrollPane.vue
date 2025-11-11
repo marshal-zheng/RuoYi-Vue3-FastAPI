@@ -145,7 +145,7 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .scroll-container {
   position: relative;
   width: 100%;
@@ -163,10 +163,10 @@ defineExpose({
   /* 隐藏滚动条 */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
+}
 
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
-  }
+.scroll-wrapper::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .tags-content {
@@ -193,16 +193,16 @@ defineExpose({
   z-index: 10;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-  }
+.scroll-button:hover {
+  background: var(--el-color-primary-light-9, #ecf5ff);
+  border-color: var(--el-color-primary, #409eff);
+  color: var(--el-color-primary, #409eff);
+}
 
-  .el-icon {
-    font-size: 12px;
-  }
+.scroll-button .el-icon {
+  font-size: 12px;
 }
 
 .scroll-button-left {

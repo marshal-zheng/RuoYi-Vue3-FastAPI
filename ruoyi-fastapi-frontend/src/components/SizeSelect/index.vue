@@ -41,7 +41,7 @@ function handleSetSize(size) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .size-icon--style {
   font-size: 18px;
   line-height: 50px;

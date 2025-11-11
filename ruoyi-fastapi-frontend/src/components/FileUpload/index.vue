@@ -212,7 +212,7 @@ function listToString(list, separator) {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 .upload-file-uploader {
   margin-bottom: 5px;
 }

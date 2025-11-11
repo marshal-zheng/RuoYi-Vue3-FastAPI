@@ -1,0 +1,230 @@
+/* Main styles entry point - optimized import order */
+
+/* 1. Import theme system first (includes Tailwind and variables) */
+@import './theme.module.css';
+
+/* 2. Import component-specific styles */
+@import './element-ui.css';
+@import './sidebar.css';
+
+/* Note: mixins.css, transition.css, and variables.module.css are deprecated and consolidated into theme.module.css */
+
+/* Base styles */
+body {
+  height: 100%;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+/* Utility classes - use Tailwind equivalents:
+ * .no-padding -> p-0
+ * .padding-content -> py-1
+ */
+
+/* App container styles */
+.app-container {
+  padding: 20px;
+}
+
+/* Link styles */
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+/* Float utilities */
+.fr {
+  float: right;
+}
+
+.fl {
+  float: left;
+}
+
+/* Padding utilities */
+.pr-5 {
+  padding-right: 5px;
+}
+
+.pl-5 {
+  padding-left: 5px;
+}
+
+/* Display utilities */
+.block {
+  display: block;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.inlineBlock {
+  display: block;
+}
+
+/* Legacy clearfix - use Tailwind's flow-root class instead */
+.clearfix::after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+
+/* Aside styles */
+aside {
+  background: #eef1f6;
+  padding: 8px 24px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  display: block;
+  line-height: 32px;
+  font-size: 16px;
+  color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+aside a {
+  color: #337ab7;
+  cursor: pointer;
+}
+
+aside a:hover {
+  color: rgb(32, 160, 255);
+}
+
+/* Main container global styles */
+.components-container {
+  margin: 30px 50px;
+  position: relative;
+}
+
+/* Use Tailwind's text-center class instead */
+
+/* Sub navbar styles */
+.sub-navbar {
+  height: 50px;
+  line-height: 50px;
+  position: relative;
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  transition: 600ms ease position;
+  background: linear-gradient(90deg, rgba(32, 182, 249, 1) 0%, rgba(32, 182, 249, 1) 0%, rgba(33, 120, 241, 1) 100%, rgba(33, 120, 241, 1) 100%);
+}
+
+.sub-navbar .subtitle {
+  font-size: 20px;
+  color: #fff;
+}
+
+.sub-navbar.draft {
+  background: #d0d0d0;
+}
+
+.sub-navbar.deleted {
+  background: #d0d0d0;
+}
+
+/* Link type styles */
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+}
+
+.link-type:hover {
+  color: rgb(32, 160, 255);
+}
+
+/* Filter container styles */
+.filter-container {
+  padding-bottom: 10px;
+}
+
+.filter-container .filter-item {
+  display: inline-block;
+  vertical-align: middle;
+  margin-bottom: 10px;
+}
+
+/* Use Tailwind equivalents instead:
+ * .container-responsive -> container mx-auto px-4 sm:px-6 lg:px-8
+ * .section-spacing -> py-8 md:py-12 lg:py-16
+ * .card-shadow -> shadow-md hover:shadow-lg transition-shadow
+ * .text-gradient -> bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent
+ * .btn-hover-lift -> hover:-translate-y-1 transition-transform
+ * .border-gradient -> border-2 border-transparent bg-gradient-to-r from-blue-500 to-purple-600
+ */
+
+/* Use Tailwind responsive utilities instead:
+ * .hide-mobile -> hidden md:block
+ * .show-mobile -> block md:hidden
+ * .responsive-grid -> grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4
+ */
+
+/* Use Tailwind animation utilities instead:
+ * .animate-fade-in -> animate-pulse
+ * .loading-skeleton -> animate-pulse bg-gray-200 rounded
+ * .loading-spinner -> animate-spin rounded-full border-2 border-gray-300 border-t-blue-600
+ */
+
+/* Custom slide-up animation - keep as it's project-specific */
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Use Tailwind badge utilities instead:
+ * .status-success -> bg-green-100 text-green-800 border border-green-200 rounded-full px-2 py-1 text-xs font-medium
+ * .status-warning -> bg-yellow-100 text-yellow-800 border border-yellow-200 rounded-full px-2 py-1 text-xs font-medium
+ * .status-error -> bg-red-100 text-red-800 border border-red-200 rounded-full px-2 py-1 text-xs font-medium
+ * .status-info -> bg-blue-100 text-blue-800 border border-blue-200 rounded-full px-2 py-1 text-xs font-medium
+ */

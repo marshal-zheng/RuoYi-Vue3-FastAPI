@@ -261,7 +261,7 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .pop_btn {
   text-align: center;
   margin-top: 20px;

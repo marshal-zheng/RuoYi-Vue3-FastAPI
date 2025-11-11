@@ -774,41 +774,36 @@ function tagChange(tagIcon) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .right-board {
   width: 350px;
   position: absolute;
   right: 0;
   top: 0;
   padding-top: 3px;
+}
 
-  &:deep() {
-    .el-tabs__header {
-      margin: 0;
-    }
+.right-board :deep(.el-tabs__header) {
+  margin: 0;
+}
 
-    .el-input-group__append .el-button {
-      display: inline-flex;
-    }
-  }
+.right-board :deep(.el-input-group__append .el-button) {
+  display: inline-flex;
+}
 
-  .field-box {
-    position: relative;
-    height: calc(100vh - 50px - 40px - 42px);
-    box-sizing: border-box;
-    overflow: hidden;
-  }
+.right-board .field-box {
+  position: relative;
+  height: calc(100vh - 50px - 40px - 42px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
 
-  .el-scrollbar {
-    height: 100%;
+.right-board .el-scrollbar {
+  height: 100%;
+}
 
-    &:deep() {
-      .el-scrollbar__view {
-        padding: 30px 20px;
-      }
-
-    }
-  }
+.right-board .el-scrollbar :deep(.el-scrollbar__view) {
+  padding: 30px 20px;
 }
 
 .reg-item {

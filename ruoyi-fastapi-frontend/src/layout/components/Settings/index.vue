@@ -108,7 +108,7 @@
 </template>
 
 <script setup>
-import variables from '@/assets/styles/variables.module.scss';
+import variables from '@/assets/styles/theme.module.css';
 import axios from 'axios';
 import { ElLoading, ElMessage } from 'element-plus';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
@@ -180,16 +180,16 @@ defineExpose({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .setting-drawer-title {
   margin-bottom: 12px;
   color: var(--el-text-color-primary, rgba(0, 0, 0, 0.85));
   line-height: 22px;
   font-weight: bold;
+}
 
-  .drawer-title {
-    font-size: 14px;
-  }
+.setting-drawer-title .drawer-title {
+  font-size: 14px;
 }
 
 .setting-drawer-block-checbox {
@@ -198,41 +198,41 @@ defineExpose({
   align-items: center;
   margin-top: 10px;
   margin-bottom: 20px;
+}
 
-  .setting-drawer-block-checbox-item {
-    position: relative;
-    margin-right: 16px;
-    border-radius: 2px;
-    cursor: pointer;
+.setting-drawer-block-checbox .setting-drawer-block-checbox-item {
+  position: relative;
+  margin-right: 16px;
+  border-radius: 2px;
+  cursor: pointer;
+}
 
-    img {
-      width: 48px;
-      height: 48px;
-    }
+.setting-drawer-block-checbox .setting-drawer-block-checbox-item img {
+  width: 48px;
+  height: 48px;
+}
 
-    .setting-drawer-block-checbox-selectIcon {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-      padding-top: 15px;
-      padding-left: 24px;
-      color: #1890ff;
-      font-weight: 700;
-      font-size: 14px;
-    }
-  }
+.setting-drawer-block-checbox .setting-drawer-block-checbox-item .setting-drawer-block-checbox-selectIcon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  padding-top: 15px;
+  padding-left: 24px;
+  color: #1890ff;
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .drawer-item {
   color: var(--el-text-color-regular, rgba(0, 0, 0, 0.65));
   padding: 12px 0;
   font-size: 14px;
+}
 
-  .comp-style {
-    float: right;
-    margin: -3px 8px 0px 0px;
-  }
+.drawer-item .comp-style {
+  float: right;
+  margin: -3px 8px 0px 0px;
 }
 </style>

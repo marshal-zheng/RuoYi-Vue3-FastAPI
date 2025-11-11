@@ -33,7 +33,7 @@ function addIframe() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .app-main {
   /* 50= navbar  50  */
   min-height: calc(100vh - 50px);
@@ -46,24 +46,20 @@ function addIframe() {
   padding-top: 50px;
 }
 
-.hasTagsView {
-  .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
-  }
+.hasTagsView .app-main {
+  /* 84 = navbar + tags-view = 50 + 34 */
+  min-height: calc(100vh - 84px);
+}
 
-  .fixed-header + .app-main {
-    padding-top: 84px;
-  }
+.hasTagsView .fixed-header + .app-main {
+  padding-top: 84px;
 }
 </style>
 
-<style lang="scss">
-// fix css style bug in open el-dialog
-.el-popup-parent--hidden {
-  .fixed-header {
-    padding-right: 6px;
-  }
+<style>
+/* fix css style bug in open el-dialog */
+.el-popup-parent--hidden .fixed-header {
+  padding-right: 6px;
 }
 
 ::-webkit-scrollbar {
