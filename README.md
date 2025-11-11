@@ -53,81 +53,52 @@
 
 ## 快速开始
 
-### 前端启动
+### 🚀 一键启动（推荐）
+
+项目提供了自动化脚本，可快速完成环境搭建和启动：
 
 ```bash
-# 进入前端目录
+# 首次使用 - 自动安装所有依赖并配置环境
+./setup.sh
+
+# 日常开发 - 快速启动前后端服务
+./start.sh
+```
+
+> 详细说明请查看 [快速启动指南 (QUICK_START.md)](./QUICK_START.md)
+
+### 手动启动
+
+#### 前端
+
+```bash
 cd ruoyi-fastapi-frontend
-
-# 安装依赖
 npm install
-# 或使用国内镜像
-npm install --registry=https://registry.npmmirror.com
-
-# 启动开发服务器
 npm run dev
 ```
 
-前端默认运行在 `http://localhost:80`
+前端访问：`http://localhost:80`
 
-### 后端启动
-
-#### 1. 安装依赖
+#### 后端
 
 ```bash
-# 进入后端目录
 cd ruoyi-fastapi-backend
 
-# MySQL 数据库
+# 安装依赖（MySQL）
 pip install -r requirements.txt
 
-# PostgreSQL 数据库
-pip install -r requirements-pg.txt
-```
+# 配置 .env.dev 文件
+# 修改数据库和 Redis 连接信息
 
-#### 2. 配置环境
+# 初始化数据库
+mysql -u root -e "CREATE DATABASE \`ruoyi-fastapi\` CHARACTER SET utf8mb4;"
+mysql -u root ruoyi-fastapi < sql/ruoyi-fastapi.sql
 
-编辑 `.env.dev` 文件，配置数据库和 Redis 连接信息：
-
-```env
-# 数据库配置
-DATABASE_HOST=localhost
-DATABASE_PORT=3306
-DATABASE_USER=root
-DATABASE_PASSWORD=your_password
-DATABASE_NAME=ruoyi-fastapi
-
-# Redis 配置
-REDIS_HOST=localhost
-REDIS_PORT=6379
-REDIS_PASSWORD=
-```
-
-#### 3. 初始化数据库
-
-```bash
-# 创建数据库
-mysql -u root -p -e "CREATE DATABASE `ruoyi-fastapi` DEFAULT CHARACTER SET utf8mb4;"
-
-# 导入 SQL 文件
-# MySQL
-mysql -u root -p ruoyi-fastapi < sql/ruoyi-fastapi.sql
-
-# PostgreSQL
-psql -U postgres -d ruoyi-fastapi -f sql/ruoyi-fastapi-pg.sql
-```
-
-#### 4. 启动后端服务
-
-```bash
-# 开发环境
+# 启动服务
 python app.py --env=dev
-
-# 生产环境
-python app.py --env=prod
 ```
 
-后端 API 文档访问：`http://localhost:8000/docs`
+后端访问：`http://localhost:8000/docs`
 
 ### 默认账号
 
@@ -136,27 +107,35 @@ python app.py --env=prod
 
 ## 生产部署
 
-### 前端构建
+### 前端
 
 ```bash
 cd ruoyi-fastapi-frontend
-
-# 构建生产环境
 npm run build:prod
-
-# 构建测试环境
-npm run build:stage
 ```
 
-构建产物在 `dist` 目录下，可部署到 Nginx 等 Web 服务器。
+构建产物在 `dist` 目录，部署到 Nginx 等 Web 服务器。
 
-### 后端部署
-
-1. 编辑 `.env.prod` 配置生产环境参数
-2. 使用生产级 ASGI 服务器（如 Gunicorn + Uvicorn）：
+### 后端
 
 ```bash
+# 配置生产环境
+vim .env.prod
+
+# 使用 Gunicorn + Uvicorn
 gunicorn app:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
+```
+
+## 项目结构
+
+```
+RuoYi-Vue3-FastAPI/
+├── ruoyi-fastapi-frontend/    # Vue3 前端项目
+├── ruoyi-fastapi-backend/     # FastAPI 后端项目
+├── setup.sh                   # 环境初始化脚本
+├── start.sh                   # 快速启动脚本
+├── QUICK_START.md            # 详细启动指南
+└── README.md                 # 项目说明
 ```
 
 ## License
