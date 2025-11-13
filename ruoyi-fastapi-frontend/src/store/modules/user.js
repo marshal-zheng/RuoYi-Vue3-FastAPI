@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/login';
 import { getToken, setToken, removeToken } from '@/utils/auth';
 import { isHttp, isEmpty } from '@/utils/validate';
+import { clampBcryptPassword } from '@/utils/password';
 import defAva from '@/assets/images/profile.jpg';
 
 const useUserStore = defineStore('user', {
@@ -16,7 +17,7 @@ const useUserStore = defineStore('user', {
     // 登录
     login(userInfo) {
       const username = userInfo.username.trim();
-      const password = userInfo.password;
+      const password = clampBcryptPassword(userInfo.password);
       const code = userInfo.code;
       const uuid = userInfo.uuid;
       return new Promise((resolve, reject) => {
@@ -60,17 +61,17 @@ const useUserStore = defineStore('user', {
     },
     // 退出系统
     logOut() {
-      return new Promise((resolve, reject) => {
+      return new Promise(resolve => {
         logout(this.token)
+          .catch(error => {
+            console.warn('Logout request failed, fallback to client-side cleanup only.', error);
+          })
           .then(() => {
             this.token = '';
             this.roles = [];
             this.permissions = [];
             removeToken();
             resolve();
-          })
-          .catch(error => {
-            reject(error);
           });
       });
     },

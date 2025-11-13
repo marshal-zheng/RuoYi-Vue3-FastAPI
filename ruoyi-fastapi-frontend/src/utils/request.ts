@@ -19,6 +19,37 @@ let downloadLoadingInstance: LoadingInstance;
 // 是否显示重新登录
 export let isRelogin: ReloginState = { show: false };
 
+const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
+
+const isPlainObject = (value: unknown): value is Record<string, any> => {
+  return Object.prototype.toString.call(value) === '[object Object]';
+};
+
+const shouldFormEncode = (config: AxiosRequestConfig): boolean => {
+  if (!config.data || !isPlainObject(config.data)) {
+    return false;
+  }
+  const headers = (config.headers || {}) as Record<string, any>;
+  const contentType = headers['Content-Type'] || headers['content-type'];
+  return typeof contentType === 'string' && contentType.includes(FORM_CONTENT_TYPE);
+};
+
+const serializeAsForm = (payload: Record<string, any>): URLSearchParams => {
+  const params = new URLSearchParams();
+  Object.keys(payload).forEach(key => {
+    const value = payload[key];
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (typeof value === 'object') {
+      params.append(key, JSON.stringify(value));
+    } else {
+      params.append(key, String(value));
+    }
+  });
+  return params;
+};
+
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 // 创建axios实例
 const service = axios.create({
@@ -31,6 +62,9 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    if (shouldFormEncode(config)) {
+      config.data = serializeAsForm(config.data);
+    }
     // 是否需要设置 token
     const isToken = (config.headers || {}).isToken === false;
     // 是否需要防止数据重复提交

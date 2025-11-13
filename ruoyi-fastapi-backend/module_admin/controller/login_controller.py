@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
+from jwt.exceptions import InvalidTokenError
 from config.enums import BusinessType, RedisInitKeyConfig
 from config.env import AppConfig, JwtConfig
 from config.get_db import get_db
@@ -138,11 +139,14 @@ async def register_user(request: Request, user_register: UserRegister, query_db:
 
 @loginController.post('/logout')
 async def logout(request: Request, token: Optional[str] = Depends(oauth2_scheme)):
-    payload = jwt.decode(
-        token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm], options={'verify_exp': False}
-    )
-    session_id: str = payload.get('session_id')
-    await LoginService.logout_services(request, session_id)
-    logger.info('退出成功')
-
+    try:
+        payload = jwt.decode(
+            token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm], options={'verify_exp': False}
+        )
+        session_id: str = payload.get('session_id')
+        await LoginService.logout_services(request, session_id)
+    except InvalidTokenError:
+        logger.warning('登出时token已失效或算法不匹配，跳过服务端会话清理')
+    else:
+        logger.info('退出成功')
     return ResponseUtil.success(msg='退出成功')

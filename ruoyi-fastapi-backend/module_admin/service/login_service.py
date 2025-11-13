@@ -1,3 +1,4 @@
+import json
 import jwt
 import random
 import uuid
@@ -72,6 +73,7 @@ class LoginService:
         :param login_user: 登录用户对象
         :return: 校验结果
         """
+        login_user = cls.__normalize_login_payload(login_user)
         await cls.__check_login_ip(request)
         account_lock = await request.app.state.redis.get(
             f'{RedisInitKeyConfig.ACCOUNT_LOCK.key}:{login_user.user_name}'
@@ -93,6 +95,9 @@ class LoginService:
             pass
         else:
             await cls.__check_login_captcha(request, login_user)
+        password_bytes_len = len(login_user.password.encode('utf-8')) if login_user.password else 0
+        if password_bytes_len > 72:
+            logger.warning('检测到登录密码字节长度(%s)超过bcrypt限制，将按72字节进行校验', password_bytes_len)
         user = await login_by_account(query_db, login_user.user_name)
         if not user:
             logger.warning('用户不存在')
@@ -479,6 +484,37 @@ class LoginService:
         # await request.app.state.redis.delete(f'{current_user.user.user_id}_session_id')
 
         return True
+
+    @classmethod
+    def __normalize_login_payload(cls, login_user: UserLogin) -> UserLogin:
+        """
+        当客户端误以application/json格式调用/login时，兼容解析JSON串，避免将其整体写入password
+        """
+        raw_password = (login_user.password or '').strip()
+        if not raw_password.startswith('{') or not raw_password.endswith('}'):
+            return login_user
+        try:
+            payload = json.loads(raw_password)
+        except json.JSONDecodeError:
+            return login_user
+        logger.warning('检测到JSON格式登录请求体，已自动兼容解析，请尽快改为表单方式提交')
+        payload_username = payload.get('username') or payload.get('userName')
+        payload_password = payload.get('password')
+        payload_code = payload.get('code')
+        payload_uuid = payload.get('uuid')
+        payload_login_info = payload.get('loginInfo') or payload.get('login_info')
+        merged = login_user.model_dump()
+        if payload_username:
+            merged['user_name'] = payload_username
+        if payload_password:
+            merged['password'] = payload_password
+        if payload_code:
+            merged['code'] = payload_code
+        if payload_uuid:
+            merged['uuid'] = payload_uuid
+        if payload_login_info:
+            merged['login_info'] = payload_login_info
+        return UserLogin(**merged)
 
 
 class RouterUtil:

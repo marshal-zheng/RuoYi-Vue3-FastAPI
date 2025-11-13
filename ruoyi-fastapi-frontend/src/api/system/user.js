@@ -1,5 +1,16 @@
 import request from '@/utils/request';
 import { parseStrEmpty } from '@/utils/ruoyi';
+import { clampBcryptPassword } from '@/utils/password';
+
+function sanitizePasswordField(payload, fields = []) {
+  const target = { ...payload };
+  fields.forEach(field => {
+    if (target[field]) {
+      target[field] = clampBcryptPassword(target[field]);
+    }
+  });
+  return target;
+}
 
 // 查询用户列表
 export function listUser(query) {
@@ -20,19 +31,21 @@ export function getUser(userId) {
 
 // 新增用户
 export function addUser(data) {
+  const payload = sanitizePasswordField(data, ['password']);
   return request({
     url: '/system/user',
     method: 'post',
-    data: data,
+    data: payload,
   });
 }
 
 // 修改用户
 export function updateUser(data) {
+  const payload = sanitizePasswordField(data, ['password']);
   return request({
     url: '/system/user',
     method: 'put',
-    data: data,
+    data: payload,
   });
 }
 
@@ -46,10 +59,13 @@ export function delUser(userId) {
 
 // 用户密码重置
 export function resetUserPwd(userId, password) {
-  const data = {
-    userId,
-    password,
-  };
+  const data = sanitizePasswordField(
+    {
+      userId,
+      password,
+    },
+    ['password']
+  );
   return request({
     url: '/system/user/resetPwd',
     method: 'put',
@@ -89,10 +105,13 @@ export function updateUserProfile(data) {
 
 // 用户密码重置
 export function updateUserPwd(oldPassword, newPassword) {
-  const data = {
-    oldPassword,
-    newPassword,
-  };
+  const data = sanitizePasswordField(
+    {
+      oldPassword,
+      newPassword,
+    },
+    ['oldPassword', 'newPassword']
+  );
   return request({
     url: '/system/user/profile/updatePwd',
     method: 'put',

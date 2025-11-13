@@ -1,10 +1,11 @@
 import request from '@/utils/request';
+import { clampBcryptPassword } from '@/utils/password';
 
 // 登录方法
 export function login(username, password, code, uuid) {
   const data = {
     username,
-    password,
+    password: clampBcryptPassword(password),
     code,
     uuid,
   };
@@ -22,13 +23,20 @@ export function login(username, password, code, uuid) {
 
 // 注册方法
 export function register(data) {
+  const payload = { ...data };
+  if (payload.password) {
+    payload.password = clampBcryptPassword(payload.password);
+  }
+  if (payload.confirmPassword) {
+    payload.confirmPassword = clampBcryptPassword(payload.confirmPassword);
+  }
   return request({
     url: '/register',
     headers: {
       isToken: false,
     },
     method: 'post',
-    data: data,
+    data: payload,
   });
 }
 
