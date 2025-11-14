@@ -196,9 +196,9 @@ defineExpose({
 }
 
 .scroll-button:hover {
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  border-color: var(--el-color-primary, #409eff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--el-color-primary-light-9, #e6f0ff);
+  border-color: var(--el-color-primary, #0052d9);
+  color: var(--el-color-primary, #0052d9);
 }
 
 .scroll-button .el-icon {

@@ -1,14 +1,18 @@
 import { createApp } from 'vue';
 
 import Cookies from 'js-cookie';
+import ZXUI from '@zxio/zxui';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
 import locale from 'element-plus/es/locale/lang/zh-cn';
+import '@zxio/zxui/theme-chalk/index.css';
 
 import '@/assets/styles/theme.module.css'; // 统一主题源文件
 import '@/assets/styles/index.css'; // global css
+import '@/assets/styles/components.less'; // global less (zxui overrides)
+import '@/assets/styles/tailwind.css'; // tailwind css
 
 import App from './App';
 import store from './store';
@@ -85,6 +89,12 @@ app.use(ElementPlus, {
   locale: locale,
   // 支持 large、default、small
   size: (Cookies.get('size') as 'large' | 'default' | 'small') || 'default',
+});
+
+app.use(ZXUI, {
+  size: 'default',
+  namespace: 'zx',
+  // zIndex: 3000
 });
 
 app.mount('#app');

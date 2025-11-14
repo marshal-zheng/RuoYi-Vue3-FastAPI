@@ -95,7 +95,7 @@ export default defineConfig({
     --el-border-color-extra-light: var(--color-gray-200);
 
     /* 可选：圆角/阴影 */
-    --el-border-radius-base: 4px;
+    --el-border-radius-base: 0;
     --el-box-shadow-light: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
   }
 

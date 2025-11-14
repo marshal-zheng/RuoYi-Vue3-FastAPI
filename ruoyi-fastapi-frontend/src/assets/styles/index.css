@@ -1,11 +1,13 @@
 /* Main styles entry point - optimized import order */
 
 /* 1. Import theme system first (includes Tailwind and variables) */
-@import './theme.module.css';
 
 /* 2. Import component-specific styles */
 @import './element-ui.css';
 @import './sidebar.css';
+
+@import './theme.module.css';
+
 
 /* Note: mixins.css, transition.css, and variables.module.css are deprecated and consolidated into theme.module.css */
 
@@ -46,6 +48,10 @@ html {
 /* App container styles */
 .app-container {
   padding: 20px;
+}
+.app-main {
+  padding: 20px;
+  box-shadow: inset 1px 1px 22px 0px rgba(196,207,234,0.76);
 }
 
 /* Link styles */

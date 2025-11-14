@@ -104,8 +104,8 @@
         style="color: var(--tags-item-text, #495060)"
         @click="refreshSelectedTag($route)"
         @mouseenter="
-          e => {
-            e.target.style.color = 'var(--el-color-primary, #409eff)';
+            e => {
+            e.target.style.color = 'var(--el-color-primary, #0052d9)';
             e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)';
           }
         "
@@ -127,7 +127,7 @@
           style="color: var(--tags-item-text, #495060)"
           @mouseenter="
             e => {
-              e.target.style.color = 'var(--el-color-primary, #409eff)';
+              e.target.style.color = 'var(--el-color-primary, #0052d9)';
               e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)';
             }
           "

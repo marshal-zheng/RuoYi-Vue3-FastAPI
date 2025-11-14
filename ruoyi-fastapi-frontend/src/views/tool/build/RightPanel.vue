@@ -851,7 +851,7 @@ function tagChange(tagIcon) {
 }
 
 .select-item.sortable-chosen {
-  border: 1px dashed #409eff;
+  border: 1px dashed var(--el-color-primary, #0052d9);
 }
 
 .select-line-icon {
@@ -885,7 +885,7 @@ function tagChange(tagIcon) {
   top: 0;
   left: 0;
   cursor: pointer;
-  background: #409eff;
+  background: var(--el-color-primary, #0052d9);
   z-index: 1;
   border-radius: 0 0 6px 0;
   justify-content: center;

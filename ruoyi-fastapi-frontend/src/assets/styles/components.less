@@ -1,0 +1,151 @@
+// 组件全局样式文件
+// 用于存放各种组件的全局样式覆盖
+
+// ZxGridList 工具栏全局样式
+.zx-grid-list__toolbar {
+  padding: 10px 0;
+  
+  .zx-select-container {
+    width: 200px;
+  }
+  
+  .zx-grid-form-bar__filters {
+    .zx-select-wrapper {
+      margin-left: 0 !important;
+    }
+  }
+
+  .zx-grid-form-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--zx-form-gap, 12px);
+    row-gap: var(--zx-form-row-gap, 10px);
+
+    &__left {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--zx-form-gap, 12px);
+      flex: 0 0 auto;
+    }
+
+    &__filters {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--zx-form-gap, 12px);
+      flex: 1 1 auto;
+      min-width: 200px;
+
+      > * {
+        flex: 0 0 auto;
+      }
+    }
+
+    &__right {
+      display: inline-flex;
+      align-items: center;
+      margin-left: auto;
+      gap: var(--zx-form-gap, 12px);
+      flex: 0 0 var(--zx-form-min-right, 260px);
+
+      .el-input,
+      .el-select,
+      .el-autocomplete {
+        width: 100%;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .zx-grid-form-bar__right {
+      flex: 1 0 100%;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.zx-grid-form-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--zx-form-gap, 12px);
+  row-gap: var(--zx-form-row-gap, 10px);
+
+  &__left {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zx-form-gap, 12px);
+    flex: 0 0 auto;
+  }
+
+  &__filters {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--zx-form-gap, 12px);
+    flex: 1 1 auto;
+    min-width: 200px;
+
+    > * {
+      flex: 0 0 auto;
+    }
+  }
+
+  &__right {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    gap: var(--zx-form-gap, 12px);
+    flex: 0 0 var(--zx-form-min-right, 260px);
+
+    .el-input,
+    .el-select,
+    .el-autocomplete {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .zx-grid-form-bar__right {
+    flex: 1 0 100%;
+    justify-content: flex-end;
+  }
+}
+
+.el-table {
+  /* 全局字号略大一档，增强可读性 */
+  font-size: 14px;
+
+  .el-table__header-wrapper th,
+  .el-table__header th {
+    height: 60px;
+    padding: 0 0px; /* 左右留白 */
+  }
+  .el-table__body td {
+    height: 56px;
+    line-height: 56px;
+    background-color: var(--el-table-tr-bg-color, var(--app-background-color-card-default));
+    border-bottom: 1px solid var(--el-table-border-color, rgba(255, 255, 255, 0.06));
+  }
+
+  .el-table__body tr:hover > td {
+    background-color: var(
+      --el-table-row-hover-bg-color,
+      var(--app-background-color-card-secondary)
+    );
+  }
+
+  .el-table__body tr.current-row > td {
+    background-color: var(--el-table-current-row-bg-color, rgba(156, 255, 249, 0.08));
+  }
+
+  .el-table__header-wrapper th {
+    background-color: var(--app-table-header-bg) !important;
+    color: var(--app-table-header-color) !important;
+  }
+  .op-col__wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

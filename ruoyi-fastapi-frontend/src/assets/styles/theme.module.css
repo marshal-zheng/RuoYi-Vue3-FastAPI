@@ -2,17 +2,17 @@
 
 /* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
 @theme {
-  /* 主色 */
-  --color-primary-50:  #e3f2fd;
-  --color-primary-100: #bbdefb;
-  --color-primary-200: #90caf9;
-  --color-primary-300: #64b5f6;
-  --color-primary-400: #42a5f5;
-  --color-primary-500: #409eff;
-  --color-primary-600: #2196f3;
-  --color-primary-700: #1976d2;
-  --color-primary-800: #1565c0;
-  --color-primary-900: #0d47a1;
+  /* 主色（对齐 RuoYi-Vue3 企业级主题） */
+  --color-primary-50:  #e6f0ff;
+  --color-primary-100: #b3ccff;
+  --color-primary-200: #99b5ff;
+  --color-primary-300: #6690ff;
+  --color-primary-400: #4d7dff;
+  --color-primary-500: #0052d9;
+  --color-primary-600: #0045bf;
+  --color-primary-700: #003ba8;
+  --color-primary-800: #002e85;
+  --color-primary-900: #00215f;
 
   /* 功能色 - Success */
   --color-success-50:  #f0f9ff;
@@ -124,36 +124,40 @@
     --el-color-info-light-9: var(--color-info-50);
     --el-color-info-dark-2: var(--color-info-700);
 
-    --el-bg-color:          var(--color-surface);
-    --el-bg-color-page:     var(--color-surface-2);
-    --el-bg-color-overlay:  var(--color-overlay);
+    /* 背景颜色（对齐参考主题） */
+    --el-bg-color:          #ffffff;
+    --el-bg-color-page:     #f7f8fa;
+    --el-bg-color-overlay:  #ffffff;
 
-    --el-text-color-primary:    var(--color-gray-800);
-    --el-text-color-regular:    var(--color-gray-700);
-    --el-text-color-secondary:  var(--color-gray-600);
-    --el-text-color-placeholder:var(--color-gray-500);
-    --el-text-color-disabled:   var(--color-gray-400);
+    /* 文字颜色（对齐参考主题） */
+    --el-text-color-primary:     #1d2129;
+    --el-text-color-regular:     #4e5969;
+    --el-text-color-secondary:   #86909c;
+    --el-text-color-placeholder: #c9cdd4;
+    --el-text-color-disabled:    #c9cdd4;
 
-    --el-border-color:           var(--color-gray-300);
-    --el-border-color-light:     var(--color-gray-300);
-    --el-border-color-lighter:   var(--color-gray-200);
-    --el-border-color-extra-light: var(--color-gray-200);
-    --el-border-color-dark:      var(--color-gray-400);
-    --el-border-color-darker:    var(--color-gray-500);
+    /* 边框颜色（对齐参考主题） */
+    --el-border-color:           #e5e6eb;
+    --el-border-color-light:     #f0f1f5;
+    --el-border-color-lighter:   #f5f6fa;
+    --el-border-color-extra-light:#fafbfc;
+    --el-border-color-dark:      #d3d4d6;
+    --el-border-color-darker:    #c5c6c8;
 
-    --el-fill-color:           var(--color-gray-100);
-    --el-fill-color-light:     var(--color-gray-50);
-    --el-fill-color-lighter:   var(--color-gray-50);
-    --el-fill-color-extra-light: var(--color-gray-50);
-    --el-fill-color-dark:      var(--color-gray-200);
-    --el-fill-color-darker:    var(--color-gray-300);
-    --el-fill-color-blank:     transparent;
+    /* 填充颜色（对齐参考主题） */
+    --el-fill-color:           #f7f8fa;
+    --el-fill-color-light:     #fafbfc;
+    --el-fill-color-lighter:   #fcfcfd;
+    --el-fill-color-extra-light:#fefefe;
+    --el-fill-color-dark:      #edeef2;
+    --el-fill-color-darker:    #e5e6eb;
+    --el-fill-color-blank:     #ffffff;
 
-    /* 可选：圆角/阴影 */
-    --el-border-radius-base: 4px;
-    --el-border-radius-small: 2px;
-    --el-border-radius-round: 20px;
-    --el-border-radius-circle: 100%;
+    /* 可选：圆角/阴影（强制直角） */
+    --el-border-radius-base: 0px !important;
+    --el-border-radius-small: 0px !important;
+    --el-border-radius-round: 0px !important;
+    --el-border-radius-circle: 100% !important;
     
     --el-box-shadow: 0 12px 32px 4px rgba(0, 0, 0, 0.04), 0 8px 20px rgba(0, 0, 0, 0.08);
     --el-box-shadow-light: 0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);

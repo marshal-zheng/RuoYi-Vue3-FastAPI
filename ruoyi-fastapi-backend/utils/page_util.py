@@ -44,9 +44,7 @@ class PageUtil:
         paginated_data = data_list[start:end]
         has_next = True if math.ceil(len(data_list) / page_size) > page_num else False
 
-        result = PageResponseModel(
-            rows=paginated_data, pageNum=page_num, pageSize=page_size, total=len(data_list), hasNext=has_next
-        )
+        result = PageResponseModel(rows=paginated_data, page_num=page_num, page_size=page_size, total=len(data_list), has_next=has_next)
 
         return result
 
@@ -72,13 +70,7 @@ class PageUtil:
                 else:
                     paginated_data.append(row)
             has_next = math.ceil(total / page_size) > page_num
-            result = PageResponseModel(
-                rows=CamelCaseUtil.transform_result(paginated_data),
-                pageNum=page_num,
-                pageSize=page_size,
-                total=total,
-                hasNext=has_next,
-            )
+            result = PageResponseModel(rows=CamelCaseUtil.transform_result(paginated_data), page_num=page_num, page_size=page_size, total=total, has_next=has_next)
         else:
             query_result = await db.execute(query)
             no_paginated_data = []
@@ -109,8 +101,6 @@ def get_page_obj(data_list: List, page_num: int, page_size: int):
     paginated_data = data_list[start:end]
     has_next = True if math.ceil(len(data_list) / page_size) > page_num else False
 
-    result = PageResponseModel(
-        rows=paginated_data, pageNum=page_num, pageSize=page_size, total=len(data_list), hasNext=has_next
-    )
+    result = PageResponseModel(rows=paginated_data, page_num=page_num, page_size=page_size, total=len(data_list), has_next=has_next)
 
     return result

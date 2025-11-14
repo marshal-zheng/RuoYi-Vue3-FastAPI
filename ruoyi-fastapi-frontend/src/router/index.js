@@ -158,6 +158,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: '/project/project-detail',
+    component: Layout,
+    hidden: true,
+    permissions: ['project:project:query'],
+    children: [
+      {
+        path: 'index/:projectId(\\d+)',
+        component: () => import('@/views/project/detail'),
+        name: 'ProjectDetail',
+        meta: { title: '工程详情', activeMenu: '/project/project' },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

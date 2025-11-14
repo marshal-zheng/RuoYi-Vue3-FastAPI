@@ -19,6 +19,7 @@ from module_admin.controller.menu_controller import menuController
 from module_admin.controller.notice_controller import noticeController
 from module_admin.controller.online_controller import onlineController
 from module_admin.controller.post_controler import postController
+from module_admin.controller.project_controller import projectController
 from module_admin.controller.role_controller import roleController
 from module_admin.controller.server_controller import serverController
 from module_admin.controller.user_controller import userController
@@ -73,6 +74,7 @@ controller_list = [
     {'router': configController, 'tags': ['系统管理-参数管理']},
     {'router': noticeController, 'tags': ['系统管理-通知公告管理']},
     {'router': logController, 'tags': ['系统管理-日志管理']},
+    {'router': projectController, 'tags': ['工程管理']},
     {'router': onlineController, 'tags': ['系统监控-在线用户']},
     {'router': jobController, 'tags': ['系统监控-定时任务']},
     {'router': serverController, 'tags': ['系统监控-菜单管理']},

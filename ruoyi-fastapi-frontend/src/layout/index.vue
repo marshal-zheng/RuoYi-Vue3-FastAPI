@@ -18,78 +18,74 @@
 </template>
 
 <script setup>
-import { useWindowSize } from '@vueuse/core';
-import Sidebar from './components/Sidebar/index.vue';
-import { AppMain, Navbar, Settings, TagsView } from './components';
-import defaultSettings from '@/settings';
+import { useWindowSize } from '@vueuse/core'
+import Sidebar from './components/Sidebar/index.vue'
+import { AppMain, Navbar, Settings, TagsView } from './components'
+import useAppStore from '@/store/modules/app'
+import useSettingsStore from '@/store/modules/settings'
 
-import useAppStore from '@/store/modules/app';
-import useSettingsStore from '@/store/modules/settings';
-
-const settingsStore = useSettingsStore();
-const theme = computed(() => settingsStore.theme);
-const sideTheme = computed(() => settingsStore.sideTheme);
-const sidebar = computed(() => useAppStore().sidebar);
-const device = computed(() => useAppStore().device);
-const needTagsView = computed(() => settingsStore.tagsView);
-const fixedHeader = computed(() => settingsStore.fixedHeader);
+const settingsStore = useSettingsStore()
+const theme = computed(() => settingsStore.theme)
+const sideTheme = computed(() => settingsStore.sideTheme)
+const sidebar = computed(() => useAppStore().sidebar)
+const device = computed(() => useAppStore().device)
+const needTagsView = computed(() => settingsStore.tagsView)
+const fixedHeader = computed(() => settingsStore.fixedHeader)
 
 const classObj = computed(() => ({
   hideSidebar: !sidebar.value.opened,
   openSidebar: sidebar.value.opened,
   withoutAnimation: sidebar.value.withoutAnimation,
-  mobile: device.value === 'mobile',
-}));
+  mobile: device.value === 'mobile'
+}))
 
-const { width, height } = useWindowSize();
-const WIDTH = 992; // refer to Bootstrap's responsive design
+const { width, height } = useWindowSize()
+const WIDTH = 992 // refer to Bootstrap's responsive design
 
-watch(
-  () => device.value,
-  () => {
-    if (device.value === 'mobile' && sidebar.value.opened) {
-      useAppStore().closeSideBar({ withoutAnimation: false });
-    }
+watch(() => device.value, () => {
+  if (device.value === 'mobile' && sidebar.value.opened) {
+    useAppStore().closeSideBar({ withoutAnimation: false })
   }
-);
+})
 
 watchEffect(() => {
   if (width.value - 1 < WIDTH) {
-    useAppStore().toggleDevice('mobile');
-    useAppStore().closeSideBar({ withoutAnimation: true });
+    useAppStore().toggleDevice('mobile')
+    useAppStore().closeSideBar({ withoutAnimation: true })
   } else {
-    useAppStore().toggleDevice('desktop');
+    useAppStore().toggleDevice('desktop')
   }
-});
+})
 
 function handleClickOutside() {
-  useAppStore().closeSideBar({ withoutAnimation: false });
+  useAppStore().closeSideBar({ withoutAnimation: false })
 }
 
-const settingRef = ref(null);
+const settingRef = ref(null)
 function setLayout() {
-  settingRef.value.openSetting();
+  settingRef.value.openSetting()
 }
 </script>
 
-<style scoped>
-@import '@/assets/styles/theme.module.css';
+<style lang="less" scoped>
+@import "@/assets/styles/mixin.less";
+@import "@/assets/styles/variables.module.less";
 
 .app-wrapper {
+  .clearfix();
   position: relative;
   height: 100%;
   width: 100%;
+
+  &.mobile.openSidebar {
+    position: fixed;
+    top: 0;
+  }
 }
 
-.app-wrapper::after {
-  content: '';
-  display: table;
-  clear: both;
-}
-
-.app-wrapper.mobile.openSidebar {
-  position: fixed;
-  top: 0;
+.main-container:has(.fixed-header) {
+  height: 100vh;
+  overflow: hidden;
 }
 
 .drawer-bg {
@@ -107,7 +103,7 @@ function setLayout() {
   top: 0;
   right: 0;
   z-index: 9;
-  width: calc(100% - var(--base-sidebar-width));
+  width: calc(100% - @base-sidebar-width);
   transition: width 0.28s;
 }
 
