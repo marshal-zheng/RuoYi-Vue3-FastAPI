@@ -7,7 +7,7 @@
         show-overflow
         :data="configTableData"
         :span-method="configSpanMethod"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
+        :edit-config="configTableEditConfig"
         class="text-sm"
       >
         <vxe-column
@@ -131,6 +131,7 @@
 <script setup lang="ts">
 import { ref, watch, reactive, computed } from 'vue';
 import type { VxeTableInstance } from 'vxe-table';
+import { resolveEditorValue } from './fieldUtils';
 
 const props = defineProps<{
   modelValue?: any;
@@ -148,12 +149,12 @@ const tableRef = ref<VxeTableInstance>();
 const defaultConfig = {
   sender: '',
   receiver: '',
-  frequency: '160',
-  speed: '460.8K',
-  method: 'RS422',
+  frequency: '',
+  speed: '',
+  method: '',
   sendDuration: '',
-  frameLength: '32',
-  errorHandle: '不判断',
+  frameLength: '',
+  errorHandle: '',
   fields: [],
 };
 
@@ -164,7 +165,7 @@ const localConfig = reactive({
 });
 
 // 配置表格数据（将配置项展示为表格形式）
-const configTableData = computed(() => [
+const configTableData = ref([
   {
     label1: '发送方',
     value1: localConfig.sender,
@@ -187,14 +188,67 @@ const configTableData = computed(() => [
   },
 ]);
 
+const syncConfigTableRows = () => {
+  const rows = configTableData.value;
+  rows[0].value1 = localConfig.sender;
+  rows[0].value2 = localConfig.receiver;
+  rows[0].value3 = `${localConfig.frequency} ms`;
+  rows[0].value4 = `${localConfig.speed} bps`;
+  rows[1].value1 = localConfig.method;
+  rows[1].value2 = localConfig.sendDuration ? `${localConfig.sendDuration} ms` : '';
+  rows[1].value3 = `${localConfig.frameLength} Byte`;
+  rows[1].value4 = localConfig.errorHandle;
+};
+
 // 配置表格编辑渲染器（发送方和接收方不允许编辑）
 const configEditRender = (field: string) => {
-  const row = configTableData.value[0];
-  const isReadonly =
-    (field === 'value1' && row.label1 === '发送方') ||
-    (field === 'value2' && row.label2 === '接收方');
 
-  return isReadonly ? {} : { name: 'input', attrs: { placeholder: '请输入' } };
+  const stripUnit = (v: any, unit: string) => String(v ?? '').replace(new RegExp(`\\s*${unit}$`, 'i'), '').trim();
+  const handleUpdate = (cellParams: any, evtOrValue: any) => {
+    const { row } = cellParams;
+    const raw = evtOrValue && evtOrValue.target ? evtOrValue.target.value : evtOrValue;
+    const nextValue = resolveEditorValue(cellParams, raw);
+    if (field === 'value1') {
+      if (row.label1 === '传输方式') {
+        localConfig.method = nextValue;
+      }
+    } else if (field === 'value2') {
+      if (row.label2 === '发送时长') {
+        localConfig.sendDuration = stripUnit(nextValue, 'ms');
+      }
+    } else if (field === 'value3') {
+      if (row.label3 === '传输频率') {
+        localConfig.frequency = stripUnit(nextValue, 'ms');
+      } else if (row.label3 === '帧长度') {
+        localConfig.frameLength = stripUnit(nextValue, 'Byte');
+      }
+    } else if (field === 'value4') {
+      if (row.label4 === '传输速率') {
+        localConfig.speed = stripUnit(nextValue, 'bps');
+      } else if (row.label4 === '错误处理') {
+        localConfig.errorHandle = nextValue;
+      }
+    }
+  };
+
+  return {
+    name: 'input',
+    attrs: { placeholder: '请输入' },
+    events: {
+      change: (cellParams: any, evt: any) => handleUpdate(cellParams, evt),
+      input: (cellParams: any, evt: any) => handleUpdate(cellParams, evt),
+    },
+  };
+};
+
+const configTableEditConfig = {
+  trigger: 'click',
+  mode: 'cell',
+  activeMethod({ row, column }: any) {
+    if (column.field === 'value1' && row.label1 === '发送方') return false;
+    if (column.field === 'value2' && row.label2 === '接收方') return false;
+    return true;
+  },
 };
 
 // 配置表格合并单元格方法
@@ -224,7 +278,8 @@ const fieldSpanMethod = ({ columnIndex }: any) => {
 watch(
   () => localConfig,
   newVal => {
-    emit('update:modelValue', { ...newVal });
+    syncConfigTableRows();
+    emit('update:modelValue', newVal);
   },
   { deep: true }
 );

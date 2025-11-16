@@ -56,9 +56,6 @@
         <el-divider content-position="left">
           <span class="template-title text-[16px] font-semibold text-[#303133]">协议格式配置</span>
         </el-divider>
-
-        {{ drawer.state.data.protocolConfig }}
-
         <component
           :is="currentTemplateComponent"
           v-if="currentTemplateComponent"

@@ -184,7 +184,7 @@ const localConfig = reactive({
 });
 
 // 配置表格数据（将配置项展示为表格形式）
-const configTableData = computed(() => [
+const configTableData = ref([
   {
     label1: '发送方',
     value1: localConfig.sender,
@@ -206,6 +206,18 @@ const configTableData = computed(() => [
     value4: localConfig.errorHandle,
   },
 ]);
+
+const syncConfigTableRows = () => {
+  const rows = configTableData.value;
+  rows[0].value1 = localConfig.sender;
+  rows[0].value2 = localConfig.receiver;
+  rows[0].value3 = localConfig.frequency;
+  rows[0].value4 = localConfig.speed;
+  rows[1].value1 = localConfig.method;
+  rows[1].value2 = localConfig.canId;
+  rows[1].value3 = localConfig.frameLength;
+  rows[1].value4 = localConfig.errorHandle;
+};
 
 // 获取编辑渲染器并同步值到本地配置
 const getEditRender = (field: string) => {
@@ -287,7 +299,8 @@ watch(
   () => localConfig,
 
   newVal => {
-    emit('update:modelValue', { ...newVal });
+    syncConfigTableRows();
+    emit('update:modelValue', newVal);
   },
   { deep: true }
 );
