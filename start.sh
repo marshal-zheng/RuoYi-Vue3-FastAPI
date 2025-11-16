@@ -5,6 +5,48 @@
 
 set -e
 
+SQL_DIR="ruoyi-fastapi-backend/sql"
+DB_NAME="${DB_NAME:-ruoyi-fastapi}"
+if [ "${DB_USER+x}" != "x" ]; then
+    DB_USER="root"
+fi
+if [ "${DB_PASSWORD+x}" != "x" ]; then
+    DB_PASSWORD="admin1234"
+fi
+
+mysql_exec() {
+    if [ -n "$DB_PASSWORD" ]; then
+        mysql -u "$DB_USER" -p"$DB_PASSWORD" "$@"
+    else
+        mysql -u "$DB_USER" "$@"
+    fi
+}
+
+apply_sql_updates() {
+    if [ ! -d "$SQL_DIR" ]; then
+        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_DIR${NC}"
+        return
+    fi
+
+    sql_found=false
+
+    while IFS= read -r sql_file; do
+        sql_found=true
+        if [[ $(basename "$sql_file") == *"-pg.sql" ]]; then
+            continue
+        fi
+        echo -e "${BLUE}   ↪ $(basename "$sql_file")${NC}"
+        mysql_exec "$DB_NAME" < "$sql_file"
+    done < <(find "$SQL_DIR" -maxdepth 1 -type f -name "update_*.sql" | sort)
+
+    if [ "$sql_found" = false ]; then
+        echo -e "${YELLOW}ℹ️  未检测到需要执行的增量 SQL 脚本${NC}"
+        return
+    fi
+
+    echo -e "${GREEN}✅ 增量 SQL 执行完成${NC}"
+}
+
 echo "🚀 启动 RuoYi-Vue3-FastAPI 项目"
 echo "=============================="
 
@@ -38,10 +80,12 @@ fi
 
 # 验证数据库连接
 echo -e "${BLUE}🔍 验证数据库连接...${NC}"
-if ! mysql -u root -padmin1234 -e "USE \`ruoyi-fastapi\`; SELECT 1;" &> /dev/null; then
+if ! mysql_exec -e "USE \`$DB_NAME\`; SELECT 1;" &> /dev/null; then
     echo -e "${RED}❌ 数据库连接失败，请先运行 ./setup.sh${NC}"
     exit 1
 fi
+
+apply_sql_updates
 
 # 验证 Redis 连接
 if ! redis-cli ping | grep -q PONG; then

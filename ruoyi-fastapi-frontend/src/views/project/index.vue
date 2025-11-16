@@ -13,14 +13,16 @@
               icon="Plus"
               @click="handleAdd"
               v-hasPermi="['project:project:add']"
-            >新增</ZxButton>
+              >新增</ZxButton
+            >
             <ZxButton
               type="danger"
               icon="Delete"
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['project:project:remove']"
-            >删除</ZxButton>
+              >删除</ZxButton
+            >
           </div>
           <div class="zx-grid-form-bar__filters">
             <el-date-picker
@@ -48,7 +50,10 @@
       </template>
 
       <template #table="{ grid, refresh: handleRefresh }">
-        <div v-loading="grid.loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 project-grid">
+        <div
+          v-loading="grid.loading"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 project-grid"
+        >
           <el-card
             v-for="project in grid.list"
             :key="project.projectId"
@@ -56,8 +61,10 @@
             shadow="hover"
             :body-style="{ padding: '0' }"
             :class="{
-              'border-[#0052d9] shadow-[0_0_0_2px_rgba(0,82,217,0.1)]': ids.includes(project.projectId),
-              'hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]': !ids.includes(project.projectId)
+              'border-[#0052d9] shadow-[0_0_0_2px_rgba(0,82,217,0.1)]': ids.includes(
+                project.projectId
+              ),
+              'hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]': !ids.includes(project.projectId),
             }"
           >
             <div
@@ -117,7 +124,9 @@
                     <ZxIcon icon="Clock" :size="14" color="#86909c" />
                     <span>创建时间</span>
                   </div>
-                  <span class="text-[#4e5969]">{{ parseTime(project.createTime, '{y}-{m}-{d}') || '-' }}</span>
+                  <span class="text-[#4e5969]">{{
+                    parseTime(project.createTime, '{y}-{m}-{d}') || '-'
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -130,33 +139,46 @@
                   type="default"
                   icon="Document"
                   class="flex-1"
-                >详情</ZxButton>
+                  >详情</ZxButton
+                >
                 <ZxButton
                   @click.stop="handleUpdate(project)"
                   v-hasPermi="['project:project:edit']"
                   type="primary"
                   icon="Edit"
                   class="flex-1"
-                >拓扑设计</ZxButton>
+                  >拓扑设计</ZxButton
+                >
                 <ZxButton
                   @click.stop="handleDelete(project)"
                   v-hasPermi="['project:project:remove']"
                   type="danger"
                   icon="Delete"
                   class="flex-1"
-                >删除</ZxButton>
+                  >删除</ZxButton
+                >
               </div>
             </template>
           </el-card>
         </div>
 
         <div v-if="!grid.loading && grid.list.length === 0" class="text-center py-16 px-4">
-          <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#f7f8fa] mb-4">
+          <div
+            class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#f7f8fa] mb-4"
+          >
             <ZxIcon icon="InfoFilled" :size="40" color="#c9cdd4" />
           </div>
           <h3 class="text-base font-semibold text-[#1d2129] mb-2">暂无工程</h3>
-          <p class="text-sm text-[#86909c] mb-6 max-w-md mx-auto">还没有创建任何工程，点击下方按钮开始创建您的第一个工程</p>
-          <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['project:project:add']">创建工程</ZxButton>
+          <p class="text-sm text-[#86909c] mb-6 max-w-md mx-auto">
+            还没有创建任何工程，点击下方按钮开始创建您的第一个工程
+          </p>
+          <ZxButton
+            type="primary"
+            icon="Plus"
+            @click="handleAdd"
+            v-hasPermi="['project:project:add']"
+            >创建工程</ZxButton
+          >
         </div>
       </template>
     </ZxGridList>
@@ -166,114 +188,113 @@
 </template>
 
 <script setup name="Project">
-import { listProject, delProject } from '@/api/project/project'
-import { checkPermi } from '@/utils/permission'
-import { Document, Edit, Delete } from '@element-plus/icons-vue'
-import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue'
+import { listProject, delProject } from '@/api/project/project';
+import { checkPermi } from '@/utils/permission';
+import { Document, Edit, Delete } from '@element-plus/icons-vue';
+import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue';
 
-const { proxy } = getCurrentInstance()
+const { proxy } = getCurrentInstance();
 
-const gridListRef = ref()
-const ids = ref([])
-const single = ref(true)
-const multiple = ref(true)
+const gridListRef = ref();
+const ids = ref([]);
+const single = ref(true);
+const multiple = ref(true);
 
-const projectDialogRef = ref()
-
+const projectDialogRef = ref();
 
 async function loadProjectData(params) {
   try {
-    const { pageNum, pageSize, ...query } = params
-    let requestParams = { pageNum, pageSize, ...query }
+    const { pageNum, pageSize, ...query } = params;
+    let requestParams = { pageNum, pageSize, ...query };
     if (query.dateRange && query.dateRange.length === 2) {
-      requestParams = proxy.addDateRange(requestParams, query.dateRange)
-      delete requestParams.dateRange
+      requestParams = proxy.addDateRange(requestParams, query.dateRange);
+      delete requestParams.dateRange;
     }
-    const response = await listProject(requestParams)
+    const response = await listProject(requestParams);
     return {
       list: response.rows || [],
-      total: response.total || 0
-    }
+      total: response.total || 0,
+    };
   } catch (error) {
-    return { list: [], total: 0 }
+    return { list: [], total: 0 };
   }
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value })
-  handleRefresh()
+  updateState({ [key]: value });
+  handleRefresh();
 }
 
 function onSearch({ handleRefresh }) {
-  handleRefresh()
+  handleRefresh();
 }
 
 function refreshList() {
-  gridListRef.value && gridListRef.value.refresh()
+  gridListRef.value && gridListRef.value.refresh();
 }
 
 function handleAdd() {
-  projectDialogRef.value && projectDialogRef.value.open()
+  projectDialogRef.value && projectDialogRef.value.open();
 }
 
 function toggleSelection(project) {
-  const index = ids.value.indexOf(project.projectId)
-  if (index > -1) ids.value.splice(index, 1)
-  else ids.value.push(project.projectId)
-  single.value = ids.value.length != 1
-  multiple.value = !ids.value.length
+  const index = ids.value.indexOf(project.projectId);
+  if (index > -1) ids.value.splice(index, 1);
+  else ids.value.push(project.projectId);
+  single.value = ids.value.length != 1;
+  multiple.value = !ids.value.length;
 }
 
 function handleDetail(row) {
-  const projectId = row.projectId
-  proxy.$router.push('/project/project-detail/index/' + projectId)
+  const projectId = row.projectId;
+  proxy.$router.push('/project/project-detail/index/' + projectId);
 }
 
 function handleUpdate(row) {
-  const projectId = row.projectId
-  proxy.$router.push('/project/topo/index/' + projectId)
+  const projectId = row.projectId;
+  proxy.$router.push('/project/topo/index/' + projectId);
 }
 
 function handleDelete(row) {
-  const projectIds = row.projectId || ids.value
+  const projectIds = row.projectId || ids.value;
   proxy.$modal
     .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
     .then(function () {
-      return delProject(projectIds)
+      return delProject(projectIds);
     })
     .then(() => {
-      refreshList()
-      proxy.$modal.msgSuccess('删除成功')
-    })
+      refreshList();
+      proxy.$modal.msgSuccess('删除成功');
+    });
 }
 
 function getProjectMoreActionList(project) {
-  const actions = []
+  const actions = [];
   if (checkPermi(['project:project:query'])) {
-    actions.push({ label: '查看详情', eventTag: 'detail', icon: Document })
+    actions.push({ label: '查看详情', eventTag: 'detail', icon: Document });
   }
   if (checkPermi(['project:project:edit'])) {
-    actions.push({ label: '拓扑设计', eventTag: 'edit', icon: Edit, type: 'primary' })
+    actions.push({ label: '拓扑设计', eventTag: 'edit', icon: Edit, type: 'primary' });
   }
   if (checkPermi(['project:project:remove'])) {
-    actions.push({ label: '删除工程', eventTag: 'delete', icon: Delete, danger: true })
+    actions.push({ label: '删除工程', eventTag: 'delete', icon: Delete, danger: true });
   }
-  return actions
+  return actions;
 }
 
 function handleMoreActionSelect(item, project, handleRefresh) {
   switch (item.eventTag) {
     case 'detail':
-      handleDetail(project)
-      break
+      handleDetail(project);
+      break;
     case 'edit':
-      handleUpdate(project)
-      break
+      handleUpdate(project);
+      break;
     case 'delete':
-      handleDelete(project)
-      break
+      handleDelete(project);
+      break;
     default:
-      break
+      break;
   }
 }
 </script>
@@ -282,7 +303,9 @@ function handleMoreActionSelect(item, project, handleRefresh) {
   border-radius: 8px;
 }
 .project-card {
-  background-image: linear-gradient(8deg, hsla(0,0%,100%,.6) 30%, rgba(0,82,217,.16) 100%), linear-gradient(209deg, #cdd8ff 0%, #eef2ff 28%, #ffffff 100%);
+  background-image:
+    linear-gradient(8deg, hsla(0, 0%, 100%, 0.6) 30%, rgba(0, 82, 217, 0.16) 100%),
+    linear-gradient(209deg, #cdd8ff 0%, #eef2ff 28%, #ffffff 100%);
   background-size: 180% 180%;
   background-position: center;
   background-repeat: no-repeat;

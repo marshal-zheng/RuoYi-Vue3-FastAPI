@@ -5,6 +5,44 @@
 
 set -e  # 遇到错误立即退出
 
+SQL_DIR="ruoyi-fastapi-backend/sql"
+DB_NAME="${DB_NAME:-ruoyi-fastapi}"
+DB_USER="${DB_USER:-root}"
+DB_PASSWORD="${DB_PASSWORD:-}"
+
+mysql_exec() {
+    if [ -n "$DB_PASSWORD" ]; then
+        mysql -u "$DB_USER" -p"$DB_PASSWORD" "$@"
+    else
+        mysql -u "$DB_USER" "$@"
+    fi
+}
+
+apply_sql_updates() {
+    if [ ! -d "$SQL_DIR" ]; then
+        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_DIR${NC}"
+        return
+    fi
+
+    sql_found=false
+
+    while IFS= read -r sql_file; do
+        sql_found=true
+        if [[ $(basename "$sql_file") == *"-pg.sql" ]]; then
+            continue
+        fi
+        echo -e "${BLUE}   ↪ $(basename "$sql_file")${NC}"
+        mysql_exec "$DB_NAME" < "$sql_file"
+    done < <(find "$SQL_DIR" -maxdepth 1 -type f -name "update_*.sql" | sort)
+
+    if [ "$sql_found" = false ]; then
+        echo -e "${YELLOW}ℹ️  未检测到需要执行的增量 SQL 脚本${NC}"
+        return
+    fi
+
+    echo -e "${GREEN}✅ 增量 SQL 执行完成${NC}"
+}
+
 echo "🚀 RuoYi-Vue3-FastAPI 一键启动脚本"
 echo "======================================"
 
@@ -76,7 +114,7 @@ sleep 5
 
 # 检查 MySQL 连接
 echo -e "${BLUE}🔍 检查 MySQL 连接...${NC}"
-if ! mysql -u root -e "SELECT 1" &> /dev/null; then
+if ! mysql_exec -e "SELECT 1" &> /dev/null; then
     echo -e "${YELLOW}⚙️  初始化 MySQL...${NC}"
     mysqld --initialize-insecure
     brew services restart mysql
@@ -85,17 +123,19 @@ fi
 
 # 创建数据库
 echo -e "${BLUE}🗄️  配置数据库...${NC}"
-mysql -u root -e "CREATE DATABASE IF NOT EXISTS \`ruoyi-fastapi\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+mysql_exec -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # 导入数据
-if [ -f "ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql" ]; then
+if [ -f "$SQL_DIR/ruoyi-fastapi.sql" ]; then
     echo -e "${BLUE}📊 导入数据库数据...${NC}"
-    mysql -u root ruoyi-fastapi < ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql
+    mysql_exec "$DB_NAME" < "$SQL_DIR/ruoyi-fastapi.sql"
     echo -e "${GREEN}✅ 数据库数据导入完成${NC}"
 else
     echo -e "${RED}❌ 数据库文件不存在${NC}"
     exit 1
 fi
+
+apply_sql_updates
 
 # 验证 Redis 连接
 echo -e "${BLUE}🔍 检查 Redis 连接...${NC}"

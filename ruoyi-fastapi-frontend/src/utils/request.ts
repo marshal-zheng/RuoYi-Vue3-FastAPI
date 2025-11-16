@@ -50,6 +50,39 @@ const serializeAsForm = (payload: Record<string, any>): URLSearchParams => {
   return params;
 };
 
+const normalizeGridParams = (params: Record<string, any>): Record<string, any> => {
+  console.log('params', params)
+  const p: Record<string, any> = { ...(params || {}) };
+  const pager = p.pager;
+  if (pager && typeof pager === 'object') {
+    if (pager.page !== undefined) p.pageNum = pager.page;
+    if (pager.size !== undefined) p.pageSize = pager.size;
+    delete p.pager;
+  }
+  const query = p.query;
+  if (query && typeof query === 'object') {
+    const q = { ...query };
+    if (q.sortProp) {
+      p.orderByColumn = q.sortProp;
+      delete q.sortProp;
+    }
+    if (q.sortOrder) {
+      const map: Record<string, string> = { ascending: 'asc', descending: 'desc' };
+      p.isAsc = map[q.sortOrder] || q.sortOrder;
+      delete q.sortOrder;
+    }
+    if (typeof q.isAsc === 'string') {
+      const map2: Record<string, string> = { ascending: 'asc', descending: 'desc' };
+      q.isAsc = map2[q.isAsc] || q.isAsc;
+    }
+    Object.keys(q).forEach(k => {
+      p[k] = q[k];
+    });
+    delete p.query;
+  }
+  return p;
+};
+
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8';
 // 创建axios实例
 const service = axios.create({
@@ -72,8 +105,10 @@ service.interceptors.request.use(
     if (getToken() && !isToken) {
       config.headers!['Authorization'] = 'Bearer ' + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
     }
-    // get请求映射params参数
     if (config.method === 'get' && config.params) {
+      if ((config.params as any).pager || (config.params as any).query) {
+        config.params = normalizeGridParams(config.params as Record<string, any>);
+      }
       let url = config.url + '?' + tansParams(config.params);
       url = url.slice(0, -1);
       config.params = {};

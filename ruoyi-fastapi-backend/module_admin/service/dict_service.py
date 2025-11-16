@@ -3,6 +3,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.constant import CommonConstant
+from config.database import AsyncSessionLocal
 from config.enums import RedisInitKeyConfig
 from exceptions.exception import ServiceException
 from module_admin.dao.dict_dao import DictDataDao, DictTypeDao
@@ -286,11 +287,25 @@ class DictDataService:
         :return: 字典数据列表信息对象
         """
         result = []
-        dict_data_list_result = await redis.get(f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}')
+        cache_key = f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}'
+        dict_data_list_result = await redis.get(cache_key)
         if dict_data_list_result:
             result = json.loads(dict_data_list_result)
+        else:
+            result = await cls._load_dict_data_and_refresh_cache(redis, dict_type, cache_key)
 
         return CamelCaseUtil.transform_result(result)
+
+    @classmethod
+    async def _load_dict_data_and_refresh_cache(cls, redis, dict_type: str, cache_key: str):
+        """
+        当缓存未命中时，从数据库加载字典数据并写回缓存
+        """
+        async with AsyncSessionLocal() as session:
+            dict_data_list = await DictDataDao.query_dict_data_list(session, dict_type)
+        dict_data = [CamelCaseUtil.transform_result(row) for row in dict_data_list if row]
+        await redis.set(cache_key, json.dumps(dict_data, ensure_ascii=False, default=str))
+        return dict_data
 
     @classmethod
     async def check_dict_data_unique_services(cls, query_db: AsyncSession, page_object: DictDataModel):

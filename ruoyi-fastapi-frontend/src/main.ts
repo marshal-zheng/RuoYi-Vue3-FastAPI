@@ -91,10 +91,18 @@ app.use(ElementPlus, {
   size: (Cookies.get('size') as 'large' | 'default' | 'small') || 'default',
 });
 
+import VXETable from 'vxe-table';
+import 'vxe-table/lib/style.css';
+import VXETablePluginElement from 'vxe-table-plugin-element';
+
+VXETable.use(VXETablePluginElement);
+
 app.use(ZXUI, {
   size: 'default',
   namespace: 'zx',
   // zIndex: 3000
 });
+
+app.use(VXETable);
 
 app.mount('#app');

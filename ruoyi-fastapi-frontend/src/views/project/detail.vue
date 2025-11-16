@@ -106,4 +106,3 @@ const compactData = computed(() => [
   }
 }
 </style>
-

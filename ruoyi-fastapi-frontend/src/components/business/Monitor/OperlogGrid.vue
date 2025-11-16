@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <ZxGridList ref="gridListRef" :load-data="loadOperlogData" class="zx-grid-list--page">
+  <div class="m-operlog-grid">
+    <ZxGridList ref="gridListRef" :load-data="loadOperlogData" :initial-state="initialState" class="zx-grid-list--page">
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
@@ -127,49 +127,7 @@
       </template>
     </ZxGridList>
 
-    <el-dialog title="操作日志详细" v-model="open" width="800px" append-to-body>
-      <el-form :model="form" label-width="100px">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="操作模块：">{{ form.title }} / {{ typeFormat(form) }}</el-form-item>
-            <el-form-item label="登录信息：">{{ form.operName }} / {{ form.operIp }} / {{ form.operLocation }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="请求地址：">{{ form.operUrl }}</el-form-item>
-            <el-form-item label="请求方式：">{{ form.requestMethod }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="操作方法：">{{ form.method }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="请求参数：">{{ form.operParam }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="返回参数：">{{ form.jsonResult }}</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="操作状态：">
-              <div v-if="form.status === 0">正常</div>
-              <div v-else-if="form.status === 1">失败</div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="消耗时间：">{{ form.costTime }}毫秒</el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="操作时间：">{{ parseTime(form.operTime) }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="异常信息：" v-if="form.status === 1">{{ form.errorMsg }}</el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="open = false">关 闭</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    <OperlogDetailDialog ref="detailDialogRef" />
   </div>
 </template>
 
@@ -177,15 +135,26 @@
 import { list, delOperlog, cleanOperlog } from '@/api/monitor/operlog'
 import { parseTime } from '@/utils/ruoyi'
 import { OperTypeSelector, OperStatusSelector } from './selector'
+import OperlogDetailDialog from './OperlogDetailDialog.vue'
 
 const { proxy } = getCurrentInstance()
 const { sys_oper_type, sys_common_status } = proxy.useDict('sys_oper_type', 'sys_common_status')
 
+const props = defineProps({ module: { type: String, default: '' } })
 const gridListRef = ref()
 const ids = ref([])
-const open = ref(false)
 const defaultSort = ref({ prop: 'operTime', order: 'descending' })
-const form = ref({})
+const detailDialogRef = ref()
+
+const initialState = computed(() => ({
+  query: {
+    title: props.module || ''
+  },
+  pager: {
+    page: 1,
+    size: 10
+  }
+}))
 
 async function loadOperlogData(params) {
   const { pageNum, pageSize, dateRange, ...query } = params || {}
@@ -221,13 +190,8 @@ function onSelectionChange(selection) {
   emit('selection-change', ids.value)
 }
 
-function typeFormat(row) {
-  return proxy.selectDictLabel(sys_oper_type.value, row.businessType)
-}
-
 function handleView(row) {
-  open.value = true
-  form.value = row
+  detailDialogRef.value && detailDialogRef.value.open(row)
 }
 
 function deleteSelected() {

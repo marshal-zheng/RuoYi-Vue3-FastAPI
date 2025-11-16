@@ -535,6 +535,90 @@ insert into sys_dict_data values(30, 9,  '清空数据', '9',       		'sys_oper_
 insert into sys_dict_data values(31, 1,  '成功',     '0',       		'sys_common_status',   '',   'primary', 'N', '0', 'admin', sysdate(), '', null, '正常状态');
 insert into sys_dict_data values(32, 2,  '失败',     '1',       		'sys_common_status',   '',   'danger',  'N', '0', 'admin', sysdate(), '', null, '停用状态');
 
+-- ----------------------------
+-- 协议管理相关字典数据（ID范围：100-199）
+-- ----------------------------
+-- 协议类型字典
+insert into sys_dict_type values(100, '协议类型', 'sys_protocol_type', '0', 'admin', sysdate(), '', null, '协议通信类型列表');
+insert into sys_dict_data values(100, 1, '以太网', 'ethernet', 'sys_protocol_type', '', 'primary', 'N', '0', 'admin', sysdate(), '', null, '以太网协议');
+insert into sys_dict_data values(101, 2, 'RS422', 'rs422', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', sysdate(), '', null, 'RS422串口协议');
+insert into sys_dict_data values(102, 3, 'CAN', 'can', 'sys_protocol_type', '', 'warning', 'N', '0', 'admin', sysdate(), '', null, 'CAN总线协议');
+insert into sys_dict_data values(103, 4, '1553B', '1553b', 'sys_protocol_type', '', 'danger', 'N', '0', 'admin', sysdate(), '', null, '1553B总线协议');
+
+-- 传输频率字典
+insert into sys_dict_type values(101, '传输频率', 'sys_protocol_frequency', '0', 'admin', sysdate(), '', null, '协议传输频率列表');
+insert into sys_dict_data values(110, 1, '单次', 'once', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '单次传输');
+insert into sys_dict_data values(111, 2, '10ms', '10', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '10毫秒周期');
+insert into sys_dict_data values(112, 3, '20ms', '20', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '20毫秒周期');
+insert into sys_dict_data values(113, 4, '50ms', '50', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '50毫秒周期');
+insert into sys_dict_data values(114, 5, '100ms', '100', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '100毫秒周期');
+insert into sys_dict_data values(115, 6, '160ms', '160', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '160毫秒周期');
+insert into sys_dict_data values(116, 7, '200ms', '200', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '200毫秒周期');
+insert into sys_dict_data values(117, 8, '500ms', '500', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '500毫秒周期');
+insert into sys_dict_data values(118, 9, '1000ms', '1000', 'sys_protocol_frequency', '', '', 'N', '0', 'admin', sysdate(), '', null, '1000毫秒周期');
+
+-- 以太网传输速率字典
+insert into sys_dict_type values(102, '以太网传输速率', 'sys_protocol_speed_ethernet', '0', 'admin', sysdate(), '', null, '以太网协议传输速率');
+insert into sys_dict_data values(120, 1, '10M', '10M', 'sys_protocol_speed_ethernet', '', '', 'N', '0', 'admin', sysdate(), '', null, '10Mbps');
+insert into sys_dict_data values(121, 2, '100M', '100M', 'sys_protocol_speed_ethernet', '', '', 'Y', '0', 'admin', sysdate(), '', null, '100Mbps');
+insert into sys_dict_data values(122, 3, '1000M', '1000M', 'sys_protocol_speed_ethernet', '', '', 'N', '0', 'admin', sysdate(), '', null, '1000Mbps');
+
+-- RS422传输速率字典
+insert into sys_dict_type values(103, 'RS422传输速率', 'sys_protocol_speed_rs422', '0', 'admin', sysdate(), '', null, 'RS422协议传输速率');
+insert into sys_dict_data values(130, 1, '9.6K', '9.6K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '9600bps');
+insert into sys_dict_data values(131, 2, '19.2K', '19.2K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '19200bps');
+insert into sys_dict_data values(132, 3, '38.4K', '38.4K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '38400bps');
+insert into sys_dict_data values(133, 4, '57.6K', '57.6K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '57600bps');
+insert into sys_dict_data values(134, 5, '115.2K', '115.2K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '115200bps');
+insert into sys_dict_data values(135, 6, '230.4K', '230.4K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '230400bps');
+insert into sys_dict_data values(136, 7, '460.8K', '460.8K', 'sys_protocol_speed_rs422', '', '', 'Y', '0', 'admin', sysdate(), '', null, '460800bps');
+insert into sys_dict_data values(137, 8, '921.6K', '921.6K', 'sys_protocol_speed_rs422', '', '', 'N', '0', 'admin', sysdate(), '', null, '921600bps');
+
+-- CAN传输速率字典
+insert into sys_dict_type values(104, 'CAN传输速率', 'sys_protocol_speed_can', '0', 'admin', sysdate(), '', null, 'CAN协议传输速率');
+insert into sys_dict_data values(140, 1, '125K', '125K', 'sys_protocol_speed_can', '', '', 'N', '0', 'admin', sysdate(), '', null, '125Kbps');
+insert into sys_dict_data values(141, 2, '250K', '250K', 'sys_protocol_speed_can', '', '', 'N', '0', 'admin', sysdate(), '', null, '250Kbps');
+insert into sys_dict_data values(142, 3, '500K', '500K', 'sys_protocol_speed_can', '', '', 'Y', '0', 'admin', sysdate(), '', null, '500Kbps');
+insert into sys_dict_data values(143, 4, '1000K', '1000K', 'sys_protocol_speed_can', '', '', 'N', '0', 'admin', sysdate(), '', null, '1000Kbps');
+
+-- 1553B传输速率字典
+insert into sys_dict_type values(105, '1553B传输速率', 'sys_protocol_speed_1553b', '0', 'admin', sysdate(), '', null, '1553B协议传输速率');
+insert into sys_dict_data values(150, 1, '1M', '1M', 'sys_protocol_speed_1553b', '', '', 'Y', '0', 'admin', sysdate(), '', null, '1Mbps');
+
+-- 以太网传输方式字典
+insert into sys_dict_type values(106, '以太网传输方式', 'sys_protocol_method_ethernet', '0', 'admin', sysdate(), '', null, '以太网协议传输方式');
+insert into sys_dict_data values(160, 1, 'UDP单播', 'udp_unicast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', sysdate(), '', null, 'UDP单播传输');
+insert into sys_dict_data values(161, 2, 'UDP组播', 'udp_multicast', 'sys_protocol_method_ethernet', '', '', 'Y', '0', 'admin', sysdate(), '', null, 'UDP组播传输');
+insert into sys_dict_data values(162, 3, 'UDP广播', 'udp_broadcast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', sysdate(), '', null, 'UDP广播传输');
+insert into sys_dict_data values(163, 4, 'TCP', 'tcp', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', sysdate(), '', null, 'TCP传输');
+
+-- CAN传输方式字典
+insert into sys_dict_type values(107, 'CAN传输方式', 'sys_protocol_method_can', '0', 'admin', sysdate(), '', null, 'CAN协议传输方式');
+insert into sys_dict_data values(170, 1, 'CAN标准帧', 'can_standard', 'sys_protocol_method_can', '', '', 'N', '0', 'admin', sysdate(), '', null, 'CAN标准帧');
+insert into sys_dict_data values(171, 2, 'CAN扩展帧', 'can_extended', 'sys_protocol_method_can', '', '', 'Y', '0', 'admin', sysdate(), '', null, 'CAN扩展帧');
+
+-- 数据类型字典
+insert into sys_dict_type values(108, '数据类型', 'sys_protocol_data_type', '0', 'admin', sysdate(), '', null, '协议字段数据类型');
+insert into sys_dict_data values(180, 1, 'uint8', 'uint8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号8位整数');
+insert into sys_dict_data values(181, 2, 'uint16', 'uint16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号16位整数');
+insert into sys_dict_data values(182, 3, 'uint32', 'uint32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号32位整数');
+insert into sys_dict_data values(183, 4, 'int8', 'int8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号8位整数');
+insert into sys_dict_data values(184, 5, 'int16', 'int16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号16位整数');
+insert into sys_dict_data values(185, 6, 'int32', 'int32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号32位整数');
+insert into sys_dict_data values(186, 7, 'float', 'float', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '单精度浮点数');
+insert into sys_dict_data values(187, 8, 'double', 'double', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '双精度浮点数');
+insert into sys_dict_data values(188, 9, 'string', 'string', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '字符串');
+insert into sys_dict_data values(189, 10, 'bool', 'bool', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '布尔值');
+
+-- 错误处理字典
+insert into sys_dict_type values(109, '错误处理', 'sys_protocol_error_handling', '0', 'admin', sysdate(), '', null, '协议错误处理策略');
+insert into sys_dict_data values(190, 1, '不判断', 'none', 'sys_protocol_error_handling', '', 'info', 'N', '0', 'admin', sysdate(), '', null, '不进行错误判断');
+insert into sys_dict_data values(191, 2, '超时重传', 'timeout_retry', 'sys_protocol_error_handling', '', 'warning', 'N', '0', 'admin', sysdate(), '', null, '超时后重传');
+insert into sys_dict_data values(192, 3, 'CRC校验', 'crc_check', 'sys_protocol_error_handling', '', 'primary', 'N', '0', 'admin', sysdate(), '', null, 'CRC循环冗余校验');
+insert into sys_dict_data values(193, 4, '奇偶校验', 'parity_check', 'sys_protocol_error_handling', '', 'success', 'N', '0', 'admin', sysdate(), '', null, '奇偶校验');
+insert into sys_dict_data values(194, 5, '超时重传 3 次, 100ms', 'timeout_retry_3_100ms', 'sys_protocol_error_handling', '', 'warning', 'Y', '0', 'admin', sysdate(), '', null, '超时重传3次，间隔100ms');
+insert into sys_dict_data values(195, 6, '-', 'default', 'sys_protocol_error_handling', '', '', 'N', '0', 'admin', sysdate(), '', null, '默认处理');
+
 
 -- ----------------------------
 -- 13、参数配置表
