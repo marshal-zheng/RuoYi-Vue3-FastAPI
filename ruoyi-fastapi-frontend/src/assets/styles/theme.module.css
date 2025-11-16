@@ -502,41 +502,41 @@
   }
   
   /* Vue transition utilities */
-  /* Fade transition */
+  /* Fade transition (Vue 3 class names) */
   .fade-enter-active,
   .fade-leave-active {
     transition: opacity 0.28s;
   }
-  
-  .fade-enter,
+  .fade-enter-from,
   .fade-leave-active {
     opacity: 0;
   }
-  
-  /* Fade transform transition */
+
+  /* Fade-transform (align with RuoYi smooth route transition) */
   .fade-transform--move,
-  .fade-transform-leave-active,
   .fade-transform-enter-active {
-    transition: all 0.5s;
+    transition: opacity .25s ease, transform .25s ease;
   }
-  
-  .fade-transform-enter {
+  /* Do not animate leaving. Keep absolute to avoid layout shift/white flash */
+  .fade-transform-leave-active {
+    position: absolute;
+    transition: none;
+  }
+  .fade-transform-enter-from {
     opacity: 0;
     transform: translateX(-30px);
   }
-  
   .fade-transform-leave-to {
-    opacity: 0;
-    transform: translateX(30px);
+    opacity: 1;
+    transform: none;
   }
   
   /* Breadcrumb transition */
   .breadcrumb-enter-active,
   .breadcrumb-leave-active {
-    transition: all 0.5s;
+    transition: all .5s;
   }
-  
-  .breadcrumb-enter,
+  .breadcrumb-enter-from,
   .breadcrumb-leave-active {
     opacity: 0;
     transform: translateX(20px);

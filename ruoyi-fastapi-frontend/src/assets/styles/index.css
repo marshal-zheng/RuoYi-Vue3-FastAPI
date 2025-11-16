@@ -71,48 +71,6 @@ a:hover {
 div:focus {
   outline: none;
 }
-
-/* Float utilities */
-.fr {
-  float: right;
-}
-
-.fl {
-  float: left;
-}
-
-/* Padding utilities */
-.pr-5 {
-  padding-right: 5px;
-}
-
-.pl-5 {
-  padding-left: 5px;
-}
-
-/* Display utilities */
-.block {
-  display: block;
-}
-
-.pointer {
-  cursor: pointer;
-}
-
-.inlineBlock {
-  display: block;
-}
-
-/* Legacy clearfix - use Tailwind's flow-root class instead */
-.clearfix::after {
-  visibility: hidden;
-  display: block;
-  font-size: 0;
-  content: " ";
-  clear: both;
-  height: 0;
-}
-
 /* Aside styles */
 aside {
   background: #eef1f6;

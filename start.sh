@@ -38,7 +38,7 @@ fi
 
 # 验证数据库连接
 echo -e "${BLUE}🔍 验证数据库连接...${NC}"
-if ! mysql -u root -e "USE \`ruoyi-fastapi\`; SELECT 1;" &> /dev/null; then
+if ! mysql -u root -padmin1234 -e "USE \`ruoyi-fastapi\`; SELECT 1;" &> /dev/null; then
     echo -e "${RED}❌ 数据库连接失败，请先运行 ./setup.sh${NC}"
     exit 1
 fi

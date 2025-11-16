@@ -1,5 +1,5 @@
 <template>
-<ContentWrap class="home">
+<ZxContentWrap class="home">
   <XflowDAG
     ref="dagRef"
     :operators="operators"
@@ -15,12 +15,11 @@
     :node-data="currentNode"
     @submit="handleNodeUpdate"
   />
-  </ContentWrap>
+  </ZxContentWrap>
 </template>
 
 <script setup name="Index">
 import { ref, onMounted } from 'vue'
-import ContentWrap from "@/components/ContentWrap/src/ContentWrap.vue"
 import XflowDAG from "@/components/business/Dag/index.vue"
 import { NodeEditDrawer } from './components'
 import { listDevice, listDeviceBusInterface } from '@/api/fixing/device'

@@ -40,15 +40,6 @@
 .status-col .cell .el-tag {
   margin-right: 0px;
 }
-
-/* Dialog fix for positioning issue */
-.el-dialog {
-  transform: none;
-  left: 0;
-  position: relative;
-  margin: 0 auto;
-}
-
 /* Upload container refinements */
 .upload-container .el-upload {
   width: 100%;

@@ -172,6 +172,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: '/project/topo',
+    component: Layout,
+    hidden: true,
+    permissions: ['project:project:edit'],
+    children: [
+      {
+        path: 'index/:projectId(\\d+)',
+        component: () => import('@/views/project/topo'),
+        name: 'ProjectTopo',
+        meta: { title: '拓扑设计', activeMenu: '/project/project' },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

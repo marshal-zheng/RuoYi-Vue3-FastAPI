@@ -37,6 +37,10 @@ const usePermissionStore = defineStore('permission', {
           const sdata = JSON.parse(JSON.stringify(res.data));
           const rdata = JSON.parse(JSON.stringify(res.data));
           const defaultData = JSON.parse(JSON.stringify(res.data));
+
+          adjustProjectMenus(sdata);
+          adjustProjectMenus(rdata);
+          adjustProjectMenus(defaultData);
           const sidebarRoutes = filterAsyncRouter(sdata);
           const rewriteRoutes = filterAsyncRouter(rdata, false, true);
           const defaultRoutes = filterAsyncRouter(defaultData);
@@ -138,5 +142,42 @@ export const loadView = view => {
   }
   return res;
 };
+
+function adjustProjectMenus(routes) {
+  if (!Array.isArray(routes)) return routes;
+  const visit = nodes => {
+    nodes.forEach(node => {
+      const nodePath = node.path || '';
+      const isProjectRoot = nodePath === '/project' || nodePath === 'project';
+      if (isProjectRoot && Array.isArray(node.children)) {
+        node.children.forEach(child => {
+          const cPath = child.path || '';
+          const cComp = child.component || '';
+          const isProjectIndex = cPath === 'project' || cComp === 'project/index';
+          if (isProjectIndex) {
+            child.meta = child.meta || {};
+            if (!child.meta.title || child.meta.title === '工程管理') {
+              child.meta.title = '工程列表';
+            }
+          }
+        });
+        const exists = node.children.some(
+          c => c.path === 'operlog' || c.component === 'project/operlog/index'
+        );
+        if (!exists) {
+          node.children.push({
+            path: 'operlog',
+            component: 'project/operlog/index',
+            name: 'ProjectOperLog',
+            meta: { title: '操作日志', icon: 'list' },
+          });
+        }
+      }
+      if (Array.isArray(node.children) && node.children.length) visit(node.children);
+    });
+  };
+  visit(routes);
+  return routes;
+}
 
 export default usePermissionStore;

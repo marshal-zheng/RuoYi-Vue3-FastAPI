@@ -3,18 +3,13 @@
     <ZxGridList
       ref="versionGridListRef"
       :load-data="loadVersionData"
-      :show-pagination="true"
-      :page-sizes="[10, 20, 50, 100]"
-      :default-page-size="10"
-      :load-on-mounted="true"
-      :clear-selection-on-load="true"
       class="version-grid zx-grid-list--page"
     >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
-            <!-- <ZxButton
+            <ZxButton
               type="primary"
               icon="Plus"
               @click="handleAddVersion"
@@ -24,14 +19,9 @@
               type="danger"
               icon="Delete"
               :disabled="multiple"
-              @click="handleDeleteVersion"
+              @click="() => handleDeleteVersion(null, versionGridListRef?.refresh)"
               v-hasPermi="['project:version:remove']"
             >删除</ZxButton>
-            <ZxButton
-              icon="Download"
-              @click="handleExportVersion"
-              v-hasPermi="['project:version:export']"
-            >导出</ZxButton> -->
           </div>
           
           <div class="zx-grid-form-bar__filters">
@@ -83,7 +73,7 @@
                 <el-tag :type="row.status === '1' ? 'success' : 'info'">
                   {{ row.status === '1' ? '启用' : '停用' }}
                 </el-tag>
-                <el-tag v-if="row.isLocked" type="warning" size="small">
+                <el-tag v-if="row.isLocked === '1'" type="warning" size="small">
                   <el-icon class="mr-1"><Lock /></el-icon>
                   固化
                 </el-tag>
@@ -108,26 +98,13 @@
             </template>
           </el-table-column>
         </el-table>
-
-        <!-- 空状态 -->
-        <div v-if="!grid.loading && grid.list.length === 0" class="text-center py-12">
-          <div class="text-gray-400 text-6xl mb-4">📦</div>
-          <h3 class="text-lg font-medium text-gray-600 mb-2">暂无版本</h3>
-          <p class="text-gray-500 mb-4">还没有创建任何版本，点击新增版本按钮开始创建吧</p>
-          <el-button 
-            type="primary" 
-            icon="Plus" 
-            @click="handleAddVersion"
-            v-hasPermi="['project:version:add']"
-          >创建版本</el-button>
-        </div>
-      </template>
+        </template>
     </ZxGridList>
 
     <!-- 编辑版本对话框 -->
     <el-dialog
       v-model="editVersionDialog"
-      title="编辑版本"
+      :title="editVersionForm.versionId ? '编辑版本' : '新增版本'"
       width="600px"
       :close-on-click-modal="false"
     >
@@ -227,12 +204,21 @@
 </template>
 
 <script setup name="VersionList">
-import { ref, reactive } from 'vue'
+import { ref, reactive, getCurrentInstance } from 'vue'
 import { View, Edit, Delete, Lock, CopyDocument } from '@element-plus/icons-vue'
+import { 
+  listProjectVersion, 
+  addProjectVersion, 
+  updateProjectVersion, 
+  delProjectVersion,
+  cloneProjectVersion,
+  lockProjectVersion
+} from '@/api/project/version'
+import { parseTime } from '@/utils/ruoyi'
 
 const { proxy } = getCurrentInstance()
 
-defineProps({
+const props = defineProps({
   projectId: {
     type: [String, Number],
     default: null
@@ -264,78 +250,37 @@ const cloneVersionForm = reactive({
   description: ''
 })
 
-/** Mock 版本数据 */
-const mockVersions = ref([
-  {
-    versionId: 1,
-    versionNumber: 'v1.0.0',
-    versionName: '初始版本',
-    description: '项目初始版本，包含基础功能模块',
-    createBy: 'admin',
-    createTime: '2024-01-15 10:30:00',
-    updateTime: '2024-01-15 10:30:00',
-    status: '1',
-    isLocked: false
-  },
-  {
-    versionId: 2,
-    versionNumber: 'v1.1.0',
-    versionName: '功能增强版',
-    description: '新增用户管理模块，优化系统性能',
-    createBy: 'admin',
-    createTime: '2024-02-20 14:20:00',
-    updateTime: '2024-02-20 14:20:00',
-    status: '1',
-    isLocked: false
-  },
-  {
-    versionId: 3,
-    versionNumber: 'v2.0.0',
-    versionName: '重大更新版',
-    description: '架构重构，新增多租户支持，UI全面升级',
-    createBy: 'admin',
-    createTime: '2024-03-10 09:15:00',
-    updateTime: '2024-03-10 09:15:00',
-    status: '1',
-    isLocked: true
-  }
-])
-
-/** ZxGridList 版本数据加载函数 - Mock */
+/** ZxGridList 版本数据加载函数 */
 async function loadVersionData(params) {
-  // 模拟网络延迟
-  await new Promise(resolve => setTimeout(resolve, 300))
-  
   const { pageNum = 1, pageSize = 10, versionName, dateRange } = params
   
-  // 过滤数据
-  let filteredList = [...mockVersions.value]
-  
-  // 按版本名称筛选
-  if (versionName) {
-    filteredList = filteredList.filter(item => 
-      item.versionName.includes(versionName) || 
-      item.versionNumber.includes(versionName)
-    )
+  const queryParams = {
+    pageNum,
+    pageSize,
+    projectId: props.projectId,
+    versionName
   }
   
-  // 按日期范围筛选
+  // 处理日期范围
   if (dateRange && dateRange.length === 2) {
-    const [startDate, endDate] = dateRange
-    filteredList = filteredList.filter(item => {
-      const createDate = item.createTime.split(' ')[0]
-      return createDate >= startDate && createDate <= endDate
-    })
+    queryParams.beginTime = dateRange[0]
+    queryParams.endTime = dateRange[1]
   }
   
-  // 分页
-  const start = (pageNum - 1) * pageSize
-  const end = start + pageSize
-  const pageList = filteredList.slice(start, end)
-  
-  return {
-    list: pageList,
-    total: filteredList.length
+  try {
+    const response = await listProjectVersion(queryParams)
+    
+    return {
+      list: response.rows || [],
+      total: response.total || 0
+    }
+  } catch (error) {
+    console.error('加载版本列表失败:', error)
+    proxy.$modal.msgError('加载版本列表失败')
+    return {
+      list: [],
+      total: 0
+    }
   }
 }
 
@@ -362,7 +307,7 @@ const getMoreActionList = (row) => {
   const actions = []
   
   // 固化版本/解除固化
-  if (row.isLocked) {
+  if (row.isLocked === '1') {
     actions.push({
       label: '解除固化',
       eventTag: 'unlock',
@@ -387,7 +332,7 @@ const getMoreActionList = (row) => {
   })
   
   // 删除版本（固化版本不能删除）
-  if (!row.isLocked) {
+  if (row.isLocked !== '1') {
     actions.push({
       label: '删除',
       eventTag: 'delete',
@@ -421,12 +366,19 @@ const handleMoreActionSelect = async (item, row, handleRefresh) => {
 
 /** 新增版本 */
 function handleAddVersion() {
-  proxy.$modal.msgInfo('新增版本功能待开发')
+  // 重置表单
+  editVersionForm.versionId = null
+  editVersionForm.versionNumber = ''
+  editVersionForm.versionName = ''
+  editVersionForm.description = ''
+  editVersionForm.status = '1'
+  
+  editVersionDialog.value = true
 }
 
 /** 删除版本 */
 function handleDeleteVersion(row, handleRefresh) {
-  const versionIds = row?.versionId || ids.value
+  const versionIds = row?.versionId || ids.value.join(',')
   let confirmMessage = ''
   
   if (row?.versionId) {
@@ -435,12 +387,17 @@ function handleDeleteVersion(row, handleRefresh) {
     confirmMessage = `是否确认删除选中的 ${ids.value.length} 个版本？`
   }
   
-  proxy.$modal.confirm(confirmMessage).then(() => {
-    proxy.$modal.msgSuccess('删除成功')
-    if (handleRefresh) {
-      handleRefresh()
-    } else if (versionGridListRef.value) {
-      versionGridListRef.value.refresh()
+  proxy.$modal.confirm(confirmMessage).then(async () => {
+    try {
+      await delProjectVersion(versionIds)
+      proxy.$modal.msgSuccess('删除成功')
+      if (handleRefresh) {
+        handleRefresh()
+      } else if (versionGridListRef.value) {
+        versionGridListRef.value.refresh()
+      }
+    } catch (error) {
+      console.error('删除版本失败:', error)
     }
   }).catch(() => {})
 }
@@ -452,7 +409,7 @@ function handleViewVersion(row) {
 
 /** 编辑版本 */
 function handleEditVersion(row) {
-  if (row.isLocked) {
+  if (row.isLocked === '1') {
     proxy.$modal.msgWarning('固化版本不允许编辑')
     return
   }
@@ -468,99 +425,80 @@ function handleEditVersion(row) {
 }
 
 /** 保存编辑版本 */
-function handleSaveEditVersion() {
+async function handleSaveEditVersion() {
   // 验证表单
   if (!editVersionForm.versionNumber || !editVersionForm.versionName) {
     proxy.$modal.msgError('版本号和版本名称不能为空')
     return
   }
   
-  // 检查版本号是否重复
-  const existingVersion = mockVersions.value.find(v => 
-    v.versionNumber === editVersionForm.versionNumber && 
-    v.versionId !== editVersionForm.versionId
-  )
-  
-  if (existingVersion) {
-    proxy.$modal.msgError('版本号已存在')
-    return
-  }
-  
-  // 更新版本数据
-  const versionIndex = mockVersions.value.findIndex(v => v.versionId === editVersionForm.versionId)
-  if (versionIndex !== -1) {
-    mockVersions.value[versionIndex] = {
-      ...mockVersions.value[versionIndex],
+  try {
+    const data = {
+      versionId: editVersionForm.versionId,
+      projectId: props.projectId,
       versionNumber: editVersionForm.versionNumber,
       versionName: editVersionForm.versionName,
       description: editVersionForm.description,
-      status: editVersionForm.status,
-      updateTime: new Date().toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).replace(/\//g, '-')
+      status: editVersionForm.status
     }
-  }
-  
-  editVersionDialog.value = false
-  proxy.$modal.msgSuccess('版本编辑成功')
-  
-  // 刷新列表
-  if (versionGridListRef.value) {
-    versionGridListRef.value.refresh()
+    
+    if (editVersionForm.versionId) {
+      // 编辑
+      await updateProjectVersion(data)
+      proxy.$modal.msgSuccess('版本编辑成功')
+    } else {
+      // 新增
+      await addProjectVersion(data)
+      proxy.$modal.msgSuccess('版本新增成功')
+    }
+    
+    editVersionDialog.value = false
+    
+    // 刷新列表
+    if (versionGridListRef.value) {
+      versionGridListRef.value.refresh()
+    }
+  } catch (error) {
+    console.error('保存版本失败:', error)
   }
 }
 
 /** 固化版本 */
 function handleLockVersion(row, handleRefresh) {
-  proxy.$modal.confirm(`确定要固化版本"${row.versionName}"吗？固化后将无法编辑和删除。`).then(() => {
-    const versionIndex = mockVersions.value.findIndex(v => v.versionId === row.versionId)
-    if (versionIndex !== -1) {
-      mockVersions.value[versionIndex].isLocked = true
-      mockVersions.value[versionIndex].updateTime = new Date().toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).replace(/\//g, '-')
-    }
-    
-    proxy.$modal.msgSuccess('版本固化成功')
-    if (handleRefresh) {
-      handleRefresh()
-    } else if (versionGridListRef.value) {
-      versionGridListRef.value.refresh()
+  proxy.$modal.confirm(`确定要固化版本"${row.versionName}"吗？固化后将无法编辑和删除。`).then(async () => {
+    try {
+      await lockProjectVersion({
+        versionId: row.versionId,
+        isLocked: '1'
+      })
+      proxy.$modal.msgSuccess('版本固化成功')
+      if (handleRefresh) {
+        handleRefresh()
+      } else if (versionGridListRef.value) {
+        versionGridListRef.value.refresh()
+      }
+    } catch (error) {
+      console.error('固化版本失败:', error)
     }
   }).catch(() => {})
 }
 
 /** 解除固化版本 */
 function handleUnlockVersion(row, handleRefresh) {
-  proxy.$modal.confirm(`确定要解除版本"${row.versionName}"的固化状态吗？`).then(() => {
-    const versionIndex = mockVersions.value.findIndex(v => v.versionId === row.versionId)
-    if (versionIndex !== -1) {
-      mockVersions.value[versionIndex].isLocked = false
-      mockVersions.value[versionIndex].updateTime = new Date().toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      }).replace(/\//g, '-')
-    }
-    
-    proxy.$modal.msgSuccess('解除固化成功')
-    if (handleRefresh) {
-      handleRefresh()
-    } else if (versionGridListRef.value) {
-      versionGridListRef.value.refresh()
+  proxy.$modal.confirm(`确定要解除版本"${row.versionName}"的固化状态吗？`).then(async () => {
+    try {
+      await lockProjectVersion({
+        versionId: row.versionId,
+        isLocked: '0'
+      })
+      proxy.$modal.msgSuccess('解除固化成功')
+      if (handleRefresh) {
+        handleRefresh()
+      } else if (versionGridListRef.value) {
+        versionGridListRef.value.refresh()
+      }
+    } catch (error) {
+      console.error('解除固化失败:', error)
     }
   }).catch(() => {})
 }
@@ -578,61 +516,30 @@ function handleCloneVersion(row) {
 }
 
 /** 保存克隆版本 */
-function handleSaveCloneVersion() {
+async function handleSaveCloneVersion() {
   // 验证表单
   if (!cloneVersionForm.versionNumber || !cloneVersionForm.versionName) {
     proxy.$modal.msgError('版本号和版本名称不能为空')
     return
   }
   
-  // 检查版本号是否重复
-  const existingVersion = mockVersions.value.find(v => 
-    v.versionNumber === cloneVersionForm.versionNumber
-  )
-  
-  if (existingVersion) {
-    proxy.$modal.msgError('版本号已存在')
-    return
-  }
-  
-  // 生成新的版本ID
-  const newVersionId = Math.max(...mockVersions.value.map(v => v.versionId)) + 1
-  
-  // 创建新版本
-  const newVersion = {
-    versionId: newVersionId,
-    versionNumber: cloneVersionForm.versionNumber,
-    versionName: cloneVersionForm.versionName,
-    description: cloneVersionForm.description,
-    createBy: 'admin',
-    createTime: new Date().toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    }).replace(/\//g, '-'),
-    updateTime: new Date().toLocaleString('zh-CN', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit'
-    }).replace(/\//g, '-'),
-    status: '1',
-    isLocked: false
-  }
-  
-  mockVersions.value.unshift(newVersion)
-  
-  cloneVersionDialog.value = false
-  proxy.$modal.msgSuccess('版本克隆成功')
-  
-  // 刷新列表
-  if (versionGridListRef.value) {
-    versionGridListRef.value.refresh()
+  try {
+    await cloneProjectVersion({
+      sourceVersionId: cloneVersionForm.sourceVersionId,
+      versionNumber: cloneVersionForm.versionNumber,
+      versionName: cloneVersionForm.versionName,
+      description: cloneVersionForm.description
+    })
+    
+    cloneVersionDialog.value = false
+    proxy.$modal.msgSuccess('版本克隆成功')
+    
+    // 刷新列表
+    if (versionGridListRef.value) {
+      versionGridListRef.value.refresh()
+    }
+  } catch (error) {
+    console.error('克隆版本失败:', error)
   }
 }
 
@@ -642,7 +549,7 @@ function handleExportVersion() {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .version-list {
   padding: 0;
 }

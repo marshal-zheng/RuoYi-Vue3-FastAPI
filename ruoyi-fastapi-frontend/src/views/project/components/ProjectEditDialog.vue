@@ -120,7 +120,7 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .dialog-form-container {
   padding: 16px 0;
 }

@@ -44,7 +44,7 @@ class DataBaseSettings(BaseSettings):
     db_host: str = '127.0.0.1'
     db_port: int = 3306
     db_username: str = 'root'
-    db_password: str = 'mysqlroot'
+    db_password: str = 'admin1234'
     db_database: str = 'ruoyi-fastapi'
     db_echo: bool = True
     db_max_overflow: int = 10
@@ -226,6 +226,16 @@ class GetConfig:
             env_file = f'.env.{run_env}'
         # 加载配置
         load_dotenv(env_file)
+
+        # 统一数据库默认配置，避免被历史 .env 文件中空密码覆盖
+        # 当前项目约定：开发环境使用 root/admin1234 连接 ruoyi-fastapi 库
+        os.environ['DB_TYPE'] = os.environ.get('DB_TYPE', 'mysql')
+        os.environ['DB_HOST'] = os.environ.get('DB_HOST', '127.0.0.1')
+        os.environ['DB_PORT'] = os.environ.get('DB_PORT', '3306')
+        os.environ['DB_USERNAME'] = os.environ.get('DB_USERNAME', 'root')
+        # 强制覆盖为当前使用的密码，防止 .env.dev 中仍为旧密码或空密码
+        os.environ['DB_PASSWORD'] = 'admin1234'
+        os.environ['DB_DATABASE'] = os.environ.get('DB_DATABASE', 'ruoyi-fastapi')
 
 
 # 实例化获取配置类

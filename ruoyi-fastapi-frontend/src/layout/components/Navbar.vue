@@ -1,12 +1,12 @@
 <template>
   <div class="navbar flex justify-between">
-    <div class="fl">
+    <div class="float-left">
       <hamburger id="hamburger-container" :is-active="appStore.sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
       <breadcrumb v-if="!settingsStore.topNav" id="breadcrumb-container" class="breadcrumb-container" />
       <top-nav v-if="settingsStore.topNav" id="topmenu-container" class="topmenu-container" />
     </div>
 
-    <div class="rt items-center flex mr-4">
+  <div class="rt items-center flex mr-4">
       <el-dropdown @command="handleCommand" class="avatar-container flex ml-4 right-menu-item hover-effect" trigger="hover">
         <div class="avatar-wrapper flex items-center gap-1">
           <svg-icon icon-class="users" class="user-avatar-icon" size="20" />
@@ -39,8 +39,6 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import HeaderSearch from '@/components/HeaderSearch'
-import RuoYiGit from '@/components/RuoYi/Git'
-import RuoYiDoc from '@/components/RuoYi/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useSettingsStore from '@/store/modules/settings'

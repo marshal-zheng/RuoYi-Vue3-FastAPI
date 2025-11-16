@@ -15,7 +15,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ZxTabs } from '@zxio/zxui'
-import { getProject } from '@/api/project'
+import { getProject } from '@/api/project/project'
 import ContentDetailWrap from '@/components/ContentDetailWrap/index'
 import { VersionList } from './components'
 
@@ -26,7 +26,8 @@ const activeTab = ref('version')
 const projectInfo = ref({
   projectId: null,
   projectName: '',
-  description: ''
+  projectCode: '',
+  projectDesc: ''
 })
 
 /** 加载项目信息 */
@@ -72,33 +73,33 @@ onMounted(() => {
   loadProjectInfo()
 })
 
-/** 模拟项目详情数据 */
+/** 项目详情数据 */
 const compactData = computed(() => [
   {
     label: '项目ID',
-    value: projectInfo.value.projectId || 'DEV-LIB-2024-001',
+    value: projectInfo.value.projectId || '-',
     prop: 'projectId'
   },
   {
     label: '项目名称',
-    value: projectInfo.value.projectName || '无人机设备库管理系统',
+    value: projectInfo.value.projectName || '-',
     prop: 'projectName'
   },
   {
     label: '项目编码',
-    value: 'UAV-DEVICE-LIB-V2.0',
+    value: projectInfo.value.projectCode || '-',
     prop: 'projectCode'
   },
   {
     label: '项目描述',
-    value: projectInfo.value.description || '基于Vue3和Spring Boot的无人机设备库管理系统，涵盖核心控制模块（飞控主板、IMU惯导、电调ESC）、定位导航模块（GPS模块、磁罗盘、气压计）、遥控通信模块等设备的统一管理、配置和监控平台',
-    prop: 'description',
+    value: projectInfo.value.projectDesc || '-',
+    prop: 'projectDesc',
     span: 3
   }
 ])
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .project-info-page {
   :deep(.zx-tabs) {
     height: 100%;
