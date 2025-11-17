@@ -202,8 +202,10 @@ const syncConfigTableRows = () => {
 
 // 配置表格编辑渲染器（发送方和接收方不允许编辑）
 const configEditRender = (field: string) => {
-
-  const stripUnit = (v: any, unit: string) => String(v ?? '').replace(new RegExp(`\\s*${unit}$`, 'i'), '').trim();
+  const stripUnit = (v: any, unit: string) =>
+    String(v ?? '')
+      .replace(new RegExp(`\\s*${unit}$`, 'i'), '')
+      .trim();
   const handleUpdate = (cellParams: any, evtOrValue: any) => {
     const { row } = cellParams;
     const raw = evtOrValue && evtOrValue.target ? evtOrValue.target.value : evtOrValue;

@@ -16,11 +16,12 @@ def as_query(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
 
     for field_name, model_field in cls.model_fields.items():
         model_field: FieldInfo  # type: ignore
+        param_name = model_field.alias or field_name
 
         if not model_field.is_required():
             new_parameters.append(
                 inspect.Parameter(
-                    model_field.alias,
+                    param_name,
                     inspect.Parameter.POSITIONAL_ONLY,
                     default=Query(default=model_field.default, description=model_field.description),
                     annotation=model_field.annotation,
@@ -29,7 +30,7 @@ def as_query(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
         else:
             new_parameters.append(
                 inspect.Parameter(
-                    model_field.alias,
+                    param_name,
                     inspect.Parameter.POSITIONAL_ONLY,
                     default=Query(..., description=model_field.description),
                     annotation=model_field.annotation,
@@ -54,11 +55,12 @@ def as_form(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
 
     for field_name, model_field in cls.model_fields.items():
         model_field: FieldInfo  # type: ignore
+        param_name = model_field.alias or field_name
 
         if not model_field.is_required():
             new_parameters.append(
                 inspect.Parameter(
-                    model_field.alias,
+                    param_name,
                     inspect.Parameter.POSITIONAL_ONLY,
                     default=Form(default=model_field.default, description=model_field.description),
                     annotation=model_field.annotation,
@@ -67,7 +69,7 @@ def as_form(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
         else:
             new_parameters.append(
                 inspect.Parameter(
-                    model_field.alias,
+                    param_name,
                     inspect.Parameter.POSITIONAL_ONLY,
                     default=Form(..., description=model_field.description),
                     annotation=model_field.annotation,

@@ -1,9 +1,8 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    title="编辑设备信息"
-    width="500px"
-    @close="onClose"
+  <ZxDialog
+    v-bind="dialogProps"
+    v-on="dialogEvents"
+    @close="onDialogClose"
   >
     <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
       <el-form-item label="设备名称" prop="deviceName">
@@ -13,17 +12,12 @@
         <CategorySelector v-model="form.categoryName" placeholder="请选择设备分类" />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="closeDialog">取消</el-button>
-        <el-button type="primary" @click="submit">确定</el-button>
-      </div>
-    </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup name="DeviceNameDialog">
 import { ref, reactive, watch } from 'vue'
+import { useDialog } from '@zxio/zxui'
 import { CategorySelector } from './selector'
 
 const props = defineProps({
@@ -36,45 +30,65 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 
-const visible = ref(props.modelValue)
-watch(() => props.modelValue, (v) => visible.value = v)
-watch(visible, (v) => emit('update:modelValue', v))
-
 const formRef = ref()
-const form = reactive({ 
+const form = reactive({
   deviceName: props.value?.deviceName || '',
   categoryName: props.value?.categoryName || ''
 })
-
-watch(() => props.value, (v) => {
-  if (v) {
-    form.deviceName = v.deviceName || ''
-    form.categoryName = v.categoryName || ''
-  }
-}, { deep: true })
 
 const rules = {
   deviceName: [{ required: true, message: '请输入设备名称', trigger: 'blur' }],
   categoryName: [{ required: true, message: '请选择设备分类', trigger: 'change' }]
 }
 
-function submit() {
-  if (!formRef.value) return
-  formRef.value.validate((valid) => {
-    if (!valid) return
-    emit('submit', { ...form })
-  })
-}
+const { dialogProps, dialogEvents, open, close, state } = useDialog({
+  title: '编辑设备信息',
+  width: '500px',
+  okText: '确定',
+  formRef,
+  preValidate: true,
+  autoScrollToError: true,
+  autoResetForm: true,
+  defaultData: () => ({
+    deviceName: props.value?.deviceName || '',
+    categoryName: props.value?.categoryName || ''
+  }),
+  onConfirm: async (data) => {
+    emit('submit', { ...data })
+    emit('update:modelValue', false)
+    return data
+  },
+  onConfirmError: (_e) => {}
+})
 
-function closeDialog() {
-  visible.value = false
-}
+watch(() => props.modelValue, (v) => {
+  if (v) {
+    state.data.deviceName = props.value?.deviceName || ''
+    state.data.categoryName = props.value?.categoryName || ''
+    form.deviceName = state.data.deviceName
+    form.categoryName = state.data.categoryName
+    open()
+  } else {
+    close()
+  }
+})
 
-function onClose() {
+watch(() => props.value, (v) => {
+  if (v) {
+    state.data.deviceName = v.deviceName || ''
+    state.data.categoryName = v.categoryName || ''
+    form.deviceName = state.data.deviceName
+    form.categoryName = state.data.categoryName
+  }
+}, { deep: true })
+
+function onDialogClose() {
   formRef.value?.resetFields()
   emit('close')
+  emit('update:modelValue', false)
+  close()
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 </style>

@@ -163,7 +163,7 @@ const handleSubmit = async () => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .drawer-footer {
   display: flex;
   justify-content: flex-end;

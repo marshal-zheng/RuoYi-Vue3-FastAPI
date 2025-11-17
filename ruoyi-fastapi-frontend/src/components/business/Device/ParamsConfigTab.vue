@@ -297,7 +297,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .params-config-content {
   padding: 20px;
   height: 100%;

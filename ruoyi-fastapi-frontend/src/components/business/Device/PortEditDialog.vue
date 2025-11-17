@@ -1,48 +1,27 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="500px"
-    @close="onClose"
+  <ZxDialog
+    v-bind="dialogProps"
+    v-on="dialogEvents"
+    @close="onDialogClose"
   >
-    <el-form ref="portFormRef" :model="portForm" :rules="portFormRules" label-width="100px">
+    <el-form ref="portFormRef" :model="state.data" :rules="portFormRules" label-width="100px">
       <el-form-item label="总线类型" prop="interfaceType">
-        <InterfaceTypeSelector
-          v-model="portForm.interfaceType"
-          @change="handleBusTypeChange"
-        />
-      </el-form-item>
-      <el-form-item label="端口名称" prop="interfaceName">
-        <el-input v-model="portForm.interfaceName" placeholder="请输入端口名称" />
+        <InterfaceTypeSelector v-model="state.data.interfaceType" @change="handleBusTypeChange" />
       </el-form-item>
       <el-form-item label="端口位置" prop="position">
-        <PositionSelector
-          v-model="portForm.position"
-          @change="handlePositionChange"
-        />
+        <PositionSelector v-model="state.data.position" @change="handlePositionChange" />
       </el-form-item>
       <el-form-item label="端口描述" prop="description">
-        <el-input
-          v-model="portForm.description"
-          type="textarea"
-          :rows="3"
-          placeholder="请输入端口描述"
-        />
+        <el-input v-model="state.data.description" type="textarea" :rows="3" placeholder="请输入端口描述" />
       </el-form-item>
     </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="closeDialog">取消</el-button>
-        <el-button type="primary" @click="submitPort">确定</el-button>
-      </div>
-    </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup name="PortEditDialog">
-import { ref, reactive, watch } from 'vue'
-import { ElMessage } from 'element-plus'
-import { InterfaceTypeSelector, PositionSelector } from '@/views/fixing/components/selector'
+import { ref, reactive, watch, computed } from 'vue'
+import { useDialog } from '@zxio/zxui'
+import { InterfaceTypeSelector, PositionSelector } from './selector'
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -62,56 +41,66 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 
-const visible = ref(props.modelValue)
-watch(() => props.modelValue, (v) => visible.value = v)
-watch(visible, (v) => emit('update:modelValue', v))
-
 const portFormRef = ref()
-const portForm = reactive({ ...props.value })
-
-watch(() => props.value, (v) => {
-  Object.assign(portForm, v || {})
-}, { deep: true })
 
 const portFormRules = {
-  interfaceName: [{ required: true, message: '请输入端口名称', trigger: 'blur' }],
   interfaceType: [{ required: true, message: '请选择总线类型', trigger: 'change' }],
   position: [{ required: true, message: '请选择端口位置', trigger: 'change' }]
 }
 
 function generatePortName(busType, position) {
-  portForm.interfaceName = busType || ''
+  state.data.interfaceName = busType || ''
 }
 
 function handleBusTypeChange(busType) {
-  if (!portForm.interfaceId && busType) {
-    generatePortName(busType, portForm.position)
+  if (!state.data.interfaceId && busType) {
+    generatePortName(busType, state.data.position)
   }
 }
 
-function handlePositionChange(position) {
-  if (!portForm.interfaceId && portForm.interfaceType) {
-    generatePortName(portForm.interfaceType, position)
+function handlePositionChange(position) { }
+
+const { dialogProps, dialogEvents, open, close, state } = useDialog({
+  title: computed(() => props.title),
+  width: '500px',
+  okText: '确定',
+  formRef: portFormRef,
+  preValidate: true,
+  autoScrollToError: true,
+  autoResetForm: true,
+  defaultData: () => ({ ...props.value }),
+  onConfirm: async (data) => {
+    const submit = { ...data, interfaceName: data.interfaceType }
+    emit('submit', submit)
+    emit('update:modelValue', false)
+    return submit
+  },
+  onConfirmError: (_e) => {}
+})
+
+watch(() => props.modelValue, (v) => {
+  if (v) {
+    Object.assign(state.data, { ...props.value })
+    state.data.interfaceName = state.data.interfaceType
+    open()
+  } else {
+    close()
   }
-}
+})
 
-function submitPort() {
-  if (!portFormRef.value) return
-  portFormRef.value.validate((valid) => {
-    if (!valid) return
-    emit('submit', { ...portForm })
-  })
-}
+watch(() => props.value, (v) => {
+  Object.assign(state.data, v || {})
+}, { deep: true })
 
-function closeDialog() {
-  visible.value = false
-}
-
-function onClose() {
+function onDialogClose() {
   portFormRef.value?.resetFields()
   emit('close')
+  emit('update:modelValue', false)
+  close()
 }
+
+defineExpose({ open, close })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 </style>

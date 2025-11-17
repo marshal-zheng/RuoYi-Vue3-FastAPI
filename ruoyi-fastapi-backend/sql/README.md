@@ -1,34 +1,34 @@
-## SQL 使用指南（单目录约定）
+## SQL 使用指南（扁平化结构）
 
-> 目的：在同一 `sql/` 目录下，通过命名约定区分**全量建库**、**初始化数据**与**增量补丁**，让工程管理、协议管理保持一致体验。
+> 所有脚本统一放在 `sql/` 根目录，按功能模块拆成最少的文件，避免再出现临时目录与分散的补丁。
 
-### 文件类型
+### 文件清单
 
-- `ruoyi-fastapi*.sql`：整库初始化脚本（MySQL/PG）。
-- `sys_*.sql`：模块建表 / 基础数据，如 `sys_project.sql`、`sys_protocol.sql`、`sys_project_version.sql`。
-- `*_dict_data.sql`：幂等的字典或演示数据脚本，例如 `protocol_dict_data.sql`。
-- `update_*.sql`：运行中环境的增量补丁（菜单、结构升级等）。命名可追加日期：`update_project_menu_20241116.sql`。
+| 文件 | 说明 |
+| --- | --- |
+| `ruoyi-fastapi.sql` | MySQL 整库初始化（包含系统基础表/菜单） |
+| `ruoyi-fastapi-pg.sql` | PostgreSQL 整库初始化 |
+| `project.sql` | 工程/项目模块：表结构、演示数据、菜单/权限补丁 |
+| `device.sql` | 设备模块：分类/设备表、接口表、菜单/权限补丁 |
+| `protocol.sql` | 协议模块：协议表、字典数据、菜单/权限补丁 |
 
-### 推荐执行顺序
+### 推荐使用方式
 
-1. `ruoyi-fastapi.sql` 或 `ruoyi-fastapi-pg.sql`
-2. 需要的 `sys_*.sql` 扩展模块（按实际功能挑选）
-3. 字典/演示数据脚本（`*_dict_data.sql`）
-4. 增量补丁（全部 `update_*.sql`，按文件中说明执行）
+1. **首次建库**：导入 `ruoyi-fastapi.sql`（或 `ruoyi-fastapi-pg.sql`）。  
+2. **按需启用模块**：执行需要的模块脚本，例如：
+   ```bash
+   mysql -u root -p ruoyi-fastapi < ruoyi-fastapi-backend/sql/project.sql
+   mysql -u root -p ruoyi-fastapi < ruoyi-fastapi-backend/sql/device.sql
+   mysql -u root -p ruoyi-fastapi < ruoyi-fastapi-backend/sql/protocol.sql
+   ```
+   所有脚本都具备幂等性，可重复执行，自动补齐菜单、字典和管理员权限。
+3. **日常启动**：`setup.sh` / `start.sh` 会跳过 `ruoyi-fastapi*.sql`，仅执行模块脚本，保证旧环境持续同步。
 
-### 编写与维护规范
+### 脚本约定
 
-- 菜单、按钮、字典等固定数据统一采用固定 ID，并通过 `INSERT ... ON DUPLICATE KEY UPDATE` / `WHERE NOT EXISTS` 保证可重复执行。
-- DDL 改造脚本先判断列/索引是否存在，必要时提供备份与回滚提示。
-- 每个 `update_*.sql` 在文件头说明：背景、适用场景、回滚方式，脚本内部用事务包裹关键更新。
-- 新功能上线时，同时提供 `sys_*.sql`（新环境）与对应 `update_*.sql`（老环境），保证部署与升级一致。
+- **表结构**：统一使用 `CREATE TABLE IF NOT EXISTS`，避免误删线上数据；如需 DDL 变更请写成 `ALTER TABLE`。
+- **基础数据/字典**：采用固定主键 + `WHERE NOT EXISTS` 或 `ON DUPLICATE KEY UPDATE`，确保可重复执行。
+- **菜单/权限**：固定 ID，执行前清理历史随机 ID，再插入新数据；必要时包裹事务。
+- **扩展模块**：新增功能时直接补充一个 `<module>.sql`，文件内部按“表结构 -> 数据 -> 菜单/角色”顺序组织即可。
 
-### 目录清单（示例）
-
-- `sys_project.sql` / `sys_protocol.sql`：工程管理、协议管理基础表
-- `protocol_menu.sql`：协议菜单全量初始化
-- `update_project_menu.sql` / `update_protocol_menu.sql`：工程与协议菜单的固定 ID 补丁
-- `update_protocol_version.sql`：协议版本字段升级
-- `protocol_dict_data.sql`：协议相关字典
-
-> 若需要新增脚本，请遵循以上命名+注释规范，避免再额外分目录，便于后续排查与部署。
+保持根目录只有少量核心 SQL，即可快速定位、审查和回滚任何模块的数据库改动。

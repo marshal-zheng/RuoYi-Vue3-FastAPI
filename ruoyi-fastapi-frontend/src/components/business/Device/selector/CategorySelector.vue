@@ -20,7 +20,7 @@
 
 <script setup name="CategorySelector">
 import { ref, onMounted } from 'vue'
-import { getDeviceCategories } from '@/api/fixing/device'
+import { getDeviceCategoryOptions } from '@/api/device/category'
 import { ElMessage } from 'element-plus'
 
 // Props
@@ -62,14 +62,14 @@ const categoryOptions = ref([])
 async function loadCategories() {
   loading.value = true
   try {
-    const response = await getDeviceCategories()
+    const response = await getDeviceCategoryOptions()
     // 根据后端返回的数据格式处理
-    const categories = response.data || response.rows || response || []
+    const categories = response.data || response.rows || []
     
     // 转换为选项格式
     categoryOptions.value = categories.map(item => ({
-      label: item.name || item.categoryName || item.label,
-      value: item.name || item.categoryName || item.value
+      label: item.name,
+      value: item.name
     }))
   } catch (error) {
     console.error('加载设备分类失败:', error)
@@ -100,7 +100,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 // 可以在这里添加自定义样式
 </style>
 

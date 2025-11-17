@@ -62,7 +62,7 @@ const onCustomInterfaceTypeChange = (value) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .selector-test {
   padding: 20px;
   max-width: 600px;

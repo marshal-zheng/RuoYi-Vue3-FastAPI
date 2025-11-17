@@ -813,7 +813,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss">
+<style lang="less">
 /* SVG foreignObject 修复 */
 .zx-dag-page foreignObject > body {
   margin: 0;

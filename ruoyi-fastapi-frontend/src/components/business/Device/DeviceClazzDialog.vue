@@ -28,7 +28,7 @@
 import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useDialog } from '@zxio/zxui'
-import { getDeviceClazz, addDeviceClazz, updateDeviceClazz } from "@/api/fixing/deviceClazz"
+import { getDeviceCategory, addDeviceCategory, updateDeviceCategory } from "@/api/device/category"
 
 // 定义组件的 emits
 const emit = defineEmits(['success'])
@@ -54,7 +54,7 @@ const formRules = computed(() => ({
 const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog({
   // 动态标题
   title: (data) => {
-    return data.deviceClazzId ? "修改设备分类" : "添加设备分类"
+    return data.categoryId ? "修改设备分类" : "添加设备分类"
   },
 
   // 对话框配置
@@ -67,7 +67,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 
   // 默认数据
   defaultData: () => ({
-    deviceClazzId: null,
+    categoryId: null,
     name: "",
     descr: "",
     status: "0"
@@ -75,7 +75,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 
   // 数据转换
   dataTransform: (raw) => ({
-    deviceClazzId: raw.deviceClazzId || null,
+    categoryId: raw.categoryId || raw.deviceClazzId || null,
     name: raw.name || "",
     descr: raw.descr || "",
     status: raw.status || "0"
@@ -83,10 +83,10 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 
   // 确认回调
   onConfirm: async (data) => {
-    if (data.deviceClazzId) {
+    if (data.categoryId) {
       // 修改
       try {
-        const response = await updateDeviceClazz(data)
+        const response = await updateDeviceCategory(data)
         ElMessage.success("修改成功")
         emit('success')
         return response
@@ -97,7 +97,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
     } else {
       // 新增
       try {
-        const response = await addDeviceClazz(data)
+        const response = await addDeviceCategory(data)
         ElMessage.success("新增成功")
         emit('success')
         return response
@@ -117,15 +117,15 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 })
 
 /** 获取设备分类详情 */
-async function getDeviceClazzInfo(deviceClazzId) {
+async function getDeviceCategoryInfo(categoryId) {
   try {
-    const response = await getDeviceClazz(deviceClazzId)
+    const response = await getDeviceCategory(categoryId)
     return response.data
   } catch (error) {
     console.warn('获取分类详情失败:', error)
     // 使用模拟数据
     return {
-      deviceClazzId: deviceClazzId,
+      categoryId: categoryId,
       name: "示例分类",
       descr: "这是一个示例分类描述",
       status: "0"
@@ -134,10 +134,10 @@ async function getDeviceClazzInfo(deviceClazzId) {
 }
 
 /** 打开弹框 */
-async function openDialog(deviceClazzId) {
-  if (deviceClazzId) {
+async function openDialog(categoryId) {
+  if (categoryId) {
     // 编辑模式，先获取数据再打开
-    const deviceData = await getDeviceClazzInfo(deviceClazzId)
+    const deviceData = await getDeviceCategoryInfo(categoryId)
     open(deviceData)
   } else {
     // 新增模式
@@ -152,7 +152,7 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .dialog-form-container {
   padding: 16px 0;
 }

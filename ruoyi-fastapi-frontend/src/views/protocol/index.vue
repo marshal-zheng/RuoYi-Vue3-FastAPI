@@ -66,28 +66,13 @@
             </template>
           </el-table-column>
           <el-table-column label="协议类型" align="center" prop="protocolType" :show-overflow-tooltip="true" />
-          <el-table-column label="版本" align="center" width="100">
-            <template #default="scope">
-              <el-tag type="info" size="small">v{{ scope.row.versionNumber || 1 }}</el-tag>
-            </template>
-          </el-table-column>
+          
           <el-table-column label="状态" align="center" prop="status" width="100">
             <template #default="scope">
               <dict-tag :options="sys_normal_disable" :value="scope.row.status"/>
             </template>
           </el-table-column>
-          <el-table-column label="固化状态" align="center" width="100">
-            <template #default="scope">
-              <el-tag v-if="scope.row.isLocked" type="warning" size="small">
-                <el-icon><Lock /></el-icon>
-                已固化
-              </el-tag>
-              <el-tag v-else type="info" size="small">
-                <el-icon><Unlock /></el-icon>
-                未固化
-              </el-tag>
-            </template>
-          </el-table-column>
+          
           <el-table-column label="创建人" align="center" prop="createBy" :show-overflow-tooltip="true"/>
           <el-table-column label="最后修改时间" align="center" prop="updateTime" width="180">
             <template #default="scope">
@@ -115,10 +100,10 @@
 </template>
 
 <script setup name="Protocol">
-import { listProtocol, delProtocol, addProtocol, updateProtocol, lockProtocol } from "@/api/protocol/protocol"
+import { listProtocol, delProtocol, addProtocol, updateProtocol } from "@/api/protocol/protocol"
 import ProtocolTypeSelector from "@/components/business/Protocol/selector/ProtocolTypeSelector.vue"
 import ProtocolFormDrawer from "@/components/business/Protocol/ProtocolFormDrawer.vue"
-import { Lock, Unlock } from '@element-plus/icons-vue'
+ 
 
 const { proxy } = getCurrentInstance()
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable')
@@ -221,33 +206,12 @@ function handleDelete(row) {
 // 获取更多操作列表
 const getMoreActionList = (row) => {
   const actions = []
-  
-  // 固化版本/解除固化
-  if (row.isLocked) {
-    actions.push({
-      label: '解除固化',
-      eventTag: 'unlock',
-      icon: 'Unlock',
-      type: 'warning'
-    })
-  } else {
-    actions.push({
-      label: '固化版本',
-      eventTag: 'lock',
-      icon: 'Lock',
-      type: 'primary'
-    })
-  }
-  
-  // 删除操作（固化版本不能删除）
-  if (!row.isLocked) {
-    actions.push({
-      label: '删除',
-      eventTag: 'delete',
-      icon: 'Delete',
-      danger: true
-    })
-  }
+  actions.push({
+    label: '删除',
+    eventTag: 'delete',
+    icon: 'Delete',
+    danger: true
+  })
   
   return actions
 }
@@ -255,12 +219,6 @@ const getMoreActionList = (row) => {
 // 处理更多操作选择
 const handleMoreActionSelect = async (item, row, handleRefresh) => {
   switch (item.eventTag) {
-    case 'lock':
-      await handleLockProtocol(row, handleRefresh)
-      break
-    case 'unlock':
-      await handleUnlockProtocol(row, handleRefresh)
-      break
     case 'delete':
       handleDelete(row)
       break
@@ -269,43 +227,7 @@ const handleMoreActionSelect = async (item, row, handleRefresh) => {
   }
 }
 
-// 固化协议版本
-const handleLockProtocol = async (row, handleRefresh) => {
-  try {
-    await proxy.$modal.confirm(`确定要固化协议版本 "${row.protocolName}" 吗？固化后将无法修改和删除。`)
-    await lockProtocol({
-      protocolId: row.protocolId,
-      isLocked: true
-    })
-    proxy.$modal.msgSuccess("固化成功")
-    if (handleRefresh) {
-      handleRefresh()
-    }
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('固化协议版本失败:', error)
-    }
-  }
-}
-
-// 解除固化协议版本
-const handleUnlockProtocol = async (row, handleRefresh) => {
-  try {
-    await proxy.$modal.confirm(`确定要解除固化协议版本 "${row.protocolName}" 吗？解除后可以重新修改和删除。`)
-    await lockProtocol({
-      protocolId: row.protocolId,
-      isLocked: false
-    })
-    proxy.$modal.msgSuccess("解除固化成功")
-    if (handleRefresh) {
-      handleRefresh()
-    }
-  } catch (error) {
-    if (error !== 'cancel') {
-      console.error('解除固化协议版本失败:', error)
-    }
-  }
-}
+// 已移除固化相关操作
 
 /** 协议保存成功回调 */
 const handleProtocolSaveSuccess = async (data) => {

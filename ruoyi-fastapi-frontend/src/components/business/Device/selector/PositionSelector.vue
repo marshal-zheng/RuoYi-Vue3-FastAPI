@@ -1,61 +1,24 @@
 <template>
-  <el-select 
-    :model-value="modelValue"
-    @update:model-value="handleChange"
-    :placeholder="placeholder"
-    :style="{ width: '100%', ...customStyle }"
-    :disabled="disabled"
-    :clearable="clearable"
-    :size="size"
-  >
-    <el-option 
-      v-for="option in positionOptions" 
-      :key="option.value"
-      :label="option.label" 
-      :value="option.value" 
-    />
-  </el-select>
+  <zx-select
+    v-model="value"
+    :options="positionOptions"
+    v-bind="$attrs"
+  />
 </template>
 
 <script setup name="PositionSelector">
-import { computed } from 'vue'
+import { computed, useAttrs } from 'vue'
 
-// Props
 const props = defineProps({
   modelValue: {
     type: String,
     default: ''
-  },
-  placeholder: {
-    type: String,
-    default: '请选择端口位置'
-  },
-  disabled: {
-    type: Boolean,
-    default: false
-  },
-  clearable: {
-    type: Boolean,
-    default: false
-  },
-  size: {
-    type: String,
-    default: 'default'
-  },
-  customStyle: {
-    type: Object,
-    default: () => ({})
-  },
-  options: {
-    type: Array,
-    default: () => []
   }
 })
+const attrs = useAttrs()
 
-// Emits
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue'])
 
-// 默认位置选项
 const defaultPositionOptions = [
   // { label: '顶部', value: 'top' },
   { label: '左侧', value: 'left' },
@@ -63,18 +26,19 @@ const defaultPositionOptions = [
   // { label: '底部', value: 'bottom' },
 ]
 
-// 计算最终的选项列表
 const positionOptions = computed(() => {
-  return props.options.length > 0 ? props.options : defaultPositionOptions
+  const opts = attrs.options
+  return Array.isArray(opts) && opts.length > 0 ? opts : defaultPositionOptions
 })
 
-// 处理值变化
-const handleChange = (value) => {
-  emit('update:modelValue', value)
-  emit('change', value)
-}
+const value = computed({
+  get: () => props.modelValue,
+  set: (v) => {
+    emit('update:modelValue', v)
+  }
+})
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 // 可以在这里添加自定义样式
 </style>

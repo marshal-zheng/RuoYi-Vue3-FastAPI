@@ -8,8 +8,7 @@ from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.protocol_vo import (
     ProtocolModel,
     ProtocolPageQueryModel,
-    DeleteProtocolModel,
-    LockProtocolModel
+    DeleteProtocolModel
 )
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.login_service import LoginService
@@ -145,33 +144,6 @@ async def query_protocol_detail(
         protocol_detail_result = await ProtocolService.protocol_detail_services(query_db, protocol_id)
         logger.info('获取成功')
         return ResponseUtil.success(data=protocol_detail_result)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
-
-
-@protocolController.put(
-    '/lock',
-    response_model=CrudResponseModel,
-    dependencies=[
-        Depends(CheckUserInterfaceAuth('protocol:edit')),
-    ]
-)
-@Log(title='协议管理', business_type=BusinessType.UPDATE, log_type='operation')
-async def lock_protocol(
-    request: Request,
-    lock_protocol: LockProtocolModel,
-    query_db: AsyncSession = Depends(get_db),
-    current_user: CurrentUserModel = Depends(LoginService.get_current_user)
-):
-    """
-    固化/解除固化协议
-    """
-    try:
-        lock_protocol.update_by = current_user.user.user_name
-        lock_protocol_result = await ProtocolService.lock_protocol_services(query_db, lock_protocol)
-        logger.info(lock_protocol_result.message)
-        return ResponseUtil.success(msg=lock_protocol_result.message)
     except Exception as e:
         logger.exception(e)
         return ResponseUtil.error(msg=str(e))

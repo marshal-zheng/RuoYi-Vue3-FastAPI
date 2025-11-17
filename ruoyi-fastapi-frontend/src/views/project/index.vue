@@ -203,21 +203,8 @@ const multiple = ref(true);
 const projectDialogRef = ref();
 
 async function loadProjectData(params) {
-  try {
-    const { pageNum, pageSize, ...query } = params;
-    let requestParams = { pageNum, pageSize, ...query };
-    if (query.dateRange && query.dateRange.length === 2) {
-      requestParams = proxy.addDateRange(requestParams, query.dateRange);
-      delete requestParams.dateRange;
-    }
-    const response = await listProject(requestParams);
-    return {
-      list: response.rows || [],
-      total: response.total || 0,
-    };
-  } catch (error) {
-    return { list: [], total: 0 };
-  }
+  const response = await listProject(params);
+  return response;
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {

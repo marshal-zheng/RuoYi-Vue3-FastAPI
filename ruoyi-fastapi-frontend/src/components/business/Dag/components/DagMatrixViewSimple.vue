@@ -432,7 +432,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .dag-matrix-view-simple {
   display: flex;
   flex-direction: column;

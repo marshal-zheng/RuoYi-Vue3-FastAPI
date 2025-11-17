@@ -5,7 +5,7 @@
 
 set -e
 
-SQL_DIR="ruoyi-fastapi-backend/sql"
+SQL_ROOT="ruoyi-fastapi-backend/sql"
 DB_NAME="${DB_NAME:-ruoyi-fastapi}"
 if [ "${DB_USER+x}" != "x" ]; then
     DB_USER="root"
@@ -23,8 +23,8 @@ mysql_exec() {
 }
 
 apply_sql_updates() {
-    if [ ! -d "$SQL_DIR" ]; then
-        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_DIR${NC}"
+    if [ ! -d "$SQL_ROOT" ]; then
+        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_ROOT${NC}"
         return
     fi
 
@@ -32,12 +32,10 @@ apply_sql_updates() {
 
     while IFS= read -r sql_file; do
         sql_found=true
-        if [[ $(basename "$sql_file") == *"-pg.sql" ]]; then
-            continue
-        fi
-        echo -e "${BLUE}   ↪ $(basename "$sql_file")${NC}"
+        rel_path=${sql_file#"$SQL_ROOT/"}
+        echo -e "${BLUE}   ↪ ${rel_path}${NC}"
         mysql_exec "$DB_NAME" < "$sql_file"
-    done < <(find "$SQL_DIR" -maxdepth 1 -type f -name "update_*.sql" | sort)
+    done < <(find "$SQL_ROOT" -maxdepth 1 -type f -name "*.sql" ! -name "ruoyi-fastapi*.sql" | sort)
 
     if [ "$sql_found" = false ]; then
         echo -e "${YELLOW}ℹ️  未检测到需要执行的增量 SQL 脚本${NC}"

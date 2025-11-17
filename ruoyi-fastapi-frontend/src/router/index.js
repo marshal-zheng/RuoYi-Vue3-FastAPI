@@ -173,6 +173,20 @@ export const dynamicRoutes = [
     ],
   },
   {
+    path: '/device/detail',
+    component: Layout,
+    hidden: true,
+    permissions: ['device:list:query'],
+    children: [
+      {
+        path: 'index/:deviceId(\\d+)?',
+        component: () => import('@/views/device/detail.vue'),
+        name: 'DeviceDetail',
+        meta: { title: '设备详情', activeMenu: '/device/list' },
+      },
+    ],
+  },
+  {
     path: '/project/topo',
     component: Layout,
     hidden: true,

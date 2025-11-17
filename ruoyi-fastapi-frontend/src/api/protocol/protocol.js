@@ -43,14 +43,7 @@ export function delProtocol(protocolId) {
   })
 }
 
-// 固化/解除固化协议
-export function lockProtocol(data) {
-  return request({
-    url: '/system/protocol/lock',
-    method: 'put',
-    data: data
-  })
-}
+// 已移除固化接口
 
 // 导出协议
 export function exportProtocol(query) {

@@ -36,9 +36,7 @@
           />
         </el-form-item>
 
-        <el-form-item label="版本号">
-          <el-tag type="info" size="large"> v{{ drawer.state.data.versionNumber || 1 }} </el-tag>
-        </el-form-item>
+        
 
         <el-form-item label="协议描述" prop="description">
           <el-input
@@ -94,7 +92,6 @@ const drawer = useDrawer({
     protocolId: null,
     protocolName: '',
     protocolType: '',
-    versionNumber: 1,
     description: '',
     remark: '',
     protocolConfig: {},
@@ -147,7 +144,6 @@ const openDrawer = async protocolData => {
         protocolId: protocolData.protocolId,
         protocolName: protocolData.protocolName || '',
         protocolType: protocolData.protocolType || '',
-        versionNumber: protocolData.versionNumber || 1,
         description: protocolData.description || '',
         remark: protocolData.remark || '',
         protocolConfig: protocolData.protocolConfig || {},

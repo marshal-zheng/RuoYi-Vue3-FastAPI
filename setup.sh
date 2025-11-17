@@ -5,7 +5,8 @@
 
 set -e  # 遇到错误立即退出
 
-SQL_DIR="ruoyi-fastapi-backend/sql"
+SQL_ROOT="ruoyi-fastapi-backend/sql"
+SQL_INIT_FILE="$SQL_ROOT/ruoyi-fastapi.sql"
 DB_NAME="${DB_NAME:-ruoyi-fastapi}"
 DB_USER="${DB_USER:-root}"
 DB_PASSWORD="${DB_PASSWORD:-}"
@@ -19,8 +20,8 @@ mysql_exec() {
 }
 
 apply_sql_updates() {
-    if [ ! -d "$SQL_DIR" ]; then
-        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_DIR${NC}"
+    if [ ! -d "$SQL_ROOT" ]; then
+        echo -e "${YELLOW}⚠️  SQL 目录不存在：$SQL_ROOT${NC}"
         return
     fi
 
@@ -28,12 +29,10 @@ apply_sql_updates() {
 
     while IFS= read -r sql_file; do
         sql_found=true
-        if [[ $(basename "$sql_file") == *"-pg.sql" ]]; then
-            continue
-        fi
-        echo -e "${BLUE}   ↪ $(basename "$sql_file")${NC}"
+        rel_path=${sql_file#"$SQL_ROOT/"}
+        echo -e "${BLUE}   ↪ ${rel_path}${NC}"
         mysql_exec "$DB_NAME" < "$sql_file"
-    done < <(find "$SQL_DIR" -maxdepth 1 -type f -name "update_*.sql" | sort)
+    done < <(find "$SQL_ROOT" -maxdepth 1 -type f -name "*.sql" ! -name "ruoyi-fastapi*.sql" | sort)
 
     if [ "$sql_found" = false ]; then
         echo -e "${YELLOW}ℹ️  未检测到需要执行的增量 SQL 脚本${NC}"
@@ -126,9 +125,9 @@ echo -e "${BLUE}🗄️  配置数据库...${NC}"
 mysql_exec -e "CREATE DATABASE IF NOT EXISTS \`$DB_NAME\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
 # 导入数据
-if [ -f "$SQL_DIR/ruoyi-fastapi.sql" ]; then
+if [ -f "$SQL_INIT_FILE" ]; then
     echo -e "${BLUE}📊 导入数据库数据...${NC}"
-    mysql_exec "$DB_NAME" < "$SQL_DIR/ruoyi-fastapi.sql"
+    mysql_exec "$DB_NAME" < "$SQL_INIT_FILE"
     echo -e "${GREEN}✅ 数据库数据导入完成${NC}"
 else
     echo -e "${RED}❌ 数据库文件不存在${NC}"

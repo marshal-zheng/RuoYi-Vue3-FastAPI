@@ -548,14 +548,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped>
-.message-config-tab {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  overflow-y: auto;
-}
+<style lang="less" scoped>
 
 .table-toolbar {
   margin-bottom: 12px;

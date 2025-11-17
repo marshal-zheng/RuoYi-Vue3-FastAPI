@@ -15,9 +15,7 @@ class ProtocolModel(BaseModel):
     protocol_id: Optional[int] = Field(default=None, description='协议ID')
     protocol_name: Optional[str] = Field(default=None, description='协议名称')
     protocol_type: Optional[str] = Field(default=None, description='协议类型')
-    version: Optional[str] = Field(default='1.0', description='版本号')
     status: Optional[str] = Field(default='0', description='状态')
-    is_locked: Optional[bool] = Field(default=False, description='是否固化')
     description: Optional[str] = Field(default=None, description='协议描述')
     protocol_config: Optional[Any] = Field(default=None, description='协议配置')
     create_by: Optional[str] = Field(default=None, description='创建者')
@@ -54,18 +52,5 @@ class DeleteProtocolModel(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel)
 
     protocol_ids: str = Field(description='需要删除的协议ID')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-
-
-class LockProtocolModel(BaseModel):
-    """
-    固化/解除固化协议模型
-    """
-
-    model_config = ConfigDict(alias_generator=to_camel)
-
-    protocol_id: int = Field(description='协议ID')
-    is_locked: bool = Field(description='是否固化')
     update_by: Optional[str] = Field(default=None, description='更新者')
     update_time: Optional[datetime] = Field(default=None, description='更新时间')

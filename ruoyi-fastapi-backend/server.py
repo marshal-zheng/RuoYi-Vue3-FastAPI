@@ -22,6 +22,8 @@ from module_admin.controller.post_controler import postController
 from module_admin.controller.project_controller import projectController
 from module_admin.controller.project_version_controller import projectVersionController
 from module_admin.controller.protocol_controller import protocolController
+from module_admin.controller.device_category_controller import deviceCategoryController
+from module_admin.controller.device_controller import deviceController
 from module_admin.controller.role_controller import roleController
 from module_admin.controller.server_controller import serverController
 from module_admin.controller.user_controller import userController
@@ -79,6 +81,8 @@ controller_list = [
     {'router': projectController, 'tags': ['工程管理']},
     {'router': projectVersionController, 'tags': ['工程管理-版本管理']},
     {'router': protocolController, 'tags': ['协议管理']},
+    {'router': deviceCategoryController, 'tags': ['设备中心-分类管理']},
+    {'router': deviceController, 'tags': ['设备中心-设备管理']},
     {'router': onlineController, 'tags': ['系统监控-在线用户']},
     {'router': jobController, 'tags': ['系统监控-定时任务']},
     {'router': serverController, 'tags': ['系统监控-菜单管理']},

@@ -282,7 +282,7 @@ function onClose() {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .import-file-dialog {
   padding: 10px 0;
 }

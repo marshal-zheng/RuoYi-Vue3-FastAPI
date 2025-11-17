@@ -4,8 +4,7 @@ from module_admin.entity.do.protocol_do import SysProtocol
 from module_admin.entity.vo.protocol_vo import (
     ProtocolModel,
     ProtocolPageQueryModel,
-    DeleteProtocolModel,
-    LockProtocolModel
+    DeleteProtocolModel
 )
 from utils.page_util import PageUtil
 
@@ -115,24 +114,5 @@ class ProtocolDao:
                 del_flag='2',
                 update_by=protocol.update_by,
                 update_time=protocol.update_time
-            )
-        )
-
-    @classmethod
-    async def lock_protocol_dao(cls, db: AsyncSession, lock_info: LockProtocolModel):
-        """
-        固化/解除固化协议数据库操作
-
-        :param db: orm对象
-        :param lock_info: 固化信息对象
-        :return: None
-        """
-        await db.execute(
-            update(SysProtocol)
-            .where(SysProtocol.protocol_id == lock_info.protocol_id)
-            .values(
-                is_locked=lock_info.is_locked,
-                update_by=lock_info.update_by,
-                update_time=lock_info.update_time
             )
         )

@@ -1,12 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from exceptions.exception import ServiceException
 from module_admin.dao.protocol_dao import ProtocolDao
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.protocol_vo import (
     ProtocolModel,
     ProtocolPageQueryModel,
-    DeleteProtocolModel,
-    LockProtocolModel
+    DeleteProtocolModel
 )
 from utils.common_util import CamelCaseUtil
 from utils.page_util import PageResponseModel
@@ -66,11 +64,6 @@ class ProtocolService:
         :param page_object: 编辑协议对象
         :return: 编辑协议校验结果
         """
-        # 检查协议是否已固化
-        protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, page_object.protocol_id)
-        if protocol and protocol.is_locked:
-            raise ServiceException(message='协议已固化，无法修改')
-        
         try:
             await ProtocolDao.edit_protocol_dao(query_db, page_object)
             await query_db.commit()
@@ -88,16 +81,6 @@ class ProtocolService:
         :param page_object: 删除协议对象
         :return: 删除协议校验结果
         """
-        if not page_object.protocol_ids:
-            raise ServiceException(message='传入协议ID为空')
-        
-        # 检查是否有已固化的协议
-        protocol_id_list = [int(pid) for pid in page_object.protocol_ids.split(',')]
-        for protocol_id in protocol_id_list:
-            protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, protocol_id)
-            if protocol and protocol.is_locked:
-                raise ServiceException(message=f'协议"{protocol.protocol_name}"已固化，无法删除')
-        
         try:
             await ProtocolDao.delete_protocol_dao(query_db, page_object)
             await query_db.commit()
@@ -122,21 +105,3 @@ class ProtocolService:
             result = CamelCaseUtil.transform_result({})
 
         return result
-
-    @classmethod
-    async def lock_protocol_services(cls, query_db: AsyncSession, lock_object: LockProtocolModel):
-        """
-        固化/解除固化协议service
-
-        :param query_db: orm对象
-        :param lock_object: 固化信息对象
-        :return: 操作结果
-        """
-        try:
-            await ProtocolDao.lock_protocol_dao(query_db, lock_object)
-            await query_db.commit()
-            message = '固化成功' if lock_object.is_locked else '解除固化成功'
-            return CrudResponseModel(is_success=True, message=message)
-        except Exception as e:
-            await query_db.rollback()
-            raise e

@@ -198,7 +198,7 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .matrix-dialog-header {
   display: flex;
   align-items: center;

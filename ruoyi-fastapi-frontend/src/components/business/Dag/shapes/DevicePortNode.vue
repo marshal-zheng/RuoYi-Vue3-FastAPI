@@ -273,7 +273,7 @@ if (props.node) {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .device-port-node {
   // 设备主体样式
   .device-body {

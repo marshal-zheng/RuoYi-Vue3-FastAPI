@@ -315,7 +315,7 @@ if (props.node) {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .dag-page foreignObject > body {
   margin: 0;
   min-height: 100%;

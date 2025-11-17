@@ -6,6 +6,7 @@ export { default as NodeEditDrawer } from './NodeEditDrawer.vue'
 export { default as ImportFileDialog } from './ImportFileDialog.vue'
 export { default as ExportDialog } from './ExportDialog.vue'
 export { default as ProtocolListDrawer } from './ProtocolListDrawer.vue'
+export { default as CategoryFormDialog } from './CategoryFormDialog.vue'
 
 // 导出配置组件
 export { default as ParamsConfigTab } from './ParamsConfigTab.vue'
