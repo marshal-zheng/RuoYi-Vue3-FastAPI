@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: ruoyi-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ruoyi-fastapi
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # - ./ruoyi-fastapi-backend/sql:/docker-entrypoint-initdb.d
+      # - ./ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql:/docker-entrypoint-initdb.d/00-ruoyi-fastapi.sql
+      # - ./ruoyi-fastapi-backend/sql/project.sql:/docker-entrypoint-initdb.d/01-project.sql
+      # - ./ruoyi-fastapi-backend/sql/device.sql:/docker-entrypoint-initdb.d/02-device.sql
+    command:
+      - --character-set-server=utf8mb4
+      - --default-authentication-plugin=mysql_native_password
+    networks:
+      - ruoyi-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ruoyi-redis
+    command: redis-server --requirepass redis123456
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ruoyi-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "redis123456", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./ruoyi-fastapi-backend
+      dockerfile: Dockerfile
+    container_name: ruoyi-backend
+    environment:
+      - APP_ENV=prod
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+      - APP_RELOAD=false
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_DATABASE=ruoyi-fastapi
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=redis123456
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_upload:/app/vf_admin/upload_path
+      - backend_logs:/app/logs
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - ruoyi-network
+
+  frontend:
+    build:
+      context: ./ruoyi-fastapi-frontend
+      dockerfile: Dockerfile
+    container_name: ruoyi-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - ruoyi-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  backend_upload:
+  backend_logs:
+
+networks:
+  ruoyi-network:
+    driver: bridge

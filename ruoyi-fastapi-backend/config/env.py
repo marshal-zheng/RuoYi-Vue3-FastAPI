@@ -233,8 +233,7 @@ class GetConfig:
         os.environ['DB_HOST'] = os.environ.get('DB_HOST', '127.0.0.1')
         os.environ['DB_PORT'] = os.environ.get('DB_PORT', '3306')
         os.environ['DB_USERNAME'] = os.environ.get('DB_USERNAME', 'root')
-        # 强制覆盖为当前使用的密码，防止 .env.dev 中仍为旧密码或空密码
-        os.environ['DB_PASSWORD'] = 'admin1234'
+        os.environ['DB_PASSWORD'] = os.environ.get('DB_PASSWORD', 'root')
         os.environ['DB_DATABASE'] = os.environ.get('DB_DATABASE', 'ruoyi-fastapi')
 
 
