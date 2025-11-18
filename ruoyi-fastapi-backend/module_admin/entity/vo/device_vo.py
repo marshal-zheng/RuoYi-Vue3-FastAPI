@@ -85,3 +85,4 @@ class DeviceListModel(BaseModel):
     bus_interfaces: Optional[str] = Field(None, description="总线接口（格式化显示）")
     create_by: Optional[str] = Field(None, description="创建者")
     update_time: Optional[datetime] = Field(None, description="更新时间")
+    interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")

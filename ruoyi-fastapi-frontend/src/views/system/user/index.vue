@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <ZxContentWrap title="用户列表">
     <el-row :gutter="20">
       <splitpanes :horizontal="appStore.device === 'mobile'" class="default-theme">
         <!--部门数据-->
@@ -32,241 +32,216 @@
         <!--用户数据-->
         <pane size="84">
           <el-col>
-            <el-form
-              :model="queryParams"
-              ref="queryRef"
-              :inline="true"
-              v-show="showSearch"
-              label-width="68px"
-            >
-              <el-form-item label="用户名称" prop="userName">
-                <el-input
-                  v-model="queryParams.userName"
-                  placeholder="请输入用户名称"
-                  clearable
-                  style="width: 240px"
-                  @keyup.enter="handleQuery"
-                />
-              </el-form-item>
-              <el-form-item label="手机号码" prop="phonenumber">
-                <el-input
-                  v-model="queryParams.phonenumber"
-                  placeholder="请输入手机号码"
-                  clearable
-                  style="width: 240px"
-                  @keyup.enter="handleQuery"
-                />
-              </el-form-item>
-              <el-form-item label="状态" prop="status">
-                <el-select
-                  v-model="queryParams.status"
-                  placeholder="用户状态"
-                  clearable
-                  style="width: 240px"
-                >
-                  <el-option
-                    v-for="dict in sys_normal_disable"
-                    :key="dict.value"
-                    :label="dict.label"
-                    :value="dict.value"
-                  />
-                </el-select>
-              </el-form-item>
-              <el-form-item label="创建时间" style="width: 308px">
-                <el-date-picker
-                  v-model="dateRange"
-                  value-format="YYYY-MM-DD"
-                  type="daterange"
-                  range-separator="-"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                ></el-date-picker>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-                <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-              </el-form-item>
-            </el-form>
-
-            <el-row :gutter="10" class="mb8">
-              <el-col :span="1.5">
-                <el-button
-                  type="primary"
-                  plain
-                  icon="Plus"
-                  @click="handleAdd"
-                  v-hasPermi="['system:user:add']"
-                  >新增</el-button
-                >
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="success"
-                  plain
-                  icon="Edit"
-                  :disabled="single"
-                  @click="handleUpdate"
-                  v-hasPermi="['system:user:edit']"
-                  >修改</el-button
-                >
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="danger"
-                  plain
-                  icon="Delete"
-                  :disabled="multiple"
-                  @click="handleDelete"
-                  v-hasPermi="['system:user:remove']"
-                  >删除</el-button
-                >
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="info"
-                  plain
-                  icon="Upload"
-                  @click="handleImport"
-                  v-hasPermi="['system:user:import']"
-                  >导入</el-button
-                >
-              </el-col>
-              <el-col :span="1.5">
-                <el-button
-                  type="warning"
-                  plain
-                  icon="Download"
-                  @click="handleExport"
-                  v-hasPermi="['system:user:export']"
-                  >导出</el-button
-                >
-              </el-col>
-              <right-toolbar
-                v-model:showSearch="showSearch"
-                @queryTable="getList"
-                :columns="columns"
-              ></right-toolbar>
-            </el-row>
-
-            <el-table
-              v-loading="loading"
-              :data="userList"
-              @selection-change="handleSelectionChange"
-            >
-              <el-table-column type="selection" width="50" align="center" />
-              <el-table-column
-                label="用户编号"
-                align="center"
-                key="userId"
-                prop="userId"
-                v-if="columns[0].visible"
-              />
-              <el-table-column
-                label="用户名称"
-                align="center"
-                key="userName"
-                prop="userName"
-                v-if="columns[1].visible"
-                :show-overflow-tooltip="true"
-              />
-              <el-table-column
-                label="用户昵称"
-                align="center"
-                key="nickName"
-                prop="nickName"
-                v-if="columns[2].visible"
-                :show-overflow-tooltip="true"
-              />
-              <el-table-column
-                label="部门"
-                align="center"
-                key="deptName"
-                prop="dept.deptName"
-                v-if="columns[3].visible"
-                :show-overflow-tooltip="true"
-              />
-              <el-table-column
-                label="手机号码"
-                align="center"
-                key="phonenumber"
-                prop="phonenumber"
-                v-if="columns[4].visible"
-                width="120"
-              />
-              <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
-                <template #default="scope">
-                  <el-switch
-                    v-model="scope.row.status"
-                    active-value="0"
-                    inactive-value="1"
-                    @change="handleStatusChange(scope.row)"
-                  ></el-switch>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="创建时间"
-                align="center"
-                prop="createTime"
-                v-if="columns[6].visible"
-                width="160"
-              >
-                <template #default="scope">
-                  <span>{{ parseTime(scope.row.createTime) }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="操作"
-                align="center"
-                width="150"
-                class-name="small-padding fixed-width"
-              >
-                <template #default="scope">
-                  <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
-                    <el-button
-                      link
+            <ZxGridList ref="gridListRef" :load-data="loadUserData" class="zx-grid-list--page">
+              <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+                <div class="zx-grid-form-bar">
+                  <div class="zx-grid-form-bar__left">
+                    <ZxButton
                       type="primary"
+                      icon="Plus"
+                      @click="handleAdd"
+                      v-hasPermi="['system:user:add']"
+                    >新增</ZxButton>
+                    <ZxButton
+                      type="success"
                       icon="Edit"
-                      @click="handleUpdate(scope.row)"
+                      :disabled="single"
+                      @click="handleUpdate"
                       v-hasPermi="['system:user:edit']"
-                    ></el-button>
-                  </el-tooltip>
-                  <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
-                    <el-button
-                      link
-                      type="primary"
+                    >修改</ZxButton>
+                    <ZxButton
+                      type="danger"
                       icon="Delete"
-                      @click="handleDelete(scope.row)"
+                      :disabled="multiple"
+                      @click="handleDelete"
                       v-hasPermi="['system:user:remove']"
-                    ></el-button>
-                  </el-tooltip>
-                  <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
-                    <el-button
-                      link
-                      type="primary"
-                      icon="Key"
-                      @click="handleResetPwd(scope.row)"
-                      v-hasPermi="['system:user:resetPwd']"
-                    ></el-button>
-                  </el-tooltip>
-                  <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
-                    <el-button
-                      link
-                      type="primary"
-                      icon="CircleCheck"
-                      @click="handleAuthRole(scope.row)"
-                      v-hasPermi="['system:user:edit']"
-                    ></el-button>
-                  </el-tooltip>
-                </template>
-              </el-table-column>
-            </el-table>
-            <pagination
-              v-show="total > 0"
-              :total="total"
-              v-model:page="queryParams.pageNum"
-              v-model:limit="queryParams.pageSize"
-              @pagination="getList"
-            />
+                    >删除</ZxButton>
+                    <ZxButton
+                      type="info"
+                      icon="Upload"
+                      @click="handleImport"
+                      v-hasPermi="['system:user:import']"
+                    >导入</ZxButton>
+                    <ZxButton
+                      type="warning"
+                      icon="Download"
+                      @click="() => onExport({ query })"
+                      v-hasPermi="['system:user:export']"
+                    >导出</ZxButton>
+                  </div>
+                  <div class="zx-grid-form-bar__filters">
+                    <el-input
+                      v-model="query.userName"
+                      placeholder="请输入用户名称"
+                      clearable
+                      style="width: 240px"
+                      @change="v => onFilterChange('userName', v, { handleRefresh, updateState })"
+                    />
+                    <el-input
+                      v-model="query.phonenumber"
+                      placeholder="请输入手机号码"
+                      clearable
+                      style="width: 240px"
+                      @change="v => onFilterChange('phonenumber', v, { handleRefresh, updateState })"
+                    />
+                    <el-select
+                      v-model="query.status"
+                      placeholder="用户状态"
+                      clearable
+                      style="width: 240px"
+                      @change="v => onFilterChange('status', v, { handleRefresh, updateState })"
+                    >
+                      <el-option
+                        v-for="dict in sys_normal_disable"
+                        :key="dict.value"
+                        :label="dict.label"
+                        :value="dict.value"
+                      />
+                    </el-select>
+                    <el-date-picker
+                      v-model="query.dateRange"
+                      value-format="YYYY-MM-DD"
+                      type="daterange"
+                      range-separator="-"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      style="width: 308px"
+                      @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+                    />
+                  </div>
+                  <div class="zx-grid-form-bar__right">
+                    <ZxSearch
+                      v-model="query.userName"
+                      placeholder="搜索用户名称"
+                      :loading="loading"
+                      search-mode="click"
+                      @search="() => onSearch({ handleRefresh, updateState })"
+                      @clear="() => onSearch({ handleRefresh, updateState })"
+                    />
+                    <right-toolbar
+                      v-model:showSearch="showSearch"
+                      @queryTable="handleRefresh"
+                      :columns="columns"
+                    />
+                  </div>
+                </div>
+              </template>
+
+              <template #table="{ grid }">
+                <el-table
+                  v-loading="grid.loading"
+                  :data="grid.list || []"
+                  @selection-change="handleSelectionChange"
+                >
+                  <el-table-column type="selection" width="50" align="center" />
+                  <el-table-column
+                    label="用户编号"
+                    align="center"
+                    key="userId"
+                    prop="userId"
+                    v-if="columns[0].visible"
+                  />
+                  <el-table-column
+                    label="用户名称"
+                    align="center"
+                    key="userName"
+                    prop="userName"
+                    v-if="columns[1].visible"
+                    :show-overflow-tooltip="true"
+                  />
+                  <el-table-column
+                    label="用户昵称"
+                    align="center"
+                    key="nickName"
+                    prop="nickName"
+                    v-if="columns[2].visible"
+                    :show-overflow-tooltip="true"
+                  />
+                  <el-table-column
+                    label="部门"
+                    align="center"
+                    key="deptName"
+                    prop="dept.deptName"
+                    v-if="columns[3].visible"
+                    :show-overflow-tooltip="true"
+                  />
+                  <el-table-column
+                    label="手机号码"
+                    align="center"
+                    key="phonenumber"
+                    prop="phonenumber"
+                    v-if="columns[4].visible"
+                    width="120"
+                  />
+                  <el-table-column label="状态" align="center" key="status" v-if="columns[5].visible">
+                    <template #default="scope">
+                      <el-switch
+                        v-model="scope.row.status"
+                        active-value="0"
+                        inactive-value="1"
+                        @change="handleStatusChange(scope.row)"
+                      />
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="创建时间"
+                    align="center"
+                    prop="createTime"
+                    v-if="columns[6].visible"
+                    width="160"
+                  >
+                    <template #default="scope">
+                      <span>{{ parseTime(scope.row.createTime) }}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="操作"
+                    align="center"
+                    width="150"
+                    class-name="small-padding fixed-width"
+                  >
+                    <template #default="scope">
+                      <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
+                        <el-button
+                          link
+                          type="primary"
+                          icon="Edit"
+                          @click="handleUpdate(scope.row)"
+                          v-hasPermi="['system:user:edit']"
+                        />
+                      </el-tooltip>
+                      <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
+                        <el-button
+                          link
+                          type="primary"
+                          icon="Delete"
+                          @click="handleDelete(scope.row)"
+                          v-hasPermi="['system:user:remove']"
+                        />
+                      </el-tooltip>
+                      <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
+                        <el-button
+                          link
+                          type="primary"
+                          icon="Key"
+                          @click="handleResetPwd(scope.row)"
+                          v-hasPermi="['system:user:resetPwd']"
+                        />
+                      </el-tooltip>
+                      <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
+                        <el-button
+                          link
+                          type="primary"
+                          icon="CircleCheck"
+                          @click="handleAuthRole(scope.row)"
+                          v-hasPermi="['system:user:edit']"
+                        />
+                      </el-tooltip>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </ZxGridList>
           </el-col>
         </pane>
       </splitpanes>
@@ -433,7 +408,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </ZxContentWrap>
 </template>
 
 <script setup name="User">
@@ -457,16 +432,17 @@ const appStore = useAppStore();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable, sys_user_sex } = proxy.useDict('sys_normal_disable', 'sys_user_sex');
 
-const userList = ref([]);
+const gridListRef = ref();
+const currentQuery = ref({});
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
-const total = ref(0);
 const title = ref('');
 const dateRange = ref([]);
+const deptSelectedId = ref();
 const deptName = ref('');
 const deptOptions = ref(undefined);
 const enabledDeptOptions = ref(undefined);
@@ -562,14 +538,15 @@ const filterNode = (value, data) => {
 watch(deptName, val => {
   proxy.$refs['deptTreeRef'].filter(val);
 });
-/** 查询用户列表 */
-function getList() {
-  loading.value = true;
-  listUser(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
-    loading.value = false;
-    userList.value = res.rows;
-    total.value = res.total;
-  });
+/** GridList 数据加载 */
+async function loadUserData(params) {
+  const pager = params?.pager || { page: params?.page, size: params?.size };
+  const q = { ...(params?.query || {}) };
+  const withDept = { ...q, deptId: deptSelectedId.value };
+  const finalQuery = proxy.addDateRange(withDept, withDept?.dateRange);
+  const res = await listUser({ pager, query: finalQuery });
+  currentQuery.value = finalQuery || {};
+  return { list: res.rows || [], total: res.total || 0 };
 }
 /** 查询部门下拉树结构 */
 function getDeptTree() {
@@ -592,21 +569,19 @@ function filterDisabledDept(deptList) {
 }
 /** 节点单击事件 */
 function handleNodeClick(data) {
-  queryParams.value.deptId = data.id;
-  handleQuery();
+  deptSelectedId.value = data.id;
+  refreshList();
 }
 /** 搜索按钮操作 */
 function handleQuery() {
-  queryParams.value.pageNum = 1;
-  getList();
+  refreshList();
 }
 /** 重置按钮操作 */
 function resetQuery() {
   dateRange.value = [];
-  proxy.resetForm('queryRef');
-  queryParams.value.deptId = undefined;
+  deptSelectedId.value = undefined;
   proxy.$refs.deptTreeRef.setCurrentKey(null);
-  handleQuery();
+  refreshList();
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
@@ -617,7 +592,7 @@ function handleDelete(row) {
       return delUser(userIds);
     })
     .then(() => {
-      getList();
+      refreshList();
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
@@ -626,9 +601,7 @@ function handleDelete(row) {
 function handleExport() {
   proxy.download(
     'system/user/export',
-    {
-      ...queryParams.value,
-    },
+    { ...(currentQuery.value || {}) },
     `user_${new Date().getTime()}.xlsx`
   );
 }
@@ -718,7 +691,7 @@ const handleFileSuccess = (response, file, fileList) => {
     '导入结果',
     { dangerouslyUseHTMLString: true }
   );
-  getList();
+  refreshList();
 };
 /** 提交上传文件 */
 function submitFileForm() {
@@ -781,19 +754,38 @@ function submitForm() {
         updateUser(form.value).then(response => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
-          getList();
+          refreshList();
         });
       } else {
         addUser(form.value).then(response => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
-          getList();
+          refreshList();
         });
       }
     }
   });
 }
 
+function refreshList() {
+  gridListRef.value && gridListRef.value.refresh && gridListRef.value.refresh();
+}
+
+function onFilterChange(key, value, { handleRefresh, updateState }) {
+  updateState({ [key]: value });
+  updateState('pager.page', 1);
+  handleRefresh();
+}
+
+function onSearch({ handleRefresh, updateState }) {
+  updateState('pager.page', 1);
+  handleRefresh();
+}
+
+function onExport({ query }) {
+  currentQuery.value = { ...(query || {}) };
+  handleExport();
+}
+
 getDeptTree();
-getList();
 </script>

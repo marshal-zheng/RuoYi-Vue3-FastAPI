@@ -5,7 +5,12 @@ from fastapi import HTTPException
 from module_admin.dao.device_dao import DeviceDao
 from module_admin.dao.device_category_dao import DeviceCategoryDao
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
-from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, DeviceListModel
+from module_admin.entity.vo.device_vo import (
+    DeviceQueryModel,
+    DeviceModel,
+    DeviceListModel,
+    DeviceInterfaceModel,
+)
 from utils.response_util import ResponseUtil
 from sqlalchemy.exc import IntegrityError
 
@@ -38,13 +43,19 @@ class DeviceService:
                 device.category.name if getattr(device, 'category', None) else None
             )
 
+            interface_vo_list = [
+                DeviceInterfaceModel.model_validate(interface)
+                for interface in device.interfaces
+            ]
+
             device_vo = DeviceListModel(
                 device_id=device.device_id,
                 device_name=device.device_name,
                 category_name=category_name or '-',
                 bus_interfaces=bus_interfaces or '-',
                 create_by=device.create_by,
-                update_time=device.update_time
+                update_time=device.update_time,
+                interfaces=interface_vo_list,
             )
 
             # 仅返回驼峰格式字段，避免混用命名风格

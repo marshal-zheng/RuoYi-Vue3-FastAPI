@@ -1,81 +1,142 @@
 <template>
-  <el-drawer
-    v-model="visible"
-    title="编辑节点"
-    :size="500"
-    :before-close="handleClose"
-    destroy-on-close
-  >
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="rules"
-      label-width="100px"
-      label-position="left"
+  <ZxDrawer v-bind="drawer.drawerProps.value" v-on="drawer.drawerEvents.value">
+    <!-- 空状态 -->
+    <div
+      v-if="!portList || portList.length === 0"
+      class="flex flex-col items-center justify-center px-5 py-16 text-center"
     >
-      <el-form-item label="节点名称" prop="name">
-        <el-input
-          v-model="formData.name"
-          placeholder="请输入节点名称"
-          clearable
-          maxlength="50"
-          show-word-limit
-        />
-      </el-form-item>
+      <el-icon class="text-5xl text-gray-300 mb-4"><Box /></el-icon>
+      <div class="text-base font-medium text-gray-500 mb-2">暂无端口数据</div>
+      <div class="text-sm text-gray-400">请先添加设备端口</div>
+    </div>
 
-      <el-form-item label="设备类型">
-        <el-input v-model="formData.deviceType" disabled />
-      </el-form-item>
-
-      <el-form-item label="设备型号">
-        <el-input v-model="formData.model" disabled />
-      </el-form-item>
-
-      <el-form-item label="制造商">
-        <el-input v-model="formData.manufacturer" disabled />
-      </el-form-item>
-
-      <el-form-item label="版本">
-        <el-input v-model="formData.version" disabled />
-      </el-form-item>
-
-      <el-form-item label="备注">
-        <el-input v-model="formData.remark" disabled type="textarea" :rows="3" />
-      </el-form-item>
-    </el-form>
-
-    <template #footer>
-      <div class="drawer-footer">
-        <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitLoading">
-          确定
-        </el-button>
+    <!-- 按总线类型分组展示协议 -->
+    <div
+      v-for="group in groupedPorts"
+      :key="group.type"
+      class="mb-4 bg-white border border-gray-200 rounded-lg overflow-hidden"
+    >
+      <!-- 总线类型分组头部 -->
+      <div
+        class="flex items-center px-4 py-3 bg-primary-50 cursor-pointer select-none transition-all border-b border-gray-200 hover:bg-primary-100"
+        @click="togglePort(group.type)"
+      >
+        <el-icon
+          class="text-base text-gray-600 transition-transform mr-2.5 shrink-0"
+          :class="{ 'rotate-90': !collapsedPorts[group.type] }"
+        >
+          <ArrowRight />
+        </el-icon>
+        <div class="flex-1 flex items-center gap-2.5 min-w-0">
+          <span class="text-[15px] font-semibold text-gray-900 truncate">{{ group.type }}</span>
+          <el-tag :type="getBusTypeTagType(group.type)" size="small" class="shrink-0">
+            {{ group.type }}
+          </el-tag>
+        </div>
+        <span class="text-sm text-gray-600 bg-gray-200 px-3 py-1 rounded-full shrink-0">
+          {{ group.totalProtocols }} 个协议
+        </span>
       </div>
-    </template>
-  </el-drawer>
+
+      <!-- 协议列表 -->
+      <div v-show="!collapsedPorts[group.type]" class="bg-gray-50">
+        <!-- 无协议提示 -->
+        <div
+          v-if="group.totalProtocols === 0"
+          class="flex items-center justify-center gap-2 p-6 text-gray-400 text-sm"
+        >
+          <el-icon><Warning /></el-icon>
+          <span>该类型端口暂无协议配置</span>
+        </div>
+
+        <!-- 协议列表 -->
+        <div
+          v-for="protocol in group.protocols"
+          :key="protocol.id"
+          class="group flex items-center px-4 py-3 m-2 bg-white border border-gray-200 rounded-md cursor-pointer transition-all hover:bg-primary-50 hover:border-primary-500 hover:shadow hover:translate-x-0.5"
+          @click="handleProtocolClick(protocol.port, protocol.message)"
+        >
+          <div
+            class="flex items-center justify-center w-9 h-9 rounded-md bg-gradient-to-br from-primary-50 to-indigo-50 text-primary-500 text-lg shrink-0"
+          >
+            <el-icon><Document /></el-icon>
+          </div>
+          <div class="flex-1 ml-3 min-w-0">
+            <div class="text-sm font-medium text-gray-900 mb-1 truncate">
+              {{ protocol.message.name || protocol.port.interfaceName + ' 协议' }}
+            </div>
+            <div class="flex items-center gap-3 flex-wrap">
+              <span
+                v-if="protocol.message.header?.sender"
+                class="text-xs text-gray-600 whitespace-nowrap"
+              >
+                发送方: {{ protocol.message.header.sender }}
+              </span>
+              <span
+                v-if="protocol.message.header?.receiver"
+                class="text-xs text-gray-600 whitespace-nowrap"
+              >
+                接收方: {{ protocol.message.header.receiver }}
+              </span>
+              <span v-if="protocol.message.fields" class="text-xs text-gray-600 whitespace-nowrap">
+                {{ protocol.message.fields.length }} 个字段
+              </span>
+            </div>
+          </div>
+          <el-icon
+            class="text-sm text-gray-400 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:text-primary-500"
+            ><ArrowRight
+          /></el-icon>
+        </div>
+      </div>
+    </div>
+  </ZxDrawer>
+
+  <!-- 协议配置对话框 -->
+  <ProtocolEditDialog ref="protocolDialogRef" @submit="handleProtocolSubmit" />
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ref, reactive, watch, nextTick, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import { useDrawer } from '@zxio/zxui';
+import { Box, ArrowRight, Document, Warning } from '@element-plus/icons-vue';
+import ProtocolEditDialog from './ProtocolEditDialog.vue';
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false
-  },
   nodeData: {
     type: Object,
-    default: () => ({})
-  }
-})
+    default: () => ({}),
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['submit']);
 
-// 控制显示/隐藏
-const visible = ref(false)
-const formRef = ref(null)
-const submitLoading = ref(false)
+const formRef = ref(null);
+
+// 使用 useDrawer
+const drawer = useDrawer({
+  title: () => `节点配置 - ${formData.name || '未命名节点'}`,
+  size: '700px',
+  placement: 'right',
+  okText: '保存',
+  formRef,
+  formModel: computed(() => formData),
+  preValidate: true,
+  autoScrollToError: true,
+  async onConfirm() {
+    // 触发提交事件，传递节点数据、修改后的名称和端口信息
+    emit('submit', {
+      nodeId: props.nodeData?.id,
+      node: props.nodeData,
+      name: formData.name,
+      ports: portList.value,
+    });
+
+    ElMessage.success('保存成功');
+    return true;
+  },
+});
 
 // 表单数据
 const formData = reactive({
@@ -84,99 +145,169 @@ const formData = reactive({
   model: '',
   manufacturer: '',
   version: '',
-  remark: ''
-})
+  remark: '',
+});
 
-// 表单验证规则
-const rules = {
-  name: [
-    { required: true, message: '请输入节点名称', trigger: 'blur' },
-    { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
-  ]
-}
+// 端口列表
+const portList = ref([]);
 
-// 监听 modelValue 变化
+// 折叠状态（默认全部展开）
+const collapsedPorts = ref({});
+
+// 协议配置对话框
+const protocolDialogRef = ref(null);
+const currentPortIndex = ref(-1);
+
+// 监听 nodeData 变化，当打开时初始化数据
 watch(
-  () => props.modelValue,
-  (newVal) => {
-    visible.value = newVal
-    if (newVal && props.nodeData) {
-      // 打开时初始化表单数据
-      initFormData()
+  () => props.nodeData,
+  newVal => {
+    if (newVal && Object.keys(newVal).length > 0) {
+      initFormData();
     }
   },
-  { immediate: true }
-)
-
-// 监听 visible 变化，同步到父组件
-watch(visible, (newVal) => {
-  emit('update:modelValue', newVal)
-})
+  { deep: true }
+);
 
 // 初始化表单数据
 const initFormData = () => {
   nextTick(() => {
-    const data = props.nodeData?.data || {}
-    formData.name = data.name || data.label || ''
-    formData.deviceType = data.deviceType || ''
-    formData.model = data.model || ''
-    formData.manufacturer = data.manufacturer || ''
-    formData.version = data.version || ''
-    formData.remark = data.remark || data.value || ''
-    
+    const data = props.nodeData?.data || {};
+    formData.name = data.name || data.label || '';
+    formData.deviceType = data.deviceType || '';
+    formData.model = data.model || '';
+    formData.manufacturer = data.manufacturer || '';
+    formData.version = data.version || '';
+    formData.remark = data.remark || data.value || '';
+
+    // 加载端口列表
+    portList.value = data.ports || [];
+
     // 清除验证状态
     if (formRef.value) {
-      formRef.value.clearValidate()
+      formRef.value.clearValidate();
     }
-  })
-}
+  });
+};
 
-// 关闭抽屉
-const handleClose = () => {
-  visible.value = false
-}
-
-// 提交表单
-const handleSubmit = async () => {
-  if (!formRef.value) return
-  
-  try {
-    // 验证表单
-    await formRef.value.validate()
-    
-    submitLoading.value = true
-    
-    // 触发提交事件，传递节点数据和修改后的名称
-    emit('submit', {
-      nodeId: props.nodeData?.id,
-      node: props.nodeData,
-      name: formData.name
-    })
-    
-    ElMessage.success('保存成功')
-    handleClose()
-  } catch (error) {
-    console.error('表单验证失败:', error)
-  } finally {
-    submitLoading.value = false
+// 获取端口的协议列表
+const getPortMessages = port => {
+  // 检查是否有配置的协议数据
+  if (!port.messageConfig) {
+    return [];
   }
-}
+
+  // 当前数据结构：每个端口只有一个 messageConfig（包含 header 和 fields）
+  // 如果有 fields 数据，说明配置了协议
+  if (port.messageConfig.fields && port.messageConfig.fields.length > 0) {
+    // 返回一个包含该协议的数组
+    return [
+      {
+        id: port.id || port.interfaceId,
+        name: `${port.interfaceName} 协议`,
+        messageId: port.id || port.interfaceId,
+        direction: 'send', // 默认发送
+        fields: port.messageConfig.fields,
+        header: port.messageConfig.header,
+      },
+    ];
+  }
+
+  return [];
+};
+
+// 按总线类型分组
+const groupedPorts = computed(() => {
+  if (!portList.value || portList.value.length === 0) {
+    return [];
+  }
+
+  // 按总线类型分组
+  const groups = {};
+
+  portList.value.forEach((port, index) => {
+    const type = port.interfaceType || port.busType;
+    if (!groups[type]) {
+      groups[type] = {
+        type: type,
+        ports: [],
+        protocols: [],
+        totalProtocols: 0,
+      };
+    }
+
+    // 保存原始索引，用于配置协议时定位
+    const portWithIndex = { ...port, _originalIndex: index };
+    groups[type].ports.push(portWithIndex);
+
+    // 获取该端口的协议列表
+    const messages = getPortMessages(port);
+    messages.forEach(message => {
+      groups[type].protocols.push({
+        id: `${port.id || port.interfaceId}_${message.id}`,
+        port: portWithIndex,
+        message: message,
+      });
+    });
+
+    groups[type].totalProtocols = groups[type].protocols.length;
+  });
+
+  // 转换为数组并排序
+  return Object.values(groups).sort((a, b) => a.type.localeCompare(b.type));
+});
+
+// 切换端口折叠状态
+const togglePort = portType => {
+  collapsedPorts.value[portType] = !collapsedPorts.value[portType];
+};
+
+// 获取总线类型对应的标签类型
+const getBusTypeTagType = busType => {
+  const typeMap = {
+    RS422: 'warning',
+    RS485: 'danger',
+    CAN: 'primary',
+    Ethernet: 'success',
+    '1553B': 'info',
+  };
+  return typeMap[busType] || 'info';
+};
+
+// 点击协议卡片
+const handleProtocolClick = (port, message) => {
+  // 准备端口信息，包含现有的协议配置
+  const portInfo = {
+    ...port,
+    messageConfig: {
+      header: message.header || {},
+      fields: message.fields || [],
+    },
+    protocolId: message.protocolId || null,
+  };
+  currentPortIndex.value = port._originalIndex;
+  // 通过 ref 的 open 方法打开对话框
+  protocolDialogRef.value?.open(portInfo);
+};
+
+// 协议提交回调
+const handleProtocolSubmit = ({ messageConfig, protocolId }) => {
+  // 更新端口的协议信息
+  if (currentPortIndex.value >= 0) {
+    portList.value[currentPortIndex.value] = {
+      ...portList.value[currentPortIndex.value],
+      messageConfig,
+      protocolId,
+    };
+  }
+};
+
+defineExpose({
+  open: drawer.open,
+  close: drawer.close,
+});
 </script>
 
 <style lang="less" scoped>
-.drawer-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
-:deep(.el-drawer__body) {
-  padding: 20px;
-}
-
-:deep(.el-drawer__footer) {
-  padding: 16px 20px;
-  border-top: 1px solid var(--el-border-color-light);
-}
+// 样式已通过 Tailwind CSS 类实现
 </style>
-
