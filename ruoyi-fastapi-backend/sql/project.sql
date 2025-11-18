@@ -12,6 +12,8 @@ SET character_set_results = utf8mb4;
 -- 1. 工程管理表
 CREATE TABLE IF NOT EXISTS `sys_project` (
   `project_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '工程编号',
+  `project_name` varchar(100) DEFAULT NULL COMMENT '工程名称',
+  `project_code` varchar(50) DEFAULT NULL COMMENT '工程编码',
   `project_desc` text COMMENT '工程描述',
   `create_by` varchar(64) DEFAULT '' COMMENT '创建人',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
