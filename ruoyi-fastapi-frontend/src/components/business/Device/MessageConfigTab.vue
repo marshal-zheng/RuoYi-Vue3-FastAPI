@@ -577,9 +577,24 @@ function initializeData() {
     messageFields.value = getDefaultFields();
   }
 
-  // 自动填充发送方为设备名称
-  if (props.portInfo.deviceName) {
-    messageHeader.sender = props.portInfo.deviceName;
+  const currentDeviceName = props.portInfo.deviceName || '';
+  const peerDeviceName = props.portInfo.peerDeviceName || '';
+  const direction = props.portInfo.direction || 'forward';
+
+  const expectedSender =
+    direction === 'reverse'
+      ? peerDeviceName || currentDeviceName
+      : currentDeviceName || peerDeviceName;
+  const expectedReceiver =
+    direction === 'reverse'
+      ? currentDeviceName || peerDeviceName
+      : peerDeviceName || currentDeviceName;
+
+  if (!messageHeader.sender && expectedSender) {
+    messageHeader.sender = expectedSender;
+  }
+  if (!messageHeader.receiver && expectedReceiver) {
+    messageHeader.receiver = expectedReceiver;
   }
 
   syncConfigRows();

@@ -1,8 +1,11 @@
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from exceptions.exception import ServiceException
 from module_admin.dao.project_dao import ProjectDao
+from module_admin.dao.project_version_dao import ProjectVersionDao
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.project_vo import ProjectModel, ProjectPageQueryModel, DeleteProjectModel
+from module_admin.entity.vo.project_version_vo import ProjectVersionModel
 from utils.common_util import CamelCaseUtil
 from utils.page_util import PageResponseModel
 
@@ -50,6 +53,23 @@ class ProjectService:
                 page_object.project_code = await cls._generate_project_code(query_db)
 
             new_project = await ProjectDao.add_project_dao(query_db, page_object)
+            await query_db.flush()
+            
+            # 创建默认初始版本
+            default_version = ProjectVersionModel(
+                project_id=new_project.project_id,
+                version_number='v1.0.0',
+                version_name='初始版本',
+                description='项目初始版本',
+                status='1',
+                is_locked='0',
+                create_by=page_object.create_by,
+                create_time=datetime.now(),
+                update_by=page_object.update_by,
+                update_time=datetime.now()
+            )
+            await ProjectVersionDao.add_project_version_dao(query_db, default_version)
+            
             await query_db.commit()
             return CrudResponseModel(
                 is_success=True,
@@ -68,7 +88,6 @@ class ProjectService:
         :param query_db: orm对象
         :return: 工程编码
         """
-        from datetime import datetime
         from sqlalchemy import select, func
         from module_admin.entity.do.project_do import SysProject
         
