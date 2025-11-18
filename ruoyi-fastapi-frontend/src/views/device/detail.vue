@@ -67,6 +67,7 @@ import PortEditDialog from '@/components/business/Device/PortEditDialog.vue';
 import PortConfigDrawer from '@/components/business/Device/PortConfigDrawer.vue';
 import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
 import ProtocolListDrawer from '@/components/business/Device/ProtocolListDrawer.vue';
+import { getPortColor } from '@/constants/portColor';
 
 registerDagShapes();
 
@@ -280,7 +281,7 @@ async function loadDeviceInfo() {
   try {
     const response = await getDevice(id);
     deviceInfo.value = response.data || response;
-    await loadDevicePorts();
+    loadDevicePorts();
     updateGraphData();
   } finally {
     loading.value = false;
@@ -318,7 +319,7 @@ watch(
   }
 );
 
-async function loadDevicePorts() {
+function loadDevicePorts() {
   if (deviceInfo.value.interfaces && deviceInfo.value.interfaces.length > 0) {
     tempPorts.value = deviceInfo.value.interfaces.map((intf, index) => {
       const normalizedId = normalizePortKey(intf.interfaceId);
@@ -335,7 +336,11 @@ async function loadDevicePorts() {
       };
     });
   }
-  devicePorts.value = tempPorts.value;
+  syncDevicePorts();
+}
+
+function syncDevicePorts() {
+  devicePorts.value = tempPorts.value.map(port => ({ ...port }));
 }
 
 function updateGraphData() {
@@ -394,18 +399,13 @@ function updateGraphData() {
     left: createPortGroup(32),
     right: createPortGroup(32),
   };
-  const colorMap = {
-    RS422: '#f59e0b',
-    RS485: '#f97316',
-    CAN: '#3b82f6',
-    LAN: '#10b981',
-    '1553B': '#8b5cf6',
-  };
   const x6Ports = devicePorts.value.map((port, index) => {
     const portId = port.id || `port_${index}`;
     const group = port.position || 'right';
-    const busType = port.interfaceType || 'RS422';
-    const color = colorMap[busType] || '#6b7280';
+    const color = getPortColor({
+      busType: port.busType,
+      interfaceType: port.interfaceType,
+    });
     const isTB = group === 'top' || group === 'bottom';
     const name = port.interfaceName || port.id;
     const text = name.length > (isTB ? 6 : 7) ? name.substring(0, isTB ? 5 : 6) + '..' : name;
@@ -635,7 +635,7 @@ async function handleDeletePort(interfaceId) {
   if (index > -1) {
     tempPorts.value.splice(index, 1);
     ElMessage.success('删除成功');
-    await loadDevicePorts();
+    syncDevicePorts();
     updateGraphData();
   }
 }
@@ -671,7 +671,7 @@ async function handlePortSubmit(formData) {
     ElMessage.success('添加成功');
   }
   portDialogRef.value?.close();
-  await loadDevicePorts();
+  syncDevicePorts();
   updateGraphData();
 }
 
@@ -686,7 +686,7 @@ async function handlePortConfigSubmit(portData) {
         : tempPorts.value[index].messageConfig,
     };
   }
-  await loadDevicePorts();
+  syncDevicePorts();
   updateGraphData();
 }
 
