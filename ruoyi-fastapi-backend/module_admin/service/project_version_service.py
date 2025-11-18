@@ -1,7 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from exceptions.exception import ServiceException
 from module_admin.dao.project_version_dao import ProjectVersionDao
+from module_admin.dao.project_topology_dao import ProjectTopologyDao
 from module_admin.entity.vo.common_vo import CrudResponseModel
+from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
 from module_admin.entity.vo.project_version_vo import (
     ProjectVersionModel,
     ProjectVersionPageQueryModel,
@@ -188,8 +190,24 @@ class ProjectVersionService:
                 create_by=clone_object.create_by,
                 create_time=clone_object.create_time
             )
-            
-            await ProjectVersionDao.add_project_version_dao(query_db, new_version)
+            new_version_do = await ProjectVersionDao.add_project_version_dao(query_db, new_version)
+
+            # 克隆拓扑数据（如果源版本存在拓扑）
+            source_topology = await ProjectTopologyDao.get_topology_by_project_and_version(
+                query_db, source_version.project_id, source_version.version_id
+            )
+            if source_topology:
+                topology_model = ProjectTopologyModel(
+                    project_id=source_version.project_id,
+                    version_id=new_version_do.version_id,
+                    topology_data=source_topology.topology_data,
+                    create_by=clone_object.create_by,
+                    create_time=clone_object.create_time,
+                    update_by=clone_object.create_by,
+                    update_time=clone_object.create_time
+                )
+                await ProjectTopologyDao.save_project_topology_dao(query_db, topology_model)
+
             await query_db.commit()
             return CrudResponseModel(is_success=True, message='克隆成功')
         except ServiceException as e:

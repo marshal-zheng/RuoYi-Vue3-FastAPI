@@ -9,13 +9,13 @@
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
-            <ZxButton
+            <!-- <ZxButton
               type="primary"
               icon="Plus"
               @click="handleAddVersion"
               v-hasPermi="['project:version:add']"
               >新增</ZxButton
-            >
+            > -->
             <ZxButton
               type="danger"
               icon="Delete"
@@ -80,14 +80,14 @@
           </el-table-column>
           <el-table-column
             label="操作"
-            width="200"
+            width="220"
             class-name="op-col"
             label-class-name="op-col__header"
           >
             <template #default="{ row }">
               <div class="op-col__wrap">
-                <!-- <ZxButton link type="primary" @click="handleViewVersion(row)">查看</ZxButton> -->
-                <ZxButton link type="primary" @click="handleEditVersion(row)">编辑</ZxButton>
+                <ZxButton link type="primary" @click="handleViewVersionTopo(row)">查看</ZxButton>
+                <ZxButton link type="primary" @click="handleEditVersionTopo(row)">图编辑</ZxButton>
                 <ZxMoreAction
                   :list="getMoreActionList(row)"
                   @select="handleMoreActionSelect($event, row, handleRefresh)"
@@ -335,25 +335,32 @@ function handleAddVersion() {
   editVersionDialog.value = true;
 }
 
-/** 查看版本 */
-function handleViewVersion(row) {
-  detailDialogRef.value?.open(row);
-}
-
-/** 编辑版本 */
-function handleEditVersion(row) {
-  if (row.isLocked === '1') {
-    proxy.$modal.msgWarning('固化版本不允许编辑');
+/** 查看版本拓扑（跳转到拓扑图，只读/查看模式暂与编辑一致） */
+function handleViewVersionTopo(row) {
+  if (!props.projectId) {
+    proxy.$modal.msgError('缺少工程ID，无法打开拓扑图');
     return;
   }
+  proxy.$router.push({
+    path: `/project/topo/index/${props.projectId}`,
+    query: {
+      versionId: row.versionId,
+    },
+  });
+}
 
-  // 填充编辑表单
-  editVersionForm.versionId = row.versionId;
-  editVersionForm.versionNumber = row.versionNumber;
-  editVersionForm.versionName = row.versionName;
-  editVersionForm.description = row.description;
-
-  editVersionDialog.value = true;
+/** 编辑版本拓扑（跳转到拓扑图进行编辑） */
+function handleEditVersionTopo(row) {
+  if (!props.projectId) {
+    proxy.$modal.msgError('缺少工程ID，无法打开拓扑图');
+    return;
+  }
+  proxy.$router.push({
+    path: `/project/topo/index/${props.projectId}`,
+    query: {
+      versionId: row.versionId,
+    },
+  });
 }
 
 /** 保存编辑版本 */

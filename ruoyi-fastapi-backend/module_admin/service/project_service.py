@@ -67,13 +67,16 @@ class ProjectService:
                 update_by=page_object.update_by,
                 update_time=datetime.now()
             )
-            await ProjectVersionDao.add_project_version_dao(query_db, default_version)
+            new_version = await ProjectVersionDao.add_project_version_dao(query_db, default_version)
             
             await query_db.commit()
             return CrudResponseModel(
                 is_success=True,
                 message='新增成功',
-                result={'projectId': new_project.project_id}
+                result={
+                    'projectId': new_project.project_id,
+                    'versionId': new_version.version_id
+                }
             )
         except Exception as e:
             await query_db.rollback()
