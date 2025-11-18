@@ -142,14 +142,6 @@
                   >详情</ZxButton
                 >
                 <ZxButton
-                  @click.stop="handleUpdate(project)"
-                  v-hasPermi="['project:project:edit']"
-                  type="primary"
-                  icon="Edit"
-                  class="flex-1"
-                  >图编辑</ZxButton
-                >
-                <ZxButton
                   @click.stop="handleDelete(project)"
                   v-hasPermi="['project:project:remove']"
                   type="danger"
@@ -190,7 +182,7 @@
 <script setup name="Project">
 import { listProject, delProject } from '@/api/project/project';
 import { checkPermi } from '@/utils/permission';
-import { Document, Edit, Delete } from '@element-plus/icons-vue';
+import { Document, Delete } from '@element-plus/icons-vue';
 import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue';
 
 const { proxy } = getCurrentInstance();
@@ -237,11 +229,6 @@ function handleDetail(row) {
   proxy.$router.push('/project/project-detail/index/' + projectId);
 }
 
-function handleUpdate(row) {
-  const projectId = row.projectId;
-  proxy.$router.push('/project/topo/index/' + projectId);
-}
-
 function handleDelete(row) {
   const projectIds = row.projectId || ids.value;
   proxy.$modal
@@ -260,9 +247,6 @@ function getProjectMoreActionList(project) {
   if (checkPermi(['project:project:query'])) {
     actions.push({ label: '查看详情', eventTag: 'detail', icon: Document });
   }
-  if (checkPermi(['project:project:edit'])) {
-    actions.push({ label: '图编辑', eventTag: 'edit', icon: Edit, type: 'primary' });
-  }
   if (checkPermi(['project:project:remove'])) {
     actions.push({ label: '删除工程', eventTag: 'delete', icon: Delete, danger: true });
   }
@@ -274,9 +258,6 @@ function handleMoreActionSelect(item, project, handleRefresh) {
     case 'detail':
       handleDetail(project);
       break;
-    case 'edit':
-      handleUpdate(project);
-      break;
     case 'delete':
       handleDelete(project);
       break;
@@ -286,16 +267,24 @@ function handleMoreActionSelect(item, project, handleRefresh) {
 }
 
 function handleCreateSuccess(payload) {
-  console.log('payload', payload)
   let projectId = null;
+  let versionId = null;
   if (payload && typeof payload === 'object') {
-    if (payload.projectId) projectId = payload.projectId;
-    else if (payload.data && typeof payload.data === 'object') {
-      projectId = payload.data.projectId || payload.data.id || payload.data?.data?.projectId;
+    const data = payload.data && typeof payload.data === 'object' ? payload.data : payload;
+    if (data && typeof data === 'object') {
+      projectId = data.projectId || data.id || data?.data?.projectId;
+      versionId = data.versionId || data?.data?.versionId;
     }
   }
   if (projectId) {
-    proxy.$router.push('/project/topo/index/' + projectId);
+    const query = {};
+    if (versionId) {
+      query.versionId = versionId;
+    }
+    proxy.$router.push({
+      path: '/project/topo/index/' + projectId,
+      query,
+    });
   } else {
     refreshList();
     proxy.$modal.msgSuccess('新增成功');

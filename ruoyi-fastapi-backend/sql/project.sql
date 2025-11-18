@@ -36,7 +36,21 @@ CREATE TABLE IF NOT EXISTS `sys_project_version` (
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目版本管理表';
 
--- 3. 菜单/权限修复（幂等）
+-- 3. 工程拓扑数据表
+CREATE TABLE IF NOT EXISTS `sys_project_topology` (
+  `topology_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '拓扑ID',
+  `project_id` int(11) NOT NULL COMMENT '工程编号',
+  `version_id` int(11) DEFAULT NULL COMMENT '版本ID',
+  `topology_data` json NOT NULL COMMENT '拓扑数据（包含图结构、总线设计、接口控制等）',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建人',
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`topology_id`),
+  KEY `idx_project_topology_project_id` (`project_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工程拓扑数据表';
+
+-- 4. 菜单/权限修复（幂等）
 START TRANSACTION;
 
 -- 清理历史随机 ID 菜单

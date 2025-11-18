@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Query
 from pydantic_validation_decorator import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
@@ -7,8 +7,10 @@ from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.project_vo import DeleteProjectModel, ProjectModel, ProjectPageQueryModel
+from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.project_service import ProjectService
+from module_admin.service.project_topology_service import ProjectTopologyService
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
@@ -116,3 +118,50 @@ async def query_detail_system_project(
     logger.info(f'获取project_id为{project_id}的信息成功')
 
     return ResponseUtil.success(data=detail_project_result)
+
+
+@projectController.post(
+    '/topology/save',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))],
+)
+@Log(title='工程拓扑', business_type=BusinessType.UPDATE)
+@ValidateFields(validate_model='project_topology')
+async def save_project_topology(
+    request: Request,
+    topology: ProjectTopologyModel,
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    保存工程拓扑数据
+    """
+    if not topology.create_by:
+        topology.create_by = current_user.user.user_name
+        topology.create_time = datetime.now()
+    topology.update_by = current_user.user.user_name
+    topology.update_time = datetime.now()
+
+    save_result = await ProjectTopologyService.save_project_topology_services(query_db, topology)
+    logger.info(save_result.message)
+    return ResponseUtil.success(msg=save_result.message)
+
+
+@projectController.get(
+    '/topology/{project_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))],
+)
+async def get_project_topology(
+    request: Request,
+    project_id: int,
+    version_id: int | None = Query(default=None, description='版本ID'),
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    获取工程拓扑数据
+    """
+    topo_result = await ProjectTopologyService.get_project_topology_services(
+        query_db, project_id, version_id
+    )
+    logger.info(f'获取project_id为{project_id}的拓扑数据成功')
+
+    return ResponseUtil.success(data=topo_result)
