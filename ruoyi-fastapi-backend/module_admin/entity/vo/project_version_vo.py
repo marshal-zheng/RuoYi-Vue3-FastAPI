@@ -10,7 +10,11 @@ class ProjectVersionModel(BaseModel):
     项目版本管理表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        from_attributes=True,
+        populate_by_name=True,
+    )
 
     version_id: Optional[int] = Field(default=None, description='版本ID')
     project_id: Optional[int] = Field(default=None, description='项目ID')
@@ -52,7 +56,7 @@ class DeleteProjectVersionModel(BaseModel):
     删除项目版本模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     version_ids: str = Field(description='需要删除的版本ID')
     update_by: Optional[str] = Field(default=None, description='更新者')
@@ -64,7 +68,7 @@ class CloneProjectVersionModel(BaseModel):
     克隆项目版本模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     source_version_id: int = Field(description='源版本ID')
     version_number: str = Field(description='新版本号')
@@ -79,7 +83,7 @@ class LockProjectVersionModel(BaseModel):
     固化/解除固化项目版本模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     version_id: int = Field(description='版本ID')
     is_locked: str = Field(description='是否固化（0否 1是）')

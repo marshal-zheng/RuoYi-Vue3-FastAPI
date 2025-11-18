@@ -36,23 +36,7 @@ CREATE TABLE IF NOT EXISTS `sys_project_version` (
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目版本管理表';
 
--- 3. 演示版本数据（仅在缺失时写入）
-INSERT INTO `sys_project_version`
-    (`version_id`, `project_id`, `version_number`, `version_name`, `description`, `status`, `is_locked`, `locked_time`, `locked_by`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`)
-SELECT 1, 1, 'v1.0.0', '初始版本', '项目初始版本，包含基础功能模块', '1', '0', NULL, NULL, 'admin', '2024-01-15 10:30:00', 'admin', '2024-01-15 10:30:00', '0'
-WHERE NOT EXISTS (SELECT 1 FROM `sys_project_version` WHERE `version_id` = 1);
-
-INSERT INTO `sys_project_version`
-    (`version_id`, `project_id`, `version_number`, `version_name`, `description`, `status`, `is_locked`, `locked_time`, `locked_by`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`)
-SELECT 2, 1, 'v1.1.0', '功能增强版', '新增用户管理模块，优化系统性能', '1', '0', NULL, NULL, 'admin', '2024-02-20 14:20:00', 'admin', '2024-02-20 14:20:00', '0'
-WHERE NOT EXISTS (SELECT 1 FROM `sys_project_version` WHERE `version_id` = 2);
-
-INSERT INTO `sys_project_version`
-    (`version_id`, `project_id`, `version_number`, `version_name`, `description`, `status`, `is_locked`, `locked_time`, `locked_by`, `create_by`, `create_time`, `update_by`, `update_time`, `del_flag`)
-SELECT 3, 1, 'v2.0.0', '重大更新版', '架构重构，新增多租户支持，UI全面升级', '1', '1', '2024-03-10 09:15:00', 'admin', 'admin', '2024-03-10 09:15:00', 'admin', '2024-03-10 09:15:00', '0'
-WHERE NOT EXISTS (SELECT 1 FROM `sys_project_version` WHERE `version_id` = 3);
-
--- 4. 菜单/权限修复（幂等）
+-- 3. 菜单/权限修复（幂等）
 START TRANSACTION;
 
 -- 清理历史随机 ID 菜单
@@ -130,14 +114,44 @@ INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component,
 VALUES (1064, '工程删除', 118, 4, '#', '', 1, 0, 'F', '0', '0', 'project:project:remove', '#', 'admin', NOW(), 'admin', NOW(), '')
 ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
 
+-- 版本管理按钮权限（挂在工程列表下，用于工程详情页Tab）
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1065, '版本查询', 118, 5, '#', '', 1, 0, 'F', '0', '0', 'project:version:query', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1066, '版本新增', 118, 6, '#', '', 1, 0, 'F', '0', '0', 'project:version:add', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1067, '版本编辑', 118, 7, '#', '', 1, 0, 'F', '0', '0', 'project:version:edit', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1068, '版本删除', 118, 8, '#', '', 1, 0, 'F', '0', '0', 'project:version:remove', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1069, '版本克隆', 118, 9, '#', '', 1, 0, 'F', '0', '0', 'project:version:clone', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1070, '版本固化', 118, 10, '#', '', 1, 0, 'F', '0', '0', 'project:version:lock', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1071, '版本列表', 118, 11, '#', '', 1, 0, 'F', '0', '0', 'project:version:list', '#', 'admin', NOW(), 'admin', NOW(), '')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
+
 -- 恢复管理员角色菜单
-DELETE FROM sys_role_menu WHERE role_id = 1 AND menu_id IN (4, 118, 119, 1061, 1062, 1063, 1064);
+DELETE FROM sys_role_menu WHERE role_id = 1 AND menu_id IN (4, 118, 119, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071);
 
 INSERT INTO sys_role_menu (role_id, menu_id)
 VALUES 
     (1, 4),
     (1, 118), (1, 119),
-    (1, 1061), (1, 1062), (1, 1063), (1, 1064)
+    (1, 1061), (1, 1062), (1, 1063), (1, 1064),
+    (1, 1065), (1, 1066), (1, 1067), (1, 1068), (1, 1069), (1, 1070), (1, 1071)
 ON DUPLICATE KEY UPDATE menu_id = VALUES(menu_id);
 
 COMMIT;

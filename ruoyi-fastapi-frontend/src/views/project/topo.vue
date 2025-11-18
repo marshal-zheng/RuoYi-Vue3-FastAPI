@@ -87,7 +87,8 @@ function convertInterfacesToPorts(interfaces) {
 
     const rawProtocol = intf.protocolConfig || intf.messageConfig || null;
     const protocolConfig = rawProtocol ? JSON.parse(JSON.stringify(rawProtocol)) : {};
-    const protocolType = intf.protocolType || protocolConfig.protocolType || protocolConfig.type || '';
+    const protocolType =
+      intf.protocolType || protocolConfig.protocolType || protocolConfig.type || '';
     const dataRate = intf.dataRate || intf.params?.dataRate || protocolConfig.dataRate || '';
 
     return {
@@ -167,14 +168,70 @@ async function loadDeviceList() {
 }
 
 /**
+ * 根据当前节点构建端口到对端设备名的映射
+ * @param {Object} node - 当前节点（X6 节点实例或其 JSON）
+ * @returns {Record<string, string>} key 为端口 ID，value 为对端设备名称
+ */
+function buildPeerDeviceNameByPort(node) {
+  const graph = dagRef.value?.getGraph();
+  if (!graph || !node) return {};
+
+  const nodeId = node.id;
+  const result = {};
+  const edges = graph.getEdges?.() || [];
+
+  edges.forEach(edge => {
+    const sourceId = edge.getSourceCellId?.();
+    const targetId = edge.getTargetCellId?.();
+    if (!sourceId || !targetId) {
+      return;
+    }
+
+    let localPortId;
+    let peerNodeId;
+
+    if (sourceId === nodeId) {
+      localPortId = edge.getSourcePortId?.();
+      peerNodeId = targetId;
+    } else if (targetId === nodeId) {
+      localPortId = edge.getTargetPortId?.();
+      peerNodeId = sourceId;
+    } else {
+      return;
+    }
+
+    if (!localPortId || !peerNodeId) {
+      return;
+    }
+
+    const peerNode = graph.getCellById(peerNodeId);
+    const data = peerNode?.getData?.() || {};
+    const deviceName = data.name || data.label || data.deviceName || '';
+
+    if (deviceName) {
+      result[localPortId] = deviceName;
+    }
+  });
+
+  return result;
+}
+
+/**
  * 处理节点双击事件
  * @param {Object} params - 包含 node, event, type
  */
 function handleNodeDblclick({ node, event, type }) {
-  console.log('节点双击:', { node, event, type });
+  // 计算当前节点各端口对应的对端设备名称
+  const peerDeviceNameByPort = buildPeerDeviceNameByPort(node);
 
-  // 保存当前节点数据
-  currentNode.value = node;
+  // 转为普通 JSON，确保包含 data / ports 等字段
+  const jsonNode = typeof node?.toJSON === 'function' ? node.toJSON() : node;
+
+  // 保存当前节点数据（附加端口到对端设备名的映射）
+  currentNode.value = {
+    ...jsonNode,
+    peerDeviceNameByPort,
+  };
 
   // 打开抽屉
   nodeEditDrawerRef.value?.open();

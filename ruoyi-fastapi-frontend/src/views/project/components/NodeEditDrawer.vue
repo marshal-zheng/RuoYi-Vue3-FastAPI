@@ -54,7 +54,7 @@
           v-for="protocol in group.protocols"
           :key="protocol.id"
           class="group flex items-center px-4 py-3 m-2 bg-white border border-gray-200 rounded-md cursor-pointer transition-all hover:bg-primary-50 hover:border-primary-500 hover:shadow hover:translate-x-0.5"
-          @click="handleProtocolClick(protocol.port, protocol.message)"
+          @click="handleProtocolClick(protocol)"
         >
           <div
             class="flex items-center justify-center w-9 h-9 rounded-md bg-gradient-to-br from-primary-50 to-indigo-50 text-primary-500 text-lg shrink-0"
@@ -180,8 +180,16 @@ const initFormData = () => {
     formData.version = data.version || '';
     formData.remark = data.remark || data.value || '';
 
-    // 加载端口列表
-    portList.value = data.ports || [];
+    // 加载端口列表，并附加对端设备名称
+    const peerMap = props.nodeData?.peerDeviceNameByPort || {};
+    const ports = Array.isArray(data.ports) ? data.ports : [];
+    portList.value = ports.map(port => {
+      const portKey = port.id || port.interfaceId;
+      return {
+        ...port,
+        peerDeviceName: (portKey && peerMap[portKey]) || port.peerDeviceName || '',
+      };
+    });
 
     // 清除验证状态
     if (formRef.value) {
@@ -190,30 +198,74 @@ const initFormData = () => {
   });
 };
 
-// 获取端口的协议列表
+const cloneHeader = header => JSON.parse(JSON.stringify(header || {}));
+const cloneFields = fields => JSON.parse(JSON.stringify(Array.isArray(fields) ? fields : []));
+const resolvePortKey = port => port?.id || port?.interfaceId;
+const getPeerDeviceName = port => {
+  if (port?.peerDeviceName) return port.peerDeviceName;
+  const peerMap = props.nodeData?.peerDeviceNameByPort || {};
+  const key = resolvePortKey(port);
+  return (key && peerMap[key]) || '';
+};
+
+// 获取端口的协议列表（当前端口 + 对端方向）
 const getPortMessages = port => {
-  // 检查是否有配置的协议数据
-  if (!port.messageConfig) {
+  if (!port || !port.messageConfig) {
     return [];
   }
 
-  // 当前数据结构：每个端口只有一个 messageConfig（包含 header 和 fields）
-  // 如果有 fields 数据，说明配置了协议
-  if (port.messageConfig.fields && port.messageConfig.fields.length > 0) {
-    // 返回一个包含该协议的数组
-    return [
-      {
-        id: port.id || port.interfaceId,
-        name: `${port.interfaceName} 协议`,
-        messageId: port.id || port.interfaceId,
-        direction: 'send', // 默认发送
-        fields: port.messageConfig.fields,
-        header: port.messageConfig.header,
-      },
-    ];
+  const messageConfig = port.messageConfig || {};
+  const currentDeviceName =
+    formData.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
+  const peerDeviceName = getPeerDeviceName(port);
+  const baseHeader = cloneHeader(messageConfig.header);
+  const baseFields = cloneFields(messageConfig.fields);
+
+  if (!baseHeader.sender && currentDeviceName) {
+    baseHeader.sender = currentDeviceName;
+  }
+  if (!baseHeader.receiver && (peerDeviceName || currentDeviceName)) {
+    baseHeader.receiver = peerDeviceName || currentDeviceName;
   }
 
-  return [];
+  const protocolId = messageConfig.protocolId || port.protocolId || null;
+  const portId = resolvePortKey(port);
+  const baseProtocol = {
+    id: portId,
+    name: `${port.interfaceName} 协议`,
+    messageId: portId,
+    port,
+    direction: 'forward',
+    message: {
+      header: baseHeader,
+      fields: baseFields,
+      protocolId,
+    },
+  };
+
+  const result = [baseProtocol];
+
+  if (peerDeviceName) {
+    const reverseHeader = cloneHeader(baseHeader);
+    const forwardSender = baseHeader.sender || currentDeviceName || '';
+    const forwardReceiver = baseHeader.receiver || peerDeviceName || '';
+    reverseHeader.sender = forwardReceiver || peerDeviceName || forwardSender;
+    reverseHeader.receiver = forwardSender || currentDeviceName || forwardReceiver;
+
+    result.push({
+      ...baseProtocol,
+      id: `${portId}-reverse`,
+      direction: 'reverse',
+      isReverse: true,
+      message: {
+        header: reverseHeader,
+        fields: cloneFields(messageConfig.fields),
+        protocolId,
+      },
+    });
+  }
+
+  return result;
 };
 
 // 按总线类型分组
@@ -241,7 +293,7 @@ const groupedPorts = computed(() => {
     groups[type].ports.push(portWithIndex);
 
     // 获取该端口的协议列表
-    const messages = getPortMessages(port);
+    const messages = getPortMessages(portWithIndex);
     messages.forEach(message => {
       groups[type].protocols.push({
         id: `${port.id || port.interfaceId}_${message.id}`,
@@ -275,18 +327,29 @@ const getBusTypeTagType = busType => {
 };
 
 // 点击协议卡片
-const handleProtocolClick = (port, message) => {
-  // 准备端口信息，包含现有的协议配置
+const handleProtocolClick = protocolItem => {
+  if (!protocolItem) return;
+  const port = protocolItem.port;
+  const message = protocolItem.message || {};
+  const direction = protocolItem.direction || (protocolItem.isReverse ? 'reverse' : 'forward');
+  if (!port) return;
+
+  const currentDeviceName =
+    formData.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
+  const peerDeviceName = getPeerDeviceName(port);
+
   const portInfo = {
     ...port,
+    deviceName: currentDeviceName || port.deviceName || '',
+    peerDeviceName,
+    direction,
     messageConfig: {
-      header: message.header || {},
-      fields: message.fields || [],
+      header: cloneHeader(message.header),
+      fields: cloneFields(message.fields),
     },
-    protocolId: message.protocolId || null,
+    protocolId: message.protocolId || port.protocolId || null,
   };
   currentPortIndex.value = port._originalIndex;
-  // 通过 ref 的 open 方法打开对话框
   protocolDialogRef.value?.open(portInfo);
 };
 
