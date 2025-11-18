@@ -147,7 +147,7 @@
                   type="primary"
                   icon="Edit"
                   class="flex-1"
-                  >拓扑设计</ZxButton
+                  >图编辑</ZxButton
                 >
                 <ZxButton
                   @click.stop="handleDelete(project)"
@@ -286,6 +286,7 @@ function handleMoreActionSelect(item, project, handleRefresh) {
 }
 
 function handleCreateSuccess(payload) {
+  console.log('payload', payload)
   let projectId = null;
   if (payload && typeof payload === 'object') {
     if (payload.projectId) projectId = payload.projectId;
@@ -293,7 +294,6 @@ function handleCreateSuccess(payload) {
       projectId = payload.data.projectId || payload.data.id || payload.data?.data?.projectId;
     }
   }
-  console.log('projectId', projectId)
   if (projectId) {
     proxy.$router.push('/project/topo/index/' + projectId);
   } else {

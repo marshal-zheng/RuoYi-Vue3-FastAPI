@@ -57,7 +57,7 @@ async def add_system_project(
     add_project_result = await ProjectService.add_project_services(query_db, add_project)
     logger.info(add_project_result.message)
 
-    return ResponseUtil.success(msg=add_project_result.message)
+    return ResponseUtil.success(msg=add_project_result.message, data=add_project_result.result)
 
 
 @projectController.put('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))])

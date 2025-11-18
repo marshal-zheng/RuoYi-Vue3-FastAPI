@@ -21,18 +21,33 @@ deviceController = APIRouter(prefix='/device', dependencies=[Depends(LoginServic
 )
 async def get_device_list(
     request: Request,
-    device_name: str = None,
-    bus_type: str = None,
-    begin_time: str = None,
-    end_time: str = None,
-    page_num: int = 1,
-    page_size: int = 10,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
     """
     获取设备列表
     """
+    qp = dict(request.query_params)
+    device_name = qp.get('device_name') or qp.get('deviceName')
+    bus_type = qp.get('bus_type') or qp.get('busType')
+    begin_time = qp.get('begin_time') or qp.get('beginTime')
+    end_time = qp.get('end_time') or qp.get('endTime')
+    # 兼容 dateRange
+    date_range = qp.get('dateRange')
+    if date_range and (not begin_time or not end_time):
+        parts = [p.strip() for p in date_range.split(',') if p.strip()]
+        if len(parts) == 2:
+            begin_time = begin_time or parts[0]
+            end_time = end_time or parts[1]
+    try:
+        page_num = int(qp.get('page_num') or qp.get('pageNum') or 1)
+    except Exception:
+        page_num = 1
+    try:
+        page_size = int(qp.get('page_size') or qp.get('pageSize') or 10)
+    except Exception:
+        page_size = 10
+
     query = DeviceQueryModel(
         device_name=device_name,
         bus_type=bus_type,

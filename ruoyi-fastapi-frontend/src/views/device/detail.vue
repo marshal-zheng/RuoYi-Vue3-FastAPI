@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount } from 'vue';
+import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { cloneDeep } from 'lodash-es';
@@ -122,7 +122,18 @@ const connectionEdgeOptions = {
   },
 };
 
-const deviceId = computed(() => route.query.id);
+const deviceId = computed(() => {
+  const normalize = value => {
+    if (Array.isArray(value)) return value[0] ?? null;
+    if (value === undefined || value === null || value === '') return null;
+    return value;
+  };
+  const paramId = normalize(route.params?.deviceId);
+  if (paramId) return paramId;
+  const queryDeviceId = normalize(route.query?.deviceId);
+  if (queryDeviceId) return queryDeviceId;
+  return normalize(route.query?.id);
+});
 
 function getDefaultParams(interfaceType) {
   const map = {
@@ -153,6 +164,34 @@ function normalizeInterfaceId(value) {
   return null;
 }
 
+function normalizePortKey(value) {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  return String(value);
+}
+
+function getPortKey(port) {
+  if (!port) return '';
+  const idKey = normalizePortKey(port.id);
+  if (idKey) {
+    return idKey;
+  }
+  return normalizePortKey(port.interfaceId);
+}
+
+function findPortByKey(key) {
+  const normalizedKey = normalizePortKey(key);
+  if (!normalizedKey) return null;
+  return tempPorts.value.find(port => getPortKey(port) === normalizedKey) || null;
+}
+
+function findPortIndexByKey(key) {
+  const normalizedKey = normalizePortKey(key);
+  if (!normalizedKey) return -1;
+  return tempPorts.value.findIndex(port => getPortKey(port) === normalizedKey);
+}
+
 async function handleSave() {
   try {
     loading.value = true;
@@ -179,14 +218,11 @@ async function handleSave() {
     if (submitData.deviceId) {
       await updateDevice(submitData);
       ElMessage.success('设备配置保存成功');
+      router.push('/device/list');
     } else {
       const response = await addDevice(submitData);
       ElMessage.success('设备创建成功');
-      const newDeviceId = response.data?.deviceId || response.deviceId;
-      if (newDeviceId) {
-        deviceInfo.value.deviceId = newDeviceId;
-        router.replace('/device/detail?id=' + newDeviceId);
-      }
+      router.push('/device/list');
     }
   } finally {
     loading.value = false;
@@ -203,7 +239,7 @@ async function loadDeviceInfo() {
     // 从 sessionStorage 读取新增设备的数据
     const newDeviceDataStr = sessionStorage.getItem('newDeviceData');
     let newDeviceData = null;
-    console.log('newDeviceDataStr', newDeviceDataStr)
+    console.log('newDeviceDataStr', newDeviceDataStr);
     if (newDeviceDataStr) {
       try {
         newDeviceData = JSON.parse(newDeviceDataStr);
@@ -214,12 +250,12 @@ async function loadDeviceInfo() {
         console.error('解析新增设备数据失败:', e);
       }
     }
-    
+
     // 确保使用用户输入的设备名称
     const deviceName = newDeviceData?.deviceName || '新设备';
 
-    console.log('newDeviceData', newDeviceData)
-    
+    console.log('newDeviceData', newDeviceData);
+
     deviceInfo.value = {
       deviceId: null,
       deviceName: deviceName,
@@ -232,9 +268,9 @@ async function loadDeviceInfo() {
       remark: newDeviceData?.remark || '',
       interfaces: [],
     };
-    
+
     console.log('设备信息已设置:', deviceInfo.value);
-    
+
     tempPorts.value = [];
     devicePorts.value = [];
     updateGraphData();
@@ -251,19 +287,53 @@ async function loadDeviceInfo() {
   }
 }
 
+watch(
+  [() => route.params.deviceId, () => route.query.id, () => route.query.deviceId],
+  (newValues, oldValues) => {
+    const normalize = value => {
+      if (Array.isArray(value)) {
+        return value[0] ?? null;
+      }
+      if (value === undefined || value === null || value === '') {
+        return null;
+      }
+      return value;
+    };
+    const pickFirstValid = values => {
+      if (!values) return null;
+      for (const val of values) {
+        const normalized = normalize(val);
+        if (normalized) {
+          return normalized;
+        }
+      }
+      return null;
+    };
+    const newId = pickFirstValid(newValues);
+    const oldId = pickFirstValid(oldValues);
+    if (newId === oldId) {
+      return;
+    }
+    loadDeviceInfo();
+  }
+);
+
 async function loadDevicePorts() {
   if (deviceInfo.value.interfaces && deviceInfo.value.interfaces.length > 0) {
-    tempPorts.value = deviceInfo.value.interfaces.map(intf => ({
-      id: intf.interfaceId,
-      interfaceId: intf.interfaceId,
-      deviceId: deviceInfo.value.deviceId,
-      interfaceName: intf.interfaceName,
-      interfaceType: intf.interfaceType,
-      position: intf.position || 'right',
-      description: intf.description || '',
-      params: intf.params ? cloneDeep(intf.params) : getDefaultParams(intf.interfaceType),
-  messageConfig: intf.messageConfig ? cloneDeep(intf.messageConfig) : null,
-    }));
+    tempPorts.value = deviceInfo.value.interfaces.map((intf, index) => {
+      const normalizedId = normalizePortKey(intf.interfaceId);
+      return {
+        id: normalizedId || `port_${index}`,
+        interfaceId: intf.interfaceId,
+        deviceId: deviceInfo.value.deviceId,
+        interfaceName: intf.interfaceName,
+        interfaceType: intf.interfaceType,
+        position: intf.position || 'right',
+        description: intf.description || '',
+        params: intf.params ? cloneDeep(intf.params) : getDefaultParams(intf.interfaceType),
+        messageConfig: intf.messageConfig ? cloneDeep(intf.messageConfig) : null,
+      };
+    });
   }
   devicePorts.value = tempPorts.value;
 }
@@ -347,10 +417,10 @@ function updateGraphData() {
     };
   });
   graphInstance.value.clearCells();
-  
+
   const deviceLabel = deviceInfo.value.deviceName || '设备';
   console.log('更新图表,设备名称:', deviceLabel);
-  
+
   graphInstance.value.addNode({
     id: 'device_node',
     shape: 'device-port-node',
@@ -397,6 +467,36 @@ function customMenuHandler(items, type, target) {
       },
     ];
   }
+  if (type === 'port' && target) {
+    const portTarget = target.port || target;
+    const targetId = portTarget?.id || portTarget?.interfaceId;
+    const portData = findPortByKey(targetId);
+    if (portData) {
+      return [
+        {
+          id: 'edit-port',
+          label: '编辑端口',
+          icon: 'Edit',
+          action: () => handleEditPortDialog(portData),
+        },
+        { type: 'divider' },
+        {
+          id: 'delete-port',
+          label: '删除端口',
+          icon: 'Delete',
+          action: () => {
+            ElMessageBox.confirm(`确定要删除端口 "${portData.interfaceName}" 吗？`, '删除确认', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            }).then(() => {
+              handleDeletePort(portData.id || portData.interfaceId);
+            });
+          },
+        },
+      ];
+    }
+  }
   return [];
 }
 
@@ -417,7 +517,7 @@ function onNodeDblClick({ node, event }) {
   } catch {}
   if (portElement) {
     const portId = portElement.getAttribute('port');
-    const portData = tempPorts.value.find(p => (p.id || p.interfaceId) === portId);
+    const portData = findPortByKey(portId);
     if (portData) {
       handleEditPort(portData);
     }
@@ -428,9 +528,7 @@ function onNodeDblClick({ node, event }) {
 
 function handlePortContextMenu({ port, e }) {
   e.preventDefault();
-  const portData = tempPorts.value.find(
-    p => (p.id || p.interfaceId) === (port.id || port.interfaceId)
-  );
+  const portData = findPortByKey(port.id || port.interfaceId);
   if (!portData) return;
   ElMessageBox.confirm(`端口：${port.interfaceName} (${port.interfaceType})`, '端口操作', {
     confirmButtonText: '编辑',
@@ -525,15 +623,15 @@ function handleAddPort() {
 
 function handleEditPort(port) {
   portDrawerTitle.value = `端口配置 - ${port.interfaceName}`;
-  currentPortInfo.value = { 
+  currentPortInfo.value = {
     ...port,
-    deviceName: deviceInfo.value.deviceName || '未命名设备'
+    deviceName: deviceInfo.value.deviceName || '未命名设备',
   };
   portConfigDrawerRef.value?.open();
 }
 
 async function handleDeletePort(interfaceId) {
-  const index = tempPorts.value.findIndex(p => (p.id || p.interfaceId) === interfaceId);
+  const index = findPortIndexByKey(interfaceId);
   if (index > -1) {
     tempPorts.value.splice(index, 1);
     ElMessage.success('删除成功');
@@ -544,11 +642,11 @@ async function handleDeletePort(interfaceId) {
 
 async function handlePortSubmit(formData) {
   const hasInterfaceKey =
-    formData.interfaceId !== null && formData.interfaceId !== undefined && formData.interfaceId !== '';
+    formData.interfaceId !== null &&
+    formData.interfaceId !== undefined &&
+    formData.interfaceId !== '';
   if (hasInterfaceKey) {
-    const index = tempPorts.value.findIndex(
-      p => (p.id || p.interfaceId) === formData.interfaceId
-    );
+    const index = findPortIndexByKey(formData.interfaceId);
     if (index > -1) {
       const oldPort = tempPorts.value[index];
       tempPorts.value[index] = {
@@ -578,9 +676,7 @@ async function handlePortSubmit(formData) {
 }
 
 async function handlePortConfigSubmit(portData) {
-  const index = tempPorts.value.findIndex(
-    p => (p.id || p.interfaceId) === (portData.interfaceId || portData.id)
-  );
+  const index = findPortIndexByKey(portData.interfaceId || portData.id);
   if (index > -1) {
     tempPorts.value[index] = {
       ...tempPorts.value[index],

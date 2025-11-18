@@ -60,60 +60,64 @@
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="设备编号" align="center" prop="device_id" width="100" />
+          <el-table-column type="selection" align="center" />
+          <!-- <el-table-column label="设备编号" align="center" prop="deviceId" width="100" /> -->
           <el-table-column label="设备名称" align="center" :show-overflow-tooltip="true">
             <template #default="scope">
               <router-link
-                :to="'/device/detail/index/' + scope.row.device_id"
+                :to="'/device/detail/index/' + scope.row.deviceId"
                 class="link-type"
               >
-                <span>{{ scope.row.device_name }}</span>
+                <span>{{ scope.row.deviceName }}</span>
               </router-link>
             </template>
           </el-table-column>
           <el-table-column
             label="设备分类"
             align="center"
-            prop="category_name"
+            prop="categoryName"
             :show-overflow-tooltip="true"
           />
           <el-table-column
             label="总线接口"
             align="center"
-            prop="bus_interfaces"
+            prop="busInterfaces"
             :show-overflow-tooltip="true"
           />
           <el-table-column
             label="创建人"
             align="center"
-            prop="create_by"
+            prop="createBy"
             :show-overflow-tooltip="true"
           />
-          <el-table-column label="最后修改时间" align="center" prop="update_time" width="180">
+          <el-table-column label="最后修改时间" align="center" prop="updateTime" width="180">
             <template #default="scope">
-              <span>{{ parseTime(scope.row.update_time) }}</span>
+              <span>{{ parseTime(scope.row.updateTime) }}</span>
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
             align="center"
-            width="220"
+            width="200"
             class-name="small-padding fixed-width"
           >
             <template #default="scope">
-              <ZxButton
-                link
-                type="primary"
-                icon="Edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['device:list:edit']"
-                >编辑</ZxButton
-              >
-              <ZxMoreAction
-                :list="getDeviceMoreActionList()"
-                @select="handleMoreActionSelect($event, scope.row, handleRefresh)"
-              />
+              <div class="op-col__wrap">
+                <ZxButton
+                  link
+                  type="primary"
+                  icon="Edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['device:list:edit']"
+                >编辑</ZxButton>
+                <ZxButton
+                  link
+                  type="danger"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['device:list:remove']"
+                >删除</ZxButton>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -131,8 +135,6 @@
 
 <script setup name="Device">
 import { listDevice, delDevice } from '@/api/device/device';
-import { checkPermi } from '@/utils/permission';
-import { Edit, Delete } from '@element-plus/icons-vue';
 import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
 
 const { proxy } = getCurrentInstance();
@@ -152,8 +154,6 @@ const createForm = reactive({
 
 async function loadDeviceData(params) {
     const response = await listDevice(params);
-    console.log('response', response.data.rows)
-    response.list = response.data?.rows || []
     return response
 
 }
@@ -174,7 +174,7 @@ function refreshList() {
 }
 
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.device_id);
+  ids.value = selection.map(item => item.deviceId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -198,11 +198,11 @@ function handleCreateSubmit(data) {
 }
 
 function handleUpdate(row) {
-  router.push(`/device/detail/index/${row.device_id}`);
+  router.push(`/device/detail/index/${row.deviceId}`);
 }
 
 function handleDelete(row) {
-  const deviceIds = row?.device_id || ids.value;
+  const deviceIds = row?.deviceId || ids.value;
   proxy.$modal
     .confirm('是否确认删除设备编号为"' + deviceIds + '"的数据项？')
     .then(function () {
@@ -214,27 +214,12 @@ function handleDelete(row) {
     });
 }
 
-function getDeviceMoreActionList() {
-  const actions = [];
-  if (checkPermi(['device:list:edit'])) {
-    actions.push({ label: '编辑', eventTag: 'edit', icon: Edit });
-  }
-  if (checkPermi(['device:list:remove'])) {
-    actions.push({ label: '删除', eventTag: 'delete', icon: Delete, danger: true });
-  }
-  return actions;
-}
-
-function handleMoreActionSelect(item, row, handleRefresh) {
-  switch (item.eventTag) {
-    case 'edit':
-      handleUpdate(row);
-      break;
-    case 'delete':
-      handleDelete(row);
-      break;
-    default:
-      break;
-  }
-}
 </script>
+
+<style scoped>
+.op-col__wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+</style>
