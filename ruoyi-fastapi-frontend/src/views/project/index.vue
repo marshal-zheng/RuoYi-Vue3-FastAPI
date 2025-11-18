@@ -261,7 +261,7 @@ function getProjectMoreActionList(project) {
     actions.push({ label: '查看详情', eventTag: 'detail', icon: Document });
   }
   if (checkPermi(['project:project:edit'])) {
-    actions.push({ label: '拓扑设计', eventTag: 'edit', icon: Edit, type: 'primary' });
+    actions.push({ label: '图编辑', eventTag: 'edit', icon: Edit, type: 'primary' });
   }
   if (checkPermi(['project:project:remove'])) {
     actions.push({ label: '删除工程', eventTag: 'delete', icon: Delete, danger: true });
