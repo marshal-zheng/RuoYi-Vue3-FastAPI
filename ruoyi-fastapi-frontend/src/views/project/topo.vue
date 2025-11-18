@@ -10,7 +10,7 @@
     />
 
     <!-- 节点编辑抽屉 -->
-    <NodeEditDrawer v-model="drawerVisible" :node-data="currentNode" @submit="handleNodeUpdate" />
+    <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
   </ZxContentWrap>
 </template>
 
@@ -18,7 +18,7 @@
 import { ref, onMounted } from 'vue';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import { NodeEditDrawer } from './components';
-import { listDevice, getDevice } from '@/api/device/device';
+import { listDevice } from '@/api/device/device';
 import { ElMessage } from 'element-plus';
 import { getPortColor } from '@/constants/portColor';
 
@@ -33,7 +33,7 @@ const layoutMode = ref('horizontal'); // 'vertical' | 'horizontal'
 const dagRef = ref(null);
 
 // 节点编辑抽屉
-const drawerVisible = ref(false);
+const nodeEditDrawerRef = ref(null);
 const currentNode = ref(null);
 
 // 可配置的文案和设置
@@ -50,51 +50,63 @@ const dndConfig = {
 };
 
 /**
- * 获取设备的端口信息（从后端获取）
- * @param {Number} deviceId - 设备ID
- * @returns {Promise<Array>} 端口列表
+ * 解析端口方向，兼容中英文配置
+ * @param {Object} intf - 接口数据
+ * @returns {String} 方向标识
  */
-async function getDevicePorts(deviceId) {
-  try {
-    const response = await getDevice(deviceId);
-    console.log('response3333', response);
-    const deviceData = response.data || response;
-    const interfaces = deviceData.interfaces || [];
+function resolvePortDirection(intf) {
+  const source = intf?.direction || intf?.params?.direction;
+  const text = String(source || '').toLowerCase();
+  if (text.includes('入') || text === 'input' || text === 'in') {
+    return 'input';
+  }
+  if (text.includes('出') || text === 'output' || text === 'out') {
+    return 'output';
+  }
+  return 'bidirectional';
+}
 
-    // 将接口数据转换为端口格式
-    return interfaces.map((intf, index) => {
-      // 根据接口类型确定端口类型
-      let interfaceType = 'bidirectional'; // 默认双向
-      if (intf.interfaceType === '输入' || intf.interfaceType === 'input') {
-        interfaceType = 'input';
-      } else if (intf.interfaceType === '输出' || intf.interfaceType === 'output') {
-        interfaceType = 'output';
-      }
-
-      // 使用接口自身的布局位置，保持与设备配置一致
-      const position = String(intf.position || '').toLowerCase();
-      const validGroups = ['left', 'right', 'top', 'bottom'];
-      const group = validGroups.includes(position) ? position : 'right';
-
-      const busType = intf.busType || intf.interfaceType || 'RS422';
-
-      return {
-        id: `port-${intf.interfaceId || index}`,
-        interfaceId: intf.interfaceId,
-        interfaceName: intf.interfaceName || `端口${index + 1}`,
-        interfaceType: interfaceType,
-        group: group,
-        description: intf.remark || '',
-        busType: busType, // 总线类型
-        color: getPortColor(busType), // 根据总线类型计算颜色
-        dataRate: intf.dataRate || '',
-        protocolType: intf.protocolType || '',
-      };
-    });
-  } catch (error) {
-    console.error(`获取设备${deviceId}的接口信息失败:`, error);
+/**
+ * 转换设备接口数据为端口格式
+ * @param {Array} interfaces - 接口列表
+ * @returns {Array} 端口列表
+ */
+function convertInterfacesToPorts(interfaces) {
+  if (!interfaces || !Array.isArray(interfaces)) {
     return [];
   }
+
+  return interfaces.map((intf, index) => {
+    // 总线类型用于展示和配色
+    const busType = intf.interfaceType || intf.busType || 'RS422';
+
+    // 使用接口自身的布局位置，保持与设备配置一致
+    const position = String(intf.position || '').toLowerCase();
+    const validGroups = ['left', 'right', 'top', 'bottom'];
+    const group = validGroups.includes(position) ? position : 'right';
+
+    const rawProtocol = intf.protocolConfig || intf.messageConfig || null;
+    const protocolConfig = rawProtocol ? JSON.parse(JSON.stringify(rawProtocol)) : {};
+    const protocolType = intf.protocolType || protocolConfig.protocolType || protocolConfig.type || '';
+    const dataRate = intf.dataRate || intf.params?.dataRate || protocolConfig.dataRate || '';
+
+    return {
+      id: `port-${intf.interfaceId || index}`,
+      interfaceId: intf.interfaceId,
+      interfaceName: intf.interfaceName || `端口${index + 1}`,
+      interfaceType: busType, // 与设备管理保持一致
+      busType: busType,
+      direction: resolvePortDirection(intf),
+      group: group,
+      description: intf.description || intf.remark || '',
+      color: getPortColor(busType),
+      dataRate,
+      protocolType,
+      protocolConfig,
+      messageConfig: protocolConfig,
+      params: intf.params || {},
+    };
+  });
 }
 
 /**
@@ -113,33 +125,32 @@ async function loadDeviceList() {
       operators.value = [];
       return;
     }
-    // 并发获取所有设备的端口信息
-    const devicesWithPorts = await Promise.all(
-      devices.map(async device => {
-        const ports = await getDevicePorts(device.deviceId);
+    // 确保端口数据存在，若列表未返回则补充查询详情
+    const devicesWithPorts = devices.map(device => {
+      const interfaces = Array.isArray(device.interfaces) ? device.interfaces : [];
+      const ports = convertInterfacesToPorts(interfaces);
 
-        return {
-          // DAG组件需要的字段
-          name: device.deviceName,
-          value: device.remark || device.deviceDesc || '设备',
-          category: device.categoryName || device.category || '未分类',
+      return {
+        // DAG组件需要的字段
+        name: device.deviceName,
+        value: device.remark || device.deviceDesc || '设备',
+        category: device.categoryName || device.category || '未分类',
 
-          // 设备原始数据（用于节点创建时使用）
-          deviceId: device.deviceId,
-          deviceType: device.deviceType,
-          busType: device.busType,
-          manufacturer: device.manufacturer,
-          model: device.model,
-          version: device.version,
+        // 设备原始数据（用于节点创建时使用）
+        deviceId: device.deviceId,
+        deviceType: device.deviceType,
+        busType: device.busType,
+        manufacturer: device.manufacturer,
+        model: device.model,
+        version: device.version,
 
-          // 端口信息（用于连接桩）
-          ports: ports,
+        // 端口信息（用于连接桩）
+        ports,
 
-          // 节点类型标识
-          nodeType: 'device-port-node',
-        };
-      })
-    );
+        // 节点类型标识
+        nodeType: 'device-port-node',
+      };
+    });
 
     operators.value = devicesWithPorts;
 
@@ -166,15 +177,15 @@ function handleNodeDblclick({ node, event, type }) {
   currentNode.value = node;
 
   // 打开抽屉
-  drawerVisible.value = true;
+  nodeEditDrawerRef.value?.open();
 }
 
 /**
  * 处理节点更新
- * @param {Object} params - 包含 nodeId, node, name
+ * @param {Object} params - 包含 nodeId, node, name, ports
  */
-function handleNodeUpdate({ nodeId, node, name }) {
-  console.log('更新节点:', { nodeId, node, name });
+function handleNodeUpdate({ nodeId, node, name, ports }) {
+  console.log('更新节点:', { nodeId, node, name, ports });
 
   // 获取图实例
   const graph = dagRef.value?.getGraph();
@@ -194,11 +205,12 @@ function handleNodeUpdate({ nodeId, node, name }) {
   // 获取当前节点数据
   const currentData = cellNode.getData() || {};
 
-  // 更新节点数据（包含 label 和 name 字段）
+  // 更新节点数据（包含 label、name 和 ports 字段）
   const updatedData = {
     ...currentData,
     name: name,
     label: name,
+    ports: ports || currentData.ports, // 更新端口信息（包含协议配置）
   };
 
   // 如果存在 properties.content 结构，也更新里面的 label
@@ -216,8 +228,11 @@ function handleNodeUpdate({ nodeId, node, name }) {
   // 节点组件会通过 watch 监听数据变化并自动重新渲染
   cellNode.setData(updatedData, { overwrite: false });
 
+  console.log('节点数据已更新:', updatedData);
+
   // 如果需要更新到后端，可以在这里调用 API
   // await updateNodeName(nodeId, name)
+  // await updateNodePorts(nodeId, ports)
 }
 
 // 页面加载时获取设备列表
