@@ -76,6 +76,7 @@ function getBusTypeColor(busType) {
 async function getDevicePorts(deviceId) {
   try {
     const response = await getDevice(deviceId)
+    console.log('response3333', response)
     const deviceData = response.data || response
     const interfaces = deviceData.interfaces || []
     
@@ -121,7 +122,8 @@ async function loadDeviceList() {
   try {
     // 从后端获取设备列表
     const response = await listDevice({})
-    const devices = response.data?.rows || []
+    console.log('response33333333', response)
+    const devices = response?.rows || []
     
     if (devices.length === 0) {
       ElMessage.warning('暂无设备数据，请先添加设备')
@@ -164,7 +166,6 @@ async function loadDeviceList() {
     })
     
   } catch (error) {
-    console.error('加载设备列表失败:', error)
     ElMessage.error('加载设备列表失败，请稍后重试')
     operators.value = []
   } finally {

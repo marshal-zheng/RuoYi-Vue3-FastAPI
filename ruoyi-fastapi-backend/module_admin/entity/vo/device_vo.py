@@ -8,6 +8,10 @@ class DeviceQueryModel(BaseModel):
     """
     设备查询模型
     """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
     device_name: Optional[str] = Field(None, description="设备名称")
     bus_type: Optional[str] = Field(None, description="总线类型")
     begin_time: Optional[str] = Field(None, description="开始时间")
@@ -69,12 +73,15 @@ class DeviceListModel(BaseModel):
     """
     设备列表模型（不包含接口详情）
     """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
     device_id: int = Field(..., description="设备ID")
     device_name: str = Field(..., description="设备名称")
     category_name: Optional[str] = Field(None, description="分类名称")
     bus_interfaces: Optional[str] = Field(None, description="总线接口（格式化显示）")
     create_by: Optional[str] = Field(None, description="创建者")
     update_time: Optional[datetime] = Field(None, description="更新时间")
-
-    class Config:
-        from_attributes = True

@@ -30,13 +30,12 @@
                   <el-input
                     v-model="loginForm.username"
                     type="text"
-                    size="large"
                     auto-complete="off"
                     placeholder="账号"
                   >
-                    <template #prefix
-                      ><svg-icon size="large" icon-class="user" class="el-input__icon input-icon"
-                    /></template>
+                    <!-- <template #prefix
+                      ><svg-icon icon-class="user" class="el-input__icon input-icon"
+                    /></template> -->
                   </el-input>
                 </el-form-item>
 
@@ -44,14 +43,13 @@
                   <el-input
                     v-model="loginForm.password"
                     type="password"
-                    size="large"
                     auto-complete="off"
                     placeholder="密码"
                     @keyup.enter="handleLogin"
                   >
-                    <template #prefix
+                    <!-- <template #prefix
                       ><svg-icon icon-class="password" class="el-input__icon input-icon"
-                    /></template>
+                    /></template> -->
                   </el-input>
                 </el-form-item>
 
@@ -59,14 +57,13 @@
                   <div class="flex gap-3">
                     <el-input
                       v-model="loginForm.code"
-                      size="large"
                       auto-complete="off"
                       placeholder="验证码"
                       @keyup.enter="handleLogin"
                     >
-                      <template #prefix
+                      <!-- <template #prefix
                         ><svg-icon icon-class="validCode" class="el-input__icon input-icon"
-                      /></template>
+                      /></template> -->
                     </el-input>
                     <div class="cursor-pointer">
                       <img :src="codeUrl" @click="getCode" />

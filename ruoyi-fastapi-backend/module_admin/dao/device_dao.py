@@ -35,7 +35,10 @@ class DeviceDao:
         total = total_result.scalar()
 
         # 查询数据（预加载接口信息）
-        stmt = select(DeviceDO).options(selectinload(DeviceDO.interfaces))
+        stmt = select(DeviceDO).options(
+            selectinload(DeviceDO.interfaces),
+            selectinload(DeviceDO.category),
+        )
         if conditions:
             stmt = stmt.where(and_(*conditions))
         stmt = stmt.order_by(DeviceDO.update_time.desc())
@@ -80,6 +83,15 @@ class DeviceDao:
         删除设备（级联删除接口）
         """
         stmt = delete(DeviceDO).where(DeviceDO.device_id.in_(device_ids))
+        result = await db.execute(stmt)
+        return result.rowcount
+
+    @classmethod
+    async def delete_interfaces_by_device_ids(cls, db: AsyncSession, device_ids: List[int]) -> int:
+        """
+        根据设备ID列表删除其所有接口
+        """
+        stmt = delete(DeviceInterfaceDO).where(DeviceInterfaceDO.device_id.in_(device_ids))
         result = await db.execute(stmt)
         return result.rowcount
 

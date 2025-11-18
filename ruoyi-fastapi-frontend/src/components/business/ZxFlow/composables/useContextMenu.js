@@ -15,7 +15,7 @@ export function useContextMenu(graph, options = {}) {
     y: 0,
     items: [],
     target: null,
-    type: 'blank' // 'blank' | 'node' | 'edge'
+  type: 'blank' // 'blank' | 'node' | 'edge' | 'port'
   })
 
   // 右键刚打开菜单后，短时间忽略一次全局 click，防止瞬时关闭
@@ -322,6 +322,9 @@ export function useContextMenu(graph, options = {}) {
         if (!config.enableEdgeMenu) return
         items = getEdgeMenuItems(target)
         break
+      case 'port':
+        items = processCustomMenu([], 'port', target)
+        break
       default:
         return
     }
@@ -444,6 +447,13 @@ export function useContextMenu(graph, options = {}) {
       console.log('blank:contextmenu triggered', { e })
       e.preventDefault()
       showContextMenu(e.clientX, e.clientY, 'blank')
+    })
+
+    // 端口右键
+    g.on('port:contextmenu', ({ e, port, node }) => {
+      console.log('port:contextmenu triggered', { e, port, node })
+      e.preventDefault()
+      showContextMenu(e.clientX, e.clientY, 'port', { port, node })
     })
 
     // 点击空白/节点/边时隐藏菜单（忽略右键点击，避免刚打开就被关闭）

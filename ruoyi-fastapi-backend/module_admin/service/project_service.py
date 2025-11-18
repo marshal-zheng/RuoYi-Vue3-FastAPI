@@ -48,10 +48,14 @@ class ProjectService:
             # 自动生成工程编码
             if not page_object.project_code:
                 page_object.project_code = await cls._generate_project_code(query_db)
-            
-            await ProjectDao.add_project_dao(query_db, page_object)
+
+            new_project = await ProjectDao.add_project_dao(query_db, page_object)
             await query_db.commit()
-            return CrudResponseModel(is_success=True, message='新增成功')
+            return CrudResponseModel(
+                is_success=True,
+                message='新增成功',
+                result={'projectId': new_project.project_id}
+            )
         except Exception as e:
             await query_db.rollback()
             raise e
