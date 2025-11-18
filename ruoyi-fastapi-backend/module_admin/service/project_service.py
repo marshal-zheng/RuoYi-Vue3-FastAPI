@@ -53,7 +53,6 @@ class ProjectService:
                 page_object.project_code = await cls._generate_project_code(query_db)
 
             new_project = await ProjectDao.add_project_dao(query_db, page_object)
-            await query_db.flush()
             
             # 创建默认初始版本
             default_version = ProjectVersionModel(
