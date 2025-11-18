@@ -27,7 +27,7 @@
           </div>
 
           <div class="zx-grid-form-bar__filters">
-            <el-date-picker
+            <!-- <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD"
               type="daterange"
@@ -36,7 +36,7 @@
               end-placeholder="结束日期"
               style="width: 240px"
               @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
-            />
+            /> -->
           </div>
 
           <div class="zx-grid-form-bar__right">
@@ -69,17 +69,13 @@
               {{ parseTime(row.createTime) }}
             </template>
           </el-table-column>
-          <el-table-column label="状态" prop="status" align="center">
+          <el-table-column label="状态" prop="isLocked" align="center" width="100">
             <template #default="{ row }">
-              <div class="flex items-center justify-center gap-2">
-                <el-tag :type="row.status === '1' ? 'success' : 'info'">
-                  {{ row.status === '1' ? '启用' : '停用' }}
-                </el-tag>
-                <el-tag v-if="row.isLocked === '1'" type="warning" size="small">
-                  <el-icon class="mr-1"><Lock /></el-icon>
-                  固化
-                </el-tag>
-              </div>
+              <el-tag v-if="row.isLocked === '1'" type="warning">
+                <el-icon class="mr-1"><Lock /></el-icon>
+                固化
+              </el-tag>
+              <el-tag v-else type="info">未固化</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -90,7 +86,7 @@
           >
             <template #default="{ row }">
               <div class="op-col__wrap">
-                <ZxButton link type="primary" @click="handleViewVersion(row)">查看</ZxButton>
+                <!-- <ZxButton link type="primary" @click="handleViewVersion(row)">查看</ZxButton> -->
                 <ZxButton link type="primary" @click="handleEditVersion(row)">编辑</ZxButton>
                 <ZxMoreAction
                   :list="getMoreActionList(row)"
@@ -194,46 +190,39 @@ const editVersionForm = reactive({
 
 /** ZxGridList 版本数据加载函数 */
 async function loadVersionData(params) {
-  const { pageNum = 1, pageSize = 10, versionName, dateRange } = params;
+  // 与现有列表保持一致：ZxGridList 传入的是 { pageNum, pageSize, ...query }
+  // const { pageNum = 1, pageSize = 10, dateRange, ...query } = params || {};
 
-  const queryParams = {
-    pageNum,
-    pageSize,
-    projectId: props.projectId,
-    versionName,
-  };
+  // const queryParams = {
+  //   pageNum,
+  //   pageSize,
+  //   projectId: props.projectId,
+  //   ...query,
+  // };
 
-  // 处理日期范围
-  if (dateRange && dateRange.length === 2) {
-    queryParams.beginTime = dateRange[0];
-    queryParams.endTime = dateRange[1];
-  }
+  // // 处理日期范围（与后端接口保持统一）
+  // if (dateRange && dateRange.length === 2) {
+  //   queryParams.beginTime = dateRange[0];
+  //   queryParams.endTime = dateRange[1];
+  //   delete queryParams.dateRange;
+  // }
 
-  try {
-    const response = await listProjectVersion(queryParams);
-
-    return {
-      list: response.rows || [],
-      total: response.total || 0,
-    };
-  } catch (error) {
-    console.error('加载版本列表失败:', error);
-    proxy.$modal.msgError('加载版本列表失败');
-    return {
-      list: [],
-      total: 0,
-    };
-  }
+  const response = await listProjectVersion(params);
+  console.log('responsesss', response);
+  response.list = response.rows || [];
+  return response;
 }
 
 /** 筛选变化处理 */
 function onFilterChange(key, value, { handleRefresh, updateState }) {
   updateState({ [key]: value });
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
 /** 搜索处理 */
 function onSearch({ handleRefresh, updateState }) {
+  updateState('pager.page', 1);
   handleRefresh();
 }
 

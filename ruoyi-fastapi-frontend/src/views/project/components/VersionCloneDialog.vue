@@ -1,9 +1,5 @@
 <template>
   <ZxDialog v-bind="dialog.dialogProps.value" v-on="dialog.dialogEvents.value">
-    <div class="mb-4 p-3 bg-gray-50 rounded">
-      <div class="text-sm text-gray-600 mb-1">源版本：</div>
-      <div class="font-medium">{{ formData.sourceVersionName }}</div>
-    </div>
     <el-form
       ref="formRef"
       :model="formData"

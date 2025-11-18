@@ -1,16 +1,12 @@
 <template>
   <ZxDialog v-bind="dialog.dialogProps.value" v-on="dialog.dialogEvents.value">
     <template #descValue="{ item }">
-      <template v-if="item.label === '状态'">
-        <el-tag :type="versionData.status === '1' ? 'success' : 'info'">
-          {{ versionData.status === '1' ? '启用' : '停用' }}
-        </el-tag>
-      </template>
-      <template v-else-if="item.label === '固化状态' && versionData.isLocked === '1'">
-        <el-tag type="warning" size="small">
+      <template v-if="item.label === '固化状态'">
+        <el-tag v-if="versionData.isLocked === '1'" type="warning">
           <el-icon class="mr-1"><Lock /></el-icon>
           已固化
         </el-tag>
+        <el-tag v-else type="info">未固化</el-tag>
       </template>
       <template v-else>
         {{ item.value || '-' }}
@@ -32,7 +28,6 @@ const descriptionItems = computed(() => {
     { label: '版本号', value: versionData.value.versionNumber },
     { label: '版本名称', value: versionData.value.versionName },
     { label: '版本描述', value: versionData.value.description },
-    { label: '状态', value: versionData.value.status },
   ];
 
   if (versionData.value.isLocked === '1') {
@@ -43,6 +38,8 @@ const descriptionItems = computed(() => {
     if (versionData.value.lockedTime) {
       items.push({ label: '固化时间', value: parseTime(versionData.value.lockedTime) });
     }
+  } else {
+    items.push({ label: '固化状态', value: '未固化' });
   }
 
   items.push(
