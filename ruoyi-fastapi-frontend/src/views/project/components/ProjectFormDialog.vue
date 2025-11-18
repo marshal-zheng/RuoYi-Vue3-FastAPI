@@ -35,7 +35,7 @@ const formRules = computed(() => ({
 const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog({
   title: (data) => (data?.projectId ? '编辑工程' : '添加工程'),
   width: '600px',
-  okText: computed(() => (state.data.projectId ? '保存' : '创建')),
+  okText: computed(() => (state.data.projectId ? '保存' : '下一步')),
   formRef,
   preValidate: true,
   autoScrollToError: true,
@@ -48,13 +48,12 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   onConfirm: async (data) => {
     if (data.projectId) {
       const res = await updateProject(data)
-      ElMessage.success('修改成功')
-      emit('success', res)
+      emit('success', { mode: 'edit', data: res })
       return res
     }
     const res = await addProject(data)
-    ElMessage.success('新增成功')
-    emit('success', res)
+    const newId = res?.data?.projectId || res?.data?.id || res?.projectId || res?.id || null
+    emit('success', { mode: 'create', projectId: newId, data: res })
     return res
   },
   onConfirmError: (e) => {

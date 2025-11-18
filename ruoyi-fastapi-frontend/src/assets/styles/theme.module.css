@@ -517,18 +517,22 @@
   .fade-transform-enter-active {
     transition: opacity .25s ease, transform .25s ease;
   }
-  /* Do not animate leaving. Keep absolute to avoid layout shift/white flash */
+  /* Smoothly fade previous view while keeping layout stable */
   .fade-transform-leave-active {
     position: absolute;
-    transition: none;
+    transition: opacity .18s ease, transform .18s ease;
+  }
+  .fade-transform-leave-from {
+    opacity: 1;
+    transform: none;
   }
   .fade-transform-enter-from {
     opacity: 0;
     transform: translateX(-30px);
   }
   .fade-transform-leave-to {
-    opacity: 1;
-    transform: none;
+    opacity: 0;
+    transform: translateX(30px);
   }
   
   /* Breadcrumb transition */

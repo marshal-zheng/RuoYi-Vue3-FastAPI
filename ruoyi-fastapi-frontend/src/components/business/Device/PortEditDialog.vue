@@ -61,7 +61,7 @@ function handleBusTypeChange(busType) {
 function handlePositionChange(position) { }
 
 const { dialogProps, dialogEvents, open, close, state } = useDialog({
-  title: computed(() => props.title),
+  title: () => props.title,
   width: '500px',
   okText: '确定',
   formRef: portFormRef,

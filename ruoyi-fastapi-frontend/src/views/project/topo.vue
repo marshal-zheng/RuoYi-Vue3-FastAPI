@@ -22,7 +22,7 @@
 import { ref, onMounted } from 'vue'
 import XflowDAG from "@/components/business/Dag/index.vue"
 import { NodeEditDrawer } from './components'
-import { listDevice, listDeviceBusInterface } from '@/api/fixing/device'
+import { listDevice, getDevice } from '@/api/device/device'
 import { ElMessage } from 'element-plus'
 
 const version = ref('3.9.0')
@@ -69,203 +69,75 @@ function getBusTypeColor(busType) {
 }
 
 /**
- * 获取设备的端口信息（Mock数据）
+ * 获取设备的端口信息（从后端获取）
  * @param {Number} deviceId - 设备ID
  * @returns {Promise<Array>} 端口列表
  */
 async function getDevicePorts(deviceId) {
-  // Mock数据：根据设备ID返回不同的端口配置
-  // 只使用五种端口类型：RS422、RS485、CAN、LAN、1553B
-  const mockPortsMap = {
-    1: [ // 飞控主板
-      { interfaceId: 1, interfaceName: 'RS422', interfaceType: '输出', busType: 'RS422', remark: 'RS422串口1' },
-      { interfaceId: 2, interfaceName: 'RS422', interfaceType: '输入', busType: 'RS422', remark: 'RS422串口2' },
-      { interfaceId: 3, interfaceName: 'CAN', interfaceType: 'bidirectional', busType: 'CAN', remark: 'CAN总线1' },
-      { interfaceId: 4, interfaceName: '1553B', interfaceType: 'bidirectional', busType: '1553B', remark: '1553B总线' }
-    ],
-    2: [ // IMU惯导
-      { interfaceId: 5, interfaceName: 'RS422', interfaceType: '输出', busType: 'RS422', remark: 'RS422数据输出' },
-      { interfaceId: 6, interfaceName: 'CAN', interfaceType: 'bidirectional', busType: 'CAN', remark: 'CAN总线接口' }
-    ],
-    3: [ // 电调ESC
-      { interfaceId: 7, interfaceName: 'CAN', interfaceType: '输入', busType: 'CAN', remark: 'CAN控制输入' },
-      { interfaceId: 8, interfaceName: 'RS485', interfaceType: 'bidirectional', busType: 'RS485', remark: 'RS485通信' }
-    ],
-    4: [ // GPS模块
-      { interfaceId: 9, interfaceName: 'RS422-TX', interfaceType: '输出', busType: 'RS422', remark: 'RS422发送' },
-      { interfaceId: 10, interfaceName: 'RS422-RX', interfaceType: '输入', busType: 'RS422', remark: 'RS422接收' },
-      { interfaceId: 11, interfaceName: 'RS485', interfaceType: 'bidirectional', busType: 'RS485', remark: 'RS485通信' }
-    ],
-    5: [ // 磁罗盘
-      { interfaceId: 12, interfaceName: 'RS485', interfaceType: 'bidirectional', busType: 'RS485', remark: 'RS485接口' },
-      { interfaceId: 13, interfaceName: 'CAN', interfaceType: 'bidirectional', busType: 'CAN', remark: 'CAN接口' }
-    ],
-    6: [ // 气压计
-      { interfaceId: 14, interfaceName: 'RS485', interfaceType: 'bidirectional', busType: 'RS485', remark: 'RS485接口' },
-      { interfaceId: 15, interfaceName: 'CAN', interfaceType: 'bidirectional', busType: 'CAN', remark: 'CAN接口' }
-    ],
-    7: [ // 遥控接收器
-      { interfaceId: 16, interfaceName: 'RS422', interfaceType: '输出', busType: 'RS422', remark: 'RS422信号输出' },
-      { interfaceId: 17, interfaceName: '1553B', interfaceType: 'bidirectional', busType: '1553B', remark: '1553B总线' }
-    ],
-    8: [ // 图传模块
-      { interfaceId: 18, interfaceName: 'LAN1', interfaceType: 'bidirectional', busType: 'LAN', remark: 'LAN网口1' },
-      { interfaceId: 19, interfaceName: 'LAN2', interfaceType: 'bidirectional', busType: 'LAN', remark: 'LAN网口2' },
-      { interfaceId: 20, interfaceName: '1553B', interfaceType: 'bidirectional', busType: '1553B', remark: '1553B总线' }
-    ]
+  try {
+    const response = await getDevice(deviceId)
+    const deviceData = response.data || response
+    const interfaces = deviceData.interfaces || []
+    
+    // 将接口数据转换为端口格式
+    return interfaces.map((intf, index) => {
+      // 根据接口类型确定端口类型
+      let interfaceType = 'bidirectional' // 默认双向
+      if (intf.interfaceType === '输入' || intf.interfaceType === 'input') {
+        interfaceType = 'input'
+      } else if (intf.interfaceType === '输出' || intf.interfaceType === 'output') {
+        interfaceType = 'output'
+      }
+      
+      // 根据索引分配到不同的组（位置）
+      // 只分配到左右两侧
+      const groups = ['left', 'right']
+      const group = groups[index % 2]
+      
+      return {
+        id: `port-${intf.interfaceId || index}`,
+        interfaceId: intf.interfaceId,
+        interfaceName: intf.interfaceName || `端口${index + 1}`,
+        interfaceType: interfaceType,
+        group: group,
+        description: intf.remark || '',
+        busType: intf.busType || 'RS422',  // 总线类型
+        color: getBusTypeColor(intf.busType || 'RS422'),  // 根据总线类型计算颜色
+        dataRate: intf.dataRate || '',
+        protocolType: intf.protocolType || ''
+      }
+    })
+  } catch (error) {
+    console.error(`获取设备${deviceId}的接口信息失败:`, error)
+    return []
   }
-  
-  const mockPorts = mockPortsMap[deviceId] || []
-  
-  // 模拟异步操作
-  await new Promise(resolve => setTimeout(resolve, 100))
-  
-  // 将接口数据转换为端口格式
-  return mockPorts.map((intf, index) => {
-    // 根据接口类型确定端口类型
-    let interfaceType = 'bidirectional' // 默认双向
-    if (intf.interfaceType === '输入' || intf.interfaceType === 'input') {
-      interfaceType = 'input'
-    } else if (intf.interfaceType === '输出' || intf.interfaceType === 'output') {
-      interfaceType = 'output'
-    }
-    
-    // 根据索引分配到不同的组（位置）
-    // 只分配到左右两侧
-    const groups = ['left', 'right']
-    const group = groups[index % 2]
-    
-    return {
-      id: `port-${intf.interfaceId || index}`,
-      interfaceId: intf.interfaceId,
-      interfaceName: intf.interfaceName || `端口${index + 1}`,
-      interfaceType: interfaceType,
-      group: group,
-      description: intf.remark || '',
-      busType: intf.busType || 'RS422',  // 总线类型
-      color: getBusTypeColor(intf.busType || 'RS422'),  // 根据总线类型计算颜色
-      dataRate: intf.dataRate || '',
-      protocolType: intf.protocolType || ''
-    }
-  })
 }
 
 /**
- * 从后端加载设备列表数据（Mock版本）
+ * 从后端加载设备列表数据
  */
 async function loadDeviceList() {
   loading.value = true
   try {
-    // Mock设备列表数据
-    const mockDevices = [
-      // 核心控制类
-      {
-        deviceId: 1,
-        deviceName: '飞控主板',
-        deviceType: '核心控制器',
-        busType: 'Multi',
-        manufacturer: 'Pixhawk',
-        model: 'PX4',
-        version: 'v1.0',
-        remark: 'Pixhawk/APM等飞行控制器核心模块',
-        categoryName: '核心控制'
-      },
-      {
-        deviceId: 2,
-        deviceName: 'IMU惯导',
-        deviceType: '传感器',
-        busType: 'SPI',
-        manufacturer: 'InvenSense',
-        model: 'MPU6000',
-        version: 'v2.0',
-        remark: '陀螺仪+加速度计，姿态感知单元',
-        categoryName: '核心控制'
-      },
-      {
-        deviceId: 3,
-        deviceName: '电调ESC',
-        deviceType: '执行器',
-        busType: 'PWM',
-        manufacturer: 'Generic',
-        model: 'BLHeli_32',
-        version: 'v1.5',
-        remark: '电子调速器，控制电机转速',
-        categoryName: '核心控制'
-      },
-      
-      // 定位导航类
-      {
-        deviceId: 4,
-        deviceName: 'GPS模块',
-        deviceType: '定位设备',
-        busType: 'UART',
-        manufacturer: 'u-blox',
-        model: 'M8N',
-        version: 'v3.0',
-        remark: '卫星定位系统，提供精准位置信息',
-        categoryName: '定位导航'
-      },
-      {
-        deviceId: 5,
-        deviceName: '磁罗盘',
-        deviceType: '传感器',
-        busType: 'I2C',
-        manufacturer: 'Honeywell',
-        model: 'HMC5883L',
-        version: 'v1.0',
-        remark: '电子罗盘，提供方向信息',
-        categoryName: '定位导航'
-      },
-      {
-        deviceId: 6,
-        deviceName: '气压计',
-        deviceType: '传感器',
-        busType: 'I2C',
-        manufacturer: 'Bosch',
-        model: 'BMP280',
-        version: 'v2.0',
-        remark: '高度测量传感器，辅助定高',
-        categoryName: '定位导航'
-      },
-      
-      // 遥控通信类
-      {
-        deviceId: 7,
-        deviceName: '遥控接收器',
-        deviceType: '通信设备',
-        busType: 'PPM/SBUS',
-        manufacturer: 'FrSky',
-        model: 'X8R',
-        version: 'v1.0',
-        remark: '接收遥控器信号，实现远程控制',
-        categoryName: '遥控通信'
-      },
-      {
-        deviceId: 8,
-        deviceName: '图传模块',
-        deviceType: '通信设备',
-        busType: 'CVBS/HDMI',
-        manufacturer: 'DJI',
-        model: 'Air Unit',
-        version: 'v2.0',
-        remark: '实时视频传输系统',
-        categoryName: '遥控通信'
-      }
-    ]
+    // 从后端获取设备列表
+    const response = await listDevice({})
+    const devices = response.data?.rows || []
     
-    // 模拟网络延迟
-    await new Promise(resolve => setTimeout(resolve, 500))
-    
+    if (devices.length === 0) {
+      ElMessage.warning('暂无设备数据，请先添加设备')
+      operators.value = []
+      return
+    }
     // 并发获取所有设备的端口信息
     const devicesWithPorts = await Promise.all(
-      mockDevices.map(async (device) => {
+      devices.map(async (device) => {
         const ports = await getDevicePorts(device.deviceId)
         
         return {
           // DAG组件需要的字段
           name: device.deviceName,
-          value: device.remark || device.description || '设备',
-          category: device.categoryName || '未分类',
+          value: device.remark || device.deviceDesc || '设备',
+          category: device.categoryName || device.category || '未分类',
           
           // 设备原始数据（用于节点创建时使用）
           deviceId: device.deviceId,
@@ -286,7 +158,7 @@ async function loadDeviceList() {
     
     operators.value = devicesWithPorts
     
-    console.log('设备列表加载成功 (Mock数据):', {
+    console.log('设备列表加载成功:', {
       total: devicesWithPorts.length,
       devices: devicesWithPorts
     })
@@ -376,7 +248,7 @@ function goTarget(url) {
 }
 </script>
 
-<style lang="scss">
+<style lang="less">
 .home {
   height: calc(100vh - 84px);
   display: flex;

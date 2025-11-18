@@ -53,11 +53,14 @@ export function exportDeviceCategory(query) {
   })
 }
 
-// 获取设备分类选项（用于下拉选择）
-export function getDeviceCategoryOptions() {
+// 获取设备分类选项(用于下拉选择)
+export function getDeviceCategoryOptions(businessType = '9999') {
   return request({
-    url: '/device/category/options',
-    method: 'get'
+    url: '/device/category/list',
+    method: 'get',
+    params: {
+      business_type: businessType
+    }
   })
 }
 

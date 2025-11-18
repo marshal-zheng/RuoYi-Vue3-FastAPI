@@ -1,44 +1,45 @@
 <template>
-  <zx-select
-    v-model="value"
-    :options="interfaceTypeOptions"
+  <DictSelect
+    v-model="selectedValue"
+    dict-type="sys_protocol_type"
+    placeholder="请选择接口类型"
+    clearable
     v-bind="$attrs"
+    @change="handleChange"
   />
 </template>
 
-<script setup name="InterfaceTypeSelector">
-import { computed, useAttrs } from 'vue'
+<script setup lang="ts" name="InterfaceTypeSelector">
+import { ref, watch } from 'vue'
+import DictSelect from '@/components/DictSelect/index.vue'
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: ''
-  }
-})
-const attrs = useAttrs()
+interface Props {
+  modelValue?: string
+}
 
-const emit = defineEmits(['update:modelValue'])
+interface Emits {
+  (e: 'update:modelValue', value: string): void
+  (e: 'change', value: string): void
+}
 
-// 默认总线类型选项
-const defaultInterfaceTypeOptions = [
-  { label: 'RS422', value: 'RS422' },
-  { label: 'RS485', value: 'RS485' },
-  { label: 'CAN', value: 'CAN' },
-  { label: 'LAN', value: 'LAN' },
-  { label: '1553B', value: '1553B' }
-]
-
-const interfaceTypeOptions = computed(() => {
-  const opts = attrs.options
-  return Array.isArray(opts) && opts.length > 0 ? opts : defaultInterfaceTypeOptions
+const props = withDefaults(defineProps<Props>(), {
+  modelValue: ''
 })
 
-const value = computed({
-  get: () => props.modelValue,
-  set: (v) => {
-    emit('update:modelValue', v)
-  }
+const emit = defineEmits<Emits>()
+
+const selectedValue = ref(props.modelValue)
+
+// 监听外部值变化
+watch(() => props.modelValue, (newValue) => {
+  selectedValue.value = newValue
 })
+
+// 处理选择变化
+const handleChange = (value: string) => {
+  emit('update:modelValue', value)
+  emit('change', value)
+}
 </script>
 
 <style lang="less" scoped>

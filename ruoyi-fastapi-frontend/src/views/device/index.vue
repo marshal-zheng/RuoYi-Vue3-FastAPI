@@ -119,6 +119,13 @@
         </el-table>
       </template>
     </ZxGridList>
+
+    <DeviceNameDialog
+      v-model="createDialogVisible"
+      :value="createForm"
+      :is-create="true"
+      @submit="handleCreateSubmit"
+    />
   </ZxContentWrap>
 </template>
 
@@ -126,6 +133,7 @@
 import { listDevice, delDevice } from '@/api/device/device';
 import { checkPermi } from '@/utils/permission';
 import { Edit, Delete } from '@element-plus/icons-vue';
+import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();
@@ -135,28 +143,19 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 
+const createDialogVisible = ref(false);
+const createForm = reactive({
+  deviceName: '',
+  categoryName: '',
+  remark: ''
+});
+
 async function loadDeviceData(params) {
-  try {
-    const { pageNum, pageSize, deviceName, busType, dateRange, ...rest } = params;
-    let requestParams = {
-      page_num: pageNum,
-      page_size: pageSize,
-      device_name: deviceName,
-      bus_type: busType,
-      ...rest,
-    };
-    if (dateRange && dateRange.length === 2) {
-      requestParams = proxy.addDateRange(requestParams, dateRange);
-      delete requestParams.dateRange;
-    }
-    const response = await listDevice(requestParams);
-    return {
-      list: response.rows || [],
-      total: response.total || 0,
-    };
-  } catch (error) {
-    return { list: [], total: 0 };
-  }
+    const response = await listDevice(params);
+    console.log('response', response.data.rows)
+    response.list = response.data?.rows || []
+    return response
+
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
@@ -181,6 +180,20 @@ function handleSelectionChange(selection) {
 }
 
 function handleAdd() {
+  createForm.deviceName = '';
+  createForm.categoryName = '';
+  createForm.remark = '';
+  createDialogVisible.value = true;
+}
+
+function handleCreateSubmit(data) {
+  // 将数据存入 sessionStorage
+  sessionStorage.setItem('newDeviceData', JSON.stringify({
+    deviceName: data.deviceName,
+    categoryName: data.categoryName,
+    remark: data.remark
+  }));
+  // 跳转到详情页
   router.push('/device/detail/index');
 }
 

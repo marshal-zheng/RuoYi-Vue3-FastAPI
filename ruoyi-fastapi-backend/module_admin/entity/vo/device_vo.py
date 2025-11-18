@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
+from pydantic.alias_generators import to_camel
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
@@ -19,6 +20,12 @@ class DeviceInterfaceModel(BaseModel):
     """
     设备接口模型
     """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
     interface_id: Optional[int] = Field(None, description="接口ID")
     device_id: Optional[int] = Field(None, description="设备ID")
     interface_name: str = Field(..., description="接口名称")
@@ -30,14 +37,17 @@ class DeviceInterfaceModel(BaseModel):
     create_time: Optional[datetime] = Field(None, description="创建时间")
     update_time: Optional[datetime] = Field(None, description="更新时间")
 
-    class Config:
-        from_attributes = True
-
 
 class DeviceModel(BaseModel):
     """
     设备模型
     """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
     device_id: Optional[int] = Field(None, description="设备ID")
     device_name: str = Field(..., description="设备名称")
     device_category_id: Optional[int] = Field(None, description="设备分类ID")
@@ -53,9 +63,6 @@ class DeviceModel(BaseModel):
     update_by: Optional[str] = Field(None, description="更新者")
     update_time: Optional[datetime] = Field(None, description="更新时间")
     interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
-
-    class Config:
-        from_attributes = True
 
 
 class DeviceListModel(BaseModel):

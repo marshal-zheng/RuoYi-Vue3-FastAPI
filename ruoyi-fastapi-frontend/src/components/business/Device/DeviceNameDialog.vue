@@ -11,12 +11,20 @@
       <el-form-item label="设备分类" prop="categoryName">
         <CategorySelector v-model="form.categoryName" placeholder="请选择设备分类" />
       </el-form-item>
+      <el-form-item label="设备描述" prop="remark">
+        <el-input 
+          v-model="form.remark" 
+          type="textarea"
+          :rows="3"
+          placeholder="请输入设备描述" 
+        />
+      </el-form-item>
     </el-form>
   </ZxDialog>
 </template>
 
 <script setup name="DeviceNameDialog">
-import { ref, reactive, watch } from 'vue'
+import { ref, watch, toRef } from 'vue'
 import { useDialog } from '@zxio/zxui'
 import { CategorySelector } from './selector'
 
@@ -24,16 +32,19 @@ const props = defineProps({
   modelValue: { type: Boolean, default: false },
   value: { 
     type: Object, 
-    default: () => ({ deviceName: '', categoryName: '' })
-  }
+    default: () => ({ deviceName: '', categoryName: '', remark: '' })
+  },
+  isCreate: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 
 const formRef = ref()
-const form = reactive({
-  deviceName: props.value?.deviceName || '',
-  categoryName: props.value?.categoryName || ''
+
+const getDefaultForm = () => ({
+  deviceName: '',
+  categoryName: '',
+  remark: ''
 })
 
 const rules = {
@@ -42,17 +53,13 @@ const rules = {
 }
 
 const { dialogProps, dialogEvents, open, close, state } = useDialog({
-  title: '编辑设备信息',
-  width: '500px',
-  okText: '确定',
+  title: props.isCreate ? '新增设备' : '编辑设备信息',
+  okText: '下一步',
   formRef,
   preValidate: true,
   autoScrollToError: true,
   autoResetForm: true,
-  defaultData: () => ({
-    deviceName: props.value?.deviceName || '',
-    categoryName: props.value?.categoryName || ''
-  }),
+  defaultData: getDefaultForm,
   onConfirm: async (data) => {
     emit('submit', { ...data })
     emit('update:modelValue', false)
@@ -61,26 +68,35 @@ const { dialogProps, dialogEvents, open, close, state } = useDialog({
   onConfirmError: (_e) => {}
 })
 
-watch(() => props.modelValue, (v) => {
-  if (v) {
-    state.data.deviceName = props.value?.deviceName || ''
-    state.data.categoryName = props.value?.categoryName || ''
-    form.deviceName = state.data.deviceName
-    form.categoryName = state.data.categoryName
-    open()
-  } else {
-    close()
-  }
-})
+const form = toRef(state, 'data')
 
-watch(() => props.value, (v) => {
-  if (v) {
-    state.data.deviceName = v.deviceName || ''
-    state.data.categoryName = v.categoryName || ''
-    form.deviceName = state.data.deviceName
-    form.categoryName = state.data.categoryName
+function formatFormValue(value) {
+  return {
+    ...getDefaultForm(),
+    ...(value || {})
   }
-}, { deep: true })
+}
+
+watch(
+  () => props.modelValue,
+  (visible) => {
+    if (visible) {
+      open(formatFormValue(props.value))
+    } else {
+      close()
+    }
+  }
+)
+
+watch(
+  () => props.value,
+  (value) => {
+    if (props.modelValue) {
+      Object.assign(form.value, formatFormValue(value))
+    }
+  },
+  { deep: true }
+)
 
 function onDialogClose() {
   formRef.value?.resetFields()

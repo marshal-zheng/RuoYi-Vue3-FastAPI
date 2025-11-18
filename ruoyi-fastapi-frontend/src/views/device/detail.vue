@@ -137,19 +137,20 @@ function getDefaultParams(interfaceType) {
 }
 
 function getDefaultMessageConfig() {
-  return cloneDeep({
-    header: {
-      sender: '设备1',
-      receiver: '',
-      frequency: 'once',
-      baudRate: 460,
-      method: '422',
-      duration: 0,
-      frameLength: 1,
-      errorHandling: 'ignore',
-    },
-    fields: [],
-  });
+  return null;
+}
+
+function normalizeInterfaceId(value) {
+  if (typeof value === 'number' && !Number.isNaN(value)) {
+    return value;
+  }
+  if (typeof value === 'string' && value.trim() !== '') {
+    const parsed = Number(value);
+    if (!Number.isNaN(parsed)) {
+      return parsed;
+    }
+  }
+  return null;
 }
 
 async function handleSave() {
@@ -166,13 +167,13 @@ async function handleSave() {
       categoryName: deviceInfo.value.categoryName || '',
       remark: deviceInfo.value.remark || '',
       interfaces: tempPorts.value.map(port => ({
-        interfaceId: port.interfaceId || null,
+        interfaceId: normalizeInterfaceId(port.interfaceId),
         interfaceName: port.interfaceName,
         interfaceType: port.interfaceType,
         position: port.position,
         description: port.description || '',
         params: port.params || getDefaultParams(port.interfaceType),
-        messageConfig: port.messageConfig || getDefaultMessageConfig(),
+        messageConfig: port.messageConfig || null,
       })),
     };
     if (submitData.deviceId) {
@@ -199,18 +200,41 @@ function goBack() {
 async function loadDeviceInfo() {
   const id = deviceId.value;
   if (!id) {
+    // 从 sessionStorage 读取新增设备的数据
+    const newDeviceDataStr = sessionStorage.getItem('newDeviceData');
+    let newDeviceData = null;
+    console.log('newDeviceDataStr', newDeviceDataStr)
+    if (newDeviceDataStr) {
+      try {
+        newDeviceData = JSON.parse(newDeviceDataStr);
+        // 读取后清除
+        sessionStorage.removeItem('newDeviceData');
+        console.log('读取到新设备数据:', newDeviceData);
+      } catch (e) {
+        console.error('解析新增设备数据失败:', e);
+      }
+    }
+    
+    // 确保使用用户输入的设备名称
+    const deviceName = newDeviceData?.deviceName || '新设备';
+
+    console.log('newDeviceData', newDeviceData)
+    
     deviceInfo.value = {
       deviceId: null,
-      deviceName: '新设备',
+      deviceName: deviceName,
       deviceType: '',
       manufacturer: '',
       model: '',
       version: '',
       busType: '',
-      categoryName: '',
-      remark: '',
+      categoryName: newDeviceData?.categoryName || '',
+      remark: newDeviceData?.remark || '',
       interfaces: [],
     };
+    
+    console.log('设备信息已设置:', deviceInfo.value);
+    
     tempPorts.value = [];
     devicePorts.value = [];
     updateGraphData();
@@ -238,7 +262,7 @@ async function loadDevicePorts() {
       position: intf.position || 'right',
       description: intf.description || '',
       params: intf.params ? cloneDeep(intf.params) : getDefaultParams(intf.interfaceType),
-      messageConfig: intf.messageConfig ? cloneDeep(intf.messageConfig) : getDefaultMessageConfig(),
+  messageConfig: intf.messageConfig ? cloneDeep(intf.messageConfig) : null,
     }));
   }
   devicePorts.value = tempPorts.value;
@@ -323,6 +347,10 @@ function updateGraphData() {
     };
   });
   graphInstance.value.clearCells();
+  
+  const deviceLabel = deviceInfo.value.deviceName || '设备';
+  console.log('更新图表,设备名称:', deviceLabel);
+  
   graphInstance.value.addNode({
     id: 'device_node',
     shape: 'device-port-node',
@@ -332,7 +360,7 @@ function updateGraphData() {
     height: 150,
     data: {
       type: 'device',
-      label: deviceInfo.value.deviceName || '设备',
+      label: deviceLabel,
       deviceId: deviceInfo.value.deviceId || null,
       busType: deviceInfo.value.busType || '',
       ports: portsData,
@@ -497,7 +525,10 @@ function handleAddPort() {
 
 function handleEditPort(port) {
   portDrawerTitle.value = `端口配置 - ${port.interfaceName}`;
-  currentPortInfo.value = { ...port };
+  currentPortInfo.value = { 
+    ...port,
+    deviceName: deviceInfo.value.deviceName || '未命名设备'
+  };
   portConfigDrawerRef.value?.open();
 }
 
@@ -512,24 +543,31 @@ async function handleDeletePort(interfaceId) {
 }
 
 async function handlePortSubmit(formData) {
-  if (formData.interfaceId) {
-    const index = tempPorts.value.findIndex(p => (p.id || p.interfaceId) === formData.interfaceId);
+  const hasInterfaceKey =
+    formData.interfaceId !== null && formData.interfaceId !== undefined && formData.interfaceId !== '';
+  if (hasInterfaceKey) {
+    const index = tempPorts.value.findIndex(
+      p => (p.id || p.interfaceId) === formData.interfaceId
+    );
     if (index > -1) {
       const oldPort = tempPorts.value[index];
       tempPorts.value[index] = {
+        ...oldPort,
         ...formData,
+        id: oldPort.id || formData.interfaceId || oldPort.interfaceId,
+        interfaceId: oldPort.interfaceId ?? null,
         params: oldPort.params,
         messageConfig: oldPort.messageConfig,
       };
-      ElMessage.success('修改成功');
     }
   } else {
+    const tempId = `port_${Date.now()}`;
     const newPort = {
       ...formData,
-      id: `port_${Date.now()}`,
-      interfaceId: `port_${Date.now()}`,
+      id: tempId,
+      interfaceId: null,
       params: getDefaultParams(formData.interfaceType),
-      messageConfig: getDefaultMessageConfig(),
+      messageConfig: null,
     };
     tempPorts.value.push(newPort);
     ElMessage.success('添加成功');
@@ -567,7 +605,6 @@ async function handleDeviceNameSubmit(formData) {
   deviceInfo.value.categoryName = formData.categoryName;
   deviceNameDialogVisible.value = false;
   updateGraphData();
-  ElMessage.success('设备信息修改成功');
 }
 
 function handleDeviceNameDialogClose() {

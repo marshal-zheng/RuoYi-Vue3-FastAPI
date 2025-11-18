@@ -5,9 +5,6 @@
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="state.data.name" placeholder="请输入分类名称" maxlength="50" show-word-limit clearable />
         </el-form-item>
-        <el-form-item label="分类描述" prop="descr">
-          <el-input v-model="state.data.descr" type="textarea" placeholder="请输入分类描述" :rows="3" maxlength="255" show-word-limit />
-        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="state.data.remark" type="textarea" placeholder="请输入备注" :rows="3" maxlength="500" show-word-limit />
         </el-form-item>
@@ -31,9 +28,6 @@ const formRules = {
     { required: true, message: '请输入分类名称', trigger: 'blur' },
     { min: 2, max: 50, message: '分类名称长度在 2 到 50 个字符', trigger: 'blur' }
   ],
-  descr: [
-    { max: 255, message: '分类描述不能超过 255 个字符', trigger: 'blur' }
-  ],
   remark: [
     { max: 500, message: '备注不能超过 500 个字符', trigger: 'blur' }
   ]
@@ -50,14 +44,12 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog<any>({
   defaultData: () => ({
     device_category_id: null,
     name: '',
-    descr: '',
     remark: ''
   }),
   onConfirm: async (data) => {
     const submitData: any = {
       device_category_id: data.device_category_id,
       name: data.name,
-      descr: data.descr,
       remark: data.remark
     }
     let res
@@ -78,7 +70,6 @@ const openDialog = async (payload?: { id?: number }) => {
     open({
       device_category_id: detail.data?.deviceCategoryId || detail.data?.device_category_id || payload.id,
       name: detail.data?.name || '',
-      descr: detail.data?.descr || '',
       remark: detail.data?.remark || ''
     })
   } else {

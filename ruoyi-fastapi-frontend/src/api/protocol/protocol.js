@@ -53,3 +53,22 @@ export function exportProtocol(query) {
     params: query
   })
 }
+
+// 下载协议导入模板
+export function downloadProtocolImportTemplate() {
+  return request({
+    url: '/system/protocol/importTemplate',
+    method: 'get',
+    responseType: 'blob'
+  })
+}
+
+// 协议导入预览
+export function previewProtocolImport(data) {
+  return request({
+    url: '/system/protocol/importPreview',
+    method: 'post',
+    data,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  })
+}

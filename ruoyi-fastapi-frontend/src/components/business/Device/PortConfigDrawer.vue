@@ -4,7 +4,7 @@
     v-on="drawer.drawerEvents.value"
     @close="handleClose"
   >
-    <ZxTabs v-model="activeTab" :items="tabItems" class="port-config-tabs">
+    <ZxTabs v-model="activeTab" :items="tabItems" class="port-config-tabs" lazy>
       <template #params>
         <ParamsConfigTab
           ref="paramsConfigTabRef"
@@ -126,6 +126,8 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-
+:deep(.zx-tabs__content) {
+  padding: 30px 0;
+}
 </style>
 

@@ -4,7 +4,7 @@ from typing import List
 from fastapi import HTTPException
 from module_admin.dao.device_dao import DeviceDao
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
-from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, DeviceInterfaceModel
+from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel
 from utils.response_util import ResponseUtil
 
 
@@ -41,10 +41,10 @@ class DeviceService:
                 'update_time': device.update_time
             })
         
-        return ResponseUtil.success(data={
-            'rows': device_list,
-            'total': total
-        })
+        return ResponseUtil.success(
+            rows=device_list,
+            dict_content={'total': total}
+        )
 
     @classmethod
     async def get_device_detail(cls, db: AsyncSession, device_id: int):
@@ -54,9 +54,44 @@ class DeviceService:
         device = await DeviceDao.get_device_by_id(db, device_id)
         if not device:
             raise HTTPException(status_code=404, detail="设备不存在")
-        
-        # 转换为VO模型
-        device_vo = DeviceModel.model_validate(device)
+
+        # 单独查询接口信息，避免异步懒加载导致 MissingGreenlet
+        interfaces = await DeviceDao.get_device_interfaces(db, device_id)
+        interface_list = []
+        for interface in interfaces:
+            interface_item = {
+                'interface_id': interface.interface_id,
+                'device_id': interface.device_id,
+                'interface_name': interface.interface_name,
+                'interface_type': interface.interface_type,
+                'position': interface.position,
+                'description': interface.description,
+                'params': interface.params,
+                'message_config': interface.message_config,
+                'create_time': interface.create_time,
+                'update_time': interface.update_time,
+            }
+            interface_list.append(interface_item)
+
+        device_data = {
+            'device_id': device.device_id,
+            'device_name': device.device_name,
+            'device_category_id': device.device_category_id,
+            'category_name': device.category_name,
+            'device_type': device.device_type,
+            'manufacturer': device.manufacturer,
+            'model': device.model,
+            'version': device.version,
+            'bus_type': device.bus_type,
+            'remark': device.remark,
+            'create_by': device.create_by,
+            'create_time': device.create_time,
+            'update_by': device.update_by,
+            'update_time': device.update_time,
+            'interfaces': interface_list,
+        }
+
+        device_vo = DeviceModel.model_validate(device_data)
         return ResponseUtil.success(data=device_vo.model_dump())
 
     @classmethod

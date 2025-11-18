@@ -184,7 +184,7 @@
     </ZxGridList>
   </ZxContentWrap>
 
-  <ProjectFormDialog ref="projectDialogRef" @success="refreshList" />
+  <ProjectFormDialog ref="projectDialogRef" @success="handleCreateSuccess" />
 </template>
 
 <script setup name="Project">
@@ -282,6 +282,23 @@ function handleMoreActionSelect(item, project, handleRefresh) {
       break;
     default:
       break;
+  }
+}
+
+function handleCreateSuccess(payload) {
+  let projectId = null;
+  if (payload && typeof payload === 'object') {
+    if (payload.projectId) projectId = payload.projectId;
+    else if (payload.data && typeof payload.data === 'object') {
+      projectId = payload.data.projectId || payload.data.id || payload.data?.data?.projectId;
+    }
+  }
+  console.log('projectId', projectId)
+  if (projectId) {
+    proxy.$router.push('/project/topo/index/' + projectId);
+  } else {
+    refreshList();
+    proxy.$modal.msgSuccess('新增成功');
   }
 }
 </script>

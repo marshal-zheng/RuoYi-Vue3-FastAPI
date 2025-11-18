@@ -62,15 +62,28 @@ const categoryOptions = ref([])
 async function loadCategories() {
   loading.value = true
   try {
-    const response = await getDeviceCategoryOptions()
+    // 使用业务类型 9999 获取分类列表
+    const response = await getDeviceCategoryOptions('9999')
     // 根据后端返回的数据格式处理
     const categories = response.data || response.rows || []
     
     // 转换为选项格式
     categoryOptions.value = categories.map(item => ({
-      label: item.name,
-      value: item.name
+      label: item.category_name || item.name || item.categoryName,
+      value: item.category_name || item.name || item.categoryName
     }))
+    
+    // 如果没有数据,提供默认分类
+    if (categoryOptions.value.length === 0) {
+      categoryOptions.value = [
+        { label: '核心控制', value: '核心控制' },
+        { label: '定位导航', value: '定位导航' },
+        { label: '遥控通信', value: '遥控通信' },
+        { label: '传感器', value: '传感器' },
+        { label: '执行器', value: '执行器' },
+        { label: '其他', value: '其他' }
+      ]
+    }
   } catch (error) {
     console.error('加载设备分类失败:', error)
     ElMessage.error('加载设备分类失败')

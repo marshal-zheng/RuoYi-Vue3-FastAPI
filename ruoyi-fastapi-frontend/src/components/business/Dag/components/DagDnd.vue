@@ -511,7 +511,7 @@ const handleMouseDown = (event, item) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .operator-library {
   width: 100%;
   max-width: 320px;

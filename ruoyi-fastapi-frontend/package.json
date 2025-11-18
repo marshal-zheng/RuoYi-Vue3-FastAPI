@@ -48,7 +48,6 @@
     "@vue/shared": "^3.5.19",
     "@vueup/vue-quill": "1.2.0",
     "@vueuse/core": "10.11.0",
-    "@zxio/zxui": "^1.0.9",
     "ant-design-vue": "^4.1.1",
     "axios": "0.28.1",
     "clipboard": "2.0.11",

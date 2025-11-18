@@ -49,7 +49,7 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .dag-search-input {
   height: 28px;
 

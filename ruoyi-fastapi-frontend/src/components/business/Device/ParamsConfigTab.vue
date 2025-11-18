@@ -298,12 +298,6 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-.params-config-content {
-  padding: 20px;
-  height: 100%;
-  overflow-y: auto;
-}
-
 .port-basic-info {
   margin-bottom: 24px;
 }

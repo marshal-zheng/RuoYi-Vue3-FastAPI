@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, File, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -16,6 +16,8 @@ from module_admin.service.protocol_service import ProtocolService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 from utils.page_util import PageResponseModel
+from utils.common_util import bytes2file_response
+from urllib.parse import quote
 
 
 protocolController = APIRouter(prefix='/system/protocol', tags=['协议管理'])
@@ -123,6 +125,53 @@ async def delete_protocol(
         delete_protocol_result = await ProtocolService.delete_protocol_services(query_db, delete_protocol)
         logger.info(delete_protocol_result.message)
         return ResponseUtil.success(msg=delete_protocol_result.message)
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
+@protocolController.get(
+    '/importTemplate',
+    dependencies=[Depends(CheckUserInterfaceAuth('protocol:edit'))]
+)
+async def download_protocol_import_template(
+    request: Request,
+):
+    """
+    下载协议导入模板
+    """
+    try:
+        template_bytes = await ProtocolService.get_protocol_import_template_services()
+        filename = quote('协议导入模板.xlsx')
+        headers = {
+            'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
+            'download-filename': filename
+        }
+        return ResponseUtil.streaming(
+            data=bytes2file_response(template_bytes),
+            headers=headers,
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
+@protocolController.post(
+    '/importPreview',
+    dependencies=[Depends(CheckUserInterfaceAuth('protocol:edit'))]
+)
+async def protocol_import_preview(
+    request: Request,
+    file: UploadFile = File(...)
+):
+    """
+    解析协议导入文件，返回预览数据
+    """
+    try:
+        preview_result = await ProtocolService.protocol_import_preview_services(file)
+        logger.info('协议导入文件解析成功')
+        return ResponseUtil.success(data=preview_result)
     except Exception as e:
         logger.exception(e)
         return ResponseUtil.error(msg=str(e))

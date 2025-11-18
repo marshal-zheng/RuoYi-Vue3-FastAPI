@@ -52,7 +52,7 @@
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="分类编号" align="center" prop="device_category_id" width="100" />
           <el-table-column label="分类名称" align="center" prop="name" :show-overflow-tooltip="true" />
-          <el-table-column label="分类描述" align="center" prop="descr" :show-overflow-tooltip="true" />
+          <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
           <el-table-column label="创建人" align="center" prop="create_by" :show-overflow-tooltip="true"/>
           <el-table-column label="创建时间" align="center" prop="create_time" width="180">
             <template #default="scope">

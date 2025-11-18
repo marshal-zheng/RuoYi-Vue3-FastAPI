@@ -6,61 +6,60 @@
     :size="'65%'"
     :placement="'right'"
     :loading="drawerLoading"
+    :noContentPadding="false"
     loadingType="skeleton"
   >
-    <div class="protocol-form-container p-5 min-h-[400px]">
-      <el-form
-        ref="formRef"
-        :model="drawer.state.data"
-        :rules="formRules"
-        label-position="right"
-        label-width="100px"
-        class="space-y-4"
-      >
-        <el-form-item label="协议名称" prop="protocolName">
-          <el-input
-            v-model="drawer.state.data.protocolName"
-            placeholder="请输入协议名称"
-            maxlength="50"
-            show-word-limit
-            clearable
-          />
-        </el-form-item>
-
-        <el-form-item label="协议类型" prop="protocolType">
-          <ProtocolTypeSelector
-            v-model="drawer.state.data.protocolType"
-            placeholder="请选择协议类型"
-            style="width: 100%"
-            @change="handleProtocolTypeChange"
-          />
-        </el-form-item>
-
-        
-
-        <el-form-item label="协议描述" prop="description">
-          <el-input
-            v-model="drawer.state.data.description"
-            type="textarea"
-            placeholder="请输入备注信息"
-            :rows="3"
-            maxlength="200"
-            show-word-limit
-          />
-        </el-form-item>
-      </el-form>
-
-      <div v-if="drawer.state.data.protocolType" class="protocol-template-section mt-6">
-        <el-divider content-position="left">
-          <span class="template-title text-[16px] font-semibold text-[#303133]">协议格式配置</span>
-        </el-divider>
-        <component
-          :is="currentTemplateComponent"
-          v-if="currentTemplateComponent"
-          v-model="drawer.state.data.protocolConfig"
-          :protocol-type="drawer.state.data.protocolType"
+    <el-form
+      ref="formRef"
+      :model="drawer.state.data"
+      :rules="formRules"
+      label-position="right"
+      label-width="100px"
+      class="space-y-4"
+    >
+      <el-form-item label="协议名称" prop="protocolName">
+        <el-input
+          v-model="drawer.state.data.protocolName"
+          placeholder="请输入协议名称"
+          maxlength="50"
+          show-word-limit
+          clearable
         />
-      </div>
+      </el-form-item>
+
+      <el-form-item label="协议类型" prop="protocolType">
+        <ProtocolTypeSelector
+          v-model="drawer.state.data.protocolType"
+          placeholder="请选择协议类型"
+          style="width: 100%"
+          @change="handleProtocolTypeChange"
+        />
+      </el-form-item>
+
+      
+
+      <el-form-item label="协议描述" prop="description">
+        <el-input
+          v-model="drawer.state.data.description"
+          type="textarea"
+          placeholder="请输入备注信息"
+          :rows="3"
+          maxlength="200"
+          show-word-limit
+        />
+      </el-form-item>
+    </el-form>
+
+    <div v-if="drawer.state.data.protocolType" class="protocol-template-section mt-6">
+      <el-divider content-position="left">
+        <span class="template-title text-[16px] font-semibold text-[#303133]">协议格式配置</span>
+      </el-divider>
+      <component
+        :is="currentTemplateComponent"
+        v-if="currentTemplateComponent"
+        v-model="drawer.state.data.protocolConfig"
+        :protocol-type="drawer.state.data.protocolType"
+      />
     </div>
   </ZxDrawer>
 </template>

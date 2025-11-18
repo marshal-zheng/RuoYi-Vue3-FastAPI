@@ -128,7 +128,7 @@ const changeZoom = (type, key) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .dag-control {
   display: inline-flex;
   gap: 6px;
