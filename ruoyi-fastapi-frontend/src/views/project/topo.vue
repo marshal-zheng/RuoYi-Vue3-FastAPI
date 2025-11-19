@@ -518,7 +518,6 @@ async function loadDeviceList() {
     const devices = response?.rows || [];
 
     if (devices.length === 0) {
-      ElMessage.warning('暂无设备数据，请先添加设备');
       operators.value = [];
       return;
     }

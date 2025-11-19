@@ -17,6 +17,7 @@
         <MessageConfigTab
           ref="messageConfigTabRef"
           :port-info="portInfo"
+          :device-mode="true"
         />
       </template>
     </ZxTabs>

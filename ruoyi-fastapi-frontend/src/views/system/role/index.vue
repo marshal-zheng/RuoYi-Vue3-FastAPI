@@ -1,177 +1,166 @@
 <template>
-  <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryRef"
-      v-show="showSearch"
-      :inline="true"
-      label-width="68px"
+  <ZxContentWrap title="角色管理">
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadRoleData"
+      :show-pagination="true"
+      :load-on-mounted="true"
+      class="zx-grid-list--page"
     >
-      <el-form-item label="角色名称" prop="roleName">
-        <el-input
-          v-model="queryParams.roleName"
-          placeholder="请输入角色名称"
-          clearable
-          style="width: 240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="权限字符" prop="roleKey">
-        <el-input
-          v-model="queryParams.roleKey"
-          placeholder="请输入权限字符"
-          clearable
-          style="width: 240px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="角色状态"
-          clearable
-          style="width: 240px"
-        >
-          <el-option
-            v-for="dict in sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="创建时间" style="width: 308px">
-        <el-date-picker
-          v-model="dateRange"
-          value-format="YYYY-MM-DD"
-          type="daterange"
-          range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-        ></el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['system:role:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:role:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:role:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['system:role:export']"
-          >导出</el-button
-        >
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <!-- 表格数据 -->
-    <el-table v-loading="loading" :data="roleList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="角色编号" prop="roleId" width="120" />
-      <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" width="150" />
-      <el-table-column label="显示顺序" prop="roleSort" width="100" />
-      <el-table-column label="状态" align="center" width="100">
-        <template #default="scope">
-          <el-switch
-            v-model="scope.row.status"
-            active-value="0"
-            inactive-value="1"
-            @change="handleStatusChange(scope.row)"
-          ></el-switch>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template #default="scope">
-          <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
-            <el-button
-              link
-              type="primary"
+      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <div class="zx-grid-form-bar">
+          <div class="zx-grid-form-bar__left">
+            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:role:add']"
+              >新增</ZxButton
+            >
+            <ZxButton
+              type="success"
               icon="Edit"
-              @click="handleUpdate(scope.row)"
+              :disabled="single"
+              @click="handleUpdate"
               v-hasPermi="['system:role:edit']"
-            ></el-button>
-          </el-tooltip>
-          <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
-            <el-button
-              link
-              type="primary"
+              >修改</ZxButton
+            >
+            <ZxButton
+              type="danger"
               icon="Delete"
-              @click="handleDelete(scope.row)"
+              :disabled="multiple"
+              @click="handleDelete"
               v-hasPermi="['system:role:remove']"
-            ></el-button>
-          </el-tooltip>
-          <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
-            <el-button
-              link
-              type="primary"
-              icon="CircleCheck"
-              @click="handleDataScope(scope.row)"
-              v-hasPermi="['system:role:edit']"
-            ></el-button>
-          </el-tooltip>
-          <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
-            <el-button
-              link
-              type="primary"
-              icon="User"
-              @click="handleAuthUser(scope.row)"
-              v-hasPermi="['system:role:edit']"
-            ></el-button>
-          </el-tooltip>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+              >删除</ZxButton
+            >
+            <ZxButton
+              type="warning"
+              icon="Download"
+              @click="() => handleExport(query)"
+              v-hasPermi="['system:role:export']"
+              >导出</ZxButton
+            >
+          </div>
+          <div class="zx-grid-form-bar__filters">
+            <el-input
+              v-model="query.roleKey"
+              placeholder="请输入权限字符"
+              clearable
+              style="width: 240px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <el-select
+              v-model="query.status"
+              placeholder="角色状态"
+              clearable
+              style="width: 160px"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            >
+              <el-option
+                v-for="dict in sys_normal_disable"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+            <el-date-picker
+              v-model="query.dateRange"
+              value-format="YYYY-MM-DD"
+              type="daterange"
+              range-separator="-"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              style="width: 240px"
+              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+            />
+          </div>
+          <div class="zx-grid-form-bar__right">
+            <ZxSearch
+              v-model="query.roleName"
+              placeholder="搜索角色名称"
+              :loading="loading"
+              search-mode="click"
+              @search="() => onSearch({ handleRefresh, updateState })"
+              @clear="() => onSearch({ handleRefresh, updateState })"
+            />
+          </div>
+        </div>
+      </template>
+      <template #table="{ grid }">
+        <el-table
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="角色编号" prop="roleId" width="120" />
+          <el-table-column
+            label="角色名称"
+            prop="roleName"
+            :show-overflow-tooltip="true"
+            width="150"
+          />
+          <el-table-column
+            label="权限字符"
+            prop="roleKey"
+            :show-overflow-tooltip="true"
+            width="150"
+          />
+          <el-table-column label="显示顺序" prop="roleSort" width="100" />
+          <el-table-column label="状态" align="center" width="100">
+            <template #default="scope">
+              <el-switch
+                v-model="scope.row.status"
+                active-value="0"
+                inactive-value="1"
+                @change="handleStatusChange(scope.row)"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" align="center" prop="createTime">
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template #default="scope">
+              <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Edit"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:role:edit']"
+                />
+              </el-tooltip>
+              <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['system:role:remove']"
+                />
+              </el-tooltip>
+              <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
+                <el-button
+                  link
+                  type="primary"
+                  icon="CircleCheck"
+                  @click="handleDataScope(scope.row)"
+                  v-hasPermi="['system:role:edit']"
+                />
+              </el-tooltip>
+              <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
+                <el-button
+                  link
+                  type="primary"
+                  icon="User"
+                  @click="handleAuthUser(scope.row)"
+                  v-hasPermi="['system:role:edit']"
+                />
+              </el-tooltip>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
 
     <!-- 添加或修改角色配置对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -289,7 +278,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </ZxContentWrap>
 </template>
 
 <script setup name="Role">
@@ -309,16 +298,11 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
-const roleList = ref([]);
 const open = ref(false);
-const loading = ref(true);
-const showSearch = ref(true);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
-const total = ref(0);
 const title = ref('');
-const dateRange = ref([]);
 const menuOptions = ref([]);
 const menuExpand = ref(false);
 const menuNodeAll = ref(false);
@@ -328,6 +312,7 @@ const deptOptions = ref([]);
 const openDataScope = ref(false);
 const menuRef = ref(null);
 const deptRef = ref(null);
+const gridListRef = ref(null);
 
 /** 数据范围选项*/
 const dataScopeOptions = ref([
@@ -340,13 +325,6 @@ const dataScopeOptions = ref([
 
 const data = reactive({
   form: {},
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-    roleName: undefined,
-    roleKey: undefined,
-    status: undefined,
-  },
   rules: {
     roleName: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
     roleKey: [{ required: true, message: '权限字符不能为空', trigger: 'blur' }],
@@ -354,27 +332,35 @@ const data = reactive({
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { form, rules } = toRefs(data);
 
-/** 查询角色列表 */
-function getList() {
-  loading.value = true;
-  listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
-    roleList.value = response.rows;
-    total.value = response.total;
-    loading.value = false;
-  });
+async function loadRoleData(params) {
+  const queryData = {
+    pageNum: params.page,
+    pageSize: params.size,
+    roleName: params.query?.roleName,
+    roleKey: params.query?.roleKey,
+    status: params.query?.status,
+  };
+  const finalParams = proxy.addDateRange(queryData, params.query?.dateRange || []);
+  try {
+    const response = await listRole(finalParams);
+    return {
+      data: response.rows || [],
+      total: response.total || 0,
+    };
+  } catch (e) {
+    return { data: [], total: 0 };
+  }
 }
-/** 搜索按钮操作 */
-function handleQuery() {
-  queryParams.value.pageNum = 1;
-  getList();
+
+function onFilterChange(field, value, { handleRefresh, updateState }) {
+  updateState({ [field]: value });
+  handleRefresh();
 }
-/** 重置按钮操作 */
-function resetQuery() {
-  dateRange.value = [];
-  proxy.resetForm('queryRef');
-  handleQuery();
+
+function onSearch({ handleRefresh }) {
+  handleRefresh();
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
@@ -385,24 +371,25 @@ function handleDelete(row) {
       return delRole(roleIds);
     })
     .then(() => {
-      getList();
+      gridListRef.value?.refresh();
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
-/** 导出按钮操作 */
-function handleExport() {
-  proxy.download(
-    'system/role/export',
+function handleExport(query) {
+  const params = proxy.addDateRange(
     {
-      ...queryParams.value,
+      roleName: query?.roleName,
+      roleKey: query?.roleKey,
+      status: query?.status,
     },
-    `role_${new Date().getTime()}.xlsx`
+    query?.dateRange || []
   );
+  proxy.download('system/role/export', params, `role_${new Date().getTime()}.xlsx`);
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.roleId);
+  ids.value = selection.map((item) => item.roleId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -440,7 +427,7 @@ function handleAuthUser(row) {
 }
 /** 查询菜单树结构 */
 function getMenuTreeselect() {
-  menuTreeselect().then(response => {
+  menuTreeselect().then((response) => {
     menuOptions.value = response.data;
   });
 }
@@ -488,14 +475,14 @@ function handleUpdate(row) {
   reset();
   const roleId = row.roleId || ids.value;
   const roleMenu = getRoleMenuTreeselect(roleId);
-  getRole(roleId).then(response => {
+  getRole(roleId).then((response) => {
     form.value = response.data;
     form.value.roleSort = Number(form.value.roleSort);
     open.value = true;
     nextTick(() => {
-      roleMenu.then(res => {
+      roleMenu.then((res) => {
         let checkedKeys = res.checkedKeys;
-        checkedKeys.forEach(v => {
+        checkedKeys.forEach((v) => {
           nextTick(() => {
             menuRef.value.setChecked(v, true, false);
           });
@@ -507,14 +494,14 @@ function handleUpdate(row) {
 }
 /** 根据角色ID查询菜单树结构 */
 function getRoleMenuTreeselect(roleId) {
-  return roleMenuTreeselect(roleId).then(response => {
+  return roleMenuTreeselect(roleId).then((response) => {
     menuOptions.value = response.menus;
     return response;
   });
 }
 /** 根据角色ID查询部门树结构 */
 function getDeptTree(roleId) {
-  return deptTreeSelect(roleId).then(response => {
+  return deptTreeSelect(roleId).then((response) => {
     deptOptions.value = response.depts;
     return response;
   });
@@ -560,21 +547,21 @@ function getMenuAllCheckedKeys() {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['roleRef'].validate(valid => {
+  proxy.$refs['roleRef'].validate((valid) => {
     if (valid) {
       if (form.value.roleId != undefined) {
         form.value.menuIds = getMenuAllCheckedKeys();
-        updateRole(form.value).then(response => {
+        updateRole(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       } else {
         form.value.menuIds = getMenuAllCheckedKeys();
-        addRole(form.value).then(response => {
+        addRole(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       }
     }
@@ -595,11 +582,11 @@ function dataScopeSelectChange(value) {
 function handleDataScope(row) {
   reset();
   const deptTreeSelect = getDeptTree(row.roleId);
-  getRole(row.roleId).then(response => {
+  getRole(row.roleId).then((response) => {
     form.value = response.data;
     openDataScope.value = true;
     nextTick(() => {
-      deptTreeSelect.then(res => {
+      deptTreeSelect.then((res) => {
         nextTick(() => {
           if (deptRef.value) {
             deptRef.value.setCheckedKeys(res.checkedKeys);
@@ -614,10 +601,10 @@ function handleDataScope(row) {
 function submitDataScope() {
   if (form.value.roleId != undefined) {
     form.value.deptIds = getDeptAllCheckedKeys();
-    dataScope(form.value).then(response => {
+    dataScope(form.value).then((response) => {
       proxy.$modal.msgSuccess('修改成功');
       openDataScope.value = false;
-      getList();
+      gridListRef.value?.refresh();
     });
   }
 }
@@ -626,6 +613,4 @@ function cancelDataScope() {
   openDataScope.value = false;
   reset();
 }
-
-getList();
 </script>

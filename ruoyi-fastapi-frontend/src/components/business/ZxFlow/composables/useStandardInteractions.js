@@ -169,20 +169,16 @@ export function useStandardInteractions(graph, options = {}) {
 
     // 节点点击选择逻辑
     g.on('node:click', ({ e, node }) => {
-      console.log('useStandardInteractions - node:click 被触发:', node?.id)
       // X6 在 detail >= 2 时代表同一节点连续点击；保持节点已有选中状态并提前返回，
       // 避免再次执行 cleanSelection/select 导致节点重新渲染，从而丢失 dblclick 判定。
       if (e?.detail >= 2) {
-        console.log('useStandardInteractions - 检测到双击，跳过重选逻辑')
         return
       }
       if (isCtrlKeyPressed(e)) {
         // 交给 Selection 插件处理多选/反选逻辑
-        console.log('useStandardInteractions - Ctrl键被按下，交给Selection插件')
         return
       }
       // 普通点击：单选
-      console.log('useStandardInteractions - 普通点击，执行单选')
       g.cleanSelection()
       g.select(node)
     })

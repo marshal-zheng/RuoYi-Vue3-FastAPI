@@ -168,6 +168,11 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
+  // 设备模式：在设备侧使用时，发送方/接收方应保持为空且不自动填充
+  deviceMode: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['update:modelValue']);
@@ -447,6 +452,12 @@ function handleImportConfirm(data) {
   // 如果有表头信息，也更新表头
   if (data.header) {
     Object.assign(messageHeader, data.header);
+    console.log('messageHeader', messageHeader)
+    // 设备模式下强制清空发送方/接收方
+    if (props.deviceMode) {
+      messageHeader.sender = '';
+      messageHeader.receiver = '';
+    }
   }
   syncConfigRows();
 }
@@ -455,8 +466,14 @@ function handleProtocolChange(entity) {
   if (!entity) return;
   selectedProtocolId.value = entity.protocolId ?? selectedProtocolId.value;
   const cfg = entity.protocolConfig || {};
-  messageHeader.sender = cfg.sender || '';
-  messageHeader.receiver = cfg.receiver || '';
+  if (props.deviceMode) {
+    // 设备模式下不使用协议中的发送方/接收方
+    messageHeader.sender = '';
+    messageHeader.receiver = '';
+  } else {
+    messageHeader.sender = cfg.sender || '';
+    messageHeader.receiver = cfg.receiver || '';
+  }
   messageHeader.frequency = cfg.frequency || '';
   messageHeader.baudRate = cfg.speed || '';
   messageHeader.method = cfg.method || '';
@@ -539,8 +556,13 @@ function handleDeleteSelected() {
 
 // 获取表单数据
 function getFormData() {
+  const header = { ...messageHeader };
+  if (props.deviceMode) {
+    header.sender = '';
+    header.receiver = '';
+  }
   return {
-    header: { ...messageHeader },
+    header,
     fields: messageFields.value,
     protocolId: selectedProtocolId.value,
   };
@@ -549,9 +571,11 @@ function getFormData() {
 // 验证表单
 async function validate() {
   // 简单验证
-  if (!messageHeader.sender) {
-    ElMessage.error('请输入发送方');
-    return false;
+  if (!props.deviceMode) {
+    if (!messageHeader.sender) {
+      ElMessage.error('请输入发送方');
+      return false;
+    }
   }
   // if (!messageHeader.receiver) {
   //   ElMessage.error('请输入接收方')
@@ -577,24 +601,30 @@ function initializeData() {
     messageFields.value = getDefaultFields();
   }
 
-  const currentDeviceName = props.portInfo.deviceName || '';
-  const peerDeviceName = props.portInfo.peerDeviceName || '';
-  const direction = props.portInfo.direction || 'forward';
+  // 设备模式下，发送方/接收方保持为空，不进行任何自动推断
+  if (!props.deviceMode) {
+    const currentDeviceName = props.portInfo.deviceName || '';
+    const peerDeviceName = props.portInfo.peerDeviceName || '';
+    const direction = props.portInfo.direction || 'forward';
 
-  const expectedSender =
-    direction === 'reverse'
-      ? peerDeviceName || currentDeviceName
-      : currentDeviceName || peerDeviceName;
-  const expectedReceiver =
-    direction === 'reverse'
-      ? currentDeviceName || peerDeviceName
-      : peerDeviceName || currentDeviceName;
+    const expectedSender =
+      direction === 'reverse'
+        ? peerDeviceName || currentDeviceName
+        : currentDeviceName || peerDeviceName;
+    const expectedReceiver =
+      direction === 'reverse'
+        ? currentDeviceName || peerDeviceName
+        : peerDeviceName || currentDeviceName;
 
-  if (!messageHeader.sender && expectedSender) {
-    messageHeader.sender = expectedSender;
-  }
-  if (!messageHeader.receiver && expectedReceiver) {
-    messageHeader.receiver = expectedReceiver;
+    if (!messageHeader.sender && expectedSender) {
+      messageHeader.sender = expectedSender;
+    }
+    if (!messageHeader.receiver && expectedReceiver) {
+      messageHeader.receiver = expectedReceiver;
+    }
+  } else {
+    messageHeader.sender = '';
+    messageHeader.receiver = '';
   }
 
   syncConfigRows();

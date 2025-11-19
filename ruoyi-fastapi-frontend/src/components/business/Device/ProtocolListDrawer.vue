@@ -176,18 +176,8 @@ const groupedPorts = computed(() => {
 
 // 监听数据变化，打印调试信息
 watch(() => props.devicePorts, (newPorts) => {
-  console.log('=== 协议列表Drawer接收到的端口数据 ===')
-  console.log('端口数量:', newPorts?.length || 0)
   if (newPorts && newPorts.length > 0) {
     newPorts.forEach((port, index) => {
-      console.log(`端口 ${index + 1}:`, {
-        id: port.id || port.interfaceId,
-        name: port.interfaceName,
-        type: port.interfaceType,
-        messageConfig: port.messageConfig,
-        hasFields: port.messageConfig?.fields?.length || 0,
-        header: port.messageConfig?.header
-      })
     })
   }
 }, { immediate: true, deep: true })
