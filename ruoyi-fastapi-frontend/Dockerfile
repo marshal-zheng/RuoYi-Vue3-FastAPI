@@ -1,13 +1,13 @@
 # 构建阶段
 FROM node:20-alpine AS builder
 
-# 配置 Alpine 国内镜像源（加速系统依赖安装）
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-
 WORKDIR /app
 
 # 复制 package.json 和 yarn 配置文件
 COPY package.json .npmrc .yarnrc.yml ./
+
+# 配置 Alpine 国内镜像源（加速系统依赖安装）
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 # 配置 npm 国内镜像（淘宝源）
 RUN npm config set registry https://registry.npmmirror.com/
@@ -15,7 +15,7 @@ RUN npm config set registry https://registry.npmmirror.com/
 RUN corepack enable
 
 # 安装依赖（使用国内源加速）
-RUN yarn install
+RUN yarn install --registry https://registry.npmmirror.com/
 
 # 复制项目文件
 COPY . .
