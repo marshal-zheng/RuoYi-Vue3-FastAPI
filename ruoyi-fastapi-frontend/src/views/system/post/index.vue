@@ -1,141 +1,126 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="岗位编码" prop="postCode">
-        <el-input
-          v-model="queryParams.postCode"
-          placeholder="请输入岗位编码"
-          clearable
-          style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="岗位名称" prop="postName">
-        <el-input
-          v-model="queryParams.postName"
-          placeholder="请输入岗位名称"
-          clearable
-          style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="岗位状态"
-          clearable
-          style="width: 200px"
+  <ZxContentWrap title="岗位管理">
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadPostData"
+      :show-pagination="true"
+      :load-on-mounted="true"
+      class="zx-grid-list--page"
+    >
+      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <div class="zx-grid-form-bar">
+          <div class="zx-grid-form-bar__left">
+            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:post:add']"
+              >新增</ZxButton
+            >
+            <ZxButton
+              type="success"
+              icon="Edit"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['system:post:edit']"
+              >修改</ZxButton
+            >
+            <ZxButton
+              type="danger"
+              icon="Delete"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['system:post:remove']"
+              >删除</ZxButton
+            >
+            <ZxButton
+              type="warning"
+              icon="Download"
+              @click="() => handleExport(query)"
+              v-hasPermi="['system:post:export']"
+              >导出</ZxButton
+            >
+          </div>
+          <div class="zx-grid-form-bar__filters">
+            <el-input
+              v-model="query.postCode"
+              placeholder="请输入岗位编码"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <el-select
+              v-model="query.status"
+              placeholder="岗位状态"
+              clearable
+              style="width: 200px"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            >
+              <el-option
+                v-for="dict in sys_normal_disable"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </div>
+          <div class="zx-grid-form-bar__right">
+            <ZxSearch
+              v-model="query.postName"
+              placeholder="搜索岗位名称"
+              :loading="loading"
+              search-mode="click"
+              @search="() => onSearch({ handleRefresh, updateState })"
+              @clear="() => onSearch({ handleRefresh, updateState })"
+            />
+          </div>
+        </div>
+      </template>
+      <template #table="{ grid }">
+        <el-table
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          @selection-change="handleSelectionChange"
         >
-          <el-option
-            v-for="dict in sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['system:post:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="Edit"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:post:edit']"
-          >修改</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="Delete"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:post:remove']"
-          >删除</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['system:post:export']"
-          >导出</el-button
-        >
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table v-loading="loading" :data="postList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="岗位编号" align="center" prop="postId" />
-      <el-table-column label="岗位编码" align="center" prop="postCode" />
-      <el-table-column label="岗位名称" align="center" prop="postName" />
-      <el-table-column label="岗位排序" align="center" prop="postSort" />
-      <el-table-column label="状态" align="center" prop="status">
-        <template #default="scope">
-          <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        width="180"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            icon="Edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:post:edit']"
-            >修改</el-button
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="岗位编号" align="center" prop="postId" />
+          <el-table-column label="岗位编码" align="center" prop="postCode" />
+          <el-table-column label="岗位名称" align="center" prop="postName" />
+          <el-table-column label="岗位排序" align="center" prop="postSort" />
+          <el-table-column label="状态" align="center" prop="status">
+            <template #default="scope">
+              <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width="180"
+            align="center"
+            class-name="small-padding fixed-width"
           >
-          <el-button
-            link
-            type="primary"
-            icon="Delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:post:remove']"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      v-model:page="queryParams.pageNum"
-      v-model:limit="queryParams.pageSize"
-      @pagination="getList"
-    />
+            <template #default="scope">
+              <el-button
+                link
+                type="primary"
+                icon="Edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:post:edit']"
+                >修改</el-button
+              >
+              <el-button
+                link
+                type="primary"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:post:remove']"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
 
     <!-- 添加或修改岗位对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
@@ -167,7 +152,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </ZxContentWrap>
 </template>
 
 <script setup name="Post">
@@ -176,25 +161,15 @@ import { listPost, addPost, delPost, getPost, updatePost } from '@/api/system/po
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
-const postList = ref([]);
 const open = ref(false);
-const loading = ref(true);
-const showSearch = ref(true);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
-const total = ref(0);
 const title = ref('');
+const gridListRef = ref(null);
 
 const data = reactive({
   form: {},
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-    postCode: undefined,
-    postName: undefined,
-    status: undefined,
-  },
   rules: {
     postName: [{ required: true, message: '岗位名称不能为空', trigger: 'blur' }],
     postCode: [{ required: true, message: '岗位编码不能为空', trigger: 'blur' }],
@@ -202,16 +177,31 @@ const data = reactive({
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { form, rules } = toRefs(data);
 
-/** 查询岗位列表 */
-function getList() {
-  loading.value = true;
-  listPost(queryParams.value).then(response => {
-    postList.value = response.rows;
-    total.value = response.total;
-    loading.value = false;
-  });
+async function loadPostData(params) {
+  const queryData = {
+    pageNum: params.page,
+    pageSize: params.size,
+    postCode: params.query?.postCode,
+    postName: params.query?.postName,
+    status: params.query?.status,
+  };
+  try {
+    const response = await listPost(queryData);
+    return { data: response.rows || [], total: response.total || 0 };
+  } catch (e) {
+    return { data: [], total: 0 };
+  }
+}
+
+function onFilterChange(field, value, { handleRefresh, updateState }) {
+  updateState({ [field]: value });
+  handleRefresh();
+}
+
+function onSearch({ handleRefresh }) {
+  handleRefresh();
 }
 /** 取消按钮 */
 function cancel() {
@@ -230,19 +220,9 @@ function reset() {
   };
   proxy.resetForm('postRef');
 }
-/** 搜索按钮操作 */
-function handleQuery() {
-  queryParams.value.pageNum = 1;
-  getList();
-}
-/** 重置按钮操作 */
-function resetQuery() {
-  proxy.resetForm('queryRef');
-  handleQuery();
-}
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.postId);
+  ids.value = selection.map((item) => item.postId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -256,7 +236,7 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const postId = row.postId || ids.value;
-  getPost(postId).then(response => {
+  getPost(postId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改岗位';
@@ -264,19 +244,19 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['postRef'].validate(valid => {
+  proxy.$refs['postRef'].validate((valid) => {
     if (valid) {
       if (form.value.postId != undefined) {
-        updatePost(form.value).then(response => {
+        updatePost(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       } else {
-        addPost(form.value).then(response => {
+        addPost(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       }
     }
@@ -291,21 +271,18 @@ function handleDelete(row) {
       return delPost(postIds);
     })
     .then(() => {
-      getList();
+      gridListRef.value?.refresh();
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
 /** 导出按钮操作 */
-function handleExport() {
-  proxy.download(
-    'system/post/export',
-    {
-      ...queryParams.value,
-    },
-    `post_${new Date().getTime()}.xlsx`
-  );
+function handleExport(query) {
+  const params = {
+    postCode: query?.postCode,
+    postName: query?.postName,
+    status: query?.status,
+  };
+  proxy.download('system/post/export', params, `post_${new Date().getTime()}.xlsx`);
 }
-
-getList();
 </script>

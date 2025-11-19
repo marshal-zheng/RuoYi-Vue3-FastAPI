@@ -1,127 +1,133 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="菜单名称" prop="menuName">
-        <el-input
-          v-model="queryParams.menuName"
-          placeholder="请输入菜单名称"
-          clearable
-          style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="菜单状态"
-          clearable
-          style="width: 200px"
-        >
-          <el-option
-            v-for="dict in sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['system:menu:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="info" plain icon="Sort" @click="toggleExpandAll">展开/折叠</el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="menuList"
-      row-key="menuId"
-      :default-expand-all="isExpandAll"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+  <ZxContentWrap title="菜单管理">
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadMenuData"
+      :show-pagination="false"
+      :load-on-mounted="true"
+      class="zx-grid-list--page"
     >
-      <el-table-column
-        prop="menuName"
-        label="菜单名称"
-        :show-overflow-tooltip="true"
-        width="160"
-      ></el-table-column>
-      <el-table-column prop="icon" label="图标" align="center" width="100">
-        <template #default="scope">
-          <svg-icon :icon-class="scope.row.icon" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
-      <el-table-column
-        prop="perms"
-        label="权限标识"
-        :show-overflow-tooltip="true"
-      ></el-table-column>
-      <el-table-column
-        prop="component"
-        label="组件路径"
-        :show-overflow-tooltip="true"
-      ></el-table-column>
-      <el-table-column prop="status" label="状态" width="80">
-        <template #default="scope">
-          <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" width="160" prop="createTime">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        align="center"
-        width="210"
-        class-name="small-padding fixed-width"
-      >
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            icon="Edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:menu:edit']"
-            >修改</el-button
+      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <div class="zx-grid-form-bar">
+          <div class="zx-grid-form-bar__left">
+            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:menu:add']"
+              >新增</ZxButton
+            >
+            <ZxButton type="info" icon="Sort" @click="toggleExpandAll">展开/折叠</ZxButton>
+          </div>
+          <div class="zx-grid-form-bar__filters">
+            <el-input
+              v-model="query.menuName"
+              placeholder="请输入菜单名称"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <el-select
+              v-model="query.status"
+              placeholder="菜单状态"
+              clearable
+              style="width: 200px"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            >
+              <el-option
+                v-for="dict in sys_normal_disable"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </div>
+          <div class="zx-grid-form-bar__right">
+            <ZxSearch
+              v-model="query.menuName"
+              placeholder="搜索菜单名称"
+              :loading="loading"
+              search-mode="click"
+              @search="() => onSearch({ handleRefresh, updateState })"
+              @clear="() => onSearch({ handleRefresh, updateState })"
+            />
+          </div>
+        </div>
+      </template>
+
+      <template #table="{ grid }">
+        <el-table
+          v-if="refreshTable"
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          row-key="menuId"
+          :default-expand-all="isExpandAll"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        >
+          <el-table-column
+            prop="menuName"
+            label="菜单名称"
+            :show-overflow-tooltip="true"
+            width="160"
+          ></el-table-column>
+          <el-table-column prop="icon" label="图标" align="center" width="100">
+            <template #default="scope">
+              <svg-icon :icon-class="scope.row.icon" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
+          <el-table-column
+            prop="perms"
+            label="权限标识"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+          <el-table-column
+            prop="component"
+            label="组件路径"
+            :show-overflow-tooltip="true"
+          ></el-table-column>
+          <el-table-column prop="status" label="状态" width="80">
+            <template #default="scope">
+              <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" align="center" width="160" prop="createTime">
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            align="center"
+            width="210"
+            class-name="small-padding fixed-width"
           >
-          <el-button
-            link
-            type="primary"
-            icon="Plus"
-            @click="handleAdd(scope.row)"
-            v-hasPermi="['system:menu:add']"
-            >新增</el-button
-          >
-          <el-button
-            link
-            type="primary"
-            icon="Delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:menu:remove']"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+            <template #default="scope">
+              <el-button
+                link
+                type="primary"
+                icon="Edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:menu:edit']"
+                >修改</el-button
+              >
+              <el-button
+                link
+                type="primary"
+                icon="Plus"
+                @click="handleAdd(scope.row)"
+                v-hasPermi="['system:menu:add']"
+                >新增</el-button
+              >
+              <el-button
+                link
+                type="primary"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:menu:remove']"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
 
     <!-- 添加或修改菜单对话框 -->
     <el-dialog :title="title" v-model="open" width="680px" append-to-body>
@@ -349,7 +355,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </ZxContentWrap>
 </template>
 
 <script setup name="Menu">
@@ -360,22 +366,16 @@ import IconSelect from '@/components/IconSelect';
 const { proxy } = getCurrentInstance();
 const { sys_show_hide, sys_normal_disable } = proxy.useDict('sys_show_hide', 'sys_normal_disable');
 
-const menuList = ref([]);
 const open = ref(false);
-const loading = ref(true);
-const showSearch = ref(true);
 const title = ref('');
 const menuOptions = ref([]);
 const isExpandAll = ref(false);
 const refreshTable = ref(true);
 const iconSelectRef = ref(null);
+const gridListRef = ref(null);
 
 const data = reactive({
   form: {},
-  queryParams: {
-    menuName: undefined,
-    visible: undefined,
-  },
   rules: {
     menuName: [{ required: true, message: '菜单名称不能为空', trigger: 'blur' }],
     orderNum: [{ required: true, message: '菜单顺序不能为空', trigger: 'blur' }],
@@ -383,20 +383,32 @@ const data = reactive({
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { form, rules } = toRefs(data);
 
-/** 查询菜单列表 */
-function getList() {
-  loading.value = true;
-  listMenu(queryParams.value).then(response => {
-    menuList.value = proxy.handleTree(response.data, 'menuId');
-    loading.value = false;
-  });
+async function loadMenuData(params) {
+  const query = {
+    menuName: params.query?.menuName,
+    status: params.query?.status,
+  };
+  try {
+    const response = await listMenu(query);
+    const tree = proxy.handleTree(response.data, 'menuId');
+    return { data: tree || [], total: 0 };
+  } catch (e) {
+    return { data: [], total: 0 };
+  }
+}
+function onFilterChange(field, value, { handleRefresh, updateState }) {
+  updateState({ [field]: value });
+  handleRefresh();
+}
+function onSearch({ handleRefresh }) {
+  handleRefresh();
 }
 /** 查询菜单下拉树结构 */
 function getTreeselect() {
   menuOptions.value = [];
-  listMenu().then(response => {
+  listMenu().then((response) => {
     const menu = { menuId: 0, menuName: '主类目', children: [] };
     menu.children = proxy.handleTree(response.data, 'menuId');
     menuOptions.value.push(menu);
@@ -432,15 +444,6 @@ function showSelectIcon() {
 function selected(name) {
   form.value.icon = name;
 }
-/** 搜索按钮操作 */
-function handleQuery() {
-  getList();
-}
-/** 重置按钮操作 */
-function resetQuery() {
-  proxy.resetForm('queryRef');
-  handleQuery();
-}
 /** 新增按钮操作 */
 function handleAdd(row) {
   reset();
@@ -465,7 +468,7 @@ function toggleExpandAll() {
 async function handleUpdate(row) {
   reset();
   await getTreeselect();
-  getMenu(row.menuId).then(response => {
+  getMenu(row.menuId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改菜单';
@@ -473,19 +476,19 @@ async function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['menuRef'].validate(valid => {
+  proxy.$refs['menuRef'].validate((valid) => {
     if (valid) {
       if (form.value.menuId != undefined) {
-        updateMenu(form.value).then(response => {
+        updateMenu(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       } else {
-        addMenu(form.value).then(response => {
+        addMenu(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       }
     }
@@ -499,11 +502,9 @@ function handleDelete(row) {
       return delMenu(row.menuId);
     })
     .then(() => {
-      getList();
+      gridListRef.value?.refresh();
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
-
-getList();
 </script>

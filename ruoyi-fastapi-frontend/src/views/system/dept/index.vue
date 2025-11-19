@@ -1,105 +1,110 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="部门名称" prop="deptName">
-        <el-input
-          v-model="queryParams.deptName"
-          placeholder="请输入部门名称"
-          clearable
-          style="width: 200px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select
-          v-model="queryParams.status"
-          placeholder="部门状态"
-          clearable
-          style="width: 200px"
-        >
-          <el-option
-            v-for="dict in sys_normal_disable"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="Plus"
-          @click="handleAdd"
-          v-hasPermi="['system:dept:add']"
-          >新增</el-button
-        >
-      </el-col>
-      <el-col :span="1.5">
-        <el-button type="info" plain icon="Sort" @click="toggleExpandAll">展开/折叠</el-button>
-      </el-col>
-      <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
-
-    <el-table
-      v-if="refreshTable"
-      v-loading="loading"
-      :data="deptList"
-      row-key="deptId"
-      :default-expand-all="isExpandAll"
-      :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+  <ZxContentWrap title="部门管理">
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadDeptData"
+      :show-pagination="false"
+      :load-on-mounted="true"
+      class="zx-grid-list--page"
     >
-      <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-      <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
-      <el-table-column prop="status" label="状态" width="100">
-        <template #default="scope">
-          <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="200">
-        <template #default="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template #default="scope">
-          <el-button
-            link
-            type="primary"
-            icon="Edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:dept:edit']"
-            >修改</el-button
-          >
-          <el-button
-            link
-            type="primary"
-            icon="Plus"
-            @click="handleAdd(scope.row)"
-            v-hasPermi="['system:dept:add']"
-            >新增</el-button
-          >
-          <el-button
-            v-if="scope.row.parentId != 0"
-            link
-            type="primary"
-            icon="Delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:dept:remove']"
-            >删除</el-button
-          >
-        </template>
-      </el-table-column>
-    </el-table>
+      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <div class="zx-grid-form-bar">
+          <div class="zx-grid-form-bar__left">
+            <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:dept:add']"
+              >新增</ZxButton
+            >
+            <ZxButton type="info" icon="Sort" @click="toggleExpandAll">展开/折叠</ZxButton>
+          </div>
+          <div class="zx-grid-form-bar__filters">
+            <el-input
+              v-model="query.deptName"
+              placeholder="请输入部门名称"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <el-select
+              v-model="query.status"
+              placeholder="部门状态"
+              clearable
+              style="width: 200px"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            >
+              <el-option
+                v-for="dict in sys_normal_disable"
+                :key="dict.value"
+                :label="dict.label"
+                :value="dict.value"
+              />
+            </el-select>
+          </div>
+          <div class="zx-grid-form-bar__right">
+            <ZxSearch
+              v-model="query.deptName"
+              placeholder="搜索部门名称"
+              :loading="loading"
+              search-mode="click"
+              @search="() => onSearch({ handleRefresh, updateState })"
+              @clear="() => onSearch({ handleRefresh, updateState })"
+            />
+          </div>
+        </div>
+      </template>
 
-    <!-- 添加或修改部门对话框 -->
+      <template #table="{ grid }">
+        <el-table
+          v-if="refreshTable"
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          row-key="deptId"
+          :default-expand-all="isExpandAll"
+          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+        >
+          <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
+          <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
+          <el-table-column prop="status" label="状态" width="100">
+            <template #default="scope">
+              <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template #default="scope">
+              <el-button
+                link
+                type="primary"
+                icon="Edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['system:dept:edit']"
+                >修改</el-button
+              >
+              <el-button
+                link
+                type="primary"
+                icon="Plus"
+                @click="handleAdd(scope.row)"
+                v-hasPermi="['system:dept:add']"
+                >新增</el-button
+              >
+              <el-button
+                v-if="scope.row.parentId != 0"
+                link
+                type="primary"
+                icon="Delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['system:dept:remove']"
+                >删除</el-button
+              >
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
+
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
       <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
@@ -161,7 +166,7 @@
         </div>
       </template>
     </el-dialog>
-  </div>
+  </ZxContentWrap>
 </template>
 
 <script setup name="Dept">
@@ -177,21 +182,16 @@ import {
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
-const deptList = ref([]);
 const open = ref(false);
-const loading = ref(true);
 const showSearch = ref(true);
 const title = ref('');
 const deptOptions = ref([]);
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
+const gridListRef = ref(null);
 
 const data = reactive({
   form: {},
-  queryParams: {
-    deptName: undefined,
-    status: undefined,
-  },
   rules: {
     parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
     deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
@@ -203,17 +203,30 @@ const data = reactive({
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { form, rules } = toRefs(data);
 
-/** 查询部门列表 */
-function getList() {
-  loading.value = true;
-  listDept(queryParams.value).then(response => {
-    deptList.value = proxy.handleTree(response.data, 'deptId');
-    loading.value = false;
-  });
+async function loadDeptData(params) {
+  const query = {
+    deptName: params.query?.deptName,
+    status: params.query?.status,
+  };
+  try {
+    const response = await listDept(query);
+    const tree = proxy.handleTree(response.data, 'deptId');
+    return { data: tree || [], total: 0 };
+  } catch (e) {
+    return { data: [], total: 0 };
+  }
 }
-/** 取消按钮 */
+
+function onFilterChange(field, value, { handleRefresh, updateState }) {
+  updateState({ [field]: value });
+  handleRefresh();
+}
+
+function onSearch({ handleRefresh }) {
+  handleRefresh();
+}
 function cancel() {
   open.value = false;
   reset();
@@ -232,19 +245,10 @@ function reset() {
   };
   proxy.resetForm('deptRef');
 }
-/** 搜索按钮操作 */
-function handleQuery() {
-  getList();
-}
-/** 重置按钮操作 */
-function resetQuery() {
-  proxy.resetForm('queryRef');
-  handleQuery();
-}
 /** 新增按钮操作 */
 function handleAdd(row) {
   reset();
-  listDept().then(response => {
+  listDept().then((response) => {
     deptOptions.value = proxy.handleTree(response.data, 'deptId');
   });
   if (row != undefined) {
@@ -264,10 +268,10 @@ function toggleExpandAll() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
   reset();
-  listDeptExcludeChild(row.deptId).then(response => {
+  listDeptExcludeChild(row.deptId).then((response) => {
     deptOptions.value = proxy.handleTree(response.data, 'deptId');
   });
-  getDept(row.deptId).then(response => {
+  getDept(row.deptId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改部门';
@@ -275,19 +279,19 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['deptRef'].validate(valid => {
+  proxy.$refs['deptRef'].validate((valid) => {
     if (valid) {
       if (form.value.deptId != undefined) {
-        updateDept(form.value).then(response => {
+        updateDept(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       } else {
-        addDept(form.value).then(response => {
+        addDept(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
-          getList();
+          gridListRef.value?.refresh();
         });
       }
     }
@@ -301,11 +305,9 @@ function handleDelete(row) {
       return delDept(row.deptId);
     })
     .then(() => {
-      getList();
+      gridListRef.value?.refresh();
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
-
-getList();
 </script>
