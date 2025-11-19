@@ -349,7 +349,7 @@ function handleCommand(command) {
 /* 激活状态 */
 .tags-view-item.is-active {
   color: v-bind(theme) !important;
-  background-color: #ffffff !important;
+  /* background-color: #ffffff !important; */
 }
 
 .tags-view-item.is-active::after {
