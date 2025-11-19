@@ -1,18 +1,25 @@
 <template>
   <ZxContentWrap>
-    <template #header-right>
+    <!-- <template #header-right>
       <ZxButton
         type="warning"
         icon="Download"
         @click="() => operlogGridRef?.exportCurrent?.()"
         v-hasPermi="['monitor:operlog:export']"
       >导出</ZxButton>
-    </template>
+    </template> -->
     <OperlogGrid 
       ref="operlogGridRef" 
       module="工程管理"
       @selection-change="onSelectionChange" 
-    ><template #filters><span></span></template></OperlogGrid>
+    ><template #filters>
+      <ZxButton
+        type="warning"
+        icon="Download"
+        @click="() => operlogGridRef?.exportCurrent?.()"
+        v-hasPermi="['monitor:operlog:export']"
+      >导出</ZxButton>
+    </template></OperlogGrid>
   </ZxContentWrap>
 </template>
 
