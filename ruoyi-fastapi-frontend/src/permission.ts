@@ -39,10 +39,24 @@ const isWhiteList = (path: string): boolean => {
   return whiteList.some(pattern => isPathMatch(pattern, path));
 };
 
+const resolveLandingRedirect = (path: string, firstMenuPath: string): string => {
+  if (!firstMenuPath) {
+    return '';
+  }
+  if (path === '/' || path === '') {
+    return firstMenuPath;
+  }
+  if (path === '/index' && firstMenuPath !== '/index') {
+    return firstMenuPath;
+  }
+  return '';
+};
+
 router.beforeEach(
   (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     NProgress.start();
     if (getToken()) {
+      const permissionStore = usePermissionStore();
       to.meta.title && useSettingsStore().setTitle(to.meta.title);
       /* has token*/
       if (to.path === '/login') {
@@ -58,17 +72,20 @@ router.beforeEach(
             .getInfo()
             .then(() => {
               isRelogin.show = false;
-              usePermissionStore()
-                .generateRoutes()
-                .then((accessRoutes: DynamicRoute[]) => {
-                  // 根据roles权限生成可访问的路由表
-                  accessRoutes.forEach((route: DynamicRoute) => {
-                    if (!isHttp(route.path)) {
-                      router.addRoute(route as RouteRecordRaw); // 动态添加可访问路由表
-                    }
-                  });
-                  next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
+              permissionStore.generateRoutes().then((accessRoutes: DynamicRoute[]) => {
+                // 根据roles权限生成可访问的路由表
+                accessRoutes.forEach((route: DynamicRoute) => {
+                  if (!isHttp(route.path)) {
+                    router.addRoute(route as RouteRecordRaw); // 动态添加可访问路由表
+                  }
                 });
+                const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
+                if (redirectPath) {
+                  next({ path: redirectPath, replace: true });
+                } else {
+                  next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
+                }
+              });
             })
             .catch((err: Error) => {
               useUserStore()
@@ -79,7 +96,13 @@ router.beforeEach(
                 });
             });
         } else {
-          next();
+          const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
+          if (redirectPath) {
+            next({ path: redirectPath, replace: true });
+            NProgress.done();
+          } else {
+            next();
+          }
         }
       }
     } else {
