@@ -33,9 +33,9 @@
                     auto-complete="off"
                     placeholder="账号"
                   >
-                    <!-- <template #prefix
-                      ><svg-icon icon-class="user" class="el-input__icon input-icon"
-                    /></template> -->
+                    <template #prefix>
+                      <ZxIcon icon="mdi:account" :size="20" class="el-input__icon input-icon" />
+                    </template>
                   </el-input>
                 </el-form-item>
 
@@ -47,9 +47,9 @@
                     placeholder="密码"
                     @keyup.enter="handleLogin"
                   >
-                    <!-- <template #prefix
-                      ><svg-icon icon-class="password" class="el-input__icon input-icon"
-                    /></template> -->
+                    <template #prefix>
+                      <ZxIcon icon="mdi:lock-outline" :size="20" class="el-input__icon input-icon" />
+                    </template>
                   </el-input>
                 </el-form-item>
 
@@ -61,9 +61,9 @@
                       placeholder="验证码"
                       @keyup.enter="handleLogin"
                     >
-                      <!-- <template #prefix
-                        ><svg-icon icon-class="validCode" class="el-input__icon input-icon"
-                      /></template> -->
+                      <template #prefix>
+                        <ZxIcon icon="mdi:shield-check-outline" :size="20" class="el-input__icon input-icon" />
+                      </template>
                     </el-input>
                     <div class="cursor-pointer">
                       <img :src="codeUrl" @click="getCode" />

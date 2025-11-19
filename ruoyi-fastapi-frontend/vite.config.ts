@@ -50,6 +50,9 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       }
     }
     },
+    optimizeDeps: {
+      include: ['@iconify/iconify']
+    },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file
     css: {
       postcss: './postcss.config.js'

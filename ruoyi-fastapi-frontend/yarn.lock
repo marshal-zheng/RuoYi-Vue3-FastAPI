@@ -1248,6 +1248,33 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@iconify/iconify@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@iconify/iconify@npm:3.1.1"
+  dependencies:
+    "@iconify/types": "npm:^2.0.0"
+  checksum: 10c0/49fa172b44fc3808c2bb456fba3fd32669467162ce47c0f35f6e5427d30ed45e06228bd9b92f793941ecd6e723ad75e6c97226087600ad5182063f6a9a6c3cd7
+  languageName: node
+  linkType: hard
+
+"@iconify/types@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@iconify/types@npm:2.0.0"
+  checksum: 10c0/65a3be43500c7ccacf360e136d00e1717f050b7b91da644e94370256ac66f582d59212bdb30d00788aab4fc078262e91c95b805d1808d654b72f6d2072a7e4b2
+  languageName: node
+  linkType: hard
+
+"@iconify/vue@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "@iconify/vue@npm:4.3.0"
+  dependencies:
+    "@iconify/types": "npm:^2.0.0"
+  peerDependencies:
+    vue: ">=3"
+  checksum: 10c0/f4200f8aa9bf2986c1055a121adaeea5bda5ac1edc7a8d51c73599bcfac90af8d73217e4193f1866139d2ec03c31f6b233e4e9229434c3de543df6fc0b85da70
+  languageName: node
+  linkType: hard
+
 "@isaacs/balanced-match@npm:^4.0.1":
   version: 4.0.1
   resolution: "@isaacs/balanced-match@npm:4.0.1"
@@ -11189,6 +11216,8 @@ __metadata:
     "@antv/x6-vue-shape": "npm:^2.1.2"
     "@element-plus/icons-vue": "npm:2.3.1"
     "@eslint/js": "npm:^9.34.0"
+    "@iconify/iconify": "npm:^3.1.1"
+    "@iconify/vue": "npm:^4.3.0"
     "@tailwindcss/postcss": "npm:^4.1.17"
     "@tailwindcss/vite": "npm:^4.1.12"
     "@testing-library/jest-dom": "npm:^6.8.0"
