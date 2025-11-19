@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="部门管理">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadDeptData"

@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="菜单管理">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadMenuData"

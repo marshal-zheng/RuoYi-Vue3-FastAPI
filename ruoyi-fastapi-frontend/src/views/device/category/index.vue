@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="设备分类">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadCategoryData"

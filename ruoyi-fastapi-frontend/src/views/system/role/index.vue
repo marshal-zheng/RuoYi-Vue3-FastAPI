@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="角色管理">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadRoleData"

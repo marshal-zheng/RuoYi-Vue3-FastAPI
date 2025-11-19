@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="字典类型">
+  <ZxContentWrap>
     <template #header-right>
       <ZxButton
         type="primary"

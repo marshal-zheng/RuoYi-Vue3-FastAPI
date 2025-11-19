@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="协议管理">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProtocolData"

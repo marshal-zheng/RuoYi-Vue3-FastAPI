@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="操作日志">
+  <ZxContentWrap>
     <template #header-right>
       <ZxButton
         type="danger"

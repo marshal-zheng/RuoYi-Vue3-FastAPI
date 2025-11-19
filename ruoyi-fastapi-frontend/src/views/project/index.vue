@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="工程列表">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProjectData"

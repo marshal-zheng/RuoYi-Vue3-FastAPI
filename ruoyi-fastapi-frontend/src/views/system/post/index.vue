@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="岗位管理">
+  <ZxContentWrap>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadPostData"

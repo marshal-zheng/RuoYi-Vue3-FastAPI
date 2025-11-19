@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="用户列表">
+  <ZxContentWrap>
     <el-row :gutter="20">
       <splitpanes :horizontal="appStore.device === 'mobile'" class="default-theme">
         <!--部门数据-->
