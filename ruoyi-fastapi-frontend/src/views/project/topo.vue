@@ -43,6 +43,34 @@
       </template>
     </XflowDAG>
 
+    <!-- 仿真状态面板 -->
+    <zx-floating-panel
+      v-if="simulationNarration"
+      title="仿真进度"
+      :position="{ top: '90px', left: '17%' }"
+      :size="{ width: '360px', maxHeight: '240px' }"
+      :collapsed-size="{ width: '48px', height: '48px' }"
+      :default-collapsed="false"
+    >
+      <template #header>
+        <div class="simulation-floating-panel__header">
+          <el-tag :type="simulationNarration.badge === '完成' ? 'success' : 'primary'" size="small">
+            {{ simulationNarration.badge }}
+          </el-tag>
+          <span class="simulation-floating-panel__header-title">仿真进度</span>
+        </div>
+      </template>
+      <div class="simulation-floating-panel__content">
+        <p class="simulation-floating-panel__title">{{ simulationNarration.title }}</p>
+        <p class="simulation-floating-panel__desc">
+          {{ simulationNarration.description }}
+        </p>
+        <p v-if="simulationNarration.busType" class="simulation-floating-panel__meta">
+          <el-tag size="small" effect="plain">{{ simulationNarration.busType }}</el-tag>
+        </p>
+      </div>
+    </zx-floating-panel>
+
     <!-- 节点编辑抽屉 -->
     <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
 
@@ -73,19 +101,14 @@ const simulationRunner = {
   runningPromise: null,
 };
 const simulationResultPayload = ref(null);
+const simulationNarration = ref(null);
+const simulationTimelinePhases = ref([]);
 const simulationArtifacts = {
   tokens: new Set(),
   animations: new Set(),
 };
 const edgeOriginalStyles = new Map();
 const BUS_TYPES = ['RS422', 'RS485', 'CAN', 'LAN', '1553B'];
-const canPauseSimulation = computed(() => simulationStatus.value === 'running');
-const canResumeSimulation = computed(
-  () => simulationStatus.value === 'paused' && simulationSteps.value.length > 0
-);
-const canResetSimulation = computed(
-  () => simulationStatus.value !== 'idle' || simulationSteps.value.length > 0
-);
 
 // 路由参数
 const route = useRoute();
@@ -160,6 +183,24 @@ const nodeStateStyles = {
     boxShadow: '0 0 8px rgba(220,38,38,0.45)',
     opacity: 1,
   },
+  sending: {
+    borderColor: '#2563eb',
+    backgroundColor: '#eff6ff',
+    boxShadow: '0 0 10px rgba(37,99,235,0.45)',
+    opacity: 1,
+  },
+  receiving: {
+    borderColor: '#7c3aed',
+    backgroundColor: '#f5f3ff',
+    boxShadow: '0 0 10px rgba(124,58,237,0.35)',
+    opacity: 1,
+  },
+  synchronizing: {
+    borderColor: '#14b8a6',
+    backgroundColor: '#ecfeff',
+    boxShadow: '0 0 10px rgba(20,184,166,0.4)',
+    opacity: 1,
+  },
 };
 
 const edgeHighlightStyles = {
@@ -177,6 +218,64 @@ const edgeHighlightStyles = {
 
 const SIMULATION_STEP_DURATION = 950;
 const SIMULATION_TOKEN_SIZE = 12;
+const EDGE_PHASE_SEQUENCE = [
+  {
+    key: 'handshake',
+    label: '建立握手',
+    badge: '握手请求',
+    direction: 'forward',
+    sourceState: 'active',
+    targetState: 'processing',
+    postSourceState: 'processing',
+    postTargetState: 'active',
+    timelineTag: 'info',
+    description: (sourceName, targetName, busType) =>
+      `${sourceName} 通过 ${busType} 通道向 ${targetName} 发起握手，请求建立通信链路`,
+  },
+  {
+    key: 'handshakeAck',
+    label: '握手确认',
+    badge: '握手确认',
+    direction: 'reverse',
+    sourceState: 'processing',
+    targetState: 'active',
+    postSourceState: 'active',
+    postTargetState: 'processing',
+    timelineTag: 'success',
+    description: (sourceName, targetName) =>
+      `${sourceName} 确认收到握手，返回确认信号，${targetName} 准备发送业务数据`,
+  },
+  {
+    key: 'dataTransfer',
+    label: '数据传输',
+    badge: '数据传输',
+    direction: 'forward',
+    sourceState: 'sending',
+    targetState: 'receiving',
+    postSourceState: 'receiving',
+    postTargetState: 'sending',
+    timelineTag: 'primary',
+    description: (sourceName, targetName, busType) =>
+      `${sourceName} 正以 ${busType} 总线向 ${targetName} 推送任务数据包`,
+  },
+  {
+    key: 'resultConfirm',
+    label: '结果确认',
+    badge: '结果确认',
+    direction: 'reverse',
+    sourceState: 'receiving',
+    targetState: 'sending',
+    postSourceState: 'done',
+    postTargetState: 'done',
+    timelineTag: 'warning',
+    description: (sourceName, targetName) =>
+      `${sourceName} 返回处理确认，${targetName} 完成闭环校验`,
+  },
+];
+const EDGE_PHASE_META = EDGE_PHASE_SEQUENCE.reduce((acc, phase) => {
+  acc[phase.key] = phase;
+  return acc;
+}, {});
 
 function getGraphInstance() {
   return dagRef.value?.getGraph?.() || null;
@@ -305,6 +404,70 @@ function highlightEdge(edge, mode) {
     return;
   }
   applyEdgeStyle(edge, preset);
+}
+
+function deriveNodeName(node) {
+  if (!node) {
+    return '未命名节点';
+  }
+  const data = node.getData?.() || {};
+  return data.name || data.label || data.deviceName || node.id || '未命名节点';
+}
+
+function deriveEdgeBusType(edge) {
+  if (!edge) {
+    return 'BUS';
+  }
+  const data = edge.getData?.() || {};
+  const candidate =
+    data.busType || data.interfaceType || data.protocolType || edge.attrs?.line?.busType;
+  return candidate || 'BUS';
+}
+
+function buildPhaseTimeline(steps) {
+  if (!Array.isArray(steps) || !steps.length) {
+    return [];
+  }
+  return steps.map((step, index) => {
+    const meta = EDGE_PHASE_META[step.phase] || {};
+    return {
+      id: `${step.id}-${step.phase}-${index}`,
+      title: `${meta.label || '阶段'}｜${step.sourceName} → ${step.targetName}`,
+      description: step.description,
+      timestamp: `${((index + 1) * 0.8).toFixed(1)} s`,
+      busTypeTag: meta.timelineTag || 'info',
+    };
+  });
+}
+
+function updateSimulationNarration(step) {
+  const meta = EDGE_PHASE_META[step?.phase];
+  if (!meta) {
+    return;
+  }
+  simulationNarration.value = {
+    badge: meta.badge,
+    title: `${meta.label}｜${step.sourceName} → ${step.targetName}`,
+    description: step.description,
+    busType: step.busType,
+  };
+}
+
+function resetSimulationNarration() {
+  simulationNarration.value = null;
+}
+
+function announceSimulationSchedule(steps) {
+  if (!Array.isArray(steps) || !steps.length) {
+    return;
+  }
+  const edgeCount = new Set(steps.map((item) => item.id)).size;
+  simulationNarration.value = {
+    badge: '排程',
+    title: '仿真路径已生成',
+    description: `检测到 ${edgeCount} 条链路，共 ${steps.length} 个阶段，将展示握手、数据传输与确认全过程`,
+    busType: '',
+  };
 }
 
 function resetGraphSimulationState(graph) {
@@ -507,22 +670,40 @@ function buildSimulationSteps(graph) {
         sourceNode,
         targetNode,
         order,
+        sourceName: deriveNodeName(sourceNode),
+        targetName: deriveNodeName(targetNode),
+        busType: deriveEdgeBusType(edge),
       };
     })
     .filter(Boolean)
     .sort((a, b) => a.order - b.order);
 
   const expandedSteps = [];
-  orderedSteps.forEach((step) => {
-    expandedSteps.push({
-      ...step,
-      direction: 'forward',
-    });
-    expandedSteps.push({
-      ...step,
-      direction: 'reverse',
-      sourceNode: step.targetNode,
-      targetNode: step.sourceNode,
+  orderedSteps.forEach((connection) => {
+    EDGE_PHASE_SEQUENCE.forEach((phase) => {
+      const isForward = phase.direction === 'forward';
+      const actualSourceNode = isForward ? connection.sourceNode : connection.targetNode;
+      const actualTargetNode = isForward ? connection.targetNode : connection.sourceNode;
+      const sourceName = isForward ? connection.sourceName : connection.targetName;
+      const targetName = isForward ? connection.targetName : connection.sourceName;
+      const description = phase.description
+        ? phase.description(sourceName, targetName, connection.busType)
+        : `${sourceName} → ${targetName}`;
+      expandedSteps.push({
+        id: connection.id,
+        edge: connection.edge,
+        sourceNode: actualSourceNode,
+        targetNode: actualTargetNode,
+        sourceName,
+        targetName,
+        order: connection.order,
+        direction: isForward ? 'forward' : 'reverse',
+        phase: phase.key,
+        description,
+        busType: connection.busType,
+        badge: phase.badge,
+        timelineTag: phase.timelineTag,
+      });
     });
   });
   return expandedSteps;
@@ -575,13 +756,24 @@ function playSimulationStep(step) {
       resolve(payload);
     };
     simulationRunner.currentStepResolver = finish;
+    const phaseMeta = EDGE_PHASE_META[step.phase] || {};
+    updateSimulationNarration(step);
     highlightEdge(step.edge, 'current');
-    applyNodeState(step.sourceNode, 'active');
+    if (phaseMeta.sourceState) {
+      applyNodeState(step.sourceNode, phaseMeta.sourceState);
+    }
+    if (phaseMeta.targetState) {
+      applyNodeState(step.targetNode, phaseMeta.targetState);
+    }
     const controller = animateEdgeToken(step.edge, step.direction, SIMULATION_STEP_DURATION, {
       onCompleted: () => {
         highlightEdge(step.edge, 'completed');
-        applyNodeState(step.sourceNode, 'done');
-        applyNodeState(step.targetNode, 'processing');
+        if (phaseMeta.postSourceState) {
+          applyNodeState(step.sourceNode, phaseMeta.postSourceState);
+        }
+        if (phaseMeta.postTargetState) {
+          applyNodeState(step.targetNode, phaseMeta.postTargetState);
+        }
         finish({ interrupted: false });
       },
       onCancelled: () => {
@@ -643,6 +835,12 @@ function finalizeSimulation() {
   edges.forEach((edge) => {
     highlightEdge(edge, 'completed');
   });
+  simulationNarration.value = {
+    badge: '完成',
+    title: '仿真结束',
+    description: '所有链路已完成握手、数据传输与结果确认，正在生成报表',
+    busType: '',
+  };
   presentSimulationResult();
 }
 
@@ -658,6 +856,9 @@ function stopSimulationRunner(nextStatus) {
   simulationRunner.runningPromise = null;
   if (nextStatus) {
     simulationStatus.value = nextStatus;
+  }
+  if (nextStatus === 'idle') {
+    resetSimulationNarration();
   }
 }
 
@@ -898,6 +1099,7 @@ function handleRunSimulation() {
     ElMessage.error('仿真失败：图实例不存在');
     return;
   }
+  resetSimulationNarration();
 
   const nodes = graph.getNodes?.() || [];
   const edges = graph.getEdges?.() || [];
@@ -937,6 +1139,8 @@ function handleRunSimulation() {
   resetGraphSimulationState(graph);
   markQueuedEdges(steps);
   simulationSteps.value = steps;
+  simulationTimelinePhases.value = buildPhaseTimeline(steps);
+  announceSimulationSchedule(steps);
   simulationPointer.value = 0;
   simulationStatus.value = 'running';
 
@@ -953,10 +1157,10 @@ function handleRunSimulation() {
     nodePayload,
     edgePayload
   );
-  const timeline = generateSimulationTimeline(edgePayload).map((item, index) => ({
-    ...item,
-    order: index + 1,
-  }));
+  const timeline =
+    simulationTimelinePhases.value?.length > 0
+      ? simulationTimelinePhases.value
+      : generateSimulationTimeline(edgePayload);
 
   queueSimulationResult({
     summary,
@@ -973,33 +1177,6 @@ function handleRunSimulation() {
 
   simulationLoading.value = false;
   runSimulationFlow();
-}
-
-function handlePauseSimulation() {
-  if (simulationStatus.value !== 'running') {
-    return;
-  }
-  simulationStatus.value = 'paused';
-  stopSimulationRunner();
-}
-
-function handleResumeSimulation() {
-  if (simulationStatus.value !== 'paused' || !simulationSteps.value.length) {
-    return;
-  }
-  simulationStatus.value = 'running';
-  runSimulationFlow();
-}
-
-function handleResetSimulation() {
-  const graph = getGraphInstance();
-  stopSimulationRunner('idle');
-  simulationSteps.value = [];
-  simulationPointer.value = 0;
-  simulationResultPayload.value = null;
-  disposeSimulationAnimations();
-  disposeAllSimulationTokens();
-  resetGraphSimulationState(graph);
 }
 
 /**
@@ -1379,6 +1556,42 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   font-weight: 600;
+}
+
+.simulation-floating-panel__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.simulation-floating-panel__header-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.simulation-floating-panel__content {
+  padding: 12px 0;
+}
+
+.simulation-floating-panel__title {
+  font-weight: 600;
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #1f2937;
+}
+
+.simulation-floating-panel__desc {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.simulation-floating-panel__meta {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .simulation-summary {
