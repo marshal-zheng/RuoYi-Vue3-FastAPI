@@ -60,3 +60,11 @@ export function lockProjectVersion(data) {
     data: data,
   });
 }
+
+// 批量解除项目下的固化版本
+export function unlockProjectVersions(projectId) {
+  return request({
+    url: `/project/version/unlock/project/${projectId}`,
+    method: 'put',
+  });
+}

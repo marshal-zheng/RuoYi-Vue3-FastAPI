@@ -150,7 +150,7 @@
 </template>
 
 <script setup name="VersionList">
-import { ref, reactive, getCurrentInstance } from 'vue';
+import { ref, reactive, watch, getCurrentInstance } from 'vue';
 import { View, Edit, Delete, Lock, CopyDocument, Plus } from '@element-plus/icons-vue';
 import {
   listProjectVersion,
@@ -189,29 +189,34 @@ const editVersionForm = reactive({
 });
 
 /** ZxGridList 版本数据加载函数 */
-async function loadVersionData(params) {
-  // 与现有列表保持一致：ZxGridList 传入的是 { pageNum, pageSize, ...query }
-  // const { pageNum = 1, pageSize = 10, dateRange, ...query } = params || {};
+async function loadVersionData(params = {}) {
+  if (!props.projectId) {
+    return {
+      rows: [],
+      list: [],
+      total: 0,
+    };
+  }
 
-  // const queryParams = {
-  //   pageNum,
-  //   pageSize,
-  //   projectId: props.projectId,
-  //   ...query,
-  // };
+  const queryParams = {
+    ...params,
+    projectId: props.projectId,
+  };
 
-  // // 处理日期范围（与后端接口保持统一）
-  // if (dateRange && dateRange.length === 2) {
-  //   queryParams.beginTime = dateRange[0];
-  //   queryParams.endTime = dateRange[1];
-  //   delete queryParams.dateRange;
-  // }
-
-  const response = await listProjectVersion(params);
-  console.log('responsesss', response);
+  const response = await listProjectVersion(queryParams);
   response.list = response.rows || [];
   return response;
 }
+
+watch(
+  () => props.projectId,
+  value => {
+    if (value && versionGridListRef.value) {
+      versionGridListRef.value.refresh();
+    }
+  },
+  { immediate: true }
+);
 
 /** 筛选变化处理 */
 function onFilterChange(key, value, { handleRefresh, updateState }) {

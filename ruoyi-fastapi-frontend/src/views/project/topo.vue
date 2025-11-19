@@ -19,7 +19,7 @@
           执行仿真
         </el-button>
         <el-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
-          保存拓扑
+          保存
         </el-button>
       </template>
     </XflowDAG>
@@ -118,7 +118,7 @@ function inferConnectionBusType(sourcePort, targetPort, index) {
 }
 
 function ensurePortSummary(portId, ports, fallbackName, index, assignedBusType) {
-  const port = Array.isArray(ports) ? ports.find(item => item.id === portId) : null;
+  const port = Array.isArray(ports) ? ports.find((item) => item.id === portId) : null;
   if (port) {
     const declaredType =
       normalizeBusType(port.busType || port.interfaceType || port.protocolType) || assignedBusType;
@@ -137,7 +137,7 @@ function ensurePortSummary(portId, ports, fallbackName, index, assignedBusType) 
 
 function buildSimulationSummary(nodes, edges) {
   const coverage = new Set();
-  edges.forEach(edge => {
+  edges.forEach((edge) => {
     if (edge.busType) {
       coverage.add(edge.busType);
     }
@@ -145,7 +145,7 @@ function buildSimulationSummary(nodes, edges) {
   return {
     deviceCount: nodes.length,
     connectionCount: edges.length,
-    busCoverage: BUS_TYPES.map(type => ({
+    busCoverage: BUS_TYPES.map((type) => ({
       name: type,
       active: coverage.has(type),
     })),
@@ -190,7 +190,7 @@ function generateIcdFilePayload(projectName, versionName, nodes, edges) {
     'DEVICE,PORT_ID,PORT_NAME,BUS_TYPE,PEER_DEVICE,PEER_PORT,PROTOCOL,DATA_RATE',
   ];
 
-  const lines = edges.flatMap(edge => {
+  const lines = edges.flatMap((edge) => {
     return [
       [
         edge.sourceDevice,
@@ -349,15 +349,15 @@ function buildSimulationPayload() {
       const sourcePortId = edge.getSourcePortId?.();
       const targetPortId = edge.getTargetPortId?.();
 
-      const sourceNode = nodes.find(node => node.id === sourceId);
-      const targetNode = nodes.find(node => node.id === targetId);
+      const sourceNode = nodes.find((node) => node.id === sourceId);
+      const targetNode = nodes.find((node) => node.id === targetId);
 
       if (!sourceNode || !targetNode) {
         return null;
       }
 
-      const sourcePortRaw = sourceNode.ports?.find(item => item.id === sourcePortId);
-      const targetPortRaw = targetNode.ports?.find(item => item.id === targetPortId);
+      const sourcePortRaw = sourceNode.ports?.find((item) => item.id === sourcePortId);
+      const targetPortRaw = targetNode.ports?.find((item) => item.id === targetPortId);
 
       const assignedBusType = inferConnectionBusType(sourcePortRaw, targetPortRaw, index);
 
@@ -459,7 +459,7 @@ function handleRunSimulation() {
     });
 
     simulationLoading.value = false;
-    playSimulationAnimation(edgePayload.map(edge => edge.id));
+    playSimulationAnimation(edgePayload.map((edge) => edge.id));
   }, 500);
 }
 
@@ -522,7 +522,7 @@ async function loadDeviceList() {
       return;
     }
     // 确保端口数据存在，若列表未返回则补充查询详情
-    const devicesWithPorts = devices.map(device => {
+    const devicesWithPorts = devices.map((device) => {
       const interfaces = Array.isArray(device.interfaces) ? device.interfaces : [];
       const ports = convertInterfacesToPorts(interfaces);
 
@@ -570,7 +570,7 @@ function buildPeerDeviceNameByPort(node) {
   const result = {};
   const edges = graph.getEdges?.() || [];
 
-  edges.forEach(edge => {
+  edges.forEach((edge) => {
     const sourceId = edge.getSourceCellId?.();
     const targetId = edge.getTargetCellId?.();
     if (!sourceId || !targetId) {
@@ -697,7 +697,7 @@ function buildTopologySavePayload() {
 
   const graphJson = typeof graph.toJSON === 'function' ? graph.toJSON() : null;
 
-  const nodeSummaries = nodes.map(node => {
+  const nodeSummaries = nodes.map((node) => {
     const data = node.getData?.() || {};
     return {
       id: node.id,
@@ -705,7 +705,7 @@ function buildTopologySavePayload() {
     };
   });
 
-  const edgeSummaries = edges.map(edge => {
+  const edgeSummaries = edges.map((edge) => {
     const sourceId = edge.getSourceCellId?.();
     const targetId = edge.getTargetCellId?.();
     const sourcePortId = edge.getSourcePortId?.();
@@ -772,7 +772,7 @@ function restoreSavedTopology() {
     }
 
     getProjectTopology(projectId, versionId ? Number(versionId) : undefined)
-      .then(res => {
+      .then((res) => {
         const topo = res?.data;
         const topoData = topo?.topologyData;
         const graphJson = topoData?.graph;

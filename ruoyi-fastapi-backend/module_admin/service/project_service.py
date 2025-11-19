@@ -137,16 +137,31 @@ class ProjectService:
         :param page_object: 删除工程对象
         :return: 删除工程校验结果
         """
-        if page_object.project_ids:
-            try:
-                await ProjectDao.delete_project_dao(query_db, page_object)
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
+        if not page_object.project_ids:
             raise ServiceException(message='传入工程id为空')
+
+        project_id_list = [int(project_id) for project_id in page_object.project_ids.split(',') if project_id]
+        if not project_id_list:
+            raise ServiceException(message='未解析到有效工程id')
+
+        try:
+            locked_map = await ProjectVersionDao.get_locked_versions_by_project(query_db, project_id_list)
+            if locked_map:
+                blocked_messages = []
+                for project_id, versions in locked_map.items():
+                    version_names = '、'.join([version.version_name for version in versions])
+                    blocked_messages.append(f'工程ID {project_id} 存在固化版本：{version_names}')
+                raise ServiceException(message='；'.join(blocked_messages))
+
+            await ProjectDao.delete_project_dao(query_db, page_object)
+            await query_db.commit()
+            return CrudResponseModel(is_success=True, message='删除成功')
+        except ServiceException:
+            await query_db.rollback()
+            raise
+        except Exception as e:
+            await query_db.rollback()
+            raise e
 
     @classmethod
     async def project_detail_services(cls, query_db: AsyncSession, project_id: int):

@@ -120,14 +120,31 @@ class ProjectVersionService:
             raise ServiceException(message='传入版本ID为空')
         
         try:
-            version_id_list = page_object.version_ids.split(',')
-            
-            # 检查是否有固化版本
+            version_id_list = [int(version_id) for version_id in page_object.version_ids.split(',') if version_id]
+            if not version_id_list:
+                raise ServiceException(message='未解析到有效版本ID')
+
+            versions = []
+            project_delete_map = {}
+
             for version_id in version_id_list:
-                version = await ProjectVersionDao.get_project_version_detail_by_id(query_db, int(version_id))
-                if version and version.is_locked == '1':
+                version = await ProjectVersionDao.get_project_version_detail_by_id(query_db, version_id)
+                if not version:
+                    raise ServiceException(message=f'版本ID {version_id} 不存在或已删除')
+                if version.is_locked == '1':
                     raise ServiceException(message=f'版本 {version.version_name} 已固化，不允许删除')
-            
+                versions.append(version)
+                project_delete_map[version.project_id] = project_delete_map.get(version.project_id, 0) + 1
+
+            project_counts = await ProjectVersionDao.get_project_version_counts(
+                query_db, list(project_delete_map.keys())
+            )
+
+            for project_id, delete_count in project_delete_map.items():
+                total_count = project_counts.get(project_id, 0)
+                if total_count - delete_count < 1:
+                    raise ServiceException(message=f'项目ID {project_id} 至少需要保留一个版本，无法全部删除')
+
             await ProjectVersionDao.delete_project_version_dao(query_db, page_object)
             await query_db.commit()
             return CrudResponseModel(is_success=True, message='删除成功')
@@ -237,6 +254,32 @@ class ProjectVersionService:
             
             message = '固化成功' if lock_object.is_locked == '1' else '解除固化成功'
             return CrudResponseModel(is_success=True, message=message)
+        except ServiceException as e:
+            await query_db.rollback()
+            raise e
+        except Exception as e:
+            await query_db.rollback()
+            raise e
+
+    @classmethod
+    async def unlock_project_versions_by_project_services(
+        cls, query_db: AsyncSession, project_id: int, operator: str | None = None
+    ):
+        """
+        批量解除指定项目下的固化版本
+        """
+        if not project_id:
+            raise ServiceException(message='工程ID不能为空')
+
+        try:
+            locked_map = await ProjectVersionDao.get_locked_versions_by_project(query_db, [project_id])
+            locked_versions = locked_map.get(project_id, [])
+            if not locked_versions:
+                raise ServiceException(message='当前工程不存在需要解除固化的版本')
+
+            await ProjectVersionDao.unlock_project_versions_by_project(query_db, project_id, operator)
+            await query_db.commit()
+            return CrudResponseModel(is_success=True, message='批量解除固化成功')
         except ServiceException as e:
             await query_db.rollback()
             raise e

@@ -33,7 +33,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               style="width: 240px"
-              @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
           </div>
           <div class="zx-grid-form-bar__right">
@@ -49,7 +49,7 @@
         </div>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh }">
+      <template #table="{ grid }">
         <div
           v-loading="grid.loading"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 project-grid"
@@ -98,8 +98,8 @@
                 </div>
                 <ZxMoreAction
                   class="flex-shrink-0"
-                  :list="getProjectMoreActionList(project)"
-                  @select="handleMoreActionSelect($event, project, handleRefresh)"
+                  :list="getProjectMoreActionList()"
+                  @select="handleMoreActionSelect($event, project)"
                 />
               </div>
             </template>
@@ -181,9 +181,11 @@
 
 <script setup name="Project">
 import { listProject, delProject } from '@/api/project/project';
+import { unlockProjectVersions } from '@/api/project/version';
 import { checkPermi } from '@/utils/permission';
-import { Document, Delete } from '@element-plus/icons-vue';
+import { Document, Delete, Unlock } from '@element-plus/icons-vue';
 import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue';
+import { confirmInputDanger } from '@zxio/zxui';
 
 const { proxy } = getCurrentInstance();
 
@@ -229,23 +231,67 @@ function handleDetail(row) {
   proxy.$router.push('/project/project-detail/index/' + projectId);
 }
 
-function handleDelete(row) {
-  const projectIds = row.projectId || ids.value;
-  proxy.$modal
-    .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
-    .then(function () {
-      return delProject(projectIds);
-    })
-    .then(() => {
-      refreshList();
-      proxy.$modal.msgSuccess('删除成功');
+async function handleDelete(row) {
+  let projectName = '';
+  let projectIds = [];
+
+  // 如果是单个项目删除
+  if (row && row.projectId) {
+    projectName = row.projectName;
+    projectIds = [row.projectId];
+  }
+  // 如果是批量删除（暂时不支持，因为需要用户确认每个项目名称）
+  else if (ids.value.length === 1) {
+    // 找到对应的项目名称
+    const grid = gridListRef.value?.grid;
+    const project = grid?.list?.find((p) => p.projectId === ids.value[0]);
+    if (project) {
+      projectName = project.projectName;
+      projectIds = ids.value;
+    }
+  } else if (ids.value.length > 1) {
+    proxy.$modal.msgError('批量删除暂不支持，请逐个删除项目以确保安全性');
+    return;
+  } else {
+    proxy.$modal.msgError('请选择要删除的项目');
+    return;
+  }
+
+  try {
+    await confirmInputDanger({
+      targetName: projectName,
+      targetType: '项目',
+      keyword: projectName,
+      dangerMessage: `您即将删除项目"${projectName}"。删除的项目及其所有版本数据将无法恢复！`,
+      description:
+        '此操作是高风险操作，将永久删除项目及其所有版本数据。为防止误操作，请输入项目名称确认您的意图。',
     });
+
+    // 用户确认后执行删除
+    await delProject(projectIds.length === 1 ? projectIds[0] : projectIds);
+    refreshList();
+    proxy.$modal.msgSuccess('删除成功');
+    // 清空选择状态
+    ids.value = [];
+    single.value = true;
+    multiple.value = true;
+  } catch (error) {
+    // 用户取消或关闭，或删除失败
+    if (error && error !== 'cancel') {
+      proxy.$modal.msgError('删除失败');
+    } else {
+      proxy.$modal.msgInfo('已取消删除');
+    }
+  }
 }
 
-function getProjectMoreActionList(project) {
+function getProjectMoreActionList() {
   const actions = [];
   if (checkPermi(['project:project:query'])) {
     actions.push({ label: '查看详情', eventTag: 'detail', icon: Document });
+  }
+  if (checkPermi(['project:version:edit'])) {
+    actions.push({ label: '批量解除固化', eventTag: 'unlockVersions', icon: Unlock });
   }
   if (checkPermi(['project:project:remove'])) {
     actions.push({ label: '删除工程', eventTag: 'delete', icon: Delete, danger: true });
@@ -253,10 +299,13 @@ function getProjectMoreActionList(project) {
   return actions;
 }
 
-function handleMoreActionSelect(item, project, handleRefresh) {
+function handleMoreActionSelect(item, project) {
   switch (item.eventTag) {
     case 'detail':
       handleDetail(project);
+      break;
+    case 'unlockVersions':
+      handleUnlockProjectVersions(project);
       break;
     case 'delete':
       handleDelete(project);
@@ -264,6 +313,20 @@ function handleMoreActionSelect(item, project, handleRefresh) {
     default:
       break;
   }
+}
+
+function handleUnlockProjectVersions(project) {
+  if (!project?.projectId) {
+    proxy.$modal.msgError('工程ID不存在，无法操作');
+    return;
+  }
+  proxy.$modal
+    .confirm(`是否批量解除工程"${project.projectName}"下的所有固化版本？`)
+    .then(async () => {
+      await unlockProjectVersions(project.projectId);
+      proxy.$modal.msgSuccess('批量解除固化成功');
+    })
+    .catch(() => {});
 }
 
 function handleCreateSuccess(payload) {
@@ -312,8 +375,5 @@ function handleCreateSuccess(payload) {
 }
 .project-card :deep(.el-card__footer) {
   background: transparent;
-}
-.project-card .text-[#4e5969] {
-  color: #4e5969;
 }
 </style>

@@ -1,4 +1,5 @@
-from sqlalchemy import desc, select, update
+from datetime import datetime
+from sqlalchemy import desc, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from module_admin.entity.do.project_version_do import SysProjectVersion
 from module_admin.entity.vo.project_version_vo import (
@@ -132,6 +133,48 @@ class ProjectVersionDao:
         )
 
     @classmethod
+    async def get_project_version_counts(cls, db: AsyncSession, project_ids: list[int]):
+        """
+        获取指定项目当前有效版本数量
+        """
+        if not project_ids:
+            return {}
+
+        query = (
+            select(
+                SysProjectVersion.project_id,
+                func.count(SysProjectVersion.version_id).label('version_count'),
+            )
+            .where(
+                SysProjectVersion.project_id.in_(project_ids),
+                SysProjectVersion.del_flag == '0',
+            )
+            .group_by(SysProjectVersion.project_id)
+        )
+        result = await db.execute(query)
+        return {row.project_id: row.version_count for row in result.all()}
+
+    @classmethod
+    async def get_locked_versions_by_project(cls, db: AsyncSession, project_ids: list[int]):
+        """
+        获取指定项目下的固化版本
+        """
+        if not project_ids:
+            return {}
+
+        query = select(SysProjectVersion).where(
+            SysProjectVersion.project_id.in_(project_ids),
+            SysProjectVersion.del_flag == '0',
+            SysProjectVersion.is_locked == '1',
+        )
+        result = await db.execute(query)
+        locked_versions = result.scalars().all()
+        locked_map = {}
+        for version in locked_versions:
+            locked_map.setdefault(version.project_id, []).append(version)
+        return locked_map
+
+    @classmethod
     async def check_version_number_unique(
         cls, db: AsyncSession, project_id: int, version_number: str, version_id: int = None
     ):
@@ -184,4 +227,27 @@ class ProjectVersionDao:
             update(SysProjectVersion)
             .where(SysProjectVersion.version_id == lock_model.version_id)
             .values(**update_data)
+        )
+
+    @classmethod
+    async def unlock_project_versions_by_project(
+        cls, db: AsyncSession, project_id: int, operator: str | None = None
+    ):
+        """
+        批量解除某个项目下的固化版本
+        """
+        await db.execute(
+            update(SysProjectVersion)
+            .where(
+                SysProjectVersion.project_id == project_id,
+                SysProjectVersion.del_flag == '0',
+                SysProjectVersion.is_locked == '1',
+            )
+            .values(
+                is_locked='0',
+                locked_by=None,
+                locked_time=None,
+                update_by=operator,
+                update_time=datetime.now(),
+            )
         )

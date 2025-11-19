@@ -182,3 +182,24 @@ async def lock_project_version(
     logger.info(lock_version_result.message)
 
     return ResponseUtil.success(msg=lock_version_result.message)
+
+
+@projectVersionController.put(
+    '/unlock/project/{project_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:version:edit'))]
+)
+@Log(title='项目版本管理', business_type=BusinessType.UPDATE)
+async def unlock_project_versions_by_project(
+    request: Request,
+    project_id: int,
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    批量解除指定工程下的固化版本
+    """
+    unlock_result = await ProjectVersionService.unlock_project_versions_by_project_services(
+        query_db, project_id, current_user.user.user_name
+    )
+    logger.info(unlock_result.message)
+    return ResponseUtil.success(msg=unlock_result.message)
