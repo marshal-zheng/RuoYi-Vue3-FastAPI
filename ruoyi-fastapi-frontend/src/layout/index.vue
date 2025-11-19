@@ -5,11 +5,29 @@
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <sidebar v-if="!sidebar.hide" class="sidebar-container" />
+    <Sidebar v-if="!sidebar.hide" class="sidebar-container" :style="sidebarInlineStyle" />
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
-      <div :class="{ 'fixed-header': true }">
-        <navbar @setLayout="setLayout" />
-        <tags-view v-if="needTagsView" />
+      <div :class="{ 'fixed-header': true }" :style="fixedHeaderStyle">
+        <!-- Header 区域：在未启用 tagsView 时显示 Logo + Navbar；启用时只显示 Navbar -->
+        <div
+          class="flex items-center justify-between affordable-thunder"
+          style="background: var(--top-header-bg); box-shadow: var(--top-header-shadow)"
+        >
+          <div
+            v-if="!needTagsView && showLogo"
+            class="flex items-center h-[50px] px-4 gap-2 shrink-0"
+          >
+            <img :src="headerLogo" class="w-8 h-8 shrink-0" />
+            <span
+              class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none text-[var(--logo-title-text-color,#f0f4ff)]"
+            >
+              {{ headerTitle }}
+            </span>
+          </div>
+          <Navbar v-if="showNavbar" class="flex-1" @setLayout="setLayout" />
+        </div>
+        <!-- TagsView 显示在 Header 下方 -->
+        <TagsView v-if="showTagsView" />
       </div>
       <app-main />
       <settings ref="settingRef" />
@@ -23,14 +41,43 @@ import Sidebar from './components/Sidebar/index.vue';
 import { AppMain, Navbar, Settings, TagsView } from './components';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
+import defaultSettings from '@/settings';
+import headerLogo from '@/assets/logo/logo.png';
 
 const settingsStore = useSettingsStore();
 const theme = computed(() => settingsStore.theme);
-const sideTheme = computed(() => settingsStore.sideTheme);
 const sidebar = computed(() => useAppStore().sidebar);
 const device = computed(() => useAppStore().device);
 const needTagsView = computed(() => settingsStore.tagsView);
-const fixedHeader = computed(() => settingsStore.fixedHeader);
+
+// 定义显示控制变量
+const showLogo = computed(() => settingsStore.sidebarLogo);
+const showNavbar = computed(() => true); // Navbar 始终显示
+const showTagsView = computed(() => needTagsView.value);
+
+// Header 中展示的系统标题
+const headerTitle = computed(() => defaultSettings.title || import.meta.env.VITE_APP_TITLE);
+const headerHeight = 50;
+
+const fixedHeaderStyle = computed(() => {
+  if (!needTagsView.value) {
+    return {
+      width: '100%',
+      left: '0',
+    };
+  }
+  return {};
+});
+
+const sidebarInlineStyle = computed(() => {
+  if (!needTagsView.value) {
+    return {
+      top: `${headerHeight}px`,
+      height: `calc(100% - ${headerHeight}px)`,
+    };
+  }
+  return {};
+});
 
 const classObj = computed(() => ({
   hideSidebar: !sidebar.value.opened,
@@ -39,7 +86,7 @@ const classObj = computed(() => ({
   mobile: device.value === 'mobile',
 }));
 
-const { width, height } = useWindowSize();
+const { width } = useWindowSize();
 const WIDTH = 992; // refer to Bootstrap's responsive design
 
 watch(

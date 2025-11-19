@@ -1,6 +1,6 @@
 <template>
-  <div :class="{ 'has-logo': showLogo }" class="sidebar-container">
-    <logo v-if="showLogo" :collapse="isCollapse" />
+  <div :class="{ 'has-logo': showLogo, 'no-logo-spacing': !showLogo }" class="sidebar-container">
+    <Logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
         :default-active="activeMenu"
@@ -38,7 +38,8 @@ const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
-const showLogo = computed(() => settingsStore.sidebarLogo);
+// 仅在开启 tagsView 时展示侧边栏 Logo，关闭 tagsView 时由 Header 中的 Logo 承担展示
+const showLogo = computed(() => settingsStore.sidebarLogo && settingsStore.tagsView);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
@@ -157,7 +158,9 @@ const activeMenu = computed(() => {
         border-bottom-right-radius: var(--left-menu-item-radius);
         z-index: -1;
         box-shadow: var(--left-menu-active-shadow);
-        transition: background 0.25s ease, box-shadow 0.25s ease;
+        transition:
+          background 0.25s ease,
+          box-shadow 0.25s ease;
       }
 
       // 左侧高亮竖条
@@ -237,7 +240,9 @@ const activeMenu = computed(() => {
           border-bottom-right-radius: var(--left-menu-item-radius);
           z-index: -1;
           box-shadow: var(--left-menu-active-shadow);
-          transition: background 0.25s ease, box-shadow 0.25s ease;
+          transition:
+            background 0.25s ease,
+            box-shadow 0.25s ease;
         }
 
         &:hover {

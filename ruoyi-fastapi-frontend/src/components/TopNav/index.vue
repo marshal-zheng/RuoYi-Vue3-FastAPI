@@ -7,9 +7,10 @@
         :key="index"
         v-if="index < visibleNumber"
       >
-        <svg-icon
+        <ZxIcon
           v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-          :icon-class="item.meta.icon"
+          :icon="resolveMenuIcon(item.meta.icon)"
+          :size="16"
         />
         {{ item.meta.title }}
       </el-menu-item>
@@ -20,9 +21,10 @@
       <template #title>更多菜单</template>
       <template v-for="(item, index) in topMenus">
         <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
-          <svg-icon
+          <ZxIcon
             v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-            :icon-class="item.meta.icon"
+            :icon="resolveMenuIcon(item.meta.icon)"
+            :size="16"
           />
           {{ item.meta.title }}
         </el-menu-item>
@@ -111,12 +113,27 @@ const activeMenu = computed(() => {
   return activePath;
 });
 
+/**
+ * 将 RuoYi 路由里的 meta.icon（如 'dashboard'）转换为 ZxIcon 识别的格式
+ * 目前路由里的图标都是本地 svg，所以统一加上 'svg-icon:' 前缀
+ */
+function resolveMenuIcon(icon) {
+  if (!icon) {
+    return '';
+  }
+  // 如果已经是带前缀的写法（例如 'mdi:home' 或 'svg-icon:xxx'），直接返回
+  if (typeof icon === 'string' && icon.includes(':')) {
+    return icon;
+  }
+  return `svg-icon:${icon}`;
+}
+
 function setVisibleNumber() {
   const width = document.body.getBoundingClientRect().width / 3;
   visibleNumber.value = parseInt(width / 85);
 }
 
-function handleSelect(key, keyPath) {
+function handleSelect(key) {
   currentIndex.value = key;
   const route = routers.value.find((item) => item.path === key);
   if (isHttp(key)) {
@@ -169,40 +186,48 @@ onMounted(() => {
 </script>
 
 <style>
-.topmenu-container.el-menu--horizontal > .el-menu-item {
+/* TopNav 顶部菜单整体容器，复用顶部导航主题色 */
+.topmenu-container.el-menu--horizontal {
+  height: var(--top-header-height);
+  line-height: var(--top-header-height);
+  border-bottom: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.topmenu-container.el-menu--horizontal > .el-menu-item,
+.topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
   float: left;
-  height: 50px !important;
-  line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
-  margin: 0 10px !important;
+  height: var(--top-header-height) !important;
+  line-height: var(--top-header-height) !important;
+  color: var(--top-header-breadcrumb-color) !important;
+  padding: 0 8px !important;
+  margin: 0 6px !important;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
-.el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
-  border-bottom: 2px solid var(--theme) !important;
-  color: #303133;
+.topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
+  border-bottom: none !important;
+  background-color: var(--top-header-menu-active-bg);
+  color: var(--top-header-breadcrumb-hover-color) !important;
 }
 
-/* sub-menu item */
-.topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
-  float: left;
-  height: 50px !important;
-  line-height: 50px !important;
-  color: #999093 !important;
-  padding: 0 5px !important;
-  margin: 0 10px !important;
-}
-
-/* 背景色隐藏 */
+/* 背景色与顶部渐变协调，避免出现一条纯白色横条 */
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-.topmenu-container.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
-  background-color: #ffffff;
+.topmenu-container.el-menu--horizontal > .el-sub-menu .el-submenu__title:hover {
+  background-color: var(--top-header-menu-hover-bg);
+  color: var(--top-header-breadcrumb-hover-color) !important;
 }
 
 /* 图标右间距 */
-.topmenu-container .svg-icon {
+.topmenu-container .zx-icon {
   margin-right: 4px;
 }
 

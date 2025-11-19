@@ -204,6 +204,8 @@
     --logo-height: 50px;
     --logo-title-text-color: #f0f4ff;
     --logo-title-text-hover-color: #ffffff;
+    --logo-title-font-size: 16px;
+    --logo-title-font-weight: 600;
 
     /* Top Header/Navbar variables - 顶部导航栏样式 */
     --top-header-height: 50px;
@@ -218,6 +220,8 @@
     --top-header-hamburger-color: rgba(255, 255, 255, 0.95);
     --top-header-hamburger-hover-color: #ffffff;
     --top-header-hamburger-hover-bg: rgba(255, 255, 255, 0.1);
+    --top-header-menu-hover-bg: rgba(255, 255, 255, 0.18);
+    --top-header-menu-active-bg: rgba(255, 255, 255, 0.28);
     --top-header-breadcrumb-color: rgba(255, 255, 255, 0.95);
     --top-header-breadcrumb-hover-color: #ffffff;
     --top-header-breadcrumb-separator-color: rgba(255, 255, 255, 0.6);
@@ -226,6 +230,7 @@
     --top-header-avatar-icon-color: #2b6df8;
     --top-header-avatar-icon-hover-color: #0045bf;
     --top-header-avatar-text-color: #1d2129;
+    --top-header-avatar-text-font-weight: 500;
     --top-header-avatar-text-hover-color: #2b6df8;
     --top-header-avatar-bg-hover: rgba(43, 109, 248, 0.08);
 
@@ -335,6 +340,8 @@
      --top-header-hamburger-color: #8daeff;
      --top-header-hamburger-hover-color: #409eff;
      --top-header-hamburger-hover-bg: rgba(64, 158, 255, 0.1);
+     --top-header-menu-hover-bg: rgba(64, 158, 255, 0.16);
+     --top-header-menu-active-bg: rgba(64, 158, 255, 0.26);
      --top-header-breadcrumb-color: rgba(207, 211, 220, 0.9);
      --top-header-breadcrumb-hover-color: #e5eaf3;
      --top-header-breadcrumb-separator-color: rgba(163, 166, 173, 0.6);
@@ -343,6 +350,7 @@
      --top-header-avatar-icon-color: #8daeff;
      --top-header-avatar-icon-hover-color: #409eff;
      --top-header-avatar-text-color: #e5eaf3;
+     --top-header-avatar-text-font-weight: 500;
      --top-header-avatar-text-hover-color: #409eff;
      --top-header-avatar-bg-hover: rgba(64, 158, 255, 0.1);
 

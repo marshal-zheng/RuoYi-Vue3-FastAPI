@@ -24,6 +24,11 @@
     z-index: 1001;
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(17, 40, 84, 0.08);
+    /* 当侧边栏不展示 Logo（此时 tagsView 通常为 false，Logo 在 Header 中）时，
+       给菜单与顶部 Header 留出一点间距，避免菜单项紧贴 Header 底部 */
+    &.no-logo-spacing {
+      padding-top: 8px;
+    }
   }
 
   /* Reset element-ui css */
@@ -51,11 +56,11 @@
     display: none;
   }
 
-  .sidebar-container a {
+  /* .sidebar-container a {
     display: inline-block;
     width: 100%;
     overflow: hidden;
-  }
+  } */
 
   .sidebar-container .svg-icon {
     margin-right: 16px;

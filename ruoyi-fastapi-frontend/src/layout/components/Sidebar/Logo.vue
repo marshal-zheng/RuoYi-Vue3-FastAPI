@@ -1,22 +1,38 @@
 <template>
-  <div class="sidebar-logo-container" :class="{ collapse: collapse }">
+  <div
+    class="sidebar-logo-container relative w-full flex items-center justify-center overflow-hidden"
+    :class="{ collapse: collapse }"
+  >
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <!-- <img v-if="logo" :src="logo" class="sidebar-logo" /> -->
-        <!-- <h1 v-else class="sidebar-title">{{ title }}</h1> -->
+      <router-link
+        v-if="collapse"
+        key="collapse"
+        class="h-full w-full flex items-center justify-center"
+        to="/"
+      >
+        <img v-if="logo" :src="logo" class="w-8 h-8 shrink-0" />
+        <h1 v-else class="sidebar-title m-0 p-0">{{ title }}</h1>
       </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <!-- <img v-if="logo" :src="logo" class="sidebar-logo" /> -->
-        <h1 class="sidebar-title">{{ title }}</h1>
+      <router-link
+        v-else
+        key="expand"
+        class="h-full w-full flex items-center justify-center"
+        to="/"
+      >
+        <img v-if="logo" :src="logo" class="sidebar-logo w-8 h-8 shrink-0 mr-3" />
+        <h1
+          class="sidebar-title m-0 p-0 text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
+        >
+          {{ title }}
+        </h1>
       </router-link>
     </transition>
   </div>
 </template>
 
 <script setup>
-import logo from '@/assets/logo/logo.png';
-import useSettingsStore from '@/store/modules/settings';
-import variables from '@/assets/styles/theme.module.css';
+import logoImg from '@/assets/logo/logo.png';
+import defaultSettings from '@/settings';
 
 defineProps({
   collapse: {
@@ -26,29 +42,15 @@ defineProps({
 });
 
 const title = import.meta.env.VITE_APP_TITLE;
-const settingsStore = useSettingsStore();
-const sideTheme = computed(() => settingsStore.sideTheme);
-
-// 获取Logo背景色
-const getLogoBackground = computed(() => {
-  if (settingsStore.isDark) {
-    return 'var(--sidebar-bg)';
-  }
-  return sideTheme.value === 'theme-dark' ? variables.menuBg : variables.menuLightBg;
-});
-
-// 获取Logo文字颜色
-const getLogoTextColor = computed(() => {
-  if (settingsStore.isDark) {
-    return 'var(--sidebar-text)';
-  }
-  return sideTheme.value === 'theme-dark' ? '#fff' : variables.menuLightText;
-});
+// 是否启用 logo 图片，如果为 false 则只显示文字标题
+const showLogoImage = defaultSettings.showLogoImage ?? true;
+const logo = showLogoImage ? logoImg : null;
 </script>
 
 <style scoped>
 @import '@/assets/styles/theme.module.css';
 
+/* Vue 过渡动画 - 必须用 CSS */
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
 }
@@ -58,51 +60,30 @@ const getLogoTextColor = computed(() => {
   opacity: 0;
 }
 
+/* CSS 变量 - 必须用 CSS */
 .sidebar-logo-container {
-  position: relative;
-  width: 100%;
   height: var(--logo-height, 50px);
-  line-height: var(--logo-height, 50px);
   background: var(--left-menu-header-bg);
   box-shadow: var(--left-menu-header-shadow);
-  text-align: center;
-  overflow: hidden;
 }
 
-.sidebar-logo-container .sidebar-logo-link {
-  height: 100%;
-  width: 100%;
-}
-
-.sidebar-logo-container .sidebar-logo-link .sidebar-logo {
-  width: 32px;
-  height: 32px;
-  vertical-align: middle;
-  margin-right: 12px;
-}
-
-.sidebar-logo-container .sidebar-logo-link .sidebar-title {
-  display: inline-block;
-  margin: 0;
+.sidebar-title {
   color: var(--logo-title-text-color, #f0f4ff);
-  font-weight: bold;
-  line-height: var(--logo-height, 50px);
-  font-size: 14px;
   font-family:
-    Avenir,
-    Helvetica Neue,
-    Arial,
-    Helvetica,
-    sans-serif;
-  vertical-align: middle;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: var(--logo-title-text-hover-color, #ffffff);
-  }
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  transition: all 0.3s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.sidebar-title:hover {
+  color: var(--logo-title-text-hover-color, #ffffff);
+  transform: scale(1.02);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* collapse 状态下的特殊样式 */
 .sidebar-logo-container.collapse .sidebar-logo {
-  margin-right: 0px;
+  margin-right: 0;
 }
 </style>

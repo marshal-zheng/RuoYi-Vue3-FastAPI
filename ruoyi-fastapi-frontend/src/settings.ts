@@ -8,6 +8,7 @@ interface SettingsConfig {
   tagsView: boolean;
   fixedHeader: boolean;
   sidebarLogo: boolean;
+  showLogoImage: boolean;
   dynamicTitle: boolean;
   errorLog: string | string[];
 }
@@ -34,7 +35,7 @@ const settings: SettingsConfig = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
    * 是否固定头部
@@ -45,6 +46,11 @@ const settings: SettingsConfig = {
    * 是否显示logo
    */
   sidebarLogo: true,
+
+  /**
+   * 是否显示logo图片（为false时只显示文字标题）
+   */
+  showLogoImage: true,
 
   /**
    * 是否显示动态标题
