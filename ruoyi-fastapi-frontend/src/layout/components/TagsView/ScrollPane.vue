@@ -68,8 +68,8 @@ function scrollToLeft() {
   const wrapper = scrollWrapper.value;
   if (!wrapper) return;
 
-  wrapper.scrollLeft = Math.max(0, wrapper.scrollLeft - 200);
-  updateScrollButtons();
+  const targetScrollLeft = Math.max(0, wrapper.scrollLeft - 180);
+  smoothScrollTo(wrapper, targetScrollLeft);
 }
 
 // 右滚动按钮
@@ -78,11 +78,41 @@ function scrollToRight() {
   const content = tagsContent.value;
   if (!wrapper || !content) return;
 
-  wrapper.scrollLeft = Math.min(
+  const targetScrollLeft = Math.min(
     content.scrollWidth - wrapper.clientWidth,
-    wrapper.scrollLeft + 200
+    wrapper.scrollLeft + 180
   );
-  updateScrollButtons();
+  smoothScrollTo(wrapper, targetScrollLeft);
+}
+
+// 平滑滚动函数
+function smoothScrollTo(element, target) {
+  const start = element.scrollLeft;
+  const distance = target - start;
+  const duration = 300;
+  let startTime = null;
+
+  function animate(currentTime) {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const run = easeOutCubic(timeElapsed, start, distance, duration);
+    element.scrollLeft = run;
+    
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animate);
+    } else {
+      element.scrollLeft = target;
+      updateScrollButtons();
+    }
+  }
+
+  function easeOutCubic(t, b, c, d) {
+    t /= d;
+    t--;
+    return c * (t * t * t + 1) + b;
+  }
+
+  requestAnimationFrame(animate);
 }
 
 const emits = defineEmits(['scroll']);
@@ -149,7 +179,7 @@ defineExpose({
 .scroll-container {
   position: relative;
   width: 100%;
-  height: 34px;
+  height: 40px;
   overflow: hidden;
 }
 
@@ -175,41 +205,71 @@ defineExpose({
   height: 100%;
   white-space: nowrap;
   min-width: 100%;
+  padding: 0 8px;
 }
 
 .scroll-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 20px;
-  height: 20px;
-  background: var(--el-bg-color-overlay, rgba(255, 255, 255, 0.9));
-  border: 1px solid var(--el-border-color-light, #e4e7ed);
-  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #6b7280;
 }
 
 .scroll-button:hover {
-  background: var(--el-color-primary-light-9, #e6f0ff);
-  border-color: var(--el-color-primary, #0052d9);
-  color: var(--el-color-primary, #0052d9);
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.scroll-button:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .scroll-button .el-icon {
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .scroll-button-left {
-  left: 5px;
+  left: 4px;
 }
 
 .scroll-button-right {
-  right: 5px;
+  right: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .scroll-container {
+    height: 36px;
+  }
+  
+  .scroll-button {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .scroll-button .el-icon {
+    font-size: 12px;
+  }
+  
+  .scroll-button-left {
+    left: 2px;
+  }
+  
+  .scroll-button-right {
+    right: 2px;
+  }
 }
 </style>

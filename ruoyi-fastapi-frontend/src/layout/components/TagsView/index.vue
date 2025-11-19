@@ -1,11 +1,8 @@
 <template>
   <div
     id="tags-view-container"
-    class="flex items-center h-8 w-full shadow-sm"
-    style="
-      background: var(--tags-bg, #fff);
-      border-bottom: 1px solid var(--tags-item-border, #d8dce5);
-    "
+    class="flex items-center h-10 w-full relative border-b border-gray-200"
+    style="background-color: #f3f5f9"
   >
     <!-- 标签滚动区域 -->
     <div class="flex-1 overflow-hidden">
@@ -15,131 +12,51 @@
           :key="tag.path"
           :data-path="tag.path"
           :class="[
-            'inline-flex items-center relative h-6 px-2 mx-1 first:ml-4 last:mr-4',
-            'border rounded text-xs cursor-pointer no-underline whitespace-nowrap',
-            'transition-all duration-200 ease-in-out hover:shadow-sm hover:-translate-y-px',
-            isActive(tag) ? 'text-white border-transparent shadow-sm' : '',
+            'tags-view-item',
+            'relative inline-flex items-center h-full px-4',
+            'text-[13px] font-medium cursor-pointer no-underline whitespace-nowrap',
+            'text-gray-600 bg-transparent',
+            'transition-colors duration-200',
+            isActive(tag) ? 'is-active' : 'hover:text-blue-600 hover:bg-blue-50/50',
+            isAffix(tag) ? 'tags-view-item--affix' : '',
           ]"
-          @mouseenter="
-            e => {
-              if (!isActive(tag)) {
-                e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)';
-              }
-            }
-          "
-          @mouseleave="
-            e => {
-              if (!isActive(tag)) {
-                e.target.style.backgroundColor = 'var(--tags-item-bg, #fff)';
-              }
-            }
-          "
-          :style="
-            isActive(tag)
-              ? {
-                  background: theme,
-                  borderColor: theme,
-                  color: '#fff',
-                }
-              : {
-                  color: 'var(--tags-item-text, #495060)',
-                  background: 'var(--tags-item-bg, #fff)',
-                  borderColor: 'var(--tags-item-border, #d8dce5)',
-                }
-          "
           :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
           @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
           @dblclick="!isAffix(tag) ? closeSelectedTag(tag) : ''"
           :title="tag.title.length > 10 ? tag.title : ''"
         >
-          <span
-            v-if="isActive(tag)"
-            class="inline-block w-2 h-2 bg-white rounded-full mr-1 animate-pulse"
-          ></span>
-          <span class="flex-1 overflow-hidden text-ellipsis">
+          <span class="inline-flex items-center whitespace-nowrap mr-2">
             {{ tag.title }}
           </span>
-          <span
+          <zx-icon
             v-if="!isAffix(tag)"
+            icon="Close"
+            class="tags-view-item__close absolute top-1/2 right-2.5 -translate-y-1/2 hidden cursor-pointer transition-opacity duration-200"
+            :size="12"
             @click.prevent.stop="closeSelectedTag(tag)"
-            class="flex items-center justify-center w-4 h-4 ml-1 rounded-full opacity-60 hover:opacity-100 transition-all duration-200 group"
-            :style="
-              isActive(tag)
-                ? {
-                    color: '#fff',
-                  }
-                : {
-                    color: 'var(--tags-item-text, #495060)',
-                  }
-            "
-            @mouseenter="
-              e => {
-                if (isActive(tag)) {
-                  e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                } else {
-                  e.target.style.backgroundColor = 'var(--tags-close-hover, rgba(0, 0, 0, 0.1))';
-                }
-              }
-            "
-            @mouseleave="
-              e => {
-                e.target.style.backgroundColor = 'transparent';
-              }
-            "
-          >
-            <Close class="w-3 h-3" />
-          </span>
+          />
         </router-link>
       </scroll-pane>
     </div>
 
     <!-- 右侧操作区域 -->
-    <div
-      class="flex items-center gap-1 px-3"
-      style="border-left: 1px solid var(--tags-item-border, #d8dce5)"
-    >
+    <div class="flex items-center h-full border-l border-gray-200">
       <!-- 刷新当前页面按钮 -->
       <div
-        class="flex items-center justify-center w-6 h-6 rounded cursor-pointer transition-all duration-200"
-        style="color: var(--tags-item-text, #495060)"
+        class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer text-gray-500 hover:text-blue-600 hover:bg-blue-50/50 transition-colors duration-200"
         @click="refreshSelectedTag($route)"
-        @mouseenter="
-            e => {
-            e.target.style.color = 'var(--el-color-primary, #0052d9)';
-            e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)';
-          }
-        "
-        @mouseleave="
-          e => {
-            e.target.style.color = 'var(--tags-item-text, #495060)';
-            e.target.style.backgroundColor = 'transparent';
-          }
-        "
         title="刷新当前页面 (Ctrl+R)"
       >
-        <el-icon class="text-sm"><RefreshRight /></el-icon>
+        <zx-icon icon="RefreshRight" :size="14" />
       </div>
 
       <!-- 更多操作下拉菜单 -->
       <el-dropdown trigger="click" @command="handleCommand">
         <div
-          class="flex items-center justify-center w-6 h-6 rounded cursor-pointer transition-all duration-200"
-          style="color: var(--tags-item-text, #495060)"
-          @mouseenter="
-            e => {
-              e.target.style.color = 'var(--el-color-primary, #0052d9)';
-              e.target.style.backgroundColor = 'var(--tags-item-hover, #f5f7fa)';
-            }
-          "
-          @mouseleave="
-            e => {
-              e.target.style.color = 'var(--tags-item-text, #495060)';
-              e.target.style.backgroundColor = 'transparent';
-            }
-          "
+          class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer text-gray-500 hover:text-blue-600 hover:bg-blue-50/50 transition-colors duration-200"
           title="更多操作"
         >
-          <el-icon class="text-sm"><MoreFilled /></el-icon>
+          <zx-icon icon="MoreFilled" :size="14" />
         </div>
         <template #dropdown>
           <el-dropdown-menu>
@@ -168,7 +85,7 @@
 </template>
 
 <script setup>
-import { MoreFilled, RefreshRight, CircleClose, Close, Back, Right } from '@element-plus/icons-vue';
+import { RefreshRight, CircleClose, Back, Right } from '@element-plus/icons-vue';
 import ScrollPane from './ScrollPane';
 import { getNormalPath } from '@/utils/ruoyi';
 import useTagsViewStore from '@/store/modules/tagsView';
@@ -204,35 +121,20 @@ onUnmounted(() => {
 function isActive(r) {
   return r.path === route.path;
 }
-function activeStyle(tag) {
-  if (!isActive(tag)) return {};
-  return {
-    'background-color': theme.value,
-    'border-color': theme.value,
-  };
-}
 function isAffix(tag) {
   return tag.meta && tag.meta.affix;
 }
 function isFirstView(view) {
-  try {
-    const target = view || { fullPath: route.fullPath };
-    return target.fullPath === '/index' || target.fullPath === visitedViews.value[1]?.fullPath;
-  } catch (err) {
-    return false;
-  }
+  const target = view || { fullPath: route.fullPath };
+  return target.fullPath === '/index' || target.fullPath === visitedViews.value[1]?.fullPath;
 }
 function isLastView(view) {
-  try {
-    const target = view || { fullPath: route.fullPath };
-    return target.fullPath === visitedViews.value[visitedViews.value.length - 1]?.fullPath;
-  } catch (err) {
-    return false;
-  }
+  const target = view || { fullPath: route.fullPath };
+  return target.fullPath === visitedViews.value[visitedViews.value.length - 1]?.fullPath;
 }
 function filterAffixTags(routes, basePath = '') {
   let tags = [];
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (route.meta && route.meta.affix) {
       const tagPath = getNormalPath(basePath + '/' + route.path);
       tags.push({
@@ -287,27 +189,11 @@ function refreshSelectedTag(view) {
   }
 }
 function closeSelectedTag(view) {
-  // 添加关闭动画
-  const tagElement = document.querySelector(`[data-path="${view.path}"]`);
-  if (tagElement) {
-    tagElement.style.transform = 'scale(0.8)';
-    tagElement.style.opacity = '0';
-
-    setTimeout(() => {
-      proxy.$tab.closePage(view).then(({ visitedViews }) => {
-        if (isActive(view)) {
-          toLastView(visitedViews, view);
-        }
-      });
-    }, 150);
-  } else {
-    // 如果找不到元素，直接关闭
-    proxy.$tab.closePage(view).then(({ visitedViews }) => {
-      if (isActive(view)) {
-        toLastView(visitedViews, view);
-      }
-    });
-  }
+  proxy.$tab.closePage(view).then(({ visitedViews }) => {
+    if (isActive(view)) {
+      toLastView(visitedViews, view);
+    }
+  });
 }
 function closeRightTags() {
   const currentTag = {
@@ -317,8 +203,8 @@ function closeRightTags() {
     name: route.name,
     meta: route.meta,
   };
-  proxy.$tab.closeRightPage(currentTag).then(visitedViews => {
-    if (!visitedViews.find(i => i.fullPath === route.fullPath)) {
+  proxy.$tab.closeRightPage(currentTag).then((visitedViews) => {
+    if (!visitedViews.find((i) => i.fullPath === route.fullPath)) {
       toLastView(visitedViews);
     }
   });
@@ -331,8 +217,8 @@ function closeLeftTags() {
     name: route.name,
     meta: route.meta,
   };
-  proxy.$tab.closeLeftPage(currentTag).then(visitedViews => {
-    if (!visitedViews.find(i => i.fullPath === route.fullPath)) {
+  proxy.$tab.closeLeftPage(currentTag).then((visitedViews) => {
+    if (!visitedViews.find((i) => i.fullPath === route.fullPath)) {
       toLastView(visitedViews);
     }
   });
@@ -351,7 +237,7 @@ function closeOthersTags() {
 }
 function closeAllTags(view) {
   proxy.$tab.closeAllPage().then(({ visitedViews }) => {
-    if (affixTags.value.some(tag => tag.path === route.path)) {
+    if (affixTags.value.some((tag) => tag.path === route.path)) {
       return;
     }
     toLastView(visitedViews, view);
@@ -381,7 +267,7 @@ function handleGlobalKeydown(e) {
   // Ctrl+W 关闭当前标签
   if (e.ctrlKey && e.key === 'w') {
     e.preventDefault();
-    const currentTag = visitedViews.value.find(tag => tag.path === route.path);
+    const currentTag = visitedViews.value.find((tag) => tag.path === route.path);
     if (currentTag && !isAffix(currentTag)) {
       closeSelectedTag(currentTag);
     }
@@ -397,7 +283,6 @@ function handleGlobalKeydown(e) {
   if (e.ctrlKey && e.shiftKey && e.key === 'T') {
     e.preventDefault();
     // TODO: 实现重新打开逻辑
-    console.log('重新打开最近关闭的标签');
   }
 }
 
@@ -430,3 +315,82 @@ function handleCommand(command) {
   }
 }
 </script>
+
+<style scoped>
+/* 底部指示器 */
+.tags-view-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: v-bind(theme);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+/* 关闭按钮基础样式 */
+.tags-view-item__close {
+  color: #9ca3af;
+}
+
+/* hover 时显示关闭按钮 */
+.tags-view-item:not(.tags-view-item--affix):hover .tags-view-item__close {
+  display: block !important;
+}
+
+.tags-view-item__close:hover {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+/* 激活状态 */
+.tags-view-item.is-active {
+  color: v-bind(theme) !important;
+  background-color: #ffffff !important;
+}
+
+.tags-view-item.is-active::after {
+  transform: scaleX(1);
+}
+
+/* 激活状态的关闭按钮 */
+.tags-view-item.is-active .tags-view-item__close {
+  display: block !important;
+  color: v-bind(theme) !important;
+}
+
+.tags-view-item.is-active .tags-view-item__close:hover {
+  opacity: 0.7 !important;
+}
+
+/* 工具按钮左边框 */
+.tags-view-tool::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 1px);
+  border-left: 1px solid #e5e7eb;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  #tags-view-container {
+    height: 2.25rem;
+  }
+
+  .tags-view-item {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .tags-view-tool {
+    width: 2rem;
+  }
+}
+</style>
