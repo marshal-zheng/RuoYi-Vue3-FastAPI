@@ -7,6 +7,13 @@
       </div>
     </template>
 
+    <template #footer>
+      <div class="simulation-dialog__footer">
+        <el-button @click="handleReopen">重新打开</el-button>
+        <el-button type="primary" @click="dialog.close()">关闭</el-button>
+      </div>
+    </template>
+
     <div v-if="simulationResult" class="simulation-summary">
       <el-descriptions :column="2" size="small" border>
         <el-descriptions-item label="设备数量">
@@ -91,12 +98,17 @@
 import { ref } from 'vue';
 import { useDialog } from '@zxio/zxui';
 
+const emit = defineEmits(['reopen']);
+
 const simulationResult = ref(null);
 const simulationTab = ref('timeline');
 
 const dialog = useDialog({
   title: '多总线仿真结果',
   width: '75%',
+  height: '80%',
+  showCancel: false,
+  okText: '关闭',
   footer: false,
 });
 
@@ -108,6 +120,10 @@ function open(payload) {
 
 function close() {
   dialog.close();
+}
+
+function handleReopen() {
+  emit('reopen');
 }
 
 function downloadSimulationFile(filename, content) {
@@ -134,6 +150,12 @@ defineExpose({
   align-items: center;
   gap: 12px;
   font-weight: 600;
+}
+
+.simulation-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .simulation-summary {

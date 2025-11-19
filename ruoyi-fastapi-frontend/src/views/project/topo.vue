@@ -6,6 +6,7 @@
       :operators-loading="loading"
       :layout="layoutMode"
       :dnd-config="dndConfig"
+      :show-graph-control="false"
       @node-dblclick="handleNodeDblclick"
     >
       <template #right>
@@ -75,7 +76,7 @@
     <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
 
     <!-- 仿真结果对话框 -->
-    <SimulationResultDialog ref="simulationDialogRef" />
+    <SimulationResultDialog ref="simulationDialogRef" @reopen="handleReopenSimulationDialog" />
   </ZxContentWrap>
 </template>
 
@@ -731,12 +732,15 @@ function presentSimulationResult() {
   if (!simulationResultPayload.value) {
     return;
   }
-  ElMessage.success('仿真完成，正在生成报表...');
-  const payload = simulationResultPayload.value;
-  simulationResultPayload.value = null;
-  setTimeout(() => {
-    simulationDialogRef.value?.open(payload);
-  }, 800);
+  simulationDialogRef.value?.open(simulationResultPayload.value);
+}
+
+function handleReopenSimulationDialog() {
+  if (!simulationResultPayload.value) {
+    ElMessage.warning('暂无仿真结果，请先执行仿真');
+    return;
+  }
+  simulationDialogRef.value?.open(simulationResultPayload.value);
 }
 
 function playSimulationStep(step) {
