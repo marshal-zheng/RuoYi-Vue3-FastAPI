@@ -9,11 +9,10 @@ RUN npm config set registry https://registry.npmmirror.com/
 RUN corepack enable
 
 # Copy package files
-COPY package.json .npmrc* .yarnrc.yml* ./
+COPY package.json yarn.lock .npmrc* .yarnrc.yml* ./
 
 # Install dependencies
-# Use --no-immutable to allow lockfile generation if missing
-RUN yarn install --no-immutable
+RUN yarn install
 
 # Copy application code (will be overridden by volume mount)
 COPY . .

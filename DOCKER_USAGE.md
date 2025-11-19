@@ -10,19 +10,19 @@
 
 ```bash
 # 启动开发环境
-docker-compose -f docker-compose.dev.yml up
+docker-compose -f docker-compose-dev.yml up
 
 # 后台运行
-docker-compose -f docker-compose.dev.yml up -d
+docker-compose -f docker-compose-dev.yml up -d
 
 # 查看日志
-docker-compose -f docker-compose.dev.yml logs -f
+docker-compose -f docker-compose-dev.yml logs -f
 
 # 停止服务
-docker-compose -f docker-compose.dev.yml down
+docker-compose -f docker-compose-dev.yml down
 
 # 停止并删除数据卷（慎用）
-docker-compose -f docker-compose.dev.yml down -v
+docker-compose -f docker-compose-dev.yml down -v
 ```
 
 ### 生产环境 (Production)
@@ -31,13 +31,13 @@ docker-compose -f docker-compose.dev.yml down -v
 
 ```bash
 # 启动生产环境
-docker-compose -f docker-compose.prod.yml up -d
+docker-compose -f docker-compose.yml up -d
 
 # 查看日志
-docker-compose -f docker-compose.prod.yml logs -f
+docker-compose -f docker-compose.yml logs -f
 
 # 停止服务
-docker-compose -f docker-compose.prod.yml down
+docker-compose -f docker-compose.yml down
 ```
 
 ## 环境配置 / Environment Configuration
@@ -92,23 +92,23 @@ docker-compose -f docker-compose.prod.yml down
 
 ```bash
 # 开发环境
-docker-compose -f docker-compose.dev.yml build
+docker-compose -f docker-compose-dev.yml build
 
 # 生产环境
-docker-compose -f docker-compose.prod.yml build
+docker-compose -f docker-compose.yml build
 
 # 强制重新构建（不使用缓存）
-docker-compose -f docker-compose.dev.yml build --no-cache
+docker-compose -f docker-compose-dev.yml build --no-cache
 ```
 
 ### 查看服务状态
 
 ```bash
 # 开发环境
-docker-compose -f docker-compose.dev.yml ps
+docker-compose -f docker-compose-dev.yml ps
 
 # 生产环境
-docker-compose -f docker-compose.prod.yml ps
+docker-compose -f docker-compose.yml ps
 ```
 
 ### 进入容器
@@ -130,14 +130,14 @@ docker exec -it ruoyi-mysql-dev mysql -uroot -proot
 
 ```bash
 # 查看所有服务日志
-docker-compose -f docker-compose.dev.yml logs -f
+docker-compose -f docker-compose-dev.yml logs -f
 
 # 查看特定服务日志
-docker-compose -f docker-compose.dev.yml logs -f backend
-docker-compose -f docker-compose.dev.yml logs -f frontend
+docker-compose -f docker-compose-dev.yml logs -f backend
+docker-compose -f docker-compose-dev.yml logs -f frontend
 
 # 查看最近 100 行日志
-docker-compose -f docker-compose.dev.yml logs --tail=100 backend
+docker-compose -f docker-compose-dev.yml logs --tail=100 backend
 ```
 
 ### 数据库操作
@@ -162,10 +162,10 @@ docker exec -it ruoyi-redis-dev redis-cli -a redis123456
 cp .env.example .env
 
 # 启动开发环境
-docker-compose -f docker-compose.dev.yml up -d
+docker-compose -f docker-compose-dev.yml up -d
 
 # 等待服务启动（约 30-60 秒）
-docker-compose -f docker-compose.dev.yml logs -f
+docker-compose -f docker-compose-dev.yml logs -f
 ```
 
 ### 2. 日常开发
@@ -184,7 +184,7 @@ docker exec -it ruoyi-frontend-dev yarn add <package-name>
 # 方式 2：本地安装后重启
 cd ruoyi-fastapi-frontend
 yarn add <package-name>
-docker-compose -f docker-compose.dev.yml restart frontend
+docker-compose -f docker-compose-dev.yml restart frontend
 ```
 
 **后端：**
@@ -195,8 +195,8 @@ docker exec -it ruoyi-backend-dev pip install <package-name>
 # 方式 2：更新 requirements.txt 后重新构建
 cd ruoyi-fastapi-backend
 echo "<package-name>" >> requirements.txt
-docker-compose -f docker-compose.dev.yml build backend
-docker-compose -f docker-compose.dev.yml up -d backend
+docker-compose -f docker-compose-dev.yml build backend
+docker-compose -f docker-compose-dev.yml up -d backend
 ```
 
 ## 故障排查 / Troubleshooting
@@ -217,15 +217,15 @@ lsof -i :3307
 
 ```bash
 # 查看详细日志
-docker-compose -f docker-compose.dev.yml logs backend
+docker-compose -f docker-compose-dev.yml logs backend
 
 # 检查容器状态
-docker-compose -f docker-compose.dev.yml ps
+docker-compose -f docker-compose-dev.yml ps
 
 # 重新构建并启动
-docker-compose -f docker-compose.dev.yml down
-docker-compose -f docker-compose.dev.yml build --no-cache
-docker-compose -f docker-compose.dev.yml up
+docker-compose -f docker-compose-dev.yml down
+docker-compose -f docker-compose-dev.yml build --no-cache
+docker-compose -f docker-compose-dev.yml up
 ```
 
 ### 数据库连接失败
@@ -235,10 +235,10 @@ docker-compose -f docker-compose.dev.yml up
 docker exec ruoyi-mysql-dev mysqladmin ping -h localhost -uroot -proot
 
 # 查看数据库日志
-docker-compose -f docker-compose.dev.yml logs mysql
+docker-compose -f docker-compose-dev.yml logs mysql
 
 # 等待数据库完全启动（healthcheck）
-docker-compose -f docker-compose.dev.yml ps
+docker-compose -f docker-compose-dev.yml ps
 ```
 
 ### 热更新不生效
@@ -246,7 +246,7 @@ docker-compose -f docker-compose.dev.yml ps
 **前端：**
 - 检查文件是否正确挂载：`docker exec ruoyi-frontend-dev ls -la /app`
 - 检查 Vite 配置中的 `server.watch` 选项
-- 重启容器：`docker-compose -f docker-compose.dev.yml restart frontend`
+- 重启容器：`docker-compose -f docker-compose-dev.yml restart frontend`
 
 **后端：**
 - 检查 `APP_RELOAD=true` 环境变量
@@ -257,10 +257,10 @@ docker-compose -f docker-compose.dev.yml ps
 
 ```bash
 # 停止并删除容器、网络
-docker-compose -f docker-compose.dev.yml down
+docker-compose -f docker-compose-dev.yml down
 
 # 删除所有数据卷（会丢失数据）
-docker-compose -f docker-compose.dev.yml down -v
+docker-compose -f docker-compose-dev.yml down -v
 
 # 清理未使用的镜像
 docker image prune -a

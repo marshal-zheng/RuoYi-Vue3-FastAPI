@@ -4,7 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # 复制 package.json 和 yarn 配置文件
-COPY package.json .npmrc .yarnrc.yml ./
+COPY package.json yarn.lock .npmrc .yarnrc.yml ./
 
 # 配置 Alpine 国内镜像源（加速系统依赖安装）
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
