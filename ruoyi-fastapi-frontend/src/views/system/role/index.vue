@@ -118,44 +118,27 @@
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" width="180" class-name="small-padding">
             <template #default="scope">
-              <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
-                <el-button
-                  link
-                  type="primary"
-                  icon="Edit"
+              <div class="op-col__wrap">
+                <ZxButton
+                  v-if="scope.row.roleId !== 1"
+                  type="text"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:role:edit']"
-                />
-              </el-tooltip>
-              <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
-                <el-button
-                  link
-                  type="primary"
-                  icon="Delete"
+                >修改</ZxButton>
+                <ZxButton
+                  v-if="scope.row.roleId !== 1"
+                  type="text"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['system:role:remove']"
+                >删除</ZxButton>
+                <ZxMoreAction
+                  v-if="scope.row.roleId !== 1 && getRoleMoreActionList(scope.row).length"
+                  :list="getRoleMoreActionList(scope.row)"
+                  @select="handleRoleMoreActionSelect($event, scope.row)"
                 />
-              </el-tooltip>
-              <el-tooltip content="数据权限" placement="top" v-if="scope.row.roleId !== 1">
-                <el-button
-                  link
-                  type="primary"
-                  icon="CircleCheck"
-                  @click="handleDataScope(scope.row)"
-                  v-hasPermi="['system:role:edit']"
-                />
-              </el-tooltip>
-              <el-tooltip content="分配用户" placement="top" v-if="scope.row.roleId !== 1">
-                <el-button
-                  link
-                  type="primary"
-                  icon="User"
-                  @click="handleAuthUser(scope.row)"
-                  v-hasPermi="['system:role:edit']"
-                />
-              </el-tooltip>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -293,6 +276,7 @@ import {
   deptTreeSelect,
 } from '@/api/system/role';
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu';
+import { checkPermi } from '@/utils/permission';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -612,5 +596,27 @@ function submitDataScope() {
 function cancelDataScope() {
   openDataScope.value = false;
   reset();
+}
+
+function getRoleMoreActionList(row) {
+  const actions = [];
+  if (checkPermi(['system:role:edit'])) {
+    actions.push({ label: '数据权限', eventTag: 'dataScope' });
+    actions.push({ label: '分配用户', eventTag: 'authUser' });
+  }
+  return actions;
+}
+
+function handleRoleMoreActionSelect(item, row) {
+  switch (item.eventTag) {
+    case 'dataScope':
+      handleDataScope(row);
+      break;
+    case 'authUser':
+      handleAuthUser(row);
+      break;
+    default:
+      break;
+  }
 }
 </script>
