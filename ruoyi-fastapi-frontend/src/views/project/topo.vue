@@ -9,18 +9,37 @@
       @node-dblclick="handleNodeDblclick"
     >
       <template #right>
-        <el-button
+        <zx-button
           size="small"
           type="success"
           :loading="simulationLoading"
-          :disabled="loading || simulationLoading"
+          :disabled="loading || simulationLoading || simulationStatus === 'running'"
           @click="handleRunSimulation"
         >
           执行仿真
-        </el-button>
-        <el-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
+        </zx-button>
+        <!-- <zx-button
+          size="small"
+          type="warning"
+          :disabled="!canPauseSimulation"
+          @click="handlePauseSimulation"
+        >
+          暂停
+        </zx-button>
+        <zx-button
+          size="small"
+          type="info"
+          :disabled="!canResumeSimulation"
+          @click="handleResumeSimulation"
+        >
+          继续
+        </zx-button> -->
+        <!-- <zx-button size="small" :disabled="!canResetSimulation" @click="handleResetSimulation">
+          重置
+        </zx-button> -->
+        <zx-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
           保存
-        </el-button>
+        </zx-button>
       </template>
     </XflowDAG>
 
@@ -33,7 +52,7 @@
 </template>
 
 <script setup name="Index">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import { NodeEditDrawer } from './components';
@@ -45,14 +64,44 @@ import { getPortColor } from '@/constants/portColor';
 
 const version = ref('3.9.0');
 const simulationLoading = ref(false);
-const simulationAnimationTimers = [];
+const simulationStatus = ref('idle');
+const simulationSteps = ref([]);
+const simulationPointer = ref(0);
+const simulationRunner = {
+  currentStepResolver: null,
+  activeController: null,
+  runningPromise: null,
+};
+const simulationResultPayload = ref(null);
+const simulationArtifacts = {
+  tokens: new Set(),
+  animations: new Set(),
+};
+const edgeOriginalStyles = new Map();
 const BUS_TYPES = ['RS422', 'RS485', 'CAN', 'LAN', '1553B'];
+const canPauseSimulation = computed(() => simulationStatus.value === 'running');
+const canResumeSimulation = computed(
+  () => simulationStatus.value === 'paused' && simulationSteps.value.length > 0
+);
+const canResetSimulation = computed(
+  () => simulationStatus.value !== 'idle' || simulationSteps.value.length > 0
+);
 
 // 路由参数
 const route = useRoute();
 const router = useRouter();
-const projectId = route.params.projectId;
-const versionId = route.query.versionId;
+const projectId = computed(() => route.params.projectId);
+const versionId = computed(() => route.query.versionId);
+
+function getProjectIdNumber() {
+  const id = projectId.value;
+  return id ? Number(id) : null;
+}
+
+function getVersionIdNumber() {
+  const id = versionId.value;
+  return id ? Number(id) : undefined;
+}
 
 // DAG 组件配置 - 设备列表（从后端获取）
 const operators = ref([]);
@@ -79,6 +128,538 @@ const dndConfig = {
     emptyDataDesc: '请先添加设备数据',
   },
 };
+
+const nodeStateStyles = {
+  idle: {
+    borderColor: '#cbd5f5',
+    backgroundColor: '#ffffff',
+    boxShadow: '',
+    opacity: 1,
+  },
+  active: {
+    borderColor: '#16a34a',
+    backgroundColor: '#f0fdf4',
+    boxShadow: '0 0 8px rgba(22,163,74,0.45)',
+    opacity: 1,
+  },
+  processing: {
+    borderColor: '#f59e0b',
+    backgroundColor: '#fffbeb',
+    boxShadow: '0 0 8px rgba(245,158,11,0.5)',
+    opacity: 1,
+  },
+  done: {
+    borderColor: '#0ea5e9',
+    backgroundColor: '#f0f9ff',
+    boxShadow: '',
+    opacity: 0.95,
+  },
+  error: {
+    borderColor: '#dc2626',
+    backgroundColor: '#fee2e2',
+    boxShadow: '0 0 8px rgba(220,38,38,0.45)',
+    opacity: 1,
+  },
+};
+
+const edgeHighlightStyles = {
+  queued: {
+    stroke: '#94a3b8',
+    strokeWidth: 2,
+    strokeDasharray: 6,
+  },
+  current: {
+    stroke: '#22c55e',
+    strokeWidth: 3,
+    strokeDasharray: 0,
+  },
+};
+
+const SIMULATION_STEP_DURATION = 950;
+const SIMULATION_TOKEN_SIZE = 12;
+
+function getGraphInstance() {
+  return dagRef.value?.getGraph?.() || null;
+}
+
+function clearGraphContent(graphInstance) {
+  const graph = graphInstance || getGraphInstance();
+  if (graph && typeof graph.clearCells === 'function') {
+    graph.clearCells();
+  }
+}
+
+function isSimulationToken(node) {
+  const data = typeof node?.getData === 'function' ? node.getData() : node?.data;
+  return Boolean(data?.isSimToken);
+}
+
+function mergeNodeStyle(currentStyle, preset) {
+  const nextStyle = { ...(currentStyle || {}) };
+  if (preset.borderColor) {
+    nextStyle.borderColor = preset.borderColor;
+  } else if (nextStyle.borderColor) {
+    delete nextStyle.borderColor;
+  }
+  if (preset.backgroundColor) {
+    nextStyle.backgroundColor = preset.backgroundColor;
+  } else if (nextStyle.backgroundColor) {
+    delete nextStyle.backgroundColor;
+  }
+  if (preset.boxShadow !== undefined) {
+    nextStyle.boxShadow = preset.boxShadow;
+  } else if (nextStyle.boxShadow) {
+    delete nextStyle.boxShadow;
+  }
+  if (preset.opacity !== undefined) {
+    nextStyle.opacity = preset.opacity;
+  } else if (nextStyle.opacity) {
+    delete nextStyle.opacity;
+  }
+  return nextStyle;
+}
+
+function applyNodeState(node, state) {
+  if (!node || isSimulationToken(node)) {
+    return;
+  }
+  const data = node.getData?.() || {};
+  const preset = nodeStateStyles[state] || nodeStateStyles.idle;
+  const nextStyle = mergeNodeStyle(data.style, preset);
+  node.setData(
+    {
+      ...data,
+      simState: state,
+      style: nextStyle,
+    },
+    { overwrite: false }
+  );
+}
+
+function getEdgeOriginalStyle(edge) {
+  if (!edge) {
+    return null;
+  }
+  if (!edgeOriginalStyles.has(edge.id)) {
+    const attrs = edge.getAttrs?.() || {};
+    const line = attrs.line || {};
+    edgeOriginalStyles.set(edge.id, {
+      stroke: line.stroke,
+      strokeWidth: line.strokeWidth,
+      strokeDasharray: line.strokeDasharray,
+      targetMarker: line.targetMarker,
+    });
+  }
+  return edgeOriginalStyles.get(edge.id);
+}
+
+function applyEdgeStyle(edge, overrides = {}) {
+  if (!edge) {
+    return;
+  }
+  const original = getEdgeOriginalStyle(edge) || {};
+  let resolvedMarker;
+  if (overrides.targetMarker === null) {
+    resolvedMarker = null;
+  } else if (overrides.targetMarker !== undefined) {
+    resolvedMarker = overrides.targetMarker;
+  } else {
+    resolvedMarker = original.targetMarker;
+  }
+  edge.attr({
+    line: {
+      stroke: overrides.stroke ?? original.stroke ?? '#c2c8d5',
+      strokeWidth: overrides.strokeWidth ?? original.strokeWidth ?? 1.6,
+      strokeDasharray: overrides.strokeDasharray ?? original.strokeDasharray ?? 0,
+      targetMarker: resolvedMarker || null,
+    },
+  });
+}
+
+function restoreEdgeStyle(edge) {
+  const original = getEdgeOriginalStyle(edge);
+  if (!original) {
+    return;
+  }
+  edge.attr({
+    line: {
+      stroke: original.stroke ?? '#c2c8d5',
+      strokeWidth: original.strokeWidth ?? 1.6,
+      strokeDasharray: original.strokeDasharray ?? 0,
+      targetMarker: original.targetMarker || null,
+    },
+  });
+}
+
+function highlightEdge(edge, mode) {
+  if (!edge) {
+    return;
+  }
+  if (!mode || mode === 'idle' || mode === 'completed') {
+    restoreEdgeStyle(edge);
+    return;
+  }
+  const preset = edgeHighlightStyles[mode];
+  if (!preset) {
+    restoreEdgeStyle(edge);
+    return;
+  }
+  applyEdgeStyle(edge, preset);
+}
+
+function resetGraphSimulationState(graph) {
+  if (!graph) {
+    return;
+  }
+  const nodes = graph.getNodes?.() || [];
+  nodes.forEach((node) => {
+    if (isSimulationToken(node)) {
+      node.remove?.();
+      return;
+    }
+    applyNodeState(node, 'idle');
+  });
+  const edges = graph.getEdges?.() || [];
+  edges.forEach((edge) => {
+    highlightEdge(edge, 'idle');
+  });
+}
+
+function registerSimulationToken(token) {
+  if (token) {
+    simulationArtifacts.tokens.add(token);
+  }
+}
+
+function disposeSimulationToken(token) {
+  if (token) {
+    token.remove?.();
+    simulationArtifacts.tokens.delete(token);
+  }
+}
+
+function disposeAllSimulationTokens() {
+  simulationArtifacts.tokens.forEach((token) => {
+    token.remove?.();
+  });
+  simulationArtifacts.tokens.clear();
+}
+
+function disposeSimulationAnimations() {
+  simulationArtifacts.animations.forEach((controller) => {
+    if (typeof controller?.cancel === 'function') {
+      controller.cancel();
+    }
+  });
+  simulationArtifacts.animations.clear();
+}
+
+function createSimulationToken(graph, startPoint) {
+  if (!graph || !startPoint) {
+    return null;
+  }
+  const halfSize = SIMULATION_TOKEN_SIZE / 2;
+  const token = graph.addNode({
+    shape: 'circle',
+    width: SIMULATION_TOKEN_SIZE,
+    height: SIMULATION_TOKEN_SIZE,
+    x: startPoint.x - halfSize,
+    y: startPoint.y - halfSize,
+    zIndex: 1000,
+    attrs: {
+      body: {
+        fill: '#f97316',
+        stroke: '#ffffff',
+        strokeWidth: 2,
+      },
+    },
+    data: {
+      isSimToken: true,
+    },
+    rotatable: false,
+    draggable: false,
+    resizable: false,
+  });
+  registerSimulationToken(token);
+  return token;
+}
+
+function animateEdgeToken(
+  edge,
+  direction = 'forward',
+  duration = SIMULATION_STEP_DURATION,
+  callbacks = {}
+) {
+  const graph = getGraphInstance();
+  if (!graph || !edge) {
+    if (callbacks.onCancelled) {
+      callbacks.onCancelled();
+    }
+    return null;
+  }
+  const edgeView = graph.findViewByCell?.(edge);
+  const pathElement =
+    edgeView?.container?.querySelector?.('path[data-edge-path="1"]') ||
+    edgeView?.container?.querySelector?.('path');
+  const pathTotalLength =
+    typeof pathElement?.getTotalLength === 'function' ? pathElement.getTotalLength() : 0;
+  const sourcePoint = edge.getSourcePoint?.();
+  const targetPoint = edge.getTargetPoint?.();
+  if (!pathElement && (!sourcePoint || !targetPoint)) {
+    if (callbacks.onCancelled) {
+      callbacks.onCancelled();
+    }
+    return null;
+  }
+  const startPoint = direction === 'forward' ? sourcePoint : targetPoint;
+  const token = createSimulationToken(graph, startPoint);
+  if (!token) {
+    if (callbacks.onCancelled) {
+      callbacks.onCancelled();
+    }
+    return null;
+  }
+  const state = {
+    rafId: 0,
+    cancelled: false,
+    startTs: 0,
+  };
+  const controller = {
+    cancel() {
+      if (state.cancelled) {
+        return;
+      }
+      state.cancelled = true;
+      if (state.rafId) {
+        cancelAnimationFrame(state.rafId);
+      }
+      disposeSimulationToken(token);
+      simulationArtifacts.animations.delete(controller);
+      if (callbacks.onCancelled) {
+        callbacks.onCancelled();
+      }
+    },
+  };
+  const stepFrame = (timestamp) => {
+    if (state.cancelled) {
+      return;
+    }
+    if (!state.startTs) {
+      state.startTs = timestamp;
+    }
+    const progress = Math.min((timestamp - state.startTs) / duration, 1);
+    const travelProgress = direction === 'forward' ? progress : 1 - progress;
+    const halfSize = SIMULATION_TOKEN_SIZE / 2;
+    let x = 0;
+    let y = 0;
+    if (pathElement && pathTotalLength > 0) {
+      const point = pathElement.getPointAtLength(pathTotalLength * travelProgress);
+      x = point.x - halfSize;
+      y = point.y - halfSize;
+    } else if (sourcePoint && targetPoint) {
+      if (direction === 'forward') {
+        x = sourcePoint.x + (targetPoint.x - sourcePoint.x) * progress - halfSize;
+        y = sourcePoint.y + (targetPoint.y - sourcePoint.y) * progress - halfSize;
+      } else {
+        x = targetPoint.x + (sourcePoint.x - targetPoint.x) * progress - halfSize;
+        y = targetPoint.y + (sourcePoint.y - targetPoint.y) * progress - halfSize;
+      }
+    }
+    token.position(x, y);
+    if (progress >= 1) {
+      disposeSimulationToken(token);
+      simulationArtifacts.animations.delete(controller);
+      if (callbacks.onCompleted) {
+        callbacks.onCompleted();
+      }
+      return;
+    }
+    state.rafId = requestAnimationFrame(stepFrame);
+  };
+  state.rafId = requestAnimationFrame(stepFrame);
+  simulationArtifacts.animations.add(controller);
+  return controller;
+}
+
+function buildSimulationSteps(graph) {
+  const edges = graph?.getEdges?.() || [];
+  const orderedSteps = edges
+    .map((edge, index) => {
+      const sourceId = edge.getSourceCellId?.();
+      const targetId = edge.getTargetCellId?.();
+      if (!sourceId || !targetId) {
+        return null;
+      }
+      const sourceNode = graph.getCellById?.(sourceId);
+      const targetNode = graph.getCellById?.(targetId);
+      if (
+        !sourceNode ||
+        !targetNode ||
+        isSimulationToken(sourceNode) ||
+        isSimulationToken(targetNode)
+      ) {
+        return null;
+      }
+      const order = edge.getData?.()?.simOrder ?? index;
+      return {
+        id: edge.id,
+        edge,
+        sourceNode,
+        targetNode,
+        order,
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.order - b.order);
+
+  const expandedSteps = [];
+  orderedSteps.forEach((step) => {
+    expandedSteps.push({
+      ...step,
+      direction: 'forward',
+    });
+    expandedSteps.push({
+      ...step,
+      direction: 'reverse',
+      sourceNode: step.targetNode,
+      targetNode: step.sourceNode,
+    });
+  });
+  return expandedSteps;
+}
+
+function markQueuedEdges(steps) {
+  const markedEdges = new Set();
+  steps.forEach((step) => {
+    if (!markedEdges.has(step.id)) {
+      highlightEdge(step.edge, 'queued');
+      markedEdges.add(step.id);
+    }
+  });
+  const firstStep = steps[0];
+  if (firstStep) {
+    applyNodeState(firstStep.sourceNode, 'active');
+  }
+}
+
+function queueSimulationResult(payload) {
+  simulationResultPayload.value = payload;
+}
+
+function presentSimulationResult() {
+  if (!simulationResultPayload.value) {
+    return;
+  }
+  ElMessage.success('仿真完成，正在生成报表...');
+  const payload = simulationResultPayload.value;
+  simulationResultPayload.value = null;
+  setTimeout(() => {
+    simulationDialogRef.value?.open(payload);
+  }, 800);
+}
+
+function playSimulationStep(step) {
+  return new Promise((resolve) => {
+    if (!step?.edge) {
+      resolve({ interrupted: true });
+      return;
+    }
+    let settled = false;
+    const finish = (payload) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      simulationRunner.currentStepResolver = null;
+      simulationRunner.activeController = null;
+      resolve(payload);
+    };
+    simulationRunner.currentStepResolver = finish;
+    highlightEdge(step.edge, 'current');
+    applyNodeState(step.sourceNode, 'active');
+    const controller = animateEdgeToken(step.edge, step.direction, SIMULATION_STEP_DURATION, {
+      onCompleted: () => {
+        highlightEdge(step.edge, 'completed');
+        applyNodeState(step.sourceNode, 'done');
+        applyNodeState(step.targetNode, 'processing');
+        finish({ interrupted: false });
+      },
+      onCancelled: () => {
+        highlightEdge(step.edge, 'queued');
+        applyNodeState(step.sourceNode, 'processing');
+        finish({ interrupted: true });
+      },
+    });
+    simulationRunner.activeController = controller;
+    if (!controller) {
+      finish({ interrupted: true });
+    }
+  });
+}
+
+function runSimulationFlow() {
+  if (simulationRunner.runningPromise) {
+    return simulationRunner.runningPromise;
+  }
+  const runnerTask = (async () => {
+    while (simulationPointer.value < simulationSteps.value.length) {
+      if (simulationStatus.value !== 'running') {
+        return;
+      }
+      const step = simulationSteps.value[simulationPointer.value];
+      const result = await playSimulationStep(step);
+      if (result?.interrupted) {
+        return;
+      }
+      simulationPointer.value += 1;
+      if (simulationPointer.value >= simulationSteps.value.length) {
+        applyNodeState(step.targetNode, 'done');
+      }
+    }
+    finalizeSimulation();
+    simulationStatus.value = 'completed';
+  })();
+  simulationRunner.runningPromise = runnerTask.finally(() => {
+    simulationRunner.runningPromise = null;
+  });
+  return simulationRunner.runningPromise;
+}
+
+function finalizeSimulation() {
+  const graph = getGraphInstance();
+  if (!graph) {
+    return;
+  }
+  disposeSimulationAnimations();
+  disposeAllSimulationTokens();
+  const nodes = graph.getNodes?.() || [];
+  nodes.forEach((node) => {
+    if (isSimulationToken(node)) {
+      return;
+    }
+    applyNodeState(node, 'done');
+  });
+  const edges = graph.getEdges?.() || [];
+  edges.forEach((edge) => {
+    highlightEdge(edge, 'completed');
+  });
+  presentSimulationResult();
+}
+
+function stopSimulationRunner(nextStatus) {
+  if (simulationRunner.activeController?.cancel) {
+    simulationRunner.activeController.cancel();
+  }
+  if (typeof simulationRunner.currentStepResolver === 'function') {
+    simulationRunner.currentStepResolver({ interrupted: true });
+  }
+  simulationRunner.activeController = null;
+  simulationRunner.currentStepResolver = null;
+  simulationRunner.runningPromise = null;
+  if (nextStatus) {
+    simulationStatus.value = nextStatus;
+  }
+}
 
 /**
  * 解析端口方向，兼容中英文配置
@@ -232,115 +813,23 @@ function generateSimulationTimeline(edges) {
   });
 }
 
-function clearSimulationAnimationTimers() {
-  while (simulationAnimationTimers.length) {
-    const timer = simulationAnimationTimers.pop();
-    clearTimeout(timer);
-  }
-}
-
-function playSimulationAnimation(edgeIds) {
-  const graph = dagRef.value?.getGraph?.();
-  if (!graph || !edgeIds?.length) {
-    return;
-  }
-
-  clearSimulationAnimationTimers();
-  const highlightColor = '#67C23A';
-  const nodeHighlightBorder = '#f59e0b';
-
-  edgeIds.forEach((edgeId, index) => {
-    const playTimer = setTimeout(() => {
-      const edge = graph.getCellById(edgeId);
-      if (!edge) {
-        return;
-      }
-
-      const sourceNode = edge.getSourceNode?.();
-      const targetNode = edge.getTargetNode?.();
-
-      // 高亮边
-      edge.attr('line/stroke', highlightColor);
-      edge.attr('line/strokeWidth', 3);
-      edge.attr('line/strokeDasharray', 6);
-
-      // 高亮节点外框（依赖自定义节点 data.style 或 properties）
-      if (sourceNode) {
-        sourceNode.setData(
-          {
-            ...sourceNode.getData(),
-            __simHighlight__: true,
-            style: {
-              ...(sourceNode.getData()?.style || {}),
-              borderColor: nodeHighlightBorder,
-            },
-          },
-          { overwrite: false }
-        );
-      }
-      if (targetNode) {
-        targetNode.setData(
-          {
-            ...targetNode.getData(),
-            __simHighlight__: true,
-            style: {
-              ...(targetNode.getData()?.style || {}),
-              borderColor: nodeHighlightBorder,
-            },
-          },
-          { overwrite: false }
-        );
-      }
-
-      const revertTimer = setTimeout(() => {
-        edge.attr('line/stroke', '#C2C8D5');
-        edge.attr('line/strokeWidth', 2);
-        edge.attr('line/strokeDasharray', 0);
-
-        // 还原节点样式
-        if (sourceNode && sourceNode.getData?.().__simHighlight__) {
-          const data = { ...sourceNode.getData() };
-          delete data.__simHighlight__;
-          if (data.style) {
-            const style = { ...data.style };
-            delete style.borderColor;
-            data.style = style;
-          }
-          sourceNode.setData(data, { overwrite: true });
-        }
-        if (targetNode && targetNode.getData?.().__simHighlight__) {
-          const data = { ...targetNode.getData() };
-          delete data.__simHighlight__;
-          if (data.style) {
-            const style = { ...data.style };
-            delete style.borderColor;
-            data.style = style;
-          }
-          targetNode.setData(data, { overwrite: true });
-        }
-      }, 800);
-      simulationAnimationTimers.push(revertTimer);
-    }, index * 500);
-
-    simulationAnimationTimers.push(playTimer);
-  });
-}
-
 function buildSimulationPayload() {
-  const graph = dagRef.value?.getGraph?.();
+  const graph = getGraphInstance();
   if (!graph) {
     return { nodes: [], edges: [] };
   }
 
-  const nodes = (graph.getNodes?.() || []).map((node, index) => {
-    const data = node.getData?.() || {};
-    return {
-      id: node.id,
-      name: data.name || data.label || `节点${index + 1}`,
-      type: data.deviceType || data.nodeType || 'device',
-      ports: data.ports || [],
-    };
-  });
+  const nodes = (graph.getNodes?.() || [])
+    .filter((node) => !isSimulationToken(node))
+    .map((node, index) => {
+      const data = node.getData?.() || {};
+      return {
+        id: node.id,
+        name: data.name || data.label || `节点${index + 1}`,
+        type: data.deviceType || data.nodeType || 'device',
+        ports: data.ports || [],
+      };
+    });
 
   const edges = (graph.getEdges?.() || [])
     .map((edge, index) => {
@@ -399,8 +888,12 @@ function handleRunSimulation() {
   if (simulationLoading.value) {
     return;
   }
+  if (simulationStatus.value === 'running') {
+    ElMessage.warning('仿真正在执行，请稍后');
+    return;
+  }
 
-  const graph = dagRef.value?.getGraph?.();
+  const graph = getGraphInstance();
   if (!graph) {
     ElMessage.error('仿真失败：图实例不存在');
     return;
@@ -419,48 +912,94 @@ function handleRunSimulation() {
     return;
   }
 
+  stopSimulationRunner('idle');
+  simulationResultPayload.value = null;
+  simulationSteps.value = [];
+  simulationPointer.value = 0;
   simulationLoading.value = true;
 
-  setTimeout(() => {
-    const { nodes: nodePayload, edges: edgePayload } = buildSimulationPayload();
-
-    if (!edgePayload.length) {
-      ElMessage.warning('暂未检测到有效连线');
-      simulationLoading.value = false;
-      return;
-    }
-
-    const summary = buildSimulationSummary(nodePayload, edgePayload);
-    const designContent = generateDesignFilePayload(
-      '多总线仿真工程',
-      version.value,
-      nodePayload,
-      edgePayload
-    );
-    const icdContent = generateIcdFilePayload(
-      '多总线仿真工程',
-      version.value,
-      nodePayload,
-      edgePayload
-    );
-    const timeline = generateSimulationTimeline(edgePayload);
-
-    simulationDialogRef.value?.open({
-      summary,
-      timeline,
-      designFile: {
-        name: 'bus_design.csv',
-        content: designContent,
-      },
-      icdFile: {
-        name: 'interface_control.csv',
-        content: icdContent,
-      },
-    });
-
+  const { nodes: nodePayload, edges: edgePayload } = buildSimulationPayload();
+  if (!edgePayload.length) {
+    ElMessage.warning('暂未检测到有效连线');
     simulationLoading.value = false;
-    playSimulationAnimation(edgePayload.map((edge) => edge.id));
-  }, 500);
+    return;
+  }
+
+  const steps = buildSimulationSteps(graph);
+  if (!steps.length) {
+    ElMessage.warning('当前拓扑缺少可执行路径');
+    simulationLoading.value = false;
+    return;
+  }
+
+  disposeSimulationAnimations();
+  disposeAllSimulationTokens();
+  resetGraphSimulationState(graph);
+  markQueuedEdges(steps);
+  simulationSteps.value = steps;
+  simulationPointer.value = 0;
+  simulationStatus.value = 'running';
+
+  const summary = buildSimulationSummary(nodePayload, edgePayload);
+  const designContent = generateDesignFilePayload(
+    '多总线仿真工程',
+    version.value,
+    nodePayload,
+    edgePayload
+  );
+  const icdContent = generateIcdFilePayload(
+    '多总线仿真工程',
+    version.value,
+    nodePayload,
+    edgePayload
+  );
+  const timeline = generateSimulationTimeline(edgePayload).map((item, index) => ({
+    ...item,
+    order: index + 1,
+  }));
+
+  queueSimulationResult({
+    summary,
+    timeline,
+    designFile: {
+      name: 'bus_design.csv',
+      content: designContent,
+    },
+    icdFile: {
+      name: 'interface_control.csv',
+      content: icdContent,
+    },
+  });
+
+  simulationLoading.value = false;
+  runSimulationFlow();
+}
+
+function handlePauseSimulation() {
+  if (simulationStatus.value !== 'running') {
+    return;
+  }
+  simulationStatus.value = 'paused';
+  stopSimulationRunner();
+}
+
+function handleResumeSimulation() {
+  if (simulationStatus.value !== 'paused' || !simulationSteps.value.length) {
+    return;
+  }
+  simulationStatus.value = 'running';
+  runSimulationFlow();
+}
+
+function handleResetSimulation() {
+  const graph = getGraphInstance();
+  stopSimulationRunner('idle');
+  simulationSteps.value = [];
+  simulationPointer.value = 0;
+  simulationResultPayload.value = null;
+  disposeSimulationAnimations();
+  disposeAllSimulationTokens();
+  resetGraphSimulationState(graph);
 }
 
 /**
@@ -550,6 +1089,7 @@ async function loadDeviceList() {
 
     operators.value = devicesWithPorts;
   } catch (error) {
+    void error;
     ElMessage.error('加载设备列表失败，请稍后重试');
     operators.value = [];
   } finally {
@@ -610,7 +1150,7 @@ function buildPeerDeviceNameByPort(node) {
  * 处理节点双击事件
  * @param {Object} params - 包含 node, event, type
  */
-function handleNodeDblclick({ node, event, type }) {
+function handleNodeDblclick({ node }) {
   // 计算当前节点各端口对应的对端设备名称
   const peerDeviceNameByPort = buildPeerDeviceNameByPort(node);
 
@@ -631,7 +1171,7 @@ function handleNodeDblclick({ node, event, type }) {
  * 处理节点更新
  * @param {Object} params - 包含 nodeId, node, name, ports
  */
-function handleNodeUpdate({ nodeId, node, name, ports }) {
+function handleNodeUpdate({ nodeId, name, ports }) {
   // 获取图实例
   const graph = dagRef.value?.getGraph();
   if (!graph) {
@@ -681,13 +1221,19 @@ function handleNodeUpdate({ nodeId, node, name, ports }) {
  * 构建设计保存用的拓扑数据 payload
  */
 function buildTopologySavePayload() {
-  const graph = dagRef.value?.getGraph?.();
+  const graph = getGraphInstance();
   if (!graph) {
     ElMessage.error('保存失败：图实例不存在');
     return null;
   }
 
-  const nodes = graph.getNodes?.() || [];
+  const currentProjectId = getProjectIdNumber();
+  if (!currentProjectId) {
+    ElMessage.error('保存失败：缺少工程ID');
+    return null;
+  }
+
+  const nodes = (graph.getNodes?.() || []).filter((node) => !isSimulationToken(node));
   const edges = graph.getEdges?.() || [];
 
   if (!nodes.length) {
@@ -696,6 +1242,9 @@ function buildTopologySavePayload() {
   }
 
   const graphJson = typeof graph.toJSON === 'function' ? graph.toJSON() : null;
+  if (graphJson && Array.isArray(graphJson.cells)) {
+    graphJson.cells = graphJson.cells.filter((cell) => !cell?.data?.isSimToken);
+  }
 
   const nodeSummaries = nodes.map((node) => {
     const data = node.getData?.() || {};
@@ -720,8 +1269,8 @@ function buildTopologySavePayload() {
   });
 
   return {
-    projectId: Number(projectId),
-    versionId: versionId ? Number(versionId) : undefined,
+    projectId: currentProjectId,
+    versionId: getVersionIdNumber(),
     topologyData: {
       version: version.value,
       savedAt: new Date().toISOString(),
@@ -736,7 +1285,8 @@ function buildTopologySavePayload() {
  * 保存工程拓扑
  */
 function handleSaveTopo() {
-  if (!projectId) {
+  const currentProjectId = getProjectIdNumber();
+  if (!currentProjectId) {
     ElMessage.error('保存失败：缺少工程ID');
     return;
   }
@@ -749,7 +1299,7 @@ function handleSaveTopo() {
   saveProjectTopology(payload)
     .then(() => {
       ElMessage.success('拓扑保存成功');
-      router.push(`/project/project-detail/index/${projectId}`);
+      router.push(`/project/project-detail/index/${currentProjectId}`);
     })
     .catch(() => {
       ElMessage.error('拓扑保存失败，请稍后重试');
@@ -760,9 +1310,12 @@ function handleSaveTopo() {
  * 从后端加载并回显已保存的拓扑数据
  */
 function restoreSavedTopology() {
-  if (!projectId) {
+  const currentProjectId = getProjectIdNumber();
+  if (!currentProjectId) {
     return;
   }
+
+  const currentVersionId = getVersionIdNumber();
 
   const tryRestore = () => {
     const graph = dagRef.value?.getGraph?.();
@@ -771,21 +1324,29 @@ function restoreSavedTopology() {
       return;
     }
 
-    getProjectTopology(projectId, versionId ? Number(versionId) : undefined)
+    clearGraphContent(graph);
+
+    getProjectTopology(currentProjectId, currentVersionId)
       .then((res) => {
         const topo = res?.data;
         const topoData = topo?.topologyData;
         const graphJson = topoData?.graph;
-        if (!graphJson) {
-          return;
+        if (graphJson) {
+          graph.fromJSON(graphJson);
         }
-        graph.fromJSON(graphJson);
       })
       .catch(() => {});
   };
 
   tryRestore();
 }
+
+watch(
+  () => [projectId.value, versionId.value],
+  () => {
+    restoreSavedTopology();
+  }
+);
 
 // 页面加载时获取设备列表并尝试回显拓扑
 onMounted(() => {
@@ -794,7 +1355,9 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  clearSimulationAnimationTimers();
+  stopSimulationRunner('idle');
+  disposeSimulationAnimations();
+  disposeAllSimulationTokens();
 });
 </script>
 

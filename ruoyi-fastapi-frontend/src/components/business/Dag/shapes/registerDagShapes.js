@@ -116,7 +116,7 @@ export const registerDagShapes = () => {
       attrs: {
         line: {
           stroke: '#C2C8D5',
-          strokeWidth: 3,
+          strokeWidth: 5,
           targetMarker: null,
         },
       },

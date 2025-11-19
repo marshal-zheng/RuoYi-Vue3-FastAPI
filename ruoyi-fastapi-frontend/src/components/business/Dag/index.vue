@@ -182,6 +182,7 @@ defineOptions({
   name: 'DAGPage'
 })
 
+// 连接时的边配置（静态默认，颜色在 edge:connecting 事件里动态覆盖）
 const connectionEdgeOptions = {
   shape: DAG_EDGE,
   animated: true,
@@ -189,7 +190,7 @@ const connectionEdgeOptions = {
   attrs: {
     line: {
       stroke: '#C2C8D5',
-      strokeWidth: 2,
+      strokeWidth: 5,
       targetMarker: null
     }
   }

@@ -75,11 +75,51 @@ const handleEdgeAdding = async ({ edge, isNew, options }) => {
   }
 }
 
+// 获取端口颜色的辅助函数
+const getPortColor = (cell, portId) => {
+  if (!cell || !portId) return null
+  
+  // 从节点的端口配置中获取颜色
+  const ports = cell.getPorts()
+  const port = ports?.find(p => p.id === portId)
+  
+  if (port?.attrs?.portBody?.stroke) {
+    return port.attrs.portBody.stroke
+  }
+  
+  // 从端口的 circle 属性中获取颜色（普通 DAG 节点）
+  if (port?.attrs?.circle?.stroke) {
+    return port.attrs.circle.stroke
+  }
+  
+  return null
+}
+
 // 连线完成后处理函数
 const handleEdgeConnected = async ({ edge }) => {
   const g = graph?.value
   if (!edge || !g) return
   console.log('[DagConnect] edge:connected', edge?.id)
+
+  // 设置边的颜色为源端口的颜色
+  try {
+    const sourceCell = edge.getSourceCell?.()
+    const sourcePortId = edge.getSourcePortId?.()
+    
+    if (sourceCell && sourcePortId) {
+      const portColor = getPortColor(sourceCell, sourcePortId)
+      if (portColor) {
+        edge.setAttrs({
+          line: {
+            stroke: portColor
+          }
+        })
+        console.log('[DagConnect] 设置边颜色为源端口颜色:', portColor)
+      }
+    }
+  } catch (e) {
+    console.warn('[DagConnect] 设置边颜色失败:', e)
+  }
 
   // 二次保险：若已形成环，直接删除该边
   try {

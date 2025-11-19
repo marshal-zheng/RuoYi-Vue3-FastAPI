@@ -14,6 +14,6 @@ export function getProjectTopology(projectId, versionId) {
   return request({
     url: '/project/topology/' + projectId,
     method: 'get',
-    params: versionId ? { versionId } : undefined,
+    params: versionId ? { version_id: versionId } : undefined,
   });
 }

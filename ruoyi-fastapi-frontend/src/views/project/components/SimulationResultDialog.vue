@@ -37,7 +37,7 @@
     <el-tabs v-model="simulationTab" class="simulation-tabs">
       <el-tab-pane label="仿真过程" name="timeline">
         <el-empty v-if="!simulationResult?.timeline?.length" description="暂无仿真数据" />
-        <el-timeline v-else>
+        <el-timeline class="p-4" v-else>
           <el-timeline-item
             v-for="item in simulationResult.timeline"
             :key="item.id"

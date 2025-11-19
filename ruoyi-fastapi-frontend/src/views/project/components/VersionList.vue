@@ -210,7 +210,7 @@ async function loadVersionData(params = {}) {
 
 watch(
   () => props.projectId,
-  value => {
+  (value) => {
     if (value && versionGridListRef.value) {
       versionGridListRef.value.refresh();
     }
@@ -233,13 +233,13 @@ function onSearch({ handleRefresh, updateState }) {
 
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.versionId);
+  ids.value = selection.map((item) => item.versionId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
 
 // 获取更多操作列表
-const getMoreActionList = row => {
+const getMoreActionList = (row) => {
   const actions = [];
 
   // 固化版本/解除固化
@@ -269,12 +269,15 @@ const getMoreActionList = row => {
 
   // 删除版本（固化版本不能删除）
   if (row.isLocked !== '1') {
-    actions.push({
-      label: '删除',
-      eventTag: 'delete',
-      icon: Delete,
-      danger: true,
-    });
+    actions.push(
+      { isDivider: true },
+      {
+        label: '删除',
+        eventTag: 'delete',
+        icon: Delete,
+        danger: true,
+      }
+    );
   }
 
   return actions;

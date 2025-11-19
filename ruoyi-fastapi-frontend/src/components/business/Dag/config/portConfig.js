@@ -37,11 +37,11 @@ export const DAG_PORT_CONFIG = {
   /**
    * 激活时透明度（显示状态）
    */
-  activeOpacity: 1
-}
+  activeOpacity: 1,
+};
 
 // 向后兼容
-export const PORT_CONFIG = DAG_PORT_CONFIG
+export const PORT_CONFIG = DAG_PORT_CONFIG;
 
 // ============================================
 // 端口组配置
@@ -52,8 +52,8 @@ export const PORT_GROUPS = {
       name: 'top',
       args: {
         x: '50%',
-        y: 0
-      }
+        y: 0,
+      },
     },
     attrs: {
       circle: {
@@ -63,17 +63,17 @@ export const PORT_GROUPS = {
         strokeWidth: DAG_PORT_CONFIG.strokeWidth,
         fill: DAG_PORT_CONFIG.fillColor,
         opacity: DAG_PORT_CONFIG.defaultOpacity,
-        'data-port-type': DEFAULT_PORT_TYPE
-      }
-    }
+        'data-port-type': DEFAULT_PORT_TYPE,
+      },
+    },
   },
   bottom: {
     position: {
       name: 'bottom',
       args: {
         x: '50%',
-        y: 0
-      }
+        y: 0,
+      },
     },
     attrs: {
       circle: {
@@ -83,17 +83,17 @@ export const PORT_GROUPS = {
         strokeWidth: DAG_PORT_CONFIG.strokeWidth,
         fill: DAG_PORT_CONFIG.fillColor,
         opacity: DAG_PORT_CONFIG.defaultOpacity,
-        'data-port-type': DEFAULT_PORT_TYPE
-      }
-    }
+        'data-port-type': DEFAULT_PORT_TYPE,
+      },
+    },
   },
   left: {
     position: {
       name: 'left',
       args: {
         x: 0,
-        y: '50%'
-      }
+        y: '50%',
+      },
     },
     attrs: {
       circle: {
@@ -103,17 +103,17 @@ export const PORT_GROUPS = {
         strokeWidth: DAG_PORT_CONFIG.strokeWidth,
         fill: DAG_PORT_CONFIG.fillColor,
         opacity: DAG_PORT_CONFIG.defaultOpacity,
-        'data-port-type': DEFAULT_PORT_TYPE
-      }
-    }
+        'data-port-type': DEFAULT_PORT_TYPE,
+      },
+    },
   },
   right: {
     position: {
       name: 'right',
       args: {
         x: 0,
-        y: '50%'
-      }
+        y: '50%',
+      },
     },
     attrs: {
       circle: {
@@ -123,11 +123,11 @@ export const PORT_GROUPS = {
         strokeWidth: DAG_PORT_CONFIG.strokeWidth,
         fill: DAG_PORT_CONFIG.fillColor,
         opacity: DAG_PORT_CONFIG.defaultOpacity,
-        'data-port-type': DEFAULT_PORT_TYPE
-      }
-    }
-  }
-}
+        'data-port-type': DEFAULT_PORT_TYPE,
+      },
+    },
+  },
+};
 
 // ============================================
 // 工具函数
@@ -139,7 +139,7 @@ export const PORT_GROUPS = {
  * @returns {Array} 端口配置数组
  */
 export const generateNodePorts = (nodeType) => {
-  const ports = []
+  const ports = [];
 
   // 为所有节点类型生成标准端口，但根据类型控制可见性
   const portConfigs = [
@@ -155,11 +155,11 @@ export const generateNodePorts = (nodeType) => {
           fill: DAG_PORT_CONFIG.fillColor,
           'data-port-type': DEFAULT_PORT_TYPE,
           style: {
-            visibility: nodeType !== 'root-node' ? 'visible' : 'hidden'
-          }
-        }
+            visibility: nodeType !== 'root-node' ? 'visible' : 'hidden',
+          },
+        },
       },
-      position: { name: 'top' }
+      position: { name: 'top' },
     },
     {
       id: 'b',
@@ -174,23 +174,23 @@ export const generateNodePorts = (nodeType) => {
           'data-port-type': DEFAULT_PORT_TYPE,
           style: {
             // 所有节点都可以有底部连接桩，包括叶子节点
-            visibility: 'visible'
-          }
-        }
+            visibility: 'visible',
+          },
+        },
       },
-      position: { name: 'bottom' }
-    }
-  ]
+      position: { name: 'bottom' },
+    },
+  ];
 
   return portConfigs.map((config) => ({
     ...config,
     data: {
-      portType: DEFAULT_PORT_TYPE
-    }
-  }))
-}
+      portType: DEFAULT_PORT_TYPE,
+    },
+  }));
+};
 
 // ============================================
 // 默认导出
 // ============================================
-export default DAG_PORT_CONFIG
+export default DAG_PORT_CONFIG;

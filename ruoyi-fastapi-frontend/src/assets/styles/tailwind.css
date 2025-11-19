@@ -129,7 +129,7 @@
   /* 边框色 */
   --el-border-color: var(--color-gray-200);
   --el-border-color-light: var(--color-gray-100);
-  --el-border-color-lighter: var(--color-gray-50);
+  --el-border-color-lighter: var(--color-gray-100);
   --el-border-color-extra-light: var(--color-gray-50);
   --el-border-color-dark: var(--color-gray-300);
   --el-border-color-darker: var(--color-gray-400);
