@@ -42,7 +42,7 @@ async def get_system_project_list(
 
 
 @projectController.post('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))])
-@Log(title='工程管理', business_type=BusinessType.INSERT)
+@Log(title='工程管理-工程', business_type=BusinessType.INSERT)
 async def add_system_project(
     request: Request,
     add_project: ProjectModel,
@@ -63,7 +63,7 @@ async def add_system_project(
 
 
 @projectController.put('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))])
-@Log(title='工程管理', business_type=BusinessType.UPDATE)
+@Log(title='工程管理-工程', business_type=BusinessType.UPDATE)
 async def edit_system_project(
     request: Request,
     edit_project: ProjectModel,
@@ -82,7 +82,7 @@ async def edit_system_project(
 
 
 @projectController.delete('/{project_ids}', dependencies=[Depends(CheckUserInterfaceAuth('project:project:remove'))])
-@Log(title='工程管理', business_type=BusinessType.DELETE)
+@Log(title='工程管理-工程', business_type=BusinessType.DELETE)
 async def delete_system_project(
     request: Request,
     project_ids: str,
@@ -124,7 +124,7 @@ async def query_detail_system_project(
     '/topology/save',
     dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))],
 )
-@Log(title='工程拓扑', business_type=BusinessType.UPDATE)
+@Log(title='工程管理-拓扑', business_type=BusinessType.UPDATE)
 @ValidateFields(validate_model='project_topology')
 async def save_project_topology(
     request: Request,

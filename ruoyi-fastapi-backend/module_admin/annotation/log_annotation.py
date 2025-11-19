@@ -181,8 +181,19 @@ class Log:
                 current_user = await LoginService.get_current_user(request, token, query_db)
                 oper_name = current_user.user.user_name
                 dept_name = current_user.user.dept.dept_name if current_user.user.dept else None
+                
+                # 动态调整 title：如果是保存拓扑且有 versionId，记录为"工程管理-版本"
+                log_title = self.title
+                if self.title == '工程管理-拓扑' and oper_param:
+                    try:
+                        param_dict = json.loads(oper_param) if isinstance(oper_param, str) else {}
+                        if param_dict.get('versionId') or param_dict.get('version_id'):
+                            log_title = '工程管理-版本'
+                    except Exception:
+                        pass
+                
                 operation_log = OperLogModel(
-                    title=self.title,
+                    title=log_title,
                     businessType=self.business_type,
                     method=func_path,
                     requestMethod=request_method,

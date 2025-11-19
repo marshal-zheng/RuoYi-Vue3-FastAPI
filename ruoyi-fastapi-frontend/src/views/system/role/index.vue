@@ -88,7 +88,7 @@
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column type="selection" width="55" />
           <el-table-column label="角色编号" prop="roleId" width="120" />
           <el-table-column
             label="角色名称"
@@ -103,7 +103,7 @@
             width="150"
           />
           <el-table-column label="显示顺序" prop="roleSort" width="100" />
-          <el-table-column label="状态" align="center" width="100">
+          <el-table-column label="状态" width="100">
             <template #default="scope">
               <el-switch
                 v-model="scope.row.status"
@@ -113,7 +113,7 @@
               />
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime">
+          <el-table-column label="创建时间" prop="createTime">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -127,12 +127,12 @@
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:role:edit']"
                 >修改</ZxButton>
-                <ZxButton
+                <zx-button
                   v-if="scope.row.roleId !== 1"
                   type="text"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['system:role:remove']"
-                >删除</ZxButton>
+                  @click="handleAuthUser(scope.row)"
+                  v-hasPermi="['system:role:edit']"
+                >分配用户</zx-button>
                 <ZxMoreAction
                   v-if="scope.row.roleId !== 1 && getRoleMoreActionList(scope.row).length"
                   :list="getRoleMoreActionList(scope.row)"
@@ -602,7 +602,9 @@ function getRoleMoreActionList(row) {
   const actions = [];
   if (checkPermi(['system:role:edit'])) {
     actions.push({ label: '数据权限', eventTag: 'dataScope' });
-    actions.push({ label: '分配用户', eventTag: 'authUser' });
+  }
+  if (checkPermi(['system:role:remove'])) {
+    actions.push({ label: '删除', eventTag: 'delete' });
   }
   return actions;
 }
@@ -614,6 +616,9 @@ function handleRoleMoreActionSelect(item, row) {
       break;
     case 'authUser':
       handleAuthUser(row);
+      break;
+    case 'delete':
+      handleDelete(row);
       break;
     default:
       break;

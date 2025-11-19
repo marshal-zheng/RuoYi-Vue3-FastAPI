@@ -30,12 +30,12 @@
           @selection-change="handleSelectionChange"
           :data="grid.list || []"
         >
-          <el-table-column label="序号" width="55" type="index" align="center" />
+          <el-table-column label="序号" width="55" type="index" />
           <el-table-column type="selection" :reserve-selection="true" width="55" />
-          <el-table-column label="角色编号" align="center" prop="roleId" />
-          <el-table-column label="角色名称" align="center" prop="roleName" />
-          <el-table-column label="权限字符" align="center" prop="roleKey" />
-          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+          <el-table-column label="角色编号" prop="roleId" />
+          <el-table-column label="角色名称" prop="roleName" />
+          <el-table-column label="权限字符" prop="roleKey" />
+          <el-table-column label="创建时间" prop="createTime" width="180">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>

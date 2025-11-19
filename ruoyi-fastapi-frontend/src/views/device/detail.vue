@@ -10,7 +10,7 @@
       <ZxButton type="primary" icon="Plus" @click="handleAddPort">添加端口</ZxButton>
       <ZxButton type="primary" icon="CircleCheck" @click="handleSave">保存</ZxButton>
     </template>
-    <div class="h-[600px]">
+    <div class="h-[720px]">
       <XFlow>
         <XFlowGraph
           ref="graphRef"
@@ -124,7 +124,7 @@ const connectionEdgeOptions = {
 };
 
 const deviceId = computed(() => {
-  const normalize = value => {
+  const normalize = (value) => {
     if (Array.isArray(value)) return value[0] ?? null;
     if (value === undefined || value === null || value === '') return null;
     return value;
@@ -184,13 +184,13 @@ function getPortKey(port) {
 function findPortByKey(key) {
   const normalizedKey = normalizePortKey(key);
   if (!normalizedKey) return null;
-  return tempPorts.value.find(port => getPortKey(port) === normalizedKey) || null;
+  return tempPorts.value.find((port) => getPortKey(port) === normalizedKey) || null;
 }
 
 function findPortIndexByKey(key) {
   const normalizedKey = normalizePortKey(key);
   if (!normalizedKey) return -1;
-  return tempPorts.value.findIndex(port => getPortKey(port) === normalizedKey);
+  return tempPorts.value.findIndex((port) => getPortKey(port) === normalizedKey);
 }
 
 async function handleSave() {
@@ -206,7 +206,7 @@ async function handleSave() {
       busType: deviceInfo.value.busType || '',
       categoryName: deviceInfo.value.categoryName || '',
       remark: deviceInfo.value.remark || '',
-      interfaces: tempPorts.value.map(port => ({
+      interfaces: tempPorts.value.map((port) => ({
         interfaceId: normalizeInterfaceId(port.interfaceId),
         interfaceName: port.interfaceName,
         interfaceType: port.interfaceType,
@@ -291,7 +291,7 @@ async function loadDeviceInfo() {
 watch(
   [() => route.params.deviceId, () => route.query.id, () => route.query.deviceId],
   (newValues, oldValues) => {
-    const normalize = value => {
+    const normalize = (value) => {
       if (Array.isArray(value)) {
         return value[0] ?? null;
       }
@@ -300,7 +300,7 @@ watch(
       }
       return value;
     };
-    const pickFirstValid = values => {
+    const pickFirstValid = (values) => {
       if (!values) return null;
       for (const val of values) {
         const normalized = normalize(val);
@@ -340,7 +340,7 @@ function loadDevicePorts() {
 }
 
 function syncDevicePorts() {
-  devicePorts.value = tempPorts.value.map(port => ({ ...port }));
+  devicePorts.value = tempPorts.value.map((port) => ({ ...port }));
 }
 
 function updateGraphData() {
@@ -373,9 +373,9 @@ function updateGraphData() {
     { tagName: 'text', selector: 'portLabel' },
   ];
 
-  const createPortGroup = width => ({
+  const createPortGroup = (width) => ({
     position: { name: 'absolute' },
-    markup: commonMarkup.map(item => ({ ...item })),
+    markup: commonMarkup.map((item) => ({ ...item })),
     attrs: {
       portBody: {
         width,
@@ -539,7 +539,7 @@ function handlePortContextMenu({ port, e }) {
     .then(() => {
       handleEditPortDialog(portData);
     })
-    .catch(action => {
+    .catch((action) => {
       if (action === 'cancel') {
         ElMessageBox.confirm(`确定要删除端口 "${port.interfaceName}" 吗？`, '删除确认', {
           confirmButtonText: '确定',

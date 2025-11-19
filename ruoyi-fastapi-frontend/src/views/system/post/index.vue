@@ -78,17 +78,17 @@
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="岗位编号" align="center" prop="postId" />
-          <el-table-column label="岗位编码" align="center" prop="postCode" />
-          <el-table-column label="岗位名称" align="center" prop="postName" />
-          <el-table-column label="岗位排序" align="center" prop="postSort" />
-          <el-table-column label="状态" align="center" prop="status">
+          <el-table-column type="selection" width="55" />
+          <el-table-column label="岗位编号" prop="postId" />
+          <el-table-column label="岗位编码" prop="postCode" />
+          <el-table-column label="岗位名称" prop="postName" />
+          <el-table-column label="岗位排序" prop="postSort" />
+          <el-table-column label="状态" prop="status">
             <template #default="scope">
               <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+          <el-table-column label="创建时间" prop="createTime" width="180">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
@@ -96,25 +96,22 @@
           <el-table-column
             label="操作"
             width="180"
-            align="center"
             class-name="small-padding fixed-width"
           >
             <template #default="scope">
-              <el-button
+              <zx-button
                 link
                 type="primary"
-                icon="Edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:post:edit']"
-                >修改</el-button
+                >修改</zx-button
               >
-              <el-button
+              <zx-button
                 link
-                type="primary"
-                icon="Delete"
+                type="danger"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:post:remove']"
-                >删除</el-button
+                >删除</zx-button
               >
             </template>
           </el-table-column>

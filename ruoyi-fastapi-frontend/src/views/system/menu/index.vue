@@ -99,27 +99,26 @@
             class-name="small-padding fixed-width"
           >
             <template #default="scope">
-              <el-button
-                link
-                type="primary"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:menu:edit']"
-                >修改</el-button
-              >
-              <el-button
-                link
-                type="primary"
-                @click="handleAdd(scope.row)"
-                v-hasPermi="['system:menu:add']"
-                >新增</el-button
-              >
-              <el-button
-                link
-                type="primary"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['system:menu:remove']"
-                >删除</el-button
-              >
+              <div class="op-col__wrap">
+                <zx-button
+                  link
+                  type="primary"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:menu:edit']"
+                  >修改</zx-button
+                >
+                <zx-button
+                  link
+                  type="primary"
+                  @click="handleAdd(scope.row)"
+                  v-hasPermi="['system:menu:add']"
+                  >新增</zx-button
+                >
+                <ZxMoreAction
+                  :list="getMoreActionList(scope.row)"
+                  @select="handleMoreActionSelect($event, scope.row)"
+                />
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -503,5 +502,27 @@ function handleDelete(row) {
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
+}
+
+function getMoreActionList(row) {
+  const actions = [];
+  actions.push({
+    label: '删除',
+    eventTag: 'delete',
+    icon: 'Delete',
+    danger: true,
+    permission: 'system:menu:remove',
+  });
+  return actions;
+}
+
+function handleMoreActionSelect(item, row) {
+  switch (item.eventTag) {
+    case 'delete':
+      handleDelete(row);
+      break;
+    default:
+      break;
+  }
 }
 </script>

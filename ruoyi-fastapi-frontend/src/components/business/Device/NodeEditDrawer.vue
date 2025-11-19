@@ -47,35 +47,33 @@
     <template #footer>
       <div class="drawer-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitLoading">
-          确定
-        </el-button>
+        <el-button type="primary" @click="handleSubmit" :loading="submitLoading"> 确定 </el-button>
       </div>
     </template>
   </el-drawer>
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ref, reactive, watch, nextTick } from 'vue';
+import { ElMessage } from 'element-plus';
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   nodeData: {
     type: Object,
-    default: () => ({})
-  }
-})
+    default: () => ({}),
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit']);
 
 // 控制显示/隐藏
-const visible = ref(false)
-const formRef = ref(null)
-const submitLoading = ref(false)
+const visible = ref(false);
+const formRef = ref(null);
+const submitLoading = ref(false);
 
 // 表单数据
 const formData = reactive({
@@ -84,83 +82,83 @@ const formData = reactive({
   model: '',
   manufacturer: '',
   version: '',
-  remark: ''
-})
+  remark: '',
+});
 
 // 表单验证规则
 const rules = {
   name: [
     { required: true, message: '请输入节点名称', trigger: 'blur' },
-    { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
-  ]
-}
+    { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' },
+  ],
+};
 
 // 监听 modelValue 变化
 watch(
   () => props.modelValue,
   (newVal) => {
-    visible.value = newVal
+    visible.value = newVal;
     if (newVal && props.nodeData) {
       // 打开时初始化表单数据
-      initFormData()
+      initFormData();
     }
   },
   { immediate: true }
-)
+);
 
 // 监听 visible 变化，同步到父组件
 watch(visible, (newVal) => {
-  emit('update:modelValue', newVal)
-})
+  emit('update:modelValue', newVal);
+});
 
 // 初始化表单数据
 const initFormData = () => {
   nextTick(() => {
-    const data = props.nodeData?.data || {}
-    formData.name = data.name || data.label || ''
-    formData.deviceType = data.deviceType || ''
-    formData.model = data.model || ''
-    formData.manufacturer = data.manufacturer || ''
-    formData.version = data.version || ''
-    formData.remark = data.remark || data.value || ''
-    
+    const data = props.nodeData?.data || {};
+    formData.name = data.name || data.label || '';
+    formData.deviceType = data.deviceType || '';
+    formData.model = data.model || '';
+    formData.manufacturer = data.manufacturer || '';
+    formData.version = data.version || '';
+    formData.remark = data.remark || data.value || '';
+
     // 清除验证状态
     if (formRef.value) {
-      formRef.value.clearValidate()
+      formRef.value.clearValidate();
     }
-  })
-}
+  });
+};
 
 // 关闭抽屉
 const handleClose = () => {
-  visible.value = false
-}
+  visible.value = false;
+};
 
 // 提交表单
 const handleSubmit = async () => {
-  if (!formRef.value) return
-  
+  if (!formRef.value) return;
+
   try {
     // 验证表单
-    await formRef.value.validate()
-    
-    submitLoading.value = true
-    
+    await formRef.value.validate();
+
+    submitLoading.value = true;
+
     // 触发提交事件，传递节点数据和修改后的名称
     emit('submit', {
       nodeId: props.nodeData?.id,
       node: props.nodeData,
-      name: formData.name
-    })
-    
-    ElMessage.success('保存成功')
-    handleClose()
+      name: formData.name,
+    });
+
+    ElMessage.success('保存成功');
+    handleClose();
   } catch (error) {
-    console.error('表单验证失败:', error)
+    console.error('表单验证失败:', error);
   } finally {
-    submitLoading.value = false
+    submitLoading.value = false;
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -179,4 +177,3 @@ const handleSubmit = async () => {
   border-top: 1px solid var(--el-border-color-light);
 }
 </style>
-

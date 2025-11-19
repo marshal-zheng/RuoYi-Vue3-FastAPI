@@ -442,7 +442,7 @@ function handleImport() {
 function handleImportConfirm(data) {
   if (data.fields && data.fields.length > 0) {
     // 替换当前字段数据
-    messageFields.value = data.fields.map(field => ({
+    messageFields.value = data.fields.map((field) => ({
       ...field,
       id: field.id || Date.now().toString() + Math.random(),
       parentId: field.parentId || null,
@@ -452,7 +452,7 @@ function handleImportConfirm(data) {
   // 如果有表头信息，也更新表头
   if (data.header) {
     Object.assign(messageHeader, data.header);
-    console.log('messageHeader', messageHeader)
+    console.log('messageHeader', messageHeader);
     // 设备模式下强制清空发送方/接收方
     if (props.deviceMode) {
       messageHeader.sender = '';
@@ -481,7 +481,7 @@ function handleProtocolChange(entity) {
   messageHeader.frameLength = cfg.frameLength || '';
   messageHeader.errorHandling = cfg.errorHandle || '';
   const list = Array.isArray(cfg.fields) ? cfg.fields : [];
-  messageFields.value = list.map(f => normalizeField(f));
+  messageFields.value = list.map((f) => normalizeField(f));
   syncConfigRows();
 }
 
@@ -522,10 +522,10 @@ function handleAddChild(row) {
 
 // 删除字段
 function handleDelete(row) {
-  const index = messageFields.value.findIndex(item => item.id === row.id);
+  const index = messageFields.value.findIndex((item) => item.id === row.id);
   if (index > -1) {
     messageFields.value = messageFields.value.filter(
-      item => item.id !== row.id && item.parentId !== row.id
+      (item) => item.id !== row.id && item.parentId !== row.id
     );
     ElMessage.success('删除成功');
   }
@@ -545,9 +545,9 @@ function handleDeleteSelected() {
     type: 'warning',
   })
     .then(() => {
-      const deleteIds = selectRecords.map(item => item.id);
+      const deleteIds = selectRecords.map((item) => item.id);
       messageFields.value = messageFields.value.filter(
-        item => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
+        (item) => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
       );
       ElMessage.success('删除成功');
     })

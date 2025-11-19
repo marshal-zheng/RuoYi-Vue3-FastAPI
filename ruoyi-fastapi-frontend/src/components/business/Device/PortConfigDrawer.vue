@@ -43,7 +43,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'close', 'submit'])
 
 const drawer = useDrawer({
-  title: computed(() => title.value),
+  title: () => title.value,
   size: '75%',
   placement: 'right',
   okText: '确定',

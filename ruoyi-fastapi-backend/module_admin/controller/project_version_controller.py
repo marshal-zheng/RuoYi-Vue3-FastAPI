@@ -51,7 +51,7 @@ async def get_project_version_list(
     '',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:add'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.INSERT)
+@Log(title='工程管理-版本', business_type=BusinessType.INSERT)
 async def add_project_version(
     request: Request,
     add_version: ProjectVersionModel,
@@ -75,7 +75,7 @@ async def add_project_version(
     '',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:edit'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.UPDATE)
+@Log(title='工程管理-版本', business_type=BusinessType.UPDATE)
 async def edit_project_version(
     request: Request,
     edit_version: ProjectVersionModel,
@@ -97,7 +97,7 @@ async def edit_project_version(
     '/{version_ids}',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:remove'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.DELETE)
+@Log(title='工程管理-版本', business_type=BusinessType.DELETE)
 async def delete_project_version(
     request: Request,
     version_ids: str,
@@ -139,7 +139,7 @@ async def query_detail_project_version(
     '/clone',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:add'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.INSERT)
+@Log(title='工程管理-版本', business_type=BusinessType.INSERT)
 async def clone_project_version(
     request: Request,
     clone_version: CloneProjectVersionModel,
@@ -161,7 +161,7 @@ async def clone_project_version(
     '/lock',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:edit'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.UPDATE)
+@Log(title='工程管理-版本', business_type=BusinessType.UPDATE)
 async def lock_project_version(
     request: Request,
     lock_version: LockProjectVersionModel,
@@ -188,7 +188,7 @@ async def lock_project_version(
     '/unlock/project/{project_id}',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:edit'))]
 )
-@Log(title='项目版本管理', business_type=BusinessType.UPDATE)
+@Log(title='工程管理-版本', business_type=BusinessType.UPDATE)
 async def unlock_project_versions_by_project(
     request: Request,
     project_id: int,
