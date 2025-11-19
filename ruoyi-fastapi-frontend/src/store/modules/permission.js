@@ -15,6 +15,7 @@ const usePermissionStore = defineStore('permission', {
     defaultRoutes: [],
     topbarRouters: [],
     sidebarRouters: [],
+    firstMenuPath: '/index',
   }),
   actions: {
     setRoutes(routes) {
@@ -29,6 +30,9 @@ const usePermissionStore = defineStore('permission', {
     },
     setSidebarRouters(routes) {
       this.sidebarRouters = routes;
+    },
+    setFirstMenuPath(path) {
+      this.firstMenuPath = path || '/index';
     },
     generateRoutes(roles) {
       return new Promise(resolve => {
@@ -49,6 +53,11 @@ const usePermissionStore = defineStore('permission', {
           this.setSidebarRouters(constantRoutes.concat(sidebarRoutes));
           this.setDefaultRoutes(sidebarRoutes);
           this.setTopbarRoutes(defaultRoutes);
+          const landingCandidates = constantRoutes
+            .filter(route => !route.hidden)
+            .concat(sidebarRoutes);
+          const firstMenuPath = findFirstMenuPath(landingCandidates);
+          this.setFirstMenuPath(firstMenuPath);
           resolve(rewriteRoutes);
         });
       });
@@ -139,5 +148,47 @@ export const loadView = view => {
   }
   return res;
 };
+
+function findFirstMenuPath(routes, parentPath = '') {
+  for (const route of routes) {
+    if (route.hidden) {
+      continue;
+    }
+    const currentPath = resolveRoutePath(parentPath, route.path);
+    if (isFunctionalRoute(route)) {
+      return currentPath || '/';
+    }
+    if (route.children && route.children.length) {
+      const childPath = findFirstMenuPath(route.children, currentPath);
+      if (childPath) {
+        return childPath;
+      }
+    }
+  }
+  return '';
+}
+
+function resolveRoutePath(parentPath, routePath = '') {
+  if (!routePath) {
+    return parentPath || '/';
+  }
+  if (routePath.startsWith('/')) {
+    return routePath;
+  }
+  if (!parentPath || parentPath === '/') {
+    return `/${routePath}`;
+  }
+  return `${parentPath.replace(/\/$/, '')}/${routePath}`;
+}
+
+function isFunctionalRoute(route) {
+  if (!route.component) {
+    return false;
+  }
+  if (route.component === Layout || route.component === ParentView || route.component === InnerLink) {
+    return false;
+  }
+  return true;
+}
 
 export default usePermissionStore;
