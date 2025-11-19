@@ -60,9 +60,9 @@
           :default-expand-all="isExpandAll"
           :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         >
-          <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-          <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
-          <el-table-column prop="status" label="状态" width="100">
+          <el-table-column prop="deptName" label="部门名称"></el-table-column>
+          <el-table-column prop="orderNum" label="排序"></el-table-column>
+          <el-table-column prop="status" label="状态">
             <template #default="scope">
               <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
@@ -72,33 +72,29 @@
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-button
-                link
-                type="primary"
-                icon="Edit"
-                @click="handleUpdate(scope.row)"
-                v-hasPermi="['system:dept:edit']"
-                >修改</el-button
-              >
-              <el-button
-                link
-                type="primary"
-                icon="Plus"
-                @click="handleAdd(scope.row)"
-                v-hasPermi="['system:dept:add']"
-                >新增</el-button
-              >
-              <el-button
-                v-if="scope.row.parentId != 0"
-                link
-                type="primary"
-                icon="Delete"
-                @click="handleDelete(scope.row)"
-                v-hasPermi="['system:dept:remove']"
-                >删除</el-button
-              >
+               <div class="op-col__wrap">
+                <zx-button
+                  link
+                  type="primary"
+                  @click="handleUpdate(scope.row)"
+                  v-hasPermi="['system:dept:edit']"
+                  >修改</zx-button
+                >
+                <zx-button
+                  link
+                  type="primary"
+                  @click="handleAdd(scope.row)"
+                  v-hasPermi="['system:dept:add']"
+                  >新增</zx-button
+                >
+                <ZxMoreAction
+                  v-if="scope.row.parentId != 0"
+                  :list="getMoreActionList(scope.row)"
+                  @select="handleMoreActionSelect($event, scope.row)"
+                />
+               </div>
             </template>
           </el-table-column>
         </el-table>
@@ -309,5 +305,31 @@ function handleDelete(row) {
       proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
+}
+
+/** 获取更多操作列表 */
+function getMoreActionList(row) {
+  const actions = [];
+  if (row.parentId != 0) {
+    actions.push({
+      label: '删除',
+      eventTag: 'delete',
+      icon: 'Delete',
+      danger: true,
+      permission: 'system:dept:remove'
+    });
+  }
+  return actions;
+}
+
+/** 处理更多操作选择 */
+function handleMoreActionSelect(item, row) {
+  switch (item.eventTag) {
+    case 'delete':
+      handleDelete(row);
+      break;
+    default:
+      break;
+  }
 }
 </script>

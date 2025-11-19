@@ -79,15 +79,26 @@
               <span>{{ parseTime(scope.row.updateTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
-              <div class="op-col__wrap">
-                <el-button link type="primary" icon="Edit" @click="handleDetailPage(scope.row)" v-hasPermi="['protocol:query']">编辑</el-button>
-                <ZxMoreAction
-                  :list="getMoreActionList(scope.row)"
-                  @select="handleMoreActionSelect($event, scope.row, handleRefresh)"
+              <el-tooltip content="编辑" placement="top">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Edit"
+                  @click="handleDetailPage(scope.row)"
+                  v-hasPermi="['protocol:query']"
                 />
-              </div>
+              </el-tooltip>
+              <el-tooltip content="删除" placement="top">
+                <el-button
+                  link
+                  type="primary"
+                  icon="Delete"
+                  @click="handleDelete(scope.row)"
+                  v-hasPermi="['protocol:remove']"
+                />
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -203,32 +214,6 @@ function handleDelete(row) {
   })
 }
 
-// 获取更多操作列表
-const getMoreActionList = (row) => {
-  const actions = []
-  actions.push({
-    label: '删除',
-    eventTag: 'delete',
-    icon: 'Delete',
-    danger: true
-  })
-  
-  return actions
-}
-
-// 处理更多操作选择
-const handleMoreActionSelect = async (item, row, handleRefresh) => {
-  switch (item.eventTag) {
-    case 'delete':
-      handleDelete(row)
-      break
-    default:
-      break
-  }
-}
-
-// 已移除固化相关操作
-
 /** 协议保存成功回调 */
 const handleProtocolSaveSuccess = async (data) => {
   try {
@@ -255,10 +240,5 @@ const handleProtocolSaveSuccess = async (data) => {
 }
 .link-type:hover {
   color: #66b1ff;
-}
-.op-col__wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 </style>

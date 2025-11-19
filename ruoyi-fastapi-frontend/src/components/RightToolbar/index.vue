@@ -1,7 +1,7 @@
 <template>
   <div class="top-right-btn" :style="style">
     <el-row>
-      <el-tooltip
+      <!-- <el-tooltip
         class="item"
         effect="dark"
         :content="showSearch ? '隐藏搜索' : '显示搜索'"
@@ -12,7 +12,7 @@
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="刷新" placement="top">
         <el-button circle icon="Refresh" @click="refresh()" />
-      </el-tooltip>
+      </el-tooltip> -->
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
         <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'" />
         <el-dropdown

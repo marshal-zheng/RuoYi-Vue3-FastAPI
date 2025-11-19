@@ -1,20 +1,57 @@
 <template>
-  <ZxContentWrap>
-    <el-row :gutter="20">
-      <splitpanes :horizontal="appStore.device === 'mobile'" class="default-theme">
-        <!--部门数据-->
-        <pane size="16">
-          <el-col>
-            <div class="head-container">
+  <ZxContentWrap title="用户管理" contentPadding="0px 20px 20px 0">
+    <template #header-right>
+      <ZxButton
+        type="primary"
+        icon="Plus"
+        @click="handleAdd"
+        v-hasPermi="['system:user:add']"
+      >新增</ZxButton>
+      <ZxButton
+        type="success"
+        icon="Edit"
+        :disabled="single"
+        @click="handleUpdate"
+        v-hasPermi="['system:user:edit']"
+      >修改</ZxButton>
+      <ZxButton
+        type="danger"
+        icon="Delete"
+        :disabled="multiple"
+        @click="handleDelete"
+        v-hasPermi="['system:user:remove']"
+      >删除</ZxButton>
+      <ZxButton
+        type="info"
+        icon="Upload"
+        @click="handleImport"
+        v-hasPermi="['system:user:import']"
+      >导入</ZxButton>
+      <ZxButton
+        type="warning"
+        icon="Download"
+        @click="() => onExport({ query })"
+        v-hasPermi="['system:user:export']"
+      >导出</ZxButton>
+    </template>
+    <div class="h-full">
+      <zx-split-box
+        :direction="appStore.device === 'mobile' ? 'vertical' : 'horizontal'"
+        size="220px"
+      >
+        <!-- 部门数据 -->
+        <template #first>
+          <div class="h-full flex flex-col p-3 space-y-3">
+            <div>
               <el-input
                 v-model="deptName"
                 placeholder="请输入部门名称"
                 clearable
                 prefix-icon="Search"
-                style="margin-bottom: 20px"
+                class="w-full"
               />
             </div>
-            <div class="head-container">
+            <div class="flex-1 overflow-auto">
               <el-tree
                 :data="deptOptions"
                 :props="{ label: 'label', children: 'children' }"
@@ -27,47 +64,16 @@
                 @node-click="handleNodeClick"
               />
             </div>
-          </el-col>
-        </pane>
-        <!--用户数据-->
-        <pane size="84">
-          <el-col>
-            <ZxGridList ref="gridListRef" :load-data="loadUserData" class="zx-grid-list--page">
+          </div>
+        </template>
+
+        <!-- 用户数据 -->
+        <template #second>
+          <div class="h-full">
+            <ZxGridList ref="gridListRef" :load-data="loadUserData" class="zx-grid-list--page" :pageViewportOffset="10">
               <template #form="{ query, loading, refresh: handleRefresh, updateState }">
                 <div class="zx-grid-form-bar">
                   <div class="zx-grid-form-bar__left">
-                    <ZxButton
-                      type="primary"
-                      icon="Plus"
-                      @click="handleAdd"
-                      v-hasPermi="['system:user:add']"
-                    >新增</ZxButton>
-                    <ZxButton
-                      type="success"
-                      icon="Edit"
-                      :disabled="single"
-                      @click="handleUpdate"
-                      v-hasPermi="['system:user:edit']"
-                    >修改</ZxButton>
-                    <ZxButton
-                      type="danger"
-                      icon="Delete"
-                      :disabled="multiple"
-                      @click="handleDelete"
-                      v-hasPermi="['system:user:remove']"
-                    >删除</ZxButton>
-                    <ZxButton
-                      type="info"
-                      icon="Upload"
-                      @click="handleImport"
-                      v-hasPermi="['system:user:import']"
-                    >导入</ZxButton>
-                    <ZxButton
-                      type="warning"
-                      icon="Download"
-                      @click="() => onExport({ query })"
-                      v-hasPermi="['system:user:export']"
-                    >导出</ZxButton>
                   </div>
                   <div class="zx-grid-form-bar__filters">
                     <el-input
@@ -118,11 +124,11 @@
                       @search="() => onSearch({ handleRefresh, updateState })"
                       @clear="() => onSearch({ handleRefresh, updateState })"
                     />
-                    <right-toolbar
+                    <!-- <right-toolbar
                       v-model:showSearch="showSearch"
                       @queryTable="handleRefresh"
                       :columns="columns"
-                    />
+                    /> -->
                   </div>
                 </div>
               </template>
@@ -197,55 +203,39 @@
                   <el-table-column
                     label="操作"
                     align="center"
-                    width="150"
+                    width="200"
                     class-name="small-padding fixed-width"
                   >
                     <template #default="scope">
-                      <el-tooltip content="修改" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button
-                          link
-                          type="primary"
-                          icon="Edit"
+                      <div class="op-col__wrap">
+                        <ZxButton
+                          v-if="scope.row.userId !== 1"
+                          type="text"
                           @click="handleUpdate(scope.row)"
                           v-hasPermi="['system:user:edit']"
-                        />
-                      </el-tooltip>
-                      <el-tooltip content="删除" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button
-                          link
-                          type="primary"
-                          icon="Delete"
+                        >修改</ZxButton>
+                        <ZxButton
+                          v-if="scope.row.userId !== 1"
+                          type="text"
                           @click="handleDelete(scope.row)"
                           v-hasPermi="['system:user:remove']"
+                        >删除</ZxButton>
+                        <ZxMoreAction
+                          v-if="scope.row.userId !== 1 && getUserMoreActionList(scope.row).length"
+                          :list="getUserMoreActionList(scope.row)"
+                          @select="handleMoreActionSelect($event, scope.row)"
                         />
-                      </el-tooltip>
-                      <el-tooltip content="重置密码" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button
-                          link
-                          type="primary"
-                          icon="Key"
-                          @click="handleResetPwd(scope.row)"
-                          v-hasPermi="['system:user:resetPwd']"
-                        />
-                      </el-tooltip>
-                      <el-tooltip content="分配角色" placement="top" v-if="scope.row.userId !== 1">
-                        <el-button
-                          link
-                          type="primary"
-                          icon="CircleCheck"
-                          @click="handleAuthRole(scope.row)"
-                          v-hasPermi="['system:user:edit']"
-                        />
-                      </el-tooltip>
+                      </div>
+
                     </template>
                   </el-table-column>
                 </el-table>
               </template>
             </ZxGridList>
-          </el-col>
-        </pane>
-      </splitpanes>
-    </el-row>
+          </div>
+        </template>
+      </zx-split-box>
+    </div>
 
     <!-- 添加或修改用户配置对话框 -->
     <el-dialog :title="title" v-model="open" width="600px" append-to-body>
@@ -414,6 +404,7 @@
 <script setup name="User">
 import { getToken } from '@/utils/auth';
 import useAppStore from '@/store/modules/app';
+import { checkPermi } from '@/utils/permission';
 import {
   changeUserStatus,
   listUser,
@@ -424,8 +415,6 @@ import {
   addUser,
   deptTreeSelect,
 } from '@/api/system/user';
-import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
 
 const router = useRouter();
 const appStore = useAppStore();
@@ -788,4 +777,28 @@ function onExport({ query }) {
 }
 
 getDeptTree();
+
+function getUserMoreActionList(row) {
+  const actions = [];
+  if (checkPermi(['system:user:resetPwd'])) {
+    actions.push({ label: '重置密码', eventTag: 'resetPwd' });
+  }
+  if (checkPermi(['system:user:edit'])) {
+    actions.push({ label: '分配角色', eventTag: 'authRole' });
+  }
+  return actions;
+}
+
+function handleMoreActionSelect(item, row) {
+  switch (item.eventTag) {
+    case 'resetPwd':
+      handleResetPwd(row);
+      break;
+    case 'authRole':
+      handleAuthRole(row);
+      break;
+    default:
+      break;
+  }
+}
 </script>
