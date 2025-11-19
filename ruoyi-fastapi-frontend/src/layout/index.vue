@@ -13,12 +13,11 @@
           class="flex items-center justify-between affordable-thunder"
           style="background: var(--top-header-bg); box-shadow: var(--top-header-shadow)"
         >
-          <div
-            v-if="!needTagsView && showLogo"
-            class="flex items-center h-[50px] px-4 gap-2 shrink-0"
-          >
+          <div v-if="!needTagsView && showLogo" class="flex items-center h-[50px] px-4 gap-2">
             <img :src="headerLogo" class="w-8 h-8 shrink-0" />
+            <!-- 收起侧边栏时隐藏标题文字，效果与 Sidebar 中 Logo 收起一致 -->
             <span
+              v-if="!isCollapse"
               class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none text-[var(--logo-title-text-color,#f0f4ff)]"
             >
               {{ headerTitle }}
@@ -54,6 +53,9 @@ const needTagsView = computed(() => settingsStore.tagsView);
 const showLogo = computed(() => settingsStore.sidebarLogo);
 const showNavbar = computed(() => true); // Navbar 始终显示
 const showTagsView = computed(() => needTagsView.value);
+
+// 与 Sidebar 折叠状态保持一致，用于控制 Header 中标题的显隐
+const isCollapse = computed(() => !sidebar.value.opened);
 
 // Header 中展示的系统标题
 const headerTitle = computed(() => defaultSettings.title || import.meta.env.VITE_APP_TITLE);
