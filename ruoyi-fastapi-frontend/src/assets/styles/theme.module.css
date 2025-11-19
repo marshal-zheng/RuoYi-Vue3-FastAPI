@@ -173,7 +173,7 @@
     --base-sidebar-width: 200px;
     --navbar-height: 50px;
     --footer-height: 60px;
-    --app-footer-height: 0;
+    --app-footer-height: 25px;
     
     /* Component-specific variables that extend Element Plus */
     --navbar-bg: var(--el-bg-color);
