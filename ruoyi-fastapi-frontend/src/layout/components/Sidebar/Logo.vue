@@ -7,7 +7,7 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <!-- <img v-if="logo" :src="logo" class="sidebar-logo" /> -->
-        <!-- <h1 class="sidebar-title">{{ title }}</h1> -->
+        <h1 class="sidebar-title">{{ title }}</h1>
       </router-link>
     </transition>
   </div>
@@ -84,7 +84,7 @@ const getLogoTextColor = computed(() => {
   display: inline-block;
   margin: 0;
   color: v-bind(getLogoTextColor);
-  font-weight: 600;
+  font-weight: bold;
   line-height: 50px;
   font-size: 14px;
   font-family:

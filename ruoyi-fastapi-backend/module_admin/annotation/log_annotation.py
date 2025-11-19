@@ -55,6 +55,9 @@ class Log:
             relative_path = os.path.relpath(file_path, start=project_root)[0:-2].replace('\\', '.').replace('/', '.')
             # 获取当前被装饰函数所在路径
             func_path = f'{relative_path}{func.__name__}()'
+            # method 字段长度限制为 100，超过则截断（保留后面部分，因为包含函数名）
+            if len(func_path) > 100:
+                func_path = '...' + func_path[-97:]
             # 获取上下文信息
             request_name_list = get_function_parameters_name_by_type(func, Request)
             request = get_function_parameters_value_by_name(func, request_name_list[0], *args, **kwargs)
