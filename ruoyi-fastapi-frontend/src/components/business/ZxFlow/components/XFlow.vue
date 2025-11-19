@@ -5,16 +5,16 @@
 </template>
 
 <script setup>
-import { provideGraphInstance } from '../composables/useGraphInstance'
+import { provideGraphInstance } from '../composables/useGraphInstance';
 
 // 提供 Graph 实例上下文
-const { graph, setGraph } = provideGraphInstance()
+const { graph, setGraph } = provideGraphInstance();
 
 // 向外暴露方法供子组件使用
 defineExpose({
   graph,
-  setGraph
-})
+  setGraph,
+});
 </script>
 
 <style scoped>

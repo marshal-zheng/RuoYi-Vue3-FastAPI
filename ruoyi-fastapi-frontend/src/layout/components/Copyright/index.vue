@@ -5,12 +5,12 @@
 </template>
 
 <script setup>
-import useSettingsStore from '@/store/modules/settings'
+import useSettingsStore from '@/store/modules/settings';
 
-const settingsStore = useSettingsStore()
+const settingsStore = useSettingsStore();
 
-const visible = computed(() => settingsStore.footerVisible)
-const content = computed(() => settingsStore.footerContent)
+const visible = computed(() => settingsStore.footerVisible);
+const content = computed(() => settingsStore.footerContent);
 </script>
 
 <style scoped>

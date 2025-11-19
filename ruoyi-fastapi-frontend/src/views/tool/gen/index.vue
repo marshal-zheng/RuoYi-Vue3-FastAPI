@@ -255,7 +255,7 @@ onActivated(() => {
 /** 查询表集合 */
 function getList() {
   loading.value = true;
-  listTable(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listTable(proxy.addDateRange(queryParams.value, dateRange.value)).then((response) => {
     tableList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -276,7 +276,7 @@ function handleGenTable(row) {
     return;
   }
   if (row.genType === '1') {
-    genCode(row.tableName).then(response => {
+    genCode(row.tableName).then((response) => {
       proxy.$modal.msgSuccess('成功生成到自定义路径：' + row.genPath);
     });
   } else {
@@ -317,7 +317,7 @@ function resetQuery() {
 
 /** 预览按钮 */
 function handlePreview(row) {
-  previewTable(row.tableId).then(response => {
+  previewTable(row.tableId).then((response) => {
     preview.value.data = response.data;
     preview.value.open = true;
     preview.value.activeName = 'do.py';
@@ -331,8 +331,8 @@ function copyTextSuccess() {
 
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.tableId);
-  tableNames.value = selection.map(item => item.tableName);
+  ids.value = selection.map((item) => item.tableId);
+  tableNames.value = selection.map((item) => item.tableName);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }

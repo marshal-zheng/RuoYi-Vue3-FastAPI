@@ -143,7 +143,7 @@ const checkboxString = computed(() => {
 });
 watch(
   () => props.cron.week,
-  value => changeRadioValue(value)
+  (value) => changeRadioValue(value)
 );
 watch([radioValue, cycleTotal, averageTotal, weekdayTotal, checkboxString], () => onRadioChange());
 function changeRadioValue(value) {
@@ -166,7 +166,7 @@ function changeRadioValue(value) {
     weekday.value = Number(indexArr[0]);
     radioValue.value = 5;
   } else {
-    checkboxList.value = [...new Set(value.split(',').map(item => Number(item)))];
+    checkboxList.value = [...new Set(value.split(',').map((item) => Number(item)))];
     radioValue.value = 6;
   }
 }

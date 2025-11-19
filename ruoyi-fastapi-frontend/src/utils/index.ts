@@ -108,7 +108,7 @@ export function cleanArray(actual: any[]): any[] {
 export function param(json?: Record<string, any>): string {
   if (!json) return '';
   return cleanArray(
-    Object.keys(json).map(key => {
+    Object.keys(json).map((key) => {
       if (json[key] === undefined) return '';
       return encodeURIComponent(key) + '=' + encodeURIComponent(json[key]);
     })
@@ -126,7 +126,7 @@ export function param2Obj(url: string): Record<string, string> {
   }
   const obj: Record<string, string> = {};
   const searchArr = search.split('&');
-  searchArr.forEach(v => {
+  searchArr.forEach((v) => {
     const index = v.indexOf('=');
     if (index !== -1) {
       const name = v.substring(0, index);
@@ -160,7 +160,7 @@ export function objectMerge(target: any, source: any): any {
   if (Array.isArray(source)) {
     return source.slice();
   }
-  Object.keys(source).forEach(property => {
+  Object.keys(source).forEach((property) => {
     const sourceProperty = source[property];
     if (typeof sourceProperty === 'object') {
       target[property] = objectMerge(target[property], sourceProperty);
@@ -259,7 +259,7 @@ export function deepClone(source: any): any {
     throw new Error('error arguments deepClone');
   }
   const targetObj: any = source.constructor === Array ? [] : {};
-  Object.keys(source).forEach(keys => {
+  Object.keys(source).forEach((keys) => {
     if (source[keys] && typeof source[keys] === 'object') {
       targetObj[keys] = deepClone(source[keys]);
     } else {
@@ -391,12 +391,12 @@ export const beautifierConf: { html: BeautifierConfig; js: BeautifierConfig } = 
 
 // 首字母大小
 export function titleCase(str: string): string {
-  return str.replace(/( |^)[a-z]/g, L => L.toUpperCase());
+  return str.replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
 }
 
 // 下划转驼峰
 export function camelCase(str: string): string {
-  return str.replace(/_[a-z]/g, str1 => str1.substr(-1).toUpperCase());
+  return str.replace(/_[a-z]/g, (str1) => str1.substr(-1).toUpperCase());
 }
 
 export function isNumberStr(str: string): boolean {

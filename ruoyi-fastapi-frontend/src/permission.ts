@@ -36,7 +36,7 @@ NProgress.configure({ showSpinner: false });
 const whiteList: string[] = ['/login', '/register'];
 
 const isWhiteList = (path: string): boolean => {
-  return whiteList.some(pattern => isPathMatch(pattern, path));
+  return whiteList.some((pattern) => isPathMatch(pattern, path));
 };
 
 const resolveLandingRedirect = (path: string, firstMenuPath: string): string => {

@@ -1,2 +1,2 @@
-export * from './selector'
-export { default as OperlogGrid } from './OperlogGrid.vue'
+export * from './selector';
+export { default as OperlogGrid } from './OperlogGrid.vue';

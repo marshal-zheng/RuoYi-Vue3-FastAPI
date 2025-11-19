@@ -115,21 +115,9 @@
     <el-table v-loading="loading" :data="configList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" />
       <el-table-column label="参数主键" prop="configId" />
-      <el-table-column
-        label="参数名称"
-        prop="configName"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="参数键名"
-        prop="configKey"
-        :show-overflow-tooltip="true"
-      />
-      <el-table-column
-        label="参数键值"
-        prop="configValue"
-        :show-overflow-tooltip="true"
-      />
+      <el-table-column label="参数名称" prop="configName" :show-overflow-tooltip="true" />
+      <el-table-column label="参数键名" prop="configKey" :show-overflow-tooltip="true" />
+      <el-table-column label="参数键值" prop="configValue" :show-overflow-tooltip="true" />
       <el-table-column label="系统内置" prop="configType">
         <template #default="scope">
           <dict-tag :options="sys_yes_no" :value="scope.row.configType" />
@@ -141,11 +129,7 @@
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="操作"
-        width="150"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="操作" width="150" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button
             link
@@ -253,7 +237,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询参数列表 */
 function getList() {
   loading.value = true;
-  listConfig(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listConfig(proxy.addDateRange(queryParams.value, dateRange.value)).then((response) => {
     configList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -289,7 +273,7 @@ function resetQuery() {
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.configId);
+  ids.value = selection.map((item) => item.configId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -303,7 +287,7 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const configId = row.configId || ids.value;
-  getConfig(configId).then(response => {
+  getConfig(configId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改参数';
@@ -311,16 +295,16 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['configRef'].validate(valid => {
+  proxy.$refs['configRef'].validate((valid) => {
     if (valid) {
       if (form.value.configId != undefined) {
-        updateConfig(form.value).then(response => {
+        updateConfig(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           getList();
         });
       } else {
-        addConfig(form.value).then(response => {
+        addConfig(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           getList();

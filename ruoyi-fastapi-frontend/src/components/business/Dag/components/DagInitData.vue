@@ -26,7 +26,7 @@ const props = defineProps({
   layoutDirection: {
     type: String,
     default: 'LR',
-    validator: value => ['LR', 'TB'].includes(value),
+    validator: (value) => ['LR', 'TB'].includes(value),
   },
 });
 
@@ -38,7 +38,7 @@ const emit = defineEmits(['data-updated']);
 // 注册 DAG 图形
 registerDagShapes();
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const ensureGraphReady = async (maxAttempts = 20, delay = 100) => {
   let attempts = 0;
@@ -56,7 +56,7 @@ const ensureGraphReady = async (maxAttempts = 20, delay = 100) => {
 };
 
 // 将数据转换为DAG画布格式
-const convertToDAGFormat = data => {
+const convertToDAGFormat = (data) => {
   if (!data || !data.nodes || !data.edges) {
     return { nodes: [], edges: [] };
   }
@@ -65,7 +65,7 @@ const convertToDAGFormat = data => {
   const sizeConfig = getNodeSizeByLayout(layoutOrientation);
 
   const childMap = new Map();
-  (data.edges || []).forEach(edge => {
+  (data.edges || []).forEach((edge) => {
     const sourceId = edge.sourceNodeId;
     if (!sourceId) return;
     if (!childMap.has(sourceId)) {
@@ -74,7 +74,7 @@ const convertToDAGFormat = data => {
     childMap.get(sourceId).add(edge.targetNodeId);
   });
 
-  const nodes = data.nodes.map(node => ({
+  const nodes = data.nodes.map((node) => ({
     id: node.id,
     shape: DAG_NODE,
     x: node.x || 0,
@@ -99,7 +99,7 @@ const convertToDAGFormat = data => {
     locked: false,
   }));
 
-  const edges = data.edges.map(edge => ({
+  const edges = data.edges.map((edge) => ({
     id: edge.id,
     shape: DAG_EDGE,
     source: { cell: edge.sourceNodeId, port: 'b' }, // 指定源端口为底部
@@ -111,7 +111,7 @@ const convertToDAGFormat = data => {
 };
 
 // 加载和设置数据
-const loadAndSetData = async dataSource => {
+const loadAndSetData = async (dataSource) => {
   try {
     let data;
 
@@ -141,8 +141,8 @@ const loadAndSetData = async dataSource => {
     }
 
     // 清空现有数据 - 使用正确的方法
-    const allNodes = graphStore.nodes.map(node => node.id);
-    const allEdges = graphStore.edges.map(edge => edge.id);
+    const allNodes = graphStore.nodes.map((node) => node.id);
+    const allEdges = graphStore.edges.map((edge) => edge.id);
 
     if (allNodes.length > 0) {
       graphStore.removeNodes(allNodes);
@@ -170,48 +170,48 @@ const loadAndSetData = async dataSource => {
 
 // 获取端口颜色的辅助函数
 const getPortColor = (cell, portId) => {
-  if (!cell || !portId) return null
-  
+  if (!cell || !portId) return null;
+
   // 从节点的端口配置中获取颜色
-  const ports = cell.getPorts()
-  const port = ports?.find(p => p.id === portId)
-  
+  const ports = cell.getPorts();
+  const port = ports?.find((p) => p.id === portId);
+
   if (port?.attrs?.portBody?.stroke) {
-    return port.attrs.portBody.stroke
+    return port.attrs.portBody.stroke;
   }
-  
+
   // 从端口的 circle 属性中获取颜色（普通 DAG 节点）
   if (port?.attrs?.circle?.stroke) {
-    return port.attrs.circle.stroke
+    return port.attrs.circle.stroke;
   }
-  
-  return null
-}
 
-const waitForGraphAndLayout = async nodes => {
+  return null;
+};
+
+const waitForGraphAndLayout = async (nodes) => {
   const g = await ensureGraphReady();
 
   if (g) {
     // 更新所有边的颜色为源端口的颜色
     try {
-      const edges = g.getEdges()
-      edges?.forEach(edge => {
-        const sourceCell = edge.getSourceCell?.()
-        const sourcePortId = edge.getSourcePortId?.()
-        
+      const edges = g.getEdges();
+      edges?.forEach((edge) => {
+        const sourceCell = edge.getSourceCell?.();
+        const sourcePortId = edge.getSourcePortId?.();
+
         if (sourceCell && sourcePortId) {
-          const portColor = getPortColor(sourceCell, sourcePortId)
+          const portColor = getPortColor(sourceCell, sourcePortId);
           if (portColor) {
             edge.setAttrs({
               line: {
-                stroke: portColor
-              }
-            })
+                stroke: portColor,
+              },
+            });
           }
         }
-      })
+      });
     } catch (e) {
-      console.warn('Failed to set edge colors:', e)
+      console.warn('Failed to set edge colors:', e);
     }
 
     refreshCollapseState(g);
@@ -232,7 +232,7 @@ const waitForGraphAndLayout = async nodes => {
 // 监听初始数据变化
 watch(
   () => props.initialData,
-  newData => {
+  (newData) => {
     if (newData) {
       // 延迟执行，确保图实例已经准备好
       setTimeout(() => {

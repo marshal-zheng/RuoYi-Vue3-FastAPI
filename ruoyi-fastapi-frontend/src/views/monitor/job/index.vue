@@ -443,7 +443,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询定时任务列表 */
 function getList() {
   loading.value = true;
-  listJob(queryParams.value).then(response => {
+  listJob(queryParams.value).then((response) => {
     jobList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -488,7 +488,7 @@ function resetQuery() {
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.jobId);
+  ids.value = selection.map((item) => item.jobId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -537,7 +537,7 @@ function handleRun(row) {
 }
 /** 任务详细信息 */
 function handleView(row) {
-  getJob(row.jobId).then(response => {
+  getJob(row.jobId).then((response) => {
     form.value = response.data;
     openView.value = true;
   });
@@ -566,7 +566,7 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const jobId = row.jobId || ids.value;
-  getJob(jobId).then(response => {
+  getJob(jobId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改任务';
@@ -574,16 +574,16 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['jobRef'].validate(valid => {
+  proxy.$refs['jobRef'].validate((valid) => {
     if (valid) {
       if (form.value.jobId != undefined) {
-        updateJob(form.value).then(response => {
+        updateJob(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           getList();
         });
       } else {
-        addJob(form.value).then(response => {
+        addJob(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           getList();

@@ -36,22 +36,34 @@
           </el-col>
           <el-col :span="24" class="space-y-2">
             <el-form-item label="请求参数：">
-              <div class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto">
+              <div
+                class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
+              >
                 {{ state.data.operParam }}
               </div>
             </el-form-item>
           </el-col>
           <el-col :span="24" class="space-y-2">
             <el-form-item label="返回参数：">
-              <div class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto">
+              <div
+                class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
+              >
                 {{ state.data.jsonResult }}
               </div>
             </el-form-item>
           </el-col>
           <el-col :span="8" class="space-y-2">
             <el-form-item label="操作状态：">
-              <span v-if="state.data.status === 0" class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-green-50 text-green-600 ring-1 ring-inset ring-green-200">正常</span>
-              <span v-else-if="state.data.status === 1" class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-red-50 text-red-600 ring-1 ring-inset ring-red-200">失败</span>
+              <span
+                v-if="state.data.status === 0"
+                class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-green-50 text-green-600 ring-1 ring-inset ring-green-200"
+                >正常</span
+              >
+              <span
+                v-else-if="state.data.status === 1"
+                class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-red-50 text-red-600 ring-1 ring-inset ring-red-200"
+                >失败</span
+              >
             </el-form-item>
           </el-col>
           <el-col :span="8" class="space-y-2">
@@ -66,23 +78,26 @@
           </el-col>
           <el-col :span="24" class="space-y-2">
             <el-form-item label="异常信息：" v-if="state.data.status === 1">
-              <div class="rounded bg-red-50 dark:bg-red-900/30 p-3 text-red-700 dark:text-red-200 text-sm whitespace-pre-wrap break-words">{{ state.data.errorMsg }}</div>
+              <div
+                class="rounded bg-red-50 dark:bg-red-900/30 p-3 text-red-700 dark:text-red-200 text-sm whitespace-pre-wrap break-words"
+              >
+                {{ state.data.errorMsg }}
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </div>
   </ZxDialog>
-  
 </template>
 
 <script setup>
-import { computed, getCurrentInstance } from 'vue'
-import { useDialog } from '@zxio/zxui'
-import { parseTime } from '@/utils/ruoyi'
+import { computed, getCurrentInstance } from 'vue';
+import { useDialog } from '@zxio/zxui';
+import { parseTime } from '@/utils/ruoyi';
 
-const { proxy } = getCurrentInstance()
-const { sys_oper_type } = proxy.useDict('sys_oper_type')
+const { proxy } = getCurrentInstance();
+const { sys_oper_type } = proxy.useDict('sys_oper_type');
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
   title: () => '操作日志详细',
@@ -103,24 +118,23 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
     status: 0,
     costTime: 0,
     operTime: '',
-    errorMsg: ''
+    errorMsg: '',
   }),
   onConfirm: async () => {
-    close()
-    return state.data
-  }
-})
+    close();
+    return state.data;
+  },
+});
 
 function typeFormat(row) {
-  return proxy.selectDictLabel(sys_oper_type.value, row.businessType)
+  return proxy.selectDictLabel(sys_oper_type.value, row.businessType);
 }
 
 function openDialog(payload) {
-  open(payload || {})
+  open(payload || {});
 }
 
-defineExpose({ open: openDialog, close })
+defineExpose({ open: openDialog, close });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

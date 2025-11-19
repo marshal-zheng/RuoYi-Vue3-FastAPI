@@ -13,7 +13,7 @@ export const DAG_INTERACTION_CONFIG = {
   snapline: {
     enabled: true,
     tolerance: 15,
-    sharp: false
+    sharp: false,
   },
 
   /**
@@ -22,12 +22,11 @@ export const DAG_INTERACTION_CONFIG = {
   zoom: {
     factor: 1.05,
     minScale: 0.1,
-    maxScale: 3
-  }
-}
+    maxScale: 3,
+  },
+};
 
 // ============================================
 // 默认导出
 // ============================================
-export default DAG_INTERACTION_CONFIG
-
+export default DAG_INTERACTION_CONFIG;

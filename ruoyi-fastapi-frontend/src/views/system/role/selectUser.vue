@@ -103,11 +103,11 @@ function clickRow(row) {
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  userIds.value = selection.map(item => item.userId);
+  userIds.value = selection.map((item) => item.userId);
 }
 // 查询表数据
 function getList() {
-  unallocatedUserList(queryParams).then(res => {
+  unallocatedUserList(queryParams).then((res) => {
     userList.value = res.rows;
     total.value = res.total;
   });
@@ -131,7 +131,7 @@ function handleSelectUser() {
     proxy.$modal.msgError('请选择要分配的用户');
     return;
   }
-  authUserSelectAll({ roleId: roleId, userIds: uIds }).then(res => {
+  authUserSelectAll({ roleId: roleId, userIds: uIds }).then((res) => {
     proxy.$modal.msgSuccess(res.msg);
     visible.value = false;
     emit('ok');

@@ -1,13 +1,11 @@
 // Composables
-import { injectDefaults, internalUseDefaults } from '@/composables/defaults'
+import { injectDefaults, internalUseDefaults } from '@/composables/defaults';
 
 // Utilities
-import {
-  defineComponent as _defineComponent, // eslint-disable-line no-restricted-imports
-} from 'vue'
-import { consoleWarn } from './console'
-import { pick } from './helpers'
-import { propsFactory } from './propsFactory'
+import { defineComponent as _defineComponent } from 'vue';
+import { consoleWarn } from './console';
+import { pick } from './helpers';
+import { propsFactory } from './propsFactory';
 
 // Types
 import type {
@@ -34,7 +32,7 @@ import type {
   VNode,
   VNodeChild,
   VNodeProps,
-} from 'vue'
+} from 'vue';
 
 // No props
 export function defineComponent<
@@ -65,7 +63,7 @@ export function defineComponent<
     II,
     S
   >
-): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>
+): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>;
 
 // Object Props
 export function defineComponent<
@@ -96,80 +94,88 @@ export function defineComponent<
     II,
     S
   >
-): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE> & FilterPropsOptions<PropsOptions>
+): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE> &
+  FilterPropsOptions<PropsOptions>;
 
 // Implementation
-export function defineComponent (options: ComponentOptions) {
-  options._setup = options._setup ?? options.setup
+export function defineComponent(options: ComponentOptions) {
+  options._setup = options._setup ?? options.setup;
 
   if (!options.name) {
-    consoleWarn('The component is missing an explicit name, unable to generate default prop value')
+    consoleWarn('The component is missing an explicit name, unable to generate default prop value');
 
-    return options
+    return options;
   }
 
   if (options._setup) {
-    options.props = propsFactory(options.props ?? {}, options.name)()
-    const propKeys = Object.keys(options.props).filter(key => key !== 'class' && key !== 'style')
-    options.filterProps = function filterProps (props: Record<string, any>) {
-      return pick(props, propKeys)
-    }
+    options.props = propsFactory(options.props ?? {}, options.name)();
+    const propKeys = Object.keys(options.props).filter((key) => key !== 'class' && key !== 'style');
+    options.filterProps = function filterProps(props: Record<string, any>) {
+      return pick(props, propKeys);
+    };
 
-    options.props._as = String
-    options.setup = function setup (props: Record<string, any>, ctx) {
-      const defaults = injectDefaults()
+    options.props._as = String;
+    options.setup = function setup(props: Record<string, any>, ctx) {
+      const defaults = injectDefaults();
 
       // Skip props proxy if defaults are not provided
-      if (!defaults.value) return options._setup(props, ctx)
+      if (!defaults.value) return options._setup(props, ctx);
 
-      const { props: _props, provideSubDefaults } = internalUseDefaults(props, props._as ?? options.name, defaults)
+      const { props: _props, provideSubDefaults } = internalUseDefaults(
+        props,
+        props._as ?? options.name,
+        defaults
+      );
 
-      const setupBindings = options._setup(_props, ctx)
+      const setupBindings = options._setup(_props, ctx);
 
-      provideSubDefaults()
+      provideSubDefaults();
 
-      return setupBindings
-    }
+      return setupBindings;
+    };
   }
 
-  return options
+  return options;
 }
 
-type ToListeners<T extends string | number | symbol> = { [K in T]: K extends `on${infer U}` ? Uncapitalize<U> : K }[T]
+type ToListeners<T extends string | number | symbol> = {
+  [K in T]: K extends `on${infer U}` ? Uncapitalize<U> : K;
+}[T];
 
-export type SlotsToProps<
-  U extends RawSlots,
-  T = MakeInternalSlots<U>
-> = {
-  $children?: (
+export type SlotsToProps<U extends RawSlots, T = MakeInternalSlots<U>> = {
+  $children?:
     | VNodeChild
     | (T extends { default: infer V } ? V : {})
     | { [K in keyof T]?: T[K] }
-    | { $stable?: boolean }
-  )
-  'v-slots'?: { [K in keyof T]?: T[K] | false }
+    | { $stable?: boolean };
+  'v-slots'?: { [K in keyof T]?: T[K] | false };
 } & {
-  [K in keyof T as `v-slot:${K & string}`]?: T[K] | false
-}
+  [K in keyof T as `v-slot:${K & string}`]?: T[K] | false;
+};
 
-type RawSlots = Record<string, unknown>
-type Slot<T> = [T] extends [never] ? () => VNodeChild : (arg: T) => VNodeChild
-type VueSlot<T> = [T] extends [never] ? () => VNode[] : (arg: T) => VNode[]
+type RawSlots = Record<string, unknown>;
+type Slot<T> = [T] extends [never] ? () => VNodeChild : (arg: T) => VNodeChild;
+type VueSlot<T> = [T] extends [never] ? () => VNode[] : (arg: T) => VNode[];
 type MakeInternalSlots<T extends RawSlots> = {
-  [K in keyof T]: Slot<T[K]>
-}
+  [K in keyof T]: Slot<T[K]>;
+};
 type MakeSlots<T extends RawSlots> = {
-  [K in keyof T]: VueSlot<T[K]>
-}
+  [K in keyof T]: VueSlot<T[K]>;
+};
 
 export type GenericProps<Props, Slots extends Record<string, unknown>> = {
-  $props: Props & SlotsToProps<Slots>
-  $slots: MakeSlots<Slots>
-}
+  $props: Props & SlotsToProps<Slots>;
+  $slots: MakeSlots<Slots>;
+};
 
-type DefineComponentWithGenericProps<T extends (new (props: Record<string, any>, slots: RawSlots) => {
-  $props?: Record<string, any>
-})> = <
+type DefineComponentWithGenericProps<
+  T extends new (
+    props: Record<string, any>,
+    slots: RawSlots
+  ) => {
+    $props?: Record<string, any>;
+  },
+> = <
   PropsOptions extends Readonly<ComponentObjectPropsOptions>,
   RawBindings,
   D,
@@ -185,9 +191,7 @@ type DefineComponentWithGenericProps<T extends (new (props: Record<string, any>,
   Slots extends RawSlots = ConstructorParameters<T>[1],
   S extends SlotsType = SlotsType<Partial<MakeSlots<Slots>>>,
   III = InstanceType<T>,
-  P = III extends Record<'$props', any>
-    ? Omit<PropsOptions, keyof III['$props']>
-    : PropsOptions,
+  P = III extends Record<'$props', any> ? Omit<PropsOptions, keyof III['$props']> : PropsOptions,
   EEE extends EmitsOptions = E extends any[]
     ? E
     : III extends Record<'$props', any>
@@ -207,10 +211,23 @@ type DefineComponentWithGenericProps<T extends (new (props: Record<string, any>,
     ExtractPropTypes<P> & ({} extends E ? {} : EmitsToProps<EEE>),
     ExtractDefaultPropTypes<P>,
     S
-  >
+  >,
 >(
-  options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE, I, II, S>
-) => Base & T & FilterPropsOptions<PropsOptions>
+  options: ComponentOptionsWithObjectProps<
+    PropsOptions,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    EE,
+    I,
+    II,
+    S
+  >
+) => Base & T & FilterPropsOptions<PropsOptions>;
 
 type DefineComponentWithSlots<Slots extends RawSlots> = <
   PropsOptions extends Readonly<ComponentPropsOptions>,
@@ -226,7 +243,20 @@ type DefineComponentWithSlots<Slots extends RawSlots> = <
   II extends string = string,
   S extends SlotsType = SlotsType<Partial<MakeSlots<Slots>>>,
 >(
-  options: ComponentOptionsWithObjectProps<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE, I, II, S>
+  options: ComponentOptionsWithObjectProps<
+    PropsOptions,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    EE,
+    I,
+    II,
+    S
+  >
 ) => DefineComponent<
   ExtractPropTypes<PropsOptions> & SlotsToProps<Slots>,
   RawBindings,
@@ -241,24 +271,32 @@ type DefineComponentWithSlots<Slots extends RawSlots> = <
   ExtractPropTypes<PropsOptions> & SlotsToProps<Slots> & ({} extends E ? {} : EmitsToProps<E>),
   ExtractDefaultPropTypes<PropsOptions>,
   S
-> & FilterPropsOptions<PropsOptions>
+> &
+  FilterPropsOptions<PropsOptions>;
 
 // No argument - simple default slot
-export function genericComponent (exposeDefaults?: boolean): DefineComponentWithSlots<{ default: never }>
+export function genericComponent(
+  exposeDefaults?: boolean
+): DefineComponentWithSlots<{ default: never }>;
 
 // Generic constructor argument - generic props and slots
-export function genericComponent<T extends (new (props: Record<string, any>, slots: any) => {
-  $props?: Record<string, any>
-})> (exposeDefaults?: boolean): DefineComponentWithGenericProps<T>
+export function genericComponent<
+  T extends new (
+    props: Record<string, any>,
+    slots: any
+  ) => {
+    $props?: Record<string, any>;
+  },
+>(exposeDefaults?: boolean): DefineComponentWithGenericProps<T>;
 
 // Slots argument - simple slots
-export function genericComponent<
-  Slots extends RawSlots
-> (exposeDefaults?: boolean): DefineComponentWithSlots<Slots>
+export function genericComponent<Slots extends RawSlots>(
+  exposeDefaults?: boolean
+): DefineComponentWithSlots<Slots>;
 
 // Implementation
-export function genericComponent (exposeDefaults = true) {
-  return (options: any) => ((exposeDefaults ? defineComponent : _defineComponent) as any)(options)
+export function genericComponent(exposeDefaults = true) {
+  return (options: any) => ((exposeDefaults ? defineComponent : _defineComponent) as any)(options);
 }
 
 export function defineFunctionalComponent<
@@ -266,41 +304,41 @@ export function defineFunctionalComponent<
   PropsOptions = ComponentObjectPropsOptions,
   Defaults = ExtractDefaultPropTypes<PropsOptions>,
   Props = Readonly<ExtractPropTypes<PropsOptions>>,
-> (props: PropsOptions, render: T): FunctionalComponent<Partial<Defaults> & Omit<Props, keyof Defaults>> {
-  render.props = props as any
-  return render as any
+>(
+  props: PropsOptions,
+  render: T
+): FunctionalComponent<Partial<Defaults> & Omit<Props, keyof Defaults>> {
+  render.props = props as any;
+  return render as any;
 }
 
 type EmitsToProps<T extends EmitsOptions> = T extends string[]
   ? {
-    [K in string & `on${Capitalize<T[number]>}`]?: (...args: any[]) => any
-  }
+      [K in string & `on${Capitalize<T[number]>}`]?: (...args: any[]) => any;
+    }
   : T extends ObjectEmitsOptions
     ? {
-      [K in string &
-        `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
-        ? T[Uncapitalize<C>] extends null
-          ? (...args: any[]) => any
-          : (
-            ...args: T[Uncapitalize<C>] extends (...args: infer P) => any
-              ? P
-              : never
-          ) => any
-        : never
-    }
-    : {}
+        [K in string & `on${Capitalize<string & keyof T>}`]?: K extends `on${infer C}`
+          ? T[Uncapitalize<C>] extends null
+            ? (...args: any[]) => any
+            : (...args: T[Uncapitalize<C>] extends (...args: infer P) => any ? P : never) => any
+          : never;
+      }
+    : {};
 
-type PublicProps =
-  & VNodeProps
-  & AllowedComponentProps
-  & ComponentCustomProps
+type PublicProps = VNodeProps & AllowedComponentProps & ComponentCustomProps;
 
 // Adds a filterProps method to the component options
-export interface FilterPropsOptions<PropsOptions extends Readonly<ComponentPropsOptions>, Props = ExtractPropTypes<PropsOptions>> {
+export interface FilterPropsOptions<
+  PropsOptions extends Readonly<ComponentPropsOptions>,
+  Props = ExtractPropTypes<PropsOptions>,
+> {
   filterProps<
     T extends Partial<Props>,
-    U extends Exclude<keyof Props, Exclude<keyof Props, keyof T>>
-  > (props: T): Partial<Pick<T, U>>
+    U extends Exclude<keyof Props, Exclude<keyof Props, keyof T>>,
+  >(
+    props: T
+  ): Partial<Pick<T, U>>;
 }
 
 // https://github.com/vuejs/core/pull/10557
@@ -308,27 +346,24 @@ export type ComponentInstance<T> = T extends { new (): ComponentPublicInstance<a
   ? InstanceType<T>
   : T extends FunctionalComponent<infer Props, infer Emits>
     ? ComponentPublicInstance<Props, {}, {}, {}, {}, ShortEmitsToObject<Emits>>
-    : T extends Component<
-          infer Props,
-          infer RawBindings,
-          infer D,
-          infer C,
-          infer M
-        >
+    : T extends Component<infer Props, infer RawBindings, infer D, infer C, infer M>
       ? // NOTE we override Props/RawBindings/D to make sure is not `unknown`
-      ComponentPublicInstance<
+        ComponentPublicInstance<
           unknown extends Props ? {} : Props,
           unknown extends RawBindings ? {} : RawBindings,
           unknown extends D ? {} : D,
           C,
           M
         >
-      : never // not a vue Component
+      : never; // not a vue Component
 
-type ShortEmitsToObject<E> = E extends Record<string, any[]> ? {
-  [K in keyof E]: (...args: E[K]) => any;
-} : E;
+type ShortEmitsToObject<E> =
+  E extends Record<string, any[]>
+    ? {
+        [K in keyof E]: (...args: E[K]) => any;
+      }
+    : E;
 
 export type JSXComponent<Props = any> =
   | { new (): ComponentPublicInstance<Props> }
-  | FunctionalComponent<Props>
+  | FunctionalComponent<Props>;

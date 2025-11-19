@@ -30,15 +30,15 @@ const selectedEntity = ref(null);
 
 const selectedValue = computed({
   get: () => props.modelValue,
-  set: val => emit('update:modelValue', val),
+  set: (val) => emit('update:modelValue', val),
 });
 
-const loadOptions = async keyword => {
+const loadOptions = async (keyword) => {
   if (!props.dictType) return [];
   try {
     const response = await getDicts(props.dictType);
     const raw = Array.isArray(response?.data) ? response.data : [];
-    let mapped = raw.map(option => ({
+    let mapped = raw.map((option) => ({
       label: option.dictLabel,
       value: option.dictValue,
       disabled: option.status === '1',
@@ -46,7 +46,7 @@ const loadOptions = async keyword => {
     }));
     if (keyword) {
       const k = String(keyword).toLowerCase();
-      mapped = mapped.filter(opt => String(opt.label).toLowerCase().includes(k));
+      mapped = mapped.filter((opt) => String(opt.label).toLowerCase().includes(k));
     }
     lastOptions.value = mapped;
     return mapped;
@@ -56,7 +56,7 @@ const loadOptions = async keyword => {
   }
 };
 
-const handleChange = value => {
+const handleChange = (value) => {
   emit('change', value);
   const entity = selectedEntity.value;
   if (entity) {
@@ -64,10 +64,8 @@ const handleChange = value => {
     return;
   }
   const selectedItem = Array.isArray(value)
-    ? lastOptions.value
-        .filter(opt => value.includes(opt.value))
-        .map(opt => opt._raw ?? opt)
-    : (lastOptions.value.find(opt => opt.value === value)?._raw ?? null);
+    ? lastOptions.value.filter((opt) => value.includes(opt.value)).map((opt) => opt._raw ?? opt)
+    : (lastOptions.value.find((opt) => opt.value === value)?._raw ?? null);
   if (selectedItem) emit('dict-change', selectedItem);
 };
 
@@ -75,8 +73,8 @@ defineExpose({
   refresh: () => {
     lastOptions.value = [];
   },
-  getDictLabel: value => {
-    const item = lastOptions.value.find(d => d.value === value);
+  getDictLabel: (value) => {
+    const item = lastOptions.value.find((d) => d.value === value);
     return item ? item.label : value;
   },
 });

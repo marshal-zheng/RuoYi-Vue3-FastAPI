@@ -10,36 +10,39 @@
 </template>
 
 <script setup lang="ts" name="InterfaceTypeSelector">
-import { ref, watch } from 'vue'
-import DictSelect from '@/components/DictSelect/index.vue'
+import { ref, watch } from 'vue';
+import DictSelect from '@/components/DictSelect/index.vue';
 
 interface Props {
-  modelValue?: string
+  modelValue?: string;
 }
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void
-  (e: 'change', value: string): void
+  (e: 'update:modelValue', value: string): void;
+  (e: 'change', value: string): void;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  modelValue: ''
-})
+  modelValue: '',
+});
 
-const emit = defineEmits<Emits>()
+const emit = defineEmits<Emits>();
 
-const selectedValue = ref(props.modelValue)
+const selectedValue = ref(props.modelValue);
 
 // 监听外部值变化
-watch(() => props.modelValue, (newValue) => {
-  selectedValue.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    selectedValue.value = newValue;
+  }
+);
 
 // 处理选择变化
 const handleChange = (value: string) => {
-  emit('update:modelValue', value)
-  emit('change', value)
-}
+  emit('update:modelValue', value);
+  emit('change', value);
+};
 </script>
 
 <style lang="less" scoped>

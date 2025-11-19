@@ -1,38 +1,39 @@
 <template>
   <ZxContentWrap>
     <template #header-right>
-      <ZxButton
-        type="primary"
-        icon="Plus"
-        @click="handleAdd"
-        v-hasPermi="['system:dict:add']"
-      >新增</ZxButton>
+      <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:dict:add']"
+        >新增</ZxButton
+      >
       <ZxButton
         type="success"
         icon="Edit"
         :disabled="single"
         @click="handleUpdate"
         v-hasPermi="['system:dict:edit']"
-      >修改</ZxButton>
+        >修改</ZxButton
+      >
       <ZxButton
         type="danger"
         icon="Delete"
         :disabled="multiple"
         @click="handleDelete"
         v-hasPermi="['system:dict:remove']"
-      >删除</ZxButton>
+        >删除</ZxButton
+      >
       <ZxButton
         type="warning"
         icon="Download"
         @click="handleExport"
         v-hasPermi="['system:dict:export']"
-      >导出</ZxButton>
+        >导出</ZxButton
+      >
       <ZxButton
         type="danger"
         icon="Refresh"
         @click="handleRefreshCache"
         v-hasPermi="['system:dict:remove']"
-      >刷新缓存</ZxButton>
+        >刷新缓存</ZxButton
+      >
     </template>
     <ZxGridList
       ref="gridListRef"
@@ -56,7 +57,7 @@
               placeholder="字典状态"
               clearable
               style="width: 240px; margin-left: 8px"
-              @change="v => onFilterChange('status', v, { handleRefresh, updateState })"
+              @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
             >
               <el-option
                 v-for="dict in sys_normal_disable"
@@ -73,7 +74,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               style="width: 308px; margin-left: 8px"
-              @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+              @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
           </div>
           <div class="zx-grid-form-bar__right">
@@ -90,7 +91,11 @@
       </template>
 
       <template #table="{ grid, refresh: handleRefresh }">
-        <el-table v-loading="grid.loading" :data="grid.list || []" @selection-change="handleSelectionChange">
+        <el-table
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          @selection-change="handleSelectionChange"
+        >
           <el-table-column type="selection" width="55" />
           <el-table-column label="字典编号" prop="dictId" />
           <el-table-column label="字典名称" prop="dictName" :show-overflow-tooltip="true" />
@@ -114,18 +119,22 @@
           </el-table-column>
           <el-table-column label="操作" width="160" class-name="small-padding fixed-width">
             <template #default="scope">
-              <zx-button
+              <el-button
                 link
                 type="primary"
+                icon="Edit"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:dict:edit']"
-              >修改</zx-button>
-              <zx-button
+                >修改</el-button
+              >
+              <el-button
                 link
-                type="danger"
+                type="primary"
+                icon="Delete"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:dict:remove']"
-              >删除</zx-button>
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
@@ -142,7 +151,9 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{ dict.label }}</el-radio>
+            <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{
+              dict.label
+            }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -231,21 +242,21 @@ function handleAdd() {
   title.value = '添加字典类型';
 }
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.dictId);
+  ids.value = selection.map((item) => item.dictId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
 function handleUpdate(row) {
   reset();
   const dictId = row?.dictId || ids.value;
-  getType(dictId).then(response => {
+  getType(dictId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改字典类型';
   });
 }
 function submitForm() {
-  proxy.$refs['dictRef'].validate(valid => {
+  proxy.$refs['dictRef'].validate((valid) => {
     if (valid) {
       if (form.value.dictId != undefined) {
         updateType(form.value).then(() => {

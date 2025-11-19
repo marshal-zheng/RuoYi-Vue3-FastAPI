@@ -95,12 +95,12 @@ function clickRow(row) {
 
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  tables.value = selection.map(item => item.tableName);
+  tables.value = selection.map((item) => item.tableName);
 }
 
 /** 查询表数据 */
 function getList() {
-  listDbTable(queryParams).then(res => {
+  listDbTable(queryParams).then((res) => {
     dbTableList.value = res.rows;
     total.value = res.total;
   });
@@ -125,7 +125,7 @@ function handleImportTable() {
     proxy.$modal.msgError('请选择要导入的表');
     return;
   }
-  importTable({ tables: tableNames }).then(res => {
+  importTable({ tables: tableNames }).then((res) => {
     proxy.$modal.msgSuccess(res.msg);
     if (res.code === 200) {
       visible.value = false;

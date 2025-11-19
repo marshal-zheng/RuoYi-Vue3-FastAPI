@@ -18,40 +18,40 @@
 </template>
 
 <script setup name="ParitySelector">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: null
+    default: null,
   },
   placeholder: {
     type: String,
-    default: '请选择校验方式'
+    default: '请选择校验方式',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   clearable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   size: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   customStyle: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   options: {
     type: Array,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认校验方式选项
 const defaultParityOptions = [
@@ -59,16 +59,16 @@ const defaultParityOptions = [
   { label: '奇校验(Odd)', value: 'Odd' },
   { label: '偶校验(Even)', value: 'Even' },
   { label: '标记(Mark)', value: 'Mark' },
-  { label: '空格(Space)', value: 'Space' }
-]
+  { label: '空格(Space)', value: 'Space' },
+];
 
 // 计算校验方式选项
 const parityOptions = computed(() => {
-  return props.options || defaultParityOptions
-})
+  return props.options || defaultParityOptions;
+});
 
 function handleChange(value) {
-  emit('update:modelValue', value)
-  emit('change', value)
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>

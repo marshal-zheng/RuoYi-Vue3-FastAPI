@@ -14,39 +14,39 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, ref, watch } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { onBeforeUnmount, ref, watch } from 'vue';
+import { Search } from '@element-plus/icons-vue';
 
 const props = defineProps({
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   className: {
     type: String,
-    default: ''
-  }
-})
+    default: '',
+  },
+});
 
-const emit = defineEmits(['search'])
+const emit = defineEmits(['search']);
 
-const keyword = ref('')
-let timer = 0
+const keyword = ref('');
+let timer = 0;
 
 watch(keyword, (val) => {
   if (timer) {
-    window.clearTimeout(timer)
+    window.clearTimeout(timer);
   }
   timer = window.setTimeout(() => {
-    emit('search', val)
-  }, 200)
-})
+    emit('search', val);
+  }, 200);
+});
 
 onBeforeUnmount(() => {
   if (timer) {
-    window.clearTimeout(timer)
+    window.clearTimeout(timer);
   }
-})
+});
 </script>
 
 <style scoped lang="less">

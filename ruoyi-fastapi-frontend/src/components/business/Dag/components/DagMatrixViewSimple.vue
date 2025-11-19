@@ -162,198 +162,198 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search, Folder, Document, Connection, Plus, Edit, Delete } from '@element-plus/icons-vue'
-import { transformGraphToMatrix } from '../utils/matrixDataTransform.js'
+import { ref, computed, watch } from 'vue';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { Search, Folder, Document, Connection, Plus, Edit, Delete } from '@element-plus/icons-vue';
+import { transformGraphToMatrix } from '../utils/matrixDataTransform.js';
 
 defineOptions({
-  name: 'DagMatrixViewSimple'
-})
+  name: 'DagMatrixViewSimple',
+});
 
 // Props
 const props = defineProps({
   graphData: {
     type: Object,
-    default: () => ({ nodes: [], edges: [] })
+    default: () => ({ nodes: [], edges: [] }),
   },
   readonly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   columns: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   nodeRenderer: {
     type: Function,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
 // Emits
-const emit = defineEmits(['node-add', 'node-update', 'node-delete', 'row-click'])
+const emit = defineEmits(['node-add', 'node-update', 'node-delete', 'row-click']);
 
 // 响应式数据
-const flatData = ref([])
-const searchText = ref('')
+const flatData = ref([]);
+const searchText = ref('');
 const editDialog = ref({
   visible: false,
   isAdd: false,
-  nodeData: {}
-})
+  nodeData: {},
+});
 
 // 计算属性
-const totalNodes = computed(() => flatData.value.length)
+const totalNodes = computed(() => flatData.value.length);
 
 const filteredData = computed(() => {
-  let result = flatData.value
+  let result = flatData.value;
 
   if (searchText.value) {
-    const search = searchText.value.toLowerCase()
+    const search = searchText.value.toLowerCase();
     result = result.filter((item) => {
-      const label = item.properties?.content?.label?.toLowerCase() || ''
-      const desc = item.properties?.content?.description?.toLowerCase() || ''
-      const path = item._pathString?.toLowerCase() || ''
-      return label.includes(search) || desc.includes(search) || path.includes(search)
-    })
+      const label = item.properties?.content?.label?.toLowerCase() || '';
+      const desc = item.properties?.content?.description?.toLowerCase() || '';
+      const path = item._pathString?.toLowerCase() || '';
+      return label.includes(search) || desc.includes(search) || path.includes(search);
+    });
   }
 
-  return result
-})
+  return result;
+});
 
 // 方法
 const convertGraphToMatrix = (graphData) => {
   try {
-    console.log('🔄 转换图数据:', graphData)
-    const treeData = transformGraphToMatrix(graphData, props.nodeRenderer)
-    console.log('🌳 树形数据:', treeData)
+    console.log('🔄 转换图数据:', graphData);
+    const treeData = transformGraphToMatrix(graphData, props.nodeRenderer);
+    console.log('🌳 树形数据:', treeData);
 
-    const flattened = flattenTreeData(treeData)
-    console.log('📊 扁平化数据:', flattened)
+    const flattened = flattenTreeData(treeData);
+    console.log('📊 扁平化数据:', flattened);
 
-    flatData.value = flattened
+    flatData.value = flattened;
   } catch (error) {
-    console.error('转换失败:', error)
-    flatData.value = []
+    console.error('转换失败:', error);
+    flatData.value = [];
   }
-}
+};
 
 const flattenTreeData = (treeData, parentPath = []) => {
-  const result = []
+  const result = [];
 
   if (!Array.isArray(treeData)) {
-    console.warn('treeData 不是数组:', treeData)
-    return result
+    console.warn('treeData 不是数组:', treeData);
+    return result;
   }
 
   treeData.forEach((node) => {
-    const currentPath = [...parentPath, node.properties?.content?.label || '未命名']
+    const currentPath = [...parentPath, node.properties?.content?.label || '未命名'];
     const flatNode = {
       ...node,
       _path: currentPath,
-      _pathString: currentPath.join(' > ')
-    }
+      _pathString: currentPath.join(' > '),
+    };
 
-    result.push(flatNode)
+    result.push(flatNode);
 
     if (node.children && node.children.length > 0) {
-      result.push(...flattenTreeData(node.children, currentPath))
+      result.push(...flattenTreeData(node.children, currentPath));
     }
-  })
+  });
 
-  return result
-}
+  return result;
+};
 
 const getNodeTypeIcon = (type) => {
   const iconMap = {
     'root-node': Folder,
     'sub-node': Connection,
-    'leaf-node': Document
-  }
-  return iconMap[type] || Document
-}
+    'leaf-node': Document,
+  };
+  return iconMap[type] || Document;
+};
 
 const getTypeTagType = (type) => {
   const typeMap = {
     'root-node': 'primary',
     'sub-node': 'success',
-    'leaf-node': 'info'
-  }
-  return typeMap[type] || 'info'
-}
+    'leaf-node': 'info',
+  };
+  return typeMap[type] || 'info';
+};
 
 const getTypeText = (type) => {
   const textMap = {
     'root-node': '根节点',
     'sub-node': '子节点',
-    'leaf-node': '叶子节点'
-  }
-  return textMap[type] || '未知'
-}
+    'leaf-node': '叶子节点',
+  };
+  return textMap[type] || '未知';
+};
 
 const renderCustomCell = (renderer, row) => {
   if (typeof renderer === 'function') {
     try {
-      const result = renderer({ rowData: row })
+      const result = renderer({ rowData: row });
       if (typeof result === 'string') {
-        return result
+        return result;
       }
       if (result && typeof result === 'object' && result.toString) {
-        return result.toString()
+        return result.toString();
       }
-      return String(result || '-')
+      return String(result || '-');
     } catch (error) {
-      console.error('自定义单元格渲染错误:', error)
-      return '-'
+      console.error('自定义单元格渲染错误:', error);
+      return '-';
     }
   }
-  return '-'
-}
+  return '-';
+};
 
 // 层级路径处理
 const getDisplayPath = (pathArray) => {
   if (!Array.isArray(pathArray) || pathArray.length === 0) {
-    return '-'
+    return '-';
   }
 
   if (pathArray.length <= 2) {
-    return pathArray.join(' > ')
+    return pathArray.join(' > ');
   }
 
   // 显示前两级
-  return pathArray.slice(0, 2).join(' > ')
-}
+  return pathArray.slice(0, 2).join(' > ');
+};
 
 const needsPopover = (pathArray) => {
-  return Array.isArray(pathArray) && pathArray.length > 2
-}
+  return Array.isArray(pathArray) && pathArray.length > 2;
+};
 
 // 描述处理
 const getTruncatedDescription = (description) => {
-  if (!description) return '-'
-  if (description.length <= 50) return description
-  return description.substring(0, 47) + '...'
-}
+  if (!description) return '-';
+  if (description.length <= 50) return description;
+  return description.substring(0, 47) + '...';
+};
 
 const needsTooltip = (description) => {
-  return description && description.length > 50
-}
+  return description && description.length > 50;
+};
 
 // 层级标签类型
 const getLevelTagType = (level) => {
-  const types = ['', 'primary', 'success', 'info', 'warning', 'danger']
-  return types[Math.min(level, types.length - 1)] || 'info'
-}
+  const types = ['', 'primary', 'success', 'info', 'warning', 'danger'];
+  return types[Math.min(level, types.length - 1)] || 'info';
+};
 
 // 事件处理
 const handleRowClick = (row) => {
-  emit('row-click', { row })
-}
+  emit('row-click', { row });
+};
 
 const handleAddChild = (parentRow) => {
   const newNode = {
@@ -364,26 +364,26 @@ const handleAddChild = (parentRow) => {
     properties: {
       content: {
         label: '新子节点',
-        description: ''
-      }
-    }
-  }
+        description: '',
+      },
+    },
+  };
 
   editDialog.value = {
     visible: true,
     isAdd: true,
     nodeData: { ...newNode },
-    parentNode: parentRow
-  }
-}
+    parentNode: parentRow,
+  };
+};
 
 const handleEdit = (row) => {
   editDialog.value = {
     visible: true,
     isAdd: false,
-    nodeData: { ...row }
-  }
-}
+    nodeData: { ...row },
+  };
+};
 
 const handleDelete = async (row) => {
   try {
@@ -391,45 +391,45 @@ const handleDelete = async (row) => {
       `确定要删除节点"${row.properties?.content?.label}"吗？`,
       '确认删除',
       { type: 'warning' }
-    )
+    );
 
-    emit('node-delete', row)
-    ElMessage.success('删除成功')
+    emit('node-delete', row);
+    ElMessage.success('删除成功');
   } catch (error) {
     // 用户取消
   }
-}
+};
 
 const handleEditSubmit = () => {
   if (editDialog.value.isAdd) {
-    emit('node-add', editDialog.value.nodeData)
-    ElMessage.success('添加成功')
+    emit('node-add', editDialog.value.nodeData);
+    ElMessage.success('添加成功');
   } else {
-    emit('node-update', editDialog.value.nodeData)
-    ElMessage.success('更新成功')
+    emit('node-update', editDialog.value.nodeData);
+    ElMessage.success('更新成功');
   }
 
-  editDialog.value.visible = false
-}
+  editDialog.value.visible = false;
+};
 
 // 监听数据变化
 watch(
   () => props.graphData,
   (newData) => {
     if (newData) {
-      convertGraphToMatrix(newData)
+      convertGraphToMatrix(newData);
     }
   },
   { immediate: true, deep: true }
-)
+);
 
 // 暴露方法
 defineExpose({
   refresh: () => convertGraphToMatrix(props.graphData),
   search: (text) => {
-    searchText.value = text
-  }
-})
+    searchText.value = text;
+  },
+});
 </script>
 
 <style lang="less" scoped>

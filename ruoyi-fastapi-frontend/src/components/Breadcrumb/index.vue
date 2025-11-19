@@ -34,14 +34,14 @@ function getBreadcrumb() {
     });
     getMatched(pathList, permissionStore.defaultRoutes, matched);
   } else {
-    matched = route.matched.filter(item => item.meta && item.meta.title);
+    matched = route.matched.filter((item) => item.meta && item.meta.title);
   }
   // 判断是否为首页
   if (!isDashboard(matched[0])) {
     matched = [{ path: '/index', meta: { title: '首页' } }].concat(matched);
   }
   levelList.value = matched.filter(
-    item => item.meta && item.meta.title && item.meta.breadcrumb !== false
+    (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
   );
 }
 function findPathNum(str, char = '/') {
@@ -55,7 +55,7 @@ function findPathNum(str, char = '/') {
 }
 function getMatched(pathList, routeList, matched) {
   let data = routeList.find(
-    item => item.path == pathList[0] || (item.name += '').toLowerCase() == pathList[0]
+    (item) => item.path == pathList[0] || (item.name += '').toLowerCase() == pathList[0]
   );
   if (data) {
     matched.push(data);
@@ -99,8 +99,33 @@ getBreadcrumb();
   margin-left: 8px;
 }
 
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__inner) {
+  color: var(--top-header-breadcrumb-color);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__inner:hover) {
+  color: var(--top-header-breadcrumb-hover-color);
+}
+
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__separator) {
+  color: var(--top-header-breadcrumb-separator-color);
+}
+
 .app-breadcrumb.el-breadcrumb .no-redirect {
-  color: #97a8be;
+  color: var(--top-header-breadcrumb-color);
   cursor: text;
+  opacity: 0.8;
+}
+
+.app-breadcrumb.el-breadcrumb a {
+  color: var(--top-header-breadcrumb-color);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.app-breadcrumb.el-breadcrumb a:hover {
+  color: var(--top-header-breadcrumb-hover-color);
 }
 </style>

@@ -24,13 +24,13 @@ export const DAG_EDGE_CONFIG = {
     normal: {
       stroke: '#2f3542',
       strokeWidth: 6,
-      opacity: 0.95
+      opacity: 0.95,
     },
     // 悬停状态
     hover: {
       stroke: '#4c8dff',
       strokeWidth: 7,
-      opacity: 1
+      opacity: 1,
     },
     // 选中状态
     selected: {
@@ -40,9 +40,9 @@ export const DAG_EDGE_CONFIG = {
         dx: 0,
         dy: 0,
         blur: 10,
-        color: 'rgba(31, 122, 235, 0.35)'
-      }
-    }
+        color: 'rgba(31, 122, 235, 0.35)',
+      },
+    },
   },
 
   /**
@@ -56,7 +56,7 @@ export const DAG_EDGE_CONFIG = {
       fontWeight: 600,
       textAnchor: 'middle',
       textVerticalAnchor: 'middle',
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     // 标签背景样式（设置为透明，不显示背景）
     rect: {
@@ -64,15 +64,15 @@ export const DAG_EDGE_CONFIG = {
       stroke: 'transparent',
       strokeWidth: 0,
       rx: 0,
-      ry: 0
+      ry: 0,
     },
     // 标签位置
     position: {
       distance: 0.75, // 在边的偏下方位置（0-1之间，0.5为中点，值越大越靠近终点）
-      offset: { x: 0, y: 0 }
-    }
-  }
-}
+      offset: { x: 0, y: 0 },
+    },
+  },
+};
 
 // ============================================
 // 工具函数
@@ -84,7 +84,7 @@ export const DAG_EDGE_CONFIG = {
  * @returns {Object}
  */
 export function getEdgeStyle(state = 'normal') {
-  return DAG_EDGE_CONFIG.style[state] || DAG_EDGE_CONFIG.style.normal
+  return DAG_EDGE_CONFIG.style[state] || DAG_EDGE_CONFIG.style.normal;
 }
 
 /**
@@ -97,17 +97,17 @@ export function createEdgeLabel(text) {
     attrs: {
       text: {
         text: String(text),
-        ...DAG_EDGE_CONFIG.label.weight
+        ...DAG_EDGE_CONFIG.label.weight,
       },
       rect: {
-        ...DAG_EDGE_CONFIG.label.rect
-      }
+        ...DAG_EDGE_CONFIG.label.rect,
+      },
     },
-    position: DAG_EDGE_CONFIG.label.position
-  }
+    position: DAG_EDGE_CONFIG.label.position,
+  };
 }
 
 // ============================================
 // 默认导出
 // ============================================
-export default DAG_EDGE_CONFIG
+export default DAG_EDGE_CONFIG;

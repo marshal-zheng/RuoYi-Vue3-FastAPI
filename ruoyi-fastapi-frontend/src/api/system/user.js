@@ -4,7 +4,7 @@ import { clampBcryptPassword } from '@/utils/password';
 
 function sanitizePasswordField(payload, fields = []) {
   const target = { ...payload };
-  fields.forEach(field => {
+  fields.forEach((field) => {
     if (target[field]) {
       target[field] = clampBcryptPassword(target[field]);
     }

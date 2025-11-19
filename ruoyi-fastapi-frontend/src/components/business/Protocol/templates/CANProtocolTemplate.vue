@@ -298,7 +298,7 @@ const fieldSpanMethod = ({ columnIndex }: any) => {
 watch(
   () => localConfig,
 
-  newVal => {
+  (newVal) => {
     syncConfigTableRows();
     emit('update:modelValue', newVal);
   },
@@ -308,7 +308,7 @@ watch(
 // 监听外部值变化
 watch(
   () => props.modelValue,
-  newVal => {
+  (newVal) => {
     if (newVal && Object.keys(newVal).length > 0) {
       Object.assign(localConfig, newVal);
     }

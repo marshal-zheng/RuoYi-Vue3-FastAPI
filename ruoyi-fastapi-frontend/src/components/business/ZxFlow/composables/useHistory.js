@@ -1,71 +1,71 @@
-import { useGraphInstance } from './useGraphInstance'
+import { useGraphInstance } from './useGraphInstance';
 
 export function useHistory(graphInstance = null) {
-  let graph
+  let graph;
 
   try {
-    graph = graphInstance || useGraphInstance()
+    graph = graphInstance || useGraphInstance();
   } catch (error) {
-    graph = graphInstance
+    graph = graphInstance;
   }
 
   const undo = () => {
-    const g = graph?.value || graph
+    const g = graph?.value || graph;
     if (g) {
-      const history = g.getPlugin('history')
+      const history = g.getPlugin('history');
       if (history) {
-        history.undo()
+        history.undo();
       }
     }
-  }
+  };
 
   const redo = () => {
-    const g = graph?.value || graph
+    const g = graph?.value || graph;
     if (g) {
-      const history = g.getPlugin('history')
+      const history = g.getPlugin('history');
       if (history) {
-        history.redo()
+        history.redo();
       }
     }
-  }
+  };
 
   const canUndo = () => {
-    const g = graph?.value || graph
+    const g = graph?.value || graph;
     if (g) {
-      const history = g.getPlugin('history')
+      const history = g.getPlugin('history');
       if (history) {
-        return history.canUndo()
+        return history.canUndo();
       }
     }
-    return false
-  }
+    return false;
+  };
 
   const canRedo = () => {
-    const g = graph?.value || graph
+    const g = graph?.value || graph;
     if (g) {
-      const history = g.getPlugin('history')
+      const history = g.getPlugin('history');
       if (history) {
-        return history.canRedo()
+        return history.canRedo();
       }
     }
-    return false
-  }
+    return false;
+  };
 
   const clean = () => {
-    const g = graph?.value || graph
+    const g = graph?.value || graph;
     if (g) {
-      const history = g.getPlugin('history')
+      const history = g.getPlugin('history');
       if (history) {
-        history.clean()
+        history.clean();
       }
     }
-  }
+  };
 
   return {
     undo,
     redo,
     canUndo,
     canRedo,
-    clean
-  }
+    clean,
+  };
 }

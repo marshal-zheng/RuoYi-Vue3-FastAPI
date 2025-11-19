@@ -57,7 +57,7 @@ const dialog = useDialog({
   footer: false,
 });
 
-const open = data => {
+const open = (data) => {
   versionData.value = data;
   dialog.open();
 };

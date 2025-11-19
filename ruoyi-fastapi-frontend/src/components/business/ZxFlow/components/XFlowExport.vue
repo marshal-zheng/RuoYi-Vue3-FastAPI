@@ -3,48 +3,48 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue'
-import { Export } from '@antv/x6-plugin-export'
-import { useGraphInstance } from '../composables/useGraphInstance'
+import { onMounted, watch } from 'vue';
+import { Export } from '@antv/x6-plugin-export';
+import { useGraphInstance } from '../composables/useGraphInstance';
 
 const props = defineProps({
   enabled: {
     type: Boolean,
-    default: true
-  }
-})
+    default: true,
+  },
+});
 
-const graph = useGraphInstance()
+const graph = useGraphInstance();
 
 const installExportPlugin = () => {
-  const g = graph?.value
-  if (!g) return
+  const g = graph?.value;
+  if (!g) return;
 
   if (g.getPlugin('export')) {
-    g.disposePlugins('export')
+    g.disposePlugins('export');
   }
 
-  if (!props.enabled) return
+  if (!props.enabled) return;
 
-  g.use(new Export())
-}
+  g.use(new Export());
+};
 
 onMounted(() => {
-  installExportPlugin()
-})
+  installExportPlugin();
+});
 
 watch(
   () => props.enabled,
   () => {
-    installExportPlugin()
+    installExportPlugin();
   }
-)
+);
 
 watch(
   () => graph && graph.value,
   (val) => {
-    if (val) installExportPlugin()
+    if (val) installExportPlugin();
   },
   { immediate: true }
-)
+);
 </script>

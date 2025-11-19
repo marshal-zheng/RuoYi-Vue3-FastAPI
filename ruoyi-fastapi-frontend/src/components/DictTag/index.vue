@@ -55,7 +55,7 @@ const props = defineProps({
 const values = computed(() => {
   if (props.value === null || typeof props.value === 'undefined' || props.value === '') return [];
   return Array.isArray(props.value)
-    ? props.value.map(item => '' + item)
+    ? props.value.map((item) => '' + item)
     : String(props.value).split(props.separator);
 });
 
@@ -72,8 +72,8 @@ const unmatch = computed(() => {
     return false;
   // 传入值为数组
   let unmatch = false; // 添加一个标志来判断是否有未匹配项
-  values.value.forEach(item => {
-    if (!props.options.some(v => v.value === item)) {
+  values.value.forEach((item) => {
+    if (!props.options.some((v) => v.value === item)) {
       unmatchArray.value.push(item);
       unmatch = true; // 如果有未匹配项，将标志设置为true
     }

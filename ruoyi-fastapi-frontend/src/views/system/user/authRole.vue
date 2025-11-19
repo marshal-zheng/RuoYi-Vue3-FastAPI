@@ -1,10 +1,5 @@
 <template>
-  <ZxContentWrap
-    :show-footer="true"
-    :footer-fixed="true"
-    @save="handleSave"
-    @cancel="handleCancel"
-  >
+  <ZxContentWrap :show-footer="true" :footer-fixed="true" @save="handleSave" @cancel="handleCancel">
     <template #title>
       <div class="flex items-center gap-6">
         <span class="text-lg font-semibold">角色授权</span>

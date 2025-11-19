@@ -26,75 +26,75 @@
 </template>
 
 <script setup name="FileTypeSelector">
-import { computed } from 'vue'
-import { Document, Grid, DocumentCopy } from '@element-plus/icons-vue'
+import { computed } from 'vue';
+import { Document, Grid, DocumentCopy } from '@element-plus/icons-vue';
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: null
+    default: null,
   },
   placeholder: {
     type: String,
-    default: '请选择文件类型'
+    default: '请选择文件类型',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   clearable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   size: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   customStyle: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   options: {
     type: Array,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认文件类型选项
 const defaultFileTypeOptions = [
-  { 
-    label: 'Word文档', 
-    value: 'doc', 
+  {
+    label: 'Word文档',
+    value: 'doc',
     extension: '.doc',
     icon: Document,
-    description: 'Microsoft Word文档格式'
+    description: 'Microsoft Word文档格式',
   },
-  { 
-    label: 'Excel表格', 
-    value: 'xlsx', 
+  {
+    label: 'Excel表格',
+    value: 'xlsx',
     extension: '.xlsx',
     icon: Grid,
-    description: 'Microsoft Excel表格格式'
+    description: 'Microsoft Excel表格格式',
   },
-  { 
-    label: 'XML文件', 
-    value: 'xml', 
+  {
+    label: 'XML文件',
+    value: 'xml',
     extension: '.xml',
     icon: DocumentCopy,
-    description: '可扩展标记语言格式'
-  }
-]
+    description: '可扩展标记语言格式',
+  },
+];
 
 // 计算文件类型选项
 const fileTypeOptions = computed(() => {
-  return props.options || defaultFileTypeOptions
-})
+  return props.options || defaultFileTypeOptions;
+});
 
 function handleChange(value) {
-  emit('update:modelValue', value)
-  emit('change', value)
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>
 
@@ -135,4 +135,3 @@ function handleChange(value) {
   color: #409eff;
 }
 </style>
-

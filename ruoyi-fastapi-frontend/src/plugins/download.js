@@ -17,7 +17,7 @@ export default {
       url: url,
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() },
-    }).then(res => {
+    }).then((res) => {
       const isBlob = blobValidate(res.data);
       if (isBlob) {
         const blob = new Blob([res.data]);
@@ -34,7 +34,7 @@ export default {
       url: url,
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() },
-    }).then(res => {
+    }).then((res) => {
       const isBlob = blobValidate(res.data);
       if (isBlob) {
         const blob = new Blob([res.data]);
@@ -56,7 +56,7 @@ export default {
       responseType: 'blob',
       headers: { Authorization: 'Bearer ' + getToken() },
     })
-      .then(res => {
+      .then((res) => {
         const isBlob = blobValidate(res.data);
         if (isBlob) {
           const blob = new Blob([res.data], { type: 'application/zip' });
@@ -66,7 +66,7 @@ export default {
         }
         downloadLoadingInstance.close();
       })
-      .catch(r => {
+      .catch((r) => {
         console.error(r);
         ElMessage.error('下载文件出现错误，请联系管理员！');
         downloadLoadingInstance.close();

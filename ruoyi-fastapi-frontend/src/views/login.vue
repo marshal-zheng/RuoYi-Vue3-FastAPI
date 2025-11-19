@@ -137,14 +137,14 @@ const redirect = ref(undefined);
 
 watch(
   route,
-  newRoute => {
+  (newRoute) => {
     redirect.value = newRoute.query && newRoute.query.redirect;
   },
   { immediate: true }
 );
 
 function handleLogin() {
-  proxy.$refs.loginRef.validate(valid => {
+  proxy.$refs.loginRef.validate((valid) => {
     if (valid) {
       loading.value = true;
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
@@ -183,7 +183,7 @@ function handleLogin() {
 }
 
 function getCode() {
-  getCodeImg().then(res => {
+  getCodeImg().then((res) => {
     captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
     if (captchaEnabled.value) {
       const imgData = res.img || '';

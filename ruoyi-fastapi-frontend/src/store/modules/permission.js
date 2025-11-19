@@ -35,9 +35,9 @@ const usePermissionStore = defineStore('permission', {
       this.firstMenuPath = path || '/index';
     },
     generateRoutes(roles) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         // 向后端请求路由数据
-        getRouters().then(res => {
+        getRouters().then((res) => {
           const sdata = JSON.parse(JSON.stringify(res.data));
           const rdata = JSON.parse(JSON.stringify(res.data));
           const defaultData = JSON.parse(JSON.stringify(res.data));
@@ -46,7 +46,7 @@ const usePermissionStore = defineStore('permission', {
           const rewriteRoutes = filterAsyncRouter(rdata, false, true);
           const defaultRoutes = filterAsyncRouter(defaultData);
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
-          asyncRoutes.forEach(route => {
+          asyncRoutes.forEach((route) => {
             router.addRoute(route);
           });
           this.setRoutes(rewriteRoutes);
@@ -54,7 +54,7 @@ const usePermissionStore = defineStore('permission', {
           this.setDefaultRoutes(sidebarRoutes);
           this.setTopbarRoutes(defaultRoutes);
           const landingCandidates = constantRoutes
-            .filter(route => !route.hidden)
+            .filter((route) => !route.hidden)
             .concat(sidebarRoutes);
           const firstMenuPath = findFirstMenuPath(landingCandidates);
           this.setFirstMenuPath(firstMenuPath);
@@ -67,7 +67,7 @@ const usePermissionStore = defineStore('permission', {
 
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap, lastRouter = false, type = false) {
-  return asyncRouterMap.filter(route => {
+  return asyncRouterMap.filter((route) => {
     if (type && route.children) {
       route.children = filterChildren(route.children);
     }
@@ -98,7 +98,7 @@ function filterChildren(childrenMap, lastRouter = false) {
   childrenMap.forEach((el, index) => {
     if (el.children && el.children.length) {
       if (el.component === 'ParentView' && !lastRouter) {
-        el.children.forEach(c => {
+        el.children.forEach((c) => {
           c.path = el.path + '/' + c.path;
           if (c.children && c.children.length) {
             children = children.concat(filterChildren(c.children, c));
@@ -124,7 +124,7 @@ function filterChildren(childrenMap, lastRouter = false) {
 // 动态路由遍历，验证是否具备权限
 export function filterDynamicRoutes(routes) {
   const res = [];
-  routes.forEach(route => {
+  routes.forEach((route) => {
     if (route.permissions) {
       if (auth.hasPermiOr(route.permissions)) {
         res.push(route);
@@ -138,7 +138,7 @@ export function filterDynamicRoutes(routes) {
   return res;
 }
 
-export const loadView = view => {
+export const loadView = (view) => {
   let res;
   for (const path in modules) {
     const dir = path.split('views/')[1].split('.vue')[0];
@@ -185,7 +185,11 @@ function isFunctionalRoute(route) {
   if (!route.component) {
     return false;
   }
-  if (route.component === Layout || route.component === ParentView || route.component === InnerLink) {
+  if (
+    route.component === Layout ||
+    route.component === ParentView ||
+    route.component === InnerLink
+  ) {
     return false;
   }
   return true;

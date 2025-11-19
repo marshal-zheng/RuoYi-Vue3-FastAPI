@@ -36,8 +36,6 @@
         />
       </el-form-item>
 
-      
-
       <el-form-item label="协议描述" prop="description">
         <el-input
           v-model="drawer.state.data.description"
@@ -134,7 +132,7 @@ const handleProtocolTypeChange = () => {
   drawer.state.data.protocolConfig = {};
 };
 
-const openDrawer = async protocolData => {
+const openDrawer = async (protocolData) => {
   if (protocolData && protocolData.protocolId) {
     drawer.open();
     drawerLoading.value = true;

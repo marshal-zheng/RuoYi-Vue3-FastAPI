@@ -1,0 +1,183 @@
+:root,
+html {
+  /* ===== Element Plus 企业级主题变量 ===== */
+  /* 主色调 - 沉稳的企业蓝 */
+  --el-color-primary: #0052d9 !important;
+  --el-color-primary-light-3: #3370ff !important;
+  --el-color-primary-light-5: #6690ff !important;
+  --el-color-primary-light-7: #99b5ff !important;
+  --el-color-primary-light-8: #b3ccff !important;
+  --el-color-primary-light-9: #e6f0ff !important;
+  --el-color-primary-dark-2: #003ba8 !important;
+
+  /* 圆角设置 - 企业级应用使用更少的圆角 */
+  --el-border-radius-base: 2px !important;
+  --el-border-radius-small: 2px !important;
+  --el-border-radius-round: 2px !important;
+  --el-border-radius-circle: 50% !important;
+
+  /* 边框颜色 - 更清晰的分隔线 */
+  --el-border-color: #e5e6eb !important;
+  --el-border-color-light: #f0f1f5 !important;
+  --el-border-color-lighter: #f5f6fa !important;
+  --el-border-color-extra-light: #fafbfc !important;
+  --el-border-color-dark: #d3d4d6 !important;
+  --el-border-color-darker: #c5c6c8 !important;
+
+  /* 文字颜色 - 更好的对比度 */
+  --el-text-color-primary: #1d2129 !important;
+  --el-text-color-regular: #4e5969 !important;
+  --el-text-color-secondary: #86909c !important;
+  --el-text-color-placeholder: #c9cdd4 !important;
+  --el-text-color-disabled: #c9cdd4 !important;
+
+  /* 背景颜色 - 更清爽的企业级配色 */
+  --el-bg-color: #ffffff;
+  --el-bg-color-page: #f7f8fa;
+  --el-bg-color-overlay: #ffffff;
+
+  /* 填充颜色 */
+  --el-fill-color: #f7f8fa;
+  --el-fill-color-light: #fafbfc;
+  --el-fill-color-lighter: #fcfcfd;
+  --el-fill-color-extra-light: #fefefe;
+  --el-fill-color-dark: #edeef2;
+  --el-fill-color-darker: #e5e6eb;
+  --el-fill-color-blank: #ffffff;
+
+  /* 按钮相关 */
+  --el-button-font-weight: 400;
+  --el-button-border-color: #d3d4d6;
+  --el-button-bg-color: #ffffff;
+  --el-button-text-color: #4e5969;
+  --el-button-disabled-text-color: #c9cdd4;
+  --el-button-disabled-bg-color: #f7f8fa;
+  --el-button-disabled-border-color: #e5e6eb;
+  --el-button-divide-border-color: #ffffff;
+  --el-button-hover-text-color: #0052d9;
+  --el-button-hover-bg-color: #f2f5fc;
+  --el-button-hover-border-color: #0052d9;
+  --el-button-active-bg-color: #e6f0ff;
+  --el-button-active-border-color: #003ba8;
+  --el-button-active-text-color: #003ba8;
+
+  /* 表格相关 */
+  --el-table-border-color: #e5e6eb;
+  --el-table-border: 1px solid #e5e6eb;
+  --el-table-text-color: #1d2129;
+  --el-table-header-text-color: #1d2129;
+  --el-table-header-bg-color: #f7f8fa;
+  --el-table-bg-color: #ffffff;
+  --el-table-current-row-bg-color: #f2f5fc;
+  --el-table-row-hover-bg-color: #f7f8fa;
+  --el-table-expanded-cell-bg-color: #ffffff;
+  --el-table-fixed-box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+
+  /* 表单相关 */
+  --el-input-text-color: #1d2129;
+  --el-input-border-color: #d3d4d6;
+  --el-input-hover-border-color: #0052d9;
+  --el-input-focus-border-color: #0052d9;
+  --el-input-transparent-border-color: transparent;
+  --el-input-border-radius: 2px;
+  --el-input-bg-color: #ffffff;
+  --el-input-icon-color: #86909c;
+  --el-input-placeholder-color: #c9cdd4;
+  --el-input-hover-border: #0052d9;
+  --el-input-clear-hover-color: #86909c;
+  --el-input-focus-border: #0052d9;
+
+  /* 阴影 - 更轻微的企业级阴影 */
+  --el-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  --el-box-shadow-light: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  --el-box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  --el-box-shadow-dark: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+
+  /* ===== 应用级自定义变量 ===== */
+  --login-bg-color: #f7f8fa;
+
+  /* left menu start */
+  --left-menu-max-width: 200px;
+  --left-menu-min-width: 64px;
+  --left-menu-bg-color: #f6f8fc;
+  --left-menu-bg-light-color: #eef2fa;
+  --left-menu-bg-active-color: rgba(35, 101, 235, 0.14);
+  --left-menu-hover-bg-color: rgba(35, 101, 235, 0.1);
+  --left-menu-text-color: #1f2a37;
+  --left-menu-text-active-color: #1e5eff;
+  --left-menu-collapse-bg-active-color: rgba(35, 101, 235, 0.14);
+  --left-menu-border-color: #d9e2f4;
+  --left-menu-active-bar-width: 4px;
+  /* --left-menu-active-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), */
+  --left-menu-active-shadow: none,
+    0 6px 16px rgba(16, 59, 156, 0.12);
+  --left-menu-indent-color: rgba(79, 117, 191, 0.28);
+  --left-menu-header-bg: linear-gradient(135deg, #0f1f3a 0%, #1f4db8 52%, #2b6df8 100%);
+  --left-menu-header-shadow: 0 10px 24px rgba(17, 40, 84, 0.24);
+  --left-menu-box-shadow: 0 12px 30px rgba(17, 40, 84, 0.08);
+  /* left menu end */
+
+  /* logo start */
+  --logo-height: 50px;
+  --logo-title-text-color: #f0f4ff;
+  --logo-title-text-hover-color: #ffffff;
+  /* logo end */
+
+  /* header start */
+  --top-header-bg-color: #ffffff;
+  --top-header-text-color: #4e5969;
+  --top-header-hover-color: #f2f5fc;
+  --top-tool-height: var(--logo-height);
+  --top-tool-p-x: 0;
+  --tags-view-height: 38px;
+  --tags-view-bg-color: #f3f5f9;
+  --tags-view-border-color: #d9e2f4;
+  --tags-view-item-bg: transparent;
+  --tags-view-item-hover-bg: rgba(30, 94, 255, 0.08);
+  --tags-view-item-active-bg: transparent;
+  --tags-view-item-border: transparent;
+  --tags-view-box-shadow: inset 0 -1px 0 rgba(9, 30, 66, 0.08);
+  --tags-view-text-color: #3a4558;
+  --tags-view-text-active-color: #1e5eff;
+  --tags-view-indicator-color: #1e5eff;
+  /* header end */
+
+  /* tab menu start */
+  --tab-menu-max-width: 80px;
+  --tab-menu-min-width: 30px;
+  --tab-menu-collapse-height: 36px;
+  /* tab menu end */
+
+  --app-content-padding: 30px;
+  --app-content-bg-color: #f5f7fa;
+  --app-footer-height: 25px;
+  --transition-time-02: 0.2s;
+  --app-table-header-bg: #f7f8fa;
+  --app-table-header-color: #1d2129;
+  
+  /* content card */
+  --app-card-radius: 0;
+  --app-card-shadow: 0 10px 24px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+  --app-card-border: 1px solid var(--el-border-color-light);
+  
+  /* breadcrumb start */
+  --breadcrumb-text-color: #86909c;
+  --breadcrumb-active-color: #1d2129;
+  --breadcrumb-hover-color: #0052d9;
+  --breadcrumb-separator-color: #c9cdd4;
+  /* breadcrumb end */
+
+  --zx-upload-width: 100%;
+}
+
+.dark {
+  --app-content-bg-color: var(--el-bg-color);
+}
+
+*,
+:after,
+:before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

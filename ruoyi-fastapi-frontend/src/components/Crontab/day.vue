@@ -98,7 +98,7 @@ const checkboxString = computed(() => {
 });
 watch(
   () => props.cron.day,
-  value => changeRadioValue(value)
+  (value) => changeRadioValue(value)
 );
 watch([radioValue, cycleTotal, averageTotal, workdayTotal, checkboxString], () => onRadioChange());
 function changeRadioValue(value) {
@@ -123,7 +123,7 @@ function changeRadioValue(value) {
   } else if (value === 'L') {
     radioValue.value = 6;
   } else {
-    checkboxList.value = [...new Set(value.split(',').map(item => Number(item)))];
+    checkboxList.value = [...new Set(value.split(',').map((item) => Number(item)))];
     radioValue.value = 7;
   }
 }

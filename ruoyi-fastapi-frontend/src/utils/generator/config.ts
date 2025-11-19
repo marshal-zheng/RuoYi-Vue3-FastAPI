@@ -333,7 +333,19 @@ export const inputComponents: InputComponent[] = [
   } as any,
 ];
 
-export const selectComponents: (SelectComponent | CascaderComponent | RadioGroupComponent | CheckboxGroupComponent | SwitchComponent | SliderComponent | TimePickerComponent | DatePickerComponent | RateComponent | ColorPickerComponent | UploadComponent)[] = [
+export const selectComponents: (
+  | SelectComponent
+  | CascaderComponent
+  | RadioGroupComponent
+  | CheckboxGroupComponent
+  | SwitchComponent
+  | SliderComponent
+  | TimePickerComponent
+  | DatePickerComponent
+  | RateComponent
+  | ColorPickerComponent
+  | UploadComponent
+)[] = [
   {
     label: '下拉选择',
     tag: 'el-select',

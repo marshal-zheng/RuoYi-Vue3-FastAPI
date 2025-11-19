@@ -97,7 +97,7 @@ const handleDeleteSelected = () => {
 };
 
 // 协议模板选择（代理到 MessageConfigTab）
-const handleProtocolChange = entity => {
+const handleProtocolChange = (entity) => {
   messageConfigRef.value?.handleProtocolChange?.(entity);
 };
 

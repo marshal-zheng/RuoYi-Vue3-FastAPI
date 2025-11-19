@@ -4,8 +4,8 @@
 export const createNodeOptions = (options = {}) => ({
   selected: false,
   draggable: true,
-  ...options
-})
+  ...options,
+});
 
 // 边选项
 export const createEdgeOptions = (options = {}) => ({
@@ -13,14 +13,14 @@ export const createEdgeOptions = (options = {}) => ({
   draggable: true,
   labelDraggable: false,
   animated: false,
-  ...options
-})
+  ...options,
+});
 
 // 图模型
 export const createGraphModel = (nodes = [], edges = []) => ({
   nodes,
-  edges
-})
+  edges,
+});
 
 // 高亮选项
 export const createHighlightOptions = (options = {}) => ({
@@ -29,12 +29,12 @@ export const createHighlightOptions = (options = {}) => ({
     attrs: {
       body: {
         stroke: '#1890ff',
-        strokeWidth: 2
-      }
-    }
+        strokeWidth: 2,
+      },
+    },
   },
-  ...options
-})
+  ...options,
+});
 
 // 连接选项
 export const createConnectionOptions = (options = {}) => ({
@@ -45,8 +45,8 @@ export const createConnectionOptions = (options = {}) => ({
   allowEdge: false,
   allowPort: true,
   highlight: true,
-  ...options
-})
+  ...options,
+});
 
 // 选择选项
 export const createSelectionOptions = (options = {}) => ({
@@ -55,15 +55,15 @@ export const createSelectionOptions = (options = {}) => ({
   rubberband: true,
   movable: true,
   showNodeSelectionBox: true,
-  ...options
-})
+  ...options,
+});
 
 // 键盘选项
 export const createKeyboardOptions = (options = {}) => ({
   enabled: true,
   global: false,
-  ...options
-})
+  ...options,
+});
 
 // 滚动选项
 export const createScrollerOptions = (options = {}) => ({
@@ -71,5 +71,5 @@ export const createScrollerOptions = (options = {}) => ({
   pannable: true,
   pageVisible: false,
   pageBreak: false,
-  ...options
-})
+  ...options,
+});

@@ -97,7 +97,7 @@ function smoothScrollTo(element, target) {
     const timeElapsed = currentTime - startTime;
     const run = easeOutCubic(timeElapsed, start, distance, duration);
     element.scrollLeft = run;
-    
+
     if (timeElapsed < duration) {
       requestAnimationFrame(animate);
     } else {
@@ -254,20 +254,20 @@ defineExpose({
   .scroll-container {
     height: 36px;
   }
-  
+
   .scroll-button {
     width: 20px;
     height: 20px;
   }
-  
+
   .scroll-button .el-icon {
     font-size: 12px;
   }
-  
+
   .scroll-button-left {
     left: 2px;
   }
-  
+
   .scroll-button-right {
     right: 2px;
   }

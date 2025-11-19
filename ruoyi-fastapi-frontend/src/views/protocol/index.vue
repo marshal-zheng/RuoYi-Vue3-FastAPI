@@ -88,17 +88,19 @@
           <el-table-column label="操作" width="150" class-name="small-padding fixed-width">
             <template #default="scope">
               <div class="op-col__wrap">
-                <zx-button
+                <el-button
                   type="text"
                   @click="handleDetailPage(scope.row)"
                   v-hasPermi="['protocol:query']"
-                >编辑</zx-button>
-                <zx-button
+                  >编辑</el-button
+                >
+                <el-button
                   link
                   type="danger"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['protocol:remove']"
-                >删除</zx-button>
+                  >删除</el-button
+                >
               </div>
             </template>
           </el-table-column>

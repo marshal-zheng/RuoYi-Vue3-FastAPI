@@ -128,10 +128,10 @@ function beforeUpload(file) {
 }
 /** 上传图片 */
 function uploadImg() {
-  proxy.$refs.cropper.getCropBlob(data => {
+  proxy.$refs.cropper.getCropBlob((data) => {
     let formData = new FormData();
     formData.append('avatarfile', data, options.filename);
-    uploadAvatar(formData).then(response => {
+    uploadAvatar(formData).then((response) => {
       open.value = false;
       options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
       userStore.avatar = options.img;

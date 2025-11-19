@@ -19,7 +19,7 @@
       ref="quillEditorRef"
       v-model:content="content"
       contentType="html"
-      @textChange="e => $emit('update:modelValue', content)"
+      @textChange="(e) => $emit('update:modelValue', content)"
       :options="options"
       :style="styles"
     />
@@ -108,7 +108,7 @@ const styles = computed(() => {
 const content = ref('');
 watch(
   () => props.modelValue,
-  v => {
+  (v) => {
     if (v !== content.value) {
       content.value = v == undefined ? '<p></p>' : v;
     }
@@ -121,7 +121,7 @@ onMounted(() => {
   if (props.type == 'url') {
     let quill = quillEditorRef.value.getQuill();
     let toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', value => {
+    toolbar.addHandler('image', (value) => {
       if (value) {
         proxy.$refs.uploadRef.click();
       } else {

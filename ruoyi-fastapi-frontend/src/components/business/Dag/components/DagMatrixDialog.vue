@@ -57,54 +57,54 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { ElMessage } from 'element-plus'
-import { Close, FullScreen, Minus, Download } from '@element-plus/icons-vue'
-import DagMatrixView from './DagMatrixView.vue'
+import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import { Close, FullScreen, Minus, Download } from '@element-plus/icons-vue';
+import DagMatrixView from './DagMatrixView.vue';
 
 defineOptions({
-  name: 'DagMatrixDialog'
-})
+  name: 'DagMatrixDialog',
+});
 
 // Props
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   title: {
     type: String,
-    default: '矩阵视图'
+    default: '矩阵视图',
   },
   graphData: {
     type: Object,
-    default: () => ({ nodes: [], edges: [] })
+    default: () => ({ nodes: [], edges: [] }),
   },
   readonly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   columns: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   nodeRenderer: {
     type: Function,
-    default: null
+    default: null,
   },
   width: {
     type: String,
-    default: '1200px'
+    default: '1200px',
   },
   height: {
     type: String,
-    default: '80%'
-  }
-})
+    default: '80%',
+  },
+});
 
 // Emits
 const emit = defineEmits([
@@ -114,88 +114,88 @@ const emit = defineEmits([
   'node-delete',
   'row-click',
   'save',
-  'close'
-])
+  'close',
+]);
 
 // 响应式数据
-const matrixViewRef = ref(null)
-const isFullscreen = ref(false)
-const saving = ref(false)
+const matrixViewRef = ref(null);
+const isFullscreen = ref(false);
+const saving = ref(false);
 
 // 计算属性
 const dialogVisible = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+  set: (value) => emit('update:modelValue', value),
+});
 
 // 方法
 const toggleFullscreen = () => {
-  isFullscreen.value = !isFullscreen.value
-}
+  isFullscreen.value = !isFullscreen.value;
+};
 
 const handleNodeAdd = (nodeData) => {
-  emit('node-add', nodeData)
-}
+  emit('node-add', nodeData);
+};
 
 const handleNodeUpdate = (nodeData) => {
-  emit('node-update', nodeData)
-}
+  emit('node-update', nodeData);
+};
 
 const handleNodeDelete = (nodeData) => {
-  emit('node-delete', nodeData)
-}
+  emit('node-delete', nodeData);
+};
 
 const handleRowClick = (data) => {
-  emit('row-click', data)
-}
+  emit('row-click', data);
+};
 
 const handleRefresh = () => {
   if (matrixViewRef.value) {
-    matrixViewRef.value.refresh()
+    matrixViewRef.value.refresh();
   }
-}
+};
 
 const handleExport = () => {
   if (matrixViewRef.value) {
-    const matrixData = matrixViewRef.value.getMatrixData()
-    const dataStr = JSON.stringify(matrixData, null, 2)
-    const blob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `matrix-data-${new Date().getTime()}.json`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-    ElMessage.success('数据导出成功')
+    const matrixData = matrixViewRef.value.getMatrixData();
+    const dataStr = JSON.stringify(matrixData, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `matrix-data-${new Date().getTime()}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    ElMessage.success('数据导出成功');
   }
-}
+};
 
 const handleSave = async () => {
   try {
-    saving.value = true
+    saving.value = true;
     // 这里可以获取矩阵数据并转换为图数据
-    const graphData = props.graphData // 简化处理
-    emit('save', graphData)
-    ElMessage.success('保存成功')
+    const graphData = props.graphData; // 简化处理
+    emit('save', graphData);
+    ElMessage.success('保存成功');
   } catch (error) {
-    console.error('保存失败:', error)
-    ElMessage.error('保存失败')
+    console.error('保存失败:', error);
+    ElMessage.error('保存失败');
   } finally {
-    saving.value = false
+    saving.value = false;
   }
-}
+};
 
 const handleClose = () => {
-  emit('close')
-  dialogVisible.value = false
-}
+  emit('close');
+  dialogVisible.value = false;
+};
 
 // 暴露方法
 defineExpose({
-  refresh: () => matrixViewRef.value?.refresh()
-})
+  refresh: () => matrixViewRef.value?.refresh(),
+});
 </script>
 
 <style lang="less" scoped>

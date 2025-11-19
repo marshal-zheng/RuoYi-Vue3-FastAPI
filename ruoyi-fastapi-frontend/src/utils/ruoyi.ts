@@ -91,7 +91,7 @@ export function selectDictLabel(datas: DictItem[], value: string | number): stri
     return '';
   }
   var actions: string[] = [];
-  Object.keys(datas).some(key => {
+  Object.keys(datas).some((key) => {
     if (datas[Number(key)].value == '' + value) {
       actions.push(datas[Number(key)].label);
       return true;
@@ -118,9 +118,9 @@ export function selectDictLabels(
   var actions: string[] = [];
   var currentSeparator = undefined === separator ? ',' : separator;
   var temp = value.split(currentSeparator);
-  Object.keys(value.split(currentSeparator)).some(val => {
+  Object.keys(value.split(currentSeparator)).some((val) => {
     var match = false;
-    Object.keys(datas).some(key => {
+    Object.keys(datas).some((key) => {
       if (datas[Number(key)].value == '' + temp[Number(val)]) {
         actions.push(datas[Number(key)].label + currentSeparator);
         match = true;

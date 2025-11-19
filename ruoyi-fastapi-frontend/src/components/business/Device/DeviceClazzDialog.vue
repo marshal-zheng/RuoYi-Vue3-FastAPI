@@ -1,17 +1,17 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="dialog-form-container">
-      <el-form
-        ref="formRef"
-        :model="state.data"
-        :rules="formRules"
-        label-width="100px"
-      >
+      <el-form ref="formRef" :model="state.data" :rules="formRules" label-width="100px">
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="state.data.name" placeholder="请输入分类名称" />
         </el-form-item>
         <el-form-item label="分类描述" prop="descr">
-          <el-input v-model="state.data.descr" type="textarea" placeholder="请输入分类描述" :rows="3"></el-input>
+          <el-input
+            v-model="state.data.descr"
+            type="textarea"
+            placeholder="请输入分类描述"
+            :rows="3"
+          ></el-input>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="state.data.status">
@@ -25,36 +25,32 @@
 </template>
 
 <script setup name="DeviceClazzDialog">
-import { ref, computed } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useDialog } from '@zxio/zxui'
-import { getDeviceCategory, addDeviceCategory, updateDeviceCategory } from "@/api/device/category"
+import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import { useDialog } from '@zxio/zxui';
+import { getDeviceCategory, addDeviceCategory, updateDeviceCategory } from '@/api/device/category';
 
 // 定义组件的 emits
-const emit = defineEmits(['success'])
+const emit = defineEmits(['success']);
 
 // 表单引用
-const formRef = ref()
+const formRef = ref();
 
 // 表单验证规则
 const formRules = computed(() => ({
   name: [
-    { required: true, message: "分类名称不能为空", trigger: "blur" },
-    { min: 2, max: 50, message: "分类名称长度必须介于 2 和 50 之间", trigger: "blur" }
+    { required: true, message: '分类名称不能为空', trigger: 'blur' },
+    { min: 2, max: 50, message: '分类名称长度必须介于 2 和 50 之间', trigger: 'blur' },
   ],
-  descr: [
-    { max: 255, message: "分类描述长度不能超过 255 个字符", trigger: "blur" }
-  ],
-  status: [
-    { required: true, message: "请选择状态", trigger: "change" }
-  ]
-}))
+  descr: [{ max: 255, message: '分类描述长度不能超过 255 个字符', trigger: 'blur' }],
+  status: [{ required: true, message: '请选择状态', trigger: 'change' }],
+}));
 
 // 使用 useDialog hook
 const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog({
   // 动态标题
   title: (data) => {
-    return data.categoryId ? "修改设备分类" : "添加设备分类"
+    return data.categoryId ? '修改设备分类' : '添加设备分类';
   },
 
   // 对话框配置
@@ -68,17 +64,17 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   // 默认数据
   defaultData: () => ({
     categoryId: null,
-    name: "",
-    descr: "",
-    status: "0"
+    name: '',
+    descr: '',
+    status: '0',
   }),
 
   // 数据转换
   dataTransform: (raw) => ({
     categoryId: raw.categoryId || raw.deviceClazzId || null,
-    name: raw.name || "",
-    descr: raw.descr || "",
-    status: raw.status || "0"
+    name: raw.name || '',
+    descr: raw.descr || '',
+    status: raw.status || '0',
   }),
 
   // 确认回调
@@ -86,50 +82,50 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
     if (data.categoryId) {
       // 修改
       try {
-        const response = await updateDeviceCategory(data)
-        ElMessage.success("修改成功")
-        emit('success')
-        return response
+        const response = await updateDeviceCategory(data);
+        ElMessage.success('修改成功');
+        emit('success');
+        return response;
       } catch (error) {
-        console.warn('修改分类失败:', error)
-        throw new Error("修改失败，接口暂不可用")
+        console.warn('修改分类失败:', error);
+        throw new Error('修改失败，接口暂不可用');
       }
     } else {
       // 新增
       try {
-        const response = await addDeviceCategory(data)
-        ElMessage.success("新增成功")
-        emit('success')
-        return response
+        const response = await addDeviceCategory(data);
+        ElMessage.success('新增成功');
+        emit('success');
+        return response;
       } catch (error) {
-        console.warn('新增分类失败:', error)
-        throw new Error("新增失败，接口暂不可用")
+        console.warn('新增分类失败:', error);
+        throw new Error('新增失败，接口暂不可用');
       }
     }
   },
 
   // 错误处理回调
   onConfirmError: (error) => {
-    console.error('操作失败:', error)
-    const errorMsg = error?.response?.data?.message || error?.message || '操作失败，请重试'
-    ElMessage.error(errorMsg)
-  }
-})
+    console.error('操作失败:', error);
+    const errorMsg = error?.response?.data?.message || error?.message || '操作失败，请重试';
+    ElMessage.error(errorMsg);
+  },
+});
 
 /** 获取设备分类详情 */
 async function getDeviceCategoryInfo(categoryId) {
   try {
-    const response = await getDeviceCategory(categoryId)
-    return response.data
+    const response = await getDeviceCategory(categoryId);
+    return response.data;
   } catch (error) {
-    console.warn('获取分类详情失败:', error)
+    console.warn('获取分类详情失败:', error);
     // 使用模拟数据
     return {
       categoryId: categoryId,
-      name: "示例分类",
-      descr: "这是一个示例分类描述",
-      status: "0"
-    }
+      name: '示例分类',
+      descr: '这是一个示例分类描述',
+      status: '0',
+    };
   }
 }
 
@@ -137,19 +133,19 @@ async function getDeviceCategoryInfo(categoryId) {
 async function openDialog(categoryId) {
   if (categoryId) {
     // 编辑模式，先获取数据再打开
-    const deviceData = await getDeviceCategoryInfo(categoryId)
-    open(deviceData)
+    const deviceData = await getDeviceCategoryInfo(categoryId);
+    open(deviceData);
   } else {
     // 新增模式
-    open()
+    open();
   }
 }
 
 // 暴露方法给父组件调用
 defineExpose({
   open: openDialog,
-  close
-})
+  close,
+});
 </script>
 
 <style scoped lang="less">

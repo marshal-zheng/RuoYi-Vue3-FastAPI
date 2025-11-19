@@ -26,8 +26,8 @@ export const DAG_LAYOUT_CONFIG = {
    * LR: 从左到右（横向）
    * TB: 从上到下（纵向）
    */
-  defaultDirection: 'TB'
-}
+  defaultDirection: 'TB',
+};
 
 // ============================================
 // 工具函数
@@ -41,12 +41,11 @@ export const DAG_LAYOUT_CONFIG = {
 export function getLayoutConfig(overrides = {}) {
   return {
     ...DAG_LAYOUT_CONFIG,
-    ...overrides
-  }
+    ...overrides,
+  };
 }
 
 // ============================================
 // 默认导出
 // ============================================
-export default DAG_LAYOUT_CONFIG
-
+export default DAG_LAYOUT_CONFIG;

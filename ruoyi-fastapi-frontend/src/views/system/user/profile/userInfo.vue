@@ -48,9 +48,9 @@ const rules = ref({
 
 /** 提交按钮 */
 function submit() {
-  proxy.$refs.userRef.validate(valid => {
+  proxy.$refs.userRef.validate((valid) => {
     if (valid) {
-      updateUserProfile(form.value).then(response => {
+      updateUserProfile(form.value).then((response) => {
         proxy.$modal.msgSuccess('修改成功');
         props.user.phonenumber = form.value.phonenumber;
         props.user.email = form.value.email;
@@ -67,7 +67,7 @@ function close() {
 // 回显当前登录用户信息
 watch(
   () => props.user,
-  user => {
+  (user) => {
     if (user) {
       form.value = {
         nickName: user.nickName,

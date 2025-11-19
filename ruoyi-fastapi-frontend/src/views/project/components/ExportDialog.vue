@@ -8,28 +8,20 @@
   >
     <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
       <el-form-item label="文件类型" prop="fileType">
-        <FileTypeSelector
-          v-model="form.fileType"
-          placeholder="请选择文件类型"
-          clearable
-        />
+        <FileTypeSelector v-model="form.fileType" placeholder="请选择文件类型" clearable />
       </el-form-item>
-      
+
       <el-form-item label="文件名称" prop="fileName">
-        <el-input
-          v-model="form.fileName"
-          placeholder="请输入文件名称"
-          clearable
-        />
+        <el-input v-model="form.fileName" placeholder="请输入文件名称" clearable />
       </el-form-item>
     </el-form>
-    
+
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="handleExport" :loading="loading">
           <el-icon><Download /></el-icon>
-          <span style="margin-left: 4px;">导 出</span>
+          <span style="margin-left: 4px">导 出</span>
         </el-button>
       </div>
     </template>
@@ -37,118 +29,120 @@
 </template>
 
 <script setup name="ExportDialog">
-import { Download } from '@element-plus/icons-vue'
-import { FileTypeSelector } from './selector'
+import { Download } from '@element-plus/icons-vue';
+import { FileTypeSelector } from './selector';
 
 // Props
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   projectData: {
     type: Object,
-    default: () => ({})
-  }
-})
+    default: () => ({}),
+  },
+});
 
 // Emits
-const emit = defineEmits(['update:modelValue', 'export'])
+const emit = defineEmits(['update:modelValue', 'export']);
 
 // Reactive data
-const formRef = ref()
-const loading = ref(false)
+const formRef = ref();
+const loading = ref(false);
 
 const form = reactive({
   fileType: 'xlsx',
-  fileName: ''
-})
+  fileName: '',
+});
 
 const rules = {
-  fileType: [
-    { required: true, message: '请选择文件类型', trigger: 'change' }
-  ],
+  fileType: [{ required: true, message: '请选择文件类型', trigger: 'change' }],
   fileName: [
     { required: true, message: '请输入文件名称', trigger: 'blur' },
-    { min: 1, max: 50, message: '文件名称长度在 1 到 50 个字符', trigger: 'blur' }
-  ]
-}
+    { min: 1, max: 50, message: '文件名称长度在 1 到 50 个字符', trigger: 'blur' },
+  ],
+};
 
 // Computed
 const visible = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+  set: (value) => emit('update:modelValue', value),
+});
 
 // Watch
-watch(() => props.modelValue, (newVal) => {
-  if (newVal) {
-    // 弹框打开时，初始化表单数据
-    initForm()
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal) {
+      // 弹框打开时，初始化表单数据
+      initForm();
+    }
   }
-})
+);
 
 // Methods
 const initForm = () => {
-  form.fileType = 'xlsx'
-  form.fileName = props.projectData.projectName ? `${props.projectData.projectName}_导出` : '项目导出'
-}
+  form.fileType = 'xlsx';
+  form.fileName = props.projectData.projectName
+    ? `${props.projectData.projectName}_导出`
+    : '项目导出';
+};
 
 const handleClose = () => {
-  visible.value = false
-  resetForm()
-}
+  visible.value = false;
+  resetForm();
+};
 
 const resetForm = () => {
   if (formRef.value) {
-    formRef.value.resetFields()
+    formRef.value.resetFields();
   }
-}
+};
 
 const handleExport = async () => {
   try {
-    const valid = await formRef.value.validate()
-    if (!valid) return
-    
-    loading.value = true
-    
+    const valid = await formRef.value.validate();
+    if (!valid) return;
+
+    loading.value = true;
+
     // 构造导出参数
     const exportParams = {
       projectId: props.projectData.projectId,
       projectName: props.projectData.projectName,
       fileType: form.fileType,
-      fileName: form.fileName
-    }
-    
+      fileName: form.fileName,
+    };
+
     // 触发导出事件
-    emit('export', exportParams)
-    
+    emit('export', exportParams);
+
     // 模拟导出过程
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     // 关闭弹框
-    handleClose()
-    
+    handleClose();
+
     // 显示成功消息
-    ElMessage.success(`${form.fileName}.${form.fileType} 导出成功！`)
-    
+    ElMessage.success(`${form.fileName}.${form.fileType} 导出成功！`);
   } catch (error) {
-    console.error('导出失败:', error)
-    ElMessage.error('导出失败，请重试')
+    console.error('导出失败:', error);
+    ElMessage.error('导出失败，请重试');
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // 获取文件类型对应的图标
 const getFileTypeIcon = (type) => {
   const iconMap = {
     doc: Document,
     xlsx: Grid,
-    xml: DocumentCopy
-  }
-  return iconMap[type] || Document
-}
+    xml: DocumentCopy,
+  };
+  return iconMap[type] || Document;
+};
 </script>
 
 <style scoped>
@@ -194,4 +188,3 @@ const getFileTypeIcon = (type) => {
   margin-bottom: 8px;
 }
 </style>
-

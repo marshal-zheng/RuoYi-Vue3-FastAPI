@@ -18,56 +18,56 @@
 </template>
 
 <script setup name="DataBitsSelector">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    default: null
+    default: null,
   },
   placeholder: {
     type: String,
-    default: '请选择数据位'
+    default: '请选择数据位',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   clearable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   size: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   customStyle: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   options: {
     type: Array,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认数据位选项
 const defaultDataBitsOptions = [
   { label: '5', value: 5 },
   { label: '6', value: 6 },
   { label: '7', value: 7 },
-  { label: '8', value: 8 }
-]
+  { label: '8', value: 8 },
+];
 
 // 计算数据位选项
 const dataBitsOptions = computed(() => {
-  return props.options || defaultDataBitsOptions
-})
+  return props.options || defaultDataBitsOptions;
+});
 
 function handleChange(value) {
-  emit('update:modelValue', value)
-  emit('change', value)
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>

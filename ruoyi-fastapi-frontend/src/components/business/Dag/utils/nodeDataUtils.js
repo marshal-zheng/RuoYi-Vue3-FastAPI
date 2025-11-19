@@ -4,14 +4,14 @@
  * 生成节点ID（不包含 - 符号）
  */
 export function generateNodeId() {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9).replace(/-/g, '')
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9).replace(/-/g, '');
 }
 
 /**
  * 生成内容ID（不包含 - 符号）
  */
 export function generateContentId() {
-  return Date.now().toString() + Math.random().toString(36).substr(2, 9).replace(/-/g, '')
+  return Date.now().toString() + Math.random().toString(36).substr(2, 9).replace(/-/g, '');
 }
 
 /**
@@ -22,38 +22,38 @@ export function generateContentId() {
  */
 export function determineNodeTypeAndLevel(graph, nodeId) {
   if (!graph || !nodeId) {
-    return { type: 'root-node', level: 1 }
+    return { type: 'root-node', level: 1 };
   }
 
-  const node = graph.getCellById(nodeId)
+  const node = graph.getCellById(nodeId);
   if (!node) {
-    return { type: 'root-node', level: 1 }
+    return { type: 'root-node', level: 1 };
   }
 
   // 获取入边和出边
-  const incomingEdges = graph.getIncomingEdges(node) || []
-  const outgoingEdges = graph.getOutgoingEdges(node) || []
+  const incomingEdges = graph.getIncomingEdges(node) || [];
+  const outgoingEdges = graph.getOutgoingEdges(node) || [];
 
   // 根节点：没有入边
   if (incomingEdges.length === 0) {
-    return { type: 'root-node', level: 1 }
+    return { type: 'root-node', level: 1 };
   }
 
   // 叶子节点：有入边但没有出边
   if (incomingEdges.length > 0 && outgoingEdges.length === 0) {
     // 计算层级：通过遍历父节点计算
-    const level = calculateNodeLevel(graph, nodeId)
-    return { type: 'leaf-node', level }
+    const level = calculateNodeLevel(graph, nodeId);
+    return { type: 'leaf-node', level };
   }
 
   // 子节点：既有入边又有出边
   if (incomingEdges.length > 0 && outgoingEdges.length > 0) {
-    const level = calculateNodeLevel(graph, nodeId)
-    return { type: 'sub-node', level }
+    const level = calculateNodeLevel(graph, nodeId);
+    return { type: 'sub-node', level };
   }
 
   // 默认情况
-  return { type: 'sub-node', level: 2 }
+  return { type: 'sub-node', level: 2 };
 }
 
 /**
@@ -63,36 +63,36 @@ export function determineNodeTypeAndLevel(graph, nodeId) {
  * @returns {number} - 节点层级
  */
 function calculateNodeLevel(graph, nodeId) {
-  if (!graph || !nodeId) return 1
+  if (!graph || !nodeId) return 1;
 
-  const node = graph.getCellById(nodeId)
-  if (!node) return 1
+  const node = graph.getCellById(nodeId);
+  if (!node) return 1;
 
-  const incomingEdges = graph.getIncomingEdges(node) || []
+  const incomingEdges = graph.getIncomingEdges(node) || [];
 
   // 如果没有入边，是根节点，层级为1
   if (incomingEdges.length === 0) {
-    return 1
+    return 1;
   }
 
   // 计算所有父节点的最大层级，然后加1
-  let maxParentLevel = 0
+  let maxParentLevel = 0;
   for (const edge of incomingEdges) {
-    const sourceId = edge.getSourceCellId()
+    const sourceId = edge.getSourceCellId();
     if (sourceId && sourceId !== nodeId) {
       // 避免循环引用
-      const sourceNode = graph.getCellById(sourceId)
+      const sourceNode = graph.getCellById(sourceId);
       if (sourceNode) {
-        const sourceData = sourceNode.getData() || {}
+        const sourceData = sourceNode.getData() || {};
         // 优先从properties.level获取，兼容顶层level字段
         const sourceLevel =
-          sourceData.properties?.level || sourceData.level || calculateNodeLevel(graph, sourceId)
-        maxParentLevel = Math.max(maxParentLevel, sourceLevel)
+          sourceData.properties?.level || sourceData.level || calculateNodeLevel(graph, sourceId);
+        maxParentLevel = Math.max(maxParentLevel, sourceLevel);
       }
     }
   }
 
-  return maxParentLevel + 1
+  return maxParentLevel + 1;
 }
 
 /**
@@ -116,8 +116,8 @@ export function createNodeData(options = {}) {
     unit = '',
     priority = '',
     defaultValue = '',
-    notes = ''
-  } = options
+    notes = '',
+  } = options;
 
   return {
     id,
@@ -127,7 +127,7 @@ export function createNodeData(options = {}) {
     properties: {
       content: {
         id: generateContentId(),
-        label
+        label,
       },
       weight,
       otherData,
@@ -138,9 +138,9 @@ export function createNodeData(options = {}) {
       priority,
       defaultValue,
       notes,
-      level
-    }
-  }
+      level,
+    },
+  };
 }
 
 /**
@@ -149,14 +149,14 @@ export function createNodeData(options = {}) {
  * @param {string} nodeId - 节点ID
  */
 export function updateNodeTypeAndLevel(graph, nodeId) {
-  if (!graph || !nodeId) return
+  if (!graph || !nodeId) return;
 
-  const node = graph.getCellById(nodeId)
-  if (!node) return
+  const node = graph.getCellById(nodeId);
+  if (!node) return;
 
-  const { type, level } = determineNodeTypeAndLevel(graph, nodeId)
-  const currentData = node.getData() || {}
-  const properties = currentData.properties || {}
+  const { type, level } = determineNodeTypeAndLevel(graph, nodeId);
+  const currentData = node.getData() || {};
+  const properties = currentData.properties || {};
 
   // 更新节点数据
   node.setData({
@@ -166,7 +166,7 @@ export function updateNodeTypeAndLevel(graph, nodeId) {
     // 同时更新properties中的level，确保数据同步
     properties: {
       ...properties,
-      level
+      level,
     },
     // 如果节点变成非叶子节点，清除计算模型数据
     ...(type !== 'leaf-node'
@@ -177,10 +177,10 @@ export function updateNodeTypeAndLevel(graph, nodeId) {
           unit: '',
           priority: '',
           defaultValue: '',
-          notes: ''
+          notes: '',
         }
-      : {})
-  })
+      : {}),
+  });
 }
 
 /**
@@ -188,12 +188,12 @@ export function updateNodeTypeAndLevel(graph, nodeId) {
  * @param {Object} graph - X6 图实例
  */
 export function updateAllNodesTypeAndLevel(graph) {
-  if (!graph) return
+  if (!graph) return;
 
-  const nodes = graph.getNodes()
+  const nodes = graph.getNodes();
   nodes.forEach((node) => {
-    updateNodeTypeAndLevel(graph, node.id)
-  })
+    updateNodeTypeAndLevel(graph, node.id);
+  });
 }
 
 /**
@@ -203,17 +203,17 @@ export function updateAllNodesTypeAndLevel(graph) {
  * @returns {string|null} - 父节点ID
  */
 export function getParentNodeId(graph, nodeId) {
-  if (!graph || !nodeId) return null
+  if (!graph || !nodeId) return null;
 
-  const node = graph.getCellById(nodeId)
-  if (!node) return null
+  const node = graph.getCellById(nodeId);
+  if (!node) return null;
 
-  const incomingEdges = graph.getIncomingEdges(node) || []
-  if (incomingEdges.length === 0) return null
+  const incomingEdges = graph.getIncomingEdges(node) || [];
+  if (incomingEdges.length === 0) return null;
 
   // 返回第一个父节点的ID（通常一个节点只有一个直接父节点）
-  const firstEdge = incomingEdges[0]
-  return firstEdge.getSourceCellId() || null
+  const firstEdge = incomingEdges[0];
+  return firstEdge.getSourceCellId() || null;
 }
 
 /**
@@ -222,10 +222,10 @@ export function getParentNodeId(graph, nodeId) {
  * @returns {boolean} - 是否有计算模型
  */
 export function hasComputeModel(nodeData) {
-  if (!nodeData) return false
+  if (!nodeData) return false;
   // 兼容两种存储位置：顶层与 properties.otherData
-  const otherData = nodeData.otherData ?? nodeData.properties?.otherData
-  return !!(otherData && Object.keys(otherData).length > 0)
+  const otherData = nodeData.otherData ?? nodeData.properties?.otherData;
+  return !!(otherData && Object.keys(otherData).length > 0);
 }
 
 /**
@@ -234,13 +234,13 @@ export function hasComputeModel(nodeData) {
  * @param {string} nodeId - 节点ID
  */
 export function clearNodeComputeModel(graph, nodeId) {
-  if (!graph || !nodeId) return
+  if (!graph || !nodeId) return;
 
-  const node = graph.getCellById(nodeId)
-  if (!node) return
+  const node = graph.getCellById(nodeId);
+  if (!node) return;
 
-  const currentData = node.getData() || {}
-  const properties = currentData.properties || {}
+  const currentData = node.getData() || {};
+  const properties = currentData.properties || {};
   node.setData({
     ...currentData,
     otherData: {},
@@ -259,10 +259,10 @@ export function clearNodeComputeModel(graph, nodeId) {
       unit: '',
       priority: '',
       defaultValue: '',
-      notes: properties.notes ?? ''
+      notes: properties.notes ?? '',
       // level保持不变
-    }
-  })
+    },
+  });
 }
 
 /**
@@ -273,13 +273,13 @@ export function clearNodeComputeModel(graph, nodeId) {
  * @param {Object} formData - 表单数据
  */
 export function setNodeComputeModel(graph, nodeId, modelData, formData = {}) {
-  if (!graph || !nodeId) return
+  if (!graph || !nodeId) return;
 
-  const node = graph.getCellById(nodeId)
-  if (!node) return
+  const node = graph.getCellById(nodeId);
+  if (!node) return;
 
-  const currentData = node.getData() || {}
-  const properties = currentData.properties || {}
+  const currentData = node.getData() || {};
+  const properties = currentData.properties || {};
   node.setData({
     ...currentData,
     otherData: modelData,
@@ -298,8 +298,8 @@ export function setNodeComputeModel(graph, nodeId, modelData, formData = {}) {
       unit: formData.unit || '',
       priority: formData.priority || '',
       defaultValue: formData.defaultValue || '',
-      notes: formData.notes || ''
+      notes: formData.notes || '',
       // level保持不变
-    }
-  })
+    },
+  });
 }

@@ -213,7 +213,9 @@ defineExpose({
   height: 48px;
 }
 
-.setting-drawer-block-checbox .setting-drawer-block-checbox-item .setting-drawer-block-checbox-selectIcon {
+.setting-drawer-block-checbox
+  .setting-drawer-block-checbox-item
+  .setting-drawer-block-checbox-selectIcon {
   position: absolute;
   top: 0;
   right: 0;

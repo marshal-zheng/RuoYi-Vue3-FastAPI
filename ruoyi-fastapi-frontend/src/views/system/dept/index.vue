@@ -74,7 +74,7 @@
           </el-table-column>
           <el-table-column label="操作" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-               <div class="op-col__wrap">
+              <div class="op-col__wrap">
                 <zx-button
                   link
                   type="primary"
@@ -94,7 +94,7 @@
                   :list="getMoreActionList(scope.row)"
                   @select="handleMoreActionSelect($event, scope.row)"
                 />
-               </div>
+              </div>
             </template>
           </el-table-column>
         </el-table>
@@ -316,7 +316,7 @@ function getMoreActionList(row) {
       eventTag: 'delete',
       icon: 'Delete',
       danger: true,
-      permission: 'system:dept:remove'
+      permission: 'system:dept:remove',
     });
   }
   return actions;

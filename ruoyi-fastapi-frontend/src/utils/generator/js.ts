@@ -83,7 +83,7 @@ export function makeUpJs(conf: FormConfig, type: string): string {
   const methodList: string[] = [];
   const uploadVarList: string[] = [];
 
-  conf.fields.forEach(el => {
+  conf.fields.forEach((el) => {
     buildAttributes(el, dataList, ruleList, optionsList, methodList, propsList, uploadVarList);
   });
 
@@ -144,7 +144,7 @@ function buildAttributes(
   }
 
   if (el.children) {
-    el.children.forEach(el2 => {
+    el.children.forEach((el2) => {
       buildAttributes(el2, dataList, ruleList, optionsList, methodList, propsList, uploadVarList);
     });
   }
@@ -186,7 +186,7 @@ function buildRules(conf: FormElement, ruleList: string[]): void {
       );
     }
     if (conf.regList && Array.isArray(conf.regList)) {
-      conf.regList.forEach(item => {
+      conf.regList.forEach((item) => {
         if (item.pattern) {
           rules.push(
             `{ pattern: new RegExp(${item.pattern}), message: '${

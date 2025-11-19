@@ -169,8 +169,8 @@ const info = ref({});
 function submitForm() {
   const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
   const genForm = proxy.$refs.genInfo.$refs.genInfoForm;
-  Promise.all([basicForm, genForm].map(getFormPromise)).then(res => {
-    const validateResult = res.every(item => !!item);
+  Promise.all([basicForm, genForm].map(getFormPromise)).then((res) => {
+    const validateResult = res.every((item) => !!item);
     if (validateResult) {
       const genTable = Object.assign({}, info.value);
       genTable.columns = columns.value;
@@ -180,7 +180,7 @@ function submitForm() {
         treeParentCode: info.value.treeParentCode,
         parentMenuId: info.value.parentMenuId,
       };
-      updateGenTable(genTable).then(res => {
+      updateGenTable(genTable).then((res) => {
         proxy.$modal.msgSuccess(res.msg);
         if (res.code === 200) {
           close();
@@ -193,8 +193,8 @@ function submitForm() {
 }
 
 function getFormPromise(form) {
-  return new Promise(resolve => {
-    form.validate(res => {
+  return new Promise((resolve) => {
+    form.validate((res) => {
       resolve(res);
     });
   });
@@ -209,13 +209,13 @@ function close() {
   const tableId = route.params && route.params.tableId;
   if (tableId) {
     // 获取表详细信息
-    getGenTable(tableId).then(res => {
+    getGenTable(tableId).then((res) => {
       columns.value = res.data.rows;
       info.value = res.data.info;
       tables.value = res.data.tables;
     });
     /** 查询字典下拉列表 */
-    getDictOptionselect().then(response => {
+    getDictOptionselect().then((response) => {
       dictOptions.value = response.data;
     });
   }

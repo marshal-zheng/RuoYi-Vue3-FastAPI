@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 export function useDeviceSupport() {
   /**
@@ -10,26 +10,26 @@ export function useDeviceSupport() {
   const isTouchDevice = ref(
     window.matchMedia('(any-pointer: coarse)').matches &&
       !window.matchMedia('(any-pointer: fine)').matches
-  )
-  const userAgent = ref(navigator.userAgent.toLowerCase())
+  );
+  const userAgent = ref(navigator.userAgent.toLowerCase());
 
   const isIOs = ref(
     userAgent.value.includes('iphone') ||
       userAgent.value.includes('ipad') ||
       userAgent.value.includes('ipod')
-  )
-  const isAndroidOs = ref(userAgent.value.includes('android'))
-  const isMacOs = ref(userAgent.value.includes('macintosh') || isIOs.value)
-  const isMobileDevice = ref(isIOs.value || isAndroidOs.value)
+  );
+  const isAndroidOs = ref(userAgent.value.includes('android'));
+  const isMacOs = ref(userAgent.value.includes('macintosh') || isIOs.value);
+  const isMobileDevice = ref(isIOs.value || isAndroidOs.value);
 
-  const controlKeyCode = ref(isMacOs.value ? 'Meta' : 'Control')
+  const controlKeyCode = ref(isMacOs.value ? 'Meta' : 'Control');
 
   function isCtrlKeyPressed(e = {}) {
-    const { metaKey = false, ctrlKey = false } = e
+    const { metaKey = false, ctrlKey = false } = e;
     if (isMacOs.value) {
-      return metaKey || ctrlKey
+      return metaKey || ctrlKey;
     }
-    return ctrlKey || metaKey
+    return ctrlKey || metaKey;
   }
 
   return {
@@ -40,6 +40,6 @@ export function useDeviceSupport() {
     isMacOs: isMacOs.value,
     isMobileDevice: isMobileDevice.value,
     controlKeyCode: controlKeyCode.value,
-    isCtrlKeyPressed
-  }
+    isCtrlKeyPressed,
+  };
 }

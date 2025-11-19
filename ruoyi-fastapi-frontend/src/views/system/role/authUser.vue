@@ -20,14 +20,16 @@
               icon="Plus"
               @click="openSelectUser"
               v-hasPermi="['system:role:add']"
-            >添加用户</ZxButton>
+              >添加用户</ZxButton
+            >
             <ZxButton
               type="danger"
               icon="CircleClose"
               :disabled="multiple"
               @click="cancelAuthUserAll"
               v-hasPermi="['system:role:remove']"
-            >批量取消授权</ZxButton>
+              >批量取消授权</ZxButton
+            >
           </div>
           <div class="zx-grid-form-bar__filters">
             <el-input
@@ -87,7 +89,8 @@
                   type="primary"
                   @click="cancelAuthUser(scope.row)"
                   v-hasPermi="['system:role:remove']"
-                >取消授权</ZxButton>
+                  >取消授权</ZxButton
+                >
               </div>
             </template>
           </el-table-column>
@@ -95,7 +98,11 @@
       </template>
     </ZxGridList>
 
-    <select-user ref="selectRef" :roleId="route.params.roleId" @ok="() => gridListRef?.value?.refresh?.() || gridListRef?.refresh?.()" />
+    <select-user
+      ref="selectRef"
+      :roleId="route.params.roleId"
+      @ok="() => gridListRef?.value?.refresh?.() || gridListRef?.refresh?.()"
+    />
   </ZxContentWrap>
 </template>
 
@@ -137,7 +144,7 @@ function onSearch({ handleRefresh, updateState }) {
 }
 
 function handleSelectionChange(selection) {
-  userIds.value = selection.map(item => item.userId);
+  userIds.value = selection.map((item) => item.userId);
   multiple.value = !selection.length;
 }
 

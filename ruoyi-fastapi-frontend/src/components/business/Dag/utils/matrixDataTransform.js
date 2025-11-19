@@ -11,44 +11,44 @@
  */
 export function transformGraphToMatrix(graphData, nodeRenderer = null) {
   if (!graphData || !graphData.nodes || !Array.isArray(graphData.nodes)) {
-    return []
+    return [];
   }
 
-  const { nodes, edges } = graphData
+  const { nodes, edges } = graphData;
 
   // 构建父子关系映射
-  const childrenMap = new Map()
-  const parentMap = new Map()
+  const childrenMap = new Map();
+  const parentMap = new Map();
 
   // 初始化所有节点的子节点集合
   nodes.forEach((node) => {
-    childrenMap.set(node.id, [])
-  })
+    childrenMap.set(node.id, []);
+  });
 
   // 构建父子关系
-  ;(edges || []).forEach((edge) => {
-    const { sourceNodeId, targetNodeId } = edge
+  (edges || []).forEach((edge) => {
+    const { sourceNodeId, targetNodeId } = edge;
     if (sourceNodeId && targetNodeId) {
       if (!childrenMap.has(sourceNodeId)) {
-        childrenMap.set(sourceNodeId, [])
+        childrenMap.set(sourceNodeId, []);
       }
-      childrenMap.get(sourceNodeId).push(targetNodeId)
-      parentMap.set(targetNodeId, sourceNodeId)
+      childrenMap.get(sourceNodeId).push(targetNodeId);
+      parentMap.set(targetNodeId, sourceNodeId);
     }
-  })
+  });
 
   // 找到根节点（没有父节点的节点）
-  const rootNodes = nodes.filter((node) => !parentMap.has(node.id))
+  const rootNodes = nodes.filter((node) => !parentMap.has(node.id));
 
   // 递归构建树形结构
   const buildTreeNode = (node, level = 1, parentId = null) => {
-    const children = childrenMap.get(node.id) || []
+    const children = childrenMap.get(node.id) || [];
     const childNodes = children
       .map((childId) => {
-        const childNode = nodes.find((n) => n.id === childId)
-        return childNode ? buildTreeNode(childNode, level + 1, node.id) : null
+        const childNode = nodes.find((n) => n.id === childId);
+        return childNode ? buildTreeNode(childNode, level + 1, node.id) : null;
       })
-      .filter(Boolean)
+      .filter(Boolean);
 
     // 基础树形节点结构
     const treeNode = {
@@ -65,23 +65,23 @@ export function transformGraphToMatrix(graphData, nodeRenderer = null) {
       // 位置信息（用于同步回图）
       position: {
         x: node.x || 0,
-        y: node.y || 0
-      }
-    }
+        y: node.y || 0,
+      },
+    };
 
     // 如果提供了自定义渲染器，使用它来扩展节点数据
     if (typeof nodeRenderer === 'function') {
-      const renderedData = nodeRenderer(node, treeNode)
-      Object.assign(treeNode, renderedData)
+      const renderedData = nodeRenderer(node, treeNode);
+      Object.assign(treeNode, renderedData);
     }
 
-    return treeNode
-  }
+    return treeNode;
+  };
 
   // 构建完整的树形结构
-  const matrixData = rootNodes.map((rootNode) => buildTreeNode(rootNode))
+  const matrixData = rootNodes.map((rootNode) => buildTreeNode(rootNode));
 
-  return matrixData
+  return matrixData;
 }
 
 /**
@@ -92,11 +92,11 @@ export function transformGraphToMatrix(graphData, nodeRenderer = null) {
  */
 export function transformMatrixToGraph(matrixData, nodeTransformer = null) {
   if (!Array.isArray(matrixData)) {
-    return { nodes: [], edges: [] }
+    return { nodes: [], edges: [] };
   }
 
-  const nodes = []
-  const edges = []
+  const nodes = [];
+  const edges = [];
 
   // 递归遍历树形数据
   const traverseTreeNode = (treeNode, parentId = null) => {
@@ -106,16 +106,16 @@ export function transformMatrixToGraph(matrixData, nodeTransformer = null) {
       type: treeNode.type || 'leaf-node',
       x: treeNode.position?.x || 0,
       y: treeNode.position?.y || 0,
-      properties: treeNode.properties || {}
-    }
+      properties: treeNode.properties || {},
+    };
 
     // 如果提供了自定义转换器，使用它来转换节点数据
     if (typeof nodeTransformer === 'function') {
-      const transformedData = nodeTransformer(treeNode, nodeData)
-      nodeData = { ...nodeData, ...transformedData }
+      const transformedData = nodeTransformer(treeNode, nodeData);
+      nodeData = { ...nodeData, ...transformedData };
     }
 
-    nodes.push(nodeData)
+    nodes.push(nodeData);
 
     // 如果有父节点，创建边
     if (parentId) {
@@ -127,24 +127,24 @@ export function transformMatrixToGraph(matrixData, nodeTransformer = null) {
         startPoint: { x: 0, y: 0 }, // 这些会在布局时重新计算
         endPoint: { x: 0, y: 0 },
         properties: {},
-        pointsList: []
-      })
+        pointsList: [],
+      });
     }
 
     // 递归处理子节点
     if (treeNode.children && Array.isArray(treeNode.children)) {
       treeNode.children.forEach((child) => {
-        traverseTreeNode(child, treeNode.id)
-      })
+        traverseTreeNode(child, treeNode.id);
+      });
     }
-  }
+  };
 
   // 遍历所有根节点
   matrixData.forEach((rootNode) => {
-    traverseTreeNode(rootNode)
-  })
+    traverseTreeNode(rootNode);
+  });
 
-  return { nodes, edges }
+  return { nodes, edges };
 }
 
 /**
@@ -154,10 +154,10 @@ export function transformMatrixToGraph(matrixData, nodeTransformer = null) {
  * @returns {Array} 扁平化的表格行数据
  */
 export function flattenTreeForTable(treeData, expandAll = true) {
-  const result = []
+  const result = [];
 
   const traverse = (nodes, parentExpanded = true) => {
-    if (!Array.isArray(nodes)) return
+    if (!Array.isArray(nodes)) return;
 
     nodes.forEach((node) => {
       // 添加当前节点到结果中（只有在父节点展开时才显示）
@@ -167,20 +167,20 @@ export function flattenTreeForTable(treeData, expandAll = true) {
           // 添加表格展示需要的属性
           _expanded: expandAll || node._expanded || false,
           _visible: true,
-          _rowKey: node.id
-        })
+          _rowKey: node.id,
+        });
       }
 
       // 递归处理子节点
       if (node.children && node.children.length > 0) {
-        const shouldExpandChildren = parentExpanded && (expandAll || node._expanded)
-        traverse(node.children, shouldExpandChildren)
+        const shouldExpandChildren = parentExpanded && (expandAll || node._expanded);
+        traverse(node.children, shouldExpandChildren);
       }
-    })
-  }
+    });
+  };
 
-  traverse(treeData)
-  return result
+  traverse(treeData);
+  return result;
 }
 
 /**
@@ -194,19 +194,19 @@ export function updateTreeNode(treeData, nodeId, updates) {
   const updateNode = (nodes) => {
     return nodes.map((node) => {
       if (node.id === nodeId) {
-        return { ...node, ...updates }
+        return { ...node, ...updates };
       }
       if (node.children && node.children.length > 0) {
         return {
           ...node,
-          children: updateNode(node.children)
-        }
+          children: updateNode(node.children),
+        };
       }
-      return node
-    })
-  }
+      return node;
+    });
+  };
 
-  return updateNode(treeData)
+  return updateNode(treeData);
 }
 
 /**
@@ -219,30 +219,30 @@ export function updateTreeNode(treeData, nodeId, updates) {
 export function addTreeNode(treeData, parentId, newNode) {
   if (!parentId) {
     // 添加根节点
-    return [...treeData, newNode]
+    return [...treeData, newNode];
   }
 
   const addToParent = (nodes) => {
     return nodes.map((node) => {
       if (node.id === parentId) {
-        const children = node.children || []
+        const children = node.children || [];
         return {
           ...node,
           children: [...children, newNode],
-          hasChildren: true
-        }
+          hasChildren: true,
+        };
       }
       if (node.children && node.children.length > 0) {
         return {
           ...node,
-          children: addToParent(node.children)
-        }
+          children: addToParent(node.children),
+        };
       }
-      return node
-    })
-  }
+      return node;
+    });
+  };
 
-  return addToParent(treeData)
+  return addToParent(treeData);
 }
 
 /**
@@ -253,21 +253,21 @@ export function addTreeNode(treeData, parentId, newNode) {
  */
 export function removeTreeNode(treeData, nodeId) {
   const removeNode = (nodes) => {
-    const filtered = nodes.filter((node) => node.id !== nodeId)
+    const filtered = nodes.filter((node) => node.id !== nodeId);
     return filtered.map((node) => {
       if (node.children && node.children.length > 0) {
-        const updatedChildren = removeNode(node.children)
+        const updatedChildren = removeNode(node.children);
         return {
           ...node,
           children: updatedChildren,
-          hasChildren: updatedChildren.length > 0
-        }
+          hasChildren: updatedChildren.length > 0,
+        };
       }
-      return node
-    })
-  }
+      return node;
+    });
+  };
 
-  return removeNode(treeData)
+  return removeNode(treeData);
 }
 
 /**
@@ -279,21 +279,21 @@ export function removeTreeNode(treeData, nodeId) {
 export function getNodePath(treeData, nodeId) {
   const findPath = (nodes, targetId, path = []) => {
     for (const node of nodes) {
-      const currentPath = [...path, node.id]
+      const currentPath = [...path, node.id];
 
       if (node.id === targetId) {
-        return currentPath
+        return currentPath;
       }
 
       if (node.children && node.children.length > 0) {
-        const childPath = findPath(node.children, targetId, currentPath)
+        const childPath = findPath(node.children, targetId, currentPath);
         if (childPath) {
-          return childPath
+          return childPath;
         }
       }
     }
-    return null
-  }
+    return null;
+  };
 
-  return findPath(treeData, nodeId) || []
+  return findPath(treeData, nodeId) || [];
 }

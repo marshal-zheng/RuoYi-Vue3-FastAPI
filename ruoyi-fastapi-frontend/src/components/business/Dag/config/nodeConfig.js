@@ -14,19 +14,19 @@ export const DAG_NODE_CONFIG = {
   size: {
     horizontal: {
       width: 200,
-      height: 38
+      height: 38,
     },
     vertical: {
       width: 45,
-      height: 200
-    }
+      height: 200,
+    },
   },
 
   /**
    * 节点默认形状名称
    */
-  shape: 'dag-node'
-}
+  shape: 'dag-node',
+};
 
 // ============================================
 // 工具函数
@@ -38,14 +38,11 @@ export const DAG_NODE_CONFIG = {
  * @returns {{width: number, height: number}}
  */
 export function getNodeSize(direction) {
-  const isVertical = direction === 'TB' || direction === 'vertical'
-  return isVertical 
-    ? DAG_NODE_CONFIG.size.vertical 
-    : DAG_NODE_CONFIG.size.horizontal
+  const isVertical = direction === 'TB' || direction === 'vertical';
+  return isVertical ? DAG_NODE_CONFIG.size.vertical : DAG_NODE_CONFIG.size.horizontal;
 }
 
 // ============================================
 // 默认导出
 // ============================================
-export default DAG_NODE_CONFIG
-
+export default DAG_NODE_CONFIG;

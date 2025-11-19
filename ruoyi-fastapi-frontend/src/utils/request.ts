@@ -36,7 +36,7 @@ const shouldFormEncode = (config: AxiosRequestConfig): boolean => {
 
 const serializeAsForm = (payload: Record<string, any>): URLSearchParams => {
   const params = new URLSearchParams();
-  Object.keys(payload).forEach(key => {
+  Object.keys(payload).forEach((key) => {
     const value = payload[key];
     if (value === undefined || value === null) {
       return;
@@ -51,7 +51,7 @@ const serializeAsForm = (payload: Record<string, any>): URLSearchParams => {
 };
 
 const normalizeGridParams = (params: Record<string, any>): Record<string, any> => {
-  console.log('params', params)
+  console.log('params', params);
   const p: Record<string, any> = { ...(params || {}) };
   const pager = p.pager;
   if (pager && typeof pager === 'object') {
@@ -75,7 +75,7 @@ const normalizeGridParams = (params: Record<string, any>): Record<string, any> =
       const map2: Record<string, string> = { ascending: 'asc', descending: 'desc' };
       q.isAsc = map2[q.isAsc] || q.isAsc;
     }
-    Object.keys(q).forEach(k => {
+    Object.keys(q).forEach((k) => {
       p[k] = q[k];
     });
     delete p.query;
@@ -231,7 +231,7 @@ export function download(
   return service
     .post(url, params, {
       transformRequest: [
-        params => {
+        (params) => {
           return tansParams(params);
         },
       ],

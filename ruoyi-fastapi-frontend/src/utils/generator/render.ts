@@ -36,7 +36,11 @@ interface DataObject {
 type ChildRenderFunction = (h: any, conf: FormElementConfig, key: string) => VNode | VNode[];
 
 // 插槽渲染函数类型
-type SlotRenderFunction = (h: any, conf: FormElementConfig, key: string) => (() => VNode) | undefined;
+type SlotRenderFunction = (
+  h: any,
+  conf: FormElementConfig,
+  key: string
+) => (() => VNode) | undefined;
 
 // 子组件配置接口
 interface ComponentChildConfig {
@@ -93,7 +97,7 @@ const componentChild: ComponentChildConfig = {
   },
   'el-select': {
     options(h, conf, key) {
-      return conf.options!.map(item =>
+      return conf.options!.map((item) =>
         h(resolveComponent('el-option'), {
           label: item.label,
           value: item.value,
@@ -104,7 +108,7 @@ const componentChild: ComponentChildConfig = {
   'el-radio-group': {
     options(h, conf, key) {
       return conf.optionType === 'button'
-        ? conf.options!.map(item =>
+        ? conf.options!.map((item) =>
             h(
               resolveComponent('el-radio-button'),
               {
@@ -113,7 +117,7 @@ const componentChild: ComponentChildConfig = {
               () => item.label
             )
           )
-        : conf.options!.map(item =>
+        : conf.options!.map((item) =>
             h(
               resolveComponent('el-radio'),
               {
@@ -128,7 +132,7 @@ const componentChild: ComponentChildConfig = {
   'el-checkbox-group': {
     options(h, conf, key) {
       return conf.optionType === 'button'
-        ? conf.options!.map(item =>
+        ? conf.options!.map((item) =>
             h(
               resolveComponent('el-checkbox-button'),
               {
@@ -137,7 +141,7 @@ const componentChild: ComponentChildConfig = {
               () => item.label
             )
           )
-        : conf.options!.map(item =>
+        : conf.options!.map((item) =>
             h(
               resolveComponent('el-checkbox'),
               {
@@ -201,10 +205,10 @@ export default defineComponent({
     const confClone: FormElementConfig = JSON.parse(JSON.stringify(this.conf));
     const children: VNode[] = [];
     const slot: Record<string, () => VNode | VNode[]> = {};
-    
+
     const childObjs = componentChild[confClone.tag];
     if (childObjs) {
-      Object.keys(childObjs).forEach(key => {
+      Object.keys(childObjs).forEach((key) => {
         const childFunc = childObjs[key];
         if (confClone[key]) {
           const result = childFunc(h, confClone, key);
@@ -216,10 +220,10 @@ export default defineComponent({
         }
       });
     }
-    
+
     const slotObjs = componentSlot[confClone.tag];
     if (slotObjs) {
-      Object.keys(slotObjs).forEach(key => {
+      Object.keys(slotObjs).forEach((key) => {
         const childFunc = slotObjs[key];
         if (confClone[key]) {
           const slotFunc = childFunc(h, confClone, key);
@@ -229,8 +233,8 @@ export default defineComponent({
         }
       });
     }
-    
-    Object.keys(confClone).forEach(key => {
+
+    Object.keys(confClone).forEach((key) => {
       const val = confClone[key];
       if (dataObject[key as keyof DataObject]) {
         (dataObject[key as keyof DataObject] as any) = val;
@@ -240,7 +244,7 @@ export default defineComponent({
         dataObject.props[key] = val;
       }
     });
-    
+
     if (children.length > 0) {
       slot.default = () => children;
     }

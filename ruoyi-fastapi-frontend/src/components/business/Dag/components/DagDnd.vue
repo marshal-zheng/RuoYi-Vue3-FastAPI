@@ -52,11 +52,7 @@
 
       <!-- 分类模式：按分类展示 -->
       <template v-else>
-        <div
-          v-for="group in displayCategoryGroups"
-          :key="group.key"
-          class="category-group"
-        >
+        <div v-for="group in displayCategoryGroups" :key="group.key" class="category-group">
           <div class="category-header" @click="toggleCategory(group.key)">
             <el-icon class="category-icon" :class="{ collapsed: collapsedCategories[group.key] }">
               <ArrowRight />
@@ -91,18 +87,18 @@
 </template>
 
 <script setup>
-import { computed, ref, toRef } from 'vue'
-import { Search, Box, Loading, ArrowRight } from '@element-plus/icons-vue'
-import { useDnd } from '../../ZxFlow/composables/useDnd'
-import { DAG_NODE, DEVICE_PORT_NODE, registerDagShapes } from '../shapes/registerDagShapes'
-import { useUserOperators } from '../composables/useUserOperators'
-import { generateNodeId, generateContentId } from '../utils/nodeDataUtils'
-import { getNodeSizeByLayout } from '../utils/nodeGeometry.js'
+import { computed, ref, toRef } from 'vue';
+import { Search, Box, Loading, ArrowRight } from '@element-plus/icons-vue';
+import { useDnd } from '../../ZxFlow/composables/useDnd';
+import { DAG_NODE, DEVICE_PORT_NODE, registerDagShapes } from '../shapes/registerDagShapes';
+import { useUserOperators } from '../composables/useUserOperators';
+import { generateNodeId, generateContentId } from '../utils/nodeDataUtils';
+import { getNodeSizeByLayout } from '../utils/nodeGeometry.js';
 
-registerDagShapes()
+registerDagShapes();
 
 // 分类折叠状态
-const collapsedCategories = ref({})
+const collapsedCategories = ref({});
 
 // Props 定义
 const props = defineProps({
@@ -111,14 +107,14 @@ const props = defineProps({
    */
   graphInstance: {
     type: [Object, Function],
-    default: null
+    default: null,
   },
   /**
    * 是否为只读模式（只读时禁用拖拽）
    */
   readonly: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /**
    * 用户传入的简单数据列表
@@ -126,28 +122,28 @@ const props = defineProps({
    */
   operators: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   /**
    * 是否显示加载状态
    */
   loading: {
     type: Boolean,
-    default: false
+    default: false,
   },
   /**
    * 搜索框占位符
    */
   searchPlaceholder: {
     type: String,
-    default: '搜索算子、组件...'
+    default: '搜索算子、组件...',
   },
   /**
    * 库标题
    */
   title: {
     type: String,
-    default: '算子库'
+    default: '算子库',
   },
   /**
    * 布局方向：vertical(竖向-上下连接桩) | horizontal(横向-左右连接桩)
@@ -155,7 +151,7 @@ const props = defineProps({
   layout: {
     type: String,
     default: 'horizontal',
-    validator: (value) => ['vertical', 'horizontal'].includes(value)
+    validator: (value) => ['vertical', 'horizontal'].includes(value),
   },
   /**
    * 文案配置
@@ -167,88 +163,87 @@ const props = defineProps({
       emptySearchText: '未找到相关算子',
       emptySearchDesc: '请尝试其他关键词',
       emptyDataText: '暂无算子数据',
-      emptyDataDesc: '请传入算子数据'
-    })
-  }
-})
+      emptyDataDesc: '请传入算子数据',
+    }),
+  },
+});
 
-const searchKeyword = ref('')
-const idSeed = ref(0)
-const graphInstanceRef = toRef(props, 'graphInstance')
-const { startDrag } = useDnd(graphInstanceRef)
+const searchKeyword = ref('');
+const idSeed = ref(0);
+const graphInstanceRef = toRef(props, 'graphInstance');
+const { startDrag } = useDnd(graphInstanceRef);
 
 // 使用新的 composable 处理用户数据
 const { processedOperators, categoryGroups, stats } = useUserOperators(
   computed(() => props.operators),
   computed(() => props.layout)
-)
+);
 
 // 搜索时的扁平展示
 const displayOperators = computed(() => {
   if (!searchKeyword.value) {
-    return processedOperators.value
+    return processedOperators.value;
   }
-  const lowerKeyword = searchKeyword.value.toLowerCase()
+  const lowerKeyword = searchKeyword.value.toLowerCase();
   return processedOperators.value.filter(
     (item) =>
       item.title.toLowerCase().includes(lowerKeyword) ||
       (item.shortDesc && item.shortDesc.toLowerCase().includes(lowerKeyword)) ||
       (item.category && item.category.toLowerCase().includes(lowerKeyword)) ||
       (item.originalData.value && item.originalData.value.toLowerCase().includes(lowerKeyword))
-  )
-})
+  );
+});
 
 // 分类展示
 const displayCategoryGroups = computed(() => {
-  return categoryGroups.value || []
-})
+  return categoryGroups.value || [];
+});
 
 // 切换分类折叠状态
 const toggleCategory = (key) => {
-  collapsedCategories.value[key] = !collapsedCategories.value[key]
-}
+  collapsedCategories.value[key] = !collapsedCategories.value[key];
+};
 
 const createNodeId = () => {
-  return generateNodeId()
-}
+  return generateNodeId();
+};
 
 const handleMouseDown = (event, item) => {
   if (props.readonly) {
-    return
+    return;
   }
-  const id = createNodeId()
-  const layoutDirection = props.layout === 'vertical' ? 'vertical' : 'horizontal'
-  
+  const id = createNodeId();
+  const layoutDirection = props.layout === 'vertical' ? 'vertical' : 'horizontal';
+
   // 判断是否为设备节点（有 nodeType 和 ports 字段）
   // useUserOperators 会把所有字段展平，所以直接从 item 上读取
-  const isDeviceNode = item.nodeType === 'device-port-node' && 
-                       item.ports && 
-                       Array.isArray(item.ports)
+  const isDeviceNode =
+    item.nodeType === 'device-port-node' && item.ports && Array.isArray(item.ports);
 
   console.log('拖拽节点信息:', {
     title: item.title,
     nodeType: item.nodeType,
     isDeviceNode,
     ports: item.ports,
-    item
-  })
+    item,
+  });
 
   // 根据节点类型选择 shape 和尺寸
-  let shape, width, height, ports
-  
+  let shape, width, height, ports;
+
   if (isDeviceNode) {
     // 设备节点使用 DEVICE_PORT_NODE shape
-    shape = DEVICE_PORT_NODE
-    width = 190
-    height = 120
-    
+    shape = DEVICE_PORT_NODE;
+    width = 190;
+    height = 120;
+
     // 构建端口组配置（与 device/detail.vue 保持一致）
     const portGroups = {
       top: {
         position: { name: 'absolute' },
         markup: [
           { tagName: 'rect', selector: 'portBody' },
-          { tagName: 'text', selector: 'portLabel' }
+          { tagName: 'text', selector: 'portLabel' },
         ],
         attrs: {
           portBody: {
@@ -261,7 +256,7 @@ const handleMouseDown = (event, item) => {
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
-            ry: 0
+            ry: 0,
           },
           portLabel: {
             text: '',
@@ -273,15 +268,15 @@ const handleMouseDown = (event, item) => {
             textVerticalAnchor: 'middle',
             x: 0,
             y: 0,
-            pointerEvents: 'none'
-          }
-        }
+            pointerEvents: 'none',
+          },
+        },
       },
       bottom: {
         position: { name: 'absolute' },
         markup: [
           { tagName: 'rect', selector: 'portBody' },
-          { tagName: 'text', selector: 'portLabel' }
+          { tagName: 'text', selector: 'portLabel' },
         ],
         attrs: {
           portBody: {
@@ -294,7 +289,7 @@ const handleMouseDown = (event, item) => {
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
-            ry: 0
+            ry: 0,
           },
           portLabel: {
             text: '',
@@ -306,15 +301,15 @@ const handleMouseDown = (event, item) => {
             textVerticalAnchor: 'middle',
             x: 0,
             y: 0,
-            pointerEvents: 'none'
-          }
-        }
+            pointerEvents: 'none',
+          },
+        },
       },
       left: {
         position: { name: 'absolute' },
         markup: [
           { tagName: 'rect', selector: 'portBody' },
-          { tagName: 'text', selector: 'portLabel' }
+          { tagName: 'text', selector: 'portLabel' },
         ],
         attrs: {
           portBody: {
@@ -327,7 +322,7 @@ const handleMouseDown = (event, item) => {
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
-            ry: 0
+            ry: 0,
           },
           portLabel: {
             text: '',
@@ -339,15 +334,15 @@ const handleMouseDown = (event, item) => {
             textVerticalAnchor: 'middle',
             x: 0,
             y: 0,
-            pointerEvents: 'none'
-          }
-        }
+            pointerEvents: 'none',
+          },
+        },
       },
       right: {
         position: { name: 'absolute' },
         markup: [
           { tagName: 'rect', selector: 'portBody' },
-          { tagName: 'text', selector: 'portLabel' }
+          { tagName: 'text', selector: 'portLabel' },
         ],
         attrs: {
           portBody: {
@@ -360,7 +355,7 @@ const handleMouseDown = (event, item) => {
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
-            ry: 0
+            ry: 0,
           },
           portLabel: {
             text: '',
@@ -372,72 +367,73 @@ const handleMouseDown = (event, item) => {
             textVerticalAnchor: 'middle',
             x: 0,
             y: 0,
-            pointerEvents: 'none'
-          }
-        }
-      }
-    }
-    
+            pointerEvents: 'none',
+          },
+        },
+      },
+    };
+
     // 使用设备的端口信息创建 X6 端口项
-    const portItems = item.ports.map(port => {
+    const portItems = item.ports.map((port) => {
       // 从端口数据中读取颜色（由业务层预先计算好）
-      const portColor = port.color || '#6b7280'  // 默认灰色
-      
+      const portColor = port.color || '#6b7280'; // 默认灰色
+
       // 文本截断
-      const isTopBottom = port.group === 'top' || port.group === 'bottom'
-      const portName = port.interfaceName || port.id
-      const displayText = portName.length > (isTopBottom ? 6 : 7) 
-        ? portName.substring(0, isTopBottom ? 5 : 6) + '..' 
-        : portName
-      
+      const isTopBottom = port.group === 'top' || port.group === 'bottom';
+      const portName = port.interfaceName || port.id;
+      const displayText =
+        portName.length > (isTopBottom ? 6 : 7)
+          ? portName.substring(0, isTopBottom ? 5 : 6) + '..'
+          : portName;
+
       return {
         id: port.id,
         group: port.group,
         args: { x: 0, y: 0 }, // 初始位置，后续由 syncPortPositions 更新
         attrs: {
           portBody: {
-            stroke: portColor  // 根据总线类型设置边框颜色
+            stroke: portColor, // 根据总线类型设置边框颜色
           },
           portLabel: {
-            text: displayText
-          }
-        }
-      }
-    })
-    
+            text: displayText,
+          },
+        },
+      };
+    });
+
     // 组装完整的端口配置
     ports = {
       groups: portGroups,
-      items: portItems
-    }
+      items: portItems,
+    };
   } else {
     // 普通 DAG 节点
-    shape = DAG_NODE
-    const sizeConfig = getNodeSizeByLayout(layoutDirection)
-    width = sizeConfig.width
-    height = sizeConfig.height
-    
+    shape = DAG_NODE;
+    const sizeConfig = getNodeSizeByLayout(layoutDirection);
+    width = sizeConfig.width;
+    height = sizeConfig.height;
+
     // 根据当前布局动态生成固定 ID 的四向连接桩（t/b/l/r），并按需隐藏
     const generatePorts = () => {
-      const isHorizontal = layoutDirection === 'horizontal'
+      const isHorizontal = layoutDirection === 'horizontal';
       const make = (pid, group, visible, role) => ({
         id: pid,
         group,
         attrs: {
           circle: {
             magnet: visible ? (role === 'output' ? true : 'passive') : false,
-            style: { display: visible ? '' : 'none' }
-          }
-        }
-      })
+            style: { display: visible ? '' : 'none' },
+          },
+        },
+      });
       return [
         make('t', 'top', !isHorizontal, 'input'),
         make('b', 'bottom', !isHorizontal, 'output'),
         make('l', 'left', isHorizontal, 'input'),
-        make('r', 'right', isHorizontal, 'output')
-      ]
-    }
-    ports = generatePorts()
+        make('r', 'right', isHorizontal, 'output'),
+      ];
+    };
+    ports = generatePorts();
   }
 
   // 构建节点数据
@@ -449,7 +445,7 @@ const handleMouseDown = (event, item) => {
     properties: {
       content: {
         id: generateContentId(),
-        label: item.title
+        label: item.title,
       },
       weight: 50,
       otherData: {}, // 空的计算模型数据
@@ -460,27 +456,27 @@ const handleMouseDown = (event, item) => {
       priority: '',
       defaultValue: '',
       notes: '',
-      level: 1 // 稍后会根据实际位置更新
+      level: 1, // 稍后会根据实际位置更新
     },
     // 兼容旧结构
     id,
     label: item.title,
     status: 'default',
     description: item.shortDesc || item.value,
-    originalData: { name: item.title, value: item.shortDesc }
-  }
+    originalData: { name: item.title, value: item.shortDesc },
+  };
 
   // 如果是设备节点，添加设备特有的数据
   if (isDeviceNode) {
-    nodeData.deviceId = item.deviceId
-    nodeData.deviceType = item.deviceType
-    nodeData.busType = item.busType
-    nodeData.manufacturer = item.manufacturer
-    nodeData.model = item.model
-    nodeData.version = item.version
-    nodeData.ports = item.ports // 端口信息供 DevicePortNode.vue 使用
-    nodeData.nodeType = 'device-port-node'
-    
+    nodeData.deviceId = item.deviceId;
+    nodeData.deviceType = item.deviceType;
+    nodeData.busType = item.busType;
+    nodeData.manufacturer = item.manufacturer;
+    nodeData.model = item.model;
+    nodeData.version = item.version;
+    nodeData.ports = item.ports; // 端口信息供 DevicePortNode.vue 使用
+    nodeData.nodeType = 'device-port-node';
+
     // 保存完整的原始数据
     nodeData.originalData = {
       name: item.name,
@@ -490,8 +486,8 @@ const handleMouseDown = (event, item) => {
       busType: item.busType,
       manufacturer: item.manufacturer,
       model: item.model,
-      version: item.version
-    }
+      version: item.version,
+    };
   }
 
   startDrag(
@@ -504,11 +500,11 @@ const handleMouseDown = (event, item) => {
       ports,
       // 确保节点默认可拖拽和未锁定
       draggable: true,
-      locked: false
+      locked: false,
     },
     event
-  )
-}
+  );
+};
 </script>
 
 <style scoped lang="less">

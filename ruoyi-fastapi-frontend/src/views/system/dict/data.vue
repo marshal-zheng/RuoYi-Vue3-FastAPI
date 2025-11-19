@@ -257,7 +257,7 @@ const { queryParams, form, rules } = toRefs(data);
 
 /** 查询字典类型详细 */
 function getTypes(dictId) {
-  getType(dictId).then(response => {
+  getType(dictId).then((response) => {
     queryParams.value.dictType = response.data.dictType;
     defaultDictType.value = response.data.dictType;
     getList();
@@ -266,14 +266,14 @@ function getTypes(dictId) {
 
 /** 查询字典类型列表 */
 function getTypeList() {
-  getDictOptionselect().then(response => {
+  getDictOptionselect().then((response) => {
     typeOptions.value = response.data;
   });
 }
 /** 查询字典数据列表 */
 function getList() {
   loading.value = true;
-  listData(queryParams.value).then(response => {
+  listData(queryParams.value).then((response) => {
     dataList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -323,7 +323,7 @@ function handleAdd() {
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.dictCode);
+  ids.value = selection.map((item) => item.dictCode);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -331,7 +331,7 @@ function handleSelectionChange(selection) {
 function handleUpdate(row) {
   reset();
   const dictCode = row.dictCode || ids.value;
-  getData(dictCode).then(response => {
+  getData(dictCode).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改字典数据';
@@ -339,17 +339,17 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['dataRef'].validate(valid => {
+  proxy.$refs['dataRef'].validate((valid) => {
     if (valid) {
       if (form.value.dictCode != undefined) {
-        updateData(form.value).then(response => {
+        updateData(form.value).then((response) => {
           useDictStore().removeDict(queryParams.value.dictType);
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           getList();
         });
       } else {
-        addData(form.value).then(response => {
+        addData(form.value).then((response) => {
           useDictStore().removeDict(queryParams.value.dictType);
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;

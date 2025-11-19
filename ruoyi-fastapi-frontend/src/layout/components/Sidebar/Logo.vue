@@ -61,9 +61,10 @@ const getLogoTextColor = computed(() => {
 .sidebar-logo-container {
   position: relative;
   width: 100%;
-  height: 50px;
-  line-height: 50px;
-  background: v-bind(getLogoBackground);
+  height: var(--logo-height, 50px);
+  line-height: var(--logo-height, 50px);
+  background: var(--left-menu-header-bg);
+  box-shadow: var(--left-menu-header-shadow);
   text-align: center;
   overflow: hidden;
 }
@@ -83,9 +84,9 @@ const getLogoTextColor = computed(() => {
 .sidebar-logo-container .sidebar-logo-link .sidebar-title {
   display: inline-block;
   margin: 0;
-  color: v-bind(getLogoTextColor);
+  color: var(--logo-title-text-color, #f0f4ff);
   font-weight: bold;
-  line-height: 50px;
+  line-height: var(--logo-height, 50px);
   font-size: 14px;
   font-family:
     Avenir,
@@ -94,6 +95,11 @@ const getLogoTextColor = computed(() => {
     Helvetica,
     sans-serif;
   vertical-align: middle;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--logo-title-text-hover-color, #ffffff);
+  }
 }
 
 .sidebar-logo-container.collapse .sidebar-logo {

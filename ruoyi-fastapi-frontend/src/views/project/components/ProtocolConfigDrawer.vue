@@ -81,39 +81,37 @@
     <template #footer>
       <div class="drawer-footer">
         <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitLoading">
-          确定
-        </el-button>
+        <el-button type="primary" @click="handleSubmit" :loading="submitLoading"> 确定 </el-button>
       </div>
     </template>
   </el-drawer>
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick, computed } from 'vue'
-import { ElMessage } from 'element-plus'
-import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue'
-import EthernetProtocolTemplate from '@/components/business/Protocol/templates/EthernetProtocolTemplate.vue'
-import RS422ProtocolTemplate from '@/components/business/Protocol/templates/RS422ProtocolTemplate.vue'
-import CANProtocolTemplate from '@/components/business/Protocol/templates/CANProtocolTemplate.vue'
-import Protocol1553BTemplate from '@/components/business/Protocol/templates/Protocol1553BTemplate.vue'
+import { ref, reactive, watch, nextTick, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
+import EthernetProtocolTemplate from '@/components/business/Protocol/templates/EthernetProtocolTemplate.vue';
+import RS422ProtocolTemplate from '@/components/business/Protocol/templates/RS422ProtocolTemplate.vue';
+import CANProtocolTemplate from '@/components/business/Protocol/templates/CANProtocolTemplate.vue';
+import Protocol1553BTemplate from '@/components/business/Protocol/templates/Protocol1553BTemplate.vue';
 
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
+    default: false,
   },
   portData: {
     type: Object,
-    default: () => ({})
-  }
-})
+    default: () => ({}),
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'submit'])
+const emit = defineEmits(['update:modelValue', 'submit']);
 
-const visible = ref(false)
-const formRef = ref(null)
-const submitLoading = ref(false)
+const visible = ref(false);
+const formRef = ref(null);
+const submitLoading = ref(false);
 
 // 表单数据
 const formData = reactive({
@@ -124,104 +122,100 @@ const formData = reactive({
   protocolType: '',
   dataRate: '',
   description: '',
-  protocolConfig: {}
-})
+  protocolConfig: {},
+});
 
 // 表单验证规则
 const rules = {
-  protocolType: [
-    { required: true, message: '请选择协议类型', trigger: 'change' }
-  ],
-  dataRate: [
-    { max: 50, message: '数据速率不能超过50个字符', trigger: 'blur' }
-  ]
-}
+  protocolType: [{ required: true, message: '请选择协议类型', trigger: 'change' }],
+  dataRate: [{ max: 50, message: '数据速率不能超过50个字符', trigger: 'blur' }],
+};
 
 // 监听 modelValue 变化
 watch(
   () => props.modelValue,
   (newVal) => {
-    visible.value = newVal
+    visible.value = newVal;
     if (newVal && props.portData) {
-      initFormData()
+      initFormData();
     }
   },
   { immediate: true }
-)
+);
 
 // 监听 visible 变化
 watch(visible, (newVal) => {
-  emit('update:modelValue', newVal)
-})
+  emit('update:modelValue', newVal);
+});
 
 // 初始化表单数据
 const initFormData = () => {
   nextTick(() => {
-    const port = props.portData || {}
-    formData.interfaceId = port.interfaceId || port.id
-    formData.interfaceName = port.interfaceName || ''
-    formData.interfaceType = port.interfaceType || port.busType || ''
-    formData.busType = port.busType || port.interfaceType || ''
-    formData.protocolType = port.protocolType || ''
-    formData.dataRate = port.dataRate || ''
-    formData.description = port.description || ''
-    formData.protocolConfig = port.protocolConfig || {}
+    const port = props.portData || {};
+    formData.interfaceId = port.interfaceId || port.id;
+    formData.interfaceName = port.interfaceName || '';
+    formData.interfaceType = port.interfaceType || port.busType || '';
+    formData.busType = port.busType || port.interfaceType || '';
+    formData.protocolType = port.protocolType || '';
+    formData.dataRate = port.dataRate || '';
+    formData.description = port.description || '';
+    formData.protocolConfig = port.protocolConfig || {};
 
     // 清除验证状态
     if (formRef.value) {
-      formRef.value.clearValidate()
+      formRef.value.clearValidate();
     }
-  })
-}
+  });
+};
 
 // 获取当前协议模板组件
 const currentTemplateComponent = computed(() => {
-  const type = String(formData.protocolType || '').toLowerCase()
+  const type = String(formData.protocolType || '').toLowerCase();
   switch (type) {
     case 'ethernet':
-      return EthernetProtocolTemplate
+      return EthernetProtocolTemplate;
     case 'rs422':
     case 'rs485':
-      return RS422ProtocolTemplate
+      return RS422ProtocolTemplate;
     case 'can':
-      return CANProtocolTemplate
+      return CANProtocolTemplate;
     case '1553b':
-      return Protocol1553BTemplate
+      return Protocol1553BTemplate;
     default:
-      return null
+      return null;
   }
-})
+});
 
 // 协议类型改变时清空配置
 const handleProtocolTypeChange = () => {
-  formData.protocolConfig = {}
-}
+  formData.protocolConfig = {};
+};
 
 // 获取接口类型标签
 const getInterfaceTypeTag = (type) => {
   const typeMap = {
-    'RS422': 'success',
-    'RS485': 'warning',
-    'CAN': 'danger',
-    'Ethernet': 'primary',
-    '1553B': 'info'
-  }
-  return typeMap[type] || 'info'
-}
+    RS422: 'success',
+    RS485: 'warning',
+    CAN: 'danger',
+    Ethernet: 'primary',
+    '1553B': 'info',
+  };
+  return typeMap[type] || 'info';
+};
 
 // 关闭抽屉
 const handleClose = () => {
-  visible.value = false
-}
+  visible.value = false;
+};
 
 // 提交表单
 const handleSubmit = async () => {
-  if (!formRef.value) return
+  if (!formRef.value) return;
 
   try {
-    await formRef.value.validate()
+    await formRef.value.validate();
 
-    submitLoading.value = true
+    submitLoading.value = true;
 
     // 组装协议数据
     const protocolData = {
@@ -232,19 +226,19 @@ const handleSubmit = async () => {
       protocolType: formData.protocolType,
       dataRate: formData.dataRate,
       description: formData.description,
-      protocolConfig: formData.protocolConfig
-    }
+      protocolConfig: formData.protocolConfig,
+    };
 
-    emit('submit', protocolData)
-    
+    emit('submit', protocolData);
+
     // 不在这里显示成功消息，由父组件处理
-    handleClose()
+    handleClose();
   } catch (error) {
-    console.error('表单验证失败:', error)
+    console.error('表单验证失败:', error);
   } finally {
-    submitLoading.value = false
+    submitLoading.value = false;
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

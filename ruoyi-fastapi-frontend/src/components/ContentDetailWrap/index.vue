@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { ElCard, ElDescriptions, ElDescriptionsItem, ElSkeleton, ElTooltip } from 'element-plus'
-import { propTypes } from '@/utils/propTypes'
-import { computed, useSlots, type VNode } from 'vue'
+import { ElCard, ElDescriptions, ElDescriptionsItem, ElSkeleton, ElTooltip } from 'element-plus';
+import { propTypes } from '@/utils/propTypes';
+import { computed, useSlots, type VNode } from 'vue';
 
-const slots = useSlots()
+const slots = useSlots();
 
 interface DetailItem {
-  label: string
-  value?: any
-  prop?: string
-  span?: number
-  render?: (item: DetailItem) => VNode | string
-  [key: string]: any
+  label: string;
+  value?: any;
+  prop?: string;
+  span?: number;
+  render?: (item: DetailItem) => VNode | string;
+  [key: string]: any;
 }
 
 const props = defineProps({
@@ -30,7 +30,7 @@ const props = defineProps({
   // 详情数据
   data: {
     type: Array as () => DetailItem[],
-    default: () => []
+    default: () => [],
   },
   // Descriptions 配置
   column: propTypes.number.def(3),
@@ -41,15 +41,14 @@ const props = defineProps({
   loading: propTypes.bool.def(false),
   // skeleton 配置
   skeletonRows: propTypes.number.def(8),
-  skeletonAnimated: propTypes.bool.def(true)
-})
+  skeletonAnimated: propTypes.bool.def(true),
+});
 
 // 判断是否有 header slot
-const hasHeaderSlot = computed(() => !!slots.header)
+const hasHeaderSlot = computed(() => !!slots.header);
 
 // 判断是否有数据
-const hasData = computed(() => props.data && props.data.length > 0)
-
+const hasData = computed(() => props.data && props.data.length > 0);
 </script>
 
 <template>
@@ -67,8 +66,8 @@ const hasData = computed(() => props.data && props.data.length > 0)
                 'content-detail-wrap__header--no-border': !showHeaderBorder,
                 'content-detail-wrap__header--no-divider': !showDivider,
                 'content-detail-wrap__header--compact': headerType === 'compact',
-                'content-detail-wrap__header--normal': headerType === 'normal'
-              }
+                'content-detail-wrap__header--normal': headerType === 'normal',
+              },
             ]"
             :style="{ padding: headerPadding }"
           >
@@ -133,8 +132,9 @@ const hasData = computed(() => props.data && props.data.length > 0)
             :class="[
               'content-detail-wrap__content',
               {
-                'content-detail-wrap__content--with-header': fixedHeader && (hasHeaderSlot || hasData)
-              }
+                'content-detail-wrap__content--with-header':
+                  fixedHeader && (hasHeaderSlot || hasData),
+              },
             ]"
             :style="{ minHeight }"
           >

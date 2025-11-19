@@ -29,7 +29,7 @@ function addCss(cssList: string[], el: FormElement): void {
   const css = styles[el.tag];
   css && cssList.indexOf(css) === -1 && cssList.push(css);
   if (el.children) {
-    el.children.forEach(el2 => addCss(cssList, el2));
+    el.children.forEach((el2) => addCss(cssList, el2));
   }
 }
 
@@ -40,7 +40,7 @@ function addCss(cssList: string[], el: FormElement): void {
  */
 export function makeUpCss(conf: FormConfig): string {
   const cssList: string[] = [];
-  conf.fields.forEach(el => addCss(cssList, el));
+  conf.fields.forEach((el) => addCss(cssList, el));
   return cssList.join('\n');
 }
 

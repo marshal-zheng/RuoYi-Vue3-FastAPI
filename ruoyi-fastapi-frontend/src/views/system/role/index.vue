@@ -126,13 +126,15 @@
                   type="text"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:role:edit']"
-                >修改</ZxButton>
+                  >修改</ZxButton
+                >
                 <zx-button
                   v-if="scope.row.roleId !== 1"
                   type="text"
                   @click="handleAuthUser(scope.row)"
                   v-hasPermi="['system:role:edit']"
-                >分配用户</zx-button>
+                  >分配用户</zx-button
+                >
                 <ZxMoreAction
                   v-if="scope.row.roleId !== 1 && getRoleMoreActionList(scope.row).length"
                   :list="getRoleMoreActionList(scope.row)"

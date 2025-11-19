@@ -49,7 +49,7 @@ const realSrcList = computed(() => {
   }
   let real_src_list = props.src.split(',');
   let srcList = [];
-  real_src_list.forEach(item => {
+  real_src_list.forEach((item) => {
     if (isExternal(item)) {
       return srcList.push(item);
     }

@@ -252,7 +252,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询调度日志列表 */
 function getList() {
   loading.value = true;
-  listJobLog(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
+  listJobLog(proxy.addDateRange(queryParams.value, dateRange.value)).then((response) => {
     jobLogList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -284,7 +284,7 @@ function resetQuery() {
 }
 // 多选框选中数据
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.jobLogId);
+  ids.value = selection.map((item) => item.jobLogId);
   multiple.value = !selection.length;
 }
 /** 详细按钮操作 */
@@ -332,7 +332,7 @@ function handleExport() {
 (() => {
   const jobId = route.params && route.params.jobId;
   if (jobId !== undefined && jobId != 0) {
-    getJob(jobId).then(response => {
+    getJob(jobId).then((response) => {
       queryParams.value.jobName = response.data.jobName;
       queryParams.value.jobGroup = response.data.jobGroup;
       getList();

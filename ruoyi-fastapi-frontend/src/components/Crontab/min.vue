@@ -78,7 +78,7 @@ const checkboxString = computed(() => {
 });
 watch(
   () => props.cron.min,
-  value => changeRadioValue(value)
+  (value) => changeRadioValue(value)
 );
 watch([radioValue, cycleTotal, averageTotal, checkboxString], () => onRadioChange());
 function changeRadioValue(value) {
@@ -95,7 +95,7 @@ function changeRadioValue(value) {
     average02.value = Number(indexArr[1]);
     radioValue.value = 3;
   } else {
-    checkboxList.value = [...new Set(value.split(',').map(item => Number(item)))];
+    checkboxList.value = [...new Set(value.split(',').map((item) => Number(item)))];
     radioValue.value = 4;
   }
 }

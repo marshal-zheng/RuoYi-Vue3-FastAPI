@@ -217,7 +217,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询公告列表 */
 function getList() {
   loading.value = true;
-  listNotice(queryParams.value).then(response => {
+  listNotice(queryParams.value).then((response) => {
     noticeList.value = response.rows;
     total.value = response.total;
     loading.value = false;
@@ -251,7 +251,7 @@ function resetQuery() {
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.noticeId);
+  ids.value = selection.map((item) => item.noticeId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -265,7 +265,7 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const noticeId = row.noticeId || ids.value;
-  getNotice(noticeId).then(response => {
+  getNotice(noticeId).then((response) => {
     form.value = response.data;
     open.value = true;
     title.value = '修改公告';
@@ -273,16 +273,16 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['noticeRef'].validate(valid => {
+  proxy.$refs['noticeRef'].validate((valid) => {
     if (valid) {
       if (form.value.noticeId != undefined) {
-        updateNotice(form.value).then(response => {
+        updateNotice(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           getList();
         });
       } else {
-        addNotice(form.value).then(response => {
+        addNotice(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           getList();

@@ -285,7 +285,7 @@ function setSubTableColumns(value) {
 
 /** 查询菜单下拉树结构 */
 function getMenuTreeselect() {
-  listMenu().then(response => {
+  listMenu().then((response) => {
     menuOptions.value = proxy.handleTree(response.data, 'menuId');
   });
 }
@@ -296,14 +296,14 @@ onMounted(() => {
 
 watch(
   () => props.info.subTableName,
-  val => {
+  (val) => {
     setSubTableColumns(val);
   }
 );
 
 watch(
   () => props.info.tplWebType,
-  val => {
+  (val) => {
     if (val === '') {
       props.info.tplWebType = 'element-plus';
     }

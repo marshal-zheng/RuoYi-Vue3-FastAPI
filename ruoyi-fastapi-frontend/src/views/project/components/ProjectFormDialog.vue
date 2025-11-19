@@ -1,17 +1,17 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="py-4">
-      <el-form
-        ref="formRef"
-        :model="state.data"
-        :rules="formRules"
-        label-width="100px"
-      >
+      <el-form ref="formRef" :model="state.data" :rules="formRules" label-width="100px">
         <el-form-item label="工程名称" prop="projectName">
           <el-input v-model="state.data.projectName" placeholder="请输入工程名称" />
         </el-form-item>
         <el-form-item label="工程描述" prop="projectDesc">
-          <el-input v-model="state.data.projectDesc" type="textarea" :rows="4" placeholder="请输入工程描述" />
+          <el-input
+            v-model="state.data.projectDesc"
+            type="textarea"
+            :rows="4"
+            placeholder="请输入工程描述"
+          />
         </el-form-item>
       </el-form>
     </div>
@@ -19,18 +19,18 @@
 </template>
 
 <script setup>
-import { ref, computed, getCurrentInstance } from 'vue'
-import { useDialog } from '@zxio/zxui'
-import { ElMessage } from 'element-plus'
-import { getProject, addProject, updateProject } from '@/api/project/project'
+import { ref, computed, getCurrentInstance } from 'vue';
+import { useDialog } from '@zxio/zxui';
+import { ElMessage } from 'element-plus';
+import { getProject, addProject, updateProject } from '@/api/project/project';
 
-const emit = defineEmits(['success'])
+const emit = defineEmits(['success']);
 
-const formRef = ref()
+const formRef = ref();
 
 const formRules = computed(() => ({
-  projectName: [{ required: true, message: '工程名称不能为空', trigger: 'blur' }]
-}))
+  projectName: [{ required: true, message: '工程名称不能为空', trigger: 'blur' }],
+}));
 
 const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog({
   title: (data) => (data?.projectId ? '编辑工程' : '添加工程'),
@@ -43,46 +43,48 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   defaultData: () => ({
     projectId: null,
     projectName: '',
-    projectDesc: ''
+    projectDesc: '',
   }),
   onConfirm: async (data) => {
     if (data.projectId) {
-      const res = await updateProject(data)
-      emit('success', { mode: 'edit', data: res })
-      return res
+      const res = await updateProject(data);
+      emit('success', { mode: 'edit', data: res });
+      return res;
     }
-    const res = await addProject(data)
-    const newId = res?.data?.projectId || res?.data?.id || res?.projectId || res?.id || null
-    emit('success', { mode: 'create', projectId: newId, data: res })
-    return res
+    const res = await addProject(data);
+    const newId = res?.data?.projectId || res?.data?.id || res?.projectId || res?.id || null;
+    emit('success', { mode: 'create', projectId: newId, data: res });
+    return res;
   },
   onConfirmError: (e) => {
-    ElMessage.error(e?.message || '提交失败，请重试')
-  }
-})
+    ElMessage.error(e?.message || '提交失败，请重试');
+  },
+});
 
 async function openDialog(payload) {
-  if (payload && (payload.projectId || typeof payload === 'number' || typeof payload === 'string')) {
-    const id = payload.projectId || payload
-    setLoading(true)
+  if (
+    payload &&
+    (payload.projectId || typeof payload === 'number' || typeof payload === 'string')
+  ) {
+    const id = payload.projectId || payload;
+    setLoading(true);
     try {
-      const resp = await getProject(id)
-      const detail = resp?.data || {}
+      const resp = await getProject(id);
+      const detail = resp?.data || {};
       open({
         projectId: detail.projectId,
         projectName: detail.projectName,
-        projectDesc: detail.projectDesc
-      })
+        projectDesc: detail.projectDesc,
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   } else {
-    open()
+    open();
   }
 }
 
-defineExpose({ open: openDialog, close })
+defineExpose({ open: openDialog, close });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

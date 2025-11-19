@@ -60,13 +60,13 @@ export const normalizeFieldRow = (row: any): ProtocolFieldRow => {
 
 export const normalizeFieldRows = (rows?: any[]): ProtocolFieldRow[] => {
   if (!Array.isArray(rows)) return [];
-  return rows.map(row => normalizeFieldRow(row));
+  return rows.map((row) => normalizeFieldRow(row));
 };
 
 export const getNextSeqNo = (rows: ProtocolFieldRow[]): string => {
   if (!rows.length) return '1';
   const max = Math.max(
-    ...rows.map(row => {
+    ...rows.map((row) => {
       const parsed = parseInt(row.seqNo, 10);
       return Number.isNaN(parsed) ? 0 : parsed;
     })

@@ -9,13 +9,13 @@
 defineProps({
   className: {
     type: String,
-    default: ''
+    default: '',
   },
   style: {
     type: Object,
-    default: () => ({})
-  }
-})
+    default: () => ({}),
+  },
+});
 </script>
 
 <style scoped>

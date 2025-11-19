@@ -18,45 +18,45 @@
 </template>
 
 <script setup name="BaudRateSelector">
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
     type: [String, Number],
-    default: null
+    default: null,
   },
   interfaceType: {
     type: String,
     default: 'serial', // 'serial' for RS422/RS485, 'can' for CAN
-    validator: (value) => ['serial', 'can'].includes(value)
+    validator: (value) => ['serial', 'can'].includes(value),
   },
   placeholder: {
     type: String,
-    default: '请选择波特率'
+    default: '请选择波特率',
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   clearable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   size: {
     type: String,
-    default: 'default'
+    default: 'default',
   },
   customStyle: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   options: {
     type: Array,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const emit = defineEmits(['update:modelValue', 'change'])
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认波特率选项
 const defaultSerialBaudRates = [
@@ -67,8 +67,8 @@ const defaultSerialBaudRates = [
   { label: '115200 bps', value: 115200 },
   { label: '230400 bps', value: 230400 },
   { label: '460800 bps', value: 460800 },
-  { label: '921600 bps', value: 921600 }
-]
+  { label: '921600 bps', value: 921600 },
+];
 
 const defaultCanBaudRates = [
   { label: '5 Kbps', value: 5000 },
@@ -80,20 +80,20 @@ const defaultCanBaudRates = [
   { label: '250 Kbps', value: 250000 },
   { label: '500 Kbps', value: 500000 },
   { label: '800 Kbps', value: 800000 },
-  { label: '1 Mbps', value: 1000000 }
-]
+  { label: '1 Mbps', value: 1000000 },
+];
 
 // 计算波特率选项
 const baudRateOptions = computed(() => {
   if (props.options) {
-    return props.options
+    return props.options;
   }
-  
-  return props.interfaceType === 'can' ? defaultCanBaudRates : defaultSerialBaudRates
-})
+
+  return props.interfaceType === 'can' ? defaultCanBaudRates : defaultSerialBaudRates;
+});
 
 function handleChange(value) {
-  emit('update:modelValue', value)
-  emit('change', value)
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>

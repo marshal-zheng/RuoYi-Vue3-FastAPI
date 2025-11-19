@@ -128,7 +128,7 @@ if (props.showColumnsType == 'transfer') {
 
 // 勾选
 function checkboxChange(event, label) {
-  props.columns.filter(item => item.label == label)[0].visible = event;
+  props.columns.filter((item) => item.label == label)[0].visible = event;
 }
 </script>
 

@@ -200,7 +200,7 @@ const layouts: Record<string, LayoutFunction> = {
     const justify = element.type === 'default' ? '' : `justify="${element.justify}"`;
     const align = element.type === 'default' ? '' : `align="${element.align}"`;
     const gutter = element.gutter ? `gutter="${element.gutter}"` : '';
-    const children = element.children?.map(el => layouts[el.layout](el)) || [];
+    const children = element.children?.map((el) => layouts[el.layout](el)) || [];
     let str = `<el-row ${type} ${justify} ${align} ${gutter}>
       ${children.join('\n')}
     </el-row>`;
@@ -470,8 +470,8 @@ function buildElUploadChild(conf: FormElement): string {
 export function makeUpHtml(conf: FormConf, type: string): string {
   const htmlList: string[] = [];
   confGlobal = conf;
-  someSpanIsNot24 = conf.fields.some(item => item.span !== 24);
-  conf.fields.forEach(el => {
+  someSpanIsNot24 = conf.fields.some((item) => item.span !== 24);
+  conf.fields.forEach((el) => {
     htmlList.push(layouts[el.layout](el));
   });
   const htmlStr = htmlList.join('\n');

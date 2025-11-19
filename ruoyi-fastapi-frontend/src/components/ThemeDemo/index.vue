@@ -25,7 +25,7 @@ const tailwindForm = ref({
 // 主题切换
 const isDark = ref(false);
 
-const toggleTheme = value => {
+const toggleTheme = (value) => {
   const html = document.documentElement;
   if (value) {
     html.classList.add('dark');

@@ -5,7 +5,7 @@
       class="xflow-context-menu"
       :style="{
         left: menu.x + 'px',
-        top: menu.y + 'px'
+        top: menu.y + 'px',
       }"
       @click.stop
     >
@@ -17,8 +17,8 @@
           {
             'menu-item--disabled': item.disabled,
             'menu-item--danger': item.danger,
-            'menu-item--divider': item.type === 'divider'
-          }
+            'menu-item--divider': item.type === 'divider',
+          },
         ]"
         @click="$emit('menu-click', item)"
       >
@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 import {
   Select,
   DocumentCopy,
@@ -45,24 +45,24 @@ import {
   Lock,
   Unlock,
   Edit,
-  Plus
-} from '@element-plus/icons-vue'
+  Plus,
+} from '@element-plus/icons-vue';
 
 const props = defineProps({
   contextMenu: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 
-const emit = defineEmits(['menu-click'])
+const emit = defineEmits(['menu-click']);
 
 // 兼容父组件传入的是 ref 或 普通对象
 const menu = computed(() => {
-  const cm = props.contextMenu
+  const cm = props.contextMenu;
   // 如果是 ref，取其 value；否则直接返回对象
-  return cm && typeof cm === 'object' && 'value' in cm ? cm.value || {} : cm || {}
-})
+  return cm && typeof cm === 'object' && 'value' in cm ? cm.value || {} : cm || {};
+});
 
 // 图标组件映射
 const iconComponents = {
@@ -74,12 +74,12 @@ const iconComponents = {
   Lock,
   Unlock,
   Edit,
-  Plus
-}
+  Plus,
+};
 
 const getIconComponent = (iconName) => {
-  return iconComponents[iconName] || null
-}
+  return iconComponents[iconName] || null;
+};
 </script>
 
 <style scoped>

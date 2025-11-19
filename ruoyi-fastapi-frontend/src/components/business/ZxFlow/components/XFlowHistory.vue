@@ -3,47 +3,47 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue'
-import { History } from '@antv/x6-plugin-history'
-import { useGraphInstance } from '../composables/useGraphInstance'
+import { onMounted, watch } from 'vue';
+import { History } from '@antv/x6-plugin-history';
+import { useGraphInstance } from '../composables/useGraphInstance';
 
 // Props 定义
 const props = defineProps({
   enabled: {
     type: Boolean,
-    default: true
+    default: true,
   },
   ignoreAdd: {
     type: Boolean,
-    default: false
+    default: false,
   },
   ignoreRemove: {
     type: Boolean,
-    default: false
+    default: false,
   },
   ignoreChange: {
     type: Boolean,
-    default: false
+    default: false,
   },
   beforeAddCommand: {
     type: Function,
-    default: null
+    default: null,
   },
   afterAddCommand: {
     type: Function,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
-const graph = useGraphInstance()
+const graph = useGraphInstance();
 
 // 初始化 History 插件
 const initHistory = () => {
-  if (!graph || !graph.value) return
+  if (!graph || !graph.value) return;
 
   // 移除已存在的插件
   if (graph.value.getPlugin('history')) {
-    graph.value.disposePlugins('history')
+    graph.value.disposePlugins('history');
   }
 
   // 添加新插件
@@ -54,14 +54,14 @@ const initHistory = () => {
       ignoreRemove: props.ignoreRemove,
       ignoreChange: props.ignoreChange,
       beforeAddCommand: props.beforeAddCommand,
-      afterAddCommand: props.afterAddCommand
+      afterAddCommand: props.afterAddCommand,
     })
-  )
-}
+  );
+};
 
 onMounted(() => {
-  initHistory()
-})
+  initHistory();
+});
 
 // 监听属性变化重新初始化插件
 watch(
@@ -71,19 +71,19 @@ watch(
     props.ignoreRemove,
     props.ignoreChange,
     props.beforeAddCommand,
-    props.afterAddCommand
+    props.afterAddCommand,
   ],
   () => {
-    initHistory()
+    initHistory();
   }
-)
+);
 
 // 监听 graph 实例就绪后初始化
 watch(
   () => graph && graph.value,
   (val) => {
-    if (val) initHistory()
+    if (val) initHistory();
   },
   { immediate: true }
-)
+);
 </script>

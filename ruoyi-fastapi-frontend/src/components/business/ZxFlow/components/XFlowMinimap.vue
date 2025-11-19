@@ -3,21 +3,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick, computed } from 'vue'
-import { NodeView } from '@antv/x6'
-import { MiniMap } from '@antv/x6-plugin-minimap'
-import { useGraphInstance } from '../composables/useGraphInstance'
+import { ref, onMounted, watch, nextTick, computed } from 'vue';
+import { NodeView } from '@antv/x6';
+import { MiniMap } from '@antv/x6-plugin-minimap';
+import { useGraphInstance } from '../composables/useGraphInstance';
 
 // 简单节点视图类
 class SimpleNodeView extends NodeView {
-  static nodeBackground = '#8f8f8f'
+  static nodeBackground = '#8f8f8f';
 
   renderMarkup() {
-    const tag = this.cell.shape === 'circle' ? 'circle' : 'rect'
+    const tag = this.cell.shape === 'circle' ? 'circle' : 'rect';
     return this.renderJSONMarkup({
       tagName: tag,
-      selector: 'body'
-    })
+      selector: 'body',
+    });
   }
 
   update() {
@@ -25,9 +25,9 @@ class SimpleNodeView extends NodeView {
       body: {
         refWidth: '100%',
         refHeight: '100%',
-        fill: SimpleNodeView.nodeBackground
-      }
-    })
+        fill: SimpleNodeView.nodeBackground,
+      },
+    });
   }
 }
 
@@ -35,48 +35,48 @@ class SimpleNodeView extends NodeView {
 const props = defineProps({
   className: {
     type: String,
-    default: ''
+    default: '',
   },
   style: {
     type: Object,
-    default: () => ({})
+    default: () => ({}),
   },
   width: {
     type: Number,
-    default: 200
+    default: 200,
   },
   height: {
     type: Number,
-    default: 160
+    default: 160,
   },
   padding: {
     type: Number,
-    default: 10
+    default: 10,
   },
   simple: {
     type: Boolean,
-    default: false
+    default: false,
   },
   simpleNodeBackground: {
     type: String,
-    default: '#8f8f8f'
+    default: '#8f8f8f',
   },
   scalable: {
     type: Boolean,
-    default: true
+    default: true,
   },
   minScale: {
     type: Number,
-    default: 0.01
+    default: 0.01,
   },
   maxScale: {
     type: Number,
-    default: 16
-  }
-})
+    default: 16,
+  },
+});
 
-const containerRef = ref(null)
-const graph = useGraphInstance()
+const containerRef = ref(null);
+const graph = useGraphInstance();
 
 // 容器样式：限制宽高并默认绝对定位，避免占满整行
 const containerStyle = computed(() => {
@@ -84,27 +84,27 @@ const containerStyle = computed(() => {
     width: props.width + 'px',
     height: props.height + 'px',
     position: 'absolute',
-    zIndex: 10
-  }
+    zIndex: 10,
+  };
 
   // 直接合并用户传入的样式，不做额外处理
   return {
     ...base,
-    ...(props.style || {})
-  }
-})
+    ...(props.style || {}),
+  };
+});
 
 // 初始化 Minimap 插件
 const initMinimap = () => {
-  if (!graph || !graph.value || !containerRef.value) return
+  if (!graph || !graph.value || !containerRef.value) return;
 
   // 移除已存在的插件（用类引用更稳妥）
   if (graph.value.getPlugin(MiniMap)) {
-    graph.value.removePlugin(MiniMap)
+    graph.value.removePlugin(MiniMap);
   }
 
   // 设置简单节点背景色
-  SimpleNodeView.nodeBackground = props.simpleNodeBackground
+  SimpleNodeView.nodeBackground = props.simpleNodeBackground;
 
   // 添加新插件
   graph.value.use(
@@ -120,23 +120,23 @@ const initMinimap = () => {
         ? {
             createCellView(cell) {
               if (cell.isEdge()) {
-                return null
+                return null;
               }
               if (cell.isNode()) {
-                return SimpleNodeView
+                return SimpleNodeView;
               }
-              return undefined
-            }
+              return undefined;
+            },
           }
-        : undefined
+        : undefined,
     })
-  )
-}
+  );
+};
 
 onMounted(async () => {
-  await nextTick()
-  initMinimap()
-})
+  await nextTick();
+  initMinimap();
+});
 
 // 监听属性变化重新初始化插件
 watch(
@@ -148,21 +148,21 @@ watch(
     props.simpleNodeBackground,
     props.scalable,
     props.minScale,
-    props.maxScale
+    props.maxScale,
   ],
   () => {
-    initMinimap()
+    initMinimap();
   }
-)
+);
 
 // 当 graph 实例就绪时再初始化（解决装载时序竞态）
 watch(
   () => graph && graph.value,
   (g) => {
-    if (g) initMinimap()
+    if (g) initMinimap();
   },
   { immediate: true }
-)
+);
 </script>
 
 <style scoped>

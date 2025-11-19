@@ -128,11 +128,11 @@ const loading = ref(false);
 const captchaEnabled = ref(true);
 
 function handleRegister() {
-  proxy.$refs.registerRef.validate(valid => {
+  proxy.$refs.registerRef.validate((valid) => {
     if (valid) {
       loading.value = true;
       register(registerForm.value)
-        .then(res => {
+        .then((res) => {
           const username = registerForm.value.username;
           ElMessageBox.alert(
             "<font color='red'>恭喜你，您的账号 " + username + ' 注册成功！</font>',
@@ -158,7 +158,7 @@ function handleRegister() {
 }
 
 function getCode() {
-  getCodeImg().then(res => {
+  getCodeImg().then((res) => {
     captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
     if (captchaEnabled.value) {
       codeUrl.value = 'data:image/gif;base64,' + res.img;

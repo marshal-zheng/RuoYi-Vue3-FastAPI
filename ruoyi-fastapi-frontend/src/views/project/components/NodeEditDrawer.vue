@@ -161,7 +161,7 @@ const currentPortIndex = ref(-1);
 // 监听 nodeData 变化，当打开时初始化数据
 watch(
   () => props.nodeData,
-  newVal => {
+  (newVal) => {
     if (newVal && Object.keys(newVal).length > 0) {
       initFormData();
     }
@@ -183,7 +183,7 @@ const initFormData = () => {
     // 加载端口列表，并附加对端设备名称
     const peerMap = props.nodeData?.peerDeviceNameByPort || {};
     const ports = Array.isArray(data.ports) ? data.ports : [];
-    portList.value = ports.map(port => {
+    portList.value = ports.map((port) => {
       const portKey = port.id || port.interfaceId;
       return {
         ...port,
@@ -198,10 +198,10 @@ const initFormData = () => {
   });
 };
 
-const cloneHeader = header => JSON.parse(JSON.stringify(header || {}));
-const cloneFields = fields => JSON.parse(JSON.stringify(Array.isArray(fields) ? fields : []));
-const resolvePortKey = port => port?.id || port?.interfaceId;
-const getPeerDeviceName = port => {
+const cloneHeader = (header) => JSON.parse(JSON.stringify(header || {}));
+const cloneFields = (fields) => JSON.parse(JSON.stringify(Array.isArray(fields) ? fields : []));
+const resolvePortKey = (port) => port?.id || port?.interfaceId;
+const getPeerDeviceName = (port) => {
   if (port?.peerDeviceName) return port.peerDeviceName;
   const peerMap = props.nodeData?.peerDeviceNameByPort || {};
   const key = resolvePortKey(port);
@@ -209,7 +209,7 @@ const getPeerDeviceName = port => {
 };
 
 // 获取端口的协议列表（当前端口 + 对端方向）
-const getPortMessages = port => {
+const getPortMessages = (port) => {
   if (!port || !port.messageConfig) {
     return [];
   }
@@ -294,7 +294,7 @@ const groupedPorts = computed(() => {
 
     // 获取该端口的协议列表
     const messages = getPortMessages(portWithIndex);
-    messages.forEach(message => {
+    messages.forEach((message) => {
       groups[type].protocols.push({
         id: `${port.id || port.interfaceId}_${message.id}`,
         port: portWithIndex,
@@ -310,12 +310,12 @@ const groupedPorts = computed(() => {
 });
 
 // 切换端口折叠状态
-const togglePort = portType => {
+const togglePort = (portType) => {
   collapsedPorts.value[portType] = !collapsedPorts.value[portType];
 };
 
 // 获取总线类型对应的标签类型
-const getBusTypeTagType = busType => {
+const getBusTypeTagType = (busType) => {
   const typeMap = {
     RS422: 'warning',
     RS485: 'danger',
@@ -327,7 +327,7 @@ const getBusTypeTagType = busType => {
 };
 
 // 点击协议卡片
-const handleProtocolClick = protocolItem => {
+const handleProtocolClick = (protocolItem) => {
   if (!protocolItem) return;
   const port = protocolItem.port;
   const message = protocolItem.message || {};

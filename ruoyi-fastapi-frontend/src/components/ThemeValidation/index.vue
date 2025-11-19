@@ -4,16 +4,12 @@
       <template #header>
         <div class="card-header">
           <span>主题集成验证</span>
-          <el-button 
-            class="button" 
-            :type="isDark ? 'warning' : 'primary'" 
-            @click="toggleTheme"
-          >
+          <el-button class="button" :type="isDark ? 'warning' : 'primary'" @click="toggleTheme">
             {{ isDark ? '切换到亮色模式' : '切换到暗色模式' }}
           </el-button>
         </div>
       </template>
-      
+
       <div class="validation-content">
         <!-- Color Validation -->
         <div class="section">
@@ -56,7 +52,7 @@
                 <el-button type="info">Info</el-button>
               </div>
             </div>
-            
+
             <div class="component-item">
               <h4>表单组件</h4>
               <el-form :model="form" label-width="80px">
@@ -64,7 +60,11 @@
                   <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                  <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
+                  <el-input
+                    v-model="form.password"
+                    type="password"
+                    placeholder="请输入密码"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="角色">
                   <el-select v-model="form.role" placeholder="请选择角色">
@@ -74,7 +74,7 @@
                 </el-form-item>
               </el-form>
             </div>
-            
+
             <div class="component-item">
               <h4>消息组件</h4>
               <div class="message-group">
@@ -84,7 +84,7 @@
                 <el-button @click="showNotification">通知</el-button>
               </div>
             </div>
-            
+
             <div class="component-item">
               <h4>数据展示</h4>
               <el-table :data="tableData" style="width: 100%">
@@ -100,9 +100,9 @@
         <div class="section">
           <h3>CSS 变量覆盖检查</h3>
           <div class="variables-info">
-            <el-alert 
-              title="主题变量统计" 
-              type="info" 
+            <el-alert
+              title="主题变量统计"
+              type="info"
               :closable="false"
               description="当前已覆盖 328+ Element Plus CSS 变量，包括所有核心颜色、组件样式和布局变量。"
             />
@@ -139,62 +139,62 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { ElMessage, ElNotification } from 'element-plus'
+import { ref, onMounted } from 'vue';
+import { ElMessage, ElNotification } from 'element-plus';
 
-const isDark = ref(false)
+const isDark = ref(false);
 const form = ref({
   username: '',
   password: '',
-  role: ''
-})
+  role: '',
+});
 
 const tableData = ref([
   {
     date: '2016-05-02',
     name: '王小虎',
-    address: '上海市普陀区金沙江路 1518 弄'
+    address: '上海市普陀区金沙江路 1518 弄',
   },
   {
     date: '2016-05-04',
     name: '王小虎',
-    address: '上海市普陀区金沙江路 1517 弄'
+    address: '上海市普陀区金沙江路 1517 弄',
   },
   {
     date: '2016-05-01',
     name: '王小虎',
-    address: '上海市普陀区金沙江路 1519 弄'
-  }
-])
+    address: '上海市普陀区金沙江路 1519 弄',
+  },
+]);
 
 const toggleTheme = () => {
-  isDark.value = !isDark.value
+  isDark.value = !isDark.value;
   if (isDark.value) {
-    document.documentElement.classList.add('dark')
+    document.documentElement.classList.add('dark');
   } else {
-    document.documentElement.classList.remove('dark')
+    document.documentElement.classList.remove('dark');
   }
-}
+};
 
 const showMessage = (type: 'success' | 'warning' | 'error') => {
   ElMessage({
     message: `这是一条${type}消息`,
     type,
-  })
-}
+  });
+};
 
 const showNotification = () => {
   ElNotification({
     title: '主题集成成功',
     message: 'Element Plus 和 Tailwind CSS 主题已完全融合',
     type: 'success',
-  })
-}
+  });
+};
 
 onMounted(() => {
   // 检查当前主题
-  isDark.value = document.documentElement.classList.contains('dark')
-})
+  isDark.value = document.documentElement.classList.contains('dark');
+});
 </script>
 
 <style scoped>
@@ -248,11 +248,21 @@ onMounted(() => {
   border: 1px solid var(--el-border-color);
 }
 
-.color-box.primary { background-color: var(--el-color-primary); }
-.color-box.success { background-color: var(--el-color-success); }
-.color-box.warning { background-color: var(--el-color-warning); }
-.color-box.danger { background-color: var(--el-color-danger); }
-.color-box.info { background-color: var(--el-color-info); }
+.color-box.primary {
+  background-color: var(--el-color-primary);
+}
+.color-box.success {
+  background-color: var(--el-color-success);
+}
+.color-box.warning {
+  background-color: var(--el-color-warning);
+}
+.color-box.danger {
+  background-color: var(--el-color-danger);
+}
+.color-box.info {
+  background-color: var(--el-color-info);
+}
 
 .component-grid {
   display: grid;

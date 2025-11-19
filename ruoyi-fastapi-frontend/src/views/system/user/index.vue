@@ -1,38 +1,35 @@
 <template>
   <ZxContentWrap title="用户管理" contentPadding="0px 20px 20px 0">
     <template #header-right>
-      <ZxButton
-        type="primary"
-        icon="Plus"
-        @click="handleAdd"
-        v-hasPermi="['system:user:add']"
-      >新增</ZxButton>
+      <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:user:add']"
+        >新增</ZxButton
+      >
       <ZxButton
         type="success"
         icon="Edit"
         :disabled="single"
         @click="handleUpdate"
         v-hasPermi="['system:user:edit']"
-      >修改</ZxButton>
+        >修改</ZxButton
+      >
       <ZxButton
         type="danger"
         icon="Delete"
         :disabled="multiple"
         @click="handleDelete"
         v-hasPermi="['system:user:remove']"
-      >删除</ZxButton>
-      <ZxButton
-        type="info"
-        icon="Upload"
-        @click="handleImport"
-        v-hasPermi="['system:user:import']"
-      >导入</ZxButton>
+        >删除</ZxButton
+      >
+      <ZxButton type="info" icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']"
+        >导入</ZxButton
+      >
       <ZxButton
         type="warning"
         icon="Download"
         @click="() => onExport({ query })"
         v-hasPermi="['system:user:export']"
-      >导出</ZxButton>
+        >导出</ZxButton
+      >
     </template>
     <div class="h-full">
       <zx-split-box
@@ -70,32 +67,38 @@
         <!-- 用户数据 -->
         <template #second>
           <div class="h-full">
-            <ZxGridList ref="gridListRef" :load-data="loadUserData" class="zx-grid-list--page" :pageViewportOffset="10">
+            <ZxGridList
+              ref="gridListRef"
+              :load-data="loadUserData"
+              class="zx-grid-list--page"
+              :pageViewportOffset="10"
+            >
               <template #form="{ query, loading, refresh: handleRefresh, updateState }">
                 <div class="zx-grid-form-bar">
-                  <div class="zx-grid-form-bar__left">
-                  </div>
+                  <div class="zx-grid-form-bar__left"></div>
                   <div class="zx-grid-form-bar__filters">
                     <el-input
                       v-model="query.userName"
                       placeholder="请输入用户名称"
                       clearable
                       style="width: 240px"
-                      @change="v => onFilterChange('userName', v, { handleRefresh, updateState })"
+                      @change="(v) => onFilterChange('userName', v, { handleRefresh, updateState })"
                     />
                     <el-input
                       v-model="query.phonenumber"
                       placeholder="请输入手机号码"
                       clearable
                       style="width: 240px"
-                      @change="v => onFilterChange('phonenumber', v, { handleRefresh, updateState })"
+                      @change="
+                        (v) => onFilterChange('phonenumber', v, { handleRefresh, updateState })
+                      "
                     />
                     <el-select
                       v-model="query.status"
                       placeholder="用户状态"
                       clearable
                       style="width: 240px"
-                      @change="v => onFilterChange('status', v, { handleRefresh, updateState })"
+                      @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
                     >
                       <el-option
                         v-for="dict in sys_normal_disable"
@@ -112,7 +115,9 @@
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
                       style="width: 308px"
-                      @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+                      @change="
+                        (v) => onFilterChange('dateRange', v, { handleRefresh, updateState })
+                      "
                     />
                   </div>
                   <div class="zx-grid-form-bar__right">
@@ -194,11 +199,7 @@
                       <span>{{ parseTime(scope.row.createTime) }}</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    label="操作"
-                    width="200"
-                    class-name="small-padding fixed-width"
-                  >
+                  <el-table-column label="操作" width="200" class-name="small-padding fixed-width">
                     <template #default="scope">
                       <div class="op-col__wrap">
                         <ZxButton
@@ -206,20 +207,21 @@
                           type="text"
                           @click="handleUpdate(scope.row)"
                           v-hasPermi="['system:user:edit']"
-                        >修改</ZxButton>
+                          >修改</ZxButton
+                        >
                         <ZxButton
                           v-if="scope.row.userId !== 1"
                           type="text"
                           @click="handleAuthRole(scope.row)"
                           v-hasPermi="['system:user:edit']"
-                        >分配角色</ZxButton>
+                          >分配角色</ZxButton
+                        >
                         <ZxMoreAction
                           v-if="scope.row.userId !== 1 && getUserMoreActionList(scope.row).length"
                           :list="getUserMoreActionList(scope.row)"
                           @select="handleMoreActionSelect($event, scope.row)"
                         />
                       </div>
-
                     </template>
                   </el-table-column>
                 </el-table>
@@ -517,7 +519,7 @@ const filterNode = (value, data) => {
   return data.label.indexOf(value) !== -1;
 };
 /** 根据名称筛选部门树 */
-watch(deptName, val => {
+watch(deptName, (val) => {
   proxy.$refs['deptTreeRef'].filter(val);
 });
 /** GridList 数据加载 */
@@ -532,14 +534,14 @@ async function loadUserData(params) {
 }
 /** 查询部门下拉树结构 */
 function getDeptTree() {
-  deptTreeSelect().then(response => {
+  deptTreeSelect().then((response) => {
     deptOptions.value = response.data;
     enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(response.data)));
   });
 }
 /** 过滤禁用的部门 */
 function filterDisabledDept(deptList) {
-  return deptList.filter(dept => {
+  return deptList.filter((dept) => {
     if (dept.disabled) {
       return false;
     }
@@ -629,14 +631,14 @@ function handleResetPwd(row) {
       closeOnClickModal: false,
       inputPattern: /^.{5,20}$/,
       inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
-      inputValidator: value => {
+      inputValidator: (value) => {
         if (/<|>|"|'|\||\\/.test(value)) {
           return '不能包含非法字符：< > " \' \\\ |';
         }
       },
     })
     .then(({ value }) => {
-      resetUserPwd(row.userId, value).then(response => {
+      resetUserPwd(row.userId, value).then((response) => {
         proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
       });
     })
@@ -644,7 +646,7 @@ function handleResetPwd(row) {
 }
 /** 选择条数  */
 function handleSelectionChange(selection) {
-  ids.value = selection.map(item => item.userId);
+  ids.value = selection.map((item) => item.userId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -705,7 +707,7 @@ function cancel() {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  getUser().then(response => {
+  getUser().then((response) => {
     postOptions.value = response.posts;
     roleOptions.value = response.roles;
     open.value = true;
@@ -717,7 +719,7 @@ function handleAdd() {
 function handleUpdate(row) {
   reset();
   const userId = row.userId || ids.value;
-  getUser(userId).then(response => {
+  getUser(userId).then((response) => {
     form.value = response.data;
     postOptions.value = response.posts;
     roleOptions.value = response.roles;
@@ -730,16 +732,16 @@ function handleUpdate(row) {
 }
 /** 提交按钮 */
 function submitForm() {
-  proxy.$refs['userRef'].validate(valid => {
+  proxy.$refs['userRef'].validate((valid) => {
     if (valid) {
       if (form.value.userId != undefined) {
-        updateUser(form.value).then(response => {
+        updateUser(form.value).then((response) => {
           proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           refreshList();
         });
       } else {
-        addUser(form.value).then(response => {
+        addUser(form.value).then((response) => {
           proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           refreshList();
