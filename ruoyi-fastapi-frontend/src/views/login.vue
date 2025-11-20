@@ -19,12 +19,8 @@
         <!-- 右侧登录表单区域 -->
         <div class="flex-1 p-6 lg:p-10 bg-gray-50 relative flex items-center">
           <div class="w-full max-w-md mx-auto">
-            <div class="bg-white rounded-lg shadow p-6">
-              <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">用户登录</h2>
-                <p class="text-base text-gray-500">请输入您的账号和密码</p>
-              </div>
-
+            <div class="bg-white rounded-lg shadow p-8">
+              <Logo :collapse="false" variant="login" class="mb-6"/>
               <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
                 <el-form-item prop="username">
                   <el-input
@@ -98,7 +94,7 @@
                     :loading="loading"
                     type="primary"
                     size="large"
-                    class="w-full !h-10 font-bold tracking-[0.2em] !text-lg"
+                    class="w-full !h-11 font-bold tracking-[0.2em] !text-lg"
                   >
                     {{ loading ? '登录中...' : '登录' }}
                   </ZxButton>
@@ -117,6 +113,7 @@ import { getCodeImg } from '@/api/login';
 import Cookies from 'js-cookie';
 import { encrypt, decrypt } from '@/utils/jsencrypt';
 import useUserStore from '@/store/modules/user';
+import Logo from '@/layout/components/Sidebar/Logo.vue';
 
 const title = import.meta.env.VITE_APP_TITLE;
 const displayTitle = computed(() => {

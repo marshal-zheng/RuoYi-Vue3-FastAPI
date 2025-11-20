@@ -1,7 +1,7 @@
 <template>
   <div
     class="sidebar-logo-container relative w-full flex items-center justify-center overflow-hidden"
-    :class="{ collapse: collapse }"
+    :class="[{ collapse: collapse }, variantClass]"
   >
     <transition name="sidebarLogoFade">
       <router-link
@@ -19,10 +19,8 @@
         class="h-full w-full flex items-center justify-center"
         to="/"
       >
-        <img v-if="logo" :src="logo" class="sidebar-logo w-8 h-8 shrink-0 mr-3" />
-        <h1
-          class="sidebar-title m-0 p-0 text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
-        >
+        <img v-if="logo" :src="logo" :class="logoSizeClass" class="shrink-0 mr-3" />
+        <h1 :class="titleSizeClass" class="sidebar-title m-0 p-0 font-semibold leading-none tracking-[0.5px] select-none">
           {{ title }}
         </h1>
       </router-link>
@@ -33,12 +31,30 @@
 <script setup>
 import logoImg from '@/assets/logo/logo.png';
 import defaultSettings from '@/settings';
+import { computed } from 'vue';
 
-defineProps({
+const props = defineProps({
   collapse: {
     type: Boolean,
     required: true,
   },
+  variant: {
+    type: String,
+    default: 'sidebar', // 'sidebar' | 'login'
+    validator: (value) => ['sidebar', 'login'].includes(value),
+  },
+});
+
+const variantClass = computed(() => {
+  return props.variant === 'login' ? 'login-variant' : '';
+});
+
+const logoSizeClass = computed(() => {
+  return props.variant === 'login' ? 'w-12 h-12' : 'w-8 h-8';
+});
+
+const titleSizeClass = computed(() => {
+  return props.variant === 'login' ? 'text-2xl' : 'text-[16px]';
 });
 
 const title = import.meta.env.VITE_APP_TITLE;
@@ -67,6 +83,12 @@ const logo = showLogoImage ? logoImg : null;
   box-shadow: var(--left-menu-header-shadow);
 }
 
+.sidebar-logo-container.login-variant {
+  background: transparent;
+  box-shadow: none;
+  height: auto;
+}
+
 .sidebar-title {
   color: var(--logo-title-text-color, #f0f4ff);
   font-family:
@@ -76,10 +98,20 @@ const logo = showLogoImage ? logoImg : null;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.sidebar-logo-container.login-variant .sidebar-title {
+  color: #1f2937;
+  text-shadow: none;
+}
+
 .sidebar-title:hover {
   color: var(--logo-title-text-hover-color, #ffffff);
   transform: scale(1.02);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-logo-container.login-variant .sidebar-title:hover {
+  color: #111827;
+  text-shadow: none;
 }
 
 /* collapse 状态下的特殊样式 */
