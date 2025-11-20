@@ -32,6 +32,7 @@
                     type="text"
                     auto-complete="off"
                     placeholder="账号"
+                    size="large"
                   >
                     <template #prefix>
                       <ZxIcon icon="mdi:account" :size="20" class="el-input__icon input-icon" />
@@ -42,13 +43,22 @@
                 <el-form-item prop="password">
                   <el-input
                     v-model="loginForm.password"
-                    type="password"
+                    :type="showPassword ? 'text' : 'password'"
                     auto-complete="off"
                     placeholder="密码"
+                    size="large"
                     @keyup.enter="handleLogin"
                   >
                     <template #prefix>
                       <ZxIcon icon="mdi:lock-outline" :size="20" class="el-input__icon input-icon" />
+                    </template>
+                    <template #suffix>
+                      <ZxIcon 
+                        :icon="showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" 
+                        :size="20" 
+                        class="el-input__icon input-icon cursor-pointer" 
+                        @click="showPassword = !showPassword"
+                      />
                     </template>
                   </el-input>
                 </el-form-item>
@@ -59,20 +69,26 @@
                       v-model="loginForm.code"
                       auto-complete="off"
                       placeholder="验证码"
+                      size="large"
+                      class="flex-1"
                       @keyup.enter="handleLogin"
                     >
                       <template #prefix>
                         <ZxIcon icon="mdi:shield-check-outline" :size="20" class="el-input__icon input-icon" />
                       </template>
                     </el-input>
-                    <div class="cursor-pointer">
-                      <img :src="codeUrl" @click="getCode" />
+                    <div 
+                      class="relative cursor-pointer w-[120px] h-[40px] flex items-center justify-center border border-gray-300 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-sm select-none overflow-hidden group active:scale-[0.98]"
+                      @click="getCode"
+                      title="点击刷新验证码"
+                    >
+                      <img :src="codeUrl" class="h-full w-full object-cover" alt="验证码" />
                     </div>
                   </div>
                 </el-form-item>
 
                 <div class="flex justify-between items-center mb-4">
-                  <el-checkbox v-model="loginForm.rememberMe" class="remember-me">
+                  <el-checkbox v-model="loginForm.rememberMe">
                     记住密码
                   </el-checkbox>
                 </div>
@@ -81,7 +97,8 @@
                   <el-button
                     :loading="loading"
                     type="primary"
-                    class="login-button w-full"
+                    size="large"
+                    class="w-full font-medium tracking-wider"
                     @click.prevent="handleLogin"
                   >
                     <span v-if="!loading">登 录</span>
@@ -114,12 +131,14 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 const loginForm = ref({
-  username: 'admin',
-  password: 'admin123',
+  username: '',
+  password: '',
   rememberMe: false,
   code: '',
   uuid: '',
 });
+
+const showPassword = ref(false);
 
 const loginRules = {
   username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
@@ -208,4 +227,38 @@ getCode();
 getCookie();
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Element Plus 深度样式覆盖 - 只处理无法用 Tailwind 实现的部分 */
+.login-form :deep(.el-form-item__content) {
+  display: block;
+}
+
+.login-form :deep(.el-input__inner) {
+  background-color: #fff !important;
+}
+
+.login-form :deep(.el-input__inner:-webkit-autofill) {
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  -webkit-text-fill-color: #606266 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-form :deep(.el-input__prefix),
+.login-form :deep(.el-input__suffix) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form :deep(.el-input__prefix-inner),
+.login-form :deep(.el-input__suffix-inner) {
+  display: flex;
+  align-items: center;
+}
+
+.login-form :deep(.el-input.is-active .el-input__inner),
+.login-form :deep(.el-input__inner:focus) {
+  border-color: #409eff;
+  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+}
+</style>
