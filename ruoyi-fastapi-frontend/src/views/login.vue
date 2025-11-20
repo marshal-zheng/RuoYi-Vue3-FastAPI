@@ -20,9 +20,9 @@
         <div class="flex-1 p-6 lg:p-10 bg-gray-50 relative flex items-center">
           <div class="w-full max-w-md mx-auto">
             <div class="bg-white rounded-lg shadow p-6">
-              <div class="text-center mb-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-1">用户登录</h2>
-                <p class="text-gray-500">请输入您的账号和密码</p>
+              <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">用户登录</h2>
+                <p class="text-base text-gray-500">请输入您的账号和密码</p>
               </div>
 
               <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
@@ -94,16 +94,14 @@
                 </div>
 
                 <el-form-item>
-                  <el-button
+                  <ZxButton
                     :loading="loading"
                     type="primary"
                     size="large"
-                    class="w-full font-medium tracking-wider"
-                    @click.prevent="handleLogin"
+                    class="w-full !h-10 font-bold tracking-[0.2em] !text-lg"
                   >
-                    <span v-if="!loading">登 录</span>
-                    <span v-else>登 录 中...</span>
-                  </el-button>
+                    {{ loading ? '登录中...' : '登录' }}
+                  </ZxButton>
                 </el-form-item>
               </el-form>
             </div>
