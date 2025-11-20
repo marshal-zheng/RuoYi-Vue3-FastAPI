@@ -95,6 +95,7 @@
                     type="primary"
                     size="large"
                     class="w-full !h-11 font-bold tracking-[0.2em] !text-lg"
+                    @click="handleLogin"
                   >
                     {{ loading ? '登录中...' : '登录' }}
                   </ZxButton>
