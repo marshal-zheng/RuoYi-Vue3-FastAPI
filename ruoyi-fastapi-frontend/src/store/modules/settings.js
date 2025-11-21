@@ -5,8 +5,16 @@ import { useDynamicTitle } from '@/utils/dynamicTitle';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { sideTheme, showSettings, topNav, tagsView, fixedHeader, sidebarLogo, dynamicTitle } =
-  defaultSettings;
+const {
+  sideTheme,
+  showSettings,
+  topNav,
+  topNavBorder,
+  tagsView,
+  fixedHeader,
+  sidebarLogo,
+  dynamicTitle,
+} = defaultSettings;
 
 const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || '';
 
@@ -24,6 +32,8 @@ const useSettingsStore = defineStore('settings', {
       storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
     dynamicTitle:
       storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle,
+    topNavBorder:
+      storageSetting.topNavBorder === undefined ? topNavBorder : storageSetting.topNavBorder,
     isDark: isDark.value,
   }),
   actions: {

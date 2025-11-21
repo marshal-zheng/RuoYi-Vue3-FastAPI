@@ -73,6 +73,13 @@
     </div>
 
     <div class="drawer-item">
+      <span>TopNav 下划线</span>
+      <span class="comp-style">
+        <el-switch v-model="settingsStore.topNavBorder" class="drawer-switch" />
+      </span>
+    </div>
+
+    <div class="drawer-item">
       <span>开启 Tags-Views</span>
       <span class="comp-style">
         <el-switch v-model="settingsStore.tagsView" class="drawer-switch" />
@@ -163,6 +170,7 @@ function saveSetting() {
     dynamicTitle: storeSettings.value.dynamicTitle,
     sideTheme: storeSettings.value.sideTheme,
     theme: storeSettings.value.theme,
+    topNavBorder: storeSettings.value.topNavBorder,
   };
   localStorage.setItem('layout-setting', JSON.stringify(layoutSetting));
   setTimeout(proxy.$modal.closeLoading(), 1000);

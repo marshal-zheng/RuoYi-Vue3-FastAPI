@@ -5,6 +5,7 @@ interface SettingsConfig {
   sideTheme: string;
   showSettings: boolean;
   topNav: boolean;
+  topNavBorder: boolean;
   tagsView: boolean;
   fixedHeader: boolean;
   sidebarLogo: boolean;
@@ -32,6 +33,11 @@ const settings: SettingsConfig = {
    * 是否显示顶部导航
    */
   topNav: false,
+
+  /**
+   * 是否显示顶部导航下划线
+   */
+  topNavBorder: false,
 
   /**
    * 是否显示 tagsView

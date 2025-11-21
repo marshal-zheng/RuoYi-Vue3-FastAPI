@@ -1,5 +1,11 @@
 <template>
-  <el-menu :default-active="activeMenu" mode="horizontal" @select="handleSelect" :ellipsis="false">
+  <el-menu
+    :default-active="activeMenu"
+    mode="horizontal"
+    @select="handleSelect"
+    :ellipsis="false"
+    :class="{ 'has-bottom-border': settingsStore.topNavBorder }"
+  >
     <template v-for="(item, index) in topMenus">
       <el-menu-item
         :style="{ '--theme': theme }"
@@ -193,42 +199,74 @@ onMounted(() => {
   border-bottom: none;
   background-color: transparent;
   box-shadow: none;
+  display: flex;
+  align-items: center;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item,
 .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
-  float: left;
+  float: none;
   height: var(--top-header-height) !important;
   line-height: var(--top-header-height) !important;
   color: var(--top-header-breadcrumb-color) !important;
-  padding: 0 8px !important;
-  margin: 0 6px !important;
-  font-size: 14px;
+  padding: 0 16px !important;
+  margin: 0 !important;
+  font-size: 15px;
   font-weight: 500;
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+  border-radius: 0;
+  border-bottom: 3px solid transparent !important;
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Active State - Conditional Styles handled via class or just generic overrides */
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
-.topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-submenu__title {
-  border-bottom: none !important;
-  background-color: var(--top-header-menu-active-bg);
-  color: var(--top-header-breadcrumb-hover-color) !important;
+.topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  color: #ffffff !important;
+  font-weight: 700 !important; /* Bold text for active state */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for legibility */
 }
 
-/* 背景色与顶部渐变协调，避免出现一条纯白色横条 */
+/* When Border is ON (default behavior if we didn't have the toggle, but here we use the store value) */
+/* We need to use :deep or global styles if we can't access store in CSS, but we can use dynamic style binding or just rely on the fact that we are in a scoped style or similar.
+   However, this file has a non-scoped <style> block.
+   To implement the toggle, I will bind a class to the container in the template and use it here.
+*/
+
+/* Default (Border OFF): Stronger background, no border */
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active,
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-sub-menu.is-active .el-sub-menu__title {
+  background-color: rgba(255, 255, 255, 0.15) !important; /* Subtler background */
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15); /* Inner glow for depth */
+  border-bottom-color: transparent !important;
+}
+
+/* Border ON: Subtle background, white border */
+.topmenu-container.el-menu--horizontal.has-bottom-border > .el-menu-item.is-active,
+.topmenu-container.el-menu--horizontal.has-bottom-border > .el-sub-menu.is-active .el-sub-menu__title {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border-bottom-color: #ffffff !important;
+}
+
+/* Hover & Focus State */
+/* Ensure focus doesn't override the active look with something ugly */
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
 .topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-.topmenu-container.el-menu--horizontal > .el-sub-menu .el-submenu__title:hover {
-  background-color: var(--top-header-menu-hover-bg);
-  color: var(--top-header-breadcrumb-hover-color) !important;
+.topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Fix for active item focus state to match active state */
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active:focus,
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-sub-menu.is-active .el-sub-menu__title:focus {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15);
 }
 
 /* 图标右间距 */
 .topmenu-container .zx-icon {
-  margin-right: 4px;
+  margin-right: 6px;
 }
 
 /* topmenu more arrow */

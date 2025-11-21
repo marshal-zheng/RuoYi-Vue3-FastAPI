@@ -98,17 +98,6 @@ const activeMenu = computed(() => {
       &:hover {
         color: var(--left-menu-text-active-color) !important;
         background-color: transparent !important;
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          left: var(--left-menu-active-bar-width);
-          background: var(--left-menu-hover-bg-color);
-          border-top-right-radius: 8px;
-          border-bottom-right-radius: 8px;
-          z-index: -1;
-        }
       }
     }
 
@@ -192,7 +181,29 @@ const activeMenu = computed(() => {
     .el-menu {
       background-color: var(--left-menu-bg-color) !important;
 
-      .el-sub-menu__title,
+      .el-sub-menu__title {
+        position: relative;
+        z-index: 0;
+        background-color: transparent !important;
+
+        // 左侧缩进指示线
+        &::before {
+          content: '';
+          position: absolute;
+          left: 16px;
+          top: 0;
+          bottom: 0;
+          width: 2px;
+          background-color: var(--left-menu-indent-color);
+          z-index: 1;
+        }
+
+        &:hover {
+          background-color: transparent !important;
+          color: var(--left-menu-text-active-color) !important;
+        }
+      }
+
       .el-menu-item {
         position: relative;
         z-index: 0;

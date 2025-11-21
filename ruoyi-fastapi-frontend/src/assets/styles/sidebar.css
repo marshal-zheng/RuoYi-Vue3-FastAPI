@@ -24,6 +24,7 @@
     z-index: 1001;
     overflow: hidden;
     box-shadow: 0 12px 30px rgba(17, 40, 84, 0.08);
+
     /* 当侧边栏不展示 Logo（此时 tagsView 通常为 false，Logo 在 Header 中）时，
        给菜单与顶部 Header 留出一点间距，避免菜单项紧贴 Header 底部 */
     &.no-logo-spacing {
@@ -83,21 +84,21 @@
     display: inline-block !important;
   }
 
-  .sidebar-container .theme-dark .is-active > .el-sub-menu__title {
+  .sidebar-container .theme-dark .is-active>.el-sub-menu__title {
     color: var(--base-menu-color-active) !important;
   }
 
-  .sidebar-container .nest-menu .el-sub-menu > .el-sub-menu__title,
+  .sidebar-container .nest-menu .el-sub-menu>.el-sub-menu__title,
   .sidebar-container .el-sub-menu .el-menu-item {
     min-width: var(--base-sidebar-width) !important;
   }
 
-  .sidebar-container .theme-dark .nest-menu .el-sub-menu > .el-sub-menu__title,
+  .sidebar-container .theme-dark .nest-menu .el-sub-menu>.el-sub-menu__title,
   .sidebar-container .theme-dark .el-sub-menu .el-menu-item {
     background-color: var(--base-sub-menu-background);
   }
 
-  .sidebar-container .theme-dark .nest-menu .el-sub-menu > .el-sub-menu__title:hover,
+  .sidebar-container .theme-dark .nest-menu .el-sub-menu>.el-sub-menu__title:hover,
   .sidebar-container .theme-dark .el-sub-menu .el-menu-item:hover {
     background-color: var(--base-sub-menu-hover) !important;
   }
@@ -128,15 +129,15 @@
     overflow: hidden;
   }
 
-  .hideSidebar .el-sub-menu > .el-sub-menu__title {
+  .hideSidebar .el-sub-menu>.el-sub-menu__title {
     padding: 0 !important;
   }
 
-  .hideSidebar .el-sub-menu > .el-sub-menu__title .svg-icon {
+  .hideSidebar .el-sub-menu>.el-sub-menu__title .svg-icon {
     margin-left: 20px;
   }
 
-  .hideSidebar .el-menu--collapse .el-sub-menu > .el-sub-menu__title > span {
+  .hideSidebar .el-menu--collapse .el-sub-menu>.el-sub-menu__title>span {
     height: 0;
     width: 0;
     overflow: hidden;
@@ -144,7 +145,7 @@
     display: inline-block;
   }
 
-  .hideSidebar .el-menu--collapse .el-sub-menu > .el-sub-menu__title > i {
+  .hideSidebar .el-menu--collapse .el-sub-menu>.el-sub-menu__title>i {
     height: 0;
     width: 0;
     overflow: hidden;
@@ -180,25 +181,25 @@
 }
 
 /* Vertical menu styles */
-.el-menu--vertical > .el-menu .svg-icon {
+.el-menu--vertical>.el-menu .svg-icon {
   margin-right: 16px;
 }
 
 /* Popup menu scrollbar */
-.el-menu--vertical > .el-menu--popup {
+.el-menu--vertical>.el-menu--popup {
   max-height: 100vh;
   overflow-y: auto;
 }
 
-.el-menu--vertical > .el-menu--popup::-webkit-scrollbar-track-piece {
+.el-menu--vertical>.el-menu--popup::-webkit-scrollbar-track-piece {
   background: #d3dce6;
 }
 
-.el-menu--vertical > .el-menu--popup::-webkit-scrollbar {
+.el-menu--vertical>.el-menu--popup::-webkit-scrollbar {
   width: 6px;
 }
 
-.el-menu--vertical > .el-menu--popup::-webkit-scrollbar-thumb {
+.el-menu--vertical>.el-menu--popup::-webkit-scrollbar-thumb {
   background: #99a9bf;
   border-radius: 20px;
 }
