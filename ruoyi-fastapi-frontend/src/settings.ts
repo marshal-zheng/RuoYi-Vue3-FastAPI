@@ -10,6 +10,7 @@ interface SettingsConfig {
   sidebarLogo: boolean;
   showLogoImage: boolean;
   dynamicTitle: boolean;
+  uniqueOpened: boolean;
   errorLog: string | string[];
 }
 
@@ -50,12 +51,17 @@ const settings: SettingsConfig = {
   /**
    * 是否显示logo图片（为false时只显示文字标题）
    */
-  showLogoImage: true,
+  showLogoImage: false,
 
   /**
    * 是否显示动态标题
    */
   dynamicTitle: false,
+
+  /**
+   * 是否只保持一个子菜单的展开（设置为 false 可以同时展开多个菜单）
+   */
+  uniqueOpened: true,
 
   /**
    * @type {string | array} 'production' | ['production', 'development']

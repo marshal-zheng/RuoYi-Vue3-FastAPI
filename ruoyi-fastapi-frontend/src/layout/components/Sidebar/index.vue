@@ -7,7 +7,7 @@
         :collapse="isCollapse"
         background-color="var(--left-menu-bg-color)"
         text-color="var(--left-menu-text-color)"
-        :unique-opened="true"
+        :unique-opened="settingsStore.uniqueOpened"
         active-text-color="var(--left-menu-text-active-color)"
         :collapse-transition="false"
         mode="vertical"
@@ -38,11 +38,16 @@ const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
-// 仅在开启 tagsView 时展示侧边栏 Logo，关闭 tagsView 时由 Header 中的 Logo 承担展示
-const showLogo = computed(() => settingsStore.sidebarLogo && settingsStore.tagsView);
 const sideTheme = computed(() => settingsStore.sideTheme);
 const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
+
+// 展示侧边栏 Logo 的策略：
+// - 默认：开启 tagsView 时，始终在 Sidebar 顶部展示 Logo（兼容原 RuoYi 行为）
+// - 关闭 tagsView 时：仅在侧边栏收起时展示缩略 Logo，展开时由 Header 区域的 Logo 承担品牌展示，避免重复
+const showLogo = computed(
+  () => settingsStore.sidebarLogo && (settingsStore.tagsView || isCollapse.value)
+);
 
 // 获取菜单背景色
 const getMenuBackground = computed(() => {
