@@ -31,3 +31,5 @@ package-lock.json
 # Vite temporary files
 *.timestamp-*
 .kiro/
+.env.development
+
