@@ -48,7 +48,7 @@ COMMIT;
 
 -- 演示数据
 INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
-SELECT '以太网协议', '以太网', '0', '标准以太网通信协议，支持10/100/1000Mbps传输', '{}', 'admin', NOW()
+SELECT '以太网协议', 'LAN', '0', '标准以太网通信协议，支持10/100/1000Mbps传输', '{}', 'admin', NOW()
 WHERE NOT EXISTS (SELECT 1 FROM `sys_protocol` WHERE `protocol_name` = '以太网协议');
 
 INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
@@ -72,23 +72,23 @@ SELECT 100, '协议类型', 'sys_protocol_type', '0', 'admin', NOW(), '', NULL, 
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_type');
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 100, 1, '以太网', 'ethernet', 'sys_protocol_type', '', 'primary', 'N', '0', 'admin', NOW(), '', NULL, '以太网协议'
+SELECT 100, 1, 'LAN', 'LAN', 'sys_protocol_type', '', 'primary', 'N', '0', 'admin', NOW(), '', NULL, '以太网协议'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 100);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 101, 2, 'RS422', 'rs422', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', NOW(), '', NULL, 'RS422串口协议'
+SELECT 101, 2, 'RS422', 'RS422', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', NOW(), '', NULL, 'RS422串口协议'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 101);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 102, 3, 'RS485', 'rs485', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', NOW(), '', NULL, 'RS485串口协议'
+SELECT 102, 3, 'RS485', 'RS485', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', NOW(), '', NULL, 'RS485串口协议'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 102);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 103, 4, 'CAN', 'can', 'sys_protocol_type', '', 'warning', 'N', '0', 'admin', NOW(), '', NULL, 'CAN总线协议'
+SELECT 103, 4, 'CAN', 'CAN', 'sys_protocol_type', '', 'warning', 'N', '0', 'admin', NOW(), '', NULL, 'CAN总线协议'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 103);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 104, 5, '1553B', '1553b', 'sys_protocol_type', '', 'danger', 'N', '0', 'admin', NOW(), '', NULL, '1553B总线协议'
+SELECT 104, 5, '1553B', '1553B', 'sys_protocol_type', '', 'danger', 'N', '0', 'admin', NOW(), '', NULL, '1553B总线协议'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 104);
 
 -- 2.2 传输频率

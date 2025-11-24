@@ -547,10 +547,11 @@ insert into sys_dict_data values(32, 2,  '失败',     '1',       		'sys_common_
 -- ----------------------------
 -- 协议类型字典
 insert into sys_dict_type values(100, '协议类型', 'sys_protocol_type', '0', 'admin', sysdate(), '', null, '协议通信类型列表');
-insert into sys_dict_data values(100, 1, '以太网', 'ethernet', 'sys_protocol_type', '', 'primary', 'N', '0', 'admin', sysdate(), '', null, '以太网协议');
-insert into sys_dict_data values(101, 2, 'RS422', 'rs422', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', sysdate(), '', null, 'RS422串口协议');
-insert into sys_dict_data values(102, 3, 'CAN', 'can', 'sys_protocol_type', '', 'warning', 'N', '0', 'admin', sysdate(), '', null, 'CAN总线协议');
-insert into sys_dict_data values(103, 4, '1553B', '1553b', 'sys_protocol_type', '', 'danger', 'N', '0', 'admin', sysdate(), '', null, '1553B总线协议');
+insert into sys_dict_data values(100, 1, 'LAN', 'LAN', 'sys_protocol_type', '', 'primary', 'N', '0', 'admin', sysdate(), '', null, '以太网协议');
+insert into sys_dict_data values(101, 2, 'RS422', 'RS422', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', sysdate(), '', null, 'RS422串口协议');
+insert into sys_dict_data values(102, 3, 'RS485', 'RS485', 'sys_protocol_type', '', 'success', 'N', '0', 'admin', sysdate(), '', null, 'RS485串口协议');
+insert into sys_dict_data values(103, 4, 'CAN', 'CAN', 'sys_protocol_type', '', 'warning', 'N', '0', 'admin', sysdate(), '', null, 'CAN总线协议');
+insert into sys_dict_data values(104, 5, '1553B', '1553B', 'sys_protocol_type', '', 'danger', 'N', '0', 'admin', sysdate(), '', null, '1553B总线协议');
 
 -- 传输频率字典
 insert into sys_dict_type values(101, '传输频率', 'sys_protocol_frequency', '0', 'admin', sysdate(), '', null, '协议传输频率列表');
