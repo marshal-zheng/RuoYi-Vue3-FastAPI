@@ -21,6 +21,42 @@ export let isRelogin: ReloginState = { show: false };
 
 const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
 
+const hasValue = (value: unknown): boolean => value !== null && value !== undefined;
+
+interface PagerInfo {
+  page?: number;
+  size?: number;
+  total?: number;
+}
+
+const resolvePager = (source?: Record<string, any>): PagerInfo | null => {
+  if (!source) return null;
+  const page = source.pageNum ?? source.page;
+  const size = source.pageSize ?? source.size;
+  const total = source.total;
+  if ([page, size, total].some(hasValue)) {
+    return { page, size, total };
+  }
+  return null;
+};
+
+const attachPager = (data: unknown): void => {
+  if (!data || typeof data !== 'object') return;
+  const payload = data as Record<string, any>;
+  const candidates: Record<string, any>[] = [];
+  if (payload && !candidates.includes(payload)) {
+    candidates.push(payload);
+  }
+  if (payload.data && typeof payload.data === 'object' && !candidates.includes(payload.data)) {
+    candidates.push(payload.data as Record<string, any>);
+  }
+  const pager = resolvePager(payload) || resolvePager(payload.data as Record<string, any>);
+  if (!pager) return;
+  candidates.forEach((target) => {
+    target.pager = { page: pager.page, size: pager.size, total: pager.total };
+  });
+};
+
 const isPlainObject = (value: unknown): value is Record<string, any> => {
   return Object.prototype.toString.call(value) === '[object Object]';
 };
@@ -199,6 +235,7 @@ service.interceptors.response.use(
       ElNotification.error({ title: msg });
       return Promise.reject('error');
     } else {
+      attachPager(res.data);
       return Promise.resolve(res.data);
     }
   },
