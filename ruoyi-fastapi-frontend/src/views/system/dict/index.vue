@@ -202,18 +202,14 @@ const data = reactive({
 const { form, rules } = toRefs(data);
 
 async function loadDictData(params) {
-  try {
-    const { pageNum, pageSize, ...query } = params || {};
-    let requestParams = { pageNum, pageSize, ...query };
-    if (query.dateRange && query.dateRange.length === 2) {
-      requestParams = proxy.addDateRange(requestParams, query.dateRange);
-      delete requestParams.dateRange;
-    }
-    const response = await listType(requestParams);
-    return { list: response.rows || [], total: response.total || 0 };
-  } catch (e) {
-    return { list: [], total: 0 };
+  const { pageNum, pageSize, ...query } = params || {};
+  let requestParams = { pageNum, pageSize, ...query };
+  if (query.dateRange && query.dateRange.length === 2) {
+    requestParams = proxy.addDateRange(requestParams, query.dateRange);
+    delete requestParams.dateRange;
   }
+  const response = await listType(requestParams);
+  return response;
 }
 function cancel() {
   open.value = false;
