@@ -253,84 +253,98 @@ INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_ty
 SELECT 160, 1, '1M', '1M', 'sys_protocol_speed_1553b', '', '', 'Y', '0', 'admin', NOW(), '', NULL, '1Mbps'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 160);
 
--- 2.8 以太网传输方式
 INSERT INTO sys_dict_type (dict_id, dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 SELECT 114, '以太网传输方式', 'sys_protocol_method_ethernet', '0', 'admin', NOW(), '', NULL, '以太网协议传输方式'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_method_ethernet');
 
-INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 170, 1, 'UDP单播', 'udp_unicast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'UDP单播传输'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 170);
+-- 清理历史上使用 170~173 作为以太网传输方式编码导致的重复数据（与主库 160~163 冲突）
+DELETE FROM sys_dict_data
+WHERE dict_type = 'sys_protocol_method_ethernet'
+  AND dict_code BETWEEN 170 AND 173;
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 171, 2, 'UDP组播', 'udp_multicast', 'sys_protocol_method_ethernet', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'UDP组播传输'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 171);
+SELECT 160, 1, 'UDP单播', 'udp_unicast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'UDP单播传输'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 160);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 172, 3, 'UDP广播', 'udp_broadcast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'UDP广播传输'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 172);
+SELECT 161, 2, 'UDP组播', 'udp_multicast', 'sys_protocol_method_ethernet', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'UDP组播传输'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 161);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 173, 4, 'TCP', 'tcp', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'TCP传输'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 173);
+SELECT 162, 3, 'UDP广播', 'udp_broadcast', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'UDP广播传输'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 162);
+
+INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 163, 4, 'TCP', 'tcp', 'sys_protocol_method_ethernet', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'TCP传输'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 163);
 
 -- 2.9 CAN传输方式
 INSERT INTO sys_dict_type (dict_id, dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 SELECT 115, 'CAN传输方式', 'sys_protocol_method_can', '0', 'admin', NOW(), '', NULL, 'CAN协议传输方式'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_method_can');
 
-INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 180, 1, 'CAN标准帧', 'can_standard', 'sys_protocol_method_can', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'CAN标准帧'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 180);
+-- 清理历史上使用 180~181 作为 CAN 传输方式编码导致的重复数据（与主库 170~171 冲突）
+DELETE FROM sys_dict_data
+WHERE dict_type = 'sys_protocol_method_can'
+  AND dict_code BETWEEN 180 AND 181;
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 181, 2, 'CAN扩展帧', 'can_extended', 'sys_protocol_method_can', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'CAN扩展帧'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 181);
+SELECT 170, 1, 'CAN标准帧', 'can_standard', 'sys_protocol_method_can', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'CAN标准帧'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 170);
+
+INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 171, 2, 'CAN扩展帧', 'can_extended', 'sys_protocol_method_can', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'CAN扩展帧'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 171);
 
 -- 2.10 数据类型
 INSERT INTO sys_dict_type (dict_id, dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 SELECT 116, '数据类型', 'sys_protocol_data_type', '0', 'admin', NOW(), '', NULL, '协议字段数据类型'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_data_type');
 
-INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 190, 1, 'uint8', 'uint8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号8位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 190);
+-- 清理历史上使用 190~199 且为小写的数据类型编码，避免与主库 180~189 的大写数据类型重复
+DELETE FROM sys_dict_data
+WHERE dict_type = 'sys_protocol_data_type'
+  AND dict_code BETWEEN 190 AND 199;
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 191, 2, 'uint16', 'uint16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号16位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 191);
+SELECT 180, 1, 'UINT8', 'UINT8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号8位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 180);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 192, 3, 'uint32', 'uint32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号32位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 192);
+SELECT 181, 2, 'UINT16', 'UINT16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号16位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 181);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 193, 4, 'int8', 'int8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号8位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 193);
+SELECT 182, 3, 'UINT32', 'UINT32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '无符号32位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 182);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 194, 5, 'int16', 'int16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号16位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 194);
+SELECT 183, 4, 'INT8', 'INT8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号8位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 183);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 195, 6, 'int32', 'int32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号32位整数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 195);
+SELECT 184, 5, 'INT16', 'INT16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号16位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 184);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 196, 7, 'float', 'float', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '单精度浮点数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 196);
+SELECT 185, 6, 'INT32', 'INT32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '有符号32位整数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 185);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 197, 8, 'double', 'double', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '双精度浮点数'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 197);
+SELECT 186, 7, 'FLOAT', 'FLOAT', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '单精度浮点数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 186);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 198, 9, 'string', 'string', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '字符串'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 198);
+SELECT 187, 8, 'DOUBLE', 'DOUBLE', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '双精度浮点数'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 187);
 
 INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
-SELECT 199, 10, 'bool', 'bool', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '布尔值'
-WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 199);
+SELECT 188, 9, 'STRING', 'STRING', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '字符串'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 188);
+
+INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 189, 10, 'BOOL', 'BOOL', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', NOW(), '', NULL, '布尔值'
+WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 189);
 
 -- 2.11 错误处理
 INSERT INTO sys_dict_type (dict_id, dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
