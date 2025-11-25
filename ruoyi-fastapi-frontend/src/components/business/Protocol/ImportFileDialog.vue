@@ -21,9 +21,9 @@
         :auto-upload="false"
         :limit="1"
         :accept="acceptTypes"
+        :show-file-list="false"
         :on-change="handleFileChange"
         :on-exceed="handleExceed"
-        :file-list="fileList"
       >
         <el-icon class="el-icon--upload">
           <upload-filled />
@@ -61,7 +61,6 @@ import { ElMessage, ElMessageBox } from 'element-plus';
 import { UploadFilled, Document } from '@element-plus/icons-vue';
 import { saveAs } from 'file-saver';
 import { useDialog } from '@zxio/zxui';
-import * as XLSX from 'xlsx';
 import { downloadProtocolImportTemplate, previewProtocolImport } from '@/api/protocol/protocol';
 
 const props = defineProps({
@@ -144,84 +143,6 @@ async function downloadTemplate() {
   }
 }
 
-// 解析Excel文件获取配置信息
-async function parseProtocolConfig(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-        const configSheetName = workbook.SheetNames.find(
-          (name) => name.includes('配置') || name.includes('Config') || name.includes('Header')
-        );
-
-        if (!configSheetName) {
-          resolve({});
-          return;
-        }
-
-        const worksheet = workbook.Sheets[configSheetName];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-        const config = {};
-        const keyMap = {
-          发送方: 'sender',
-          Sender: 'sender',
-          接收方: 'receiver',
-          Receiver: 'receiver',
-          协议类型: 'protocolType',
-          ProtocolType: 'protocolType',
-          'Protocol Type': 'protocolType',
-          波特率: 'baudRate',
-          BaudRate: 'baudRate',
-          Speed: 'speed',
-          传输频率: 'frequency',
-          发送频率: 'frequency',
-          Frequency: 'frequency',
-          '传输速率/bps': 'speed',
-          校验方式: 'checkMode',
-          CheckMode: 'checkMode',
-          数据位: 'dataBits',
-          DataBits: 'dataBits',
-          停止位: 'stopBits',
-          StopBits: 'stopBits',
-          发送方式: 'method',
-          Method: 'method',
-          '发送时长/ms': 'sendDuration',
-          发送时长: 'duration',
-          Duration: 'duration',
-          '帧长度/Byte': 'frameLength',
-          '帧长度/word': 'frameLength',
-          帧长: 'frameLength',
-          FrameLength: 'frameLength',
-          端口号: 'port',
-          子地址: 'subAddress',
-          错误处理: 'errorHandle',
-          ErrorHandling: 'errorHandle',
-        };
-
-        jsonData.forEach((row) => {
-          if (row.length >= 2) {
-            const key = (row[0] || '').toString().trim();
-            const value = row[1];
-
-            if (keyMap[key]) {
-              config[keyMap[key]] = value;
-            }
-          }
-        });
-
-        resolve(config);
-      } catch {
-        resolve({});
-      }
-    };
-    reader.onerror = () => resolve({});
-    reader.readAsArrayBuffer(file);
-  });
-}
-
 const { dialogProps, dialogEvents, open, close } = useDialog({
   title: () => '导入协议数据',
   width: '600px',
@@ -238,31 +159,21 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
       const formData = new FormData();
       formData.append('file', fileInfo.value);
 
-      const [backendResult, frontendConfig] = await Promise.all([
-        previewProtocolImport(formData),
-        parseProtocolConfig(fileInfo.value),
-      ]);
-
-      console.log('backendResult', backendResult);
-      console.log('frontendConfig', frontendConfig);
-
+      const backendResult = await previewProtocolImport(formData);
       const payload = backendResult?.data || {};
       const fieldCount = payload?.fields?.length || 0;
       const importedProtocolType = payload?.protocolType;
+      const headerValues = payload?.header ? Object.values(payload.header) : [];
+      const hasHeaderConfig = headerValues.some(
+        (value) => value !== '' && value !== null && value !== undefined
+      );
 
-      const finalResult = {
-        ...payload,
-        header: {
-          ...(payload.header || {}),
-          ...frontendConfig,
-        },
-      };
-
-      const hasConfig = Object.keys(frontendConfig).length > 0;
-      if (!fieldCount && !hasConfig) {
+      if (!fieldCount && !hasHeaderConfig) {
         ElMessage.warning('文件中没有有效的数据（字段或配置）');
         throw new Error('empty_data');
       }
+
+      const finalResult = { ...payload };
 
       if (
         importedProtocolType &&
@@ -290,7 +201,7 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
 
       let msg = '导入成功';
       if (fieldCount) msg += `，包含 ${fieldCount} 个字段`;
-      if (hasConfig) msg += `，已更新协议配置`;
+      if (hasHeaderConfig) msg += '，已更新协议配置';
       ElMessage.success(msg);
 
       close();
@@ -306,6 +217,7 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
 });
 
 function onClose() {
+  uploadRef.value?.clearFiles();
   fileList.value = [];
   fileInfo.value = null;
   emit('close');

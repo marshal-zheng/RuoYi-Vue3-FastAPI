@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 import pandas as pd
 from fastapi import UploadFile
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, PatternFill
+from openpyxl.styles import Alignment, PatternFill, Border, Side, Font, Protection
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -103,6 +103,8 @@ HEADER_FIELDS = [
     ('errorHandling', '错误处理'),
 ]
 
+NON_EDITABLE_HEADER_KEYS = {'sender', 'receiver'}
+
 HEADER_NUMERIC_KEYS = {'baudRate', 'duration', 'frameLength', 'port', 'sendDuration'}
 HEADER_SHEET_NAMES = ['报文配置', '报文头', 'header', '基础配置', '协议配置表格']
 
@@ -115,7 +117,6 @@ FIELD_COLUMNS = [
     {'key': 'unit', 'label': '量纲', 'width': 12},
     {'key': 'data_type', 'label': '数据类型', 'width': 14},
     {'key': 'scale', 'label': '比例尺', 'width': 12},
-    {'key': 'parent_code', 'label': '父级标识', 'width': 16},
     {'key': 'remark', 'label': '备注', 'width': 24},
 ]
 
@@ -148,8 +149,8 @@ DATA_TYPE_ALIASES = {
 }
 
 DEFAULT_HEADER_SAMPLE = {
-    'sender': '设备A',
-    'receiver': '地面站',
+    'sender': '',
+    'receiver': '',
     'frequency': '单次',
     'baudRate': 115200,
     'method': '422',
@@ -175,7 +176,6 @@ DEFAULT_FIELD_SAMPLE = [
         'unit': '',
         'data_type': 'UINT8',
         'scale': '1',
-        'parent_code': '',
         'remark': ''
     },
     {
@@ -187,7 +187,6 @@ DEFAULT_FIELD_SAMPLE = [
         'unit': '',
         'data_type': 'UINT8',
         'scale': '1',
-        'parent_code': '',
         'remark': ''
     },
     {
@@ -199,7 +198,6 @@ DEFAULT_FIELD_SAMPLE = [
         'unit': '',
         'data_type': 'UINT16',
         'scale': '1',
-        'parent_code': '',
         'remark': ''
     }
 ]
@@ -396,6 +394,16 @@ class ProtocolService:
         header_sheet = workbook.active
         header_sheet.title = '协议配置表格'
 
+        label_fill = PatternFill(start_color='f7f8fa', end_color='f7f8fa', fill_type='solid')
+        value_fill = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
+        head_font = Font(bold=True)
+        thin_border = Border(
+            left=Side(border_style='thin', color='d9d9d9'),
+            right=Side(border_style='thin', color='d9d9d9'),
+            top=Side(border_style='thin', color='d9d9d9'),
+            bottom=Side(border_style='thin', color='d9d9d9'),
+        )
+
         # 空表头行，保持与前端所见格子一致（无标题）
         header_sheet.append(['', '', '', '', ''])
         header_sheet.freeze_panes = 'A2'
@@ -405,17 +413,39 @@ class ProtocolService:
         header_sheet.merge_cells(start_row=first_data_row, start_column=1, end_row=last_row, end_column=1)
         protocol_cell = header_sheet.cell(row=first_data_row, column=1, value=display_name)
         protocol_cell.alignment = Alignment(horizontal='center', vertical='center')
+        protocol_cell.fill = label_fill
+        protocol_cell.font = head_font
+
+        def apply_range_border(sheet, r1, r2, c1, c2):
+            for r in range(r1, r2 + 1):
+                for c in range(c1, c2 + 1):
+                    sheet.cell(row=r, column=c).border = thin_border
+
+        def configure_header_value_cell(cell, key):
+            sample_value = '' if key in NON_EDITABLE_HEADER_KEYS else cls.__header_sample_value(key)
+            cell.value = sample_value
+            cell.fill = value_fill
+            cell.protection = Protection(locked=key in NON_EDITABLE_HEADER_KEYS)
 
         for row_offset, pair in enumerate(layout_rows):
             current_row = first_data_row + row_offset
             if pair:
                 key1, label1 = pair[0]
-                header_sheet.cell(row=current_row, column=2, value=label1).alignment = Alignment(horizontal='center', vertical='center')
-                header_sheet.cell(row=current_row, column=3, value=cls.__header_sample_value(key1))
+                c_label1 = header_sheet.cell(row=current_row, column=2, value=label1)
+                c_label1.alignment = Alignment(horizontal='center', vertical='center')
+                c_label1.fill = label_fill
+                c_label1.font = head_font
+
+                c_val1 = header_sheet.cell(row=current_row, column=3)
+                configure_header_value_cell(c_val1, key1)
             if len(pair) > 1:
                 key2, label2 = pair[1]
-                header_sheet.cell(row=current_row, column=4, value=label2).alignment = Alignment(horizontal='center', vertical='center')
-                header_sheet.cell(row=current_row, column=5, value=cls.__header_sample_value(key2))
+                c_label2 = header_sheet.cell(row=current_row, column=4, value=label2)
+                c_label2.alignment = Alignment(horizontal='center', vertical='center')
+                c_label2.fill = label_fill
+                c_label2.font = head_font
+                c_val2 = header_sheet.cell(row=current_row, column=5)
+                configure_header_value_cell(c_val2, key2)
 
             # 如果当前行只有 label1 / value1，也做横向合并
             if len(pair) == 1 or (len(pair) > 1 and not pair[1][0]):
@@ -426,18 +456,25 @@ class ProtocolService:
         header_sheet.column_dimensions['C'].width = 24
         header_sheet.column_dimensions['D'].width = 18
         header_sheet.column_dimensions['E'].width = 24
+        apply_range_border(header_sheet, first_data_row, last_row, 1, 5)
 
         # 在同一张表下继续绘制字段列表表格，保持与示例一致
         field_table_start = last_row + 2
         for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
             cell = header_sheet.cell(row=field_table_start, column=column_index, value=column_meta['label'])
             cell.alignment = Alignment(horizontal='center', vertical='center')
+            cell.fill = label_fill
+            cell.font = head_font
             header_sheet.column_dimensions[get_column_letter(column_index)].width = column_meta['width']
 
         for row_index, row_data in enumerate(DEFAULT_FIELD_SAMPLE, start=field_table_start + 1):
             for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
                 value = cls.__field_value(column_meta['key'], row_data, row_index - field_table_start)
-                header_sheet.cell(row=row_index, column=column_index, value=value)
+                data_cell = header_sheet.cell(row=row_index, column=column_index, value=value)
+                data_cell.fill = value_fill
+                data_cell.protection = Protection(locked=False)
+        apply_range_border(header_sheet, field_table_start, field_table_start + len(DEFAULT_FIELD_SAMPLE), 1, len(FIELD_COLUMNS))
+        header_sheet.protection.sheet = True
 
         # 同时保留单独的字段列表表，用于导入解析兼容
         field_sheet = workbook.create_sheet(title='字段列表表格')
@@ -584,6 +621,49 @@ class ProtocolService:
                     yield label, row_dict.get(column_names[1], '')
 
     @staticmethod
+    def __fill_header_from_matrix(df: pd.DataFrame, header_result: Dict[str, Optional[str]]):
+        """
+        扫描整个矩阵，兼容“标签/取值写在相邻列或上下单元格”的模板布局。
+        """
+        if df.empty:
+            return
+
+        matrix = df.fillna('').astype(str).values
+        row_count, col_count = matrix.shape
+
+        for row_index in range(row_count):
+            for col_index in range(col_count):
+                cell_value = str(matrix[row_index][col_index]).strip()
+                if not cell_value:
+                    continue
+                key = HEADER_LABEL_TO_KEY.get(cell_value)
+                if key is None:
+                    continue
+
+                current_value = header_result.get(key)
+                if current_value not in (None, ''):
+                    continue
+
+                candidate = ''
+                if col_index + 1 < col_count:
+                    right_value = str(matrix[row_index][col_index + 1]).strip()
+                    if right_value:
+                        candidate = right_value
+
+                if not candidate and row_index + 1 < row_count:
+                    down_value = str(matrix[row_index + 1][col_index]).strip()
+                    if down_value and down_value not in HEADER_LABEL_TO_KEY:
+                        candidate = down_value
+
+                if not candidate:
+                    continue
+
+                normalized_value = ProtocolService.__normalize_header_value(key, candidate)
+                if normalized_value in (None, ''):
+                    continue
+                header_result[key] = normalized_value
+
+    @staticmethod
     def __extract_protocol_type(sheet_map: Dict[str, pd.DataFrame]):
         """
         从报文配置sheet中提取协议类型
@@ -683,6 +763,7 @@ class ProtocolService:
                 if key is None:
                     continue
                 header_result[key] = cls.__normalize_header_value(key, value)
+        cls.__fill_header_from_matrix(df, header_result)
         return header_result
 
     @classmethod
