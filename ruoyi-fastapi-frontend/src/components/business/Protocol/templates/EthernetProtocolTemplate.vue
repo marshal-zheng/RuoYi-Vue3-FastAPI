@@ -13,7 +13,6 @@
         </div>
       </slot>
     </div>
-    {{ configTableData }}
     <!-- 协议配置表格 -->
     <vxe-table
       border
