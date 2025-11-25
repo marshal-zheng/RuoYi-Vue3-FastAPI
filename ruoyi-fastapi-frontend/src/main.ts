@@ -94,8 +94,85 @@ app.use(ElementPlus, {
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
 import VXETablePluginElement from 'vxe-table-plugin-element';
+import VxeDictAutocomplete from '@/components/VxeDictAutocomplete/index.vue';
+import { h } from 'vue';
 
 VXETable.use(VXETablePluginElement);
+
+type DictRendererEvents = {
+  input?: (args: Record<string, unknown>) => void;
+  change?: (args: Record<string, unknown>) => void;
+};
+
+type DictRendererOptions = {
+  props?: {
+    dictType?: string;
+    placeholder?: string;
+    disabled?: boolean;
+    inputType?: string;
+    clearable?: boolean;
+  };
+  events?: DictRendererEvents;
+};
+
+type DictRendererRow = Record<string, string | number | undefined>;
+
+type DictRendererParams = {
+  row: DictRendererRow;
+  column: { field: string };
+  [key: string]: unknown;
+};
+
+VXETable.renderer.add('DictAutocomplete', {
+  // Ensure the input is focused as soon as the cell enters edit mode
+  autofocus: '.el-input__inner',
+  renderEdit(renderOpts, params) {
+    const option = renderOpts as DictRendererOptions;
+    const typedParams = params as unknown as DictRendererParams;
+    const { row, column } = typedParams;
+    const field = column.field;
+    const propFactory = option.props;
+    const resolvedProps =
+      typeof propFactory === 'function' ? propFactory(typedParams) : propFactory || {};
+
+    const emitEvent = (eventName: 'input' | 'change', value: string | number | undefined) => {
+      const handler = option.events?.[eventName];
+      handler?.({
+        ...(typedParams as Record<string, unknown>),
+        value,
+      });
+    };
+
+    const normalizeValue = (val: any) => {
+      if (val && typeof val === 'object' && 'value' in val) {
+        return val.value as string | number | undefined;
+      }
+      return val as string | number | undefined;
+    };
+
+    const handleInput = (value: string | number | undefined) => {
+      row[field] = normalizeValue(value) ?? '';
+      emitEvent('input', row[field]);
+    };
+
+    const handleChange = (value: any) => {
+      row[field] = normalizeValue(value) ?? '';
+      emitEvent('change', value);
+    };
+
+    return [
+      h(VxeDictAutocomplete, {
+        modelValue: row[field],
+        'onUpdate:modelValue': handleInput,
+        onChange: handleChange,
+        params: {
+          ...typedParams,
+          ...(resolvedProps as Record<string, unknown>),
+        },
+      }),
+    ];
+  },
+});
 
 app.use(ZXUI, {
   size: 'default',

@@ -87,12 +87,11 @@ const serializeAsForm = (payload: Record<string, any>): URLSearchParams => {
 };
 
 const normalizeGridParams = (params: Record<string, any>): Record<string, any> => {
-  console.log('params', params);
   const p: Record<string, any> = { ...(params || {}) };
   const pager = p.pager;
   if (pager && typeof pager === 'object') {
-    if (pager.page !== undefined) p.pageNum = pager.page;
-    if (pager.size !== undefined) p.pageSize = pager.size;
+    if (hasValue(pager.page)) p.pageNum = pager.page;
+    if (hasValue(pager.size)) p.pageSize = pager.size;
     delete p.pager;
   }
   const query = p.query;

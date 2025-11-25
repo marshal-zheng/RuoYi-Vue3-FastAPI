@@ -35,13 +35,7 @@
         >刷新缓存</ZxButton
       >
     </template>
-    <ZxGridList
-      ref="gridListRef"
-      :load-data="loadDictData"
-      :show-pagination="true"
-      :load-on-mounted="true"
-      class="zx-grid-list--page"
-    >
+    <ZxGridList ref="gridListRef" :load-data="loadDictData" class="zx-grid-list--page">
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
@@ -90,7 +84,7 @@
         </div>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh }">
+      <template #table="{ grid }">
         <el-table
           v-loading="grid.loading"
           :data="grid.list || []"
@@ -201,14 +195,16 @@ const data = reactive({
 
 const { form, rules } = toRefs(data);
 
-async function loadDictData(params) {
-  const { pageNum, pageSize, ...query } = params || {};
-  let requestParams = { pageNum, pageSize, ...query };
-  if (query.dateRange && query.dateRange.length === 2) {
-    requestParams = proxy.addDateRange(requestParams, query.dateRange);
-    delete requestParams.dateRange;
+async function loadDictData(params = {}) {
+  const { dateRange, ...restQuery } = params.query || {};
+  if (Array.isArray(dateRange) && dateRange.length === 2) {
+    params.query = {
+      ...restQuery,
+      beginTime: dateRange[0],
+      endTime: dateRange[1],
+    };
   }
-  const response = await listType(requestParams);
+  const response = await listType(params);
   return response;
 }
 function cancel() {

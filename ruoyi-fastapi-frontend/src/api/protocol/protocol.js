@@ -55,10 +55,11 @@ export function exportProtocol(query) {
 }
 
 // 下载协议导入模板
-export function downloadProtocolImportTemplate() {
+export function downloadProtocolImportTemplate(params) {
   return request({
     url: '/system/protocol/importTemplate',
     method: 'get',
+    params,
     responseType: 'blob',
   });
 }

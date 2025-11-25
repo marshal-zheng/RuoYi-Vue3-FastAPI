@@ -136,13 +136,15 @@ async def delete_protocol(
 )
 async def download_protocol_import_template(
     request: Request,
+    protocolType: str = None
 ):
     """
     下载协议导入模板
     """
     try:
-        template_bytes = await ProtocolService.get_protocol_import_template_services()
-        filename = quote('协议导入模板.xlsx')
+        template_bytes = await ProtocolService.get_protocol_import_template_services(protocolType)
+        protocol_suffix = f'_{protocolType.upper()}' if protocolType else ''
+        filename = quote(f'协议导入模板{protocol_suffix}.xlsx')
         headers = {
             'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
             'download-filename': filename

@@ -607,16 +607,16 @@ insert into sys_dict_data values(171, 2, 'CAN扩展帧', 'can_extended', 'sys_pr
 
 -- 数据类型字典
 insert into sys_dict_type values(108, '数据类型', 'sys_protocol_data_type', '0', 'admin', sysdate(), '', null, '协议字段数据类型');
-insert into sys_dict_data values(180, 1, 'uint8', 'uint8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号8位整数');
-insert into sys_dict_data values(181, 2, 'uint16', 'uint16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号16位整数');
-insert into sys_dict_data values(182, 3, 'uint32', 'uint32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号32位整数');
-insert into sys_dict_data values(183, 4, 'int8', 'int8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号8位整数');
-insert into sys_dict_data values(184, 5, 'int16', 'int16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号16位整数');
-insert into sys_dict_data values(185, 6, 'int32', 'int32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号32位整数');
-insert into sys_dict_data values(186, 7, 'float', 'float', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '单精度浮点数');
-insert into sys_dict_data values(187, 8, 'double', 'double', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '双精度浮点数');
-insert into sys_dict_data values(188, 9, 'string', 'string', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '字符串');
-insert into sys_dict_data values(189, 10, 'bool', 'bool', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '布尔值');
+insert into sys_dict_data values(180, 1, 'UINT8', 'UINT8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号8位整数');
+insert into sys_dict_data values(181, 2, 'UINT16', 'UINT16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号16位整数');
+insert into sys_dict_data values(182, 3, 'UINT32', 'UINT32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '无符号32位整数');
+insert into sys_dict_data values(183, 4, 'INT8', 'INT8', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号8位整数');
+insert into sys_dict_data values(184, 5, 'INT16', 'INT16', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号16位整数');
+insert into sys_dict_data values(185, 6, 'INT32', 'INT32', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '有符号32位整数');
+insert into sys_dict_data values(186, 7, 'FLOAT', 'FLOAT', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '单精度浮点数');
+insert into sys_dict_data values(187, 8, 'DOUBLE', 'DOUBLE', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '双精度浮点数');
+insert into sys_dict_data values(188, 9, 'STRING', 'STRING', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '字符串');
+insert into sys_dict_data values(189, 10, 'BOOL', 'BOOL', 'sys_protocol_data_type', '', '', 'N', '0', 'admin', sysdate(), '', null, '布尔值');
 
 -- 错误处理字典
 insert into sys_dict_type values(109, '错误处理', 'sys_protocol_error_handling', '0', 'admin', sysdate(), '', null, '协议错误处理策略');

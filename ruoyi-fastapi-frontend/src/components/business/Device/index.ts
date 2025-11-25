@@ -3,7 +3,7 @@ export { default as PortEditDialog } from './PortEditDialog.vue';
 export { default as DeviceNameDialog } from './DeviceNameDialog.vue';
 export { default as DeviceClazzDialog } from './DeviceClazzDialog.vue';
 export { default as NodeEditDrawer } from './NodeEditDrawer.vue';
-export { default as ImportFileDialog } from './ImportFileDialog.vue';
+// export { default as ImportFileDialog } from './ImportFileDialog.vue';
 export { default as ExportDialog } from './ExportDialog.vue';
 export { default as ProtocolListDrawer } from './ProtocolListDrawer.vue';
 export { default as CategoryFormDialog } from './CategoryFormDialog.vue';
