@@ -266,11 +266,6 @@ export function download(
   });
   return service
     .post(url, params, {
-      transformRequest: [
-        (params) => {
-          return tansParams(params);
-        },
-      ],
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       responseType: 'blob',
       ...config,

@@ -369,6 +369,208 @@ class ProtocolService:
         return result
 
     @classmethod
+    async def export_protocol_config_services(cls, query_db: AsyncSession, protocol_id: int):
+        """
+        导出协议配置service
+
+        :param query_db: orm对象
+        :param protocol_id: 协议ID
+        :return: 包含协议名称和Excel内容的字典
+        """
+        protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, protocol_id)
+        if not protocol:
+            raise ServiceException(message='协议不存在')
+
+        protocol_data = CamelCaseUtil.transform_result(protocol)
+        protocol_name = protocol_data.get('protocolName', '协议配置')
+        protocol_config = protocol_data.get('protocolConfig') or {}
+        protocol_type = protocol_data.get('protocolType') or protocol_config.get('protocolType', '')
+
+        def resolve_header_config():
+            # 兼容不同存储结构：
+            # 1) 顶层 headerConfig
+            # 2) protocolConfig.headerConfig
+            # 3) protocolConfig.header (部分保存/导入逻辑使用 header 字段)
+            # 4) 平铺在 protocolConfig（除去字段列表）
+            header_cfg = (
+                protocol_data.get('headerConfig')
+                or protocol_config.get('headerConfig')
+                or protocol_config.get('header')
+                or {}
+            )
+            if not header_cfg and isinstance(protocol_config, dict):
+                header_cfg = {k: v for k, v in protocol_config.items() if k not in {'fields', 'fieldsConfig'}}
+            return header_cfg or {}
+
+        def resolve_fields_config():
+            # 兼容不同存储结构：顶层 fieldsConfig、protocolConfig.fieldsConfig、protocolConfig.fields
+            fields_cfg = (
+                protocol_data.get('fieldsConfig')
+                or protocol_config.get('fieldsConfig')
+                or protocol_config.get('fields')
+            )
+            return fields_cfg or []
+
+        header_config = resolve_header_config()
+        fields_config = resolve_fields_config()
+
+        # 标准化协议类型
+        normalized_protocol_type = PROTOCOL_TYPE_MAPPING.get(protocol_type.lower() if protocol_type else '', None)
+        header_fields = HEADER_FIELDS_BY_PROTOCOL.get(normalized_protocol_type, HEADER_FIELDS)
+        display_name = PROTOCOL_DISPLAY_NAME.get(normalized_protocol_type, normalized_protocol_type or '通用')
+        layout_rows = CONFIG_TABLE_LAYOUT.get(
+            normalized_protocol_type,
+            cls.__build_default_layout(header_fields)
+        )
+
+        workbook = Workbook()
+        header_sheet = workbook.active
+        header_sheet.title = '协议配置表格'
+
+        label_fill = PatternFill(start_color='f7f8fa', end_color='f7f8fa', fill_type='solid')
+        value_fill = PatternFill(start_color='ffffff', end_color='ffffff', fill_type='solid')
+        head_font = Font(bold=True)
+        thin_border = Border(
+            left=Side(border_style='thin', color='d9d9d9'),
+            right=Side(border_style='thin', color='d9d9d9'),
+            top=Side(border_style='thin', color='d9d9d9'),
+            bottom=Side(border_style='thin', color='d9d9d9'),
+        )
+
+        # 空表头行
+        header_sheet.append(['', '', '', '', ''])
+        header_sheet.freeze_panes = 'A2'
+
+        first_data_row = 2
+        last_row = first_data_row + len(layout_rows) - 1
+        header_sheet.merge_cells(start_row=first_data_row, start_column=1, end_row=last_row, end_column=1)
+        protocol_cell = header_sheet.cell(row=first_data_row, column=1, value=display_name)
+        protocol_cell.alignment = Alignment(horizontal='center', vertical='center')
+        protocol_cell.fill = label_fill
+        protocol_cell.font = head_font
+
+        def apply_range_border(sheet, r1, r2, c1, c2):
+            for r in range(r1, r2 + 1):
+                for c in range(c1, c2 + 1):
+                    sheet.cell(row=r, column=c).border = thin_border
+
+        header_key_alias = {
+            # 优先展示带 Label 的中文值，再回退到原始值/别名
+            'frequency': ['frequencyLabel'],
+            'speed': ['speedLabel', 'baudRate'],
+            'method': ['methodLabel'],
+            'errorHandling': ['errorHandleLabel', 'errorHandle'],
+            'sendDuration': ['duration'],
+        }
+
+        def pick_value(src: Dict, candidates: List[str]):
+            for name in candidates:
+                if name not in src:
+                    continue
+                val = src.get(name, '')
+                if isinstance(val, dict):
+                    # 兼容存储为 {label, value} 或 {text, value}
+                    return val.get('label') or val.get('text') or val.get('value') or ''
+                return val
+            return ''
+
+        def get_header_value(key):
+            """从header_config/protocol_config中获取值"""
+            if key == 'protocolType':
+                return protocol_type or protocol_config.get('protocolType', '')
+
+            candidates = header_key_alias.get(key, []) + [key, f'{key}Label']
+
+            if isinstance(header_config, dict):
+                val = pick_value(header_config, candidates)
+                if val not in (None, ''):
+                    return val
+
+            if isinstance(protocol_config, dict):
+                val = pick_value(protocol_config, candidates)
+                if val not in (None, ''):
+                    return val
+
+            return ''
+
+        for row_offset, pair in enumerate(layout_rows):
+            current_row = first_data_row + row_offset
+            if pair:
+                key1, label1 = pair[0]
+                c_label1 = header_sheet.cell(row=current_row, column=2, value=label1)
+                c_label1.alignment = Alignment(horizontal='center', vertical='center')
+                c_label1.fill = label_fill
+                c_label1.font = head_font
+
+                c_val1 = header_sheet.cell(row=current_row, column=3, value=get_header_value(key1))
+                c_val1.fill = value_fill
+
+            if len(pair) > 1:
+                key2, label2 = pair[1]
+                c_label2 = header_sheet.cell(row=current_row, column=4, value=label2)
+                c_label2.alignment = Alignment(horizontal='center', vertical='center')
+                c_label2.fill = label_fill
+                c_label2.font = head_font
+                c_val2 = header_sheet.cell(row=current_row, column=5, value=get_header_value(key2))
+                c_val2.fill = value_fill
+
+            # 如果当前行只有一个字段，横向合并
+            if len(pair) == 1 or (len(pair) > 1 and not pair[1][0]):
+                header_sheet.merge_cells(start_row=current_row, start_column=3, end_row=current_row, end_column=5)
+
+        header_sheet.column_dimensions['A'].width = 12
+        header_sheet.column_dimensions['B'].width = 18
+        header_sheet.column_dimensions['C'].width = 24
+        header_sheet.column_dimensions['D'].width = 18
+        header_sheet.column_dimensions['E'].width = 24
+        apply_range_border(header_sheet, first_data_row, last_row, 1, 5)
+
+        # 绘制字段列表表格
+        field_table_start = last_row + 2
+        for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
+            cell = header_sheet.cell(row=field_table_start, column=column_index, value=column_meta['label'])
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+            cell.fill = label_fill
+            cell.font = head_font
+            header_sheet.column_dimensions[get_column_letter(column_index)].width = column_meta['width']
+
+        # 填充字段数据
+        field_key_mapping = {
+            'seq': 'seq',
+            'field_name': 'fieldName',
+            'byte_count': 'byteCount',
+            'byte_sequence': 'byteSequence',
+            'value_range': 'valueRange',
+            'unit': 'unit',
+            'data_type': 'dataType',
+            'scale': 'scale',
+            'remark': 'remark',
+        }
+
+        if fields_config and isinstance(fields_config, list):
+            for row_index, field_data in enumerate(fields_config, start=field_table_start + 1):
+                for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
+                    key = column_meta['key']
+                    mapped_key = field_key_mapping.get(key, key)
+                    if key == 'seq':
+                        value = row_index - field_table_start
+                    else:
+                        value = field_data.get(mapped_key, '') if isinstance(field_data, dict) else ''
+                    data_cell = header_sheet.cell(row=row_index, column=column_index, value=value)
+                    data_cell.fill = value_fill
+            apply_range_border(header_sheet, field_table_start, field_table_start + len(fields_config), 1, len(FIELD_COLUMNS))
+        else:
+            apply_range_border(header_sheet, field_table_start, field_table_start, 1, len(FIELD_COLUMNS))
+
+        buffer = io.BytesIO()
+        workbook.save(buffer)
+        buffer.seek(0)
+        return {
+            'protocol_name': protocol_name,
+            'content': buffer.getvalue()
+        }
+
+    @classmethod
     async def get_protocol_import_template_services(
         cls,
         protocol_type: Optional[str] = None,

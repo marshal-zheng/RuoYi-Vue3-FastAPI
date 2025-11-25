@@ -199,11 +199,6 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
 
       emit('confirm', finalResult);
 
-      let msg = '导入成功';
-      if (fieldCount) msg += `，包含 ${fieldCount} 个字段`;
-      if (hasHeaderConfig) msg += '，已更新协议配置';
-      ElMessage.success(msg);
-
       close();
       return finalResult;
     } catch (error) {

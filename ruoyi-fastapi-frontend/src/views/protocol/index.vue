@@ -3,10 +3,6 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProtocolData"
-      :show-pagination="true"
-      :page-sizes="[10, 20, 50, 100]"
-      :default-page-size="10"
-      :load-on-mounted="true"
       :clear-selection-on-load="true"
       class="protocol-grid zx-grid-list--page"
     >
@@ -57,7 +53,7 @@
       </template>
 
       <!-- 表格内容 -->
-      <template #table="{ grid, refresh: handleRefresh }">
+      <template #table="{ grid }">
         <el-table :data="grid.list" style="width: 100%" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" />
           <el-table-column label="协议编号" prop="protocolId" width="100" />
@@ -85,7 +81,7 @@
               <span>{{ parseTime(scope.row.updateTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" class-name="small-padding fixed-width">
+          <el-table-column label="操作" width="220" class-name="small-padding fixed-width">
             <template #default="scope">
               <div class="op-col__wrap">
                 <el-button
@@ -95,12 +91,15 @@
                   >编辑</el-button
                 >
                 <el-button
-                  link
-                  type="danger"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['protocol:remove']"
-                  >删除</el-button
+                  type="text"
+                  @click="handleExport(scope.row)"
+                  v-hasPermi="['protocol:export']"
+                  >导出协议配置</el-button
                 >
+                <ZxMoreAction
+                  :list="getMoreActionList()"
+                  @select="handleMoreActionSelect($event, scope.row)"
+                />
               </div>
             </template>
           </el-table-column>
@@ -150,8 +149,7 @@ async function loadProtocolData(params) {
       data: response.rows || [],
       total: response.total || 0,
     };
-  } catch (error) {
-    console.error('加载协议数据失败:', error);
+  } catch {
     return {
       data: [],
       total: 0,
@@ -213,11 +211,7 @@ function handleDelete(row) {
       gridListRef.value?.refresh();
       proxy.$modal.msgSuccess('删除成功');
     })
-    .catch((error) => {
-      if (error && error !== 'cancel') {
-        console.error('删除协议失败:', error);
-      }
-    });
+    .catch(() => {});
 }
 
 /** 协议保存成功回调 */
@@ -233,10 +227,40 @@ const handleProtocolSaveSuccess = async (data) => {
     protocolDrawerRef.value?.close();
     gridListRef.value?.refresh();
   } catch (error) {
-    console.error('保存协议失败:', error);
     throw error;
   }
 };
+
+/** 获取更多操作列表 */
+function getMoreActionList() {
+  return [
+    {
+      label: '删除',
+      eventTag: 'delete',
+      icon: 'Delete',
+      danger: true,
+      permission: 'protocol:remove',
+    },
+  ];
+}
+
+/** 更多操作选择处理 */
+function handleMoreActionSelect(item, row) {
+  if (item.eventTag === 'delete') {
+    handleDelete(row);
+  }
+}
+
+/** 导出协议配置 */
+function handleExport(row) {
+  proxy.download(
+    'system/protocol/export',
+    {
+      protocolId: row.protocolId,
+    },
+    `协议配置_${row.protocolName}_${new Date().getTime()}.xlsx`
+  );
+}
 </script>
 
 <style scoped>

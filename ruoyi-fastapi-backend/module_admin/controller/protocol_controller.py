@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -174,6 +174,37 @@ async def protocol_import_preview(
         preview_result = await ProtocolService.protocol_import_preview_services(file)
         logger.info('协议导入文件解析成功')
         return ResponseUtil.success(data=preview_result)
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
+@protocolController.post(
+    '/export',
+    dependencies=[Depends(CheckUserInterfaceAuth('protocol:export'))]
+)
+@Log(title='协议管理', business_type=BusinessType.EXPORT, log_type='operation')
+async def export_protocol_config(
+    request: Request,
+    protocolId: int = Form(...),
+    query_db: AsyncSession = Depends(get_db)
+):
+    """
+    导出协议配置
+    """
+    try:
+        export_result = await ProtocolService.export_protocol_config_services(query_db, protocolId)
+        protocol_name = export_result.get('protocol_name', '协议配置')
+        filename = quote(f'{protocol_name}_配置.xlsx')
+        headers = {
+            'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
+            'download-filename': filename
+        }
+        return ResponseUtil.streaming(
+            data=bytes2file_response(export_result.get('content')),
+            headers=headers,
+            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
     except Exception as e:
         logger.exception(e)
         return ResponseUtil.error(msg=str(e))

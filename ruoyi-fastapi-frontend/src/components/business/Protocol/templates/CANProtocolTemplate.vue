@@ -21,7 +21,7 @@
       :data="configTableData"
       :span-method="configSpanMethod"
       :edit-config="configTableEditConfig"
-      class="text-sm mb-4"
+      class="text-sm"
     >
       <vxe-column field="protocolName" title="" width="80" align="center" />
       <vxe-column field="label1" title="" width="120" align="center" />
@@ -67,12 +67,7 @@
         :edit-render="{ name: 'input', props: { type: 'number' } }"
       />
 
-      <vxe-column
-        field="byteSequence"
-        title="字节序号"
-        width="120"
-        :edit-render="{ name: 'input', props: { placeholder: '0~3' } }"
-      />
+      <vxe-column field="byteSequence" title="字节序号" width="120" />
 
       <vxe-column field="valueRange" title="值域及含义" :edit-render="{ name: 'textarea' }" />
 
@@ -132,20 +127,18 @@ const emit = defineEmits<{
 
 const tableRef = ref<VxeTableInstance>();
 
-function getDataTypeTagType(dataType: string) {
-  const typeMap: Record<string, string> = {
-    UINT8: 'success',
-    UINT16: 'success',
-    UINT32: 'success',
-    INT8: 'warning',
-    INT16: 'warning',
-    INT32: 'warning',
-    FLOAT: 'info',
-    DOUBLE: 'info',
-    STRING: '',
-  };
-  return typeMap[dataType] || '';
-}
+// 数据类型对应的字节长度映射
+const DATA_TYPE_BYTE_LENGTH_MAP: Record<string, number> = {
+  UINT8: 1,
+  INT8: 1,
+  UINT16: 2,
+  INT16: 2,
+  UINT32: 4,
+  INT32: 4,
+  FLOAT: 4,
+  DOUBLE: 8,
+  BOOL: 1,
+};
 
 const defaultConfig = {
   sender: '',
@@ -167,6 +160,75 @@ const localConfig = reactive({
   ...defaultConfig,
   ...(props.modelValue || {}),
 });
+
+// 解析为正整数
+const parsePositiveInt = (val: any): number | null => {
+  const num = Number(val);
+  if (!Number.isFinite(num)) return null;
+  if (num <= 0) return null;
+  return Math.floor(num);
+};
+
+const inferStringByteLength = (field: any): number | null => {
+  const manual = parsePositiveInt(field.byteCount);
+  if (manual !== null) return manual;
+  if (typeof field.valueRange === 'string') {
+    const match = field.valueRange.match(/"([^"]+)"/);
+    if (match && match[1]) return match[1].length;
+  }
+  return null;
+};
+
+const getByteLengthByType = (field: any): number | null => {
+  if (typeof field.dataType === 'string' && field.dataType) {
+    const key = field.dataType.toUpperCase();
+    if (key === 'STRING') return inferStringByteLength(field);
+    const typeLen = DATA_TYPE_BYTE_LENGTH_MAP[key];
+    if (typeLen) return typeLen;
+  }
+  return null;
+};
+
+// 根据数据类型和字节数计算每个字段的字节长度
+const getFieldByteLength = (field: any): number => {
+  const typeLen = getByteLengthByType(field);
+  if (typeLen !== null) {
+    field.byteCount = typeLen;
+    return typeLen;
+  }
+
+  const fromCount = parsePositiveInt(field.byteCount);
+  if (fromCount !== null) return fromCount;
+
+  field.byteCount = '';
+  return 0;
+};
+
+const ensureByteCountSync = () => {
+  if (!Array.isArray(localConfig.fields)) return;
+  localConfig.fields.forEach((field: any) => {
+    getFieldByteLength(field);
+  });
+};
+
+// 根据数据类型/字节数自动计算「字节序号」，从 0 开始，受上一行变动影响
+const recalcByteSequence = () => {
+  if (!Array.isArray(localConfig.fields)) return;
+
+  let offset = 0;
+  localConfig.fields.forEach((field: any) => {
+    const length = getFieldByteLength(field);
+    if (!length) {
+      field.byteSequence = '';
+      return;
+    }
+
+    const start = offset;
+    const end = offset + length - 1;
+    field.byteSequence = start === end ? String(start) : `${start}-${end}`;
+    offset = end + 1;
+  });
+};
 
 const configTableData = ref([
   {
@@ -358,10 +420,12 @@ const fieldSpanMethod = ({ columnIndex }: any) => {
 watch(
   () => localConfig,
   (newVal) => {
+    ensureByteCountSync();
+    recalcByteSequence();
     syncConfigTableRows();
     emit('update:modelValue', newVal);
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 watch(
@@ -369,6 +433,8 @@ watch(
   (newVal) => {
     if (newVal && Object.keys(newVal).length > 0) {
       Object.assign(localConfig, newVal);
+      ensureByteCountSync();
+      recalcByteSequence();
       syncConfigTableRows();
     }
   },
@@ -381,7 +447,7 @@ const insertRow = () => {
     id: newId,
     parentId: null,
     fieldName: '',
-    byteCount: 1,
+    byteCount: '',
     byteSequence: '',
     valueRange: '',
     unit: '',

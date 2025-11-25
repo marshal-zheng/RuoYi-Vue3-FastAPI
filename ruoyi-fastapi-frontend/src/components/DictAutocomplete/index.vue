@@ -41,14 +41,29 @@ const loadDictData = async () => {
   try {
     const response = await getDicts(props.dictType);
     const raw = Array.isArray(response?.data) ? response.data : [];
-    allOptions.value = raw.map((option) => {
+    const dedupMap = {};
+    raw.forEach((option) => {
       const baseLabel = option.dictLabel ?? option.dictValue ?? '';
+      const key = String(baseLabel ?? option.dictValue ?? '').toLowerCase();
+      if (!key) return;
+      const isUppercase = String(baseLabel) === String(baseLabel).toUpperCase();
+      const existing = dedupMap[key];
+      if (!existing || (!existing.isUppercase && isUppercase)) {
+        dedupMap[key] = {
+          option,
+          baseLabel,
+          isUppercase,
+        };
+      }
+    });
+    allOptions.value = Object.values(dedupMap).map((item) => {
+      const baseLabel = item.baseLabel;
       const label = props.uppercaseLabel ? String(baseLabel).toUpperCase() : baseLabel;
       return {
         label,
-        value: option.dictValue,
-        disabled: option.status === '1',
-        _raw: option,
+        value: item.option.dictValue,
+        disabled: item.option.status === '1',
+        _raw: item.option,
       };
     });
   } catch (_error) {

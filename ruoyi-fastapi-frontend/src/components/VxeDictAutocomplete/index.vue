@@ -4,6 +4,7 @@
     v-model="cellValue"
     :dict-type="dictType"
     :placeholder="placeholder"
+    :uppercase-label="uppercaseLabel"
     :clearable="clearable"
     :disabled="disabled"
     style="width: 100%"
@@ -35,6 +36,7 @@ const placeholder = computed(() => props.params?.placeholder || '请输入');
 const clearable = computed(() => props.params?.clearable !== false);
 const disabled = computed(() => props.params?.disabled || false);
 const inputType = computed(() => props.params?.inputType || 'text');
+const uppercaseLabel = computed(() => props.params?.uppercaseLabel === true);
 
 const cellValue = computed({
   get() {

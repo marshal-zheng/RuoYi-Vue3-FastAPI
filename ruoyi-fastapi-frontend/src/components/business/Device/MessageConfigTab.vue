@@ -165,7 +165,7 @@ function getFormData() {
       errorHandling: config.errorHandle || '',
     },
     fields: config.fields || [],
-    protocolId: selectedProtocolId.value,
+    protocolId: props.portInfo?.protocolId || null,
   };
 }
 

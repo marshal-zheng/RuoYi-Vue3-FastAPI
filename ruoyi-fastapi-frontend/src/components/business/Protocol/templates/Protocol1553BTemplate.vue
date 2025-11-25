@@ -21,7 +21,7 @@
       :data="configTableData"
       :span-method="configSpanMethod"
       :edit-config="configTableEditConfig"
-      class="text-sm mb-4"
+      class="text-sm"
     >
       <vxe-column field="protocolName" title="" width="80" align="center" />
       <vxe-column field="label1" title="" width="120" align="center" />
@@ -67,12 +67,7 @@
         :edit-render="{ name: 'input', props: { type: 'number' } }"
       />
 
-      <vxe-column
-        field="byteSequence"
-        title="字节序号"
-        width="120"
-        :edit-render="{ name: 'input', props: { placeholder: '0~3' } }"
-      />
+      <vxe-column field="byteSequence" title="字节序号" width="120" />
 
       <vxe-column field="valueRange" title="值域及含义" :edit-render="{ name: 'textarea' }" />
 
