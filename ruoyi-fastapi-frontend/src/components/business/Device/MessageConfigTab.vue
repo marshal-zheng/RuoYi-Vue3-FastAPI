@@ -163,6 +163,7 @@ function getFormData() {
       duration: config.sendDuration || null,
       frameLength: config.frameLength || null,
       errorHandling: config.errorHandle || '',
+      port: config.port || '',
     },
     fields: config.fields || [],
     protocolId: props.portInfo?.protocolId || null,
@@ -201,6 +202,7 @@ function initializeData() {
       sendDuration: config.duration || null,
       frameLength: config.frameLength || null,
       errorHandle: config.errorHandling || '',
+      port: config.port || '',
       fields,
     };
   } else {

@@ -676,7 +676,8 @@ async function handlePortSubmit(formData) {
 }
 
 async function handlePortConfigSubmit(portData) {
-  const index = findPortIndexByKey(portData.interfaceId || portData.id);
+  // 使用与 getPortKey 一致的逻辑：优先使用 id，然后是 interfaceId
+  const index = findPortIndexByKey(portData.id || portData.interfaceId);
   if (index > -1) {
     tempPorts.value[index] = {
       ...tempPorts.value[index],
