@@ -10,9 +10,11 @@ from module_admin.entity.vo.device_vo import (
     DeviceModel,
     DeviceListModel,
     DeviceInterfaceModel,
+    CloneDeviceModel,
 )
 from utils.response_util import ResponseUtil
 from sqlalchemy.exc import IntegrityError
+from exceptions.exception import ServiceException
 
 
 class DeviceService:
@@ -234,6 +236,76 @@ class DeviceService:
             raise HTTPException(status_code=400, detail=f"设备删除失败: {exc.orig}")
 
         return ResponseUtil.success(msg=f"删除成功，共删除{deleted_count}条记录")
+
+    @classmethod
+    async def check_device_name_unique(cls, db: AsyncSession, device_name: str, device_id: int = None):
+        """
+        检查设备名称是否唯一
+        """
+        existing = await DeviceDao.get_device_by_name(db, device_name)
+        
+        if not existing:
+            return ResponseUtil.success(data=True)
+        
+        if device_id and existing.device_id == device_id:
+            return ResponseUtil.success(data=True)
+        
+        return ResponseUtil.success(data=False)
+
+    @classmethod
+    async def clone_device(cls, db: AsyncSession, clone_data: CloneDeviceModel, current_user: str):
+        """
+        克隆设备（包含接口）
+        """
+        # 获取源设备信息
+        source_device = await DeviceDao.get_device_by_id(db, clone_data.source_device_id)
+        if not source_device:
+            raise ServiceException(message='源设备不存在')
+        
+        # 检查新设备名称是否唯一
+        existing = await DeviceDao.get_device_by_name(db, clone_data.device_name)
+        if existing:
+            raise ServiceException(message=f'设备名称 "{clone_data.device_name}" 已存在')
+        
+        # 创建新设备
+        resolved_category_id, resolved_category_name = await cls._resolve_category_info(
+            db,
+            source_device.device_category_id,
+            source_device.category_name,
+        )
+        
+        new_device = DeviceDO(
+            device_name=clone_data.device_name,
+            device_category_id=resolved_category_id,
+            category_name=resolved_category_name,
+            device_type=source_device.device_type,
+            manufacturer=source_device.manufacturer,
+            model=source_device.model,
+            version=source_device.version,
+            bus_type=source_device.bus_type,
+            remark=source_device.remark,
+            create_by=current_user,
+            create_time=datetime.now()
+        )
+        
+        # 克隆接口
+        for source_interface in source_device.interfaces:
+            interface_do = DeviceInterfaceDO(
+                interface_name=source_interface.interface_name,
+                interface_type=source_interface.interface_type,
+                position=source_interface.position,
+                description=source_interface.description,
+                params=source_interface.params,
+                message_config=source_interface.message_config,
+                create_time=datetime.now()
+            )
+            new_device.interfaces.append(interface_do)
+        
+        # 保存到数据库
+        result = await DeviceDao.add_device(db, new_device)
+        await db.commit()
+        
+        return ResponseUtil.success(data={'device_id': result.device_id}, msg="克隆成功")
 
     @staticmethod
     async def _resolve_category_info(db: AsyncSession, category_id, category_name):

@@ -1,5 +1,5 @@
 <template>
-  <zx-select v-model="value" :options="positionOptions" v-bind="$attrs" />
+  <zx-select v-model="value" :options="positionOptions" :multiple="multiple" v-bind="$attrs" />
 </template>
 
 <script setup name="PositionSelector">
@@ -7,13 +7,17 @@ import { computed, useAttrs } from 'vue';
 
 const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Array],
     default: '',
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
   },
 });
 const attrs = useAttrs();
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const defaultPositionOptions = [
   // { label: '顶部', value: 'top' },
@@ -31,6 +35,7 @@ const value = computed({
   get: () => props.modelValue,
   set: (v) => {
     emit('update:modelValue', v);
+    emit('change', v);
   },
 });
 </script>

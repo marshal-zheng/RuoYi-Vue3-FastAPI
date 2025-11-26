@@ -416,6 +416,7 @@ class ProtocolService:
             # 3) protocolConfig.header (部分保存/导入逻辑使用 header 字段)
             # 4) protocolConfig.protocolConfig 内层存储
             # 5) 平铺在 protocolConfig（除去字段列表）
+            # 6) messageConfig 结构（历史设备协议或导入数据）
             def merge_header_sources(sources):
                 merged = {}
                 for source in sources:
@@ -436,9 +437,21 @@ class ProtocolService:
                 ensure_dict(protocol_data.get('header')),
             ]
 
+            message_config = ensure_dict(protocol_data.get('messageConfig'))
+            if isinstance(message_config, dict):
+                header_sources.append(ensure_dict(message_config.get('header')))
+                header_sources.append(
+                    {
+                        k: v
+                        for k, v in message_config.items()
+                        if k not in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}
+                    }
+                )
+
             if isinstance(protocol_config, dict):
                 header_sources.append(ensure_dict(protocol_config.get('headerConfig')))
                 header_sources.append(ensure_dict(protocol_config.get('header')))
+                header_sources.append(ensure_dict(protocol_config.get('messageConfig', {}).get('header')))
                 # 将平铺在 protocolConfig 的字段纳入
                 header_sources.append(
                     {
@@ -451,6 +464,7 @@ class ProtocolService:
             if isinstance(nested_protocol_config, dict):
                 header_sources.append(ensure_dict(nested_protocol_config.get('headerConfig')))
                 header_sources.append(ensure_dict(nested_protocol_config.get('header')))
+                header_sources.append(ensure_dict(nested_protocol_config.get('messageConfig', {}).get('header')))
                 header_sources.append(
                     {
                         k: v
@@ -490,13 +504,17 @@ class ProtocolService:
             保留第一个非空值，避免被空值覆盖。
             """
             merged: Dict[str, Any] = {}
+            visited: set[int] = set()
 
             def walk(obj: Dict[str, Any]):
+                obj_id = id(obj)
+                if obj_id in visited:
+                    return
+                visited.add(obj_id)
                 for k, v in obj.items():
+                    if isinstance(v, dict):
+                        walk(v)
                     if k in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}:
-                        # 深入这些节点继续找
-                        if isinstance(v, dict):
-                            walk(v)
                         continue
                     if k not in merged or merged[k] in (None, ''):
                         merged[k] = v
@@ -557,11 +575,28 @@ class ProtocolService:
 
         header_key_alias = {
             # 优先展示带 Label 的中文值，再回退到原始值/别名
-            'frequency': ['frequencyLabel'],
-            'speed': ['speedLabel', 'baudRate'],
-            'method': ['methodLabel'],
-            'errorHandling': ['errorHandleLabel', 'errorHandle'],
-            'sendDuration': ['duration'],
+            # 前端使用 frequencyLabel 保存中文标签，frequency 保存值
+            'frequency': ['frequencyLabel', 'frequency_label', 'frequency'],
+            # 前端使用 speedLabel 保存中文标签，speed 保存值；后端可能用 baudRate
+            'speed': ['speedLabel', 'speed_label', 'speed', 'baudRate', 'baud_rate', 'baudRateLabel', 'baud_rate_label'],
+            # 前端使用 methodLabel 保存中文标签，method 保存值
+            'method': ['methodLabel', 'method_label', 'method'],
+            # 前端使用 errorHandle/errorHandleLabel，后端导出模板用 errorHandling
+            'errorHandling': [
+                'errorHandleLabel',
+                'error_handle_label',
+                'errorHandle',
+                'error_handle',
+                'errorHandling',
+                'errorHandlingLabel',
+                'error_handling_label',
+            ],
+            # 前端使用 sendDuration，后端可能用 duration
+            'sendDuration': ['sendDuration', 'send_duration', 'duration'],
+            # 帧长度
+            'frameLength': ['frameLength', 'frameLengthLabel', 'frame_length', 'frame_length_label'],
+            # 端口号
+            'port': ['port', 'portNo', 'portNumber', 'port_no', 'port_number'],
         }
 
         def pick_value(src: Dict, candidates: List[str]):
@@ -571,7 +606,13 @@ class ProtocolService:
                 val = src.get(name, '')
                 if isinstance(val, dict):
                     # 兼容存储为 {label, value} 或 {text, value}
-                    return val.get('label') or val.get('text') or val.get('value') or ''
+                    extracted = val.get('label') or val.get('text') or val.get('value') or ''
+                    if extracted not in (None, ''):
+                        return extracted
+                    continue
+                # 跳过空值，继续查找下一个候选项
+                if val in (None, ''):
+                    continue
                 return val
             return ''
 

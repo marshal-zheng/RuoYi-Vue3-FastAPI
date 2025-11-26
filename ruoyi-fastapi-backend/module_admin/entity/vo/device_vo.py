@@ -86,3 +86,18 @@ class DeviceListModel(BaseModel):
     create_by: Optional[str] = Field(None, description="创建者")
     update_time: Optional[datetime] = Field(None, description="更新时间")
     interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
+
+
+class CloneDeviceModel(BaseModel):
+    """
+    克隆设备模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+
+    source_device_id: int = Field(..., description="源设备ID")
+    device_name: str = Field(..., description="新设备名称")
+    create_by: Optional[str] = Field(None, description="创建者")
+    create_time: Optional[datetime] = Field(None, description="创建时间")

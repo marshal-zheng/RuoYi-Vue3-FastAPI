@@ -54,7 +54,7 @@
         </div>
       </template>
 
-      <template #table="{ grid, refresh: handleRefresh }">
+      <template #table="{ grid }">
         <el-table
           v-loading="grid.loading"
           :data="grid.list || []"
@@ -89,11 +89,15 @@
                 >
                 <ZxButton
                   link
-                  type="danger"
-                  @click="handleDelete(scope.row)"
-                  v-hasPermi="['device:list:remove']"
-                  >删除</ZxButton
+                  type="primary"
+                  @click="handleClone(scope.row)"
+                  v-hasPermi="['device:list:add']"
+                  >克隆</ZxButton
                 >
+                <ZxMoreAction
+                  :list="getMoreActionList(scope.row)"
+                  @select="handleMoreActionSelect($event, scope.row)"
+                />
               </div>
             </template>
           </el-table-column>
@@ -107,17 +111,21 @@
       :is-create="true"
       @submit="handleCreateSubmit"
     />
+
+    <DeviceCloneDialog ref="cloneDialogRef" />
   </ZxContentWrap>
 </template>
 
 <script setup name="Device">
 import { listDevice, delDevice } from '@/api/device/device';
 import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
+import DeviceCloneDialog from '@/components/business/Device/DeviceCloneDialog.vue';
 
 const { proxy } = getCurrentInstance();
 const router = useRouter();
 
 const gridListRef = ref();
+const cloneDialogRef = ref();
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
@@ -191,6 +199,34 @@ function handleDelete(row) {
       refreshList();
       proxy.$modal.msgSuccess('删除成功');
     });
+}
+
+function handleClone(row) {
+  cloneDialogRef.value.open(row, () => {
+    refreshList();
+  });
+}
+
+function getMoreActionList() {
+  const actions = [];
+  actions.push({
+    label: '删除',
+    eventTag: 'delete',
+    icon: 'Delete',
+    danger: true,
+    permission: 'device:list:remove',
+  });
+  return actions;
+}
+
+function handleMoreActionSelect(item, row) {
+  switch (item.eventTag) {
+    case 'delete':
+      handleDelete(row);
+      break;
+    default:
+      break;
+  }
 }
 </script>
 

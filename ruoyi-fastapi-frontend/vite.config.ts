@@ -44,6 +44,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       '/dev-api': {
         target: baseUrl,
         changeOrigin: true,
+        ws: true, // 支持 WebSocket 代理
         // 将 /dev-api 重写为空（开发环境代理）
         rewrite: (p) => p.replace(/^\/dev-api/, '')
       }

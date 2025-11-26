@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from datetime import datetime
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
-from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel
+from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, CloneDeviceModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.device_service import DeviceService
 from module_admin.service.login_service import LoginService
@@ -64,6 +65,27 @@ async def get_device_list(
 
 
 @deviceController.get(
+    '/checkNameUnique',
+    dependencies=[Depends(CheckUserInterfaceAuth('device:list:query'))]
+)
+async def check_device_name_unique(
+    request: Request,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    检查设备名称是否唯一
+    """
+    qp = dict(request.query_params)
+    device_name = qp.get('deviceName') or qp.get('device_name')
+    device_id = qp.get('deviceId') or qp.get('device_id')
+    device_id = int(device_id) if device_id else None
+    
+    result = await DeviceService.check_device_name_unique(query_db, device_name, device_id)
+    logger.info(f'检查设备名称唯一性: {device_name}')
+    return result
+
+
+@deviceController.get(
     '/{device_id}',
     dependencies=[Depends(CheckUserInterfaceAuth('device:list:query'))]
 )
@@ -119,6 +141,27 @@ async def update_device(
         query_db, device_data, current_user.user.user_name
     )
     logger.info('修改设备成功')
+    return result
+
+
+@deviceController.post(
+    '/clone',
+    dependencies=[Depends(CheckUserInterfaceAuth('device:list:add'))]
+)
+@Log(title='设备管理', business_type=BusinessType.INSERT)
+async def clone_device(
+    request: Request,
+    clone_data: CloneDeviceModel,
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    克隆设备（包含接口）
+    """
+    clone_data.create_by = current_user.user.user_name
+    clone_data.create_time = datetime.now()
+    result = await DeviceService.clone_device(query_db, clone_data, current_user.user.user_name)
+    logger.info('克隆设备成功')
     return result
 
 

@@ -5,7 +5,7 @@
         <InterfaceTypeSelector v-model="state.data.interfaceType" @change="handleBusTypeChange" />
       </el-form-item>
       <el-form-item label="端口位置" prop="position">
-        <PositionSelector v-model="state.data.position" @change="handlePositionChange" />
+        <PositionSelector v-model="state.data.position" multiple @change="handlePositionChange" />
       </el-form-item>
       <el-form-item label="端口描述" prop="description">
         <el-input
@@ -20,7 +20,7 @@
 </template>
 
 <script setup name="PortEditDialog">
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, watch } from 'vue';
 import { useDialog } from '@zxio/zxui';
 import { InterfaceTypeSelector, PositionSelector } from './selector';
 
@@ -34,7 +34,7 @@ const props = defineProps({
       deviceId: null,
       interfaceName: '',
       interfaceType: 'RS422',
-      position: 'right',
+      position: ['right'],
       description: '',
     }),
   },
@@ -46,20 +46,32 @@ const portFormRef = ref();
 
 const portFormRules = {
   interfaceType: [{ required: true, message: '请选择总线类型', trigger: 'change' }],
-  position: [{ required: true, message: '请选择端口位置', trigger: 'change' }],
+  position: [
+    { required: true, message: '请选择端口位置', trigger: 'change' },
+    {
+      validator: (rule, value, callback) => {
+        if (!Array.isArray(value) || value.length === 0) {
+          callback(new Error('请至少选择一个端口位置'));
+        } else {
+          callback();
+        }
+      },
+      trigger: 'change',
+    },
+  ],
 };
 
-function generatePortName(busType, position) {
+function generatePortName(busType) {
   state.data.interfaceName = busType || '';
 }
 
 function handleBusTypeChange(busType) {
   if (!state.data.interfaceId && busType) {
-    generatePortName(busType, state.data.position);
+    generatePortName(busType);
   }
 }
 
-function handlePositionChange(position) {}
+function handlePositionChange() {}
 
 const { dialogProps, dialogEvents, open, close, state } = useDialog({
   title: () => props.title,
@@ -76,7 +88,7 @@ const { dialogProps, dialogEvents, open, close, state } = useDialog({
     emit('update:modelValue', false);
     return submit;
   },
-  onConfirmError: (_e) => {},
+  onConfirmError: () => {},
 });
 
 watch(

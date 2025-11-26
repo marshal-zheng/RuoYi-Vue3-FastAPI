@@ -121,3 +121,12 @@ class DeviceDao:
         stmt = select(DeviceInterfaceDO).where(DeviceInterfaceDO.device_id == device_id)
         result = await db.execute(stmt)
         return result.scalars().all()
+
+    @classmethod
+    async def get_device_by_name(cls, db: AsyncSession, device_name: str) -> Optional[DeviceDO]:
+        """
+        根据设备名称获取设备
+        """
+        stmt = select(DeviceDO).where(DeviceDO.device_name == device_name)
+        result = await db.execute(stmt)
+        return result.scalar_one_or_none()

@@ -80,6 +80,13 @@ const devicePorts = ref([]);
 const graphRef = ref(null);
 const graphInstance = ref(null);
 const selectedPortId = ref(null);
+const graphEventHandlers = {
+  portClick: null,
+  portDblClick: null,
+  portContextMenu: null,
+  blankClick: null,
+  nodeContextMenu: null,
+};
 
 const portDialogRef = ref(null);
 const portDialogTitle = ref('添加端口');
@@ -323,13 +330,18 @@ function loadDevicePorts() {
   if (deviceInfo.value.interfaces && deviceInfo.value.interfaces.length > 0) {
     tempPorts.value = deviceInfo.value.interfaces.map((intf, index) => {
       const normalizedId = normalizePortKey(intf.interfaceId);
+      // 兼容处理：将字符串 position 转为数组格式
+      let position = intf.position || ['right'];
+      if (typeof position === 'string') {
+        position = [position];
+      }
       return {
         id: normalizedId || `port_${index}`,
         interfaceId: intf.interfaceId,
         deviceId: deviceInfo.value.deviceId,
         interfaceName: intf.interfaceName,
         interfaceType: intf.interfaceType,
-        position: intf.position || 'right',
+        position: position,
         description: intf.description || '',
         params: intf.params ? cloneDeep(intf.params) : getDefaultParams(intf.interfaceType),
         messageConfig: intf.messageConfig ? cloneDeep(intf.messageConfig) : null,
@@ -345,14 +357,23 @@ function syncDevicePorts() {
 
 function updateGraphData() {
   if (!graphInstance.value) return;
-  const portsData = devicePorts.value.map((port, index) => ({
-    id: port.id || `port_${index}`,
-    group: port.position || 'right',
-    interfaceId: port.interfaceId || port.id,
-    interfaceName: port.interfaceName,
-    interfaceType: port.interfaceType,
-    description: port.description,
-  }));
+  const portsData = devicePorts.value.map((port, index) => {
+    // 兼容处理：如果 position 是数组，取第一个值作为主位置
+    let position = 'right';
+    if (Array.isArray(port.position) && port.position.length > 0) {
+      position = port.position[0];
+    } else if (typeof port.position === 'string') {
+      position = port.position;
+    }
+    return {
+      id: port.id || `port_${index}`,
+      group: position,
+      interfaceId: port.interfaceId || port.id,
+      interfaceName: port.interfaceName,
+      interfaceType: port.interfaceType,
+      description: port.description,
+    };
+  });
 
   const BASE_PORT_LABEL_ATTRS = {
     text: '',
@@ -382,10 +403,12 @@ function updateGraphData() {
         height: 12,
         x: -width / 2,
         y: -6,
-        magnet: false,
+        magnet: true,
         fill: '#fff',
         strokeWidth: 1,
         cursor: 'pointer',
+        pointerEvents: 'all',
+        'pointer-events': 'all',
         rx: 0,
         ry: 0,
       },
@@ -401,7 +424,16 @@ function updateGraphData() {
   };
   const x6Ports = devicePorts.value.map((port, index) => {
     const portId = port.id || `port_${index}`;
-    const group = port.position || 'right';
+    const normalizedSelectedKey = normalizePortKey(selectedPortId.value);
+    const normalizedPortKey = normalizePortKey(portId);
+    const isSelected = normalizedSelectedKey && normalizedSelectedKey === normalizedPortKey;
+    // 兼容处理：如果 position 是数组，取第一个值作为主位置
+    let group = 'right';
+    if (Array.isArray(port.position) && port.position.length > 0) {
+      group = port.position[0];
+    } else if (typeof port.position === 'string') {
+      group = port.position;
+    }
     const color = getPortColor({
       busType: port.busType,
       interfaceType: port.interfaceType,
@@ -413,7 +445,19 @@ function updateGraphData() {
       id: portId,
       group,
       args: { x: 0, y: 0 },
-      attrs: { portBody: { stroke: color }, portLabel: { text } },
+      zIndex: 10,
+      attrs: {
+        portBody: {
+          stroke: color,
+          strokeWidth: isSelected ? 2 : 1,
+          fill: isSelected ? '#e8f3ff' : '#fff',
+        },
+        portLabel: {
+          text,
+          fill: isSelected ? '#1f4b99' : '#4b5563',
+          fontWeight: isSelected ? 600 : 500,
+        },
+      },
     };
   });
   graphInstance.value.clearCells();
@@ -465,6 +509,16 @@ function customMenuHandler(items, type, target) {
         icon: 'Plus',
         action: () => handleAddPortWithPosition('right'),
       },
+      { type: 'divider' },
+      {
+        id: 'delete-selected-port',
+        label: selectedPortId.value
+          ? `删除端口：${findPortByKey(selectedPortId.value)?.interfaceName || selectedPortId.value}`
+          : '删除端口（先选中）',
+        icon: 'Delete',
+        // disabled: !selectedPortId.value || !findPortByKey(selectedPortId.value),
+        action: () => handleDeleteSelectedPort(),
+      },
     ];
   }
   if (type === 'port' && target) {
@@ -502,21 +556,30 @@ function customMenuHandler(items, type, target) {
 
 function onGraphReady(graph) {
   graphInstance.value = graph;
+  bindGraphEvents(graph);
   updateGraphData();
+}
+
+function extractEventPortId(target) {
+  if (!target || typeof target.closest !== 'function') return null;
+  const portEl = target.closest('[port], .x6-port');
+  if (!portEl) return null;
+  return (
+    portEl.getAttribute('port') ||
+    portEl.getAttribute('data-port-id') ||
+    portEl.getAttribute('data-port') ||
+    portEl.dataset?.portId ||
+    portEl.dataset?.port ||
+    null
+  );
 }
 
 function onNodeDblClick({ node, event }) {
   if (!node) return;
   const e = event;
   const target = e?.target || e?.currentTarget || e?.srcElement;
-  let portElement = null;
-  try {
-    if (target && typeof target.closest === 'function') {
-      portElement = target.closest('[port]');
-    }
-  } catch {}
-  if (portElement) {
-    const portId = portElement.getAttribute('port');
+  const portId = extractEventPortId(target);
+  if (portId) {
     const portData = findPortByKey(portId);
     if (portData) {
       handleEditPort(portData);
@@ -526,48 +589,28 @@ function onNodeDblClick({ node, event }) {
   }
 }
 
-function handlePortContextMenu({ port, e }) {
-  e.preventDefault();
-  const portData = findPortByKey(port.id || port.interfaceId);
-  if (!portData) return;
-  ElMessageBox.confirm(`端口：${port.interfaceName} (${port.interfaceType})`, '端口操作', {
-    confirmButtonText: '编辑',
-    cancelButtonText: '删除',
-    distinguishCancelAndClose: true,
-    type: 'info',
-  })
-    .then(() => {
-      handleEditPortDialog(portData);
-    })
-    .catch((action) => {
-      if (action === 'cancel') {
-        ElMessageBox.confirm(`确定要删除端口 "${port.interfaceName}" 吗？`, '删除确认', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }).then(() => {
-          handleDeletePort(port.id || port.interfaceId);
-        });
-      }
-    });
-}
-
 function handleEditPortDialog(port) {
   portDialogTitle.value = '编辑端口';
   portForm.interfaceId = port.interfaceId || port.id;
   portForm.deviceId = port.deviceId || deviceId.value;
   portForm.interfaceName = port.interfaceName;
   portForm.interfaceType = port.interfaceType;
-  portForm.position = port.position;
+  // 编辑时禁止多选，只允许单个位置
+  portForm.position = Array.isArray(port.position) ? port.position : [port.position];
   portForm.description = port.description;
   portDialogRef.value?.open();
 }
 
 function onNodeClick({ e }) {
-  const target = e.target;
-  if (target && target.classList && target.classList.contains('port-item')) {
-    const portId = target.dataset.portId;
-    handlePortClick(portId);
+  const target = e?.target || e?.currentTarget || e?.srcElement;
+  const portId = extractEventPortId(target);
+  if (portId) {
+    handlePortClick(portId, { allowToggle: false });
+    return;
+  }
+  if (selectedPortId.value) {
+    selectedPortId.value = null;
+    updatePortHighlight();
   }
 }
 
@@ -578,15 +621,22 @@ function handleAddPortWithPosition(position) {
   portForm.deviceId = deviceId.value;
   portForm.interfaceName = '';
   portForm.interfaceType = 'RS422';
-  portForm.position = position;
+  portForm.position = [position];
   portForm.description = '';
   handleBusTypeChange('RS422');
   portDialogRef.value?.open();
 }
 
-function handlePortClick(portId) {
-  if (!portId) return;
-  selectedPortId.value = selectedPortId.value === portId ? null : portId;
+function handlePortClick(portId, { allowToggle = true } = {}) {
+  const normalizedId = normalizePortKey(portId);
+  if (!normalizedId) return;
+  if (selectedPortId.value === normalizedId) {
+    if (allowToggle) {
+      selectedPortId.value = null;
+    }
+  } else {
+    selectedPortId.value = normalizedId;
+  }
   updatePortHighlight();
 }
 
@@ -594,6 +644,16 @@ function updatePortHighlight() {
   if (!graphInstance.value) return;
   const node = graphInstance.value.getCellById('device_node');
   if (node) {
+    const normalizedSelectedKey = normalizePortKey(selectedPortId.value);
+    const ports = node.getPorts ? node.getPorts() : [];
+    ports.forEach((port) => {
+      const isSelected =
+        normalizedSelectedKey && normalizePortKey(port?.id) === normalizedSelectedKey;
+      node.setPortProp(port.id, ['attrs', 'portBody', 'strokeWidth'], isSelected ? 2 : 1);
+      node.setPortProp(port.id, ['attrs', 'portBody', 'fill'], isSelected ? '#e8f3ff' : '#fff');
+      node.setPortProp(port.id, ['attrs', 'portLabel', 'fill'], isSelected ? '#1f4b99' : '#4b5563');
+      node.setPortProp(port.id, ['attrs', 'portLabel', 'fontWeight'], isSelected ? 600 : 500);
+    });
     node.setData({ ...node.getData(), selectedPortId: selectedPortId.value });
   }
 }
@@ -616,7 +676,7 @@ function handleAddPort() {
   portForm.deviceId = deviceId.value;
   portForm.interfaceName = '';
   portForm.interfaceType = 'RS422';
-  portForm.position = 'right';
+  portForm.position = ['right'];
   portForm.description = '';
   portDialogRef.value?.open();
 }
@@ -634,6 +694,9 @@ async function handleDeletePort(interfaceId) {
   const index = findPortIndexByKey(interfaceId);
   if (index > -1) {
     tempPorts.value.splice(index, 1);
+    if (normalizePortKey(selectedPortId.value) === normalizePortKey(interfaceId)) {
+      selectedPortId.value = null;
+    }
     ElMessage.success('删除成功');
     syncDevicePorts();
     updateGraphData();
@@ -645,7 +708,9 @@ async function handlePortSubmit(formData) {
     formData.interfaceId !== null &&
     formData.interfaceId !== undefined &&
     formData.interfaceId !== '';
+
   if (hasInterfaceKey) {
+    // 编辑模式：更新现有端口
     const index = findPortIndexByKey(formData.interfaceId);
     if (index > -1) {
       const oldPort = tempPorts.value[index];
@@ -658,18 +723,33 @@ async function handlePortSubmit(formData) {
         messageConfig: oldPort.messageConfig,
       };
     }
+    ElMessage.success('修改成功');
   } else {
-    const tempId = `port_${Date.now()}`;
-    const newPort = {
-      ...formData,
-      id: tempId,
-      interfaceId: null,
-      params: getDefaultParams(formData.interfaceType),
-      messageConfig: null,
-    };
-    tempPorts.value.push(newPort);
-    ElMessage.success('添加成功');
+    // 新增模式：如果选择了多个位置，为每个位置创建一个端口
+    const positions = Array.isArray(formData.position) ? formData.position : [formData.position];
+
+    if (positions.length === 0) {
+      ElMessage.warning('请选择至少一个端口位置');
+      return;
+    }
+
+    positions.forEach((pos, index) => {
+      const tempId = `port_${Date.now()}_${index}`;
+      const newPort = {
+        ...formData,
+        position: [pos], // 每个端口只有一个位置
+        id: tempId,
+        interfaceId: null,
+        params: getDefaultParams(formData.interfaceType),
+        messageConfig: null,
+      };
+      tempPorts.value.push(newPort);
+    });
+
+    const count = positions.length;
+    ElMessage.success(`成功添加${count}个端口`);
   }
+
   portDialogRef.value?.close();
   syncDevicePorts();
   updateGraphData();
@@ -721,10 +801,93 @@ function handleProtocolClick({ port }) {
 
 onMounted(() => {
   loadDeviceInfo();
+  document.addEventListener('keydown', handleKeydownDelete, true);
 });
 onBeforeUnmount(() => {
   if (graphInstance.value) {
-    graphInstance.value.off('port:contextmenu', handlePortContextMenu);
+    if (graphEventHandlers.portClick) {
+      graphInstance.value.off('port:click', graphEventHandlers.portClick);
+    }
+    if (graphEventHandlers.portDblClick) {
+      graphInstance.value.off('port:dblclick', graphEventHandlers.portDblClick);
+    }
+    if (graphEventHandlers.portContextMenu) {
+      graphInstance.value.off('port:contextmenu', graphEventHandlers.portContextMenu);
+    }
+    if (graphEventHandlers.nodeContextMenu) {
+      graphInstance.value.off('node:contextmenu', graphEventHandlers.nodeContextMenu);
+    }
+    if (graphEventHandlers.blankClick) {
+      graphInstance.value.off('blank:click', graphEventHandlers.blankClick);
+    }
   }
+  document.removeEventListener('keydown', handleKeydownDelete, true);
 });
+
+function bindGraphEvents(graph) {
+  if (!graph) return;
+  graphEventHandlers.portClick = ({ port }) => {
+    const portId = port?.id || port?.interfaceId;
+    handlePortClick(portId, { allowToggle: true });
+  };
+  graphEventHandlers.portDblClick = ({ port }) => {
+    const portId = port?.id || port?.interfaceId;
+    const portData = findPortByKey(portId);
+    if (portData) {
+      handleEditPort(portData);
+    }
+  };
+  graphEventHandlers.portContextMenu = ({ port }) => {
+    const portId = port?.id || port?.interfaceId;
+    if (portId) {
+      handlePortClick(portId);
+    }
+  };
+  graphEventHandlers.blankClick = () => {
+    if (selectedPortId.value) {
+      selectedPortId.value = null;
+      updatePortHighlight();
+    }
+  };
+  graphEventHandlers.nodeContextMenu = ({ e }) => {
+    // 兼容：如果右键发生在端口元素上但触发了 node:contextmenu，仍然选中该端口
+    const portId = extractEventPortId(e?.target || e?.currentTarget || e?.srcElement);
+    if (portId) {
+      handlePortClick(portId, { allowToggle: false });
+    }
+  };
+  graph.on('port:click', graphEventHandlers.portClick);
+  graph.on('port:dblclick', graphEventHandlers.portDblClick);
+  graph.on('port:contextmenu', graphEventHandlers.portContextMenu);
+  graph.on('node:contextmenu', graphEventHandlers.nodeContextMenu);
+  graph.on('blank:click', graphEventHandlers.blankClick);
+}
+
+function handleDeleteSelectedPort() {
+  const portData = findPortByKey(selectedPortId.value);
+  if (!portData) {
+    selectedPortId.value = null;
+    return;
+  }
+  const name = portData.interfaceName || portData.interfaceId || '端口';
+  return ElMessageBox.confirm(`确定要删除端口 "${name}" 吗？`, '删除确认', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
+    handleDeletePort(portData.id || portData.interfaceId);
+  });
+}
+
+function handleKeydownDelete(e) {
+  const key = e.key?.toLowerCase();
+  const targetTag = (e?.target?.tagName || '').toLowerCase();
+  const isTypingField =
+    targetTag === 'input' || targetTag === 'textarea' || e?.target?.isContentEditable;
+  if ((key === 'delete' || key === 'backspace') && selectedPortId.value && !isTypingField) {
+    e.preventDefault();
+    e.stopPropagation();
+    handleDeleteSelectedPort();
+  }
+}
 </script>

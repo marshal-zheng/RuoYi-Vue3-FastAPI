@@ -52,3 +52,24 @@ export function exportDevice(query) {
     responseType: 'blob',
   });
 }
+
+// 检查设备名称是否唯一
+export function checkDeviceNameUnique(deviceName, deviceId) {
+  return request({
+    url: '/device/checkNameUnique',
+    method: 'get',
+    params: {
+      deviceName: deviceName,
+      deviceId: deviceId,
+    },
+  });
+}
+
+// 克隆设备
+export function cloneDevice(data) {
+  return request({
+    url: '/device/clone',
+    method: 'post',
+    data: data,
+  });
+}

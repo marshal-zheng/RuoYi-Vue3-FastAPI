@@ -5,6 +5,7 @@
  */
 import { ref, onUnmounted } from 'vue'
 import { ElMessage } from 'element-plus'
+import { getToken } from '@/utils/auth'
 
 export function useSimulationWebSocket() {
   const ws = ref(null)
@@ -31,10 +32,15 @@ export function useSimulationWebSocket() {
       return
     }
 
-    // 构建WebSocket URL
+    // 构建WebSocket URL，携带token以通过后端鉴权
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const host = window.location.host
-    const wsUrl = `${protocol}//${host}/api/simulation/sessions/${sessionId}/ws`
+    const baseApi = import.meta.env.VITE_APP_BASE_API || ''
+    const apiPrefix = (baseApi.startsWith('/') ? baseApi : `/${baseApi}`).replace(/\/$/, '')
+    const wsHost = window.location.host
+    const token = getToken()
+    const tokenQuery = token ? `?token=${encodeURIComponent(token)}` : ''
+    const wsPath = `${apiPrefix}/simulation/sessions/${sessionId}/ws${tokenQuery}`
+    const wsUrl = `${protocol}//${wsHost}${wsPath}`
 
     try {
       ws.value = new WebSocket(wsUrl)

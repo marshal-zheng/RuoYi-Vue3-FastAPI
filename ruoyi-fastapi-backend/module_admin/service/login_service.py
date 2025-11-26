@@ -7,7 +7,7 @@ from fastapi import Depends, Form, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt.exceptions import InvalidTokenError
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 from config.constant import CommonConstant, MenuConstant
 from config.enums import RedisInitKeyConfig
 from config.env import AppConfig, JwtConfig
@@ -198,9 +198,31 @@ class LoginService:
         :return: 当前用户信息对象
         :raise: 令牌异常AuthException
         """
-        # if token[:6] != 'Bearer':
-        #     logger.warning("用户token不合法")
-        #     raise AuthException(data="", message="用户token不合法")
+        return await cls.__resolve_current_user(request, token, query_db)
+
+    @classmethod
+    async def get_current_user_from_token(
+        cls, context: Any, token: Optional[str], query_db: AsyncSession
+    ):
+        """
+        根据显式传入的token获取当前用户信息（用于WebSocket等无法通过oauth2_scheme注入的场景）
+
+        :param context: Request 或 WebSocket 对象，用于访问应用状态
+        :param token: 用户token（可包含Bearer前缀）
+        :param query_db: orm对象
+        :return: 当前用户信息对象
+        """
+        return await cls.__resolve_current_user(context, token, query_db)
+
+    @classmethod
+    async def __resolve_current_user(cls, context: Any, token: Optional[str], query_db: AsyncSession):
+        """
+        统一的token解析逻辑，支持HTTP请求和WebSocket连接
+        """
+        if not token:
+            logger.warning('用户token不合法')
+            raise AuthException(data='', message='用户token不合法')
+
         try:
             if token.startswith('Bearer'):
                 token = token.split(' ')[1]
@@ -218,22 +240,30 @@ class LoginService:
         if query_user.get('user_basic_info') is None:
             logger.warning('用户token不合法')
             raise AuthException(data='', message='用户token不合法')
+
+        app = getattr(context, 'app', None)
+        redis_client = getattr(app, 'state', None).redis if app and hasattr(app, 'state') else None
+        if redis_client is None:
+            logger.warning('Redis客户端不可用')
+            raise AuthException(data='', message='用户token不合法')
+
         if AppConfig.app_same_time_login:
-            redis_token = await request.app.state.redis.get(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
+            redis_token = await redis_client.get(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
         else:
             # 此方法可实现同一账号同一时间只能登录一次
-            redis_token = await request.app.state.redis.get(
+            redis_token = await redis_client.get(
                 f"{RedisInitKeyConfig.ACCESS_TOKEN.key}:{query_user.get('user_basic_info').user_id}"
             )
+
         if token == redis_token:
             if AppConfig.app_same_time_login:
-                await request.app.state.redis.set(
+                await redis_client.set(
                     f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}',
                     redis_token,
                     ex=timedelta(minutes=JwtConfig.jwt_redis_expire_minutes),
                 )
             else:
-                await request.app.state.redis.set(
+                await redis_client.set(
                     f"{RedisInitKeyConfig.ACCESS_TOKEN.key}:{query_user.get('user_basic_info').user_id}",
                     redis_token,
                     ex=timedelta(minutes=JwtConfig.jwt_redis_expire_minutes),
@@ -260,9 +290,9 @@ class LoginService:
                 ),
             )
             return current_user
-        else:
-            logger.warning('用户token已失效，请重新登录')
-            raise AuthException(data='', message='用户token已失效，请重新登录')
+
+        logger.warning('用户token已失效，请重新登录')
+        raise AuthException(data='', message='用户token已失效，请重新登录')
 
     @classmethod
     async def get_current_user_routers(cls, user_id: int, query_db: AsyncSession):

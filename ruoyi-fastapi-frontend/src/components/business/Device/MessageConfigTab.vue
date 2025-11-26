@@ -1,5 +1,20 @@
 <template>
   <div class="message-config-tab">
+    <!-- 协议选择区域 -->
+    <div v-if="currentTemplateComponent" class="protocol-selector-section">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-medium text-gray-700">选择协议模板：</span>
+        <ProtocolTemplateSelector
+          v-model="selectedProtocolId"
+          :protocol-type="portInfo?.interfaceType?.toLowerCase()"
+          placeholder="请选择已有协议模板"
+          clearable
+          style="flex: 1"
+          @entity-change="handleProtocolSelect"
+        />
+      </div>
+    </div>
+
     <!-- 协议配置区域 -->
     <div v-if="currentTemplateComponent" class="protocol-config-section">
       <div class="section-header">
@@ -43,6 +58,7 @@
 import { ref, computed, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import ImportFileDialog from '../Protocol/ImportFileDialog.vue';
+import ProtocolTemplateSelector from '../Protocol/selector/ProtocolTemplateSelector.vue';
 import {
   EthernetProtocolTemplate,
   RS422ProtocolTemplate,
@@ -69,6 +85,9 @@ const templateRef = ref();
 // 导入对话框引用
 const importDialogRef = ref();
 
+// 选中的协议ID
+const selectedProtocolId = ref(null);
+
 // 协议配置数据
 const protocolConfig = ref({});
 
@@ -93,6 +112,42 @@ const currentProtocolLabel = computed(() => {
   return interfaceType ? String(interfaceType).toUpperCase() : '';
 });
 
+// 处理协议选择
+function handleProtocolSelect(protocol) {
+  if (!protocol || !protocol.protocolConfig) return;
+
+  // 从选中的协议中加载配置
+  const config = protocol.protocolConfig;
+
+  // 构建协议配置对象
+  const newConfig = {
+    ...protocolConfig.value,
+  };
+
+  // 更新表头信息（兼容扁平结构和嵌套结构）
+  // 后端返回的 protocolConfig 可能是扁平结构（header 字段直接在根级别）
+  // 或者是嵌套结构（header 字段在 config.header 中）
+  const headerData = config.header || config;
+  Object.assign(newConfig, normalizeHeader(headerData));
+
+  // 设备模式下强制清空发送方/接收方
+  if (props.deviceMode) {
+    newConfig.sender = '';
+    newConfig.receiver = '';
+  }
+
+  // 更新字段列表
+  if (config.fields && config.fields.length > 0) {
+    newConfig.fields = config.fields.map((field) => ({
+      ...field,
+      id: field.id || Date.now().toString() + Math.random(),
+      parentId: field.parentId || null,
+    }));
+  }
+
+  protocolConfig.value = newConfig;
+}
+
 // 打开导入对话框
 function handleImport() {
   importDialogRef.value?.open?.();
@@ -107,15 +162,14 @@ function handleImportConfirm(data) {
     ...protocolConfig.value,
   };
 
-  // 更新表头信息
-  if (data.header) {
-    Object.assign(config, normalizeHeader(data.header));
+  // 更新表头信息（兼容扁平结构和嵌套结构）
+  const headerData = data.header || data;
+  Object.assign(config, normalizeHeader(headerData));
 
-    // 设备模式下强制清空发送方/接收方
-    if (props.deviceMode) {
-      config.sender = '';
-      config.receiver = '';
-    }
+  // 设备模式下强制清空发送方/接收方
+  if (props.deviceMode) {
+    config.sender = '';
+    config.receiver = '';
   }
 
   // 更新字段列表
@@ -198,6 +252,9 @@ function clearValidate() {
 
 // 初始化数据
 function initializeData() {
+  // 设置选中的协议ID
+  selectedProtocolId.value = props.portInfo?.protocolId || null;
+
   if (props.portInfo.messageConfig) {
     const config = JSON.parse(JSON.stringify(props.portInfo.messageConfig.header || {}));
     const fields = JSON.parse(JSON.stringify(props.portInfo.messageConfig.fields || []));
@@ -285,6 +342,15 @@ defineExpose({
   flex-direction: column;
   height: 100%;
   padding: 0 4px;
+  gap: 12px;
+}
+
+.protocol-selector-section {
+  background-color: var(--el-fill-color-light);
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--el-border-color-lighter);
+  flex-shrink: 0;
 }
 
 .protocol-config-section {

@@ -23,8 +23,7 @@ from utils.response_util import ResponseUtil
 
 
 simulationController = APIRouter(
-    prefix='/simulation',
-    dependencies=[Depends(LoginService.get_current_user)]
+    prefix='/simulation'
 )
 
 
@@ -69,7 +68,10 @@ manager = ConnectionManager()
 
 @simulationController.post(
     '/sessions',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:session:create'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:create'))
+    ]
 )
 @Log(title='仿真管理-创建会话', business_type=BusinessType.INSERT)
 async def create_simulation_session(
@@ -104,7 +106,10 @@ async def create_simulation_session(
 
 @simulationController.post(
     '/sessions/{session_id}/start',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:session:start'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:start'))
+    ]
 )
 @Log(title='仿真管理-启动仿真', business_type=BusinessType.UPDATE)
 async def start_simulation_session(
@@ -133,7 +138,10 @@ async def start_simulation_session(
 
 @simulationController.post(
     '/sessions/{session_id}/stop',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:session:stop'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:stop'))
+    ]
 )
 @Log(title='仿真管理-停止仿真', business_type=BusinessType.UPDATE)
 async def stop_simulation_session(
@@ -164,7 +172,10 @@ async def stop_simulation_session(
 
 @simulationController.get(
     '/sessions/{session_id}/status',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:session:query'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:query'))
+    ]
 )
 async def get_simulation_status(
     request: Request,
@@ -189,7 +200,10 @@ async def get_simulation_status(
 
 @simulationController.get(
     '/sessions/{session_id}/messages',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:data:query'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+    ]
 )
 async def get_simulation_messages(
     request: Request,
@@ -216,7 +230,10 @@ async def get_simulation_messages(
 
 @simulationController.get(
     '/sessions/{session_id}/bandwidth',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:data:query'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+    ]
 )
 async def get_simulation_bandwidth(
     request: Request,
@@ -243,7 +260,10 @@ async def get_simulation_bandwidth(
 
 @simulationController.get(
     '/sessions/{session_id}/alarms',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:data:query'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+    ]
 )
 async def get_simulation_alarms(
     request: Request,
@@ -268,7 +288,10 @@ async def get_simulation_alarms(
 
 @simulationController.post(
     '/sessions/{session_id}/export',
-    dependencies=[Depends(CheckUserInterfaceAuth('simulation:data:export'))]
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:data:export'))
+    ]
 )
 @Log(title='仿真管理-导出数据', business_type=BusinessType.EXPORT)
 async def export_simulation_data(
@@ -301,7 +324,8 @@ async def export_simulation_data(
 @simulationController.websocket('/sessions/{session_id}/ws')
 async def websocket_endpoint(
     websocket: WebSocket,
-    session_id: str
+    session_id: str,
+    query_db: AsyncSession = Depends(get_db)
 ):
     """
     WebSocket端点 - 实时推送仿真数据
@@ -315,6 +339,19 @@ async def websocket_endpoint(
             "data": {...}
         }
     """
+    token = (
+        websocket.query_params.get('token')
+        or websocket.headers.get('Authorization')
+        or websocket.cookies.get('Admin-Token')
+    )
+
+    try:
+        await LoginService.get_current_user_from_token(websocket, token, query_db)
+    except Exception as e:
+        logger.warning(f'WebSocket认证失败: {str(e)}')
+        await websocket.close(code=1008, reason='Unauthorized')
+        return
+
     await manager.connect(websocket, session_id)
     logger.info(f'WebSocket连接建立: {session_id}')
     
