@@ -2,6 +2,7 @@
 Word/Excel 文档导出工具
 使用HTML转Word的方式生成Word文档，并支持导出附录Excel压缩包
 """
+import base64
 import io
 import json
 import re
@@ -10,6 +11,10 @@ from typing import Optional
 
 from openpyxl import Workbook
 from openpyxl.cell.cell import MergedCell
+try:
+    from PIL import Image  # type: ignore
+except Exception:  # Pillow 可能未安装，忽略
+    Image = None
 from openpyxl.styles import Alignment, Border, Font, Side
 
 # 默认的接口控制文件模板
@@ -974,12 +979,76 @@ def export_version_to_excel(topology_data: Optional[dict] = None) -> bytes:
     return data
 
 
-def export_version_to_word(topology_data: Optional[dict] = None) -> bytes:
+def generate_image_html(image_base64: Optional[str] = None) -> str:
+    """
+    生成图片的HTML标签
+    
+    Args:
+        image_base64: 图片的base64编码字符串（不含data:前缀）
+    
+    Returns:
+        HTML img标签字符串，如果没有图片则返回占位文本
+    """
+    if not image_base64:
+        return '（图片占位）'
+
+    # 若图片为横向且安装了 Pillow，自动旋转 90 度以竖向适配
+    def rotate_if_needed(b64: str) -> str:
+        if not Image:
+            return b64
+        try:
+            img_bytes = base64.b64decode(b64)
+            with Image.open(io.BytesIO(img_bytes)) as im:
+                width, height = im.size
+                if width > height:
+                    # 逆时针旋转 90 度
+                    im = im.rotate(-90, expand=True)
+                    buf = io.BytesIO()
+                    im.save(buf, format='PNG')
+                    return base64.b64encode(buf.getvalue()).decode('utf-8')
+        except Exception:
+            return b64
+        return b64
+
+    image_base64 = rotate_if_needed(image_base64)
+
+    # 构建data URI
+    data_uri = f'data:image/png;base64,{image_base64}'
+    
+    # 在 Word 中限制尺寸并保持等比缩放，旋转 90 度以适配竖向，避免跨页/超出可视区域
+    wrapper_style = (
+        'width:100%;'
+        'display:flex;'
+        'align-items:center;'
+        'justify-content:center;'
+        'margin:4pt auto;'
+    )
+    img_style = (
+        'display:block;'
+        'max-width:9cm;'
+        'max-height:12cm;'
+        'object-fit:contain;'
+        'height:auto;'
+        'border:1pt solid #e6e6e6;'
+        'padding:4pt;'
+        'box-sizing:border-box;'
+        'background:#fafafa;'
+        'transform:rotate(90deg);'
+        'transform-origin:center center;'
+    )
+    return f'<div style="{wrapper_style}"><img src="{data_uri}" style="{img_style}" alt="信息交联关系图" /></div>'
+
+
+def export_version_to_word(
+    topology_data: Optional[dict] = None,
+    image_base64: Optional[str] = None
+) -> bytes:
     """
     根据版本拓扑数据导出Word文档
     
     Args:
         topology_data: 拓扑数据
+        image_base64: 拓扑图的base64编码字符串（可选，由前端生成并传递）
     
     Returns:
         Word文档的字节内容
@@ -989,9 +1058,12 @@ def export_version_to_word(topology_data: Optional[dict] = None) -> bytes:
     
     # 通信概览表（替换 ${table}）
     summary_table_html = generate_summary_table_html(topology_data)
+    
+    # 生成图片HTML（替换 ${image}）
+    image_html = generate_image_html(image_base64)
 
     template_data = {
-        'image': '（图片占位）',
+        'image': image_html,
         'table': summary_table_html,
         'Appendix': appendix_html if appendix_html else '<h2 style="text-align: center;"><span style="font-family: 黑体;">附录</span></h2>',
     }

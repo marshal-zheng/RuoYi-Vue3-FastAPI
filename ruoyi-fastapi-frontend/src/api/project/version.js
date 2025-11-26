@@ -70,10 +70,11 @@ export function unlockProjectVersions(projectId) {
 }
 
 // 导出项目版本为Word文档
-export function exportProjectVersion(versionId) {
+export function exportProjectVersion(data) {
   return request({
-    url: `/project/version/export/${versionId}`,
-    method: 'get',
+    url: '/project/version/export',
+    method: 'post',
+    data: data,
     responseType: 'blob',
   });
 }

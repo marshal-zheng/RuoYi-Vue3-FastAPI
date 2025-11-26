@@ -8,16 +8,23 @@
         <FileTypeSelector v-model="state.data.format" style="width: 100%" />
       </el-form-item>
     </el-form>
+    <div v-if="exporting" class="export-loading">
+      <el-icon class="is-loading"><Loading /></el-icon>
+      <span>正在生成拓扑图...</span>
+    </div>
   </ZxDialog>
 </template>
 
 <script setup name="VersionExportDialog">
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, ref } from 'vue';
+import { Loading } from '@element-plus/icons-vue';
 import { useDialog } from '@zxio/zxui';
 import { exportProjectVersion, exportProjectVersionExcel } from '@/api/project/version';
+import { exportTopologyAsImage } from '../composables/topoExportUtils';
 import { FileTypeSelector } from './selector';
 
 const { proxy } = getCurrentInstance();
+const exporting = ref(false);
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
   title: '导出版本',
@@ -25,6 +32,7 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
   okText: '确定导出',
   defaultData: () => ({
     versionId: null,
+    projectId: null,
     versionName: '',
     format: 'word',
   }),
@@ -39,7 +47,23 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
     let extension = '';
 
     if (data.format === 'word') {
-      response = await exportProjectVersion(data.versionId);
+      exporting.value = true;
+      let imageBase64 = null;
+
+      // 生成拓扑图图片
+      if (data.projectId) {
+        imageBase64 = await exportTopologyAsImage({
+          projectId: data.projectId,
+          versionId: data.versionId,
+        });
+      }
+      exporting.value = false;
+
+      // 调用导出接口，传递图片数据
+      response = await exportProjectVersion({
+        versionId: data.versionId,
+        imageBase64: imageBase64,
+      });
       mimeType = 'application/msword';
       extension = 'doc';
     } else if (data.format === 'excel') {
@@ -47,7 +71,10 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
       mimeType = 'application/zip';
       extension = 'zip';
     } else if (data.format === 'xml') {
-      response = await exportProjectVersion(data.versionId);
+      response = await exportProjectVersion({
+        versionId: data.versionId,
+        imageBase64: null,
+      });
       mimeType = 'application/xml';
       extension = 'xml';
     }
@@ -70,6 +97,7 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
 function openDialog(row, defaultFormat = 'word') {
   open({
     versionId: row.versionId,
+    projectId: row.projectId,
     versionName: row.versionName || '',
     format: defaultFormat || 'word',
   });
@@ -77,3 +105,14 @@ function openDialog(row, defaultFormat = 'word') {
 
 defineExpose({ open: openDialog, close });
 </script>
+
+<style scoped>
+.export-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  color: var(--el-color-primary);
+}
+</style>
