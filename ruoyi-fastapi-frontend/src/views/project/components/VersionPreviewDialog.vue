@@ -1,48 +1,39 @@
 <template>
-  <ZxDialog v-bind="dialog.dialogProps.value" v-on="dialog.dialogEvents.value">
-    <RichEditor
-      v-model="versionData.description"
-      :editorConfig="{ readOnly: false }"
-      height="500px"
-    />
+  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+    <RichEditor v-model="state.data.description" :bordered="false" auto-height />
   </ZxDialog>
 </template>
 
 <script setup name="VersionPreviewDialog">
-import { ref } from 'vue';
 import { useDialog } from '@zxio/zxui';
 import { Editor as RichEditor } from '@/components/RichEditor';
 
-const versionData = ref({
-  versionNumber: '',
-  versionName: '',
-  description: '',
-});
-
-const dialog = useDialog({
+const { state, dialogProps, dialogEvents, open, close } = useDialog({
   title: '预览版本',
   width: '90%',
   height: '80%',
-  footer: false,
+  okText: '确定',
+  defaultData: () => ({
+    versionNumber: '',
+    versionName: '',
+    description: '',
+  }),
+  onConfirm: async () => {
+    console.log('富文本编辑器内容:', state.data.description);
+    throw new Error('测试弹窗确认的报错');
+    return state.data;
+  },
 });
 
-const open = (data) => {
-  versionData.value = {
-    versionNumber: data.versionNumber || '',
-    versionName: data.versionName || '',
-    description: data.description || '<p style="color: #909399;">暂无描述内容</p>',
-  };
-  dialog.open();
-};
+function openDialog(data) {
+  open({
+    versionNumber: data?.versionNumber || '',
+    versionName: data?.versionName || '',
+    description: data?.description || '<p style="color: #909399;">暂无描述内容</p>',
+  });
+}
 
-const close = () => {
-  dialog.close();
-};
-
-defineExpose({
-  open,
-  close,
-});
+defineExpose({ open: openDialog, close });
 </script>
 
 <style scoped lang="less">

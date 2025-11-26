@@ -68,3 +68,21 @@ export function unlockProjectVersions(projectId) {
     method: 'put',
   });
 }
+
+// 导出项目版本为Word文档
+export function exportProjectVersion(versionId) {
+  return request({
+    url: `/project/version/export/${versionId}`,
+    method: 'get',
+    responseType: 'blob',
+  });
+}
+
+// 导出项目版本附录Excel（ZIP）
+export function exportProjectVersionExcel(versionId) {
+  return request({
+    url: `/project/version/export-excel/${versionId}`,
+    method: 'get',
+    responseType: 'blob',
+  });
+}

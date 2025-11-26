@@ -105,11 +105,23 @@
         </template>
       </vxe-column>
     </vxe-table>
+
+    <!-- 附注区域 -->
+    <div class="notes-section mt-4">
+      <div class="notes-label font-medium mb-2">附注</div>
+      <el-input
+        v-model="localConfig.notes"
+        type="textarea"
+        :rows="3"
+        placeholder="请输入附注信息"
+        class="notes-input"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive, toRefs } from 'vue';
+import { ref, watch, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
 import { useDict } from '@/utils/dict';
@@ -167,6 +179,7 @@ const defaultConfig = {
   frameLength: '',
   errorHandle: '',
   errorHandleLabel: '',
+  notes: '',
   fields: [],
 };
 

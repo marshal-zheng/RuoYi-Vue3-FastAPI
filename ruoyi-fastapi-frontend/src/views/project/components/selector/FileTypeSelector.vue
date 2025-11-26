@@ -1,19 +1,15 @@
 <template>
-  <el-select
+  <zx-select
     :model-value="modelValue"
+    :options="fileTypeOptions"
     :placeholder="placeholder"
     :disabled="disabled"
     :clearable="clearable"
     :size="size"
-    :style="customStyle"
+    v-bind="$attrs"
     @update:model-value="handleChange"
   >
-    <el-option
-      v-for="option in fileTypeOptions"
-      :key="option.value"
-      :label="option.label"
-      :value="option.value"
-    >
+    <template #default="{ option }">
       <div class="file-type-option">
         <el-icon class="file-type-icon">
           <component :is="option.icon" />
@@ -21,8 +17,8 @@
         <span class="file-type-text">{{ option.label }}</span>
         <span class="file-type-ext">{{ option.extension }}</span>
       </div>
-    </el-option>
-  </el-select>
+    </template>
+  </zx-select>
 </template>
 
 <script setup name="FileTypeSelector">
@@ -65,21 +61,21 @@ const emit = defineEmits(['update:modelValue', 'change']);
 // 默认文件类型选项
 const defaultFileTypeOptions = [
   {
-    label: 'Word文档',
-    value: 'doc',
+    label: 'Word 文档',
+    value: 'word',
     extension: '.doc',
     icon: Document,
     description: 'Microsoft Word文档格式',
   },
   {
-    label: 'Excel表格',
-    value: 'xlsx',
-    extension: '.xlsx',
+    label: 'Excel 表格',
+    value: 'excel',
+    extension: '.zip',
     icon: Grid,
-    description: 'Microsoft Excel表格格式',
+    description: '导出附录Excel压缩包',
   },
   {
-    label: 'XML文件',
+    label: 'XML 文件',
     value: 'xml',
     extension: '.xml',
     icon: DocumentCopy,
@@ -87,9 +83,12 @@ const defaultFileTypeOptions = [
   },
 ];
 
-// 计算文件类型选项
+// 计算文件类型选项 (返回函数供 zx-select 使用)
 const fileTypeOptions = computed(() => {
-  return props.options || defaultFileTypeOptions;
+  return async () => {
+    const options = props.options || defaultFileTypeOptions;
+    return options;
+  };
 });
 
 function handleChange(value) {

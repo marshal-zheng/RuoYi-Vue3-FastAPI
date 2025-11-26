@@ -86,7 +86,6 @@
           >
             <template #default="{ row }">
               <div class="op-col__wrap">
-                <ZxButton link type="primary" @click="handlePreviewVersion(row)">预览</ZxButton>
                 <ZxButton link type="primary" @click="handleSimulateVersion(row)">仿真</ZxButton>
                 <ZxButton link type="primary" @click="handleEditVersionTopo(row)">图编辑</ZxButton>
                 <ZxMoreAction
@@ -150,12 +149,15 @@
 
     <!-- 预览版本 -->
     <VersionPreviewDialog ref="previewDialogRef" />
+
+    <!-- 导出版本对话框 -->
+    <VersionExportDialog ref="exportDialogRef" />
   </div>
 </template>
 
 <script setup name="VersionList">
 import { ref, reactive, watch, getCurrentInstance } from 'vue';
-import { View, Edit, Delete, Lock, CopyDocument, Plus } from '@element-plus/icons-vue';
+import { View, Delete, Lock, CopyDocument, Download } from '@element-plus/icons-vue';
 import {
   listProjectVersion,
   addProjectVersion,
@@ -167,6 +169,7 @@ import { parseTime } from '@/utils/ruoyi';
 import VersionDetailDialog from './VersionDetailDialog.vue';
 import VersionCloneDialog from './VersionCloneDialog.vue';
 import VersionPreviewDialog from './VersionPreviewDialog.vue';
+import VersionExportDialog from './VersionExportDialog.vue';
 
 const { proxy } = getCurrentInstance();
 
@@ -181,6 +184,7 @@ const versionGridListRef = ref(null);
 const detailDialogRef = ref(null);
 const cloneDialogRef = ref(null);
 const previewDialogRef = ref(null);
+const exportDialogRef = ref(null);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
@@ -248,6 +252,22 @@ function handleSelectionChange(selection) {
 const getMoreActionList = (row) => {
   const actions = [];
 
+  // 预览版本
+  actions.push({
+    label: '预览',
+    eventTag: 'preview',
+    icon: View,
+    type: 'primary',
+  });
+
+  // 导出文件
+  actions.push({
+    label: '导出文件',
+    eventTag: 'export',
+    icon: Download,
+    type: 'primary',
+  });
+
   // 固化版本/解除固化
   if (row.isLocked === '1') {
     actions.push({
@@ -292,6 +312,15 @@ const getMoreActionList = (row) => {
 // 处理更多操作选择
 const handleMoreActionSelect = async (item, row, handleRefresh) => {
   switch (item.eventTag) {
+    case 'preview':
+      handlePreviewVersion(row);
+      break;
+    case 'export':
+      handleExportVersion(row);
+      break;
+    case 'exportExcel':
+      handleExportVersionExcel(row);
+      break;
     case 'lock':
       handleLockVersion(row, handleRefresh);
       break;
@@ -473,8 +502,13 @@ function handlePreviewVersion(row) {
 }
 
 /** 导出版本 */
-function handleExportVersion() {
-  proxy.$modal.msgInfo('导出版本功能待开发');
+function handleExportVersion(row) {
+  exportDialogRef.value?.open(row);
+}
+
+/** 导出版本（直接选择 Excel） */
+function handleExportVersionExcel(row) {
+  exportDialogRef.value?.open(row, 'excel');
 }
 </script>
 

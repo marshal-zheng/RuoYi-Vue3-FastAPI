@@ -349,19 +349,21 @@ const getBusTypeTagType = (busType) => {
 const handleProtocolClick = (protocolItem) => {
   if (!protocolItem) return;
   const port = protocolItem.port;
-  const message = protocolItem.message || {};
-  const direction = protocolItem.direction || (protocolItem.isReverse ? 'reverse' : 'forward');
+  const messageWrapper = protocolItem.message || {};
+  // 实际的消息配置数据在 messageWrapper.message 中
+  const messageData = messageWrapper.message || {};
+  const direction = messageWrapper.direction || (protocolItem.isReverse ? 'reverse' : 'forward');
   if (!port) return;
 
   const currentDeviceName =
     formData.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
-  
-  // 优先使用协议消息头中的接收方作为对端设备名称
-  let peerDeviceName = message.header?.receiver;
 
-  // 如果没有获取到，尝试通过 message.id 解析索引来获取对应的 peerDeviceName
-  if (!peerDeviceName && message.id) {
-    const parts = message.id.toString().split('-');
+  // 优先使用协议消息头中的接收方作为对端设备名称
+  let peerDeviceName = messageData.header?.receiver;
+
+  // 如果没有获取到，尝试通过 messageWrapper.id 解析索引来获取对应的 peerDeviceName
+  if (!peerDeviceName && messageWrapper.id) {
+    const parts = messageWrapper.id.toString().split('-');
     const index = parseInt(parts[parts.length - 1]);
     if (!isNaN(index) && Array.isArray(port.peerDeviceNames)) {
       peerDeviceName = port.peerDeviceNames[index];
@@ -374,7 +376,7 @@ const handleProtocolClick = (protocolItem) => {
   }
 
   // 强制确保 header.receiver 与 peerDeviceName 一致
-  const header = cloneHeader(message.header);
+  const header = cloneHeader(messageData.header);
   if (peerDeviceName) {
     header.receiver = peerDeviceName;
   }
@@ -386,9 +388,9 @@ const handleProtocolClick = (protocolItem) => {
     direction,
     messageConfig: {
       header: header,
-      fields: cloneFields(message.fields),
+      fields: cloneFields(messageData.fields),
     },
-    protocolId: message.protocolId || port.protocolId || null,
+    protocolId: messageData.protocolId || port.protocolId || null,
   };
   console.log('Opening dialog with portInfo:', portInfo);
   currentPortIndex.value = port._originalIndex;

@@ -296,6 +296,36 @@ INSERT INTO sys_dict_data (dict_code, dict_sort, dict_label, dict_value, dict_ty
 SELECT 171, 2, 'CAN扩展帧', 'can_extended', 'sys_protocol_method_can', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'CAN扩展帧'
 WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_code = 171);
 
+-- 2.9.1 RS422传输方式
+INSERT INTO sys_dict_type (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+SELECT 'RS422传输方式', 'sys_protocol_method_rs422', '0', 'admin', NOW(), '', NULL, 'RS422协议传输方式'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_method_rs422');
+
+INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 1, '异步传输', 'asynchronous', 'sys_protocol_method_rs422', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'RS422异步传输方式'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'sys_protocol_method_rs422' AND dict_value = 'asynchronous');
+
+INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 2, '同步传输', 'synchronous', 'sys_protocol_method_rs422', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'RS422同步传输方式'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'sys_protocol_method_rs422' AND dict_value = 'synchronous');
+
+-- 2.9.2 1553B传输方式
+INSERT INTO sys_dict_type (dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
+SELECT '1553B传输方式', 'sys_protocol_method_1553b', '0', 'admin', NOW(), '', NULL, '1553B协议传输方式'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_type WHERE dict_type = 'sys_protocol_method_1553b');
+
+INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 1, 'BC->RT', 'bc_to_rt', 'sys_protocol_method_1553b', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'BC向RT传输'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'sys_protocol_method_1553b' AND dict_value = 'bc_to_rt');
+
+INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 2, 'RT->BC', 'rt_to_bc', 'sys_protocol_method_1553b', '', '', 'N', '0', 'admin', NOW(), '', NULL, 'RT向BC传输'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'sys_protocol_method_1553b' AND dict_value = 'rt_to_bc');
+
+INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, update_by, update_time, remark)
+SELECT 3, 'RT->RT', 'rt_to_rt', 'sys_protocol_method_1553b', '', '', 'Y', '0', 'admin', NOW(), '', NULL, 'RT间传输'
+FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type = 'sys_protocol_method_1553b' AND dict_value = 'rt_to_rt');
+
 -- 2.10 数据类型
 INSERT INTO sys_dict_type (dict_id, dict_name, dict_type, status, create_by, create_time, update_by, update_time, remark)
 SELECT 116, '数据类型', 'sys_protocol_data_type', '0', 'admin', NOW(), '', NULL, '协议字段数据类型'

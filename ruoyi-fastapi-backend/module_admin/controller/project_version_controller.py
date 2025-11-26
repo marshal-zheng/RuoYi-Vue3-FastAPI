@@ -1,6 +1,9 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import StreamingResponse
 from sqlalchemy.ext.asyncio import AsyncSession
+from io import BytesIO
+from urllib.parse import quote
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
@@ -14,10 +17,12 @@ from module_admin.entity.vo.project_version_vo import (
 )
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.project_version_service import ProjectVersionService
+from module_admin.service.project_topology_service import ProjectTopologyService
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
+from utils.word_util import export_version_to_word, export_version_to_excel
 
 
 projectVersionController = APIRouter(
@@ -203,3 +208,100 @@ async def unlock_project_versions_by_project(
     )
     logger.info(unlock_result.message)
     return ResponseUtil.success(msg=unlock_result.message)
+
+
+@projectVersionController.get(
+    '/export/{version_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:version:export'))]
+)
+@Log(title='工程管理-版本', business_type=BusinessType.EXPORT)
+async def export_project_version(
+    request: Request,
+    version_id: int,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    导出项目版本为Word文档
+    """
+    # 获取版本详情
+    version_detail = await ProjectVersionService.project_version_detail_services(query_db, version_id)
+    
+    # 获取版本对应的拓扑数据
+    project_id = None
+    version_name = ''
+    if version_detail:
+        project_id = version_detail.get('project_id') or version_detail.get('projectId')
+        version_name = version_detail.get('version_name') or version_detail.get('versionName') or ''
+    topology_data = None
+
+    if project_id:
+        topo_result = await ProjectTopologyService.get_project_topology_services(
+            query_db, project_id, version_id
+        )
+        if topo_result:
+            topology_data = topo_result.get('topology_data') or topo_result.get('topologyData')
+    
+    # 生成Word文档
+    word_content = export_version_to_word(topology_data)
+    
+    # 设置文件名
+    file_name = f"{version_name}_接口控制文件.doc" if version_name else "接口控制文件.doc"
+    
+    # 对文件名进行URL编码
+    encoded_filename = quote(file_name)
+    
+    logger.info(f'导出版本 {version_id} 成功')
+    
+    return StreamingResponse(
+        BytesIO(word_content),
+        media_type='application/msword',
+        headers={
+            'Content-Disposition': f"attachment; filename*=UTF-8''{encoded_filename}"
+        }
+    )
+
+
+@projectVersionController.get(
+    '/export-excel/{version_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:version:export'))]
+)
+@Log(title='工程管理-版本Excel', business_type=BusinessType.EXPORT)
+async def export_project_version_excel(
+    request: Request,
+    version_id: int,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    导出项目版本附录Excel（压缩包，每个协议一张表）
+    """
+    # 获取版本详情
+    version_detail = await ProjectVersionService.project_version_detail_services(query_db, version_id)
+
+    project_id = None
+    version_name = ''
+    if version_detail:
+        project_id = version_detail.get('project_id') or version_detail.get('projectId')
+        version_name = version_detail.get('version_name') or version_detail.get('versionName') or ''
+
+    topology_data = None
+    if project_id:
+        topo_result = await ProjectTopologyService.get_project_topology_services(
+            query_db, project_id, version_id
+        )
+        if topo_result:
+            topology_data = topo_result.get('topology_data') or topo_result.get('topologyData')
+
+    zip_content = export_version_to_excel(topology_data)
+
+    file_name = f"{version_name}_附录表.zip" if version_name else "附录表.zip"
+    encoded_filename = quote(file_name)
+
+    logger.info(f'导出版本 {version_id} Excel 成功')
+
+    return StreamingResponse(
+        BytesIO(zip_content),
+        media_type='application/zip',
+        headers={
+            'Content-Disposition': f"attachment; filename*=UTF-8''{encoded_filename}"
+        }
+    )
