@@ -1,6 +1,6 @@
 import io
 import uuid
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 import pandas as pd
 from fastapi import UploadFile
 from openpyxl import Workbook
@@ -383,36 +383,137 @@ class ProtocolService:
 
         protocol_data = CamelCaseUtil.transform_result(protocol)
         protocol_name = protocol_data.get('protocolName', '协议配置')
-        protocol_config = protocol_data.get('protocolConfig') or {}
-        protocol_type = protocol_data.get('protocolType') or protocol_config.get('protocolType', '')
+        # 兼容 protocol_config 存为 JSON 字符串的情况
+        def ensure_dict(obj):
+            if isinstance(obj, dict):
+                return obj
+            if isinstance(obj, str) and obj.strip():
+                try:
+                    import json
+
+                    loaded = json.loads(obj)
+                    return loaded if isinstance(loaded, dict) else {}
+                except Exception:
+                    return {}
+            return {}
+
+        protocol_config = ensure_dict(protocol_data.get('protocolConfig') or {})
+        nested_protocol_config = ensure_dict(protocol_config.get('protocolConfig'))
+        protocol_type = (
+            protocol_data.get('protocolType')
+            or (protocol_config.get('protocolType') if isinstance(protocol_config, dict) else '')
+            or (
+                nested_protocol_config.get('protocolType')
+                if isinstance(nested_protocol_config, dict)
+                else ''
+            )
+        )
 
         def resolve_header_config():
             # 兼容不同存储结构：
             # 1) 顶层 headerConfig
             # 2) protocolConfig.headerConfig
             # 3) protocolConfig.header (部分保存/导入逻辑使用 header 字段)
-            # 4) 平铺在 protocolConfig（除去字段列表）
-            header_cfg = (
-                protocol_data.get('headerConfig')
-                or protocol_config.get('headerConfig')
-                or protocol_config.get('header')
-                or {}
-            )
-            if not header_cfg and isinstance(protocol_config, dict):
-                header_cfg = {k: v for k, v in protocol_config.items() if k not in {'fields', 'fieldsConfig'}}
+            # 4) protocolConfig.protocolConfig 内层存储
+            # 5) 平铺在 protocolConfig（除去字段列表）
+            def merge_header_sources(sources):
+                merged = {}
+                for source in sources:
+                    if not isinstance(source, dict):
+                        continue
+                    for key, val in source.items():
+                        # 跳过明显不是头部配置的字段
+                        if key in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}:
+                            continue
+                        # 避免用空值覆盖已有值
+                        if val in (None, '') and merged.get(key) not in (None, ''):
+                            continue
+                        merged[key] = val
+                return merged
+
+            header_sources = [
+                ensure_dict(protocol_data.get('headerConfig')),
+                ensure_dict(protocol_data.get('header')),
+            ]
+
+            if isinstance(protocol_config, dict):
+                header_sources.append(ensure_dict(protocol_config.get('headerConfig')))
+                header_sources.append(ensure_dict(protocol_config.get('header')))
+                # 将平铺在 protocolConfig 的字段纳入
+                header_sources.append(
+                    {
+                        k: v
+                        for k, v in protocol_config.items()
+                        if k not in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}
+                    }
+                )
+
+            if isinstance(nested_protocol_config, dict):
+                header_sources.append(ensure_dict(nested_protocol_config.get('headerConfig')))
+                header_sources.append(ensure_dict(nested_protocol_config.get('header')))
+                header_sources.append(
+                    {
+                        k: v
+                        for k, v in nested_protocol_config.items()
+                        if k not in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}
+                    }
+                )
+
+            header_cfg = merge_header_sources(header_sources)
             return header_cfg or {}
 
         def resolve_fields_config():
             # 兼容不同存储结构：顶层 fieldsConfig、protocolConfig.fieldsConfig、protocolConfig.fields
-            fields_cfg = (
-                protocol_data.get('fieldsConfig')
-                or protocol_config.get('fieldsConfig')
-                or protocol_config.get('fields')
-            )
-            return fields_cfg or []
+            candidates = [
+                protocol_data.get('fieldsConfig'),
+                protocol_config.get('fieldsConfig') if isinstance(protocol_config, dict) else None,
+                protocol_config.get('fields') if isinstance(protocol_config, dict) else None,
+                nested_protocol_config.get('fieldsConfig')
+                if isinstance(nested_protocol_config, dict)
+                else None,
+                nested_protocol_config.get('fields')
+                if isinstance(nested_protocol_config, dict)
+                else None,
+            ]
+            for item in candidates:
+                if item:
+                    return item
+            # 确保至少返回空列表
+            return []
 
         header_config = resolve_header_config()
         fields_config = resolve_fields_config()
+
+        def flatten_configs(configs):
+            """
+            将多个配置源拍平，便于取值，跳过字段列表等大块内容。
+            保留第一个非空值，避免被空值覆盖。
+            """
+            merged: Dict[str, Any] = {}
+
+            def walk(obj: Dict[str, Any]):
+                for k, v in obj.items():
+                    if k in {'fields', 'fieldsConfig', 'protocolConfig', 'header', 'headerConfig'}:
+                        # 深入这些节点继续找
+                        if isinstance(v, dict):
+                            walk(v)
+                        continue
+                    if k not in merged or merged[k] in (None, ''):
+                        merged[k] = v
+
+            for cfg in configs:
+                if isinstance(cfg, dict):
+                    walk(cfg)
+            return merged
+
+        flattened_header_source = flatten_configs(
+            [
+                protocol_data,
+                header_config,
+                protocol_config,
+                nested_protocol_config,
+            ]
+        )
 
         # 标准化协议类型
         normalized_protocol_type = PROTOCOL_TYPE_MAPPING.get(protocol_type.lower() if protocol_type else '', None)
@@ -490,6 +591,11 @@ class ProtocolService:
                 val = pick_value(protocol_config, candidates)
                 if val not in (None, ''):
                     return val
+
+            # 深度兼容：在拍平后的配置源中兜底取值
+            val = pick_value(flattened_header_source, candidates)
+            if val not in (None, ''):
+                return val
 
             return ''
 

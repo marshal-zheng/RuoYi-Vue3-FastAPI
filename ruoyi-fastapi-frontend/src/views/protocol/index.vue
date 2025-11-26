@@ -90,11 +90,11 @@
                   v-hasPermi="['protocol:query']"
                   >编辑</el-button
                 >
-                <el-button
+                <zx-button
                   type="text"
                   @click="handleExport(scope.row)"
                   v-hasPermi="['protocol:export']"
-                  >导出协议配置</el-button
+                  >导出协议</zx-button
                 >
                 <ZxMoreAction
                   :list="getMoreActionList()"

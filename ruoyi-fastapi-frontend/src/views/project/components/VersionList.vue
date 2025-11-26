@@ -86,7 +86,8 @@
           >
             <template #default="{ row }">
               <div class="op-col__wrap">
-                <ZxButton link type="primary" @click="handleViewVersionTopo(row)">查看</ZxButton>
+                <ZxButton link type="primary" @click="handlePreviewVersion(row)">预览</ZxButton>
+                <ZxButton link type="primary" @click="handleSimulateVersion(row)">仿真</ZxButton>
                 <ZxButton link type="primary" @click="handleEditVersionTopo(row)">图编辑</ZxButton>
                 <ZxMoreAction
                   :list="getMoreActionList(row)"
@@ -146,6 +147,9 @@
 
     <!-- 克隆版本 -->
     <VersionCloneDialog ref="cloneDialogRef" />
+
+    <!-- 预览版本 -->
+    <VersionPreviewDialog ref="previewDialogRef" />
   </div>
 </template>
 
@@ -162,6 +166,7 @@ import {
 import { parseTime } from '@/utils/ruoyi';
 import VersionDetailDialog from './VersionDetailDialog.vue';
 import VersionCloneDialog from './VersionCloneDialog.vue';
+import VersionPreviewDialog from './VersionPreviewDialog.vue';
 
 const { proxy } = getCurrentInstance();
 
@@ -175,6 +180,7 @@ const props = defineProps({
 const versionGridListRef = ref(null);
 const detailDialogRef = ref(null);
 const cloneDialogRef = ref(null);
+const previewDialogRef = ref(null);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
@@ -343,14 +349,14 @@ function handleAddVersion() {
   editVersionDialog.value = true;
 }
 
-/** 查看版本拓扑（跳转到拓扑图，只读/查看模式暂与编辑一致） */
-function handleViewVersionTopo(row) {
+/** 仿真版本（跳转到仿真页面） */
+function handleSimulateVersion(row) {
   if (!props.projectId) {
-    proxy.$modal.msgError('缺少工程ID，无法打开拓扑图');
+    proxy.$modal.msgError('缺少工程ID，无法打开仿真页面');
     return;
   }
   proxy.$router.push({
-    path: `/project/topo/index/${props.projectId}`,
+    path: `/project/simulation/index/${props.projectId}`,
     query: {
       versionId: row.versionId,
     },
@@ -459,6 +465,11 @@ function handleCloneVersion(row) {
       versionGridListRef.value.refresh();
     }
   });
+}
+
+/** 预览版本 */
+function handlePreviewVersion(row) {
+  previewDialogRef.value?.open(row);
 }
 
 /** 导出版本 */

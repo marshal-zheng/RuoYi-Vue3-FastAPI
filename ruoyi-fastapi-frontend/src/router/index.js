@@ -200,6 +200,20 @@ export const dynamicRoutes = [
       },
     ],
   },
+  {
+    path: '/project/simulation',
+    component: Layout,
+    hidden: true,
+    permissions: ['project:project:query'],
+    children: [
+      {
+        path: 'index/:projectId(\\d+)',
+        component: () => import('@/views/project/simulation'),
+        name: 'ProjectSimulation',
+        meta: { title: '版本仿真', activeMenu: '/project/project' },
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
