@@ -25,7 +25,7 @@ COPY . .
 RUN mkdir -p vf_admin/upload_path vf_admin/download_path vf_admin/gen_path logs
 
 # 暴露端口
-EXPOSE 9099
+EXPOSE 8000
 
 # 启动命令
 CMD ["python", "app.py"]
