@@ -140,7 +140,8 @@ const handleBlur = () => {
     inputValue.value = match.label;
     emitValue(match.value, match.label);
   } else {
-    syncInputValue();
+    // 没有匹配的字典项时，直接使用用户输入的自定义值
+    emitValue(inputValue.value, inputValue.value);
   }
 };
 
