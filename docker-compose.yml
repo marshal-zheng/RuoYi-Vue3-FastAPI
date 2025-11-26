@@ -17,6 +17,7 @@ services:
       - ./ruoyi-fastapi-backend/sql/project.sql:/docker-entrypoint-initdb.d/01-project.sql
       - ./ruoyi-fastapi-backend/sql/device.sql:/docker-entrypoint-initdb.d/02-device.sql
       - ./ruoyi-fastapi-backend/sql/protocol.sql:/docker-entrypoint-initdb.d/03-protocol.sql
+      - ./ruoyi-fastapi-backend/sql/simulation.sql:/docker-entrypoint-initdb.d/04-simulation.sql
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

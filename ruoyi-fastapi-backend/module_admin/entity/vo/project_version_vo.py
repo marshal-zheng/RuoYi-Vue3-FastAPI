@@ -91,3 +91,14 @@ class LockProjectVersionModel(BaseModel):
     locked_time: Optional[datetime] = Field(default=None, description='固化时间')
     update_by: Optional[str] = Field(default=None, description='更新者')
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
+
+
+class ExportProjectVersionModel(BaseModel):
+    """
+    导出项目版本请求模型
+    """
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+    version_id: int = Field(description='版本ID')
+    image_base64: Optional[str] = Field(default=None, description='拓扑图的base64编码字符串')

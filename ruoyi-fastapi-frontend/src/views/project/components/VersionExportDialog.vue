@@ -19,7 +19,11 @@
 import { getCurrentInstance, ref } from 'vue';
 import { Loading } from '@element-plus/icons-vue';
 import { useDialog } from '@zxio/zxui';
-import { exportProjectVersion, exportProjectVersionExcel } from '@/api/project/version';
+import {
+  exportProjectVersion,
+  exportProjectVersionExcel,
+  exportProjectVersionXml,
+} from '@/api/project/version';
 import { exportTopologyAsImage } from '../composables/topoExportUtils';
 import { FileTypeSelector } from './selector';
 
@@ -71,10 +75,7 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
       mimeType = 'application/zip';
       extension = 'zip';
     } else if (data.format === 'xml') {
-      response = await exportProjectVersion({
-        versionId: data.versionId,
-        imageBase64: null,
-      });
+      response = await exportProjectVersionXml(data.versionId);
       mimeType = 'application/xml';
       extension = 'xml';
     }

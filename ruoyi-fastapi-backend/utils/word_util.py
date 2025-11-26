@@ -7,7 +7,9 @@ import io
 import json
 import re
 import zipfile
-from typing import Optional
+from typing import Optional, List
+from xml.etree import ElementTree as ET
+from xml.dom import minidom
 
 from openpyxl import Workbook
 from openpyxl.cell.cell import MergedCell
@@ -693,10 +695,49 @@ def replace_template_placeholders(template: str, data: dict) -> str:
     return result
 
 
-def generate_summary_table_html(topology_data: Optional[dict]) -> str:
+def _safe_text(value) -> str:
+    """将不同类型的值转换为可写入 XML 的字符串"""
+    if value in (None, ''):
+        return ''
+    if isinstance(value, (list, dict)):
+        try:
+            return json.dumps(value, ensure_ascii=False)
+        except TypeError:
+            return str(value)
+    return str(value)
+
+
+def _format_xml_tag(key: str) -> str:
+    """将任意 key 转换为 PascalCase 的 XML 标签"""
+    if not key:
+        return 'Value'
+    token_pattern = re.compile(r'[A-Z]?[a-z]+|[A-Z]+(?![a-z])|\d+')
+    tokens = token_pattern.findall(key)
+    if not tokens:
+        cleaned = re.sub(r'[^0-9A-Za-z]+', ' ', key).strip()
+        tokens = cleaned.split()
+    if not tokens:
+        tokens = [key]
+    return ''.join(token.capitalize() for token in tokens)
+
+
+def _append_child(parent: ET.Element, tag: str, value=None) -> ET.Element:
+    child = ET.SubElement(parent, tag)
+    text = _safe_text(value)
+    if text:
+        child.text = text
+    return child
+
+
+def _prettify_xml(element: ET.Element) -> bytes:
+    rough = ET.tostring(element, encoding='utf-8')
+    parsed = minidom.parseString(rough)
+    return parsed.toprettyxml(indent='  ', encoding='utf-8')
+
+
+def collect_summary_rows(topology_data: Optional[dict]) -> List[dict]:
     """
-    生成通信速率及通信周期表格HTML（替换模板中的 ${table}）
-    列：序号、来源、目的、通信类型、波特率、传输类型、备注
+    提取通信概览数据，供多种导出格式复用
     """
     devices = extract_protocols_from_topology(topology_data or {}) if topology_data else []
     rows = []
@@ -730,7 +771,15 @@ def generate_summary_table_html(topology_data: Optional[dict]) -> str:
                 'method': method,
                 'remark': header.get('remark') or '',
             })
+    return rows
 
+
+def generate_summary_table_html(topology_data: Optional[dict]) -> str:
+    """
+    生成通信速率及通信周期表格HTML（替换模板中的 ${table}）
+    列：序号、来源、目的、通信类型、波特率、传输类型、备注
+    """
+    rows = collect_summary_rows(topology_data)
     if not rows:
         return '<p style="text-align: center;">（暂无通信数据）</p>'
 
@@ -1072,3 +1121,93 @@ def export_version_to_word(
         html_content=DEFAULT_ICD_TEMPLATE,
         template_data=template_data
     )
+
+
+def export_version_to_xml(
+    version_detail: Optional[dict] = None,
+    topology_data: Optional[dict] = None
+) -> bytes:
+    """
+    根据版本详情与拓扑数据导出 XML 接口控制文件
+    """
+    detail = version_detail or {}
+    root = ET.Element('InterfaceControlDocument')
+
+    version_info = ET.SubElement(root, 'VersionInfo')
+    _append_child(version_info, 'VersionId', detail.get('version_id') or detail.get('versionId'))
+    _append_child(version_info, 'ProjectId', detail.get('project_id') or detail.get('projectId'))
+    _append_child(version_info, 'VersionNumber', detail.get('version_number') or detail.get('versionNumber'))
+    _append_child(version_info, 'VersionName', detail.get('version_name') or detail.get('versionName'))
+    _append_child(version_info, 'Description', detail.get('description'))
+    _append_child(version_info, 'Creator', detail.get('create_by') or detail.get('createBy'))
+    _append_child(version_info, 'CreateTime', detail.get('create_time') or detail.get('createTime'))
+    _append_child(version_info, 'Updater', detail.get('update_by') or detail.get('updateBy'))
+    _append_child(version_info, 'UpdateTime', detail.get('update_time') or detail.get('updateTime'))
+    _append_child(version_info, 'IsLocked', detail.get('is_locked') or detail.get('isLocked'))
+    _append_child(version_info, 'LockedBy', detail.get('locked_by') or detail.get('lockedBy'))
+    _append_child(version_info, 'LockedTime', detail.get('locked_time') or detail.get('lockedTime'))
+
+    summary_rows = collect_summary_rows(topology_data)
+    summary_node = ET.SubElement(root, 'CommunicationSummary')
+    if not summary_rows:
+        summary_node.set('empty', 'true')
+    else:
+        for idx, row in enumerate(summary_rows, 1):
+            link_el = ET.SubElement(summary_node, 'Link', index=str(idx))
+            _append_child(link_el, 'Sender', row.get('sender'))
+            _append_child(link_el, 'Receiver', row.get('receiver'))
+            _append_child(link_el, 'CommunicationType', row.get('comm_type'))
+            _append_child(link_el, 'BaudRate', row.get('baud'))
+            _append_child(link_el, 'Method', row.get('method'))
+            _append_child(link_el, 'Remark', row.get('remark'))
+
+    devices_node = ET.SubElement(root, 'Devices')
+    devices = extract_protocols_from_topology(topology_data or {}) if topology_data else []
+    if not devices:
+        devices_node.set('empty', 'true')
+    else:
+        for dev_index, device in enumerate(devices):
+            appendix_letter = get_appendix_letter(dev_index)
+            device_el = ET.SubElement(
+                devices_node,
+                'Device',
+                appendix=appendix_letter,
+                name=device.get('deviceName', '') or ''
+            )
+            protocols = device.get('protocols', []) or []
+            if not protocols:
+                device_el.set('empty', 'true')
+                continue
+
+            for proto_index, protocol in enumerate(protocols, 1):
+                proto_el = ET.SubElement(
+                    device_el,
+                    'Protocol',
+                    index=str(proto_index)
+                )
+                _append_child(proto_el, 'ProtocolName', protocol.get('name') or protocol.get('protocolName'))
+                _append_child(proto_el, 'Sender', protocol.get('sender'))
+                _append_child(proto_el, 'Receiver', protocol.get('receiver'))
+
+                header_node = ET.SubElement(proto_el, 'Header')
+                header = protocol.get('header', {}) or {}
+                if not header:
+                    header_node.set('empty', 'true')
+                else:
+                    for key, value in header.items():
+                        _append_child(header_node, _format_xml_tag(key), value)
+
+                fields_node = ET.SubElement(proto_el, 'Fields')
+                fields = protocol.get('fields', []) or []
+                if not fields:
+                    fields_node.set('empty', 'true')
+                else:
+                    for field_index, field in enumerate(fields, 1):
+                        field_el = ET.SubElement(fields_node, 'Field', index=str(field_index))
+                        if isinstance(field, dict):
+                            for f_key, f_val in field.items():
+                                _append_child(field_el, _format_xml_tag(f_key), f_val)
+                        else:
+                            _append_child(field_el, 'Value', field)
+
+    return _prettify_xml(root)

@@ -7,7 +7,10 @@
 import { Graph } from '@antv/x6';
 import { Export } from '@antv/x6-plugin-export';
 import { getProjectTopology } from '@/api/project/topology';
-import { registerDagShapes, DAG_CONNECTOR } from '@/components/business/Dag/shapes/registerDagShapes';
+import {
+  registerDagShapes,
+  DAG_CONNECTOR,
+} from '@/components/business/Dag/shapes/registerDagShapes';
 
 /**
  * 将 DataURL 转换为 Blob

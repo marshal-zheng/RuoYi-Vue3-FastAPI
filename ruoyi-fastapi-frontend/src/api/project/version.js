@@ -87,3 +87,12 @@ export function exportProjectVersionExcel(versionId) {
     responseType: 'blob',
   });
 }
+
+// 导出项目版本为XML
+export function exportProjectVersionXml(versionId) {
+  return request({
+    url: `/project/version/export-xml/${versionId}`,
+    method: 'get',
+    responseType: 'blob',
+  });
+}

@@ -67,6 +67,7 @@ const EDGE_PHASE_META = EDGE_PHASE_SEQUENCE.reduce((acc, phase) => {
 }, {});
 
 const SIMULATION_STEP_DURATION = 950;
+const SIMULATION_LOOP_DELAY = 800; // 循环间隔延时
 
 export function useSimulationCore({ graphStyleUtils, animationUtils }) {
   const simulationStatus = ref('idle');
@@ -76,6 +77,8 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
   const simulationNarration = ref(null);
   const simulationTimelinePhases = ref([]);
   const simulationResultPayload = ref(null);
+  const simulationLoopCount = ref(0); // 仿真循环次数
+  const simulationContinuousMode = ref(true); // 持续仿真模式
 
   const simulationRunner = {
     currentStepResolver: null,
@@ -282,7 +285,8 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
             graphStyleUtils.applyNodeState(step.sourceNode, 'processing');
             finish({ interrupted: true });
           },
-        }
+        },
+        step.busType // 传递总线类型以显示不同颜色
       );
       simulationRunner.activeController = controller;
       if (!controller) {
@@ -292,29 +296,67 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
   }
 
   /**
-   * 运行仿真流程
+   * 延时工具函数
+   */
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  /**
+   * 运行仿真流程（支持持续循环模式）
    */
   function runSimulationFlow() {
     if (simulationRunner.runningPromise) {
       return simulationRunner.runningPromise;
     }
     const runnerTask = (async () => {
-      while (simulationPointer.value < simulationSteps.value.length) {
-        if (simulationStatus.value !== 'running') {
-          return;
+      // 持续循环运行
+      while (simulationStatus.value === 'running') {
+        // 执行一轮完整的仿真步骤
+        while (simulationPointer.value < simulationSteps.value.length) {
+          if (simulationStatus.value !== 'running') {
+            return;
+          }
+          const step = simulationSteps.value[simulationPointer.value];
+          const result = await playSimulationStep(step);
+          if (result?.interrupted) {
+            return;
+          }
+          simulationPointer.value += 1;
         }
-        const step = simulationSteps.value[simulationPointer.value];
-        const result = await playSimulationStep(step);
-        if (result?.interrupted) {
+
+        // 一轮完成
+        simulationLoopCount.value += 1;
+
+        // 如果是持续模式，重置指针并继续循环
+        if (simulationContinuousMode.value && simulationStatus.value === 'running') {
+          // 更新旁白显示循环信息
+          simulationNarration.value = {
+            badge: `第${simulationLoopCount.value}轮`,
+            title: '仿真持续运行中',
+            description: `已完成 ${simulationLoopCount.value} 轮仿真，正在准备下一轮...`,
+            busType: '',
+          };
+
+          // 重置图形状态，准备下一轮
+          const graph = simulationSteps.value[0]?.edge?.model?.graph;
+          if (graph) {
+            graphStyleUtils.resetGraphSimulationState(graph);
+            graphStyleUtils.markQueuedEdges(simulationSteps.value);
+          }
+
+          // 重置指针
+          simulationPointer.value = 0;
+
+          // 短暂延时后开始下一轮
+          await delay(SIMULATION_LOOP_DELAY);
+        } else {
+          // 非持续模式，正常结束
+          finalizeSimulation();
+          simulationStatus.value = 'completed';
           return;
-        }
-        simulationPointer.value += 1;
-        if (simulationPointer.value >= simulationSteps.value.length) {
-          graphStyleUtils.applyNodeState(step.targetNode, 'done');
         }
       }
-      finalizeSimulation();
-      simulationStatus.value = 'completed';
     })();
     simulationRunner.runningPromise = runnerTask.finally(() => {
       simulationRunner.runningPromise = null;
@@ -364,6 +406,21 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
     simulationResultPayload.value = payload;
   }
 
+  /**
+   * 设置持续仿真模式
+   */
+  function setContinuousMode(enabled) {
+    simulationContinuousMode.value = enabled;
+  }
+
+  /**
+   * 重置仿真状态（用于重新开始）
+   */
+  function resetSimulationState() {
+    simulationLoopCount.value = 0;
+    simulationPointer.value = 0;
+  }
+
   return {
     simulationStatus,
     simulationSteps,
@@ -372,6 +429,8 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
     simulationNarration,
     simulationTimelinePhases,
     simulationResultPayload,
+    simulationLoopCount,
+    simulationContinuousMode,
     buildSimulationSteps,
     buildPhaseTimeline,
     announceSimulationSchedule,
@@ -379,5 +438,7 @@ export function useSimulationCore({ graphStyleUtils, animationUtils }) {
     stopSimulationRunner,
     queueSimulationResult,
     resetSimulationNarration,
+    setContinuousMode,
+    resetSimulationState,
   };
 }

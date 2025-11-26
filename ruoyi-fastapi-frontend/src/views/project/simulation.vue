@@ -1,56 +1,114 @@
 <template>
-  <ZxContentWrap class="simulation-page">
-    <!-- header-right插槽添加 '仿真'操作 -->
-    <template #header-right>
-      <zx-button type="primary" icon="VideoPlay" @click="handleRunSimulation"> 执行仿真 </zx-button>
-      <zx-button type="success" icon="GoodsFilled" @click="handleSaveTopo"> 健康自检 </zx-button>
-    </template>
-    <XflowDAG
-      ref="dagRef"
-      :showToolbar="false"
-      :showSidebar="false"
-      :operators="operators"
-      :operators-loading="loading"
-      :layout="layoutMode"
-      :dnd-config="dndConfig"
-      :show-graph-control="false"
-      @node-dblclick="handleNodeDblclick"
-    >
-      <template #right>
-        <zx-button
-          size="small"
-          type="success"
-          :loading="simulationLoading"
-          :disabled="loading || simulationLoading || simulationStatus === 'running'"
-          @click="handleRunSimulation"
-        >
-          执行仿真
-        </zx-button>
-        <zx-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
-          保存
-        </zx-button>
+  <transition name="page-fade" mode="out-in">
+    <ZxContentWrap class="simulation-page" v-if="!pageLoading">
+      <!-- header-right插槽添加 '仿真'操作 -->
+      <template #header-right>
+        <template v-if="simulationStatus === 'running'">
+          <el-tag type="success" effect="dark" class="simulation-running-tag">
+            <el-icon class="is-loading"><Loading /></el-icon>
+            仿真运行中 · 第{{ simulationLoopCount || 1 }}轮
+          </el-tag>
+          <zx-button type="danger" icon="VideoPause" @click="handleStopSimulation">
+            停止仿真
+          </zx-button>
+        </template>
+        <template v-else>
+          <zx-button type="primary" icon="VideoPlay" @click="handleRunSimulation">
+            执行仿真
+          </zx-button>
+        </template>
+        <zx-button type="success" icon="GoodsFilled" @click="handleSaveTopo"> 健康自检 </zx-button>
       </template>
-    </XflowDAG>
+      <XflowDAG
+        ref="dagRef"
+        :showToolbar="false"
+        :showSidebar="false"
+        :operators="operators"
+        :operators-loading="loading"
+        :layout="layoutMode"
+        :dnd-config="dndConfig"
+        :show-graph-control="false"
+        @node-dblclick="handleNodeDblclick"
+      >
+        <template #right>
+          <template v-if="simulationStatus === 'running'">
+            <zx-button size="small" type="danger" @click="handleStopSimulation">
+              停止仿真
+            </zx-button>
+          </template>
+          <template v-else>
+            <zx-button
+              size="small"
+              type="success"
+              :loading="simulationLoading"
+              :disabled="loading || simulationLoading"
+              @click="handleRunSimulation"
+            >
+              执行仿真
+            </zx-button>
+          </template>
+          <zx-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
+            保存
+          </zx-button>
+        </template>
+      </XflowDAG>
 
-    <!-- 仿真状态面板 -->
-    <SimulationStatusPanel :narration="simulationNarration" />
+      <!-- 仿真监控面板（进度+告警） -->
+      <SimulationMonitorPanel
+        :visible="showMonitorPanel"
+        :narration="simulationNarration"
+        :alarms="alarmData"
+        :position="{ top: '40px', left: '30px' }"
+        :default-collapsed="false"
+      />
 
-    <!-- 节点编辑抽屉 -->
-    <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
+      <!-- 带宽图表面板 -->
+      <BandwidthChartPanel
+        :visible="showPanels"
+        :bandwidth-data="bandwidthData"
+        :position="{ top: '40px', right: '30px' }"
+        :default-collapsed="false"
+      />
 
-    <!-- 仿真结果对话框 -->
-    <SimulationResultDialog ref="simulationDialogRef" @reopen="handleReopenSimulationDialog" />
-  </ZxContentWrap>
+      <!-- 报文列表面板 -->
+      <MessageListPanel
+        ref="messageListRef"
+        :visible="showPanels"
+        :messages="messageData"
+        :position="{ bottom: '30px', right: '30px' }"
+        :default-collapsed="true"
+      />
+
+      <!-- 节点编辑抽屉 -->
+      <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
+
+      <!-- 仿真结果对话框 -->
+      <SimulationResultDialog ref="simulationDialogRef" @reopen="handleReopenSimulationDialog" />
+    </ZxContentWrap>
+    <ZxContentWrap v-else class="simulation-page simulation-page--loading">
+      <SkeletonLoader type="default" />
+    </ZxContentWrap>
+  </transition>
 </template>
 
 <script setup name="Index">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { Loading } from '@element-plus/icons-vue';
 import XflowDAG from '@/components/business/Dag/index.vue';
-import { NodeEditDrawer } from './components';
-import SimulationResultDialog from './components/SimulationResultDialog.vue';
-import SimulationStatusPanel from './components/SimulationStatusPanel.vue';
+import {
+  NodeEditDrawer,
+  SimulationResultDialog,
+  SimulationMonitorPanel,
+  BandwidthChartPanel,
+  MessageListPanel,
+} from './simulation/components';
 import { listDevice } from '@/api/device/device';
+import {
+  createSimulationSession,
+  startSimulationSession,
+  stopSimulationSession,
+} from '@/api/simulation/simulation';
 import { ElMessage } from 'element-plus';
 
 // 引入拆分的 composables
@@ -60,6 +118,7 @@ import { useSimulationCore } from './composables/useSimulationCore';
 import { useDataTransform } from './composables/useDataTransform';
 import { useSimulationFiles } from './composables/useSimulationFiles';
 import { useTopology } from './composables/useTopology';
+import { useSimulationWebSocket } from './simulation/composables/useSimulationWebSocket';
 
 // 版本号
 const version = ref('3.9.0');
@@ -92,6 +151,30 @@ const dagRef = ref(null);
 const nodeEditDrawerRef = ref(null);
 const currentNode = ref(null);
 const simulationDialogRef = ref(null);
+const messageListRef = ref(null);
+const alarmPanelRef = ref(null);
+
+// 实时数据
+const bandwidthData = ref([]);
+const messageData = ref([]);
+const alarmData = ref([]);
+
+// 仿真会话管理
+const currentSessionId = ref(null);
+
+// UI状态
+const pageLoading = ref(true);
+const showStatusPanel = computed(() => simulationStatus.value !== 'idle');
+const showBandwidthPanel = computed(() => bandwidthData.value.length > 0);
+const showMessagePanel = computed(() => messageData.value.length > 0);
+
+// 面板显示控制
+const showMonitorPanel = computed(
+  () => simulationNarration.value !== null || alarmData.value.length > 0
+);
+const showPanels = computed(
+  () => simulationStatus.value === 'running' || simulationStatus.value === 'completed'
+);
 
 // 可配置的文案和设置
 const dndConfig = {
@@ -144,6 +227,7 @@ const {
   simulationNarration,
   simulationTimelinePhases,
   simulationResultPayload,
+  simulationLoopCount,
   buildSimulationSteps,
   buildPhaseTimeline,
   announceSimulationSchedule,
@@ -151,6 +235,7 @@ const {
   stopSimulationRunner,
   queueSimulationResult,
   resetSimulationNarration,
+  resetSimulationState,
 } = simulationCore;
 
 /**
@@ -175,9 +260,43 @@ function handleReopenSimulationDialog() {
 }
 
 /**
+ * 停止仿真
+ */
+async function handleStopSimulation() {
+  if (simulationStatus.value !== 'running') {
+    return;
+  }
+
+  // 调用后端停止仿真
+  if (currentSessionId.value) {
+    try {
+      await stopSimulationSession(currentSessionId.value);
+    } catch (err) {
+      console.error('停止仿真会话失败:', err);
+    }
+  }
+
+  // 断开WebSocket
+  wsManager.disconnect();
+
+  stopSimulationRunner('idle');
+  animationUtils.disposeSimulationAnimations();
+  animationUtils.disposeAllSimulationTokens();
+
+  const graph = getGraphInstance();
+  if (graph) {
+    graphStyleUtils.resetGraphSimulationState(graph);
+  }
+
+  resetSimulationState();
+  currentSessionId.value = null;
+  ElMessage.success('仿真已停止');
+}
+
+/**
  * 执行仿真
  */
-function handleRunSimulation() {
+async function handleRunSimulation() {
   if (simulationLoading.value) {
     return;
   }
@@ -191,7 +310,17 @@ function handleRunSimulation() {
     ElMessage.error('仿真失败：图实例不存在');
     return;
   }
+
+  const currentProjectId = getProjectIdNumber();
+  const currentVersionId = getVersionIdNumber();
+
+  if (!currentProjectId) {
+    ElMessage.error('仿真失败：缺少工程ID');
+    return;
+  }
+
   resetSimulationNarration();
+  resetSimulationState();
 
   const nodes = graph.getNodes?.() || [];
   const edges = graph.getEdges?.() || [];
@@ -212,76 +341,112 @@ function handleRunSimulation() {
   simulationPointer.value = 0;
   simulationLoading.value = true;
 
-  const { nodes: nodePayload, edges: edgePayload } = dataTransform.buildSimulationPayload(
-    graph,
-    graphStyleUtils.isSimulationToken
-  );
-  if (!edgePayload.length) {
-    ElMessage.warning('暂未检测到有效连线');
-    simulationLoading.value = false;
-    return;
-  }
+  // 清空之前的数据
+  bandwidthData.value = [];
+  messageData.value = [];
+  alarmData.value = [];
+  wsManager.clearData();
 
-  const steps = buildSimulationSteps(graph);
-  if (!steps.length) {
-    ElMessage.warning('当前拓扑缺少可执行路径');
-    simulationLoading.value = false;
-    return;
-  }
+  try {
+    // 1. 创建后端仿真会话
+    simulationNarration.value = {
+      badge: '准备中',
+      title: '正在创建仿真会话',
+      description: '正在与服务器建立连接...',
+      busType: '',
+    };
 
-  animationUtils.disposeSimulationAnimations();
-  animationUtils.disposeAllSimulationTokens();
-  graphStyleUtils.resetGraphSimulationState(graph);
-  graphStyleUtils.markQueuedEdges(steps);
-  simulationSteps.value = steps;
-  simulationTimelinePhases.value = buildPhaseTimeline(steps);
-  announceSimulationSchedule(steps);
-  simulationPointer.value = 0;
-  simulationStatus.value = 'running';
+    const createResult = await createSimulationSession({
+      projectId: currentProjectId,
+      versionId: currentVersionId,
+    });
 
-  const summary = simulationFiles.buildSimulationSummary(
-    nodePayload,
-    edgePayload,
-    dataTransform.BUS_TYPES
-  );
-  const designContent = simulationFiles.generateDesignFilePayload(
-    '多总线仿真工程',
-    version.value,
-    nodePayload,
-    edgePayload
-  );
-  const icdContent = simulationFiles.generateIcdFilePayload(
-    '多总线仿真工程',
-    version.value,
-    nodePayload,
-    edgePayload
-  );
-  const timeline =
-    simulationTimelinePhases.value?.length > 0
-      ? simulationTimelinePhases.value
-      : simulationFiles.generateSimulationTimeline(edgePayload);
-
-  queueSimulationResult({
-    summary,
-    timeline,
-    designFile: {
-      name: 'bus_design.csv',
-      content: designContent,
-    },
-    icdFile: {
-      name: 'interface_control.csv',
-      content: icdContent,
-    },
-  });
-
-  simulationLoading.value = false;
-
-  // 运行仿真流程，完成后展示结果
-  runSimulationFlow().then(() => {
-    if (simulationStatus.value === 'completed') {
-      presentSimulationResult();
+    if (!createResult?.data?.sessionId) {
+      throw new Error('创建仿真会话失败');
     }
-  });
+
+    currentSessionId.value = createResult.data.sessionId;
+
+    // 2. 启动后端仿真
+    simulationNarration.value = {
+      badge: '启动中',
+      title: '正在启动仿真引擎',
+      description: '仿真引擎正在初始化...',
+      busType: '',
+    };
+
+    await startSimulationSession(currentSessionId.value);
+
+    // 3. 连接WebSocket接收实时数据
+    wsManager.connect(currentSessionId.value);
+
+    // 4. 准备前端动画
+    const { nodes: nodePayload, edges: edgePayload } = dataTransform.buildSimulationPayload(
+      graph,
+      graphStyleUtils.isSimulationToken
+    );
+
+    const steps = buildSimulationSteps(graph);
+
+    animationUtils.disposeSimulationAnimations();
+    animationUtils.disposeAllSimulationTokens();
+    graphStyleUtils.resetGraphSimulationState(graph);
+    graphStyleUtils.markQueuedEdges(steps);
+    simulationSteps.value = steps;
+    simulationTimelinePhases.value = buildPhaseTimeline(steps);
+    announceSimulationSchedule(steps);
+    simulationPointer.value = 0;
+    simulationStatus.value = 'running';
+
+    const summary = simulationFiles.buildSimulationSummary(
+      nodePayload,
+      edgePayload,
+      dataTransform.BUS_TYPES
+    );
+    const designContent = simulationFiles.generateDesignFilePayload(
+      '多总线仿真工程',
+      version.value,
+      nodePayload,
+      edgePayload
+    );
+    const icdContent = simulationFiles.generateIcdFilePayload(
+      '多总线仿真工程',
+      version.value,
+      nodePayload,
+      edgePayload
+    );
+    const timeline =
+      simulationTimelinePhases.value?.length > 0
+        ? simulationTimelinePhases.value
+        : simulationFiles.generateSimulationTimeline(edgePayload);
+
+    queueSimulationResult({
+      summary,
+      timeline,
+      designFile: {
+        name: 'bus_design.csv',
+        content: designContent,
+      },
+      icdFile: {
+        name: 'interface_control.csv',
+        content: icdContent,
+      },
+    });
+
+    simulationLoading.value = false;
+
+    // 运行前端动画流程
+    runSimulationFlow();
+
+    ElMessage.success('仿真已启动');
+  } catch (error) {
+    console.error('启动仿真失败:', error);
+    ElMessage.error(error?.message || '启动仿真失败，请稍后重试');
+    simulationLoading.value = false;
+    simulationStatus.value = 'idle';
+    currentSessionId.value = null;
+    resetSimulationNarration();
+  }
 }
 
 /**
@@ -402,16 +567,123 @@ watch(
   }
 );
 
+// WebSocket连接（用于实时数据推送）
+const wsManager = useSimulationWebSocket();
+const {
+  bandwidthData: wsBandwidthData,
+  messagesData: wsMessagesData,
+  alarmsData: wsAlarmsData,
+  statusData: wsStatusData,
+} = wsManager;
+
+// 监听WebSocket带宽数据更新
+watch(
+  wsBandwidthData,
+  (newData) => {
+    if (newData && newData.length > 0) {
+      // 追加新数据
+      bandwidthData.value = [...bandwidthData.value, ...newData];
+      // 保持最近600秒的数据
+      const now = Date.now() / 1000;
+      const cutoffTime = now - 600;
+      bandwidthData.value = bandwidthData.value.filter((item) => item.timestamp >= cutoffTime);
+    }
+  },
+  { deep: true }
+);
+
+// 监听WebSocket报文数据更新
+watch(
+  wsMessagesData,
+  (newData) => {
+    if (newData && newData.length > 0) {
+      // 追加新数据，转换字段名称
+      const formattedMessages = newData.map((msg) => ({
+        messageId: msg.messageId,
+        timestamp: msg.sendTimestamp || msg.timestamp,
+        sender: msg.senderNodeId || msg.sender,
+        receiver: msg.receiverNodeId || msg.receiver,
+        protocol: msg.protocolType || msg.protocol,
+        size: msg.sizeBytes || msg.size,
+        status: 'success',
+      }));
+      messageData.value = [...messageData.value, ...formattedMessages];
+      // 保持最近100条报文
+      if (messageData.value.length > 100) {
+        messageData.value = messageData.value.slice(-100);
+      }
+    }
+  },
+  { deep: true }
+);
+
+// 监听WebSocket告警数据更新
+watch(
+  wsAlarmsData,
+  (newData) => {
+    if (newData && newData.length > 0) {
+      // 追加新告警
+      alarmData.value = [...alarmData.value, ...newData];
+    }
+  },
+  { deep: true }
+);
+
+// 监听WebSocket状态更新
+watch(
+  wsStatusData,
+  (newStatus) => {
+    if (newStatus) {
+      // 更新仿真旁白信息
+      if (newStatus.status === 'running') {
+        const elapsedTime = newStatus.elapsedTime || 0;
+        simulationNarration.value = {
+          badge: '运行中',
+          title: `仿真持续运行`,
+          description: `已运行 ${elapsedTime.toFixed(1)} 秒，报文数: ${newStatus.messageCount || 0}`,
+          busType: '',
+        };
+      } else if (newStatus.status === 'stopped') {
+        simulationNarration.value = {
+          badge: '已停止',
+          title: '仿真已停止',
+          description: `总计生成 ${newStatus.messageCount || 0} 条报文`,
+          busType: '',
+        };
+      }
+    }
+  },
+  { deep: true }
+);
+
 // 页面加载时获取设备列表并尝试回显拓扑
-onMounted(() => {
-  loadDeviceList();
-  restoreSavedTopology();
+onMounted(async () => {
+  pageLoading.value = true;
+  try {
+    await loadDeviceList();
+    await restoreSavedTopology();
+  } finally {
+    // 添加短暂延迟以显示加载动画
+    setTimeout(() => {
+      pageLoading.value = false;
+    }, 500);
+  }
 });
 
-onUnmounted(() => {
+onUnmounted(async () => {
+  // 如果仿真正在运行，停止后端仿真
+  if (currentSessionId.value && simulationStatus.value === 'running') {
+    try {
+      await stopSimulationSession(currentSessionId.value);
+    } catch (err) {
+      console.error('停止仿真会话失败:', err);
+    }
+  }
+
   stopSimulationRunner('idle');
   animationUtils.disposeSimulationAnimations();
   animationUtils.disposeAllSimulationTokens();
+  wsManager.disconnect();
 });
 </script>
 
@@ -471,5 +743,16 @@ onUnmounted(() => {
   color: #606266;
   margin: 0;
   font-size: 12px;
+}
+
+.simulation-running-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+
+  .el-icon {
+    font-size: 14px;
+  }
 }
 </style>

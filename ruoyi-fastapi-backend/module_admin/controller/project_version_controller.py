@@ -13,7 +13,8 @@ from module_admin.entity.vo.project_version_vo import (
     ProjectVersionModel,
     ProjectVersionPageQueryModel,
     CloneProjectVersionModel,
-    LockProjectVersionModel
+    LockProjectVersionModel,
+    ExportProjectVersionModel
 )
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.project_version_service import ProjectVersionService
@@ -22,7 +23,7 @@ from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
-from utils.word_util import export_version_to_word, export_version_to_excel
+from utils.word_util import export_version_to_word, export_version_to_excel, export_version_to_xml
 
 
 projectVersionController = APIRouter(
@@ -210,19 +211,25 @@ async def unlock_project_versions_by_project(
     return ResponseUtil.success(msg=unlock_result.message)
 
 
-@projectVersionController.get(
-    '/export/{version_id}',
+@projectVersionController.post(
+    '/export',
     dependencies=[Depends(CheckUserInterfaceAuth('project:version:export'))]
 )
 @Log(title='工程管理-版本', business_type=BusinessType.EXPORT)
 async def export_project_version(
     request: Request,
-    version_id: int,
+    export_data: ExportProjectVersionModel,
     query_db: AsyncSession = Depends(get_db),
 ):
     """
     导出项目版本为Word文档
+    
+    Args:
+        export_data: 包含版本ID和可选的拓扑图base64图片数据
     """
+    version_id = export_data.version_id
+    image_base64 = export_data.image_base64
+    
     # 获取版本详情
     version_detail = await ProjectVersionService.project_version_detail_services(query_db, version_id)
     
@@ -241,8 +248,8 @@ async def export_project_version(
         if topo_result:
             topology_data = topo_result.get('topology_data') or topo_result.get('topologyData')
     
-    # 生成Word文档
-    word_content = export_version_to_word(topology_data)
+    # 生成Word文档（传入图片base64数据）
+    word_content = export_version_to_word(topology_data, image_base64)
     
     # 设置文件名
     file_name = f"{version_name}_接口控制文件.doc" if version_name else "接口控制文件.doc"
@@ -301,6 +308,51 @@ async def export_project_version_excel(
     return StreamingResponse(
         BytesIO(zip_content),
         media_type='application/zip',
+        headers={
+            'Content-Disposition': f"attachment; filename*=UTF-8''{encoded_filename}"
+        }
+    )
+
+
+@projectVersionController.get(
+    '/export-xml/{version_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:version:export'))]
+)
+@Log(title='工程管理-版本XML', business_type=BusinessType.EXPORT)
+async def export_project_version_xml(
+    request: Request,
+    version_id: int,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    导出项目版本为 XML 接口控制文件
+    """
+    version_detail = await ProjectVersionService.project_version_detail_services(query_db, version_id)
+
+    project_id = None
+    version_name = ''
+    if version_detail:
+        project_id = version_detail.get('project_id') or version_detail.get('projectId')
+        version_name = version_detail.get('version_name') or version_detail.get('versionName') or ''
+
+    topology_data = None
+    if project_id:
+        topo_result = await ProjectTopologyService.get_project_topology_services(
+            query_db, project_id, version_id
+        )
+        if topo_result:
+            topology_data = topo_result.get('topology_data') or topo_result.get('topologyData')
+
+    xml_content = export_version_to_xml(version_detail, topology_data)
+
+    file_name = f"{version_name}_接口控制文件.xml" if version_name else "接口控制文件.xml"
+    encoded_filename = quote(file_name)
+
+    logger.info(f'导出版本 {version_id} XML 成功')
+
+    return StreamingResponse(
+        BytesIO(xml_content),
+        media_type='application/xml',
         headers={
             'Content-Disposition': f"attachment; filename*=UTF-8''{encoded_filename}"
         }
