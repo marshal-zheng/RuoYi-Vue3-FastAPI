@@ -6,10 +6,13 @@
 -- 仿真管理菜单和权限
 -- ----------------------------
 -- 仿真管理菜单（使用较大的ID避免冲突）
-INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, route_name, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark) 
-VALUES (3100, '仿真管理', 0, 10, 'simulation', NULL, NULL, 'Simulation', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', NOW(), '', NULL, '仿真管理目录');
+-- 注意：仿真功能已集成在工程管理中，通过 工程列表 -> 工程详情 -> 版本仿真 进入
+-- 如果需要独立的仿真管理菜单，取消下面的注释
 
--- 仿真会话管理
+-- INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, route_name, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark) 
+-- VALUES (3100, '仿真管理', 0, 10, 'simulation', NULL, NULL, 'Simulation', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', NOW(), '', NULL, '仿真管理目录');
+
+-- 仿真会话管理（按钮权限，已集成到工程管理中）
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, route_name, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark) 
 VALUES (3101, '创建会话', 3100, 1, '', NULL, NULL, '', 1, 0, 'F', '0', '0', 'simulation:session:create', '#', 'admin', NOW(), '', NULL, '创建仿真会话');
 

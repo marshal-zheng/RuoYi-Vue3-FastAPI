@@ -22,6 +22,8 @@ export function useSimulationWebSocket() {
 
   let reconnectTimer = null
   let heartbeatTimer = null
+  // 已弹出通知的告警ID集合，防止重复弹出
+  const notifiedAlarmIds = new Set()
 
   /**
    * 连接WebSocket
@@ -33,14 +35,28 @@ export function useSimulationWebSocket() {
     }
 
     // 构建WebSocket URL，携带token以通过后端鉴权
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const baseApi = import.meta.env.VITE_APP_BASE_API || ''
-    const apiPrefix = (baseApi.startsWith('/') ? baseApi : `/${baseApi}`).replace(/\/$/, '')
-    const wsHost = window.location.host
-    const token = getToken()
-    const tokenQuery = token ? `?token=${encodeURIComponent(token)}` : ''
-    const wsPath = `${apiPrefix}/simulation/sessions/${sessionId}/ws${tokenQuery}`
-    const wsUrl = `${protocol}//${wsHost}${wsPath}`
+    const buildWsUrl = () => {
+      const baseApi = import.meta.env.VITE_APP_BASE_API || ''
+      const token = getToken()
+      const tokenQuery = token ? `?token=${encodeURIComponent(token)}` : ''
+      const relativePath = `/simulation/sessions/${sessionId}/ws${tokenQuery}`
+
+      // 如果 baseApi 是完整的 http(s) 地址，直接转换为 ws(s) 连接到真实后端
+      if (/^https?:\/\//i.test(baseApi)) {
+        const apiUrl = new URL(baseApi)
+        const wsProtocol = apiUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+        const basePath = apiUrl.pathname.replace(/\/$/, '')
+        return `${wsProtocol}//${apiUrl.host}${basePath}${relativePath}`
+      }
+
+      // 默认走当前站点 + API 前缀（走本地代理）
+      const apiPrefix = (baseApi.startsWith('/') ? baseApi : `/${baseApi}`).replace(/\/$/, '')
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
+      const wsHost = window.location.host
+      return `${protocol}//${wsHost}${apiPrefix}${relativePath}`
+    }
+
+    const wsUrl = buildWsUrl()
 
     try {
       ws.value = new WebSocket(wsUrl)
@@ -128,16 +144,30 @@ export function useSimulationWebSocket() {
   }
 
   /**
-   * 显示告警通知
+   * 显示告警通知（去重处理，同一告警只弹一次）
    */
   const showAlarmNotification = (alarm) => {
+    // 检查是否已经弹出过该告警
+    if (notifiedAlarmIds.has(alarm.alarmId)) {
+      return
+    }
+
+    // 标记为已弹出
+    notifiedAlarmIds.add(alarm.alarmId)
+
+    // 限制缓存大小，避免内存泄漏
+    if (notifiedAlarmIds.size > 500) {
+      const firstId = notifiedAlarmIds.values().next().value
+      notifiedAlarmIds.delete(firstId)
+    }
+
     const severityMap = {
       info: 'info',
       warning: 'warning',
       error: 'error',
       critical: 'error'
     }
-    
+
     const type = severityMap[alarm.severity] || 'warning'
     ElMessage({
       type,
@@ -212,6 +242,7 @@ export function useSimulationWebSocket() {
     messagesData.value = []
     bandwidthData.value = []
     alarmsData.value = []
+    notifiedAlarmIds.clear()
   }
 
   // 组件卸载时断开连接

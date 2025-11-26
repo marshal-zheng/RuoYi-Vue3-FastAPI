@@ -1,68 +1,34 @@
 /**
  * 告警管理Composable
  * 管理告警列表、过滤、统计
- * 提供告警通知功能
+ * 告警只在浮动面板中显示，不使用弹框通知
  */
 import { ref, computed } from 'vue'
-import { ElNotification } from 'element-plus'
 
 export function useAlarmManager() {
   const alarms = ref([]) // 告警列表
   const filterSeverity = ref(null) // 过滤严重程度
   const filterType = ref(null) // 过滤告警类型
   const searchKeyword = ref('') // 搜索关键字
-  const enableNotification = ref(true) // 是否启用通知
 
   /**
-   * 添加告警
+   * 添加告警（去重处理）
    */
   const addAlarm = (alarm) => {
     if (Array.isArray(alarm)) {
-      alarms.value = [...alarms.value, ...alarm]
-      // 显示最新的告警通知
-      if (alarm.length > 0 && enableNotification.value) {
-        showAlarmNotification(alarm[alarm.length - 1])
+      // 过滤掉已存在的告警（基于 alarmId 去重）
+      const existingIds = new Set(alarms.value.map(a => a.alarmId))
+      const newAlarms = alarm.filter(a => !existingIds.has(a.alarmId))
+      if (newAlarms.length > 0) {
+        alarms.value = [...alarms.value, ...newAlarms]
       }
     } else {
-      alarms.value.push(alarm)
-      if (enableNotification.value) {
-        showAlarmNotification(alarm)
+      // 检查是否已存在
+      const exists = alarms.value.some(a => a.alarmId === alarm.alarmId)
+      if (!exists) {
+        alarms.value.push(alarm)
       }
     }
-  }
-
-  /**
-   * 显示告警通知
-   */
-  const showAlarmNotification = (alarm) => {
-    const severityConfig = {
-      info: {
-        type: 'info',
-        title: '信息'
-      },
-      warning: {
-        type: 'warning',
-        title: '警告'
-      },
-      error: {
-        type: 'error',
-        title: '错误'
-      },
-      critical: {
-        type: 'error',
-        title: '严重错误'
-      }
-    }
-
-    const config = severityConfig[alarm.severity] || severityConfig.warning
-
-    ElNotification({
-      title: config.title,
-      message: alarm.message,
-      type: config.type,
-      duration: 5000,
-      position: 'top-right'
-    })
   }
 
   /**
@@ -173,6 +139,7 @@ export function useAlarmManager() {
     const labelMap = {
       loopback: '回环连接',
       multi_connection: '多端口连接',
+      disconnected_node: '孤立节点',
       bandwidth_overflow: '带宽溢出',
       protocol_mismatch: '协议不匹配',
       config_error: '配置错误'
@@ -268,7 +235,6 @@ export function useAlarmManager() {
     filterSeverity,
     filterType,
     searchKeyword,
-    enableNotification,
     addAlarm,
     removeAlarm,
     clearAllAlarms,

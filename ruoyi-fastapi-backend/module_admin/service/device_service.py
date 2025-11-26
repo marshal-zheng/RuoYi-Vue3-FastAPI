@@ -285,7 +285,9 @@ class DeviceService:
             bus_type=source_device.bus_type,
             remark=source_device.remark,
             create_by=current_user,
-            create_time=datetime.now()
+            create_time=datetime.now(),
+            update_by=current_user,
+            update_time=datetime.now()
         )
         
         # 克隆接口

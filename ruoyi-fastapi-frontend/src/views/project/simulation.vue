@@ -6,18 +6,33 @@
         <template v-if="simulationStatus === 'running'">
           <el-tag type="success" effect="dark" class="simulation-running-tag">
             <el-icon class="is-loading"><Loading /></el-icon>
-            仿真运行中 · 第{{ simulationLoopCount || 1 }}轮
+            {{ simulationContinuousMode ? `持续运行 - 第${simulationLoopCount || 1}轮` : '运行中' }}
           </el-tag>
           <zx-button type="danger" icon="VideoPause" @click="handleStopSimulation">
             停止仿真
           </zx-button>
         </template>
         <template v-else>
-          <zx-button type="primary" icon="VideoPlay" @click="handleRunSimulation">
-            执行仿真
-          </zx-button>
+          <el-dropdown @command="handleRunSimulation">
+            <el-button type="primary">
+              执行仿真
+              <el-icon class="el-icon--right"><arrow-down /></el-icon>
+            </el-button>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="once">
+                  <el-icon><VideoPlay /></el-icon>
+                  执行一轮
+                </el-dropdown-item>
+                <el-dropdown-item command="continuous">
+                  <el-icon><Refresh /></el-icon>
+                  持续播放
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </template>
-        <zx-button type="success" icon="GoodsFilled" @click="handleSaveTopo"> 健康自检 </zx-button>
+        <zx-button type="success" icon="Cpu" @click="handleHealthCheck"> 健康自检 </zx-button>
       </template>
       <XflowDAG
         ref="dagRef"
@@ -37,15 +52,24 @@
             </zx-button>
           </template>
           <template v-else>
-            <zx-button
-              size="small"
-              type="success"
-              :loading="simulationLoading"
-              :disabled="loading || simulationLoading"
-              @click="handleRunSimulation"
-            >
-              执行仿真
-            </zx-button>
+            <el-dropdown @command="handleRunSimulation" :disabled="loading || simulationLoading">
+              <el-button size="small" type="success" :loading="simulationLoading">
+                执行仿真
+                <el-icon class="el-icon--right"><arrow-down /></el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="once">
+                    <el-icon><VideoPlay /></el-icon>
+                    执行一轮
+                  </el-dropdown-item>
+                  <el-dropdown-item command="continuous">
+                    <el-icon><Refresh /></el-icon>
+                    持续播放
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </template>
           <zx-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
             保存
@@ -53,12 +77,17 @@
         </template>
       </XflowDAG>
 
-      <!-- 仿真监控面板（进度+告警） -->
-      <SimulationMonitorPanel
-        :visible="showMonitorPanel"
+      <!-- 仿真进度面板（左上角） -->
+      <SimulationStatusPanel
         :narration="simulationNarration"
-        :alarms="alarmData"
         :position="{ top: '40px', left: '30px' }"
+      />
+
+      <!-- 告警信息面板（左下角） -->
+      <SimulationMonitorPanel
+        :visible="showAlarmPanel"
+        :alarms="alarmData"
+        :position="{ bottom: '30px', left: '30px' }"
         :default-collapsed="false"
       />
 
@@ -70,13 +99,13 @@
         :default-collapsed="false"
       />
 
-      <!-- 报文列表面板 -->
+      <!-- 报文列表面板（常态显示） -->
       <MessageListPanel
         ref="messageListRef"
-        :visible="showPanels"
+        :visible="showMessagePanel"
         :messages="messageData"
-        :position="{ bottom: '30px', right: '30px' }"
-        :default-collapsed="true"
+        :position="{ bottom: '20px', right: '20px' }"
+        :default-collapsed="false"
       />
 
       <!-- 节点编辑抽屉 -->
@@ -84,6 +113,9 @@
 
       <!-- 仿真结果对话框 -->
       <SimulationResultDialog ref="simulationDialogRef" @reopen="handleReopenSimulationDialog" />
+
+      <!-- 健康自检对话框 -->
+      <HealthCheckDialog ref="healthCheckDialogRef" @recheck="handleHealthCheck" />
     </ZxContentWrap>
     <ZxContentWrap v-else class="simulation-page simulation-page--loading">
       <SkeletonLoader type="default" />
@@ -94,7 +126,7 @@
 <script setup name="Index">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Loading } from '@element-plus/icons-vue';
+import { Loading, ArrowDown, VideoPlay, Refresh } from '@element-plus/icons-vue';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import {
   NodeEditDrawer,
@@ -102,7 +134,9 @@ import {
   SimulationMonitorPanel,
   BandwidthChartPanel,
   MessageListPanel,
+  HealthCheckDialog,
 } from './simulation/components';
+import SimulationStatusPanel from './components/SimulationStatusPanel.vue';
 import { listDevice } from '@/api/device/device';
 import {
   createSimulationSession,
@@ -119,6 +153,8 @@ import { useDataTransform } from './composables/useDataTransform';
 import { useSimulationFiles } from './composables/useSimulationFiles';
 import { useTopology } from './composables/useTopology';
 import { useSimulationWebSocket } from './simulation/composables/useSimulationWebSocket';
+import { useHealthCheck } from './simulation/composables/useHealthCheck';
+import { useSimulationDataManager } from './simulation/composables/useSimulationDataManager';
 
 // 版本号
 const version = ref('3.9.0');
@@ -152,29 +188,36 @@ const nodeEditDrawerRef = ref(null);
 const currentNode = ref(null);
 const simulationDialogRef = ref(null);
 const messageListRef = ref(null);
-const alarmPanelRef = ref(null);
+const healthCheckDialogRef = ref(null);
 
-// 实时数据
-const bandwidthData = ref([]);
-const messageData = ref([]);
-const alarmData = ref([]);
+// 健康自检
+const { runHealthCheck } = useHealthCheck();
 
 // 仿真会话管理
 const currentSessionId = ref(null);
 
+// 使用优化的数据管理器
+const dataManager = useSimulationDataManager();
+const {
+  bandwidthData,
+  messageData,
+  alarmData,
+  updateBandwidthData,
+  updateMessageData,
+  updateAlarmData,
+  clearAllData,
+} = dataManager;
+
 // UI状态
 const pageLoading = ref(true);
-const showStatusPanel = computed(() => simulationStatus.value !== 'idle');
-const showBandwidthPanel = computed(() => bandwidthData.value.length > 0);
-const showMessagePanel = computed(() => messageData.value.length > 0);
 
 // 面板显示控制
-const showMonitorPanel = computed(
-  () => simulationNarration.value !== null || alarmData.value.length > 0
-);
+const showAlarmPanel = computed(() => alarmData.value.length > 0);
 const showPanels = computed(
   () => simulationStatus.value === 'running' || simulationStatus.value === 'completed'
 );
+// 报文追踪面板常态显示（有数据就显示，或仿真运行中）
+const showMessagePanel = computed(() => messageData.value.length > 0 || showPanels.value);
 
 // 可配置的文案和设置
 const dndConfig = {
@@ -228,6 +271,7 @@ const {
   simulationTimelinePhases,
   simulationResultPayload,
   simulationLoopCount,
+  simulationContinuousMode,
   buildSimulationSteps,
   buildPhaseTimeline,
   announceSimulationSchedule,
@@ -236,17 +280,8 @@ const {
   queueSimulationResult,
   resetSimulationNarration,
   resetSimulationState,
+  setContinuousMode,
 } = simulationCore;
-
-/**
- * 队列仿真结果并展示
- */
-function presentSimulationResult() {
-  if (!simulationResultPayload.value) {
-    return;
-  }
-  simulationDialogRef.value?.open(simulationResultPayload.value);
-}
 
 /**
  * 重新打开仿真对话框
@@ -290,13 +325,13 @@ async function handleStopSimulation() {
 
   resetSimulationState();
   currentSessionId.value = null;
-  ElMessage.success('仿真已停止');
 }
 
 /**
  * 执行仿真
+ * @param {string} mode - 执行模式：'once' 执行一轮, 'continuous' 持续播放
  */
-async function handleRunSimulation() {
+async function handleRunSimulation(mode = 'continuous') {
   if (simulationLoading.value) {
     return;
   }
@@ -318,6 +353,9 @@ async function handleRunSimulation() {
     ElMessage.error('仿真失败：缺少工程ID');
     return;
   }
+
+  // 设置仿真模式
+  setContinuousMode(mode === 'continuous');
 
   resetSimulationNarration();
   resetSimulationState();
@@ -342,9 +380,7 @@ async function handleRunSimulation() {
   simulationLoading.value = true;
 
   // 清空之前的数据
-  bandwidthData.value = [];
-  messageData.value = [];
-  alarmData.value = [];
+  clearAllData();
   wsManager.clearData();
 
   try {
@@ -437,8 +473,6 @@ async function handleRunSimulation() {
 
     // 运行前端动画流程
     runSimulationFlow();
-
-    ElMessage.success('仿真已启动');
   } catch (error) {
     console.error('启动仿真失败:', error);
     ElMessage.error(error?.message || '启动仿真失败，请稍后重试');
@@ -550,6 +584,20 @@ function handleSaveTopo() {
 }
 
 /**
+ * 执行健康自检
+ */
+function handleHealthCheck() {
+  const graph = getGraphInstance();
+  if (!graph) {
+    ElMessage.error('无法执行健康检查：图实例不存在');
+    return;
+  }
+
+  const report = runHealthCheck(graph, graphStyleUtils.isSimulationToken);
+  healthCheckDialogRef.value?.open(report);
+}
+
+/**
  * 从后端加载并回显已保存的拓扑数据
  */
 function restoreSavedTopology() {
@@ -576,62 +624,33 @@ const {
   statusData: wsStatusData,
 } = wsManager;
 
-// 监听WebSocket带宽数据更新
+// 监听WebSocket带宽数据更新（优化：使用节流）
 watch(
-  wsBandwidthData,
+  () => wsBandwidthData.value,
   (newData) => {
-    if (newData && newData.length > 0) {
-      // 追加新数据
-      bandwidthData.value = [...bandwidthData.value, ...newData];
-      // 保持最近600秒的数据
-      const now = Date.now() / 1000;
-      const cutoffTime = now - 600;
-      bandwidthData.value = bandwidthData.value.filter((item) => item.timestamp >= cutoffTime);
-    }
-  },
-  { deep: true }
+    updateBandwidthData(newData);
+  }
 );
 
-// 监听WebSocket报文数据更新
+// 监听WebSocket报文数据更新（优化：使用节流）
 watch(
-  wsMessagesData,
+  () => wsMessagesData.value,
   (newData) => {
-    if (newData && newData.length > 0) {
-      // 追加新数据，转换字段名称
-      const formattedMessages = newData.map((msg) => ({
-        messageId: msg.messageId,
-        timestamp: msg.sendTimestamp || msg.timestamp,
-        sender: msg.senderNodeId || msg.sender,
-        receiver: msg.receiverNodeId || msg.receiver,
-        protocol: msg.protocolType || msg.protocol,
-        size: msg.sizeBytes || msg.size,
-        status: 'success',
-      }));
-      messageData.value = [...messageData.value, ...formattedMessages];
-      // 保持最近100条报文
-      if (messageData.value.length > 100) {
-        messageData.value = messageData.value.slice(-100);
-      }
-    }
-  },
-  { deep: true }
+    updateMessageData(newData);
+  }
 );
 
 // 监听WebSocket告警数据更新
 watch(
-  wsAlarmsData,
+  () => wsAlarmsData.value,
   (newData) => {
-    if (newData && newData.length > 0) {
-      // 追加新告警
-      alarmData.value = [...alarmData.value, ...newData];
-    }
-  },
-  { deep: true }
+    updateAlarmData(newData);
+  }
 );
 
 // 监听WebSocket状态更新
 watch(
-  wsStatusData,
+  () => wsStatusData.value,
   (newStatus) => {
     if (newStatus) {
       // 更新仿真旁白信息

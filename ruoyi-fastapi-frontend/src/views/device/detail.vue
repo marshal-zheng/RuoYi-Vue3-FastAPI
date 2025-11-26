@@ -217,7 +217,7 @@ async function handleSave() {
         interfaceId: normalizeInterfaceId(port.interfaceId),
         interfaceName: port.interfaceName,
         interfaceType: port.interfaceType,
-        position: port.position,
+        position: Array.isArray(port.position) ? port.position[0] : port.position,
         description: port.description || '',
         params: port.params || getDefaultParams(port.interfaceType),
         messageConfig: port.messageConfig || null,

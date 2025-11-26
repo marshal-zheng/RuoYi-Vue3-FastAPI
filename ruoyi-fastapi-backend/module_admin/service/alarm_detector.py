@@ -30,8 +30,9 @@ class AlarmDetector:
         edges = topology_data.get('edges', [])
         
         for edge in edges:
-            source_node = edge.get('source')
-            target_node = edge.get('target')
+            # 兼容两种字段格式
+            source_node = edge.get('source') or edge.get('sourceId')
+            target_node = edge.get('target') or edge.get('targetId')
             
             # 检查源节点和目标节点是否相同
             if source_node and target_node and source_node == target_node:
@@ -44,8 +45,8 @@ class AlarmDetector:
                     'timestamp': datetime.now().timestamp(),
                     'details': {
                         'edge_id': edge.get('id'),
-                        'source_port': edge.get('sourcePort'),
-                        'target_port': edge.get('targetPort')
+                        'source_port': edge.get('sourcePort') or edge.get('sourcePortId'),
+                        'target_port': edge.get('targetPort') or edge.get('targetPortId')
                     }
                 }
                 alarms.append(alarm)
@@ -72,10 +73,11 @@ class AlarmDetector:
         port_connections = {}  # {node_id:port_id: [连接列表]}
         
         for edge in edges:
-            source_node = edge.get('source')
-            source_port = edge.get('sourcePort')
-            target_node = edge.get('target')
-            target_port = edge.get('targetPort')
+            # 兼容两种字段格式
+            source_node = edge.get('source') or edge.get('sourceId')
+            source_port = edge.get('sourcePort') or edge.get('sourcePortId')
+            target_node = edge.get('target') or edge.get('targetId')
+            target_port = edge.get('targetPort') or edge.get('targetPortId')
             
             if source_node and source_port:
                 key = f"{source_node}:{source_port}"
@@ -119,52 +121,6 @@ class AlarmDetector:
         return alarms
 
     @staticmethod
-    def detect_disconnected_nodes(topology_data: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        检测孤立节点
-        
-        孤立节点：没有任何连接的节点
-        
-        参数:
-            topology_data: 拓扑数据，包含nodes和edges
-            
-        返回:
-            告警列表
-        """
-        alarms = []
-        nodes = topology_data.get('nodes', [])
-        edges = topology_data.get('edges', [])
-        
-        # 收集所有有连接的节点
-        connected_nodes = set()
-        for edge in edges:
-            source = edge.get('source')
-            target = edge.get('target')
-            if source:
-                connected_nodes.add(source)
-            if target:
-                connected_nodes.add(target)
-        
-        # 检查孤立节点
-        for node in nodes:
-            node_id = node.get('id')
-            if node_id and node_id not in connected_nodes:
-                alarm = {
-                    'alarm_id': str(uuid.uuid4()),
-                    'alarm_type': 'disconnected_node',
-                    'severity': 'info',
-                    'affected_nodes': [node_id],
-                    'message': f'检测到孤立节点：节点 {node_id} 没有任何连接',
-                    'timestamp': datetime.now().timestamp(),
-                    'details': {
-                        'node_name': node.get('data', {}).get('name', node_id)
-                    }
-                }
-                alarms.append(alarm)
-        
-        return alarms
-
-    @staticmethod
     def detect_all_alarms(topology_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         执行所有告警检测
@@ -184,10 +140,6 @@ class AlarmDetector:
         # 检测多连接
         multi_conn_alarms = AlarmDetector.detect_multi_connection(topology_data)
         all_alarms.extend(multi_conn_alarms)
-        
-        # 检测孤立节点
-        disconnected_alarms = AlarmDetector.detect_disconnected_nodes(topology_data)
-        all_alarms.extend(disconnected_alarms)
         
         return all_alarms
 

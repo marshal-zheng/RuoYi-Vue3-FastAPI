@@ -3,6 +3,7 @@
 处理仿真相关的HTTP请求和WebSocket连接
 """
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, Request
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 import asyncio
 import json
@@ -399,37 +400,37 @@ async def push_simulation_data(session_id: str):
                 break
             
             # 推送状态
-            await manager.broadcast(session_id, {
+            await manager.broadcast(session_id, jsonable_encoder({
                 'type': 'status',
                 'data': status
-            })
+            }))
             
             # 推送最新报文
             messages = SimulationService.get_realtime_messages(session_id, limit=10)
             if messages:
-                await manager.broadcast(session_id, {
+                await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'messages',
                     'data': messages
-                })
+                }))
             
             # 推送带宽数据
             bandwidth_data = SimulationService.get_realtime_bandwidth(session_id)
             if bandwidth_data:
-                await manager.broadcast(session_id, {
+                await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'bandwidth',
                     'data': bandwidth_data
-                })
+                }))
             
             # 推送告警
             alarms = SimulationService.get_realtime_alarms(session_id)
             if alarms:
-                await manager.broadcast(session_id, {
+                await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'alarms',
                     'data': alarms
-                })
+                }))
             
-            # 等待1秒后继续推送
-            await asyncio.sleep(1)
+            # 等待0.5秒后继续推送（提高推送频率，增强实时感）
+            await asyncio.sleep(0.5)
             
     except asyncio.CancelledError:
         pass

@@ -1,7 +1,7 @@
 <template>
   <zx-floating-panel
     v-if="visible"
-    title="仿真监控"
+    title="告警信息"
     :position="position"
     :size="size"
     :collapsed-size="collapsedSize"
@@ -9,183 +9,157 @@
   >
     <template #header>
       <div class="flex items-center gap-2">
-        <span class="font-semibold text-sm">仿真监控</span>
+        <span class="font-semibold text-sm">告警信息</span>
         <el-badge v-if="alarmStats.total > 0" :value="alarmStats.total" :max="99" type="danger" />
       </div>
     </template>
 
     <div class="py-2 max-h-[calc(70vh-60px)] overflow-y-auto">
-      <!-- 仿真进度部分 -->
-      <div v-if="narration" class="py-2">
-        <div class="flex items-center gap-2 mb-2">
-          <el-tag :type="badgeType" size="small">
-            {{ narration.badge }}
-          </el-tag>
-          <span class="font-semibold text-sm text-gray-800">{{ narration.title }}</span>
+      <!-- 告警统计 -->
+      <div v-if="alarmStats.total > 0" class="flex gap-2 mb-3">
+        <div
+          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          :class="{ 'bg-white shadow-sm': alarmStats.critical > 0 }"
+        >
+          <div class="text-lg text-red-700">
+            <el-icon><CircleCloseFilled /></el-icon>
+          </div>
+          <div class="flex-1">
+            <div class="text-base font-semibold text-gray-800 leading-none">
+              {{ alarmStats.critical || 0 }}
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5">严重</div>
+          </div>
         </div>
-        <p class="m-0 mb-2 text-xs text-gray-600 leading-relaxed">{{ narration.description }}</p>
-        <p v-if="narration.busType" class="m-0">
-          <el-tag size="small" effect="plain">{{ narration.busType }}</el-tag>
-        </p>
+        <div
+          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          :class="{ 'bg-white shadow-sm': alarmStats.error > 0 }"
+        >
+          <div class="text-lg text-red-500">
+            <el-icon><WarningFilled /></el-icon>
+          </div>
+          <div class="flex-1">
+            <div class="text-base font-semibold text-gray-800 leading-none">
+              {{ alarmStats.error || 0 }}
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5">错误</div>
+          </div>
+        </div>
+        <div
+          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          :class="{ 'bg-white shadow-sm': alarmStats.warning > 0 }"
+        >
+          <div class="text-lg text-yellow-500">
+            <el-icon><Warning /></el-icon>
+          </div>
+          <div class="flex-1">
+            <div class="text-base font-semibold text-gray-800 leading-none">
+              {{ alarmStats.warning || 0 }}
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5">警告</div>
+          </div>
+        </div>
       </div>
 
-      <el-divider v-if="narration && alarms.length > 0" class="my-3" />
-
-      <!-- 告警信息部分 -->
-      <div v-if="alarms.length > 0" class="py-2">
-        <div class="flex gap-2 mb-3">
-          <div
-            class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
-            :class="{ 'bg-white shadow-sm': alarmStats.critical > 0 }"
-          >
-            <div class="text-lg text-red-700">
-              <el-icon><CircleCloseFilled /></el-icon>
-            </div>
-            <div class="flex-1">
-              <div class="text-base font-semibold text-gray-800 leading-none">
-                {{ alarmStats.critical || 0 }}
-              </div>
-              <div class="text-[10px] text-gray-500 mt-0.5">严重</div>
-            </div>
+      <!-- 告警列表 -->
+      <div v-if="alarmStats.total > 0" class="max-h-[300px] overflow-y-auto">
+        <div
+          v-for="alarm in displayAlarms"
+          :key="alarm.alarmId"
+          class="flex gap-2 p-2 mb-1.5 bg-white border border-gray-200 rounded border-l-[3px]"
+          :class="{
+            'border-l-red-700': alarm.severity === 'critical',
+            'border-l-red-500': alarm.severity === 'error',
+            'border-l-yellow-500': alarm.severity === 'warning',
+            'border-l-gray-400': alarm.severity === 'info',
+          }"
+        >
+          <div class="text-base pt-0.5">
+            <el-icon>
+              <component :is="getSeverityIcon(alarm.severity)" />
+            </el-icon>
           </div>
-          <div
-            class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
-            :class="{ 'bg-white shadow-sm': alarmStats.error > 0 }"
-          >
-            <div class="text-lg text-red-500">
-              <el-icon><WarningFilled /></el-icon>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5 mb-1">
+              <el-tag :type="getSeverityTagType(alarm.severity)" size="small" effect="dark">
+                {{ getSeverityLabel(alarm.severity) }}
+              </el-tag>
+              <span class="ml-auto text-[11px] text-gray-500 whitespace-nowrap">
+                {{ formatTime(alarm.timestamp) }}
+              </span>
             </div>
-            <div class="flex-1">
-              <div class="text-base font-semibold text-gray-800 leading-none">
-                {{ alarmStats.error || 0 }}
-              </div>
-              <div class="text-[10px] text-gray-500 mt-0.5">错误</div>
-            </div>
-          </div>
-          <div
-            class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
-            :class="{ 'bg-white shadow-sm': alarmStats.warning > 0 }"
-          >
-            <div class="text-lg text-yellow-500">
-              <el-icon><Warning /></el-icon>
-            </div>
-            <div class="flex-1">
-              <div class="text-base font-semibold text-gray-800 leading-none">
-                {{ alarmStats.warning || 0 }}
-              </div>
-              <div class="text-[10px] text-gray-500 mt-0.5">警告</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="max-h-[300px] overflow-y-auto">
-          <div
-            v-for="alarm in displayAlarms"
-            :key="alarm.alarmId"
-            class="flex gap-2 p-2 mb-1.5 bg-white border border-gray-200 rounded border-l-[3px]"
-            :class="{
-              'border-l-red-700': alarm.severity === 'critical',
-              'border-l-red-500': alarm.severity === 'error',
-              'border-l-yellow-500': alarm.severity === 'warning',
-              'border-l-gray-400': alarm.severity === 'info'
-            }"
-          >
-            <div class="text-base pt-0.5">
-              <el-icon>
-                <component :is="getSeverityIcon(alarm.severity)" />
-              </el-icon>
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-1.5 mb-1">
-                <el-tag :type="getSeverityTagType(alarm.severity)" size="small" effect="dark">
-                  {{ getSeverityLabel(alarm.severity) }}
-                </el-tag>
-                <span class="ml-auto text-[11px] text-gray-500 whitespace-nowrap">
-                  {{ formatTime(alarm.timestamp) }}
-                </span>
-              </div>
-              <div class="text-xs text-gray-800 leading-snug break-words">{{ alarm.message }}</div>
-            </div>
+            <div class="text-xs text-gray-800 leading-snug break-words">{{ alarm.message }}</div>
           </div>
         </div>
       </div>
 
       <!-- 无告警提示 -->
-      <div v-else-if="!narration" class="py-5">
-        <el-empty description="暂无监控数据" :image-size="60" />
+      <div v-else class="py-5">
+        <el-empty description="暂无告警信息" :image-size="60" />
       </div>
     </div>
   </zx-floating-panel>
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
-import {
-  CircleCloseFilled,
-  WarningFilled,
-  Warning,
-  InfoFilled
-} from '@element-plus/icons-vue'
-import { useAlarmManager } from '../composables/useAlarmManager'
+import { computed, watch } from 'vue';
+import { CircleCloseFilled, WarningFilled, Warning, InfoFilled } from '@element-plus/icons-vue';
+import { useAlarmManager } from '../composables/useAlarmManager';
 
 const props = defineProps({
-  narration: {
-    type: Object,
-    default: null
-  },
   alarms: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   visible: {
     type: Boolean,
-    default: false
+    default: false,
   },
   position: {
     type: Object,
-    default: () => ({ top: '40px', left: '30px' })
+    default: () => ({ bottom: '30px', left: '30px' }),
   },
   size: {
     type: Object,
-    default: () => ({ width: '380px', maxHeight: '70vh' })
+    default: () => ({ width: '380px', maxHeight: '50vh' }),
   },
   collapsedSize: {
     type: Object,
-    default: () => ({ width: '48px', height: '48px' })
+    default: () => ({ width: '48px', height: '48px' }),
   },
   defaultCollapsed: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
-const alarmManager = useAlarmManager()
-const { alarmStats, getSeverityLabel } = alarmManager
+const alarmManager = useAlarmManager();
+const { alarmStats, getSeverityLabel } = alarmManager;
 
 // 同步外部告警数据
-watch(() => props.alarms, (newAlarms) => {
-  if (newAlarms && newAlarms.length > 0) {
-    alarmManager.addAlarm(newAlarms)
-  }
-}, { immediate: true, deep: true })
+watch(
+  () => props.alarms,
+  (newAlarms) => {
+    if (newAlarms && newAlarms.length > 0) {
+      alarmManager.addAlarm(newAlarms);
+    }
+  },
+  { immediate: true, deep: true }
+);
 
-const badgeType = computed(() => {
-  return props.narration?.badge === '完成' ? 'success' : 'primary'
-})
-
-// 只显示最新的5条告警
+// 显示所有告警
 const displayAlarms = computed(() => {
-  return alarmManager.filteredAlarms.value.slice(0, 5)
-})
+  return alarmManager.filteredAlarms.value;
+});
 
 function getSeverityIcon(severity) {
   const iconMap = {
     critical: CircleCloseFilled,
     error: WarningFilled,
     warning: Warning,
-    info: InfoFilled
-  }
-  return iconMap[severity] || InfoFilled
+    info: InfoFilled,
+  };
+  return iconMap[severity] || InfoFilled;
 }
 
 function getSeverityTagType(severity) {
@@ -193,16 +167,14 @@ function getSeverityTagType(severity) {
     critical: 'danger',
     error: 'danger',
     warning: 'warning',
-    info: 'info'
-  }
-  return typeMap[severity] || 'info'
+    info: 'info',
+  };
+  return typeMap[severity] || 'info';
 }
 
 function formatTime(timestamp) {
-  if (!timestamp) return '-'
-  const date = new Date(timestamp * 1000)
-  return date.toLocaleTimeString()
+  if (!timestamp) return '-';
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleTimeString();
 }
 </script>
-
-

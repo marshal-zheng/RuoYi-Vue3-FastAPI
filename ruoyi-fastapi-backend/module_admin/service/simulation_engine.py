@@ -5,6 +5,7 @@
 import asyncio
 import uuid
 import time
+import random
 from datetime import datetime
 from typing import Dict, List, Any, Optional
 from module_admin.service.bandwidth_calculator import BandwidthCalculator
@@ -146,10 +147,11 @@ class SimulationEngine:
         messages = []
         
         for edge in self.edges:
-            source_node = edge.get('source')
-            source_port = edge.get('sourcePort')
-            target_node = edge.get('target')
-            target_port = edge.get('targetPort')
+            # 兼容两种字段格式：source/sourcePort 或 sourceId/sourcePortId
+            source_node = edge.get('source') or edge.get('sourceId')
+            source_port = edge.get('sourcePort') or edge.get('sourcePortId')
+            target_node = edge.get('target') or edge.get('targetId')
+            target_port = edge.get('targetPort') or edge.get('targetPortId')
             
             if not all([source_node, source_port, target_node, target_port]):
                 continue
@@ -201,11 +203,14 @@ class SimulationEngine:
         # 统计每个端口的报文数量和大小
         port_stats = {}  # {node_id:port_id: {count, total_bytes}}
         
-        # 只统计最近1秒内的报文
+        # 只统计最近1秒内的报文（用于滑动窗口带宽计算）
         recent_messages = [
             msg for msg in self.messages
             if self.current_timestamp - msg['send_timestamp'] <= 1.0
         ]
+        # 窗口时长，避免除零并处理启动初期不足1秒的情况
+        window_start = max(self.start_timestamp or self.current_timestamp, self.current_timestamp - 1.0)
+        window_seconds = max(self.tick_interval, self.current_timestamp - window_start)
         
         for msg in recent_messages:
             sender_key = f"{msg['sender_node_id']}:{msg['sender_port_id']}"
@@ -222,22 +227,10 @@ class SimulationEngine:
             if not port_config:
                 continue
             
-            protocol_type = port_config.get('protocol_type', 'LAN')
-            params = port_config.get('params', {})
-            
-            # 根据协议类型计算带宽
-            if protocol_type == 'LAN':
-                frequency_ms = params.get('frequency', 1000)
-                byte_count = params.get('byte_count', 100)
-                bandwidth_mbps = BandwidthCalculator.calculate_lan_bandwidth(frequency_ms, byte_count)
-            elif protocol_type in ['RS422', 'RS485']:
-                baud_rate = params.get('baud_rate', 115200)
-                bandwidth_mbps = BandwidthCalculator.calculate_rs422_bandwidth(baud_rate)
-            elif protocol_type == 'CAN':
-                baud_rate = params.get('baud_rate', 500000)
-                bandwidth_mbps = BandwidthCalculator.calculate_can_bandwidth(baud_rate)
-            else:
-                bandwidth_mbps = 0.0
+            # 使用实际统计的近1秒报文字节数计算即时带宽，并加入轻微抖动让曲线更贴近真实网络波动
+            base_bandwidth = (stats['total_bytes'] * 8) / (1_000_000 * window_seconds)
+            jitter = random.uniform(0.92, 1.08)
+            bandwidth_mbps = base_bandwidth * jitter
             
             bandwidth_data.append({
                 'session_id': self.session_id,
