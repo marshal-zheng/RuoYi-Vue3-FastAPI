@@ -102,7 +102,7 @@
         :latest-message="latestMessageForPanel"
         :node-name-map="nodeNameMap"
         :injection-strategy="currentInjectionStrategy"
-        :position="{ top: '230px', left: '30px' }"
+        :position="{ top: '240px', left: '30px' }"
       />
 
       <!-- 数据注入策略配置面板 -->

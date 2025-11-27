@@ -66,7 +66,8 @@ const badgeType = computed(() => {
 
 .simulation-status-panel__content {
   padding: 12px 0;
-  min-height: 80px;
+  height: 100px;
+  overflow: hidden;
 }
 
 .simulation-status-panel__main-title {
@@ -74,6 +75,9 @@ const badgeType = computed(() => {
   margin: 0 0 8px;
   font-size: 14px;
   color: #1f2937;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .simulation-status-panel__desc {
@@ -81,6 +85,9 @@ const badgeType = computed(() => {
   font-size: 13px;
   color: #6b7280;
   line-height: 1.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .simulation-status-panel__meta {
