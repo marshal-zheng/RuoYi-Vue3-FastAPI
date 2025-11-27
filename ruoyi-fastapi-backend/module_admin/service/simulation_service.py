@@ -75,8 +75,13 @@ class SimulationService:
             await SimulationDao.create_session(query_db, session)
             await query_db.commit()
             
-            # 创建仿真引擎实例
-            engine = SimulationEngine(session_id, topology_data)
+            # 创建仿真引擎实例（传递全局策略配置）
+            engine = SimulationEngine(
+                session_id, 
+                topology_data,
+                injection_strategy=request.injection_strategy or 'random',
+                injection_params=request.injection_params or {}
+            )
             cls._active_engines[session_id] = engine
             
             return CamelCaseUtil.transform_result({

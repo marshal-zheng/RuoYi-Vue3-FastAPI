@@ -10,6 +10,12 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 from module_admin.service.bandwidth_calculator import BandwidthCalculator
 from module_admin.service.alarm_detector import AlarmDetector
+from module_admin.service.data_injection_strategy import (
+    PayloadGenerator, 
+    IncrementStrategy, 
+    CycleStrategy,
+    STRATEGY_DEFINITIONS
+)
 
 
 class SimulationEngine:
@@ -18,16 +24,21 @@ class SimulationEngine:
     负责管理仿真会话、生成报文、计算带宽
     """
 
-    def __init__(self, session_id: str, topology_data: Dict[str, Any]):
+    def __init__(self, session_id: str, topology_data: Dict[str, Any], 
+                 injection_strategy: str = 'random', injection_params: Dict[str, Any] = None):
         """
         初始化仿真引擎
         
         参数:
             session_id: 会话ID
             topology_data: 拓扑数据，包含nodes和edges
+            injection_strategy: 全局数据注入策略
+            injection_params: 策略参数
         """
         self.session_id = session_id
         self.topology_data = topology_data
+        self.injection_strategy = injection_strategy
+        self.injection_params = injection_params or {}
         self.status = 'created'  # created/running/stopped
         self.start_timestamp = None
         self.current_timestamp = None
@@ -59,6 +70,9 @@ class SimulationEngine:
         
         # 初始化告警检测
         self._detect_initial_alarms()
+        
+        # 初始化报文内容生成器（使用全局策略）
+        self.payload_generator = PayloadGenerator(default_strategy=self.injection_strategy)
 
     def _parse_topology(self):
         """解析拓扑数据"""
@@ -120,6 +134,10 @@ class SimulationEngine:
                 await self.tick_task
             except asyncio.CancelledError:
                 pass
+        
+        # 清理数据填充策略的状态
+        IncrementStrategy.reset_counters(self.session_id)
+        CycleStrategy.reset_indices(self.session_id)
 
     async def _run_tick_loop(self):
         """运行定时任务循环"""
@@ -182,6 +200,34 @@ class SimulationEngine:
             # 判断是否应该发送报文
             # 简化逻辑：每个频率周期发送一次
             if elapsed_time > 0 and int(elapsed_time * 1000) % int(frequency_ms) < self.tick_interval * 1000:
+                # 获取消息配置
+                message_config = port_config.get('message_config', {})
+                
+                # 如果没有配置策略，使用全局策略
+                if not message_config.get('fillStrategy'):
+                    message_config['fillStrategy'] = self.injection_strategy
+                    message_config['strategyParams'] = self.injection_params
+                
+                # 构建生成上下文（包含全局策略参数）
+                context = {
+                    'session_id': self.session_id,
+                    'elapsed_time': elapsed_time,
+                    'tick_count': int(elapsed_time / self.tick_interval),
+                    'source_node': source_node,
+                    'source_port': source_port,
+                    'target_node': target_node,
+                    'target_port': target_port,
+                    # 传递全局策略参数
+                    **self.injection_params,
+                }
+                
+                # 生成报文内容（使用数据填充策略）
+                payload_result = self.payload_generator.generate_payload(message_config, context)
+                
+                # 计算实际报文大小
+                payload_size = len(payload_result.get('payload', b''))
+                actual_size = payload_size if payload_size > 0 else params.get('byte_count', 100)
+                
                 # 生成报文
                 message = {
                     'message_id': str(uuid.uuid4()),
@@ -191,10 +237,14 @@ class SimulationEngine:
                     'receiver_node_id': target_node,
                     'receiver_port_id': target_port,
                     'protocol_type': port_config.get('protocol_type', 'LAN'),
-                    'size_bytes': params.get('byte_count', 100),  # 默认100字节
+                    'size_bytes': actual_size,
                     'send_timestamp': self.current_timestamp,
                     'receive_timestamp': self.current_timestamp + 0.001,  # 假设1ms延迟
-                    'create_time': datetime.now()
+                    'create_time': datetime.now(),
+                    # 新增：报文内容相关字段
+                    'payload_hex': payload_result.get('payload_hex', ''),
+                    'field_values': payload_result.get('field_values', {}),
+                    'fill_strategy': message_config.get('fillStrategy', 'random'),
                 }
                 messages.append(message)
         

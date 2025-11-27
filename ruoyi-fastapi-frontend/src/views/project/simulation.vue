@@ -96,6 +96,24 @@
         :position="{ top: '40px', left: '30px' }"
       />
 
+      <!-- 报文详情面板（仿真进度下方） -->
+      <MessageDetailPanel
+        :visible="showPanels"
+        :latest-message="latestMessageForPanel"
+        :node-name-map="nodeNameMap"
+        :injection-strategy="currentInjectionStrategy"
+        :position="{ top: '230px', left: '30px' }"
+      />
+
+      <!-- 数据注入策略配置面板 -->
+      <DataInjectionPanel
+        ref="dataInjectionPanelRef"
+        :visible="simulationStatus !== 'running'"
+        :position="{ top: '160px', left: '30px' }"
+        :default-collapsed="true"
+        @apply="handleApplyInjectionStrategy"
+      />
+
       <!-- 告警信息面板（左下角） -->
       <SimulationMonitorPanel
         :visible="showAlarmPanel"
@@ -119,6 +137,7 @@
         :messages="messageData"
         :position="{ bottom: '5px', right: '20px' }"
         :default-collapsed="false"
+        :injection-strategy="currentInjectionStrategy"
       />
 
       <!-- 节点编辑抽屉 -->
@@ -149,6 +168,8 @@ import {
   BandwidthChartPanel,
   MessageListPanel,
   HealthCheckDialog,
+  DataInjectionPanel,
+  MessageDetailPanel,
 } from './simulation/components';
 import SimulationStatusPanel from './components/SimulationStatusPanel.vue';
 import { listDevice } from '@/api/device/device';
@@ -203,6 +224,13 @@ const currentNode = ref(null);
 const simulationDialogRef = ref(null);
 const messageListRef = ref(null);
 const healthCheckDialogRef = ref(null);
+const dataInjectionPanelRef = ref(null);
+
+// 当前数据注入策略配置
+const currentInjectionStrategy = ref({
+  strategy: 'random',
+  params: {},
+});
 
 // 健康自检
 const { runHealthCheck } = useHealthCheck();
@@ -232,6 +260,86 @@ const showPanels = computed(
 );
 // 报文追踪面板常态显示（有数据就显示，或仿真运行中）
 const showMessagePanel = computed(() => messageData.value.length > 0 || showPanels.value);
+
+// 构建节点ID到名称的映射
+const nodeNameMap = computed(() => {
+  const graph = getGraphInstance();
+  if (!graph) return {};
+
+  const map = {};
+  const nodes = graph.getNodes?.() || [];
+  nodes.forEach((node) => {
+    const data = node.getData?.() || {};
+    const nodeId = node.id;
+    // 优先使用 name，其次 label，再次 deviceName
+    map[nodeId] = data.name || data.label || data.deviceName || nodeId;
+  });
+  return map;
+});
+
+// 获取最新报文用于状态面板显示（模拟生成报文内容）
+const latestMessageForPanel = computed(() => {
+  if (messageData.value.length === 0) return null;
+  const latest = messageData.value[messageData.value.length - 1];
+
+  // 如果没有 payloadHex，根据策略模拟生成
+  if (!latest.payloadHex) {
+    const strategy = currentInjectionStrategy.value?.strategy || 'random';
+    const params = currentInjectionStrategy.value?.params || {};
+    const timestamp = latest.sendTimestamp || Date.now() / 1000;
+    const byteCount = Math.min(latest.sizeBytes || 32, 32);
+    let bytes = [];
+
+    switch (strategy) {
+      case 'random':
+        for (let i = 0; i < byteCount; i++) {
+          bytes.push(Math.floor(Math.random() * 256));
+        }
+        break;
+      case 'increment':
+        for (let i = 0; i < byteCount; i++) {
+          bytes.push((i + Math.floor(timestamp)) % 256);
+        }
+        break;
+      case 'fixed':
+        for (let i = 0; i < byteCount; i++) {
+          bytes.push(params.fixedValue || 0xaa);
+        }
+        break;
+      case 'cycle': {
+        const presetValues = params.presetValues || [0x00, 0x55, 0xaa, 0xff];
+        for (let i = 0; i < byteCount; i++) {
+          bytes.push(presetValues[i % presetValues.length]);
+        }
+        break;
+      }
+      case 'sine_wave': {
+        const amplitude = params.amplitude || 100;
+        const offset = params.offset || 127;
+        const frequency = params.frequency || 1;
+        const phase = params.phase || 0;
+        for (let i = 0; i < byteCount; i++) {
+          const sineValue =
+            offset + amplitude * Math.sin(2 * Math.PI * frequency * timestamp + phase + i * 0.1);
+          bytes.push(Math.max(0, Math.min(255, Math.round(sineValue))));
+        }
+        break;
+      }
+      default:
+        for (let i = 0; i < byteCount; i++) {
+          bytes.push(Math.floor(Math.random() * 256));
+        }
+    }
+
+    return {
+      ...latest,
+      payloadHex: bytes.map((b) => b.toString(16).padStart(2, '0')).join(''),
+      fillStrategy: strategy,
+    };
+  }
+
+  return latest;
+});
 
 // 可配置的文案和设置
 const dndConfig = {
@@ -419,9 +527,17 @@ async function handleRunSimulation(mode = 'continuous') {
       busType: '',
     };
 
+    // 获取当前选择的数据注入策略
+    const injectionConfig = dataInjectionPanelRef.value?.getConfig?.() || {
+      strategy: 'random',
+      params: {},
+    };
+
     const createResult = await createSimulationSession({
       projectId: currentProjectId,
       versionId: currentVersionId,
+      injectionStrategy: injectionConfig.strategy,
+      injectionParams: injectionConfig.params,
     });
 
     if (!createResult?.data?.sessionId) {
@@ -622,6 +738,15 @@ function handleHealthCheck() {
 
   const report = runHealthCheck(graph, graphStyleUtils.isSimulationToken);
   healthCheckDialogRef.value?.open(report);
+}
+
+/**
+ * 应用数据注入策略（仅更新当前选择，不修改拓扑数据）
+ * @param {Object} strategyConfig - 策略配置
+ */
+function handleApplyInjectionStrategy(strategyConfig) {
+  // 只保存策略配置，在执行仿真时通过参数传递给后端
+  currentInjectionStrategy.value = strategyConfig;
 }
 
 /**

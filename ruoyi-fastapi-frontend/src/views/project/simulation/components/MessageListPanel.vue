@@ -151,6 +151,37 @@
                 </template>
               </el-table-column>
 
+              <!-- 报文内容 -->
+              <el-table-column label="报文内容" width="180">
+                <template #default="scope">
+                  <el-popover
+                    v-if="scope.row.payloadHex"
+                    placement="top"
+                    :width="300"
+                    trigger="hover"
+                  >
+                    <template #reference>
+                      <div class="payload-preview text-xs font-mono text-gray-600 cursor-pointer">
+                        {{ formatPayloadPreview(scope.row.payloadHex) }}
+                      </div>
+                    </template>
+                    <div class="payload-detail">
+                      <div class="text-xs text-gray-500 mb-2">完整报文内容 (HEX)</div>
+                      <div class="font-mono text-xs bg-gray-100 p-2 rounded break-all">
+                        {{ formatPayloadHex(scope.row.payloadHex) }}
+                      </div>
+                      <div v-if="scope.row.fillStrategy" class="mt-2 text-xs">
+                        <span class="text-gray-500">填充策略：</span>
+                        <el-tag size="small" type="info">
+                          {{ getStrategyLabel(scope.row.fillStrategy) }}
+                        </el-tag>
+                      </div>
+                    </div>
+                  </el-popover>
+                  <span v-else class="text-xs text-gray-400">-</span>
+                </template>
+              </el-table-column>
+
               <!-- 传输状态 -->
               <el-table-column label="传输状态" width="100" align="center">
                 <template #default="scope">
@@ -231,6 +262,11 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  // 数据注入策略配置
+  injectionStrategy: {
+    type: Object,
+    default: () => ({ strategy: 'random', params: {} }),
+  },
 });
 
 const emit = defineEmits(['export']);
@@ -295,11 +331,117 @@ watch(
   { immediate: true, deep: true }
 );
 
+// 监听策略变化，清除缓存并重新计算
+watch(
+  () => props.injectionStrategy,
+  () => {
+    // 清除缓存，强制重新计算报文内容
+    enhancedMessagesCache.clear();
+    // 重置计数器
+    incrementCounter = 0;
+    cycleIndex = 0;
+    // 重新增强所有消息
+    if (props.messages && props.messages.length > 0) {
+      localMessages.value = props.messages.map((msg) => {
+        const enhanced = enhanceMessage(msg);
+        enhancedMessagesCache.set(msg.messageId, enhanced);
+        return enhanced;
+      });
+      nextTick(() => {
+        gridListRef.value?.refresh?.();
+      });
+    }
+  },
+  { deep: true }
+);
+
 // 网段缓存（优化：避免重复计算）
 const segmentCache = new Map();
 
+// 递增计数器（用于序列递增策略）
+let incrementCounter = 0;
+// 循环索引（用于循环模式策略）
+let cycleIndex = 0;
+
 /**
- * 增强报文数据 - 添加网段检测、丢包检测等
+ * 根据策略生成模拟报文内容
+ * @param {Object} strategy - 策略配置 { strategy: string, params: object }
+ * @param {number} timestamp - 报文时间戳
+ * @param {number} size - 报文大小
+ * @returns {Object} { payloadHex, fillStrategy }
+ */
+function generatePayloadByStrategy(strategy, timestamp, size) {
+  const { strategy: strategyType, params = {} } = strategy || { strategy: 'random', params: {} };
+  const byteCount = Math.min(size || 64, 32); // 最多生成32字节用于显示
+  let bytes = [];
+
+  switch (strategyType) {
+    case 'random': {
+      // 随机值：在值域范围内随机生成
+      const [min, max] = params.valueRange || [0, 255];
+      for (let i = 0; i < byteCount; i++) {
+        bytes.push(Math.floor(Math.random() * (max - min + 1)) + min);
+      }
+      break;
+    }
+    case 'increment': {
+      // 序列递增：计数器模式
+      const startValue = params.startValue || 0;
+      const step = params.step || 1;
+      for (let i = 0; i < byteCount; i++) {
+        const value = (startValue + incrementCounter * step + i) % 256;
+        bytes.push(value);
+      }
+      incrementCounter++;
+      break;
+    }
+    case 'fixed': {
+      // 固定值：使用预设固定值
+      const fixedValue = params.fixedValue || 0xaa;
+      for (let i = 0; i < byteCount; i++) {
+        bytes.push(fixedValue & 0xff);
+      }
+      break;
+    }
+    case 'cycle': {
+      // 循环模式：循环使用预设数据
+      const presetValues = params.presetValues || [0x00, 0x55, 0xaa, 0xff];
+      for (let i = 0; i < byteCount; i++) {
+        bytes.push(presetValues[(cycleIndex + i) % presetValues.length]);
+      }
+      cycleIndex = (cycleIndex + 1) % presetValues.length;
+      break;
+    }
+    case 'sine_wave': {
+      // 正弦波：模拟周期性变化
+      const amplitude = params.amplitude || 100;
+      const offset = params.offset || 127;
+      const frequency = params.frequency || 1;
+      const phase = params.phase || 0;
+      // 使用时间戳计算正弦值
+      const t = timestamp || Date.now() / 1000;
+      for (let i = 0; i < byteCount; i++) {
+        // 每个字节使用略微不同的相位，产生波形效果
+        const sineValue =
+          offset + amplitude * Math.sin(2 * Math.PI * frequency * t + phase + i * 0.1);
+        const value = Math.round(sineValue);
+        bytes.push(Math.max(0, Math.min(255, value)));
+      }
+      break;
+    }
+    default:
+      // 默认随机
+      for (let i = 0; i < byteCount; i++) {
+        bytes.push(Math.floor(Math.random() * 256));
+      }
+  }
+
+  const payloadHex = bytes.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return { payloadHex, fillStrategy: strategyType };
+}
+
+/**
+ * 增强报文数据 - 添加网段检测、丢包检测、报文内容模拟等
  */
 function enhanceMessage(msg) {
   const enhanced = { ...msg };
@@ -327,6 +469,17 @@ function enhanceMessage(msg) {
 
   // 传输状态
   enhanced.transmissionStatus = getTransmissionStatusValue(enhanced.packetLoss, latency);
+
+  // 如果没有报文内容，根据策略模拟生成
+  if (!enhanced.payloadHex) {
+    const generated = generatePayloadByStrategy(
+      props.injectionStrategy,
+      msg.sendTimestamp,
+      msg.sizeBytes
+    );
+    enhanced.payloadHex = generated.payloadHex;
+    enhanced.fillStrategy = generated.fillStrategy;
+  }
 
   return enhanced;
 }
@@ -427,6 +580,40 @@ function onFilterChange(key, value, { handleRefresh, updateState }) {
 
 function onSearch({ handleRefresh }) {
   handleRefresh();
+}
+
+/**
+ * 格式化报文内容预览（只显示前几个字节）
+ */
+function formatPayloadPreview(hex) {
+  if (!hex) return '-';
+  // 每2个字符是一个字节，显示前8个字节
+  const preview = hex.substring(0, 16).toUpperCase();
+  const formatted = preview.match(/.{2}/g)?.join(' ') || preview;
+  return hex.length > 16 ? `${formatted}...` : formatted;
+}
+
+/**
+ * 格式化完整报文内容
+ */
+function formatPayloadHex(hex) {
+  if (!hex) return '-';
+  // 每2个字符用空格分隔
+  return hex.toUpperCase().match(/.{2}/g)?.join(' ') || hex;
+}
+
+/**
+ * 获取策略标签
+ */
+function getStrategyLabel(strategy) {
+  const labels = {
+    random: '随机值',
+    increment: '序列递增',
+    fixed: '固定值',
+    cycle: '循环模式',
+    sine_wave: '正弦波',
+  };
+  return labels[strategy] || strategy || '随机值';
 }
 
 /**
@@ -623,5 +810,20 @@ defineExpose({
     transform: scale(1);
     opacity: 1;
   }
+}
+
+.payload-preview {
+  background: #f5f7fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.payload-preview:hover {
+  background: #e6f0ff;
 }
 </style>

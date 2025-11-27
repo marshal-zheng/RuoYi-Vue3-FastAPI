@@ -102,3 +102,14 @@ export function exportSimulationData(sessionId, data) {
     data: data
   })
 }
+
+/**
+ * 获取可用的数据填充策略列表
+ * @returns {Promise}
+ */
+export function getFillStrategies() {
+  return request({
+    url: '/simulation/strategies',
+    method: 'get'
+  })
+}

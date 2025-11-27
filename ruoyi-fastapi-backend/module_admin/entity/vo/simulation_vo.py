@@ -29,6 +29,9 @@ class CreateSimulationSessionModel(BaseModel):
     project_id: int = Field(description='项目ID')
     version_id: int = Field(description='版本ID')
     create_by: Optional[str] = Field(default=None, description='创建者')
+    # 全局数据注入策略配置
+    injection_strategy: Optional[str] = Field(default='random', description='数据注入策略: random/increment/fixed/cycle/sine_wave')
+    injection_params: Optional[dict] = Field(default=None, description='策略参数')
 
 
 class SimulationMessageModel(BaseModel):

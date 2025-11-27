@@ -19,6 +19,7 @@ from module_admin.entity.vo.simulation_vo import (
 )
 from module_admin.service.simulation_service import SimulationService
 from module_admin.service.login_service import LoginService
+from module_admin.service.data_injection_strategy import STRATEGY_DEFINITIONS
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
@@ -65,6 +66,35 @@ class ConnectionManager:
 
 
 manager = ConnectionManager()
+
+
+@simulationController.get(
+    '/strategies',
+    dependencies=[
+        Depends(LoginService.get_current_user)
+    ]
+)
+async def get_fill_strategies(request: Request):
+    """
+    获取可用的数据填充策略列表
+    
+    返回:
+        策略列表，包含名称、描述、图标、参数配置等信息
+    """
+    try:
+        strategies = []
+        for key, definition in STRATEGY_DEFINITIONS.items():
+            strategies.append({
+                'value': key,
+                'label': definition['name'],
+                'description': definition['description'],
+                'icon': definition['icon'],
+                'params': definition['params']
+            })
+        return ResponseUtil.success(data=strategies)
+    except Exception as e:
+        logger.error(f'获取填充策略列表失败: {str(e)}')
+        return ResponseUtil.error(msg=str(e))
 
 
 @simulationController.post(

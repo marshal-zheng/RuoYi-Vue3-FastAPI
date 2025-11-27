@@ -39,7 +39,7 @@ const props = defineProps({
   },
   size: {
     type: Object,
-    default: () => ({ width: '360px', maxHeight: '240px' }),
+    default: () => ({ width: '360px', maxHeight: '200px' }),
   },
   collapsedSize: {
     type: Object,
@@ -66,6 +66,7 @@ const badgeType = computed(() => {
 
 .simulation-status-panel__content {
   padding: 12px 0;
+  min-height: 80px;
 }
 
 .simulation-status-panel__main-title {
