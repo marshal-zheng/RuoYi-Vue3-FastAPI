@@ -140,6 +140,7 @@
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowDown, VideoPlay, Refresh } from '@element-plus/icons-vue';
+import useAppStore from '@/store/modules/app';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import {
   NodeEditDrawer,
@@ -374,6 +375,14 @@ async function handleRunSimulation(mode = 'continuous') {
 
   // 设置仿真模式
   setContinuousMode(mode === 'continuous');
+
+  // 收起侧边栏，保存之前状态以便恢复
+  if (previousSidebarState.value === null) {
+    previousSidebarState.value = appStore.sidebar.opened;
+  }
+  if (appStore.sidebar.opened) {
+    appStore.closeSideBar({ withoutAnimation: false });
+  }
 
   resetSimulationNarration();
   resetSimulationState();
@@ -693,6 +702,10 @@ watch(
   { deep: true }
 );
 
+// 侧边栏控制
+const appStore = useAppStore();
+const previousSidebarState = ref(null);
+
 // 页面加载时获取设备列表并尝试回显拓扑
 onMounted(async () => {
   pageLoading.value = true;
@@ -708,6 +721,11 @@ onMounted(async () => {
 });
 
 onUnmounted(async () => {
+  // 恢复侧边栏状态（仅当执行过仿真且之前是展开状态时）
+  if (previousSidebarState.value === true && !appStore.sidebar.opened) {
+    appStore.toggleSideBar(false);
+  }
+
   // 如果仿真正在运行，停止后端仿真
   if (currentSessionId.value && simulationStatus.value === 'running') {
     try {
