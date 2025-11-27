@@ -170,12 +170,8 @@ async function loadOperlogData(params) {
     requestParams = proxy.addDateRange(requestParams, dateRange);
     delete requestParams.dateRange;
   }
-  try {
-    const response = await list(requestParams);
-    return { list: response.rows || [], total: response.total || 0 };
-  } catch (e) {
-    return { list: [], total: 0 };
-  }
+  const response = await list(requestParams);
+  return response;
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {

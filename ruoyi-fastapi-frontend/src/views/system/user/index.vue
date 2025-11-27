@@ -530,7 +530,7 @@ async function loadUserData(params) {
   const finalQuery = proxy.addDateRange(withDept, withDept?.dateRange);
   const res = await listUser({ pager, query: finalQuery });
   currentQuery.value = finalQuery || {};
-  return { list: res.rows || [], total: res.total || 0 };
+  return res;
 }
 /** 查询部门下拉树结构 */
 function getDeptTree() {
