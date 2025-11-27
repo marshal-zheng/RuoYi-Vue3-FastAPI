@@ -20,7 +20,10 @@
         to="/"
       >
         <img v-if="logo" :src="logo" :class="logoSizeClass" class="shrink-0 mr-3" />
-        <h1 :class="titleSizeClass" class="sidebar-title m-0 p-0 font-semibold leading-none tracking-[0.5px] select-none">
+        <h1
+          :class="titleSizeClass"
+          class="sidebar-title m-0 p-0 font-semibold leading-none tracking-[0.5px] select-none"
+        >
           {{ title }}
         </h1>
       </router-link>
@@ -90,6 +93,7 @@ const logo = showLogoImage ? logoImg : null;
 }
 
 .sidebar-title {
+  font-size: var(--logo-title-font-size, 16px);
   color: var(--logo-title-text-color, #f0f4ff);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC',
