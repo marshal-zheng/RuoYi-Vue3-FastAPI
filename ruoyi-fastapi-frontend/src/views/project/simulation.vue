@@ -4,10 +4,14 @@
       <!-- header-right插槽添加 '仿真'操作 -->
       <template #header-right>
         <template v-if="simulationStatus === 'running'">
-          <el-tag type="success" effect="dark" class="simulation-running-tag">
-            <el-icon class="is-loading"><Loading /></el-icon>
-            {{ simulationContinuousMode ? `持续运行 - 第${simulationLoopCount || 1}轮` : '运行中' }}
-          </el-tag>
+          <div class="simulation-status-badge">
+            <span class="status-pulse"></span>
+            <span class="status-text">
+              {{
+                simulationContinuousMode ? `持续运行 · 第${simulationLoopCount || 1}轮` : '运行中'
+              }}
+            </span>
+          </div>
           <zx-button type="danger" icon="VideoPause" @click="handleStopSimulation">
             停止仿真
           </zx-button>
@@ -32,6 +36,15 @@
             </template>
           </el-dropdown>
         </template>
+        <!-- 仿真报告按钮：运行中或有历史结果时显示 -->
+        <zx-button
+          v-if="simulationResultPayload && simulationStatus !== 'running'"
+          type="warning"
+          icon="Document"
+          @click="handleReopenSimulationDialog"
+        >
+          查看报告
+        </zx-button>
         <zx-button type="success" icon="Cpu" @click="handleHealthCheck"> 健康自检 </zx-button>
       </template>
       <XflowDAG
@@ -87,7 +100,7 @@
       <SimulationMonitorPanel
         :visible="showAlarmPanel"
         :alarms="alarmData"
-        :position="{ bottom: '30px', left: '30px' }"
+        :position="{ bottom: '5px', left: '30px' }"
         :default-collapsed="false"
       />
 
@@ -95,7 +108,7 @@
       <BandwidthChartPanel
         :visible="showPanels"
         :bandwidth-data="bandwidthData"
-        :position="{ top: '40px', right: '30px' }"
+        :position="{ top: '80px', right: '30px' }"
         :default-collapsed="false"
       />
 
@@ -104,7 +117,7 @@
         ref="messageListRef"
         :visible="showMessagePanel"
         :messages="messageData"
-        :position="{ bottom: '20px', right: '20px' }"
+        :position="{ bottom: '5px', right: '20px' }"
         :default-collapsed="false"
       />
 
@@ -126,7 +139,7 @@
 <script setup name="Index">
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Loading, ArrowDown, VideoPlay, Refresh } from '@element-plus/icons-vue';
+import { ArrowDown, VideoPlay, Refresh } from '@element-plus/icons-vue';
 import XflowDAG from '@/components/business/Dag/index.vue';
 import {
   NodeEditDrawer,
@@ -291,7 +304,12 @@ function handleReopenSimulationDialog() {
     ElMessage.warning('暂无仿真结果，请先执行仿真');
     return;
   }
-  simulationDialogRef.value?.open(simulationResultPayload.value);
+  // 传入仿真结果和实时收集的带宽/报文数据
+  simulationDialogRef.value?.open({
+    ...simulationResultPayload.value,
+    bandwidthData: bandwidthData.value,
+    messageData: messageData.value,
+  });
 }
 
 /**
@@ -764,14 +782,47 @@ onUnmounted(async () => {
   font-size: 12px;
 }
 
-.simulation-running-tag {
+/* 仿真运行状态徽章 */
+.simulation-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-right: 8px;
+  gap: 10px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 24px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+  margin-right: 12px;
 
-  .el-icon {
-    font-size: 14px;
+  .status-pulse {
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+    animation: pulse-ring 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .status-text {
+    white-space: nowrap;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    opacity: 1;
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+    opacity: 0.7;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    opacity: 1;
   }
 }
 </style>

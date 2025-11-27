@@ -13,7 +13,7 @@
           <span class="font-semibold text-sm">带宽监控</span>
           <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
             <span class="live-dot"></span>
-            LIVE
+            实时
           </el-tag>
           <el-tag v-else-if="isWaiting" type="info" size="small" effect="plain"> 待机 </el-tag>
         </div>
@@ -123,7 +123,7 @@ const props = defineProps({
   },
   size: {
     type: Object,
-    default: () => ({ width: '380px', maxHeight: '420px' }),
+    default: () => ({ width: '500px', maxHeight: '420px' }),
   },
   collapsedSize: {
     type: Object,

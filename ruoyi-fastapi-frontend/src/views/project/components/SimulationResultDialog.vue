@@ -9,7 +9,6 @@
 
     <template #footer>
       <div class="simulation-dialog__footer">
-        <el-button @click="handleReopen">重新打开</el-button>
         <el-button type="primary" @click="dialog.close()">关闭</el-button>
       </div>
     </template>
@@ -56,6 +55,23 @@
           </el-timeline-item>
         </el-timeline>
       </el-tab-pane>
+
+      <!-- 数据图表 Tab -->
+      <el-tab-pane label="数据图表" name="charts">
+        <div class="charts-container">
+          <!-- 带宽趋势图 -->
+          <div class="chart-section">
+            <div class="chart-title">带宽趋势</div>
+            <div ref="bandwidthChartRef" class="chart-box"></div>
+          </div>
+          <!-- 协议分布图 -->
+          <div class="chart-section">
+            <div class="chart-title">协议分布</div>
+            <div ref="protocolChartRef" class="chart-box"></div>
+          </div>
+        </div>
+      </el-tab-pane>
+
       <el-tab-pane label="总线通信设计文件" name="design">
         <div class="simulation-file__header">
           <el-button
@@ -95,13 +111,22 @@
 </template>
 
 <script setup name="SimulationResultDialog">
-import { ref } from 'vue';
+import { ref, watch, nextTick, onUnmounted } from 'vue';
 import { useDialog } from '@zxio/zxui';
+import * as echarts from 'echarts';
 
-const emit = defineEmits(['reopen']);
+defineEmits(['reopen']);
 
 const simulationResult = ref(null);
 const simulationTab = ref('timeline');
+
+// 图表 DOM 引用
+const bandwidthChartRef = ref(null);
+const protocolChartRef = ref(null);
+
+// echarts 实例
+let bandwidthChart = null;
+let protocolChart = null;
 
 const dialog = useDialog({
   title: '多总线仿真结果',
@@ -112,6 +137,215 @@ const dialog = useDialog({
   footer: false,
 });
 
+// 监听 tab 切换，当切换到图表 tab 时初始化图表
+watch(simulationTab, (newTab) => {
+  if (newTab === 'charts') {
+    nextTick(() => {
+      initCharts();
+    });
+  }
+});
+
+// 初始化图表
+function initCharts() {
+  initBandwidthChart();
+  initProtocolChart();
+}
+
+// 带宽趋势图
+function initBandwidthChart() {
+  if (!bandwidthChartRef.value) return;
+
+  if (bandwidthChart) {
+    bandwidthChart.dispose();
+  }
+
+  bandwidthChart = echarts.init(bandwidthChartRef.value);
+
+  // 使用真实的带宽数据
+  const rawBandwidthData = simulationResult.value?.bandwidthData || [];
+  const timeData = [];
+  const bandwidthValues = [];
+
+  // 获取基准时间戳（第一个数据点的时间）
+  const baseTimestamp = rawBandwidthData.length > 0 ? rawBandwidthData[0].timestamp || 0 : 0;
+
+  // 计算最大带宽值，决定使用 Kbps 还是 Mbps
+  // 注意：数据字段名是 bandwidthMbps
+  let maxBandwidth = 0;
+  rawBandwidthData.forEach((item) => {
+    const bw = item.bandwidthMbps || item.bandwidth || 0;
+    if (bw > maxBandwidth) maxBandwidth = bw;
+  });
+
+  // 如果最大值小于 1 Mbps，使用 Kbps 作为单位
+  const useKbps = maxBandwidth < 1;
+  const unit = useKbps ? 'Kbps' : 'Mbps';
+  const multiplier = useKbps ? 1000 : 1;
+
+  if (rawBandwidthData.length > 0) {
+    rawBandwidthData.forEach((item) => {
+      // X轴使用相对时间（从0开始）
+      const relativeTime = (item.timestamp || 0) - baseTimestamp;
+      timeData.push(`${relativeTime.toFixed(1)}s`);
+      // 带宽值根据单位转换，保持两位小数（字段名是 bandwidthMbps）
+      const rawValue = item.bandwidthMbps || item.bandwidth || 0;
+      const value = rawValue * multiplier;
+      bandwidthValues.push(parseFloat(value.toFixed(2)));
+    });
+  } else {
+    // 没有数据时显示空状态
+    for (let i = 0; i < 10; i++) {
+      timeData.push(`${i}s`);
+      bandwidthValues.push(0);
+    }
+  }
+
+  const option = {
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(15, 23, 42, 0.9)',
+      borderColor: '#334155',
+      textStyle: { color: '#e2e8f0' },
+      formatter: (params) => {
+        const data = params[0];
+        return `${data.axisValue}<br/><span style="color:#3b82f6">●</span> 带宽: ${data.value.toFixed(2)} ${unit}`;
+      },
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      top: '10%',
+      containLabel: true,
+    },
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: timeData,
+      axisLine: { lineStyle: { color: '#64748b' } },
+      axisLabel: { color: '#94a3b8' },
+    },
+    yAxis: {
+      type: 'value',
+      name: unit,
+      nameTextStyle: { color: '#94a3b8' },
+      axisLine: { lineStyle: { color: '#64748b' } },
+      axisLabel: {
+        color: '#94a3b8',
+        formatter: (value) => value.toFixed(2),
+      },
+      splitLine: { lineStyle: { color: '#334155', type: 'dashed' } },
+    },
+    series: [
+      {
+        name: '带宽',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(59, 130, 246, 0.4)' },
+            { offset: 1, color: 'rgba(59, 130, 246, 0.05)' },
+          ]),
+        },
+        lineStyle: { color: '#3b82f6', width: 2 },
+        data: bandwidthValues,
+      },
+    ],
+  };
+
+  bandwidthChart.setOption(option);
+}
+
+// 协议分布饼图
+function initProtocolChart() {
+  if (!protocolChartRef.value) return;
+
+  if (protocolChart) {
+    protocolChart.dispose();
+  }
+
+  protocolChart = echarts.init(protocolChartRef.value);
+
+  // 从真实报文数据统计协议分布
+  const messageData = simulationResult.value?.messageData || [];
+  const protocolCount = {};
+
+  messageData.forEach((msg) => {
+    const protocol = msg.protocolType || '未知';
+    protocolCount[protocol] = (protocolCount[protocol] || 0) + 1;
+  });
+
+  // 转换为图表数据格式
+  let chartData = Object.entries(protocolCount).map(([name, value]) => ({
+    name,
+    value,
+  }));
+
+  // 如果没有报文数据，使用 summary 中的总线覆盖信息
+  if (chartData.length === 0) {
+    const busCoverage = simulationResult.value?.summary?.busCoverage || [];
+    chartData = busCoverage
+      .filter((bus) => bus.active)
+      .map((bus) => ({
+        name: bus.name,
+        value: bus.count || 1,
+      }));
+  }
+
+  // 如果仍然没有数据，显示空状态
+  if (chartData.length === 0) {
+    chartData = [{ name: '暂无数据', value: 1 }];
+  }
+
+  const option = {
+    tooltip: {
+      trigger: 'item',
+      backgroundColor: 'rgba(15, 23, 42, 0.9)',
+      borderColor: '#334155',
+      textStyle: { color: '#e2e8f0' },
+      formatter: '{b}: {c} 条报文 ({d}%)',
+    },
+    legend: {
+      orient: 'vertical',
+      right: '5%',
+      top: 'center',
+      textStyle: { color: '#64748b' },
+    },
+    series: [
+      {
+        name: '协议分布',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        center: ['40%', '50%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+          borderRadius: 8,
+          borderColor: '#fff',
+          borderWidth: 2,
+        },
+        label: {
+          show: false,
+          position: 'center',
+        },
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 16,
+            fontWeight: 'bold',
+          },
+        },
+        labelLine: { show: false },
+        data: chartData,
+      },
+    ],
+    color: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'],
+  };
+
+  protocolChart.setOption(option);
+}
+
 function open(payload) {
   simulationResult.value = payload || null;
   simulationTab.value = 'timeline';
@@ -120,10 +354,6 @@ function open(payload) {
 
 function close() {
   dialog.close();
-}
-
-function handleReopen() {
-  emit('reopen');
 }
 
 function downloadSimulationFile(filename, content) {
@@ -137,6 +367,18 @@ function downloadSimulationFile(filename, content) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+// 清理 echarts 实例
+onUnmounted(() => {
+  if (bandwidthChart) {
+    bandwidthChart.dispose();
+    bandwidthChart = null;
+  }
+  if (protocolChart) {
+    protocolChart.dispose();
+    protocolChart = null;
+  }
+});
 
 defineExpose({
   open,
@@ -194,5 +436,35 @@ defineExpose({
   color: #606266;
   margin: 0;
   font-size: 12px;
+}
+
+/* 图表容器样式 */
+.charts-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 16px;
+}
+
+.chart-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.chart-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 12px;
+  padding-left: 8px;
+  border-left: 3px solid #3b82f6;
+}
+
+.chart-box {
+  height: 260px;
+  background: #fff;
+  border-radius: 8px;
 }
 </style>

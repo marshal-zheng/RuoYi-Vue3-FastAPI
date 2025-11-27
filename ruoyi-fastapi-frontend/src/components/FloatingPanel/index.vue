@@ -7,7 +7,9 @@
       @mousedown="handleMouseDown"
     >
       <!-- Header -->
-      <div class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 cursor-move">
+      <div
+        class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 cursor-move"
+      >
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <slot name="header">
             <span class="text-sm font-semibold text-gray-800 truncate">{{ title }}</span>
@@ -47,7 +49,7 @@
         @mousedown.stop="handleResizeStart"
       >
         <svg class="w-full h-full text-gray-400" viewBox="0 0 16 16" fill="currentColor">
-          <path d="M16 16V14L14 16H16ZM16 11V9L9 16H11L16 11ZM16 6V4L4 16H6L16 6Z"/>
+          <path d="M16 16V14L14 16H16ZM16 11V9L9 16H11L16 11ZM16 6V4L4 16H6L16 6Z" />
         </svg>
       </div>
     </div>
@@ -68,164 +70,173 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { Close, Minus, Expand } from '@element-plus/icons-vue'
+import { ref, computed, watch } from 'vue';
+import { Close, Minus, Expand } from '@element-plus/icons-vue';
 
 const props = defineProps({
   title: {
     type: String,
-    default: '面板'
+    default: '面板',
   },
   position: {
     type: Object,
-    default: () => ({ top: '100px', right: '30px' })
+    default: () => ({ top: '100px', right: '30px' }),
   },
   size: {
     type: Object,
-    default: () => ({ width: '400px', maxHeight: '500px' })
+    default: () => ({ width: '400px', maxHeight: '500px' }),
   },
   collapsedSize: {
     type: Object,
-    default: () => ({ width: '48px', height: '48px' })
+    default: () => ({ width: '48px', height: '48px' }),
   },
   defaultCollapsed: {
     type: Boolean,
-    default: false
+    default: false,
   },
   closable: {
     type: Boolean,
-    default: false
+    default: false,
   },
   resizable: {
     type: Boolean,
-    default: true
+    default: true,
   },
   draggable: {
     type: Boolean,
-    default: true
+    default: true,
   },
   visible: {
     type: Boolean,
-    default: true
+    default: true,
+  },
+});
+
+const emit = defineEmits(['close', 'collapse', 'expand']);
+
+const collapsed = ref(props.defaultCollapsed);
+const currentPosition = ref({ ...props.position });
+const currentSize = ref({ ...props.size });
+const isDragging = ref(false);
+const isResizing = ref(false);
+const dragStart = ref({ x: 0, y: 0 });
+const resizeStart = ref({ x: 0, y: 0, width: 0, height: 0 });
+
+watch(
+  () => props.visible,
+  (newVal) => {
+    if (!newVal) {
+      collapsed.value = true;
+    }
   }
-})
-
-const emit = defineEmits(['close', 'collapse', 'expand'])
-
-const collapsed = ref(props.defaultCollapsed)
-const currentPosition = ref({ ...props.position })
-const currentSize = ref({ ...props.size })
-const isDragging = ref(false)
-const isResizing = ref(false)
-const dragStart = ref({ x: 0, y: 0 })
-const resizeStart = ref({ x: 0, y: 0, width: 0, height: 0 })
-
-watch(() => props.visible, (newVal) => {
-  if (!newVal) {
-    collapsed.value = true
-  }
-})
+);
 
 const panelStyle = computed(() => {
   const style = {
     ...currentPosition.value,
-    ...currentSize.value
-  }
-  
+    ...currentSize.value,
+  };
+
   if (isDragging.value) {
-    style.transition = 'none'
+    style.transition = 'none';
   }
-  
-  return style
-})
+
+  return style;
+});
 
 const contentStyle = computed(() => {
   return {
-    maxHeight: currentSize.value.maxHeight || '500px'
-  }
-})
+    maxHeight: currentSize.value.maxHeight || '500px',
+  };
+});
 
 const collapsedStyle = computed(() => {
   return {
     ...currentPosition.value,
-    ...props.collapsedSize
-  }
-})
+    ...props.collapsedSize,
+  };
+});
 
 const handleCollapse = () => {
-  collapsed.value = true
-  emit('collapse')
-}
+  collapsed.value = true;
+  emit('collapse');
+};
 
 const handleExpand = () => {
-  collapsed.value = false
-  emit('expand')
-}
+  collapsed.value = false;
+  emit('expand');
+};
 
 const handleClose = () => {
-  emit('close')
-}
+  emit('close');
+};
 
 const handleMouseDown = (e) => {
-  if (!props.draggable) return
-  if (e.target.closest('.floating-panel > div:first-child') === null) return
-  
-  isDragging.value = true
+  if (!props.draggable) return;
+  if (e.target.closest('.floating-panel > div:first-child') === null) return;
+
+  isDragging.value = true;
   dragStart.value = {
     x: e.clientX - parseInt(currentPosition.value.left || currentPosition.value.right || 0),
-    y: e.clientY - parseInt(currentPosition.value.top || currentPosition.value.bottom || 0)
-  }
-  
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mouseup', handleMouseUp)
-}
+    y: e.clientY - parseInt(currentPosition.value.top || currentPosition.value.bottom || 0),
+  };
+
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
+};
 
 const handleMouseMove = (e) => {
-  if (!isDragging.value && !isResizing.value) return
-  
+  if (!isDragging.value && !isResizing.value) return;
+
   if (isDragging.value) {
-    const newLeft = e.clientX - dragStart.value.x
-    const newTop = e.clientY - dragStart.value.y
-    
+    const newLeft = e.clientX - dragStart.value.x;
+    const newTop = e.clientY - dragStart.value.y;
+
     currentPosition.value = {
       left: `${Math.max(0, Math.min(newLeft, window.innerWidth - 400))}px`,
-      top: `${Math.max(0, Math.min(newTop, window.innerHeight - 100))}px`
-    }
+      top: `${Math.max(0, Math.min(newTop, window.innerHeight - 100))}px`,
+    };
   } else if (isResizing.value) {
-    const deltaX = e.clientX - resizeStart.value.x
-    const deltaY = e.clientY - resizeStart.value.y
-    
-    const newWidth = Math.max(300, resizeStart.value.width + deltaX)
-    const newHeight = Math.max(200, resizeStart.value.height + deltaY)
-    
+    const deltaX = e.clientX - resizeStart.value.x;
+    const deltaY = e.clientY - resizeStart.value.y;
+
+    const newWidth = Math.max(300, resizeStart.value.width + deltaX);
+    const newHeight = Math.max(200, resizeStart.value.height + deltaY);
+
     currentSize.value = {
       width: `${newWidth}px`,
-      maxHeight: `${newHeight}px`
-    }
+      maxHeight: `${newHeight}px`,
+    };
   }
-}
+};
 
 const handleMouseUp = () => {
-  isDragging.value = false
-  isResizing.value = false
-  document.removeEventListener('mousemove', handleMouseMove)
-  document.removeEventListener('mouseup', handleMouseUp)
-}
+  isDragging.value = false;
+  isResizing.value = false;
+  document.removeEventListener('mousemove', handleMouseMove);
+  document.removeEventListener('mouseup', handleMouseUp);
+};
 
 const handleResizeStart = (e) => {
-  if (!props.resizable) return
-  
-  isResizing.value = true
+  if (!props.resizable) return;
+
+  isResizing.value = true;
   resizeStart.value = {
     x: e.clientX,
     y: e.clientY,
     width: parseInt(currentSize.value.width),
-    height: parseInt(currentSize.value.maxHeight)
-  }
-  
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mouseup', handleMouseUp)
-}
+    height: parseInt(currentSize.value.maxHeight),
+  };
+
+  document.addEventListener('mousemove', handleMouseMove);
+  document.addEventListener('mouseup', handleMouseUp);
+};
+
+// 暴露方法给外部调用
+defineExpose({
+  collapse: handleCollapse,
+  expand: handleExpand,
+});
 </script>
 
 <style scoped>
@@ -234,6 +245,8 @@ const handleResizeStart = (e) => {
 }
 
 .floating-panel:hover {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 </style>

@@ -10,30 +10,29 @@
       :default-collapsed="defaultCollapsed"
     >
       <template #header>
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-sm">报文追踪</span>
-          <transition name="badge-bounce">
-            <el-badge
-              :value="localMessages.length"
-              :max="999"
-              type="primary"
-              :key="localMessages.length"
-            />
-          </transition>
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-sm">报文追踪</span>
+            <transition name="badge-bounce">
+              <el-badge
+                :value="localMessages.length"
+                :max="999"
+                type="primary"
+                :key="localMessages.length"
+              />
+            </transition>
+          </div>
+          <el-button
+            type="primary"
+            size="small"
+            icon="Download"
+            class="mr-4"
+            :disabled="!localMessages || localMessages.length === 0"
+            @click="handleExport"
+          >
+            导出
+          </el-button>
         </div>
-      </template>
-
-      <template #actions>
-        <el-button
-          type="primary"
-          size="small"
-          icon="Download"
-          :disabled="!localMessages || localMessages.length === 0"
-          @click="handleExport"
-        >
-          导出
-        </el-button>
-        <el-button size="small" icon="Minus" @click="handleCollapse"> 收起 </el-button>
       </template>
 
       <ZxGridList
@@ -574,13 +573,6 @@ function handleExport() {
 
 function refresh() {
   gridListRef.value?.refresh?.();
-}
-
-/**
- * 收起面板
- */
-function handleCollapse() {
-  panelRef.value?.collapse?.();
 }
 
 defineExpose({
