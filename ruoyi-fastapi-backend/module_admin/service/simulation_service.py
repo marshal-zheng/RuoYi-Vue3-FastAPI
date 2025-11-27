@@ -226,7 +226,7 @@ class SimulationService:
     @classmethod
     def get_realtime_messages(cls, session_id: str, limit: int = 100) -> List[Dict]:
         """
-        获取实时报文数据
+        获取实时报文数据（全量）
         
         参数:
             session_id: 会话ID
@@ -245,9 +245,28 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(msg) for msg in messages]
 
     @classmethod
+    def get_new_messages(cls, session_id: str, limit: int = 20) -> List[Dict]:
+        """
+        获取增量报文数据（仅返回未推送过的新数据）
+        
+        参数:
+            session_id: 会话ID
+            limit: 限制数量
+            
+        返回:
+            新报文列表
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+        
+        messages = engine.get_new_messages(limit)
+        return [CamelCaseUtil.transform_result(msg) for msg in messages]
+
+    @classmethod
     def get_realtime_bandwidth(cls, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
         """
-        获取实时带宽数据
+        获取实时带宽数据（全量）
         
         参数:
             session_id: 会话ID
@@ -264,9 +283,27 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
 
     @classmethod
+    def get_new_bandwidth(cls, session_id: str) -> List[Dict]:
+        """
+        获取增量带宽数据（仅返回未推送过的新数据）
+        
+        参数:
+            session_id: 会话ID
+            
+        返回:
+            新带宽数据列表
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+        
+        bandwidth_data = engine.get_new_bandwidth_data()
+        return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
+
+    @classmethod
     def get_realtime_alarms(cls, session_id: str) -> List[Dict]:
         """
-        获取实时告警数据
+        获取实时告警数据（全量）
         
         参数:
             session_id: 会话ID
@@ -279,6 +316,24 @@ class SimulationService:
             return []
         
         alarms = engine.get_alarms()
+        return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+
+    @classmethod
+    def get_new_alarms(cls, session_id: str) -> List[Dict]:
+        """
+        获取增量告警数据（仅返回未推送过的新数据）
+        
+        参数:
+            session_id: 会话ID
+            
+        返回:
+            新告警列表
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+        
+        alarms = engine.get_new_alarms()
         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
 
     @classmethod

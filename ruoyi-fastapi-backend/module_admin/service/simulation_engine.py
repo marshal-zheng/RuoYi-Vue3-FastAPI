@@ -37,9 +37,18 @@ class SimulationEngine:
         self.bandwidth_data = []  # 带宽数据列表
         self.alarms = []  # 告警列表
         
+        # 增量数据追踪（用于WebSocket增量推送）
+        self._last_pushed_msg_index = 0
+        self._last_pushed_bw_index = 0
+        self._last_pushed_alarm_index = 0
+        
+        # 数据清理配置
+        self._max_messages = 1000  # 最多保留1000条报文
+        self._max_bandwidth_points = 600  # 最多保留600个带宽点（10分钟，每秒1个）
+        
         # 定时任务
         self.tick_task = None
-        self.tick_interval = 0.1  # 100ms tick
+        self.tick_interval = 0.5  # 500ms tick（降低频率，减少性能消耗）
         
         # 解析拓扑数据
         self.nodes = {}  # {node_id: node_data}
@@ -133,6 +142,9 @@ class SimulationEngine:
         # 计算带宽
         bandwidth_data = self._calculate_bandwidth(elapsed)
         self.bandwidth_data.extend(bandwidth_data)
+        
+        # 定期清理旧数据，防止内存泄漏
+        self._cleanup_old_data()
 
     def _generate_messages(self, elapsed_time: float) -> List[Dict[str, Any]]:
         """
@@ -283,3 +295,40 @@ class SimulationEngine:
             'bandwidth_data_count': len(self.bandwidth_data),
             'alarm_count': len(self.alarms)
         }
+
+    def _cleanup_old_data(self):
+        """清理旧数据，防止内存泄漏"""
+        # 清理超出限制的报文
+        if len(self.messages) > self._max_messages:
+            # 调整推送索引
+            remove_count = len(self.messages) - self._max_messages
+            self._last_pushed_msg_index = max(0, self._last_pushed_msg_index - remove_count)
+            self.messages = self.messages[-self._max_messages:]
+        
+        # 清理超出限制的带宽数据
+        if len(self.bandwidth_data) > self._max_bandwidth_points:
+            remove_count = len(self.bandwidth_data) - self._max_bandwidth_points
+            self._last_pushed_bw_index = max(0, self._last_pushed_bw_index - remove_count)
+            self.bandwidth_data = self.bandwidth_data[-self._max_bandwidth_points:]
+
+    def get_new_messages(self, limit: int = 20) -> List[Dict[str, Any]]:
+        """获取增量报文数据（未推送过的）"""
+        new_messages = self.messages[self._last_pushed_msg_index:]
+        # 更新索引
+        self._last_pushed_msg_index = len(self.messages)
+        # 限制返回数量
+        return new_messages[-limit:] if len(new_messages) > limit else new_messages
+
+    def get_new_bandwidth_data(self) -> List[Dict[str, Any]]:
+        """获取增量带宽数据（未推送过的）"""
+        new_data = self.bandwidth_data[self._last_pushed_bw_index:]
+        # 更新索引
+        self._last_pushed_bw_index = len(self.bandwidth_data)
+        return new_data
+
+    def get_new_alarms(self) -> List[Dict[str, Any]]:
+        """获取增量告警数据（未推送过的）"""
+        new_alarms = self.alarms[self._last_pushed_alarm_index:]
+        # 更新索引
+        self._last_pushed_alarm_index = len(self.alarms)
+        return new_alarms

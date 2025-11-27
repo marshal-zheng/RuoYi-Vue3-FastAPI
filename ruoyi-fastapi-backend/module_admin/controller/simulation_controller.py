@@ -386,51 +386,51 @@ async def websocket_endpoint(
 
 async def push_simulation_data(session_id: str):
     """
-    推送仿真数据到WebSocket客户端
+    推送仿真数据到WebSocket客户端（增量推送，优化性能）
     
     参数:
         session_id: 会话ID
     """
     try:
         while True:
-            # 获取实时数据
+            # 获取实时状态
             status = SimulationService.get_session_status(session_id)
             
             if status.get('status') == 'not_found':
                 break
             
-            # 推送状态
+            # 推送状态（每次都推送，数据量小）
             await manager.broadcast(session_id, jsonable_encoder({
                 'type': 'status',
                 'data': status
             }))
             
-            # 推送最新报文
-            messages = SimulationService.get_realtime_messages(session_id, limit=10)
-            if messages:
+            # 推送增量报文（仅推送新数据）
+            new_messages = SimulationService.get_new_messages(session_id, limit=20)
+            if new_messages:
                 await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'messages',
-                    'data': messages
+                    'data': new_messages
                 }))
             
-            # 推送带宽数据
-            bandwidth_data = SimulationService.get_realtime_bandwidth(session_id)
-            if bandwidth_data:
+            # 推送增量带宽数据（仅推送新数据）
+            new_bandwidth = SimulationService.get_new_bandwidth(session_id)
+            if new_bandwidth:
                 await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'bandwidth',
-                    'data': bandwidth_data
+                    'data': new_bandwidth
                 }))
             
-            # 推送告警
-            alarms = SimulationService.get_realtime_alarms(session_id)
-            if alarms:
+            # 推送增量告警（仅推送新告警）
+            new_alarms = SimulationService.get_new_alarms(session_id)
+            if new_alarms:
                 await manager.broadcast(session_id, jsonable_encoder({
                     'type': 'alarms',
-                    'data': alarms
+                    'data': new_alarms
                 }))
             
-            # 等待0.5秒后继续推送（提高推送频率，增强实时感）
-            await asyncio.sleep(0.5)
+            # 等待1秒后继续推送（平衡实时性和性能）
+            await asyncio.sleep(1.0)
             
     except asyncio.CancelledError:
         pass
