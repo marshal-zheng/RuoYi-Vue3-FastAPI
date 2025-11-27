@@ -94,10 +94,14 @@ app.use(ElementPlus, {
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
 import VXETablePluginElement from 'vxe-table-plugin-element';
+import zhCN from 'vxe-table/lib/locale/lang/zh-CN';
 import VxeDictAutocomplete from '@/components/VxeDictAutocomplete/index.vue';
 import { h } from 'vue';
 
 VXETable.use(VXETablePluginElement);
+VXETable.setConfig({
+  i18n: (key, args) => zhCN[key],
+});
 
 type DictRendererEvents = {
   input?: (args: Record<string, unknown>) => void;

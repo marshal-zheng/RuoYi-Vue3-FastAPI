@@ -46,23 +46,6 @@ EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 COMMIT;
 
--- 演示数据
-INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
-SELECT '以太网协议', 'LAN', '0', '标准以太网通信协议，支持10/100/1000Mbps传输', '{}', 'admin', NOW()
-WHERE NOT EXISTS (SELECT 1 FROM `sys_protocol` WHERE `protocol_name` = '以太网协议');
-
-INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
-SELECT 'RS422串行协议', 'RS422', '0', 'RS422差分信号串行通信协议，支持长距离传输', '{}', 'admin', NOW()
-WHERE NOT EXISTS (SELECT 1 FROM `sys_protocol` WHERE `protocol_name` = 'RS422串行协议');
-
-INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
-SELECT 'CAN总线协议', 'CAN', '0', '控制器局域网总线协议，广泛应用于汽车和工业控制', '{}', 'admin', NOW()
-WHERE NOT EXISTS (SELECT 1 FROM `sys_protocol` WHERE `protocol_name` = 'CAN总线协议');
-
-INSERT INTO `sys_protocol` (`protocol_name`, `protocol_type`, `status`, `description`, `protocol_config`, `create_by`, `create_time`)
-SELECT 'MIL-STD-1553B协议', '1553B', '1', '军用标准数据总线协议，用于航空航天设备通信', '{}', 'admin', NOW()
-WHERE NOT EXISTS (SELECT 1 FROM `sys_protocol` WHERE `protocol_name` = 'MIL-STD-1553B协议');
-
 -- 2. 字典数据
 -- Dict helper macros are implemented via INSERT ... SELECT ... WHERE NOT EXISTS to keep scripts idempotent.
 

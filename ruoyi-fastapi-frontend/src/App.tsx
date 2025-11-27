@@ -1,5 +1,7 @@
 import { defineComponent, onMounted, nextTick } from 'vue';
 import { RouterView } from 'vue-router';
+import { ElConfigProvider } from 'element-plus';
+import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import useSettingsStore from '@/store/modules/settings';
 import { handleThemeStyle } from '@/utils/theme';
 
@@ -13,6 +15,10 @@ export default defineComponent({
       });
     });
 
-    return () => <RouterView />;
+    return () => (
+      <ElConfigProvider locale={zhCn}>
+        <RouterView />
+      </ElConfigProvider>
+    );
   },
 });

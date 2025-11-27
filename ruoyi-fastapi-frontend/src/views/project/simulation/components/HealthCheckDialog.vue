@@ -21,10 +21,7 @@
     </template>
 
     <!-- 检查结果汇总 -->
-    <div
-      class="flex items-center gap-4 p-5 rounded-lg mb-5"
-      :class="summaryBgClass"
-    >
+    <div class="flex items-center gap-4 p-5 rounded-lg mb-5" :class="summaryBgClass">
       <div :class="summaryIconClass">
         <el-icon :size="32">
           <component :is="summaryIcon" />
