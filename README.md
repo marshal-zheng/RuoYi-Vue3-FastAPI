@@ -60,10 +60,14 @@
 ```bash
 cd ruoyi-fastapi-frontend
 
-# 安装依赖
+# 1. 配置环境变量
+cp .env.example .env.development
+# 编辑 .env.development，配置后端接口地址 VITE_APP_BASE_URL
+
+# 2. 安装依赖
 yarn install
 
-# 启动开发服务器
+# 3. 启动开发服务器
 yarn dev
 ```
 
@@ -72,7 +76,7 @@ yarn dev
 > 前端使用 Vite 构建，支持热更新。修改代码后会自动刷新浏览器。
 > 
 > 注意：仅启动前端时，需要确保后端服务已运行，或配置 Mock 数据。
-> 如需修改后端代理地址，请编辑 `vite.config.ts` 文件中的 `baseUrl` 配置。
+> 如需修改后端代理地址，请编辑 `.env.development` 文件中的 `VITE_APP_BASE_URL` 配置。
 
 **常用命令：**
 ```bash
@@ -147,19 +151,19 @@ mysql -u root -p ruoyi-fastapi < ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql
 ```bash
 cd ruoyi-fastapi-backend
 
-# 创建虚拟环境（推荐）
+# 1. 创建虚拟环境（推荐）
 python3 -m venv venv
 source venv/bin/activate  # macOS/Linux
 # 或 venv\Scripts\activate  # Windows
 
-# 安装依赖
+# 2. 安装依赖
 pip install -r requirements.txt
 
-# 配置环境变量
-cp .env.dev .env.dev.local  # 复制配置文件
-vim .env.dev.local          # 修改数据库和 Redis 连接信息
+# 3. 配置环境变量
+cp .env.example .env.dev
+# 编辑 .env.dev，配置数据库和 Redis 连接信息
 
-# 启动开发服务器
+# 4. 启动开发服务器
 python app.py --env=dev
 ```
 
@@ -173,10 +177,14 @@ python app.py --env=dev
 ```bash
 cd ruoyi-fastapi-frontend
 
-# 安装依赖
+# 1. 配置环境变量
+cp .env.example .env.development
+# 编辑 .env.development，配置后端接口地址
+
+# 2. 安装依赖
 yarn install
 
-# 启动开发服务器
+# 3. 启动开发服务器
 yarn dev
 ```
 
