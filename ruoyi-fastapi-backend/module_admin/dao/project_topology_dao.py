@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import desc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -65,3 +67,19 @@ class ProjectTopologyDao:
         db.add(db_topology)
         await db.flush()
         return db_topology
+
+    @classmethod
+    async def get_topologies_by_version_ids(
+        cls, db: AsyncSession, project_id: int, version_ids: List[int]
+    ) -> List[SysProjectTopology]:
+        """
+        根据版本ID列表获取拓扑数据
+        """
+        if not version_ids:
+            return []
+        query = select(SysProjectTopology).where(
+            SysProjectTopology.project_id == project_id,
+            SysProjectTopology.version_id.in_(version_ids)
+        )
+        result = await db.execute(query)
+        return result.scalars().all()

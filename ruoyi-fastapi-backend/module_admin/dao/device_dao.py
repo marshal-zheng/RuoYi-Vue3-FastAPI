@@ -130,3 +130,32 @@ class DeviceDao:
         stmt = select(DeviceDO).where(DeviceDO.device_name == device_name)
         result = await db.execute(stmt)
         return result.scalar_one_or_none()
+
+    @classmethod
+    async def get_devices_by_ids(cls, db: AsyncSession, device_ids: List[int]) -> List[DeviceDO]:
+        """
+        根据ID列表批量获取设备（包含接口信息）
+        """
+        if not device_ids:
+            return []
+        stmt = select(DeviceDO).options(
+            selectinload(DeviceDO.interfaces),
+            selectinload(DeviceDO.category),
+        ).where(DeviceDO.device_id.in_(device_ids))
+        result = await db.execute(stmt)
+        return result.scalars().all()
+
+    @classmethod
+    async def find_device_by_name_and_type(
+        cls, db: AsyncSession, device_name: str, device_type: Optional[str] = None
+    ) -> Optional[DeviceDO]:
+        """
+        根据设备名称和类型查找设备
+        """
+        stmt = select(DeviceDO).options(selectinload(DeviceDO.interfaces)).where(
+            DeviceDO.device_name == device_name
+        )
+        if device_type:
+            stmt = stmt.where(DeviceDO.device_type == device_type)
+        result = await db.execute(stmt)
+        return result.scalars().first()

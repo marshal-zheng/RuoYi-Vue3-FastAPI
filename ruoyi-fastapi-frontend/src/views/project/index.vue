@@ -23,6 +23,28 @@
               v-hasPermi="['project:project:remove']"
               >删除</ZxButton
             >
+            <ZxButton
+              type="default"
+              icon="Download"
+              :disabled="multiple"
+              @click="handleBatchExport"
+              v-hasPermi="['project:project:query']"
+              >批量导出</ZxButton
+            >
+            <ZxButton
+              type="success"
+              icon="Upload"
+              @click="handleImportClick"
+              v-hasPermi="['project:project:add']"
+              >导入工程</ZxButton
+            >
+            <input
+              ref="importFileInputRef"
+              type="file"
+              accept=".json,.zip"
+              style="display: none"
+              @change="handleImportFileChange"
+            />
           </div>
           <div class="zx-grid-form-bar__filters">
             <el-date-picker
@@ -78,7 +100,7 @@
                     :model-value="ids.includes(project.projectId)"
                     @change="toggleSelection(project)"
                     @click.stop
-                    class="mt-0.5 flex-shrink-0"
+                    class="-mt-1 flex-shrink-0"
                   />
                   <div class="flex-1 min-w-0">
                     <h3 class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight">
@@ -95,6 +117,32 @@
                       <span>编号: {{ project.projectId }}</span>
                     </p>
                   </div>
+                </div>
+                <div class="flex items-center gap-2 mr-2">
+                  <ZxIcon
+                    v-if="checkPermi(['project:project:query'])"
+                    icon="View"
+                    :size="16"
+                    tooltip="查看详情"
+                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                    @click.stop="handleDetail(project)"
+                  />
+                  <ZxIcon
+                    v-if="checkPermi(['project:project:edit'])"
+                    icon="Edit"
+                    :size="16"
+                    tooltip="编辑工程"
+                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                    @click.stop="handleEdit(project)"
+                  />
+                  <ZxIcon
+                    v-if="checkPermi(['project:project:query'])"
+                    icon="Download"
+                    :size="16"
+                    tooltip="导出工程"
+                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                    @click.stop="handleExport(project)"
+                  />
                 </div>
                 <ZxMoreAction
                   class="flex-shrink-0"
@@ -180,12 +228,20 @@
 </template>
 
 <script setup name="Project">
-import { listProject, delProject } from '@/api/project/project';
+import {
+  listProject,
+  delProject,
+  exportProject,
+  exportProjectBatch,
+  importProject,
+  importProjectBatch,
+} from '@/api/project/project';
 import { unlockProjectVersions } from '@/api/project/version';
 import { checkPermi } from '@/utils/permission';
-import { Document, Delete, Unlock } from '@element-plus/icons-vue';
+import { Document, Delete, Unlock, Download, Edit, View } from '@element-plus/icons-vue';
 import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue';
 import { confirmInputDanger } from '@zxio/zxui';
+import { ElMessage } from 'element-plus';
 
 const { proxy } = getCurrentInstance();
 
@@ -257,39 +313,26 @@ async function handleDelete(row) {
     return;
   }
 
-  try {
-    await confirmInputDanger({
-      targetName: projectName,
-      targetType: '项目',
-      keyword: projectName,
-      dangerMessage: `您即将删除项目"${projectName}"。删除的项目及其所有版本数据将无法恢复！`,
-      description:
-        '此操作是高风险操作，将永久删除项目及其所有版本数据。为防止误操作，请输入项目名称确认您的意图。',
-    });
+  await confirmInputDanger({
+    targetName: projectName,
+    targetType: '项目',
+    keyword: projectName,
+    dangerMessage: `您即将删除项目"${projectName}"。删除的项目及其所有版本数据将无法恢复！`,
+    description:
+      '此操作是高风险操作，将永久删除项目及其所有版本数据。为防止误操作，请输入项目名称确认您的意图。',
+  });
 
-    // 用户确认后执行删除
-    await delProject(projectIds.length === 1 ? projectIds[0] : projectIds);
-    refreshList();
-    proxy.$modal.msgSuccess('删除成功');
-    // 清空选择状态
-    ids.value = [];
-    single.value = true;
-    multiple.value = true;
-  } catch (error) {
-    // 用户取消或关闭，或删除失败
-    if (error && error !== 'cancel') {
-      proxy.$modal.msgError('删除失败');
-    } else {
-      proxy.$modal.msgInfo('已取消删除');
-    }
-  }
+  // 用户确认后执行删除
+  await delProject(projectIds.length === 1 ? projectIds[0] : projectIds);
+  refreshList();
+  // 清空选择状态
+  ids.value = [];
+  single.value = true;
+  multiple.value = true;
 }
 
 function getProjectMoreActionList() {
   const actions = [];
-  if (checkPermi(['project:project:query'])) {
-    actions.push({ label: '查看详情', eventTag: 'detail', icon: Document });
-  }
   if (checkPermi(['project:version:edit'])) {
     actions.push({ label: '批量解除固化', eventTag: 'unlockVersions', icon: Unlock });
   }
@@ -304,6 +347,12 @@ function handleMoreActionSelect(item, project) {
     case 'detail':
       handleDetail(project);
       break;
+    case 'edit':
+      handleEdit(project);
+      break;
+    case 'export':
+      handleExport(project);
+      break;
     case 'unlockVersions':
       handleUnlockProjectVersions(project);
       break;
@@ -313,6 +362,10 @@ function handleMoreActionSelect(item, project) {
     default:
       break;
   }
+}
+
+function handleEdit(project) {
+  projectDialogRef.value && projectDialogRef.value.open(project.projectId);
 }
 
 function handleUnlockProjectVersions(project) {
@@ -330,6 +383,14 @@ function handleUnlockProjectVersions(project) {
 }
 
 function handleCreateSuccess(payload) {
+  // 编辑模式：刷新列表即可
+  if (payload?.mode === 'edit') {
+    refreshList();
+    proxy.$modal.msgSuccess('修改成功');
+    return;
+  }
+
+  // 新增模式：跳转到拓扑页面
   let projectId = null;
   let versionId = null;
   if (payload && typeof payload === 'object') {
@@ -352,6 +413,150 @@ function handleCreateSuccess(payload) {
     refreshList();
     proxy.$modal.msgSuccess('新增成功');
   }
+}
+
+// ========== 工程导出功能 ==========
+async function handleExport(project) {
+  if (!project?.projectId) {
+    proxy.$modal.msgError('工程ID不存在，无法导出');
+    return;
+  }
+
+  const data = await exportProject(project.projectId);
+
+  // 创建下载链接
+  const jsonStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+
+  // 生成文件名
+  const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+  const filename = `${project.projectName}_export_${timestamp}.json`;
+
+  // 触发下载
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  ElMessage.success('工程导出成功');
+}
+
+async function handleBatchExport() {
+  if (!ids.value.length) {
+    proxy.$modal.msgError('请先勾选要导出的工程');
+    return;
+  }
+
+  try {
+    const res = await exportProjectBatch(ids.value);
+    const blob = res instanceof Blob ? res : new Blob([res], { type: 'application/zip' });
+    const url = URL.createObjectURL(blob);
+    const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
+    const filename = `project_export_${timestamp}.zip`;
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    ElMessage.success('批量导出任务已完成');
+  } catch (error) {
+    proxy.$modal.msgError(error?.msg || '批量导出失败');
+  }
+}
+
+// ========== 工程导入功能 ==========
+const importFileInputRef = ref(null);
+
+function handleImportClick() {
+  importFileInputRef.value?.click();
+}
+
+async function handleImportFileChange(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  // 重置input，以便下次选择同一文件时也能触发change事件
+  event.target.value = '';
+
+  const lowerName = file.name.toLowerCase();
+
+  // zip批量导入
+  if (lowerName.endsWith('.zip')) {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const result = await importProjectBatch(formData);
+      const summary = result?.data || {};
+      ElMessage.success(
+        `批量导入完成，成功 ${summary.successCount || 0} 个，失败 ${summary.failedCount || 0} 个`
+      );
+      refreshList();
+    } catch (error) {
+      proxy.$modal.msgError(error?.msg || '批量导入失败');
+    }
+    return;
+  }
+
+  // 单文件JSON导入
+  if (!lowerName.endsWith('.json')) {
+    proxy.$modal.msgError('请选择JSON或ZIP格式的工程文件');
+    return;
+  }
+
+  // 读取文件内容
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const content = e.target?.result;
+    if (!content) {
+      proxy.$modal.msgError('文件读取失败');
+      return;
+    }
+
+    let importData;
+    const text = content;
+    importData = JSON.parse(text);
+
+    // 验证导入数据基本结构
+    if (!importData.exportVersion || !importData.project) {
+      proxy.$modal.msgError('无效的工程导出文件格式');
+      return;
+    }
+
+    // 显示确认对话框
+    proxy.$modal
+      .confirm(
+        `确认导入工程"${importData.project.projectName}"？\n` +
+          `包含 ${importData.versions?.length || 0} 个版本，` +
+          `${importData.devices?.length || 0} 个设备定义。`
+      )
+      .then(async () => {
+        const result = await importProject(importData);
+        ElMessage.success('工程导入成功');
+        refreshList();
+
+        // 跳转到新工程详情
+        if (result?.data?.projectId) {
+          proxy.$router.push('/project/project-detail/index/' + result.data.projectId);
+        }
+      })
+      .catch(() => {
+        proxy.$modal.msgInfo('已取消导入');
+      });
+  };
+
+  reader.onerror = () => {
+    proxy.$modal.msgError('文件读取失败');
+  };
+
+  reader.readAsText(file);
 }
 </script>
 <style scoped>

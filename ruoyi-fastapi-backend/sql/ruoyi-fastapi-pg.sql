@@ -516,7 +516,7 @@ create table sys_oper_log (
     oper_ip varchar(128) default '',
     oper_location varchar(255) default '',
     oper_param varchar(2000) default '',
-    json_result varchar(2000) default '',
+    json_result text default '',
     status int4 default 0,
     error_msg varchar(2000) default '',
     oper_time timestamp(0),

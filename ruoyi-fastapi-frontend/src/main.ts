@@ -3,6 +3,9 @@ import { createApp } from 'vue';
 import Cookies from 'js-cookie';
 import ZXUI from '@zxio/zxui';
 
+// Iconify 图标库
+import '@iconify/iconify';
+
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';

@@ -42,3 +42,40 @@ export function delProject(projectId) {
     method: 'delete',
   });
 }
+
+// 导出工程
+export function exportProject(projectId) {
+  return request({
+    url: '/project/export/' + projectId,
+    method: 'get',
+  });
+}
+
+// 批量导出工程（zip）
+export function exportProjectBatch(projectIds) {
+  return request({
+    url: '/project/export/batch',
+    method: 'post',
+    data: { projectIds },
+    responseType: 'blob',
+  });
+}
+
+// 导入工程
+export function importProject(data) {
+  return request({
+    url: '/project/import',
+    method: 'post',
+    data: data,
+  });
+}
+
+// 批量导入工程（zip）
+export function importProjectBatch(formData) {
+  return request({
+    url: '/project/import/batch',
+    method: 'post',
+    data: formData,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}

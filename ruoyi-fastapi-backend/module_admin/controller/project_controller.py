@@ -1,17 +1,26 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends, Request, Query
+
+from fastapi import APIRouter, Depends, File, Query, Request, UploadFile
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic_validation_decorator import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
-from module_admin.entity.vo.project_vo import DeleteProjectModel, ProjectModel, ProjectPageQueryModel
 from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
+from module_admin.entity.vo.project_vo import (
+    BatchProjectIdsModel,
+    DeleteProjectModel,
+    ProjectImportDataModel,
+    ProjectModel,
+    ProjectPageQueryModel,
+)
 from module_admin.entity.vo.user_vo import CurrentUserModel
+from module_admin.service.login_service import LoginService
 from module_admin.service.project_service import ProjectService
 from module_admin.service.project_topology_service import ProjectTopologyService
-from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
@@ -165,3 +174,94 @@ async def get_project_topology(
     logger.info(f'获取project_id为{project_id}的拓扑数据成功')
 
     return ResponseUtil.success(data=topo_result)
+
+
+@projectController.get(
+    '/export/{project_id}',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:query'))],
+)
+@Log(title='工程管理-导出', business_type=BusinessType.EXPORT)
+async def export_project(
+    request: Request,
+    project_id: int,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    导出工程数据
+    """
+    export_data = await ProjectService.export_project_services(query_db, project_id)
+    logger.info(f'导出project_id为{project_id}的工程数据成功')
+
+    # 返回JSON格式数据，前端负责下载
+    return JSONResponse(
+        content=export_data.model_dump(mode='json', by_alias=True),
+        headers={
+            'Content-Disposition': f'attachment; filename=project_export_{project_id}.json'
+        }
+    )
+
+
+@projectController.post(
+    '/export/batch',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:query'))],
+)
+@Log(title='工程管理-批量导出', business_type=BusinessType.EXPORT)
+async def export_projects_batch(
+    request: Request,
+    project_ids_body: BatchProjectIdsModel,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    批量导出工程数据（返回zip包）
+    """
+    zip_buffer, filename = await ProjectService.export_projects_zip_services(
+        query_db, project_ids_body.project_ids
+    )
+    return StreamingResponse(
+        content=zip_buffer,
+        media_type='application/zip',
+        headers={'Content-Disposition': f'attachment; filename={filename}'},
+    )
+
+
+@projectController.post(
+    '/import',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))],
+)
+@Log(title='工程管理-导入', business_type=BusinessType.IMPORT)
+async def import_project(
+    request: Request,
+    import_data: ProjectImportDataModel,
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    导入工程数据
+    """
+    import_result = await ProjectService.import_project_services(
+        query_db, import_data, current_user.user.user_name
+    )
+    logger.info(import_result.message)
+
+    return ResponseUtil.success(msg=import_result.message, data=import_result.result)
+
+
+@projectController.post(
+    '/import/batch',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))],
+)
+@Log(title='工程管理-批量导入', business_type=BusinessType.IMPORT)
+async def import_projects_batch(
+    request: Request,
+    file: UploadFile = File(...),
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    批量导入工程（zip包）
+    """
+    file_bytes = await file.read()
+    import_result = await ProjectService.import_projects_from_zip_services(
+        query_db, file_bytes, current_user.user.user_name
+    )
+    return ResponseUtil.success(msg='批量导入完成', data=import_result)

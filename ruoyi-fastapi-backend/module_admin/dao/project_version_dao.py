@@ -251,3 +251,15 @@ class ProjectVersionDao:
                 update_time=datetime.now(),
             )
         )
+
+    @classmethod
+    async def get_all_versions_by_project(cls, db: AsyncSession, project_id: int):
+        """
+        获取某个项目下的所有版本（用于导出）
+        """
+        query = select(SysProjectVersion).where(
+            SysProjectVersion.project_id == project_id,
+            SysProjectVersion.del_flag == '0'
+        ).order_by(SysProjectVersion.create_time)
+        result = await db.execute(query)
+        return result.scalars().all()
