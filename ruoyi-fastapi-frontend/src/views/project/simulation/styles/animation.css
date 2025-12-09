@@ -1,0 +1,131 @@
+/**
+ * 仿真拓扑动画样式
+ * 
+ * 包含：
+ * - 链路流量动画（光点移动）
+ * - 链路错误闪烁动画
+ * - 节点呼吸灯效果
+ */
+
+/* ============================================
+   链路流量动画
+   ============================================ */
+.edge-traffic-animation {
+  stroke-dasharray: 5 5;
+  animation: traffic-flow 0.5s linear infinite;
+}
+
+@keyframes traffic-flow {
+  from {
+    stroke-dashoffset: 10;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================
+   链路错误闪烁动画
+   ============================================ */
+.edge-error-animation {
+  animation: error-flash 0.3s ease-in-out 3;
+}
+
+@keyframes error-flash {
+  0%, 100% {
+    stroke: #ef4444;
+    stroke-width: 4;
+    opacity: 1;
+  }
+  50% {
+    stroke: #fca5a5;
+    stroke-width: 6;
+    opacity: 0.7;
+  }
+}
+
+/* ============================================
+   节点呼吸灯效果
+   ============================================ */
+.node-breathing {
+  animation: node-breathe 2s ease-in-out infinite;
+}
+
+@keyframes node-breathe {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.5));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.8));
+  }
+}
+
+/* ============================================
+   节点错误状态
+   ============================================ */
+.node-error {
+  animation: node-error-pulse 0.5s ease-in-out infinite;
+}
+
+@keyframes node-error-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(239, 68, 68, 1));
+  }
+}
+
+/* ============================================
+   节点故障标识
+   ============================================ */
+.node-fault {
+  position: relative;
+}
+
+.node-fault::after {
+  content: '⚠';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 16px;
+  color: #f59e0b;
+  animation: fault-icon-bounce 1s ease-in-out infinite;
+}
+
+@keyframes fault-icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* ============================================
+   链路故障标识
+   ============================================ */
+.edge-fault {
+  stroke-dasharray: 8 4;
+  stroke: #ef4444 !important;
+  animation: fault-dash 1s linear infinite;
+}
+
+@keyframes fault-dash {
+  from {
+    stroke-dashoffset: 12;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================
+   链路断开状态
+   ============================================ */
+.edge-disconnected {
+  stroke: #6b7280 !important;
+  stroke-dasharray: 4 8;
+  opacity: 0.5;
+}

@@ -208,7 +208,7 @@ export const dynamicRoutes = [
     children: [
       {
         path: 'index/:projectId(\\d+)',
-        component: () => import('@/views/project/simulation'),
+        component: () => import('@/views/project/simulation/index.vue'),
         name: 'ProjectSimulation',
         meta: { title: '版本仿真', activeMenu: '/project/project' },
       },

@@ -1,0 +1,56 @@
+<template>
+  <div
+    v-if="edge"
+    class="fixed z-50 p-3 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl pointer-events-none backdrop-blur-sm"
+    :style="{ left: position.x + 10 + 'px', top: position.y + 10 + 'px' }"
+  >
+    <div class="flex justify-between gap-6 text-xs leading-relaxed">
+      <span class="text-slate-400">协议类型</span>
+      <span class="text-slate-100 font-medium">{{ bandwidthData?.protocolType || '-' }}</span>
+    </div>
+    <div class="flex justify-between gap-6 text-xs leading-relaxed">
+      <span class="text-slate-400">实时带宽</span>
+      <span class="text-slate-100 font-medium">{{ formatBandwidth(bandwidthData?.bandwidthMbps) }}</span>
+    </div>
+    <div class="flex justify-between gap-6 text-xs leading-relaxed">
+      <span class="text-slate-400">负载率</span>
+      <span class="font-medium" :class="getLoadClass(bandwidthData?.loadPercent)">
+        {{ bandwidthData?.loadPercent?.toFixed(1) || 0 }}%
+      </span>
+    </div>
+    <div class="flex justify-between gap-6 text-xs leading-relaxed">
+      <span class="text-slate-400">报文数量</span>
+      <span class="text-slate-100 font-medium">{{ bandwidthData?.messageCount || 0 }}</span>
+    </div>
+  </div>
+</template>
+
+<script setup>
+defineProps({
+  edge: {
+    type: Object,
+    default: null,
+  },
+  position: {
+    type: Object,
+    default: () => ({ x: 0, y: 0 }),
+  },
+  bandwidthData: {
+    type: Object,
+    default: null,
+  },
+})
+
+function formatBandwidth(mbps) {
+  if (!mbps) return '0 Mbps'
+  if (mbps >= 1000) return `${(mbps / 1000).toFixed(2)} Gbps`
+  return `${mbps.toFixed(2)} Mbps`
+}
+
+function getLoadClass(percent) {
+  if (!percent) return 'text-slate-100'
+  if (percent > 95) return 'text-danger-400'
+  if (percent > 80) return 'text-warning-400'
+  return 'text-success-400'
+}
+</script>

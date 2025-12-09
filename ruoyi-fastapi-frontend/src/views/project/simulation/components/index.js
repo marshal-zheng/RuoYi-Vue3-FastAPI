@@ -1,8 +1,19 @@
+// 新版仿真组件
+export { default as SimulationHeader } from './SimulationHeader.vue'
+export { default as BandwidthDashboard } from './BandwidthDashboard.vue'
+export { default as AlarmPanel } from './AlarmPanel.vue'
+export { default as ProtocolAnalyzer } from './ProtocolAnalyzer.vue'
+export { default as DeviceDetailPanel } from './DeviceDetailPanel.vue'
+export { default as EdgeTooltip } from './EdgeTooltip.vue'
+export { default as FaultInjectorMenu } from './FaultInjectorMenu.vue'
+export { default as EventTriggerPanel } from './EventTriggerPanel.vue'
+export { default as SimulationReportDialog } from './SimulationReportDialog.vue'
+export { default as HealthCheckDialog } from './HealthCheckDialog.vue'
+
+// 旧版组件（兼容）
 export { default as BandwidthChartPanel } from './BandwidthChartPanel.vue'
 export { default as MessageListPanel } from './MessageListPanel.vue'
-export { default as AlarmPanel } from './AlarmPanel.vue'
 export { default as SimulationMonitorPanel } from './SimulationMonitorPanel.vue'
-export { default as HealthCheckDialog } from './HealthCheckDialog.vue'
 export { default as DataInjectionPanel } from './DataInjectionPanel.vue'
 export { default as MessageDetailPanel } from './MessageDetailPanel.vue'
 export { default as NodeEditDrawer } from '../../components/NodeEditDrawer.vue'

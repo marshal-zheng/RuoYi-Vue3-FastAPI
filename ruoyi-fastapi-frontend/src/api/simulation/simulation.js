@@ -113,3 +113,165 @@ export function getFillStrategies() {
     method: 'get'
   })
 }
+
+// ==================== 新增仿真控制接口 ====================
+
+/**
+ * 暂停仿真会话
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function pauseSimulationSession(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/pause`,
+    method: 'post'
+  })
+}
+
+/**
+ * 继续仿真会话
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function resumeSimulationSession(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/resume`,
+    method: 'post'
+  })
+}
+
+/**
+ * 单步执行仿真
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function stepSimulationSession(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/step`,
+    method: 'post'
+  })
+}
+
+/**
+ * 设置仿真速度
+ * @param {String} sessionId - 会话ID
+ * @param {Number} speed - 速度倍率 (0.5-4.0)
+ * @returns {Promise}
+ */
+export function setSimulationSpeed(sessionId, speed) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/speed`,
+    method: 'post',
+    data: { speed }
+  })
+}
+
+// ==================== 故障注入接口 ====================
+
+/**
+ * 注入故障
+ * @param {String} sessionId - 会话ID
+ * @param {Object} data - 故障配置
+ * @returns {Promise}
+ */
+export function injectFault(sessionId, data) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/faults`,
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 清除故障
+ * @param {String} sessionId - 会话ID
+ * @param {String} faultId - 故障ID
+ * @returns {Promise}
+ */
+export function clearFault(sessionId, faultId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/faults/${faultId}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 获取故障列表
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function getFaults(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/faults`,
+    method: 'get'
+  })
+}
+
+// ==================== 事件触发接口 ====================
+
+/**
+ * 创建事件
+ * @param {String} sessionId - 会话ID
+ * @param {Object} data - 事件配置
+ * @returns {Promise}
+ */
+export function createEvent(sessionId, data) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/events`,
+    method: 'post',
+    data
+  })
+}
+
+/**
+ * 更新事件
+ * @param {String} sessionId - 会话ID
+ * @param {String} eventId - 事件ID
+ * @param {Object} data - 事件配置
+ * @returns {Promise}
+ */
+export function updateEvent(sessionId, eventId, data) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/events/${eventId}`,
+    method: 'put',
+    data
+  })
+}
+
+/**
+ * 删除事件
+ * @param {String} sessionId - 会话ID
+ * @param {String} eventId - 事件ID
+ * @returns {Promise}
+ */
+export function deleteEvent(sessionId, eventId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/events/${eventId}`,
+    method: 'delete'
+  })
+}
+
+/**
+ * 手动触发事件
+ * @param {String} sessionId - 会话ID
+ * @param {String} eventId - 事件ID
+ * @returns {Promise}
+ */
+export function triggerEvent(sessionId, eventId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/events/${eventId}/trigger`,
+    method: 'post'
+  })
+}
+
+/**
+ * 获取事件列表
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function getEvents(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/events`,
+    method: 'get'
+  })
+}

@@ -1,304 +1,123 @@
 <template>
-  <transition name="fade-slide">
-    <zx-floating-panel
-      v-if="visible"
-      title="告警信息"
-      :position="position"
-      :size="size"
-      :collapsed-size="collapsedSize"
-      :default-collapsed="defaultCollapsed"
-    >
-      <template #header>
-        <div class="alarm-panel__header">
-          <span class="alarm-panel__title">告警信息</span>
-          <transition name="badge-bounce">
-            <el-badge :value="alarmStats.total" :max="99" type="danger" :key="alarmStats.total" />
-          </transition>
-        </div>
-      </template>
-
-      <template #actions>
-        <el-button
-          size="small"
-          icon="Delete"
-          :disabled="alarms.length === 0"
-          @click="handleClearAll"
-        >
-          清空
-        </el-button>
-        <el-button
-          type="primary"
-          size="small"
-          icon="Download"
-          :disabled="alarms.length === 0"
-          @click="handleExport"
-        >
-          导出
-        </el-button>
-      </template>
-
-      <div class="alarm-panel__content">
-        <div class="alarm-stats">
-          <div class="stat-card" :class="{ active: alarmStats.critical > 0 }">
-            <div class="stat-icon critical">
-              <el-icon><CircleCloseFilled /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">{{ alarmStats.critical || 0 }}</div>
-              <div class="stat-label">严重</div>
-            </div>
-          </div>
-          <div class="stat-card" :class="{ active: alarmStats.error > 0 }">
-            <div class="stat-icon error">
-              <el-icon><WarningFilled /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">{{ alarmStats.error || 0 }}</div>
-              <div class="stat-label">错误</div>
-            </div>
-          </div>
-          <div class="stat-card" :class="{ active: alarmStats.warning > 0 }">
-            <div class="stat-icon warning">
-              <el-icon><Warning /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">{{ alarmStats.warning || 0 }}</div>
-              <div class="stat-label">警告</div>
-            </div>
-          </div>
-          <div class="stat-card" :class="{ active: alarmStats.info > 0 }">
-            <div class="stat-icon info">
-              <el-icon><InfoFilled /></el-icon>
-            </div>
-            <div class="stat-content">
-              <div class="stat-value">{{ alarmStats.info || 0 }}</div>
-              <div class="stat-label">信息</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="alarm-filters">
-          <el-select
-            v-model="filterSeverity"
-            placeholder="严重程度"
-            clearable
-            size="small"
-            style="width: 120px"
-          >
-            <el-option label="全部" value="" />
-            <el-option label="严重" value="critical" />
-            <el-option label="错误" value="error" />
-            <el-option label="警告" value="warning" />
-            <el-option label="信息" value="info" />
-          </el-select>
-          <el-select
-            v-model="filterType"
-            placeholder="告警类型"
-            clearable
-            size="small"
-            style="width: 140px; margin-left: 8px"
-          >
-            <el-option label="全部" value="" />
-            <el-option
-              v-for="type in alarmTypes"
-              :key="type"
-              :label="getAlarmTypeLabel(type)"
-              :value="type"
-            />
-          </el-select>
-          <el-input
-            v-model="searchKeyword"
-            placeholder="搜索告警"
-            clearable
-            size="small"
-            style="width: 200px; margin-left: 8px"
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
-        </div>
-
-        <div class="alarm-list" style="height: 280px">
-          <transition name="fade" mode="out-in">
-            <SkeletonLoader v-if="isLoading" type="card" key="loading" />
-            <el-empty
-              v-else-if="filteredAlarms.length === 0"
-              description="暂无告警信息"
-              key="empty"
-            />
-            <div v-else class="alarm-items" key="list">
-              <transition-group name="alarm-list" tag="div">
-                <div
-                  v-for="alarm in filteredAlarms"
-                  :key="alarm.alarmId"
-                  class="alarm-item"
-                  :class="[`severity-${alarm.severity}`, { unread: !alarm.read }]"
-                  @click="handleAlarmClick(alarm)"
-                >
-                  <div class="alarm-icon">
-                    <el-icon>
-                      <component :is="getSeverityIcon(alarm.severity)" />
-                    </el-icon>
-                  </div>
-                  <div class="alarm-content">
-                    <div class="alarm-header">
-                      <el-tag :type="getSeverityTagType(alarm.severity)" size="small" effect="dark">
-                        {{ getSeverityLabel(alarm.severity) }}
-                      </el-tag>
-                      <el-tag size="small" effect="plain">
-                        {{ getAlarmTypeLabel(alarm.alarmType) }}
-                      </el-tag>
-                      <span class="alarm-time">{{ formatTime(alarm.timestamp) }}</span>
-                    </div>
-                    <div class="alarm-message">{{ alarm.message }}</div>
-                    <div
-                      v-if="alarm.affectedNodes && alarm.affectedNodes.length > 0"
-                      class="alarm-nodes"
-                    >
-                      <span class="nodes-label">受影响节点:</span>
-                      <el-tag
-                        v-for="(node, index) in alarm.affectedNodes"
-                        :key="index"
-                        size="small"
-                        type="info"
-                        effect="plain"
-                      >
-                        {{ node }}
-                      </el-tag>
-                    </div>
-                  </div>
-                </div>
-              </transition-group>
-            </div>
-          </transition>
-        </div>
+  <div class="flex flex-col h-full">
+    <!-- 头部 -->
+    <div class="pro-card-header flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <el-icon class="text-amber-500"><Bell /></el-icon>
+        <span class="text-sm font-semibold text-slate-200">告警信息</span>
+        <el-badge v-if="alarmStats.total > 0" :value="alarmStats.total" :max="99" type="danger" />
       </div>
-    </zx-floating-panel>
-  </transition>
+      <el-button link size="small" :disabled="alarms.length === 0" @click="handleClearAll" class="!text-slate-400 hover:!text-slate-200">
+        清空
+      </el-button>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="grid grid-cols-2 gap-3 p-3 border-b border-slate-700/50 bg-slate-900/50">
+      <div
+        class="flex flex-col items-center py-3 rounded-md transition-all duration-200 border"
+        :class="alarmStats.critical > 0 ? 'bg-danger-500/10 border-danger-500/30' : 'bg-slate-800/50 border-slate-700/50'"
+      >
+        <span class="text-xl font-bold tabular-nums" :class="alarmStats.critical > 0 ? 'text-danger-400' : 'text-slate-500'">
+          {{ alarmStats.critical || 0 }}
+        </span>
+        <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">严重</span>
+      </div>
+      <div
+        class="flex flex-col items-center py-3 rounded-md transition-all duration-200 border"
+        :class="alarmStats.error > 0 ? 'bg-danger-500/10 border-danger-500/20' : 'bg-slate-800/50 border-slate-700/50'"
+      >
+        <span class="text-xl font-bold tabular-nums" :class="alarmStats.error > 0 ? 'text-danger-300' : 'text-slate-500'">
+          {{ alarmStats.error || 0 }}
+        </span>
+        <span class="text-xs text-slate-400 uppercase tracking-wider mt-1">错误</span>
+      </div>
+    </div>
+
+    <!-- 告警列表 -->
+    <div class="flex-1 overflow-y-auto p-3 bg-slate-900/30">
+      <template v-if="filteredAlarms.length > 0">
+        <div
+          v-for="alarm in filteredAlarms"
+          :key="alarm.alarmId"
+          class="flex gap-3 p-3 mb-2 rounded-md cursor-pointer transition-all duration-200 border"
+          :class="[
+            alarm.read 
+              ? 'bg-slate-800/30 hover:bg-slate-800/50 border-slate-700/30' 
+              : 'bg-primary-500/8 hover:bg-primary-500/15 border-primary-500/20 shadow-sm',
+          ]"
+          @click="handleAlarmClick(alarm)"
+        >
+          <div
+            class="w-1 shrink-0 rounded-full"
+            :class="{
+              'bg-danger-500 shadow-[0_0_8px_rgba(245,108,108,0.4)]': alarm.severity === 'critical',
+              'bg-danger-400': alarm.severity === 'error',
+              'bg-amber-500': alarm.severity === 'warning',
+              'bg-slate-500': alarm.severity === 'info',
+            }"
+          ></div>
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-xs font-medium text-slate-300">{{ getAlarmTypeLabel(alarm.alarmType) }}</span>
+              <span class="text-xs text-slate-500 font-mono">{{ formatTime(alarm.timestamp) }}</span>
+            </div>
+            <div class="text-xs text-slate-400 line-clamp-2 leading-relaxed">{{ alarm.message }}</div>
+          </div>
+        </div>
+      </template>
+      <div v-else class="flex flex-col items-center justify-center h-full text-slate-500">
+        <el-icon class="text-4xl mb-3 text-emerald-500"><CircleCheck /></el-icon>
+        <span class="text-sm font-medium">暂无告警</span>
+        <span class="text-xs text-slate-600 mt-1">系统运行正常</span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import {
-  CircleCloseFilled,
-  WarningFilled,
-  Warning,
-  InfoFilled,
-  Search,
-} from '@element-plus/icons-vue';
-import { useAlarmManager } from '../composables/useAlarmManager';
-import SkeletonLoader from './SkeletonLoader.vue';
+import { watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { Bell, CircleCheck } from '@element-plus/icons-vue'
+import { useAlarmManager } from '../composables/useAlarmManager'
 
 const props = defineProps({
   alarms: {
     type: Array,
     default: () => [],
   },
-  visible: {
-    type: Boolean,
-    default: false,
-  },
-  position: {
-    type: Object,
-    default: () => ({ top: '100px', left: '30px' }),
-  },
-  size: {
-    type: Object,
-    default: () => ({ width: '380px', maxHeight: '500px' }),
-  },
-  collapsedSize: {
-    type: Object,
-    default: () => ({ width: '48px', height: '48px' }),
-  },
-  defaultCollapsed: {
-    type: Boolean,
-    default: false,
-  },
-});
+})
 
-const emit = defineEmits(['alarm-click', 'export', 'clear']);
+const emit = defineEmits(['alarm-click', 'filter-change'])
 
-const isLoading = ref(false);
-const visible = computed(() => props.alarms && props.alarms.length > 0);
+const alarmManager = useAlarmManager()
+const { filteredAlarms, alarmStats, getAlarmTypeLabel, clearAllAlarms, markAsRead } = alarmManager
 
-const alarmManager = useAlarmManager();
-const {
-  filteredAlarms,
-  alarmStats,
-  alarmTypes,
-  filterSeverity,
-  filterType,
-  searchKeyword,
-  getSeverityLabel,
-  getAlarmTypeLabel,
-  exportAlarms,
-  clearAllAlarms,
-  markAsRead,
-} = alarmManager;
-
-// 同步外部告警数据（去重处理已在 useAlarmManager 中实现）
 watch(
   () => props.alarms,
   (newAlarms) => {
     if (newAlarms && newAlarms.length > 0) {
-      isLoading.value = true;
-      setTimeout(() => {
-        alarmManager.addAlarm(newAlarms);
-        isLoading.value = false;
-      }, 250);
+      alarmManager.addAlarm(newAlarms)
     }
   },
   { immediate: true, deep: true }
-);
+)
 
-/**
- * 获取严重程度图标
- */
-function getSeverityIcon(severity) {
-  const iconMap = {
-    critical: CircleCloseFilled,
-    error: WarningFilled,
-    warning: Warning,
-    info: InfoFilled,
-  };
-  return iconMap[severity] || InfoFilled;
-}
-
-/**
- * 获取严重程度标签类型
- */
-function getSeverityTagType(severity) {
-  const typeMap = {
-    critical: 'danger',
-    error: 'danger',
-    warning: 'warning',
-    info: 'info',
-  };
-  return typeMap[severity] || 'info';
-}
-
-/**
- * 格式化时间
- */
 function formatTime(timestamp) {
-  if (!timestamp) return '-';
-  const date = new Date(timestamp * 1000);
-  return date.toLocaleTimeString();
+  if (!timestamp) return '-'
+  const date = new Date(timestamp * 1000)
+  return date.toLocaleTimeString('zh-CN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
 }
 
-/**
- * 处理告警点击
- */
 function handleAlarmClick(alarm) {
-  markAsRead(alarm.alarmId);
-  emit('alarm-click', alarm);
+  markAsRead(alarm.alarmId)
+  emit('alarm-click', alarm)
 }
 
-/**
- * 清空所有告警
- */
 function handleClearAll() {
   ElMessageBox.confirm('确定要清空所有告警吗？', '提示', {
     confirmButtonText: '确定',
@@ -306,262 +125,9 @@ function handleClearAll() {
     type: 'warning',
   })
     .then(() => {
-      clearAllAlarms();
-      emit('clear');
-      ElMessage.success('已清空所有告警');
+      clearAllAlarms()
+      ElMessage.success('已清空所有告警')
     })
-    .catch(() => {});
-}
-
-/**
- * 导出告警数据
- */
-function handleExport() {
-  const csvContent = exportAlarms('csv');
-
-  // 下载文件
-  const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `simulation_alarms_${new Date().getTime()}.csv`;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-
-  ElMessage.success('导出成功');
-  emit('export', csvContent);
+    .catch(() => {})
 }
 </script>
-
-<style lang="less" scoped>
-.alarm-panel__header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.alarm-panel__title {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.alarm-panel__content {
-  padding: 8px 0;
-}
-
-.alarm-stats {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.stat-card {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
-  transition: all 0.3s;
-
-  &.active {
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-}
-
-.stat-icon {
-  font-size: 24px;
-
-  &.critical {
-    color: #c03639;
-  }
-
-  &.error {
-    color: #f56c6c;
-  }
-
-  &.warning {
-    color: #e6a23c;
-  }
-
-  &.info {
-    color: #909399;
-  }
-}
-
-.stat-content {
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 20px;
-  font-weight: 600;
-  color: #303133;
-}
-
-.stat-label {
-  font-size: 12px;
-  color: #909399;
-  margin-top: 2px;
-}
-
-.alarm-filters {
-  display: flex;
-  margin-bottom: 16px;
-}
-
-.alarm-list {
-  overflow-y: auto;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-}
-
-.alarm-items {
-  padding: 8px;
-}
-
-.alarm-item {
-  display: flex;
-  gap: 12px;
-  padding: 12px;
-  margin-bottom: 8px;
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  &.unread {
-    background: #f0f9ff;
-    border-left: 3px solid #409eff;
-  }
-
-  &.severity-critical {
-    border-left-color: #c03639;
-  }
-
-  &.severity-error {
-    border-left-color: #f56c6c;
-  }
-
-  &.severity-warning {
-    border-left-color: #e6a23c;
-  }
-
-  &.severity-info {
-    border-left-color: #909399;
-  }
-}
-
-.alarm-icon {
-  font-size: 20px;
-  padding-top: 2px;
-}
-
-.alarm-content {
-  flex: 1;
-}
-
-.alarm-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.alarm-time {
-  margin-left: auto;
-  font-size: 12px;
-  color: #909399;
-}
-
-.alarm-message {
-  font-size: 14px;
-  color: #303133;
-  margin-bottom: 8px;
-  line-height: 1.5;
-}
-
-.alarm-nodes {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.nodes-label {
-  font-size: 12px;
-  color: #909399;
-}
-
-/* Transition animations */
-.fade-slide-enter-active,
-.fade-slide-leave-active {
-  transition: all 0.3s ease;
-}
-
-.fade-slide-enter-from {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-.fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-.badge-bounce-enter-active {
-  animation: badge-bounce 0.5s ease;
-}
-
-@keyframes badge-bounce {
-  0% {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-.alarm-list-enter-active,
-.alarm-list-leave-active {
-  transition: all 0.4s ease;
-}
-
-.alarm-list-enter-from {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.alarm-list-leave-to {
-  opacity: 0;
-  transform: translateY(10px);
-}
-
-.alarm-list-move {
-  transition: transform 0.4s ease;
-}
-</style>
