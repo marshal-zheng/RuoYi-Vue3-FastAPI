@@ -405,3 +405,271 @@ class SimulationService:
             }
         else:
             raise ServiceException(message=f'不支持的导出格式: {export_format}')
+
+    # ==================== 新增：仿真控制增强 ====================
+
+    @classmethod
+    async def pause_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+        """
+        暂停仿真会话
+
+        参数:
+            query_db: 数据库会话
+            session_id: 会话ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        await engine.pause()
+
+        await SimulationDao.update_session_status(query_db, session_id, 'paused', None)
+        await query_db.commit()
+
+        return CrudResponseModel(is_success=True, message='仿真已暂停')
+
+    @classmethod
+    async def resume_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+        """
+        继续仿真会话
+
+        参数:
+            query_db: 数据库会话
+            session_id: 会话ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        await engine.resume()
+
+        await SimulationDao.update_session_status(query_db, session_id, 'running', None)
+        await query_db.commit()
+
+        return CrudResponseModel(is_success=True, message='仿真已继续')
+
+    @classmethod
+    def set_speed(cls, session_id: str, speed: float) -> CrudResponseModel:
+        """
+        设置仿真速度
+
+        参数:
+            session_id: 会话ID
+            speed: 速度（0.5-4.0）
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        clamped_speed = max(0.5, min(speed, 4.0))
+        engine.set_speed(clamped_speed)
+
+        return CrudResponseModel(is_success=True, message=f'仿真速度已设置为 {clamped_speed}x')
+
+    @classmethod
+    async def step_once(cls, session_id: str) -> CrudResponseModel:
+        """
+        单步执行
+
+        参数:
+            session_id: 会话ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        await engine.step_once()
+
+        return CrudResponseModel(is_success=True, message='单步执行完成')
+
+    @classmethod
+    def set_duration(cls, session_id: str, duration: Optional[float]) -> CrudResponseModel:
+        """
+        设置仿真时长
+
+        参数:
+            session_id: 会话ID
+            duration: 时长（秒），None 表示无限制
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        engine.set_duration(duration)
+
+        msg = f'仿真时长已设置为 {duration}秒' if duration else '仿真时长限制已取消'
+        return CrudResponseModel(is_success=True, message=msg)
+
+    # ==================== 新增：故障注入 ====================
+
+    @classmethod
+    def inject_fault(
+        cls,
+        session_id: str,
+        fault_type: str,
+        target_id: str,
+        params: Optional[Dict] = None
+    ) -> Dict:
+        """
+        注入故障
+
+        参数:
+            session_id: 会话ID
+            fault_type: 故障类型（disconnect, error_frame, device_failure, packet_loss, delay）
+            target_id: 目标ID（链路ID或节点ID）
+            params: 故障参数
+
+        返回:
+            故障信息
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        fault = engine.fault_injector.inject_fault(session_id, fault_type, target_id, params)
+        return CamelCaseUtil.transform_result(fault)
+
+    @classmethod
+    def clear_fault(cls, session_id: str, fault_id: str) -> CrudResponseModel:
+        """
+        清除故障
+
+        参数:
+            session_id: 会话ID
+            fault_id: 故障ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        success = engine.fault_injector.clear_fault(session_id, fault_id)
+        if success:
+            return CrudResponseModel(is_success=True, message='故障已清除')
+        else:
+            raise ServiceException(message='故障不存在或已清除')
+
+    @classmethod
+    def list_faults(cls, session_id: str) -> List[Dict]:
+        """
+        获取故障列表
+
+        参数:
+            session_id: 会话ID
+
+        返回:
+            故障列表
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+
+        faults = engine.fault_injector.list_faults(session_id)
+        return [CamelCaseUtil.transform_result(f) for f in faults]
+
+    # ==================== 新增：事件触发 ====================
+
+    @classmethod
+    def add_event(cls, session_id: str, event: Dict) -> Dict:
+        """
+        添加事件
+
+        参数:
+            session_id: 会话ID
+            event: 事件配置
+
+        返回:
+            事件信息
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        event_data = engine.event_service.add_event(session_id, event)
+        return CamelCaseUtil.transform_result(event_data)
+
+    @classmethod
+    def remove_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
+        """
+        删除事件
+
+        参数:
+            session_id: 会话ID
+            event_id: 事件ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        success = engine.event_service.remove_event(session_id, event_id)
+        if success:
+            return CrudResponseModel(is_success=True, message='事件已删除')
+        else:
+            raise ServiceException(message='事件不存在')
+
+    @classmethod
+    def list_events(cls, session_id: str) -> List[Dict]:
+        """
+        获取事件列表
+
+        参数:
+            session_id: 会话ID
+
+        返回:
+            事件列表
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+
+        events = engine.event_service.list_events(session_id)
+        return [CamelCaseUtil.transform_result(e) for e in events]
+
+    # ==================== 新增：拓扑验证 ====================
+
+    @classmethod
+    def validate_topology(cls, topology_data: Dict) -> Dict:
+        """
+        验证拓扑配置
+
+        参数:
+            topology_data: 拓扑数据
+
+        返回:
+            验证结果
+        """
+        from module_admin.service.alarm_detector import AlarmDetector
+
+        alarms = AlarmDetector.validate_topology(topology_data)
+        sorted_alarms = AlarmDetector.sort_alarms_by_severity(alarms)
+
+        errors = [a for a in sorted_alarms if a.get('severity') == 'error']
+        warnings = [a for a in sorted_alarms if a.get('severity') == 'warning']
+
+        return {
+            'is_valid': len(errors) == 0,
+            'error_count': len(errors),
+            'warning_count': len(warnings),
+            'errors': [CamelCaseUtil.transform_result(e) for e in errors],
+            'warnings': [CamelCaseUtil.transform_result(w) for w in warnings],
+        }

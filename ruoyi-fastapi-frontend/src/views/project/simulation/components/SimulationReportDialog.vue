@@ -11,8 +11,8 @@
         <h3>仿真摘要</h3>
         <div class="simulation-report__summary-grid">
           <div class="simulation-report__summary-item">
-            <span class="simulation-report__summary-label">会话ID</span>
-            <span class="simulation-report__summary-value">{{ sessionId || '-' }}</span>
+            <span class="simulation-report__summary-label">开始时间</span>
+            <span class="simulation-report__summary-value">{{ summary?.startTime || '-' }}</span>
           </div>
           <div class="simulation-report__summary-item">
             <span class="simulation-report__summary-label">运行时长</span>
@@ -92,8 +92,7 @@ function getLevelType(level) {
 }
 
 function handleExport() {
-  // TODO: 实现报告导出
-  console.log('导出报告')
+  // TODO: 报告导出逻辑待实现
 }
 
 defineExpose({ open })
@@ -101,6 +100,9 @@ defineExpose({ open })
 
 <style lang="less" scoped>
 .simulation-report {
+  color: #e2e8f0;
+  background: #0b1220;
+
   &__summary {
     margin-bottom: 24px;
 
@@ -108,6 +110,7 @@ defineExpose({ open })
       margin-bottom: 16px;
       font-size: 16px;
       font-weight: 600;
+      color: #e2e8f0;
     }
   }
 
@@ -119,32 +122,55 @@ defineExpose({ open })
 
   &__summary-item {
     padding: 16px;
-    background: #f5f7fa;
-    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 10px;
     text-align: center;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
   }
 
   &__summary-label {
     display: block;
     font-size: 12px;
-    color: #64748b;
+    color: #94a3b8;
     margin-bottom: 8px;
+    letter-spacing: 0.02em;
   }
 
   &__summary-value {
     display: block;
     font-size: 18px;
-    font-weight: 600;
-    color: #1e293b;
+    font-weight: 700;
+    color: #f8fafc;
   }
 
   &__section {
     margin-bottom: 24px;
 
     h3 {
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-size: 16px;
       font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    :deep(.el-table) {
+      background: rgba(15, 23, 42, 0.75);
+      color: #e2e8f0;
+      border-radius: 8px;
+    }
+
+    :deep(.el-table th) {
+      background: rgba(30, 41, 59, 0.9);
+      color: #cbd5e1;
+    }
+
+    :deep(.el-table tr) {
+      background: rgba(15, 23, 42, 0.6);
+    }
+
+    :deep(.el-table__body tr:hover > td) {
+      background: rgba(59, 130, 246, 0.08);
     }
   }
 }

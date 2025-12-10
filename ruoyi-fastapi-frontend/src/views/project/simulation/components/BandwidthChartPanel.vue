@@ -2,41 +2,46 @@
   <transition name="fade-slide">
     <zx-floating-panel
       v-if="visible"
-      title="实时带宽监控"
       :position="position"
       :size="size"
       :collapsed-size="collapsedSize"
       :default-collapsed="defaultCollapsed"
+      theme="dark"
+      class="bandwidth-chart-panel"
     >
       <template #header>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-1">
           <span class="font-semibold text-sm">带宽监控</span>
           <el-tag v-if="isRunning" type="success" size="small" effect="dark" class="live-tag">
             <span class="live-dot"></span>
             实时
           </el-tag>
           <el-tag v-else-if="isWaiting" type="info" size="small" effect="plain"> 待机 </el-tag>
+          
+          <div class="flex items-center gap-2 ml-auto">
+            <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
+            <el-select
+              v-if="viewMode === 'port'"
+              v-model="selectedPort"
+              placeholder="选择端口"
+              size="small"
+              style="width: 120px"
+              clearable
+            >
+              <el-option v-for="port in portList" :key="port" :label="port" :value="port" />
+            </el-select>
+          </div>
         </div>
       </template>
 
-      <div class="monitor-panel">
-        <!-- 视图切换 -->
-        <div class="control-bar">
-          <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
-          <el-select
-            v-if="viewMode === 'port'"
-            v-model="selectedPort"
-            placeholder="选择端口"
-            size="small"
-            class="port-select"
-            clearable
-          >
-            <el-option v-for="port in portList" :key="port" :label="port" :value="port" />
-          </el-select>
-        </div>
+      <div class="bandwidth-chart-panel monitor-panel">
 
         <!-- 实时图表区域 -->
-        <div class="chart-wrapper">
+        <div 
+          class="chart-wrapper"
+          @mousemove="handleChartMouseMove"
+          @mouseleave="handleChartMouseLeave"
+        >
           <!-- 示波器风格背景 -->
           <div class="oscilloscope-bg">
             <div class="grid-lines"></div>
@@ -67,7 +72,41 @@
             <span>{{ yAxisLabels.mid }}</span>
             <span>0</span>
           </div>
+
+          <!-- 垂直指示线 -->
+          <div 
+            v-if="chartTooltip.visible" 
+            class="chart-crosshair"
+            :style="{ left: chartTooltip.lineX + 'px' }"
+          ></div>
+
+          <!-- 数据点高亮 -->
+          <div 
+            v-if="chartTooltip.visible" 
+            class="chart-highlight-dot"
+            :style="{ left: chartTooltip.dotX + 'px', top: chartTooltip.dotY + 'px' }"
+          ></div>
         </div>
+
+        <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
+        <Teleport to="body">
+          <div 
+            v-if="chartTooltip.visible" 
+            class="chart-tooltip-fixed bandwidth"
+            :style="{ left: chartTooltip.tooltipX + 'px', top: chartTooltip.tooltipY + 'px' }"
+          >
+            <div class="tooltip-header">
+              <span class="tooltip-time">{{ chartTooltip.time }}</span>
+              <span class="tooltip-index">#{{ chartTooltip.index + 1 }}</span>
+            </div>
+            <div class="tooltip-main-value">
+              <span class="main-value">
+                {{ chartTooltip.value }}
+                <span class="unit">{{ chartTooltip.unit }}</span>
+              </span>
+            </div>
+          </div>
+        </Teleport>
 
         <!-- 统计卡片 -->
         <div class="stats-grid">
@@ -173,6 +212,29 @@ const scanlineOffset = ref(0);
 let animationFrameId = null;
 let lastUpdateTime = 0;
 const UPDATE_INTERVAL = 1000; // 每秒更新一次数据点
+
+// Tooltip 状态
+const chartTooltip = ref({
+  visible: false,
+  lineX: 0,
+  dotX: 0,
+  dotY: 0,
+  tooltipX: 0,
+  tooltipY: 0,
+  index: 0,
+  time: '',
+  value: '',
+  unit: '',
+});
+
+// 图表布局参数（供鼠标事件使用）
+const chartLayout = ref({
+  padding: { top: 10, right: 10, bottom: 20, left: 40 },
+  width: 0,
+  height: 0,
+  chartWidth: 0,
+  chartHeight: 0,
+});
 
 // 是否正在运行
 const isRunning = computed(() => {
@@ -348,6 +410,9 @@ function drawChart() {
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
+  // 保存布局供鼠标事件使用
+  chartLayout.value = { padding, width, height, chartWidth, chartHeight };
+
   // 清空画布
   ctx.clearRect(0, 0, width, height);
 
@@ -429,6 +494,90 @@ function drawChart() {
     ctx.fillStyle = '#00ff88';
     ctx.fill();
   }
+}
+
+// 鼠标移动处理
+function handleChartMouseMove(event) {
+  const canvas = canvasRef.value;
+  if (!canvas || dataBuffer.value.length === 0) {
+    chartTooltip.value.visible = false;
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+
+  const { padding, chartWidth, chartHeight, height } = chartLayout.value;
+  const data = dataBuffer.value;
+  const pointWidth = chartWidth / (MAX_POINTS - 1);
+
+  // 找到最近的数据点
+  const relativeX = mouseX - padding.left;
+  
+  // 检查是否在图表区域内
+  if (relativeX < 0 || relativeX > chartWidth) {
+    chartTooltip.value.visible = false;
+    return;
+  }
+
+  const index = Math.round(relativeX / pointWidth);
+
+  if (index >= 0 && index < data.length) {
+    const value = data[index];
+    const maxY = Math.max(yAxisMax.value, 0.001);
+    
+    // 计算数据点的实际位置（相对于canvas）
+    const pointX = padding.left + index * pointWidth;
+    const pointY = height - padding.bottom - (value / maxY) * chartHeight;
+
+    // 计算tooltip位置（使用视口绝对坐标，因为tooltip通过Teleport放到body）
+    const tooltipWidth = 140;
+    const tooltipHeight = 70;
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    // 转换为视口坐标
+    let tooltipX = rect.left + pointX + 12;
+    let tooltipY = rect.top + pointY - tooltipHeight / 2;
+
+    // 如果tooltip会超出右边界，显示在左边
+    if (tooltipX + tooltipWidth > viewportWidth - 10) {
+      tooltipX = rect.left + pointX - tooltipWidth - 12;
+    }
+    // 如果超出左边界，贴左边显示
+    if (tooltipX < 10) {
+      tooltipX = 10;
+    }
+    // 确保不超出上下边界
+    tooltipY = Math.max(10, Math.min(tooltipY, viewportHeight - tooltipHeight - 10));
+
+    // 格式化带宽值
+    const formatted = formatBandwidth(value);
+    
+    // 计算时间（假设每个点代表1秒，从当前时间往前推）
+    const secondsAgo = (data.length - 1 - index);
+    const time = secondsAgo === 0 ? '现在' : `-${secondsAgo}s`;
+
+    chartTooltip.value = {
+      visible: true,
+      lineX: pointX,
+      dotX: pointX - 6,
+      dotY: pointY - 6,
+      tooltipX,
+      tooltipY,
+      index,
+      time,
+      value: formatted.value,
+      unit: formatted.unit,
+    };
+  } else {
+    chartTooltip.value.visible = false;
+  }
+}
+
+// 鼠标离开处理
+function handleChartMouseLeave() {
+  chartTooltip.value.visible = false;
 }
 
 // 动画循环
@@ -559,22 +708,10 @@ onUnmounted(() => {
   border-radius: 8px;
 }
 
-.control-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-
-  .port-select {
-    flex: 1;
-    max-width: 150px;
-  }
-
-  :deep(.el-segmented) {
-    --el-segmented-bg-color: rgba(255, 255, 255, 0.05);
-    --el-segmented-item-hover-bg-color: rgba(255, 255, 255, 0.1);
-    --el-segmented-item-selected-bg-color: #10b981;
-  }
+:deep(.el-segmented) {
+  --el-segmented-bg-color: rgba(255, 255, 255, 0.05);
+  --el-segmented-item-hover-bg-color: rgba(255, 255, 255, 0.1);
+  --el-segmented-item-selected-bg-color: #10b981;
 }
 
 .chart-wrapper {
@@ -584,6 +721,7 @@ onUnmounted(() => {
   overflow: hidden;
   background: #0a0f18;
   border: 1px solid rgba(0, 255, 136, 0.15);
+  cursor: crosshair;
 }
 
 .oscilloscope-bg {
@@ -623,6 +761,58 @@ onUnmounted(() => {
   inset: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+}
+
+// 垂直指示线
+.chart-crosshair {
+  position: absolute;
+  top: 10px;
+  bottom: 20px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(0, 255, 136, 0.8) 10%,
+    rgba(0, 255, 136, 0.8) 90%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 20;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    width: 5px;
+    height: 5px;
+    background: #00ff88;
+    border-radius: 50%;
+  }
+}
+
+// 数据点高亮
+.chart-highlight-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #00ff88 0%, rgba(0, 255, 136, 0.4) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: 21;
+  animation: pulse-highlight 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-highlight {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
 }
 
 .current-value-display {
@@ -793,4 +983,10 @@ onUnmounted(() => {
     }
   }
 }
+
+</style>
+
+<style lang="less">
+@import '../styles/aviation-dark-theme.less';
+@import '../styles/chart-tooltip.less';
 </style>

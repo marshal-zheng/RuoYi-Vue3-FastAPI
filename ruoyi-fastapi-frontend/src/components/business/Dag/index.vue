@@ -104,8 +104,13 @@
                 @data-updated="onGraphDataUpdated"
               />
               <DagConnect />
-              <XFlowBackground color="#fafafa" />
-              <XFlowGrid :size="14" type="mesh" :dot-size="2" color="#e6e6e6" />
+              <XFlowBackground :color="backgroundConfig.color" />
+              <XFlowGrid
+                :size="gridConfig.size"
+                :type="gridConfig.type"
+                :dot-size="gridConfig.dotSize"
+                :color="gridConfig.color"
+              />
               <!-- 小地图 -->
               <!-- <XFlowMinimap 
                 :key="minimapKey"
@@ -331,6 +336,38 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  /**
+   * 主题模式：light | dark
+   */
+  theme: {
+    type: String,
+    default: 'light',
+  },
+});
+
+// 根据主题计算背景和网格配置
+const backgroundConfig = computed(() => {
+  if (props.theme === 'dark') {
+    return { color: '#0a0e14' };
+  }
+  return { color: '#ffffff' };
+});
+
+const gridConfig = computed(() => {
+  if (props.theme === 'dark') {
+    return {
+      size: 20,
+      type: 'mesh',
+      dotSize: 1,
+      color: 'rgba(34, 211, 238, 0.12)',
+    };
+  }
+  return {
+    size: 14,
+    type: 'mesh',
+    dotSize: 2,
+    color: 'rgba(148, 163, 184, 0.15)',
+  };
 });
 
 const emit = defineEmits([

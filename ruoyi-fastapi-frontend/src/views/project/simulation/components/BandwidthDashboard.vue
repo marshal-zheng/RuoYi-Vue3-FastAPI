@@ -1,20 +1,5 @@
 <template>
   <div class="pro-card-body">
-    <!-- 头部 -->
-    <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-700/30">
-      <div class="flex items-center gap-2">
-        <div class="w-2 h-2 bg-primary-500 rounded-full"></div>
-        <span class="text-sm font-semibold text-slate-200 tracking-wide">带宽监控</span>
-      </div>
-      <el-switch 
-        v-model="showTrend" 
-        active-text="趋势" 
-        inactive-text="仪表" 
-        size="small"
-        class="custom-switch"
-      />
-    </div>
-
     <!-- 仪表盘视图 -->
     <div v-if="!showTrend" class="flex flex-wrap gap-4">
       <div
@@ -60,12 +45,19 @@
     </div>
 
     <!-- 趋势图视图 -->
-    <div v-else ref="chartRef" class="w-full h-48"></div>
+    <div v-else class="w-full h-48 relative">
+      <div v-if="bandwidthData.length === 0" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
+        <el-icon class="text-4xl mb-3 text-slate-600"><DataLine /></el-icon>
+        <div class="text-sm font-medium">暂无带宽数据</div>
+        <div class="text-xs text-slate-600 mt-1">等待仿真开始</div>
+      </div>
+      <div ref="chartRef" class="w-full h-full"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { DataLine } from '@element-plus/icons-vue'
 import * as echarts from 'echarts'
 
@@ -78,19 +70,29 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showTrend: {
+    type: Boolean,
+    default: false,
+  },
 })
 
-defineEmits(['port-click'])
+const emit = defineEmits(['port-click', 'update:showTrend'])
 
-const showTrend = ref(false)
+const showTrend = computed({
+  get: () => props.showTrend,
+  set: (val) => emit('update:showTrend', val),
+})
 const chartRef = ref(null)
 let chartInstance = null
+let resizeObserver = null
 
 const groupedBandwidth = computed(() => {
   const grouped = {}
 
   props.bandwidthData.forEach((item) => {
     const protocol = item.protocolType || 'unknown'
+    const load = Number((item.loadPercent || 0).toFixed(2))
+    const bw = Number((item.bandwidthMbps || 0).toFixed(3))
     if (!grouped[protocol]) {
       grouped[protocol] = {
         protocol,
@@ -100,8 +102,8 @@ const groupedBandwidth = computed(() => {
         ports: [],
       }
     }
-    grouped[protocol].bandwidthMbps += item.bandwidthMbps || 0
-    grouped[protocol].loadPercent = Math.max(grouped[protocol].loadPercent, item.loadPercent || 0)
+    grouped[protocol].bandwidthMbps += bw
+    grouped[protocol].loadPercent = Math.max(grouped[protocol].loadPercent, load)
     grouped[protocol].messageCount += item.messageCount || 0
     grouped[protocol].ports.push(item)
   })
@@ -122,48 +124,107 @@ function getStrokeDasharray(percent) {
 }
 
 function formatBandwidth(mbps) {
-  if (mbps >= 1000) {
-    return `${(mbps / 1000).toFixed(2)} Gbps`
+  const safe = Number(mbps || 0)
+  if (safe >= 1000) {
+    return `${(safe / 1000).toFixed(2)} Gbps`
   }
-  return `${mbps.toFixed(2)} Mbps`
+  return `${safe.toFixed(2)} Mbps`
 }
 
 function initChart() {
   if (!chartRef.value) return
 
-  chartInstance = echarts.init(chartRef.value)
+  chartInstance = echarts.init(chartRef.value, 'dark')
 
   const option = {
     backgroundColor: 'transparent',
     grid: {
       top: 30,
-      right: 20,
-      bottom: 30,
-      left: 50,
+      right: 5,
+      bottom: 20,
+      left: 30,
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(15, 23, 42, 0.9)',
-      borderColor: 'rgba(51, 65, 85, 0.5)',
-      textStyle: { color: '#e2e8f0' },
+      backgroundColor: 'rgba(15, 23, 42, 0.95)',
+      borderColor: 'rgba(51, 65, 85, 0.7)',
+      borderWidth: 1,
+      textStyle: { color: '#e2e8f0', fontSize: 12 },
+      axisPointer: {
+        type: 'cross',
+        label: {
+          backgroundColor: 'rgba(30, 41, 59, 0.9)',
+        },
+      },
+      formatter: (params) => {
+        let result = `<div style="margin-bottom: 4px; font-weight: 600;">${params[0].axisValue}</div>`
+        params.forEach((param) => {
+          const val = Number(param.value?.[1] ?? 0).toFixed(2)
+          result += `<div style="margin: 2px 0;">
+            <span style="display: inline-block; width: 10px; height: 10px; background: ${param.color}; border-radius: 50%; margin-right: 6px;"></span>
+            ${param.seriesName}: <span style="font-weight: 600; color: ${param.color};">${val}%</span>
+          </div>`
+        })
+        return result
+      },
     },
     legend: {
       data: [],
-      textStyle: { color: '#94a3b8' },
+      top: 0,
+      textStyle: { color: '#94a3b8', fontSize: 11 },
+      itemWidth: 12,
+      itemHeight: 8,
+      itemGap: 15,
     },
     xAxis: {
       type: 'time',
-      axisLine: { lineStyle: { color: '#334155' } },
-      axisLabel: { color: '#94a3b8' },
+      boundaryGap: false,
+      axisLine: { 
+        lineStyle: { color: '#334155', width: 1 },
+      },
+      axisLabel: { 
+        color: '#94a3b8',
+        fontSize: 10,
+        rotate: 0,
+        formatter: (value) => {
+          const date = new Date(value)
+          const hours = date.getHours().toString().padStart(2, '0')
+          const minutes = date.getMinutes().toString().padStart(2, '0')
+          const seconds = date.getSeconds().toString().padStart(2, '0')
+          return `${hours}:${minutes}:${seconds}`
+        },
+      },
+      splitLine: {
+        show: true,
+        lineStyle: { color: 'rgba(51, 65, 85, 0.3)', type: 'dashed' },
+      },
+      axisPointer: {
+        label: {
+          formatter: (params) => {
+            const date = new Date(params.value)
+            return `${date.toLocaleTimeString('zh-CN', { hour12: false })}`
+          },
+        },
+      },
     },
     yAxis: {
       type: 'value',
-      name: '负载率(%)',
-      nameTextStyle: { color: '#94a3b8' },
+      name: '负载率 (%)',
+      nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+      min: 0,
       max: 100,
-      axisLine: { lineStyle: { color: '#334155' } },
-      axisLabel: { color: '#94a3b8' },
-      splitLine: { lineStyle: { color: 'rgba(51, 65, 85, 0.5)' } },
+      axisLine: { 
+        lineStyle: { color: '#334155', width: 1 },
+      },
+      axisLabel: { 
+        color: '#94a3b8',
+        fontSize: 10,
+        formatter: '{value}%',
+      },
+      splitLine: { 
+        show: true,
+        lineStyle: { color: 'rgba(51, 65, 85, 0.3)', type: 'dashed' },
+      },
     },
     series: [],
   }
@@ -173,48 +234,181 @@ function initChart() {
 
 function updateChart() {
   if (!chartInstance) return
+  
+  if (!props.bandwidthData || props.bandwidthData.length === 0) {
+    chartInstance.setOption({
+      series: [],
+      legend: { data: [] },
+    })
+    return
+  }
 
+  // 按协议类型分组数据
   const seriesData = {}
+  const protocolColors = {
+    '1553B': '#3b82f6',   // 蓝色
+    'CAN': '#10b981',     // 绿色
+    'RS422': '#f59e0b',   // 橙色
+    'LAN': '#8b5cf6',     // 紫色
+    'unknown': '#64748b', // 灰色
+  }
+  
+  // 渐变色配置
+  const gradientColors = {
+    '1553B': ['rgba(59, 130, 246, 0.4)', 'rgba(59, 130, 246, 0.05)'],
+    'CAN': ['rgba(16, 185, 129, 0.4)', 'rgba(16, 185, 129, 0.05)'],
+    'RS422': ['rgba(245, 158, 11, 0.4)', 'rgba(245, 158, 11, 0.05)'],
+    'LAN': ['rgba(139, 92, 246, 0.4)', 'rgba(139, 92, 246, 0.05)'],
+    'unknown': ['rgba(100, 116, 139, 0.4)', 'rgba(100, 116, 139, 0.05)'],
+  }
 
-  props.bandwidthData.forEach((item) => {
+  // 处理数据：按时间戳排序，按协议分组
+  const sortedData = [...props.bandwidthData].sort((a, b) => {
+    const timeA = (a.timestamp || 0) * 1000
+    const timeB = (b.timestamp || 0) * 1000
+    return timeA - timeB
+  })
+
+  sortedData.forEach((item) => {
     const protocol = item.protocolType || 'unknown'
     if (!seriesData[protocol]) {
       seriesData[protocol] = []
     }
-    seriesData[protocol].push([item.timestamp * 1000, item.loadPercent || 0])
+    const timestamp = (item.timestamp || 0) * 1000
+    const loadPercent = Number((item.loadPercent || 0).toFixed(2))
+    seriesData[protocol].push([timestamp, loadPercent])
   })
 
-  const series = Object.entries(seriesData).map(([name, data]) => ({
-    name,
-    type: 'line',
-    smooth: true,
-    data,
-    areaStyle: { opacity: 0.1 },
-  }))
+  // 生成系列配置
+  const series = Object.entries(seriesData)
+    .filter(([_, data]) => data.length > 0)
+    .map(([name, data], index) => {
+      const color = protocolColors[name] || `hsl(${(index * 60) % 360}, 70%, 60%)`
+      const gradients = gradientColors[name] || [`${color}40`, `${color}05`]
+      
+      return {
+        name,
+        type: 'line',
+        smooth: 0.4,
+        symbol: 'circle',
+        symbolSize: data.length < 30 ? 5 : 0, // 数据点少时显示符号
+        showSymbol: false,
+        data,
+        lineStyle: {
+          width: 2.5,
+          color,
+          shadowBlur: 4,
+          shadowColor: color,
+          shadowOffsetY: 2,
+        },
+        itemStyle: {
+          color,
+          borderColor: '#0f172a',
+          borderWidth: 1,
+        },
+        areaStyle: {
+          color: {
+            type: 'linear',
+            x: 0,
+            y: 0,
+            x2: 0,
+            y2: 1,
+            colorStops: [
+              { offset: 0, color: gradients[0] },
+              { offset: 1, color: gradients[1] },
+            ],
+          },
+        },
+        emphasis: {
+          focus: 'series',
+          lineStyle: {
+            width: 3.5,
+          },
+          itemStyle: {
+            symbolSize: 7,
+            borderWidth: 2,
+          },
+        },
+        animation: true,
+        animationDuration: 1000,
+        animationEasing: 'cubicOut',
+      }
+    })
 
+  // 更新图表
   chartInstance.setOption({
-    legend: { data: Object.keys(seriesData) },
+    legend: { 
+      data: Object.keys(seriesData).filter(key => seriesData[key].length > 0),
+      selected: Object.keys(seriesData).reduce((acc, key) => {
+        acc[key] = true
+        return acc
+      }, {}),
+    },
     series,
-  })
+  }, { notMerge: false })
+
+  // 自适应调整Y轴范围
+  if (series.length > 0) {
+    const allValues = series.flatMap(s => s.data.map(d => d[1]))
+    const maxValue = Math.max(...allValues, 0)
+    const minValue = Math.min(...allValues, 0)
+    
+    chartInstance.setOption({
+      yAxis: {
+        min: Math.max(0, Math.floor(minValue / 10) * 10 - 5),
+        max: Math.min(100, Math.ceil(maxValue / 10) * 10 + 5),
+      },
+    })
+  }
 }
 
-watch(() => props.bandwidthData, updateChart, { deep: true })
+watch(() => props.bandwidthData, updateChart, { deep: true, immediate: true })
 
 watch(showTrend, (show) => {
   if (show) {
-    setTimeout(initChart, 100)
+    nextTick(() => {
+      setTimeout(() => {
+        initChart()
+        updateChart()
+      }, 100)
+    })
+  } else {
+    if (chartInstance) {
+      chartInstance.dispose()
+      chartInstance = null
+    }
   }
 })
 
 onMounted(() => {
   if (showTrend.value) {
-    initChart()
+    nextTick(() => {
+      setTimeout(() => {
+        initChart()
+        updateChart()
+      }, 100)
+    })
+  }
+
+  // 监听容器大小变化
+  if (chartRef.value) {
+    resizeObserver = new ResizeObserver(() => {
+      if (chartInstance) {
+        chartInstance.resize()
+      }
+    })
+    resizeObserver.observe(chartRef.value)
   }
 })
 
 onUnmounted(() => {
+  if (resizeObserver) {
+    resizeObserver.disconnect()
+    resizeObserver = null
+  }
   if (chartInstance) {
     chartInstance.dispose()
+    chartInstance = null
   }
 })
 </script>

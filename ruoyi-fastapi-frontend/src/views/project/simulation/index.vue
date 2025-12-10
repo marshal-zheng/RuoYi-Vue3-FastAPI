@@ -1,5 +1,5 @@
 <template>
-  <div class="simulation-dark flex flex-col h-full bg-slate-950 overflow-hidden">
+  <div class="simulation-dark simulation-shell flex flex-col h-full bg-slate-950">
     <!-- 顶部控制栏 -->
     <header class="shrink-0 z-50">
       <SimulationHeader
@@ -18,8 +18,8 @@
     </header>
 
     <!-- 主内容区域 -->
-    <main class="flex flex-1 min-h-0 p-3 gap-3">
-      <!-- 左侧：拓扑画布 -->
+    <main class="flex flex-1 min-h-0 p-3 relative">
+      <!-- 拓扑画布 -->
       <section class="sim-canvas pro-card flex-1 relative">
         <XflowDAG
           ref="dagRef"
@@ -30,6 +30,7 @@
           :layout="layoutMode"
           :dnd-config="dndConfig"
           :show-graph-control="false"
+          theme="dark"
           @node-click="handleNodeClick"
           @node-dblclick="handleNodeDblclick"
           @edge-click="handleEdgeClick"
@@ -46,33 +47,50 @@
         />
       </section>
 
-      <!-- 右侧：监控面板 -->
-      <aside class="shrink-0 w-72 flex flex-col gap-3">
-        <!-- 带宽监控仪表盘 -->
-        <div class="shrink-0 pro-card">
-          <BandwidthDashboard
-            :bandwidth-data="bandwidthData"
-            :is-running="isRunning"
-            @port-click="handlePortClick"
-          />
-        </div>
+      <!-- 带宽面板（封装组件，内部含浮动容器） -->
+      <BandwidthChartPanel
+        :visible="true"
+        :bandwidth-data="bandwidthData"
+        :position="{ top: '90px', right: '28px' }"
+        :size="{ width: '520px', maxHeight: '430px' }"
+        :collapsed-size="{ width: '46px', height: '46px' }"
+        :default-collapsed="false"
+      />
 
-        <!-- 告警面板 -->
-        <div class="flex-1 min-h-0 flex flex-col pro-card">
-          <AlarmPanel
-            :alarms="alarmData"
-            @alarm-click="handleAlarmClick"
-            @filter-change="handleAlarmFilterChange"
-          />
-        </div>
+      <!-- 告警面板（封装组件，内部含浮动容器） -->
+      <AlarmPanelFloating
+        :alarms="alarmData"
+        :position="{ top: '550px', right: '28px' }"
+        :size="{ width: '520px', maxHeight: '420px' }"
+        :collapsed-size="{ width: '46px', height: '46px' }"
+        :default-collapsed="false"
+        @alarm-click="handleAlarmClick"
+        @filter-change="handleAlarmFilterChange"
+      />
 
-        <!-- 设备详情面板 -->
-        <transition name="slide-up">
-          <div v-if="selectedNode" class="shrink-0 pro-card">
-            <DeviceDetailPanel :node="selectedNode" @close="selectedNode = null" />
-          </div>
-        </transition>
-      </aside>
+      <zx-floating-panel
+        v-if="selectedNode"
+        title="设备详情"
+        :position="{ bottom: '96px', right: '28px' }"
+        :size="{ width: '340px', maxHeight: '460px' }"
+        :collapsed-size="{ width: '46px', height: '46px' }"
+        :default-collapsed="false"
+        class="floating-panel shadow-lg"
+        theme="dark"
+      >
+        <DeviceDetailPanel :node="selectedNode" @close="selectedNode = null" />
+      </zx-floating-panel>
+
+      <!-- 时序/延迟分析面板 -->
+      <TimingLatencyPanel
+        :visible="true"
+        :messages="filteredMessages"
+        :bandwidth-data="bandwidthData"
+        :position="{ bottom: '96px', left: '28px' }"
+        :size="{ width: '560px', maxHeight: '480px' }"
+        :collapsed-size="{ width: '46px', height: '46px' }"
+        :default-collapsed="false"
+      />
     </main>
 
     <!-- 底部：协议分析器 -->
@@ -125,8 +143,8 @@ import { ElMessage } from 'element-plus';
 // 组件导入
 import XflowDAG from '@/components/business/Dag/index.vue';
 import SimulationHeader from './components/SimulationHeader.vue';
-import BandwidthDashboard from './components/BandwidthDashboard.vue';
-import AlarmPanel from './components/AlarmPanel.vue';
+import BandwidthChartPanel from './components/BandwidthChartPanel.vue';
+import AlarmPanelFloating from './components/AlarmPanelFloating.vue';
 import ProtocolAnalyzer from './components/ProtocolAnalyzer.vue';
 import DeviceDetailPanel from './components/DeviceDetailPanel.vue';
 import EdgeTooltip from './components/EdgeTooltip.vue';
@@ -134,11 +152,15 @@ import FaultInjectorMenu from './components/FaultInjectorMenu.vue';
 import EventTriggerPanel from './components/EventTriggerPanel.vue';
 import SimulationReportDialog from './components/SimulationReportDialog.vue';
 import HealthCheckDialog from './components/HealthCheckDialog.vue';
+import TimingLatencyPanel from './components/TimingLatencyPanel.vue';
 import { NodeEditDrawer } from '../components';
 
 // Composables 导入
 import { useSimulationControl } from './composables/useSimulationControl';
 import { useSimulationData } from './composables/useSimulationData';
+
+// 样式导入
+import './styles/simulation-theme.css';
 import { useTopologyAnimation } from './composables/useTopologyAnimation';
 import { useFaultInjection } from './composables/useFaultInjection';
 import { useEventTrigger } from './composables/useEventTrigger';
@@ -210,7 +232,25 @@ const {
   triggerTrafficAnimation,
   triggerErrorAnimation,
   setNodeActive,
+  setNodeError,
+  highlightEdges,
+  clearEdgeHighlight,
 } = useTopologyAnimation(dagRef);
+
+const ALARM_HIGHLIGHT_DURATION = 2800;
+
+const ALARM_REASON_MAP = {
+  collision: { label: '冲突', color: '#ef4444' },
+  multi_connection: { label: '冲突', color: '#ef4444' },
+  packet_loss: { label: '丢包', color: '#f97316' },
+  bandwidth_exceed: { label: '超载', color: '#f59e0b' },
+  bandwidth_overflow: { label: '超载', color: '#f59e0b' },
+  congestion: { label: '超载', color: '#f59e0b' },
+  value_overflow: { label: '超载', color: '#f59e0b' },
+  disconnect: { label: '链路断开', color: '#60a5fa' },
+  link_down: { label: '链路断开', color: '#60a5fa' },
+  device_failure: { label: '链路断开', color: '#60a5fa' },
+};
 
 // 故障注入
 const { faults, injectFault, clearFault, clearAllFaults } = useFaultInjection(sessionId);
@@ -225,6 +265,7 @@ const currentNode = ref(null);
 const hoveredEdge = ref(null);
 const tooltipPosition = ref({ x: 0, y: 0 });
 const autoScroll = ref(true);
+const dashboardShowTrend = ref(false);
 const showEventPanel = ref(false);
 const simulationSummary = ref(null);
 
@@ -329,6 +370,7 @@ function handleResume() {
 async function handleStop() {
   await stop();
   stopAnimation();
+  simulationSummary.value = buildSimulationSummary();
   reportDialogRef.value?.open();
 }
 
@@ -414,17 +456,134 @@ function handlePortClick(portData) {
   });
 }
 
+function getAlarmReason(alarmType) {
+  const key = (alarmType || '').toLowerCase();
+  return ALARM_REASON_MAP[key] || { label: '告警', color: '#94a3b8' };
+}
+
+function collectAlarmTargets(alarm) {
+  const graph = getGraphInstance();
+  const nodeIds = new Set();
+  const edgeIds = new Set();
+
+  if (!graph || !alarm) {
+    return { nodeIds: [], edgeIds: [] };
+  }
+
+  const addByCell = (cellId) => {
+    if (!cellId) return;
+    const cell = graph.getCellById(cellId);
+    if (!cell) return;
+    if (cell.isEdge?.()) {
+      edgeIds.add(cellId);
+    } else {
+      nodeIds.add(cellId);
+    }
+  };
+
+  addByCell(alarm.targetId);
+  addByCell(alarm.targetEdgeId);
+  addByCell(alarm.targetNodeId);
+
+  if (alarm.edgeId) {
+    edgeIds.add(alarm.edgeId);
+  }
+  if (Array.isArray(alarm.edgeIds)) {
+    alarm.edgeIds.forEach((id) => id && edgeIds.add(id));
+  }
+  if (Array.isArray(alarm.affectedNodes)) {
+    alarm.affectedNodes.forEach((id) => id && nodeIds.add(id));
+  }
+  if (Array.isArray(alarm.affectedNodeIds)) {
+    alarm.affectedNodeIds.forEach((id) => id && nodeIds.add(id));
+  }
+
+  const details = alarm.details || {};
+  addByCell(details.edgeId || details.edge_id);
+
+  if (Array.isArray(details.connections)) {
+    details.connections.forEach((conn) => {
+      const edgeId = conn?.edgeId || conn?.edge_id;
+      if (edgeId) {
+        edgeIds.add(edgeId);
+      }
+    });
+  }
+
+  const portId = details.portId || details.port_id;
+  if (portId) {
+    const edges = graph.getEdges?.() || [];
+    edges.forEach((edge) => {
+      const sourcePortId = edge.getSourcePortId?.();
+      const targetPortId = edge.getTargetPortId?.();
+      if (sourcePortId === portId || targetPortId === portId) {
+        edgeIds.add(edge.id);
+      }
+    });
+  }
+
+  if (details.nodeId || details.node_id) {
+    nodeIds.add(details.nodeId || details.node_id);
+  }
+
+  if (nodeIds.size >= 2) {
+    const edges = graph.getEdges?.() || [];
+    edges.forEach((edge) => {
+      const sourceId = edge.getSourceCellId?.();
+      const targetId = edge.getTargetCellId?.();
+      if (nodeIds.has(sourceId) && nodeIds.has(targetId)) {
+        edgeIds.add(edge.id);
+      }
+    });
+  }
+
+  if (nodeIds.size > 0 && edgeIds.size === 0) {
+    const edges = graph.getEdges?.() || [];
+    edges.forEach((edge) => {
+      const sourceId = edge.getSourceCellId?.();
+      const targetId = edge.getTargetCellId?.();
+      if (nodeIds.has(sourceId) || nodeIds.has(targetId)) {
+        edgeIds.add(edge.id);
+      }
+    });
+  }
+
+  return {
+    nodeIds: Array.from(nodeIds),
+    edgeIds: Array.from(edgeIds),
+  };
+}
+
 // 告警处理
 function handleAlarmClick(alarm) {
-  if (alarm.targetId) {
-    const graph = getGraphInstance();
-    if (graph) {
-      const cell = graph.getCellById(alarm.targetId);
-      if (cell) {
-        graph.centerCell(cell);
-        triggerErrorAnimation(alarm.targetId);
-      }
+  const graph = getGraphInstance();
+  if (!graph) return;
+
+  const reason = getAlarmReason(alarm?.alarmType);
+  const { nodeIds, edgeIds } = collectAlarmTargets(alarm);
+  const focusId = edgeIds[0] || nodeIds[0] || alarm?.targetId;
+
+  if (focusId) {
+    const cell = graph.getCellById(focusId);
+    if (cell) {
+      graph.centerCell(cell);
     }
+  }
+
+  if (edgeIds.length > 0) {
+    highlightEdges(edgeIds, reason.color);
+    setTimeout(() => clearEdgeHighlight(edgeIds), ALARM_HIGHLIGHT_DURATION);
+    if (alarm?.severity === 'error' || alarm?.severity === 'critical') {
+      edgeIds.forEach((edgeId) => triggerErrorAnimation(edgeId, ALARM_HIGHLIGHT_DURATION));
+    }
+  }
+
+  if (nodeIds.length > 0) {
+    nodeIds.forEach((nodeId) => setNodeError(nodeId, true));
+    setTimeout(
+      () => nodeIds.forEach((nodeId) => setNodeError(nodeId, false)),
+      ALARM_HIGHLIGHT_DURATION
+    );
   }
 }
 
@@ -455,6 +614,84 @@ function handleMessageSelect(message) {
 
 function handleMessageFilterChange(filter) {
   setMessageFilter(filter);
+}
+
+function formatDuration(seconds) {
+  const total = Math.max(0, Math.floor(seconds || 0));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const parts = [];
+  if (h > 0) parts.push(`${h}小时`);
+  if (m > 0) parts.push(`${m}分`);
+  parts.push(`${s}秒`);
+  return parts.join('');
+}
+
+function formatDateTime(ts) {
+  if (!ts) return '-';
+  const date = new Date(ts);
+  if (Number.isNaN(date.getTime())) return '-';
+  const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
+    date.getHours()
+  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
+function buildSimulationSummary() {
+  const messageCount = messageData.value.length;
+  const alarmCount = alarmData.value.length;
+  const duration = formatDuration(simulationState.elapsedTime);
+  const startTime = formatDateTime(simulationState.startTime);
+
+  const bandwidthStatsMap = {};
+  bandwidthData.value.forEach((item) => {
+    const protocol = item.protocolType || item.protocol_type || '未知协议';
+    if (!bandwidthStatsMap[protocol]) {
+      bandwidthStatsMap[protocol] = {
+        protocol,
+        total: 0,
+        max: 0,
+        loadTotal: 0,
+        count: 0,
+      };
+    }
+    const stat = bandwidthStatsMap[protocol];
+    const bw = Number(item.bandwidthMbps || item.bandwidth_mbps || 0);
+    const load = Number(item.loadPercent || item.load_percent || 0);
+    stat.total += bw;
+    stat.loadTotal += load;
+    stat.count += 1;
+    stat.max = Math.max(stat.max, bw);
+  });
+
+  const bandwidthStats = Object.values(bandwidthStatsMap).map((item) => ({
+    protocol: item.protocol,
+    avgBandwidth: `${(item.total / item.count || 0).toFixed(3)} Mbps`,
+    maxBandwidth: `${item.max.toFixed(3)} Mbps`,
+    avgLoad: `${(item.loadTotal / item.count || 0).toFixed(1)}%`,
+  }));
+
+  const alarmStatsMap = {};
+  alarmData.value.forEach((alarm) => {
+    const type = alarm.alarmType || alarm.type || '未知类型';
+    const level = alarm.severity || alarm.level || 'info';
+    const key = `${type}-${level}`;
+    if (!alarmStatsMap[key]) {
+      alarmStatsMap[key] = { type, level, count: 0 };
+    }
+    alarmStatsMap[key].count += 1;
+  });
+  const alarmStats = Object.values(alarmStatsMap);
+
+  return {
+    duration,
+    messageCount,
+    alarmCount,
+    bandwidthStats,
+    alarmStats,
+    startTime,
+  };
 }
 
 function handleExportMessages(format) {
@@ -548,6 +785,31 @@ watch(isRunning, (running) => {
   z-index: 1;
 }
 
+/* 仿真页面 DAG 暗黑主题覆盖 */
+.sim-canvas :deep(.zx-dag-page) {
+  background: transparent;
+}
+
+.sim-canvas :deep(.dag-center) {
+  background: transparent !important;
+}
+
+.sim-canvas :deep(.dag-graph) {
+  background: transparent !important;
+}
+
+.sim-canvas :deep(.xflow-graph) {
+  background: transparent !important;
+}
+
+.sim-canvas :deep(.x6-graph) {
+  background: transparent !important;
+}
+
+.sim-canvas :deep(.x6-graph-svg) {
+  background: transparent !important;
+}
+
 /* 设备详情面板滑入动画 */
 .slide-up-enter-active,
 .slide-up-leave-active {
@@ -558,5 +820,96 @@ watch(isRunning, (running) => {
 .slide-up-leave-to {
   opacity: 0;
   transform: translateY(20px);
+}
+
+.simulation-shell {
+  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%),
+    #0b1220;
+}
+
+.floating-panel {
+  position: absolute;
+  z-index: 30;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-title .title-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: 0.02em;
+}
+
+.panel-title .live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 10px;
+  font-weight: 600;
+  color: #10b981;
+  letter-spacing: 0.04em;
+}
+
+.panel-title .live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: live-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.panel-actions {
+  display: inline-flex;
+  align-items: center;
+}
+
+.view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.view-toggle .toggle-item {
+  color: #94a3b8;
+  cursor: pointer;
+  transition: color 0.15s ease;
+  user-select: none;
+}
+
+.view-toggle .toggle-item:hover {
+  color: #64748b;
+}
+
+.view-toggle .toggle-item.active {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.view-toggle .toggle-divider {
+  color: #cbd5e1;
+  font-weight: 300;
 }
 </style>

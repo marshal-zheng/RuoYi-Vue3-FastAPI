@@ -14,6 +14,8 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-plugin-transform": "^2.1.8",
     "@antv/x6-vue-shape": "^2.1.2",
+    "cursor-agent": "^1.0.3",
+    "vue3-virtual-scroller": "^0.2.3",
     "vxe-table": "^4.17.15",
     "vxe-table-plugin-element": "^4.0.4",
     "xe-utils": "^3.7.9",

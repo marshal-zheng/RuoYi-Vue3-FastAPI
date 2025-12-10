@@ -19,6 +19,7 @@ export function useSimulationWebSocket() {
   const messagesData = shallowRef([]);
   const bandwidthData = shallowRef([]);
   const alarmsData = shallowRef([]);
+  const animationData = shallowRef([]);
 
   let reconnectTimer = null;
   let heartbeatTimer = null;
@@ -134,6 +135,11 @@ export function useSimulationWebSocket() {
         }
         break;
 
+      case 'animation':
+        // 动画事件，保留最近100条供拓扑动画消费
+        animationData.value = [...animationData.value, ...data].slice(-100);
+        break;
+
       case 'pong':
         // 心跳响应
         break;
@@ -242,6 +248,7 @@ export function useSimulationWebSocket() {
     messagesData.value = [];
     bandwidthData.value = [];
     alarmsData.value = [];
+    animationData.value = [];
     notifiedAlarmIds.clear();
   };
 
@@ -256,6 +263,7 @@ export function useSimulationWebSocket() {
     messagesData,
     bandwidthData,
     alarmsData,
+    animationData,
     connect,
     disconnect,
     clearData,

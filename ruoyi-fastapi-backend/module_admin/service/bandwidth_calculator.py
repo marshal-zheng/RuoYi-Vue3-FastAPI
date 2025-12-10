@@ -129,10 +129,22 @@ class BandwidthCalculator:
                 return BandwidthCalculator.calculate_can_bandwidth(baud_rate)
         
         elif protocol_type == '1553B':
-            # 1553B协议的带宽计算可以后续扩展
-            # 目前返回固定值或基于波特率计算
-            if baud_rate:
-                return baud_rate / 1024 / 1024  # 简化计算
+            # 1553B协议带宽计算
+            # 1553B 固定带宽 1 Mbps，有效数据率约 80%（协议开销）
+            # 计算基于消息频率和字节数
+            if frequency_ms and byte_count:
+                # 每秒发送次数
+                messages_per_second = 1000.0 / frequency_ms
+                # 每条消息的数据量（含协议开销约20%）
+                # 1553B: 命令字(20bit) + 状态字(20bit) + 数据字(word_count * 20bit)
+                # 有效数据占比约 80%
+                effective_ratio = 0.8
+                bits_per_message = byte_count * 8 / effective_ratio
+                # 带宽 Mbps
+                return (messages_per_second * bits_per_message) / 1_000_000
+            elif baud_rate:
+                # 1553B 标准带宽 1 Mbps
+                return min(baud_rate / 1_000_000, 1.0)
         
         return 0.0
 

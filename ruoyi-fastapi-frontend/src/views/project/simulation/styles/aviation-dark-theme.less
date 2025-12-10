@@ -1,0 +1,373 @@
+// 航空暗黑系主题样式
+// 用于带宽监控和告警面板（Teleport 后依然生效）
+
+// ============================================
+// 航空主题色彩定义
+// ============================================
+@aviation-cyan: #22d3ee;           // 主色 - 航空青色
+@aviation-cyan-dim: rgba(34, 211, 238, 0.6);
+@aviation-cyan-glow: rgba(34, 211, 238, 0.3);
+@aviation-amber: #fbbf24;          // 警告色 - 琥珀色
+@aviation-red: #ef4444;            // 严重告警 - 红色
+@aviation-orange: #f97316;         // 错误色 - 橙色
+@aviation-green: #22c55e;          // 正常状态 - 绿色
+@aviation-text: #e2e8f0;           // 主文字 - 亮灰白
+@aviation-text-secondary: #94a3b8; // 次要文字
+@aviation-border: rgba(34, 211, 238, 0.25); // 默认边框
+
+// 带宽监控面板样式
+.bandwidth-chart-panel {
+  background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%) !important;
+  border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  color: @aviation-text !important;
+  .zx-floating-panel__header {
+    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  }
+  .zx-floating-panel__collapse-btn {
+    color: @aviation-text !important;
+    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  }
+  
+  // Header 区域 - 航空暗黑系
+  .floating-panel {
+    > div:first-child {
+      background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+      border-bottom: 1px solid @aviation-border !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.08) !important;
+    }
+    
+    // 标题文字
+    .font-semibold,
+    span {
+      color: @aviation-text !important;
+      text-shadow: 0 0 8px @aviation-cyan-glow !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.05em !important;
+    }
+    
+    // 标签样式
+    .el-tag {
+      background: rgba(34, 211, 238, 0.15) !important;
+      border: 1px solid @aviation-border !important;
+      color: @aviation-cyan !important;
+      box-shadow: 0 0 6px @aviation-cyan-glow !important;
+    }
+    
+    // 分段控制器
+    .el-segmented {
+      --el-segmented-bg-color: rgba(15, 23, 42, 0.9) !important;
+      --el-segmented-item-hover-bg-color: rgba(34, 211, 238, 0.1) !important;
+      --el-segmented-item-selected-bg-color: rgba(34, 211, 238, 0.2) !important;
+      --el-segmented-item-selected-color: @aviation-cyan !important;
+      border: 1px solid @aviation-border !important;
+      
+      .el-segmented__item {
+        color: @aviation-text-secondary !important;
+        
+        &.is-selected {
+          color: @aviation-cyan !important;
+        }
+      }
+    }
+    
+    // 下拉选择框
+    .el-select {
+      .el-input__wrapper {
+        background: rgba(15, 23, 42, 0.9) !important;
+        border: 1px solid @aviation-border !important;
+        box-shadow: 0 0 4px @aviation-cyan-glow !important;
+      }
+      
+      .el-input__inner {
+        color: @aviation-text !important;
+      }
+    }
+    
+    // 按钮图标
+    button {
+      color: @aviation-text-secondary !important;
+      
+      &:hover {
+        background: rgba(34, 211, 238, 0.1) !important;
+        color: @aviation-cyan !important;
+      }
+    }
+  }
+  
+  // 内容区域 - 航空暗黑系
+  .monitor-panel {
+    background: linear-gradient(180deg, #0a0f18 0%, #060a10 50%, #0a0f18 100%) !important;
+    border-radius: 0 !important;
+    padding: 12px !important;
+  }
+  
+  // 图表容器
+  .chart-wrapper {
+    background: rgba(10, 15, 24, 0.95) !important;
+    border: 1px solid @aviation-border !important;
+    box-shadow: 
+      inset 0 0 20px rgba(34, 211, 238, 0.05),
+      0 0 10px rgba(0, 0, 0, 0.5) !important;
+  }
+  
+  // 统计卡片
+  .stats-grid {
+    .stat-card {
+      background: rgba(15, 23, 42, 0.8) !important;
+      border: 1px solid @aviation-border !important;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.5), inset 0 0 4px rgba(34, 211, 238, 0.05) !important;
+      
+      &:hover {
+        background: rgba(15, 23, 42, 0.95) !important;
+        border-color: rgba(34, 211, 238, 0.4) !important;
+        box-shadow: 0 0 12px @aviation-cyan-glow, inset 0 0 6px rgba(34, 211, 238, 0.08) !important;
+      }
+      
+      .stat-label {
+        color: @aviation-text-secondary !important;
+        font-size: 12px !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.02em;
+      }
+      
+      .stat-value {
+        color: @aviation-text !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        text-shadow: 0 0 6px @aviation-cyan-glow !important;
+        
+        &.highlight {
+          color: @aviation-cyan !important;
+          text-shadow: 0 0 10px rgba(34, 211, 238, 0.6) !important;
+        }
+      }
+      
+      // 单位文字
+      .stat-unit {
+        color: @aviation-text-secondary !important;
+      }
+    }
+  }
+}
+
+// 告警面板样式
+.alarm-panel-floating {
+  .zx-floating-panel__header {
+    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  }
+  .zx-floating-panel__collapse-btn {
+    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+  }
+  background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
+  
+  // Header 区域 - 航空暗黑系
+  .floating-panel {
+    > div:first-child {
+      background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+      border-bottom: 1px solid @aviation-border !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.08) !important;
+    }
+    
+    .panel-header {
+      color: @aviation-text !important;
+    }
+    
+    .panel-title {
+      .title-text {
+        color: @aviation-text !important;
+        text-shadow: 0 0 8px @aviation-cyan-glow !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.05em !important;
+      }
+    }
+    
+    // Badge 样式
+    .el-badge {
+      .el-badge__content {
+        background: @aviation-red !important;
+        border-color: #0d1117 !important;
+        box-shadow: 0 0 8px rgba(239, 68, 68, 0.6) !important;
+        color: #ffffff !important;
+      }
+    }
+    
+    // 按钮图标
+    button {
+      color: @aviation-text-secondary !important;
+      
+      &:hover {
+        background: rgba(34, 211, 238, 0.1) !important;
+        color: @aviation-cyan !important;
+      }
+    }
+  }
+}
+
+
+
+// AlarmPanel 内容区域 - 航空暗黑系
+.alarm-panel-content {
+  background: linear-gradient(180deg, #0a0f18 0%, #060a10 50%, #0a0f18 100%) !important;
+
+  // 统计卡片区域
+  .stat-cards-area {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border-bottom: 1px solid @aviation-border !important;
+  }
+  
+  // 统计卡片
+  .stat-card {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border: 1px solid @aviation-border !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5), inset 0 0 6px rgba(34, 211, 238, 0.05) !important;
+    
+    &:hover {
+      background: rgba(15, 23, 42, 0.95) !important;
+      border-color: rgba(34, 211, 238, 0.4) !important;
+      box-shadow: 0 0 14px @aviation-cyan-glow, inset 0 0 8px rgba(34, 211, 238, 0.08) !important;
+    }
+    
+    // 根据告警级别设置不同的边框颜色
+    &.critical {
+      border-color: rgba(239, 68, 68, 0.4) !important;
+      
+      .stat-value {
+        color: @aviation-red !important;
+      }
+    }
+    
+    &.error {
+      border-color: rgba(249, 115, 22, 0.4) !important;
+      
+      .stat-value {
+        color: @aviation-orange !important;
+      }
+    }
+    
+    &.warning {
+      border-color: rgba(251, 191, 36, 0.4) !important;
+      
+      .stat-value {
+        color: @aviation-amber !important;
+      }
+    }
+    
+    .stat-label {
+      color: @aviation-text !important;
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.02em;
+    }
+    
+    .stat-value {
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      color: @aviation-text !important;
+    }
+  }
+  
+  // 告警列表区域
+  .alarm-list-area {
+    background: transparent !important;
+    
+    .alarm-list-header {
+      color: @aviation-text !important;
+      border-bottom: 1px solid @aviation-border !important;
+      font-weight: 500 !important;
+    }
+    
+    // 告警项
+    .alarm-item {
+      background: rgba(15, 23, 42, 0.7) !important;
+      border: 1px solid @aviation-border !important;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.4) !important;
+      
+      &:hover {
+        background: rgba(15, 23, 42, 0.9) !important;
+        border-color: rgba(34, 211, 238, 0.4) !important;
+        box-shadow: 0 0 10px @aviation-cyan-glow !important;
+      }
+      
+      // 严重告警
+      &.critical {
+        background: rgba(239, 68, 68, 0.1) !important;
+        border-color: rgba(239, 68, 68, 0.4) !important;
+        box-shadow: 0 0 12px rgba(239, 68, 68, 0.3) !important;
+      }
+      
+      // 错误告警
+      &.error {
+        background: rgba(249, 115, 22, 0.1) !important;
+        border-color: rgba(249, 115, 22, 0.3) !important;
+      }
+      
+      // 警告告警
+      &.warning {
+        background: rgba(251, 191, 36, 0.1) !important;
+        border-color: rgba(251, 191, 36, 0.3) !important;
+      }
+      
+      .alarm-text {
+        color: @aviation-text !important;
+      }
+      
+      .alarm-time {
+        color: @aviation-text-secondary !important;
+      }
+    }
+    
+    // 空状态
+    .empty-state {
+      color: @aviation-text-secondary !important;
+      
+      .el-icon {
+        color: @aviation-green !important;
+      }
+      
+      .empty-title {
+        color: @aviation-text !important;
+      }
+      
+      .empty-desc {
+        color: @aviation-text-secondary !important;
+      }
+    }
+  }
+}
+
+// 全局覆盖 FloatingPanel 在 simulation-dark 下的样式
+.simulation-dark {
+  // 带宽监控面板
+  .bandwidth-chart-panel {
+    background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
+    
+    .floating-panel {
+      > div:first-child {
+        background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+        border-bottom: 1px solid @aviation-border !important;
+        color: @aviation-text !important;
+      }
+    }
+  }
+
+  // 告警面板
+  .alarm-panel-floating {
+    .floating-panel {
+      > div:first-child {
+        background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+        border-bottom: 1px solid @aviation-border !important;
+        color: @aviation-text !important;
+      }
+    }
+  }
+  
+  // 设备详情面板
+  .floating-panel[theme="dark"] {
+    background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+    border: 1px solid @aviation-border !important;
+    
+    .panel-title {
+      color: @aviation-text !important;
+    }
+  }
+}

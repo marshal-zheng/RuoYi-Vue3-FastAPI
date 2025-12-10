@@ -14,11 +14,11 @@
       </div>
     </template>
 
-    <div class="py-2 max-h-[calc(70vh-60px)] overflow-y-auto">
+    <div class="simulation-monitor-panel py-2 max-h-[calc(70vh-60px)] overflow-y-auto">
       <!-- 告警统计 -->
       <div v-if="alarmStats.total > 0" class="flex gap-2 mb-3">
         <div
-          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
           :class="{ 'bg-white shadow-sm': alarmStats.critical > 0 }"
         >
           <div class="text-lg text-red-700">
@@ -32,7 +32,7 @@
           </div>
         </div>
         <div
-          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
           :class="{ 'bg-white shadow-sm': alarmStats.error > 0 }"
         >
           <div class="text-lg text-red-500">
@@ -46,7 +46,7 @@
           </div>
         </div>
         <div
-          class="flex-1 flex items-center gap-2 p-2 bg-gray-50 rounded transition-all"
+          class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
           :class="{ 'bg-white shadow-sm': alarmStats.warning > 0 }"
         >
           <div class="text-lg text-yellow-500">
@@ -66,7 +66,7 @@
         <div
           v-for="alarm in displayAlarms"
           :key="alarm.alarmId"
-          class="flex gap-2 p-2 mb-1.5 bg-white border border-gray-200 rounded border-l-[3px]"
+          class="flex gap-2 p-2 mb-1.5 border rounded border-l-[3px]"
           :class="{
             'border-l-red-700': alarm.severity === 'critical',
             'border-l-red-500': alarm.severity === 'error',
@@ -178,3 +178,7 @@ function formatTime(timestamp) {
   return date.toLocaleTimeString();
 }
 </script>
+
+<style scoped lang="less">
+@import './SimulationMonitorPanel.less';
+</style>

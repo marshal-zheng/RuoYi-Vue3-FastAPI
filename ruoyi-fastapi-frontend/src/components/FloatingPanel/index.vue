@@ -2,35 +2,40 @@
   <teleport to="body">
     <div
       v-if="!collapsed"
-      class="floating-panel fixed z-50 bg-white rounded-lg shadow-2xl border border-gray-200 overflow-hidden transition-all duration-300 ease-in-out"
+      class="floating-panel fixed z-50 rounded-lg overflow-hidden transition-all duration-300 ease-in-out"
+      :class="panelClass"
       :style="panelStyle"
       @mousedown="handleMouseDown"
     >
       <!-- Header -->
       <div
-        class="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-200 cursor-move"
+        class="flex items-center justify-between px-4 py-3 border-b cursor-move"
+        :class="headerClass"
+        :style="headerStyle"
       >
         <div class="flex items-center gap-2 flex-1 min-w-0">
           <slot name="header">
-            <span class="text-sm font-semibold text-gray-800 truncate">{{ title }}</span>
+            <span class="text-sm font-semibold truncate" :class="titleClass">{{ title }}</span>
           </slot>
         </div>
         <div class="flex items-center gap-2 ml-2">
           <slot name="actions"></slot>
           <button
             @click="handleCollapse"
-            class="p-1 hover:bg-white/50 rounded transition-colors"
+            class="p-1 rounded transition-colors"
+            :class="iconBtnClass"
             title="最小化"
           >
-            <el-icon class="text-gray-600"><Minus /></el-icon>
+            <el-icon :class="iconClass"><Minus /></el-icon>
           </button>
           <button
             v-if="closable"
             @click="handleClose"
-            class="p-1 hover:bg-red-50 rounded transition-colors"
+            class="p-1 rounded transition-colors"
+            :class="closeBtnClass"
             title="关闭"
           >
-            <el-icon class="text-gray-600 hover:text-red-600"><Close /></el-icon>
+            <el-icon :class="closeIconClass"><Close /></el-icon>
           </button>
         </div>
       </div>
@@ -57,13 +62,14 @@
     <!-- Collapsed State -->
     <div
       v-else
-      class="floating-panel-collapsed fixed z-50 bg-white rounded-full shadow-lg border border-gray-200 cursor-pointer hover:shadow-xl transition-all duration-300"
+      class="floating-panel-collapsed fixed z-50 rounded-full cursor-pointer transition-all duration-300"
+      :class="collapsedClass"
       :style="collapsedStyle"
       @click="handleExpand"
       :title="title"
     >
       <div class="flex items-center justify-center w-full h-full">
-        <el-icon class="text-blue-600 text-xl"><Expand /></el-icon>
+        <el-icon :class="collapseIconClass"><Expand /></el-icon>
       </div>
     </div>
   </teleport>
@@ -106,6 +112,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  theme: {
+    type: String,
+    default: 'auto', // auto | light | dark
+  },
   visible: {
     type: Boolean,
     default: true,
@@ -131,10 +141,35 @@ watch(
   }
 );
 
+const panelTokens = computed(() =>
+  isDark.value
+    ? {
+        bg: 'rgba(15,23,42,0.95)',
+        border: '1px solid rgba(51,65,85,0.7)',
+        headerBg: 'rgba(30,41,59,0.85)',
+        headerBorder: '1px solid rgba(51,65,85,0.7)',
+        shadow: '0 18px 38px -18px rgba(0,0,0,0.65)',
+        text: '#e2e8f0',
+      }
+    : {
+        bg: '#ffffff',
+        border: '1px solid #e5e7eb',
+        headerBg: '#f8fafc',
+        headerBorder: '1px solid #e5e7eb',
+        shadow: '0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04)',
+        text: '#0f172a',
+      }
+);
+
 const panelStyle = computed(() => {
   const style = {
     ...currentPosition.value,
     ...currentSize.value,
+    backgroundColor: panelTokens.value.bg,
+    border: panelTokens.value.border,
+    boxShadow: panelTokens.value.shadow,
+    backdropFilter: isDark.value ? 'blur(8px)' : 'none',
+    color: panelTokens.value.text,
   };
 
   if (isDragging.value) {
@@ -147,8 +182,56 @@ const panelStyle = computed(() => {
 const contentStyle = computed(() => {
   return {
     maxHeight: currentSize.value.maxHeight || '500px',
+    backgroundColor: panelTokens.value.bg,
   };
 });
+
+const headerStyle = computed(() => ({
+  backgroundColor: panelTokens.value.headerBg,
+  borderColor: panelTokens.value.headerBorder.replace('1px solid ', ''),
+  color: panelTokens.value.text,
+}));
+
+const isDark = computed(() => {
+  if (props.theme === 'dark') return true;
+  if (props.theme === 'light') return false;
+  // auto: follow simulation shell or body dark class
+  const hasSimulationShell = document.querySelector('.simulation-dark');
+  const bodyDark = document.body.classList.contains('dark');
+  return Boolean(hasSimulationShell || bodyDark);
+});
+
+const panelClass = computed(() =>
+  isDark.value
+    ? 'bg-slate-900/95 border border-slate-700/70 shadow-[0_18px_38px_-18px_rgba(0,0,0,0.65)] backdrop-blur'
+    : 'bg-white border border-gray-200 shadow-2xl'
+);
+
+const headerClass = computed(() =>
+  isDark.value
+    ? 'bg-slate-800/70 border-slate-700/70 text-slate-100'
+    : 'bg-gradient-to-r from-blue-50 to-indigo-50 border-gray-200 text-gray-800'
+);
+
+const titleClass = computed(() => (isDark.value ? 'text-slate-100' : 'text-gray-800'));
+const iconClass = computed(() => (isDark.value ? 'text-slate-200' : 'text-gray-600'));
+const closeIconClass = computed(() =>
+  isDark.value ? 'text-slate-200 hover:text-red-400' : 'text-gray-600 hover:text-red-600'
+);
+const iconBtnClass = computed(() =>
+  isDark.value ? 'hover:bg-slate-700/60 text-slate-100' : 'hover:bg-white/50'
+);
+const closeBtnClass = computed(() =>
+  isDark.value ? 'hover:bg-red-500/10' : 'hover:bg-red-50'
+);
+
+const collapsedClass = computed(() =>
+  isDark.value
+    ? 'bg-slate-800/90 border border-slate-700/80 shadow-lg hover:shadow-xl'
+    : 'bg-white border border-gray-200 shadow-lg hover:shadow-xl'
+);
+
+const collapseIconClass = computed(() => (isDark.value ? 'text-slate-100 text-xl' : 'text-blue-600 text-xl'));
 
 const collapsedStyle = computed(() => {
   return {

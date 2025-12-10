@@ -358,88 +358,6 @@ watch(
 // 网段缓存（优化：避免重复计算）
 const segmentCache = new Map();
 
-// 递增计数器（用于序列递增策略）
-let incrementCounter = 0;
-// 循环索引（用于循环模式策略）
-let cycleIndex = 0;
-
-/**
- * 根据策略生成模拟报文内容
- * @param {Object} strategy - 策略配置 { strategy: string, params: object }
- * @param {number} timestamp - 报文时间戳
- * @param {number} size - 报文大小
- * @returns {Object} { payloadHex, fillStrategy }
- */
-function generatePayloadByStrategy(strategy, timestamp, size) {
-  const { strategy: strategyType, params = {} } = strategy || { strategy: 'random', params: {} };
-  const byteCount = Math.min(size || 64, 32); // 最多生成32字节用于显示
-  let bytes = [];
-
-  switch (strategyType) {
-    case 'random': {
-      // 随机值：在值域范围内随机生成
-      const [min, max] = params.valueRange || [0, 255];
-      for (let i = 0; i < byteCount; i++) {
-        bytes.push(Math.floor(Math.random() * (max - min + 1)) + min);
-      }
-      break;
-    }
-    case 'increment': {
-      // 序列递增：计数器模式
-      const startValue = params.startValue || 0;
-      const step = params.step || 1;
-      for (let i = 0; i < byteCount; i++) {
-        const value = (startValue + incrementCounter * step + i) % 256;
-        bytes.push(value);
-      }
-      incrementCounter++;
-      break;
-    }
-    case 'fixed': {
-      // 固定值：使用预设固定值
-      const fixedValue = params.fixedValue || 0xaa;
-      for (let i = 0; i < byteCount; i++) {
-        bytes.push(fixedValue & 0xff);
-      }
-      break;
-    }
-    case 'cycle': {
-      // 循环模式：循环使用预设数据
-      const presetValues = params.presetValues || [0x00, 0x55, 0xaa, 0xff];
-      for (let i = 0; i < byteCount; i++) {
-        bytes.push(presetValues[(cycleIndex + i) % presetValues.length]);
-      }
-      cycleIndex = (cycleIndex + 1) % presetValues.length;
-      break;
-    }
-    case 'sine_wave': {
-      // 正弦波：模拟周期性变化
-      const amplitude = params.amplitude || 100;
-      const offset = params.offset || 127;
-      const frequency = params.frequency || 1;
-      const phase = params.phase || 0;
-      // 使用时间戳计算正弦值
-      const t = timestamp || Date.now() / 1000;
-      for (let i = 0; i < byteCount; i++) {
-        // 每个字节使用略微不同的相位，产生波形效果
-        const sineValue =
-          offset + amplitude * Math.sin(2 * Math.PI * frequency * t + phase + i * 0.1);
-        const value = Math.round(sineValue);
-        bytes.push(Math.max(0, Math.min(255, value)));
-      }
-      break;
-    }
-    default:
-      // 默认随机
-      for (let i = 0; i < byteCount; i++) {
-        bytes.push(Math.floor(Math.random() * 256));
-      }
-  }
-
-  const payloadHex = bytes.map((b) => b.toString(16).padStart(2, '0')).join('');
-  return { payloadHex, fillStrategy: strategyType };
-}
-
 /**
  * 增强报文数据 - 添加网段检测、丢包检测、报文内容模拟等
  */
@@ -470,15 +388,11 @@ function enhanceMessage(msg) {
   // 传输状态
   enhanced.transmissionStatus = getTransmissionStatusValue(enhanced.packetLoss, latency);
 
-  // 如果没有报文内容，根据策略模拟生成
+  // payloadHex 由后端真实生成，前端不再模拟
+  // 如果后端没有返回 payloadHex，显示空值而非假数据
   if (!enhanced.payloadHex) {
-    const generated = generatePayloadByStrategy(
-      props.injectionStrategy,
-      msg.sendTimestamp,
-      msg.sizeBytes
-    );
-    enhanced.payloadHex = generated.payloadHex;
-    enhanced.fillStrategy = generated.fillStrategy;
+    enhanced.payloadHex = '';
+    enhanced.fillStrategy = msg.fillStrategy || 'unknown';
   }
 
   return enhanced;

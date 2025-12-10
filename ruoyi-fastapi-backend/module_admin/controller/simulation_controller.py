@@ -352,6 +352,247 @@ async def export_simulation_data(
         return ResponseUtil.error(msg=str(e))
 
 
+# ==================== 新增：仿真控制增强 ====================
+
+@simulationController.post(
+    '/sessions/{session_id}/pause',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+    ]
+)
+@Log(title='仿真管理-暂停仿真', business_type=BusinessType.UPDATE)
+async def pause_simulation_session(
+    request: Request,
+    session_id: str,
+    query_db: AsyncSession = Depends(get_db)
+):
+    """暂停仿真会话"""
+    result = await SimulationService.pause_session(query_db, session_id)
+    logger.info(f'暂停仿真会话: {session_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.post(
+    '/sessions/{session_id}/resume',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+    ]
+)
+@Log(title='仿真管理-继续仿真', business_type=BusinessType.UPDATE)
+async def resume_simulation_session(
+    request: Request,
+    session_id: str,
+    query_db: AsyncSession = Depends(get_db)
+):
+    """继续仿真会话"""
+    result = await SimulationService.resume_session(query_db, session_id)
+    logger.info(f'继续仿真会话: {session_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.post(
+    '/sessions/{session_id}/speed',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+    ]
+)
+async def set_simulation_speed(
+    request: Request,
+    session_id: str,
+    body: dict
+):
+    """设置仿真速度（0.5x-4x）"""
+    speed = body.get('speed', 1.0)
+    result = SimulationService.set_speed(session_id, speed)
+    logger.info(f'设置仿真速度: {session_id} -> {speed}x')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.post(
+    '/sessions/{session_id}/step',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+    ]
+)
+async def step_simulation(
+    request: Request,
+    session_id: str
+):
+    """单步执行"""
+    result = await SimulationService.step_once(session_id)
+    logger.info(f'单步执行: {session_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.post(
+    '/sessions/{session_id}/duration',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+    ]
+)
+async def set_simulation_duration(
+    request: Request,
+    session_id: str,
+    duration: float = None
+):
+    """设置仿真时长（秒），不传则无限制"""
+    result = SimulationService.set_duration(session_id, duration)
+    return ResponseUtil.success(data=result.model_dump())
+
+
+# ==================== 新增：故障注入 ====================
+
+@simulationController.post(
+    '/sessions/{session_id}/faults',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:inject'))
+    ]
+)
+@Log(title='仿真管理-注入故障', business_type=BusinessType.INSERT)
+async def inject_fault(
+    request: Request,
+    session_id: str,
+    fault_type: str,
+    target_id: str,
+    params: dict = None
+):
+    """
+    注入故障
+
+    参数:
+        fault_type: disconnect | error_frame | device_failure | packet_loss | delay
+        target_id: 链路ID或节点ID
+        params: {loss_rate, delay_ms, count 等}
+    """
+    result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
+    logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
+    return ResponseUtil.success(data=result)
+
+
+@simulationController.delete(
+    '/sessions/{session_id}/faults/{fault_id}',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+    ]
+)
+@Log(title='仿真管理-清除故障', business_type=BusinessType.DELETE)
+async def clear_fault(
+    request: Request,
+    session_id: str,
+    fault_id: str
+):
+    """清除故障"""
+    result = SimulationService.clear_fault(session_id, fault_id)
+    logger.info(f'清除故障: {session_id} -> {fault_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.get(
+    '/sessions/{session_id}/faults',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:query'))
+    ]
+)
+async def list_faults(
+    request: Request,
+    session_id: str
+):
+    """获取故障列表"""
+    faults = SimulationService.list_faults(session_id)
+    return ResponseUtil.success(data=faults)
+
+
+# ==================== 新增：事件触发 ====================
+
+@simulationController.post(
+    '/sessions/{session_id}/events',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:create'))
+    ]
+)
+@Log(title='仿真管理-添加事件', business_type=BusinessType.INSERT)
+async def add_event(
+    request: Request,
+    session_id: str,
+    event: dict
+):
+    """
+    添加事件
+
+    参数:
+        event: {
+            name: 事件名称,
+            condition: {type, value},
+            action: {type, params}
+        }
+    """
+    result = SimulationService.add_event(session_id, event)
+    logger.info(f'添加事件: {session_id}')
+    return ResponseUtil.success(data=result)
+
+
+@simulationController.delete(
+    '/sessions/{session_id}/events/{event_id}',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:delete'))
+    ]
+)
+@Log(title='仿真管理-删除事件', business_type=BusinessType.DELETE)
+async def remove_event(
+    request: Request,
+    session_id: str,
+    event_id: str
+):
+    """删除事件"""
+    result = SimulationService.remove_event(session_id, event_id)
+    logger.info(f'删除事件: {session_id} -> {event_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
+@simulationController.get(
+    '/sessions/{session_id}/events',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:query'))
+    ]
+)
+async def list_events(
+    request: Request,
+    session_id: str
+):
+    """获取事件列表"""
+    events = SimulationService.list_events(session_id)
+    return ResponseUtil.success(data=events)
+
+
+# ==================== 新增：拓扑验证 ====================
+
+@simulationController.post(
+    '/topology/validate',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:topology:validate'))
+    ]
+)
+async def validate_topology(
+    request: Request,
+    topology_data: dict
+):
+    """验证拓扑配置完整性"""
+    result = SimulationService.validate_topology(topology_data)
+    return ResponseUtil.success(data=result)
+
+
 @simulationController.websocket('/sessions/{session_id}/ws')
 async def websocket_endpoint(
     websocket: WebSocket,
@@ -420,7 +661,23 @@ async def push_simulation_data(session_id: str):
     
     参数:
         session_id: 会话ID
+    
+    消息类型:
+        - status: 仿真状态
+        - messages: 报文数据
+        - bandwidth: 带宽数据
+        - alarms: 告警数据
+        - animation: 动画事件（traffic/error/node_active）
+        - event: 事件触发通知
     """
+    import time
+    last_push_time = time.time()
+    push_interval = 0.1  # 100ms 推送间隔（节流）
+    buffer_messages = []
+    buffer_bandwidth = []
+    buffer_alarms = []
+    buffer_animations = []
+
     try:
         while True:
             # 获取实时状态
@@ -429,40 +686,132 @@ async def push_simulation_data(session_id: str):
             if status.get('status') == 'not_found':
                 break
             
-            # 推送状态（每次都推送，数据量小）
-            await manager.broadcast(session_id, jsonable_encoder({
-                'type': 'status',
-                'data': status
-            }))
-            
-            # 推送增量报文（仅推送新数据）
+            current_time = time.time()
+            should_push = (current_time - last_push_time) >= push_interval
+
+            # 收集增量数据
             new_messages = SimulationService.get_new_messages(session_id, limit=20)
             if new_messages:
-                await manager.broadcast(session_id, jsonable_encoder({
-                    'type': 'messages',
-                    'data': new_messages
-                }))
-            
-            # 推送增量带宽数据（仅推送新数据）
+                buffer_messages.extend(new_messages)
+                # 为每条新消息生成动画事件
+                for msg in new_messages:
+                    animation = _build_animation_event(msg)
+                    if animation:
+                        buffer_animations.append(animation)
+
             new_bandwidth = SimulationService.get_new_bandwidth(session_id)
             if new_bandwidth:
-                await manager.broadcast(session_id, jsonable_encoder({
-                    'type': 'bandwidth',
-                    'data': new_bandwidth
-                }))
-            
-            # 推送增量告警（仅推送新告警）
+                buffer_bandwidth.extend(new_bandwidth)
+
             new_alarms = SimulationService.get_new_alarms(session_id)
             if new_alarms:
+                buffer_alarms.extend(new_alarms)
+                # 为告警生成错误动画
+                for alarm in new_alarms:
+                    error_animation = _build_error_animation(alarm)
+                    if error_animation:
+                        buffer_animations.append(error_animation)
+
+            # 节流：达到推送间隔时批量推送
+            if should_push:
+                # 推送状态（每次都推送，数据量小）
                 await manager.broadcast(session_id, jsonable_encoder({
-                    'type': 'alarms',
-                    'data': new_alarms
+                    'type': 'status',
+                    'data': status,
+                    'timestamp': current_time
                 }))
-            
-            # 等待1秒后继续推送（平衡实时性和性能）
-            await asyncio.sleep(1.0)
+
+                # 推送缓冲的报文
+                if buffer_messages:
+                    await manager.broadcast(session_id, jsonable_encoder({
+                        'type': 'messages',
+                        'data': buffer_messages[-50:],  # 限制单次推送数量
+                        'timestamp': current_time
+                    }))
+                    buffer_messages.clear()
+
+                # 推送缓冲的带宽数据
+                if buffer_bandwidth:
+                    await manager.broadcast(session_id, jsonable_encoder({
+                        'type': 'bandwidth',
+                        'data': buffer_bandwidth,
+                        'timestamp': current_time
+                    }))
+                    buffer_bandwidth.clear()
+
+                # 推送缓冲的告警
+                if buffer_alarms:
+                    await manager.broadcast(session_id, jsonable_encoder({
+                        'type': 'alarms',
+                        'data': buffer_alarms,
+                        'timestamp': current_time
+                    }))
+                    buffer_alarms.clear()
+
+                # 推送动画事件
+                if buffer_animations:
+                    await manager.broadcast(session_id, jsonable_encoder({
+                        'type': 'animation',
+                        'data': buffer_animations[-20:],  # 限制动画事件数量
+                        'timestamp': current_time
+                    }))
+                    buffer_animations.clear()
+
+                last_push_time = current_time
+
+            # 短间隔轮询（50ms），但批量推送（100ms）
+            await asyncio.sleep(0.05)
             
     except asyncio.CancelledError:
         pass
     except Exception as e:
         logger.error(f'推送仿真数据错误: {str(e)}')
+
+
+def _build_animation_event(message: dict) -> dict:
+    """根据报文构建动画事件"""
+    protocol_type = message.get('protocolType') or message.get('protocol_type', 'LAN')
+    sender_node = message.get('senderNodeId') or message.get('sender_node_id')
+    receiver_node = message.get('receiverNodeId') or message.get('receiver_node_id')
+
+    if not sender_node or not receiver_node:
+        return None
+
+    # 协议颜色映射
+    protocol_colors = {
+        '1553B': '#F97316',  # 橙色
+        'CAN': '#3B82F6',    # 蓝色
+        'RS422': '#22C55E',  # 绿色
+        'RS485': '#22C55E',  # 绿色
+        'LAN': '#FFFFFF',    # 白色
+    }
+
+    return {
+        'type': 'traffic',
+        'edgeId': f"{sender_node}-{receiver_node}",
+        'sourceNodeId': sender_node,
+        'targetNodeId': receiver_node,
+        'protocol': protocol_type,
+        'color': protocol_colors.get(protocol_type, '#FFFFFF'),
+        'duration': 500,  # 动画时长（毫秒）
+    }
+
+
+def _build_error_animation(alarm: dict) -> dict:
+    """根据告警构建错误动画事件"""
+    alarm_type = alarm.get('alarmType') or alarm.get('alarm_type')
+    affected_nodes = alarm.get('affectedNodes') or alarm.get('affected_nodes', [])
+    details = alarm.get('details', {})
+
+    if alarm_type in ('collision', 'bandwidth_exceed', 'congestion'):
+        edge_id = details.get('edge_id') or details.get('bus_id')
+        if edge_id or affected_nodes:
+            return {
+                'type': 'error',
+                'edgeId': edge_id,
+                'nodeIds': affected_nodes,
+                'alarmType': alarm_type,
+                'duration': 1000,
+            }
+
+    return None

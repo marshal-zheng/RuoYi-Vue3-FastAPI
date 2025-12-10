@@ -142,7 +142,17 @@ export function useAlarmManager() {
       disconnected_node: '孤立节点',
       bandwidth_overflow: '带宽溢出',
       protocol_mismatch: '协议不匹配',
-      config_error: '配置错误'
+      config_error: '配置错误',
+      collision: '报文冲突',
+      packet_loss: '丢包',
+      congestion: '总线超载',
+      bandwidth_exceed: '带宽超限',
+      value_overflow: '参数越界',
+      unconfigured_port: '端口未配置',
+      insufficient_nodes: '设备不足',
+      no_connection: '缺少连接',
+      device_failure: '设备故障',
+      disconnect: '链路断开',
     }
     return labelMap[type] || type
   }

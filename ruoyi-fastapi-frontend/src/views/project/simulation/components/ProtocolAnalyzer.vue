@@ -1,69 +1,87 @@
 <template>
   <div class="flex flex-col h-full text-slate-300">
     <!-- 工具栏 -->
-    <div class="pro-card-header flex justify-between items-center">
-      <div class="flex gap-3 items-center">
-        <el-select
-          v-model="localFilter.protocolType"
-          placeholder="协议类型"
-          clearable
-          size="small"
-          class="w-28 sim-select-dark"
-          @change="handleFilterChange"
-        >
-          <el-option label="1553B" value="1553B" />
-          <el-option label="CAN" value="CAN" />
-          <el-option label="RS422" value="RS422" />
-          <el-option label="LAN" value="LAN" />
-        </el-select>
-        <el-input
-          v-model="localFilter.keyword"
-          placeholder="搜索关键字"
-          clearable
-          size="small"
-          class="w-36 sim-input-dark"
-          @input="handleFilterChange"
+    <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
+      <el-select
+        v-model="localFilter.protocolType"
+        placeholder="协议"
+        clearable
+        size="small"
+        class="!w-20 sim-select-dark flex-shrink-0"
+        @change="handleFilterChange"
+      >
+        <el-option label="1553B" value="1553B" />
+        <el-option label="CAN" value="CAN" />
+        <el-option label="RS422" value="RS422" />
+        <el-option label="LAN" value="LAN" />
+      </el-select>
+      <el-select
+        v-model="localFilter.senderNode"
+        placeholder="源节点"
+        clearable
+        filterable
+        size="small"
+        class="!w-24 sim-select-dark flex-shrink-0"
+        @change="handleFilterChange"
+      >
+        <el-option
+          v-for="node in senderNodeOptions"
+          :key="node.value"
+          :label="node.label"
+          :value="node.value"
         />
-        <el-checkbox v-model="localFilter.errorOnly" size="small" @change="handleFilterChange">
-          仅显示错误
-        </el-checkbox>
-      </div>
-      <div class="flex gap-3 items-center">
-        <el-checkbox v-model="localAutoScroll" size="small" @change="$emit('auto-scroll-change', $event)">
-          自动滚动
-        </el-checkbox>
-        <el-dropdown @command="handleExport">
-          <el-button size="small" class="sim-btn-dark">
-            导出 <el-icon><ArrowDown /></el-icon>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="csv">导出 CSV</el-dropdown-item>
-              <el-dropdown-item command="json">导出 JSON</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-        <span class="text-xs text-slate-500">共 {{ messages.length }} 条</span>
-      </div>
+      </el-select>
+      <el-select
+        v-model="localFilter.receiverNode"
+        placeholder="目标节点"
+        clearable
+        filterable
+        size="small"
+        class="!w-24 sim-select-dark flex-shrink-0"
+        @change="handleFilterChange"
+      >
+        <el-option
+          v-for="node in receiverNodeOptions"
+          :key="node.value"
+          :label="node.label"
+          :value="node.value"
+        />
+      </el-select>
+      <el-input
+        v-model="localFilter.keyword"
+        placeholder="关键字"
+        clearable
+        size="small"
+        class="!w-24 sim-input-dark flex-shrink-0"
+        @input="handleFilterChange"
+      />
+      <el-checkbox v-model="localFilter.errorOnly" size="small" class="flex-shrink-0" @change="handleFilterChange">
+        错误
+      </el-checkbox>
+      <el-checkbox v-model="localAutoScroll" size="small" class="flex-shrink-0" @change="handleAutoScrollChange">
+        自动滚动
+      </el-checkbox>
+      <el-dropdown @command="handleExport" class="flex-shrink-0">
+        <el-button size="small" class="sim-btn-dark">
+          导出 <el-icon><ArrowDown /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="csv">导出 CSV</el-dropdown-item>
+            <el-dropdown-item command="json">导出 JSON</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <span class="text-xs text-slate-500 flex-shrink-0 ml-auto">共 {{ filteredMessages.length }} 条</span>
     </div>
 
     <!-- 报文列表 -->
-    <div class="flex-1 overflow-hidden" ref="listRef">
-      <!-- 表头 -->
-      <div class="pro-table-header flex px-4 py-2 border-b border-slate-700/50">
-        <span class="w-24">时间</span>
-        <span class="w-28">源节点</span>
-        <span class="w-28">目标节点</span>
-        <span class="w-20">协议</span>
-        <span class="w-16">大小</span>
-        <span class="flex-1">数据</span>
-      </div>
-      <!-- 数据行 -->
+    <div class="flex-1 overflow-hidden w-full" ref="listRef">
       <el-table-v2
-        v-if="messages.length > 0"
+        v-if="filteredMessages.length > 0"
         ref="tableRef"
         :columns="tableColumns"
-        :data="messages"
+        :data="filteredMessages"
         :width="tableWidth"
         :height="tableHeight"
         :row-height="36"
@@ -104,7 +122,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick } from 'vue'
+import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
 import { ArrowDown, Document, Close } from '@element-plus/icons-vue'
 import { formatTimestamp } from '../utils/timeFormatter'
 
@@ -127,55 +145,78 @@ const emit = defineEmits(['message-select', 'filter-change', 'export', 'auto-scr
 
 const tableRef = ref(null)
 const listRef = ref(null)
-const tableWidth = ref(800)
+const tableWidth = ref(0)
 const tableHeight = ref(200)
-
-const tableColumns = [
-  {
-    key: 'timestamp',
-    dataKey: 'timestamp',
-    title: '时间',
-    width: 100,
-    cellRenderer: ({ cellData }) => formatTime(cellData),
-  },
-  { key: 'senderNodeName', dataKey: 'senderNodeName', title: '源节点', width: 120 },
-  { key: 'receiverNodeName', dataKey: 'receiverNodeName', title: '目标节点', width: 120 },
-  { key: 'protocolType', dataKey: 'protocolType', title: '协议', width: 80 },
-  {
-    key: 'sizeBytes',
-    dataKey: 'sizeBytes',
-    title: '大小',
-    width: 60,
-    cellRenderer: ({ cellData }) => `${cellData}B`,
-  },
-  {
-    key: 'payloadHex',
-    dataKey: 'payloadHex',
-    title: '数据',
-    width: 200,
-    cellRenderer: ({ cellData }) => truncateHex(cellData),
-  },
-]
-
-function getRowClass({ rowData }) {
-  const classes = []
-  if (rowData.isError) classes.push('protocol-analyzer__row--error')
-  if (selectedId.value === rowData.messageId) classes.push('protocol-analyzer__row--selected')
-  return classes.join(' ')
-}
-
-function handleRowClick({ rowData }) {
-  handleSelect(rowData)
-}
+const resizeObserver = ref(null)
+const rowHeight = 36
 
 const selectedId = ref(null)
 const selectedMessage = ref(null)
 const localAutoScroll = ref(props.autoScroll)
+const safeMessages = computed(() => (Array.isArray(props.messages) ? props.messages : []))
 
 const localFilter = ref({
   protocolType: '',
+  senderNode: '',
+  receiverNode: '',
   keyword: '',
   errorOnly: false,
+})
+
+const filteredMessages = computed(() => {
+  const keyword = (localFilter.value.keyword || '').toLowerCase().trim()
+  return safeMessages.value.filter((m) => {
+    if (localFilter.value.protocolType && m.protocolType !== localFilter.value.protocolType) {
+      return false
+    }
+    if (localFilter.value.senderNode) {
+      const sender = m.senderNodeId || m.senderNodeName
+      if (sender !== localFilter.value.senderNode) return false
+    }
+    if (localFilter.value.receiverNode) {
+      const receiver = m.receiverNodeId || m.receiverNodeName
+      if (receiver !== localFilter.value.receiverNode) return false
+    }
+    if (localFilter.value.errorOnly && !m.isError) {
+      return false
+    }
+    if (keyword) {
+      const text = [
+        m.payloadHex,
+        m.message,
+        m.protocolType,
+        m.senderNodeName,
+        m.receiverNodeName,
+        m.senderNodeId,
+        m.receiverNodeId,
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      if (!text.includes(keyword)) return false
+    }
+    return true
+  })
+})
+
+const senderNodeOptions = computed(() => {
+  const entries = new Map()
+  safeMessages.value.forEach((m) => {
+    const id = m?.senderNodeId || m?.senderNodeName
+    if (!id) return
+    entries.set(id, m?.senderNodeName || m?.senderNodeId)
+  })
+  return Array.from(entries.entries()).map(([value, label]) => ({ value, label }))
+})
+
+const receiverNodeOptions = computed(() => {
+  const entries = new Map()
+  safeMessages.value.forEach((m) => {
+    const id = m?.receiverNodeId || m?.receiverNodeName
+    if (!id) return
+    entries.set(id, m?.receiverNodeName || m?.receiverNodeId)
+  })
+  return Array.from(entries.entries()).map(([value, label]) => ({ value, label }))
 })
 
 function formatTime(timestamp) {
@@ -199,6 +240,14 @@ function parseHex(hex) {
   return bytes
 }
 
+function formatLatency(message) {
+  const send = message?.sendTimestamp ?? message?.timestamp
+  const recv = message?.receiveTimestamp
+  if (!send || !recv) return '-'
+  const diffMs = Math.max(0, (recv - send) * 1000)
+  return `${diffMs.toFixed(2)} ms`
+}
+
 function handleSelect(message) {
   selectedId.value = message.messageId
   selectedMessage.value = message
@@ -213,32 +262,138 @@ function handleExport(format) {
   emit('export', format)
 }
 
-function scrollToBottom() {
-  if (tableRef.value && localAutoScroll.value) {
-    nextTick(() => {
-      tableRef.value.scrollToBottom?.()
-    })
+function handleAutoScrollChange(val) {
+  localAutoScroll.value = val
+  emit('auto-scroll-change', val)
+  if (val) {
+    restartAutoScroll()
+  } else {
+    stopAutoScroll()
   }
 }
 
-watch(
-  () => props.messages.length,
-  () => {
-    if (localAutoScroll.value) {
-      scrollToBottom()
+const baseColumns = [
+  {
+    key: 'timestamp',
+    dataKey: 'sendTimestamp',
+    title: '时间',
+    minWidth: 120,
+    cellRenderer: ({ rowData }) =>
+      formatTime(rowData?.sendTimestamp || rowData?.timestamp || rowData?.receiveTimestamp),
+  },
+  {
+    key: 'senderNode',
+    dataKey: 'senderNodeId',
+    title: '源节点',
+    minWidth: 140,
+    cellRenderer: ({ rowData }) => rowData?.senderNodeName || rowData?.senderNodeId || '-',
+  },
+  {
+    key: 'senderPort',
+    dataKey: 'senderPortId',
+    title: '源端口',
+    minWidth: 120,
+    cellRenderer: ({ rowData }) => rowData?.senderPortName || rowData?.senderPortId || '-',
+  },
+  {
+    key: 'receiverNode',
+    dataKey: 'receiverNodeId',
+    title: '目标节点',
+    minWidth: 140,
+    cellRenderer: ({ rowData }) => rowData?.receiverNodeName || rowData?.receiverNodeId || '-',
+  },
+  {
+    key: 'receiverPort',
+    dataKey: 'receiverPortId',
+    title: '目标端口',
+    minWidth: 120,
+    cellRenderer: ({ rowData }) => rowData?.receiverPortName || rowData?.receiverPortId || '-',
+  },
+  {
+    key: 'latency',
+    dataKey: 'receiveTimestamp',
+    title: '时延',
+    minWidth: 100,
+    cellRenderer: ({ rowData }) => formatLatency(rowData),
+  },
+  { key: 'protocolType', dataKey: 'protocolType', title: '协议', minWidth: 80 },
+  {
+    key: 'sizeBytes',
+    dataKey: 'sizeBytes',
+    title: '大小',
+    minWidth: 80,
+    cellRenderer: ({ rowData }) => `${rowData?.sizeBytes ?? 0}B`,
+  },
+  {
+    key: 'payloadHex',
+    dataKey: 'payloadHex',
+    title: '数据',
+    minWidth: 240,
+    cellRenderer: ({ cellData }) => truncateHex(cellData),
+  },
+]
+
+const tableColumns = computed(() => {
+  const perColWidth = Math.max(Math.floor(tableWidth.value / baseColumns.length), 120)
+  return baseColumns.map((col) => ({
+    ...col,
+    width: Math.max(perColWidth, col.minWidth || 0),
+    flexGrow: 1,
+  }))
+})
+
+function getRowClass({ rowData }) {
+  const classes = []
+  if (rowData.isError) classes.push('protocol-analyzer__row--error')
+  if (selectedId.value === rowData.messageId) classes.push('protocol-analyzer__row--selected')
+  return classes.join(' ')
+}
+
+function handleRowClick({ rowData }) {
+  handleSelect(rowData)
+}
+
+function scrollToBottom() {
+  if (!tableRef.value || !localAutoScroll.value || filteredMessages.value.length === 0) return
+
+  nextTick(() => {
+    const lastIndex = filteredMessages.value.length - 1
+    if (tableRef.value?.scrollToRow) {
+      tableRef.value.scrollToRow(lastIndex, 'end')
+      return
     }
-  }
+
+    const tableEl = tableRef.value?.$el
+    const scrollContainer =
+      tableEl?.querySelector('.el-table-v2__body') ||
+      tableEl?.querySelector('.el-scrollbar__wrap')
+
+    if (scrollContainer) {
+      scrollContainer.scrollTop = scrollContainer.scrollHeight
+    }
+  })
+}
+
+watch(
+  () => filteredMessages.value.length,
+  () => {
+    scrollToBottom()
+  },
+  { flush: 'post' }
 )
 
 watch(
   () => props.autoScroll,
   (val) => {
     localAutoScroll.value = val
+    if (val) {
+      scrollToBottom()
+    }
   }
 )
 
 function exportData(format) {
-  const data = props.messages
+  const data = filteredMessages.value
 
   if (format === 'json') {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
@@ -246,7 +401,7 @@ function exportData(format) {
   } else if (format === 'csv') {
     const headers = ['时间', '源节点', '目标节点', '协议', '大小', '数据']
     const rows = data.map((m) => [
-      formatTime(m.timestamp),
+      formatTime(m.sendTimestamp || m.timestamp || m.receiveTimestamp),
       m.senderNodeName || m.senderNodeId,
       m.receiverNodeName || m.receiverNodeId,
       m.protocolType,
@@ -269,39 +424,99 @@ function downloadBlob(blob, filename) {
 }
 
 defineExpose({ exportData })
+
+function updateTableSize() {
+  if (!listRef.value) return
+  const { clientWidth, clientHeight } = listRef.value
+  tableWidth.value = clientWidth
+  tableHeight.value = Math.max(clientHeight, 160)
+}
+
+onMounted(() => {
+  nextTick(() => {
+    updateTableSize()
+    if (listRef.value) {
+      resizeObserver.value = new ResizeObserver(updateTableSize)
+      resizeObserver.value.observe(listRef.value)
+    }
+    if (localAutoScroll.value && props.messages.length > 0) {
+      scrollToBottom()
+    }
+  })
+})
+
+onBeforeUnmount(() => {
+  resizeObserver.value?.disconnect()
+})
 </script>
 
 <style scoped>
-/* 虚拟表格行样式 - 深色主题 */
+:deep(.el-table-v2__header) {
+  background-color: rgba(30, 41, 59, 0.85);
+  color: #94a3b8;
+}
+
 :deep(.el-table-v2__row) {
   font-size: 12px;
   font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace;
   cursor: pointer;
   color: #cbd5e1;
   background-color: transparent;
-  transition: all 0.15s ease;
+  transition: background 0.15s ease;
 }
 
 :deep(.el-table-v2__row:hover) {
-  background-color: rgba(51, 65, 85, 0.4);
+  background-color: rgba(51, 65, 85, 0.35);
 }
 
 :deep(.protocol-analyzer__row--selected) {
   background-color: rgba(0, 82, 217, 0.12);
-  border-left: 2px solid #0052d9;
+  border-left: 2px solid #22d3ee;
 }
 
 :deep(.protocol-analyzer__row--error) {
-  background-color: rgba(239, 68, 68, 0.08);
+  background-color: rgba(239, 68, 68, 0.12);
   color: #fca5a5;
   border-left: 2px solid #f56c6c;
 }
 
 /* 表单控件已通过全局 simulation-dark 类统一样式 */
-/* 这里保留组件特定的微调 */
+:deep(.el-checkbox__input) {
+  border-color: #ffffff !important;
+}
+
+:deep(.el-checkbox__inner) {
+  border-color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner),
+:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
+  background-color: #ffffff !important;
+  border-color: #ffffff !important;
+}
+
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner::after),
+:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner::after) {
+  border-color: #0f172a !important;
+}
 
 :deep(.el-checkbox__label) {
-  color: #94a3b8 !important;
+  color: #ffffff !important;
   font-size: 13px;
+}
+
+.pro-card-header {
+  color: #e2e8f0;
+}
+
+:deep(.sim-input-dark .el-input__inner),
+:deep(.sim-select-dark .el-select__placeholder),
+:deep(.sim-select-dark .el-select__selected-item) {
+  color: #e2e8f0;
+}
+
+:deep(.sim-input-dark input::placeholder) {
+  color: #cbd5e1;
 }
 </style>

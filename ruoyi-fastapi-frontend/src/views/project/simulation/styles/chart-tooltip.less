@@ -1,0 +1,203 @@
+// 图表 Tooltip 全局样式
+// 用于 Teleport 到 body 的 fixed 定位 tooltip
+
+.chart-tooltip-fixed {
+  position: fixed;
+  z-index: 99999;
+  min-width: 140px;
+  max-width: 240px;
+  padding: 0;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+
+  // 时序/延迟 - 琥珀色主题
+  &.timing {
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(251, 191, 36, 0.1);
+
+    .tooltip-header {
+      background: rgba(251, 191, 36, 0.1);
+      border-bottom-color: rgba(251, 191, 36, 0.15);
+    }
+  }
+
+  // 带宽监控 - 绿色主题
+  &.bandwidth {
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
+
+    .tooltip-header {
+      background: rgba(0, 255, 136, 0.1);
+      border-bottom-color: rgba(0, 255, 136, 0.15);
+
+      .tooltip-index {
+        color: #00ff88;
+      }
+    }
+
+    .tooltip-main-value .main-value {
+      color: #00ff88;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    }
+  }
+
+  // 协议分析 - 蓝色主题
+  &.protocol {
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+
+    .tooltip-header {
+      background: rgba(59, 130, 246, 0.1);
+      border-bottom-color: rgba(59, 130, 246, 0.15);
+    }
+  }
+
+  .tooltip-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 5px 5px 0 0;
+
+    .tooltip-index {
+      font-size: 11px;
+      font-weight: 600;
+      color: #fbbf24;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tooltip-protocol {
+      font-size: 10px;
+      padding: 2px 6px;
+      background: rgba(251, 191, 36, 0.2);
+      border-radius: 3px;
+      color: #fbbf24;
+      font-weight: 500;
+    }
+
+    .tooltip-time {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.7);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .tooltip-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  .tooltip-body {
+    padding: 8px 10px;
+  }
+
+  .tooltip-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 11px;
+
+    &.main {
+      padding-bottom: 6px;
+      margin-bottom: 4px;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+
+      .tooltip-value {
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      &.bandwidth .tooltip-value {
+        color: #00ff88;
+      }
+      &.latency .tooltip-value {
+        color: #fbbf24;
+      }
+    }
+
+    .tooltip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+
+      &.bandwidth {
+        background: #00ff88;
+        box-shadow: 0 0 6px rgba(0, 255, 136, 0.5);
+      }
+      &.latency {
+        background: #fbbf24;
+        box-shadow: 0 0 6px rgba(251, 191, 36, 0.5);
+      }
+      &.send {
+        background: #10b981;
+      }
+      &.receive {
+        background: #3b82f6;
+      }
+      &.warning {
+        background: #f59e0b;
+      }
+      &.critical {
+        background: #ef4444;
+      }
+    }
+
+    .tooltip-label {
+      color: rgba(255, 255, 255, 0.5);
+      width: 32px;
+      flex-shrink: 0;
+    }
+
+    .tooltip-value {
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'JetBrains Mono', monospace;
+      flex: 1;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      &.align-right {
+        text-align: right;
+      }
+      &.highlight-green {
+        color: #00ff88;
+      }
+      &.highlight-amber {
+        color: #fbbf24;
+      }
+      &.highlight-red {
+        color: #ef4444;
+      }
+    }
+  }
+
+  // 单值大显示模式
+  .tooltip-main-value {
+    padding: 6px 10px;
+    text-align: center;
+
+    .main-value {
+      font-size: 18px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      color: #00ff88;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+
+      .unit {
+        font-size: 11px;
+        font-weight: 400;
+        opacity: 0.7;
+        margin-left: 2px;
+      }
+    }
+  }
+}

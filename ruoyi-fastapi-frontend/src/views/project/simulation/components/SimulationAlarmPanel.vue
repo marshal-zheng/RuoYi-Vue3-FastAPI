@@ -1,0 +1,52 @@
+<template>
+  <zx-floating-panel
+    title="告警信息"
+    :position="position"
+    :size="size"
+    :collapsed-size="collapsedSize"
+    :default-collapsed="defaultCollapsed"
+    class="floating-panel shadow-lg"
+    theme="dark"
+  >
+    <AlarmPanel
+      :alarms="alarms"
+      @alarm-click="$emit('alarm-click', $event)"
+      @filter-change="$emit('filter-change', $event)"
+    />
+  </zx-floating-panel>
+</template>
+
+<script setup>
+import AlarmPanel from './AlarmPanel.vue';
+
+const props = defineProps({
+  alarms: {
+    type: Array,
+    default: () => [],
+  },
+  position: {
+    type: Object,
+    default: () => ({ top: '550px', right: '28px' }),
+  },
+  size: {
+    type: Object,
+    default: () => ({ width: '320px', maxHeight: '420px' }),
+  },
+  collapsedSize: {
+    type: Object,
+    default: () => ({ width: '46px', height: '46px' }),
+  },
+  defaultCollapsed: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(['alarm-click', 'filter-change']);
+</script>
+
+<style scoped>
+.floating-panel {
+  border: 1px solid rgba(148, 163, 184, 0.15);
+}
+</style>
