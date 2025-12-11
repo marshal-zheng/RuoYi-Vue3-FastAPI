@@ -71,8 +71,23 @@ class LANModel(BaseProtocolModel):
                 if self._stopped:
                     break
 
+                payload_info = {}
+                supplier = pkt_cfg.get("payload_supplier")
+                if callable(supplier):
+                    payload_info = supplier(self.env.now) or {}
+
+                if payload_info.get("payload_hex"):
+                    pkt_cfg = dict(pkt_cfg)
+                    pkt_cfg["payload"] = payload_info.get("payload_hex")
+
                 # 构建以太网帧
-                eth_frame = self._build_ethernet_frame(device_id, pkt_cfg)
+                eth_frame = self._build_ethernet_frame(
+                    device_id,
+                    pkt_cfg,
+                    field_values=payload_info.get("field_values"),
+                    fill_strategy=payload_info.get("fill_strategy"),
+                    size_bytes=payload_info.get("size_bytes"),
+                )
 
                 # 放入交换机缓冲区
                 if len(self.switch_buffer.items) < self.switch_buffer.capacity:
@@ -108,7 +123,12 @@ class LANModel(BaseProtocolModel):
             yield self.env.timeout(self.IFG_TIME)
 
     def _build_ethernet_frame(
-        self, device_id: str, pkt_config: Dict[str, Any]
+        self,
+        device_id: str,
+        pkt_config: Dict[str, Any],
+        field_values: Optional[Dict[str, Any]] = None,
+        fill_strategy: Optional[str] = None,
+        size_bytes: Optional[int] = None,
     ) -> Dict[str, Any]:
         """构建以太网帧"""
         # MAC 地址
@@ -136,7 +156,7 @@ class LANModel(BaseProtocolModel):
         payload_len = len(bytes.fromhex(payload_hex)) if payload_hex else 0
         # 以太网头（14字节） + IP头（20字节） + TCP/UDP头（8-20字节） + 负载 + FCS（4字节）
         header_size = 14 + 20 + 8  # 简化计算
-        frame_size = max(self.MIN_FRAME_SIZE, header_size + payload_len + 4)
+        frame_size = max(self.MIN_FRAME_SIZE, header_size + (size_bytes if size_bytes is not None else payload_len) + 4)
 
         # 计算 FCS（简化为 CRC32 低4字节）
         fcs = sum(bytes.fromhex(payload_hex)) & 0xFFFFFFFF if payload_hex else 0
@@ -157,6 +177,8 @@ class LANModel(BaseProtocolModel):
             "size_bytes": frame_size,
             "fcs": fcs,
             "is_error": False,
+            "field_values": field_values or {},
+            "fill_strategy": fill_strategy or pkt_config.get("fill_strategy"),
             "create_time": datetime.now(),
         }
 
@@ -199,5 +221,10 @@ class LANModel(BaseProtocolModel):
             }
         )
         return base_status
+
+
+
+
+
 
 

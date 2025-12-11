@@ -36,9 +36,12 @@ class SimulationRunner(threading.Thread):
         self._paused = threading.Event()
         self._stopped = threading.Event()
         self._paused.set()  # 运行态
+        
+        # 缓存目标速度（用于状态查询，避免异步延迟）
+        self._target_speed = max(0.5, min(speed, 4.0))
 
         # 环境与指令
-        self.env = simpy.rt.RealtimeEnvironment(factor=max(0.5, min(speed, 4.0)), strict=False)
+        self.env = simpy.rt.RealtimeEnvironment(factor=self._target_speed, strict=False)
         self.command_queue: Queue = Queue()
 
     def run(self):
@@ -53,7 +56,14 @@ class SimulationRunner(threading.Thread):
                 time.sleep(0.05)
                 continue
 
-            target_time = self.env.now + self.tick_interval
+            # 使用更短的时间片，以便speed命令能更快生效
+            # 每次只推进一小段时间，这样可以更频繁地检查命令队列
+            step_size = min(self.tick_interval, 0.05)
+            target_time = self.env.now + step_size
+            
+            # 在运行前再次处理命令，确保speed修改能立即生效
+            self._process_commands()
+            
             self.env.run(until=target_time)
 
             now = time.time()
@@ -80,6 +90,7 @@ class SimulationRunner(threading.Thread):
     def set_speed(self, speed: float):
         """调节仿真速度（0.5x-4x）"""
         clamped = max(0.5, min(speed, 4.0))
+        self._target_speed = clamped  # 立即缓存目标速度
         self.command_queue.put(("speed", clamped))
 
     def step_once(self):
@@ -96,7 +107,7 @@ class SimulationRunner(threading.Thread):
             "session_id": self.session_id,
             "status": "stopped" if self._stopped.is_set() else ("running" if self._paused.is_set() else "paused"),
             "env_now": self.env.now,
-            "speed": getattr(self.env, "factor", 1.0),
+            "speed": self._target_speed,  # 返回缓存的目标速度，避免异步延迟
         }
 
     def _process_commands(self):
@@ -108,13 +119,14 @@ class SimulationRunner(threading.Thread):
                 break
 
             if cmd == "speed":
-                self.env.factor = max(0.5, min(float(payload), 4.0))
+                clamped_speed = max(0.5, min(float(payload), 4.0))
+                # 直接修改factor属性，SimPy的RealtimeEnvironment支持动态修改
+                self.env.factor = clamped_speed
             elif cmd == "step":
-                self._paused.clear()
+                self._paused.set()
                 self.env.run(until=self.env.now + self.tick_interval)
                 self.tick_callback(self.env.now)
                 self._paused.clear()
-                self._paused.set()
 
     def _setup_world(self):
         """

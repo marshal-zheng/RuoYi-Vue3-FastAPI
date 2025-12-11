@@ -403,6 +403,27 @@ class PayloadGenerator:
     
     def __init__(self, default_strategy: str = 'random'):
         self.default_strategy = default_strategy
+
+    @staticmethod
+    def _target_frame_length(message_config: Dict[str, Any], generated_len: int) -> int:
+        """
+        计算目标帧长，优先使用配置中的 frameLength，并确保不小于已生成长度
+        """
+        header = message_config.get('header', {}) or {}
+        cfg_len = (
+            header.get('frameLength')
+            or header.get('frame_length')
+            or message_config.get('frameLength')
+            or message_config.get('frame_length')
+        )
+        try:
+            cfg_len_int = int(cfg_len) if cfg_len is not None else None
+        except (TypeError, ValueError):
+            cfg_len_int = None
+
+        target_len = max(generated_len, cfg_len_int) if cfg_len_int else generated_len
+        # 最低保证为1字节，避免空帧
+        return max(1, int(target_len))
     
     def generate_payload(self, message_config: Dict[str, Any], context: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -419,7 +440,7 @@ class PayloadGenerator:
         
         if not fields:
             # 没有字段定义，返回默认随机数据
-            size = message_config.get('header', {}).get('frameLength', 64)
+            size = self._target_frame_length(message_config, message_config.get('header', {}).get('frameLength', 64) or 64)
             payload = bytes([random.randint(0, 255) for _ in range(size)])
             return {
                 'payload': payload,
@@ -442,6 +463,14 @@ class PayloadGenerator:
             # 记录字段值（用于调试和显示）
             field_name = field.get('fieldName', 'unknown')
             field_values[field_name] = field_data.hex()
+
+        # 统一帧长：补齐或截断到目标帧长，避免报文过短或溢出
+        target_len = self._target_frame_length(message_config, len(payload))
+        if len(payload) < target_len:
+            padding = bytes(target_len - len(payload))
+            payload.extend(padding)
+        elif len(payload) > target_len:
+            payload = payload[:target_len]
         
         return {
             'payload': bytes(payload),

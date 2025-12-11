@@ -1,0 +1,1794 @@
+{
+  "exportVersion": "1.0.0",
+  "exportTime": "2025-12-10T10:00:00Z",
+  "project": {
+    "projectName": "冲突拥塞告警验证工程",
+    "projectCode": "TEST-ALARM-001",
+    "projectDesc": "用于验证运行期冲突、丢包、拥塞检测功能",
+    "createBy": "admin",
+    "createTime": "2025-12-10T10:00:00Z"
+  },
+  "versions": [
+    {
+      "versionNumber": "v1.0.0",
+      "versionName": "冲突拥塞测试版本",
+      "description": "包含CAN冲突、RS485主从冲突、LAN拥塞场景",
+      "status": "1",
+      "isLocked": "0",
+      "topology": {
+        "edges": [
+          {
+            "id": "edge-can-master-slave1",
+            "sourceId": "node-can-master",
+            "sourcePortId": "can-port-1",
+            "targetId": "node-can-slave1",
+            "targetPortId": "can-port-1"
+          },
+          {
+            "id": "edge-can-master-slave2",
+            "sourceId": "node-can-master",
+            "sourcePortId": "can-port-1",
+            "targetId": "node-can-slave2",
+            "targetPortId": "can-port-1"
+          },
+          {
+            "id": "edge-rs485-master-slave1",
+            "sourceId": "node-rs485-master",
+            "sourcePortId": "rs485-port-1",
+            "targetId": "node-rs485-slave1",
+            "targetPortId": "rs485-port-1"
+          },
+          {
+            "id": "edge-lan-server-client",
+            "sourceId": "node-lan-server",
+            "sourcePortId": "lan-port-1",
+            "targetId": "node-lan-client",
+            "targetPortId": "lan-port-1"
+          }
+        ],
+        "graph": {
+          "cells": [
+            {
+              "id": "edge-can-master-slave1",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "shape": "dag-edge",
+              "source": {
+                "cell": "node-can-master",
+                "port": "can-port-1"
+              },
+              "target": {
+                "cell": "node-can-slave1",
+                "port": "can-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-can-master-slave2",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "shape": "dag-edge",
+              "source": {
+                "cell": "node-can-master",
+                "port": "can-port-1"
+              },
+              "target": {
+                "cell": "node-can-slave2",
+                "port": "can-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-rs485-master-slave1",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "shape": "dag-edge",
+              "source": {
+                "cell": "node-rs485-master",
+                "port": "rs485-port-1"
+              },
+              "target": {
+                "cell": "node-rs485-slave1",
+                "port": "rs485-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-lan-server-client",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "shape": "dag-edge",
+              "source": {
+                "cell": "node-lan-server",
+                "port": "lan-port-1"
+              },
+              "target": {
+                "cell": "node-lan-client",
+                "port": "lan-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "node-can-master",
+              "data": {
+                "id": "devnode-101",
+                "name": "CAN主控器",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "CAN主控器",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "color": "#10b981",
+                    "group": "right",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "busType": "CAN",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1001,
+                    "protocolType": "",
+                    "interfaceName": "CAN",
+                    "interfaceType": "CAN",
+                    "messageConfig": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "increment",
+                      "fields": [
+                        {
+                          "fieldName": "counter",
+                          "dataType": "UINT16",
+                          "byteCount": 2,
+                          "fillStrategy": "increment",
+                          "startValue": 1,
+                          "step": 1,
+                          "valueRange": "1-2000"
+                        }
+                      ]
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 101,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-101",
+                    "label": "CAN主控器"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "CAN主控器",
+                  "value": "设备",
+                  "deviceId": 101
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "args": {
+                      "x": 104,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "group": "right",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 1,
+              "position": {
+                "x": 100,
+                "y": 100
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-can-slave1",
+              "data": {
+                "id": "devnode-102",
+                "name": "CAN从机1",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "CAN从机1",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "color": "#10b981",
+                    "group": "left",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "busType": "CAN",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1002,
+                    "protocolType": "",
+                    "interfaceName": "CAN",
+                    "interfaceType": "CAN",
+                    "messageConfig": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 102,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-102",
+                    "label": "CAN从机1"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "CAN从机1",
+                  "value": "设备",
+                  "deviceId": 102
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "args": {
+                      "x": 16,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "group": "left",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 2,
+              "position": {
+                "x": 400,
+                "y": 80
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-can-slave2",
+              "data": {
+                "id": "devnode-103",
+                "name": "CAN从机2",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "CAN从机2",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "color": "#10b981",
+                    "group": "left",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "busType": "CAN",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1003,
+                    "protocolType": "",
+                    "interfaceName": "CAN",
+                    "interfaceType": "CAN",
+                    "messageConfig": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 103,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-103",
+                    "label": "CAN从机2"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "CAN从机2",
+                  "value": "设备",
+                  "deviceId": 103
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "args": {
+                      "x": 16,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "group": "left",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 3,
+              "position": {
+                "x": 400,
+                "y": 200
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-rs485-master",
+              "data": {
+                "id": "devnode-104",
+                "name": "RS485主机",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "RS485主机",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "rs485-port-1",
+                    "color": "#10b981",
+                    "group": "right",
+                    "params": {
+                      "baudRate": 9600,
+                      "dataBits": 8,
+                      "stopBits": 1,
+                      "parity": "none",
+                      "frequency": 80
+                    },
+                    "busType": "RS485",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1004,
+                    "protocolType": "",
+                    "interfaceName": "RS485",
+                    "interfaceType": "RS485",
+                    "messageConfig": {
+                      "header": {
+                        "header": "AA55",
+                        "frameLength": 128
+                      },
+                      "fillStrategy": "increment",
+                      "fields": [
+                        {
+                          "fieldName": "cmd",
+                          "dataType": "UINT8",
+                          "byteCount": 1,
+                          "fillStrategy": "cycle",
+                          "presetValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5
+                          ]
+                        }
+                      ]
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 104,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-104",
+                    "label": "RS485主机"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "RS485主机",
+                  "value": "设备",
+                  "deviceId": 104
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "rs485-port-1",
+                    "args": {
+                      "x": 104,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "RS485"
+                      }
+                    },
+                    "group": "right",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 4,
+              "position": {
+                "x": 100,
+                "y": 350
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-rs485-slave1",
+              "data": {
+                "id": "devnode-105",
+                "name": "RS485从机1",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "RS485从机1",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "rs485-port-1",
+                    "color": "#10b981",
+                    "group": "left",
+                    "params": {
+                      "baudRate": 9600,
+                      "dataBits": 8,
+                      "stopBits": 1,
+                      "parity": "none",
+                      "frequency": 80
+                    },
+                    "busType": "RS485",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1005,
+                    "protocolType": "",
+                    "interfaceName": "RS485",
+                    "interfaceType": "RS485",
+                    "messageConfig": {
+                      "header": {
+                        "header": "AA55",
+                        "frameLength": 64
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 105,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-105",
+                    "label": "RS485从机1"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "RS485从机1",
+                  "value": "设备",
+                  "deviceId": 105
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "rs485-port-1",
+                    "args": {
+                      "x": 16,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "RS485"
+                      }
+                    },
+                    "group": "left",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 5,
+              "position": {
+                "x": 400,
+                "y": 350
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-lan-server",
+              "data": {
+                "id": "devnode-106",
+                "name": "LAN服务器",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "LAN服务器",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "lan-port-1",
+                    "color": "#10b981",
+                    "group": "right",
+                    "params": {
+                      "ipAddress": "192.168.1.10",
+                      "port": 8080,
+                      "protocol": "UDP",
+                      "bandwidth": 10,
+                      "maxBandwidthMbps": 10,
+                      "vizBandwidthMbps": 0.5,
+                      "frequency": 20
+                    },
+                    "busType": "LAN",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1006,
+                    "protocolType": "",
+                    "interfaceName": "LAN",
+                    "interfaceType": "LAN",
+                    "messageConfig": {
+                      "header": {
+                        "frameLength": 1024
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 106,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-106",
+                    "label": "LAN服务器"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "LAN服务器",
+                  "value": "设备",
+                  "deviceId": 106
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "lan-port-1",
+                    "args": {
+                      "x": 104,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "LAN"
+                      }
+                    },
+                    "group": "right",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 6,
+              "position": {
+                "x": 100,
+                "y": 500
+              },
+              "draggable": true
+            },
+            {
+              "id": "node-lan-client",
+              "data": {
+                "id": "devnode-107",
+                "name": "LAN客户端",
+                "type": "leaf-node",
+                "unit": "",
+                "label": "LAN客户端",
+                "level": 1,
+                "notes": "",
+                "ports": [
+                  {
+                    "id": "lan-port-1",
+                    "color": "#10b981",
+                    "group": "left",
+                    "params": {
+                      "ipAddress": "192.168.1.20",
+                      "port": 8081,
+                      "protocol": "UDP",
+                      "bandwidth": 10,
+                      "frequency": 20
+                    },
+                    "busType": "LAN",
+                    "dataRate": "",
+                    "direction": "bidirectional",
+                    "description": "",
+                    "interfaceId": 1007,
+                    "protocolType": "",
+                    "interfaceName": "LAN",
+                    "interfaceType": "LAN",
+                    "messageConfig": {
+                      "header": {
+                        "frameLength": 1024
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    },
+                    "protocolConfig": {}
+                  }
+                ],
+                "status": "default",
+                "deviceId": 107,
+                "nodeType": "device-port-node",
+                "priority": "",
+                "collapsed": false,
+                "otherData": {},
+                "customType": "",
+                "properties": {
+                  "unit": "",
+                  "level": 1,
+                  "notes": "",
+                  "weight": 50,
+                  "content": {
+                    "id": "content-107",
+                    "label": "LAN客户端"
+                  },
+                  "priority": "",
+                  "otherData": {},
+                  "customType": "",
+                  "defaultValue": "",
+                  "parentNodeId": null,
+                  "customProperties": ""
+                },
+                "description": "设备",
+                "hasChildren": false,
+                "defaultValue": "",
+                "originalData": {
+                  "name": "LAN客户端",
+                  "value": "设备",
+                  "deviceId": 107
+                },
+                "layoutDirection": "horizontal",
+                "customProperties": ""
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "view": "vue-shape-view",
+              "ports": {
+                "items": [
+                  {
+                    "id": "lan-port-1",
+                    "args": {
+                      "x": 16,
+                      "y": 40
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "LAN"
+                      }
+                    },
+                    "group": "left",
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "shape": "device-port-node",
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "zIndex": 7,
+              "position": {
+                "x": 400,
+                "y": 500
+              },
+              "draggable": true
+            }
+          ]
+        },
+        "nodes": [
+          {
+            "id": "node-can-master",
+            "data": {
+              "id": "devnode-101",
+              "name": "CAN主控器",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "CAN主控器",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "color": "#10b981",
+                  "group": "right",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "busType": "CAN",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1001,
+                  "protocolType": "",
+                  "interfaceName": "CAN",
+                  "interfaceType": "CAN",
+                  "messageConfig": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "increment",
+                    "fields": [
+                      {
+                        "fieldName": "counter",
+                        "dataType": "UINT16",
+                        "byteCount": 2,
+                        "fillStrategy": "increment",
+                        "startValue": 1,
+                        "step": 1,
+                        "valueRange": "1-2000"
+                      }
+                    ]
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 101,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-101",
+                  "label": "CAN主控器"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "CAN主控器",
+                "value": "设备",
+                "deviceId": 101
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-can-slave1",
+            "data": {
+              "id": "devnode-102",
+              "name": "CAN从机1",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "CAN从机1",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "color": "#10b981",
+                  "group": "left",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "busType": "CAN",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1002,
+                  "protocolType": "",
+                  "interfaceName": "CAN",
+                  "interfaceType": "CAN",
+                  "messageConfig": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 102,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-102",
+                  "label": "CAN从机1"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "CAN从机1",
+                "value": "设备",
+                "deviceId": 102
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-can-slave2",
+            "data": {
+              "id": "devnode-103",
+              "name": "CAN从机2",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "CAN从机2",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "color": "#10b981",
+                  "group": "left",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "busType": "CAN",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1003,
+                  "protocolType": "",
+                  "interfaceName": "CAN",
+                  "interfaceType": "CAN",
+                  "messageConfig": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 103,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-103",
+                  "label": "CAN从机2"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "CAN从机2",
+                "value": "设备",
+                "deviceId": 103
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-rs485-master",
+            "data": {
+              "id": "devnode-104",
+              "name": "RS485主机",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "RS485主机",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "rs485-port-1",
+                  "color": "#10b981",
+                  "group": "right",
+                  "params": {
+                    "baudRate": 9600,
+                    "dataBits": 8,
+                    "stopBits": 1,
+                    "parity": "none",
+                    "frequency": 80
+                  },
+                  "busType": "RS485",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1004,
+                  "protocolType": "",
+                  "interfaceName": "RS485",
+                  "interfaceType": "RS485",
+                  "messageConfig": {
+                    "header": {
+                      "header": "AA55",
+                      "frameLength": 128
+                    },
+                    "fillStrategy": "increment",
+                    "fields": [
+                      {
+                        "fieldName": "cmd",
+                        "dataType": "UINT8",
+                        "byteCount": 1,
+                        "fillStrategy": "cycle",
+                        "presetValues": [
+                          1,
+                          2,
+                          3,
+                          4,
+                          5
+                        ]
+                      }
+                    ]
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 104,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-104",
+                  "label": "RS485主机"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "RS485主机",
+                "value": "设备",
+                "deviceId": 104
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-rs485-slave1",
+            "data": {
+              "id": "devnode-105",
+              "name": "RS485从机1",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "RS485从机1",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "rs485-port-1",
+                  "color": "#10b981",
+                  "group": "left",
+                  "params": {
+                    "baudRate": 9600,
+                    "dataBits": 8,
+                    "stopBits": 1,
+                    "parity": "none",
+                    "frequency": 80
+                  },
+                  "busType": "RS485",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1005,
+                  "protocolType": "",
+                  "interfaceName": "RS485",
+                  "interfaceType": "RS485",
+                  "messageConfig": {
+                    "header": {
+                      "header": "AA55",
+                      "frameLength": 64
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 105,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-105",
+                  "label": "RS485从机1"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "RS485从机1",
+                "value": "设备",
+                "deviceId": 105
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-lan-server",
+            "data": {
+              "id": "devnode-106",
+              "name": "LAN服务器",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "LAN服务器",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "lan-port-1",
+                  "color": "#10b981",
+                  "group": "right",
+                  "params": {
+                    "ipAddress": "192.168.1.10",
+                    "port": 8080,
+                    "protocol": "UDP",
+                    "bandwidth": 10,
+                    "maxBandwidthMbps": 10,
+                    "vizBandwidthMbps": 0.5,
+                    "frequency": 20
+                  },
+                  "busType": "LAN",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1006,
+                  "protocolType": "",
+                  "interfaceName": "LAN",
+                  "interfaceType": "LAN",
+                  "messageConfig": {
+                    "header": {
+                      "frameLength": 1024
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 106,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-106",
+                  "label": "LAN服务器"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "LAN服务器",
+                "value": "设备",
+                "deviceId": 106
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          },
+          {
+            "id": "node-lan-client",
+            "data": {
+              "id": "devnode-107",
+              "name": "LAN客户端",
+              "type": "leaf-node",
+              "unit": "",
+              "label": "LAN客户端",
+              "level": 1,
+              "notes": "",
+              "ports": [
+                {
+                  "id": "lan-port-1",
+                  "color": "#10b981",
+                  "group": "left",
+                  "params": {
+                    "ipAddress": "192.168.1.20",
+                    "port": 8081,
+                    "protocol": "UDP",
+                    "bandwidth": 10,
+                    "frequency": 20
+                  },
+                  "busType": "LAN",
+                  "dataRate": "",
+                  "direction": "bidirectional",
+                  "description": "",
+                  "interfaceId": 1007,
+                  "protocolType": "",
+                  "interfaceName": "LAN",
+                  "interfaceType": "LAN",
+                  "messageConfig": {
+                    "header": {
+                      "frameLength": 1024
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  },
+                  "protocolConfig": {}
+                }
+              ],
+              "status": "default",
+              "deviceId": 107,
+              "nodeType": "device-port-node",
+              "priority": "",
+              "collapsed": false,
+              "otherData": {},
+              "customType": "",
+              "properties": {
+                "unit": "",
+                "level": 1,
+                "notes": "",
+                "weight": 50,
+                "content": {
+                  "id": "content-107",
+                  "label": "LAN客户端"
+                },
+                "priority": "",
+                "otherData": {},
+                "customType": "",
+                "defaultValue": "",
+                "parentNodeId": null,
+                "customProperties": ""
+              },
+              "description": "设备",
+              "hasChildren": false,
+              "defaultValue": "",
+              "originalData": {
+                "name": "LAN客户端",
+                "value": "设备",
+                "deviceId": 107
+              },
+              "layoutDirection": "horizontal",
+              "customProperties": ""
+            }
+          }
+        ],
+        "savedAt": "2025-12-10T10:00:00.000Z",
+        "version": "3.9.0"
+      }
+    }
+  }
+],
+"devices": [
+  {
+    "deviceId": 101,
+    "deviceName": "CAN主控器",
+    "deviceType": "controller",
+    "categoryName": "控制器",
+    "manufacturer": "示例厂商",
+    "model": "CAN-MASTER-V1",
+    "version": "1.0",
+    "busType": "CAN",
+    "remark": "CAN总线主控器，用于测试仲裁冲突",
+    "interfaces": [
+      {
+        "interfaceName": "CAN-1",
+        "interfaceType": "CAN",
+        "position": "right",
+        "description": "CAN总线接口",
+        "params": {
+          "baudRate": 500000,
+          "canMode": "normal",
+          "frequency": 50
+        },
+        "messageConfig": {
+          "header": {
+            "canId": 288,
+            "dlc": 8,
+            "frameLength": 16,
+            "extended": false
+          },
+          "fillStrategy": "increment",
+          "fields": [
+            {
+              "fieldName": "counter",
+              "dataType": "UINT16",
+              "byteCount": 2,
+              "fillStrategy": "increment",
+              "startValue": 1,
+              "step": 1,
+              "valueRange": "1-2000"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 102,
+    "deviceName": "CAN从机1",
+    "deviceType": "sensor",
+    "categoryName": "传感器",
+    "manufacturer": "示例厂商",
+    "model": "CAN-SLAVE-V1",
+    "version": "1.0",
+    "busType": "CAN",
+    "remark": "CAN从机1，与主控器使用相同CAN ID会产生冲突",
+    "interfaces": [
+      {
+        "interfaceName": "CAN-1",
+        "interfaceType": "CAN",
+        "position": "left",
+        "description": "CAN总线接口",
+        "params": {
+          "baudRate": 500000,
+          "canMode": "normal",
+          "frequency": 50
+        },
+        "messageConfig": {
+          "header": {
+            "canId": 288,
+            "dlc": 8,
+            "frameLength": 16,
+            "extended": false
+          },
+          "fillStrategy": "random",
+          "fields": []
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 103,
+    "deviceName": "CAN从机2",
+    "deviceType": "sensor",
+    "categoryName": "传感器",
+    "manufacturer": "示例厂商",
+    "model": "CAN-SLAVE-V2",
+    "version": "1.0",
+    "busType": "CAN",
+    "remark": "CAN从机2，同样使用ID 288会产生三方冲突",
+    "interfaces": [
+      {
+        "interfaceName": "CAN-1",
+        "interfaceType": "CAN",
+        "position": "left",
+        "description": "CAN总线接口",
+        "params": {
+          "baudRate": 500000,
+          "canMode": "normal",
+          "frequency": 50
+        },
+        "messageConfig": {
+          "header": {
+            "canId": 288,
+            "dlc": 8,
+            "frameLength": 16,
+            "extended": false
+          },
+          "fillStrategy": "random",
+          "fields": []
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 104,
+    "deviceName": "RS485主机",
+    "deviceType": "controller",
+    "categoryName": "控制器",
+    "manufacturer": "示例厂商",
+    "model": "RS485-MASTER-V1",
+    "version": "1.0",
+    "busType": "RS485",
+    "remark": "RS485主机，高频发送可能与从机冲突",
+    "interfaces": [
+      {
+        "interfaceName": "RS485-1",
+        "interfaceType": "RS485",
+        "position": "right",
+        "description": "RS485总线接口",
+        "params": {
+          "baudRate": 9600,
+          "dataBits": 8,
+          "stopBits": 1,
+          "parity": "none",
+          "frequency": 80
+        },
+        "messageConfig": {
+          "header": {
+            "header": "AA55",
+            "frameLength": 128
+          },
+          "fillStrategy": "increment",
+          "fields": [
+            {
+              "fieldName": "cmd",
+              "dataType": "UINT8",
+              "byteCount": 1,
+              "fillStrategy": "cycle",
+              "presetValues": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 105,
+    "deviceName": "RS485从机1",
+    "deviceType": "actuator",
+    "categoryName": "执行器",
+    "manufacturer": "示例厂商",
+    "model": "RS485-SLAVE-V1",
+    "version": "1.0",
+    "busType": "RS485",
+    "remark": "RS485从机，同频率发送会产生总线冲突",
+    "interfaces": [
+      {
+        "interfaceName": "RS485-1",
+        "interfaceType": "RS485",
+        "position": "left",
+        "description": "RS485总线接口",
+        "params": {
+          "baudRate": 9600,
+          "dataBits": 8,
+          "stopBits": 1,
+          "parity": "none",
+          "frequency": 80
+        },
+        "messageConfig": {
+          "header": {
+            "header": "AA55",
+            "frameLength": 64
+          },
+          "fillStrategy": "random",
+          "fields": []
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 106,
+    "deviceName": "LAN服务器",
+    "deviceType": "server",
+    "categoryName": "服务器",
+    "manufacturer": "示例厂商",
+    "model": "LAN-SERVER-V1",
+    "version": "1.0",
+    "busType": "LAN",
+    "remark": "LAN服务器，低带宽配置(0.5Mbps)会产生拥塞",
+    "interfaces": [
+      {
+        "interfaceName": "LAN-1",
+        "interfaceType": "LAN",
+        "position": "right",
+        "description": "以太网接口",
+        "params": {
+          "ipAddress": "192.168.1.10",
+          "port": 8080,
+          "protocol": "UDP",
+          "bandwidth": 10,
+          "maxBandwidthMbps": 10,
+          "vizBandwidthMbps": 0.5,
+          "frequency": 20
+        },
+        "messageConfig": {
+          "header": {
+            "frameLength": 1024
+          },
+          "fillStrategy": "random",
+          "fields": []
+        }
+      }
+    ]
+  },
+  {
+    "deviceId": 107,
+    "deviceName": "LAN客户端",
+    "deviceType": "client",
+    "categoryName": "客户端",
+    "manufacturer": "示例厂商",
+    "model": "LAN-CLIENT-V1",
+    "version": "1.0",
+    "busType": "LAN",
+    "remark": "LAN客户端，接收大量数据",
+    "interfaces": [
+      {
+        "interfaceName": "LAN-1",
+        "interfaceType": "LAN",
+        "position": "left",
+        "description": "以太网接口",
+        "params": {
+          "ipAddress": "192.168.1.20",
+          "port": 8081,
+          "protocol": "UDP",
+          "bandwidth": 10,
+          "frequency": 20
+        },
+        "messageConfig": {
+          "header": {
+            "frameLength": 1024
+          },
+          "fillStrategy": "random",
+          "fields": []
+        }
+      }
+    ]
+  }
+]
+}

@@ -81,7 +81,7 @@ export function validateProtocolColors(protocolTypes) {
  * @param {Ref} dagRef - DAG 组件引用
  * @returns {Object} 动画控制方法
  */
-export function useTopologyAnimation(dagRef) {
+export function useTopologyAnimation(dagRef, speedSource = null) {
   // 动画状态
   const isAnimating = ref(false)
   const activeNodes = ref(new Set())
@@ -92,10 +92,24 @@ export function useTopologyAnimation(dagRef) {
   const animationTimers = ref(new Map())
 
   // 节流配置
-  const THROTTLE_INTERVAL = 100 // 100ms 节流
+  const THROTTLE_INTERVAL = 100 // 基准 100ms 节流
 
   // 上次动画触发时间
   const lastAnimationTime = ref(new Map())
+
+  /**
+   * 当前速度倍率
+   */
+  function getSpeedFactor() {
+    const val =
+      typeof speedSource === 'function'
+        ? speedSource()
+        : speedSource && typeof speedSource === 'object' && 'value' in speedSource
+          ? speedSource.value
+          : speedSource
+    const num = Number(val) || 1
+    return Math.max(0.5, Math.min(num, 4))
+  }
 
   /**
    * 获取图实例
@@ -109,9 +123,11 @@ export function useTopologyAnimation(dagRef) {
    */
   function shouldThrottle(key) {
     const now = Date.now()
+    const factor = getSpeedFactor()
+    const interval = Math.max(20, THROTTLE_INTERVAL / factor)
     const lastTime = lastAnimationTime.value.get(key) || 0
     
-    if (now - lastTime < THROTTLE_INTERVAL) {
+    if (now - lastTime < interval) {
       return true
     }
 
@@ -162,10 +178,17 @@ export function useTopologyAnimation(dagRef) {
     })
 
     nodes.forEach(node => {
-      // 移除呼吸灯效果
-      const nodeEl = document.querySelector(`[data-cell-id="${node.id}"]`)
-      if (nodeEl) {
-        nodeEl.classList.remove('node-breathing', 'node-error')
+      // 通过 findViewByCell 获取节点视图
+      const nodeView = graph.findViewByCell(node)
+      if (nodeView && nodeView.container) {
+        nodeView.container.classList.remove('node-breathing', 'node-error')
+        // 重置 SVG 元素样式
+        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path')
+        if (svgEl) {
+          svgEl.style.stroke = ''
+          svgEl.style.strokeWidth = ''
+          svgEl.style.filter = ''
+        }
       }
     })
   }
@@ -207,6 +230,9 @@ export function useTopologyAnimation(dagRef) {
     }
 
     // 设置定时器恢复样式
+    const factor = getSpeedFactor()
+    const adjustedDuration = Math.max(200, duration / factor)
+
     const timerId = setTimeout(() => {
       edge.attr('line/stroke', '#b1b1b7')
       edge.attr('line/strokeWidth', 2)
@@ -221,7 +247,7 @@ export function useTopologyAnimation(dagRef) {
       }
 
       animationTimers.value.delete(edgeId)
-    }, duration)
+    }, adjustedDuration)
 
     animationTimers.value.set(edgeId, timerId)
   }
@@ -257,6 +283,9 @@ export function useTopologyAnimation(dagRef) {
     }
 
     // 设置定时器恢复样式
+    const factor = getSpeedFactor()
+    const adjustedDuration = Math.max(300, duration / factor)
+
     const timerId = setTimeout(() => {
       edge.attr('line/stroke', '#b1b1b7')
       edge.attr('line/strokeWidth', 2)
@@ -270,7 +299,7 @@ export function useTopologyAnimation(dagRef) {
       }
 
       animationTimers.value.delete(`error-${edgeId}`)
-    }, duration)
+    }, adjustedDuration)
 
     animationTimers.value.set(`error-${edgeId}`, timerId)
   }
@@ -279,9 +308,11 @@ export function useTopologyAnimation(dagRef) {
    * 设置节点活跃状态（呼吸灯效果）
    * @param {string} nodeId - 节点ID
    * @param {boolean} active - 是否活跃
+   * @param {boolean} force - 是否强制设置（忽略 isAnimating 状态）
    */
-  function setNodeActive(nodeId, active = true) {
-    if (!isAnimating.value && active) return
+  function setNodeActive(nodeId, active = true, force = false) {
+    // 如果不是强制模式且动画未启动，则跳过
+    if (!force && !isAnimating.value && active) return
 
     const graph = getGraph()
     if (!graph) return
@@ -289,15 +320,16 @@ export function useTopologyAnimation(dagRef) {
     const node = graph.getCellById(nodeId)
     if (!node) return
 
-    const nodeEl = document.querySelector(`[data-cell-id="${nodeId}"]`)
-    if (!nodeEl) return
+    // 通过 findViewByCell 获取节点视图
+    const nodeView = graph.findViewByCell(node)
+    if (!nodeView || !nodeView.container) return
 
     if (active) {
       activeNodes.value.add(nodeId)
-      nodeEl.classList.add('node-breathing')
+      nodeView.container.classList.add('node-breathing')
     } else {
       activeNodes.value.delete(nodeId)
-      nodeEl.classList.remove('node-breathing')
+      nodeView.container.classList.remove('node-breathing')
     }
   }
 
@@ -310,13 +342,68 @@ export function useTopologyAnimation(dagRef) {
     const graph = getGraph()
     if (!graph) return
 
-    const nodeEl = document.querySelector(`[data-cell-id="${nodeId}"]`)
-    if (!nodeEl) return
+    const node = graph.getCellById(nodeId)
+    if (!node) return
 
+    // 方式1: 通过 findViewByCell 获取节点视图的容器元素并添加 CSS 类
+    const nodeView = graph.findViewByCell(node)
+    if (nodeView && nodeView.container) {
+      if (hasError) {
+        nodeView.container.classList.add('node-error')
+        // 同时给 SVG 元素添加红色边框效果
+        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path')
+        if (svgEl) {
+          svgEl.style.stroke = '#ef4444'
+          svgEl.style.strokeWidth = '3px'
+          svgEl.style.filter = 'drop-shadow(0 0 10px rgba(239, 68, 68, 0.9))'
+        }
+      } else {
+        nodeView.container.classList.remove('node-error')
+        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path')
+        if (svgEl) {
+          svgEl.style.stroke = ''
+          svgEl.style.strokeWidth = ''
+          svgEl.style.filter = ''
+        }
+      }
+    }
+
+    // 方式2: 通过 X6 的 attr API 设置样式（兼容不同节点类型）
+    // 尝试多个可能的形状属性名
+    const shapeAttrs = ['body', 'rect', 'circle', 'ellipse', 'path', 'polygon']
+    
     if (hasError) {
-      nodeEl.classList.add('node-error')
+      // 保存原始样式
+      const originalStyles = {}
+      shapeAttrs.forEach(shape => {
+        const stroke = node.attr(`${shape}/stroke`)
+        const strokeWidth = node.attr(`${shape}/strokeWidth`)
+        if (stroke !== undefined) {
+          originalStyles[shape] = { stroke, strokeWidth }
+        }
+      })
+      node.setData({ _originalStyles: originalStyles }, { silent: true })
+      
+      // 设置错误样式 - 尝试所有可能的形状
+      shapeAttrs.forEach(shape => {
+        node.attr(`${shape}/stroke`, '#ef4444', { silent: true })
+        node.attr(`${shape}/strokeWidth`, 3, { silent: true })
+      })
     } else {
-      nodeEl.classList.remove('node-error')
+      // 恢复原始样式
+      const data = node.getData() || {}
+      const originalStyles = data._originalStyles || {}
+      
+      shapeAttrs.forEach(shape => {
+        const original = originalStyles[shape]
+        if (original) {
+          node.attr(`${shape}/stroke`, original.stroke || '#e2e8f0', { silent: true })
+          node.attr(`${shape}/strokeWidth`, original.strokeWidth || 1, { silent: true })
+        } else {
+          node.attr(`${shape}/stroke`, '#e2e8f0', { silent: true })
+          node.attr(`${shape}/strokeWidth`, 1, { silent: true })
+        }
+      })
     }
   }
 

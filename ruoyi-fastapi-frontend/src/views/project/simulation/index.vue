@@ -1,117 +1,177 @@
 <template>
-  <div class="simulation-dark simulation-shell flex flex-col h-full bg-slate-950">
-    <!-- 顶部控制栏 -->
-    <header class="shrink-0 z-50">
-      <SimulationHeader
-        :status="simulationState.status"
-        :elapsed-time="simulationState.elapsedTime"
-        :speed="simulationState.speed"
-        :project-name="projectName"
-        @start="handleStart"
-        @pause="handlePause"
-        @resume="handleResume"
-        @stop="handleStop"
-        @step="handleStep"
-        @speed-change="handleSpeedChange"
-        @back="handleBack"
-      />
-    </header>
+  <div class="simulation-dark simulation-shell flex h-full bg-slate-950" :class="{ 'fault-injection-mode': isFaultInjectionMode }">
+    <!-- 故障注入模式提示条 -->
+    <Transition name="mode-banner">
+      <div v-if="isFaultInjectionMode" class="fault-mode-banner">
+        <div class="banner-content">
+          <div class="banner-icon">
+            <el-icon class="pulse-icon"><Warning /></el-icon>
+          </div>
+          <div class="banner-text">
+            <span class="banner-title">故障注入</span>
+            <span class="banner-hint">
+              <template v-if="!selectedEdge">点击拓扑图中的 <strong>链路</strong> 选择目标</template>
+              <template v-else>已锁定 <strong class="text-cyan-400">{{ getSelectedEdgeId() }}</strong></template>
+            </span>
+          </div>
+          <div class="banner-actions">
+            <el-button v-if="selectedEdge" class="cancel-select-btn" size="small" @click="clearSelectedEdge">
+              取消
+            </el-button>
+            <el-button class="exit-mode-btn" size="small" @click="exitFaultMode">
+              关闭
+            </el-button>
+          </div>
+        </div>
+        <div class="banner-progress"></div>
+      </div>
+    </Transition>
 
-    <!-- 主内容区域 -->
-    <main class="flex flex-1 min-h-0 p-3 relative">
-      <!-- 拓扑画布 -->
-      <section class="sim-canvas pro-card flex-1 relative">
-        <XflowDAG
-          ref="dagRef"
-          :showToolbar="false"
-          :showSidebar="false"
-          :operators="operators"
-          :operators-loading="loading"
-          :layout="layoutMode"
-          :dnd-config="dndConfig"
-          :show-graph-control="false"
-          theme="dark"
-          @node-click="handleNodeClick"
-          @node-dblclick="handleNodeDblclick"
-          @edge-click="handleEdgeClick"
-          @edge-mouseenter="handleEdgeMouseEnter"
-          @edge-mouseleave="handleEdgeMouseLeave"
+    <!-- 左侧主区域：header + main + footer -->
+    <div class="flex flex-col flex-1 min-w-0 h-full">
+      <!-- 顶部控制栏 -->
+      <header class="shrink-0 z-50">
+        <SimulationHeader
+          :status="simulationState.status"
+          :elapsed-time="simulationState.elapsedTime"
+          :speed="simulationState.speed"
+          :project-name="projectName"
+          @start="handleStart"
+          @pause="handlePause"
+          @resume="handleResume"
+          @stop="handleStop"
+          @step="handleStep"
+          @speed-change="handleSpeedChange"
+          @back="handleBack"
+          @health-check="handleHealthCheck"
+          @show-events="handleShowEvents"
+          @show-report="handleShowReport"
+        />
+      </header>
+
+      <!-- 主内容区域 -->
+      <main class="flex flex-1 min-h-0 p-3 relative">
+        <!-- 拓扑画布 -->
+        <section class="sim-canvas pro-card flex-1 relative" :class="{ 'fault-target-canvas': isFaultInjectionMode }">
+          <!-- 故障注入模式下的选中链路高亮层 -->
+          <div v-if="isFaultInjectionMode && selectedEdge" class="selected-edge-indicator">
+            <div class="indicator-ring"></div>
+            <span class="indicator-text">已锁定目标链路</span>
+          </div>
+          <XflowDAG
+            ref="dagRef"
+            :showToolbar="false"
+            :showSidebar="false"
+            :operators="operators"
+            :operators-loading="loading"
+            :layout="layoutMode"
+            :dnd-config="dndConfig"
+            :show-graph-control="false"
+            theme="dark"
+            @node-click="handleNodeClick"
+            @node-dblclick="handleNodeDblclick"
+            @edge-click="handleEdgeClick"
+            @edge-mouseenter="handleEdgeMouseEnter"
+            @edge-mouseleave="handleEdgeMouseLeave"
+          />
+
+          <!-- 链路悬停信息提示 -->
+          <EdgeTooltip
+            v-if="hoveredEdge"
+            :edge="hoveredEdge"
+            :position="tooltipPosition"
+            :bandwidth-data="getEdgeBandwidth(hoveredEdge)"
+          />
+        </section>
+
+        <!-- 带宽面板（封装组件，内部含浮动容器） -->
+        <BandwidthChartPanel
+          ref="bandwidthChartRef"
+          v-if="dockState.bandwidth"
+          :visible="dockState.bandwidth"
+          :bandwidth-data="bandwidthData"
+          :running="isRunning"
+          :speed="simulationState.speed"
+          :reset-on-stop="true"
+          :position="{ top: '14px', left: '14px' }"
+          :size="{ width: '520px', maxHeight: '430px' }"
+          :collapsed-size="{ width: '46px', height: '46px' }"
+          :default-collapsed="false"
         />
 
-        <!-- 链路悬停信息提示 -->
-        <EdgeTooltip
-          v-if="hoveredEdge"
-          :edge="hoveredEdge"
-          :position="tooltipPosition"
-          :bandwidth-data="getEdgeBandwidth(hoveredEdge)"
+        <!-- 告警面板（封装组件，内部含浮动容器） -->
+        <AlarmPanelFloating
+          v-if="dockState.alarm"
+          :alarms="alarmData"
+          :position="{ top: '14px', right: '14px' }"
+          :size="{ width: '520px', maxHeight: '420px' }"
+          :collapsed-size="{ width: '46px', height: '46px' }"
+          :default-collapsed="false"
+          @alarm-click="handleAlarmClick"
+          @filter-change="handleAlarmFilterChange"
         />
-      </section>
 
-      <!-- 带宽面板（封装组件，内部含浮动容器） -->
-      <BandwidthChartPanel
-        :visible="true"
-        :bandwidth-data="bandwidthData"
-        :position="{ top: '90px', right: '28px' }"
-        :size="{ width: '520px', maxHeight: '430px' }"
-        :collapsed-size="{ width: '46px', height: '46px' }"
-        :default-collapsed="false"
+        <!-- 时序/延迟分析面板 -->
+        <TimingLatencyPanel
+          v-if="dockState.timing"
+          :visible="dockState.timing"
+          :messages="filteredMessages"
+          :bandwidth-data="bandwidthData"
+          :position="{ top: '420px', left: '14px' }"
+          :size="{ width: '520px', maxHeight: '430px' }"
+          :collapsed-size="{ width: '46px', height: '46px' }"
+          :default-collapsed="false"
+        />
+      </main>
+
+      <!-- 底部：协议分析器 -->
+      <footer class="shrink-0 h-64 mx-3 mb-3 pro-card">
+        <ProtocolAnalyzer
+          ref="protocolAnalyzerRef"
+          :messages="filteredMessages"
+          :is-running="isRunning"
+          :auto-scroll="autoScroll"
+          :speed="simulationState.speed"
+          @message-select="handleMessageSelect"
+          @filter-change="handleMessageFilterChange"
+          @export="handleExportMessages"
+          @auto-scroll-change="autoScroll = $event"
+        />
+      </footer>
+    </div>
+
+    <!-- 故障板浮层 -->
+    <FaultBoardFloating
+      v-if="dockState.fault"
+      :visible="dockState.fault"
+      :faults="faults"
+      :loading="faultsLoading"
+      :selected-edge="selectedEdge"
+      :hovered-edge="hoveredEdge"
+      :is-running="isRunning"
+      :position="{ top: '58px', right: '92px' }"
+      @apply-template="handleFaultTemplate"
+      @clear="handleFaultClear"
+      @clear-all="handleClearAllFaults"
+      @refresh="refreshFaults"
+      @close="exitFaultMode"
+    />
+
+    <!-- 右侧通顶侧边栏 - 航空暗黑系 -->
+    <aside class="sim-side-dock-aside">
+      <SimulationSideDock
+        :items="dockItems"
+        :active-keys="activeDockKeys"
+        :badges="dockBadges"
+        :disabled-items="dockDisabledItems"
+        :all-collapsed="allDockPanelsCollapsed"
+        @toggle="handleDockToggle"
+        @toggle-all="handleToggleAllPanels"
       />
-
-      <!-- 告警面板（封装组件，内部含浮动容器） -->
-      <AlarmPanelFloating
-        :alarms="alarmData"
-        :position="{ top: '550px', right: '28px' }"
-        :size="{ width: '520px', maxHeight: '420px' }"
-        :collapsed-size="{ width: '46px', height: '46px' }"
-        :default-collapsed="false"
-        @alarm-click="handleAlarmClick"
-        @filter-change="handleAlarmFilterChange"
-      />
-
-      <zx-floating-panel
-        v-if="selectedNode"
-        title="设备详情"
-        :position="{ bottom: '96px', right: '28px' }"
-        :size="{ width: '340px', maxHeight: '460px' }"
-        :collapsed-size="{ width: '46px', height: '46px' }"
-        :default-collapsed="false"
-        class="floating-panel shadow-lg"
-        theme="dark"
-      >
-        <DeviceDetailPanel :node="selectedNode" @close="selectedNode = null" />
-      </zx-floating-panel>
-
-      <!-- 时序/延迟分析面板 -->
-      <TimingLatencyPanel
-        :visible="true"
-        :messages="filteredMessages"
-        :bandwidth-data="bandwidthData"
-        :position="{ bottom: '96px', left: '28px' }"
-        :size="{ width: '560px', maxHeight: '480px' }"
-        :collapsed-size="{ width: '46px', height: '46px' }"
-        :default-collapsed="false"
-      />
-    </main>
-
-    <!-- 底部：协议分析器 -->
-    <footer class="shrink-0 h-64 mx-3 mb-3 pro-card">
-      <ProtocolAnalyzer
-        ref="protocolAnalyzerRef"
-        :messages="filteredMessages"
-        :is-running="isRunning"
-        :auto-scroll="autoScroll"
-        @message-select="handleMessageSelect"
-        @filter-change="handleMessageFilterChange"
-        @export="handleExportMessages"
-        @auto-scroll-change="autoScroll = $event"
-      />
-    </footer>
+    </aside>
 
     <!-- 节点编辑抽屉 -->
     <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
-
-    <!-- 故障注入右键菜单 -->
-    <FaultInjectorMenu ref="faultMenuRef" @inject="handleFaultInject" @clear="handleFaultClear" />
 
     <!-- 事件触发面板 -->
     <EventTriggerPanel
@@ -137,18 +197,20 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
+import { throttle } from 'lodash-es';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { Warning } from '@element-plus/icons-vue';
 
 // 组件导入
 import XflowDAG from '@/components/business/Dag/index.vue';
 import SimulationHeader from './components/SimulationHeader.vue';
 import BandwidthChartPanel from './components/BandwidthChartPanel.vue';
 import AlarmPanelFloating from './components/AlarmPanelFloating.vue';
+import SimulationSideDock from './components/SimulationSideDock.vue';
 import ProtocolAnalyzer from './components/ProtocolAnalyzer.vue';
-import DeviceDetailPanel from './components/DeviceDetailPanel.vue';
 import EdgeTooltip from './components/EdgeTooltip.vue';
-import FaultInjectorMenu from './components/FaultInjectorMenu.vue';
+import FaultBoardFloating from './components/FaultBoardFloating.vue';
 import EventTriggerPanel from './components/EventTriggerPanel.vue';
 import SimulationReportDialog from './components/SimulationReportDialog.vue';
 import HealthCheckDialog from './components/HealthCheckDialog.vue';
@@ -158,12 +220,18 @@ import { NodeEditDrawer } from '../components';
 // Composables 导入
 import { useSimulationControl } from './composables/useSimulationControl';
 import { useSimulationData } from './composables/useSimulationData';
+import { useTopologyAnimation } from './composables/useTopologyAnimation';
+import { useFaultInjection } from './composables/useFaultInjection';
+import { useFaultInjectionUI } from './composables/useFaultInjectionUI';
+import { useAlarmHandler } from './composables/useAlarmHandler';
+import { useSimulationReport } from './composables/useSimulationReport';
+import { useEventTrigger } from './composables/useEventTrigger';
+import { useHealthCheck } from './composables/useHealthCheck';
+import useAppStore from '@/store/modules/app';
 
 // 样式导入
 import './styles/simulation-theme.css';
-import { useTopologyAnimation } from './composables/useTopologyAnimation';
-import { useFaultInjection } from './composables/useFaultInjection';
-import { useEventTrigger } from './composables/useEventTrigger';
+import './styles/fault-injection-mode.less';
 
 // API 导入
 import { listDevice } from '@/api/device/device';
@@ -179,6 +247,7 @@ const projectId = computed(() => Number(route.params.projectId));
 const versionId = computed(() =>
   route.query.versionId ? Number(route.query.versionId) : undefined
 );
+const appStore = useAppStore();
 
 // 项目信息
 const projectName = ref('');
@@ -212,18 +281,31 @@ const {
   stop,
   step,
   setSpeed,
+  syncStatus,
 } = useSimulationControl(projectId, versionId);
+let stepLock = false;
 
 // 仿真数据
 const {
   bandwidthData,
   messageData,
   alarmData,
+  statusData,
   filteredMessages,
+  filteredAlarms,
   messageFilter,
+  alarmFilter,
   setMessageFilter,
+  setAlarmFilter,
   clearData,
+  faultEventData,
+  getNewFaultEvents,
 } = useSimulationData(sessionId);
+
+watch(statusData, (status) => {
+  if (!status) return;
+  syncStatus(status);
+});
 
 // 拓扑动画
 const {
@@ -235,32 +317,25 @@ const {
   setNodeError,
   highlightEdges,
   clearEdgeHighlight,
-} = useTopologyAnimation(dagRef);
+} = useTopologyAnimation(dagRef, () => simulationState.speed);
 
-const ALARM_HIGHLIGHT_DURATION = 2800;
-
-const ALARM_REASON_MAP = {
-  collision: { label: '冲突', color: '#ef4444' },
-  multi_connection: { label: '冲突', color: '#ef4444' },
-  packet_loss: { label: '丢包', color: '#f97316' },
-  bandwidth_exceed: { label: '超载', color: '#f59e0b' },
-  bandwidth_overflow: { label: '超载', color: '#f59e0b' },
-  congestion: { label: '超载', color: '#f59e0b' },
-  value_overflow: { label: '超载', color: '#f59e0b' },
-  disconnect: { label: '链路断开', color: '#60a5fa' },
-  link_down: { label: '链路断开', color: '#60a5fa' },
-  device_failure: { label: '链路断开', color: '#60a5fa' },
-};
+const { runHealthCheck } = useHealthCheck();
+const healthReport = ref(null);
 
 // 故障注入
-const { faults, injectFault, clearFault, clearAllFaults } = useFaultInjection(sessionId);
+const faultInjection = useFaultInjection(sessionId);
+const {
+  faults,
+  injectFault,
+  ingestFaultEvents,
+  loading: faultsLoading,
+} = faultInjection;
 
 // 事件触发
 const { eventList, createEvent, updateEvent, deleteEvent, triggerEvent } =
   useEventTrigger(sessionId);
 
 // UI 状态
-const selectedNode = ref(null);
 const currentNode = ref(null);
 const hoveredEdge = ref(null);
 const tooltipPosition = ref({ x: 0, y: 0 });
@@ -268,18 +343,185 @@ const autoScroll = ref(true);
 const dashboardShowTrend = ref(false);
 const showEventPanel = ref(false);
 const simulationSummary = ref(null);
+const dockState = reactive({
+  bandwidth: false,
+  alarm: false,
+  timing: false,
+  fault: false,
+});
+
+const dockItems = [
+  { key: 'bandwidth', label: '带宽', icon: 'ri:activity-line' },
+  { key: 'alarm', label: '告警', icon: 'ri:alarm-warning-line' },
+  { key: 'timing', label: '时序', icon: 'ri:bar-chart-2-line' },
+  { key: 'fault', label: '故障', icon: 'ri:bug-line' },
+];
+const activeDockKeys = computed(() => {
+  const keys = [];
+  if (dockState.bandwidth) keys.push('bandwidth');
+  if (dockState.alarm) keys.push('alarm');
+  if (dockState.timing) keys.push('timing');
+  if (dockState.fault) keys.push('fault');
+  return keys;
+});
+const dockBadges = computed(() => {
+  const uniqueAlarmCount = alarmData.value?.length
+    ? new Set(alarmData.value.map((item) => item.alarmId)).size
+    : 0;
+  const activeFaultCount = faults.value?.filter?.((f) => f.status === 'active').length || 0;
+  return {
+    alarm: uniqueAlarmCount || '',
+    fault: activeFaultCount || '',
+  };
+});
+
+// 侧边栏按钮禁用配置
+const dockDisabledItems = computed(() => {
+  const disabled = {};
+  // 仿真未运行时禁用故障注入
+  if (!isRunning.value) {
+    disabled.fault = '请先启动仿真后再进行故障注入';
+  }
+  return disabled;
+});
+const allDockPanelsCollapsed = computed(() => {
+  return !dockState.bandwidth && !dockState.alarm && !dockState.timing && !dockState.fault;
+});
 
 // 组件引用
 const nodeEditDrawerRef = ref(null);
-const faultMenuRef = ref(null);
 const protocolAnalyzerRef = ref(null);
 const reportDialogRef = ref(null);
 const healthCheckDialogRef = ref(null);
+const bandwidthChartRef = ref(null);
 
 // 获取图实例
 function getGraphInstance() {
   return dagRef.value?.getGraph?.() || null;
 }
+
+/**
+ * 构建端口到对端设备名的映射
+ * @param {Object} node - 当前节点
+ * @returns {Record<string, string[]>} key 为端口 ID，value 为对端设备名称数组
+ */
+function buildPeerDeviceNameByPort(node) {
+  const graph = getGraphInstance();
+  if (!graph || !node) return {};
+
+  const nodeId = node.id;
+  const result = {};
+  const edges = graph.getEdges?.() || [];
+
+  const registerPeer = (portId, peerName) => {
+    if (!portId || !peerName) return;
+    const key = String(portId);
+    const keys = [key];
+    if (key.startsWith('port-')) {
+      keys.push(key.replace(/^port-/, ''));
+    }
+
+    keys.forEach((k) => {
+      if (!result[k]) {
+        result[k] = [];
+      }
+      const list = Array.isArray(result[k]) ? result[k] : [result[k]];
+      if (!list.includes(peerName)) {
+        result[k] = list.concat(peerName);
+      } else {
+        result[k] = list;
+      }
+    });
+  };
+
+  edges.forEach((edge) => {
+    const sourceId = edge.getSourceCellId?.();
+    const targetId = edge.getTargetCellId?.();
+    if (!sourceId || !targetId) return;
+
+    let localPortId;
+    let peerNodeId;
+
+    if (sourceId === nodeId) {
+      localPortId = edge.getSourcePortId?.();
+      peerNodeId = targetId;
+    } else if (targetId === nodeId) {
+      localPortId = edge.getTargetPortId?.();
+      peerNodeId = sourceId;
+    } else {
+      return;
+    }
+
+    if (!localPortId || !peerNodeId) return;
+
+    const peerNode = graph.getCellById(peerNodeId);
+    const data = peerNode?.getData?.() || {};
+    const deviceName = data.name || data.label || data.deviceName || '';
+
+    registerPeer(localPortId, deviceName);
+  });
+
+  return result;
+}
+
+// 故障注入 UI 交互
+const {
+  selectedEdge,
+  isFaultInjectionMode,
+  getSelectedEdgeId,
+  setupEdgeEvents,
+  clearSelectedEdge,
+  exitFaultMode: _exitFaultMode,
+  handleFaultClear,
+  handleClearAllFaults,
+  handleFaultTemplate: _handleFaultTemplate,
+  refreshFaults,
+} = useFaultInjectionUI({
+  getGraphInstance,
+  dockState,
+  faultInjection,
+});
+
+// 退出故障模式（包装函数，额外清除图上的高亮状态）
+async function exitFaultMode() {
+  const graph = getGraphInstance();
+  if (graph) {
+    // 清除所有边的高亮
+    const edgeIds = graph.getEdges().map(e => e.id);
+    clearEdgeHighlight(edgeIds);
+    // 清除所有节点的错误状态
+    graph.getNodes().forEach(node => {
+      setNodeError(node.id, false);
+      setNodeActive(node.id, false, true);
+    });
+  }
+  await _exitFaultMode();
+}
+
+// 告警处理
+const {
+  handleAlarmClick,
+  handleAlarmFilterChange,
+} = useAlarmHandler({
+  getGraphInstance,
+  topologyAnimation: {
+    highlightEdges,
+    clearEdgeHighlight,
+    triggerErrorAnimation,
+    setNodeError,
+    setNodeActive,
+  },
+});
+
+// 仿真报告
+const {
+  buildSimulationSummary,
+} = useSimulationReport({
+  messageData,
+  alarmData,
+  bandwidthData,
+  simulationState,
+});
 
 // 加载项目信息
 async function loadProjectInfo() {
@@ -316,6 +558,10 @@ function restoreSavedTopology() {
       return;
     }
 
+    // 设置边的事件监听
+    setupEdgeEvents(graph);
+    setupEdgeHoverEvents(graph);
+
     getProjectTopology(projectId.value, versionId.value)
       .then((res) => {
         const topo = res?.data;
@@ -329,6 +575,20 @@ function restoreSavedTopology() {
   };
 
   tryRestore();
+}
+
+// 设置边的鼠标事件（hover 提示）
+function setupEdgeHoverEvents(graph) {
+  if (!graph) return;
+  
+  graph.on('edge:mouseenter', ({ edge, e }) => {
+    hoveredEdge.value = edge;
+    tooltipPosition.value = { x: e.clientX, y: e.clientY };
+  });
+  
+  graph.on('edge:mouseleave', () => {
+    hoveredEdge.value = null;
+  });
 }
 
 // 仿真控制处理
@@ -352,6 +612,9 @@ async function handleStart() {
     return;
   }
 
+  const passed = await runPreflightCheck(graph);
+  if (!passed) return;
+
   await start();
   startAnimation();
   ElMessage.success('仿真已启动');
@@ -374,9 +637,25 @@ async function handleStop() {
   reportDialogRef.value?.open();
 }
 
-function handleStep() {
-  step();
-}
+const handleStep = throttle(
+  () => {
+    if (stepLock) return;
+    stepLock = true;
+    step()
+      .then(() => {
+        bandwidthChartRef.value?.stepScanline();
+      })
+      .catch((err) => {
+        const message = err?.message || '单步执行失败';
+        ElMessage.error(message);
+      })
+      .finally(() => {
+        stepLock = false;
+      });
+  },
+  500,
+  { trailing: false }
+);
 
 function handleSpeedChange(speed) {
   setSpeed(speed);
@@ -388,15 +667,20 @@ function handleBack() {
 
 // 节点事件处理
 function handleNodeClick({ node }) {
-  const data = node.getData?.() || {};
-  selectedNode.value = {
-    id: node.id,
-    ...data,
-  };
+  // 点击节点时取消链路选中
+  selectedEdge.value = null;
 }
 
 function handleNodeDblclick({ node }) {
-  currentNode.value = typeof node?.toJSON === 'function' ? node.toJSON() : node;
+  // 构建端口到对端设备名的映射
+  const peerDeviceNameByPort = buildPeerDeviceNameByPort(node);
+  // 转为普通 JSON
+  const jsonNode = typeof node?.toJSON === 'function' ? node.toJSON() : node;
+  // 附加映射数据
+  currentNode.value = {
+    ...jsonNode,
+    peerDeviceNameByPort,
+  };
   nodeEditDrawerRef.value?.open();
 }
 
@@ -419,20 +703,17 @@ function handleNodeUpdate({ nodeId, name, ports }) {
   );
 }
 
-// 链路事件处理
+// 链路事件处理 (这些函数现在由 setupEdgeEvents 中的图实例事件监听处理)
 function handleEdgeClick({ edge, e }) {
-  if (e.button === 2) {
-    faultMenuRef.value?.show(e, { type: 'edge', target: edge });
-  }
+  // 由 setupEdgeEvents 处理
 }
 
 function handleEdgeMouseEnter({ edge, e }) {
-  hoveredEdge.value = edge;
-  tooltipPosition.value = { x: e.clientX, y: e.clientY };
+  // 由 setupEdgeEvents 处理
 }
 
 function handleEdgeMouseLeave() {
-  hoveredEdge.value = null;
+  // 由 setupEdgeEvents 处理
 }
 
 function getEdgeBandwidth(edge) {
@@ -454,141 +735,6 @@ function handlePortClick(portData) {
       triggerTrafficAnimation(edge.id, portData.protocolType);
     }
   });
-}
-
-function getAlarmReason(alarmType) {
-  const key = (alarmType || '').toLowerCase();
-  return ALARM_REASON_MAP[key] || { label: '告警', color: '#94a3b8' };
-}
-
-function collectAlarmTargets(alarm) {
-  const graph = getGraphInstance();
-  const nodeIds = new Set();
-  const edgeIds = new Set();
-
-  if (!graph || !alarm) {
-    return { nodeIds: [], edgeIds: [] };
-  }
-
-  const addByCell = (cellId) => {
-    if (!cellId) return;
-    const cell = graph.getCellById(cellId);
-    if (!cell) return;
-    if (cell.isEdge?.()) {
-      edgeIds.add(cellId);
-    } else {
-      nodeIds.add(cellId);
-    }
-  };
-
-  addByCell(alarm.targetId);
-  addByCell(alarm.targetEdgeId);
-  addByCell(alarm.targetNodeId);
-
-  if (alarm.edgeId) {
-    edgeIds.add(alarm.edgeId);
-  }
-  if (Array.isArray(alarm.edgeIds)) {
-    alarm.edgeIds.forEach((id) => id && edgeIds.add(id));
-  }
-  if (Array.isArray(alarm.affectedNodes)) {
-    alarm.affectedNodes.forEach((id) => id && nodeIds.add(id));
-  }
-  if (Array.isArray(alarm.affectedNodeIds)) {
-    alarm.affectedNodeIds.forEach((id) => id && nodeIds.add(id));
-  }
-
-  const details = alarm.details || {};
-  addByCell(details.edgeId || details.edge_id);
-
-  if (Array.isArray(details.connections)) {
-    details.connections.forEach((conn) => {
-      const edgeId = conn?.edgeId || conn?.edge_id;
-      if (edgeId) {
-        edgeIds.add(edgeId);
-      }
-    });
-  }
-
-  const portId = details.portId || details.port_id;
-  if (portId) {
-    const edges = graph.getEdges?.() || [];
-    edges.forEach((edge) => {
-      const sourcePortId = edge.getSourcePortId?.();
-      const targetPortId = edge.getTargetPortId?.();
-      if (sourcePortId === portId || targetPortId === portId) {
-        edgeIds.add(edge.id);
-      }
-    });
-  }
-
-  if (details.nodeId || details.node_id) {
-    nodeIds.add(details.nodeId || details.node_id);
-  }
-
-  if (nodeIds.size >= 2) {
-    const edges = graph.getEdges?.() || [];
-    edges.forEach((edge) => {
-      const sourceId = edge.getSourceCellId?.();
-      const targetId = edge.getTargetCellId?.();
-      if (nodeIds.has(sourceId) && nodeIds.has(targetId)) {
-        edgeIds.add(edge.id);
-      }
-    });
-  }
-
-  if (nodeIds.size > 0 && edgeIds.size === 0) {
-    const edges = graph.getEdges?.() || [];
-    edges.forEach((edge) => {
-      const sourceId = edge.getSourceCellId?.();
-      const targetId = edge.getTargetCellId?.();
-      if (nodeIds.has(sourceId) || nodeIds.has(targetId)) {
-        edgeIds.add(edge.id);
-      }
-    });
-  }
-
-  return {
-    nodeIds: Array.from(nodeIds),
-    edgeIds: Array.from(edgeIds),
-  };
-}
-
-// 告警处理
-function handleAlarmClick(alarm) {
-  const graph = getGraphInstance();
-  if (!graph) return;
-
-  const reason = getAlarmReason(alarm?.alarmType);
-  const { nodeIds, edgeIds } = collectAlarmTargets(alarm);
-  const focusId = edgeIds[0] || nodeIds[0] || alarm?.targetId;
-
-  if (focusId) {
-    const cell = graph.getCellById(focusId);
-    if (cell) {
-      graph.centerCell(cell);
-    }
-  }
-
-  if (edgeIds.length > 0) {
-    highlightEdges(edgeIds, reason.color);
-    setTimeout(() => clearEdgeHighlight(edgeIds), ALARM_HIGHLIGHT_DURATION);
-    if (alarm?.severity === 'error' || alarm?.severity === 'critical') {
-      edgeIds.forEach((edgeId) => triggerErrorAnimation(edgeId, ALARM_HIGHLIGHT_DURATION));
-    }
-  }
-
-  if (nodeIds.length > 0) {
-    nodeIds.forEach((nodeId) => setNodeError(nodeId, true));
-    setTimeout(
-      () => nodeIds.forEach((nodeId) => setNodeError(nodeId, false)),
-      ALARM_HIGHLIGHT_DURATION
-    );
-  }
-}
-
-function handleAlarmFilterChange(filter) {
-  // 告警过滤逻辑
 }
 
 // 报文处理
@@ -616,97 +762,24 @@ function handleMessageFilterChange(filter) {
   setMessageFilter(filter);
 }
 
-function formatDuration(seconds) {
-  const total = Math.max(0, Math.floor(seconds || 0));
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  const parts = [];
-  if (h > 0) parts.push(`${h}小时`);
-  if (m > 0) parts.push(`${m}分`);
-  parts.push(`${s}秒`);
-  return parts.join('');
+function handleDockToggle(key) {
+  dockState[key] = !dockState[key];
 }
 
-function formatDateTime(ts) {
-  if (!ts) return '-';
-  const date = new Date(ts);
-  if (Number.isNaN(date.getTime())) return '-';
-  const pad = (n) => (n < 10 ? `0${n}` : `${n}`);
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(
-    date.getHours()
-  )}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-function buildSimulationSummary() {
-  const messageCount = messageData.value.length;
-  const alarmCount = alarmData.value.length;
-  const duration = formatDuration(simulationState.elapsedTime);
-  const startTime = formatDateTime(simulationState.startTime);
-
-  const bandwidthStatsMap = {};
-  bandwidthData.value.forEach((item) => {
-    const protocol = item.protocolType || item.protocol_type || '未知协议';
-    if (!bandwidthStatsMap[protocol]) {
-      bandwidthStatsMap[protocol] = {
-        protocol,
-        total: 0,
-        max: 0,
-        loadTotal: 0,
-        count: 0,
-      };
-    }
-    const stat = bandwidthStatsMap[protocol];
-    const bw = Number(item.bandwidthMbps || item.bandwidth_mbps || 0);
-    const load = Number(item.loadPercent || item.load_percent || 0);
-    stat.total += bw;
-    stat.loadTotal += load;
-    stat.count += 1;
-    stat.max = Math.max(stat.max, bw);
+function handleToggleAllPanels() {
+  const allCollapsed = !dockState.bandwidth && !dockState.alarm && !dockState.timing && !dockState.fault;
+  Object.keys(dockState).forEach((key) => {
+    dockState[key] = allCollapsed;
   });
-
-  const bandwidthStats = Object.values(bandwidthStatsMap).map((item) => ({
-    protocol: item.protocol,
-    avgBandwidth: `${(item.total / item.count || 0).toFixed(3)} Mbps`,
-    maxBandwidth: `${item.max.toFixed(3)} Mbps`,
-    avgLoad: `${(item.loadTotal / item.count || 0).toFixed(1)}%`,
-  }));
-
-  const alarmStatsMap = {};
-  alarmData.value.forEach((alarm) => {
-    const type = alarm.alarmType || alarm.type || '未知类型';
-    const level = alarm.severity || alarm.level || 'info';
-    const key = `${type}-${level}`;
-    if (!alarmStatsMap[key]) {
-      alarmStatsMap[key] = { type, level, count: 0 };
-    }
-    alarmStatsMap[key].count += 1;
-  });
-  const alarmStats = Object.values(alarmStatsMap);
-
-  return {
-    duration,
-    messageCount,
-    alarmCount,
-    bandwidthStats,
-    alarmStats,
-    startTime,
-  };
 }
 
 function handleExportMessages(format) {
   protocolAnalyzerRef.value?.exportData(format);
 }
 
-// 故障注入处理
-async function handleFaultInject(config) {
-  await injectFault(config);
-  ElMessage.success('故障注入成功');
-}
-
-async function handleFaultClear(faultId) {
-  await clearFault(faultId);
-  ElMessage.success('故障已清除');
+// 故障模板应用（包装 composable 方法，传入 hoveredEdge）
+function handleFaultTemplate(tpl) {
+  _handleFaultTemplate(tpl, hoveredEdge);
 }
 
 // 事件触发处理
@@ -737,11 +810,65 @@ function handleHealthCheck() {
     ElMessage.error('图实例不存在');
     return;
   }
-  healthCheckDialogRef.value?.open(graph);
+  const report = runHealthCheck(graph);
+  healthReport.value = report;
+  healthCheckDialogRef.value?.open(report);
 }
+
+// 显示事件面板
+function handleShowEvents() {
+  showEventPanel.value = true;
+}
+
+// 显示仿真报告
+function handleShowReport() {
+  if (!sessionId.value) {
+    ElMessage.warning('当前无仿真会话，无法生成报告');
+    return;
+  }
+  simulationSummary.value = buildSimulationSummary();
+  reportDialogRef.value?.open();
+}
+
+async function runPreflightCheck(graph) {
+  const report = runHealthCheck(graph);
+  healthReport.value = report;
+  if (!report.canSimulate || report.errorChecks > 0) {
+    healthCheckDialogRef.value?.open(report);
+    ElMessage.error('拓扑检查未通过，无法启动仿真');
+    return false;
+  }
+  if (report.warningChecks > 0) {
+    healthCheckDialogRef.value?.open(report);
+    ElMessage.warning('存在警告，请确认后继续');
+  }
+  return true;
+}
+
+watch(faultEventData, () => {
+  const events = getNewFaultEvents();
+  if (events && events.length) {
+    ingestFaultEvents(events);
+  }
+});
+
+watch(sessionId, (id) => {
+  if (id) {
+    refreshFaults();
+  }
+});
+
+// 监听故障面板打开，自动获取故障列表
+watch(() => dockState.fault, (opened) => {
+  if (opened && sessionId.value) {
+    refreshFaults();
+  }
+});
 
 // 生命周期
 onMounted(async () => {
+  // 进入页面时自动收起全局侧边栏
+  appStore.closeSideBar({ withoutAnimation: true });
   await Promise.all([loadProjectInfo(), loadDeviceList()]);
   restoreSavedTopology();
 });
@@ -808,18 +935,6 @@ watch(isRunning, (running) => {
 
 .sim-canvas :deep(.x6-graph-svg) {
   background: transparent !important;
-}
-
-/* 设备详情面板滑入动画 */
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-up-enter-from,
-.slide-up-leave-to {
-  opacity: 0;
-  transform: translateY(20px);
 }
 
 .simulation-shell {
@@ -911,5 +1026,53 @@ watch(isRunning, (running) => {
 .view-toggle .toggle-divider {
   color: #cbd5e1;
   font-weight: 300;
+}
+
+/* 右侧通顶侧边栏 - 航空暗黑系 */
+.sim-side-dock-aside {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 10px;
+  background: 
+    linear-gradient(180deg, 
+      rgba(12, 22, 40, 0.98) 0%, 
+      rgba(8, 14, 26, 1) 30%,
+      rgba(6, 10, 18, 1) 70%,
+      rgba(10, 18, 32, 0.98) 100%
+    );
+  border-left: 1px solid rgba(34, 211, 238, 0.12);
+  box-shadow: 
+    -6px 0 32px rgba(0, 0, 0, 0.5),
+    -2px 0 8px rgba(0, 0, 0, 0.3),
+    inset 1px 0 0 rgba(34, 211, 238, 0.06);
+}
+
+/* 侧边栏顶部光晕 */
+.sim-side-dock-aside::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: radial-gradient(ellipse 100% 100% at 50% -20%, rgba(34, 211, 238, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 侧边栏底部光晕 */
+.sim-side-dock-aside::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: radial-gradient(ellipse 100% 100% at 50% 120%, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+  pointer-events: none;
 }
 </style>

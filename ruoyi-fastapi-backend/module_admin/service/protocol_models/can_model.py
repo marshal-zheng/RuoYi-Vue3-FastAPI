@@ -37,7 +37,7 @@ class CANBusModel(BaseProtocolModel):
     ):
         super().__init__(env, model_id, config, message_callback)
         # 总线资源（支持仲裁）
-        self.bus = simpy.Resource(env, capacity=1)
+        self.bus = simpy.PriorityResource(env, capacity=1)
         # 波特率
         self.baud_rate = config.get("baud_rate", 500000)
         # 设备消息配置列表
@@ -73,8 +73,18 @@ class CANBusModel(BaseProtocolModel):
                 with self.bus.request(priority=priority) as req:
                     yield req
 
+                    payload_info = {}
+                    supplier = msg_cfg.get("payload_supplier")
+                    if callable(supplier):
+                        payload_info = supplier(self.env.now) or {}
+
+                    data_hex = payload_info.get("payload_hex", msg_cfg.get("data", "00000000"))
+                    field_values = payload_info.get("field_values", {})
+                    fill_strategy = payload_info.get("fill_strategy")
+
                     # 计算帧传输时间
-                    data_len = msg_cfg.get("dlc", 8)
+                    data_len = payload_info.get("size_bytes") or msg_cfg.get("dlc", 8)
+                    data_len = max(0, min(8, data_len))
                     # 标准帧：47位开销 + 数据位
                     # 扩展帧：67位开销 + 数据位
                     is_extended = msg_cfg.get("extended", False)
@@ -86,7 +96,14 @@ class CANBusModel(BaseProtocolModel):
                     yield self.env.timeout(tx_time)
 
                     # 构建并发送消息
-                    can_msg = self._build_can_message(device_id, msg_cfg)
+                    can_msg = self._build_can_message(
+                        device_id,
+                        msg_cfg,
+                        data_hex=data_hex,
+                        dlc=data_len,
+                        field_values=field_values,
+                        fill_strategy=fill_strategy,
+                    )
                     self._notify_message(can_msg)
 
                     # 检查是否注入错误帧
@@ -99,12 +116,18 @@ class CANBusModel(BaseProtocolModel):
                 yield self.env.timeout(interval)
 
     def _build_can_message(
-        self, device_id: str, msg_cfg: Dict[str, Any]
+        self,
+        device_id: str,
+        msg_cfg: Dict[str, Any],
+        data_hex: Optional[str] = None,
+        dlc: Optional[int] = None,
+        field_values: Optional[Dict[str, Any]] = None,
+        fill_strategy: Optional[str] = None,
     ) -> Dict[str, Any]:
         """构建 CAN 消息"""
         can_id = msg_cfg.get("can_id", 0)
-        data = msg_cfg.get("data", "00000000")
-        dlc = msg_cfg.get("dlc", 8)
+        data = data_hex if data_hex is not None else msg_cfg.get("data", "00000000")
+        dlc = dlc if dlc is not None else msg_cfg.get("dlc", 8)
         is_extended = msg_cfg.get("extended", False)
 
         # 确保数据是十六进制字符串
@@ -131,6 +154,9 @@ class CANBusModel(BaseProtocolModel):
             "payload_hex": data_hex,
             "crc": crc,
             "is_error_frame": False,
+            "size_bytes": dlc,
+            "field_values": field_values or {},
+            "fill_strategy": fill_strategy or msg_cfg.get("fill_strategy"),
             "create_time": datetime.now(),
         }
 
@@ -176,5 +202,10 @@ class CANBusModel(BaseProtocolModel):
             }
         )
         return base_status
+
+
+
+
+
 
 

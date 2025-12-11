@@ -32,6 +32,10 @@ class SimulationService:
     
     # 存储活动的仿真引擎实例
     _active_engines: Dict[str, SimulationEngine] = {}
+    # WS 故障事件增量游标
+    _fault_event_offsets: Dict[str, int] = {}
+    # 会话配置缓存（支撑停止后重建）
+    _session_configs: Dict[str, Dict] = {}
 
     @classmethod
     async def create_session(
@@ -83,6 +87,13 @@ class SimulationService:
                 injection_params=request.injection_params or {}
             )
             cls._active_engines[session_id] = engine
+            # 缓存重建所需配置
+            cls._session_configs[session_id] = {
+                'project_id': request.project_id,
+                'version_id': request.version_id,
+                'injection_strategy': request.injection_strategy or 'random',
+                'injection_params': request.injection_params or {},
+            }
             
             return CamelCaseUtil.transform_result({
                 'session_id': session_id,
@@ -118,8 +129,8 @@ class SimulationService:
         try:
             # 获取引擎实例
             engine = cls._active_engines.get(session_id)
-            if not engine:
-                raise ServiceException(message='仿真会话不存在或已过期')
+            if (not engine) or getattr(engine, "status", "") == "stopped":
+                engine = await cls._rebuild_engine(query_db, session_id)
             
             # 启动引擎
             await engine.start()
@@ -138,6 +149,40 @@ class SimulationService:
         except Exception as e:
             await query_db.rollback()
             raise ServiceException(message=f'启动仿真失败: {str(e)}')
+
+    @classmethod
+    async def _rebuild_engine(cls, query_db: AsyncSession, session_id: str) -> SimulationEngine:
+        """
+        当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
+        """
+        session = await SimulationDao.get_session_by_id(query_db, session_id)
+        if not session:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        cached = cls._session_configs.get(session_id, {})
+        if not cached:
+            raise ServiceException(message='仿真会话配置缺失，无法重建引擎，请重新创建会话')
+
+        topology = await ProjectTopologyDao.get_topology_by_project_and_version(
+            query_db, session.project_id, session.version_id
+        )
+        if not topology or not topology.topology_data:
+            raise ServiceException(message='拓扑数据不存在，无法重建仿真会话')
+
+        topology_data = topology.topology_data
+        if isinstance(topology_data, str):
+            topology_data = json.loads(topology_data)
+
+        engine = SimulationEngine(
+            session_id,
+            topology_data,
+            injection_strategy=cached.get('injection_strategy', 'random'),
+            injection_params=cached.get('injection_params', {})
+        )
+        cls._active_engines[session_id] = engine
+        # 清理故障事件游标，避免引用旧实例
+        cls._fault_event_offsets.pop(session_id, None)
+        return engine
 
     @classmethod
     async def stop_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
@@ -171,6 +216,7 @@ class SimulationService:
             
             # 移除引擎实例
             del cls._active_engines[session_id]
+            cls._fault_event_offsets.pop(session_id, None)
             
             return CrudResponseModel(is_success=True, message='仿真已停止')
             
@@ -223,9 +269,24 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
+            # 若引擎不存在但会话记录仍在，返回已停止状态，便于WS保持
+            cached = cls._session_configs.get(session_id)
+            if cached:
+                return {
+                    'session_id': session_id,
+                    'status': 'stopped',
+                    'engine_present': False,
+                    'message': '仿真已停止',
+                    'speed': 1.0,
+                    'elapsed_time': 0,
+                    'message_count': 0,
+                    'bandwidth_data_count': 0,
+                    'alarm_count': 0,
+                }
             return {'status': 'not_found', 'message': '仿真会话不存在'}
         
         status = engine.get_status()
+        status['engine_present'] = True
         return CamelCaseUtil.transform_result(status)
 
     @classmethod
@@ -340,6 +401,20 @@ class SimulationService:
         
         alarms = engine.get_new_alarms()
         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+
+    @classmethod
+    def get_new_fault_events(cls, session_id: str) -> List[Dict]:
+        """
+        获取增量故障事件（创建/激活/过期/清除）
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            return []
+
+        offset = cls._fault_event_offsets.get(session_id, 0)
+        events, new_offset = engine.fault_injector.get_new_events(session_id, offset)
+        cls._fault_event_offsets[session_id] = new_offset
+        return [CamelCaseUtil.transform_result(evt) for evt in events]
 
     @classmethod
     async def get_historical_messages(
@@ -565,6 +640,29 @@ class SimulationService:
             return CrudResponseModel(is_success=True, message='故障已清除')
         else:
             raise ServiceException(message='故障不存在或已清除')
+
+    @classmethod
+    def clear_all_faults(cls, session_id: str) -> CrudResponseModel:
+        """
+        清除指定会话的所有故障
+
+        参数:
+            session_id: 会话ID
+
+        返回:
+            操作结果（包含清除数量）
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        try:
+            cleared_count = engine.fault_injector.clear_all_faults(session_id)
+        except Exception as e:
+            logger.error(f'清除全部故障失败: {e}')
+            cleared_count = 0
+
+        return CrudResponseModel(is_success=True, message=f'已清除 {cleared_count} 个故障')
 
     @classmethod
     def list_faults(cls, session_id: str) -> List[Dict]:

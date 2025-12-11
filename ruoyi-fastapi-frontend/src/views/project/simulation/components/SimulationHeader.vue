@@ -65,23 +65,25 @@
 
         <!-- 单步 -->
         <button
-          :disabled="status !== 'paused'"
+          :disabled="status !== 'paused' || stepping"
           :class="[
             'inline-flex items-center gap-2 h-8 px-3 rounded-md text-sm font-medium transition-all duration-200',
-            status !== 'paused'
+            status !== 'paused' || stepping
               ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-              : 'bg-slate-700 text-slate-200 hover:bg-slate-600 hover:text-white'
+              : 'bg-slate-700 text-slate-200 hover:bg-slate-600 hover:text-white',
+            stepping ? 'cursor-wait opacity-80' : ''
           ]"
           @click="$emit('step')"
         >
-          <el-icon :size="14"><DArrowRight /></el-icon>
-          <span>单步</span>
+          <el-icon v-if="stepping" :size="14" class="animate-spin"><Loading /></el-icon>
+          <el-icon v-else :size="14"><DArrowRight /></el-icon>
+          <span>{{ stepping ? '单步中' : '单步' }}</span>
         </button>
       </div>
 
       <!-- 速度调节 -->
       <div class="flex items-center gap-3 pl-4 border-l border-slate-700/50">
-        <span class="text-xs font-medium text-slate-400 uppercase tracking-wider">Speed</span>
+        <span class="text-xs font-medium text-slate-400 tracking-wider">速度</span>
         <div class="flex items-center gap-1 p-0.5 rounded-md bg-slate-800/50 border border-slate-700/50">
           <button
             v-for="speed in speedOptions"
@@ -167,6 +169,7 @@ import {
   CircleClose,
   DArrowRight,
   Timer,
+  Loading,
   Cpu,
   Lightning,
   Document,
@@ -189,6 +192,10 @@ const props = defineProps({
   projectName: {
     type: String,
     default: '',
+  },
+  stepping: {
+    type: Boolean,
+    default: false,
   },
 })
 

@@ -148,7 +148,10 @@ export function resumeSimulationSession(sessionId) {
 export function stepSimulationSession(sessionId) {
   return request({
     url: `/simulation/sessions/${sessionId}/step`,
-    method: 'post'
+    method: 'post',
+    headers: {
+      repeatSubmit: false,
+    },
   })
 }
 
@@ -176,9 +179,12 @@ export function setSimulationSpeed(sessionId, speed) {
  */
 export function injectFault(sessionId, data) {
   return request({
-    url: `/simulation/sessions/${sessionId}/faults`,
+    url: `/simulation/faults`,
     method: 'post',
-    data
+    data: {
+      sessionId,
+      ...data,
+    },
   })
 }
 
@@ -190,8 +196,21 @@ export function injectFault(sessionId, data) {
  */
 export function clearFault(sessionId, faultId) {
   return request({
-    url: `/simulation/sessions/${sessionId}/faults/${faultId}`,
-    method: 'delete'
+    url: `/simulation/faults/${faultId}`,
+    method: 'delete',
+    params: { sessionId },
+  })
+}
+
+/**
+ * 清除指定会话的所有故障
+ * @param {String} sessionId - 会话ID
+ * @returns {Promise}
+ */
+export function clearAllFaults(sessionId) {
+  return request({
+    url: `/simulation/sessions/${sessionId}/faults`,
+    method: 'delete',
   })
 }
 
@@ -202,8 +221,9 @@ export function clearFault(sessionId, faultId) {
  */
 export function getFaults(sessionId) {
   return request({
-    url: `/simulation/sessions/${sessionId}/faults`,
-    method: 'get'
+    url: `/simulation/faults`,
+    method: 'get',
+    params: { sessionId },
   })
 }
 

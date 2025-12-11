@@ -102,11 +102,11 @@
 }
 
 /* Button 按钮 */
-.simulation-dark .el-button {
+/* .simulation-dark .el-button {
   background-color: rgba(30, 41, 59, 0.8) !important;
   border-color: rgba(51, 65, 85, 0.5) !important;
   color: #e2e8f0 !important;
-}
+} */
 
 .simulation-dark .el-button:hover {
   background-color: rgba(51, 65, 85, 0.8) !important;

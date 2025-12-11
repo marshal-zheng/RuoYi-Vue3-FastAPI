@@ -20,6 +20,7 @@ export function useSimulationWebSocket() {
   const bandwidthData = shallowRef([]);
   const alarmsData = shallowRef([]);
   const animationData = shallowRef([]);
+  const faultEventsData = shallowRef([]);
 
   let reconnectTimer = null;
   let heartbeatTimer = null;
@@ -111,23 +112,23 @@ export function useSimulationWebSocket() {
         break;
 
       case 'messages':
-        // 追加新报文，保持最新的50条（优化内存）
-        messagesData.value = [...messagesData.value, ...data].slice(-50);
+        // 追加新报文，保持最新的200条（优化内存与可回溯性）
+        messagesData.value = [...messagesData.value, ...data].slice(-200);
         break;
 
       case 'bandwidth': {
-        // 追加带宽数据，保持最新120秒数据（优化内存）
+        // 追加带宽数据，保持最新600秒数据（对齐长窗口需求）
         const now = Date.now() / 1000;
-        const cutoff = now - 120;
+        const cutoff = now - 600;
         const merged = [...bandwidthData.value, ...data];
         // 过滤旧数据并限制数量
-        bandwidthData.value = merged.filter((item) => item.timestamp >= cutoff).slice(-120);
+        bandwidthData.value = merged.filter((item) => item.timestamp >= cutoff).slice(-600);
         break;
       }
 
       case 'alarms':
-        // 追加告警，限制最多50条
-        alarmsData.value = [...alarmsData.value, ...data].slice(-50);
+        // 追加告警，限制最多200条
+        alarmsData.value = [...alarmsData.value, ...data].slice(-200);
         // 显示新告警通知
         if (data.length > 0) {
           const latestAlarm = data[data.length - 1];
@@ -138,6 +139,11 @@ export function useSimulationWebSocket() {
       case 'animation':
         // 动画事件，保留最近100条供拓扑动画消费
         animationData.value = [...animationData.value, ...data].slice(-100);
+        break;
+
+      case 'faults':
+        // 故障事件增量，保留最近200条
+        faultEventsData.value = [...faultEventsData.value, ...data].slice(-200);
         break;
 
       case 'pong':
@@ -249,6 +255,7 @@ export function useSimulationWebSocket() {
     bandwidthData.value = [];
     alarmsData.value = [];
     animationData.value = [];
+    faultEventsData.value = [];
     notifiedAlarmIds.clear();
   };
 
@@ -264,6 +271,7 @@ export function useSimulationWebSocket() {
     bandwidthData,
     alarmsData,
     animationData,
+    faultEventsData,
     connect,
     disconnect,
     clearData,

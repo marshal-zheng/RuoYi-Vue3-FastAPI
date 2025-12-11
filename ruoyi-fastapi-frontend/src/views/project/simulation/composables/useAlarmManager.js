@@ -65,7 +65,7 @@ export function useAlarmManager() {
    */
   const alarmStats = computed(() => {
     const stats = {
-      total: alarms.value.length,
+      total: 0,
       info: 0,
       warning: 0,
       error: 0,
@@ -73,13 +73,14 @@ export function useAlarmManager() {
       byType: {}
     }
 
-    alarms.value.forEach(alarm => {
-      // 按严重程度统计
+    const list = filteredAlarms.value
+    stats.total = list.length
+
+    list.forEach(alarm => {
       if (alarm.severity) {
         stats[alarm.severity] = (stats[alarm.severity] || 0) + 1
       }
 
-      // 按类型统计
       if (alarm.alarmType) {
         stats.byType[alarm.alarmType] = (stats.byType[alarm.alarmType] || 0) + 1
       }
@@ -141,10 +142,15 @@ export function useAlarmManager() {
       multi_connection: '多端口连接',
       disconnected_node: '孤立节点',
       bandwidth_overflow: '带宽溢出',
+      bandwidth_limit: '带宽限速',
       protocol_mismatch: '协议不匹配',
       config_error: '配置错误',
       collision: '报文冲突',
       packet_loss: '丢包',
+      delay: '延迟注入',
+      payload_corrupt: '数据篡改',
+      noise_frame: '噪声帧',
+      error_frame: '错误帧',
       congestion: '总线超载',
       bandwidth_exceed: '带宽超限',
       value_overflow: '参数越界',

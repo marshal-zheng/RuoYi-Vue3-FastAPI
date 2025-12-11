@@ -6,7 +6,7 @@ import uuid
 import time
 import random
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Callable
 from module_admin.service.alarm_detector import AlarmDetector
 from module_admin.service.data_injection_strategy import (
     PayloadGenerator,
@@ -16,6 +16,14 @@ from module_admin.service.data_injection_strategy import (
 from module_admin.service.fault_injector import FaultInjector
 from module_admin.service.event_trigger import EventTriggerService
 from module_admin.service.simulation_runner import SimulationRunner
+from module_admin.service.protocol_models import (
+    CANBusModel,
+    LANModel,
+    MIL1553BModel,
+    RS485Model,
+    BaseProtocolModel,
+)
+from module_admin.service.alarm_detector import AlarmDetector
 
 
 class SimulationEngine:
@@ -66,12 +74,18 @@ class SimulationEngine:
         
         # 数据清理配置
         self._max_messages = 1000  # 最多保留1000条报文
-        self._max_bandwidth_points = 600  # 最多保留600个带宽点（10分钟，每秒1个）
+        # 10分钟窗口：tick=0.1s 时每秒约10点，放宽至6000
+        self._max_bandwidth_points = 6000
+        # 运行期统计与节流
+        self._port_stats: Dict[str, Dict[str, int]] = {}  # sent/dropped/collision
+        self._last_drop_alarm_at: Dict[str, float] = {}
+        self._last_congestion_alarm_at: Dict[str, float] = {}
         
         # 解析拓扑数据
         self.nodes = {}  # {node_id: node_data}
         self.edges = []  # 边列表
         self.port_configs = {}  # {node_id:port_id: config}
+        self.edge_routes: Dict[str, List[Dict[str, Any]]] = {}
         
         self._parse_topology()
 
@@ -94,6 +108,10 @@ class SimulationEngine:
             duration=duration_limit,
             tick_interval=0.1
         )
+
+        # 协议模型实例
+        self.protocol_models: List[BaseProtocolModel] = []
+        self._init_protocol_models()
 
     def _parse_topology(self):
         """解析拓扑数据"""
@@ -121,6 +139,22 @@ class SimulationEngine:
         
         # 解析边
         self.edges = self.topology_data.get('edges', [])
+        # 构建源到目的的路由表，便于协议回调派发
+        for edge in self.edges:
+            source_node = edge.get('source') or edge.get('sourceId')
+            source_port = edge.get('sourcePort') or edge.get('sourcePortId')
+            target_node = edge.get('target') or edge.get('targetId')
+            target_port = edge.get('targetPort') or edge.get('targetPortId')
+            if not all([source_node, source_port, target_node, target_port]):
+                continue
+            source_key = f"{source_node}:{source_port}"
+            self.edge_routes.setdefault(source_key, []).append(
+                {
+                    'target_node': target_node,
+                    'target_port': target_port,
+                    'edge': edge,
+                }
+            )
 
     def _get_node_name(self, node_id: str) -> str:
         """根据节点ID获取显示名称"""
@@ -301,6 +335,252 @@ class SimulationEngine:
             alarm['session_id'] = self.session_id
             self.alarms.append(alarm)
 
+    def _init_protocol_models(self):
+        """
+        根据拓扑初始化协议模型并注册消息回调
+        """
+        # 将端口按协议分组
+        grouped_ports: Dict[str, List[Dict[str, Any]]] = {}
+        for key, cfg in self.port_configs.items():
+            protocol = (cfg.get('protocol_type') or 'LAN').upper()
+            cfg = dict(cfg)
+            cfg['source_key'] = key
+            grouped_ports.setdefault(protocol, []).append(cfg)
+
+        for protocol, port_list in grouped_ports.items():
+            if protocol == 'CAN':
+                model = self._build_can_model(port_list)
+            elif protocol in ('RS485', 'RS422'):
+                model = self._build_rs485_model(port_list)
+            elif protocol == '1553B':
+                model = self._build_1553b_model(port_list)
+            else:
+                model = self._build_lan_model(port_list)
+
+            if model:
+                self.protocol_models.append(model)
+                model.start_processes()
+
+    def _make_payload_supplier(
+        self,
+        protocol_type: str,
+        source_node: str,
+        source_port: str,
+        message_config: Dict[str, Any],
+        port_params: Dict[str, Any],
+    ) -> Callable[[float], Dict[str, Any]]:
+        """
+        创建协议专用的负载生成器，复用现有 PayloadGenerator
+        """
+        cfg = self._apply_default_frame_length(
+            message_config or {},
+            protocol_type,
+            port_params,
+        )
+        # 选择一个目标用于上下文（若有多个目标，则取首个）
+        targets = self.edge_routes.get(f"{source_node}:{source_port}", [])
+        target = targets[0] if targets else {}
+
+        def _supplier(sim_time: float) -> Dict[str, Any]:
+            context = {
+                'session_id': self.session_id,
+                'elapsed_time': sim_time,
+                'tick_count': int(sim_time / 0.1),
+                'source_node': source_node,
+                'source_port': source_port,
+                'target_node': target.get('target_node'),
+                'target_port': target.get('target_port'),
+                **self.injection_params,
+            }
+            result = self.payload_generator.generate_payload(cfg, context)
+            payload_hex = result.get('payload_hex', '')
+            payload_bytes = bytes.fromhex(payload_hex) if payload_hex else b''
+            size_profile = self._protocol_size_profile(protocol_type)
+            min_len = size_profile.get('min') or 1
+            max_len = size_profile.get('max')
+            size_bytes = len(payload_bytes) if payload_bytes else cfg.get('header', {}).get('frameLength') or size_profile.get('default')
+            if max_len:
+                size_bytes = min(size_bytes, max_len)
+            size_bytes = max(size_bytes, min_len)
+            return {
+                'payload_hex': payload_hex,
+                'field_values': result.get('field_values', {}),
+                'fill_strategy': cfg.get('fillStrategy', 'random'),
+                'size_bytes': size_bytes,
+            }
+
+        return _supplier
+
+    def _build_can_model(self, ports: List[Dict[str, Any]]) -> Optional[BaseProtocolModel]:
+        """构建 CAN 总线模型"""
+        device_configs = []
+        for idx, port in enumerate(ports):
+            node_id = port.get('node_id')
+            port_id = port.get('port_id')
+            params = port.get('params', {}) or {}
+            message_cfg = port.get('message_config', {}) or {}
+            header_cfg = message_cfg.get('header', {}) or {}
+            interval = max(0.05, (params.get('frequency', 200)) / 1000)
+
+            supplier = self._make_payload_supplier(
+                'CAN',
+                node_id,
+                port_id,
+                message_cfg,
+                params,
+            )
+
+            device_configs.append(
+                {
+                    'device_id': port.get('source_key'),
+                    'messages': [
+                        {
+                            'can_id': header_cfg.get('canId') or header_cfg.get('can_id') or 0x100 + idx,
+                            'dlc': header_cfg.get('frameLength') or header_cfg.get('frame_length') or 8,
+                            'extended': header_cfg.get('extended', False),
+                            'interval': interval,
+                            'payload_supplier': supplier,
+                        }
+                    ],
+                }
+            )
+
+        if not device_configs:
+            return None
+
+        return CANBusModel(
+            env=self.runner.env,
+            model_id=f"{self.session_id}-CAN",
+            config={'devices': device_configs, 'baud_rate': 500000},
+            message_callback=self._handle_protocol_message,
+        )
+
+    def _build_rs485_model(self, ports: List[Dict[str, Any]]) -> Optional[BaseProtocolModel]:
+        """构建 RS485 半双工模型"""
+        device_configs = []
+        for idx, port in enumerate(ports):
+            node_id = port.get('node_id')
+            port_id = port.get('port_id')
+            params = port.get('params', {}) or {}
+            message_cfg = port.get('message_config', {}) or {}
+            header_cfg = message_cfg.get('header', {}) or {}
+            interval = max(0.05, (params.get('frequency', 200)) / 1000)
+
+            supplier = self._make_payload_supplier(
+                'RS485',
+                node_id,
+                port_id,
+                message_cfg,
+                params,
+            )
+
+            device_configs.append(
+                {
+                    'device_id': port.get('source_key'),
+                    'frames': [
+                        {
+                            'header': header_cfg.get('header') or header_cfg.get('frameHeader') or 'AA55',
+                            'interval': interval,
+                            'payload_supplier': supplier,
+                        }
+                    ],
+                }
+            )
+
+        if not device_configs:
+            return None
+
+        return RS485Model(
+            env=self.runner.env,
+            model_id=f"{self.session_id}-RS485",
+            config={'devices': device_configs, 'baud_rate': 9600},
+            message_callback=self._handle_protocol_message,
+        )
+
+    def _build_lan_model(self, ports: List[Dict[str, Any]]) -> Optional[BaseProtocolModel]:
+        """构建 LAN/以太网模型"""
+        device_configs = []
+        for idx, port in enumerate(ports):
+            node_id = port.get('node_id')
+            port_id = port.get('port_id')
+            params = port.get('params', {}) or {}
+            message_cfg = port.get('message_config', {}) or {}
+            header_cfg = message_cfg.get('header', {}) or {}
+            interval = max(0.01, (params.get('frequency', 200)) / 1000)
+
+            supplier = self._make_payload_supplier(
+                'LAN',
+                node_id,
+                port_id,
+                message_cfg,
+                params,
+            )
+
+            device_configs.append(
+                {
+                    'device_id': port.get('source_key'),
+                    'packets': [
+                        {
+                            'src_mac': header_cfg.get('srcMac') or header_cfg.get('src_mac') or f'00:00:00:00:{idx:02X}:01',
+                            'dst_mac': header_cfg.get('dstMac') or header_cfg.get('dst_mac') or f'00:00:00:00:{idx:02X}:02',
+                            'src_ip': header_cfg.get('srcIp') or header_cfg.get('src_ip') or '192.168.1.1',
+                            'dst_ip': header_cfg.get('dstIp') or header_cfg.get('dst_ip') or '192.168.1.2',
+                            'interval': interval,
+                            'payload_supplier': supplier,
+                        }
+                    ],
+                }
+            )
+
+        if not device_configs:
+            return None
+
+        return LANModel(
+            env=self.runner.env,
+            model_id=f"{self.session_id}-LAN",
+            config={'devices': device_configs, 'bandwidth': 100_000_000},
+            message_callback=self._handle_protocol_message,
+        )
+
+    def _build_1553b_model(self, ports: List[Dict[str, Any]]) -> Optional[BaseProtocolModel]:
+        """构建 1553B 模型（简化：将端口映射为 RT）"""
+        rt_addresses = []
+        schedule = []
+        for idx, port in enumerate(ports):
+            rt_addr = idx + 1
+            rt_addresses.append(rt_addr)
+            params = port.get('params', {}) or {}
+            message_cfg = port.get('message_config', {}) or {}
+            header_cfg = message_cfg.get('header', {}) or {}
+            interval = max(0.01, (params.get('frequency', 200)) / 1000)
+            supplier = self._make_payload_supplier(
+                '1553B',
+                port.get('node_id'),
+                port.get('port_id'),
+                message_cfg,
+                params,
+            )
+            schedule.append(
+                {
+                    'rt_address': rt_addr,
+                    'sub_address': header_cfg.get('subAddress', 1),
+                    'tr_bit': header_cfg.get('trBit', False),
+                    'word_count': header_cfg.get('wordCount', 1),
+                    'interval': interval,
+                    'payload_supplier': supplier,
+                }
+            )
+
+        if not rt_addresses:
+            return None
+
+        return MIL1553BModel(
+            env=self.runner.env,
+            model_id=f"{self.session_id}-1553B",
+            config={'rt_addresses': rt_addresses, 'schedule': schedule},
+            message_callback=self._handle_protocol_message,
+        )
+
     async def start(self):
         """启动仿真"""
         if self.status == 'running':
@@ -322,6 +602,9 @@ class SimulationEngine:
         
         # 停止 SimPy 仿真运行器
         self.runner.stop()
+        # 停止协议模型
+        for model in self.protocol_models:
+            model.stop()
         
         # 清理数据填充策略的状态
         IncrementStrategy.reset_counters(self.session_id)
@@ -365,16 +648,115 @@ class SimulationEngine:
         # 更新当前时间戳
         self.current_timestamp = self.start_timestamp + simpy_time
         
-        # 生成报文
-        messages = self._generate_messages(simpy_time)
-        self.messages.extend(messages)
-        
+        # 若未绑定协议模型，兼容旧路径生成报文
+        if not self.protocol_models:
+            messages = self._generate_messages(simpy_time)
+            self.messages.extend(messages)
+
         # 计算带宽
         bandwidth_data = self._calculate_bandwidth(simpy_time)
         self.bandwidth_data.extend(bandwidth_data)
         
         # 定期清理旧数据，防止内存泄漏
         self._cleanup_old_data()
+
+    def _handle_protocol_message(self, proto_msg: Dict[str, Any]):
+        """
+        协议模型消息回调：将协议事件映射为通用报文并派发到拓扑链路
+        """
+        source_key = proto_msg.get('device_id') or proto_msg.get('source_key')
+        if not source_key:
+            return
+
+        routes = self.edge_routes.get(source_key, [])
+        if not routes:
+            return
+
+        if ':' in source_key:
+            source_node, source_port = source_key.split(':', 1)
+        else:
+            source_node, source_port = source_key, ''
+
+        sim_time = proto_msg.get('timestamp', self.runner.env.now)
+        send_timestamp = (self.start_timestamp or time.time()) + sim_time
+        payload_hex = proto_msg.get('payload_hex', '')
+        size_bytes = proto_msg.get('size_bytes')
+        if not size_bytes and payload_hex:
+            size_bytes = max(1, len(payload_hex) // 2)
+        size_bytes = size_bytes or proto_msg.get('dlc') or proto_msg.get('data_length') or 1
+
+        port_config = self.port_configs.get(source_key, {}) or {}
+        port_params = port_config.get('params', {}) or {}
+        protocol_type = proto_msg.get('protocol_type') or port_config.get('protocol_type', 'LAN')
+
+        for route in routes:
+            target_node = route.get('target_node')
+            target_port = route.get('target_port')
+            edge = route.get('edge', {})
+            edge_id = edge.get('id', f"{source_node}-{target_node}")
+
+            # 故障注入：断链/丢包/延迟/限速/篡改
+            fault_effect = self.fault_injector.apply_effects(
+                self.session_id,
+                edge_id,
+                {
+                    'payload_hex': payload_hex,
+                    'sender_node_id': source_node,
+                    'receiver_node_id': target_node,
+                    'sender_port_id': source_port,
+                    'receiver_port_id': target_port,
+                    'protocol_type': protocol_type,
+                },
+            )
+            fault_reasons = fault_effect.get('reasons', [])
+            if fault_effect.get('drop'):
+                self._record_drop(source_key)
+                self._emit_drop_alarm(edge_id, source_node, target_node, fault_reasons)
+                continue
+            extra_delay = fault_effect.get('delay', 0.0)
+            payload_hex = fault_effect.get('payload_hex', payload_hex)
+            is_error_frame = proto_msg.get('is_error_frame', False) or fault_effect.get('error_frame', False)
+
+            real_latency = self._calculate_latency(
+                protocol_type=protocol_type,
+                size_bytes=size_bytes,
+                port_params=port_params,
+                edge_data=edge,
+            )
+
+            message = {
+                'message_id': str(uuid.uuid4()),
+                'session_id': self.session_id,
+                'sender_node_id': source_node,
+                'sender_node_name': self._get_node_name(source_node),
+                'sender_port_id': source_port,
+                'sender_port_name': port_config.get('port_name', source_port),
+                'receiver_node_id': target_node,
+                'receiver_node_name': self._get_node_name(target_node),
+                'receiver_port_id': target_port,
+                'receiver_port_name': self.port_configs.get(f"{target_node}:{target_port}", {}).get(
+                    'port_name', target_port
+                ),
+                'protocol_type': protocol_type,
+                'size_bytes': size_bytes,
+                'send_timestamp': send_timestamp,
+                'receive_timestamp': send_timestamp + real_latency + extra_delay,
+                'create_time': datetime.now(),
+                'payload_hex': payload_hex,
+                'field_values': proto_msg.get('field_values', {}),
+                'fill_strategy': proto_msg.get('fill_strategy', self.injection_strategy),
+                'error_frame': is_error_frame,
+                'fault_reasons': fault_reasons,
+            }
+
+            self.messages.append(message)
+
+            # 记录统计
+            self._record_send(source_key)
+
+        # 如果是协议事件（如碰撞），生成告警
+        if proto_msg.get('event_type') == 'collision':
+            self._emit_collision_alarm(proto_msg, source_node)
 
     def _generate_messages(self, simpy_time: float) -> List[Dict[str, Any]]:
         """
@@ -399,15 +781,8 @@ class SimulationEngine:
             if not all([source_node, source_port, target_node, target_port]):
                 continue
             
-            # 检查链路是否被断开（故障注入）
             edge_id = edge.get('id', f"{source_node}-{target_node}")
-            if self.fault_injector.is_disconnected(self.session_id, edge_id):
-                continue
-            
-            # 检查设备是否故障
-            if self.fault_injector.is_device_failed(self.session_id, source_node):
-                continue
-            
+
             # 获取源端口配置
             source_key = f"{source_node}:{source_port}"
             port_config = self.port_configs.get(source_key)
@@ -421,13 +796,6 @@ class SimulationEngine:
             
             # 判断是否应该发送报文（基于仿真时间）
             if simpy_time > 0 and int(simpy_time * 1000) % int(frequency_ms) < tick_interval * 1000:
-                # 检查丢包（故障注入）
-                if self.fault_injector.should_drop(self.session_id, edge_id):
-                    continue
-                
-                # 获取延迟（故障注入）
-                extra_delay = self.fault_injector.get_delay(self.session_id, edge_id)
-                
                 # 获取消息配置
                 message_config = port_config.get('message_config', {})
                 
@@ -457,7 +825,28 @@ class SimulationEngine:
                 
                 # 生成报文内容
                 payload_result = self.payload_generator.generate_payload(message_config, context)
-                
+
+                fault_effect = self.fault_injector.apply_effects(
+                    self.session_id,
+                    edge_id,
+                    {
+                        'payload_hex': payload_result.get('payload_hex', ''),
+                        'sender_node_id': source_node,
+                        'receiver_node_id': target_node,
+                        'sender_port_id': source_port,
+                        'receiver_port_id': target_port,
+                        'protocol_type': port_config.get('protocol_type', 'LAN'),
+                    },
+                )
+                fault_reasons = fault_effect.get('reasons', [])
+                if fault_effect.get('drop'):
+                    self._record_drop(source_key)
+                    self._emit_drop_alarm(edge_id, source_node, target_node, fault_reasons)
+                    continue
+                extra_delay = fault_effect.get('delay', 0.0)
+                is_error_frame = fault_effect.get('error_frame', False)
+                payload_hex = fault_effect.get('payload_hex', payload_result.get('payload_hex', ''))
+
                 # 计算实际报文大小：优先 payload 长度，其次帧长/业务配置，并按协议上下限修正
                 payload_size = len(payload_result.get('payload', b''))
                 header_cfg = message_config.get('header') or {}
@@ -507,9 +896,11 @@ class SimulationEngine:
                     'send_timestamp': self.current_timestamp,
                     'receive_timestamp': self.current_timestamp + real_latency + extra_delay,
                     'create_time': datetime.now(),
-                    'payload_hex': payload_result.get('payload_hex', ''),
+                    'payload_hex': payload_hex,
                     'field_values': payload_result.get('field_values', {}),
                     'fill_strategy': message_config.get('fillStrategy', 'random'),
+                    'error_frame': is_error_frame,
+                    'fault_reasons': fault_reasons,
                 }
                 messages.append(message)
         
@@ -527,19 +918,23 @@ class SimulationEngine:
         """
         bandwidth_data = []
         tick_interval = 0.1  # 100ms
+        # 根据当前速度动态调整统计窗口，速度越快窗口越短，最短0.25s
+        runner_speed = self.runner.get_status().get("speed", 1.0) if self.runner else 1.0
+        clamped_speed = max(0.5, min(float(runner_speed or 1.0), 4.0))
+        window_span = max(0.25, 1.0 / clamped_speed)
         
         # 统计每个端口的报文数量和大小
         port_stats = {}  # {node_id:port_id: {count, total_bytes}}
         
-        # 只统计最近1秒内的报文（滑动窗口）
+        # 只统计最近 window_span 内的报文（滑动窗口）
         recent_messages = [
             msg for msg in self.messages
-            if self.current_timestamp - msg['send_timestamp'] <= 1.0
+            if self.current_timestamp - msg['send_timestamp'] <= window_span
         ]
         
         # 窗口时长
-        window_start = max(self.start_timestamp, self.current_timestamp - 1.0)
-        window_seconds = max(tick_interval, self.current_timestamp - window_start)
+        window_start = max(self.start_timestamp, self.current_timestamp - window_span)
+        window_seconds = max(tick_interval, window_span)
         
         for msg in recent_messages:
             sender_key = f"{msg['sender_node_id']}:{msg['sender_port_id']}"
@@ -585,6 +980,9 @@ class SimulationEngine:
                 'message_count': stats['count'],
                 'create_time': datetime.now()
             })
+
+            # 拥塞/超限告警
+            self._detect_congestion_and_alarm(port_key, bandwidth_mbps, max_bandwidth_mbps, load_percent)
         
         return bandwidth_data
 
@@ -668,3 +1066,98 @@ class SimulationEngine:
         # 更新索引
         self._last_pushed_alarm_index = len(self.alarms)
         return new_alarms
+
+    # ==================== 运行期告警辅助 ====================
+    def _push_alarm(self, alarm: Dict[str, Any]) -> None:
+        """追加告警并带上会话信息"""
+        alarm = dict(alarm)
+        alarm['session_id'] = self.session_id
+        alarm['create_time'] = datetime.now()
+        self.alarms.append(alarm)
+
+    def _record_send(self, port_key: str) -> None:
+        stats = self._port_stats.setdefault(port_key, {'sent': 0, 'dropped': 0, 'collision': 0})
+        stats['sent'] += 1
+
+    def _record_drop(self, port_key: str) -> None:
+        stats = self._port_stats.setdefault(port_key, {'sent': 0, 'dropped': 0, 'collision': 0})
+        stats['dropped'] += 1
+
+    def _record_collision(self, port_key: str) -> None:
+        stats = self._port_stats.setdefault(port_key, {'sent': 0, 'dropped': 0, 'collision': 0})
+        stats['collision'] += 1
+
+    def _emit_drop_alarm(self, edge_id: str, source_node: str, target_node: str, reasons: list = None) -> None:
+        """
+        发送丢包/故障告警
+        @param reasons: 故障原因列表，如 ['disconnect'], ['packet_loss'], ['bandwidth_limit'] 等
+        """
+        now = self.current_timestamp or time.time()
+        last = self._last_drop_alarm_at.get(edge_id, 0)
+        # 节流：同一链路2秒内只告警一次
+        if now - last < 2:
+            return
+        self._last_drop_alarm_at[edge_id] = now
+        
+        reasons = reasons or []
+        primary_reason = reasons[0] if reasons else 'packet_loss'
+        
+        reason_label_map = {
+            'packet_loss': '丢包',
+            'disconnect': '链路断开',
+            'bandwidth_limit': '限速丢弃',
+            'device_failure': '设备故障',
+            'noise_frame': '噪声帧',
+            'payload_corrupt': '数据篡改',
+        }
+        
+        # 主因标签
+        primary_label = reason_label_map.get(primary_reason, '丢包')
+        # 如果有多个原因，附加提示
+        if len(reasons) > 1:
+            message = f'链路 {edge_id} {primary_label}（共{len(reasons)}种故障）'
+        else:
+            message = f'链路 {edge_id} {primary_label}'
+        
+        alarm = {
+            'alarm_id': str(uuid.uuid4()),
+            'alarm_type': primary_reason,
+            'severity': 'warning',
+            'message': message,
+            'timestamp': now,
+            'details': {
+                'edge_id': edge_id,
+                'source_node': source_node,
+                'target_node': target_node,
+                'reasons': reasons,  # 全量原因数组
+                'primary_reason': primary_reason,
+            }
+        }
+        self._push_alarm(alarm)
+
+    def _emit_collision_alarm(self, proto_msg: Dict[str, Any], source_node: str) -> None:
+        port_key = proto_msg.get('device_id')
+        self._record_collision(port_key or '')
+        alarm = AlarmDetector.detect_collision(
+            device_ids=proto_msg.get('collision_devices', [source_node]) if isinstance(proto_msg.get('collision_devices'), list) else [source_node],
+            collision_time=self.current_timestamp or time.time(),
+            bus_id=proto_msg.get('model_id')
+        )
+        self._push_alarm(alarm)
+
+    def _detect_congestion_and_alarm(self, port_key: str, bandwidth_mbps: float, limit_mbps: float, load_percent: float) -> None:
+        alarms = AlarmDetector.detect_bandwidth_alarm(
+            port_id=port_key,
+            bandwidth_mbps=bandwidth_mbps,
+            limit_mbps=limit_mbps
+        )
+        now = self.current_timestamp or time.time()
+        if not alarms:
+            return
+        # 节流：同一端口1秒内只推一次拥塞/超限
+        last = self._last_congestion_alarm_at.get(port_key, 0)
+        if now - last < 1:
+            return
+        self._last_congestion_alarm_at[port_key] = now
+        for alarm in alarms:
+            self._push_alarm(alarm)

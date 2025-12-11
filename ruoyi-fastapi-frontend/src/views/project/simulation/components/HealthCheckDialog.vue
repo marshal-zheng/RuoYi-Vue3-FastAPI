@@ -1,15 +1,19 @@
 <template>
-  <ZxDialog v-bind="dialog.dialogProps.value" v-on="dialog.dialogEvents.value">
+  <ZxDialog 
+    v-bind="dialog.dialogProps.value" 
+    v-on="dialog.dialogEvents.value"
+    class="simulation-dialog health-check-dialog"
+  >
     <template #header>
       <div class="flex items-center gap-2.5 font-semibold text-base">
-        <el-icon :size="20" class="text-primary"><Monitor /></el-icon>
+        <el-icon :size="20" class="text-cyan-400"><Monitor /></el-icon>
         <span>健康自检报告</span>
       </div>
     </template>
 
     <template #footer>
       <div class="flex items-center justify-between w-full">
-        <span class="text-xs text-gray-400">检查时间: {{ formatTime(report?.timestamp) }}</span>
+        <span class="text-xs text-slate-400">检查时间: {{ formatTime(report?.timestamp) }}</span>
         <div class="flex gap-2">
           <el-button @click="handleRecheck">
             <el-icon><Refresh /></el-icon>
@@ -20,100 +24,100 @@
       </div>
     </template>
 
-    <!-- 检查结果汇总 -->
-    <div class="flex items-center gap-4 p-5 rounded-lg mb-5" :class="summaryBgClass">
-      <div :class="summaryIconClass">
-        <el-icon :size="32">
-          <component :is="summaryIcon" />
-        </el-icon>
-      </div>
-      <div class="flex-1">
-        <div class="text-base font-semibold text-gray-800 mb-1">{{ summaryTitle }}</div>
-        <div class="text-sm text-gray-500">{{ summaryDesc }}</div>
-      </div>
-      <div class="flex gap-4">
-        <div class="flex flex-col items-center min-w-[50px]">
-          <span class="text-2xl font-bold text-green-500">{{ report?.passedChecks || 0 }}</span>
-          <span class="text-xs text-gray-400">通过</span>
+    <div class="health-check-content">
+      <!-- 检查结果汇总 -->
+      <div class="summary-card flex items-center gap-4 p-5 rounded-lg mb-5">
+        <div :class="summaryIconClass">
+          <el-icon :size="32">
+            <component :is="summaryIcon" />
+          </el-icon>
         </div>
-        <div class="flex flex-col items-center min-w-[50px]">
-          <span class="text-2xl font-bold text-amber-500">{{ report?.warningChecks || 0 }}</span>
-          <span class="text-xs text-gray-400">警告</span>
+        <div class="flex-1">
+          <div class="text-base font-semibold text-slate-100 mb-1">{{ summaryTitle }}</div>
+          <div class="text-sm text-slate-400">{{ summaryDesc }}</div>
         </div>
-        <div class="flex flex-col items-center min-w-[50px]">
-          <span class="text-2xl font-bold text-red-500">{{ report?.errorChecks || 0 }}</span>
-          <span class="text-xs text-gray-400">错误</span>
+        <div class="flex gap-6">
+          <div class="flex flex-col items-center min-w-[50px]">
+            <span class="text-2xl font-bold text-green-400">{{ report?.passedChecks || 0 }}</span>
+            <span class="text-xs text-slate-400">通过</span>
+          </div>
+          <div class="flex flex-col items-center min-w-[50px]">
+            <span class="text-2xl font-bold text-amber-400">{{ report?.warningChecks || 0 }}</span>
+            <span class="text-xs text-slate-400">警告</span>
+          </div>
+          <div class="flex flex-col items-center min-w-[50px]">
+            <span class="text-2xl font-bold text-red-400">{{ report?.errorChecks || 0 }}</span>
+            <span class="text-xs text-slate-400">错误</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- 检查项详情 -->
-    <div class="max-h-[400px] overflow-y-auto">
-      <el-collapse v-model="activeCategories">
-        <el-collapse-item
-          v-for="(items, category) in groupedItems"
-          :key="category"
-          :name="category"
-        >
+      <!-- 检查项详情 -->
+      <div class="details-container max-h-[400px] overflow-y-auto">
+        <el-collapse v-model="activeCategories">
+          <el-collapse-item
+            v-for="(items, category) in groupedItems"
+            :key="category"
+            :name="category"
+          >
           <template #title>
             <div class="flex items-center justify-between w-full pr-3">
-              <span class="font-medium">{{ category }}</span>
-              <div class="flex gap-1.5">
-                <el-tag
-                  v-if="getCategoryStats(items).error > 0"
-                  type="danger"
-                  size="small"
-                  effect="dark"
-                >
-                  {{ getCategoryStats(items).error }} 错误
-                </el-tag>
-                <el-tag
-                  v-if="getCategoryStats(items).warning > 0"
-                  type="warning"
-                  size="small"
-                  effect="dark"
-                >
-                  {{ getCategoryStats(items).warning }} 警告
-                </el-tag>
-                <el-tag
-                  v-if="getCategoryStats(items).success > 0"
-                  type="success"
-                  size="small"
-                  effect="plain"
-                >
-                  {{ getCategoryStats(items).success }} 通过
-                </el-tag>
+              <span class="font-medium text-slate-200">{{ category }}</span>
+                <div class="flex gap-1.5">
+                  <el-tag
+                    v-if="getCategoryStats(items).error > 0"
+                    type="danger"
+                    size="small"
+                  >
+                    {{ getCategoryStats(items).error }} 错误
+                  </el-tag>
+                  <el-tag
+                    v-if="getCategoryStats(items).warning > 0"
+                    type="warning"
+                    size="small"
+                  >
+                    {{ getCategoryStats(items).warning }} 警告
+                  </el-tag>
+                  <el-tag
+                    v-if="getCategoryStats(items).success > 0"
+                    type="success"
+                    size="small"
+                    effect="plain"
+                  >
+                    {{ getCategoryStats(items).success }} 通过
+                  </el-tag>
+                </div>
               </div>
-            </div>
-          </template>
+            </template>
 
-          <div class="flex flex-col gap-2 py-2">
-            <div
-              v-for="item in items"
-              :key="item.id"
-              class="flex gap-3 p-3 rounded-md"
-              :class="getItemBgClass(item.status)"
-            >
-              <div class="shrink-0 mt-0.5" :class="getItemIconClass(item.status)">
-                <el-icon :size="18">
-                  <component :is="getStatusIcon(item.status)" />
-                </el-icon>
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="font-medium text-gray-800 mb-1">{{ item.name }}</div>
-                <div class="text-sm text-gray-600 break-words">{{ item.message }}</div>
-                <div
-                  v-if="item.suggestion"
-                  class="flex items-start gap-1 mt-2 p-2 text-xs text-blue-600 bg-blue-50 rounded"
-                >
-                  <el-icon class="shrink-0 mt-0.5"><InfoFilled /></el-icon>
-                  <span>{{ item.suggestion }}</span>
+            <div class="flex flex-col gap-2 py-2">
+              <div
+                v-for="item in items"
+                :key="item.id"
+                class="check-item flex gap-3 p-3 rounded-md"
+                :class="getItemBgClass(item.status)"
+              >
+                <div class="shrink-0 mt-0.5" :class="getItemIconClass(item.status)">
+                  <el-icon :size="18">
+                    <component :is="getStatusIcon(item.status)" />
+                  </el-icon>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="font-medium text-slate-100 mb-1">{{ item.name }}</div>
+                  <div class="text-sm text-slate-300 break-words">{{ item.message }}</div>
+                  <div
+                    v-if="item.suggestion"
+                    class="suggestion-box flex items-start gap-1 mt-2 p-2 text-xs rounded"
+                  >
+                    <el-icon class="shrink-0 mt-0.5"><InfoFilled /></el-icon>
+                    <span>{{ item.suggestion }}</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
+          </el-collapse-item>
+        </el-collapse>
+      </div>
     </div>
   </ZxDialog>
 </template>
@@ -293,3 +297,36 @@ defineExpose({
   close,
 });
 </script>
+
+<style lang="less" scoped>
+@import '../styles/simulation-dialog-theme.less';
+
+.health-check-content {
+  color: @sim-dialog-text-primary;
+}
+
+.summary-card {
+  .sim-dialog-card();
+}
+
+.details-container {
+  .sim-dialog-scrollbar();
+}
+
+.check-item {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid @sim-dialog-border;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: @sim-dialog-border-hover;
+  }
+}
+
+.suggestion-box {
+  background: rgba(34, 211, 238, 0.12) !important;
+  color: @sim-dialog-info !important;
+  border: 1px solid rgba(34, 211, 238, 0.25);
+}
+</style>

@@ -413,3 +413,8 @@ def test_load_percent_calculation(bytes_count, time_window, max_bandwidth_mbps):
 后端功能已基本实现，但 **simulation_engine.py 需要重构集成 SimPy 架构**，这是客户需求中明确要求的核心架构变更。完成这一步后，系统将满足 95% 以上的客户需求。
 
 
+
+
+
+
+

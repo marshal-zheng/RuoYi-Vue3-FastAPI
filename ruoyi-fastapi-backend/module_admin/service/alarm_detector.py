@@ -13,6 +13,9 @@ class AlarmDetector:
     基于拓扑数据进行静态分析，检测配置问题
     """
 
+    BUS_PROTOCOLS = {"CAN", "CANFD", "RS485", "RS422", "1553B"}
+    P2P_PROTOCOLS = {"LAN", "ETHERNET"}
+
     @staticmethod
     def detect_loopback(topology_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
@@ -54,6 +57,21 @@ class AlarmDetector:
         return alarms
 
     @staticmethod
+    def _build_port_protocols(topology_data: Dict[str, Any]) -> Dict[str, Optional[str]]:
+        """构建端口协议映射 node:port -> protocol"""
+        port_protocols = {}
+        for node in topology_data.get('nodes', []):
+            node_id = node.get('id')
+            node_data = node.get('data', {}) if isinstance(node, dict) else {}
+            ports = node_data.get('ports', [])
+            for port in ports:
+                port_id = port.get('id')
+                protocol = (port.get('type') or port.get('protocol_type') or '').upper() or None
+                key = f"{node_id}:{port_id}"
+                port_protocols[key] = protocol
+        return port_protocols
+
+    @staticmethod
     def detect_multi_connection(topology_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         检测多连接
@@ -66,59 +84,7 @@ class AlarmDetector:
         返回:
             告警列表
         """
-        alarms = []
-        edges = topology_data.get('edges', [])
-        
-        # 统计每个端口的连接数
-        port_connections = {}  # {node_id:port_id: [连接列表]}
-        
-        for edge in edges:
-            # 兼容两种字段格式
-            source_node = edge.get('source') or edge.get('sourceId')
-            source_port = edge.get('sourcePort') or edge.get('sourcePortId')
-            target_node = edge.get('target') or edge.get('targetId')
-            target_port = edge.get('targetPort') or edge.get('targetPortId')
-            
-            if source_node and source_port:
-                key = f"{source_node}:{source_port}"
-                if key not in port_connections:
-                    port_connections[key] = []
-                port_connections[key].append({
-                    'type': 'source',
-                    'edge_id': edge.get('id'),
-                    'connected_to': f"{target_node}:{target_port}"
-                })
-            
-            if target_node and target_port:
-                key = f"{target_node}:{target_port}"
-                if key not in port_connections:
-                    port_connections[key] = []
-                port_connections[key].append({
-                    'type': 'target',
-                    'edge_id': edge.get('id'),
-                    'connected_to': f"{source_node}:{source_port}"
-                })
-        
-        # 检查是否有端口连接数大于1
-        for port_key, connections in port_connections.items():
-            if len(connections) > 1:
-                node_id, port_id = port_key.split(':', 1)
-                alarm = {
-                    'alarm_id': str(uuid.uuid4()),
-                    'alarm_type': 'multi_connection',
-                    'severity': 'warning',
-                    'affected_nodes': [node_id],
-                    'message': f'检测到多连接：端口 {port_id} 连接到 {len(connections)} 个其他端口',
-                    'timestamp': datetime.now().timestamp(),
-                    'details': {
-                        'port_id': port_id,
-                        'connection_count': len(connections),
-                        'connections': connections
-                    }
-                }
-                alarms.append(alarm)
-        
-        return alarms
+        return []
 
     @staticmethod
     def detect_all_alarms(topology_data: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -133,13 +99,16 @@ class AlarmDetector:
         """
         all_alarms = []
         
+        # 拓扑完整性与协议兼容
+        validation_alarms = AlarmDetector.validate_topology(topology_data)
+        all_alarms.extend(validation_alarms)
+
         # 检测回环
         loopback_alarms = AlarmDetector.detect_loopback(topology_data)
         all_alarms.extend(loopback_alarms)
         
         # 检测多连接
-        multi_conn_alarms = AlarmDetector.detect_multi_connection(topology_data)
-        all_alarms.extend(multi_conn_alarms)
+        # 已按需求关闭多连接告警
         
         return all_alarms
 

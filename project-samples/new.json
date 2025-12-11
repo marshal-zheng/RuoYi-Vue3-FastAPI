@@ -1,0 +1,2715 @@
+{
+  "exportVersion": "1.0.0",
+  "exportTime": "2025-12-10T10:00:00Z",
+  "project": {
+    "projectName": "冲突拥塞告警验证工程",
+    "projectCode": "TEST-ALARM-001",
+    "projectDesc": "用于验证运行期冲突、丢包、拥塞检测功能",
+    "createBy": "admin",
+    "createTime": "2025-12-10T10:00:00Z"
+  },
+  "versions": [
+    {
+      "versionNumber": "v1.0",
+      "versionName": "冲突拥塞测试版本",
+      "description": "包含CAN冲突、RS485主从冲突、LAN拥塞场景",
+      "status": "1",
+      "isLocked": "0",
+      "topology": {
+        "nodes": [
+          {
+            "id": "node-can-master",
+            "data": {
+              "deviceId": 101,
+              "name": "CAN主控器",
+              "label": "CAN主控器",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "name": "CAN-1",
+                  "type": "CAN",
+                  "interfaceType": "CAN",
+                  "position": "right",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "message_config": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "increment",
+                    "fields": [
+                      {
+                        "fieldName": "counter",
+                        "dataType": "UINT16",
+                        "byteCount": 2,
+                        "fillStrategy": "increment",
+                        "startValue": 1,
+                        "step": 1,
+                        "valueRange": "1-2000"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-can-slave1",
+            "data": {
+              "deviceId": 102,
+              "name": "CAN从机1",
+              "label": "CAN从机1",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "name": "CAN-1",
+                  "type": "CAN",
+                  "interfaceType": "CAN",
+                  "position": "left",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "message_config": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-can-slave2",
+            "data": {
+              "deviceId": 103,
+              "name": "CAN从机2",
+              "label": "CAN从机2",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "can-port-1",
+                  "name": "CAN-1",
+                  "type": "CAN",
+                  "interfaceType": "CAN",
+                  "position": "left",
+                  "params": {
+                    "baudRate": 500000,
+                    "canMode": "normal",
+                    "frequency": 50
+                  },
+                  "message_config": {
+                    "header": {
+                      "canId": 288,
+                      "dlc": 8,
+                      "frameLength": 16,
+                      "extended": false
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-rs485-master",
+            "data": {
+              "deviceId": 104,
+              "name": "RS485主机",
+              "label": "RS485主机",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "rs485-port-1",
+                  "name": "RS485-1",
+                  "type": "RS485",
+                  "interfaceType": "RS485",
+                  "position": "right",
+                  "params": {
+                    "baudRate": 9600,
+                    "dataBits": 8,
+                    "stopBits": 1,
+                    "parity": "none",
+                    "frequency": 80
+                  },
+                  "message_config": {
+                    "header": {
+                      "header": "AA55",
+                      "frameLength": 128
+                    },
+                    "fillStrategy": "increment",
+                    "fields": [
+                      {
+                        "fieldName": "cmd",
+                        "dataType": "UINT8",
+                        "byteCount": 1,
+                        "fillStrategy": "cycle",
+                        "presetValues": [
+                          1,
+                          2,
+                          3,
+                          4,
+                          5
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-rs485-slave1",
+            "data": {
+              "deviceId": 105,
+              "name": "RS485从机1",
+              "label": "RS485从机1",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "rs485-port-1",
+                  "name": "RS485-1",
+                  "type": "RS485",
+                  "interfaceType": "RS485",
+                  "position": "left",
+                  "params": {
+                    "baudRate": 9600,
+                    "dataBits": 8,
+                    "stopBits": 1,
+                    "parity": "none",
+                    "frequency": 80
+                  },
+                  "message_config": {
+                    "header": {
+                      "header": "AA55",
+                      "frameLength": 64
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-lan-server",
+            "data": {
+              "deviceId": 106,
+              "name": "LAN服务器",
+              "label": "LAN服务器",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "lan-port-1",
+                  "name": "LAN-1",
+                  "type": "LAN",
+                  "interfaceType": "LAN",
+                  "position": "right",
+                  "params": {
+                    "ipAddress": "192.168.1.10",
+                    "port": 8080,
+                    "protocol": "UDP",
+                    "bandwidth": 10,
+                    "maxBandwidthMbps": 10,
+                    "vizBandwidthMbps": 0.5,
+                    "frequency": 20
+                  },
+                  "message_config": {
+                    "header": {
+                      "frameLength": 1024
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "id": "node-lan-client",
+            "data": {
+              "deviceId": 107,
+              "name": "LAN客户端",
+              "label": "LAN客户端",
+              "nodeType": "device-port-node",
+              "ports": [
+                {
+                  "id": "lan-port-1",
+                  "name": "LAN-1",
+                  "type": "LAN",
+                  "interfaceType": "LAN",
+                  "position": "left",
+                  "params": {
+                    "ipAddress": "192.168.1.20",
+                    "port": 8081,
+                    "protocol": "UDP",
+                    "bandwidth": 10,
+                    "frequency": 20
+                  },
+                  "message_config": {
+                    "header": {
+                      "frameLength": 1024
+                    },
+                    "fillStrategy": "random",
+                    "fields": []
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "edges": [
+          {
+            "id": "edge-can-master-slave1",
+            "sourceId": "node-can-master",
+            "targetId": "node-can-slave1",
+            "sourcePortId": "can-port-1",
+            "targetPortId": "can-port-1"
+          },
+          {
+            "id": "edge-can-master-slave2",
+            "sourceId": "node-can-master",
+            "targetId": "node-can-slave2",
+            "sourcePortId": "can-port-1",
+            "targetPortId": "can-port-1"
+          },
+          {
+            "id": "edge-rs485-master-slave1",
+            "sourceId": "node-rs485-master",
+            "targetId": "node-rs485-slave1",
+            "sourcePortId": "rs485-port-1",
+            "targetPortId": "rs485-port-1"
+          },
+          {
+            "id": "edge-lan-server-client",
+            "sourceId": "node-lan-server",
+            "targetId": "node-lan-client",
+            "sourcePortId": "lan-port-1",
+            "targetPortId": "lan-port-1"
+          }
+        ],
+        "graph": {
+          "cells": [
+            {
+              "id": "node-can-master",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 100,
+                "y": 100
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": 0,
+                        "y": "50%"
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": 0,
+                        "y": "50%"
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "group": "right",
+                    "args": {
+                      "x": 104,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 101,
+                "name": "CAN主控器",
+                "label": "CAN主控器",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "name": "CAN-1",
+                    "type": "CAN",
+                    "interfaceType": "CAN",
+                    "position": "right",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "message_config": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "increment",
+                      "fields": [
+                        {
+                          "fieldName": "counter",
+                          "dataType": "UINT16",
+                          "byteCount": 2,
+                          "fillStrategy": "increment",
+                          "startValue": 1,
+                          "step": 1,
+                          "valueRange": "1-2000"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-can-slave1",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 400,
+                "y": 80
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": 0,
+                        "y": "50%"
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": 0,
+                        "y": "50%"
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "group": "left",
+                    "args": {
+                      "x": 16,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 102,
+                "name": "CAN从机1",
+                "label": "CAN从机1",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "name": "CAN-1",
+                    "type": "CAN",
+                    "interfaceType": "CAN",
+                    "position": "left",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "message_config": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-can-slave2",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 400,
+                "y": 200
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "can-port-1",
+                    "group": "left",
+                    "args": {
+                      "x": 16,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "CAN"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 103,
+                "name": "CAN从机2",
+                "label": "CAN从机2",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "can-port-1",
+                    "name": "CAN-1",
+                    "type": "CAN",
+                    "interfaceType": "CAN",
+                    "position": "left",
+                    "params": {
+                      "baudRate": 500000,
+                      "canMode": "normal",
+                      "frequency": 50
+                    },
+                    "message_config": {
+                      "header": {
+                        "canId": 288,
+                        "dlc": 8,
+                        "frameLength": 16,
+                        "extended": false
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-rs485-master",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 100,
+                "y": 350
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": 0,
+                        "y": "50%"
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "rs485-port-1",
+                    "group": "right",
+                    "args": {
+                      "x": 104,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "RS485"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 104,
+                "name": "RS485主机",
+                "label": "RS485主机",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "rs485-port-1",
+                    "name": "RS485-1",
+                    "type": "RS485",
+                    "interfaceType": "RS485",
+                    "position": "right",
+                    "params": {
+                      "baudRate": 9600,
+                      "dataBits": 8,
+                      "stopBits": 1,
+                      "parity": "none",
+                      "frequency": 80
+                    },
+                    "message_config": {
+                      "header": {
+                        "header": "AA55",
+                        "frameLength": 128
+                      },
+                      "fillStrategy": "increment",
+                      "fields": [
+                        {
+                          "fieldName": "cmd",
+                          "dataType": "UINT8",
+                          "byteCount": 1,
+                          "fillStrategy": "cycle",
+                          "presetValues": [
+                            1,
+                            2,
+                            3,
+                            4,
+                            5
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-rs485-slave1",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 400,
+                "y": 350
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "rs485-port-1",
+                    "group": "left",
+                    "args": {
+                      "x": 16,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "RS485"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 105,
+                "name": "RS485从机1",
+                "label": "RS485从机1",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "rs485-port-1",
+                    "name": "RS485-1",
+                    "type": "RS485",
+                    "interfaceType": "RS485",
+                    "position": "left",
+                    "params": {
+                      "baudRate": 9600,
+                      "dataBits": 8,
+                      "stopBits": 1,
+                      "parity": "none",
+                      "frequency": 80
+                    },
+                    "message_config": {
+                      "header": {
+                        "header": "AA55",
+                        "frameLength": 64
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-lan-server",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 100,
+                "y": 500
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "lan-port-1",
+                    "group": "right",
+                    "args": {
+                      "x": 104,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "LAN"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 106,
+                "name": "LAN服务器",
+                "label": "LAN服务器",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "lan-port-1",
+                    "name": "LAN-1",
+                    "type": "LAN",
+                    "interfaceType": "LAN",
+                    "position": "right",
+                    "params": {
+                      "ipAddress": "192.168.1.10",
+                      "port": 8080,
+                      "protocol": "UDP",
+                      "bandwidth": 10,
+                      "maxBandwidthMbps": 10,
+                      "vizBandwidthMbps": 0.5,
+                      "frequency": 20
+                    },
+                    "message_config": {
+                      "header": {
+                        "frameLength": 1024
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "node-lan-client",
+              "shape": "device-port-node",
+              "view": "vue-shape-view",
+              "position": {
+                "x": 400,
+                "y": 500
+              },
+              "size": {
+                "width": 120,
+                "height": 80
+              },
+              "zIndex": 1,
+              "effect": [
+                "data"
+              ],
+              "locked": false,
+              "draggable": true,
+              "ports": {
+                "groups": {
+                  "top": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": "passive",
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "left": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "right": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -16,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 32,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  },
+                  "bottom": {
+                    "attrs": {
+                      "circle": {
+                        "r": 8,
+                        "fill": "#fff",
+                        "magnet": true,
+                        "stroke": "#31d0c6",
+                        "opacity": 0,
+                        "strokeWidth": 2,
+                        "data-port-type": "STANDARD"
+                      },
+                      "portBody": {
+                        "x": -12,
+                        "y": -6,
+                        "rx": 0,
+                        "ry": 0,
+                        "fill": "#fff",
+                        "width": 24,
+                        "cursor": "crosshair",
+                        "height": 12,
+                        "magnet": true,
+                        "strokeWidth": 1
+                      },
+                      "portLabel": {
+                        "x": 0,
+                        "y": 0,
+                        "fill": "#4b5563",
+                        "text": "",
+                        "fontSize": 7,
+                        "fontFamily": "Arial, sans-serif",
+                        "fontWeight": 500,
+                        "textAnchor": "middle",
+                        "pointerEvents": "none",
+                        "textVerticalAnchor": "middle"
+                      }
+                    },
+                    "markup": [
+                      {
+                        "tagName": "rect",
+                        "selector": "portBody"
+                      },
+                      {
+                        "tagName": "text",
+                        "selector": "portLabel"
+                      }
+                    ],
+                    "position": {
+                      "args": {
+                        "x": "50%",
+                        "y": 0
+                      },
+                      "name": "absolute"
+                    }
+                  }
+                },
+                "items": [
+                  {
+                    "id": "lan-port-1",
+                    "group": "left",
+                    "args": {
+                      "x": 16,
+                      "y": 40.0
+                    },
+                    "attrs": {
+                      "portBody": {
+                        "stroke": "#10b981"
+                      },
+                      "portLabel": {
+                        "text": "LAN"
+                      }
+                    },
+                    "position": {
+                      "name": "absolute"
+                    }
+                  }
+                ]
+              },
+              "data": {
+                "deviceId": 107,
+                "name": "LAN客户端",
+                "label": "LAN客户端",
+                "nodeType": "device-port-node",
+                "ports": [
+                  {
+                    "id": "lan-port-1",
+                    "name": "LAN-1",
+                    "type": "LAN",
+                    "interfaceType": "LAN",
+                    "position": "left",
+                    "params": {
+                      "ipAddress": "192.168.1.20",
+                      "port": 8081,
+                      "protocol": "UDP",
+                      "bandwidth": 10,
+                      "frequency": 20
+                    },
+                    "message_config": {
+                      "header": {
+                        "frameLength": 1024
+                      },
+                      "fillStrategy": "random",
+                      "fields": []
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "edge-can-master-slave1",
+              "shape": "dag-edge",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "source": {
+                "cell": "node-can-master",
+                "port": "can-port-1"
+              },
+              "target": {
+                "cell": "node-can-slave1",
+                "port": "can-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-can-master-slave2",
+              "shape": "dag-edge",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "source": {
+                "cell": "node-can-master",
+                "port": "can-port-1"
+              },
+              "target": {
+                "cell": "node-can-slave2",
+                "port": "can-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-rs485-master-slave1",
+              "shape": "dag-edge",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "source": {
+                "cell": "node-rs485-master",
+                "port": "rs485-port-1"
+              },
+              "target": {
+                "cell": "node-rs485-slave1",
+                "port": "rs485-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            },
+            {
+              "id": "edge-lan-server-client",
+              "shape": "dag-edge",
+              "attrs": {
+                "line": {
+                  "stroke": "#10b981",
+                  "strokeWidth": 5,
+                  "targetMarker": null
+                }
+              },
+              "source": {
+                "cell": "node-lan-server",
+                "port": "lan-port-1"
+              },
+              "target": {
+                "cell": "node-lan-client",
+                "port": "lan-port-1"
+              },
+              "zIndex": -1,
+              "animated": true
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "devices": [
+    {
+      "deviceId": 101,
+      "deviceName": "CAN主控器",
+      "deviceType": "controller",
+      "categoryName": "控制器",
+      "manufacturer": "示例厂商",
+      "model": "CAN-MASTER-V1",
+      "version": "1.0",
+      "busType": "CAN",
+      "remark": "CAN总线主控器，用于测试仲裁冲突",
+      "interfaces": [
+        {
+          "interfaceName": "CAN-1",
+          "interfaceType": "CAN",
+          "position": "right",
+          "description": "CAN总线接口",
+          "params": {
+            "baudRate": 500000,
+            "canMode": "normal",
+            "frequency": 50
+          },
+          "messageConfig": {
+            "header": {
+              "canId": 288,
+              "dlc": 8,
+              "frameLength": 16,
+              "extended": false
+            },
+            "fillStrategy": "increment",
+            "fields": [
+              {
+                "fieldName": "counter",
+                "dataType": "UINT16",
+                "byteCount": 2,
+                "fillStrategy": "increment",
+                "startValue": 1,
+                "step": 1,
+                "valueRange": "1-2000"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 102,
+      "deviceName": "CAN从机1",
+      "deviceType": "sensor",
+      "categoryName": "传感器",
+      "manufacturer": "示例厂商",
+      "model": "CAN-SLAVE-V1",
+      "version": "1.0",
+      "busType": "CAN",
+      "remark": "CAN从机1，与主控器使用相同CAN ID会产生冲突",
+      "interfaces": [
+        {
+          "interfaceName": "CAN-1",
+          "interfaceType": "CAN",
+          "position": "left",
+          "description": "CAN总线接口",
+          "params": {
+            "baudRate": 500000,
+            "canMode": "normal",
+            "frequency": 50
+          },
+          "messageConfig": {
+            "header": {
+              "canId": 288,
+              "dlc": 8,
+              "frameLength": 16,
+              "extended": false
+            },
+            "fillStrategy": "random",
+            "fields": []
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 103,
+      "deviceName": "CAN从机2",
+      "deviceType": "sensor",
+      "categoryName": "传感器",
+      "manufacturer": "示例厂商",
+      "model": "CAN-SLAVE-V2",
+      "version": "1.0",
+      "busType": "CAN",
+      "remark": "CAN从机2，同样使用ID 288会产生三方冲突",
+      "interfaces": [
+        {
+          "interfaceName": "CAN-1",
+          "interfaceType": "CAN",
+          "position": "left",
+          "description": "CAN总线接口",
+          "params": {
+            "baudRate": 500000,
+            "canMode": "normal",
+            "frequency": 50
+          },
+          "messageConfig": {
+            "header": {
+              "canId": 288,
+              "dlc": 8,
+              "frameLength": 16,
+              "extended": false
+            },
+            "fillStrategy": "random",
+            "fields": []
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 104,
+      "deviceName": "RS485主机",
+      "deviceType": "controller",
+      "categoryName": "控制器",
+      "manufacturer": "示例厂商",
+      "model": "RS485-MASTER-V1",
+      "version": "1.0",
+      "busType": "RS485",
+      "remark": "RS485主机，高频发送可能与从机冲突",
+      "interfaces": [
+        {
+          "interfaceName": "RS485-1",
+          "interfaceType": "RS485",
+          "position": "right",
+          "description": "RS485总线接口",
+          "params": {
+            "baudRate": 9600,
+            "dataBits": 8,
+            "stopBits": 1,
+            "parity": "none",
+            "frequency": 80
+          },
+          "messageConfig": {
+            "header": {
+              "header": "AA55",
+              "frameLength": 128
+            },
+            "fillStrategy": "increment",
+            "fields": [
+              {
+                "fieldName": "cmd",
+                "dataType": "UINT8",
+                "byteCount": 1,
+                "fillStrategy": "cycle",
+                "presetValues": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 105,
+      "deviceName": "RS485从机1",
+      "deviceType": "actuator",
+      "categoryName": "执行器",
+      "manufacturer": "示例厂商",
+      "model": "RS485-SLAVE-V1",
+      "version": "1.0",
+      "busType": "RS485",
+      "remark": "RS485从机，同频率发送会产生总线冲突",
+      "interfaces": [
+        {
+          "interfaceName": "RS485-1",
+          "interfaceType": "RS485",
+          "position": "left",
+          "description": "RS485总线接口",
+          "params": {
+            "baudRate": 9600,
+            "dataBits": 8,
+            "stopBits": 1,
+            "parity": "none",
+            "frequency": 80
+          },
+          "messageConfig": {
+            "header": {
+              "header": "AA55",
+              "frameLength": 64
+            },
+            "fillStrategy": "random",
+            "fields": []
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 106,
+      "deviceName": "LAN服务器",
+      "deviceType": "server",
+      "categoryName": "服务器",
+      "manufacturer": "示例厂商",
+      "model": "LAN-SERVER-V1",
+      "version": "1.0",
+      "busType": "LAN",
+      "remark": "LAN服务器，低带宽配置(0.5Mbps)会产生拥塞",
+      "interfaces": [
+        {
+          "interfaceName": "LAN-1",
+          "interfaceType": "LAN",
+          "position": "right",
+          "description": "以太网接口",
+          "params": {
+            "ipAddress": "192.168.1.10",
+            "port": 8080,
+            "protocol": "UDP",
+            "bandwidth": 10,
+            "maxBandwidthMbps": 10,
+            "vizBandwidthMbps": 0.5,
+            "frequency": 20
+          },
+          "messageConfig": {
+            "header": {
+              "frameLength": 1024
+            },
+            "fillStrategy": "random",
+            "fields": []
+          }
+        }
+      ]
+    },
+    {
+      "deviceId": 107,
+      "deviceName": "LAN客户端",
+      "deviceType": "client",
+      "categoryName": "客户端",
+      "manufacturer": "示例厂商",
+      "model": "LAN-CLIENT-V1",
+      "version": "1.0",
+      "busType": "LAN",
+      "remark": "LAN客户端，接收大量数据",
+      "interfaces": [
+        {
+          "interfaceName": "LAN-1",
+          "interfaceType": "LAN",
+          "position": "left",
+          "description": "以太网接口",
+          "params": {
+            "ipAddress": "192.168.1.20",
+            "port": 8081,
+            "protocol": "UDP",
+            "bandwidth": 10,
+            "frequency": 20
+          },
+          "messageConfig": {
+            "header": {
+              "frameLength": 1024
+            },
+            "fillStrategy": "random",
+            "fields": []
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,7 @@
       :collapsed-size="collapsedSize"
       :default-collapsed="defaultCollapsed"
       theme="dark"
-      class="timing-latency-panel"
+      class="timing-latency-panel simbus-floating-panel"
     >
       <template #header>
         <div class="flex items-center gap-2 flex-1">
@@ -1120,6 +1120,9 @@ watch(
   () => {
     if (viewMode.value === 'timing' && props.visible) {
       updateTimingData();
+      if (!animationFrameId) {
+        startAnimation();
+      }
     }
   },
   { deep: true }
@@ -1131,6 +1134,9 @@ watch(
   () => {
     if (viewMode.value === 'bandwidth' && props.visible) {
       drawBandwidthChart();
+      if (!animationFrameId) {
+        startAnimation();
+      }
     }
   },
   { deep: true }

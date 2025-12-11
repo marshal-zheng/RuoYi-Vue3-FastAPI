@@ -1,0 +1,248 @@
+/**
+ * 故障注入模式样式
+ * 专业仿真软件风格
+ */
+
+/* ========================================
+   故障注入模式 - 变量定义
+   ======================================== */
+@fault-accent: #ef4444;
+@fault-accent-light: #fca5a5;
+@fault-accent-glow: rgba(239, 68, 68, 0.3);
+@cyan-accent: #22d3ee;
+@cyan-accent-glow: rgba(34, 211, 238, 0.8);
+
+/* ========================================
+   故障注入模式 - 整体样式
+   ======================================== */
+.fault-injection-mode {
+  --fault-accent: @fault-accent;
+  --fault-accent-glow: @fault-accent-glow;
+}
+
+/* ========================================
+   故障模式提示条
+   ======================================== */
+.fault-mode-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0px;
+  z-index: 100;
+  background: linear-gradient(135deg,
+    rgba(38, 10, 10, 0.9) 0%,
+    rgba(90, 12, 12, 0.9) 45%,
+    rgba(150, 38, 38, 0.88) 100%
+  );
+  border-bottom: 1px solid rgba(239, 68, 68, 0.4);
+  backdrop-filter: blur(12px);
+  box-shadow: 
+    0 4px 24px rgba(239, 68, 68, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+}
+
+.banner-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.3));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  
+  .pulse-icon {
+    font-size: 16px;
+    color: @fault-accent;
+    animation: icon-pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes icon-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.banner-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.banner-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff7ed;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.45), 0 0 14px rgba(239, 68, 68, 0.55);
+}
+
+.banner-hint {
+  font-size: 12px;
+  color: #f8fafc;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  font-weight: 500;
+  
+  strong {
+    color: #fef3c7;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancel-select-btn,
+.exit-mode-btn {
+  color: #f8fafc !important;
+  font-weight: 600;
+  padding: 4px 12px !important;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+}
+
+.cancel-select-btn {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.22), rgba(148, 163, 184, 0.32)) !important;
+  border-color: rgba(226, 232, 240, 0.55) !important;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(226, 232, 240, 0.32), rgba(226, 232, 240, 0.42)) !important;
+    border-color: rgba(255, 255, 255, 0.75) !important;
+  }
+}
+
+.exit-mode-btn {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(248, 113, 113, 0.35)) !important;
+  border-color: rgba(254, 226, 226, 0.65) !important;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.4), rgba(248, 113, 113, 0.5)) !important;
+    border-color: rgba(255, 255, 255, 0.85) !important;
+  }
+}
+
+.banner-progress {
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(239, 68, 68, 0.6) 20%,
+    rgba(239, 68, 68, 0.8) 50%,
+    rgba(239, 68, 68, 0.6) 80%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: progress-flow 3s linear infinite;
+}
+
+@keyframes progress-flow {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ========================================
+   模式切换动画
+   ======================================== */
+.mode-banner-enter-active {
+  animation: banner-slide-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mode-banner-leave-active {
+  animation: banner-slide-out 0.3s ease-in;
+}
+
+@keyframes banner-slide-in {
+  0% { transform: translateY(-100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes banner-slide-out {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+
+/* ========================================
+   故障注入目标画布
+   ======================================== */
+.fault-target-canvas {
+  position: relative;
+  border: 2px solid rgba(239, 68, 68, 0.3) !important;
+  box-shadow: 
+    inset 0 0 40px rgba(239, 68, 68, 0.05),
+    0 0 30px rgba(239, 68, 68, 0.1) !important;
+  transition: all 0.3s ease;
+}
+
+/* 故障注入模式下链路hover效果增强 */
+.fault-target-canvas :deep(.x6-edge) {
+  cursor: crosshair !important;
+}
+
+.fault-target-canvas :deep(.x6-edge:hover path) {
+  stroke: @fault-accent !important;
+  stroke-width: 4px !important;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.6));
+}
+
+/* ========================================
+   选中链路指示器
+   ======================================== */
+.selected-edge-indicator {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(6, 182, 212, 0.2));
+  border: 1px solid rgba(34, 211, 238, 0.5);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(34, 211, 238, 0.2);
+  animation: indicator-appear 0.3s ease-out;
+}
+
+@keyframes indicator-appear {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.indicator-ring {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: @cyan-accent;
+  box-shadow: 0 0 12px @cyan-accent-glow;
+  animation: ring-pulse 1.5s ease-in-out infinite;
+}
+
+.indicator-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: @cyan-accent;
+  letter-spacing: 0.02em;
+}
+
+@keyframes ring-pulse {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 12px @cyan-accent-glow;
+  }
+  50% { 
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(34, 211, 238, 1);
+  }
+}

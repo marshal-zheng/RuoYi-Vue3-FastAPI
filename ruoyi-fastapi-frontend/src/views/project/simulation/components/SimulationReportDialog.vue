@@ -4,6 +4,7 @@
     title="仿真报告"
     width="800px"
     destroy-on-close
+    class="simulation-dialog"
   >
     <div class="simulation-report">
       <!-- 摘要信息 -->
@@ -99,9 +100,10 @@ defineExpose({ open })
 </script>
 
 <style lang="less" scoped>
+@import '../styles/simulation-dialog-theme.less';
+
 .simulation-report {
-  color: #e2e8f0;
-  background: #0b1220;
+  color: @sim-dialog-text-primary;
 
   &__summary {
     margin-bottom: 24px;
@@ -110,7 +112,7 @@ defineExpose({ open })
       margin-bottom: 16px;
       font-size: 16px;
       font-weight: 600;
-      color: #e2e8f0;
+      color: @sim-dialog-text-primary;
     }
   }
 
@@ -121,18 +123,15 @@ defineExpose({ open })
   }
 
   &__summary-item {
+    .sim-dialog-card();
     padding: 16px;
-    background: linear-gradient(180deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
-    border: 1px solid rgba(148, 163, 184, 0.12);
-    border-radius: 10px;
     text-align: center;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
   }
 
   &__summary-label {
     display: block;
     font-size: 12px;
-    color: #94a3b8;
+    color: @sim-dialog-text-secondary;
     margin-bottom: 8px;
     letter-spacing: 0.02em;
   }
@@ -141,7 +140,7 @@ defineExpose({ open })
     display: block;
     font-size: 18px;
     font-weight: 700;
-    color: #f8fafc;
+    color: @sim-dialog-text-white;
   }
 
   &__section {
@@ -151,26 +150,7 @@ defineExpose({ open })
       margin-bottom: 12px;
       font-size: 16px;
       font-weight: 600;
-      color: #e2e8f0;
-    }
-
-    :deep(.el-table) {
-      background: rgba(15, 23, 42, 0.75);
-      color: #e2e8f0;
-      border-radius: 8px;
-    }
-
-    :deep(.el-table th) {
-      background: rgba(30, 41, 59, 0.9);
-      color: #cbd5e1;
-    }
-
-    :deep(.el-table tr) {
-      background: rgba(15, 23, 42, 0.6);
-    }
-
-    :deep(.el-table__body tr:hover > td) {
-      background: rgba(59, 130, 246, 0.08);
+      color: @sim-dialog-text-primary;
     }
   }
 }

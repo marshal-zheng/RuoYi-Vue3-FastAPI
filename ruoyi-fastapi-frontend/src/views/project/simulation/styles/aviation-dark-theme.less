@@ -15,28 +15,102 @@
 @aviation-text-secondary: #94a3b8; // 次要文字
 @aviation-border: rgba(34, 211, 238, 0.25); // 默认边框
 
-// 带宽监控面板样式
-.bandwidth-chart-panel {
-  background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%) !important;
-  border: 1px solid rgba(34, 211, 238, 0.25) !important;
+// 通用浮动面板/卡片/图表样式
+.simbus-panel-shell() {
+  background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
+  border: 1px solid @aviation-border !important;
   color: @aviation-text !important;
-  .zx-floating-panel__header {
-    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+}
+
+.simbus-panel-header() {
+  background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
+  border-bottom: 1px solid @aviation-border !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.08) !important;
+}
+
+.simbus-stat-card() {
+  background: rgba(15, 23, 42, 0.82) !important;
+  border: 1px solid @aviation-border !important;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5), inset 0 0 4px rgba(34, 211, 238, 0.05) !important;
+  color: @aviation-text !important;
+}
+
+.simbus-chart-wrapper() {
+  background: rgba(10, 15, 24, 0.95) !important;
+  border: 1px solid @aviation-border !important;
+  box-shadow:
+    inset 0 0 20px rgba(34, 211, 238, 0.05),
+    0 0 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.simbus-floating-panel {
+  .simbus-panel-shell();
+
+  > div:first-child {
+    .simbus-panel-header();
   }
+
+  .zx-floating-panel__header {
+    border: 1px solid @aviation-border !important;
+  }
+
   .zx-floating-panel__collapse-btn {
     color: @aviation-text !important;
-    border: 1px solid rgba(34, 211, 238, 0.25) !important;
+    border: 1px solid @aviation-border !important;
   }
-  
-  // Header 区域 - 航空暗黑系
-  .floating-panel {
-    > div:first-child {
-      background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
-      border-bottom: 1px solid @aviation-border !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.08) !important;
+
+  .panel-header {
+    color: @aviation-text !important;
+  }
+
+  .panel-title .title-text {
+    color: @aviation-text !important;
+    text-shadow: 0 0 8px @aviation-cyan-glow !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .el-badge .el-badge__content {
+    background: @aviation-red !important;
+    border-color: #0d1117 !important;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.6) !important;
+    color: #ffffff !important;
+  }
+
+  button {
+    color: @aviation-text-secondary !important;
+
+    &:hover {
+      background: rgba(34, 211, 238, 0.1) !important;
+      color: @aviation-cyan !important;
     }
-    
-    // 标题文字
+  }
+}
+
+// 将通用浮动面板样式应用到各模块容器
+.bandwidth-chart-panel .floating-panel,
+.alarm-panel-floating .floating-panel,
+.simulation-dark .floating-panel[theme="dark"] {
+  .simbus-floating-panel;
+}
+
+// 统计卡片统一样式：带宽 / 告警 / 时序
+.bandwidth-chart-panel .stats-grid .stat-card,
+.alarm-panel-content .stat-card,
+.latency-stats-grid .stat-card,
+.grouped-stats-table {
+  .simbus-stat-card();
+}
+
+// 图表容器统一样式：带宽 / 时序
+.bandwidth-chart-panel .chart-wrapper,
+.timing-chart-wrapper {
+  .simbus-chart-wrapper();
+}
+
+// 带宽监控面板样式
+.bandwidth-chart-panel {
+  .floating-panel {
     .font-semibold,
     span {
       color: @aviation-text !important;
@@ -80,16 +154,6 @@
       
       .el-input__inner {
         color: @aviation-text !important;
-      }
-    }
-    
-    // 按钮图标
-    button {
-      color: @aviation-text-secondary !important;
-      
-      &:hover {
-        background: rgba(34, 211, 238, 0.1) !important;
-        color: @aviation-cyan !important;
       }
     }
   }
@@ -149,61 +213,6 @@
     }
   }
 }
-
-// 告警面板样式
-.alarm-panel-floating {
-  .zx-floating-panel__header {
-    border: 1px solid rgba(34, 211, 238, 0.25) !important;
-  }
-  .zx-floating-panel__collapse-btn {
-    border: 1px solid rgba(34, 211, 238, 0.25) !important;
-  }
-  background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
-  
-  // Header 区域 - 航空暗黑系
-  .floating-panel {
-    > div:first-child {
-      background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
-      border-bottom: 1px solid @aviation-border !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(34, 211, 238, 0.08) !important;
-    }
-    
-    .panel-header {
-      color: @aviation-text !important;
-    }
-    
-    .panel-title {
-      .title-text {
-        color: @aviation-text !important;
-        text-shadow: 0 0 8px @aviation-cyan-glow !important;
-        font-weight: 600 !important;
-        letter-spacing: 0.05em !important;
-      }
-    }
-    
-    // Badge 样式
-    .el-badge {
-      .el-badge__content {
-        background: @aviation-red !important;
-        border-color: #0d1117 !important;
-        box-shadow: 0 0 8px rgba(239, 68, 68, 0.6) !important;
-        color: #ffffff !important;
-      }
-    }
-    
-    // 按钮图标
-    button {
-      color: @aviation-text-secondary !important;
-      
-      &:hover {
-        background: rgba(34, 211, 238, 0.1) !important;
-        color: @aviation-cyan !important;
-      }
-    }
-  }
-}
-
-
 
 // AlarmPanel 内容区域 - 航空暗黑系
 .alarm-panel-content {
@@ -335,39 +344,3 @@
   }
 }
 
-// 全局覆盖 FloatingPanel 在 simulation-dark 下的样式
-.simulation-dark {
-  // 带宽监控面板
-  .bandwidth-chart-panel {
-    background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
-    
-    .floating-panel {
-      > div:first-child {
-        background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
-        border-bottom: 1px solid @aviation-border !important;
-        color: @aviation-text !important;
-      }
-    }
-  }
-
-  // 告警面板
-  .alarm-panel-floating {
-    .floating-panel {
-      > div:first-child {
-        background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
-        border-bottom: 1px solid @aviation-border !important;
-        color: @aviation-text !important;
-      }
-    }
-  }
-  
-  // 设备详情面板
-  .floating-panel[theme="dark"] {
-    background: linear-gradient(180deg, #0a1628 0%, #0d1117 100%) !important;
-    border: 1px solid @aviation-border !important;
-    
-    .panel-title {
-      color: @aviation-text !important;
-    }
-  }
-}

@@ -4,7 +4,7 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import createVitePlugins from './vite/plugins'
 
-const baseUrl = 'http://127.0.0.1:8000' 
+const baseUrl = 'http://127.0.0.1:8088' 
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {

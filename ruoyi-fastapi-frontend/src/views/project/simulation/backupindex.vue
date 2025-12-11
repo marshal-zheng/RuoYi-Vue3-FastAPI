@@ -258,7 +258,7 @@ const {
   triggerTrafficAnimation,
   triggerErrorAnimation,
   setNodeActive,
-} = useTopologyAnimation(dagRef);
+} = useTopologyAnimation(dagRef, () => simulationState.speed);
 
 // 故障注入
 const { faults, injectFault, clearFault, clearAllFaults } = useFaultInjection(sessionId);

@@ -92,6 +92,9 @@ export function useSimulationControl(projectId, versionId) {
   const isStopped = computed(() => simulationState.status === SimulationStatus.STOPPED)
   const isIdle = computed(() => simulationState.status === SimulationStatus.IDLE)
 
+  // 最近一次前端主动设置速度的时间戳（用于防止状态回写冲掉本地设置）
+  const lastSpeedSetAt = ref(0)
+
   /**
    * 启动计时器
    */
@@ -245,9 +248,39 @@ export function useSimulationControl(projectId, versionId) {
   async function setSpeed(speed) {
     const clampedSpeed = clampSpeed(speed)
     simulationState.speed = clampedSpeed
+    lastSpeedSetAt.value = Date.now()
 
-    if (sessionId.value && isRunning.value) {
+    // 仅在有有效会话且处于运行/暂停时下发后端
+    if (sessionId.value && (isRunning.value || isPaused.value)) {
       await setSimulationSpeed(sessionId.value, clampedSpeed)
+    }
+  }
+
+  /**
+   * 同步后端状态（WS 状态推送）
+   */
+  function syncStatus(status) {
+    if (!status || typeof status !== 'object') return
+
+    if (status.status) {
+      simulationState.status = status.status
+    }
+    if (status.speed !== undefined) {
+      const now = Date.now()
+      const incoming = clampSpeed(Number(status.speed))
+      // 如果刚刚（1秒内）本地设置过速度，则不被后端回写立即覆盖
+      if (now - lastSpeedSetAt.value > 1000) {
+        simulationState.speed = incoming
+      }
+    }
+    if (status.elapsedTime !== undefined) {
+      simulationState.elapsedTime = Number(status.elapsedTime) || 0
+    }
+    if (status.messageCount !== undefined) {
+      simulationState.messageCount = Number(status.messageCount) || 0
+    }
+    if (status.alarmCount !== undefined) {
+      simulationState.alarmCount = Number(status.alarmCount) || 0
     }
   }
 
@@ -302,6 +335,7 @@ export function useSimulationControl(projectId, versionId) {
     stop,
     step,
     setSpeed,
+    syncStatus,
     reset,
     updateStats,
   }

@@ -7,7 +7,7 @@
       :collapsed-size="collapsedSize"
       :default-collapsed="defaultCollapsed"
       theme="dark"
-      class="bandwidth-chart-panel"
+      class="bandwidth-chart-panel simbus-floating-panel"
     >
       <template #header>
         <div class="flex items-center gap-2 flex-1">
@@ -45,7 +45,7 @@
           <!-- 示波器风格背景 -->
           <div class="oscilloscope-bg">
             <div class="grid-lines"></div>
-            <div class="scanline" :style="{ left: scanlinePosition }"></div>
+            <div v-if="hasData" class="scanline" :style="{ left: scanlinePosition }"></div>
           </div>
 
           <!-- Canvas 图表 -->
@@ -172,6 +172,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  running: {
+    type: Boolean,
+    default: undefined,
+  },
+  speed: {
+    type: Number,
+    default: 1,
+  },
+  resetOnStop: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // DOM引用
@@ -184,6 +196,7 @@ const viewOptions = [
   { label: '汇总', value: 'total' },
   { label: '按端口', value: 'port' },
 ];
+const hasData = ref(false);
 
 // 带宽数值格式化，自动在 Mbps/Kbps 之间切换，避免小数被四舍五入成 0
 const formatBandwidth = (valueMbps) => {
@@ -202,16 +215,18 @@ const formatBandwidth = (valueMbps) => {
   return { value, unit: 'Mbps', text: `${value} Mbps` };
 };
 
-// 实时数据缓冲区（固定60个点，表示60秒）
-const MAX_POINTS = 60;
+// 实时数据缓冲区（固定600个点，表示10分钟按1秒采样）
+const MAX_POINTS = 600;
 const dataBuffer = ref(new Array(MAX_POINTS).fill(0));
 const currentBandwidth = ref(0);
 const scanlineOffset = ref(0);
+const STEP_OFFSET = 100 / MAX_POINTS;
 
 // 动画相关
 let animationFrameId = null;
 let lastUpdateTime = 0;
 const UPDATE_INTERVAL = 1000; // 每秒更新一次数据点
+const MIN_SPEED = 0.25;
 
 // Tooltip 状态
 const chartTooltip = ref({
@@ -238,6 +253,9 @@ const chartLayout = ref({
 
 // 是否正在运行
 const isRunning = computed(() => {
+  if (props.running !== undefined && props.running !== null) {
+    return props.running;
+  }
   if (props.bandwidthData.length === 0) return false;
   const latestTime = Math.max(...props.bandwidthData.map((d) => d.timestamp || 0));
   const now = Date.now() / 1000;
@@ -337,6 +355,15 @@ const stats = computed(() => {
   };
 });
 
+// 播放速率，最低 0.25x，防止 0
+const playSpeed = computed(() => {
+  const val = Number(props.speed) || 1;
+  return Math.max(val, MIN_SPEED);
+});
+
+// 动画间隔随速度缩放
+const intervalMs = computed(() => UPDATE_INTERVAL / playSpeed.value);
+
 // 自动选择第一个端口
 watch(
   portList,
@@ -352,6 +379,7 @@ watch(
 watch(
   () => props.bandwidthData,
   (newData) => {
+    hasData.value = Array.isArray(newData) && newData.length > 0;
     if (!newData || newData.length === 0) return;
 
     // 根据视图模式过滤数据
@@ -387,7 +415,7 @@ watch(
       }
     }
   },
-  { deep: true }
+  { deep: true, immediate: true }
 );
 
 // 绘制图表
@@ -582,11 +610,15 @@ function handleChartMouseLeave() {
 
 // 动画循环
 function animate(timestamp) {
-  // 更新扫描线位置
-  scanlineOffset.value += 0.5;
+  if (!isRunning.value) {
+    stopAnimation();
+    return;
+  }
+
+  scanlineOffset.value += 0.5 * playSpeed.value;
 
   // 每秒更新一次数据点
-  if (timestamp - lastUpdateTime >= UPDATE_INTERVAL) {
+  if (timestamp - lastUpdateTime >= intervalMs.value) {
     lastUpdateTime = timestamp;
 
     // 将数据向左移动，添加新数据到右侧
@@ -598,6 +630,12 @@ function animate(timestamp) {
   }
 
   animationFrameId = requestAnimationFrame(animate);
+}
+
+// 单步推进扫描线
+function stepScanline() {
+  scanlineOffset.value += STEP_OFFSET;
+  drawChart();
 }
 
 // 启动动画
@@ -630,7 +668,12 @@ watch(
     if (visible) {
       nextTick(() => {
         initCanvas();
-        startAnimation();
+        if (isRunning.value) {
+          startAnimation();
+        } else {
+          stopAnimation();
+          drawChart();
+        }
       });
     } else {
       stopAnimation();
@@ -638,6 +681,19 @@ watch(
   },
   { immediate: true }
 );
+
+watch(isRunning, (running) => {
+  if (running && props.visible) {
+    startAnimation();
+  } else {
+    stopAnimation();
+    if (props.resetOnStop) {
+      dataBuffer.value = new Array(MAX_POINTS).fill(0);
+      currentBandwidth.value = 0;
+      drawChart();
+    }
+  }
+});
 
 // 监听视图模式变化
 watch([viewMode, selectedPort], () => {
@@ -649,12 +705,18 @@ watch([viewMode, selectedPort], () => {
 onMounted(() => {
   if (props.visible) {
     initCanvas();
-    startAnimation();
+    if (isRunning.value) {
+      startAnimation();
+    }
   }
 });
 
 onUnmounted(() => {
   stopAnimation();
+});
+
+defineExpose({
+  stepScanline,
 });
 </script>
 

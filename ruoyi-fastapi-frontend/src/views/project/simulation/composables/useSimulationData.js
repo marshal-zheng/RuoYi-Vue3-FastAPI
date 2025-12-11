@@ -16,6 +16,117 @@ const DATA_LIMITS = {
 }
 
 /**
+ * 计算报文时延（毫秒）
+ */
+function getLatencyMs(message) {
+  const send = message?.sendTimestamp ?? message?.timestamp
+  const recv = message?.receiveTimestamp
+  if (!send || !recv) return null
+  return Math.max(0, (recv - send) * 1000)
+}
+
+/**
+ * 单条条件匹配
+ */
+function matchesCondition(message, condition) {
+  if (!condition) return null
+  const type = condition.type || 'payload'
+  const operator = (condition.operator || 'includes').toLowerCase()
+
+  if (type === 'payload') {
+    const payload = String(message?.payloadHex || '').toLowerCase()
+    const value = String(condition.value || '').toLowerCase()
+    if (!value) return null
+    if (operator === 'startsWith') return payload.startsWith(value)
+    if (operator === 'equals') return payload === value
+    return payload.includes(value)
+  }
+
+  if (type === 'field') {
+    const fieldValues = message?.fieldValues || {}
+    const keyFilter = String(condition.key || '').toLowerCase()
+    const valueFilter = String(condition.value || '').toLowerCase()
+    if (!keyFilter && !valueFilter) return null
+    return Object.entries(fieldValues).some(([k, v]) => {
+      const kText = String(k || '').toLowerCase()
+      const vText = String(v ?? '').toLowerCase()
+      if (keyFilter && !kText.includes(keyFilter)) return false
+      if (valueFilter) return vText.includes(valueFilter) || (!keyFilter && kText.includes(valueFilter))
+      return true
+    })
+  }
+
+  if (type === 'node') {
+    const field = condition.field || 'senderNodeId'
+    const target = String(message?.[field] || '').toLowerCase()
+    const value = String(condition.value || '').toLowerCase()
+    if (!value) return null
+    return target.includes(value)
+  }
+
+  if (type === 'protocol') {
+    const protocol = String(message?.protocolType || '').toLowerCase()
+    const value = String(condition.value || '').toLowerCase()
+    if (!value) return null
+    if (operator === 'equals') return protocol === value
+    return protocol.includes(value)
+  }
+
+  if (type === 'size') {
+    const size = Number(message?.sizeBytes || 0)
+    const min = condition.min !== undefined && condition.min !== null ? Number(condition.min) : null
+    const max = condition.max !== undefined && condition.max !== null ? Number(condition.max) : null
+    if (min === null && max === null) return null
+    if (Number.isFinite(min) && size < min) return false
+    if (Number.isFinite(max) && size > max) return false
+    return true
+  }
+
+  if (type === 'latency') {
+    const latency = getLatencyMs(message)
+    if (latency === null) return false
+    const min = condition.min !== undefined && condition.min !== null ? Number(condition.min) : null
+    const max = condition.max !== undefined && condition.max !== null ? Number(condition.max) : null
+    if (min === null && max === null) return null
+    if (Number.isFinite(min) && latency < min) return false
+    if (Number.isFinite(max) && latency > max) return false
+    return true
+  }
+
+  return null
+}
+
+/**
+ * 多条件匹配（支持 AND / OR）
+ */
+function matchesConditions(message, filter) {
+  const conditions = Array.isArray(filter?.conditions) ? filter.conditions : []
+  if (!conditions.length) return true
+
+  const normalized = conditions
+    .map((c) => ({
+      ...c,
+      type: c?.type || 'payload',
+    }))
+    .filter((c) => {
+      if (c.type === 'size' || c.type === 'latency') {
+        return c.min !== undefined || c.max !== undefined
+      }
+      return Boolean(String(c.value || c.key || '').trim())
+    })
+
+  if (!normalized.length) return true
+
+  const logic = (filter?.conditionLogic || 'and').toLowerCase() === 'or' ? 'or' : 'and'
+  const results = normalized
+    .map((cond) => matchesCondition(message, cond))
+    .filter((res) => res !== null)
+
+  if (!results.length) return true
+  return logic === 'or' ? results.some(Boolean) : results.every(Boolean)
+}
+
+/**
  * 报文过滤器
  * @param {Array} messages - 报文列表
  * @param {Object} filter - 过滤条件
@@ -54,6 +165,10 @@ export function filterMessages(messages, filter) {
         msg.receiverNodeName,
         msg.protocolType,
         msg.payloadHex,
+        msg.senderPortId,
+        msg.receiverPortId,
+        msg.fillStrategy,
+        ...(msg.fieldValues ? Object.values(msg.fieldValues) : []),
       ].filter(Boolean).map(s => s.toLowerCase())
 
       if (!searchFields.some(field => field.includes(keyword))) {
@@ -71,6 +186,11 @@ export function filterMessages(messages, filter) {
 
     // 错误报文过滤
     if (filter.errorOnly && !msg.isError) {
+      return false
+    }
+
+    // 多条件过滤
+    if (!matchesConditions(msg, filter)) {
       return false
     }
 
@@ -129,6 +249,7 @@ export function useSimulationData(sessionId) {
   const bandwidthData = ref([])
   const messageData = ref([])
   const alarmData = ref([])
+  const faultEventData = ref([])
 
   // 过滤条件
   const messageFilter = ref({})
@@ -138,6 +259,7 @@ export function useSimulationData(sessionId) {
   const lastMessageIndex = ref(0)
   const lastBandwidthIndex = ref(0)
   const lastAlarmIndex = ref(0)
+  const lastFaultEventIndex = ref(0)
 
   // WebSocket 连接
   const wsManager = useSimulationWebSocket()
@@ -246,9 +368,11 @@ export function useSimulationData(sessionId) {
     bandwidthData.value = []
     messageData.value = []
     alarmData.value = []
+    faultEventData.value = []
     lastMessageIndex.value = 0
     lastBandwidthIndex.value = 0
     lastAlarmIndex.value = 0
+    lastFaultEventIndex.value = 0
   }
 
   /**
@@ -278,6 +402,15 @@ export function useSimulationData(sessionId) {
     return result.newData
   }
 
+  /**
+   * 获取增量故障事件
+   */
+  function getNewFaultEvents() {
+    const result = extractIncrementalData(faultEventData.value, lastFaultEventIndex.value)
+    lastFaultEventIndex.value = result.newIndex
+    return result.newData
+  }
+
   // 监听 WebSocket 数据
   watch(() => wsManager.messagesData.value, (newData) => {
     if (newData && newData.length > 0) {
@@ -294,6 +427,15 @@ export function useSimulationData(sessionId) {
   watch(() => wsManager.alarmsData.value, (newData) => {
     if (newData && newData.length > 0) {
       updateAlarmData(newData)
+    }
+  })
+
+  watch(() => wsManager.faultEventsData.value, (newData) => {
+    if (newData && newData.length > 0) {
+      faultEventData.value = cleanupOldData(
+        [...faultEventData.value, ...newData],
+        200
+      )
     }
   })
 
@@ -317,10 +459,12 @@ export function useSimulationData(sessionId) {
     bandwidthData,
     messageData,
     alarmData,
+    statusData: wsManager.statusData,
     filteredMessages,
     filteredAlarms,
     bandwidthByProtocol,
     latestBandwidth,
+    faultEventData,
 
     // 过滤条件
     messageFilter,
@@ -336,9 +480,8 @@ export function useSimulationData(sessionId) {
     getNewMessages,
     getNewBandwidth,
     getNewAlarms,
+    getNewFaultEvents,
 
-    // WebSocket 管理器
-    wsManager,
   }
 }
 

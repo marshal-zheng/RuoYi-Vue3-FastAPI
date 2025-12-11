@@ -60,10 +60,18 @@ class Log:
                 func_path = '...' + func_path[-97:]
             # 获取上下文信息
             request_name_list = get_function_parameters_name_by_type(func, Request)
-            request = get_function_parameters_value_by_name(func, request_name_list[0], *args, **kwargs)
+            request = (
+                get_function_parameters_value_by_name(func, request_name_list[0], *args, **kwargs)
+                if request_name_list
+                else None
+            )
             token = request.headers.get('Authorization')
             session_name_list = get_function_parameters_name_by_type(func, AsyncSession)
-            query_db = get_function_parameters_value_by_name(func, session_name_list[0], *args, **kwargs)
+            query_db = (
+                get_function_parameters_value_by_name(func, session_name_list[0], *args, **kwargs)
+                if session_name_list
+                else None
+            )
             request_method = request.method
             operator_type = 0
             user_agent = request.headers.get('User-Agent')
@@ -176,8 +184,15 @@ class Log:
                     login_log['status'] = str(status)
                     login_log['msg'] = result_dict.get('msg')
 
-                    await LoginLogService.add_login_log_services(query_db, LogininforModel(**login_log))
+                    if query_db:
+                        await LoginLogService.add_login_log_services(query_db, LogininforModel(**login_log))
+                    else:
+                        logger.warning('Log decorator 未获取到 AsyncSession，跳过登录日志入库')
             else:
+                if not query_db:
+                    logger.warning('Log decorator 未获取到 AsyncSession，跳过操作日志入库')
+                    return result
+
                 current_user = await LoginService.get_current_user(request, token, query_db)
                 oper_name = current_user.user.user_name
                 dept_name = current_user.user.dept.dept_name if current_user.user.dept else None

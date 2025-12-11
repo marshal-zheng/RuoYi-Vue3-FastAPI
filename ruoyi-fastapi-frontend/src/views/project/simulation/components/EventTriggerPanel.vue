@@ -4,6 +4,7 @@
     title="事件触发配置"
     direction="rtl"
     size="400px"
+    class="simulation-drawer"
     @update:model-value="$emit('update:visible', $event)"
   >
     <div class="flex flex-col h-full">
@@ -12,16 +13,16 @@
         <div
           v-for="event in events"
           :key="event.eventId"
-          class="p-4 mb-3 rounded-lg transition-colors"
-          :class="event.status === 'triggered' ? 'bg-success-50 border border-success-200' : 'bg-gray-50'"
+          class="event-card p-4 mb-3 rounded-lg transition-colors"
+          :class="event.status === 'triggered' ? 'triggered' : ''"
         >
           <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-gray-800">{{ event.name }}</span>
+            <span class="font-semibold text-slate-100">{{ event.name }}</span>
             <el-tag :type="getStatusType(event.status)" size="small">
               {{ getStatusText(event.status) }}
             </el-tag>
           </div>
-          <div class="text-xs text-gray-500 mb-3 space-y-1">
+          <div class="text-xs text-slate-400 mb-3 space-y-1">
             <div>条件: {{ getConditionText(event.condition) }}</div>
             <div>动作: {{ getActionText(event.action) }}</div>
           </div>
@@ -32,7 +33,7 @@
           </div>
         </div>
 
-        <div v-if="events.length === 0" class="flex flex-col items-center justify-center py-12 text-gray-400">
+        <div v-if="events.length === 0" class="flex flex-col items-center justify-center py-12 text-slate-500">
           <el-icon class="text-5xl mb-3"><Lightning /></el-icon>
           <span class="text-sm">暂无事件配置</span>
         </div>
@@ -51,6 +52,7 @@
       :title="editingEvent ? '编辑事件' : '添加事件'"
       width="500px"
       append-to-body
+      class="simulation-dialog"
     >
       <el-form :model="eventForm" label-width="80px">
         <el-form-item label="事件名称">
@@ -70,7 +72,7 @@
 
         <el-form-item v-if="eventForm.conditionType === 'time'" label="触发时间">
           <el-input-number v-model="eventForm.conditionValue.time" :min="0" />
-          <span class="ml-2 text-gray-500">秒</span>
+          <span class="ml-2 text-slate-400">秒</span>
         </el-form-item>
 
         <el-form-item v-if="eventForm.conditionType === 'message_count'" label="报文数量">
@@ -79,7 +81,7 @@
 
         <el-form-item v-if="eventForm.conditionType === 'bandwidth_threshold'" label="阈值">
           <el-input-number v-model="eventForm.conditionValue.threshold" :min="0" :max="100" />
-          <span class="ml-2 text-gray-500">%</span>
+          <span class="ml-2 text-slate-400">%</span>
         </el-form-item>
 
         <el-divider>触发动作</el-divider>
@@ -228,3 +230,40 @@ watch(
   }
 )
 </script>
+
+<style lang="less" scoped>
+@import '../styles/simulation-dialog-theme.less';
+
+.event-card {
+  .sim-dialog-card();
+  
+  &.triggered {
+    background: linear-gradient(180deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+    border-color: rgba(34, 197, 94, 0.4);
+  }
+}
+
+:deep(.el-form) {
+  .el-form-item__label {
+    color: @sim-dialog-text-primary;
+  }
+  
+  .el-input__inner,
+  .el-input-number__decrease,
+  .el-input-number__increase {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: @sim-dialog-border;
+    color: @sim-dialog-text-primary;
+  }
+  
+  .el-select .el-input__wrapper {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: @sim-dialog-border;
+  }
+}
+
+:deep(.el-divider__text) {
+  background: @sim-dialog-bg-main;
+  color: @sim-dialog-text-primary;
+}
+</style>

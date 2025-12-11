@@ -2,7 +2,7 @@
   <teleport to="body">
     <div
       v-if="!collapsed"
-      class="floating-panel fixed z-50 rounded-lg overflow-hidden transition-all duration-300 ease-in-out"
+      class="floating-panel fixed z-50 rounded-lg overflow-hidden transition-all duration-300 ease-in-out flex flex-col"
       :class="panelClass"
       :style="panelStyle"
       @mousedown="handleMouseDown"
@@ -41,8 +41,8 @@
       </div>
 
       <!-- Content -->
-      <div class="overflow-auto" :style="contentStyle">
-        <div class="p-4">
+      <div class="overflow-auto flex-1 min-h-0" :style="contentStyle">
+        <div class="p-4 h-full flex flex-col min-h-0">
           <slot></slot>
         </div>
       </div>
@@ -176,12 +176,18 @@ const panelStyle = computed(() => {
     style.transition = 'none';
   }
 
+  const height = currentSize.value.height || currentSize.value.maxHeight;
+  if (height) {
+    style.height = height;
+  }
+
   return style;
 });
 
 const contentStyle = computed(() => {
   return {
-    maxHeight: currentSize.value.maxHeight || '500px',
+    height: '100%',
+    maxHeight: currentSize.value.maxHeight || currentSize.value.height || '500px',
     backgroundColor: panelTokens.value.bg,
   };
 });

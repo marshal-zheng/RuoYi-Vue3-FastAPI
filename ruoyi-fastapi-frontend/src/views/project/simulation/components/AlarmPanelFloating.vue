@@ -11,7 +11,7 @@
       <div class="panel-header">
         <div class="panel-title">
           <span class="title-text">告警</span>
-          <el-badge v-if="alarms?.length" :value="alarms.length" :max="99" type="danger" />
+          <el-badge v-if="alarmBadge" :value="alarmBadge" :max="99" type="danger" />
         </div>
         <div class="panel-actions">
           <!-- 可按需添加操作按钮 -->
@@ -19,17 +19,19 @@
       </div>
     </template>
 
-    <div class="alarm-panel-content">
+    <div class="alarm-panel-content panel-body">
       <AlarmPanel
         :alarms="alarms"
         @alarm-click="$emit('alarm-click', $event)"
         @filter-change="$emit('filter-change', $event)"
+        @stats-change="handleStatsChange"
       />
     </div>
   </zx-floating-panel>
 </template>
 
 <script setup>
+import { computed, ref } from 'vue';
 import AlarmPanel from './AlarmPanel.vue';
 
 const props = defineProps({
@@ -54,6 +56,14 @@ const props = defineProps({
     default: false,
   },
 });
+
+const alarmSummary = ref({ total: 0 });
+
+const alarmBadge = computed(() => alarmSummary.value?.total || 0);
+
+const handleStatsChange = (stats) => {
+  alarmSummary.value = stats || { total: 0 };
+};
 
 defineEmits(['alarm-click', 'filter-change']);
 </script>
@@ -84,6 +94,18 @@ defineEmits(['alarm-click', 'filter-change']);
   gap: 8px;
   color: #94a3b8;
   font-size: 12px;
+}
+
+.alarm-panel-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  height: 100%;
+}
+
+:deep(.alarm-panel-content) {
+  flex: 1;
+  min-height: 0;
 }
 
 ::v-deep(.pro-card-header) {

@@ -7,7 +7,7 @@
  * 2. 端口配置完整性检查 - 各协议类型必需参数
  * 3. 连接有效性检查 - 协议类型匹配、端口存在性
  * 4. 通信参数一致性检查 - 波特率匹配、IP地址有效性
- * 5. 配置冲突检测 - 回环、多连接
+ * 5. 配置冲突检测 - 回环
  */
 
 /**
@@ -42,8 +42,9 @@
 
 // 协议类型必需参数配置
 const PROTOCOL_REQUIRED_PARAMS = {
-  RS422: ['baudRate', 'dataBits', 'stopBits', 'parity'],
-  RS485: ['baudRate', 'dataBits', 'stopBits', 'parity'],
+  // 目前协议编辑界面仅提供波特率，数据位/停止位/校验暂未收集
+  RS422: ['baudRate'],
+  RS485: ['baudRate'],
   CAN: ['baudRate'],
   LAN: ['ipAddress', 'port', 'protocol'],
   '1553B': ['busAddress', 'rtAddress', 'subAddress'],
@@ -242,6 +243,20 @@ export function useHealthCheck() {
     const items = [];
     const portIssues = [];
 
+    // 优先从 params 取值，不存在时回退到 messageConfig.header
+    const getParamValue = (port, key) => {
+      const params = port?.params || {};
+      const header = port?.messageConfig?.header || {};
+      const lowerKey = key ? key.charAt(0).toLowerCase() + key.slice(1) : '';
+      return (
+        params[key] ??
+        params[lowerKey] ??
+        header[key] ??
+        header[lowerKey] ??
+        null
+      );
+    };
+
     nodes.forEach((node) => {
       const data = node.getData?.() || {};
       const nodeName = data.name || data.label || node.id;
@@ -279,7 +294,7 @@ export function useHealthCheck() {
         const requiredParams = PROTOCOL_REQUIRED_PARAMS[interfaceType];
         if (requiredParams) {
           const missingParams = requiredParams.filter((param) => {
-            const value = params[param];
+            const value = getParamValue(port, param);
             return value === undefined || value === null || value === '';
           });
 
@@ -299,17 +314,18 @@ export function useHealthCheck() {
         }
 
         // LAN协议特殊检查：IP地址格式
-        if (interfaceType === 'LAN' && params.ipAddress) {
+        const ipAddress = getParamValue(port, 'ipAddress');
+        if (interfaceType === 'LAN' && ipAddress) {
           const ipPattern =
             /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-          if (!ipPattern.test(params.ipAddress)) {
+          if (!ipPattern.test(ipAddress)) {
             portIssues.push({
               nodeId: node.id,
               nodeName,
               portId: port.id,
               portName,
               issue: 'invalid-ip',
-              message: `端口 "${portName}" 的IP地址格式无效：${params.ipAddress}`,
+              message: `端口 "${portName}" 的IP地址格式无效：${ipAddress}`,
             });
           }
         }
@@ -587,7 +603,7 @@ export function useHealthCheck() {
   function checkConfigurationConflicts(nodes, edges) {
     const items = [];
 
-    // 5.1 回环检测（自连接）
+    // 回环检测（自连接）
     const loopbackEdges = edges.filter((edge) => {
       const sourceId = edge.getSourceCellId?.();
       const targetId = edge.getTargetCellId?.();
@@ -611,53 +627,6 @@ export function useHealthCheck() {
         name: '回环连接检测',
         status: 'success',
         message: '未检测到回环连接',
-      });
-    }
-
-    // 5.2 多连接检测（一个端口连接多个端口）
-    const portConnections = new Map(); // {nodeId:portId: count}
-
-    edges.forEach((edge) => {
-      const sourceNodeId = edge.getSourceCellId?.();
-      const targetNodeId = edge.getTargetCellId?.();
-      const sourcePortId = edge.getSourcePortId?.();
-      const targetPortId = edge.getTargetPortId?.();
-
-      if (sourceNodeId && sourcePortId) {
-        const key = `${sourceNodeId}:${sourcePortId}`;
-        portConnections.set(key, (portConnections.get(key) || 0) + 1);
-      }
-
-      if (targetNodeId && targetPortId) {
-        const key = `${targetNodeId}:${targetPortId}`;
-        portConnections.set(key, (portConnections.get(key) || 0) + 1);
-      }
-    });
-
-    const multiConnectedPorts = [];
-    portConnections.forEach((count, key) => {
-      if (count > 1) {
-        multiConnectedPorts.push({ key, count });
-      }
-    });
-
-    if (multiConnectedPorts.length > 0) {
-      items.push({
-        id: 'conflict-multi-connection',
-        category: '配置冲突',
-        name: '多连接检测',
-        status: 'warning',
-        message: `检测到 ${multiConnectedPorts.length} 个端口存在多连接`,
-        suggestion: '单个端口连接多个目标可能导致信号冲突，请确认是否符合总线拓扑设计',
-        details: { ports: multiConnectedPorts },
-      });
-    } else {
-      items.push({
-        id: 'conflict-multi-connection-ok',
-        category: '配置冲突',
-        name: '多连接检测',
-        status: 'success',
-        message: '未检测到端口多连接冲突',
       });
     }
 

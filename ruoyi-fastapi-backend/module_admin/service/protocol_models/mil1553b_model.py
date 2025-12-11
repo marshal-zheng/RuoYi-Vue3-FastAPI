@@ -71,6 +71,21 @@ class MIL1553BModel(BaseProtocolModel):
                 if self._stopped:
                     break
 
+                payload_info = {}
+                supplier = frame.get("payload_supplier")
+                if callable(supplier):
+                    payload_info = supplier(self.env.now) or {}
+
+                if payload_info:
+                    frame = dict(frame)
+                    if payload_info.get("payload_hex"):
+                        try:
+                            frame["data"] = [int(payload_info["payload_hex"][:4], 16)]
+                        except Exception:
+                            frame["data"] = frame.get("data", [0x0000])
+                    frame["field_values"] = payload_info.get("field_values")
+                    frame["fill_strategy"] = payload_info.get("fill_strategy")
+
                 # 申请总线独占
                 with self.bus.request() as req:
                     yield req
@@ -94,6 +109,11 @@ class MIL1553BModel(BaseProtocolModel):
                     if self._error_frames:
                         error = self._error_frames.pop(0)
                         self._notify_message(error)
+
+                # 帧间隔（用于分隔同一主帧内的调度项）
+                interval = frame.get("interval", 0)
+                if interval:
+                    yield self.env.timeout(interval)
 
             # 主帧周期等待
             yield self.env.timeout(self.major_frame_time)
@@ -146,6 +166,8 @@ class MIL1553BModel(BaseProtocolModel):
             "word_count": word_count,
             "raw_word": command_word,
             "payload_hex": f"{command_word:04X}",
+            "field_values": frame.get("field_values", {}),
+            "fill_strategy": frame.get("fill_strategy"),
             "create_time": datetime.now(),
         }
 
@@ -165,6 +187,8 @@ class MIL1553BModel(BaseProtocolModel):
             "rt_address": rt_address,
             "raw_word": status_word,
             "payload_hex": f"{status_word:04X}",
+            "field_values": command.get("field_values", {}),
+            "fill_strategy": command.get("fill_strategy"),
             "create_time": datetime.now(),
         }
 
@@ -185,6 +209,9 @@ class MIL1553BModel(BaseProtocolModel):
             "rt_address": rt_address,
             "raw_word": data_word,
             "payload_hex": f"{data_word:04X}",
+            "field_values": command.get("field_values", {}),
+            "fill_strategy": command.get("fill_strategy"),
+            "size_bytes": 2,
             "create_time": datetime.now(),
         }
 
@@ -216,5 +243,10 @@ class MIL1553BModel(BaseProtocolModel):
             return True
 
         return False
+
+
+
+
+
 
 

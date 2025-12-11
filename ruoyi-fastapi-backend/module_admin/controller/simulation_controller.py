@@ -2,7 +2,7 @@
 仿真控制器
 处理仿真相关的HTTP请求和WebSocket连接
 """
-from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, Request
+from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, Request, Body, Query
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 import asyncio
@@ -458,9 +458,9 @@ async def set_simulation_duration(
 async def inject_fault(
     request: Request,
     session_id: str,
-    fault_type: str,
-    target_id: str,
-    params: dict = None
+    fault_type: str = None,
+    target_id: str = None,
+    payload: dict = Body(None)
 ):
     """
     注入故障
@@ -470,6 +470,16 @@ async def inject_fault(
         target_id: 链路ID或节点ID
         params: {loss_rate, delay_ms, count 等}
     """
+    if payload:
+        fault_type = payload.get('faultType') or payload.get('fault_type') or fault_type
+        target_id = payload.get('targetId') or payload.get('target_id') or target_id
+        params = payload.get('params') or payload
+    else:
+        params = None
+
+    if not fault_type or target_id is None:
+        return ResponseUtil.error(msg='faultType/targetId 不能为空')
+
     result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
     logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
     return ResponseUtil.success(data=result)
@@ -494,6 +504,24 @@ async def clear_fault(
     return ResponseUtil.success(data=result.model_dump())
 
 
+@simulationController.delete(
+    '/sessions/{session_id}/faults',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+    ]
+)
+@Log(title='仿真管理-清除全部故障', business_type=BusinessType.DELETE)
+async def clear_all_faults(
+    request: Request,
+    session_id: str
+):
+    """清除指定会话的所有故障"""
+    result = SimulationService.clear_all_faults(session_id)
+    logger.info(f'清除全部故障: {session_id}')
+    return ResponseUtil.success(data=result.model_dump())
+
+
 @simulationController.get(
     '/sessions/{session_id}/faults',
     dependencies=[
@@ -508,6 +536,64 @@ async def list_faults(
     """获取故障列表"""
     faults = SimulationService.list_faults(session_id)
     return ResponseUtil.success(data=faults)
+
+
+# ==================== 新增：统一故障接口（无 session 路径） ====================
+
+
+@simulationController.post(
+    '/faults',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:inject'))
+    ]
+)
+async def upsert_fault(
+    request: Request,
+    payload: dict = Body(...)
+):
+    """
+    新增/更新故障规则
+    """
+    session_id = payload.get('sessionId') or payload.get('session_id')
+    fault_type = payload.get('faultType') or payload.get('fault_type')
+    target_id = payload.get('targetId') or payload.get('target_id')
+    params = payload.get('params') or payload
+    if not session_id or not fault_type or target_id is None:
+        return ResponseUtil.error(msg='sessionId、faultType、targetId 为必填')
+
+    result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
+    logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
+    return ResponseUtil.success(data=result)
+
+
+@simulationController.get(
+    '/faults',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:query'))
+    ]
+)
+async def query_faults(session_id: str = Query(..., alias="sessionId")):
+    """查询会话故障"""
+    if not session_id:
+        return ResponseUtil.error(msg='sessionId 不能为空')
+    faults = SimulationService.list_faults(session_id)
+    return ResponseUtil.success(data=faults)
+
+
+@simulationController.delete(
+    '/faults/{fault_id}',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+    ]
+)
+async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessionId")):
+    """删除会话故障"""
+    result = SimulationService.clear_fault(session_id, fault_id)
+    logger.info(f'清除故障: {session_id} -> {fault_id}')
+    return ResponseUtil.success(data=result.model_dump())
 
 
 # ==================== 新增：事件触发 ====================
@@ -669,23 +755,59 @@ async def push_simulation_data(session_id: str):
         - alarms: 告警数据
         - animation: 动画事件（traffic/error/node_active）
         - event: 事件触发通知
+        - faults: 故障事件
     """
     import time
     last_push_time = time.time()
-    push_interval = 0.1  # 100ms 推送间隔（节流）
+    base_interval = 0.1  # 基础 100ms
     buffer_messages = []
     buffer_bandwidth = []
     buffer_alarms = []
     buffer_animations = []
+    buffer_faults = []
+
+    def compute_interval(speed: float) -> float:
+        # 根据速度缩放推送频率，限制区间 [20ms, 200ms]
+        clamped = max(0.5, min(speed or 1.0, 4.0))
+        return max(0.02, min(0.2, base_interval / clamped))
+
+    def compute_limits(speed: float) -> Dict[str, int]:
+        """
+        根据速度动态调整单次推送批量，避免高倍速堆积/低倍速浪费带宽
+        """
+        clamped = max(0.5, min(speed or 1.0, 4.0))
+        msg_limit = int(50 * clamped)
+        bw_limit = int(200 * clamped)
+        return {
+            "messages": max(50, min(msg_limit, 200)),
+            "bandwidth": max(100, min(bw_limit, 400)),
+            "animations": 20,
+            "faults": 50,
+        }
 
     try:
         while True:
             # 获取实时状态
             status = SimulationService.get_session_status(session_id)
-            
-            if status.get('status') == 'not_found':
+
+            state = status.get('status')
+            engine_present = status.get('engine_present', True)
+
+            if state == 'not_found':
                 break
-            
+
+            # 引擎缺失但会话仍在（已停止）时，仅推送状态并等待复活
+            if not engine_present or state == 'stopped':
+                await manager.broadcast(session_id, jsonable_encoder({
+                    'type': 'status',
+                    'data': status,
+                    'timestamp': time.time()
+                }))
+                await asyncio.sleep(0.5)
+                continue
+
+            push_interval = compute_interval(status.get('speed', 1.0))
+            limits = compute_limits(status.get('speed', 1.0))
             current_time = time.time()
             should_push = (current_time - last_push_time) >= push_interval
 
@@ -712,6 +834,10 @@ async def push_simulation_data(session_id: str):
                     if error_animation:
                         buffer_animations.append(error_animation)
 
+            new_fault_events = SimulationService.get_new_fault_events(session_id)
+            if new_fault_events:
+                buffer_faults.extend(new_fault_events)
+
             # 节流：达到推送间隔时批量推送
             if should_push:
                 # 推送状态（每次都推送，数据量小）
@@ -725,7 +851,7 @@ async def push_simulation_data(session_id: str):
                 if buffer_messages:
                     await manager.broadcast(session_id, jsonable_encoder({
                         'type': 'messages',
-                        'data': buffer_messages[-50:],  # 限制单次推送数量
+                        'data': buffer_messages[-limits["messages"]:],  # 动态限制单次推送数量
                         'timestamp': current_time
                     }))
                     buffer_messages.clear()
@@ -734,7 +860,7 @@ async def push_simulation_data(session_id: str):
                 if buffer_bandwidth:
                     await manager.broadcast(session_id, jsonable_encoder({
                         'type': 'bandwidth',
-                        'data': buffer_bandwidth,
+                        'data': buffer_bandwidth[-limits["bandwidth"]:],
                         'timestamp': current_time
                     }))
                     buffer_bandwidth.clear()
@@ -752,10 +878,18 @@ async def push_simulation_data(session_id: str):
                 if buffer_animations:
                     await manager.broadcast(session_id, jsonable_encoder({
                         'type': 'animation',
-                        'data': buffer_animations[-20:],  # 限制动画事件数量
+                        'data': buffer_animations[-limits["animations"]:],  # 限制动画事件数量
                         'timestamp': current_time
                     }))
                     buffer_animations.clear()
+
+                if buffer_faults:
+                    await manager.broadcast(session_id, jsonable_encoder({
+                        'type': 'faults',
+                        'data': buffer_faults[-limits["faults"]:],
+                        'timestamp': current_time
+                    }))
+                    buffer_faults.clear()
 
                 last_push_time = current_time
 

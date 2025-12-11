@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full text-slate-300">
     <!-- 工具栏 -->
-    <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
+  <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
       <el-select
         v-model="localFilter.protocolType"
         placeholder="协议"
@@ -55,6 +55,144 @@
         class="!w-24 sim-input-dark flex-shrink-0"
         @input="handleFilterChange"
       />
+    <el-popover v-model:visible="showAdvanced" placement="bottom-start" :width="520" trigger="click">
+      <div class="advanced-search__panel">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs text-slate-400">报文/字段多条件检索</span>
+          <el-select
+            v-model="conditionLogic"
+            size="small"
+            class="!w-32 sim-select-dark"
+            @change="handleAdvancedChange"
+          >
+            <el-option label="满足全部(AND)" value="and" />
+            <el-option label="满足任一(OR)" value="or" />
+          </el-select>
+        </div>
+        <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+          <div
+            v-for="cond in advancedConditions"
+            :key="cond.id"
+            class="flex items-center gap-2"
+          >
+            <el-select
+              v-model="cond.type"
+              placeholder="条件类型"
+              size="small"
+              class="!w-28 sim-select-dark"
+              @change="handleAdvancedChange"
+            >
+              <el-option label="报文HEX包含" value="payload" />
+              <el-option label="字段键/值" value="field" />
+              <el-option label="节点/端口" value="node" />
+              <el-option label="协议匹配" value="protocol" />
+              <el-option label="大小范围" value="size" />
+              <el-option label="时延范围" value="latency" />
+            </el-select>
+
+            <template v-if="cond.type === 'node'">
+              <el-select
+                v-model="cond.field"
+                placeholder="字段"
+                size="small"
+                class="!w-32 sim-select-dark"
+                @change="handleAdvancedChange"
+              >
+                <el-option label="源节点" value="senderNodeId" />
+                <el-option label="源端口" value="senderPortId" />
+                <el-option label="目标节点" value="receiverNodeId" />
+                <el-option label="目标端口" value="receiverPortId" />
+              </el-select>
+              <el-input
+                v-model="cond.value"
+                size="small"
+                placeholder="请输入值"
+                class="!w-36 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+            </template>
+
+            <template v-else-if="cond.type === 'field'">
+              <el-input
+                v-model="cond.key"
+                size="small"
+                placeholder="字段名(可选)"
+                class="!w-32 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+              <el-input
+                v-model="cond.value"
+                size="small"
+                placeholder="字段值"
+                class="!w-36 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+            </template>
+
+            <template v-else-if="cond.type === 'size' || cond.type === 'latency'">
+              <el-input
+                v-model.number="cond.min"
+                size="small"
+                placeholder="最小"
+                class="!w-24 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+              <span class="text-xs text-slate-400">~</span>
+              <el-input
+                v-model.number="cond.max"
+                size="small"
+                placeholder="最大"
+                class="!w-24 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+              <span class="text-xs text-slate-500">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
+            </template>
+
+            <template v-else>
+              <el-input
+                v-model="cond.value"
+                size="small"
+                placeholder="请输入值"
+                class="!w-48 sim-input-dark"
+                @input="handleAdvancedChange"
+              />
+            </template>
+
+            <el-button
+              circle
+              size="small"
+              class="sim-btn-dark !border-slate-700"
+              @click="removeCondition(cond.id)"
+            >
+              <el-icon><Close /></el-icon>
+            </el-button>
+          </div>
+        </div>
+        <div class="mt-3 flex items-center justify-between">
+          <div class="flex items-center gap-2 text-xs text-slate-500">
+            <el-button text size="small" type="primary" @click="addCondition">
+              新增条件
+            </el-button>
+            <span>当前 {{ activeConditionCount }} 条</span>
+          </div>
+          <el-button size="small" type="primary" @click="applyAdvancedSearch">
+            应用检索
+          </el-button>
+        </div>
+      </div>
+      <template #reference>
+        <el-button
+          size="small"
+          class="sim-btn-dark flex-shrink-0"
+          :type="activeConditionCount ? 'primary' : 'default'"
+        >
+          多条件检索
+          <span v-if="activeConditionCount" class="ml-1 text-primary-300">
+            ({{ activeConditionCount }})
+          </span>
+        </el-button>
+      </template>
+    </el-popover>
       <el-checkbox v-model="localFilter.errorOnly" size="small" class="flex-shrink-0" @change="handleFilterChange">
         错误
       </el-checkbox>
@@ -72,8 +210,21 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <span class="text-xs text-slate-500 flex-shrink-0 ml-auto">共 {{ filteredMessages.length }} 条</span>
+    <span class="text-xs text-slate-500 flex-shrink-0 ml-auto">共 {{ filteredMessages.length }} 条</span>
     </div>
+  <div v-if="activeConditionCount" class="px-3 pb-2 flex flex-wrap gap-2">
+    <el-tag
+      v-for="cond in normalizedConditions"
+      :key="cond.id"
+      closable
+      size="small"
+      type="info"
+      effect="dark"
+      @close="removeCondition(cond.id)"
+    >
+      {{ describeCondition(cond) }}
+    </el-tag>
+  </div>
 
     <!-- 报文列表 -->
     <div class="flex-1 overflow-hidden w-full" ref="listRef">
@@ -122,7 +273,7 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed, h } from 'vue'
 import { ArrowDown, Document, Close } from '@element-plus/icons-vue'
 import { formatTimestamp } from '../utils/timeFormatter'
 
@@ -139,6 +290,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  speed: {
+    type: Number,
+    default: 1,
+  },
 })
 
 const emit = defineEmits(['message-select', 'filter-change', 'export', 'auto-scroll-change'])
@@ -154,6 +309,12 @@ const selectedId = ref(null)
 const selectedMessage = ref(null)
 const localAutoScroll = ref(props.autoScroll)
 const safeMessages = computed(() => (Array.isArray(props.messages) ? props.messages : []))
+const playSpeed = computed(() => Math.max(0.5, Math.min(Number(props.speed) || 1, 4)))
+
+let conditionUid = 0
+const showAdvanced = ref(false)
+const advancedConditions = ref([createCondition('payload')])
+const conditionLogic = ref('and')
 
 const localFilter = ref({
   protocolType: '',
@@ -161,6 +322,50 @@ const localFilter = ref({
   receiverNode: '',
   keyword: '',
   errorOnly: false,
+})
+
+const normalizedConditions = computed(() =>
+  advancedConditions.value
+    .map((cond) => ({
+      ...cond,
+      type: cond?.type || 'payload',
+    }))
+    .filter((cond) => {
+      if (cond.type === 'size' || cond.type === 'latency') {
+        return cond.min !== undefined || cond.max !== undefined
+      }
+      return Boolean(String(cond.value || cond.key || '').trim())
+    })
+)
+
+const activeConditionCount = computed(() => normalizedConditions.value.length)
+
+const keywordTokens = computed(() =>
+  localFilter.value.keyword ? [localFilter.value.keyword] : []
+)
+const payloadTokens = computed(() =>
+  normalizedConditions.value
+    .filter((c) => c.type === 'payload' && c.value)
+    .map((c) => c.value)
+)
+const nodeTokens = computed(() =>
+  normalizedConditions.value
+    .filter((c) => c.type === 'node' && c.value)
+    .map((c) => c.value)
+)
+const fieldTokens = computed(() =>
+  normalizedConditions.value
+    .filter((c) => c.type === 'field')
+    .flatMap((c) => [c.value, c.key])
+    .filter(Boolean)
+)
+const protocolTokens = computed(() => {
+  const tokens = []
+  if (localFilter.value.protocolType) tokens.push(localFilter.value.protocolType)
+  normalizedConditions.value
+    .filter((c) => c.type === 'protocol' && c.value)
+    .forEach((c) => tokens.push(c.value))
+  return tokens
 })
 
 const filteredMessages = computed(() => {
@@ -180,6 +385,9 @@ const filteredMessages = computed(() => {
     if (localFilter.value.errorOnly && !m.isError) {
       return false
     }
+    if (!matchesAdvanced(m)) {
+      return false
+    }
     if (keyword) {
       const text = [
         m.payloadHex,
@@ -189,6 +397,9 @@ const filteredMessages = computed(() => {
         m.receiverNodeName,
         m.senderNodeId,
         m.receiverNodeId,
+        m.senderPortId,
+        m.receiverPortId,
+        ...(m.fieldValues ? Object.values(m.fieldValues) : []),
       ]
         .filter(Boolean)
         .join(' ')
@@ -198,6 +409,115 @@ const filteredMessages = computed(() => {
     return true
   })
 })
+
+function getLatencyMs(message) {
+  const send = message?.sendTimestamp ?? message?.timestamp
+  const recv = message?.receiveTimestamp
+  if (!send || !recv) return null
+  return Math.max(0, (recv - send) * 1000)
+}
+
+function matchesAdvanced(message) {
+  const list = normalizedConditions.value
+  if (!list.length) return true
+  const logic = conditionLogic.value === 'or' ? 'or' : 'and'
+
+  const checks = list.map((cond) => {
+    const type = cond.type || 'payload'
+    if (type === 'payload') {
+      const val = String(cond.value || '').toLowerCase()
+      if (!val) return null
+      return String(message?.payloadHex || '').toLowerCase().includes(val)
+    }
+    if (type === 'field') {
+      const key = String(cond.key || '').toLowerCase()
+      const val = String(cond.value || '').toLowerCase()
+      if (!key && !val) return null
+      const entries = Object.entries(message?.fieldValues || {})
+      return entries.some(([k, v]) => {
+        const kText = String(k || '').toLowerCase()
+        const vText = String(v ?? '').toLowerCase()
+        if (key && !kText.includes(key)) return false
+        if (val) return vText.includes(val) || (!key && kText.includes(val))
+        return true
+      })
+    }
+    if (type === 'node') {
+      const field = cond.field || 'senderNodeId'
+      const val = String(cond.value || '').toLowerCase()
+      if (!val) return null
+      return String(message?.[field] || '').toLowerCase().includes(val)
+    }
+    if (type === 'protocol') {
+      const val = String(cond.value || '').toLowerCase()
+      if (!val) return null
+      return String(message?.protocolType || '').toLowerCase().includes(val)
+    }
+    if (type === 'size') {
+      const size = Number(message?.sizeBytes || 0)
+      const min = cond.min !== undefined && cond.min !== null ? Number(cond.min) : null
+      const max = cond.max !== undefined && cond.max !== null ? Number(cond.max) : null
+      if (min === null && max === null) return null
+      if (Number.isFinite(min) && size < min) return false
+      if (Number.isFinite(max) && size > max) return false
+      return true
+    }
+    if (type === 'latency') {
+      const latency = getLatencyMs(message)
+      if (latency === null) return false
+      const min = cond.min !== undefined && cond.min !== null ? Number(cond.min) : null
+      const max = cond.max !== undefined && cond.max !== null ? Number(cond.max) : null
+      if (min === null && max === null) return null
+      if (Number.isFinite(min) && latency < min) return false
+      if (Number.isFinite(max) && latency > max) return false
+      return true
+    }
+    return null
+  })
+
+  const validChecks = checks.filter((c) => c !== null)
+  if (!validChecks.length) return true
+  return logic === 'or' ? validChecks.some(Boolean) : validChecks.every(Boolean)
+}
+
+function createCondition(type = 'payload') {
+  return {
+    id: `cond-${Date.now()}-${conditionUid++}`,
+    type,
+    value: '',
+    key: '',
+    field: 'senderNodeId',
+    min: null,
+    max: null,
+  }
+}
+
+function addCondition() {
+  advancedConditions.value.push(createCondition('payload'))
+  handleAdvancedChange()
+}
+
+function removeCondition(id) {
+  advancedConditions.value = advancedConditions.value.filter((c) => c.id !== id)
+  handleAdvancedChange()
+}
+
+function handleAdvancedChange() {
+  emitFilterChange()
+}
+
+function applyAdvancedSearch() {
+  showAdvanced.value = false
+  emitFilterChange()
+}
+
+function emitFilterChange() {
+  emit('filter-change', {
+    ...localFilter.value,
+    conditionLogic: conditionLogic.value,
+    conditions: normalizedConditions.value,
+  })
+}
 
 const senderNodeOptions = computed(() => {
   const entries = new Map()
@@ -231,6 +551,47 @@ function truncateHex(hex) {
   return hex
 }
 
+function highlightText(text, tokens) {
+  const value = String(text || '')
+  if (!tokens || tokens.length === 0) return value
+  const lower = value.toLowerCase()
+  const targetTokens = [...new Set(tokens.map((t) => String(t || '').toLowerCase()).filter(Boolean))].filter(
+    (t) => lower.includes(t)
+  )
+  if (!targetTokens.length) return value
+
+  const segments = []
+  let cursor = 0
+
+  const findNext = () => {
+    let pos = -1
+    let tok = ''
+    targetTokens.forEach((t) => {
+      const idx = lower.indexOf(t, cursor)
+      if (idx !== -1 && (pos === -1 || idx < pos)) {
+        pos = idx
+        tok = t
+      }
+    })
+    return { pos, tok }
+  }
+
+  while (cursor < value.length) {
+    const { pos, tok } = findNext()
+    if (pos === -1) {
+      segments.push(value.slice(cursor))
+      break
+    }
+    if (pos > cursor) {
+      segments.push(value.slice(cursor, pos))
+    }
+    segments.push(h('span', { class: 'highlight-token' }, value.slice(pos, pos + tok.length)))
+    cursor = pos + tok.length
+  }
+
+  return segments
+}
+
 function parseHex(hex) {
   if (!hex) return []
   const bytes = []
@@ -255,7 +616,7 @@ function handleSelect(message) {
 }
 
 function handleFilterChange() {
-  emit('filter-change', { ...localFilter.value })
+  emitFilterChange()
 }
 
 function handleExport(format) {
@@ -286,28 +647,44 @@ const baseColumns = [
     dataKey: 'senderNodeId',
     title: '源节点',
     minWidth: 140,
-    cellRenderer: ({ rowData }) => rowData?.senderNodeName || rowData?.senderNodeId || '-',
+    cellRenderer: ({ rowData }) =>
+      highlightText(rowData?.senderNodeName || rowData?.senderNodeId || '-', [
+        ...nodeTokens.value,
+        ...keywordTokens.value,
+      ]),
   },
   {
     key: 'senderPort',
     dataKey: 'senderPortId',
     title: '源端口',
     minWidth: 120,
-    cellRenderer: ({ rowData }) => rowData?.senderPortName || rowData?.senderPortId || '-',
+    cellRenderer: ({ rowData }) =>
+      highlightText(rowData?.senderPortName || rowData?.senderPortId || '-', [
+        ...nodeTokens.value,
+        ...keywordTokens.value,
+      ]),
   },
   {
     key: 'receiverNode',
     dataKey: 'receiverNodeId',
     title: '目标节点',
     minWidth: 140,
-    cellRenderer: ({ rowData }) => rowData?.receiverNodeName || rowData?.receiverNodeId || '-',
+    cellRenderer: ({ rowData }) =>
+      highlightText(rowData?.receiverNodeName || rowData?.receiverNodeId || '-', [
+        ...nodeTokens.value,
+        ...keywordTokens.value,
+      ]),
   },
   {
     key: 'receiverPort',
     dataKey: 'receiverPortId',
     title: '目标端口',
     minWidth: 120,
-    cellRenderer: ({ rowData }) => rowData?.receiverPortName || rowData?.receiverPortId || '-',
+    cellRenderer: ({ rowData }) =>
+      highlightText(rowData?.receiverPortName || rowData?.receiverPortId || '-', [
+        ...nodeTokens.value,
+        ...keywordTokens.value,
+      ]),
   },
   {
     key: 'latency',
@@ -316,7 +693,14 @@ const baseColumns = [
     minWidth: 100,
     cellRenderer: ({ rowData }) => formatLatency(rowData),
   },
-  { key: 'protocolType', dataKey: 'protocolType', title: '协议', minWidth: 80 },
+  {
+    key: 'protocolType',
+    dataKey: 'protocolType',
+    title: '协议',
+    minWidth: 80,
+    cellRenderer: ({ cellData }) =>
+      highlightText(cellData || '-', [...protocolTokens.value, ...keywordTokens.value]),
+  },
   {
     key: 'sizeBytes',
     dataKey: 'sizeBytes',
@@ -329,7 +713,8 @@ const baseColumns = [
     dataKey: 'payloadHex',
     title: '数据',
     minWidth: 240,
-    cellRenderer: ({ cellData }) => truncateHex(cellData),
+    cellRenderer: ({ cellData }) =>
+      highlightText(truncateHex(cellData), [...payloadTokens.value, ...keywordTokens.value]),
   },
 ]
 
@@ -356,20 +741,34 @@ function handleRowClick({ rowData }) {
 function scrollToBottom() {
   if (!tableRef.value || !localAutoScroll.value || filteredMessages.value.length === 0) return
 
-  nextTick(() => {
-    const lastIndex = filteredMessages.value.length - 1
-    if (tableRef.value?.scrollToRow) {
-      tableRef.value.scrollToRow(lastIndex, 'end')
-      return
-    }
+  const duration = Math.max(80, 320 / playSpeed.value)
 
+  const smoothScroll = (container, target) => {
+    const start = container.scrollTop
+    const change = target - start
+    const startTime = performance.now()
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+
+    const step = (now) => {
+      const elapsed = now - startTime
+      const progress = Math.min(1, elapsed / duration)
+      const eased = easeOutCubic(progress)
+      container.scrollTop = start + change * eased
+      if (progress < 1) {
+        requestAnimationFrame(step)
+      }
+    }
+    requestAnimationFrame(step)
+  }
+
+  nextTick(() => {
     const tableEl = tableRef.value?.$el
     const scrollContainer =
       tableEl?.querySelector('.el-table-v2__body') ||
       tableEl?.querySelector('.el-scrollbar__wrap')
 
     if (scrollContainer) {
-      scrollContainer.scrollTop = scrollContainer.scrollHeight
+      smoothScroll(scrollContainer, scrollContainer.scrollHeight)
     }
   })
 }
@@ -518,5 +917,12 @@ onBeforeUnmount(() => {
 
 :deep(.sim-input-dark input::placeholder) {
   color: #cbd5e1;
+}
+
+.highlight-token {
+  background: rgba(34, 211, 238, 0.18);
+  color: #e0f2fe;
+  padding: 0 2px;
+  border-radius: 2px;
 }
 </style>

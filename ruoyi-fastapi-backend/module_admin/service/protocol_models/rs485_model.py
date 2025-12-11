@@ -63,6 +63,16 @@ class RS485Model(BaseProtocolModel):
                 if self._stopped:
                     break
 
+                payload_info = {}
+                supplier = frame.get("payload_supplier")
+                if callable(supplier):
+                    payload_info = supplier(self.env.now) or {}
+
+                data_override = payload_info.get("payload_hex")
+                if data_override:
+                    frame = dict(frame)
+                    frame["data"] = data_override
+
                 # 检查总线是否忙
                 if self.bus.count > 0:
                     # 总线忙，记录冲突
@@ -78,13 +88,23 @@ class RS485Model(BaseProtocolModel):
                     data = frame.get("data", b"")
                     if isinstance(data, str):
                         data = bytes.fromhex(data) if data else b""
+                    size_bytes = payload_info.get("size_bytes", len(data))
+                    if payload_info.get("payload_hex") and not data:
+                        data = bytes.fromhex(payload_info.get("payload_hex"))
                     data_len = len(data)
-                    tx_time = (data_len * 10) / self.baud_rate
+                    tx_time = (max(size_bytes, data_len) * 10) / self.baud_rate
 
                     yield self.env.timeout(tx_time)
 
                     # 构建并发送帧
-                    rs485_frame = self._build_frame(device_id, frame)
+                    rs485_frame = self._build_frame(
+                        device_id,
+                        frame,
+                        payload_hex=payload_info.get("payload_hex"),
+                        field_values=payload_info.get("field_values"),
+                        fill_strategy=payload_info.get("fill_strategy"),
+                        size_bytes=payload_info.get("size_bytes"),
+                    )
                     self._notify_message(rs485_frame)
 
                 # 等待发送间隔
@@ -92,10 +112,16 @@ class RS485Model(BaseProtocolModel):
                 yield self.env.timeout(interval)
 
     def _build_frame(
-        self, device_id: str, frame_config: Dict[str, Any]
+        self,
+        device_id: str,
+        frame_config: Dict[str, Any],
+        payload_hex: Optional[str] = None,
+        field_values: Optional[Dict[str, Any]] = None,
+        fill_strategy: Optional[str] = None,
+        size_bytes: Optional[int] = None,
     ) -> Dict[str, Any]:
         """构建 RS485 帧"""
-        data = frame_config.get("data", "")
+        data = payload_hex if payload_hex is not None else frame_config.get("data", "")
         if isinstance(data, (bytes, bytearray)):
             data_hex = data.hex().upper()
         elif isinstance(data, list):
@@ -106,7 +132,7 @@ class RS485Model(BaseProtocolModel):
         # 帧头（默认 0xAA55）
         header = frame_config.get("header", "AA55")
         # 数据长度
-        data_len = len(bytes.fromhex(data_hex)) if data_hex else 0
+        data_len = size_bytes if size_bytes is not None else (len(bytes.fromhex(data_hex)) if data_hex else 0)
 
         # 计算校验和（简单累加）
         checksum = sum(bytes.fromhex(data_hex)) & 0xFF if data_hex else 0
@@ -126,6 +152,8 @@ class RS485Model(BaseProtocolModel):
             "checksum": checksum,
             "payload_hex": full_frame,
             "is_error": False,
+            "field_values": field_values or {},
+            "fill_strategy": fill_strategy or frame_config.get("fill_strategy"),
             "create_time": datetime.now(),
         }
 
@@ -173,5 +201,10 @@ class RS485Model(BaseProtocolModel):
             }
         )
         return base_status
+
+
+
+
+
 
 
