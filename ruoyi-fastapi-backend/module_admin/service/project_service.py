@@ -1,3 +1,4 @@
+import base64
 import json
 import re
 from datetime import datetime
@@ -292,6 +293,27 @@ class ProjectService:
         return export_data
 
     @classmethod
+    async def export_project_zip_services(cls, query_db: AsyncSession, project_id: int):
+        """
+        导出单个工程为zip包
+        """
+        export_data = await cls.export_project_services(query_db, project_id)
+        buffer = BytesIO()
+
+        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zip_file:
+            data_dict = export_data.model_dump(mode='json', by_alias=True)
+            json_bytes = json.dumps(data_dict, ensure_ascii=False, default=str).encode('utf-8')
+
+            project_name = export_data.project.project_name or f'project_{project_id}'
+            safe_name = cls._safe_filename(project_name)
+            filename = f'{safe_name}_export_{project_id}.json'
+            zip_file.writestr(filename, json_bytes)
+
+        buffer.seek(0)
+        zip_name = f'{safe_name}_export_{project_id}.zip'
+        return buffer, zip_name
+
+    @classmethod
     async def export_projects_zip_services(cls, query_db: AsyncSession, project_ids: List[int]):
         """
         批量导出工程数据并打包为zip
@@ -375,9 +397,17 @@ class ProjectService:
         :param operator: 操作人
         :return: 导入结果
         """
+        # 获取原始项目名称，确保不为空
+        original_name = import_data.project.project_name
+        base_name = original_name.strip() if original_name else '未命名工程'
+        if not base_name:
+            base_name = '未命名工程'
+        import_suffix = '-外部导入'
+        project_name = base_name if base_name.endswith(import_suffix) else f'{base_name}{import_suffix}'
+
         # 1. 创建新工程
         new_project = ProjectModel(
-            project_name=import_data.project.project_name,
+            project_name=project_name,
             project_desc=import_data.project.project_desc,
             create_by=operator,
             create_time=datetime.now(),
@@ -528,53 +558,75 @@ class ProjectService:
         if not file_bytes:
             raise ServiceException(message='上传文件为空')
 
-        # 检查是否为有效zip
-        file_buffer = BytesIO(file_bytes)
-        if not is_zipfile(file_buffer):
-            raise ServiceException(message='上传文件格式错误，请选择zip批量导出包或单个json文件')
-        file_buffer.seek(0)
+        logger.info(f'导入文件大小: {len(file_bytes)} 字节')
+        logger.info(f'文件头部(hex): {file_bytes[:20].hex() if len(file_bytes) >= 20 else file_bytes.hex()}')
 
+        def _as_zip_buffer(raw_bytes: bytes) -> BytesIO | None:
+            buf = BytesIO(raw_bytes)
+            if is_zipfile(buf):
+                buf.seek(0)
+                return buf
+            return None
+
+        # 先尝试直接识别zip，其次尝试解码base64再识别zip
+        file_buffer = _as_zip_buffer(file_bytes)
+        if not file_buffer:
+            try:
+                decoded = base64.b64decode(file_bytes, validate=True)
+                file_buffer = _as_zip_buffer(decoded)
+                if file_buffer:
+                    file_bytes = decoded
+            except Exception:
+                file_buffer = None
+
+        # 以zip方式解析
         results = []
         success_count = 0
         failed_count = 0
 
         try:
-            with ZipFile(file_buffer, 'r') as zip_file:
-                json_files = [
-                    name for name in zip_file.namelist()
-                    if not name.endswith('/') and name.lower().endswith('.json')
-                ]
+            if file_buffer:
+                with ZipFile(file_buffer, 'r') as zip_file:
+                    json_files = [
+                        name for name in zip_file.namelist()
+                        if not name.endswith('/') and name.lower().endswith('.json')
+                    ]
 
-                if not json_files:
-                    raise ServiceException(message='zip包中未找到json工程文件')
+                    if not json_files:
+                        raise ServiceException(message='zip包中未找到json工程文件')
 
-                for name in json_files:
-                    try:
-                        file_content = zip_file.read(name).decode('utf-8')
-                        raw_data = json.loads(file_content)
-                        project_name = raw_data.get('project', {}).get('projectName')
-                        if not project_name:
-                            raise ServiceException(message='缺少工程名称（project.projectName）')
+                    for name in json_files:
+                        try:
+                            file_content = zip_file.read(name).decode('utf-8')
+                            import_result = await cls._import_single_project_from_json(
+                                query_db, file_content, operator, name
+                            )
+                            success_count += 1
+                            results.append(import_result)
+                        except Exception as e:
+                            failed_count += 1
+                            await query_db.rollback()
+                            results.append({
+                                'fileName': name,
+                                'status': 'failed',
+                                'message': str(e),
+                            })
+            else:
+                # 尝试将文件作为单个json工程导入，兼容未压缩的导出文件
+                try:
+                    file_content = file_bytes.decode('utf-8')
+                except UnicodeDecodeError:
+                    raise ServiceException(message='上传文件格式错误，请选择有效的zip导出包')
 
-                        import_data = ProjectImportDataModel(**raw_data)
-                        import_result = await cls.import_project_services(
-                            query_db, import_data, operator
-                        )
-                        success_count += 1
-                        results.append({
-                            'fileName': name,
-                            'status': 'success',
-                            'projectId': import_result.result.get('projectId'),
-                            'versionId': import_result.result.get('versionId'),
-                        })
-                    except Exception as e:
-                        failed_count += 1
-                        await query_db.rollback()
-                        results.append({
-                            'fileName': name,
-                            'status': 'failed',
-                            'message': str(e),
-                        })
+                try:
+                    import_result = await cls._import_single_project_from_json(
+                        query_db, file_content, operator, 'project.json'
+                    )
+                    success_count = 1
+                    results.append(import_result)
+                except Exception as e:
+                    await query_db.rollback()
+                    raise ServiceException(message=str(e))
         except ServiceException:
             raise
         except Exception as e:
@@ -584,6 +636,37 @@ class ProjectService:
             'successCount': success_count,
             'failedCount': failed_count,
             'details': results,
+        }
+
+    @classmethod
+    async def _import_single_project_from_json(
+        cls, query_db: AsyncSession, json_text: str, operator: str, filename: str
+    ) -> dict:
+        """
+        从单个json文本导入工程（用于zip内文件或直接上传json）
+        """
+        raw_data = json.loads(json_text)
+        if isinstance(raw_data, dict) and 'code' in raw_data and 'msg' in raw_data and 'project' not in raw_data:
+            # 后端错误信息被误当成导出包上传
+            err_code = raw_data.get('code')
+            err_msg = raw_data.get('msg') or '文件内容无效'
+            raise ServiceException(
+                message=f'导入文件不是有效的工程导出包：后端返回 code={err_code}, msg={err_msg}'
+            )
+
+        project_name_from_json = raw_data.get('project', {}).get('projectName')
+        if not project_name_from_json:
+            raise ServiceException(message='缺少工程名称（project.projectName）')
+
+        import_data = ProjectImportDataModel(**raw_data)
+        import_result = await cls.import_project_services(
+            query_db, import_data, operator
+        )
+        return {
+            'fileName': filename,
+            'status': 'success',
+            'projectId': import_result.result.get('projectId'),
+            'versionId': import_result.result.get('versionId'),
         }
 
     @staticmethod

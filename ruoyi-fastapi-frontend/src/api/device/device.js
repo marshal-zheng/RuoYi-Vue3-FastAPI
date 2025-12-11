@@ -53,6 +53,26 @@ export function exportDevice(query) {
   });
 }
 
+// 批量导出设备
+export function exportDeviceBatch(data) {
+  return request({
+    url: '/device/export/batch',
+    method: 'post',
+    data,
+    responseType: 'blob',
+  });
+}
+
+// 批量导入设备
+export function importDeviceBatch(formData) {
+  return request({
+    url: '/device/import/batch',
+    method: 'post',
+    data: formData,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}
+
 // 检查设备名称是否唯一
 export function checkDeviceNameUnique(deviceName, deviceId) {
   return request({

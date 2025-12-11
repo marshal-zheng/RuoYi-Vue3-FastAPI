@@ -11,12 +11,16 @@ from exceptions.exception import (
 )
 from utils.log_util import logger
 from utils.response_util import jsonable_encoder, JSONResponse, ResponseUtil
+DEFAULT_ERROR_MSG = '接口异常'
 
 
 def handle_exception(app: FastAPI):
     """
     全局异常处理
     """
+
+    def _resolve_msg(msg: str | None, default: str = DEFAULT_ERROR_MSG) -> str:
+        return msg if msg else default
 
     # 自定义token检验异常
     @app.exception_handler(AuthException)
@@ -48,8 +52,9 @@ def handle_exception(app: FastAPI):
     # 自定义服务异常
     @app.exception_handler(ServiceException)
     async def service_exception_handler(request: Request, exc: ServiceException):
-        logger.error(exc.message)
-        return ResponseUtil.error(data=exc.data, msg=exc.message)
+        resolved_msg = _resolve_msg(exc.message)
+        logger.error(resolved_msg)
+        return ResponseUtil.error(data=exc.data, msg=resolved_msg)
 
     # 自定义服务警告
     @app.exception_handler(ServiceWarning)
@@ -68,4 +73,5 @@ def handle_exception(app: FastAPI):
     @app.exception_handler(Exception)
     async def exception_handler(request: Request, exc: Exception):
         logger.exception(exc)
-        return ResponseUtil.error(msg=str(exc))
+        resolved_msg = _resolve_msg(str(exc))
+        return ResponseUtil.error(msg=resolved_msg)

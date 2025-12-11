@@ -15,6 +15,31 @@
               v-hasPermi="['device:list:remove']"
               >删除</ZxButton
             >
+            <ZxButton
+              type="primary"
+              icon="Download"
+              :disabled="multiple"
+              :loading="exporting"
+              @click="handleBatchExport"
+              v-hasPermi="['device:list:list']"
+              >批量导出</ZxButton
+            >
+            <ZxButton
+              type="warning"
+              icon="Upload"
+              :loading="importing"
+              @click="triggerImport"
+              v-hasPermi="['device:list:add']"
+              >批量导入</ZxButton
+            >
+            <el-upload
+              ref="uploadRef"
+              class="device-import-upload"
+              :show-file-list="false"
+              :auto-upload="false"
+              accept=".zip,.json"
+              :on-change="handleImportFile"
+            />
           </div>
           <div class="zx-grid-form-bar__filters">
             <el-select
@@ -117,7 +142,8 @@
 </template>
 
 <script setup name="Device">
-import { listDevice, delDevice } from '@/api/device/device';
+import { listDevice, delDevice, importDeviceBatch } from '@/api/device/device';
+import { download } from '@/utils/request';
 import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
 import DeviceCloneDialog from '@/components/business/Device/DeviceCloneDialog.vue';
 
@@ -129,6 +155,9 @@ const cloneDialogRef = ref();
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
+const uploadRef = ref();
+const exporting = ref(false);
+const importing = ref(false);
 
 const createDialogVisible = ref(false);
 const createForm = reactive({
@@ -161,6 +190,43 @@ function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.deviceId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
+}
+
+function handleBatchExport() {
+  if (multiple.value) {
+    proxy.$modal.msgWarning('请先选择需要导出的设备');
+    return;
+  }
+  exporting.value = true;
+  download(
+    '/device/export/batch',
+    { deviceIds: ids.value },
+    `device_export_${Date.now()}.zip`,
+    { headers: { 'Content-Type': 'application/json' } }
+  ).finally(() => {
+    exporting.value = false;
+  });
+}
+
+function triggerImport() {
+  const inputEl = uploadRef.value?.$el?.querySelector('input[type="file"]');
+  inputEl && inputEl.click();
+}
+
+function handleImportFile(uploadFile) {
+  if (!uploadFile || !uploadFile.raw) return;
+  importing.value = true;
+  const formData = new FormData();
+  formData.append('file', uploadFile.raw);
+  importDeviceBatch(formData)
+    .then((res) => {
+      proxy.$modal.msgSuccess(res.msg || '导入完成');
+      refreshList();
+    })
+    .finally(() => {
+      importing.value = false;
+      uploadRef.value && uploadRef.value.clearFiles();
+    });
 }
 
 function handleAdd() {
@@ -235,5 +301,8 @@ function handleMoreActionSelect(item, row) {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.device-import-upload {
+  display: none;
 }
 </style>

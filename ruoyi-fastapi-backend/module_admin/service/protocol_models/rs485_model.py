@@ -208,3 +208,4 @@ class RS485Model(BaseProtocolModel):
 
 
 
+

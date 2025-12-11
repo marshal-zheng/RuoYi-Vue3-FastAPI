@@ -1,7 +1,12 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+import json
+import re
+from io import BytesIO
 from datetime import datetime
-from typing import List
+from typing import Dict, List
+from zipfile import ZipFile, ZIP_DEFLATED, is_zipfile
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 from module_admin.dao.device_dao import DeviceDao
 from module_admin.dao.device_category_dao import DeviceCategoryDao
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
@@ -11,9 +16,11 @@ from module_admin.entity.vo.device_vo import (
     DeviceListModel,
     DeviceInterfaceModel,
     CloneDeviceModel,
+    DeviceExportDataModel,
+    ExportDeviceModel,
+    ExportDeviceInterfaceModel,
 )
 from utils.response_util import ResponseUtil
-from sqlalchemy.exc import IntegrityError
 from exceptions.exception import ServiceException
 
 
@@ -308,6 +315,208 @@ class DeviceService:
         await db.commit()
         
         return ResponseUtil.success(data={'device_id': result.device_id}, msg="克隆成功")
+
+    @classmethod
+    async def export_devices_zip_services(cls, db: AsyncSession, device_ids: List[int]):
+        """
+        批量导出设备数据（zip包）
+        """
+        if not device_ids:
+            raise ServiceException(message='请选择需要导出的设备')
+
+        buffer = BytesIO()
+        exported = 0
+
+        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zip_file:
+            for device_id in device_ids:
+                device = await DeviceDao.get_device_by_id(db, device_id)
+                if not device:
+                    continue
+
+                export_data = cls._build_export_data(device)
+                data_dict = export_data.model_dump(mode='json', by_alias=True)
+                json_bytes = json.dumps(data_dict, ensure_ascii=False, default=str).encode('utf-8')
+
+                safe_name = cls._safe_filename(device.device_name)
+                filename = f'{safe_name}_{device_id}.json'
+                zip_file.writestr(filename, json_bytes)
+                exported += 1
+
+        if exported == 0:
+            raise ServiceException(message='未找到可导出的设备')
+
+        buffer.seek(0)
+        zip_name = f'device_export_{datetime.now().strftime("%Y%m%d%H%M%S")}.zip'
+        return buffer, zip_name
+
+    @classmethod
+    async def import_devices_from_zip_services(cls, db: AsyncSession, file_bytes: bytes, operator: str):
+        """
+        批量导入设备（zip或单个json）
+        """
+        if not file_bytes:
+            raise ServiceException(message='上传文件为空')
+
+        file_buffer = BytesIO(file_bytes)
+        success_count = 0
+        failed_count = 0
+        results: List[Dict[str, str]] = []
+
+        if is_zipfile(file_buffer):
+            file_buffer.seek(0)
+            with ZipFile(file_buffer, 'r') as zip_file:
+                json_files = [
+                    name for name in zip_file.namelist()
+                    if not name.endswith('/') and name.lower().endswith('.json')
+                ]
+                if not json_files:
+                    raise ServiceException(message='zip包中未找到json设备文件')
+
+                for name in json_files:
+                    content = zip_file.read(name).decode('utf-8')
+                    try:
+                        import_result = await cls._import_single_device(db, content, operator)
+                        success_count += 1
+                        results.append({
+                            'fileName': name,
+                            'status': 'success',
+                            **import_result,
+                        })
+                    except Exception as exc:
+                        failed_count += 1
+                        await db.rollback()
+                        results.append({
+                            'fileName': name,
+                            'status': 'failed',
+                            'message': str(exc),
+                        })
+        else:
+            try:
+                content = file_buffer.getvalue().decode('utf-8')
+                import_result = await cls._import_single_device(db, content, operator)
+                success_count = 1
+                results.append({
+                    'fileName': 'device.json',
+                    'status': 'success',
+                    **import_result,
+                })
+            except Exception as exc:
+                await db.rollback()
+                raise ServiceException(message=str(exc))
+
+        return {
+            'successCount': success_count,
+            'failedCount': failed_count,
+            'details': results,
+        }
+
+    @classmethod
+    async def _import_single_device(cls, db: AsyncSession, json_text: str, operator: str):
+        """
+        导入单个设备
+        """
+        raw_data = json.loads(json_text)
+        export_data = DeviceExportDataModel(**raw_data)
+        source = export_data.device
+
+        resolved_category_id, resolved_category_name = await cls._resolve_category_info(
+            db,
+            getattr(source, 'device_category_id', None),
+            source.category_name,
+        )
+        device_name = await cls._ensure_unique_device_name(db, source.device_name)
+
+        new_device = DeviceDO(
+            device_name=device_name,
+            device_category_id=resolved_category_id,
+            category_name=resolved_category_name,
+            device_type=source.device_type,
+            manufacturer=source.manufacturer,
+            model=source.model,
+            version=source.version,
+            bus_type=source.bus_type,
+            remark=source.remark,
+            create_by=operator,
+            create_time=datetime.now(),
+            update_by=operator,
+            update_time=datetime.now()
+        )
+
+        for interface in source.interfaces:
+            interface_do = DeviceInterfaceDO(
+                interface_name=interface.interface_name,
+                interface_type=interface.interface_type,
+                position=interface.position or 'right',
+                description=interface.description,
+                params=interface.params,
+                message_config=interface.message_config,
+                create_time=datetime.now(),
+                update_time=datetime.now()
+            )
+            new_device.interfaces.append(interface_do)
+
+        result = await DeviceDao.add_device(db, new_device)
+        await db.commit()
+
+        return {
+            'deviceId': result.device_id,
+            'deviceName': new_device.device_name,
+        }
+
+    @staticmethod
+    def _build_export_data(device: DeviceDO) -> DeviceExportDataModel:
+        """
+        构造导出数据
+        """
+        interfaces = [
+            ExportDeviceInterfaceModel(
+                interface_name=intf.interface_name,
+                interface_type=intf.interface_type,
+                position=intf.position,
+                description=intf.description,
+                params=intf.params,
+                message_config=intf.message_config,
+            )
+            for intf in (device.interfaces or [])
+        ]
+        export_device = ExportDeviceModel(
+            device_id=device.device_id,
+            device_name=device.device_name,
+            category_name=device.category_name,
+            device_type=device.device_type,
+            manufacturer=device.manufacturer,
+            model=device.model,
+            version=device.version,
+            bus_type=device.bus_type,
+            remark=device.remark,
+            interfaces=interfaces,
+        )
+        return DeviceExportDataModel(
+            device=export_device
+        )
+
+    @staticmethod
+    async def _ensure_unique_device_name(db: AsyncSession, device_name: str) -> str:
+        """
+        确保设备名称唯一
+        """
+        base_name = device_name or '设备'
+        candidate = base_name
+        suffix = 1
+        existing = await DeviceDao.get_device_by_name(db, candidate)
+        while existing:
+            candidate = f'{base_name}_{suffix}'
+            suffix += 1
+            existing = await DeviceDao.get_device_by_name(db, candidate)
+        return candidate
+
+    @staticmethod
+    def _safe_filename(name: str) -> str:
+        """
+        生成安全的文件名
+        """
+        safe = re.sub(r'[\\/:*?"<>|\\s]+', '_', name.strip()) if name else 'device'
+        return safe or 'device'
 
     @staticmethod
     async def _resolve_category_info(db: AsyncSession, category_id, category_name):

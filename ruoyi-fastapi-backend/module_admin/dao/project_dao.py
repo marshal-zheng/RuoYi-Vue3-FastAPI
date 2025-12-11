@@ -64,7 +64,8 @@ class ProjectDao:
         :param project: 工程对象
         :return: None
         """
-        db_project = SysProject(**project.model_dump(exclude_unset=True))
+        data = project.model_dump(exclude_unset=True)
+        db_project = SysProject(**data)
         db.add(db_project)
         await db.flush()
         return db_project

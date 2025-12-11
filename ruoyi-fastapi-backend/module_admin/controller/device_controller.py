@@ -1,16 +1,19 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, File, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
-from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, CloneDeviceModel
+from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, CloneDeviceModel, BatchDeviceIdsModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.device_service import DeviceService
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
+from utils.common_util import bytes2file_response
+from urllib.parse import quote
+import re
 
 
 deviceController = APIRouter(prefix='/device', dependencies=[Depends(LoginService.get_current_user)])
@@ -181,3 +184,50 @@ async def delete_device(
     result = await DeviceService.delete_device(query_db, device_ids)
     logger.info(f'删除设备成功: {device_ids}')
     return result
+
+
+@deviceController.post(
+    '/export/batch',
+    dependencies=[Depends(CheckUserInterfaceAuth('device:list:list'))]
+)
+@Log(title='设备管理-批量导出', business_type=BusinessType.EXPORT)
+async def export_device_batch(
+    request: Request,
+    device_ids_body: BatchDeviceIdsModel,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    批量导出设备数据（zip）
+    """
+    buffer, filename = await DeviceService.export_devices_zip_services(
+        query_db, device_ids_body.device_ids
+    )
+    encoded_filename = quote(filename)
+    ascii_fallback = re.sub(r'[^0-9A-Za-z._-]+', '_', filename)
+    content_disposition = f"attachment; filename={ascii_fallback}; filename*=UTF-8''{encoded_filename}"
+    return ResponseUtil.streaming(
+        data=bytes2file_response(buffer.getvalue()),
+        headers={'Content-Disposition': content_disposition},
+        media_type='application/zip',
+    )
+
+
+@deviceController.post(
+    '/import/batch',
+    dependencies=[Depends(CheckUserInterfaceAuth('device:list:add'))]
+)
+@Log(title='设备管理-批量导入', business_type=BusinessType.IMPORT)
+async def import_device_batch(
+    request: Request,
+    file: UploadFile = File(...),
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+):
+    """
+    批量导入设备数据（zip或json）
+    """
+    file_bytes = await file.read()
+    import_result = await DeviceService.import_devices_from_zip_services(
+        query_db, file_bytes, current_user.user.user_name
+    )
+    return ResponseUtil.success(msg='批量导入完成', data=import_result)

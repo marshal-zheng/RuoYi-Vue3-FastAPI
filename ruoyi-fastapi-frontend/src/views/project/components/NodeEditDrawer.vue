@@ -397,14 +397,43 @@ const handleProtocolClick = (protocolItem) => {
   protocolDialogRef.value?.open(portInfo);
 };
 
+const buildParamsFromHeader = (header) => {
+  const pick = (...keys) => {
+    for (const k of keys) {
+      const val = header?.[k];
+      if (val !== undefined && val !== null && val !== '') return val;
+    }
+    return undefined;
+  };
+
+  return {
+    baudRate: pick('baudRate', 'speed'),
+    dataBits: pick('dataBits'),
+    stopBits: pick('stopBits'),
+    parity: pick('parity'),
+    canMode: pick('canMode', 'mode'),
+    ipAddress: pick('ipAddress'),
+    port: pick('port'),
+    protocol: pick('protocol'),
+    busAddress: pick('busAddress'),
+    rtAddress: pick('rtAddress'),
+    subAddress: pick('subAddress'),
+  };
+};
+
 // 协议提交回调
 const handleProtocolSubmit = ({ messageConfig, protocolId }) => {
   // 更新端口的协议信息
   if (currentPortIndex.value >= 0) {
+    const paramsPatch = buildParamsFromHeader(messageConfig?.header || {});
     portList.value[currentPortIndex.value] = {
       ...portList.value[currentPortIndex.value],
       messageConfig,
       protocolId,
+      params: {
+        ...(portList.value[currentPortIndex.value].params || {}),
+        ...paramsPatch,
+      },
     };
   }
 };

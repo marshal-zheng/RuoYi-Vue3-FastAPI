@@ -41,7 +41,7 @@
             <input
               ref="importFileInputRef"
               type="file"
-              accept=".json,.zip"
+              accept=".zip"
               style="display: none"
               @change="handleImportFileChange"
             />
@@ -233,7 +233,6 @@ import {
   delProject,
   exportProject,
   exportProjectBatch,
-  importProject,
   importProjectBatch,
 } from '@/api/project/project';
 import { unlockProjectVersions } from '@/api/project/version';
@@ -422,18 +421,14 @@ async function handleExport(project) {
     return;
   }
 
-  const data = await exportProject(project.projectId);
-
-  // 创建下载链接
-  const jsonStr = JSON.stringify(data, null, 2);
-  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const res = await exportProject(project.projectId);
+  const blob = res instanceof Blob ? res : new Blob([res], { type: 'application/zip' });
   const url = URL.createObjectURL(blob);
 
-  // 生成文件名
   const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
-  const filename = `${project.projectName}_export_${timestamp}.json`;
+  const safeName = (project.projectName || 'project').replace(/[\\/:*?"<>|\\s]+/g, '_');
+  const filename = `${safeName}_export_${timestamp}.zip`;
 
-  // 触发下载
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
@@ -488,75 +483,25 @@ async function handleImportFileChange(event) {
 
   const lowerName = file.name.toLowerCase();
 
-  // zip批量导入
-  if (lowerName.endsWith('.zip')) {
-    const formData = new FormData();
-    formData.append('file', file);
-    try {
-      const result = await importProjectBatch(formData);
-      const summary = result?.data || {};
-      ElMessage.success(
-        `批量导入完成，成功 ${summary.successCount || 0} 个，失败 ${summary.failedCount || 0} 个`
-      );
-      refreshList();
-    } catch (error) {
-      proxy.$modal.msgError(error?.msg || '批量导入失败');
-    }
+  // 只支持 zip 导入
+  if (!lowerName.endsWith('.zip')) {
+    proxy.$modal.msgError('请选择ZIP格式的工程导出文件');
     return;
   }
 
-  // 单文件JSON导入
-  if (!lowerName.endsWith('.json')) {
-    proxy.$modal.msgError('请选择JSON或ZIP格式的工程文件');
-    return;
+  const formData = new FormData();
+  formData.append('file', file);
+  const result = await importProjectBatch(formData);
+  const summary = result?.data || {};
+  const successCount = summary.successCount || 0;
+  const failedCount = summary.failedCount || 0;
+
+  if (failedCount > 0) {
+    ElMessage.warning(`导入完成，成功 ${successCount} 个，失败 ${failedCount} 个`);
+  } else {
+    ElMessage.success(`导入完成，成功 ${successCount} 个工程`);
   }
-
-  // 读取文件内容
-  const reader = new FileReader();
-  reader.onload = async (e) => {
-    const content = e.target?.result;
-    if (!content) {
-      proxy.$modal.msgError('文件读取失败');
-      return;
-    }
-
-    let importData;
-    const text = content;
-    importData = JSON.parse(text);
-
-    // 验证导入数据基本结构
-    if (!importData.exportVersion || !importData.project) {
-      proxy.$modal.msgError('无效的工程导出文件格式');
-      return;
-    }
-
-    // 显示确认对话框
-    proxy.$modal
-      .confirm(
-        `确认导入工程"${importData.project.projectName}"？\n` +
-          `包含 ${importData.versions?.length || 0} 个版本，` +
-          `${importData.devices?.length || 0} 个设备定义。`
-      )
-      .then(async () => {
-        const result = await importProject(importData);
-        ElMessage.success('工程导入成功');
-        refreshList();
-
-        // 跳转到新工程详情
-        if (result?.data?.projectId) {
-          proxy.$router.push('/project/project-detail/index/' + result.data.projectId);
-        }
-      })
-      .catch(() => {
-        proxy.$modal.msgInfo('已取消导入');
-      });
-  };
-
-  reader.onerror = () => {
-    proxy.$modal.msgError('文件读取失败');
-  };
-
-  reader.readAsText(file);
+  refreshList();
 }
 </script>
 <style scoped>

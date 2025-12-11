@@ -130,6 +130,14 @@ const service = axios.create({
 // request拦截器
 service.interceptors.request.use(
   (config: AxiosRequestConfig) => {
+    // FormData 交给浏览器自动设置 boundary
+    if (config.data instanceof FormData) {
+      const headers = config.headers as Record<string, any> | undefined;
+      if (headers) {
+        delete headers['Content-Type'];
+        delete headers['content-type'];
+      }
+    }
     if (shouldFormEncode(config)) {
       config.data = serializeAsForm(config.data);
     }
@@ -253,6 +261,25 @@ service.interceptors.response.use(
   }
 );
 
+const resolveDownloadErrorMessage = async (data: any): Promise<string> => {
+  const fallback = '下载文件出现错误，请联系管理员！';
+  if (!data || typeof data.text !== 'function') {
+    return fallback;
+  }
+  const resText = await data.text();
+  const trimmed = (resText || '').trim();
+  if (!trimmed) {
+    return fallback;
+  }
+  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+    return Promise.resolve()
+      .then(() => JSON.parse(trimmed))
+      .then((rspObj: any) => errorCode[rspObj?.code] || rspObj?.msg || errorCode['default'])
+      .catch(() => trimmed.slice(0, 200) || fallback);
+  }
+  return trimmed.slice(0, 200) || fallback;
+};
+
 // 通用下载方法
 export function download(
   url: string,
@@ -276,16 +303,14 @@ export function download(
         const blob = new Blob([data]);
         saveAs(blob, filename);
       } else {
-        const resText = await data.text();
-        const rspObj = JSON.parse(resText);
-        const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default'];
+        const errMsg = await resolveDownloadErrorMessage(data);
         ElMessage.error(errMsg);
       }
       downloadLoadingInstance.close();
     })
-    .catch((r: any) => {
-      console.error(r);
-      ElMessage.error('下载文件出现错误，请联系管理员！');
+    .catch(async (r: any) => {
+      const errMsg = await resolveDownloadErrorMessage(r?.response?.data) || '下载文件出现错误，请联系管理员！';
+      ElMessage.error(errMsg);
       downloadLoadingInstance.close();
     });
 }

@@ -478,16 +478,27 @@ class ProtocolService:
 
         def resolve_fields_config():
             # 兼容不同存储结构：顶层 fieldsConfig、protocolConfig.fieldsConfig、protocolConfig.fields
+            message_config = ensure_dict(protocol_data.get('messageConfig'))
+            protocol_message_config = (
+                ensure_dict(protocol_config.get('messageConfig')) if isinstance(protocol_config, dict) else {}
+            )
+            nested_message_config = (
+                ensure_dict(nested_protocol_config.get('messageConfig')) if isinstance(nested_protocol_config, dict) else {}
+            )
             candidates = [
                 protocol_data.get('fieldsConfig'),
+                protocol_data.get('fields'),
+                message_config.get('fields'),
                 protocol_config.get('fieldsConfig') if isinstance(protocol_config, dict) else None,
                 protocol_config.get('fields') if isinstance(protocol_config, dict) else None,
+                protocol_message_config.get('fields'),
                 nested_protocol_config.get('fieldsConfig')
                 if isinstance(nested_protocol_config, dict)
                 else None,
                 nested_protocol_config.get('fields')
                 if isinstance(nested_protocol_config, dict)
                 else None,
+                nested_message_config.get('fields'),
             ]
             for item in candidates:
                 if item:
@@ -537,6 +548,8 @@ class ProtocolService:
         normalized_protocol_type = PROTOCOL_TYPE_MAPPING.get(protocol_type.lower() if protocol_type else '', None)
         header_fields = HEADER_FIELDS_BY_PROTOCOL.get(normalized_protocol_type, HEADER_FIELDS)
         display_name = PROTOCOL_DISPLAY_NAME.get(normalized_protocol_type, normalized_protocol_type or '通用')
+        protocol_type_value = normalized_protocol_type or (protocol_type or '通用')
+        protocol_type_display = display_name or protocol_type_value or '通用'
         layout_rows = CONFIG_TABLE_LAYOUT.get(
             normalized_protocol_type,
             cls.__build_default_layout(header_fields)
@@ -556,11 +569,19 @@ class ProtocolService:
             bottom=Side(border_style='thin', color='d9d9d9'),
         )
 
-        # 空表头行
+        # 写入协议类型元数据行，便于导出文件可直接被导入解析
+        header_sheet.append(['协议类型', '协议显示名', '', '', ''])
+        header_sheet.append([protocol_type_value, protocol_type_display, '', '', ''])
+        # 空行分隔视觉区域
         header_sheet.append(['', '', '', '', ''])
-        header_sheet.freeze_panes = 'A2'
+        # 隐藏协议元数据行，避免导出时在视觉上多出额外的提示行
+        header_sheet.row_dimensions[1].hidden = True
+        header_sheet.row_dimensions[2].hidden = True
+        header_sheet.row_dimensions[3].hidden = True
 
-        first_data_row = 2
+        header_sheet.freeze_panes = f'A{header_sheet.max_row + 1}'
+
+        first_data_row = header_sheet.max_row + 1
         last_row = first_data_row + len(layout_rows) - 1
         header_sheet.merge_cells(start_row=first_data_row, start_column=1, end_row=last_row, end_column=1)
         protocol_cell = header_sheet.cell(row=first_data_row, column=1, value=display_name)
@@ -672,7 +693,7 @@ class ProtocolService:
         header_sheet.column_dimensions['E'].width = 24
         apply_range_border(header_sheet, first_data_row, last_row, 1, 5)
 
-        # 绘制字段列表表格
+        # 绘制字段列表表格（主 sheet，保持原有布局）
         field_table_start = last_row + 2
         for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
             cell = header_sheet.cell(row=field_table_start, column=column_index, value=column_meta['label'])
@@ -681,7 +702,6 @@ class ProtocolService:
             cell.font = head_font
             header_sheet.column_dimensions[get_column_letter(column_index)].width = column_meta['width']
 
-        # 填充字段数据
         field_key_mapping = {
             'seq': 'seq',
             'field_name': 'fieldName',
@@ -694,13 +714,20 @@ class ProtocolService:
             'remark': 'remark',
         }
 
+        def resolve_seq(field_data: dict, default_seq: int):
+            if isinstance(field_data, dict):
+                seq_val = field_data.get('seq')
+                if seq_val not in (None, ''):
+                    return seq_val
+            return default_seq
+
         if fields_config and isinstance(fields_config, list):
             for row_index, field_data in enumerate(fields_config, start=field_table_start + 1):
                 for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
                     key = column_meta['key']
                     mapped_key = field_key_mapping.get(key, key)
                     if key == 'seq':
-                        value = row_index - field_table_start
+                        value = resolve_seq(field_data, row_index - field_table_start)
                     else:
                         value = field_data.get(mapped_key, '') if isinstance(field_data, dict) else ''
                     data_cell = header_sheet.cell(row=row_index, column=column_index, value=value)
@@ -708,6 +735,53 @@ class ProtocolService:
             apply_range_border(header_sheet, field_table_start, field_table_start + len(fields_config), 1, len(FIELD_COLUMNS))
         else:
             apply_range_border(header_sheet, field_table_start, field_table_start, 1, len(FIELD_COLUMNS))
+
+        # 额外生成“字段列表表格”sheet，保持与模板一致，确保导出文件可直接导入
+        field_sheet = workbook.create_sheet(title='字段列表表格')
+        field_sheet.freeze_panes = 'A2'
+        header_fill = PatternFill(start_color='f2f2f2', end_color='f2f2f2', fill_type='solid')
+        for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
+            cell = field_sheet.cell(row=1, column=column_index, value=column_meta['label'])
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+            cell.fill = header_fill
+            field_sheet.column_dimensions[get_column_letter(column_index)].width = column_meta['width']
+
+        target_fields = fields_config if fields_config and isinstance(fields_config, list) else []
+        for row_index, field_data in enumerate(target_fields, start=2):
+            for column_index, column_meta in enumerate(FIELD_COLUMNS, start=1):
+                key = column_meta['key']
+                mapped_key = field_key_mapping.get(key, key)
+                if key == 'seq':
+                    value = resolve_seq(field_data, row_index - 1)
+                else:
+                    value = field_data.get(mapped_key, '') if isinstance(field_data, dict) else ''
+                field_sheet.cell(row=row_index, column=column_index, value=value)
+
+        data_type_column_index = next(
+            (index for index, column_meta in enumerate(FIELD_COLUMNS, start=1) if column_meta['key'] == 'data_type'),
+            None
+        )
+        if data_type_column_index:
+            data_type_column_letter = get_column_letter(data_type_column_index)
+
+            dv_header = DataValidation(
+                type='list',
+                formula1=f"\"{','.join(DATA_TYPE_OPTIONS)}\"",
+                allow_blank=True,
+                showErrorMessage=True,
+            )
+            header_start_row = field_table_start + 1
+            dv_header.add(f'{data_type_column_letter}{header_start_row}:{data_type_column_letter}1048576')
+            header_sheet.add_data_validation(dv_header)
+
+            dv_fields = DataValidation(
+                type='list',
+                formula1=f"\"{','.join(DATA_TYPE_OPTIONS)}\"",
+                allow_blank=True,
+                showErrorMessage=True,
+            )
+            dv_fields.add(f'{data_type_column_letter}2:{data_type_column_letter}1048576')
+            field_sheet.add_data_validation(dv_fields)
 
         buffer = io.BytesIO()
         workbook.save(buffer)

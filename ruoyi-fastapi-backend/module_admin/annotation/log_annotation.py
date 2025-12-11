@@ -18,6 +18,7 @@ from module_admin.service.log_service import LoginLogService, OperationLogServic
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
+DEFAULT_ERROR_MSG = '接口异常'
 
 
 class Log:
@@ -127,18 +128,24 @@ class Log:
                     loginTime=oper_time.strftime('%Y-%m-%d %H:%M:%S'),
                 )
                 kwargs['form_data'].login_info = login_log
+            def _resolve_msg(msg: str | None, default: str = DEFAULT_ERROR_MSG) -> str:
+                return msg if msg else default
+
             try:
                 # 调用原始函数
                 result = await func(*args, **kwargs)
             except (LoginException, ServiceWarning) as e:
-                logger.warning(e.message)
-                result = ResponseUtil.failure(data=e.data, msg=e.message)
+                resolved_msg = _resolve_msg(e.message, default='操作警告')
+                logger.warning(resolved_msg)
+                result = ResponseUtil.failure(data=e.data, msg=resolved_msg)
             except ServiceException as e:
-                logger.error(e.message)
-                result = ResponseUtil.error(data=e.data, msg=e.message)
+                resolved_msg = _resolve_msg(e.message)
+                logger.error(resolved_msg)
+                result = ResponseUtil.error(data=e.data, msg=resolved_msg)
             except Exception as e:
+                resolved_msg = _resolve_msg(str(e))
                 logger.exception(e)
-                result = ResponseUtil.error(msg=str(e))
+                result = ResponseUtil.error(msg=resolved_msg)
             # 获取请求耗时
             cost_time = float(time.time() - start_time) * 100
             # 判断请求是否来自api文档

@@ -101,3 +101,70 @@ class CloneDeviceModel(BaseModel):
     device_name: str = Field(..., description="新设备名称")
     create_by: Optional[str] = Field(None, description="创建者")
     create_time: Optional[datetime] = Field(None, description="创建时间")
+
+
+class ExportDeviceInterfaceModel(BaseModel):
+    """
+    导出设备接口模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    interface_name: str = Field(..., description="接口名称")
+    interface_type: Optional[str] = Field(None, description="接口类型")
+    position: Optional[str] = Field(None, description="端口位置")
+    description: Optional[str] = Field(None, description="接口描述")
+    params: Optional[Dict[str, Any]] = Field(None, description="接口参数配置")
+    message_config: Optional[Dict[str, Any]] = Field(None, description="报文配置")
+
+
+class ExportDeviceModel(BaseModel):
+    """
+    导出设备模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    device_id: Optional[int] = Field(None, description="设备ID")
+    device_name: str = Field(..., description="设备名称")
+    category_name: Optional[str] = Field(None, description="分类名称")
+    device_type: Optional[str] = Field(None, description="设备类型")
+    manufacturer: Optional[str] = Field(None, description="制造商")
+    model: Optional[str] = Field(None, description="型号")
+    version: Optional[str] = Field(None, description="版本")
+    bus_type: Optional[str] = Field(None, description="总线类型")
+    remark: Optional[str] = Field(None, description="备注")
+    interfaces: List[ExportDeviceInterfaceModel] = Field(default_factory=list, description="接口列表")
+
+
+class DeviceExportDataModel(BaseModel):
+    """
+    设备导出数据模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True,
+        from_attributes=True
+    )
+
+    export_version: str = Field('1.0.0', description="导出版本")
+    export_time: datetime = Field(default_factory=datetime.now, description="导出时间")
+    device: ExportDeviceModel
+
+
+class BatchDeviceIdsModel(BaseModel):
+    """
+    批量设备ID模型
+    """
+    model_config = ConfigDict(
+        alias_generator=to_camel,
+        populate_by_name=True
+    )
+
+    device_ids: List[int] = Field(..., description="设备ID列表")

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, Query, Request, UploadFile
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 from pydantic_validation_decorator import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,6 +24,8 @@ from module_admin.service.project_topology_service import ProjectTopologyService
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
+from urllib.parse import quote
+import re
 
 
 projectController = APIRouter(prefix='/project', dependencies=[Depends(LoginService.get_current_user)])
@@ -187,17 +189,18 @@ async def export_project(
     query_db: AsyncSession = Depends(get_db),
 ):
     """
-    导出工程数据
+    导出工程数据（zip包）
     """
-    export_data = await ProjectService.export_project_services(query_db, project_id)
+    zip_buffer, filename = await ProjectService.export_project_zip_services(query_db, project_id)
     logger.info(f'导出project_id为{project_id}的工程数据成功')
-
-    # 返回JSON格式数据，前端负责下载
-    return JSONResponse(
-        content=export_data.model_dump(mode='json', by_alias=True),
-        headers={
-            'Content-Disposition': f'attachment; filename=project_export_{project_id}.json'
-        }
+    encoded_filename = quote(filename)
+    # 提供 ASCII 兜底，避免非拉丁字符导致 Header 编码失败
+    ascii_fallback = re.sub(r'[^0-9A-Za-z._-]+', '_', filename)
+    content_disposition = f"attachment; filename={ascii_fallback}; filename*=UTF-8''{encoded_filename}"
+    return StreamingResponse(
+        content=zip_buffer,
+        media_type='application/zip',
+        headers={'Content-Disposition': content_disposition},
     )
 
 
@@ -217,10 +220,13 @@ async def export_projects_batch(
     zip_buffer, filename = await ProjectService.export_projects_zip_services(
         query_db, project_ids_body.project_ids
     )
+    encoded_filename = quote(filename)
+    ascii_fallback = re.sub(r'[^0-9A-Za-z._-]+', '_', filename)
+    content_disposition = f"attachment; filename={ascii_fallback}; filename*=UTF-8''{encoded_filename}"
     return StreamingResponse(
         content=zip_buffer,
         media_type='application/zip',
-        headers={'Content-Disposition': f'attachment; filename={filename}'},
+        headers={'Content-Disposition': content_disposition},
     )
 
 

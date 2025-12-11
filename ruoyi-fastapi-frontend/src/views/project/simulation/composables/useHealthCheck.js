@@ -243,16 +243,30 @@ export function useHealthCheck() {
     const items = [];
     const portIssues = [];
 
-    // 优先从 params 取值，不存在时回退到 messageConfig.header
+    // 优先从 params 取值，不存在时回退到 messageConfig.header，并尝试别名
     const getParamValue = (port, key) => {
       const params = port?.params || {};
       const header = port?.messageConfig?.header || {};
       const lowerKey = key ? key.charAt(0).toLowerCase() + key.slice(1) : '';
+      const aliasMap = {
+        baudRate: ['speed'],
+        ipAddress: ['ip'],
+        protocol: ['proto'],
+      };
+      const aliases = aliasMap[key] || [];
+      const aliasParamVal = aliases
+        .map((a) => params[a])
+        .find((v) => v !== undefined && v !== null && v !== '');
+      const aliasHeaderVal = aliases
+        .map((a) => header[a])
+        .find((v) => v !== undefined && v !== null && v !== '');
       return (
         params[key] ??
         params[lowerKey] ??
+        aliasParamVal ??
         header[key] ??
         header[lowerKey] ??
+        aliasHeaderVal ??
         null
       );
     };

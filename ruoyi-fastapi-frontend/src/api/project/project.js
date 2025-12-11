@@ -48,6 +48,7 @@ export function exportProject(projectId) {
   return request({
     url: '/project/export/' + projectId,
     method: 'get',
+    responseType: 'blob',
   });
 }
 
@@ -76,6 +77,5 @@ export function importProjectBatch(formData) {
     url: '/project/import/batch',
     method: 'post',
     data: formData,
-    headers: { 'Content-Type': 'multipart/form-data' },
   });
 }

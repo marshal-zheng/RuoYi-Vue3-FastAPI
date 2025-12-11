@@ -10,7 +10,7 @@ class ProjectModel(BaseModel):
     工程管理表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     project_id: Optional[int] = Field(default=None, description='工程编号')
     project_name: Optional[str] = Field(default=None, description='工程名称')

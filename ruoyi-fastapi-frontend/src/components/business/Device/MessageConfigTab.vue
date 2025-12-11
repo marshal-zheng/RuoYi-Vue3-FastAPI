@@ -345,68 +345,68 @@ defineExpose({
   gap: 12px;
 }
 
-.protocol-selector-section {
-  background-color: var(--el-fill-color-light);
-  border-radius: 8px;
-  padding: 12px 16px;
-  border: 1px solid var(--el-border-color-lighter);
-  flex-shrink: 0;
-}
+// .protocol-selector-section {
+//   background-color: var(--el-fill-color-light);
+//   border-radius: 8px;
+//   padding: 12px 16px;
+//   border: 1px solid var(--el-border-color-lighter);
+//   flex-shrink: 0;
+// }
 
-.protocol-config-section {
-  background-color: var(--el-fill-color-light);
-  border-radius: 8px;
-  padding: 16px;
-  border: 1px solid var(--el-border-color-lighter);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+// .protocol-config-section {
+//   background-color: var(--el-fill-color-light);
+//   border-radius: 8px;
+//   padding: 16px;
+//   border: 1px solid var(--el-border-color-lighter);
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+//   overflow: hidden;
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--el-border-color-lighter);
-    flex-shrink: 0;
+//   .section-header {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     margin-bottom: 16px;
+//     padding-bottom: 12px;
+//     border-bottom: 1px solid var(--el-border-color-lighter);
+//     flex-shrink: 0;
 
-    .section-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--el-text-color-primary);
-      position: relative;
-      padding-left: 12px;
+//     .section-title {
+//       font-size: 15px;
+//       font-weight: 600;
+//       color: var(--el-text-color-primary);
+//       position: relative;
+//       padding-left: 12px;
 
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 4px;
-        height: 14px;
-        background-color: var(--el-color-primary);
-        border-radius: 2px;
-      }
-    }
-  }
+//       &::before {
+//         content: '';
+//         position: absolute;
+//         left: 0;
+//         top: 50%;
+//         transform: translateY(-50%);
+//         width: 4px;
+//         height: 14px;
+//         background-color: var(--el-color-primary);
+//         border-radius: 2px;
+//       }
+//     }
+//   }
 
-  .config-content {
-    flex: 1;
-    overflow: auto;
+//   .config-content {
+//     flex: 1;
+//     overflow: auto;
 
-    /* 修复表格在 flex 容器中的高度问题 */
-    :deep(.protocol-template-wrapper) {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+//     /* 修复表格在 flex 容器中的高度问题 */
+//     :deep(.protocol-template-wrapper) {
+//       height: 100%;
+//       display: flex;
+//       flex-direction: column;
 
-      .vxe-table--render-wrapper {
-        height: 100% !important;
-      }
-    }
-  }
-}
+//       .vxe-table--render-wrapper {
+//         height: 100% !important;
+//       }
+//     }
+//   }
+// }
 </style>
