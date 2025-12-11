@@ -228,19 +228,14 @@
 </template>
 
 <script setup name="Project">
-import {
-  listProject,
-  delProject,
-  exportProject,
-  exportProjectBatch,
-  importProjectBatch,
-} from '@/api/project/project';
+import { listProject, delProject, exportProject, exportProjectBatch, importProjectBatch } from '@/api/project/project';
 import { unlockProjectVersions } from '@/api/project/version';
 import { checkPermi } from '@/utils/permission';
 import { Document, Delete, Unlock, Download, Edit, View } from '@element-plus/icons-vue';
 import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue';
 import { confirmInputDanger } from '@zxio/zxui';
 import { ElMessage } from 'element-plus';
+import { downloadFromResponse, validateFile } from '@/utils/io-toolkit';
 
 const { proxy } = getCurrentInstance();
 
@@ -421,21 +416,11 @@ async function handleExport(project) {
     return;
   }
 
-  const res = await exportProject(project.projectId);
-  const blob = res instanceof Blob ? res : new Blob([res], { type: 'application/zip' });
-  const url = URL.createObjectURL(blob);
-
   const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
   const safeName = (project.projectName || 'project').replace(/[\\/:*?"<>|\\s]+/g, '_');
   const filename = `${safeName}_export_${timestamp}.zip`;
-
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  const res = await exportProject(project.projectId);
+  await downloadFromResponse(res, filename);
 
   ElMessage.success('工程导出成功');
 }
@@ -447,19 +432,10 @@ async function handleBatchExport() {
   }
 
   try {
-    const res = await exportProjectBatch(ids.value);
-    const blob = res instanceof Blob ? res : new Blob([res], { type: 'application/zip' });
-    const url = URL.createObjectURL(blob);
     const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
     const filename = `project_export_${timestamp}.zip`;
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const res = await exportProjectBatch(ids.value);
+    await downloadFromResponse(res, filename);
 
     ElMessage.success('批量导出任务已完成');
   } catch (error) {
@@ -481,11 +457,9 @@ async function handleImportFileChange(event) {
   // 重置input，以便下次选择同一文件时也能触发change事件
   event.target.value = '';
 
-  const lowerName = file.name.toLowerCase();
-
-  // 只支持 zip 导入
-  if (!lowerName.endsWith('.zip')) {
-    proxy.$modal.msgError('请选择ZIP格式的工程导出文件');
+  const validation = validateFile(file, { accept: ['.zip'], maxSize: 50 * 1024 * 1024 });
+  if (!validation.valid) {
+    proxy.$modal.msgError(validation.error || '文件校验失败');
     return;
   }
 

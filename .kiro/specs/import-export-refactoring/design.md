@@ -6,6 +6,614 @@
 
 ## Architecture
 
+### 🚨 核心原则：优先使用开源社区顶级库，严禁重复造轮子
+
+> **这是本项目最重要的工程原则。** 开源社区的顶级库已经过大量生产环境验证，具有更好的性能、稳定性和安全性。我们的工作是**组合和封装**这些库，而不是重新实现它们的功能。
+
+#### 后端依赖库选择
+
+| 功能领域 | 选用库 | 理由 | 替代方案（不采用） |
+|---------|--------|------|------------------|
+| **Excel读写** | `openpyxl` | Python社区标准，支持xlsx格式，功能完整 | 自己解析XML |
+| **Excel数据处理** | `pandas` | 数据处理事实标准，性能优异 | 手动遍历处理 |
+| **JSON序列化** | `pydantic` + `orjson` | 类型安全+高性能JSON | 手动dict转换 |
+| **ZIP处理** | `zipfile` (标准库) | Python标准库，稳定可靠 | 自己实现压缩 |
+| **XML处理** | `lxml` | C扩展，性能最佳 | xml.etree |
+| **数据验证** | `pydantic` | 类型验证事实标准 | 手动if判断 |
+| **异步支持** | `aiofiles` | 异步文件IO | 同步阻塞IO |
+| **日期处理** | `python-dateutil` | 日期解析标准库 | 手动解析 |
+
+#### 前端依赖库选择
+
+| 功能领域 | 选用库 | 理由 | 替代方案（不采用） |
+|---------|--------|------|------------------|
+| **文件下载** | `file-saver` | 浏览器兼容性最佳 | 手动创建a标签 |
+| **Excel生成** | `xlsx` / `exceljs` | 功能完整，社区活跃 | 自己拼接XML |
+| **ZIP处理** | `jszip` | 浏览器端ZIP标准库 | 自己实现 |
+| **HTTP请求** | `axios` | 项目已有，功能完整 | fetch封装 |
+| **类型验证** | `zod` | TypeScript类型验证最佳 | 手动类型检查 |
+
+#### 我们只做三件事
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    IO_Toolkit 职责边界                       │
+├─────────────────────────────────────────────────────────────┤
+│  ✅ 我们做的事情：                                           │
+│     1. 定义统一的接口和数据模型                              │
+│     2. 组合和封装开源库，提供简洁API                         │
+│     3. 处理业务特定的转换逻辑（字段映射、版本控制等）         │
+├─────────────────────────────────────────────────────────────┤
+│  ❌ 我们不做的事情：                                         │
+│     1. 不实现Excel/ZIP/XML的底层解析                         │
+│     2. 不实现JSON序列化/反序列化                             │
+│     3. 不实现文件压缩算法                                    │
+│     4. 不实现浏览器文件下载兼容性处理                        │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### 代码示例：正确的封装方式
+
+```python
+# ✅ 正确：封装openpyxl，提供业务API
+class ExcelExporter(ExportStrategy):
+    async def export(self, data: List[Dict], **options) -> ExportResult:
+        # 使用openpyxl处理Excel
+        from openpyxl import Workbook
+        from openpyxl.styles import PatternFill, Font
+        
+        wb = Workbook()
+        ws = wb.active
+        # ... 使用openpyxl的API
+        
+        # 使用pandas进行数据转换（如果需要）
+        import pandas as pd
+        df = pd.DataFrame(data)
+        # ...
+
+# ❌ 错误：自己实现Excel格式
+class BadExcelExporter:
+    def export(self, data):
+        # 不要这样做！
+        xml_content = '<?xml version="1.0"?><worksheet>...'
+        # 手动拼接XML是错误的做法
+```
+
+### 设计原则（对标Google工程实践）
+
+本架构设计遵循以下Google级别的工程原则：
+
+| 原则 | 说明 | 实现方式 |
+|------|------|---------|
+| **Use Existing Libraries** | 优先使用成熟开源库 | openpyxl/pandas/pydantic |
+| **SOLID** | 单一职责、开闭原则、里氏替换、接口隔离、依赖倒置 | 策略模式、抽象基类、依赖注入 |
+| **DRY** | Don't Repeat Yourself | 统一基类、工厂方法、模板方法 |
+| **KISS** | Keep It Simple, Stupid | 简洁API、合理默认值 |
+| **YAGNI** | You Aren't Gonna Need It | 按需扩展、避免过度设计 |
+| **Composition over Inheritance** | 组合优于继承 | 装饰器模式、组合导出器 |
+| **Fail Fast** | 快速失败 | 前置验证、明确异常 |
+| **Defensive Programming** | 防御性编程 | 输入验证、边界检查 |
+
+### 核心架构模式
+
+#### 1. 策略模式（Strategy Pattern）
+```
+┌─────────────────┐
+│  ExportStrategy │ ◄── 抽象策略
+└────────┬────────┘
+         │
+    ┌────┴────┬────────┬────────┐
+    ▼         ▼        ▼        ▼
+┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐
+│ Excel │ │ JSON  │ │  ZIP  │ │  XML  │  ◄── 具体策略
+└───────┘ └───────┘ └───────┘ └───────┘
+```
+
+#### 2. 工厂模式（Factory Pattern）
+```python
+class ExporterFactory:
+    _exporters: Dict[str, Type[ExportStrategy]] = {}
+    
+    @classmethod
+    def register(cls, format_type: str, exporter_class: Type[ExportStrategy]):
+        cls._exporters[format_type] = exporter_class
+    
+    @classmethod
+    def create(cls, format_type: str, **options) -> ExportStrategy:
+        if format_type not in cls._exporters:
+            raise ValueError(f"Unknown format: {format_type}")
+        return cls._exporters[format_type](**options)
+
+# 注册导出器
+ExporterFactory.register('excel', ExcelExporter)
+ExporterFactory.register('json', JsonExporter)
+ExporterFactory.register('zip', ZipExporter)
+
+# 使用
+exporter = ExporterFactory.create('excel', mapping_dict={...})
+```
+
+#### 3. 装饰器模式（Decorator Pattern）
+```python
+class LoggingExporter(ExportStrategy):
+    """日志装饰器"""
+    def __init__(self, wrapped: ExportStrategy):
+        self._wrapped = wrapped
+    
+    async def export(self, data, **options) -> ExportResult:
+        logger.info(f"Starting export with {self._wrapped.__class__.__name__}")
+        start = time.time()
+        result = await self._wrapped.export(data, **options)
+        logger.info(f"Export completed in {time.time() - start:.2f}s, size: {result.size}")
+        return result
+
+class CompressionExporter(ExportStrategy):
+    """压缩装饰器"""
+    def __init__(self, wrapped: ExportStrategy, compression_level: int = 6):
+        self._wrapped = wrapped
+        self._compression_level = compression_level
+    
+    async def export(self, data, **options) -> ExportResult:
+        result = await self._wrapped.export(data, **options)
+        compressed = gzip.compress(result.content, self._compression_level)
+        return ExportResult(
+            content=compressed,
+            filename=result.filename + '.gz',
+            content_type='application/gzip',
+            size=len(compressed)
+        )
+
+# 组合使用
+exporter = LoggingExporter(CompressionExporter(JsonExporter()))
+```
+
+#### 4. 建造者模式（Builder Pattern）
+```python
+class ExcelTemplateBuilder:
+    """Excel模板建造者"""
+    def __init__(self):
+        self._headers: List[ColumnConfig] = []
+        self._validations: List[ValidationConfig] = []
+        self._sample_data: List[Dict] = []
+        self._styles: StyleConfig = StyleConfig()
+    
+    def add_column(self, key: str, label: str, width: int = 15) -> 'ExcelTemplateBuilder':
+        self._headers.append(ColumnConfig(key=key, label=label, width=width))
+        return self
+    
+    def add_dropdown(self, column: str, options: List[str]) -> 'ExcelTemplateBuilder':
+        self._validations.append(ValidationConfig(column=column, options=options))
+        return self
+    
+    def add_sample_row(self, data: Dict) -> 'ExcelTemplateBuilder':
+        self._sample_data.append(data)
+        return self
+    
+    def with_header_style(self, fill_color: str, font_bold: bool = True) -> 'ExcelTemplateBuilder':
+        self._styles.header_fill = fill_color
+        self._styles.header_bold = font_bold
+        return self
+    
+    def build(self) -> bytes:
+        """构建Excel模板"""
+        return ExcelTemplateGenerator(
+            headers=self._headers,
+            validations=self._validations,
+            sample_data=self._sample_data,
+            styles=self._styles
+        ).generate()
+
+# 使用
+template = (ExcelTemplateBuilder()
+    .add_column('userName', '用户名称', width=20)
+    .add_column('status', '状态', width=10)
+    .add_dropdown('status', ['正常', '停用'])
+    .add_sample_row({'userName': '示例用户', 'status': '正常'})
+    .with_header_style('#f2f2f2')
+    .build())
+```
+
+#### 5. 管道模式（Pipeline Pattern）
+```python
+class ImportPipeline:
+    """导入处理管道"""
+    def __init__(self):
+        self._steps: List[PipelineStep] = []
+    
+    def add_step(self, step: PipelineStep) -> 'ImportPipeline':
+        self._steps.append(step)
+        return self
+    
+    async def execute(self, context: ImportContext) -> ImportResult:
+        for step in self._steps:
+            context = await step.process(context)
+            if context.should_abort:
+                break
+        return context.to_result()
+
+# 定义管道步骤
+class FileValidationStep(PipelineStep):
+    async def process(self, ctx: ImportContext) -> ImportContext:
+        if not ctx.file_content:
+            ctx.add_error(ImportError(message="文件内容为空"))
+            ctx.should_abort = True
+        return ctx
+
+class SchemaValidationStep(PipelineStep):
+    async def process(self, ctx: ImportContext) -> ImportContext:
+        errors = self._validator.validate(ctx.parsed_data, ctx.target_schema)
+        ctx.errors.extend(errors)
+        return ctx
+
+class DataTransformStep(PipelineStep):
+    async def process(self, ctx: ImportContext) -> ImportContext:
+        ctx.transformed_data = self._transformer.transform(ctx.parsed_data)
+        return ctx
+
+# 使用
+pipeline = (ImportPipeline()
+    .add_step(FileValidationStep())
+    .add_step(ParseStep())
+    .add_step(SchemaValidationStep())
+    .add_step(VersionValidationStep())
+    .add_step(DataTransformStep()))
+
+result = await pipeline.execute(ImportContext(file_content=content))
+```
+
+#### 6. 缓存策略（Caching Strategy）
+```python
+from functools import lru_cache
+from typing import Hashable
+import hashlib
+
+class ExportCache:
+    """导出结果缓存（LRU策略）"""
+    def __init__(self, max_size: int = 100, ttl_seconds: int = 300):
+        self._cache: OrderedDict[str, CacheEntry] = OrderedDict()
+        self._max_size = max_size
+        self._ttl = ttl_seconds
+    
+    def _compute_key(self, data: Any, options: Dict) -> str:
+        """计算缓存键（基于内容哈希）"""
+        content = json.dumps(data, sort_keys=True, default=str)
+        options_str = json.dumps(options, sort_keys=True)
+        return hashlib.sha256(f"{content}:{options_str}".encode()).hexdigest()
+    
+    def get(self, key: str) -> Optional[ExportResult]:
+        """获取缓存（O(1)时间复杂度）"""
+        if key not in self._cache:
+            return None
+        entry = self._cache[key]
+        if entry.is_expired(self._ttl):
+            del self._cache[key]
+            return None
+        # LRU: 移动到末尾
+        self._cache.move_to_end(key)
+        return entry.result
+    
+    def set(self, key: str, result: ExportResult):
+        """设置缓存（O(1)时间复杂度）"""
+        if key in self._cache:
+            self._cache.move_to_end(key)
+        else:
+            if len(self._cache) >= self._max_size:
+                # 淘汰最久未使用的条目
+                self._cache.popitem(last=False)
+        self._cache[key] = CacheEntry(result=result, created_at=time.time())
+
+class CachedExporter(ExportStrategy):
+    """带缓存的导出器装饰器"""
+    def __init__(self, wrapped: ExportStrategy, cache: ExportCache):
+        self._wrapped = wrapped
+        self._cache = cache
+    
+    async def export(self, data, **options) -> ExportResult:
+        cache_key = self._cache._compute_key(data, options)
+        cached = self._cache.get(cache_key)
+        if cached:
+            return cached
+        result = await self._wrapped.export(data, **options)
+        self._cache.set(cache_key, result)
+        return result
+```
+
+#### 7. 流式处理（Streaming for Large Data）
+```python
+from typing import AsyncIterator, Iterator
+import asyncio
+
+class StreamingExporter(ExportStrategy):
+    """流式导出器（处理大数据集）"""
+    
+    async def export_stream(
+        self, 
+        data_iterator: AsyncIterator[Dict],
+        chunk_size: int = 1000
+    ) -> AsyncIterator[bytes]:
+        """
+        流式导出，避免内存溢出
+        时间复杂度: O(n)，空间复杂度: O(chunk_size)
+        """
+        buffer = []
+        async for item in data_iterator:
+            buffer.append(item)
+            if len(buffer) >= chunk_size:
+                yield await self._process_chunk(buffer)
+                buffer = []
+        if buffer:
+            yield await self._process_chunk(buffer)
+    
+    async def _process_chunk(self, chunk: List[Dict]) -> bytes:
+        """处理数据块"""
+        pass
+
+class StreamingZipExporter:
+    """流式ZIP导出（支持超大文件）"""
+    
+    async def export_stream(
+        self,
+        entries: AsyncIterator[ZipEntry]
+    ) -> AsyncIterator[bytes]:
+        """
+        流式生成ZIP，无需将整个文件加载到内存
+        使用zipfile的增量写入能力
+        """
+        buffer = BytesIO()
+        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zf:
+            async for entry in entries:
+                zf.writestr(entry.filename, entry.content)
+                # 每写入一个文件就yield当前buffer内容
+                yield buffer.getvalue()
+                buffer.seek(0)
+                buffer.truncate()
+```
+
+#### 8. 并发处理（Concurrent Processing）
+```python
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+
+class BatchExporter:
+    """批量导出器（并发处理）"""
+    
+    def __init__(
+        self, 
+        exporter: ExportStrategy,
+        max_concurrency: int = 10
+    ):
+        self._exporter = exporter
+        self._semaphore = asyncio.Semaphore(max_concurrency)
+    
+    async def export_batch(
+        self,
+        items: List[Any],
+        filename_fn: Callable[[Any, int], str]
+    ) -> List[ExportResult]:
+        """
+        并发批量导出
+        时间复杂度: O(n/concurrency)
+        """
+        async def export_with_semaphore(item, index):
+            async with self._semaphore:
+                return await self._exporter.export(
+                    item, 
+                    filename=filename_fn(item, index)
+                )
+        
+        tasks = [
+            export_with_semaphore(item, i) 
+            for i, item in enumerate(items)
+        ]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+
+class ParallelImporter:
+    """并行导入器"""
+    
+    def __init__(
+        self,
+        importer: ImportStrategy,
+        max_workers: int = 4
+    ):
+        self._importer = importer
+        self._executor = ThreadPoolExecutor(max_workers=max_workers)
+    
+    async def import_batch(
+        self,
+        files: List[bytes],
+        model: Type[BaseModel]
+    ) -> List[ImportResult]:
+        """
+        并行批量导入（CPU密集型任务使用线程池）
+        """
+        loop = asyncio.get_event_loop()
+        tasks = [
+            loop.run_in_executor(
+                self._executor,
+                self._sync_import,
+                content,
+                model
+            )
+            for content in files
+        ]
+        return await asyncio.gather(*tasks, return_exceptions=True)
+```
+
+#### 9. 数据结构优化
+```python
+from dataclasses import dataclass, field
+from typing import Generic, TypeVar
+import bisect
+
+T = TypeVar('T')
+
+@dataclass
+class IndexedFieldMapping:
+    """
+    字段映射索引结构
+    使用哈希表实现O(1)查找
+    """
+    _forward: Dict[str, str] = field(default_factory=dict)  # key -> label
+    _reverse: Dict[str, str] = field(default_factory=dict)  # label -> key
+    
+    def add(self, key: str, label: str):
+        self._forward[key] = label
+        self._reverse[label] = key
+    
+    def get_label(self, key: str) -> Optional[str]:
+        """O(1) 查找"""
+        return self._forward.get(key)
+    
+    def get_key(self, label: str) -> Optional[str]:
+        """O(1) 反向查找"""
+        return self._reverse.get(label)
+
+class SortedImportErrors:
+    """
+    有序错误集合（按行号排序）
+    使用二分插入保持有序，O(log n)插入
+    """
+    def __init__(self):
+        self._errors: List[ImportError] = []
+    
+    def add(self, error: ImportError):
+        """O(log n) 插入"""
+        if error.row is None:
+            self._errors.append(error)
+        else:
+            bisect.insort(self._errors, error, key=lambda e: e.row or float('inf'))
+    
+    def get_errors_in_range(self, start_row: int, end_row: int) -> List[ImportError]:
+        """O(log n + k) 范围查询，k为结果数量"""
+        left = bisect.bisect_left(self._errors, start_row, key=lambda e: e.row or float('inf'))
+        right = bisect.bisect_right(self._errors, end_row, key=lambda e: e.row or float('inf'))
+        return self._errors[left:right]
+
+class TrieColumnMatcher:
+    """
+    Trie树实现的列名模糊匹配
+    用于Excel导入时的列名自动识别
+    """
+    def __init__(self):
+        self._root: Dict = {}
+    
+    def add_pattern(self, pattern: str, key: str):
+        """添加匹配模式 O(m)，m为模式长度"""
+        node = self._root
+        for char in pattern.lower():
+            if char not in node:
+                node[char] = {}
+            node = node[char]
+        node['$'] = key
+    
+    def match(self, text: str) -> Optional[str]:
+        """匹配文本 O(m)"""
+        node = self._root
+        for char in text.lower():
+            if char not in node:
+                return None
+            node = node[char]
+        return node.get('$')
+    
+    def fuzzy_match(self, text: str, max_distance: int = 2) -> List[str]:
+        """模糊匹配（编辑距离）O(m * n)"""
+        # 使用动态规划计算编辑距离
+        pass
+```
+
+#### 10. 内存优化（Memory Optimization）
+```python
+from __future__ import annotations
+import sys
+from typing import TYPE_CHECKING
+import weakref
+
+if TYPE_CHECKING:
+    from .models import ExportResult
+
+class MemoryEfficientExportResult:
+    """
+    内存优化的导出结果
+    使用__slots__减少内存占用
+    """
+    __slots__ = ('_content', '_filename', '_content_type', '_size', '_created_at')
+    
+    def __init__(self, content: bytes, filename: str, content_type: str):
+        self._content = content
+        self._filename = filename
+        self._content_type = content_type
+        self._size = len(content)
+        self._created_at = time.time()
+    
+    @property
+    def content(self) -> bytes:
+        return self._content
+    
+    def release(self):
+        """显式释放大内存对象"""
+        self._content = b''
+
+class LazyExportResult:
+    """
+    延迟加载的导出结果
+    适用于大文件，避免一次性加载到内存
+    """
+    def __init__(self, generator_fn: Callable[[], bytes], filename: str, content_type: str):
+        self._generator_fn = generator_fn
+        self._content: Optional[bytes] = None
+        self._filename = filename
+        self._content_type = content_type
+    
+    @property
+    def content(self) -> bytes:
+        """延迟生成内容"""
+        if self._content is None:
+            self._content = self._generator_fn()
+        return self._content
+    
+    def stream(self) -> Iterator[bytes]:
+        """流式获取内容"""
+        return self._generator_fn()
+```
+
+#### 11. 插件架构（Plugin Architecture）
+```python
+class IOToolkitRegistry:
+    """IO工具库注册中心"""
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance._exporters = {}
+            cls._instance._importers = {}
+            cls._instance._validators = {}
+        return cls._instance
+    
+    def register_exporter(self, format_type: str, exporter: Type[ExportStrategy]):
+        self._exporters[format_type] = exporter
+    
+    def register_importer(self, format_type: str, importer: Type[ImportStrategy]):
+        self._importers[format_type] = importer
+    
+    def register_validator(self, name: str, validator: Type[Validator]):
+        self._validators[name] = validator
+    
+    def get_exporter(self, format_type: str, **options) -> ExportStrategy:
+        return self._exporters[format_type](**options)
+    
+    def get_importer(self, format_type: str, **options) -> ImportStrategy:
+        return self._importers[format_type](**options)
+
+# 自动发现和注册（类似Django的autodiscover）
+def autodiscover_plugins():
+    """自动发现并注册插件"""
+    registry = IOToolkitRegistry()
+    for module in discover_modules('utils.io_toolkit.plugins'):
+        if hasattr(module, 'register'):
+            module.register(registry)
+```
+
 ### 整体架构图
 
 ```mermaid
@@ -612,6 +1220,172 @@ export interface FileInfo {
 
 **Validates: Requirements 5.2**
 
+## Reusability and Extension Guide
+
+### 复用机制说明
+
+本工具库设计的核心目标是**一次开发，处处复用**。以下是具体的复用场景和方式：
+
+### 场景1：新增简单列表导出（如：新增"部门导出"功能）
+
+**只需3行代码：**
+```python
+# 在 dept_service.py 中
+from utils.io_toolkit import ExcelExporter, ExportResult
+
+async def export_dept_list_services(dept_list: List) -> ExportResult:
+    mapping = {'deptId': '部门编号', 'deptName': '部门名称', 'status': '状态'}
+    return await ExcelExporter(mapping_dict=mapping).export(dept_list, filename='部门列表')
+```
+
+### 场景2：新增复杂结构导出（如：新增"任务导出"功能）
+
+**定义数据模型 + 使用导出器：**
+```python
+# 定义导出模型（继承ExportDataModel自动带版本）
+class TaskExportDataModel(ExportDataModel):
+    export_version: str = '1.0.0'
+    task: TaskModel
+    subtasks: List[SubtaskModel]
+
+# 导出为JSON
+async def export_task_services(task_id: int) -> ExportResult:
+    data = TaskExportDataModel(task=task, subtasks=subtasks)
+    return await JsonExporter().export(data, filename=f'task_{task_id}')
+
+# 或导出为ZIP（包含多个文件）
+async def export_tasks_zip_services(task_ids: List[int]) -> ExportResult:
+    entries = [ZipEntry(filename=f'{t.name}.json', content=t.json().encode()) for t in tasks]
+    return await ZipExporter().export(entries, filename='tasks_export')
+```
+
+### 场景3：新增导入功能（如：新增"任务导入"功能）
+
+**使用导入器 + 自动验证：**
+```python
+async def import_task_services(file_bytes: bytes) -> ImportResult:
+    # 自动解析JSON并验证模型
+    return await JsonImporter().import_data(file_bytes, model=TaskExportDataModel)
+```
+
+### 场景4：新增新的导出格式（如：CSV导出）
+
+**只需实现ExportStrategy接口：**
+```python
+class CsvExporter(ExportStrategy):
+    async def export(self, data: List[Dict], **options) -> ExportResult:
+        # 实现CSV导出逻辑
+        pass
+    
+    @property
+    def content_type(self) -> str:
+        return 'text/csv'
+    
+    @property
+    def file_extension(self) -> str:
+        return '.csv'
+```
+
+### 场景5：前端新增导出按钮
+
+**使用ExportButton组件：**
+```vue
+<ExportButton
+  :export-fn="() => exportTaskApi(taskId)"
+  filename="任务导出.json"
+  button-text="导出任务"
+/>
+```
+
+### 场景6：前端新增导入功能
+
+**使用ImportUploader组件：**
+```vue
+<ImportUploader
+  :accept="['.json', '.zip']"
+  :upload-fn="importTaskApi"
+  @success="onImportSuccess"
+  @error="onImportError"
+/>
+```
+
+### 复用保证机制
+
+| 机制 | 说明 | 好处 |
+|------|------|------|
+| **策略模式** | 导出/导入器实现统一接口 | 新增格式无需修改现有代码 |
+| **工厂模式** | ExporterFactory/ImporterFactory | 统一创建入口，支持配置化 |
+| **装饰器模式** | LoggingExporter/CompressionExporter | 灵活添加横切关注点 |
+| **建造者模式** | ExcelTemplateBuilder | 流畅API，复杂对象构建 |
+| **管道模式** | ImportPipeline | 可配置的处理流程 |
+| **插件架构** | IOToolkitRegistry | 运行时扩展，零侵入 |
+| **统一返回类型** | ExportResult/ImportResult | 所有导出/导入行为一致 |
+| **版本控制** | ExportDataModel强制版本字段 | 格式变更时可向后兼容 |
+
+### 扩展性保证（对标Google级别）
+
+#### 水平扩展：新增导出格式
+```python
+# 1. 实现ExportStrategy接口
+class PdfExporter(ExportStrategy):
+    async def export(self, data, **options) -> ExportResult:
+        # PDF生成逻辑
+        pass
+
+# 2. 注册到工厂（可选，也可直接使用）
+ExporterFactory.register('pdf', PdfExporter)
+
+# 3. 使用
+exporter = ExporterFactory.create('pdf')
+# 或
+exporter = PdfExporter()
+```
+
+#### 垂直扩展：增强现有功能
+```python
+# 使用装饰器增强
+exporter = LoggingExporter(
+    RetryExporter(
+        CompressionExporter(
+            JsonExporter()
+        ),
+        max_retries=3
+    )
+)
+```
+
+#### 配置化扩展
+```python
+# 通过配置文件定义导出行为
+export_config = {
+    'format': 'excel',
+    'options': {
+        'mapping': {'userId': '用户ID', 'userName': '用户名'},
+        'sheet_name': '用户列表',
+        'header_style': {'fill_color': '#f2f2f2', 'bold': True}
+    },
+    'decorators': ['logging', 'compression']
+}
+
+exporter = ExporterFactory.create_from_config(export_config)
+```
+
+### 不需要改动的场景
+
+以下场景**不需要修改工具库代码**：
+- 新增任何业务模块的导出功能
+- 新增任何业务模块的导入功能
+- 修改导出文件名格式
+- 修改Excel列映射
+- 添加导入数据验证规则（通过Pydantic模型）
+
+### 需要扩展工具库的场景
+
+以下场景需要**扩展**（非修改）工具库：
+- 新增导出格式（如CSV、PDF）→ 实现新的Exporter类
+- 新增导入格式 → 实现新的Importer类
+- 新增验证规则类型 → 实现新的Validator类
+
 ## Error Handling
 
 ### 异常类层次结构
@@ -671,6 +1445,21 @@ class FileFormatException(ImportException):
 - **后端**: pytest + pytest-asyncio + hypothesis (属性测试)
 - **前端**: Vitest + @vue/test-utils + fast-check (属性测试)
 
+### 测试金字塔（Google Testing Pyramid）
+
+```
+        ╱╲
+       ╱  ╲
+      ╱ E2E╲        ← 少量端到端测试（导入导出完整流程）
+     ╱──────╲
+    ╱ 集成测试╲      ← 中等数量集成测试（API层测试）
+   ╱──────────╲
+  ╱   单元测试  ╲    ← 大量单元测试（各组件独立测试）
+ ╱──────────────╲
+╱   属性测试     ╲   ← 属性测试覆盖核心逻辑
+────────────────────
+```
+
 ### 双重测试策略
 
 本项目采用单元测试和属性测试相结合的策略：
@@ -693,6 +1482,8 @@ ruoyi-fastapi-backend/
             ├── test_exporters.py      # 导出器单元测试
             ├── test_importers.py      # 导入器单元测试
             ├── test_validators.py     # 验证器单元测试
+            ├── test_factory.py        # 工厂模式测试
+            ├── test_pipeline.py       # 管道模式测试
             └── test_properties.py     # 属性测试
 
 ruoyi-fastapi-frontend/
@@ -702,6 +1493,7 @@ ruoyi-fastapi-frontend/
             ├── download.test.ts       # 下载工具测试
             ├── upload.test.ts         # 上传工具测试
             ├── validators.test.ts     # 验证器测试
+            ├── components.test.ts     # 组件测试
             └── properties.test.ts     # 属性测试
 ```
 
@@ -713,4 +1505,26 @@ ruoyi-fastapi-frontend/
 @given(st.lists(st.dictionaries(st.text(), st.text())))
 def test_excel_round_trip(data):
     ...
+```
+
+### 代码质量保证（Google Code Quality Standards）
+
+| 指标 | 目标 | 工具 |
+|------|------|------|
+| **测试覆盖率** | ≥ 90% | pytest-cov / vitest coverage |
+| **代码复杂度** | 圈复杂度 ≤ 10 | radon / eslint-plugin-complexity |
+| **类型覆盖率** | 100% | mypy / TypeScript strict mode |
+| **文档覆盖率** | 所有公共API | pydoc / TSDoc |
+| **代码风格** | 统一规范 | ruff / eslint + prettier |
+
+### 持续集成检查
+
+```yaml
+# CI Pipeline 检查项
+- lint: ruff check / eslint
+- type-check: mypy / tsc --noEmit
+- unit-test: pytest / vitest run
+- property-test: pytest (hypothesis) / vitest (fast-check)
+- coverage: ≥ 90%
+- complexity: max 10
 ```

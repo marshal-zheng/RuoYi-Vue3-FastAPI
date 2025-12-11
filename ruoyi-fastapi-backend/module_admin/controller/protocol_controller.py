@@ -13,6 +13,7 @@ from module_admin.entity.vo.protocol_vo import (
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.login_service import LoginService
 from module_admin.service.protocol_service import ProtocolService
+from module_admin.service.protocol_io_adapter import ProtocolIOAdapter
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 from utils.page_util import PageResponseModel
@@ -142,15 +143,14 @@ async def download_protocol_import_template(
     下载协议导入模板
     """
     try:
-        template_bytes = await ProtocolService.get_protocol_import_template_services(protocolType)
-        protocol_suffix = f'_{protocolType.upper()}' if protocolType else ''
-        filename = quote(f'协议导入模板{protocol_suffix}.xlsx')
+        export_result = await ProtocolIOAdapter.export_import_template(protocolType)
+        filename = quote(export_result.filename)
         headers = {
             'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
             'download-filename': filename
         }
         return ResponseUtil.streaming(
-            data=bytes2file_response(template_bytes),
+            data=bytes2file_response(export_result.content),
             headers=headers,
             media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )
@@ -171,9 +171,9 @@ async def protocol_import_preview(
     解析协议导入文件，返回预览数据
     """
     try:
-        preview_result = await ProtocolService.protocol_import_preview_services(file)
+        preview_result = await ProtocolIOAdapter.import_preview(file)
         logger.info('协议导入文件解析成功')
-        return ResponseUtil.success(data=preview_result)
+        return ResponseUtil.success(data=preview_result.data)
     except Exception as e:
         logger.exception(e)
         return ResponseUtil.error(msg=str(e))
@@ -193,15 +193,14 @@ async def export_protocol_config(
     导出协议配置
     """
     try:
-        export_result = await ProtocolService.export_protocol_config_services(query_db, protocolId)
-        protocol_name = export_result.get('protocol_name', '协议配置')
-        filename = quote(f'{protocol_name}_配置.xlsx')
+        export_result = await ProtocolIOAdapter.export_protocol_excel(query_db, protocolId)
+        filename = quote(export_result.filename)
         headers = {
             'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
             'download-filename': filename
         }
         return ResponseUtil.streaming(
-            data=bytes2file_response(export_result.get('content')),
+            data=bytes2file_response(export_result.content),
             headers=headers,
             media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
         )

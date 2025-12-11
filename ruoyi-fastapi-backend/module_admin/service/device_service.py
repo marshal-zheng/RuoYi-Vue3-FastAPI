@@ -3,7 +3,7 @@ import re
 from io import BytesIO
 from datetime import datetime
 from typing import Dict, List
-from zipfile import ZipFile, ZIP_DEFLATED, is_zipfile
+from zipfile import is_zipfile
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
@@ -22,6 +22,7 @@ from module_admin.entity.vo.device_vo import (
 )
 from utils.response_util import ResponseUtil
 from exceptions.exception import ServiceException
+from utils.io_toolkit import JsonExporter, ZipExporter, ZipEntry, ZipImporter
 
 
 class DeviceService:
@@ -324,30 +325,32 @@ class DeviceService:
         if not device_ids:
             raise ServiceException(message='请选择需要导出的设备')
 
-        buffer = BytesIO()
+        json_exporter = JsonExporter()
+        zip_exporter = ZipExporter()
+        entries: List[ZipEntry] = []
         exported = 0
 
-        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zip_file:
-            for device_id in device_ids:
-                device = await DeviceDao.get_device_by_id(db, device_id)
-                if not device:
-                    continue
+        for device_id in device_ids:
+            device = await DeviceDao.get_device_by_id(db, device_id)
+            if not device:
+                continue
 
-                export_data = cls._build_export_data(device)
-                data_dict = export_data.model_dump(mode='json', by_alias=True)
-                json_bytes = json.dumps(data_dict, ensure_ascii=False, default=str).encode('utf-8')
-
-                safe_name = cls._safe_filename(device.device_name)
-                filename = f'{safe_name}_{device_id}.json'
-                zip_file.writestr(filename, json_bytes)
-                exported += 1
+            export_data = cls._build_export_data(device)
+            data_dict = export_data.model_dump(mode='json', by_alias=True)
+            safe_name = cls._safe_filename(device.device_name)
+            filename = f'{safe_name}_{device_id}.json'
+            json_result = await json_exporter.export(data_dict, filename=filename)
+            entries.append(ZipEntry(filename=json_result.filename, content=json_result.content))
+            exported += 1
 
         if exported == 0:
             raise ServiceException(message='未找到可导出的设备')
 
-        buffer.seek(0)
         zip_name = f'device_export_{datetime.now().strftime("%Y%m%d%H%M%S")}.zip'
-        return buffer, zip_name
+        zip_result = await zip_exporter.export(entries, filename=zip_name)
+        buffer = BytesIO(zip_result.content)
+        buffer.seek(0)
+        return buffer, zip_result.filename
 
     @classmethod
     async def import_devices_from_zip_services(cls, db: AsyncSession, file_bytes: bytes, operator: str):
@@ -357,42 +360,37 @@ class DeviceService:
         if not file_bytes:
             raise ServiceException(message='上传文件为空')
 
-        file_buffer = BytesIO(file_bytes)
         success_count = 0
         failed_count = 0
         results: List[Dict[str, str]] = []
 
-        if is_zipfile(file_buffer):
-            file_buffer.seek(0)
-            with ZipFile(file_buffer, 'r') as zip_file:
-                json_files = [
-                    name for name in zip_file.namelist()
-                    if not name.endswith('/') and name.lower().endswith('.json')
-                ]
-                if not json_files:
-                    raise ServiceException(message='zip包中未找到json设备文件')
+        if is_zipfile(BytesIO(file_bytes)):
+            zip_importer = ZipImporter(file_filter=lambda name: name.lower().endswith('.json'))
+            zip_result = await zip_importer.import_data(file_bytes)
+            entries = zip_result.data or {}
+            if not entries:
+                raise ServiceException(message='zip包中未找到json设备文件')
 
-                for name in json_files:
-                    content = zip_file.read(name).decode('utf-8')
-                    try:
-                        import_result = await cls._import_single_device(db, content, operator)
-                        success_count += 1
-                        results.append({
-                            'fileName': name,
-                            'status': 'success',
-                            **import_result,
-                        })
-                    except Exception as exc:
-                        failed_count += 1
-                        await db.rollback()
-                        results.append({
-                            'fileName': name,
-                            'status': 'failed',
-                            'message': str(exc),
-                        })
+            for name, content in entries.items():
+                try:
+                    import_result = await cls._import_single_device(db, content.decode('utf-8'), operator)
+                    success_count += 1
+                    results.append({
+                        'fileName': name,
+                        'status': 'success',
+                        **import_result,
+                    })
+                except Exception as exc:
+                    failed_count += 1
+                    await db.rollback()
+                    results.append({
+                        'fileName': name,
+                        'status': 'failed',
+                        'message': str(exc),
+                    })
         else:
             try:
-                content = file_buffer.getvalue().decode('utf-8')
+                content = file_bytes.decode('utf-8')
                 import_result = await cls._import_single_device(db, content, operator)
                 success_count = 1
                 results.append({

@@ -402,3 +402,5 @@ export function camelCase(str: string): string {
 export function isNumberStr(str: string): boolean {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str);
 }
+
+export * from './io-toolkit';

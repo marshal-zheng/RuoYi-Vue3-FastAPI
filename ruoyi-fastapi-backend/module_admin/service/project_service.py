@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from io import BytesIO
 from typing import List, Set
-from zipfile import ZIP_DEFLATED, ZipFile, is_zipfile
+from zipfile import is_zipfile
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -31,6 +31,14 @@ from module_admin.entity.vo.project_vo import (
 from utils.common_util import CamelCaseUtil
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
+from utils.io_toolkit import (
+    JsonExporter,
+    ZipExporter,
+    ZipEntry,
+    JsonImporter,
+    ZipImporter,
+    ImportStatus,
+)
 
 
 class ProjectService:
@@ -298,20 +306,23 @@ class ProjectService:
         导出单个工程为zip包
         """
         export_data = await cls.export_project_services(query_db, project_id)
-        buffer = BytesIO()
+        data_dict = export_data.model_dump(mode='json', by_alias=True)
 
-        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zip_file:
-            data_dict = export_data.model_dump(mode='json', by_alias=True)
-            json_bytes = json.dumps(data_dict, ensure_ascii=False, default=str).encode('utf-8')
-
-            project_name = export_data.project.project_name or f'project_{project_id}'
-            safe_name = cls._safe_filename(project_name)
-            filename = f'{safe_name}_export_{project_id}.json'
-            zip_file.writestr(filename, json_bytes)
-
-        buffer.seek(0)
+        project_name = export_data.project.project_name or f'project_{project_id}'
+        safe_name = cls._safe_filename(project_name)
+        json_filename = f'{safe_name}_export_{project_id}.json'
         zip_name = f'{safe_name}_export_{project_id}.zip'
-        return buffer, zip_name
+
+        json_exporter = JsonExporter()
+        zip_exporter = ZipExporter()
+
+        json_result = await json_exporter.export(data_dict, filename=json_filename)
+        zip_entry = ZipEntry(filename=json_result.filename, content=json_result.content)
+        zip_result = await zip_exporter.export([zip_entry], filename=zip_name)
+
+        buffer = BytesIO(zip_result.content)
+        buffer.seek(0)
+        return buffer, zip_result.filename
 
     @classmethod
     async def export_projects_zip_services(cls, query_db: AsyncSession, project_ids: List[int]):
@@ -325,37 +336,40 @@ class ProjectService:
         if not project_ids:
             raise ServiceException(message='请选择需要导出的工程')
 
-        buffer = BytesIO()
         errors = []
         exported_count = 0
 
-        with ZipFile(buffer, 'w', ZIP_DEFLATED) as zip_file:
-            for project_id in project_ids:
-                try:
-                    export_data = await cls.export_project_services(query_db, project_id)
-                    data_dict = export_data.model_dump(mode='json', by_alias=True)
-                    json_bytes = json.dumps(data_dict, ensure_ascii=False, default=str).encode('utf-8')
+        json_exporter = JsonExporter()
+        zip_exporter = ZipExporter()
+        entries: List[ZipEntry] = []
 
-                    project_name = export_data.project.project_name or f'project_{project_id}'
-                    safe_name = cls._safe_filename(project_name)
-                    filename = f'{safe_name}_export_{project_id}.json'
-                    zip_file.writestr(filename, json_bytes)
-                    exported_count += 1
-                except Exception as e:
-                    logger.error(f'导出工程 {project_id} 失败: {e}')
-                    errors.append(f'工程ID {project_id}: {str(e)}')
+        for project_id in project_ids:
+            try:
+                export_data = await cls.export_project_services(query_db, project_id)
+                data_dict = export_data.model_dump(mode='json', by_alias=True)
+                project_name = export_data.project.project_name or f'project_{project_id}'
+                safe_name = cls._safe_filename(project_name)
+                filename = f'{safe_name}_export_{project_id}.json'
+                json_result = await json_exporter.export(data_dict, filename=filename)
+                entries.append(ZipEntry(filename=json_result.filename, content=json_result.content))
+                exported_count += 1
+            except Exception as e:
+                logger.error(f'导出工程 {project_id} 失败: {e}')
+                errors.append(f'工程ID {project_id}: {str(e)}')
 
         if exported_count == 0:
             raise ServiceException(message='未能导出任何工程，请检查工程ID是否有效')
 
-        buffer.seek(0)
         zip_name = f'project_export_{datetime.now().strftime("%Y%m%d%H%M%S")}.zip'
+        zip_result = await zip_exporter.export(entries, filename=zip_name)
 
         # 记录导出过程中失败的工程，作为响应头提示
         if errors:
             logger.warning(f'部分工程导出失败: {"；".join(errors)}')
 
-        return buffer, zip_name
+        buffer = BytesIO(zip_result.content)
+        buffer.seek(0)
+        return buffer, zip_result.filename
 
     @classmethod
     def _extract_device_ids_from_topology(cls, topology_data: dict) -> Set[int]:
@@ -579,38 +593,36 @@ class ProjectService:
             except Exception:
                 file_buffer = None
 
-        # 以zip方式解析
         results = []
         success_count = 0
         failed_count = 0
 
         try:
             if file_buffer:
-                with ZipFile(file_buffer, 'r') as zip_file:
-                    json_files = [
-                        name for name in zip_file.namelist()
-                        if not name.endswith('/') and name.lower().endswith('.json')
-                    ]
+                zip_importer = ZipImporter(
+                    file_filter=lambda name: name.lower().endswith('.json'),
+                )
+                zip_result = await zip_importer.import_data(file_bytes)
+                entries = zip_result.data or {}
+                if not entries:
+                    raise ServiceException(message='zip包中未找到json工程文件')
 
-                    if not json_files:
-                        raise ServiceException(message='zip包中未找到json工程文件')
-
-                    for name in json_files:
-                        try:
-                            file_content = zip_file.read(name).decode('utf-8')
-                            import_result = await cls._import_single_project_from_json(
-                                query_db, file_content, operator, name
-                            )
-                            success_count += 1
-                            results.append(import_result)
-                        except Exception as e:
-                            failed_count += 1
-                            await query_db.rollback()
-                            results.append({
-                                'fileName': name,
-                                'status': 'failed',
-                                'message': str(e),
-                            })
+                for name, content in entries.items():
+                    try:
+                        file_content = content.decode('utf-8')
+                        import_result = await cls._import_single_project_from_json(
+                            query_db, file_content, operator, name
+                        )
+                        success_count += 1
+                        results.append(import_result)
+                    except Exception as e:
+                        failed_count += 1
+                        await query_db.rollback()
+                        results.append({
+                            'fileName': name,
+                            'status': 'failed',
+                            'message': str(e),
+                        })
             else:
                 # 尝试将文件作为单个json工程导入，兼容未压缩的导出文件
                 try:

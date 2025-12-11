@@ -1,0 +1,206 @@
+# Implementation Plan
+
+- [ ] 1. 后端IO_Toolkit基础架构搭建
+  - [ ] 1.1 创建目录结构和模块初始化文件
+    - 创建 `utils/io_toolkit/` 目录结构
+    - 创建 `__init__.py` 统一导出
+    - _Requirements: 8.1, 8.2_
+  - [ ] 1.2 实现核心数据模型 (models.py)
+    - 实现 ExportResult、ImportResult、ImportError、ImportStatus
+    - 实现 ExportDataModel 基类（强制版本字段）
+    - 实现 ZipEntry 模型
+    - _Requirements: 1.4, 2.4, 3.1, 3.4_
+  - [ ] 1.3 编写属性测试：ExportResult/ImportResult结构完整性
+    - **Property 4: ExportResult Structure Completeness**
+    - **Property 5: ImportResult Structure Completeness**
+    - **Validates: Requirements 1.4, 2.4**
+  - [ ] 1.4 实现异常类层次结构 (exceptions.py)
+    - 实现 IOToolkitException 基类
+    - 实现 ExportException、ImportException
+    - 实现 ImportValidationException、VersionIncompatibleException、FileFormatException
+    - _Requirements: 1.5, 2.5, 3.3_
+  - [ ] 1.5 编写属性测试：异常处理
+    - **Property 6: Export Exception on Invalid Input**
+    - **Property 7: Import Validation Exception on Invalid Data**
+    - **Validates: Requirements 1.5, 2.5**
+
+- [ ] 2. 后端导出器实现
+  - [ ] 2.1 实现导出策略基类 (exporters/base.py)
+    - 定义 ExportStrategy 抽象基类
+    - 定义 content_type、file_extension 抽象属性
+    - _Requirements: 8.1, 8.3_
+  - [ ] 2.2 实现 ExcelExporter (exporters/excel.py)
+    - 基于 openpyxl 和 pandas 实现
+    - 支持字段映射、样式配置
+    - 支持多Sheet导出
+    - _Requirements: 1.1_
+  - [ ] 2.3 编写属性测试：Excel导出-导入往返
+    - **Property 1: Excel Export-Import Round Trip**
+    - **Validates: Requirements 1.1, 2.1**
+  - [ ] 2.4 实现 JsonExporter (exporters/json.py)
+    - 基于 pydantic 和 orjson 实现
+    - 支持 Pydantic 模型序列化
+    - 支持自定义编码器
+    - _Requirements: 1.2_
+  - [ ] 2.5 编写属性测试：JSON导出-导入往返
+    - **Property 2: JSON Export-Import Round Trip**
+    - **Validates: Requirements 1.2, 2.2**
+  - [ ] 2.6 实现 ZipExporter (exporters/zip.py)
+    - 基于 zipfile 标准库实现
+    - 支持多文件打包
+    - 支持压缩级别配置
+    - _Requirements: 1.3_
+  - [ ] 2.7 编写属性测试：ZIP导出-导入往返
+    - **Property 3: ZIP Export-Import Round Trip**
+    - **Validates: Requirements 1.3, 2.3**
+
+- [ ] 3. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 4. 后端导入器实现
+  - [ ] 4.1 实现导入策略基类 (importers/base.py)
+    - 定义 ImportStrategy 抽象基类
+    - 定义 supported_extensions 抽象属性
+    - _Requirements: 8.2, 8.3_
+  - [ ] 4.2 实现 ExcelImporter (importers/excel.py)
+    - 基于 pandas 实现 Excel 解析
+    - 支持列名映射和别名识别
+    - 支持多Sheet解析
+    - _Requirements: 2.1_
+  - [ ] 4.3 实现 JsonImporter (importers/json.py)
+    - 基于 pydantic 实现 JSON 反序列化
+    - 支持模型验证
+    - _Requirements: 2.2_
+  - [ ] 4.4 实现 ZipImporter (importers/zip.py)
+    - 基于 zipfile 实现 ZIP 解包
+    - 支持文件过滤和内部导入器组合
+    - _Requirements: 2.3_
+
+- [ ] 5. 后端验证器和高级功能
+  - [ ] 5.1 实现版本验证器 (validators/version.py)
+    - 实现版本兼容性检查
+    - 支持版本范围配置
+    - _Requirements: 3.2, 3.3_
+  - [ ] 5.2 编写属性测试：版本兼容性验证
+    - **Property 8: Version Compatibility Validation**
+    - **Validates: Requirements 3.2, 3.3**
+  - [ ] 5.3 实现 Excel 模板建造者 (templates/excel_template.py)
+    - 实现 ExcelTemplateBuilder 流畅API
+    - 支持列定义、下拉验证、样式配置、示例数据
+    - _Requirements: 4.1, 4.2, 4.3, 4.4_
+  - [ ] 5.4 编写属性测试：Excel模板生成完整性
+    - **Property 9: Excel Template Generation Completeness**
+    - **Validates: Requirements 4.1, 4.2, 4.3, 4.4**
+  - [ ] 5.5 实现工厂模式 (factory.py)
+    - 实现 ExporterFactory
+    - 实现 ImporterFactory
+    - 支持格式注册和配置化创建
+    - _Requirements: 8.1, 8.2, 8.4_
+  - [ ] 5.6 实现装饰器 (decorators.py)
+    - 实现 LoggingExporter/LoggingImporter
+    - 实现 CachedExporter
+    - 实现 RetryExporter
+    - _Requirements: 8.4_
+
+- [ ] 6. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 7. 前端IO_Toolkit基础架构
+  - [ ] 7.1 创建目录结构和类型定义
+    - 创建 `utils/io-toolkit/` 目录
+    - 创建 types.ts 类型定义
+    - _Requirements: 5.1, 6.1_
+  - [ ] 7.2 实现下载工具 (download.ts)
+    - 基于 file-saver 实现 downloadBlob
+    - 实现 downloadFromResponse
+    - 实现 extractFilenameFromHeaders
+    - _Requirements: 5.1, 5.2, 5.3_
+  - [ ] 7.3 编写属性测试：文件名提取
+    - **Property 11: Frontend Filename Extraction**
+    - **Validates: Requirements 5.2**
+  - [ ] 7.4 实现上传工具 (upload.ts)
+    - 实现 validateFile 文件验证
+    - 实现 parseJsonFile JSON解析
+    - 实现 uploadFormData 表单上传
+    - _Requirements: 6.1, 6.2, 6.3, 6.4_
+  - [ ] 7.5 编写属性测试：文件验证正确性
+    - **Property 10: Frontend File Validation Correctness**
+    - **Validates: Requirements 6.1, 6.4**
+
+- [ ] 8. 前端Vue组件实现
+  - [ ] 8.1 实现 ExportButton 组件
+    - 支持异步导出函数
+    - 支持加载状态和错误显示
+    - 支持权限控制
+    - _Requirements: 7.1, 7.4_
+  - [ ] 8.2 实现 ImportUploader 组件
+    - 支持文件类型和大小验证
+    - 支持JSON/FormData两种上传模式
+    - 支持事件回调（success/error/progress）
+    - _Requirements: 7.2, 7.3_
+  - [ ] 8.3 编写组件单元测试
+    - 测试 ExportButton 加载状态和错误处理
+    - 测试 ImportUploader 文件验证和事件触发
+    - _Requirements: 7.1, 7.2, 7.3, 7.4_
+  - [ ] 8.4 实现 useImportExport 组合式函数
+    - 封装导入导出通用逻辑
+    - 提供响应式状态管理
+    - _Requirements: 7.1, 7.2_
+
+- [ ] 9. Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 10. 现有导出功能迁移
+  - [ ] 10.1 迁移用户导出功能
+    - 将 user_service.py 中的 export_user_list_services 改用 ExcelExporter
+    - 保持API兼容性
+    - _Requirements: 9.1_
+  - [ ] 10.2 迁移角色/字典/配置等简单列表导出
+    - 统一使用 ExcelExporter
+    - 抽取公共映射配置
+    - _Requirements: 9.1_
+  - [ ] 10.3 迁移工程导出功能
+    - 将 project_service.py 中的导出改用 JsonExporter + ZipExporter
+    - 保持导出格式兼容
+    - _Requirements: 9.2, 9.3_
+  - [ ] 10.4 迁移设备导出功能
+    - 将 device_service.py 中的导出改用 JsonExporter + ZipExporter
+    - _Requirements: 9.3_
+
+- [ ] 11. 现有导入功能迁移
+  - [ ] 11.1 迁移用户导入功能
+    - 将 user_service.py 中的 batch_import_user_services 改用 ExcelImporter
+    - 保持验证逻辑
+    - _Requirements: 10.1_
+  - [ ] 11.2 迁移工程导入功能
+    - 将 project_service.py 中的导入改用 JsonImporter + ZipImporter
+    - _Requirements: 10.2_
+  - [ ] 11.3 迁移协议导入功能
+    - 将 protocol_service.py 中的复杂Excel解析改用 ExcelImporter
+    - 配置多Sheet解析规则
+    - _Requirements: 10.3_
+
+- [ ] 12. 前端迁移
+  - [ ] 12.1 迁移工程导出页面
+    - 将 project/index.vue 中的手动Blob处理改用 downloadBlob
+    - _Requirements: 9.2_
+  - [ ] 12.2 迁移工程导入页面
+    - 将 project/index.vue 中的导入逻辑改用 ImportUploader 组件
+    - _Requirements: 10.2_
+  - [ ] 12.3 迁移用户导入页面
+    - 将 system/user/index.vue 中的导入改用 ImportUploader 组件
+    - _Requirements: 10.1_
+
+- [ ] 13. Final Checkpoint - 确保所有测试通过
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 14. 文档和示例
+  - [ ] 14.1 编写 IO_Toolkit 使用文档
+    - 创建 dev-docs/io-toolkit/README.md
+    - 包含快速开始、API参考、最佳实践
+    - _Requirements: 8.1, 8.2_
+  - [ ] 14.2 编写扩展指南
+    - 如何新增导出格式
+    - 如何新增导入格式
+    - 如何使用装饰器增强功能
+    - _Requirements: 8.1, 8.2, 8.4_
