@@ -56,8 +56,26 @@ CREATE TABLE IF NOT EXISTS `sys_project_topology` (
   `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`topology_id`),
-  KEY `idx_project_topology_project_id` (`project_id`)
+  KEY `idx_project_topology_project_id` (`project_id`),
+  KEY `idx_project_topology_project_version_update_time` (`project_id`, `version_id`, `update_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='工程拓扑数据表';
+
+-- 补充索引（兼容已存在表）：避免按更新时间排序触发大 filesort 导致 sort buffer 报错
+SET @idx_sys_project_topology_sort := (
+  SELECT COUNT(1)
+  FROM information_schema.statistics
+  WHERE table_schema = DATABASE()
+    AND table_name = 'sys_project_topology'
+    AND index_name = 'idx_project_topology_project_version_update_time'
+);
+SET @sql_sys_project_topology_sort := IF(
+  @idx_sys_project_topology_sort = 0,
+  'ALTER TABLE `sys_project_topology` ADD INDEX `idx_project_topology_project_version_update_time` (`project_id`, `version_id`, `update_time`)',
+  'SELECT 1'
+);
+PREPARE stmt_sys_project_topology_sort FROM @sql_sys_project_topology_sort;
+EXECUTE stmt_sys_project_topology_sort;
+DEALLOCATE PREPARE stmt_sys_project_topology_sort;
 
 -- 4. 菜单/权限修复（幂等）
 START TRANSACTION;
