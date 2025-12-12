@@ -5,7 +5,11 @@
 
 set -e
 
-SQL_ROOT="ruoyi-fastapi-backend/sql"
+# 切换到项目根目录
+cd "$(dirname "$0")/.."
+PROJECT_ROOT=$(pwd)
+
+SQL_ROOT="$PROJECT_ROOT/ruoyi-fastapi-backend/sql"
 DB_NAME="${DB_NAME:-ruoyi-fastapi}"
 if [ "${DB_USER+x}" != "x" ]; then
     DB_USER="root"
@@ -47,6 +51,7 @@ apply_sql_updates() {
 
 echo "🚀 启动 RuoYi-Vue3-FastAPI 项目"
 echo "=============================="
+echo "项目目录: $PROJECT_ROOT"
 
 # 颜色定义
 RED='\033[0;31m'
@@ -79,7 +84,7 @@ fi
 # 验证数据库连接
 echo -e "${BLUE}🔍 验证数据库连接...${NC}"
 if ! mysql_exec -e "USE \`$DB_NAME\`; SELECT 1;" &> /dev/null; then
-    echo -e "${RED}❌ 数据库连接失败，请先运行 ./setup.sh${NC}"
+    echo -e "${RED}❌ 数据库连接失败，请先运行 ./scripts/setup.sh${NC}"
     exit 1
 fi
 
@@ -95,11 +100,11 @@ echo -e "${GREEN}✅ 所有服务正常${NC}"
 
 # 启动后端服务
 echo -e "${BLUE}🐍 启动后端服务...${NC}"
-cd ruoyi-fastapi-backend
+cd "$PROJECT_ROOT/ruoyi-fastapi-backend"
 
 # 检查虚拟环境
 if [ ! -d "venv" ]; then
-    echo -e "${RED}❌ 虚拟环境不存在，请先运行 ./setup.sh${NC}"
+    echo -e "${RED}❌ 虚拟环境不存在，请先运行 ./scripts/setup.sh${NC}"
     exit 1
 fi
 
@@ -108,7 +113,7 @@ source venv/bin/activate
 python app.py &
 BACKEND_PID=$!
 echo -e "${GREEN}✅ 后端服务已启动 (PID: $BACKEND_PID)${NC}"
-cd ..
+cd "$PROJECT_ROOT"
 
 # 等待后端启动
 echo -e "${YELLOW}⏳ 等待后端服务启动...${NC}"
@@ -116,11 +121,11 @@ sleep 5
 
 # 启动前端服务
 echo -e "${BLUE}🎨 启动前端服务...${NC}"
-cd ruoyi-fastapi-frontend
+cd "$PROJECT_ROOT/ruoyi-fastapi-frontend"
 
 # 检查前端依赖
 if [ ! -d "node_modules" ]; then
-    echo -e "${RED}❌ 前端依赖未安装，请先运行 ./setup.sh${NC}"
+    echo -e "${RED}❌ 前端依赖未安装，请先运行 ./scripts/setup.sh${NC}"
     exit 1
 fi
 
@@ -132,7 +137,7 @@ else
 fi
 FRONTEND_PID=$!
 echo -e "${GREEN}✅ 前端服务已启动 (PID: $FRONTEND_PID)${NC}"
-cd ..
+cd "$PROJECT_ROOT"
 
 echo ""
 echo -e "${GREEN}🎉 项目启动完成！${NC}"

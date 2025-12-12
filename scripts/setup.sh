@@ -5,7 +5,11 @@
 
 set -e  # 遇到错误立即退出
 
-SQL_ROOT="ruoyi-fastapi-backend/sql"
+# 切换到项目根目录
+cd "$(dirname "$0")/.."
+PROJECT_ROOT=$(pwd)
+
+SQL_ROOT="$PROJECT_ROOT/ruoyi-fastapi-backend/sql"
 SQL_INIT_FILE="$SQL_ROOT/ruoyi-fastapi.sql"
 DB_NAME="${DB_NAME:-ruoyi-fastapi}"
 DB_USER="${DB_USER:-root}"
@@ -44,6 +48,7 @@ apply_sql_updates() {
 
 echo "🚀 RuoYi-Vue3-FastAPI 一键启动脚本"
 echo "======================================"
+echo "项目目录: $PROJECT_ROOT"
 
 # 颜色定义
 RED='\033[0;31m'
@@ -147,7 +152,7 @@ fi
 
 # 设置后端环境
 echo -e "${BLUE}🐍 配置后端环境...${NC}"
-cd ruoyi-fastapi-backend
+cd "$PROJECT_ROOT/ruoyi-fastapi-backend"
 
 # 创建虚拟环境
 if [ ! -d "venv" ]; then
@@ -177,11 +182,11 @@ else
 fi
 
 # 返回项目根目录
-cd ..
+cd "$PROJECT_ROOT"
 
 # 设置前端环境
 echo -e "${BLUE}🎨 配置前端环境...${NC}"
-cd ruoyi-fastapi-frontend
+cd "$PROJECT_ROOT/ruoyi-fastapi-frontend"
 
 # 修正前端代理配置
 echo -e "${BLUE}⚙️  配置前端代理...${NC}"
@@ -204,71 +209,12 @@ else
 fi
 
 # 返回项目根目录
-cd ..
-
-# 创建启动脚本
-echo -e "${BLUE}📝 创建启动脚本...${NC}"
-cat > start_servers.sh << 'EOF'
-#!/bin/bash
-
-# 启动服务脚本
-echo "🚀 启动 RuoYi-Vue3-FastAPI 项目"
-echo "=============================="
-
-# 检查服务状态
-echo "🔍 检查服务状态..."
-if ! brew services list | grep mysql | grep -q started; then
-    echo "启动 MySQL..."
-    brew services start mysql
-fi
-
-if ! brew services list | grep redis | grep -q started; then
-    echo "启动 Redis..."
-    brew services start redis
-fi
-
-# 启动后端
-echo "🐍 启动后端服务..."
-cd ruoyi-fastapi-backend
-source venv/bin/activate
-python app.py &
-BACKEND_PID=$!
-echo "后端服务已启动 (PID: $BACKEND_PID)"
-cd ..
-
-# 等待后端启动
-sleep 3
-
-# 启动前端
-echo "🎨 启动前端服务..."
-cd ruoyi-fastapi-frontend
-if command -v yarn &> /dev/null; then
-    yarn dev &
-else
-    npm run dev &
-fi
-FRONTEND_PID=$!
-echo "前端服务已启动 (PID: $FRONTEND_PID)"
-cd ..
-
-echo ""
-echo "🎉 项目启动完成！"
-echo "前端地址: http://localhost:80"
-echo "后端地址: http://localhost:8000"
-echo ""
-echo "按 Ctrl+C 停止所有服务"
-
-# 等待用户中断
-trap 'echo "\n🛑 正在停止服务..."; kill $BACKEND_PID $FRONTEND_PID 2>/dev/null; exit' INT
-wait
-EOF
-
-chmod +x start_servers.sh
+cd "$PROJECT_ROOT"
 
 echo ""
 echo -e "${GREEN}🎉 环境配置完成！${NC}"
 echo -e "${BLUE}📋 使用说明：${NC}"
-echo -e "  • 运行 ${YELLOW}./start_servers.sh${NC} 启动项目"
+echo -e "  • 运行 ${YELLOW}./scripts/start.sh${NC} 启动项目"
 echo -e "  • 前端地址: ${YELLOW}http://localhost:80${NC}"
 echo -e "  • 后端地址: ${YELLOW}http://localhost:8000${NC}"
 echo -e "  • 默认账号: ${YELLOW}admin${NC} 密码: ${YELLOW}admin123${NC}"
@@ -280,5 +226,5 @@ echo ""
 read -p "是否现在启动项目？(y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
-    ./start_servers.sh
+    "$PROJECT_ROOT/scripts/start.sh"
 fi
