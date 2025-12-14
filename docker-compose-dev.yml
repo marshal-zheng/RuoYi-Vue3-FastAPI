@@ -1,6 +1,12 @@
-# Default docker-compose.yml for development
-# For development: docker-compose up
-# For production: docker-compose -f docker-compose.prod.yml up
+# ============================================================
+# 开发环境 Docker Compose 配置
+# 使用方式: docker-compose -f docker-compose-dev.yml up
+# 
+# 最佳实践：
+# 1. 开发端口绑定到 127.0.0.1，仅本机可访问
+# 2. 前端端口对外暴露用于访问
+# 3. MySQL/Redis 绑定本地，用于开发工具连接
+# ============================================================
 
 version: '3.8'
 
@@ -12,8 +18,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ruoyi-fastapi
       TZ: Asia/Shanghai
+    # 绑定到本地回环地址，仅本机可访问（开发工具连接用）
     ports:
-      - "3307:3306"
+      - "127.0.0.1:3307:3306"
     volumes:
       - mysql_data_dev:/var/lib/mysql
       # - ./ruoyi-fastapi-backend/sql:/docker-entrypoint-initdb.d:ro
@@ -32,8 +39,9 @@ services:
     image: docker.1ms.run/library/redis:7-alpine
     container_name: ruoyi-redis-dev
     command: redis-server --requirepass redis123456
+    # 绑定到本地回环地址，仅本机可访问（开发工具连接用）
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6380:6379"
     volumes:
       - redis_data_dev:/data
     networks:
@@ -63,8 +71,9 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=redis123456
+    # 绑定到本地回环地址，仅本机可访问（API 调试用）
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     volumes:
       # Mount source code for hot reload
       - ./ruoyi-fastapi-backend:/app:cached
@@ -92,6 +101,7 @@ services:
     environment:
       - NODE_ENV=development
       - VITE_APP_ENV=development
+    # 前端开发服务器对外暴露
     ports:
       - "80:5173"
     volumes:

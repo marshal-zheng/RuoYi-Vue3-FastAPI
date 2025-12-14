@@ -1,5 +1,13 @@
 version: '3.8'
 
+# ============================================================
+# 生产环境 Docker Compose 配置
+# 最佳实践：
+# 1. 仅暴露必要端口（仅前端对外）
+# 2. 内部服务通过 Docker 网络通信
+# 3. 使用 expose 声明容器内部端口（仅用于文档说明）
+# ============================================================
+
 services:
   mysql:
     image: mysql:8.0
@@ -8,8 +16,9 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
       MYSQL_DATABASE: ruoyi-fastapi
       TZ: Asia/Shanghai
-    ports:
-      - "3306:3306"
+    # 不暴露端口到宿主机，仅容器内部网络可访问
+    expose:
+      - "3306"
     volumes:
       - mysql_data_prod:/var/lib/mysql
       - ./ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql:/docker-entrypoint-initdb.d/00-ruoyi-fastapi.sql
@@ -37,8 +46,9 @@ services:
     image: redis:7-alpine
     container_name: ruoyi-redis-prod
     command: redis-server --requirepass ${REDIS_PASSWORD:-redis123456} --maxmemory 256mb --maxmemory-policy allkeys-lru
-    ports:
-      - "6379:6379"
+    # 不暴露端口到宿主机，仅容器内部网络可访问
+    expose:
+      - "6379"
     volumes:
       - redis_data_prod:/data
     networks:
@@ -71,8 +81,9 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_PASSWORD=${REDIS_PASSWORD:-redis123456}
-    ports:
-      - "8000:8000"
+    # 不暴露端口到宿主机，通过 nginx 反向代理访问
+    expose:
+      - "8000"
     volumes:
       - backend_upload_prod:/app/vf_admin/upload_path
       - backend_logs_prod:/app/logs
@@ -100,6 +111,7 @@ services:
       args:
         - BUILD_ENV=production
     container_name: ruoyi-frontend-prod
+    # 仅前端服务暴露端口，作为系统唯一入口
     ports:
       - "8799:80"
     depends_on:
