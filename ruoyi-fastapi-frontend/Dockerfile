@@ -9,13 +9,16 @@ COPY package.json yarn.lock .npmrc .yarnrc.yml ./
 # 配置 Alpine 国内镜像源（加速系统依赖安装）
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
-# 配置 npm 国内镜像（淘宝源）
-RUN npm config set registry https://registry.npmmirror.com/
+# 禁用 corepack，避免访问 repo.yarnpkg.com
+RUN corepack disable || true
 
-RUN corepack enable
+# 使用国内 npm 镜像安装 yarn（稳定）
+RUN npm config set registry https://registry.npmmirror.com \
+ && npm install -g yarn@1.22.22 \
+ && yarn config set registry https://registry.npmmirror.com
 
-# 安装依赖（使用国内源加速）
-RUN yarn install --registry https://registry.npmmirror.com/
+# 安装依赖
+RUN yarn install --frozen-lockfile
 
 # 复制项目文件
 COPY . .

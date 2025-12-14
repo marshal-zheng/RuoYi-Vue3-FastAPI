@@ -76,6 +76,8 @@ export function exportProjectVersion(data) {
     method: 'post',
     data: data,
     responseType: 'blob',
+    // 导出包含拓扑图生成，耗时较长，单独放宽超时时间
+    timeout: 120000,
   });
 }
 
@@ -85,6 +87,7 @@ export function exportProjectVersionExcel(versionId) {
     url: `/project/version/export-excel/${versionId}`,
     method: 'get',
     responseType: 'blob',
+    timeout: 120000,
   });
 }
 
@@ -94,5 +97,6 @@ export function exportProjectVersionXml(versionId) {
     url: `/project/version/export-xml/${versionId}`,
     method: 'get',
     responseType: 'blob',
+    timeout: 120000,
   });
 }
