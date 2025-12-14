@@ -6,7 +6,10 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
 
 RUN npm config set registry https://registry.npmmirror.com/
 
-RUN corepack enable
+RUN corepack enable && corepack prepare yarn@4.9.2 --activate
+
+# 配置 yarn 镜像
+RUN yarn config set npmRegistryServer https://registry.npmmirror.com
 
 # Copy package files
 COPY package.json yarn.lock .npmrc* .yarnrc.yml* ./
