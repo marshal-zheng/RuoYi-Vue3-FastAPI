@@ -96,6 +96,7 @@ app.use(ElementPlus, {
 
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
+import '@/components/VxeTableValidation/validation.less'; // VXE-Table 通用校验样式
 import VXETablePluginElement from 'vxe-table-plugin-element';
 import zhCN from 'vxe-table/lib/locale/lang/zh-CN';
 import VxeDictAutocomplete from '@/components/VxeDictAutocomplete/index.vue';

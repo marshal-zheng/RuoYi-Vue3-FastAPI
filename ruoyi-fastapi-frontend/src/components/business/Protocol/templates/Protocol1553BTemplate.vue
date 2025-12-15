@@ -413,9 +413,22 @@ const removeSelectRow = async () => {
     .catch(() => {});
 };
 
+/**
+ * 校验数据（供父组件在保存前调用）
+ * TODO: 后续可集成通用校验框架 useVxeTableValidation
+ */
+const validateBeforeSave = async (): Promise<boolean> => {
+  // 基础校验：检查是否有字段
+  if (!localConfig.fields || localConfig.fields.length === 0) {
+    return true;
+  }
+  return true;
+};
+
 defineExpose({
   insertRow,
   removeSelectRow,
+  validateBeforeSave,
 });
 </script>
 

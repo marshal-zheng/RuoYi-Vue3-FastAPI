@@ -73,3 +73,13 @@ export function previewProtocolImport(data) {
     headers: { 'Content-Type': 'multipart/form-data' },
   });
 }
+
+// 导入协议配置（创建新协议）
+export function importProtocol(formData) {
+  return request({
+    url: '/system/protocol/import',
+    method: 'post',
+    data: formData,
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}

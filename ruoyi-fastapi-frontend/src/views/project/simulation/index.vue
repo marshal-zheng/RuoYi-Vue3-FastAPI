@@ -1,5 +1,8 @@
 <template>
-  <div class="simulation-dark simulation-shell flex h-full bg-slate-950" :class="{ 'fault-injection-mode': isFaultInjectionMode }">
+  <div
+    class="simulation-dark simulation-shell flex h-full bg-slate-950"
+    :class="{ 'fault-injection-mode': isFaultInjectionMode }"
+  >
     <!-- 故障注入模式提示条 -->
     <Transition name="mode-banner">
       <div v-if="isFaultInjectionMode" class="fault-mode-banner">
@@ -10,15 +13,31 @@
           <div class="banner-text">
             <span class="banner-title">故障注入</span>
             <span class="banner-hint">
-              <template v-if="!selectedEdge">点击拓扑图中的 <strong>链路</strong> 选择目标</template>
-              <template v-else>已锁定 <strong class="text-cyan-400">{{ getSelectedEdgeId() }}</strong></template>
+              <template v-if="!selectedEdge"
+                >点击拓扑图中的 <strong>链路</strong> 选择目标</template
+              >
+              <template v-else
+                >已锁定
+                <strong class="text-cyan-400">{{
+                  getSelectedEdgeId()
+                }}</strong></template
+              >
             </span>
           </div>
           <div class="banner-actions">
-            <el-button v-if="selectedEdge" class="cancel-select-btn" size="small" @click="clearSelectedEdge">
+            <el-button
+              v-if="selectedEdge"
+              class="cancel-select-btn"
+              size="small"
+              @click="clearSelectedEdge"
+            >
               取消
             </el-button>
-            <el-button class="exit-mode-btn" size="small" @click="exitFaultMode">
+            <el-button
+              class="exit-mode-btn"
+              size="small"
+              @click="exitFaultMode"
+            >
               关闭
             </el-button>
           </div>
@@ -52,9 +71,15 @@
       <!-- 主内容区域 -->
       <main class="flex flex-1 min-h-0 p-3 relative">
         <!-- 拓扑画布 -->
-        <section class="sim-canvas pro-card flex-1 relative" :class="{ 'fault-target-canvas': isFaultInjectionMode }">
+        <section
+          class="sim-canvas pro-card flex-1 relative"
+          :class="{ 'fault-target-canvas': isFaultInjectionMode }"
+        >
           <!-- 故障注入模式下的选中链路高亮层 -->
-          <div v-if="isFaultInjectionMode && selectedEdge" class="selected-edge-indicator">
+          <div
+            v-if="isFaultInjectionMode && selectedEdge"
+            class="selected-edge-indicator"
+          >
             <div class="indicator-ring"></div>
             <span class="indicator-text">已锁定目标链路</span>
           </div>
@@ -157,6 +182,15 @@
       @close="exitFaultMode"
     />
 
+    <!-- 数据注入策略面板 -->
+    <DataInjectionPanel
+      ref="injectionPanelRef"
+      :visible="dockState.injection"
+      :position="{ bottom: '280px', left: '14px' }"
+      :default-collapsed="false"
+      @apply="handleInjectionStrategyApply"
+    />
+
     <!-- 右侧通顶侧边栏 - 航空暗黑系 -->
     <aside class="sim-side-dock-aside">
       <SimulationSideDock
@@ -171,12 +205,17 @@
     </aside>
 
     <!-- 节点编辑抽屉 -->
-    <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
+    <NodeEditDrawer
+      ref="nodeEditDrawerRef"
+      :node-data="currentNode"
+      @submit="handleNodeUpdate"
+    />
 
     <!-- 事件触发面板 -->
     <EventTriggerPanel
       v-model:visible="showEventPanel"
       :events="eventList"
+      :nodes="topologyNodes"
       @create="handleEventCreate"
       @edit="handleEventEdit"
       @delete="handleEventDelete"
@@ -184,88 +223,90 @@
     />
 
     <!-- 仿真报告对话框 -->
-    <SimulationReportDialog
-      ref="reportDialogRef"
-      :session-id="sessionId"
-      :summary="simulationSummary"
-    />
+    <SimulationReportDialog ref="reportDialogRef" />
 
     <!-- 健康自检对话框 -->
-    <HealthCheckDialog ref="healthCheckDialogRef" @recheck="handleHealthCheck" />
+    <HealthCheckDialog
+      ref="healthCheckDialogRef"
+      @recheck="handleHealthCheck"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
-import { throttle } from 'lodash-es';
-import { useRoute, useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
-import { Warning } from '@element-plus/icons-vue';
+import { ref, reactive, computed, onMounted, onUnmounted, watch } from "vue";
+import { throttle } from "lodash-es";
+import { useRoute, useRouter } from "vue-router";
+import { ElMessage } from "element-plus";
+import { Warning } from "@element-plus/icons-vue";
 
 // 组件导入
-import XflowDAG from '@/components/business/Dag/index.vue';
-import SimulationHeader from './components/SimulationHeader.vue';
-import BandwidthChartPanel from './components/BandwidthChartPanel.vue';
-import AlarmPanelFloating from './components/AlarmPanelFloating.vue';
-import SimulationSideDock from './components/SimulationSideDock.vue';
-import ProtocolAnalyzer from './components/ProtocolAnalyzer.vue';
-import EdgeTooltip from './components/EdgeTooltip.vue';
-import FaultBoardFloating from './components/FaultBoardFloating.vue';
-import EventTriggerPanel from './components/EventTriggerPanel.vue';
-import SimulationReportDialog from './components/SimulationReportDialog.vue';
-import HealthCheckDialog from './components/HealthCheckDialog.vue';
-import TimingLatencyPanel from './components/TimingLatencyPanel.vue';
-import { NodeEditDrawer } from '../components';
+import XflowDAG from "@/components/business/Dag/index.vue";
+import SimulationHeader from "./components/SimulationHeader.vue";
+import BandwidthChartPanel from "./components/BandwidthChartPanel.vue";
+import AlarmPanelFloating from "./components/AlarmPanelFloating.vue";
+import SimulationSideDock from "./components/SimulationSideDock.vue";
+import ProtocolAnalyzer from "./components/ProtocolAnalyzer.vue";
+import EdgeTooltip from "./components/EdgeTooltip.vue";
+import FaultBoardFloating from "./components/FaultBoardFloating.vue";
+import EventTriggerPanel from "./components/EventTriggerPanel.vue";
+import SimulationReportDialog from "./components/SimulationReportDialog.vue";
+import HealthCheckDialog from "./components/HealthCheckDialog.vue";
+import TimingLatencyPanel from "./components/TimingLatencyPanel.vue";
+import DataInjectionPanel from "./components/DataInjectionPanel.vue";
+import { NodeEditDrawer } from "../components";
 
 // Composables 导入
-import { useSimulationControl } from './composables/useSimulationControl';
-import { useSimulationData } from './composables/useSimulationData';
-import { useTopologyAnimation } from './composables/useTopologyAnimation';
-import { useFaultInjection } from './composables/useFaultInjection';
-import { useFaultInjectionUI } from './composables/useFaultInjectionUI';
-import { useAlarmHandler } from './composables/useAlarmHandler';
-import { useSimulationReport } from './composables/useSimulationReport';
-import { useEventTrigger } from './composables/useEventTrigger';
-import { useHealthCheck } from './composables/useHealthCheck';
-import useAppStore from '@/store/modules/app';
+import { useSimulationControl } from "./composables/useSimulationControl";
+import { useSimulationData } from "./composables/useSimulationData";
+import { useTopologyAnimation } from "./composables/useTopologyAnimation";
+import { useFaultInjection } from "./composables/useFaultInjection";
+import { useFaultInjectionUI } from "./composables/useFaultInjectionUI";
+import { useAlarmHandler } from "./composables/useAlarmHandler";
+import { useSimulationReport } from "./composables/useSimulationReport";
+import { useEventTrigger } from "./composables/useEventTrigger";
+import { useHealthCheck } from "./composables/useHealthCheck";
+import useAppStore from "@/store/modules/app";
 
-// 样式导入
-import './styles/simulation-theme.css';
-import './styles/fault-injection-mode.less';
+// 样式导入 - 注意：simulation-theme.css 已内部导入 variables.css
+import "./styles/simulation-theme.css";
+import "./styles/global-popper-dark.css"; // 全局 Popper 深色样式（Teleport到body的元素）
+import "./styles/fault-injection-mode.less";
+import "./styles/aviation-dark-theme.less";
 
 // API 导入
-import { listDevice } from '@/api/device/device';
-import { getProject } from '@/api/project/project';
-import { getProjectTopology } from '@/api/project/topology';
+import { listDevice } from "@/api/device/device";
+import { getProject } from "@/api/project/project";
+import { getProjectTopology } from "@/api/project/topology";
 
-defineOptions({ name: 'SimulationConsole' });
+defineOptions({ name: "SimulationConsole" });
 
 // 路由
 const route = useRoute();
 const router = useRouter();
 const projectId = computed(() => Number(route.params.projectId));
 const versionId = computed(() =>
-  route.query.versionId ? Number(route.query.versionId) : undefined
+  route.query.versionId ? Number(route.query.versionId) : undefined,
 );
 const appStore = useAppStore();
 
 // 项目信息
-const projectName = ref('');
+const projectName = ref("");
 
 // DAG 组件
 const dagRef = ref(null);
 const operators = ref([]);
 const loading = ref(false);
-const layoutMode = ref('horizontal');
+const layoutMode = ref("horizontal");
 const dndConfig = {
-  title: '设备库',
-  searchPlaceholder: '搜索设备...',
+  title: "设备库",
+  searchPlaceholder: "搜索设备...",
   textConfig: {
-    loadingText: '正在加载设备库...',
-    emptySearchText: '没有找到匹配的设备',
-    emptySearchDesc: '请尝试使用其他关键词搜索',
-    emptyDataText: '暂无可用设备',
-    emptyDataDesc: '请先添加设备数据',
+    loadingText: "正在加载设备库...",
+    emptySearchText: "没有找到匹配的设备",
+    emptySearchDesc: "请尝试使用其他关键词搜索",
+    emptyDataText: "暂无可用设备",
+    emptyDataDesc: "请先添加设备数据",
   },
 };
 
@@ -335,6 +376,21 @@ const {
 const { eventList, createEvent, updateEvent, deleteEvent, triggerEvent } =
   useEventTrigger(sessionId);
 
+// 获取拓扑节点列表（用于事件触发面板的设备选择）
+const topologyNodes = ref([]);
+
+// 更新拓扑节点列表
+function updateTopologyNodes() {
+  const graph = dagRef.value?.getGraph?.();
+  if (!graph) return;
+  const nodes = graph.getNodes?.() || [];
+  topologyNodes.value = nodes.map((node) => ({
+    id: node.id,
+    data: node.getData?.() || node.data || {},
+    label: node.getData?.()?.label || node.data?.label || node.id,
+  }));
+}
+
 // UI 状态
 const currentNode = ref(null);
 const hoveredEdge = ref(null);
@@ -343,35 +399,55 @@ const autoScroll = ref(true);
 const dashboardShowTrend = ref(false);
 const showEventPanel = ref(false);
 const simulationSummary = ref(null);
+
+// 数据注入策略配置
+const injectionStrategy = ref({
+  strategy: "random",
+  params: {
+    valueRange: "0~255",
+    startValue: 0,
+    step: 1,
+    fixedValue: "0",
+    presetValues: "0,1,2,3,4,5",
+    amplitude: 100,
+    offset: 0,
+    frequency: 1,
+    phase: 0,
+  },
+});
 const dockState = reactive({
   bandwidth: false,
   alarm: false,
   timing: false,
   fault: false,
+  injection: false,
 });
 
 const dockItems = [
-  { key: 'bandwidth', label: '带宽', icon: 'ri:activity-line' },
-  { key: 'alarm', label: '告警', icon: 'ri:alarm-warning-line' },
-  { key: 'timing', label: '时序', icon: 'ri:bar-chart-2-line' },
-  { key: 'fault', label: '故障', icon: 'ri:bug-line' },
+  { key: "bandwidth", label: "带宽", icon: "ri:activity-line" },
+  { key: "alarm", label: "告警", icon: "ri:alarm-warning-line" },
+  { key: "timing", label: "时序", icon: "ri:bar-chart-2-line" },
+  { key: "fault", label: "故障", icon: "ri:bug-line" },
+  { key: "injection", label: "注入", icon: "ri:settings-3-line" },
 ];
 const activeDockKeys = computed(() => {
   const keys = [];
-  if (dockState.bandwidth) keys.push('bandwidth');
-  if (dockState.alarm) keys.push('alarm');
-  if (dockState.timing) keys.push('timing');
-  if (dockState.fault) keys.push('fault');
+  if (dockState.bandwidth) keys.push("bandwidth");
+  if (dockState.alarm) keys.push("alarm");
+  if (dockState.timing) keys.push("timing");
+  if (dockState.fault) keys.push("fault");
+  if (dockState.injection) keys.push("injection");
   return keys;
 });
 const dockBadges = computed(() => {
   const uniqueAlarmCount = alarmData.value?.length
     ? new Set(alarmData.value.map((item) => item.alarmId)).size
     : 0;
-  const activeFaultCount = faults.value?.filter?.((f) => f.status === 'active').length || 0;
+  const activeFaultCount =
+    faults.value?.filter?.((f) => f.status === "active").length || 0;
   return {
-    alarm: uniqueAlarmCount || '',
-    fault: activeFaultCount || '',
+    alarm: uniqueAlarmCount || "",
+    fault: activeFaultCount || "",
   };
 });
 
@@ -380,12 +456,18 @@ const dockDisabledItems = computed(() => {
   const disabled = {};
   // 仿真未运行时禁用故障注入
   if (!isRunning.value) {
-    disabled.fault = '请先启动仿真后再进行故障注入';
+    disabled.fault = "请先启动仿真后再进行故障注入";
   }
   return disabled;
 });
 const allDockPanelsCollapsed = computed(() => {
-  return !dockState.bandwidth && !dockState.alarm && !dockState.timing && !dockState.fault;
+  return (
+    !dockState.bandwidth &&
+    !dockState.alarm &&
+    !dockState.timing &&
+    !dockState.fault &&
+    !dockState.injection
+  );
 });
 
 // 组件引用
@@ -394,6 +476,7 @@ const protocolAnalyzerRef = ref(null);
 const reportDialogRef = ref(null);
 const healthCheckDialogRef = ref(null);
 const bandwidthChartRef = ref(null);
+const injectionPanelRef = ref(null);
 
 // 获取图实例
 function getGraphInstance() {
@@ -417,8 +500,8 @@ function buildPeerDeviceNameByPort(node) {
     if (!portId || !peerName) return;
     const key = String(portId);
     const keys = [key];
-    if (key.startsWith('port-')) {
-      keys.push(key.replace(/^port-/, ''));
+    if (key.startsWith("port-")) {
+      keys.push(key.replace(/^port-/, ""));
     }
 
     keys.forEach((k) => {
@@ -456,7 +539,7 @@ function buildPeerDeviceNameByPort(node) {
 
     const peerNode = graph.getCellById(peerNodeId);
     const data = peerNode?.getData?.() || {};
-    const deviceName = data.name || data.label || data.deviceName || '';
+    const deviceName = data.name || data.label || data.deviceName || "";
 
     registerPeer(localPortId, deviceName);
   });
@@ -487,10 +570,10 @@ async function exitFaultMode() {
   const graph = getGraphInstance();
   if (graph) {
     // 清除所有边的高亮
-    const edgeIds = graph.getEdges().map(e => e.id);
+    const edgeIds = graph.getEdges().map((e) => e.id);
     clearEdgeHighlight(edgeIds);
     // 清除所有节点的错误状态
-    graph.getNodes().forEach(node => {
+    graph.getNodes().forEach((node) => {
       setNodeError(node.id, false);
       setNodeActive(node.id, false, true);
     });
@@ -499,10 +582,7 @@ async function exitFaultMode() {
 }
 
 // 告警处理
-const {
-  handleAlarmClick,
-  handleAlarmFilterChange,
-} = useAlarmHandler({
+const { handleAlarmClick, handleAlarmFilterChange } = useAlarmHandler({
   getGraphInstance,
   topologyAnimation: {
     highlightEdges,
@@ -514,9 +594,7 @@ const {
 });
 
 // 仿真报告
-const {
-  buildSimulationSummary,
-} = useSimulationReport({
+const { buildSimulationSummary } = useSimulationReport({
   messageData,
   alarmData,
   bandwidthData,
@@ -526,7 +604,7 @@ const {
 // 加载项目信息
 async function loadProjectInfo() {
   const res = await getProject(projectId.value);
-  projectName.value = res.data?.projectName || '未命名工程';
+  projectName.value = res.data?.projectName || "未命名工程";
 }
 
 // 加载设备列表
@@ -536,13 +614,13 @@ async function loadDeviceList() {
   const devices = response?.rows || [];
   operators.value = devices.map((device) => ({
     name: device.deviceName,
-    value: device.remark || device.deviceDesc || '设备',
-    category: device.categoryName || device.category || '未分类',
+    value: device.remark || device.deviceDesc || "设备",
+    category: device.categoryName || device.category || "未分类",
     deviceId: device.deviceId,
     deviceType: device.deviceType,
     busType: device.busType,
     ports: device.interfaces || [],
-    nodeType: 'device-port-node',
+    nodeType: "device-port-node",
   }));
   loading.value = false;
 }
@@ -569,6 +647,8 @@ function restoreSavedTopology() {
         const graphJson = topoData?.graph;
         if (graphJson) {
           graph.fromJSON(graphJson);
+          // 拓扑加载完成后，更新节点列表
+          updateTopologyNodes();
         }
       })
       .catch(() => {});
@@ -580,13 +660,13 @@ function restoreSavedTopology() {
 // 设置边的鼠标事件（hover 提示）
 function setupEdgeHoverEvents(graph) {
   if (!graph) return;
-  
-  graph.on('edge:mouseenter', ({ edge, e }) => {
+
+  graph.on("edge:mouseenter", ({ edge, e }) => {
     hoveredEdge.value = edge;
     tooltipPosition.value = { x: e.clientX, y: e.clientY };
   });
-  
-  graph.on('edge:mouseleave', () => {
+
+  graph.on("edge:mouseleave", () => {
     hoveredEdge.value = null;
   });
 }
@@ -595,7 +675,7 @@ function setupEdgeHoverEvents(graph) {
 async function handleStart() {
   const graph = getGraphInstance();
   if (!graph) {
-    ElMessage.error('图实例不存在');
+    ElMessage.error("图实例不存在");
     return;
   }
 
@@ -603,21 +683,29 @@ async function handleStart() {
   const edges = graph.getEdges?.() || [];
 
   if (nodes.length < 2) {
-    ElMessage.warning('请至少放置两个设备节点');
+    ElMessage.warning("请至少放置两个设备节点");
     return;
   }
 
   if (!edges.length) {
-    ElMessage.warning('请先建立设备之间的连接');
+    ElMessage.warning("请先建立设备之间的连接");
     return;
   }
 
   const passed = await runPreflightCheck(graph);
   if (!passed) return;
 
-  await start();
+  // 构建数据注入策略参数
+  const strategyConfig =
+    injectionPanelRef.value?.getConfig?.() || injectionStrategy.value;
+  const startOptions = {
+    injection_strategy: strategyConfig.strategy,
+    injection_params: strategyConfig.params,
+  };
+
+  await start(startOptions);
   startAnimation();
-  ElMessage.success('仿真已启动');
+  ElMessage.success("仿真已启动");
 }
 
 function handlePause() {
@@ -634,7 +722,10 @@ async function handleStop() {
   await stop();
   stopAnimation();
   simulationSummary.value = buildSimulationSummary();
-  reportDialogRef.value?.open();
+  reportDialogRef.value?.open({
+    sessionId: sessionId.value,
+    summary: simulationSummary.value,
+  });
 }
 
 const handleStep = throttle(
@@ -646,7 +737,7 @@ const handleStep = throttle(
         bandwidthChartRef.value?.stepScanline();
       })
       .catch((err) => {
-        const message = err?.message || '单步执行失败';
+        const message = err?.message || "单步执行失败";
         ElMessage.error(message);
       })
       .finally(() => {
@@ -654,7 +745,7 @@ const handleStep = throttle(
       });
   },
   500,
-  { trailing: false }
+  { trailing: false },
 );
 
 function handleSpeedChange(speed) {
@@ -675,7 +766,7 @@ function handleNodeDblclick({ node }) {
   // 构建端口到对端设备名的映射
   const peerDeviceNameByPort = buildPeerDeviceNameByPort(node);
   // 转为普通 JSON
-  const jsonNode = typeof node?.toJSON === 'function' ? node.toJSON() : node;
+  const jsonNode = typeof node?.toJSON === "function" ? node.toJSON() : node;
   // 附加映射数据
   currentNode.value = {
     ...jsonNode,
@@ -699,7 +790,7 @@ function handleNodeUpdate({ nodeId, name, ports }) {
       label: name,
       ports: ports || currentData.ports,
     },
-    { overwrite: false }
+    { overwrite: false },
   );
 }
 
@@ -747,8 +838,10 @@ function handleMessageSelect(message) {
         const sourceId = e.getSourceCellId?.();
         const targetId = e.getTargetCellId?.();
         return (
-          (sourceId === message.senderNodeId && targetId === message.receiverNodeId) ||
-          (sourceId === message.receiverNodeId && targetId === message.senderNodeId)
+          (sourceId === message.senderNodeId &&
+            targetId === message.receiverNodeId) ||
+          (sourceId === message.receiverNodeId &&
+            targetId === message.senderNodeId)
         );
       });
       if (edge) {
@@ -767,7 +860,12 @@ function handleDockToggle(key) {
 }
 
 function handleToggleAllPanels() {
-  const allCollapsed = !dockState.bandwidth && !dockState.alarm && !dockState.timing && !dockState.fault;
+  const allCollapsed =
+    !dockState.bandwidth &&
+    !dockState.alarm &&
+    !dockState.timing &&
+    !dockState.fault &&
+    !dockState.injection;
   Object.keys(dockState).forEach((key) => {
     dockState[key] = allCollapsed;
   });
@@ -782,32 +880,37 @@ function handleFaultTemplate(tpl) {
   _handleFaultTemplate(tpl, hoveredEdge);
 }
 
+// 数据注入策略应用
+function handleInjectionStrategyApply(config) {
+  injectionStrategy.value = config;
+}
+
 // 事件触发处理
 async function handleEventCreate(config) {
   await createEvent(config);
-  ElMessage.success('事件创建成功');
+  ElMessage.success("事件创建成功");
 }
 
 async function handleEventEdit(eventId, config) {
   await updateEvent(eventId, config);
-  ElMessage.success('事件更新成功');
+  ElMessage.success("事件更新成功");
 }
 
 async function handleEventDelete(eventId) {
   await deleteEvent(eventId);
-  ElMessage.success('事件删除成功');
+  ElMessage.success("事件删除成功");
 }
 
 async function handleEventTrigger(eventId) {
   await triggerEvent(eventId);
-  ElMessage.success('事件已触发');
+  ElMessage.success("事件已触发");
 }
 
 // 健康自检
 function handleHealthCheck() {
   const graph = getGraphInstance();
   if (!graph) {
-    ElMessage.error('图实例不存在');
+    ElMessage.error("图实例不存在");
     return;
   }
   const report = runHealthCheck(graph);
@@ -823,11 +926,14 @@ function handleShowEvents() {
 // 显示仿真报告
 function handleShowReport() {
   if (!sessionId.value) {
-    ElMessage.warning('当前无仿真会话，无法生成报告');
+    ElMessage.warning("当前无仿真会话，无法生成报告");
     return;
   }
   simulationSummary.value = buildSimulationSummary();
-  reportDialogRef.value?.open();
+  reportDialogRef.value?.open({
+    sessionId: sessionId.value,
+    summary: simulationSummary.value,
+  });
 }
 
 async function runPreflightCheck(graph) {
@@ -835,12 +941,12 @@ async function runPreflightCheck(graph) {
   healthReport.value = report;
   if (!report.canSimulate || report.errorChecks > 0) {
     healthCheckDialogRef.value?.open(report);
-    ElMessage.error('拓扑检查未通过，无法启动仿真');
+    ElMessage.error("拓扑检查未通过，无法启动仿真");
     return false;
   }
   if (report.warningChecks > 0) {
     healthCheckDialogRef.value?.open(report);
-    ElMessage.warning('存在警告，请确认后继续');
+    ElMessage.warning("存在警告，请确认后继续");
   }
   return true;
 }
@@ -859,11 +965,14 @@ watch(sessionId, (id) => {
 });
 
 // 监听故障面板打开，自动获取故障列表
-watch(() => dockState.fault, (opened) => {
-  if (opened && sessionId.value) {
-    refreshFaults();
-  }
-});
+watch(
+  () => dockState.fault,
+  (opened) => {
+    if (opened && sessionId.value) {
+      refreshFaults();
+    }
+  },
+);
 
 // 生命周期
 onMounted(async () => {
@@ -891,17 +1000,27 @@ watch(isRunning, (running) => {
 </script>
 
 <style scoped>
-@import './styles/animation.css';
+@import "./styles/animation.css";
 
 /* 拓扑画布网格背景 - 深色主题优化 */
 .sim-canvas {
   background-color: #0a0f1a;
-  background-image: 
+  background-image:
     linear-gradient(rgba(77, 125, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(77, 125, 255, 0.03) 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, rgba(77, 125, 255, 0.02) 0%, transparent 50%);
-  background-size: 20px 20px, 20px 20px, 100% 100%;
-  background-position: 0 0, 0 0, center center;
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(77, 125, 255, 0.02) 0%,
+      transparent 50%
+    );
+  background-size:
+    20px 20px,
+    20px 20px,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    center center;
 }
 
 .sim-canvas :deep(.xflow-dag),
@@ -938,8 +1057,17 @@ watch(isRunning, (running) => {
 }
 
 .simulation-shell {
-  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%),
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(59, 130, 246, 0.07),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(52, 211, 153, 0.05),
+      transparent 25%
+    ),
     #0b1220;
 }
 
@@ -991,8 +1119,13 @@ watch(isRunning, (running) => {
 }
 
 @keyframes live-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .panel-actions {
@@ -1038,15 +1171,15 @@ watch(isRunning, (running) => {
   flex-direction: column;
   align-items: center;
   padding: 12px 10px;
-  background: 
-    linear-gradient(180deg, 
-      rgba(12, 22, 40, 0.98) 0%, 
-      rgba(8, 14, 26, 1) 30%,
-      rgba(6, 10, 18, 1) 70%,
-      rgba(10, 18, 32, 0.98) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(12, 22, 40, 0.98) 0%,
+    rgba(8, 14, 26, 1) 30%,
+    rgba(6, 10, 18, 1) 70%,
+    rgba(10, 18, 32, 0.98) 100%
+  );
   border-left: 1px solid rgba(34, 211, 238, 0.12);
-  box-shadow: 
+  box-shadow:
     -6px 0 32px rgba(0, 0, 0, 0.5),
     -2px 0 8px rgba(0, 0, 0, 0.3),
     inset 1px 0 0 rgba(34, 211, 238, 0.06);
@@ -1054,25 +1187,33 @@ watch(isRunning, (running) => {
 
 /* 侧边栏顶部光晕 */
 .sim-side-dock-aside::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: 120px;
-  background: radial-gradient(ellipse 100% 100% at 50% -20%, rgba(34, 211, 238, 0.08) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse 100% 100% at 50% -20%,
+    rgba(34, 211, 238, 0.08) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
 /* 侧边栏底部光晕 */
 .sim-side-dock-aside::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 80px;
-  background: radial-gradient(ellipse 100% 100% at 50% 120%, rgba(34, 211, 238, 0.05) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse 100% 100% at 50% 120%,
+    rgba(34, 211, 238, 0.05) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 </style>

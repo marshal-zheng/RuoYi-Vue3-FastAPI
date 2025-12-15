@@ -11,6 +11,22 @@
             >删除选中</zx-button
           >
         </div>
+        <div class="toolbar-right flex items-center gap-2">
+          <zx-button
+            :type="validationIssues.length > 0 ? 'warning' : 'success'"
+            icon="Aim"
+            size="medium"
+            @click="runValidation"
+          >
+            校验诊断
+            <el-badge
+              v-if="errorCount > 0"
+              :value="errorCount"
+              type="danger"
+              class="ml-1"
+            />
+          </zx-button>
+        </div>
       </slot>
     </div>
     <!-- 协议配置表格 -->
@@ -48,11 +64,14 @@
       keep-source
       :data="localConfig.fields"
       :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
-      :edit-config="{ trigger: 'click', mode: 'cell' }"
+      :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
       :checkbox-config="{ checkField: 'checked' }"
       :span-method="fieldSpanMethod"
+      :row-class-name="getRowClassName"
+      :cell-class-name="getCellClassName"
       max-height="500"
       class="fields-table text-sm"
+      @edit-closed="handleEditClosed"
     >
       <vxe-column type="checkbox" fixed="left" width="50" />
       <vxe-column type="seq" title="序号" tree-node width="80" />
@@ -117,6 +136,13 @@
         class="notes-input"
       />
     </div>
+
+    <!-- 校验诊断面板 - 使用通用组件 -->
+    <VxeValidationPanel
+      :issues="validationIssues"
+      :auto-expand="true"
+      @issue-click="handleIssueClick"
+    />
   </div>
 </template>
 
@@ -125,6 +151,20 @@ import { ref, watch, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
 import { useDict } from '@/utils/dict';
+// 使用通用校验框架
+import {
+  useVxeTableValidation,
+  VxeValidationPanel,
+  required,
+  positiveInteger,
+  scale as scaleValidator,
+  warning,
+  lengthRange,
+  createBandwidthValidator,
+  createFrameLengthValidator,
+  createValueRangeValidator,
+  parseNumber,
+} from '@/components/VxeTableValidation';
 
 const props = defineProps<{
   modelValue?: any;
@@ -152,6 +192,117 @@ const {
 );
 
 const tableRef = ref<VxeTableInstance>();
+
+// ==================== 使用通用校验框架 ====================
+// 数据类型对应的值范围（用于溢出检测）
+const DATA_TYPE_VALUE_RANGES: Record<string, { min: number; max: number }> = {
+  UINT8: { min: 0, max: 255 },
+  INT8: { min: -128, max: 127 },
+  UINT16: { min: 0, max: 65535 },
+  INT16: { min: -32768, max: 32767 },
+  UINT32: { min: 0, max: 4294967295 },
+  INT32: { min: -2147483648, max: 2147483647 },
+  FLOAT: { min: -3.4e38, max: 3.4e38 },
+  DOUBLE: { min: -1.8e308, max: 1.8e308 },
+  BOOL: { min: 0, max: 1 },
+};
+
+// 计算帧总长度的辅助函数
+const calculateFrameLength = (fields: any[]): number => {
+  if (!Array.isArray(fields)) return 0;
+  return fields.reduce((sum, field) => {
+    const bytes = parseNumber(field.byteCount);
+    return sum + (bytes || 0);
+  }, 0);
+};
+
+// 解析速率为 bps
+const parseDataRate = (rate: string): number => {
+  if (!rate) return 0;
+  const match = rate.replace(/\s/g, '').toLowerCase().match(/^(\d+(?:\.\d+)?)(g|m|k)?bps$/i);
+  if (!match) return 0;
+  const value = parseFloat(match[1]);
+  const unit = (match[2] || '').toLowerCase();
+  const multipliers: Record<string, number> = { g: 1e9, m: 1e6, k: 1e3, '': 1 };
+  return value * (multipliers[unit] || 1);
+};
+
+// 初始化自定义校验框架（通过面板 + 高亮显示校验结果）
+const {
+  issues: validationIssues,
+  errorCount,
+  hasErrors,
+  validate,
+  validateOrThrow,
+  isValid,
+  getRowClassName,
+  getCellClassName,
+  setContext,
+} = useVxeTableValidation({
+  // 字段校验规则 - 类似 Element Plus 的配置方式
+  rules: {
+    fieldName: [
+      required('信息名称不能为空'),
+    ],
+    byteCount: [
+      // 条件校验：只在没有数据类型时要求手动填写
+      {
+        when: (row) => !row.dataType,
+        validator: (value) => {
+          if (!value) return true; // 非必填
+          const num = parseNumber(value);
+          return num !== null && num > 0;
+        },
+        message: '字节数必须为正整数',
+        level: 'warning',
+      },
+      {
+        type: 'integer',
+        max: 65535,
+        message: '字节数不能超过 65535',
+      },
+    ],
+    scale: [
+      scaleValidator('比例尺不能为0'),
+    ],
+    remark: [
+      warning(lengthRange(0, 500, '备注建议不超过500字')),
+    ],
+  },
+  // 字段显示名称映射
+  fieldLabels: {
+    fieldName: '信息名称',
+    byteCount: '字节数',
+    byteSequence: '字节序号',
+    valueRange: '值域及含义',
+    unit: '量纲',
+    dataType: '数据类型',
+    scale: '比例尺',
+    remark: '备注',
+  },
+  // 全局校验器
+  globalValidators: [
+    // 数值范围溢出校验
+    createValueRangeValidator({
+      dataTypeField: 'dataType',
+      valueRangeField: 'valueRange',
+      typeRanges: DATA_TYPE_VALUE_RANGES,
+    }),
+    // 带宽校验
+    createBandwidthValidator({
+      getFrameLength: calculateFrameLength,
+      getFrequency: (ctx) => parseNumber(ctx?.frequency) || 1,
+      getBandwidthLimit: (ctx) => parseDataRate(ctx?.speed) || 1e9,
+    }),
+    // 帧长度校验
+    createFrameLengthValidator({
+      getActualLength: calculateFrameLength,
+      getConfiguredLimit: (ctx) => parseNumber(ctx?.frameLength) || undefined,
+      busLimits: { Ethernet: 1500 },
+      getBusType: () => 'Ethernet',
+    }),
+  ],
+});
 
 // 数据类型对应的字节长度映射
 const DATA_TYPE_BYTE_LENGTH_MAP: Record<string, number> = {
@@ -561,17 +712,107 @@ const removeSelectRow = async () => {
         (item: any) => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
       );
       ElMessage.success('删除成功');
+      // 删除后重新校验
+      runValidation();
     })
     .catch(() => {});
+};
+
+// 运行校验 - 使用通用框架
+const runValidation = async () => {
+  // 更新校验上下文
+  setContext({
+    busType: 'Ethernet',
+    speed: localConfig.speed,
+    frameLength: localConfig.frameLength,
+    frequency: localConfig.frequency,
+  });
+
+  // 执行校验
+  const result = await validate(localConfig.fields);
+
+  if (result.valid && result.warningCount === 0) {
+    ElMessage.success('校验通过，配置正确');
+  } else {
+    const parts = [];
+    if (result.errorCount > 0) parts.push(`${result.errorCount} 个错误`);
+    if (result.warningCount > 0) parts.push(`${result.warningCount} 个警告`);
+    ElMessage.warning(`发现 ${parts.join('，')}，请检查配置`);
+  }
+};
+
+// 编辑完成后自动校验
+const handleEditClosed = () => {
+  // 延迟执行，确保数据已更新
+  setTimeout(() => {
+    runValidation();
+  }, 100);
+};
+
+// 点击问题项跳转到对应单元格
+const handleIssueClick = (issue: any) => {
+  if (issue.rowIndex < 0) return;
+
+  const $table = tableRef.value;
+  if (!$table) return;
+
+  const row = localConfig.fields[issue.rowIndex];
+  if (!row) return;
+
+  // 滚动到对应行
+  $table.scrollToRow(row);
+
+  // 高亮该行
+  $table.setCurrentRow(row);
+
+  // 如果有字段信息，尝试激活编辑
+  if (issue.field) {
+    $table.setEditCell(row, issue.field);
+  }
+};
+
+/**
+ * 校验数据并返回结果（供父组件在保存前调用）
+ * @returns Promise<boolean> - true 表示校验通过，可以保存
+ */
+const validateBeforeSave = async (): Promise<boolean> => {
+  // 更新上下文
+  setContext({
+    busType: 'Ethernet',
+    speed: localConfig.speed,
+    frameLength: localConfig.frameLength,
+    frequency: localConfig.frequency,
+  });
+
+  // 执行校验
+  const result = await validate(localConfig.fields);
+
+  if (!result.valid) {
+    ElMessage.error(`校验失败：发现 ${result.errorCount} 个错误，请修正后再保存`);
+    return false;
+  }
+
+  return true;
 };
 
 defineExpose({
   insertRow,
   removeSelectRow,
+  runValidation,
+  validationIssues,
+  // 供父组件阻断保存使用
+  validateBeforeSave,  // 推荐：返回 boolean
+  validate,            // 返回完整结果
+  validateOrThrow,     // 失败时抛出错误
+  isValid,             // 简化版
+  hasErrors,           // 是否有错误
 });
 </script>
 
 <style lang="less" scoped>
+// 注意：validation.less 已在 main.ts 中全局引入，不要在 scoped 中重复导入
+// 否则会因为 scoped hash 导致 tooltip 样式失效
+
 .protocol-template-wrapper {
   width: 100%;
 }
@@ -584,6 +825,12 @@ defineExpose({
 }
 
 .toolbar-left {
+  column-gap: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar-right {
   column-gap: 8px;
   display: flex;
   align-items: center;

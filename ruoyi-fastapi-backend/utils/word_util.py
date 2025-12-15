@@ -112,6 +112,8 @@ def generate_protocol_table_html(
     Returns:
         表格HTML字符串
     """
+    header = _ensure_dict(header)
+    fields = _ensure_list(fields)
     # 表格标题: 表 A.1 发送给部件X的XXX指令
     table_title = f"表 {appendix_letter}.{table_index} 发送给{receiver}的{protocol_name}"
     
@@ -172,48 +174,42 @@ def generate_protocol_table_html(
     # 发送时长/端口号列动态标题和值
     duration_or_port_label = '端口号' if port else '发送时长/ms'
     duration_or_port_value = port or duration
-    type_cell_style = "writing-mode: vertical-rl; text-orientation: upright; text-align: center; font-weight: bold;"
+    type_cell_style = "writing-mode: vertical-rl; text-orientation: upright; text-align: center;"
     # 信息行数量（发送方、接收方、传输频率、传输方式、帧长度）
     type_rowspan = 5
     
-    # 构建表头HTML
-    header_html = f'''
+    # 构建表格（头信息 + 字段信息）HTML，合并为一张表以保持连续边框
+    table_html = f'''
 <p style="text-align: center;"><span style="font-family: 宋体; font-weight: bold;">{table_title}</span></p>
-<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; font-family: 宋体; font-size: 10.5pt; border: 1pt solid #000;">
+<table border="1" cellspacing="0" cellpadding="4" style="width: 100%; border-collapse: collapse; font-family: 宋体; font-size: 10.5pt; border: 1pt solid #000;">
   <tr>
-    <td style="width: 8%; {type_cell_style}; border: 1pt solid #000;" rowspan="{type_rowspan}">{protocol_type_text}</td>
-    <td style="width: 15%; border: 1pt solid #000;">发送方</td>
-    <td style="border: 1pt solid #000;" colspan="3">{sender_text}</td>
+    <td style="width: 8%; {type_cell_style} border: 1pt solid #000; vertical-align: middle;" rowspan="{type_rowspan}">{protocol_type_text}</td>
+    <td style="width: 15%; border: 1pt solid #000;" colspan="2">发送方</td>
+    <td style="border: 1pt solid #000;" colspan="6">{sender_text}</td>
   </tr>
   <tr>
-    <td style="border: 1pt solid #000;">接收方</td>
-    <td style="border: 1pt solid #000;" colspan="3">{receiver_text}</td>
+    <td style="border: 1pt solid #000;" colspan="2">接收方</td>
+    <td style="border: 1pt solid #000;" colspan="6">{receiver_text}</td>
   </tr>
   <tr>
-    <td style="border: 1pt solid #000;">传输频率</td>
-    <td style="width: 15%; border: 1pt solid #000;">单次</td>
-    <td style="width: 20%; border: 1pt solid #000;">传输速率/bps</td>
-    <td style="border: 1pt solid #000;">{baud_rate}</td>
+    <td style="border: 1pt solid #000;" colspan="2">传输频率</td>
+    <td style="border: 1pt solid #000;" colspan="2">单次</td>
+    <td style="border: 1pt solid #000;" colspan="2">传输速率/bps</td>
+    <td style="border: 1pt solid #000;" colspan="2">{baud_rate}</td>
   </tr>
   <tr>
-    <td style="width: 15%; border: 1pt solid #000;">传输方式</td>
-    <td style="border: 1pt solid #000;">{method}</td>
-    <td style="border: 1pt solid #000;">{duration_or_port_label}</td>
-    <td style="border: 1pt solid #000;">{duration_or_port_value}</td>
+    <td style="border: 1pt solid #000;" colspan="2">传输方式</td>
+    <td style="border: 1pt solid #000;" colspan="2">{method}</td>
+    <td style="border: 1pt solid #000;" colspan="2">{duration_or_port_label}</td>
+    <td style="border: 1pt solid #000;" colspan="2">{duration_or_port_value}</td>
   </tr>
   <tr>
-    <td style="width: 15%; border: 1pt solid #000;">帧长度/Byte</td>
-    <td style="border: 1pt solid #000;">{frame_length}</td>
-    <td style="border: 1pt solid #000;">错误处理</td>
-    <td style="border: 1pt solid #000;">{error_handling}</td>
+    <td style="border: 1pt solid #000;" colspan="2">帧长度/Byte</td>
+    <td style="border: 1pt solid #000;" colspan="2">{frame_length}</td>
+    <td style="border: 1pt solid #000;" colspan="2">错误处理</td>
+    <td style="border: 1pt solid #000;" colspan="2">{error_handling}</td>
   </tr>
-</table>
-'''
-    
-    # 构建字段表格HTML
-    fields_html = '''
-<table border="1" cellspacing="0" cellpadding="4" style="width: 100%; border-collapse: collapse; font-family: 宋体; font-size: 10.5pt; margin-top: -1px; border: 1pt solid #000;">
-  <tr style="font-weight: bold;">
+  <tr>
     <td style="width: 5%; text-align: center; border: 1pt solid #000;">序号</td>
     <td style="width: 15%; text-align: center; border: 1pt solid #000;">信息名称</td>
     <td style="width: 8%; text-align: center; border: 1pt solid #000;">字节数</td>
@@ -246,7 +242,7 @@ def generate_protocol_table_html(
         scale = field.get('scale', '') or field.get('ratio', '') or ''
         remark = field.get('remark', '') or field.get('note', '') or ''
 
-    fields_html += f'''
+        table_html += f'''
   <tr>
     <td style="text-align: center; border: 1pt solid #000;">{idx}</td>
     <td style="border: 1pt solid #000;">{name}</td>
@@ -262,7 +258,7 @@ def generate_protocol_table_html(
     # 添加附注行
     notes = header.get('notes', '') if isinstance(header, dict) else ''
     notes_html = notes.replace('\n', '<br>') if notes else ''
-    fields_html += f'''
+    table_html += f'''
   <tr>
     <td style="border: 1pt solid #000;">附注</td>
     <td style="border: 1pt solid #000;" colspan="8">{notes_html or '&nbsp;'}</td>
@@ -271,7 +267,7 @@ def generate_protocol_table_html(
 <p><br></p>
 '''
     
-    return header_html + fields_html
+    return table_html
 
 
 def generate_appendix_html(appendix_letter: str, device_name: str, protocols: list) -> str:
@@ -786,7 +782,7 @@ def generate_summary_table_html(topology_data: Optional[dict]) -> str:
     # 构建HTML表格
     table_html = ['<table border="1" cellspacing="0" cellpadding="5" style="width:100%; border-collapse: collapse; font-family: 宋体; font-size: 10.5pt;">']
     table_html.append(
-        '<tr style="background-color: #f5f5f5; font-weight: bold;">'
+        '<tr style="background-color: #f5f5f5;">'
         '<td style="width:6%; text-align:center;">序号</td>'
         '<td style="width:16%; text-align:center;">来源</td>'
         '<td style="width:16%; text-align:center;">目的</td>'
@@ -1094,13 +1090,6 @@ def export_version_to_word(
 ) -> bytes:
     """
     根据版本拓扑数据导出Word文档
-    
-    Args:
-        topology_data: 拓扑数据
-        image_base64: 拓扑图的base64编码字符串（可选，由前端生成并传递）
-    
-    Returns:
-        Word文档的字节内容
     """
     # 生成附录HTML
     appendix_html = generate_all_appendices_html(topology_data) if topology_data else ''

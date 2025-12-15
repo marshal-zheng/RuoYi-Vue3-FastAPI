@@ -1,0 +1,121 @@
+/**
+ * VXE-Table 4.x 通用样式修复
+ * 在 main.ts 中全局引入
+ */
+
+// ==================== VXE-Table Tooltip 层级修复 ====================
+
+// 所有 VXE tooltip 确保层级足够高
+.vxe-table--tooltip-wrapper,
+.vxe-cell--valid-error-tip {
+  z-index: 99999 !important;
+}
+
+// ==================== VXE-Table Tooltip 样式 ====================
+
+// 通用 tooltip wrapper 样式（溢出提示、校验提示等）
+.vxe-table--tooltip-wrapper {
+  max-width: 400px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  background: #303133 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  color: #fff !important;
+  word-break: break-word !important;
+  
+  // 清除可能的错误样式
+  &::before,
+  &::after {
+    display: none !important;
+  }
+}
+
+// 校验错误 tooltip（白底红字）
+.vxe-table--tooltip-wrapper.vxe-table--valid-error {
+  background: #fff !important;
+  border: 1px solid #f56c6c !important;
+  border-left-width: 3px !important;
+  color: #f56c6c !important;
+}
+
+// ==================== 校验提示样式 ====================
+
+// normal 主题（白底红字 - 推荐）
+.vxe-cell--valid-error-theme-normal {
+  padding: 6px 10px !important;
+  max-width: 280px !important;
+  background: #fff !important;
+  border: 1px solid #f56c6c !important;
+  border-left-width: 3px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  
+  .vxe-cell--valid-error-msg {
+    color: #f56c6c !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    background: transparent !important;
+  }
+}
+
+// beautify 主题（红底白字）
+.vxe-cell--valid-error-theme-beautify {
+  padding: 6px 10px !important;
+  max-width: 280px !important;
+  background: #f56c6c !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  
+  .vxe-cell--valid-error-msg {
+    color: #fff !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+    background: transparent !important;
+  }
+}
+
+// ==================== 自定义校验框架样式 ====================
+
+:root {
+  --vxe-validation-error-color: #f56c6c;
+  --vxe-validation-error-bg: rgba(245, 108, 108, 0.08);
+  --vxe-validation-warning-color: #e6a23c;
+  --vxe-validation-warning-bg: rgba(230, 162, 60, 0.08);
+}
+
+// 行高亮
+.vxe-table {
+  .vxe-body--row.vxe-row--validation-error {
+    background-color: var(--vxe-validation-error-bg) !important;
+  }
+
+  .vxe-body--row.vxe-row--validation-warning {
+    background-color: var(--vxe-validation-warning-bg) !important;
+  }
+}
+
+// 单元格高亮
+.vxe-table {
+  .vxe-body--column.vxe-cell--validation-error {
+    background-color: rgba(245, 108, 108, 0.1) !important;
+
+    .vxe-cell {
+      color: var(--vxe-validation-error-color) !important;
+    }
+  }
+
+  .vxe-body--column.vxe-cell--validation-warning {
+    background-color: rgba(230, 162, 60, 0.1) !important;
+
+    .vxe-cell {
+      color: var(--vxe-validation-warning-color) !important;
+    }
+  }
+  
+  // 内置校验错误单元格
+  .vxe-body--column.col--valid-error {
+    background-color: rgba(245, 108, 108, 0.06) !important;
+  }
+}

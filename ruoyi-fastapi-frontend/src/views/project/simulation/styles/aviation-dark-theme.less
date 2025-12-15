@@ -1,21 +1,28 @@
-// 航空暗黑系主题样式
-// 用于带宽监控和告警面板（Teleport 后依然生效）
+/**
+ * 航空暗黑系主题样式
+ * 用于带宽监控和告警面板（Teleport 后依然生效）
+ * 
+ * 注意: 此文件的less变量现在映射到CSS变量，以便统一管理
+ * 在 .simulation-dark 容器内使用CSS变量 var(--sim-xxx)
+ */
 
 // ============================================
-// 航空主题色彩定义
+// Less变量 - 映射到CSS变量（保持兼容性）
 // ============================================
-@aviation-cyan: #22d3ee;           // 主色 - 航空青色
-@aviation-cyan-dim: rgba(34, 211, 238, 0.6);
-@aviation-cyan-glow: rgba(34, 211, 238, 0.3);
-@aviation-amber: #fbbf24;          // 警告色 - 琥珀色
-@aviation-red: #ef4444;            // 严重告警 - 红色
-@aviation-orange: #f97316;         // 错误色 - 橙色
-@aviation-green: #22c55e;          // 正常状态 - 绿色
-@aviation-text: #e2e8f0;           // 主文字 - 亮灰白
-@aviation-text-secondary: #94a3b8; // 次要文字
-@aviation-border: rgba(34, 211, 238, 0.25); // 默认边框
+@aviation-cyan: var(--sim-accent, #22d3ee);           // 主色 - 航空青色
+@aviation-cyan-dim: var(--sim-accent-light, rgba(34, 211, 238, 0.6));
+@aviation-cyan-glow: var(--sim-accent-dim, rgba(34, 211, 238, 0.3));
+@aviation-amber: var(--sim-warning, #fbbf24);         // 警告色 - 琥珀色
+@aviation-red: var(--sim-danger, #ef4444);            // 严重告警 - 红色
+@aviation-orange: var(--sim-orange, #f97316);         // 错误色 - 橙色
+@aviation-green: var(--sim-success, #22c55e);         // 正常状态 - 绿色
+@aviation-text: var(--sim-text-primary, #f1f5f9);     // 主文字 - 亮灰白（提亮）
+@aviation-text-secondary: var(--sim-text-secondary, #cbd5e1); // 次要文字（提亮）
+@aviation-border: var(--sim-border-accent, rgba(34, 211, 238, 0.25)); // 默认边框
 
+// ============================================
 // 通用浮动面板/卡片/图表样式
+// ============================================
 .simbus-panel-shell() {
   background: linear-gradient(180deg, #0a0f18 0%, #0d1117 100%) !important;
   border: 1px solid @aviation-border !important;
@@ -43,6 +50,9 @@
     0 0 10px rgba(0, 0, 0, 0.5) !important;
 }
 
+// ============================================
+// 浮动面板通用样式
+// ============================================
 .simbus-floating-panel {
   .simbus-panel-shell();
 
@@ -108,7 +118,9 @@
   .simbus-chart-wrapper();
 }
 
+// ============================================
 // 带宽监控面板样式
+// ============================================
 .bandwidth-chart-panel {
   .floating-panel {
     .font-semibold,
@@ -214,7 +226,9 @@
   }
 }
 
+// ============================================
 // AlarmPanel 内容区域 - 航空暗黑系
+// ============================================
 .alarm-panel-content {
   background: linear-gradient(180deg, #0a0f18 0%, #060a10 50%, #0a0f18 100%) !important;
 
@@ -343,4 +357,3 @@
     }
   }
 }
-

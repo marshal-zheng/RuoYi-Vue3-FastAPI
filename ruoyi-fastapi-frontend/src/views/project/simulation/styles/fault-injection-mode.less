@@ -1,15 +1,17 @@
 /**
  * 故障注入模式样式
  * 专业仿真软件风格
+ * 
+ * 注意: 此文件的less变量现在映射到CSS变量，以便统一管理
  */
 
 /* ========================================
-   故障注入模式 - 变量定义
+   故障注入模式 - 变量定义（映射到CSS变量）
    ======================================== */
-@fault-accent: #ef4444;
+@fault-accent: var(--sim-danger, #ef4444);
 @fault-accent-light: #fca5a5;
-@fault-accent-glow: rgba(239, 68, 68, 0.3);
-@cyan-accent: #22d3ee;
+@fault-accent-glow: var(--sim-danger-border, rgba(239, 68, 68, 0.3));
+@cyan-accent: var(--sim-accent, #22d3ee);
 @cyan-accent-glow: rgba(34, 211, 238, 0.8);
 
 /* ========================================

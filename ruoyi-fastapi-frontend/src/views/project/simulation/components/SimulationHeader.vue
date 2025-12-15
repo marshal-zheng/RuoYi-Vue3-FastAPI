@@ -139,10 +139,20 @@
             <el-icon :size="16"><Cpu /></el-icon>
           </button>
         </el-tooltip>
-        <el-tooltip content="事件触发" placement="bottom" :show-after="300">
+        <el-tooltip
+          :content="isSimulationActive ? '事件触发' : '请先启动仿真'"
+          placement="bottom"
+          :show-after="300"
+        >
           <button
-            class="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-amber-400 hover:bg-slate-800 transition-all duration-200 hover:shadow-sm hover:shadow-amber-500/20"
-            @click="$emit('show-events')"
+            :disabled="!isSimulationActive"
+            :class="[
+              'flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200',
+              isSimulationActive
+                ? 'text-slate-400 hover:text-amber-400 hover:bg-slate-800 hover:shadow-sm hover:shadow-amber-500/20'
+                : 'text-slate-600 cursor-not-allowed'
+            ]"
+            @click="isSimulationActive && $emit('show-events')"
           >
             <el-icon :size="16"><Lightning /></el-icon>
           </button>
@@ -238,6 +248,11 @@ const statusText = computed(() => {
     stopped: '已停止',
   }
   return statusMap[props.status] || '未知'
+})
+
+// 仿真是否处于活跃状态（运行中或暂停）
+const isSimulationActive = computed(() => {
+  return props.status === 'running' || props.status === 'paused'
 })
 
 const formattedTime = computed(() => {

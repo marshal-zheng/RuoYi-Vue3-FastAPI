@@ -222,17 +222,17 @@ function getStatusIcon(status) {
   }
 }
 
-// 获取检查项背景样式
+// 获取检查项背景样式 - 适配深色主题
 function getItemBgClass(status) {
   switch (status) {
     case 'success':
-      return 'bg-gray-50';
+      return 'bg-slate-800/50';
     case 'warning':
-      return 'bg-amber-50 border-l-[3px] border-amber-400';
+      return 'bg-amber-500/10 border-l-[3px] border-amber-400';
     case 'error':
-      return 'bg-red-50 border-l-[3px] border-red-400';
+      return 'bg-red-500/10 border-l-[3px] border-red-400';
     default:
-      return 'bg-gray-50';
+      return 'bg-slate-800/50';
   }
 }
 

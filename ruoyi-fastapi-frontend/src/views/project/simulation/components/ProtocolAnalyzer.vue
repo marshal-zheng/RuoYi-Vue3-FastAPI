@@ -8,6 +8,7 @@
         clearable
         size="small"
         class="!w-20 sim-select-dark flex-shrink-0"
+        popper-class="sim-popper-dark"
         @change="handleFilterChange"
       >
         <el-option label="1553B" value="1553B" />
@@ -22,6 +23,7 @@
         filterable
         size="small"
         class="!w-24 sim-select-dark flex-shrink-0"
+        popper-class="sim-popper-dark"
         @change="handleFilterChange"
       >
         <el-option
@@ -38,6 +40,7 @@
         filterable
         size="small"
         class="!w-24 sim-select-dark flex-shrink-0"
+        popper-class="sim-popper-dark"
         @change="handleFilterChange"
       >
         <el-option
@@ -47,14 +50,14 @@
           :value="node.value"
         />
       </el-select>
-      <el-input
+      <!-- <el-input
         v-model="localFilter.keyword"
         placeholder="关键字"
         clearable
         size="small"
         class="!w-24 sim-input-dark flex-shrink-0"
         @input="handleFilterChange"
-      />
+      /> -->
     <el-popover v-model:visible="showAdvanced" placement="bottom-start" :width="520" trigger="click">
       <div class="advanced-search__panel">
         <div class="flex items-center justify-between mb-2">
@@ -63,6 +66,7 @@
             v-model="conditionLogic"
             size="small"
             class="!w-32 sim-select-dark"
+            popper-class="sim-popper-dark"
             @change="handleAdvancedChange"
           >
             <el-option label="满足全部(AND)" value="and" />
@@ -80,6 +84,7 @@
               placeholder="条件类型"
               size="small"
               class="!w-28 sim-select-dark"
+              popper-class="sim-popper-dark"
               @change="handleAdvancedChange"
             >
               <el-option label="报文HEX包含" value="payload" />
@@ -96,6 +101,7 @@
                 placeholder="字段"
                 size="small"
                 class="!w-32 sim-select-dark"
+                popper-class="sim-popper-dark"
                 @change="handleAdvancedChange"
               >
                 <el-option label="源节点" value="senderNodeId" />
@@ -180,7 +186,7 @@
           </el-button>
         </div>
       </div>
-      <template #reference>
+      <!-- <template #reference>
         <el-button
           size="small"
           class="sim-btn-dark flex-shrink-0"
@@ -191,7 +197,7 @@
             ({{ activeConditionCount }})
           </span>
         </el-button>
-      </template>
+      </template> -->
     </el-popover>
       <el-checkbox v-model="localFilter.errorOnly" size="small" class="flex-shrink-0" @change="handleFilterChange">
         错误
@@ -851,77 +857,77 @@ onBeforeUnmount(() => {
 
 <style scoped>
 :deep(.el-table-v2__header) {
-  background-color: rgba(30, 41, 59, 0.85);
-  color: #94a3b8;
+  background-color: var(--sim-fill-light, rgba(30, 41, 59, 0.85));
+  color: var(--sim-text-tertiary, #94a3b8);
 }
 
 :deep(.el-table-v2__row) {
   font-size: 12px;
   font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace;
   cursor: pointer;
-  color: #cbd5e1;
+  color: var(--sim-text-secondary, #cbd5e1);
   background-color: transparent;
   transition: background 0.15s ease;
 }
 
 :deep(.el-table-v2__row:hover) {
-  background-color: rgba(51, 65, 85, 0.35);
+  background-color: var(--sim-bg-hover, rgba(51, 65, 85, 0.35));
 }
 
 :deep(.protocol-analyzer__row--selected) {
-  background-color: rgba(0, 82, 217, 0.12);
-  border-left: 2px solid #22d3ee;
+  background-color: var(--sim-accent-bg, rgba(34, 211, 238, 0.12));
+  border-left: 2px solid var(--sim-accent, #22d3ee);
 }
 
 :deep(.protocol-analyzer__row--error) {
-  background-color: rgba(239, 68, 68, 0.12);
+  background-color: var(--sim-danger-bg, rgba(239, 68, 68, 0.12));
   color: #fca5a5;
-  border-left: 2px solid #f56c6c;
+  border-left: 2px solid var(--sim-danger, #ef4444);
 }
 
 /* 表单控件已通过全局 simulation-dark 类统一样式 */
 :deep(.el-checkbox__input) {
-  border-color: #ffffff !important;
+  border-color: var(--sim-text-primary, #f1f5f9) !important;
 }
 
 :deep(.el-checkbox__inner) {
-  border-color: #ffffff !important;
+  border-color: var(--sim-border-hover, rgba(71, 85, 105, 0.8)) !important;
   background-color: transparent !important;
 }
 
 :deep(.el-checkbox__input.is-checked .el-checkbox__inner),
 :deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
-  background-color: #ffffff !important;
-  border-color: #ffffff !important;
+  background-color: var(--sim-accent, #22d3ee) !important;
+  border-color: var(--sim-accent, #22d3ee) !important;
 }
 
 :deep(.el-checkbox__input.is-checked .el-checkbox__inner::after),
 :deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner::after) {
-  border-color: #0f172a !important;
+  border-color: var(--sim-bg-main, #0b1220) !important;
 }
 
 :deep(.el-checkbox__label) {
-  color: #ffffff !important;
+  color: var(--sim-text-regular, #e2e8f0) !important;
   font-size: 13px;
 }
 
 .pro-card-header {
-  color: #e2e8f0;
+  color: var(--sim-text-regular, #e2e8f0);
 }
 
 :deep(.sim-input-dark .el-input__inner),
 :deep(.sim-select-dark .el-select__placeholder),
 :deep(.sim-select-dark .el-select__selected-item) {
-  color: #e2e8f0;
+  color: var(--sim-text-regular, #e2e8f0);
 }
 
 :deep(.sim-input-dark input::placeholder) {
-  color: #cbd5e1;
+  color: var(--sim-text-tertiary, #94a3b8);
 }
 
 .highlight-token {
-  background: rgba(34, 211, 238, 0.18);
-  color: #e0f2fe;
+  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.18));
+  color: var(--sim-text-primary, #f1f5f9);
   padding: 0 2px;
   border-radius: 2px;
 }

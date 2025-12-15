@@ -76,7 +76,7 @@ defineProps({
 .skeleton-line,
 .skeleton-circle,
 .skeleton-bar {
-  background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 37%, #f2f2f2 63%);
+  background: linear-gradient(90deg, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 25%, var(--sim-bg-hover, #334155) 37%, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 63%);
   background-size: 400px 100%;
   animation: skeleton-loading 1.4s ease infinite;
   border-radius: 4px;
@@ -148,7 +148,7 @@ defineProps({
     gap: 12px;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #ebeef5;
+    border-bottom: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
   }
 
   &__row {

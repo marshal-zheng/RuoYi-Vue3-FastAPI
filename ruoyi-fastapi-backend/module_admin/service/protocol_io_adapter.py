@@ -59,3 +59,31 @@ class ProtocolIOAdapter:
             data=preview,
             errors=[],
         )
+
+    @staticmethod
+    async def import_protocol(
+        query_db: AsyncSession,
+        file: UploadFile,
+        protocol_name: Optional[str],
+        operator: str
+    ) -> ImportResult:
+        """
+        导入协议配置，创建新协议
+
+        :param query_db: 数据库会话
+        :param file: 上传的Excel文件
+        :param protocol_name: 协议名称（可选）
+        :param operator: 操作人
+        :return: ImportResult
+        """
+        result = await ProtocolService.import_protocol_services(
+            query_db, file, protocol_name, operator
+        )
+        return ImportResult(
+            status=ImportStatus.SUCCESS if result.is_success else ImportStatus.FAILED,
+            total_count=1,
+            success_count=1 if result.is_success else 0,
+            failed_count=0 if result.is_success else 1,
+            data=result.result,
+            errors=[] if result.is_success else [result.message],
+        )

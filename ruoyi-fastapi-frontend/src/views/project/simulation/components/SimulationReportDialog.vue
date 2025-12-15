@@ -1,11 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    title="仿真报告"
-    width="800px"
-    destroy-on-close
-    class="simulation-dialog"
-  >
+  <ZxDialog v-bind="dialogProps" v-on="dialogEvents" class="simulation-dialog">
     <div class="simulation-report">
       <!-- 摘要信息 -->
       <div class="simulation-report__summary">
@@ -13,19 +7,27 @@
         <div class="simulation-report__summary-grid">
           <div class="simulation-report__summary-item">
             <span class="simulation-report__summary-label">开始时间</span>
-            <span class="simulation-report__summary-value">{{ summary?.startTime || '-' }}</span>
+            <span class="simulation-report__summary-value">{{
+              state.data.summary?.startTime || '-'
+            }}</span>
           </div>
           <div class="simulation-report__summary-item">
             <span class="simulation-report__summary-label">运行时长</span>
-            <span class="simulation-report__summary-value">{{ summary?.duration || '-' }}</span>
+            <span class="simulation-report__summary-value">{{
+              state.data.summary?.duration || '-'
+            }}</span>
           </div>
           <div class="simulation-report__summary-item">
             <span class="simulation-report__summary-label">报文总数</span>
-            <span class="simulation-report__summary-value">{{ summary?.messageCount || 0 }}</span>
+            <span class="simulation-report__summary-value">{{
+              state.data.summary?.messageCount || 0
+            }}</span>
           </div>
           <div class="simulation-report__summary-item">
             <span class="simulation-report__summary-label">告警数量</span>
-            <span class="simulation-report__summary-value">{{ summary?.alarmCount || 0 }}</span>
+            <span class="simulation-report__summary-value">{{
+              state.data.summary?.alarmCount || 0
+            }}</span>
           </div>
         </div>
       </div>
@@ -33,7 +35,7 @@
       <!-- 带宽统计 -->
       <div class="simulation-report__section">
         <h3>带宽统计</h3>
-        <el-table :data="summary?.bandwidthStats || []" stripe>
+        <el-table :data="state.data.summary?.bandwidthStats || []" stripe>
           <el-table-column prop="protocol" label="协议类型" />
           <el-table-column prop="avgBandwidth" label="平均带宽" />
           <el-table-column prop="maxBandwidth" label="峰值带宽" />
@@ -44,7 +46,7 @@
       <!-- 告警汇总 -->
       <div class="simulation-report__section">
         <h3>告警汇总</h3>
-        <el-table :data="summary?.alarmStats || []" stripe>
+        <el-table :data="state.data.summary?.alarmStats || []" stripe>
           <el-table-column prop="type" label="告警类型" />
           <el-table-column prop="count" label="数量" />
           <el-table-column prop="level" label="级别">
@@ -55,48 +57,49 @@
         </el-table>
       </div>
     </div>
-
-    <template #footer>
-      <el-button @click="visible = false">关闭</el-button>
-      <el-button type="primary" @click="handleExport">导出报告</el-button>
-    </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { useDialog } from '@zxio/zxui';
 
-const props = defineProps({
-  sessionId: {
-    type: String,
-    default: '',
+const { state, dialogProps, dialogEvents, open, close } = useDialog({
+  title: '仿真报告',
+  width: '800px',
+  okText: '导出报告',
+  cancelText: '关闭',
+  showCancel: true,
+  defaultData: () => ({
+    sessionId: '',
+    summary: null,
+  }),
+  onConfirm: async () => {
+    handleExport();
+    return false;
   },
-  summary: {
-    type: Object,
-    default: null,
-  },
-})
-
-const visible = ref(false)
-
-function open() {
-  visible.value = true
-}
+});
 
 function getLevelType(level) {
   const map = {
     error: 'danger',
     warning: 'warning',
     info: 'info',
-  }
-  return map[level] || 'info'
+  };
+  return map[level] || 'info';
 }
 
 function handleExport() {
   // TODO: 报告导出逻辑待实现
 }
 
-defineExpose({ open })
+function openDialog(data) {
+  open({
+    sessionId: data?.sessionId || '',
+    summary: data?.summary || null,
+  });
+}
+
+defineExpose({ open: openDialog, close });
 </script>
 
 <style lang="less" scoped>

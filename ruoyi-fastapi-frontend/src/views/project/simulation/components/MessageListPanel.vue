@@ -58,6 +58,7 @@
                 clearable
                 size="small"
                 style="width: 140px"
+                popper-class="sim-popper-dark"
                 @change="(v) => onFilterChange('protocolType', v, { handleRefresh, updateState })"
               >
                 <el-option label="全部" value="" />
@@ -727,7 +728,7 @@ defineExpose({
 }
 
 .payload-preview {
-  background: #f5f7fa;
+  background: var(--sim-fill-light, rgba(30, 41, 59, 0.8));
   padding: 2px 6px;
   border-radius: 4px;
   max-width: 160px;
@@ -735,9 +736,10 @@ defineExpose({
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: background 0.2s;
+  color: var(--sim-text-regular, #e2e8f0);
 }
 
 .payload-preview:hover {
-  background: #e6f0ff;
+  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.1));
 }
 </style>

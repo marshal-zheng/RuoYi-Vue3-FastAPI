@@ -60,6 +60,7 @@
         <div class="config-content">
           <component
             :is="currentTemplateComponent"
+            ref="templateRef"
             v-if="currentTemplateComponent"
             v-model="drawer.state.data.protocolConfig"
             :protocol-type="drawer.state.data.protocolType"
@@ -82,6 +83,7 @@
 <script setup name="ProtocolFormDrawer">
 import { ref, computed } from 'vue';
 import { useDrawer } from '@zxio/zxui';
+import { getProtocol } from '@/api/protocol/protocol';
 import ProtocolTypeSelector from './selector/ProtocolTypeSelector.vue';
 import EthernetProtocolTemplate from './templates/EthernetProtocolTemplate.vue';
 import RS422ProtocolTemplate from './templates/RS422ProtocolTemplate.vue';
@@ -104,6 +106,7 @@ const props = defineProps({
 });
 
 const formRef = ref(null);
+const templateRef = ref(null); // 协议模板组件引用（VXE-Table 校验）
 const drawerLoading = ref(false);
 const importDialogRef = ref(null);
 const senderEditable = computed(() => props.senderEditable !== false);
@@ -127,6 +130,15 @@ const drawer = useDrawer({
     protocolConfig: {},
   }),
   async onConfirm() {
+    // 校验协议模板（VXE-Table 表格校验）
+    if (templateRef.value?.validateBeforeSave) {
+      const templateValid = await templateRef.value.validateBeforeSave();
+      if (!templateValid) {
+        // 校验失败，阻断保存（返回 false 阻止 drawer 关闭）
+        return false;
+      }
+    }
+
     const submitData = { ...drawer.state.data };
     emit('success', submitData);
     return true;
@@ -213,13 +225,16 @@ const openDrawer = async (protocolData) => {
     drawer.open();
     drawerLoading.value = true;
     try {
+      // 调用详情接口获取完整数据（包含 protocolConfig）
+      const res = await getProtocol(protocolData.protocolId);
+      const detail = res.data || res || {};
       drawer.state.data = {
-        protocolId: protocolData.protocolId,
-        protocolName: protocolData.protocolName || '',
-        protocolType: protocolData.protocolType || '',
-        description: protocolData.description || '',
-        remark: protocolData.remark || '',
-        protocolConfig: normalizeHeader(protocolData.protocolConfig || {}),
+        protocolId: detail.protocolId,
+        protocolName: detail.protocolName || '',
+        protocolType: detail.protocolType || '',
+        description: detail.description || '',
+        remark: detail.remark || '',
+        protocolConfig: normalizeHeader(detail.protocolConfig || {}),
       };
     } finally {
       drawerLoading.value = false;

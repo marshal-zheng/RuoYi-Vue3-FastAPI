@@ -17,6 +17,20 @@
               v-hasPermi="['protocol:add']"
               >新增</ZxButton
             >
+            <ZxButton
+              type="success"
+              icon="Upload"
+              @click="handleImportClick"
+              v-hasPermi="['protocol:add']"
+              >导入协议</ZxButton
+            >
+            <input
+              ref="importFileInputRef"
+              type="file"
+              accept=".xlsx,.xls"
+              style="display: none"
+              @change="handleImportFileChange"
+            />
           </div>
 
           <div class="zx-grid-form-bar__filters">
@@ -113,9 +127,11 @@
 </template>
 
 <script setup name="Protocol">
-import { listProtocol, delProtocol, addProtocol, updateProtocol } from '@/api/protocol/protocol';
+import { listProtocol, delProtocol, addProtocol, updateProtocol, importProtocol } from '@/api/protocol/protocol';
 import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
 import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
+import { validateFile } from '@/utils/io-toolkit';
+import { ElMessage } from 'element-plus';
 
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
@@ -260,6 +276,39 @@ function handleExport(row) {
     },
     `协议配置_${row.protocolName}_${new Date().getTime()}.xlsx`
   );
+}
+
+// ========== 协议导入功能 ==========
+const importFileInputRef = ref(null);
+
+function handleImportClick() {
+  importFileInputRef.value?.click();
+}
+
+async function handleImportFileChange(event) {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  // 重置input，以便下次选择同一文件时也能触发change事件
+  event.target.value = '';
+
+  const validation = validateFile(file, { accept: ['.xlsx', '.xls'], maxSize: 10 * 1024 * 1024 });
+  if (!validation.valid) {
+    proxy.$modal.msgError(validation.error || '文件校验失败');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const result = await importProtocol(formData);
+  if (result.code === 200) {
+    const data = result.data || {};
+    ElMessage.success(`导入成功，协议名称：${data.protocolName || '未知'}`);
+    gridListRef.value?.refresh();
+  } else {
+    proxy.$modal.msgError(result.msg || '导入失败');
+  }
 }
 </script>
 

@@ -65,6 +65,7 @@
       </el-divider>
       <component
         :is="currentTemplateComponent"
+        ref="templateRef"
         v-if="currentTemplateComponent"
         v-model="formData.protocolConfig"
         :protocol-type="formData.protocolType"
@@ -111,6 +112,7 @@ const emit = defineEmits(['update:modelValue', 'submit']);
 
 const visible = ref(false);
 const formRef = ref(null);
+const templateRef = ref(null); // 协议模板组件引用
 const submitLoading = ref(false);
 
 // 表单数据
@@ -213,7 +215,17 @@ const handleSubmit = async () => {
   if (!formRef.value) return;
 
   try {
+    // 1. 先校验 Element Plus 表单
     await formRef.value.validate();
+
+    // 2. 校验协议模板（VXE-Table 表格校验）
+    if (templateRef.value?.validateBeforeSave) {
+      const templateValid = await templateRef.value.validateBeforeSave();
+      if (!templateValid) {
+        // 校验失败，阻断保存
+        return;
+      }
+    }
 
     submitLoading.value = true;
 
@@ -234,7 +246,7 @@ const handleSubmit = async () => {
     // 不在这里显示成功消息，由父组件处理
     handleClose();
   } catch (error) {
-    console.error('表单验证失败:', error);
+    // 校验失败
   } finally {
     submitLoading.value = false;
   }

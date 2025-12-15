@@ -35,6 +35,26 @@ class ProtocolDao:
         return protocol_info
 
     @classmethod
+    async def get_protocol_by_name(cls, db: AsyncSession, protocol_name: str):
+        """
+        根据协议名称获取协议信息
+
+        :param db: orm对象
+        :param protocol_name: 协议名称
+        :return: 协议信息对象
+        """
+        protocol_info = (
+            await db.execute(
+                select(SysProtocol).where(
+                    SysProtocol.protocol_name == protocol_name,
+                    SysProtocol.del_flag == '0'
+                )
+            )
+        ).scalars().first()
+
+        return protocol_info
+
+    @classmethod
     async def get_protocol_list(cls, db: AsyncSession, query_object: ProtocolPageQueryModel, is_page: bool = False):
         """
         根据查询参数获取协议列表信息
@@ -77,7 +97,7 @@ class ProtocolDao:
         :param protocol: 协议对象
         :return: 新增的协议对象
         """
-        db_protocol = SysProtocol(**protocol.model_dump(exclude_unset=True))
+        db_protocol = SysProtocol(**protocol.model_dump(exclude_unset=True, by_alias=False))
         db.add(db_protocol)
         await db.flush()
         return db_protocol
@@ -94,7 +114,7 @@ class ProtocolDao:
         await db.execute(
             update(SysProtocol)
             .where(SysProtocol.protocol_id == protocol.protocol_id)
-            .values(**protocol.model_dump(exclude_unset=True, exclude={'protocol_id'}))
+            .values(**protocol.model_dump(exclude_unset=True, exclude={'protocol_id'}, by_alias=False))
         )
 
     @classmethod

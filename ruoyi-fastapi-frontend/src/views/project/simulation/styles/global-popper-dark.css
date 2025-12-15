@@ -1,0 +1,129 @@
+/**
+ * 仿真模块 - 全局 Popper 深色样式
+ * 
+ * 用于处理 Teleport 到 body 的下拉框/弹出层
+ * 这些元素不在 .simulation-dark 容器内，需要单独处理
+ * 
+ * 使用方式：
+ * 1. 在需要深色 popper 的 select 上添加 popper-class="sim-popper-dark"
+ * 2. 或者全局引入此文件（仅在仿真页面）
+ */
+
+/* ============================================
+   通用深色 Popper 样式
+   ============================================ */
+.sim-popper-dark,
+.sim-select-popper-dark,
+.zx-select-popper-dark {
+  background-color: #1e293b !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.sim-popper-dark .el-select-dropdown__item,
+.sim-select-popper-dark .el-select-dropdown__item,
+.zx-select-popper-dark .el-select-dropdown__item {
+  color: #cbd5e1 !important;
+  padding: 0 12px !important;
+  height: 34px !important;
+  line-height: 34px !important;
+}
+
+.sim-popper-dark .el-select-dropdown__item:hover,
+.sim-select-popper-dark .el-select-dropdown__item:hover,
+.zx-select-popper-dark .el-select-dropdown__item:hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+}
+
+.sim-popper-dark .el-select-dropdown__item.is-selected,
+.sim-select-popper-dark .el-select-dropdown__item.is-selected,
+.zx-select-popper-dark .el-select-dropdown__item.is-selected {
+  background-color: rgba(34, 211, 238, 0.15) !important;
+  color: #22d3ee !important;
+  font-weight: 600;
+}
+
+.sim-popper-dark .el-select-dropdown__item.hover,
+.sim-select-popper-dark .el-select-dropdown__item.hover,
+.zx-select-popper-dark .el-select-dropdown__item.hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+}
+
+.sim-popper-dark .el-scrollbar__bar,
+.sim-select-popper-dark .el-scrollbar__bar,
+.zx-select-popper-dark .el-scrollbar__bar {
+  background-color: rgba(148, 163, 184, 0.3);
+}
+
+/* ============================================
+   Popover 深色样式
+   ============================================ */
+.sim-popover-dark {
+  background-color: #1e293b !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  color: #cbd5e1 !important;
+}
+
+.sim-popover-dark .el-popover__title {
+  color: #f1f5f9 !important;
+}
+
+/* ============================================
+   Tooltip 深色样式
+   ============================================ */
+.sim-tooltip-dark {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  color: #e2e8f0 !important;
+}
+
+/* ============================================
+   DatePicker/TimePicker Popper 深色样式
+   ============================================ */
+.sim-picker-popper-dark {
+  background-color: #1e293b !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+}
+
+.sim-picker-popper-dark .el-date-picker__header,
+.sim-picker-popper-dark .el-time-panel__header {
+  color: #f1f5f9 !important;
+}
+
+.sim-picker-popper-dark .el-picker-panel__content {
+  color: #cbd5e1 !important;
+}
+
+.sim-picker-popper-dark .el-date-table th {
+  color: #94a3b8 !important;
+}
+
+.sim-picker-popper-dark .el-date-table td.available:hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+}
+
+.sim-picker-popper-dark .el-date-table td.current:not(.disabled) span {
+  background-color: #22d3ee !important;
+}
+
+/* ============================================
+   Dropdown Menu 深色样式
+   ============================================ */
+.sim-dropdown-dark {
+  background-color: #1e293b !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+}
+
+.sim-dropdown-dark .el-dropdown-menu__item {
+  color: #cbd5e1 !important;
+}
+
+.sim-dropdown-dark .el-dropdown-menu__item:hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  color: #f1f5f9 !important;
+}
+
+.sim-dropdown-dark .el-dropdown-menu__item--divided::before {
+  background-color: rgba(51, 65, 85, 0.5) !important;
+}

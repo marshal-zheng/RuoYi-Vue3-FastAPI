@@ -254,11 +254,11 @@ function getSelectedEdgeInfo() {
 }
 .title {
   font-weight: 700;
-  color: #fca5a5;
+  color: var(--sim-danger, #ef4444);
 }
 .sub {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--sim-text-tertiary, #94a3b8);
 }
 .actions {
   display: flex;
@@ -268,26 +268,26 @@ function getSelectedEdgeInfo() {
 .tpl-btn {
   text-align: left;
   padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(45, 212, 191, 0.08);
-  background: rgba(15, 23, 42, 0.6);
+  border-radius: var(--sim-radius-lg, 10px);
+  border: 1px solid var(--sim-border-light, rgba(45, 212, 191, 0.08));
+  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.6));
   transition: all 0.2s ease;
   cursor: pointer;
 }
 .tpl-btn:hover:not(.tpl-btn-disabled) {
-  border-color: rgba(45, 212, 191, 0.4);
-  box-shadow: 0 8px 16px rgba(34, 211, 238, 0.12);
+  border-color: var(--sim-border-accent, rgba(45, 212, 191, 0.4));
+  box-shadow: var(--sim-shadow-glow, 0 8px 16px rgba(34, 211, 238, 0.12));
   transform: translateY(-1px);
 }
 .tpl-btn-disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  border-color: rgba(100, 116, 139, 0.2);
+  border-color: var(--sim-border-light, rgba(100, 116, 139, 0.2));
 }
 .edge-hint {
   margin-bottom: 6px;
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--sim-text-tertiary, #94a3b8);
 }
 .fault-list {
   /* 自适应高度，保证在小屏和面板缩放时也能滚动 */
@@ -307,17 +307,17 @@ function getSelectedEdgeInfo() {
 }
 .fault-item {
   padding: 10px 12px;
-  border: 1px solid rgba(148, 163, 184, 0.18);
-  border-radius: 10px;
-  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid var(--sim-border-base, rgba(148, 163, 184, 0.18));
+  border-radius: var(--sim-radius-lg, 10px);
+  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.55));
   margin-bottom: 8px;
 }
 .fault-item.is-active {
-  border-color: rgba(34, 211, 238, 0.5);
-  box-shadow: 0 6px 20px rgba(34, 211, 238, 0.15);
+  border-color: var(--sim-border-focus, rgba(34, 211, 238, 0.5));
+  box-shadow: var(--sim-shadow-glow, 0 6px 20px rgba(34, 211, 238, 0.15));
 }
 .fault-item.is-pending {
-  border-color: rgba(250, 204, 21, 0.4);
+  border-color: var(--sim-warning-border, rgba(250, 204, 21, 0.4));
 }
 .fault-item.is-ended {
   opacity: 0.7;
@@ -327,8 +327,8 @@ function getSelectedEdgeInfo() {
   align-items: center;
   padding: 2px 6px;
   border-radius: 6px;
-  background: rgba(34, 211, 238, 0.12);
-  color: #22d3ee;
+  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.12));
+  color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 700;
 }
@@ -351,44 +351,44 @@ function getSelectedEdgeInfo() {
 }
 .empty-text {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--sim-text-tertiary, #94a3b8);
   font-weight: 500;
   margin-bottom: 4px;
 }
 .empty-hint {
   font-size: 11px;
-  color: #64748b;
+  color: var(--sim-text-disabled, #64748b);
 }
 
-/* 刷新按钮样式 */
+/* 刷新按钮样式 - 使用CSS变量 */
 .refresh-btn {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(45, 212, 191, 0.15)) !important;
-  border: 1px solid rgba(34, 211, 238, 0.4) !important;
-  color: #22d3ee !important;
+  background: linear-gradient(135deg, var(--sim-accent-bg, rgba(34, 211, 238, 0.15)), rgba(45, 212, 191, 0.15)) !important;
+  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.4)) !important;
+  color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all var(--sim-transition-normal, 0.3s ease);
 }
 .refresh-btn:hover {
   background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(45, 212, 191, 0.25)) !important;
-  border-color: rgba(34, 211, 238, 0.6) !important;
-  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.2);
+  border-color: var(--sim-accent-light, rgba(34, 211, 238, 0.6)) !important;
+  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px rgba(34, 211, 238, 0.2));
   transform: translateY(-1px);
 }
 .refresh-btn .el-icon {
   margin-right: 4px;
 }
 
-/* 清除全部按钮样式 */
+/* 清除全部按钮样式 - 使用CSS变量 */
 .clear-all-btn {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.15)) !important;
-  border: 1px solid rgba(239, 68, 68, 0.4) !important;
-  color: #ef4444 !important;
+  background: linear-gradient(135deg, var(--sim-danger-bg, rgba(239, 68, 68, 0.15)), rgba(220, 38, 38, 0.15)) !important;
+  border: 1px solid var(--sim-danger-border, rgba(239, 68, 68, 0.4)) !important;
+  color: var(--sim-danger, #ef4444) !important;
   font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all var(--sim-transition-normal, 0.3s ease);
 }
 .clear-all-btn:hover {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(220, 38, 38, 0.25)) !important;
-  border-color: rgba(239, 68, 68, 0.6) !important;
+  border-color: var(--sim-danger, rgba(239, 68, 68, 0.6)) !important;
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
   transform: translateY(-1px);
 }
@@ -396,15 +396,15 @@ function getSelectedEdgeInfo() {
   margin-right: 4px;
 }
 
-/* 选中链路提示样式 */
+/* 选中链路提示样式 - 使用CSS变量 */
 .selected-edge-hint {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
   border-radius: 6px;
-  background: rgba(34, 211, 238, 0.15);
-  border: 1px solid rgba(34, 211, 238, 0.3);
-  color: #22d3ee;
+  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.15));
+  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.3));
+  color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 600;
   animation: pulse-glow 2s ease-in-out infinite;

@@ -209,6 +209,32 @@ async def export_protocol_config(
         return ResponseUtil.error(msg=str(e))
 
 
+@protocolController.post(
+    '/import',
+    dependencies=[Depends(CheckUserInterfaceAuth('protocol:add'))]
+)
+@Log(title='协议管理', business_type=BusinessType.IMPORT, log_type='operation')
+async def import_protocol(
+    request: Request,
+    file: UploadFile = File(...),
+    protocolName: str = Form(default=None),
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user)
+):
+    """
+    导入协议配置
+    """
+    try:
+        import_result = await ProtocolIOAdapter.import_protocol(
+            query_db, file, protocolName, current_user.user.user_name
+        )
+        logger.info('协议导入成功')
+        return ResponseUtil.success(data=import_result.data, msg='导入成功')
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
 @protocolController.get(
     '/{protocol_id}',
     dependencies=[Depends(CheckUserInterfaceAuth('protocol:query'))]

@@ -2,16 +2,23 @@
   <zx-floating-panel
     ref="panelRef"
     v-if="visible"
+    class="injection-floating simbus-floating-panel"
+    theme="dark"
     title="数据注入策略"
     :position="position"
-    :size="{ width: '320px', maxHeight: '400px' }"
+    :size="{ width: '340px', maxHeight: '520px' }"
     :collapsed-size="{ width: '48px', height: '48px' }"
     :default-collapsed="defaultCollapsed"
   >
     <template #header>
-      <div class="flex items-center gap-2">
-        <el-icon class="text-blue-500"><Setting /></el-icon>
-        <span class="font-semibold text-sm">数据注入策略</span>
+      <div class="header">
+        <div class="flex items-center gap-2">
+          <el-icon class="text-cyan-400"><Setting /></el-icon>
+          <div>
+            <div class="title">数据注入策略</div>
+            <div class="sub">配置仿真数据填充方式</div>
+          </div>
+        </div>
       </div>
     </template>
 
@@ -19,7 +26,13 @@
       <!-- 全局策略选择 -->
       <div class="strategy-section">
         <div class="section-label">全局填充策略</div>
-        <el-select v-model="globalStrategy" placeholder="选择策略" size="small" class="w-full">
+        <el-select 
+          v-model="globalStrategy" 
+          placeholder="选择策略" 
+          size="small" 
+          class="w-full strategy-select"
+          popper-class="sim-popper-dark"
+        >
           <el-option
             v-for="strategy in strategies"
             :key="strategy.value"
@@ -29,8 +42,8 @@
             <div class="flex items-center gap-2">
               <el-icon :class="strategy.iconClass"><component :is="strategy.icon" /></el-icon>
               <div class="flex flex-col">
-                <span class="text-sm">{{ strategy.label }}</span>
-                <span class="text-xs text-gray-400">{{ strategy.description }}</span>
+                <span class="option-label">{{ strategy.label }}</span>
+                <span class="option-desc">{{ strategy.description }}</span>
               </div>
             </div>
           </el-option>
@@ -136,31 +149,12 @@
 
       <!-- 应用按钮 -->
       <div class="action-section">
-        <el-button type="primary" size="small" class="w-full" @click="handleApply">
+        <el-button type="primary" size="small" class="w-full apply-btn" @click="handleApply">
           <el-icon class="mr-1"><Check /></el-icon>
           确认策略
         </el-button>
-        <div class="tips text-xs text-gray-400 mt-2 text-center">
-          提示：执行仿真时将使用选择的策略生成报文数据
-        </div>
-      </div>
-
-      <!-- 策略说明 -->
-      <div class="info-section">
-        <el-divider content-position="left">
-          <span class="text-xs text-gray-400">策略说明</span>
-        </el-divider>
-        <div class="strategy-info">
-          <div
-            v-for="strategy in strategies"
-            :key="strategy.value"
-            class="strategy-item"
-            :class="{ active: globalStrategy === strategy.value }"
-          >
-            <el-icon :class="strategy.iconClass"><component :is="strategy.icon" /></el-icon>
-            <span class="strategy-name">{{ strategy.label }}</span>
-            <span class="strategy-desc">{{ strategy.description }}</span>
-          </div>
+        <div class="tips text-xs mt-2 text-center">
+          提示：启动仿真时将使用选择的策略生成报文数据
         </div>
       </div>
     </div>
@@ -292,26 +286,83 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
+/* 浮动面板样式 - 使用CSS变量 */
+.injection-floating {
+  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.3));
+  box-shadow: var(--sim-shadow-glow-accent, 0 8px 32px rgba(34, 211, 238, 0.15));
+}
+
+.header {
+  margin-bottom: 8px;
+}
+
+.title {
+  font-weight: 700;
+  color: var(--sim-accent, #22d3ee);
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--sim-text-tertiary, #94a3b8);
+  margin-top: 2px;
+}
+
 .injection-panel-content {
   padding: 8px;
 }
 
 .section-label {
   font-size: 12px;
-  font-weight: 500;
-  color: #606266;
+  font-weight: 600;
+  color: var(--sim-text-tertiary, #94a3b8);
   margin-bottom: 8px;
 }
 
 .strategy-section {
   margin-bottom: 16px;
+
+  .option-label {
+    font-size: 13px;
+    color: var(--sim-text-regular, #e2e8f0);
+  }
+
+  .option-desc {
+    font-size: 11px;
+    color: var(--sim-text-disabled, #64748b);
+  }
+}
+
+/* Select 输入框暗黑样式 - 使用CSS变量 */
+.strategy-select {
+  :deep(.el-input__wrapper) {
+    background-color: var(--sim-fill-light, rgba(15, 23, 42, 0.8)) !important;
+    border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5)) !important;
+    box-shadow: none !important;
+  }
+
+  :deep(.el-input__wrapper:hover) {
+    border-color: var(--sim-border-accent, rgba(34, 211, 238, 0.4)) !important;
+  }
+
+  :deep(.el-input__wrapper.is-focus) {
+    border-color: var(--sim-border-focus, rgba(34, 211, 238, 0.6)) !important;
+  }
+
+  :deep(.el-input__inner) {
+    color: var(--sim-text-regular, #e2e8f0) !important;
+  }
+
+  :deep(.el-select__caret) {
+    color: var(--sim-text-tertiary, #94a3b8) !important;
+  }
 }
 
 .params-section {
   margin-bottom: 16px;
   padding: 12px;
-  background: #f5f7fa;
-  border-radius: 6px;
+  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--sim-border-light, rgba(45, 212, 191, 0.08));
+  border-radius: var(--sim-radius-lg, 10px);
 
   .compact-item {
     margin-bottom: 8px;
@@ -319,51 +370,33 @@ defineExpose({
     :deep(.el-form-item__label) {
       font-size: 12px;
       padding-bottom: 4px;
+      color: var(--sim-text-tertiary, #94a3b8);
     }
   }
 }
 
 .action-section {
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
-.info-section {
-  .strategy-info {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+/* 确认策略按钮样式 - 使用CSS变量 */
+.apply-btn {
+  background: linear-gradient(135deg, var(--sim-accent-bg, rgba(34, 211, 238, 0.2)), rgba(45, 212, 191, 0.2)) !important;
+  border: 1px solid var(--sim-border-focus, rgba(34, 211, 238, 0.5)) !important;
+  color: var(--sim-accent, #22d3ee) !important;
+  font-weight: 600;
+  transition: all var(--sim-transition-normal, 0.3s ease);
+}
 
-  .strategy-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    transition: all 0.2s;
-
-    &.active {
-      background: #ecf5ff;
-    }
-
-    .el-icon {
-      font-size: 14px;
-    }
-
-    .strategy-name {
-      font-weight: 500;
-      min-width: 60px;
-    }
-
-    .strategy-desc {
-      color: #909399;
-      flex: 1;
-    }
-  }
+.apply-btn:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(45, 212, 191, 0.3)) !important;
+  border-color: var(--sim-accent-light, rgba(34, 211, 238, 0.7)) !important;
+  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px rgba(34, 211, 238, 0.25));
+  transform: translateY(-1px);
 }
 
 .tips {
   line-height: 1.4;
+  color: var(--sim-text-disabled, #64748b);
 }
 </style>

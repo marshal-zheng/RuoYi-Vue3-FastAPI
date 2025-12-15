@@ -10,7 +10,7 @@ class ProtocolModel(BaseModel):
     协议管理表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     protocol_id: Optional[int] = Field(default=None, description='协议ID')
     protocol_name: Optional[str] = Field(default=None, description='协议名称')

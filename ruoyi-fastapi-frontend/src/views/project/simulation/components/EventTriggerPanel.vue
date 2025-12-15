@@ -1,17 +1,14 @@
 <template>
-  <el-drawer
-    :model-value="visible"
-    title="事件触发配置"
-    direction="rtl"
-    size="400px"
+  <ZxDrawer
+    v-bind="drawer.drawerProps.value"
+    v-on="drawer.drawerEvents.value"
     class="simulation-drawer"
-    @update:model-value="$emit('update:visible', $event)"
   >
     <div class="flex flex-col h-full">
       <!-- 事件列表 -->
       <div class="flex-1 overflow-y-auto">
         <div
-          v-for="event in events"
+          v-for="event in displayEvents"
           :key="event.eventId"
           class="event-card p-4 mb-3 rounded-lg transition-colors"
           :class="event.status === 'triggered' ? 'triggered' : ''"
@@ -27,90 +24,66 @@
             <div>动作: {{ getActionText(event.action) }}</div>
           </div>
           <div class="flex gap-2">
-            <el-button size="small" @click="$emit('trigger', event.eventId)">手动触发</el-button>
+            <el-button
+              size="small"
+              type="primary"
+              @click="$emit('trigger', event.eventId)"
+            >
+              <el-icon class="mr-1"><VideoPlay /></el-icon>
+              触发
+            </el-button>
             <el-button size="small" @click="handleEdit(event)">编辑</el-button>
-            <el-button size="small" type="danger" @click="$emit('delete', event.eventId)">删除</el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="$emit('delete', event.eventId)"
+            >
+              删除
+            </el-button>
           </div>
         </div>
 
-        <div v-if="events.length === 0" class="flex flex-col items-center justify-center py-12 text-slate-500">
+        <div
+          v-if="!hasEvents"
+          class="flex flex-col items-center justify-center py-12 text-slate-500"
+        >
           <el-icon class="text-5xl mb-3"><Lightning /></el-icon>
           <span class="text-sm">暂无事件配置</span>
+          <span class="text-xs mt-2"
+            >点击下方按钮添加事件，可配置设备间发送指令等动作</span
+          >
         </div>
       </div>
 
       <!-- 添加按钮 -->
-      <el-button type="primary" class="mt-4" @click="showAddDialog = true">
+      <el-button type="primary" class="mt-4" @click="handleAdd">
         <el-icon><Plus /></el-icon>
         添加事件
       </el-button>
     </div>
 
-    <!-- 添加/编辑对话框 -->
-    <el-dialog
-      v-model="showAddDialog"
-      :title="editingEvent ? '编辑事件' : '添加事件'"
-      width="500px"
-      append-to-body
-      class="simulation-dialog"
-    >
-      <el-form :model="eventForm" label-width="80px">
-        <el-form-item label="事件名称">
-          <el-input v-model="eventForm.name" placeholder="请输入事件名称" />
-        </el-form-item>
-
-        <el-divider>触发条件</el-divider>
-
-        <el-form-item label="条件类型">
-          <el-select v-model="eventForm.conditionType" placeholder="选择条件类型">
-            <el-option label="时间点" value="time" />
-            <el-option label="报文数量" value="message_count" />
-            <el-option label="带宽阈值" value="bandwidth_threshold" />
-            <el-option label="报文内容" value="message_content" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item v-if="eventForm.conditionType === 'time'" label="触发时间">
-          <el-input-number v-model="eventForm.conditionValue.time" :min="0" />
-          <span class="ml-2 text-slate-400">秒</span>
-        </el-form-item>
-
-        <el-form-item v-if="eventForm.conditionType === 'message_count'" label="报文数量">
-          <el-input-number v-model="eventForm.conditionValue.count" :min="1" />
-        </el-form-item>
-
-        <el-form-item v-if="eventForm.conditionType === 'bandwidth_threshold'" label="阈值">
-          <el-input-number v-model="eventForm.conditionValue.threshold" :min="0" :max="100" />
-          <span class="ml-2 text-slate-400">%</span>
-        </el-form-item>
-
-        <el-divider>触发动作</el-divider>
-
-        <el-form-item label="动作类型">
-          <el-select v-model="eventForm.actionType" placeholder="选择动作类型">
-            <el-option label="暂停仿真" value="pause" />
-            <el-option label="记录日志" value="log" />
-            <el-option label="注入故障" value="inject_fault" />
-          </el-select>
-        </el-form-item>
-
-        <el-form-item v-if="eventForm.actionType === 'log'" label="日志内容">
-          <el-input v-model="eventForm.actionParams.message" placeholder="请输入日志内容" />
-        </el-form-item>
-      </el-form>
-
-      <template #footer>
-        <el-button @click="showAddDialog = false">取消</el-button>
-        <el-button type="primary" @click="handleSave">保存</el-button>
-      </template>
-    </el-dialog>
-  </el-drawer>
+    <!-- 事件表单对话框 -->
+    <EventFormDialog
+      ref="eventFormDialogRef"
+      :nodes="nodes"
+      @submit="handleFormSubmit"
+    />
+  </ZxDrawer>
 </template>
 
 <script setup>
-import { ref, reactive, watch } from 'vue'
-import { Lightning, Plus } from '@element-plus/icons-vue'
-import { CONDITION_TYPE_CONFIG, ACTION_TYPE_CONFIG } from '../composables/useEventTrigger'
+import { ref, computed, watch } from "vue";
+import { Lightning, Plus, VideoPlay } from "@element-plus/icons-vue";
+import { useDrawer } from "@zxio/zxui";
+import EventFormDialog from "./EventFormDialog.vue";
+import {
+  commandTypeLabels,
+  eventStatusMap,
+} from "./eventOptions";
+import {
+  CONDITION_TYPE_CONFIG,
+  ACTION_TYPE_CONFIG,
+} from "../composables/useEventTrigger";
 
 const props = defineProps({
   visible: {
@@ -121,149 +94,144 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-})
+  nodes: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const emit = defineEmits(['update:visible', 'create', 'edit', 'delete', 'trigger'])
+const emit = defineEmits([
+  "update:visible",
+  "create",
+  "edit",
+  "delete",
+  "trigger",
+]);
 
-const showAddDialog = ref(false)
-const editingEvent = ref(null)
+const eventFormDialogRef = ref(null);
 
-const eventForm = reactive({
-  name: '',
-  conditionType: 'time',
-  conditionValue: { time: 10 },
-  actionType: 'pause',
-  actionParams: {},
-})
+const drawer = useDrawer({
+  title: "事件触发配置",
+  size: "450px",
+  placement: "right",
+  showContinue: false,
+  onOpen: () => emit("update:visible", true),
+  onClose: () => emit("update:visible", false),
+});
+
+watch(
+  () => props.visible,
+  (visible) => {
+    if (visible) {
+      drawer.open();
+    } else {
+      drawer.close();
+    }
+  },
+  { immediate: true },
+);
+
+// 计算节点选项（用于显示）
+const nodeOptions = computed(() => {
+  if (!props.nodes || props.nodes.length === 0) {
+    return [];
+  }
+  return props.nodes.map((node) => ({
+    id: node.id,
+    label: node.data?.label || node.data?.name || node.label || node.id,
+  }));
+});
+
+const displayEvents = computed(() =>
+  Array.isArray(props.events) ? props.events : [],
+);
+const hasEvents = computed(() => displayEvents.value.length > 0);
 
 function getStatusType(status) {
-  const map = {
-    pending: 'info',
-    triggered: 'success',
-    disabled: 'warning',
-  }
-  return map[status] || 'info'
+  return eventStatusMap[status]?.type || "info";
 }
 
 function getStatusText(status) {
-  const map = {
-    pending: '待触发',
-    triggered: '已触发',
-    disabled: '已禁用',
-  }
-  return map[status] || status
+  return eventStatusMap[status]?.label || status;
 }
 
 function getConditionText(condition) {
-  if (!condition) return '-'
-  const config = CONDITION_TYPE_CONFIG[condition.type]
-  if (!config) return condition.type
-  return `${config.label}: ${JSON.stringify(condition.value)}`
+  if (!condition) return "手动触发";
+  if (condition.type === "manual") return "手动触发";
+  const config = CONDITION_TYPE_CONFIG[condition.type];
+  if (!config) return condition.type;
+
+  const value = condition.value || {};
+  if (condition.type === "time") {
+    return `${config.label}: ${value.time || 0}秒`;
+  }
+  if (condition.type === "message_count") {
+    return `${config.label}: ${value.count || 0}条`;
+  }
+  if (condition.type === "bandwidth_threshold") {
+    return `${config.label}: ${value.threshold || 0}%`;
+  }
+  return `${config.label}: ${JSON.stringify(value)}`;
 }
 
 function getActionText(action) {
-  if (!action) return '-'
-  const config = ACTION_TYPE_CONFIG[action.type]
-  if (!config) return action.type
-  return config.label
+  if (!action) return "-";
+  const config = ACTION_TYPE_CONFIG[action.type];
+  if (!config) return action.type;
+
+  const params = action.params || {};
+  if (action.type === "send_command" || action.type === "send_message") {
+    const cmdLabel =
+      commandTypeLabels[params.commandType] || params.commandType || "";
+    const sourceLabel = getNodeLabel(params.sourceNodeId);
+    const targetLabel = getNodeLabel(params.targetNodeId);
+    if (sourceLabel && targetLabel) {
+      if (action.type === "send_command") {
+        return `${sourceLabel} → ${targetLabel}: ${cmdLabel}`;
+      }
+      return `${sourceLabel} → ${targetLabel}`;
+    }
+    return `${config.label}${cmdLabel ? ": " + cmdLabel : ""}`;
+  }
+  return config.label;
+}
+
+function getNodeLabel(nodeId) {
+  if (!nodeId) return "";
+  const node = nodeOptions.value.find((n) => n.id === nodeId);
+  return node?.label || nodeId;
+}
+
+function handleAdd() {
+  eventFormDialogRef.value?.open();
 }
 
 function handleEdit(event) {
-  editingEvent.value = event
-  eventForm.name = event.name
-  eventForm.conditionType = event.condition?.type || 'time'
-  eventForm.conditionValue = { ...event.condition?.value }
-  eventForm.actionType = event.action?.type || 'pause'
-  eventForm.actionParams = { ...event.action?.params }
-  showAddDialog.value = true
+  eventFormDialogRef.value?.open(event);
 }
 
-function handleSave() {
-  const config = {
-    name: eventForm.name,
-    condition: {
-      type: eventForm.conditionType,
-      value: eventForm.conditionValue,
-    },
-    action: {
-      type: eventForm.actionType,
-      params: eventForm.actionParams,
-    },
-  }
-
-  if (editingEvent.value) {
-    emit('edit', editingEvent.value.eventId, config)
+function handleFormSubmit(eventId, config) {
+  if (eventId) {
+    emit("edit", eventId, config);
   } else {
-    emit('create', config)
+    emit("create", config);
   }
-
-  showAddDialog.value = false
-  resetForm()
 }
-
-function resetForm() {
-  editingEvent.value = null
-  eventForm.name = ''
-  eventForm.conditionType = 'time'
-  eventForm.conditionValue = { time: 10 }
-  eventForm.actionType = 'pause'
-  eventForm.actionParams = {}
-}
-
-watch(
-  () => eventForm.conditionType,
-  (type) => {
-    switch (type) {
-      case 'time':
-        eventForm.conditionValue = { time: 10 }
-        break
-      case 'message_count':
-        eventForm.conditionValue = { count: 100 }
-        break
-      case 'bandwidth_threshold':
-        eventForm.conditionValue = { threshold: 80 }
-        break
-      case 'message_content':
-        eventForm.conditionValue = { pattern: '' }
-        break
-    }
-  }
-)
 </script>
 
 <style lang="less" scoped>
-@import '../styles/simulation-dialog-theme.less';
+@import "../styles/simulation-dialog-theme.less";
 
 .event-card {
   .sim-dialog-card();
-  
+
   &.triggered {
-    background: linear-gradient(180deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
-    border-color: rgba(34, 197, 94, 0.4);
+    background: linear-gradient(
+      180deg,
+      var(--sim-success-bg, rgba(34, 197, 94, 0.2)),
+      rgba(34, 197, 94, 0.1)
+    );
+    border-color: var(--sim-success-border, rgba(34, 197, 94, 0.4));
   }
-}
-
-:deep(.el-form) {
-  .el-form-item__label {
-    color: @sim-dialog-text-primary;
-  }
-  
-  .el-input__inner,
-  .el-input-number__decrease,
-  .el-input-number__increase {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: @sim-dialog-border;
-    color: @sim-dialog-text-primary;
-  }
-  
-  .el-select .el-input__wrapper {
-    background: rgba(15, 23, 42, 0.8);
-    border-color: @sim-dialog-border;
-  }
-}
-
-:deep(.el-divider__text) {
-  background: @sim-dialog-bg-main;
-  color: @sim-dialog-text-primary;
 }
 </style>

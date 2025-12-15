@@ -277,6 +277,42 @@ class ProtocolService:
     协议管理模块服务层
     """
 
+    @staticmethod
+    def __normalize_protocol_config_for_frontend(raw):
+        """
+        将协议配置规范化为前端编辑页可直接渲染的结构：
+        - 头部字段平铺在根对象
+        - 字段列表放在 fields
+        兼容历史/导入时的 headerConfig / fieldsConfig / messageConfig 等嵌套结构。
+        """
+        if not isinstance(raw, dict):
+            return raw if raw else {}
+
+        # 已经是前端结构
+        if isinstance(raw.get('fields'), list):
+            return raw
+
+        header = raw.get('headerConfig') or raw.get('header') or {}
+        if not isinstance(header, dict):
+            header = {}
+
+        message_cfg = raw.get('messageConfig') if isinstance(raw.get('messageConfig'), dict) else {}
+        if isinstance(message_cfg.get('header'), dict) and not header:
+            header = message_cfg.get('header')
+
+        fields = raw.get('fieldsConfig')
+        if not isinstance(fields, list):
+            fields = message_cfg.get('fields')
+        if not isinstance(fields, list):
+            fields = []
+
+        # 如果没有解析到 header/fields，则直接返回原始对象，避免误覆盖
+        if not header and not fields:
+            return raw
+
+        merged = {**header, 'fields': fields}
+        return merged
+
     @classmethod
     async def get_protocol_list_services(
         cls, query_db: AsyncSession, query_object: ProtocolPageQueryModel, is_page: bool = False
@@ -291,10 +327,14 @@ class ProtocolService:
         """
         protocol_list_result = await ProtocolDao.get_protocol_list(query_db, query_object, is_page)
         if is_page:
+            rows = CamelCaseUtil.transform_result(protocol_list_result.rows)
+            for row in rows:
+                if isinstance(row, dict) and 'protocolConfig' in row:
+                    row['protocolConfig'] = cls.__normalize_protocol_config_for_frontend(row.get('protocolConfig'))
             return PageResponseModel(
                 **{
                     **protocol_list_result.model_dump(),
-                    'rows': CamelCaseUtil.transform_result(protocol_list_result.rows)
+                    'rows': rows
                 }
             )
         else:
@@ -363,6 +403,8 @@ class ProtocolService:
         protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, protocol_id)
         if protocol:
             result = CamelCaseUtil.transform_result(protocol)
+            if isinstance(result, dict) and 'protocolConfig' in result:
+                result['protocolConfig'] = cls.__normalize_protocol_config_for_frontend(result.get('protocolConfig'))
         else:
             result = CamelCaseUtil.transform_result({})
 
@@ -968,6 +1010,104 @@ class ProtocolService:
             raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
         return {'header': header, 'fields': fields, 'protocolType': protocol_type}
 
+    @classmethod
+    async def import_protocol_services(
+        cls,
+        query_db: AsyncSession,
+        file: UploadFile,
+        protocol_name: Optional[str],
+        operator: str
+    ):
+        """
+        导入协议配置service
+        解析导出的Excel文件并创建新协议
+
+        :param query_db: orm对象
+        :param file: 上传的Excel文件
+        :param protocol_name: 协议名称（可选，若不提供则从文件名提取）
+        :param operator: 操作人
+        :return: 导入结果
+        """
+        if not file or not file.filename:
+            raise ServiceException(message='请选择要导入的文件')
+
+        suffix = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+        if suffix not in ('xlsx', 'xls', 'csv'):
+            raise ServiceException(message='仅支持 .xlsx/.xls/.csv 格式的文件')
+
+        content = await file.read()
+        if not content:
+            raise ServiceException(message='文件内容为空')
+
+        # 解析Excel文件
+        sheet_map = cls.__read_workbook(content, suffix)
+        protocol_type = cls.__extract_protocol_type(sheet_map)
+        header = cls.__extract_header(sheet_map)
+        fields = cls.__extract_fields(sheet_map)
+
+        if not fields:
+            raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
+
+        # 确定协议名称
+        if not protocol_name:
+            # 从文件名提取，移除后缀和"_配置"后缀
+            base_name = file.filename.rsplit('.', 1)[0] if '.' in file.filename else file.filename
+            if base_name.endswith('_配置'):
+                base_name = base_name[:-3]
+            protocol_name = base_name
+
+        # 检查协议名称是否已存在，如果存在则添加时间戳
+        existing = await ProtocolDao.get_protocol_by_name(query_db, protocol_name)
+        if existing:
+            import time
+            timestamp = int(time.time())
+            protocol_name = f'{protocol_name}_{timestamp}'
+
+        # 标准化协议类型
+        normalized_type = PROTOCOL_TYPE_MAPPING.get(
+            protocol_type.lower() if protocol_type else '',
+            protocol_type or 'LAN'
+        )
+
+        # 构建协议配置（与前端编辑页期望结构对齐：头部字段平铺 + fields 列表）
+        header_payload = dict(header or {})
+        header_payload['protocolType'] = normalized_type
+        protocol_config = {
+            **header_payload,
+            'fields': fields,
+            # 兼容导出/旧逻辑：同时保留嵌套结构
+            'headerConfig': header_payload,
+            'fieldsConfig': fields,
+            'messageConfig': {
+                'header': header_payload,
+                'fields': fields
+            }
+        }
+
+        # 创建协议模型
+        protocol_model = ProtocolModel(
+            protocolName=protocol_name,
+            protocolType=normalized_type,
+            protocolConfig=protocol_config,
+            status='0',
+            createBy=operator,
+            updateBy=operator
+        )
+
+        # 保存协议
+        try:
+            await ProtocolDao.add_protocol_dao(query_db, protocol_model)
+            await query_db.commit()
+        except Exception as e:
+            await query_db.rollback()
+            raise e
+
+        return CrudResponseModel(
+            is_success=True,
+            message='导入成功',
+            result={'protocolName': protocol_name, 'protocolType': normalized_type}
+        )
+
     @staticmethod
     def __read_workbook(content: bytes, suffix: str):
         try:
@@ -1170,9 +1310,14 @@ class ProtocolService:
 
         df = header_df.fillna('')
 
-        # 方案一：横向表头（列名为中文标签）
-        row_data = df.iloc[0].to_dict()
-        if any(label in row_data for label in HEADER_LABEL_TO_KEY.keys()):
+        # 实际头部配置字段（排除元数据字段 '协议类型' 等）
+        config_labels = {'发送方', '接收方', '传输频率', '传输速率/bps', '传输方式', '端口号',
+                         '发送时长/ms', '帧长度/Byte', '帧长度/word', '错误处理', '子地址', 'ID'}
+
+        # 方案一：横向表头（列名为中文标签）- 需要匹配到实际配置字段
+        row_data = df.iloc[0].to_dict() if len(df) > 0 else {}
+        matched_config_labels = [label for label in config_labels if label in row_data]
+        if len(matched_config_labels) >= 3:  # 至少匹配到3个配置标签才认为是横向表头
             for label, key in HEADER_LABEL_TO_KEY.items():
                 if label in row_data:
                     value = row_data.get(label, '')
@@ -1186,6 +1331,8 @@ class ProtocolService:
                 if key is None:
                     continue
                 header_result[key] = cls.__normalize_header_value(key, value)
+
+        # 方案三：扫描矩阵，处理标签/取值在相邻单元格的布局（如导出的Excel格式）
         cls.__fill_header_from_matrix(df, header_result)
         return header_result
 

@@ -620,10 +620,97 @@ async def add_event(
             condition: {type, value},
             action: {type, params}
         }
+        
+    动作类型:
+        - send_command: 发送指令（A设备给B设备发送指令，如自检、上电等）
+        - send_message: 发送报文
+        - inject_fault: 注入故障
+        - pause: 暂停仿真
+        - log: 记录日志
     """
     result = SimulationService.add_event(session_id, event)
     logger.info(f'添加事件: {session_id}')
     return ResponseUtil.success(data=result)
+
+
+@simulationController.put(
+    '/sessions/{session_id}/events/{event_id}',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:update'))
+    ]
+)
+@Log(title='仿真管理-更新事件', business_type=BusinessType.UPDATE)
+async def update_event(
+    request: Request,
+    session_id: str,
+    event_id: str,
+    updates: dict
+):
+    """
+    更新事件配置
+
+    参数:
+        session_id: 会话ID
+        event_id: 事件ID
+        updates: 更新内容
+    """
+    result = SimulationService.update_event(session_id, event_id, updates)
+    logger.info(f'更新事件: {session_id} -> {event_id}')
+    return ResponseUtil.success(data=result)
+
+
+@simulationController.post(
+    '/sessions/{session_id}/events/{event_id}/trigger',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:trigger'))
+    ]
+)
+@Log(title='仿真管理-触发事件', business_type=BusinessType.UPDATE)
+async def trigger_event(
+    request: Request,
+    session_id: str,
+    event_id: str
+):
+    """
+    手动触发事件
+    
+    用于人为触发预设的事件动作，如：
+    - A设备给B设备发送自检指令
+    - A设备给B设备发送上电指令
+    - A设备给B设备发送报文
+    - 注入故障
+    - 暂停仿真
+    
+    参数:
+        session_id: 会话ID
+        event_id: 事件ID
+        
+    返回:
+        触发结果，包含动作执行信息
+    """
+    result = SimulationService.trigger_event(session_id, event_id)
+    logger.info(f'触发事件: {session_id} -> {event_id}')
+    return ResponseUtil.success(data=result)
+
+
+@simulationController.post(
+    '/sessions/{session_id}/events/{event_id}/reset',
+    dependencies=[
+        Depends(LoginService.get_current_user),
+        Depends(CheckUserInterfaceAuth('simulation:event:update'))
+    ]
+)
+async def reset_event(
+    request: Request,
+    session_id: str,
+    event_id: str
+):
+    """重置事件状态为待触发"""
+    result = SimulationService.reset_event(session_id, event_id)
+    logger.info(f'重置事件: {session_id} -> {event_id}')
+    return ResponseUtil.success(data=result.model_dump())
 
 
 @simulationController.delete(

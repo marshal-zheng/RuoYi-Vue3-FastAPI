@@ -1,24 +1,29 @@
-// 仿真模块对话框统一深色主题样式
-// 用于所有仿真相关的对话框组件
+/**
+ * 仿真模块对话框统一深色主题样式
+ * 用于所有仿真相关的对话框组件
+ * 
+ * 注意: 此文件的less变量现在映射到CSS变量，以便统一管理
+ * 在 .simulation-dark 容器内使用CSS变量 var(--sim-xxx)
+ */
 
 // ============================================
-// 色彩定义
+// Less变量 - 映射到CSS变量（保持兼容性）
 // ============================================
-@sim-dialog-bg-main: #0b1220;
-@sim-dialog-bg-secondary: rgba(15, 23, 42, 0.75);
+@sim-dialog-bg-main: var(--sim-bg-main, #0b1220);
+@sim-dialog-bg-secondary: var(--sim-fill-lighter, rgba(15, 23, 42, 0.75));
 @sim-dialog-bg-card: linear-gradient(180deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.8));
-@sim-dialog-border: rgba(148, 163, 184, 0.12);
-@sim-dialog-border-hover: rgba(34, 211, 238, 0.25);
+@sim-dialog-border: var(--sim-border-base, rgba(148, 163, 184, 0.12));
+@sim-dialog-border-hover: var(--sim-border-accent, rgba(34, 211, 238, 0.25));
 
-@sim-dialog-text-primary: #e2e8f0;
-@sim-dialog-text-secondary: #94a3b8;
-@sim-dialog-text-tertiary: #64748b;
-@sim-dialog-text-white: #f8fafc;
+@sim-dialog-text-primary: var(--sim-text-primary, #f1f5f9);
+@sim-dialog-text-secondary: var(--sim-text-secondary, #cbd5e1);
+@sim-dialog-text-tertiary: var(--sim-text-tertiary, #94a3b8);
+@sim-dialog-text-white: var(--sim-text-primary, #f8fafc);
 
-@sim-dialog-success: #22c55e;
-@sim-dialog-warning: #fbbf24;
-@sim-dialog-danger: #ef4444;
-@sim-dialog-info: #22d3ee;
+@sim-dialog-success: var(--sim-success, #22c55e);
+@sim-dialog-warning: var(--sim-warning, #fbbf24);
+@sim-dialog-danger: var(--sim-danger, #ef4444);
+@sim-dialog-info: var(--sim-accent, #22d3ee);
 
 // ============================================
 // 混入（Mixins）
@@ -94,7 +99,7 @@
 
   :deep(.el-table th) {
     background: rgba(30, 41, 59, 0.9);
-    color: #cbd5e1;
+    color: @sim-dialog-text-secondary;
     border-color: @sim-dialog-border;
     font-weight: 600;
   }
@@ -274,6 +279,52 @@
   }
 }
 
+// 输入框样式（深色）
+.sim-dialog-input() {
+  :deep(.el-input__wrapper) {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid @sim-dialog-border;
+    box-shadow: none;
+    
+    &:hover {
+      border-color: rgba(71, 85, 105, 0.8);
+    }
+    
+    &.is-focus {
+      border-color: rgba(34, 211, 238, 0.5);
+    }
+  }
+  
+  :deep(.el-input__inner) {
+    color: @sim-dialog-text-primary;
+  }
+  
+  :deep(.el-input__inner::placeholder) {
+    color: @sim-dialog-text-tertiary;
+  }
+}
+
+// Select选择框样式（深色）
+.sim-dialog-select() {
+  :deep(.el-select .el-input__wrapper) {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid @sim-dialog-border;
+    
+    &:hover {
+      border-color: rgba(71, 85, 105, 0.8);
+    }
+    
+    &.is-focus {
+      border-color: rgba(34, 211, 238, 0.5);
+    }
+  }
+  
+  :deep(.el-select__placeholder),
+  :deep(.el-select__selected-item) {
+    color: @sim-dialog-text-primary;
+  }
+}
+
 // ============================================
 // 统一对话框类
 // ============================================
@@ -283,6 +334,8 @@
   .sim-dialog-collapse();
   .sim-dialog-tag();
   .sim-dialog-button();
+  .sim-dialog-input();
+  .sim-dialog-select();
 }
 
 // 统一抽屉类
@@ -291,7 +344,6 @@
   .sim-dialog-tag();
   .sim-dialog-button();
   .sim-dialog-scrollbar();
+  .sim-dialog-input();
+  .sim-dialog-select();
 }
-
-
-

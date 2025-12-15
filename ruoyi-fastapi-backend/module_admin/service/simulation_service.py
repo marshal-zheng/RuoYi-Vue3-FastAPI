@@ -700,8 +700,79 @@ class SimulationService:
         if not engine:
             raise ServiceException(message='仿真会话不存在或已过期')
 
+        # 设置动作执行器
+        cls._setup_action_executor(engine)
+
         event_data = engine.event_service.add_event(session_id, event)
         return CamelCaseUtil.transform_result(event_data)
+
+    @classmethod
+    def update_event(cls, session_id: str, event_id: str, updates: Dict) -> Dict:
+        """
+        更新事件
+
+        参数:
+            session_id: 会话ID
+            event_id: 事件ID
+            updates: 更新内容
+
+        返回:
+            更新后的事件信息
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        event_data = engine.event_service.update_event(session_id, event_id, updates)
+        if not event_data:
+            raise ServiceException(message='事件不存在')
+        return CamelCaseUtil.transform_result(event_data)
+
+    @classmethod
+    def trigger_event(cls, session_id: str, event_id: str) -> Dict:
+        """
+        手动触发事件
+
+        参数:
+            session_id: 会话ID
+            event_id: 事件ID
+
+        返回:
+            触发结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        # 设置动作执行器
+        cls._setup_action_executor(engine)
+
+        result = engine.event_service.trigger_event(session_id, event_id)
+        if not result:
+            raise ServiceException(message='事件不存在')
+        return CamelCaseUtil.transform_result(result)
+
+    @classmethod
+    def reset_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
+        """
+        重置事件状态为待触发
+
+        参数:
+            session_id: 会话ID
+            event_id: 事件ID
+
+        返回:
+            操作结果
+        """
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ServiceException(message='仿真会话不存在或已过期')
+
+        success = engine.event_service.reset_event(session_id, event_id)
+        if success:
+            return CrudResponseModel(is_success=True, message='事件已重置')
+        else:
+            raise ServiceException(message='事件不存在')
 
     @classmethod
     def remove_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
@@ -742,6 +813,114 @@ class SimulationService:
 
         events = engine.event_service.list_events(session_id)
         return [CamelCaseUtil.transform_result(e) for e in events]
+
+    @classmethod
+    def _setup_action_executor(cls, engine: SimulationEngine):
+        """
+        设置事件动作执行器
+
+        参数:
+            engine: 仿真引擎实例
+        """
+        def execute_action(session_id: str, action: Dict) -> Dict:
+            """
+            执行事件动作
+
+            动作类型:
+                - send_command: 发送指令/报文（A设备给B设备发指令）
+                - send_message: 发送报文
+                - inject_fault: 注入故障
+                - pause: 暂停仿真
+                - log: 记录日志
+            """
+            from utils.log_util import logger
+            import uuid
+            from datetime import datetime
+
+            action_type = action.get('type')
+            params = action.get('params', {})
+            result = {'success': True, 'action_type': action_type}
+
+            if action_type in ('send_command', 'send_message'):
+                # 发送指令/报文：A设备给B设备发送指令
+                source_node = params.get('sourceNodeId') or params.get('source_node_id')
+                target_node = params.get('targetNodeId') or params.get('target_node_id')
+                command_type = params.get('commandType') or params.get('command_type', 'custom')
+                payload_hex = params.get('payload') or params.get('payloadHex') or params.get('payload_hex', '')
+                protocol_type = params.get('protocolType') or params.get('protocol_type', 'LAN')
+
+                # 预定义指令类型
+                predefined_commands = {
+                    'self_check': 'AA55010100',      # 自检指令
+                    'power_on': 'AA55020100',        # 上电指令
+                    'power_off': 'AA55020200',       # 断电指令
+                    'reset': 'AA55030100',           # 复位指令
+                    'status_query': 'AA55040100',    # 状态查询
+                    'heartbeat': 'AA55050100',       # 心跳
+                }
+
+                if command_type in predefined_commands and not payload_hex:
+                    payload_hex = predefined_commands[command_type]
+
+                # 生成报文
+                message = {
+                    'message_id': str(uuid.uuid4()),
+                    'session_id': session_id,
+                    'sender_node_id': source_node or 'event_trigger',
+                    'sender_node_name': engine._get_node_name(source_node) if source_node else '事件触发器',
+                    'sender_port_id': params.get('sourcePortId') or params.get('source_port_id', 'event'),
+                    'sender_port_name': '事件端口',
+                    'receiver_node_id': target_node or 'broadcast',
+                    'receiver_node_name': engine._get_node_name(target_node) if target_node else '广播',
+                    'receiver_port_id': params.get('targetPortId') or params.get('target_port_id', 'event'),
+                    'receiver_port_name': '事件端口',
+                    'protocol_type': protocol_type,
+                    'size_bytes': len(payload_hex) // 2 if payload_hex else 8,
+                    'send_timestamp': engine.current_timestamp or datetime.now().timestamp(),
+                    'receive_timestamp': (engine.current_timestamp or datetime.now().timestamp()) + 0.001,
+                    'create_time': datetime.now(),
+                    'payload_hex': payload_hex,
+                    'field_values': {},
+                    'fill_strategy': 'command',
+                    'is_command': True,
+                    'command_type': command_type,
+                }
+
+                engine.messages.append(message)
+                result['message_id'] = message['message_id']
+                result['command_type'] = command_type
+                logger.info(f'事件触发发送指令: {source_node} -> {target_node}, 类型: {command_type}')
+
+            elif action_type == 'inject_fault':
+                # 注入故障
+                fault_type = params.get('faultType') or params.get('fault_type', 'packet_loss')
+                target_id = params.get('targetId') or params.get('target_id')
+                if target_id:
+                    fault = engine.fault_injector.inject_fault(session_id, fault_type, target_id, params)
+                    result['fault_id'] = fault.get('fault_id')
+                    logger.info(f'事件触发注入故障: {fault_type} @ {target_id}')
+
+            elif action_type == 'pause':
+                # 暂停仿真
+                engine.runner.pause()
+                engine.status = 'paused'
+                logger.info(f'事件触发暂停仿真: {session_id}')
+
+            elif action_type == 'log':
+                # 记录日志
+                message = params.get('message', '事件触发')
+                level = params.get('level', 'info')
+                if level == 'warning':
+                    logger.warning(f'[事件日志] {message}')
+                elif level == 'error':
+                    logger.error(f'[事件日志] {message}')
+                else:
+                    logger.info(f'[事件日志] {message}')
+                result['log_message'] = message
+
+            return result
+
+        engine.event_service.set_action_executor(execute_action)
 
     # ==================== 新增：拓扑验证 ====================
 

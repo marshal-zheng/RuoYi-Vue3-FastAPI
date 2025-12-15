@@ -27,6 +27,7 @@
               size="small"
               style="width: 120px"
               clearable
+              popper-class="sim-popper-dark"
             >
               <el-option v-for="port in portList" :key="port" :label="port" :value="port" />
             </el-select>
