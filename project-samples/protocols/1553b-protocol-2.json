@@ -1,0 +1,143 @@
+{
+  "protocolName": "1553B协议-导航数据上报",
+  "protocolType": "1553B",
+  "status": "0",
+  "description": "导航系统通过1553B总线向飞控计算机上报导航数据，RT→BC模式",
+  "protocolConfig": {
+    "sender": "导航计算机(RT02)",
+    "receiver": "飞控计算机(BC)",
+    "frequency": "50",
+    "frequencyLabel": "50Hz",
+    "speed": "1Mbps",
+    "speedLabel": "1Mbps",
+    "method": "RT-BC",
+    "methodLabel": "RT到BC",
+    "subAddress": "02",
+    "frameLength": "32",
+    "errorHandle": "discard",
+    "errorHandleLabel": "丢弃",
+    "notes": "与RS422惯导/GPS数据配合，导航计算机融合后通过1553B上报飞控",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "状态字",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "1553B状态字"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "经度高位",
+        "byteCount": 2,
+        "byteSequence": "2-3",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "INT16",
+        "scale": "1",
+        "remark": "经度整数部分"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "经度低位",
+        "byteCount": 2,
+        "byteSequence": "4-5",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "0.00001",
+        "remark": "经度小数部分"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "纬度高位",
+        "byteCount": 2,
+        "byteSequence": "6-7",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "INT16",
+        "scale": "1",
+        "remark": "纬度整数部分"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "纬度低位",
+        "byteCount": 2,
+        "byteSequence": "8-9",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "0.00001",
+        "remark": "纬度小数部分"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "高度",
+        "byteCount": 2,
+        "byteSequence": "10-11",
+        "valueRange": "-1000~50000",
+        "unit": "m",
+        "dataType": "INT16",
+        "scale": "1",
+        "remark": "气压高度"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "真航向",
+        "byteCount": 2,
+        "byteSequence": "12-13",
+        "valueRange": "0-3600",
+        "unit": "0.1°",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "真北航向"
+      },
+      {
+        "id": "8",
+        "parentId": null,
+        "fieldName": "地速",
+        "byteCount": 2,
+        "byteSequence": "14-15",
+        "valueRange": "0-2000",
+        "unit": "0.1m/s",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "地面速度"
+      },
+      {
+        "id": "9",
+        "parentId": null,
+        "fieldName": "航迹角",
+        "byteCount": 2,
+        "byteSequence": "16-17",
+        "valueRange": "0-3600",
+        "unit": "0.1°",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "地面航迹角"
+      },
+      {
+        "id": "10",
+        "parentId": null,
+        "fieldName": "导航状态",
+        "byteCount": 2,
+        "byteSequence": "18-19",
+        "valueRange": "Bit0=GPS有效,Bit1=惯导有效,Bit2=组合导航,Bit3=精度降级",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "导航系统工作状态"
+      }
+    ]
+  }
+}

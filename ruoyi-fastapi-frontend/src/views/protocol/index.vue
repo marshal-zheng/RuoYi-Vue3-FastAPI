@@ -18,19 +18,31 @@
               >新增</ZxButton
             >
             <ZxButton
-              type="success"
-              icon="Upload"
-              @click="handleImportClick"
-              v-hasPermi="['protocol:add']"
-              >导入协议</ZxButton
+              type="danger"
+              icon="Delete"
+              :disabled="multiple"
+              @click="handleBatchDelete"
+              v-hasPermi="['protocol:remove']"
+              >批量删除</ZxButton
             >
-            <input
-              ref="importFileInputRef"
-              type="file"
-              accept=".xlsx,.xls"
-              style="display: none"
+            <ZxUpload
+              ref="importUploadRef"
+              v-model="importFileList"
+              :auto-upload="false"
+              :limit="1"
+              accept=".xlsx,.xls,.csv,.json"
+              :max-size="10 * 1024 * 1024"
+              :show-file-list="false"
+              :show-tip="false"
               @change="handleImportFileChange"
-            />
+            >
+              <ZxButton
+                type="success"
+                icon="Upload"
+                v-hasPermi="['protocol:add']"
+                >导入协议</ZxButton
+              >
+            </ZxUpload>
           </div>
 
           <div class="zx-grid-form-bar__filters">
@@ -230,6 +242,15 @@ function handleDelete(row) {
     .catch(() => {});
 }
 
+/** 批量删除按钮操作 */
+function handleBatchDelete() {
+  if (ids.value.length === 0) {
+    proxy.$modal.msgWarning('请选择要删除的协议');
+    return;
+  }
+  handleDelete({});
+}
+
 /** 协议保存成功回调 */
 const handleProtocolSaveSuccess = async (data) => {
   try {
@@ -279,35 +300,38 @@ function handleExport(row) {
 }
 
 // ========== 协议导入功能 ==========
-const importFileInputRef = ref(null);
+const importUploadRef = ref(null);
+const importFileList = ref([]);
 
-function handleImportClick() {
-  importFileInputRef.value?.click();
-}
+async function handleImportFileChange(fileList) {
+  if (!fileList || fileList.length === 0) return;
 
-async function handleImportFileChange(event) {
-  const file = event.target.files?.[0];
-  if (!file) return;
-
-  // 重置input，以便下次选择同一文件时也能触发change事件
-  event.target.value = '';
-
-  const validation = validateFile(file, { accept: ['.xlsx', '.xls'], maxSize: 10 * 1024 * 1024 });
-  if (!validation.valid) {
-    proxy.$modal.msgError(validation.error || '文件校验失败');
-    return;
-  }
+  const file = fileList[0];
+  const fileObj = file.raw || file;
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', fileObj);
 
-  const result = await importProtocol(formData);
-  if (result.code === 200) {
-    const data = result.data || {};
-    ElMessage.success(`导入成功，协议名称：${data.protocolName || '未知'}`);
-    gridListRef.value?.refresh();
-  } else {
-    proxy.$modal.msgError(result.msg || '导入失败');
+  try {
+    const result = await importProtocol(formData);
+    if (result.code === 200) {
+      const data = result.data || {};
+      ElMessage.success(`导入成功，协议名称：${data.protocolName || '未知'}`);
+      gridListRef.value?.refresh();
+      // 清空文件列表
+      importUploadRef.value?.clearFiles();
+      importFileList.value = [];
+    } else {
+      proxy.$modal.msgError(result.msg || '导入失败');
+      // 清空文件列表
+      importUploadRef.value?.clearFiles();
+      importFileList.value = [];
+    }
+  } catch (error) {
+    proxy.$modal.msgError(error?.message || '导入失败');
+    // 清空文件列表
+    importUploadRef.value?.clearFiles();
+    importFileList.value = [];
   }
 }
 </script>

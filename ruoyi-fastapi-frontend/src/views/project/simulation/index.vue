@@ -361,8 +361,69 @@ const {
   clearEdgeHighlight,
 } = useTopologyAnimation(dagRef, () => simulationState.speed);
 
-const { runHealthCheck } = useHealthCheck();
+const { runHealthCheck, PROTOCOL_REQUIRED_PARAMS } = useHealthCheck();
 const healthReport = ref(null);
+
+// 协议参数持久化辅助：将必需字段写入 port.params，供健康检查使用
+const PARAM_ALIAS_MAP = {
+  baudRate: ["baudRate", "speed", "dataRate"],
+  ipAddress: ["ipAddress", "ip", "host"],
+  port: ["port", "lanPort"],
+  protocol: ["protocol", "proto", "protocolType"],
+  busAddress: ["busAddress"],
+  rtAddress: ["rtAddress"],
+  subAddress: ["subAddress"],
+};
+
+const normalizePortParams = (port = {}) => {
+  const interfaceType = (port.interfaceType || port.busType || "").toUpperCase();
+  const requiredParams = PROTOCOL_REQUIRED_PARAMS?.[interfaceType];
+  if (!requiredParams || requiredParams.length === 0) return port;
+
+  const params = { ...(port.params || {}) };
+  const header = port.messageConfig?.header || {};
+  const sources = [params, header, port];
+
+  const pickValue = (key) => {
+    const aliases = PARAM_ALIAS_MAP[key] || [key];
+    for (const source of sources) {
+      for (const alias of aliases) {
+        const val = source?.[alias];
+        if (val !== undefined && val !== null && val !== "") return val;
+      }
+    }
+    return undefined;
+  };
+
+  requiredParams.forEach((key) => {
+    const currentVal = params[key];
+    if (currentVal === undefined || currentVal === null || currentVal === "") {
+      const value = pickValue(key);
+      if (value !== undefined && value !== null && value !== "") {
+        params[key] = value;
+      }
+    }
+  });
+
+  return {
+    ...port,
+    params,
+  };
+};
+
+const normalizePorts = (ports = []) => {
+  if (!Array.isArray(ports)) return [];
+  return ports.map((p) => normalizePortParams(p || {}));
+};
+
+const normalizeGraphPorts = (graph) => {
+  if (!graph) return;
+  graph.getNodes?.().forEach((node) => {
+    const data = node.getData?.() || {};
+    const normalizedPorts = normalizePorts(data.ports || []);
+    node.setData({ ...data, ports: normalizedPorts }, { overwrite: true });
+  });
+};
 
 // 故障注入
 const faultInjection = useFaultInjection(sessionId);
@@ -626,7 +687,7 @@ async function loadDeviceList() {
     deviceId: device.deviceId,
     deviceType: device.deviceType,
     busType: device.busType,
-    ports: device.interfaces || [],
+    ports: normalizePorts(device.interfaces || []),
     nodeType: "device-port-node",
   }));
   loading.value = false;
@@ -654,6 +715,7 @@ function restoreSavedTopology() {
         const graphJson = topoData?.graph;
         if (graphJson) {
           graph.fromJSON(graphJson);
+          normalizeGraphPorts(graph);
           // 拓扑加载完成后，更新节点列表
           updateTopologyNodes();
         }
@@ -775,8 +837,13 @@ function handleNodeDblclick({ node }) {
   // 转为普通 JSON
   const jsonNode = typeof node?.toJSON === "function" ? node.toJSON() : node;
   // 附加映射数据
+  const nodeData = jsonNode?.data || {};
   currentNode.value = {
     ...jsonNode,
+    data: {
+      ...nodeData,
+      ports: normalizePorts(nodeData.ports || []),
+    },
     peerDeviceNameByPort,
   };
   nodeEditDrawerRef.value?.open();
@@ -790,12 +857,13 @@ function handleNodeUpdate({ nodeId, name, ports }) {
   if (!cellNode) return;
 
   const currentData = cellNode.getData() || {};
+  const normalizedPorts = normalizePorts(ports || currentData.ports);
   cellNode.setData(
     {
       ...currentData,
       name,
       label: name,
-      ports: ports || currentData.ports,
+      ports: normalizedPorts,
     },
     { overwrite: false },
   );

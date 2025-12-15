@@ -1,0 +1,107 @@
+{
+  "protocolName": "CAN协议-起落架状态反馈",
+  "protocolType": "CAN",
+  "status": "0",
+  "description": "起落架控制器状态反馈协议，上报起落架位置、锁定状态等信息",
+  "protocolConfig": {
+    "sender": "起落架控制器",
+    "receiver": "飞控计算机",
+    "frequency": "50",
+    "frequencyLabel": "50Hz",
+    "speed": "500Kbps",
+    "speedLabel": "500Kbps",
+    "method": "标准帧",
+    "methodLabel": "标准帧",
+    "canId": "0x181",
+    "frameLength": "8",
+    "errorHandle": "discard",
+    "errorHandleLabel": "丢弃",
+    "notes": "与CAN协议-起落架控制配对，反馈执行状态供飞控计算机监控",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "前起落架位置",
+        "byteCount": 1,
+        "byteSequence": "0",
+        "valueRange": "0-100",
+        "unit": "%",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "0=完全收起,100=完全放下"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "左主起落架位置",
+        "byteCount": 1,
+        "byteSequence": "1",
+        "valueRange": "0-100",
+        "unit": "%",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "0=完全收起,100=完全放下"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "右主起落架位置",
+        "byteCount": 1,
+        "byteSequence": "2",
+        "valueRange": "0-100",
+        "unit": "%",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "0=完全收起,100=完全放下"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "锁定状态",
+        "byteCount": 1,
+        "byteSequence": "3",
+        "valueRange": "Bit0=前上锁,Bit1=前下锁,Bit2=左上锁,Bit3=左下锁,Bit4=右上锁,Bit5=右下锁",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "各起落架锁定状态"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "液压压力",
+        "byteCount": 1,
+        "byteSequence": "4",
+        "valueRange": "0-255",
+        "unit": "bar",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "液压系统压力"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "状态字",
+        "byteCount": 1,
+        "byteSequence": "5",
+        "valueRange": "Bit0=动作中,Bit1=故障,Bit2=过载,Bit3=液压低",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "系统状态标志"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "响应序列号",
+        "byteCount": 2,
+        "byteSequence": "6-7",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "对应指令序列号"
+      }
+    ]
+  }
+}

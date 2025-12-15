@@ -1,0 +1,83 @@
+{
+  "protocolName": "CAN协议-燃油系统监控",
+  "protocolType": "CAN",
+  "status": "0",
+  "description": "燃油系统监控协议，采集各油箱油量、油泵状态等信息上报飞控计算机",
+  "protocolConfig": {
+    "sender": "燃油管理单元",
+    "receiver": "飞控计算机",
+    "frequency": "10",
+    "frequencyLabel": "10Hz",
+    "speed": "250Kbps",
+    "speedLabel": "250Kbps",
+    "method": "标准帧",
+    "methodLabel": "标准帧",
+    "canId": "0x200",
+    "frameLength": "8",
+    "errorHandle": "retry",
+    "errorHandleLabel": "重传",
+    "notes": "与LAN协议-传感器数据采集配合，燃油数据汇聚到综合传感器数据中",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "左主油箱油量",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "0-10000",
+        "unit": "kg",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "左主油箱剩余油量"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "右主油箱油量",
+        "byteCount": 2,
+        "byteSequence": "2-3",
+        "valueRange": "0-10000",
+        "unit": "kg",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "右主油箱剩余油量"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "中央油箱油量",
+        "byteCount": 2,
+        "byteSequence": "4-5",
+        "valueRange": "0-20000",
+        "unit": "kg",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "中央油箱剩余油量"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "油泵状态",
+        "byteCount": 1,
+        "byteSequence": "6",
+        "valueRange": "Bit0=左主泵,Bit1=右主泵,Bit2=中央泵,Bit3=备用泵",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "各油泵运行状态"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "告警状态",
+        "byteCount": 1,
+        "byteSequence": "7",
+        "valueRange": "Bit0=油量低,Bit1=不平衡,Bit2=泄漏,Bit3=温度高",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "燃油系统告警"
+      }
+    ]
+  }
+}

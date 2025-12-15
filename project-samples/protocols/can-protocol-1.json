@@ -1,0 +1,107 @@
+{
+  "protocolName": "CAN协议-起落架控制",
+  "protocolType": "CAN",
+  "status": "0",
+  "description": "起落架控制系统CAN协议，飞控计算机向起落架控制器发送收放指令",
+  "protocolConfig": {
+    "sender": "飞控计算机",
+    "receiver": "起落架控制器",
+    "frequency": "50",
+    "frequencyLabel": "50Hz",
+    "speed": "500Kbps",
+    "speedLabel": "500Kbps",
+    "method": "标准帧",
+    "methodLabel": "标准帧",
+    "canId": "0x180",
+    "frameLength": "8",
+    "errorHandle": "retry",
+    "errorHandleLabel": "重传",
+    "notes": "与飞控数据传输配合，根据飞行阶段自动控制起落架收放",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "指令类型",
+        "byteCount": 1,
+        "byteSequence": "0",
+        "valueRange": "0x01=收起,0x02=放下,0x03=锁定,0x04=解锁,0x05=状态查询",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "起落架控制指令"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "目标位置",
+        "byteCount": 1,
+        "byteSequence": "1",
+        "valueRange": "Bit0=前起落架,Bit1=左主起落架,Bit2=右主起落架",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "目标起落架选择"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "动作速度",
+        "byteCount": 1,
+        "byteSequence": "2",
+        "valueRange": "0=正常,1=快速,2=慢速",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "收放速度档位"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "安全检查",
+        "byteCount": 1,
+        "byteSequence": "3",
+        "valueRange": "Bit0=空速检查,Bit1=高度检查,Bit2=重量检查",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "安全条件确认"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "序列号",
+        "byteCount": 2,
+        "byteSequence": "4-5",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "指令序列号"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "控制字",
+        "byteCount": 1,
+        "byteSequence": "6",
+        "valueRange": "Bit0=使能,Bit1=紧急停止,Bit2=手动覆盖",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "控制标志位"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "校验字节",
+        "byteCount": 1,
+        "byteSequence": "7",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "异或校验"
+      }
+    ]
+  }
+}

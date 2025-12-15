@@ -5,7 +5,7 @@
         <el-alert title="导入说明" type="info" :closable="false" show-icon>
           <template #default>
             <div class="tip-content">
-              <p>1. 支持导入 Excel(.xlsx, .xls) 或 CSV(.csv) 格式文件</p>
+              <p>1. 支持导入 Excel(.xlsx, .xls)、CSV(.csv) 或 JSON(.json) 格式文件</p>
               <p>2. 请按照模板格式整理数据，确保字段名称、数据类型等信息完整</p>
               <p>3. 导入的数据将追加到现有字段列表中</p>
               <p v-if="protocolType">4. 若包含协议配置信息，将自动填充到对应表单</p>
@@ -14,31 +14,24 @@
         </el-alert>
       </div>
 
-      <el-upload
+      <ZxUpload
         ref="uploadRef"
-        class="upload-container"
+        v-model="fileList"
         drag
         :auto-upload="false"
         :limit="1"
         :accept="acceptTypes"
-        :show-file-list="false"
-        :on-change="handleFileChange"
-        :on-exceed="handleExceed"
-      >
-        <el-icon class="el-icon--upload">
-          <upload-filled />
-        </el-icon>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <template #tip>
-          <div class="el-upload__tip">只能上传 xlsx/xls/csv 文件，且不超过 10MB</div>
-        </template>
-      </el-upload>
-
-      <div v-if="fileInfo" class="file-info">
-        <el-icon><Document /></el-icon>
-        <span class="file-name">{{ fileInfo.name }}</span>
-        <span class="file-size">{{ formatFileSize(fileInfo.size) }}</span>
-      </div>
+        :max-size="10 * 1024 * 1024"
+        :custom-file-list="true"
+        :show-file-list="true"
+        main-text="将文件拖到此处，或点击上传"
+        sub-text="支持 xlsx/xls/csv/json 格式"
+        tip-text="只能上传 xlsx/xls/csv/json 文件，且不超过 10MB"
+        :show-tip="true"
+        :show-sub-text="true"
+        @change="handleFileChange"
+        @exceed="handleExceed"
+      />
     </div>
 
     <template #footerLeft>
@@ -56,9 +49,8 @@
 </template>
 
 <script setup name="ImportFileDialog">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { UploadFilled, Document } from '@element-plus/icons-vue';
 import { saveAs } from 'file-saver';
 import { useDialog } from '@zxio/zxui';
 import { downloadProtocolImportTemplate, previewProtocolImport } from '@/api/protocol/protocol';
@@ -78,32 +70,35 @@ const emit = defineEmits(['confirm', 'close']);
 
 const uploadRef = ref();
 const fileList = ref([]);
-const fileInfo = ref(null);
-const acceptTypes = '.xlsx,.xls,.csv';
+const acceptTypes = '.xlsx,.xls,.csv,.json';
 const downloading = ref(false);
 
+// 计算当前选中的文件信息
+const fileInfo = computed(() => {
+  if (fileList.value.length > 0) {
+    const file = fileList.value[0];
+    return file.raw || file;
+  }
+  return null;
+});
+
 // 文件变化处理
-function handleFileChange(file) {
-  const isValidType = /\.(xlsx|xls|csv)$/.test(file.name.toLowerCase());
-  const isLt10M = file.size / 1024 / 1024 < 10;
-
+function handleFileChange(fileList) {
+  if (fileList.length === 0) {
+    return;
+  }
+  
+  const file = fileList[0];
+  const fileObj = file.raw || file;
+  
+  // 文件类型验证（ZxUpload 已经做了基础验证，这里做二次确认）
+  const isValidType = /\.(xlsx|xls|csv|json)$/i.test(fileObj.name);
   if (!isValidType) {
-    ElMessage.error('只能上传 xlsx/xls/csv 格式的文件！');
-    fileList.value = [];
-    fileInfo.value = null;
-    return false;
+    ElMessage.error('只能上传 xlsx/xls/csv/json 格式的文件！');
+    // 清空文件列表
+    uploadRef.value?.clearFiles();
+    return;
   }
-
-  if (!isLt10M) {
-    ElMessage.error('文件大小不能超过 10MB！');
-    fileList.value = [];
-    fileInfo.value = null;
-    return false;
-  }
-
-  fileInfo.value = file.raw || file;
-  fileList.value = [file];
-  return true;
 }
 
 // 文件超出限制
@@ -111,14 +106,6 @@ function handleExceed() {
   ElMessage.warning('只能上传一个文件，请删除后重新上传');
 }
 
-// 格式化文件大小
-function formatFileSize(bytes) {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
-}
 
 // 下载模板
 async function downloadTemplate() {
@@ -150,14 +137,15 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
   preValidate: false,
   autoScrollToError: false,
   onConfirm: async () => {
-    if (!fileInfo.value) {
+    if (!fileInfo.value || fileList.value.length === 0) {
       ElMessage.warning('请先选择要导入的文件');
       throw new Error('no_file');
     }
 
     try {
       const formData = new FormData();
-      formData.append('file', fileInfo.value);
+      const file = fileInfo.value;
+      formData.append('file', file);
 
       const backendResult = await previewProtocolImport(formData);
       const payload = backendResult?.data || {};
@@ -214,7 +202,6 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
 function onClose() {
   uploadRef.value?.clearFiles();
   fileList.value = [];
-  fileInfo.value = null;
   emit('close');
 }
 
@@ -238,43 +225,6 @@ defineExpose({ open, close });
   }
 }
 
-.upload-container {
-  :deep(.el-upload) {
-    width: 100%;
-  }
-
-  :deep(.el-upload-dragger) {
-    width: 100%;
-    padding: 40px 20px;
-  }
-}
-
-.file-info {
-  margin-top: 20px;
-  padding: 12px 15px;
-  background-color: #f5f7fa;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  .el-icon {
-    font-size: 20px;
-    color: #409eff;
-  }
-
-  .file-name {
-    flex: 1;
-    font-size: 14px;
-    color: #303133;
-    font-weight: 500;
-  }
-
-  .file-size {
-    font-size: 12px;
-    color: #909399;
-  }
-}
 
 .dialog-footer {
   display: flex;

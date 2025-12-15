@@ -158,14 +158,21 @@ VXETable.renderer.add('DictAutocomplete', {
       return val as string | number | undefined;
     };
 
-    const handleInput = (value: string | number | undefined) => {
-      row[field] = normalizeValue(value) ?? '';
+    const handleInput = (_paramsOrValue: any, val?: any) => {
+      // VxeDictAutocomplete emit('input', params, val) 传递两个参数
+      // 兼容只传一个参数的情况（如 el-input 直接传值）
+      const actualValue = val !== undefined ? val : _paramsOrValue;
+      row[field] = normalizeValue(actualValue) ?? '';
       emitEvent('input', row[field]);
     };
 
-    const handleChange = (value: any) => {
-      row[field] = normalizeValue(value) ?? '';
-      emitEvent('change', value);
+    const handleChange = (_paramsOrValue: any, val?: any) => {
+      // VxeDictAutocomplete emit('change', params, val) 传递两个参数
+      // 第一个是 params，第二个是实际值
+      // 兼容只传一个参数的情况
+      const actualValue = val !== undefined ? val : _paramsOrValue;
+      row[field] = normalizeValue(actualValue) ?? '';
+      emitEvent('change', actualValue);
     };
 
     return [

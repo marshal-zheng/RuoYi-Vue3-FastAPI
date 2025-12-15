@@ -1,0 +1,143 @@
+{
+  "protocolName": "1553B协议-武器火控数据",
+  "protocolType": "1553B",
+  "status": "0",
+  "description": "火控计算机与任务计算机之间的武器系统数据交换，RT→RT模式",
+  "protocolConfig": {
+    "sender": "火控计算机(RT03)",
+    "receiver": "任务计算机(RT01)",
+    "frequency": "25",
+    "frequencyLabel": "25Hz",
+    "speed": "1Mbps",
+    "speedLabel": "1Mbps",
+    "method": "RT-RT",
+    "methodLabel": "RT到RT",
+    "subAddress": "03",
+    "frameLength": "32",
+    "errorHandle": "retry",
+    "errorHandleLabel": "重传",
+    "notes": "火控系统数据通过1553B总线传输，与飞控数据融合进行武器瞄准计算",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "目标方位角",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "0-3600",
+        "unit": "0.1°",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "目标相对方位"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "目标俯仰角",
+        "byteCount": 2,
+        "byteSequence": "2-3",
+        "valueRange": "-900~900",
+        "unit": "0.1°",
+        "dataType": "INT16",
+        "scale": "0.1",
+        "remark": "目标相对俯仰"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "目标距离",
+        "byteCount": 2,
+        "byteSequence": "4-5",
+        "valueRange": "0-65535",
+        "unit": "m",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "目标斜距"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "目标速度",
+        "byteCount": 2,
+        "byteSequence": "6-7",
+        "valueRange": "-1000~1000",
+        "unit": "m/s",
+        "dataType": "INT16",
+        "scale": "1",
+        "remark": "目标径向速度"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "瞄准线方位",
+        "byteCount": 2,
+        "byteSequence": "8-9",
+        "valueRange": "0-3600",
+        "unit": "0.1°",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "瞄准线方位角"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "瞄准线俯仰",
+        "byteCount": 2,
+        "byteSequence": "10-11",
+        "valueRange": "-900~900",
+        "unit": "0.1°",
+        "dataType": "INT16",
+        "scale": "0.1",
+        "remark": "瞄准线俯仰角"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "武器状态",
+        "byteCount": 2,
+        "byteSequence": "12-13",
+        "valueRange": "Bit0=挂载,Bit1=解锁,Bit2=瞄准,Bit3=发射许可",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "武器系统状态"
+      },
+      {
+        "id": "8",
+        "parentId": null,
+        "fieldName": "跟踪模式",
+        "byteCount": 2,
+        "byteSequence": "14-15",
+        "valueRange": "0=手动,1=半自动,2=全自动,3=记忆跟踪",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "目标跟踪模式"
+      },
+      {
+        "id": "9",
+        "parentId": null,
+        "fieldName": "目标编号",
+        "byteCount": 2,
+        "byteSequence": "16-17",
+        "valueRange": "0-255",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "当前跟踪目标ID"
+      },
+      {
+        "id": "10",
+        "parentId": null,
+        "fieldName": "火控状态",
+        "byteCount": 2,
+        "byteSequence": "18-19",
+        "valueRange": "Bit0=雷达锁定,Bit1=红外锁定,Bit2=激光测距,Bit3=解算完成",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "火控系统工作状态"
+      }
+    ]
+  }
+}

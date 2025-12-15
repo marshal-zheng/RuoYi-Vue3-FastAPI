@@ -98,6 +98,7 @@ const filterOptions = (queryString) => {
 };
 
 const handleSelect = (item) => {
+  console.log('itemsssss', item)
   inputValue.value = item.label;
   emitValue(item.value);
   emit('dict-change', item._raw ?? item);
@@ -107,8 +108,10 @@ const handleInput = (val) => {
   inputValue.value = val;
 };
 
+const isSameValue = (a, b) => String(a) === String(b);
+
 const syncInputValue = () => {
-  const target = allOptions.value.find((d) => d.value === props.modelValue);
+  const target = allOptions.value.find((d) => isSameValue(d.value, props.modelValue));
   if (target) {
     inputValue.value = target.label;
     emitValue(props.modelValue, target.label);
@@ -121,7 +124,7 @@ const findOptionByLabel = (label) => {
   return allOptions.value.find(
     (opt) =>
       String(opt.label).toLowerCase() === String(label).toLowerCase() ||
-      String(opt.value).toLowerCase() === String(label).toLowerCase()
+      isSameValue(opt.value, label)
   );
 };
 

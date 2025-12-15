@@ -1,0 +1,131 @@
+{
+  "protocolName": "RS485协议-舵机控制指令",
+  "protocolType": "RS485",
+  "status": "0",
+  "description": "飞控系统舵机控制协议，飞控计算机通过RS485总线向舵机控制器发送控制指令",
+  "protocolConfig": {
+    "sender": "飞控计算机",
+    "receiver": "舵机控制器",
+    "frequency": "100",
+    "frequencyLabel": "100Hz",
+    "speed": "115200",
+    "speedLabel": "115200bps",
+    "method": "半双工",
+    "methodLabel": "半双工",
+    "sendDuration": "5",
+    "frameLength": "32",
+    "errorHandle": "retry",
+    "errorHandleLabel": "重传",
+    "notes": "与LAN协议-飞控数据传输配合使用，飞控计算机根据姿态数据计算舵面偏转角度后下发控制指令",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "帧头",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "0xEB90",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "固定帧头"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "帧计数",
+        "byteCount": 2,
+        "byteSequence": "2-3",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "与飞控数据帧计数同步"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "舵机地址",
+        "byteCount": 1,
+        "byteSequence": "4",
+        "valueRange": "0x01=副翼,0x02=升降舵,0x03=方向舵,0x04=襟翼",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "目标舵机编号"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "控制模式",
+        "byteCount": 1,
+        "byteSequence": "5",
+        "valueRange": "0x01=位置,0x02=速度,0x03=力矩",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "舵机控制模式"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "目标角度",
+        "byteCount": 4,
+        "byteSequence": "6-9",
+        "valueRange": "-45~45",
+        "unit": "°",
+        "dataType": "FLOAT",
+        "scale": "0.01",
+        "remark": "舵面目标偏转角度"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "角速度限制",
+        "byteCount": 4,
+        "byteSequence": "10-13",
+        "valueRange": "0~100",
+        "unit": "°/s",
+        "dataType": "FLOAT",
+        "scale": "0.1",
+        "remark": "舵面转动速度限制"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "力矩限制",
+        "byteCount": 2,
+        "byteSequence": "14-15",
+        "valueRange": "0~100",
+        "unit": "%",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "输出力矩百分比限制"
+      },
+      {
+        "id": "8",
+        "parentId": null,
+        "fieldName": "控制字",
+        "byteCount": 1,
+        "byteSequence": "16",
+        "valueRange": "Bit0=使能,Bit1=紧急停止,Bit2=回零",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "控制标志位"
+      },
+      {
+        "id": "9",
+        "parentId": null,
+        "fieldName": "校验和",
+        "byteCount": 1,
+        "byteSequence": "17",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "UINT8",
+        "scale": "1",
+        "remark": "累加和校验"
+      }
+    ]
+  }
+}

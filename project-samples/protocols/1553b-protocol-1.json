@@ -1,0 +1,143 @@
+{
+  "protocolName": "1553B协议-飞控指令下发",
+  "protocolType": "1553B",
+  "status": "0",
+  "description": "飞控计算机通过1553B总线向各子系统下发控制指令，BC→RT模式",
+  "protocolConfig": {
+    "sender": "飞控计算机(BC)",
+    "receiver": "任务计算机(RT01)",
+    "frequency": "50",
+    "frequencyLabel": "50Hz",
+    "speed": "1Mbps",
+    "speedLabel": "1Mbps",
+    "method": "BC-RT",
+    "methodLabel": "BC到RT",
+    "subAddress": "01",
+    "frameLength": "32",
+    "errorHandle": "retry",
+    "errorHandleLabel": "重传",
+    "notes": "1553B总线核心协议，飞控计算机作为BC向各RT下发飞行控制指令",
+    "fields": [
+      {
+        "id": "1",
+        "parentId": null,
+        "fieldName": "指令字",
+        "byteCount": 2,
+        "byteSequence": "0-1",
+        "valueRange": "",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "1553B命令字"
+      },
+      {
+        "id": "2",
+        "parentId": null,
+        "fieldName": "飞行模式",
+        "byteCount": 2,
+        "byteSequence": "2-3",
+        "valueRange": "0x01=手动,0x02=自动,0x03=半自动,0x04=应急",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "当前飞行控制模式"
+      },
+      {
+        "id": "3",
+        "parentId": null,
+        "fieldName": "目标航向",
+        "byteCount": 2,
+        "byteSequence": "4-5",
+        "valueRange": "0-3600",
+        "unit": "0.1°",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "目标航向角"
+      },
+      {
+        "id": "4",
+        "parentId": null,
+        "fieldName": "目标高度",
+        "byteCount": 2,
+        "byteSequence": "6-7",
+        "valueRange": "0-50000",
+        "unit": "m",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "目标飞行高度"
+      },
+      {
+        "id": "5",
+        "parentId": null,
+        "fieldName": "目标空速",
+        "byteCount": 2,
+        "byteSequence": "8-9",
+        "valueRange": "0-1000",
+        "unit": "m/s",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "目标指示空速"
+      },
+      {
+        "id": "6",
+        "parentId": null,
+        "fieldName": "俯仰指令",
+        "byteCount": 2,
+        "byteSequence": "10-11",
+        "valueRange": "-900~900",
+        "unit": "0.1°",
+        "dataType": "INT16",
+        "scale": "0.1",
+        "remark": "俯仰角指令"
+      },
+      {
+        "id": "7",
+        "parentId": null,
+        "fieldName": "横滚指令",
+        "byteCount": 2,
+        "byteSequence": "12-13",
+        "valueRange": "-1800~1800",
+        "unit": "0.1°",
+        "dataType": "INT16",
+        "scale": "0.1",
+        "remark": "横滚角指令"
+      },
+      {
+        "id": "8",
+        "parentId": null,
+        "fieldName": "油门指令",
+        "byteCount": 2,
+        "byteSequence": "14-15",
+        "valueRange": "0-1000",
+        "unit": "0.1%",
+        "dataType": "UINT16",
+        "scale": "0.1",
+        "remark": "油门开度指令"
+      },
+      {
+        "id": "9",
+        "parentId": null,
+        "fieldName": "控制字",
+        "byteCount": 2,
+        "byteSequence": "16-17",
+        "valueRange": "Bit0=自动驾驶,Bit1=自动油门,Bit2=航向保持,Bit3=高度保持",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "自动驾驶功能使能"
+      },
+      {
+        "id": "10",
+        "parentId": null,
+        "fieldName": "帧计数",
+        "byteCount": 2,
+        "byteSequence": "18-19",
+        "valueRange": "0-65535",
+        "unit": "",
+        "dataType": "UINT16",
+        "scale": "1",
+        "remark": "与LAN飞控数据帧同步"
+      }
+    ]
+  }
+}

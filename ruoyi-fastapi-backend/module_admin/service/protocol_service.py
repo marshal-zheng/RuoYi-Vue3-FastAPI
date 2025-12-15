@@ -1,5 +1,6 @@
 import io
 import uuid
+import json
 from typing import Dict, List, Optional, Any
 import pandas as pd
 from fastapi import UploadFile
@@ -991,20 +992,28 @@ class ProtocolService:
     async def protocol_import_preview_services(cls, file: UploadFile):
         """
         解析导入的协议配置文件
+        支持 Excel (.xlsx, .xls, .csv) 和 JSON (.json) 格式
         """
         if not file or not file.filename:
             raise ServiceException(message='请选择要导入的文件')
         suffix = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
-        if suffix not in ('xlsx', 'xls', 'csv'):
-            raise ServiceException(message='仅支持 .xlsx/.xls/.csv 格式的文件')
+        if suffix not in ('xlsx', 'xls', 'csv', 'json'):
+            raise ServiceException(message='仅支持 .xlsx/.xls/.csv/.json 格式的文件')
 
         content = await file.read()
         if not content:
             raise ServiceException(message='文件内容为空')
 
+        # JSON 格式处理
+        if suffix == 'json':
+            parsed = cls.__parse_json_protocol(content)
+            parsed['header'] = cls.__normalize_header_enums(parsed.get('header') or {}, parsed.get('protocolType'))
+            return parsed
+        
+        # Excel 格式处理
         sheet_map = cls.__read_workbook(content, suffix)
         protocol_type = cls.__extract_protocol_type(sheet_map)
-        header = cls.__extract_header(sheet_map)
+        header = cls.__normalize_header_enums(cls.__extract_header(sheet_map), protocol_type)
         fields = cls.__extract_fields(sheet_map)
         if not fields:
             raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
@@ -1020,10 +1029,10 @@ class ProtocolService:
     ):
         """
         导入协议配置service
-        解析导出的Excel文件并创建新协议
+        解析导出的Excel或JSON文件并创建新协议
 
         :param query_db: orm对象
-        :param file: 上传的Excel文件
+        :param file: 上传的Excel或JSON文件
         :param protocol_name: 协议名称（可选，若不提供则从文件名提取）
         :param operator: 操作人
         :return: 导入结果
@@ -1032,18 +1041,25 @@ class ProtocolService:
             raise ServiceException(message='请选择要导入的文件')
 
         suffix = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
-        if suffix not in ('xlsx', 'xls', 'csv'):
-            raise ServiceException(message='仅支持 .xlsx/.xls/.csv 格式的文件')
+        if suffix not in ('xlsx', 'xls', 'csv', 'json'):
+            raise ServiceException(message='仅支持 .xlsx/.xls/.csv/.json 格式的文件')
 
         content = await file.read()
         if not content:
             raise ServiceException(message='文件内容为空')
 
-        # 解析Excel文件
-        sheet_map = cls.__read_workbook(content, suffix)
-        protocol_type = cls.__extract_protocol_type(sheet_map)
-        header = cls.__extract_header(sheet_map)
-        fields = cls.__extract_fields(sheet_map)
+        # JSON 格式处理
+        if suffix == 'json':
+            parsed_data = cls.__parse_json_protocol(content)
+            protocol_type = parsed_data.get('protocolType', 'LAN')
+            header = cls.__normalize_header_enums(parsed_data.get('header', {}), protocol_type)
+            fields = parsed_data.get('fields', [])
+        else:
+            # Excel 格式处理
+            sheet_map = cls.__read_workbook(content, suffix)
+            protocol_type = cls.__extract_protocol_type(sheet_map)
+            header = cls.__normalize_header_enums(cls.__extract_header(sheet_map), protocol_type)
+            fields = cls.__extract_fields(sheet_map)
 
         if not fields:
             raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
@@ -1120,6 +1136,117 @@ class ProtocolService:
             raise ServiceException(message=f'解析导入文件失败: {exc}') from exc
 
     @staticmethod
+    def __parse_json_protocol(content: bytes) -> Dict[str, Any]:
+        """
+        解析 JSON 格式的协议配置文件
+        
+        JSON 格式示例:
+        {
+            "protocolType": "LAN",
+            "protocolName": "协议名称",
+            "header": {
+                "sender": "发送方",
+                "receiver": "接收方",
+                "frequency": "1000",
+                ...
+            },
+            "fields": [
+                {
+                    "code": "field1",
+                    "name": "字段1",
+                    "type": "string",
+                    "seq": 1,
+                    ...
+                },
+                ...
+            ]
+        }
+        
+        :param content: JSON 文件内容（字节）
+        :return: 包含 header, fields, protocolType 的字典
+        """
+        try:
+            # 尝试解码为 UTF-8
+            text_content = content.decode('utf-8')
+        except UnicodeDecodeError:
+            try:
+                # 尝试 UTF-8-sig (带 BOM)
+                text_content = content.decode('utf-8-sig')
+            except UnicodeDecodeError:
+                raise ServiceException(message='JSON 文件编码格式不支持，请使用 UTF-8 编码')
+        
+        try:
+            data = json.loads(text_content)
+        except json.JSONDecodeError as e:
+            raise ServiceException(message=f'JSON 格式错误: {str(e)}')
+        
+        if not isinstance(data, dict):
+            raise ServiceException(message='JSON 文件根节点必须是对象类型')
+        
+        # 提取协议类型
+        protocol_type = data.get('protocolType') or data.get('protocol_type') or 'LAN'
+        
+        # 获取 protocolConfig 嵌套对象（如果存在）
+        protocol_config = data.get('protocolConfig', {})
+        if not isinstance(protocol_config, dict):
+            protocol_config = {}
+        
+        # 提取头部配置
+        header = {}
+        # 支持多种可能的头部配置位置
+        header_source = (
+            data.get('header') or 
+            data.get('headerConfig') or 
+            data.get('messageConfig', {}).get('header') or
+            protocol_config.get('header') or
+            protocol_config.get('headerConfig') or
+            # 如果 protocolConfig 本身包含配置字段（平铺结构），也尝试提取
+            (protocol_config if protocol_config and 'fields' in protocol_config else None) or
+            {}
+        )
+        
+        if isinstance(header_source, dict):
+            # 过滤掉 protocolType 和 fields 字段（如果存在）
+            header = {k: v for k, v in header_source.items() if k not in ('protocolType', 'fields')}
+        else:
+            header = {}
+        
+        # 提取字段列表
+        fields = []
+        fields_source = (
+            data.get('fields') or 
+            data.get('fieldsConfig') or 
+            data.get('messageConfig', {}).get('fields') or
+            protocol_config.get('fields') or
+            protocol_config.get('fieldsConfig') or
+            []
+        )
+        
+        if isinstance(fields_source, list):
+            fields = fields_source
+        elif isinstance(fields_source, dict):
+            # 如果是字典，尝试转换为列表
+            fields = list(fields_source.values()) if fields_source else []
+        
+        # 验证字段列表
+        if not fields:
+            raise ServiceException(message='JSON 文件中未找到有效的字段列表（fields）')
+        
+        # 确保字段列表中的每个元素都是字典
+        validated_fields = []
+        for idx, field in enumerate(fields):
+            if isinstance(field, dict):
+                validated_fields.append(field)
+            else:
+                raise ServiceException(message=f'字段列表第 {idx + 1} 项格式错误，必须是对象类型')
+        
+        return {
+            'header': header,
+            'fields': validated_fields,
+            'protocolType': protocol_type
+        }
+
+    @staticmethod
     def __build_default_layout(header_fields: List[tuple]):
         layout: List[List[tuple]] = []
         buffer: List[tuple] = []
@@ -1153,6 +1280,154 @@ class ProtocolService:
         if value is None:
             return ''
         return str(value).strip()
+
+    @staticmethod
+    def __normalize_header_enums(header: Dict[str, Any], protocol_type: str) -> Dict[str, Any]:
+        """
+        将头部配置中的枚举/字典值从人类可读的标签（如 100Mbps、UDP、重传、BC-RT）
+        归一化为系统字典的 value（如 100M、udp_unicast、timeout_retry、bc_to_rt）。
+        """
+        if not isinstance(header, dict):
+            return header or {}
+
+        def _normalize_key(text: str) -> str:
+            return (
+                str(text)
+                .strip()
+                .lower()
+                .replace(' ', '')
+                .replace('—', '-')
+                .replace('－', '-')
+                .replace('→', '->')
+                .replace('至', '->')
+            )
+
+        def _map_value(raw_value: Any, mapping: Dict[str, str]) -> Any:
+            if raw_value is None:
+                return raw_value
+            raw_text = str(raw_value).strip()
+            if raw_text == '':
+                return raw_value
+            key = _normalize_key(raw_text)
+            return mapping.get(key, raw_value)
+
+        # 频率（跨协议共用）
+        frequency_map = {
+            'once': 'once',
+            '单次': 'once',
+            '10': '10',
+            '10ms': '10',
+            '10hz': '10',
+            '20': '20',
+            '20ms': '20',
+            '20hz': '20',
+            '50': '50',
+            '50ms': '50',
+            '50hz': '50',
+            '100': '100',
+            '100ms': '100',
+            '100hz': '100',
+            '160': '160',
+            '160ms': '160',
+            '200': '200',
+            '200ms': '200',
+            '500': '500',
+            '500ms': '500',
+            '1000': '1000',
+            '1000ms': '1000',
+            '1000hz': '1000',
+        }
+
+        # 速率（按协议区分）
+        lan_speed_map = {
+            '10m': '10M',
+            '10mbps': '10M',
+            '10mb/s': '10M',
+            '100m': '100M',
+            '100mbps': '100M',
+            '100mb/s': '100M',
+            '1g': '1000M',
+            '1gbps': '1000M',
+            '1000m': '1000M',
+            '1000mbps': '1000M',
+            '1000mb/s': '1000M',
+        }
+        b1553_speed_map = {
+            '1m': '1M',
+            '1mbps': '1M',
+            '1mb/s': '1M',
+        }
+
+        # 传输方式（按协议区分）
+        lan_method_map = {
+            'udp': 'udp_unicast',
+            'udp单播': 'udp_unicast',
+            'udp_unicast': 'udp_unicast',
+            'udp组播': 'udp_multicast',
+            'udpmulticast': 'udp_multicast',
+            'udp广播': 'udp_broadcast',
+            'udpbroadcast': 'udp_broadcast',
+            'tcp': 'tcp',
+        }
+        b1553_method_map = {
+            'bc-rt': 'bc_to_rt',
+            'bc->rt': 'bc_to_rt',
+            'bc到rt': 'bc_to_rt',
+            'rt-bc': 'rt_to_bc',
+            'rt->bc': 'rt_to_bc',
+            'rt到bc': 'rt_to_bc',
+            'rt-rt': 'rt_to_rt',
+            'rt->rt': 'rt_to_rt',
+            'rt到rt': 'rt_to_rt',
+        }
+
+        # 错误处理（通用）
+        error_handle_map = {
+            'none': 'none',
+            '不判断': 'none',
+            'retry': 'timeout_retry',
+            '重传': 'timeout_retry',
+            '超时重传': 'timeout_retry',
+            '超时重传3次,100ms': 'timeout_retry_3_100ms',
+            '超时重传3次，100ms': 'timeout_retry_3_100ms',
+            'crc': 'crc_check',
+            'crc校验': 'crc_check',
+            'parity_check': 'parity_check',
+            '奇偶校验': 'parity_check',
+            '-': 'default',
+            'default': 'default',
+        }
+
+        proto = (protocol_type or '').upper()
+        normalized = {**header}
+
+        if 'frequency' in normalized:
+            normalized['frequency'] = _map_value(normalized.get('frequency'), frequency_map)
+
+        speed_map = lan_speed_map if proto == 'LAN' else b1553_speed_map if proto == '1553B' else None
+        if speed_map and 'speed' in normalized:
+            normalized['speed'] = _map_value(normalized.get('speed'), speed_map)
+        # 兼容 baudRate 写入 speed
+        if speed_map and 'baudRate' in normalized and not normalized.get('speed'):
+            normalized['speed'] = _map_value(normalized.get('baudRate'), speed_map)
+
+        if 'method' in normalized:
+            method_map = lan_method_map if proto == 'LAN' else b1553_method_map if proto == '1553B' else None
+            if method_map:
+                normalized['method'] = _map_value(normalized.get('method'), method_map)
+
+        # 错误处理：处理 errorHandling / errorHandle 两种写法
+        if 'errorHandling' in normalized:
+            normalized['errorHandling'] = _map_value(normalized.get('errorHandling'), error_handle_map)
+        if 'errorHandle' in normalized:
+            normalized['errorHandle'] = _map_value(normalized.get('errorHandle'), error_handle_map)
+        # 同步两个 key，前端会优先使用 errorHandle
+        if normalized.get('errorHandle') is None and normalized.get('errorHandling') is not None:
+            normalized['errorHandle'] = normalized.get('errorHandling')
+        if normalized.get('errorHandling') is None and normalized.get('errorHandle') is not None:
+            normalized['errorHandling'] = normalized.get('errorHandle')
+
+        return normalized
 
     @staticmethod
     def __iter_label_value_pairs(row: pd.Series, columns):
