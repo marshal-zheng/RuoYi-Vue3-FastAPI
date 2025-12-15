@@ -19,7 +19,7 @@
       </div>
     </template>
 
-    <div class="alarm-panel-content panel-body">
+    <div class="alarm-panel-content panel-body h-full" style="height: 350px">
       <AlarmPanel
         :alarms="alarms"
         @alarm-click="$emit('alarm-click', $event)"

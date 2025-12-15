@@ -42,7 +42,7 @@
         </el-button>
       </div>
 
-      <div class="flex-1 min-h-0 overflow-hidden">
+      <div class="flex-1 min-h-0">
         <RecycleScroller
           v-if="filteredAlarms.length > 0"
           class="alarm-virtual-scroller alarm-scroll"
