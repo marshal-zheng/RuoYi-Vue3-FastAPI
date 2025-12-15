@@ -72,153 +72,154 @@
       </template>
 
       <template #table="{ grid }">
-        <div
-          v-loading="grid.loading"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 project-grid"
-        >
-          <el-card
-            v-for="project in grid.list"
-            :key="project.projectId"
-            class="group relative project-card"
-            shadow="hover"
-            :body-style="{ padding: '0' }"
-            :class="{
-              'border-[#0052d9] shadow-[0_0_0_2px_rgba(0,82,217,0.1)]': ids.includes(
-                project.projectId
-              ),
-              'hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]': !ids.includes(project.projectId),
-            }"
-          >
-            <div
-              v-if="ids.includes(project.projectId)"
-              class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0052d9] to-[#3370ff]"
-            />
-            <template #header>
-              <div class="flex items-start justify-between gap-3">
-                <div class="flex items-start gap-3 flex-1 min-w-0">
-                  <el-checkbox
-                    :model-value="ids.includes(project.projectId)"
-                    @change="toggleSelection(project)"
-                    @click.stop
-                    class="-mt-1 flex-shrink-0"
-                  />
-                  <div class="flex-1 min-w-0">
-                    <h3 class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight">
-                      <router-link
-                        :to="'/project/project-detail/index/' + project.projectId"
-                        class="hover:text-[#0052d9] transition-colors no-underline"
-                        @click.stop
-                      >
-                        {{ project.projectName }}
-                      </router-link>
-                    </h3>
-                    <p class="text-xs text-[#86909c] flex items-center gap-1">
-                      <ZxIcon icon="Tickets" :size="14" color="#86909c" />
-                      <span>编号: {{ project.projectId }}</span>
-                    </p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2 mr-2">
-                  <ZxIcon
-                    v-if="checkPermi(['project:project:query'])"
-                    icon="View"
-                    :size="16"
-                    tooltip="查看详情"
-                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
-                    @click.stop="handleDetail(project)"
-                  />
-                  <ZxIcon
-                    v-if="checkPermi(['project:project:edit'])"
-                    icon="Edit"
-                    :size="16"
-                    tooltip="编辑工程"
-                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
-                    @click.stop="handleEdit(project)"
-                  />
-                  <ZxIcon
-                    v-if="checkPermi(['project:project:query'])"
-                    icon="Download"
-                    :size="16"
-                    tooltip="导出工程"
-                    class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
-                    @click.stop="handleExport(project)"
-                  />
-                </div>
-                <ZxMoreAction
-                  class="flex-shrink-0"
-                  :list="getProjectMoreActionList()"
-                  @select="handleMoreActionSelect($event, project)"
-                />
-              </div>
-            </template>
-
-            <div class="px-5 py-4">
-              <div class="mb-4">
-                <div class="text-[#4e5969] text-[13px] leading-relaxed line-clamp-2 min-h-[40px]">
-                  {{ project.projectDesc || '暂无工程描述信息' }}
-                </div>
-              </div>
-
-              <div class="space-y-2.5 mb-4">
-                <div class="flex items-center text-xs">
-                  <div class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0">
-                    <ZxIcon icon="User" :size="14" color="#86909c" />
-                    <span>创建人</span>
-                  </div>
-                  <span class="text-[#1d2129] font-medium">{{ project.createBy || '-' }}</span>
-                </div>
-                <div class="flex items-center text-xs">
-                  <div class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0">
-                    <ZxIcon icon="Clock" :size="14" color="#86909c" />
-                    <span>创建时间</span>
-                  </div>
-                  <span class="text-[#4e5969]">{{
-                    parseTime(project.createTime, '{y}-{m}-{d}') || '-'
-                  }}</span>
-                </div>
-              </div>
-            </div>
-
-            <template #footer>
-              <div class="flex items-center gap-2">
-                <ZxButton
-                  @click.stop="handleDetail(project)"
-                  v-hasPermi="['project:project:query']"
-                  type="default"
-                  icon="Document"
-                  class="flex-1"
-                  >详情</ZxButton
-                >
-                <ZxButton
-                  @click.stop="handleDelete(project)"
-                  v-hasPermi="['project:project:remove']"
-                  type="danger"
-                  icon="Delete"
-                  class="flex-1"
-                  >删除</ZxButton
-                >
-              </div>
-            </template>
-          </el-card>
-        </div>
-
-        <div v-if="!grid.loading && grid.list.length === 0" class="text-center py-16 px-4">
+        <div class="project-grid__scroll" v-loading="grid.loading">
           <div
-            class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#f7f8fa] mb-4"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-5 project-grid"
           >
-            <ZxIcon icon="InfoFilled" :size="40" color="#c9cdd4" />
+            <el-card
+              v-for="project in grid.list"
+              :key="project.projectId"
+              class="group relative project-card"
+              shadow="hover"
+              :body-style="{ padding: '0' }"
+              :class="{
+                'border-[#0052d9] shadow-[0_0_0_2px_rgba(0,82,217,0.1)]': ids.includes(
+                  project.projectId
+                ),
+                'hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]': !ids.includes(project.projectId),
+              }"
+            >
+              <div
+                v-if="ids.includes(project.projectId)"
+                class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0052d9] to-[#3370ff]"
+              />
+              <template #header>
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3 flex-1 min-w-0">
+                    <el-checkbox
+                      :model-value="ids.includes(project.projectId)"
+                      @change="toggleSelection(project)"
+                      @click.stop
+                      class="-mt-1 flex-shrink-0"
+                    />
+                    <div class="flex-1 min-w-0">
+                      <h3 class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight">
+                        <router-link
+                          :to="'/project/project-detail/index/' + project.projectId"
+                          class="hover:text-[#0052d9] transition-colors no-underline"
+                          @click.stop
+                        >
+                          {{ project.projectName }}
+                        </router-link>
+                      </h3>
+                      <p class="text-xs text-[#86909c] flex items-center gap-1">
+                        <ZxIcon icon="Tickets" :size="14" color="#86909c" />
+                        <span>编号: {{ project.projectId }}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-2 mr-2">
+                    <ZxIcon
+                      v-if="checkPermi(['project:project:query'])"
+                      icon="View"
+                      :size="16"
+                      tooltip="查看详情"
+                      class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                      @click.stop="handleDetail(project)"
+                    />
+                    <ZxIcon
+                      v-if="checkPermi(['project:project:edit'])"
+                      icon="Edit"
+                      :size="16"
+                      tooltip="编辑工程"
+                      class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                      @click.stop="handleEdit(project)"
+                    />
+                    <ZxIcon
+                      v-if="checkPermi(['project:project:query'])"
+                      icon="Download"
+                      :size="16"
+                      tooltip="导出工程"
+                      class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                      @click.stop="handleExport(project)"
+                    />
+                  </div>
+                  <ZxMoreAction
+                    class="flex-shrink-0"
+                    :list="getProjectMoreActionList()"
+                    @select="handleMoreActionSelect($event, project)"
+                  />
+                </div>
+              </template>
+
+              <div class="px-5 py-4">
+                <div class="mb-4">
+                  <div class="text-[#4e5969] text-[13px] leading-relaxed line-clamp-2 min-h-[40px]">
+                    {{ project.projectDesc || '暂无工程描述信息' }}
+                  </div>
+                </div>
+
+                <div class="space-y-2.5 mb-4">
+                  <div class="flex items-center text-xs">
+                    <div class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0">
+                      <ZxIcon icon="User" :size="14" color="#86909c" />
+                      <span>创建人</span>
+                    </div>
+                    <span class="text-[#1d2129] font-medium">{{ project.createBy || '-' }}</span>
+                  </div>
+                  <div class="flex items-center text-xs">
+                    <div class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0">
+                      <ZxIcon icon="Clock" :size="14" color="#86909c" />
+                      <span>创建时间</span>
+                    </div>
+                    <span class="text-[#4e5969]">{{
+                      parseTime(project.createTime, '{y}-{m}-{d}') || '-'
+                    }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <template #footer>
+                <div class="flex items-center gap-2">
+                  <ZxButton
+                    @click.stop="handleDetail(project)"
+                    v-hasPermi="['project:project:query']"
+                    type="default"
+                    icon="Document"
+                    class="flex-1"
+                    >详情</ZxButton
+                  >
+                  <ZxButton
+                    @click.stop="handleDelete(project)"
+                    v-hasPermi="['project:project:remove']"
+                    type="danger"
+                    icon="Delete"
+                    class="flex-1"
+                    >删除</ZxButton
+                  >
+                </div>
+              </template>
+            </el-card>
           </div>
-          <h3 class="text-base font-semibold text-[#1d2129] mb-2">暂无工程</h3>
-          <p class="text-sm text-[#86909c] mb-6 max-w-md mx-auto">
-            还没有创建任何工程，点击下方按钮开始创建您的第一个工程
-          </p>
-          <ZxButton
-            type="primary"
-            icon="Plus"
-            @click="handleAdd"
-            v-hasPermi="['project:project:add']"
-            >创建工程</ZxButton
-          >
+
+          <div v-if="!grid.loading && grid.list.length === 0" class="text-center py-16 px-4">
+            <div
+              class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#f7f8fa] mb-4"
+            >
+              <ZxIcon icon="InfoFilled" :size="40" color="#c9cdd4" />
+            </div>
+            <h3 class="text-base font-semibold text-[#1d2129] mb-2">暂无工程</h3>
+            <p class="text-sm text-[#86909c] mb-6 max-w-md mx-auto">
+              还没有创建任何工程，点击下方按钮开始创建您的第一个工程
+            </p>
+            <ZxButton
+              type="primary"
+              icon="Plus"
+              @click="handleAdd"
+              v-hasPermi="['project:project:add']"
+              >创建工程</ZxButton
+            >
+          </div>
         </div>
       </template>
     </ZxGridList>
@@ -479,6 +480,21 @@ async function handleImportFileChange(event) {
 }
 </script>
 <style scoped>
+.project-grid__scroll {
+  max-height: calc(100vh - 240px);
+  overflow-y: auto;
+  padding: 6px 4px 16px;
+}
+
+.project-grid__scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.project-grid__scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.18);
+  border-radius: 999px;
+}
+
 .project-grid :deep(.el-card) {
   border-radius: 8px;
 }
