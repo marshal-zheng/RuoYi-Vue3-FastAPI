@@ -52,8 +52,12 @@
       :edit-config="{ trigger: 'click', mode: 'cell' }"
       :checkbox-config="{ checkField: 'checked' }"
       :span-method="fieldSpanMethod"
+      :row-class-name="getRowClassName"
+      :cell-class-name="getCellClassName"
+      :tooltip-config="tooltipConfig"
       max-height="500"
       class="fields-table text-sm"
+      @edit-closed="handleEditClosed"
     >
       <vxe-column type="checkbox" fixed="left" width="50" />
       <vxe-column type="seq" title="序号" tree-node width="80" />
@@ -102,6 +106,13 @@
       </vxe-column>
     </vxe-table>
 
+    <!-- 校验诊断面板 -->
+    <VxeValidationPanel
+      :issues="validationIssues"
+      :auto-expand="true"
+      @issue-click="handleIssueClick"
+    />
+
     <!-- 附注区域 -->
     <div class="notes-section mt-4">
       <div class="notes-label font-medium mb-2">附注</div>
@@ -120,6 +131,11 @@
 import { ref, watch, reactive } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
+import {
+  useVxeTableValidation,
+  VxeValidationPanel,
+  required,
+} from '@/components/VxeTableValidation';
 
 const props = defineProps<{
   modelValue?: any;
@@ -134,6 +150,38 @@ const emit = defineEmits<{
 }>();
 
 const tableRef = ref<VxeTableInstance>();
+
+// 初始化校验框架
+const {
+  issues: validationIssues,
+  errorCount,
+  validate,
+  getRowClassName,
+  getCellClassName,
+  getCellTooltip,
+} = useVxeTableValidation({
+  rules: {
+    fieldName: [required('信息名称不能为空')],
+  },
+  fieldLabels: {
+    fieldName: '信息名称',
+    byteCount: '字节数',
+    byteSequence: '字节序号',
+    valueRange: '值域及含义',
+    unit: '量纲',
+    dataType: '数据类型',
+    scale: '比例尺',
+    remark: '备注',
+  },
+});
+
+// tooltip 配置：当单元格有校验错误时显示错误提示
+const tooltipConfig = {
+  showAll: true,
+  contentMethod: ({ row, column, rowIndex }: any) => {
+    return getCellTooltip(rowIndex, column?.field);
+  },
+};
 
 const defaultConfig = {
   sender: '',
@@ -350,6 +398,10 @@ watch(
   (newVal) => {
     syncConfigTableRows();
     emit('update:modelValue', newVal);
+    // 自动校验
+    if (Array.isArray(localConfig.fields) && localConfig.fields.length > 0) {
+      validate(localConfig.fields);
+    }
   },
   { deep: true }
 );
@@ -413,14 +465,40 @@ const removeSelectRow = async () => {
     .catch(() => {});
 };
 
+// 编辑完成后自动校验
+const handleEditClosed = () => {
+  setTimeout(() => {
+    if (Array.isArray(localConfig.fields) && localConfig.fields.length > 0) {
+      validate(localConfig.fields);
+    }
+  }, 100);
+};
+
+// 点击问题项跳转到对应单元格
+const handleIssueClick = (issue: any) => {
+  if (issue.rowIndex < 0) return;
+  const $table = tableRef.value;
+  if (!$table) return;
+  const row = localConfig.fields[issue.rowIndex];
+  if (!row) return;
+  $table.scrollToRow(row);
+  $table.setCurrentRow(row);
+  if (issue.field) {
+    $table.setEditCell(row, issue.field);
+  }
+};
+
 /**
  * 校验数据（供父组件在保存前调用）
- * TODO: 后续可集成通用校验框架 useVxeTableValidation
  */
 const validateBeforeSave = async (): Promise<boolean> => {
-  // 基础校验：检查是否有字段
   if (!localConfig.fields || localConfig.fields.length === 0) {
     return true;
+  }
+  const result = await validate(localConfig.fields);
+  if (!result.valid) {
+    ElMessage.error(`校验失败：发现 ${result.errorCount} 个错误，请修正后再保存`);
+    return false;
   }
   return true;
 };
@@ -429,6 +507,7 @@ defineExpose({
   insertRow,
   removeSelectRow,
   validateBeforeSave,
+  validationIssues,
 });
 </script>
 

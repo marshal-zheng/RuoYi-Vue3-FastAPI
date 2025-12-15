@@ -1,36 +1,36 @@
 <template>
-  <el-drawer
-    v-model="visible"
+  <ZxDrawer
+    v-bind="drawer.drawerProps.value"
+    v-on="drawer.drawerEvents.value"
     :title="`配置协议 - ${portData?.interfaceName || '端口'}`"
     :size="800"
-    :before-close="handleClose"
-    destroy-on-close
+    placement="right"
   >
     <el-form
       ref="formRef"
-      :model="formData"
+      :model="drawer.state.data"
       :rules="rules"
       label-width="100px"
       label-position="left"
     >
       <!-- 端口信息展示 -->
       <el-form-item label="端口名称">
-        <el-input v-model="formData.interfaceName" disabled />
+        <el-input v-model="drawer.state.data.interfaceName" disabled />
       </el-form-item>
 
       <el-form-item label="总线类型">
-        <el-tag :type="getInterfaceTypeTag(formData.interfaceType)">
-          {{ formData.interfaceType }}
+        <el-tag :type="getInterfaceTypeTag(drawer.state.data.interfaceType)">
+          {{ drawer.state.data.interfaceType }}
         </el-tag>
       </el-form-item>
 
       <!-- 协议选择 -->
       <el-form-item label="协议类型" prop="protocolType">
         <ProtocolTypeSelector
-          v-model="formData.protocolType"
+          v-model="drawer.state.data.protocolType"
           placeholder="请选择协议类型"
           style="width: 100%"
-          :bus-type="formData.interfaceType"
+          :bus-type="drawer.state.data.interfaceType"
           @change="handleProtocolTypeChange"
         />
       </el-form-item>
@@ -38,7 +38,7 @@
       <!-- 数据速率 -->
       <el-form-item label="数据速率" prop="dataRate">
         <el-input
-          v-model="formData.dataRate"
+          v-model="drawer.state.data.dataRate"
           placeholder="例如：9600bps, 1Mbps"
           clearable
           maxlength="50"
@@ -48,7 +48,7 @@
       <!-- 协议描述 -->
       <el-form-item label="协议描述">
         <el-input
-          v-model="formData.description"
+          v-model="drawer.state.data.description"
           type="textarea"
           placeholder="请输入协议描述"
           :rows="3"
@@ -59,7 +59,7 @@
     </el-form>
 
     <!-- 协议格式配置 -->
-    <div v-if="formData.protocolType" class="protocol-template-section">
+    <div v-if="drawer.state.data.protocolType" class="protocol-template-section">
       <el-divider content-position="left">
         <span class="template-title text-[16px] font-semibold text-[#303133]">协议格式配置</span>
       </el-divider>
@@ -67,8 +67,8 @@
         :is="currentTemplateComponent"
         ref="templateRef"
         v-if="currentTemplateComponent"
-        v-model="formData.protocolConfig"
-        :protocol-type="formData.protocolType"
+        v-model="drawer.state.data.protocolConfig"
+        :protocol-type="drawer.state.data.protocolType"
       />
       <el-alert
         v-else
@@ -79,18 +79,12 @@
       />
     </div>
 
-    <template #footer>
-      <div class="drawer-footer">
-        <el-button @click="handleClose">取消</el-button>
-        <el-button type="primary" @click="handleSubmit" :loading="submitLoading"> 确定 </el-button>
-      </div>
-    </template>
-  </el-drawer>
+  </ZxDrawer>
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick, computed } from 'vue';
-import { ElMessage } from 'element-plus';
+import { ref, computed } from 'vue';
+import { useDrawer } from '@zxio/zxui';
 import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
 import EthernetProtocolTemplate from '@/components/business/Protocol/templates/EthernetProtocolTemplate.vue';
 import RS422ProtocolTemplate from '@/components/business/Protocol/templates/RS422ProtocolTemplate.vue';
@@ -98,33 +92,49 @@ import CANProtocolTemplate from '@/components/business/Protocol/templates/CANPro
 import Protocol1553BTemplate from '@/components/business/Protocol/templates/Protocol1553BTemplate.vue';
 
 const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
   portData: {
     type: Object,
     default: () => ({}),
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'submit']);
+const emit = defineEmits(['submit']);
 
-const visible = ref(false);
 const formRef = ref(null);
-const templateRef = ref(null); // 协议模板组件引用
-const submitLoading = ref(false);
+const templateRef = ref(null);
 
-// 表单数据
-const formData = reactive({
-  interfaceId: null,
-  interfaceName: '',
-  interfaceType: '',
-  busType: '',
-  protocolType: '',
-  dataRate: '',
-  description: '',
-  protocolConfig: {},
+const drawer = useDrawer({
+  size: 800,
+  placement: 'right',
+  okText: '确定',
+  formRef,
+  formModel: computed(() => drawer.state.data),
+  preValidate: true,
+  autoScrollToError: true,
+  autoResetForm: true,
+  defaultData: () => ({
+    interfaceId: null,
+    interfaceName: '',
+    interfaceType: '',
+    busType: '',
+    protocolType: '',
+    dataRate: '',
+    description: '',
+    protocolConfig: {},
+  }),
+  async onConfirm() {
+    // 校验协议模板（VXE-Table 表格校验）
+    if (templateRef.value?.validateBeforeSave) {
+      const templateValid = await templateRef.value.validateBeforeSave();
+      if (!templateValid) {
+        return false;
+      }
+    }
+
+    const protocolData = { ...drawer.state.data };
+    emit('submit', protocolData);
+    return true;
+  },
 });
 
 // 表单验证规则
@@ -133,46 +143,9 @@ const rules = {
   dataRate: [{ max: 50, message: '数据速率不能超过50个字符', trigger: 'blur' }],
 };
 
-// 监听 modelValue 变化
-watch(
-  () => props.modelValue,
-  (newVal) => {
-    visible.value = newVal;
-    if (newVal && props.portData) {
-      initFormData();
-    }
-  },
-  { immediate: true }
-);
-
-// 监听 visible 变化
-watch(visible, (newVal) => {
-  emit('update:modelValue', newVal);
-});
-
-// 初始化表单数据
-const initFormData = () => {
-  nextTick(() => {
-    const port = props.portData || {};
-    formData.interfaceId = port.interfaceId || port.id;
-    formData.interfaceName = port.interfaceName || '';
-    formData.interfaceType = port.interfaceType || port.busType || '';
-    formData.busType = port.busType || port.interfaceType || '';
-    formData.protocolType = port.protocolType || '';
-    formData.dataRate = port.dataRate || '';
-    formData.description = port.description || '';
-    formData.protocolConfig = port.protocolConfig || {};
-
-    // 清除验证状态
-    if (formRef.value) {
-      formRef.value.clearValidate();
-    }
-  });
-};
-
 // 获取当前协议模板组件
 const currentTemplateComponent = computed(() => {
-  const type = String(formData.protocolType || '').toLowerCase();
+  const type = String(drawer.state.data.protocolType || '').toLowerCase();
   switch (type) {
     case 'ethernet':
       return EthernetProtocolTemplate;
@@ -190,7 +163,7 @@ const currentTemplateComponent = computed(() => {
 
 // 协议类型改变时清空配置
 const handleProtocolTypeChange = () => {
-  formData.protocolConfig = {};
+  drawer.state.data.protocolConfig = {};
 };
 
 // 获取接口类型标签
@@ -205,68 +178,30 @@ const getInterfaceTypeTag = (type) => {
   return typeMap[type] || 'info';
 };
 
-// 关闭抽屉
-const handleClose = () => {
-  visible.value = false;
+// 打开抽屉
+const open = (portData) => {
+  const port = portData || props.portData || {};
+  drawer.open({
+    interfaceId: port.interfaceId || port.id,
+    interfaceName: port.interfaceName || '',
+    interfaceType: port.interfaceType || port.busType || '',
+    busType: port.busType || port.interfaceType || '',
+    protocolType: port.protocolType || '',
+    dataRate: port.dataRate || '',
+    description: port.description || '',
+    protocolConfig: port.protocolConfig || {},
+  });
 };
 
-// 提交表单
-const handleSubmit = async () => {
-  if (!formRef.value) return;
-
-  try {
-    // 1. 先校验 Element Plus 表单
-    await formRef.value.validate();
-
-    // 2. 校验协议模板（VXE-Table 表格校验）
-    if (templateRef.value?.validateBeforeSave) {
-      const templateValid = await templateRef.value.validateBeforeSave();
-      if (!templateValid) {
-        // 校验失败，阻断保存
-        return;
-      }
-    }
-
-    submitLoading.value = true;
-
-    // 组装协议数据
-    const protocolData = {
-      interfaceId: formData.interfaceId,
-      interfaceName: formData.interfaceName,
-      interfaceType: formData.interfaceType,
-      busType: formData.busType,
-      protocolType: formData.protocolType,
-      dataRate: formData.dataRate,
-      description: formData.description,
-      protocolConfig: formData.protocolConfig,
-    };
-
-    emit('submit', protocolData);
-
-    // 不在这里显示成功消息，由父组件处理
-    handleClose();
-  } catch (error) {
-    // 校验失败
-  } finally {
-    submitLoading.value = false;
-  }
-};
+defineExpose({
+  open,
+  close: drawer.close,
+});
 </script>
 
 <style lang="less" scoped>
-.drawer-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-}
-
 :deep(.el-drawer__body) {
   padding: 20px;
-}
-
-:deep(.el-drawer__footer) {
-  padding: 16px 20px;
-  border-top: 1px solid var(--el-border-color-light);
 }
 
 .protocol-template-section {
@@ -278,4 +213,5 @@ const handleSubmit = async () => {
     color: #303133;
   }
 }
+
 </style>

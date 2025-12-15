@@ -69,6 +69,7 @@
       :span-method="fieldSpanMethod"
       :row-class-name="getRowClassName"
       :cell-class-name="getCellClassName"
+      :tooltip-config="tooltipConfig"
       max-height="500"
       class="fields-table text-sm"
       @edit-closed="handleEditClosed"
@@ -125,6 +126,13 @@
       </vxe-column>
     </vxe-table>
 
+    <!-- 校验诊断面板 -->
+    <VxeValidationPanel
+      :issues="validationIssues"
+      :auto-expand="true"
+      @issue-click="handleIssueClick"
+    />
+
     <!-- 附注区域 -->
     <div class="notes-section mt-4">
       <div class="notes-label font-medium mb-2">附注</div>
@@ -136,13 +144,6 @@
         class="notes-input"
       />
     </div>
-
-    <!-- 校验诊断面板 - 使用通用组件 -->
-    <VxeValidationPanel
-      :issues="validationIssues"
-      :auto-expand="true"
-      @issue-click="handleIssueClick"
-    />
   </div>
 </template>
 
@@ -315,6 +316,14 @@ const DATA_TYPE_BYTE_LENGTH_MAP: Record<string, number> = {
   FLOAT: 4,
   DOUBLE: 8,
   BOOL: 1,
+};
+
+// tooltip 配置：当单元格有校验错误时显示错误提示
+const tooltipConfig = {
+  showAll: true,
+  contentMethod: ({ row, column, rowIndex }: any) => {
+    return getCellTooltip(rowIndex, column?.field);
+  },
 };
 
 const defaultConfig = {
@@ -759,13 +768,9 @@ const handleIssueClick = (issue: any) => {
   const row = localConfig.fields[issue.rowIndex];
   if (!row) return;
 
-  // 滚动到对应行
   $table.scrollToRow(row);
-
-  // 高亮该行
   $table.setCurrentRow(row);
 
-  // 如果有字段信息，尝试激活编辑
   if (issue.field) {
     $table.setEditCell(row, issue.field);
   }
