@@ -111,10 +111,15 @@ export function useSimulationWebSocket() {
         statusData.value = data;
         break;
 
-      case 'messages':
-        // 追加新报文，保持最新的200条（优化内存与可回溯性）
-        messagesData.value = [...messagesData.value, ...data].slice(-200);
+      case 'messages': {
+        // 追加新报文，保留滑动窗口，避免前端内存爆炸
+        const WS_MESSAGE_LIMIT = 50000;
+        const merged = [...messagesData.value, ...data];
+        messagesData.value = WS_MESSAGE_LIMIT
+          ? merged.slice(-WS_MESSAGE_LIMIT)
+          : merged;
         break;
+      }
 
       case 'bandwidth': {
         // 追加带宽数据，保持最新600秒数据（对齐长窗口需求）

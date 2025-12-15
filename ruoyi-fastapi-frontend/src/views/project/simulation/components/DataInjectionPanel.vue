@@ -40,7 +40,7 @@
             :label="strategy.label"
           >
             <div class="flex items-center gap-2">
-              <el-icon :class="strategy.iconClass"><component :is="strategy.icon" /></el-icon>
+              <!-- <el-icon :class="strategy.iconClass"><component :is="strategy.icon" /></el-icon> -->
               <div class="flex flex-col">
                 <span class="option-label">{{ strategy.label }}</span>
                 <span class="option-desc">{{ strategy.description }}</span>

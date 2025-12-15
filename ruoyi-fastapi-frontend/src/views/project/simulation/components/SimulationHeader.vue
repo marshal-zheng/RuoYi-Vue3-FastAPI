@@ -82,7 +82,7 @@
       </div>
 
       <!-- 速度调节 -->
-      <div class="flex items-center gap-3 pl-4 border-l border-slate-700/50">
+      <!-- <div class="flex items-center gap-3 pl-4 border-l border-slate-700/50">
         <span class="text-xs font-medium text-slate-400 tracking-wider">速度</span>
         <div class="flex items-center gap-1 p-0.5 rounded-md bg-slate-800/50 border border-slate-700/50">
           <button
@@ -99,7 +99,7 @@
             {{ speed }}x
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- 右侧：状态和时间 -->

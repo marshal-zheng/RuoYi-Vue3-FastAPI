@@ -8,3 +8,4 @@ export { default as ProtocolTypeSelector } from "./ProtocolTypeSelector.vue";
 export { default as FaultTypeSelector } from "./FaultTypeSelector.vue";
 export { default as LogLevelSelector } from "./LogLevelSelector.vue";
 export { default as NodeSelector } from "./NodeSelector.vue";
+export { default as PortPairSelector } from "./PortPairSelector.vue";

@@ -51,9 +51,10 @@ const dialog = useDialog({
       return false;
     }
 
-    // 验证表单
+    // 验证表单（包含协议模板校验）
     const valid = await messageConfigRef.value.validate();
     if (!valid) {
+      // 校验失败，不保存并关闭对话框
       return false;
     }
 

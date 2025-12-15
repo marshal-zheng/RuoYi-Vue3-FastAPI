@@ -452,14 +452,14 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
 
   /**
    * VXE-Table 4.x valid-config 配置
-   * message: 'inline' 在单元格下方显示校验消息（更可靠）
+   * message: 'tooltip' 鼠标悬停时显示校验消息（右上角三角号触发）
    */
   const vxeValidConfig = {
     // 显示校验消息
     showMessage: true,
     // VXE-Table 4.x: 'tooltip' | 'inline' | 'default'
-    // 'inline' 更稳定，在单元格下方显示
-    message: 'inline' as const,
+    // 'tooltip' 鼠标悬停时显示，配合右上角三角号使用
+    message: 'tooltip' as const,
     // 'single' 只显示第一个错误，'full' 显示所有
     msgMode: 'single' as const,
     // 校验主题：'beautify'(红底白字) | 'normal'(白底红字)

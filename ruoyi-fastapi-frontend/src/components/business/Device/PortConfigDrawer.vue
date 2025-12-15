@@ -47,7 +47,10 @@ const drawer = useDrawer({
         return;
       }
       const valid = await paramsConfigTabRef.value.validate();
-      if (!valid) return;
+      if (!valid) {
+        // 校验失败，不保存并关闭抽屉
+        return false;
+      }
       const params = paramsConfigTabRef.value.getFormData();
       dataToSubmit.params = params;
       emit('submit', dataToSubmit);
@@ -57,14 +60,18 @@ const drawer = useDrawer({
         emit('update:modelValue', false);
         return;
       }
+      // 验证表单（包含协议模板校验）
       const valid = await messageConfigTabRef.value.validate();
-      if (!valid) return;
+      if (!valid) {
+        // 校验失败，不保存并关闭抽屉
+        return false;
+      }
       const messageConfig = messageConfigTabRef.value.getFormData();
       dataToSubmit.messageConfig = messageConfig;
       emit('submit', dataToSubmit);
     }
     handleClose();
-    return dataToSubmit;
+    return true;
   },
   onConfirmError: (_e) => {},
 });

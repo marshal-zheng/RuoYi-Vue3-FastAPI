@@ -194,6 +194,14 @@ function normalizeHeader(rawConfig = {}) {
   if (cfg.sendDuration === undefined && cfg.duration !== undefined) {
     cfg.sendDuration = cfg.duration;
   }
+  // CAN 协议 ID 字段兼容（后端可能用 id、canId、frameId）
+  if (cfg.canId === undefined) {
+    cfg.canId = cfg.id || cfg.frameId || '';
+  }
+  // 1553B 协议子地址字段兼容
+  if (cfg.subAddress === undefined) {
+    cfg.subAddress = cfg.sub_address || cfg.subaddress || '';
+  }
   return cfg;
 }
 
@@ -225,7 +233,14 @@ function getFormData() {
       errorHandle: config.errorHandle || '',
       errorHandleLabel: config.errorHandleLabel || '',
       errorHandlingLabel: config.errorHandleLabel || '',
+      // 以太网协议字段
       port: config.port || '',
+      // CAN 协议字段
+      canId: config.canId || '',
+      id: config.canId || '',  // 兼容后端可能使用 id 字段
+      // 1553B 协议字段
+      subAddress: config.subAddress || '',
+      // 通用
       notes: config.notes || '',
     },
     fields: config.fields || [],
@@ -242,6 +257,15 @@ async function validate() {
       return false;
     }
   }
+
+  // 校验协议模板（VXE-Table 表格校验）
+  if (templateRef.value?.validateBeforeSave) {
+    const templateValid = await templateRef.value.validateBeforeSave();
+    if (!templateValid) {
+      return false;
+    }
+  }
+
   return true;
 }
 
@@ -264,15 +288,21 @@ function initializeData() {
       receiver: config.receiver || '',
       frequency: config.frequency || '',
       frequencyLabel: config.frequencyLabel || '',
-      speed: config.baudRate || '',
+      speed: config.baudRate || config.speed || '',
       speedLabel: config.speedLabel || '',
       method: config.method || '',
       methodLabel: config.methodLabel || '',
-      sendDuration: config.duration || null,
+      sendDuration: config.duration || config.sendDuration || null,
       frameLength: config.frameLength || null,
-      errorHandle: config.errorHandling || '',
+      errorHandle: config.errorHandling || config.errorHandle || '',
       errorHandleLabel: config.errorHandleLabel || config.errorHandlingLabel || '',
+      // 以太网协议字段
       port: config.port || '',
+      // CAN 协议字段
+      canId: config.canId || config.id || config.frameId || '',
+      // 1553B 协议字段
+      subAddress: config.subAddress || config.sub_address || config.subaddress || '',
+      // 通用
       notes: config.notes || '',
       fields,
     };
@@ -333,6 +363,7 @@ defineExpose({
   clearValidate,
   handleAddField,
   handleDeleteSelected,
+  templateRef, // 暴露协议模板 ref，供父组件访问校验状态
 });
 </script>
 

@@ -2,7 +2,7 @@
   <div class="flex flex-col h-full text-slate-300">
     <!-- 工具栏 -->
   <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
-      <el-select
+      <ProtocolTypeSelector
         v-model="localFilter.protocolType"
         placeholder="协议"
         clearable
@@ -10,12 +10,7 @@
         class="!w-20 sim-select-dark flex-shrink-0"
         popper-class="sim-popper-dark"
         @change="handleFilterChange"
-      >
-        <el-option label="1553B" value="1553B" />
-        <el-option label="CAN" value="CAN" />
-        <el-option label="RS422" value="RS422" />
-        <el-option label="LAN" value="LAN" />
-      </el-select>
+      />
       <el-select
         v-model="localFilter.senderNode"
         placeholder="源节点"
@@ -50,6 +45,17 @@
           :value="node.value"
         />
       </el-select>
+      <PortPairSelector
+        v-model="localFilter.portPair"
+        :options="portPairOptions"
+        placeholder="源端口 → 目标端口"
+        size="small"
+        class="!w-40 sim-select-dark flex-shrink-0"
+        popper-class="sim-popper-dark"
+        clearable
+        filterable
+        @change="handleFilterChange"
+      />
       <!-- <el-input
         v-model="localFilter.keyword"
         placeholder="关键字"
@@ -282,6 +288,7 @@
 import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed, h } from 'vue'
 import { ArrowDown, Document, Close } from '@element-plus/icons-vue'
 import { formatTimestamp } from '../utils/timeFormatter'
+import { PortPairSelector, ProtocolTypeSelector } from './selector'
 
 const props = defineProps({
   messages: {
@@ -326,6 +333,7 @@ const localFilter = ref({
   protocolType: '',
   senderNode: '',
   receiverNode: '',
+  portPair: '',
   keyword: '',
   errorOnly: false,
 })
@@ -374,116 +382,14 @@ const protocolTokens = computed(() => {
   return tokens
 })
 
-const filteredMessages = computed(() => {
-  const keyword = (localFilter.value.keyword || '').toLowerCase().trim()
-  return safeMessages.value.filter((m) => {
-    if (localFilter.value.protocolType && m.protocolType !== localFilter.value.protocolType) {
-      return false
-    }
-    if (localFilter.value.senderNode) {
-      const sender = m.senderNodeId || m.senderNodeName
-      if (sender !== localFilter.value.senderNode) return false
-    }
-    if (localFilter.value.receiverNode) {
-      const receiver = m.receiverNodeId || m.receiverNodeName
-      if (receiver !== localFilter.value.receiverNode) return false
-    }
-    if (localFilter.value.errorOnly && !m.isError) {
-      return false
-    }
-    if (!matchesAdvanced(m)) {
-      return false
-    }
-    if (keyword) {
-      const text = [
-        m.payloadHex,
-        m.message,
-        m.protocolType,
-        m.senderNodeName,
-        m.receiverNodeName,
-        m.senderNodeId,
-        m.receiverNodeId,
-        m.senderPortId,
-        m.receiverPortId,
-        ...(m.fieldValues ? Object.values(m.fieldValues) : []),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase()
-      if (!text.includes(keyword)) return false
-    }
-    return true
-  })
-})
+// 上层已按同样条件过滤过，这里直接透传，避免重复全量遍历
+const filteredMessages = computed(() => safeMessages.value)
 
 function getLatencyMs(message) {
   const send = message?.sendTimestamp ?? message?.timestamp
   const recv = message?.receiveTimestamp
   if (!send || !recv) return null
   return Math.max(0, (recv - send) * 1000)
-}
-
-function matchesAdvanced(message) {
-  const list = normalizedConditions.value
-  if (!list.length) return true
-  const logic = conditionLogic.value === 'or' ? 'or' : 'and'
-
-  const checks = list.map((cond) => {
-    const type = cond.type || 'payload'
-    if (type === 'payload') {
-      const val = String(cond.value || '').toLowerCase()
-      if (!val) return null
-      return String(message?.payloadHex || '').toLowerCase().includes(val)
-    }
-    if (type === 'field') {
-      const key = String(cond.key || '').toLowerCase()
-      const val = String(cond.value || '').toLowerCase()
-      if (!key && !val) return null
-      const entries = Object.entries(message?.fieldValues || {})
-      return entries.some(([k, v]) => {
-        const kText = String(k || '').toLowerCase()
-        const vText = String(v ?? '').toLowerCase()
-        if (key && !kText.includes(key)) return false
-        if (val) return vText.includes(val) || (!key && kText.includes(val))
-        return true
-      })
-    }
-    if (type === 'node') {
-      const field = cond.field || 'senderNodeId'
-      const val = String(cond.value || '').toLowerCase()
-      if (!val) return null
-      return String(message?.[field] || '').toLowerCase().includes(val)
-    }
-    if (type === 'protocol') {
-      const val = String(cond.value || '').toLowerCase()
-      if (!val) return null
-      return String(message?.protocolType || '').toLowerCase().includes(val)
-    }
-    if (type === 'size') {
-      const size = Number(message?.sizeBytes || 0)
-      const min = cond.min !== undefined && cond.min !== null ? Number(cond.min) : null
-      const max = cond.max !== undefined && cond.max !== null ? Number(cond.max) : null
-      if (min === null && max === null) return null
-      if (Number.isFinite(min) && size < min) return false
-      if (Number.isFinite(max) && size > max) return false
-      return true
-    }
-    if (type === 'latency') {
-      const latency = getLatencyMs(message)
-      if (latency === null) return false
-      const min = cond.min !== undefined && cond.min !== null ? Number(cond.min) : null
-      const max = cond.max !== undefined && cond.max !== null ? Number(cond.max) : null
-      if (min === null && max === null) return null
-      if (Number.isFinite(min) && latency < min) return false
-      if (Number.isFinite(max) && latency > max) return false
-      return true
-    }
-    return null
-  })
-
-  const validChecks = checks.filter((c) => c !== null)
-  if (!validChecks.length) return true
-  return logic === 'or' ? validChecks.some(Boolean) : validChecks.every(Boolean)
 }
 
 function createCondition(type = 'payload') {
@@ -525,25 +431,79 @@ function emitFilterChange() {
   })
 }
 
-const senderNodeOptions = computed(() => {
-  const entries = new Map()
-  safeMessages.value.forEach((m) => {
-    const id = m?.senderNodeId || m?.senderNodeName
-    if (!id) return
-    entries.set(id, m?.senderNodeName || m?.senderNodeId)
-  })
-  return Array.from(entries.entries()).map(([value, label]) => ({ value, label }))
-})
+// 增量累积节点/端口对选项，避免每次全量遍历 5w 条窗口
+const senderNodeOptions = ref([])
+const receiverNodeOptions = ref([])
+const portPairOptions = ref([])
+const senderNodeMap = ref(new Map())
+const receiverNodeMap = ref(new Map())
+const portPairMap = ref(new Map())
+const lastProcessedCount = ref(0)
 
-const receiverNodeOptions = computed(() => {
-  const entries = new Map()
-  safeMessages.value.forEach((m) => {
-    const id = m?.receiverNodeId || m?.receiverNodeName
-    if (!id) return
-    entries.set(id, m?.receiverNodeName || m?.receiverNodeId)
-  })
-  return Array.from(entries.entries()).map(([value, label]) => ({ value, label }))
-})
+const buildPortPairKey = (msg) => {
+  const sNode = msg?.senderNodeId || msg?.senderNodeName || ''
+  const sPort = msg?.senderPortId || msg?.senderPortName || ''
+  const rNode = msg?.receiverNodeId || msg?.receiverNodeName || ''
+  const rPort = msg?.receiverPortId || msg?.receiverPortName || ''
+  if (!sPort && !rPort) return ''
+  return [sNode, sPort, rNode, rPort].join('||')
+}
+
+const buildPortPairLabel = (msg) => {
+  const senderNode = msg?.senderNodeName || msg?.senderNodeId || '源节点'
+  const senderPort = msg?.senderPortName || msg?.senderPortId || '-'
+  const receiverNode = msg?.receiverNodeName || msg?.receiverNodeId || '目标节点'
+  const receiverPort = msg?.receiverPortName || msg?.receiverPortId || '-'
+  return `${senderNode}/${senderPort} → ${receiverNode}/${receiverPort}`
+}
+
+watch(
+  safeMessages,
+  (list) => {
+    // 如果过滤重置导致数量变少，整体重建一次
+    if (!Array.isArray(list) || list.length < lastProcessedCount.value) {
+      senderNodeMap.value = new Map()
+      receiverNodeMap.value = new Map()
+      portPairMap.value = new Map()
+      lastProcessedCount.value = 0
+    }
+
+    const delta = list.slice(lastProcessedCount.value)
+    delta.forEach((m) => {
+      const senderId = m?.senderNodeId || m?.senderNodeName
+      const senderLabel = m?.senderNodeName || m?.senderNodeId
+      if (senderId && !senderNodeMap.value.has(senderId)) {
+        senderNodeMap.value.set(senderId, senderLabel)
+      }
+
+      const receiverId = m?.receiverNodeId || m?.receiverNodeName
+      const receiverLabel = m?.receiverNodeName || m?.receiverNodeId
+      if (receiverId && !receiverNodeMap.value.has(receiverId)) {
+        receiverNodeMap.value.set(receiverId, receiverLabel)
+      }
+
+      const pairKey = buildPortPairKey(m)
+      if (pairKey && !portPairMap.value.has(pairKey)) {
+        portPairMap.value.set(pairKey, {
+          value: pairKey,
+          label: buildPortPairLabel(m),
+        })
+      }
+    })
+
+    lastProcessedCount.value = list.length
+    senderNodeOptions.value = Array.from(senderNodeMap.value.entries()).map(([value, label]) => ({
+      value,
+      label,
+    }))
+    receiverNodeOptions.value = Array.from(receiverNodeMap.value.entries()).map(([value, label]) => ({
+      value,
+      label,
+    }))
+    portPairOptions.value = Array.from(portPairMap.value.values())
+  },
+  { immediate: true }
+)
 
 function formatTime(timestamp) {
   return formatTimestamp(timestamp)

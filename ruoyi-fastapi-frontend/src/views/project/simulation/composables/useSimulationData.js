@@ -10,7 +10,8 @@ import { useSimulationWebSocket } from './useSimulationWebSocket'
  * 数据清理配置
  */
 const DATA_LIMITS = {
-  MAX_MESSAGES: 10000,      // 最大报文数量
+  // 为避免前端内存爆炸，保留一个滑动窗口；总数显示继续累加
+  MAX_MESSAGES: 50000,
   MAX_BANDWIDTH_POINTS: 600, // 最大带宽数据点（10分钟，每秒1个）
   MAX_ALARMS: 1000,         // 最大告警数量
 }
@@ -215,7 +216,8 @@ export function matchesFilter(message, filter) {
  * @returns {Array} 清理后的数据
  */
 export function cleanupOldData(data, maxLength) {
-  if (!Array.isArray(data) || data.length <= maxLength) {
+  // maxLength 无效或无限时不做截断
+  if (!Array.isArray(data) || !Number.isFinite(maxLength) || maxLength <= 0 || data.length <= maxLength) {
     return data
   }
   return data.slice(-maxLength)
@@ -352,6 +354,10 @@ export function useSimulationData(sessionId) {
    */
   function setMessageFilter(filter) {
     messageFilter.value = filter || {}
+    // 过滤条件变化后清空累计数量，等待新数据重新累计
+    messageData.value = []
+    lastMessageIndex.value = 0
+    wsManager.messagesData.value = []
   }
 
   /**

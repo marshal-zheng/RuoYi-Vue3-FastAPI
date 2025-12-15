@@ -710,3 +710,459 @@
 .simulation-dark .sim-input-dark input::placeholder {
   color: var(--sim-text-tertiary) !important;
 }
+
+/* ============================================
+   VXE-Table 深色主题样式
+   适配航空暗黑系设计风格
+   ============================================ */
+
+/* VXE-Table CSS变量覆盖 - 最高优先级 */
+.simulation-dark .vxe-table,
+.simulation-dark .vxe-grid,
+.simulation-dark .vxe-table--render-default {
+  --vxe-ui-font-color: #e2e8f0 !important;
+  --vxe-ui-table-font-color: #e2e8f0 !important;
+  --vxe-ui-table-header-font-color: #94a3b8 !important;
+  --vxe-ui-table-footer-font-color: #94a3b8 !important;
+  --vxe-ui-table-body-bg-color: transparent !important;
+  --vxe-ui-table-header-bg-color: rgba(30, 41, 59, 0.8) !important;
+  --vxe-ui-table-footer-bg-color: rgba(30, 41, 59, 0.8) !important;
+  --vxe-ui-table-border-color: rgba(51, 65, 85, 0.5) !important;
+  --vxe-ui-table-row-hover-bg-color: #334155 !important;
+  --vxe-ui-table-row-current-bg-color: rgba(34, 211, 238, 0.1) !important;
+  --vxe-ui-table-column-hover-bg-color: #334155 !important;
+  --vxe-ui-table-column-current-bg-color: rgba(34, 211, 238, 0.1) !important;
+  --vxe-ui-layout-background-color: transparent !important;
+  background-color: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+/* 表格整体容器 - 强制深色背景 */
+.simulation-dark .vxe-table--render-default {
+  background-color: #0f172a !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--main-wrapper {
+  background-color: transparent !important;
+}
+
+/* 表格主体wrapper */
+.simulation-dark .vxe-table--body-wrapper {
+  background-color: #0f172a !important;
+}
+
+.simulation-dark .vxe-table--body {
+  background-color: transparent !important;
+}
+
+/* 表头样式 - 强制覆盖 */
+.simulation-dark .vxe-table--header-wrapper {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-header--row {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-header--column {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  color: #94a3b8 !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-header--column .vxe-cell {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.03em !important;
+}
+
+/* 表体行样式 - 强制覆盖 */
+.simulation-dark .vxe-table--render-default .vxe-body--row {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+  transition: background-color 0.15s ease !important;
+}
+
+/* 斑马纹 - 奇数行稍微不同 */
+.simulation-dark .vxe-table--render-default .vxe-body--row.row--stripe {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+}
+
+/* hover 和选中状态 */
+.simulation-dark .vxe-table--render-default .vxe-body--row:hover,
+.simulation-dark .vxe-table--render-default .vxe-body--row.row--hover {
+  background-color: #334155 !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-body--row.row--current {
+  background-color: rgba(34, 211, 238, 0.12) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-body--row.row--checked {
+  background-color: rgba(34, 211, 238, 0.08) !important;
+}
+
+/* 单元格样式 - 强制覆盖 */
+.simulation-dark .vxe-table--render-default .vxe-body--column {
+  background-color: inherit !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-body--column .vxe-cell {
+  color: #e2e8f0 !important;
+}
+
+/* 边框颜色 */
+.simulation-dark .vxe-table--render-default.border--default .vxe-body--column,
+.simulation-dark .vxe-table--render-default.border--full .vxe-body--column,
+.simulation-dark .vxe-table--render-default.border--outer .vxe-body--column,
+.simulation-dark .vxe-table--render-default.border--default .vxe-header--column,
+.simulation-dark .vxe-table--render-default.border--full .vxe-header--column,
+.simulation-dark .vxe-table--render-default.border--outer .vxe-header--column {
+  border-right-color: rgba(51, 65, 85, 0.4) !important;
+  border-bottom-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+/* 外边框 */
+.simulation-dark .vxe-table--render-default,
+.simulation-dark .vxe-table--render-default.border--default,
+.simulation-dark .vxe-table--render-default.border--full,
+.simulation-dark .vxe-table--render-default.border--outer {
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* 可编辑单元格 */
+.simulation-dark .vxe-table--render-default .vxe-body--column.col--actived {
+  background-color: #1e293b !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-body--column.col--actived .vxe-cell {
+  padding: 0 !important;
+}
+
+/* 编辑器输入框 */
+.simulation-dark .vxe-input,
+.simulation-dark .vxe-textarea,
+.simulation-dark .vxe-select {
+  --vxe-ui-input-bg-color: rgba(30, 41, 59, 0.8) !important;
+  --vxe-ui-input-border-color: rgba(51, 65, 85, 0.5) !important;
+  --vxe-ui-input-font-color: #e2e8f0 !important;
+  --vxe-ui-input-placeholder-color: #94a3b8 !important;
+  --vxe-ui-input-disabled-bg-color: rgba(30, 41, 59, 0.5) !important;
+  --vxe-ui-input-disabled-color: #64748b !important;
+}
+
+.simulation-dark .vxe-input--inner,
+.simulation-dark .vxe-textarea--inner {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+}
+
+.simulation-dark .vxe-input--inner:focus,
+.simulation-dark .vxe-textarea--inner:focus {
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.1) !important;
+}
+
+.simulation-dark .vxe-input--inner::placeholder,
+.simulation-dark .vxe-textarea--inner::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Checkbox 选择框 */
+.simulation-dark .vxe-table--render-default .vxe-checkbox--icon,
+.simulation-dark .vxe-table--render-default .vxe-radio--icon {
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  background-color: transparent !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-checkbox--checked-icon,
+.simulation-dark .vxe-table--render-default .vxe-radio--checked-icon {
+  background-color: #22d3ee !important;
+  border-color: #22d3ee !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-checkbox--label,
+.simulation-dark .vxe-table--render-default .vxe-radio--label {
+  color: #e2e8f0 !important;
+}
+
+/* 树形表格展开图标 */
+.simulation-dark .vxe-table--render-default .vxe-tree--btn-wrapper .vxe-tree--node-btn {
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-tree--btn-wrapper .vxe-tree--node-btn:hover {
+  color: #22d3ee !important;
+}
+
+/* 序号列 */
+.simulation-dark .vxe-table--render-default .vxe-body--column.col--seq .vxe-cell {
+  color: #94a3b8 !important;
+}
+
+/* 空数据提示 */
+.simulation-dark .vxe-table--render-default .vxe-table--empty-placeholder,
+.simulation-dark .vxe-table--render-default .vxe-table--empty-content {
+  color: #64748b !important;
+  background-color: #0f172a !important;
+}
+
+/* 加载提示 */
+.simulation-dark .vxe-table--render-default .vxe-table--loading {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* 固定列容器 - 深色背景 */
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-left-wrapper,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-right-wrapper {
+  background-color: #0f172a !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-left-wrapper .vxe-body--row,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-right-wrapper .vxe-body--row {
+  background-color: #0f172a !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-left-wrapper .vxe-body--row:hover,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-right-wrapper .vxe-body--row:hover {
+  background-color: #334155 !important;
+}
+
+/* 固定列阴影 */
+.simulation-dark .vxe-table--fixed-left-wrapper {
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+.simulation-dark .vxe-table--fixed-right-wrapper {
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 分页器 */
+.simulation-dark .vxe-pager {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .vxe-pager--btn,
+.simulation-dark .vxe-pager--num-btn {
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+.simulation-dark .vxe-pager--btn:hover,
+.simulation-dark .vxe-pager--num-btn:hover {
+  color: #22d3ee !important;
+  border-color: #22d3ee !important;
+}
+
+.simulation-dark .vxe-pager--num-btn.is--active {
+  background-color: #22d3ee !important;
+  color: #0f172a !important;
+  border-color: #22d3ee !important;
+}
+
+/* 工具栏 */
+.simulation-dark .vxe-toolbar {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+.simulation-dark .vxe-toolbar .vxe-button {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .vxe-toolbar .vxe-button:hover {
+  background-color: #1e293b !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+/* 下拉菜单 */
+.simulation-dark .vxe-select--panel,
+.simulation-dark .vxe-optgroup--panel {
+  background-color: #1e293b !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.4), 0 4px 8px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.simulation-dark .vxe-select-option {
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .vxe-select-option:hover,
+.simulation-dark .vxe-select-option.is--hover {
+  background-color: #334155 !important;
+  color: #f1f5f9 !important;
+}
+
+.simulation-dark .vxe-select-option.is--selected {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  color: #22d3ee !important;
+}
+
+/* 校验错误样式 */
+.simulation-dark .vxe-table--render-default .vxe-body--column.col--valid-error {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-body--column.col--valid-error .vxe-cell {
+  color: #ef4444 !important;
+}
+
+/* 校验错误 tooltip */
+.simulation-dark .vxe-table--tooltip-wrapper {
+  background-color: #1e293b !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.4), 0 4px 8px -2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.simulation-dark .vxe-table--tooltip-wrapper.vxe-table--valid-error {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+/* 滚动条适配 */
+.simulation-dark .vxe-table--render-default .vxe-table--body-wrapper::-webkit-scrollbar,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--body-wrapper::-webkit-scrollbar-track,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-wrapper::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--body-wrapper::-webkit-scrollbar-thumb,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.6);
+  border-radius: 4px;
+}
+
+.simulation-dark .vxe-table--render-default .vxe-table--body-wrapper::-webkit-scrollbar-thumb:hover,
+.simulation-dark .vxe-table--render-default .vxe-table--fixed-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8);
+}
+
+/* 确保表格内所有文字都是浅色 */
+.simulation-dark .vxe-table--render-default,
+.simulation-dark .vxe-table--render-default * {
+  color: inherit;
+}
+
+/* 表格容器整体深色背景 */
+.simulation-dark .vxe-grid--wrapper,
+.simulation-dark .vxe-table--wrapper {
+  background-color: #0f172a !important;
+}
+
+/* 表格内按钮样式 */
+.simulation-dark .vxe-table--render-default .el-button--text,
+.simulation-dark .vxe-table--render-default .el-button.is-text,
+.simulation-dark .vxe-table--render-default .el-button.is-link {
+  color: #22d3ee !important;
+}
+
+.simulation-dark .vxe-table--render-default .el-button--text:hover,
+.simulation-dark .vxe-table--render-default .el-button.is-text:hover,
+.simulation-dark .vxe-table--render-default .el-button.is-link:hover {
+  color: rgba(34, 211, 238, 0.8) !important;
+}
+
+.simulation-dark .vxe-table--render-default .el-button.el-button--danger.is-text,
+.simulation-dark .vxe-table--render-default .el-button.el-button--danger.is-link {
+  color: #ef4444 !important;
+}
+
+.simulation-dark .vxe-table--render-default .el-button.el-button--danger.is-text:hover,
+.simulation-dark .vxe-table--render-default .el-button.el-button--danger.is-link:hover {
+  color: #fca5a5 !important;
+}
+
+/* 表格工具栏按钮 */
+.simulation-dark .table-toolbar .el-button,
+.simulation-dark .protocol-template-wrapper .el-button {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .table-toolbar .el-button:hover,
+.simulation-dark .protocol-template-wrapper .el-button:hover {
+  background-color: #1e293b !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+.simulation-dark .table-toolbar .el-button--primary,
+.simulation-dark .protocol-template-wrapper .el-button--primary {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  border-color: rgba(34, 211, 238, 0.25) !important;
+  color: #22d3ee !important;
+}
+
+.simulation-dark .table-toolbar .el-button--primary:hover,
+.simulation-dark .protocol-template-wrapper .el-button--primary:hover {
+  background-color: rgba(34, 211, 238, 0.2) !important;
+  border-color: #22d3ee !important;
+}
+
+.simulation-dark .table-toolbar .el-button--danger,
+.simulation-dark .protocol-template-wrapper .el-button--danger {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+.simulation-dark .table-toolbar .el-button--danger:hover,
+.simulation-dark .protocol-template-wrapper .el-button--danger:hover {
+  background-color: rgba(239, 68, 68, 0.2) !important;
+  border-color: #ef4444 !important;
+}
+
+/* 协议模板容器样式 */
+.simulation-dark .protocol-template-wrapper {
+  background-color: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+.simulation-dark .protocol-template-wrapper .section-label,
+.simulation-dark .protocol-template-wrapper .notes-label {
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .protocol-template-wrapper .notes-input .el-textarea__inner {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+}
+
+/* VxeValidationPanel 校验面板 */
+.simulation-dark .vxe-validation-panel {
+  background-color: rgba(30, 41, 59, 0.5) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+}
+
+.simulation-dark .vxe-validation-panel .validation-item {
+  color: #cbd5e1 !important;
+}
+
+.simulation-dark .vxe-validation-panel .validation-item--error {
+  color: #ef4444 !important;
+}
+
+.simulation-dark .vxe-validation-panel .validation-item--warning {
+  color: #fbbf24 !important;
+}

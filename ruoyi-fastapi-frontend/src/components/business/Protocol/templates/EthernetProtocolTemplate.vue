@@ -65,11 +65,13 @@
       :data="localConfig.fields"
       :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
       :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
+      :edit-rules="vxeEditRules"
       :checkbox-config="{ checkField: 'checked' }"
       :span-method="fieldSpanMethod"
       :row-class-name="getRowClassName"
       :cell-class-name="getCellClassName"
       :tooltip-config="tooltipConfig"
+      :valid-config="vxeValidConfig"
       max-height="500"
       class="fields-table text-sm"
       @edit-closed="handleEditClosed"
@@ -148,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive } from 'vue';
+import { ref, watch, reactive, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
 import { useDict } from '@/utils/dict';
@@ -238,6 +240,9 @@ const {
   isValid,
   getRowClassName,
   getCellClassName,
+  getCellTooltip,
+  toVxeEditRules,
+  vxeValidConfig,
   setContext,
 } = useVxeTableValidation({
   // 字段校验规则 - 类似 Element Plus 的配置方式
@@ -304,6 +309,8 @@ const {
     }),
   ],
 });
+
+const vxeEditRules = computed(toVxeEditRules);
 
 // 数据类型对应的字节长度映射
 const DATA_TYPE_BYTE_LENGTH_MAP: Record<string, number> = {
@@ -751,9 +758,14 @@ const runValidation = async () => {
 };
 
 // 编辑完成后自动校验
-const handleEditClosed = () => {
+const handleEditClosed = ({ row, column }: any) => {
   // 延迟执行，确保数据已更新
-  setTimeout(() => {
+  setTimeout(async () => {
+    // 先清除该单元格的 VxeTable 内置校验状态
+    if (row && column?.field) {
+      await tableRef.value?.clearValidate(row, column.field);
+    }
+    // 然后运行自定义校验
     runValidation();
   }, 100);
 };

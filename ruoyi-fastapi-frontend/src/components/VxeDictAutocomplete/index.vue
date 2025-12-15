@@ -8,6 +8,7 @@
     :clearable="clearable"
     :disabled="disabled"
     style="width: 100%"
+    @change="handleChange"
   />
   <el-input
     v-else
@@ -16,6 +17,8 @@
     :placeholder="placeholder"
     :disabled="disabled"
     style="width: 100%"
+    @input="handleInput"
+    @change="handleChange"
   />
 </template>
 
@@ -30,6 +33,8 @@ const props = defineProps({
     default: () => ({}),
   },
 });
+
+const emit = defineEmits(['change', 'input']);
 
 const dictType = computed(() => props.params?.dictType || '');
 const placeholder = computed(() => props.params?.placeholder || '请输入');
@@ -50,4 +55,14 @@ const cellValue = computed({
     }
   },
 });
+
+// 触发 change 事件，将值同步到父组件
+const handleChange = (val: any) => {
+  emit('change', props.params, val);
+};
+
+// 触发 input 事件
+const handleInput = (val: any) => {
+  emit('input', props.params, val);
+};
 </script>

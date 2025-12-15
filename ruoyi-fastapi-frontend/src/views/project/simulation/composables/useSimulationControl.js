@@ -247,12 +247,22 @@ export function useSimulationControl(projectId, versionId) {
    */
   async function setSpeed(speed) {
     const clampedSpeed = clampSpeed(speed)
+    const prevSpeed = simulationState.speed
     simulationState.speed = clampedSpeed
     lastSpeedSetAt.value = Date.now()
 
+    // 后端对 <1x 可能异常，传输时最低保持 1x，前端仍按 clampedSpeed 展示/动画
+    const backendSpeed = Math.max(1, clampedSpeed)
+
     // 仅在有有效会话且处于运行/暂停时下发后端
     if (sessionId.value && (isRunning.value || isPaused.value)) {
-      await setSimulationSpeed(sessionId.value, clampedSpeed)
+      try {
+        await setSimulationSpeed(sessionId.value, backendSpeed)
+      } catch (err) {
+        // 回滚到上一次速度，避免卡死
+        simulationState.speed = prevSpeed
+        throw err
+      }
     }
   }
 

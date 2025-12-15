@@ -127,3 +127,127 @@
 .sim-dropdown-dark .el-dropdown-menu__item--divided::before {
   background-color: rgba(51, 65, 85, 0.5) !important;
 }
+
+/* ============================================
+   VXE-Table 下拉面板深色样式
+   VXE 的 select/autocomplete 等组件会 Teleport 到 body
+   ============================================ */
+
+/* VXE Select 下拉面板 */
+.vxe-select--panel.is--transfer,
+.vxe-pulldown--panel.is--transfer {
+  background-color: #1e293b !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+.vxe-select--panel.is--transfer .vxe-select-option,
+.vxe-pulldown--panel.is--transfer .vxe-select-option {
+  color: #cbd5e1 !important;
+}
+
+.vxe-select--panel.is--transfer .vxe-select-option:hover,
+.vxe-select--panel.is--transfer .vxe-select-option.is--hover,
+.vxe-pulldown--panel.is--transfer .vxe-select-option:hover,
+.vxe-pulldown--panel.is--transfer .vxe-select-option.is--hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  color: #f1f5f9 !important;
+}
+
+.vxe-select--panel.is--transfer .vxe-select-option.is--selected,
+.vxe-pulldown--panel.is--transfer .vxe-select-option.is--selected {
+  background-color: rgba(34, 211, 238, 0.15) !important;
+  color: #22d3ee !important;
+  font-weight: 600 !important;
+}
+
+/* VXE Optgroup 分组样式 */
+.vxe-select--panel.is--transfer .vxe-optgroup--title,
+.vxe-pulldown--panel.is--transfer .vxe-optgroup--title {
+  color: #94a3b8 !important;
+  font-weight: 600 !important;
+}
+
+/* VXE 输入框 在 Teleport 容器中 */
+.vxe-select--panel.is--transfer .vxe-input--inner,
+.vxe-pulldown--panel.is--transfer .vxe-input--inner {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+}
+
+.vxe-select--panel.is--transfer .vxe-input--inner:focus,
+.vxe-pulldown--panel.is--transfer .vxe-input--inner:focus {
+  border-color: rgba(34, 211, 238, 0.5) !important;
+}
+
+/* VXE Tooltip 深色样式（Teleport 到 body） */
+.vxe-table--tooltip-wrapper.is--transfer {
+  background: rgba(30, 41, 59, 0.98) !important;
+  border: 1px solid rgba(51, 65, 85, 0.5) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+.vxe-table--tooltip-wrapper.is--transfer.vxe-table--valid-error {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 1px solid rgba(239, 68, 68, 0.4) !important;
+  border-left-width: 3px !important;
+  color: #fca5a5 !important;
+}
+
+/* VXE Modal/Drawer 深色样式 */
+.vxe-modal--wrapper.is--transfer {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(51, 65, 85, 0.5) !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+.vxe-modal--wrapper.is--transfer .vxe-modal--header {
+  background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5) !important;
+  color: #f1f5f9 !important;
+}
+
+.vxe-modal--wrapper.is--transfer .vxe-modal--body {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+.vxe-modal--wrapper.is--transfer .vxe-modal--footer {
+  background: linear-gradient(180deg, #0f172a, #1e293b) !important;
+  border-top: 1px solid rgba(51, 65, 85, 0.5) !important;
+}
+
+/* VXE Loading 深色样式 */
+.vxe-loading--wrapper.is--transfer {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+.vxe-loading--wrapper.is--transfer .vxe-loading--spinner {
+  color: #22d3ee !important;
+}
+
+/* VXE 滚动条深色样式 */
+.vxe-select--panel.is--transfer::-webkit-scrollbar,
+.vxe-pulldown--panel.is--transfer::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.vxe-select--panel.is--transfer::-webkit-scrollbar-track,
+.vxe-pulldown--panel.is--transfer::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.5);
+  border-radius: 4px;
+}
+
+.vxe-select--panel.is--transfer::-webkit-scrollbar-thumb,
+.vxe-pulldown--panel.is--transfer::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.6);
+  border-radius: 4px;
+}
+
+.vxe-select--panel.is--transfer::-webkit-scrollbar-thumb:hover,
+.vxe-pulldown--panel.is--transfer::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.8);
+}

@@ -50,11 +50,13 @@
       :data="localConfig.fields"
       :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
       :edit-config="{ trigger: 'click', mode: 'cell' }"
+      :edit-rules="vxeEditRules"
       :checkbox-config="{ checkField: 'checked' }"
       :span-method="fieldSpanMethod"
       :row-class-name="getRowClassName"
       :cell-class-name="getCellClassName"
       :tooltip-config="tooltipConfig"
+      :valid-config="vxeValidConfig"
       max-height="500"
       class="fields-table text-sm"
       @edit-closed="handleEditClosed"
@@ -135,6 +137,7 @@
 import { ref, watch, reactive, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
+import { useDict } from '@/utils/dict';
 import {
   useVxeTableValidation,
   VxeValidationPanel,
@@ -156,6 +159,19 @@ const emit = defineEmits<{
 
 const tableRef = ref<VxeTableInstance>();
 
+// 获取字典数据
+const {
+  sys_protocol_method_rs422,
+  sys_protocol_frequency,
+  sys_protocol_speed_rs422,
+  sys_protocol_error_handling,
+} = useDict(
+  'sys_protocol_method_rs422',
+  'sys_protocol_frequency',
+  'sys_protocol_speed_rs422',
+  'sys_protocol_error_handling'
+);
+
 // 初始化校验框架
 const {
   issues: validationIssues,
@@ -164,6 +180,8 @@ const {
   getRowClassName,
   getCellClassName,
   getCellTooltip,
+  toVxeEditRules,
+  vxeValidConfig,
 } = useVxeTableValidation({
   rules: {
     fieldName: [required('信息名称不能为空')],
@@ -179,6 +197,8 @@ const {
     remark: '备注',
   },
 });
+
+const vxeEditRules = computed(toVxeEditRules);
 
 // tooltip 配置：当单元格有校验错误时显示错误提示
 const tooltipConfig = {
@@ -335,17 +355,62 @@ const configTableData = ref([
   },
 ]);
 
+// 辅助函数：根据字典获取 label
+const getLabel = (dict: any[], value: string, fallbackLabel: string = '') => {
+  if (!value) return '';
+  const found = dict?.find((item) => item.value === value);
+  return found ? found.label : fallbackLabel || value;
+};
+
 const syncConfigTableRows = () => {
   const rows = configTableData.value;
   rows[0].value1 = localConfig.sender;
   rows[1].value1 = localConfig.receiver;
-  rows[2].value1 = localConfig.frequencyLabel || localConfig.frequency;
-  rows[2].value2 = localConfig.speedLabel || localConfig.speed;
-  rows[3].value1 = localConfig.methodLabel || localConfig.method;
+
+  // 传输频率
+  rows[2].value1 = getLabel(
+    sys_protocol_frequency.value,
+    localConfig.frequency,
+    localConfig.frequencyLabel
+  );
+
+  // 传输速率
+  rows[2].value2 = getLabel(
+    sys_protocol_speed_rs422.value,
+    localConfig.speed,
+    localConfig.speedLabel
+  );
+
+  // 传输方式
+  rows[3].value1 = getLabel(
+    sys_protocol_method_rs422.value,
+    localConfig.method,
+    localConfig.methodLabel
+  );
+
   rows[3].value2 = localConfig.sendDuration;
   rows[4].value1 = localConfig.frameLength;
-  rows[4].value2 = localConfig.errorHandleLabel || localConfig.errorHandle;
+
+  // 错误处理
+  rows[4].value2 = getLabel(
+    sys_protocol_error_handling.value,
+    localConfig.errorHandle,
+    localConfig.errorHandleLabel
+  );
 };
+
+// 监听字典加载完成，重新同步显示
+watch(
+  [
+    sys_protocol_method_rs422,
+    sys_protocol_frequency,
+    sys_protocol_speed_rs422,
+    sys_protocol_error_handling,
+  ],
+  () => {
+    syncConfigTableRows();
+  }
+);
 
 const configEditRender = (field: string) => {
   const getDictType = (row: Record<string, string>) => {
@@ -578,8 +643,13 @@ const removeSelectRow = async () => {
 };
 
 // 编辑完成后自动校验
-const handleEditClosed = () => {
-  setTimeout(() => {
+const handleEditClosed = ({ row, column }: any) => {
+  setTimeout(async () => {
+    // 先清除该单元格的 VxeTable 内置校验状态
+    if (row && column?.field) {
+      await tableRef.value?.clearValidate(row, column.field);
+    }
+    // 然后运行自定义校验
     if (Array.isArray(localConfig.fields) && localConfig.fields.length > 0) {
       validate(localConfig.fields);
     }

@@ -38,6 +38,12 @@
   border: 1px solid #f56c6c !important;
   border-left-width: 3px !important;
   color: #f56c6c !important;
+  max-width: 300px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  word-break: break-word !important;
 }
 
 // ==================== 校验提示样式 ====================
@@ -117,5 +123,135 @@
   // 内置校验错误单元格
   .vxe-body--column.col--valid-error {
     background-color: rgba(245, 108, 108, 0.06) !important;
+  }
+}
+
+// ==================== 校验错误三角号位置调整 ====================
+
+// vxe-table--render-default .vxe-body--column.col--dirty:before { content: ""; top: calc(var(--vxe-ui-table-cell-dirty-width) * -1); right: calc(var(--vxe-ui-table-cell-dirty-width) * -1); position: absolute; border-width: var(--vxe-ui-table-cell-dirty-width); border-style: solid; border-color: transparent var(--vxe-ui-table-cell-dirty-update-color) transparent transparent; transform: rotate(45deg); }
+
+.vxe-table--render-default .vxe-body--column.col--dirty:before {
+  display: none;
+}
+
+// 确保 tooltip 能正确显示
+// .vxe-table--render-default .vxe-body--column.col--dirty {
+//   position: relative !important;
+// }
+
+// VXE-Table 校验错误 tooltip 样式优化
+.vxe-table--tooltip-wrapper.vxe-table--valid-error,
+.vxe-cell--valid-error-tip {
+  z-index: 99999 !important;
+  max-width: 300px !important;
+  padding: 8px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
+  background: #fff !important;
+  border: 1px solid #f56c6c !important;
+  border-left-width: 3px !important;
+  color: #f56c6c !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  word-break: break-word !important;
+}
+
+// 确保 VXE-Table 的 tooltip 在右上角三角号区域也能触发
+// .vxe-table--render-default .vxe-body--column.col--dirty {
+//   // 单元格悬停时显示 tooltip
+//   &:hover {
+//     .vxe-cell--valid-error-tip {
+//       display: block !important;
+//     }
+//   }
+// }
+
+// ==================== 深色主题适配 ====================
+
+// 深色主题下的校验错误样式
+.simulation-dark {
+  // 校验变量 - 深色主题
+  --vxe-validation-error-color: #ef4444;
+  --vxe-validation-error-bg: rgba(239, 68, 68, 0.12);
+  --vxe-validation-warning-color: #fbbf24;
+  --vxe-validation-warning-bg: rgba(251, 191, 36, 0.12);
+
+  // 行高亮 - 深色主题
+  .vxe-table {
+    .vxe-body--row.vxe-row--validation-error {
+      background-color: var(--vxe-validation-error-bg) !important;
+    }
+
+    .vxe-body--row.vxe-row--validation-warning {
+      background-color: var(--vxe-validation-warning-bg) !important;
+    }
+  }
+
+  // 单元格高亮 - 深色主题
+  .vxe-table {
+    .vxe-body--column.vxe-cell--validation-error {
+      background-color: rgba(239, 68, 68, 0.15) !important;
+
+      .vxe-cell {
+        color: var(--vxe-validation-error-color) !important;
+      }
+    }
+
+    .vxe-body--column.vxe-cell--validation-warning {
+      background-color: rgba(251, 191, 36, 0.15) !important;
+
+      .vxe-cell {
+        color: var(--vxe-validation-warning-color) !important;
+      }
+    }
+
+    // 内置校验错误单元格
+    .vxe-body--column.col--valid-error {
+      background-color: rgba(239, 68, 68, 0.1) !important;
+    }
+  }
+
+  // 校验错误 tooltip - 深色主题
+  .vxe-table--tooltip-wrapper {
+    background: rgba(30, 41, 59, 0.98) !important;
+    border: 1px solid rgba(51, 65, 85, 0.5) !important;
+    color: #e2e8f0 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .vxe-table--tooltip-wrapper.vxe-table--valid-error {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    border-left-width: 3px !important;
+    color: #fca5a5 !important;
+  }
+
+  .vxe-cell--valid-error-tip {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    border-left-width: 3px !important;
+    color: #fca5a5 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  // normal 主题 - 深色适配
+  .vxe-cell--valid-error-theme-normal {
+    background: rgba(30, 41, 59, 0.98) !important;
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    border-left-width: 3px !important;
+    
+    .vxe-cell--valid-error-msg {
+      color: #fca5a5 !important;
+      background: transparent !important;
+    }
+  }
+
+  // beautify 主题 - 深色适配
+  .vxe-cell--valid-error-theme-beautify {
+    background: rgba(239, 68, 68, 0.9) !important;
+    
+    .vxe-cell--valid-error-msg {
+      color: #fff !important;
+      background: transparent !important;
+    }
   }
 }

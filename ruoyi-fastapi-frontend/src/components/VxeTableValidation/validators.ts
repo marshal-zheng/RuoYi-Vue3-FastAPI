@@ -332,14 +332,36 @@ export const byteCount = (maxBytes?: number, message?: string): ValidationRule =
   message: message || (maxBytes ? `字节数必须在 1-${maxBytes} 之间` : '字节数必须为正整数'),
 });
 
-/** 比例尺校验（非零数字） */
-export const scale = (message?: string): ValidationRule => ({
+/**
+ * 比例尺校验（非零数字）
+ *
+ * @param zeroMessage 自定义比例尺为0时的提示
+ * @param typeMessage 自定义类型错误提示（默认：必须是有效数字）
+ */
+export const scale = (zeroMessage?: string, typeMessage?: string): ValidationRule => ({
   type: 'number',
+  // 不设置默认 message，避免类型错误时覆盖成「不能为0」
+  message: typeMessage,
   validator: (value) => {
+    // 空值跳过（由 required 规则处理）
+    if (isEmpty(value)) {
+      return true;
+    }
+
     const num = parseNumber(value);
-    return num !== null && num !== 0;
+
+    // 如果无法解析为数字，返回类型错误
+    if (num === null) {
+      return typeMessage || '必须是有效数字';
+    }
+
+    // 如果为0，返回不能为0的错误
+    if (num === 0) {
+      return zeroMessage || '比例尺不能为0';
+    }
+
+    return true;
   },
-  message: message || '比例尺不能为0',
 });
 
 // ==================== 全局校验器工厂 ====================
