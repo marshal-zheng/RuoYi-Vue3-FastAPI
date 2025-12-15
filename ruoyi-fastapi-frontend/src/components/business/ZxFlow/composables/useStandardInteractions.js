@@ -9,6 +9,18 @@ import { useDeviceSupport } from './useDeviceSupport.js';
 
 export function useStandardInteractions(graph, options = {}) {
   const { isMacOs, isCtrlKeyPressed } = useDeviceSupport();
+  const safeCleanSelection = (graphInstance) => {
+    const g = graphInstance;
+    if (!g) return;
+    if (typeof g.cleanSelection === 'function') {
+      g.cleanSelection();
+      return;
+    }
+    const selected = g.getSelectedCells?.();
+    if (selected && Array.isArray(selected) && selected.length > 0) {
+      selected.forEach((cell) => g.unselect?.(cell));
+    }
+  };
 
   // 默认配置
   const defaultOptions = {
@@ -163,7 +175,7 @@ export function useStandardInteractions(graph, options = {}) {
         return;
       }
       if (!isCtrlKeyPressed(e)) {
-        g.cleanSelection();
+        safeCleanSelection(g);
       }
     });
 
@@ -179,7 +191,7 @@ export function useStandardInteractions(graph, options = {}) {
         return;
       }
       // 普通点击：单选
-      g.cleanSelection();
+      safeCleanSelection(g);
       g.select(node);
     });
 
@@ -208,7 +220,7 @@ export function useStandardInteractions(graph, options = {}) {
       }
 
       // 普通点击：单选
-      g.cleanSelection();
+      safeCleanSelection(g);
       g.select(edge);
     });
   };
@@ -233,9 +245,7 @@ export function useStandardInteractions(graph, options = {}) {
 
   const clearSelection = () => {
     const g = graph?.value || graph;
-    if (g) {
-      g.cleanSelection();
-    }
+    safeCleanSelection(g);
   };
 
   const deleteSelected = () => {

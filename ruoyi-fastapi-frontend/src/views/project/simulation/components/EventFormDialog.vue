@@ -244,10 +244,17 @@ const dialog = useDialog({
   formRef,
   formModel: formData,
   preValidate: true,
-  onOk: handleSubmit,
+  // useDialog 约定 onConfirm 回调，返回 true 关闭弹窗
+  onConfirm: handleSubmit,
 });
 
 async function handleSubmit() {
+  // 兜底校验（preValidate 依赖 formRef，但加上显式校验更安全）
+  if (formRef.value) {
+    const valid = await formRef.value.validate();
+    if (!valid) return false;
+  }
+
   const config = {
     name: formData.name,
     condition: {
@@ -268,6 +275,7 @@ async function handleSubmit() {
 
   dialog.close();
   resetForm();
+  return true;
 }
 
 function resetForm() {
@@ -341,7 +349,7 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-@import "../styles/simulation-dialog-theme.less";
+@import (reference) "../styles/simulation-dialog-theme.less";
 
 :deep(.el-form) {
   .el-form-item__label {

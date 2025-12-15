@@ -142,9 +142,9 @@ const nodeOptions = computed(() => {
   }));
 });
 
-const displayEvents = computed(() =>
-  Array.isArray(props.events) ? props.events : [],
-);
+const displayEvents = computed(() => {
+  return Array.isArray(props.events) ? props.events : []
+});
 const hasEvents = computed(() => displayEvents.value.length > 0);
 
 function getStatusType(status) {
@@ -220,7 +220,7 @@ function handleFormSubmit(eventId, config) {
 </script>
 
 <style lang="less" scoped>
-@import "../styles/simulation-dialog-theme.less";
+@import (reference) "../styles/simulation-dialog-theme.less";
 
 .event-card {
   .sim-dialog-card();

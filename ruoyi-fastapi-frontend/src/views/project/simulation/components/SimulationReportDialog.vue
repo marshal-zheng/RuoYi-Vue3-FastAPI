@@ -103,7 +103,7 @@ defineExpose({ open: openDialog, close });
 </script>
 
 <style lang="less" scoped>
-@import '../styles/simulation-dialog-theme.less';
+@import (reference) '../styles/simulation-dialog-theme.less';
 
 .simulation-report {
   color: @sim-dialog-text-primary;

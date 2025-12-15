@@ -273,6 +273,7 @@ import "./styles/simulation-theme.css";
 import "./styles/global-popper-dark.css"; // 全局 Popper 深色样式（Teleport到body的元素）
 import "./styles/fault-injection-mode.less";
 import "./styles/aviation-dark-theme.less";
+import "./styles/simulation-dialog-theme.less";
 
 // API 导入
 import { listDevice } from "@/api/device/device";
@@ -373,8 +374,14 @@ const {
 } = faultInjection;
 
 // 事件触发
-const { eventList, createEvent, updateEvent, deleteEvent, triggerEvent } =
-  useEventTrigger(sessionId);
+const {
+  eventList,
+  loadEvents,
+  createEvent,
+  updateEvent,
+  deleteEvent,
+  triggerEvent,
+} = useEventTrigger(sessionId);
 
 // 获取拓扑节点列表（用于事件触发面板的设备选择）
 const topologyNodes = ref([]);
@@ -887,23 +894,59 @@ function handleInjectionStrategyApply(config) {
 
 // 事件触发处理
 async function handleEventCreate(config) {
-  await createEvent(config);
-  ElMessage.success("事件创建成功");
+  if (!sessionId.value) {
+    ElMessage.warning("请先启动仿真会话后再添加事件");
+    return;
+  }
+  try {
+    await createEvent(config);
+    ElMessage.success("事件创建成功");
+  } catch (err) {
+    console.error("创建事件失败", err);
+    ElMessage.error(err?.message || "创建事件失败");
+  }
 }
 
 async function handleEventEdit(eventId, config) {
-  await updateEvent(eventId, config);
-  ElMessage.success("事件更新成功");
+  if (!sessionId.value) {
+    ElMessage.warning("当前无仿真会话，无法更新事件");
+    return;
+  }
+  try {
+    await updateEvent(eventId, config);
+    ElMessage.success("事件更新成功");
+  } catch (err) {
+    console.error("更新事件失败", err);
+    ElMessage.error(err?.message || "更新事件失败");
+  }
 }
 
 async function handleEventDelete(eventId) {
-  await deleteEvent(eventId);
-  ElMessage.success("事件删除成功");
+  if (!sessionId.value) {
+    ElMessage.warning("当前无仿真会话，无法删除事件");
+    return;
+  }
+  try {
+    await deleteEvent(eventId);
+    ElMessage.success("事件删除成功");
+  } catch (err) {
+    console.error("删除事件失败", err);
+    ElMessage.error(err?.message || "删除事件失败");
+  }
 }
 
 async function handleEventTrigger(eventId) {
-  await triggerEvent(eventId);
-  ElMessage.success("事件已触发");
+  if (!sessionId.value) {
+    ElMessage.warning("当前无仿真会话，无法触发事件");
+    return;
+  }
+  try {
+    await triggerEvent(eventId);
+    ElMessage.success("事件已触发");
+  } catch (err) {
+    console.error("触发事件失败", err);
+    ElMessage.error(err?.message || "触发事件失败");
+  }
 }
 
 // 健康自检
@@ -958,11 +1001,19 @@ watch(faultEventData, () => {
   }
 });
 
-watch(sessionId, (id) => {
-  if (id) {
-    refreshFaults();
-  }
-});
+watch(
+  sessionId,
+  (id) => {
+    if (id) {
+      refreshFaults();
+      loadEvents();
+    } else {
+      console.log('eventList.valuesss', eventList.value)
+      eventList.value = [];
+    }
+  },
+  { immediate: true },
+);
 
 // 监听故障面板打开，自动获取故障列表
 watch(

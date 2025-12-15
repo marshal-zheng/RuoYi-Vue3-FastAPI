@@ -299,7 +299,7 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-@import '../styles/simulation-dialog-theme.less';
+@import (reference) '../styles/simulation-dialog-theme.less';
 
 .health-check-content {
   color: @sim-dialog-text-primary;

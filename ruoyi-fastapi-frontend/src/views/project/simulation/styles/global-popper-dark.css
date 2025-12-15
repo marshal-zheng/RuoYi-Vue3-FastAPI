@@ -251,3 +251,359 @@
 .vxe-pulldown--panel.is--transfer::-webkit-scrollbar-thumb:hover {
   background: rgba(100, 116, 139, 0.8);
 }
+
+/* ============================================
+   ZxDrawer / ZxDialog 深色主题样式
+   用于仿真模块中 Teleport 到 body 的组件
+   通过 body.simulation-active 类来激活
+   ============================================ */
+
+/* 当仿真页面激活时，给 body 添加 simulation-active 类 */
+/* 需要在仿真页面挂载时添加此类 */
+
+/* ZxDrawer 深色样式 - 通过 overlay 类选择器 */
+body.simulation-active .zx-drawer,
+body.simulation-active .zx-drawer__wrapper,
+.sim-drawer-dark.zx-drawer,
+.sim-drawer-dark .zx-drawer__wrapper {
+  background-color: #0f172a !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__header,
+.sim-drawer-dark .zx-drawer__header {
+  background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5) !important;
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__title,
+.sim-drawer-dark .zx-drawer__title {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__close,
+.sim-drawer-dark .zx-drawer__close {
+  color: #94a3b8 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__close:hover,
+.sim-drawer-dark .zx-drawer__close:hover {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__body,
+.sim-drawer-dark .zx-drawer__body {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__footer,
+.sim-drawer-dark .zx-drawer__footer {
+  background: linear-gradient(180deg, #0f172a, #1e293b) !important;
+  border-top: 1px solid rgba(51, 65, 85, 0.5) !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__footer .el-button,
+.sim-drawer-dark .zx-drawer__footer .el-button {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__footer .el-button:hover,
+.sim-drawer-dark .zx-drawer__footer .el-button:hover {
+  background-color: #1e293b !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__footer .el-button--primary,
+.sim-drawer-dark .zx-drawer__footer .el-button--primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(45, 212, 191, 0.2)) !important;
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  color: #22d3ee !important;
+}
+
+body.simulation-active .zx-drawer .zx-drawer__footer .el-button--primary:hover,
+.sim-drawer-dark .zx-drawer__footer .el-button--primary:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(45, 212, 191, 0.3)) !important;
+  border-color: rgba(34, 211, 238, 0.7) !important;
+}
+
+/* ============================================
+   ZxDrawer 内部 Tailwind 类深色覆盖
+   使用高优先级选择器确保覆盖生效
+   ============================================ */
+
+/* bg-white 背景色覆盖 - 最重要！ */
+body.simulation-active .zx-drawer .bg-white,
+body.simulation-active .zx-drawer div.bg-white,
+body.simulation-active .zx-drawer [class*="bg-white"],
+body.simulation-active .el-drawer .bg-white,
+body.simulation-active .el-drawer div.bg-white {
+  background-color: #0f172a !important;
+}
+
+/* p-2 bg-white 协议列表容器 */
+body.simulation-active .zx-drawer .p-2.bg-white,
+body.simulation-active .el-drawer .p-2.bg-white {
+  background-color: #0f172a !important;
+}
+
+/* 边框颜色覆盖 */
+body.simulation-active .zx-drawer .border-gray-200,
+body.simulation-active .zx-drawer [class*="border-gray-200"],
+body.simulation-active .el-drawer .border-gray-200 {
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* 总线类型分组头部 - 蓝色背景 */
+body.simulation-active .zx-drawer .bg-\[\#bfdbfe\],
+body.simulation-active .zx-drawer [style*="bfdbfe"],
+body.simulation-active .el-drawer .bg-\[\#bfdbfe\] {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(45, 212, 191, 0.15)) !important;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.25) !important;
+}
+
+/* 文字颜色覆盖 */
+body.simulation-active .zx-drawer .text-gray-900,
+body.simulation-active .el-drawer .text-gray-900 {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .text-gray-700,
+body.simulation-active .el-drawer .text-gray-700 {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-drawer .text-gray-600,
+body.simulation-active .el-drawer .text-gray-600 {
+  color: #e2e8f0 !important;
+}
+
+body.simulation-active .zx-drawer .text-gray-500,
+body.simulation-active .el-drawer .text-gray-500 {
+  color: #cbd5e1 !important;
+}
+
+body.simulation-active .zx-drawer .text-gray-400,
+body.simulation-active .el-drawer .text-gray-400 {
+  color: #94a3b8 !important;
+}
+
+body.simulation-active .zx-drawer .text-gray-300,
+body.simulation-active .el-drawer .text-gray-300 {
+  color: #64748b !important;
+}
+
+/* 协议数量徽章 */
+body.simulation-active .zx-drawer .bg-gray-200\/80,
+body.simulation-active .el-drawer .bg-gray-200\/80 {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #94a3b8 !important;
+}
+
+/* 协议图标背景 */
+body.simulation-active .zx-drawer .bg-\[\#eff6ff\],
+body.simulation-active .el-drawer .bg-\[\#eff6ff\] {
+  background-color: rgba(34, 211, 238, 0.15) !important;
+}
+
+/* 主色文字 */
+body.simulation-active .zx-drawer .text-primary-500,
+body.simulation-active .el-drawer .text-primary-500 {
+  color: #22d3ee !important;
+}
+
+/* 协议卡片样式 */
+body.simulation-active .zx-drawer .group.bg-white,
+body.simulation-active .zx-drawer div.group.bg-white,
+body.simulation-active .el-drawer .group.bg-white {
+  background-color: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+/* 协议卡片 hover 效果 */
+body.simulation-active .zx-drawer .group:hover,
+body.simulation-active .zx-drawer .group.bg-white:hover,
+body.simulation-active .el-drawer .group:hover {
+  background-color: rgba(34, 211, 238, 0.1) !important;
+  border-color: rgba(34, 211, 238, 0.4) !important;
+}
+
+/* 分组外层卡片 */
+body.simulation-active .zx-drawer .mb-4.bg-white,
+body.simulation-active .el-drawer .mb-4.bg-white {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+/* 分组内的白色标签 */
+body.simulation-active .zx-drawer .bg-\[\#bfdbfe\] .bg-white,
+body.simulation-active .el-drawer .bg-\[\#bfdbfe\] .bg-white {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  color: #cbd5e1 !important;
+}
+
+/* ZxDialog 深色样式 */
+body.simulation-active .zx-dialog,
+body.simulation-active .zx-dialog__wrapper,
+.sim-dialog-dark.zx-dialog,
+.sim-dialog-dark .zx-dialog__wrapper {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(51, 65, 85, 0.5) !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__header,
+.sim-dialog-dark .zx-dialog__header {
+  background: linear-gradient(180deg, #1e293b, #0f172a) !important;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.5) !important;
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__title,
+.sim-dialog-dark .zx-dialog__title {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__close,
+.sim-dialog-dark .zx-dialog__close {
+  color: #94a3b8 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__close:hover,
+.sim-dialog-dark .zx-dialog__close:hover {
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__body,
+.sim-dialog-dark .zx-dialog__body {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__footer,
+.sim-dialog-dark .zx-dialog__footer {
+  background: linear-gradient(180deg, #0f172a, #1e293b) !important;
+  border-top: 1px solid rgba(51, 65, 85, 0.5) !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__footer .el-button,
+.sim-dialog-dark .zx-dialog__footer .el-button {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__footer .el-button:hover,
+.sim-dialog-dark .zx-dialog__footer .el-button:hover {
+  background-color: #1e293b !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__footer .el-button--primary,
+.sim-dialog-dark .zx-dialog__footer .el-button--primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(45, 212, 191, 0.2)) !important;
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  color: #22d3ee !important;
+}
+
+body.simulation-active .zx-dialog .zx-dialog__footer .el-button--primary:hover,
+.sim-dialog-dark .zx-dialog__footer .el-button--primary:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(45, 212, 191, 0.3)) !important;
+  border-color: rgba(34, 211, 238, 0.7) !important;
+}
+
+/* ZxButton 深色样式 */
+body.simulation-active .zx-button,
+.sim-dialog-dark .zx-button,
+.sim-drawer-dark .zx-button {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+  color: #cbd5e1 !important;
+}
+
+body.simulation-active .zx-button:hover,
+.sim-dialog-dark .zx-button:hover,
+.sim-drawer-dark .zx-button:hover {
+  background-color: #1e293b !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: #f1f5f9 !important;
+}
+
+body.simulation-active .zx-button--primary,
+.sim-dialog-dark .zx-button--primary,
+.sim-drawer-dark .zx-button--primary {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(45, 212, 191, 0.2)) !important;
+  border-color: rgba(34, 211, 238, 0.5) !important;
+  color: #22d3ee !important;
+}
+
+body.simulation-active .zx-button--primary:hover,
+.sim-dialog-dark .zx-button--primary:hover,
+.sim-drawer-dark .zx-button--primary:hover {
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(45, 212, 191, 0.3)) !important;
+  border-color: rgba(34, 211, 238, 0.7) !important;
+}
+
+body.simulation-active .zx-button--danger,
+.sim-dialog-dark .zx-button--danger,
+.sim-drawer-dark .zx-button--danger {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+  color: #ef4444 !important;
+}
+
+body.simulation-active .zx-button--danger:hover,
+.sim-dialog-dark .zx-button--danger:hover,
+.sim-drawer-dark .zx-button--danger:hover {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+/* VXE-Table 在 ZxDrawer/ZxDialog 中的深色样式 */
+body.simulation-active .zx-drawer .vxe-table--render-default,
+body.simulation-active .zx-dialog .vxe-table--render-default,
+.sim-drawer-dark .vxe-table--render-default,
+.sim-dialog-dark .vxe-table--render-default {
+  background-color: #0f172a !important;
+}
+
+body.simulation-active .zx-drawer .vxe-table--render-default .vxe-header--column,
+body.simulation-active .zx-dialog .vxe-table--render-default .vxe-header--column,
+.sim-drawer-dark .vxe-table--render-default .vxe-header--column,
+.sim-dialog-dark .vxe-table--render-default .vxe-header--column {
+  background-color: rgba(30, 41, 59, 0.9) !important;
+  color: #94a3b8 !important;
+}
+
+body.simulation-active .zx-drawer .vxe-table--render-default .vxe-body--row,
+body.simulation-active .zx-dialog .vxe-table--render-default .vxe-body--row,
+.sim-drawer-dark .vxe-table--render-default .vxe-body--row,
+.sim-dialog-dark .vxe-table--render-default .vxe-body--row {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.simulation-active .zx-drawer .vxe-table--render-default .vxe-body--row:hover,
+body.simulation-active .zx-dialog .vxe-table--render-default .vxe-body--row:hover,
+.sim-drawer-dark .vxe-table--render-default .vxe-body--row:hover,
+.sim-dialog-dark .vxe-table--render-default .vxe-body--row:hover {
+  background-color: #334155 !important;
+}
+
+body.simulation-active .zx-drawer .vxe-table--render-default .vxe-body--column,
+body.simulation-active .zx-dialog .vxe-table--render-default .vxe-body--column,
+.sim-drawer-dark .vxe-table--render-default .vxe-body--column,
+.sim-dialog-dark .vxe-table--render-default .vxe-body--column {
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+body.simulation-active .zx-drawer .vxe-table--render-default .vxe-cell,
+body.simulation-active .zx-dialog .vxe-table--render-default .vxe-cell,
+.sim-drawer-dark .vxe-table--render-default .vxe-cell,
+.sim-dialog-dark .vxe-table--render-default .vxe-cell {
+  color: #e2e8f0 !important;
+}

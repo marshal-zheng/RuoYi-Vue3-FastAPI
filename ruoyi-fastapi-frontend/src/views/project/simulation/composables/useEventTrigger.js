@@ -3,7 +3,7 @@
  *
  * 管理仿真过程中的自定义事件触发功能
  */
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 import {
   createEvent as createEventApi,
   updateEvent as updateEventApi,
@@ -289,7 +289,10 @@ export function useEventTrigger(sessionId) {
    * 加载事件列表
    */
   async function loadEvents() {
-    if (!sessionId.value) return;
+    if (!sessionId.value) {
+      eventList.value = [];
+      return;
+    }
 
     loading.value = true;
     try {
@@ -344,6 +347,9 @@ export function useEventTrigger(sessionId) {
 
     eventList.value.push(event);
 
+    // 重新获取一次，确保与服务端状态一致
+    await loadEvents();
+
     return event;
   }
 
@@ -364,6 +370,8 @@ export function useEventTrigger(sessionId) {
     if (event) {
       Object.assign(event, config);
     }
+    // 后端可能会更新其他字段（如状态/触发次数），刷新一次
+    await loadEvents();
   }
 
   /**
@@ -382,6 +390,7 @@ export function useEventTrigger(sessionId) {
     if (index !== -1) {
       eventList.value.splice(index, 1);
     }
+    await loadEvents();
   }
 
   /**
@@ -402,6 +411,7 @@ export function useEventTrigger(sessionId) {
       event.triggerCount += 1;
       event.lastTriggerTime = Date.now();
     }
+    await loadEvents();
   }
 
   /**
@@ -437,6 +447,19 @@ export function useEventTrigger(sessionId) {
   function reset() {
     eventList.value = [];
   }
+
+  // 会话变化时自动拉取事件列表
+  watch(
+    () => sessionId.value,
+    (id) => {
+      if (id) {
+        loadEvents();
+      } else {
+        eventList.value = [];
+      }
+    },
+    { immediate: true },
+  );
 
   return {
     // 状态

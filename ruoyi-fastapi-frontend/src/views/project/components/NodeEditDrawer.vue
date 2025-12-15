@@ -11,39 +11,35 @@
     </div>
 
     <!-- 按总线类型分组展示协议 -->
-    <div
-      v-for="group in groupedPorts"
-      :key="group.type"
-      class="mb-4 bg-white border border-gray-200 rounded-lg overflow-hidden"
-    >
+    <div v-for="group in groupedPorts" :key="group.type" class="node-group-card mb-4">
       <!-- 总线类型分组头部 -->
       <div
-        class="flex items-center justify-between px-4 py-3 bg-[#bfdbfe] cursor-pointer select-none transition-all hover:opacity-90"
+        class="node-group-header flex items-center justify-between px-4 py-3 cursor-pointer select-none transition-all"
         @click="togglePort(group.type)"
       >
         <div class="flex items-center gap-2">
           <el-icon
-            class="text-base text-gray-700 transition-transform shrink-0"
+            class="text-base node-group-arrow transition-transform shrink-0"
             :class="{ 'rotate-90': !collapsedPorts[group.type] }"
           >
             <ArrowRight />
           </el-icon>
-          <span class="text-[15px] font-bold text-gray-900 truncate">{{ group.type }}</span>
-          <span class="px-2 py-0.5 text-xs text-gray-500 bg-white rounded-md shrink-0">
+          <span class="node-group-title text-[15px] font-bold truncate">{{ group.type }}</span>
+          <span class="node-group-chip px-2 py-0.5 text-xs rounded-md shrink-0">
             {{ group.type }}
           </span>
         </div>
-        <span class="px-3 py-1 text-sm text-gray-600 bg-gray-200/80 rounded-full shrink-0">
+        <span class="node-group-count px-3 py-1 text-sm rounded-full shrink-0">
           {{ group.totalProtocols }} 个协议
         </span>
       </div>
 
       <!-- 协议列表 -->
-      <div v-show="!collapsedPorts[group.type]" class="p-2 bg-white">
+      <div v-show="!collapsedPorts[group.type]" class="node-protocol-list p-2">
         <!-- 无协议提示 -->
         <div
           v-if="group.totalProtocols === 0"
-          class="flex items-center justify-center gap-2 p-6 text-gray-400 text-sm"
+          class="node-empty-tip flex items-center justify-center gap-2 p-6 text-sm"
         >
           <el-icon><Warning /></el-icon>
           <span>该类型端口暂无协议配置</span>
@@ -53,22 +49,22 @@
         <div
           v-for="protocol in group.protocols"
           :key="protocol.id"
-          class="group flex items-center justify-between px-4 py-3 mb-2 last:mb-0 bg-white border border-gray-200 rounded-lg cursor-pointer transition-all hover:border-primary-500 hover:shadow-sm"
+          class="group flex items-center justify-between px-4 py-3 mb-2 last:mb-0 node-protocol-card cursor-pointer transition-all"
           @click="handleProtocolClick(protocol)"
         >
           <div class="flex items-center gap-3 min-w-0">
             <div
-              class="flex items-center justify-center w-8 h-8 rounded bg-[#eff6ff] text-primary-500 shrink-0"
+              class="node-protocol-icon flex items-center justify-center w-8 h-8 rounded shrink-0"
             >
               <el-icon class="text-lg"><Document /></el-icon>
             </div>
             <div class="flex flex-col min-w-0">
-              <span class="text-sm font-medium text-gray-900 truncate">
+              <span class="node-protocol-title text-sm font-medium truncate">
                 {{ protocol.message.name || protocol.port.interfaceName + ' 协议' }}
               </span>
             </div>
           </div>
-          <el-icon class="text-gray-400 group-hover:text-primary-500"><ArrowRight /></el-icon>
+          <el-icon class="node-protocol-arrow"><ArrowRight /></el-icon>
         </div>
       </div>
     </div>
@@ -445,5 +441,80 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-// 样式已通过 Tailwind CSS 类实现
+@import (reference) '../simulation/styles/variables.css';
+
+.node-group-card {
+  background: var(--sim-bg-panel, #0f172a);
+  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--sim-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.4));
+}
+
+.node-group-header {
+  background: linear-gradient(
+    135deg,
+    var(--sim-accent-bg, rgba(34, 211, 238, 0.1)),
+    rgba(45, 212, 191, 0.12)
+  );
+  border-bottom: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.25));
+  color: var(--sim-text-primary, #f1f5f9);
+}
+
+.node-group-title {
+  color: var(--sim-text-primary, #f1f5f9);
+}
+
+.node-group-arrow {
+  color: var(--sim-text-secondary, #cbd5e1);
+}
+
+.node-group-chip {
+  background: var(--sim-bg-main, #0b1220);
+  border: 1px solid var(--sim-border-light, rgba(51, 65, 85, 0.3));
+  color: var(--sim-text-secondary, #cbd5e1);
+}
+
+.node-group-count {
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.25));
+  color: var(--sim-accent, #22d3ee);
+}
+
+.node-protocol-list {
+  background: var(--sim-bg-main, #0b1220);
+}
+
+.node-empty-tip {
+  color: var(--sim-text-tertiary, #94a3b8);
+}
+
+.node-protocol-card {
+  background: var(--sim-fill-light, rgba(15, 23, 42, 0.8));
+  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  border-radius: 10px;
+  color: var(--sim-text-primary, #f1f5f9);
+
+  &:hover {
+    border-color: var(--sim-border-hover, rgba(71, 85, 105, 0.8));
+    box-shadow: var(--sim-shadow-glow-accent, 0 0 20px rgba(34, 211, 238, 0.3));
+  }
+}
+
+.node-protocol-icon {
+  background: rgba(34, 211, 238, 0.15);
+  color: var(--sim-accent, #22d3ee);
+}
+
+.node-protocol-title {
+  color: var(--sim-text-primary, #f1f5f9);
+}
+
+.node-protocol-arrow {
+  color: var(--sim-text-secondary, #cbd5e1);
+
+  .group:hover & {
+    color: var(--sim-accent, #22d3ee);
+  }
+}
 </style>
