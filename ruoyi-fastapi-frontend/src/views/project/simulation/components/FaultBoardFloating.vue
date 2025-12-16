@@ -5,6 +5,7 @@
     theme="dark"
     :position="position"
     :size="size"
+    :showCollapseBtn="false"
     :collapsed-size="collapsedSize"
     :default-collapsed="defaultCollapsed"
     @close="$emit('close')"

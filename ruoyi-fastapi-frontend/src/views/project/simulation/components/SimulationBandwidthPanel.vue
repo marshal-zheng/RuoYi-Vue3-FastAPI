@@ -1,6 +1,7 @@
 <template>
   <zx-floating-panel
     :position="position"
+    :showCollapseBtn="false"
     :size="size"
     :collapsed-size="collapsedSize"
     :default-collapsed="defaultCollapsed"

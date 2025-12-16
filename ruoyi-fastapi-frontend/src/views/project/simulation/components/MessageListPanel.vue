@@ -3,6 +3,7 @@
     <zx-floating-panel
       ref="panelRef"
       v-if="visible"
+      :showCollapseBtn="false"
       title="报文追踪"
       :position="position"
       :size="size"

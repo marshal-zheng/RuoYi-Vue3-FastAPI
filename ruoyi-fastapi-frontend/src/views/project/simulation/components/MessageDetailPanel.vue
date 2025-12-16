@@ -2,6 +2,7 @@
   <zx-floating-panel
     v-if="visible && latestMessage"
     title="报文详情"
+    :showCollapseBtn="false"
     :position="position"
     :size="size"
     :collapsed-size="collapsedSize"

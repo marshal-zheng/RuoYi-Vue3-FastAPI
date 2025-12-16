@@ -2,6 +2,7 @@
   <transition name="fade-slide">
     <zx-floating-panel
       v-if="visible"
+       :showCollapseBtn="false"
       :position="position"
       :size="size"
       :collapsed-size="collapsedSize"

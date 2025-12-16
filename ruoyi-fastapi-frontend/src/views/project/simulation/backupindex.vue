@@ -48,6 +48,7 @@
 
       <!-- 浮动监控/告警面板，不占用主布局 -->
       <zx-floating-panel
+        :showCollapseBtn="false"
         :position="{ top: '90px', right: '28px' }"
         :size="{ width: '520px', maxHeight: '430px' }"
         :collapsed-size="{ width: '46px', height: '46px' }"
@@ -91,6 +92,7 @@
       </zx-floating-panel>
 
       <zx-floating-panel
+      :showCollapseBtn="false"
         title="告警信息"
         :position="{ top: '550px', right: '28px' }"
         :size="{ width: '320px', maxHeight: '420px' }"

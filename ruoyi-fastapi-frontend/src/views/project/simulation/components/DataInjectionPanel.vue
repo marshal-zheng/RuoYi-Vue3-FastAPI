@@ -2,6 +2,7 @@
   <zx-floating-panel
     ref="panelRef"
     v-if="visible"
+    :showCollapseBtn="false"
     class="injection-floating simbus-floating-panel"
     theme="dark"
     title="数据注入策略"

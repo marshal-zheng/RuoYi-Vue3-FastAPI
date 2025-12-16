@@ -1,6 +1,7 @@
 <template>
   <zx-floating-panel
     v-if="visible"
+    :showCollapseBtn="false"
     title="告警信息"
     :position="position"
     :size="size"

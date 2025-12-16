@@ -3391,15 +3391,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@npm:^1.0.11":
-  version: 1.0.11
-  resolution: "@zxio/zxui@npm:1.0.11"
+"@zxio/zxui@npm:^1.0.12":
+  version: 1.0.12
+  resolution: "@zxio/zxui@npm:1.0.12"
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
   peerDependencies:
     element-plus: ">=2.0.0 <3.0.0"
     vue: ^3.2.0
-  checksum: 10c0/ae358279142d3ecf0ddf67cb05549841d84edf2a2bc87cc9e02cc9f63789b5e6b1ac5ecf0fdde2fdfd39e2d8f66f97c921c696fa21491ba2f0808641d5dd2729
+  checksum: 10c0/5cd3a4152b5ad2567c1f19b7a591e064bb7ddb972c942f25fe475f2ce0f1d9bdfb0b8f0943d7f58e2bac0a120e9b6f8f1d73cea1e77c8c24543eea26d7383f6d
   languageName: node
   linkType: hard
 
@@ -11778,7 +11778,7 @@ __metadata:
     "@vueuse/core": "npm:10.11.0"
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
-    "@zxio/zxui": "npm:^1.0.11"
+    "@zxio/zxui": "npm:^1.0.12"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"
     axios: "npm:0.28.1"

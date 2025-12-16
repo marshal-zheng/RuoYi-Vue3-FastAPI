@@ -52,7 +52,7 @@
     "@vueuse/core": "10.11.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.10",
-    "@zxio/zxui": "^1.0.11",
+    "@zxio/zxui": "^1.0.12",
     "ant-design-vue": "^4.1.1",
     "axios": "0.28.1",
     "clipboard": "2.0.11",
