@@ -4,8 +4,6 @@
   "status": "0",
   "description": "惯性导航系统数据输出协议，用于输出姿态、角速度、加速度等导航参数",
   "protocolConfig": {
-    "sender": "惯导系统",
-    "receiver": "飞控计算机",
     "frequency": "100",
     "frequencyLabel": "100Hz",
     "speed": "115200",

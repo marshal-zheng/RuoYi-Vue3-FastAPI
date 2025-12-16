@@ -4,8 +4,6 @@
   "status": "0",
   "description": "飞控系统舵机控制协议，飞控计算机通过RS485总线向舵机控制器发送控制指令",
   "protocolConfig": {
-    "sender": "飞控计算机",
-    "receiver": "舵机控制器",
     "frequency": "100",
     "frequencyLabel": "100Hz",
     "speed": "115200",

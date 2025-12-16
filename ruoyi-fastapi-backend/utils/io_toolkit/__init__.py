@@ -19,12 +19,24 @@ from .exporters import (
     ExcelExporter,
     JsonExporter,
     ZipExporter,
+    BatchExporter,
+    BatchExportTask,
+    BatchExportSummary,
 )
 from .importers import (
     ImportStrategy,
     ExcelImporter,
     JsonImporter,
     ZipImporter,
+    BatchImporter,
+    BatchImportSource,
+    BatchImportSummary,
+)
+from .actions import (
+    BatchActionExecutor,
+    BatchActionResult,
+    BatchActionSummary,
+    BatchActionTask,
 )
 
 __all__ = [
@@ -45,7 +57,17 @@ __all__ = [
     'ExcelExporter',
     'JsonExporter',
     'ZipExporter',
+    'BatchExporter',
+    'BatchExportTask',
+    'BatchExportSummary',
     'ExcelImporter',
     'JsonImporter',
     'ZipImporter',
+    'BatchImporter',
+    'BatchImportSource',
+    'BatchImportSummary',
+    'BatchActionExecutor',
+    'BatchActionResult',
+    'BatchActionSummary',
+    'BatchActionTask',
 ]

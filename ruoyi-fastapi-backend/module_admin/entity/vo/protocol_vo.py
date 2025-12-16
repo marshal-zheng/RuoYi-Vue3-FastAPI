@@ -49,7 +49,7 @@ class DeleteProtocolModel(BaseModel):
     删除协议模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     protocol_ids: str = Field(description='需要删除的协议ID')
     update_by: Optional[str] = Field(default=None, description='更新者')

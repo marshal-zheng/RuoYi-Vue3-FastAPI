@@ -4,8 +4,6 @@
   "status": "0",
   "description": "发动机控制单元数据采集协议，采集发动机转速、温度、油压等参数上报给飞控计算机",
   "protocolConfig": {
-    "sender": "发动机控制单元",
-    "receiver": "飞控计算机",
     "frequency": "50",
     "frequencyLabel": "50Hz",
     "speed": "57600",

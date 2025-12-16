@@ -4,8 +4,6 @@
   "status": "0",
   "description": "燃油系统监控协议，采集各油箱油量、油泵状态等信息上报飞控计算机",
   "protocolConfig": {
-    "sender": "燃油管理单元",
-    "receiver": "飞控计算机",
     "frequency": "10",
     "frequencyLabel": "10Hz",
     "speed": "250Kbps",

@@ -4,8 +4,6 @@
   "status": "0",
   "description": "导航系统通过1553B总线向飞控计算机上报导航数据，RT→BC模式",
   "protocolConfig": {
-    "sender": "导航计算机(RT02)",
-    "receiver": "飞控计算机(BC)",
     "frequency": "50",
     "frequencyLabel": "50Hz",
     "speed": "1Mbps",

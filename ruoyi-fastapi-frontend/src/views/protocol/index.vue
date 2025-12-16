@@ -17,6 +17,20 @@
               v-hasPermi="['protocol:add']"
               >新增</ZxButton
             >
+            <ZxUpload
+              ref="importUploadRef"
+              v-model="importFileList"
+              :auto-upload="false"
+              :limit="50"
+              :multiple="true"
+              accept=".xlsx,.xls,.csv,.json"
+              button-text="导入协议"
+              :max-size="10 * 1024 * 1024"
+              :show-file-list="false"
+              :show-tip="false"
+              v-hasPermi="['protocol:add']"
+              @change="handleImportFileChange"
+            />
             <ZxButton
               type="danger"
               icon="Delete"
@@ -25,24 +39,6 @@
               v-hasPermi="['protocol:remove']"
               >批量删除</ZxButton
             >
-            <ZxUpload
-              ref="importUploadRef"
-              v-model="importFileList"
-              :auto-upload="false"
-              :limit="1"
-              accept=".xlsx,.xls,.csv,.json"
-              :max-size="10 * 1024 * 1024"
-              :show-file-list="false"
-              :show-tip="false"
-              @change="handleImportFileChange"
-            >
-              <ZxButton
-                type="success"
-                icon="Upload"
-                v-hasPermi="['protocol:add']"
-                >导入协议</ZxButton
-              >
-            </ZxUpload>
           </div>
 
           <div class="zx-grid-form-bar__filters">
@@ -139,7 +135,14 @@
 </template>
 
 <script setup name="Protocol">
-import { listProtocol, delProtocol, addProtocol, updateProtocol, importProtocol } from '@/api/protocol/protocol';
+import {
+  listProtocol,
+  delProtocol,
+  delProtocolBatch,
+  addProtocol,
+  updateProtocol,
+  importProtocolBatch,
+} from '@/api/protocol/protocol';
 import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
 import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
 import { validateFile } from '@/utils/io-toolkit';
@@ -156,33 +159,17 @@ const protocolDrawerRef = ref();
 
 // 选中的协议ID列表
 const ids = ref([]);
+// 选中的行数据，避免依赖 gridListRef 内部实现
+const selectedRows = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 
 /** ZxGridList 数据加载函数 */
 async function loadProtocolData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    protocolName: params.query?.protocolName || '',
-    protocolType: params.query?.protocolType || '',
-  };
-
-  // 添加日期范围
-  const finalParams = proxy.addDateRange(queryData, params.query?.dateRange || []);
-
-  try {
-    const response = await listProtocol(finalParams);
-    return {
-      data: response.rows || [],
-      total: response.total || 0,
-    };
-  } catch {
-    return {
-      data: [],
-      total: 0,
-    };
-  }
+  // 优化写法，避免无用传参和提升可读性
+  const query = { ...params, ...proxy.addDateRange({}, params.query?.dateRange) };
+  const response = await listProtocol(query);
+  return response;
 }
 
 /** 筛选条件变化处理 */
@@ -199,6 +186,7 @@ function onSearch({ handleRefresh }) {
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.protocolId);
+  selectedRows.value = selection;
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
@@ -215,35 +203,52 @@ function handleDetailPage(row) {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const protocolIds = row.protocolId || ids.value;
+  const protocolIdsRaw = row.protocolId ? [row.protocolId] : ids.value;
+  const protocolIds = (protocolIdsRaw || []).filter((id) => id !== undefined && id !== null);
   let confirmMessage = '';
 
-  if (row.protocolId) {
+
+  if (row?.protocolId) {
     confirmMessage = '是否确认删除协议"' + row.protocolName + '"？';
   } else {
-    const currentData = gridListRef.value?.getData() || [];
-    const selectedProtocols = currentData.filter((item) => ids.value.includes(item.protocolId));
+    const selectedProtocols = selectedRows.value || [];
     if (selectedProtocols.length === 1) {
       confirmMessage = '是否确认删除协议"' + selectedProtocols[0].protocolName + '"？';
     } else {
       confirmMessage = '是否确认删除选中的 ' + selectedProtocols.length + ' 个协议？';
     }
   }
-
   proxy.$modal
     .confirm(confirmMessage)
     .then(function () {
-      return delProtocol(protocolIds);
+      if (!protocolIds || protocolIds.length === 0) {
+        return Promise.reject(new Error('no_ids'));
+      }
+      // 单个仍可用批量接口，保持一致的结果结构
+      return delProtocolBatch(protocolIds);
     })
-    .then(() => {
+    .then((res) => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('删除成功');
+      const summary = res?.data?.summary || {};
+      const successCount = Array.isArray(summary.success) ? summary.success.length : 0;
+      const failCount = Array.isArray(summary.failed) ? summary.failed.length : 0;
+      if (failCount === 0) {
+        proxy.$modal.msgSuccess('删除成功');
+      } else if (successCount > 0) {
+        proxy.$modal.msgWarning(`部分成功：成功 ${successCount} 个，失败 ${failCount} 个`);
+      } else {
+        proxy.$modal.msgError('删除失败');
+      }
     })
-    .catch(() => {});
+    .catch((err) => {
+      if (err?.message === 'no_ids') return;
+      proxy.$modal.msgError(err?.message || '删除失败');
+    });
 }
 
 /** 批量删除按钮操作 */
 function handleBatchDelete() {
+  console.log('ids', ids)
   if (ids.value.length === 0) {
     proxy.$modal.msgWarning('请选择要删除的协议');
     return;
@@ -302,36 +307,73 @@ function handleExport(row) {
 // ========== 协议导入功能 ==========
 const importUploadRef = ref(null);
 const importFileList = ref([]);
+const importing = ref(false);
+let importTimer = null;
 
-async function handleImportFileChange(fileList) {
+// 文件变化时使用防抖，等待所有文件选择完成
+function handleImportFileChange(fileList) {
   if (!fileList || fileList.length === 0) return;
+  if (importing.value) return;
 
-  const file = fileList[0];
-  const fileObj = file.raw || file;
+  // 防抖：等待文件选择稳定后再执行导入
+  if (importTimer) {
+    clearTimeout(importTimer);
+  }
+  importTimer = setTimeout(() => {
+    doImportFiles(fileList);
+  }, 100);
+}
+
+// 实际执行批量导入
+async function doImportFiles(fileList) {
+  if (!fileList || fileList.length === 0) return;
+  if (importing.value) return;
+
+  importing.value = true;
 
   const formData = new FormData();
-  formData.append('file', fileObj);
+  fileList.forEach((file) => {
+    const fileObj = file.raw || file;
+    formData.append('files', fileObj);
+  });
+
+  let successList = [];
+  let failList = [];
 
   try {
-    const result = await importProtocol(formData);
-    if (result.code === 200) {
-      const data = result.data || {};
-      ElMessage.success(`导入成功，协议名称：${data.protocolName || '未知'}`);
-      gridListRef.value?.refresh();
-      // 清空文件列表
-      importUploadRef.value?.clearFiles();
-      importFileList.value = [];
-    } else {
-      proxy.$modal.msgError(result.msg || '导入失败');
-      // 清空文件列表
-      importUploadRef.value?.clearFiles();
-      importFileList.value = [];
-    }
+    const result = await importProtocolBatch(formData);
+    const payload = result?.data || {};
+    const data = payload.data || {};
+    successList = data.success || [];
+    failList = data.failed || [];
   } catch (error) {
-    proxy.$modal.msgError(error?.message || '导入失败');
-    // 清空文件列表
-    importUploadRef.value?.clearFiles();
-    importFileList.value = [];
+    failList = (fileList || []).map((file) => ({
+      name: file?.name || file?.raw?.name || '未知文件',
+      reason: error?.message || '导入失败',
+    }));
+  }
+
+  // 清空文件列表
+  importUploadRef.value?.clearFiles();
+  importFileList.value = [];
+  importing.value = false;
+
+  // 显示导入结果
+  if (successList.length > 0 && failList.length === 0) {
+    ElMessage.success(`批量导入成功，共导入 ${successList.length} 个协议`);
+  } else if (successList.length === 0 && failList.length > 0) {
+    if (failList.length === 1) {
+      proxy.$modal.msgError(`导入失败：${failList[0].reason}`);
+    } else {
+      proxy.$modal.msgError(`批量导入失败，共 ${failList.length} 个文件导入失败`);
+    }
+  } else {
+    ElMessage.warning(`批量导入完成：成功 ${successList.length} 个，失败 ${failList.length} 个`);
+  }
+
+  // 刷新列表
+  if (successList.length > 0) {
+    gridListRef.value?.refresh();
   }
 }
 </script>

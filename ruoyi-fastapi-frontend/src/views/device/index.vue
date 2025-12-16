@@ -7,16 +7,22 @@
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['device:list:add']"
               >新增</ZxButton
             >
+            <ZxUpload
+              ref="uploadRef"
+              v-model="importFileList"
+              :auto-upload="false"
+              :multiple="true"
+              :limit="50"
+              accept=".zip,.json"
+              button-text="导入设备"
+              :max-size="20 * 1024 * 1024"
+              :show-file-list="false"
+              :show-tip="false"
+              :loading="importing"
+              v-hasPermi="['device:list:add']"
+              @change="handleImportFileChange"
+            />
             <ZxButton
-              type="danger"
-              icon="Delete"
-              :disabled="multiple"
-              @click="handleDelete"
-              v-hasPermi="['device:list:remove']"
-              >删除</ZxButton
-            >
-            <ZxButton
-              type="primary"
               icon="Download"
               :disabled="multiple"
               :loading="exporting"
@@ -25,21 +31,13 @@
               >批量导出</ZxButton
             >
             <ZxButton
-              type="warning"
-              icon="Upload"
-              :loading="importing"
-              @click="triggerImport"
-              v-hasPermi="['device:list:add']"
-              >批量导入</ZxButton
+              type="danger"
+              icon="Delete"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['device:list:remove']"
+              >删除</ZxButton
             >
-            <el-upload
-              ref="uploadRef"
-              class="device-import-upload"
-              :show-file-list="false"
-              :auto-upload="false"
-              accept=".zip,.json"
-              :on-change="handleImportFile"
-            />
           </div>
           <div class="zx-grid-form-bar__filters">
             <el-select
@@ -156,8 +154,10 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const uploadRef = ref();
+const importFileList = ref([]);
 const exporting = ref(false);
 const importing = ref(false);
+let importTimer = null;
 
 const createDialogVisible = ref(false);
 const createForm = reactive({
@@ -208,25 +208,53 @@ function handleBatchExport() {
   });
 }
 
-function triggerImport() {
-  const inputEl = uploadRef.value?.$el?.querySelector('input[type="file"]');
-  inputEl && inputEl.click();
+// 文件变化时使用防抖，等待所有文件选择完成再导入（避免只提交第一个文件）
+function handleImportFileChange(fileList) {
+  if (!fileList || fileList.length === 0) return;
+  if (importing.value) return;
+
+  if (importTimer) clearTimeout(importTimer);
+  importTimer = setTimeout(() => {
+    // 优先使用 v-model 的最终列表，避免 change 事件逐个触发时拿到的只是局部列表
+    doImportFiles(importFileList.value?.length ? importFileList.value : fileList);
+  }, 100);
 }
 
-function handleImportFile(uploadFile) {
-  if (!uploadFile || !uploadFile.raw) return;
+async function doImportFiles(fileList) {
+  if (!fileList || fileList.length === 0) return;
+  if (importing.value) return;
   importing.value = true;
+
   const formData = new FormData();
-  formData.append('file', uploadFile.raw);
-  importDeviceBatch(formData)
-    .then((res) => {
-      proxy.$modal.msgSuccess(res.msg || '导入完成');
-      refreshList();
-    })
-    .finally(() => {
-      importing.value = false;
-      uploadRef.value && uploadRef.value.clearFiles();
-    });
+  fileList.forEach((file) => {
+    const fileObj = file.raw || file;
+    formData.append('files', fileObj);
+  });
+
+  try {
+    const res = await importDeviceBatch(formData);
+    const data = res?.data || {};
+    const success = data.successCount || 0;
+    const failed = data.failedCount || 0;
+    if (failed === 0) {
+      proxy.$modal.msgSuccess(`导入成功，共 ${success} 条`);
+    } else if (success > 0) {
+      proxy.$modal.msgWarning(`部分成功：成功 ${success} 条，失败 ${failed} 条`);
+    } else {
+      proxy.$modal.msgError('导入失败');
+    }
+    refreshList();
+  } catch (err) {
+    proxy.$modal.msgError(err?.message || '导入失败');
+  } finally {
+    importing.value = false;
+    if (importTimer) {
+      clearTimeout(importTimer);
+      importTimer = null;
+    }
+    uploadRef.value && uploadRef.value.clearFiles();
+    importFileList.value = [];
+  }
 }
 
 function handleAdd() {

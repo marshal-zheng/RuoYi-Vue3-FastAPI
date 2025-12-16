@@ -69,7 +69,7 @@ export function importDeviceBatch(formData) {
     url: '/device/import/batch',
     method: 'post',
     data: formData,
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
   });
 }
 

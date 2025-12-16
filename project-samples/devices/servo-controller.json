@@ -1,0 +1,23 @@
+{
+  "deviceName": "舵机控制器",
+  "deviceType": "执行机构",
+  "manufacturer": "伺服控制研究所",
+  "model": "SRV-400",
+  "version": "V2.0",
+  "busType": "RS485",
+  "remark": "飞行舵面伺服控制器，支持副翼、升降舵、方向舵、襟翼控制，响应频率100Hz",
+  "interfaces": [
+    {
+      "interfaceName": "RS485-指令接收",
+      "interfaceType": "RS485",
+      "position": "left",
+      "description": "RS485接口，接收飞控计算机下发的舵面控制指令"
+    },
+    {
+      "interfaceName": "RS485-状态反馈",
+      "interfaceType": "RS485",
+      "position": "right",
+      "description": "RS485接口，向飞控计算机反馈舵机执行状态"
+    }
+  ]
+}

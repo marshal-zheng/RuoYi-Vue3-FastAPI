@@ -4,8 +4,6 @@
   "status": "0",
   "description": "火控计算机与任务计算机之间的武器系统数据交换，RT→RT模式",
   "protocolConfig": {
-    "sender": "火控计算机(RT03)",
-    "receiver": "任务计算机(RT01)",
     "frequency": "25",
     "frequencyLabel": "25Hz",
     "speed": "1Mbps",

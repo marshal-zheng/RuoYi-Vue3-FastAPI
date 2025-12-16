@@ -4,8 +4,6 @@
   "status": "0",
   "description": "GPS接收机定位数据输出协议，包含位置、速度、时间等导航信息",
   "protocolConfig": {
-    "sender": "GPS接收机",
-    "receiver": "导航计算机",
     "frequency": "10",
     "frequencyLabel": "10Hz",
     "speed": "38400",

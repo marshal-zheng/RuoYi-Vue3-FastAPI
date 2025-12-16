@@ -1,0 +1,17 @@
+{
+  "deviceName": "GPS接收机",
+  "deviceType": "导航设备",
+  "manufacturer": "卫星导航研究所",
+  "model": "GPS-300",
+  "version": "V2.5",
+  "busType": "RS422",
+  "remark": "多星座卫星导航接收机，支持GPS/北斗/GLONASS，定位精度2.5m CEP",
+  "interfaces": [
+    {
+      "interfaceName": "RS422-GPS输出",
+      "interfaceType": "RS422",
+      "position": "right",
+      "description": "RS422串行接口，输出GPS定位数据，38400bps，10Hz"
+    }
+  ]
+}

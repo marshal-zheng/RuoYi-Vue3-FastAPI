@@ -4,8 +4,6 @@
   "status": "0",
   "description": "起落架控制器状态反馈协议，上报起落架位置、锁定状态等信息",
   "protocolConfig": {
-    "sender": "起落架控制器",
-    "receiver": "飞控计算机",
     "frequency": "50",
     "frequencyLabel": "50Hz",
     "speed": "500Kbps",

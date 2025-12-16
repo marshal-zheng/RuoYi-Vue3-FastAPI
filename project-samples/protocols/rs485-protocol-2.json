@@ -4,8 +4,6 @@
   "status": "0",
   "description": "舵机控制器状态反馈协议，舵机控制器向飞控计算机上报当前状态",
   "protocolConfig": {
-    "sender": "舵机控制器",
-    "receiver": "飞控计算机",
     "frequency": "100",
     "frequencyLabel": "100Hz",
     "speed": "115200",

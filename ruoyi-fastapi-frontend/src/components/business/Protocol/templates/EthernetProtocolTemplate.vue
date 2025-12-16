@@ -38,65 +38,45 @@
       :edit-config="configTableEditConfig"
       class="text-sm"
     >
-      <vxe-column field="protocolName" title="" width="80" align="center" />
-      <vxe-column field="label1" title="" width="120" align="center" />
-      <vxe-column
-        field="value1"
-        title=""
-        min-width="200"
-        :edit-render="configEditRender('value1')"
-      />
-      <vxe-column field="label2" title="" width="140" align="center" />
-      <vxe-column
-        field="value2"
-        title=""
-        min-width="200"
-        :edit-render="configEditRender('value2')"
-      />
+      <vxe-column v-for="column in configColumns" :key="column.field" v-bind="column" />
     </vxe-table>
 
     <!-- 字段列表表格 -->
-    <vxe-table
-      ref="tableRef"
-      border
-      resizable
-      show-overflow
-      keep-source
+    <VxeSchemaTable
+      class="fields-table text-sm"
       :data="localConfig.fields"
-      :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
+      :columns="fieldSchemaColumns"
       :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
       :edit-rules="vxeEditRules"
-      :checkbox-config="{ checkField: 'checked' }"
-      :span-method="fieldSpanMethod"
-      :row-class-name="getRowClassName"
-      :cell-class-name="getCellClassName"
-      :tooltip-config="tooltipConfig"
-      :valid-config="vxeValidConfig"
-      max-height="500"
-      class="fields-table text-sm"
-      @edit-closed="handleEditClosed"
+      :table-props="{
+        border: true,
+        resizable: true,
+        showOverflow: true,
+        keepSource: true,
+        treeConfig: { transform: true, rowField: 'id', parentField: 'parentId' },
+        checkboxConfig: { checkField: 'checked' },
+        spanMethod: fieldSpanMethod,
+        rowClassName: getRowClassName,
+        cellClassName: getCellClassName,
+        tooltipConfig,
+        validConfig: vxeValidConfig,
+        maxHeight: 500,
+      }"
+      :hooks="schemaTableHooks"
     >
-      <vxe-column
-        v-for="column in fieldColumns"
-        :key="column.field || column.type"
-        v-bind="column"
-      />
-
-      <vxe-column title="操作" width="80" fixed="right">
-        <template #default="slotProps">
-          <zx-button
-            v-if="slotProps?.row"
-            link
-            type="danger"
-            icon="Delete"
-            size="small"
-            @click="removeRow(slotProps.row)"
-          >
-            删除
-          </zx-button>
-        </template>
-      </vxe-column>
-    </vxe-table>
+      <template #actions="{ row }">
+        <zx-button
+          v-if="row"
+          link
+          type="danger"
+          icon="Delete"
+          size="small"
+          @click="removeRow(row)"
+        >
+          删除
+        </zx-button>
+      </template>
+    </VxeSchemaTable>
 
     <!-- 校验诊断面板 -->
     <VxeValidationPanel
@@ -120,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive, computed } from 'vue';
+import { ref, watch, reactive, computed, shallowRef } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type { VxeTableInstance } from 'vxe-table';
 import { useDict } from '@/utils/dict';
@@ -138,7 +118,8 @@ import {
   createValueRangeValidator,
   parseNumber,
 } from '@/components/VxeTableValidation';
-import { createProtocolFieldColumns } from './vxeColumns';
+import VxeSchemaTable from '@/components/VxeSchemaTable/index.vue';
+import { createProtocolFieldColumns, createProtocolConfigColumns } from './vxeColumns';
 
 const props = defineProps<{
   modelValue?: any;
@@ -165,12 +146,26 @@ const {
   'sys_protocol_error_handling'
 );
 
-const tableRef = ref<VxeTableInstance>();
-const fieldColumns = computed(() =>
-  createProtocolFieldColumns({
+const tableRef = shallowRef<VxeTableInstance>();
+const schemaTableHooks = {
+  onTableReady: (table: VxeTableInstance) => {
+    tableRef.value = table;
+  },
+  onEditClosed: handleEditClosed,
+};
+const configColumns = computed(() => createProtocolConfigColumns(configEditRender));
+const fieldSchemaColumns = computed(() => [
+  ...createProtocolFieldColumns({
     dataTypeProps: { uppercaseLabel: true },
-  })
-);
+  }),
+  {
+    field: '__actions',
+    title: '操作',
+    width: 80,
+    fixed: 'right',
+    slot: 'actions',
+  },
+]);
 
 // ==================== 使用通用校验框架 ====================
 // 数据类型对应的值范围（用于溢出检测）
@@ -497,7 +492,7 @@ watch(
   }
 );
 
-const configEditRender = (field: string) => {
+function configEditRender(field: 'value1' | 'value2') {
   const getDictType = (row: Record<string, string>) => {
     if (field === 'value1' && row.label1 === '传输方式') return 'sys_protocol_method_ethernet';
     if (field === 'value1' && row.label1 === '传输频率') return 'sys_protocol_frequency';
@@ -734,7 +729,7 @@ const runValidation = async () => {
 };
 
 // 编辑完成后自动校验
-const handleEditClosed = ({ row, column }: any) => {
+function handleEditClosed({ row, column }: any) {
   // 延迟执行，确保数据已更新
   setTimeout(async () => {
     // 先清除该单元格的 VxeTable 内置校验状态
@@ -744,7 +739,7 @@ const handleEditClosed = ({ row, column }: any) => {
     // 然后运行自定义校验
     runValidation();
   }, 100);
-};
+}
 
 // 点击问题项跳转到对应单元格
 const handleIssueClick = (issue: any) => {

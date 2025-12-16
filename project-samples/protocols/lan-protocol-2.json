@@ -4,8 +4,6 @@
   "status": "0",
   "description": "多传感器数据采集以太网协议，用于温度、压力、振动等传感器数据的汇聚传输",
   "protocolConfig": {
-    "sender": "数据采集单元",
-    "receiver": "中央处理器",
     "frequency": "50",
     "frequencyLabel": "50Hz",
     "speed": "1Gbps",

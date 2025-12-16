@@ -4,8 +4,6 @@
   "status": "0",
   "description": "视频监控系统控制协议，用于摄像头控制指令和状态反馈",
   "protocolConfig": {
-    "sender": "监控主机",
-    "receiver": "摄像头云台",
     "frequency": "25",
     "frequencyLabel": "25Hz",
     "speed": "100Mbps",

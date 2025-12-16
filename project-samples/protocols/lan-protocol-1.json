@@ -1,8 +1,6 @@
 {
   "protocolType": "LAN",
   "header": {
-    "sender": "飞控计算机",
-    "receiver": "显控终端",
     "frequency": "100",
     "speed": "100M",
     "method": "udp_unicast",

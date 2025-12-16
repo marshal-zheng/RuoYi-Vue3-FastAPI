@@ -87,3 +87,19 @@ class ProtocolIOAdapter:
             data=result.result,
             errors=[] if result.is_success else [result.message],
         )
+
+    @staticmethod
+    async def import_protocol_batch(
+        query_db: AsyncSession,
+        files: list[UploadFile],
+        operator: str
+    ) -> ImportResult:
+        """
+        批量导入协议配置
+        """
+        batch_result = await ProtocolService.import_protocol_batch_services(
+            query_db=query_db,
+            files=files,
+            operator=operator
+        )
+        return batch_result

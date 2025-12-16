@@ -1,0 +1,29 @@
+{
+  "deviceName": "导航计算机",
+  "deviceType": "计算机",
+  "manufacturer": "航空电子研究所",
+  "model": "NAV-1000",
+  "version": "V1.8",
+  "busType": "多总线",
+  "remark": "导航数据融合计算机，融合惯导和GPS数据，通过1553B上报飞控计算机",
+  "interfaces": [
+    {
+      "interfaceName": "RS422-惯导输入",
+      "interfaceType": "RS422",
+      "position": "left",
+      "description": "RS422串行接口，接收惯导系统数据"
+    },
+    {
+      "interfaceName": "RS422-GPS输入",
+      "interfaceType": "RS422",
+      "position": "left",
+      "description": "RS422串行接口，接收GPS定位数据"
+    },
+    {
+      "interfaceName": "1553B-RT",
+      "interfaceType": "1553B",
+      "position": "right",
+      "description": "1553B总线RT接口，向飞控计算机上报融合后的导航数据"
+    }
+  ]
+}

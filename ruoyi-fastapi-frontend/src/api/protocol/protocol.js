@@ -43,6 +43,15 @@ export function delProtocol(protocolId) {
   });
 }
 
+// 批量删除协议
+export function delProtocolBatch(protocolIds) {
+  return request({
+    url: '/system/protocol/deleteBatch',
+    method: 'post',
+    data: { protocolIds },
+  });
+}
+
 // 已移除固化接口
 
 // 导出协议
@@ -80,6 +89,17 @@ export function importProtocol(formData) {
     url: '/system/protocol/import',
     method: 'post',
     data: formData,
-    headers: { 'Content-Type': 'multipart/form-data' },
+    // 批量导入需要连续发起多次请求，关闭全局防重复提交校验避免被拦截
+    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+  });
+}
+
+// 批量导入协议配置（单次请求携带多个文件）
+export function importProtocolBatch(formData) {
+  return request({
+    url: '/system/protocol/importBatch',
+    method: 'post',
+    data: formData,
+    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
   });
 }

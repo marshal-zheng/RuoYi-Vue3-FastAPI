@@ -219,15 +219,26 @@ async def export_device_batch(
 @Log(title='设备管理-批量导入', business_type=BusinessType.IMPORT)
 async def import_device_batch(
     request: Request,
-    file: UploadFile = File(...),
+    files: list[UploadFile] = File(default=[]),
+    file: UploadFile = File(default=None),
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
     """
     批量导入设备数据（zip或json）
     """
-    file_bytes = await file.read()
-    import_result = await DeviceService.import_devices_from_zip_services(
-        query_db, file_bytes, current_user.user.user_name
-    )
-    return ResponseUtil.success(msg='批量导入完成', data=import_result)
+    if files:
+        contents = [await f.read() for f in files]
+        import_result = await DeviceService.import_devices_multi_services(
+            query_db, contents, current_user.user.user_name
+        )
+        return ResponseUtil.success(msg='批量导入完成', data=import_result)
+
+    if file:
+        file_bytes = await file.read()
+        import_result = await DeviceService.import_devices_from_zip_services(
+            query_db, file_bytes, current_user.user.user_name
+        )
+        return ResponseUtil.success(msg='批量导入完成', data=import_result)
+
+    return ResponseUtil.error(msg='未提供上传文件')

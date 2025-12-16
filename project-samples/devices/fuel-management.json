@@ -1,0 +1,23 @@
+{
+  "deviceName": "燃油管理系统",
+  "deviceType": "监控设备",
+  "manufacturer": "燃油系统研究所",
+  "model": "FMS-100",
+  "version": "V1.2",
+  "busType": "CAN",
+  "remark": "燃油系统监控管理单元，监测各油箱油量、油泵状态，提供燃油告警",
+  "interfaces": [
+    {
+      "interfaceName": "传感器输入",
+      "interfaceType": "RS422",
+      "position": "left",
+      "description": "油量传感器信号输入接口"
+    },
+    {
+      "interfaceName": "CAN-燃油数据",
+      "interfaceType": "CAN",
+      "position": "right",
+      "description": "CAN总线接口，上报燃油系统监控数据"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, File, Form, Request, UploadFile
+from fastapi import APIRouter, Body, Depends, File, Form, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -131,6 +131,35 @@ async def delete_protocol(
         return ResponseUtil.error(msg=str(e))
 
 
+@protocolController.post(
+    '/deleteBatch',
+    response_model=CrudResponseModel,
+    dependencies=[
+        Depends(CheckUserInterfaceAuth('protocol:remove')),
+    ]
+)
+@Log(title='协议管理', business_type=BusinessType.DELETE, log_type='operation')
+async def delete_protocol_batch(
+    request: Request,
+    protocolIds: list[int] = Body(..., embed=True),
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user)
+):
+    """
+    批量删除协议（使用 BatchActionExecutor 收敛结果）
+    """
+    try:
+        summary = await ProtocolService.delete_protocol_batch_services(
+            query_db=query_db,
+            protocol_ids=protocolIds,
+            operator=current_user.user.user_name,
+        )
+        return ResponseUtil.success(data={'summary': summary}, msg='批量删除完成')
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
 @protocolController.get(
     '/importTemplate',
     dependencies=[Depends(CheckUserInterfaceAuth('protocol:edit'))]
@@ -230,6 +259,33 @@ async def import_protocol(
         )
         logger.info('协议导入成功')
         return ResponseUtil.success(data=import_result.data, msg='导入成功')
+    except Exception as e:
+        logger.exception(e)
+        return ResponseUtil.error(msg=str(e))
+
+
+@protocolController.post(
+    '/importBatch',
+    dependencies=[Depends(CheckUserInterfaceAuth('protocol:add'))]
+)
+@Log(title='协议管理', business_type=BusinessType.IMPORT, log_type='operation')
+async def import_protocol_batch(
+    request: Request,
+    files: list[UploadFile] = File(...),
+    query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(LoginService.get_current_user)
+):
+    """
+    批量导入协议配置
+    """
+    try:
+        import_result = await ProtocolIOAdapter.import_protocol_batch(
+            query_db=query_db,
+            files=files,
+            operator=current_user.user.user_name
+        )
+        msg = '批量导入成功' if import_result.failed_count == 0 else '部分导入成功'
+        return ResponseUtil.success(data=import_result.model_dump(), msg=msg)
     except Exception as e:
         logger.exception(e)
         return ResponseUtil.error(msg=str(e))

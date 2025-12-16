@@ -1,0 +1,23 @@
+{
+  "deviceName": "起落架控制器",
+  "deviceType": "执行机构",
+  "manufacturer": "机电系统研究所",
+  "model": "LGC-200",
+  "version": "V1.5",
+  "busType": "CAN",
+  "remark": "起落架收放控制器，控制前起落架和左右主起落架的收放、锁定动作",
+  "interfaces": [
+    {
+      "interfaceName": "CAN-指令接收",
+      "interfaceType": "CAN",
+      "position": "left",
+      "description": "CAN总线接口，接收飞控计算机下发的起落架控制指令"
+    },
+    {
+      "interfaceName": "CAN-状态反馈",
+      "interfaceType": "CAN",
+      "position": "right",
+      "description": "CAN总线接口，向飞控计算机反馈起落架位置和锁定状态"
+    }
+  ]
+}

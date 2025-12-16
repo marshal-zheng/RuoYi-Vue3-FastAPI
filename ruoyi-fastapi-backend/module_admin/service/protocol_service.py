@@ -1,6 +1,7 @@
 import io
 import uuid
 import json
+from datetime import datetime
 from typing import Dict, List, Optional, Any
 import pandas as pd
 from fastapi import UploadFile
@@ -19,6 +20,8 @@ from module_admin.entity.vo.protocol_vo import (
 )
 from utils.common_util import CamelCaseUtil
 from utils.page_util import PageResponseModel
+from utils.io_toolkit.models import ImportResult, ImportStatus
+from utils.io_toolkit import BatchActionExecutor, BatchActionTask
 
 
 PROTOCOL_TYPE_MAPPING = {
@@ -391,6 +394,59 @@ class ProtocolService:
         except Exception as e:
             await query_db.rollback()
             raise e
+
+    @classmethod
+    async def delete_protocol_batch_services(
+        cls,
+        query_db: AsyncSession,
+        protocol_ids: List[int],
+        operator: str,
+    ) -> Dict[str, Any]:
+        """
+        批量删除协议，使用 BatchActionExecutor 统一结果结构
+        """
+        if not protocol_ids:
+            raise ServiceException(message='请选择要删除的协议')
+
+        normalized_ids: List[int] = []
+        invalid_ids: List[str] = []
+        for pid in protocol_ids:
+            try:
+                normalized_ids.append(int(pid))
+            except Exception:
+                invalid_ids.append(str(pid))
+
+        executor = BatchActionExecutor(concurrency=1, enable_dedup=True)
+
+        async def _delete_one(pid: int):
+            payload = DeleteProtocolModel(protocolIds=str(pid), update_by=operator, update_time=datetime.now())
+            try:
+                await ProtocolDao.delete_protocol_dao(query_db, payload)
+                await query_db.commit()
+            except Exception as exc:  # noqa: BLE001
+                await query_db.rollback()
+                raise exc
+
+        tasks = [
+            BatchActionTask(
+                id=pid,
+                handler=_delete_one,
+                args=(pid,),
+                timeout=5,
+                max_retries=0,
+                dedup_key=str(pid),
+            )
+            for pid in normalized_ids
+        ]
+
+        summary = await executor.run(tasks)
+        result = summary.as_dict()
+        if invalid_ids:
+            # 记录无法解析的ID
+            result.setdefault('failed', []).extend(
+                [{'id': bad_id, 'success': False, 'data': None, 'error': '非法ID', 'attempts': 0} for bad_id in invalid_ids]
+            )
+        return result
 
     @classmethod
     async def protocol_detail_services(cls, query_db: AsyncSession, protocol_id: int):
@@ -1122,6 +1178,66 @@ class ProtocolService:
             is_success=True,
             message='导入成功',
             result={'protocolName': protocol_name, 'protocolType': normalized_type}
+        )
+
+    @classmethod
+    async def import_protocol_batch_services(
+        cls,
+        query_db: AsyncSession,
+        files: List[UploadFile],
+        operator: str
+    ) -> ImportResult:
+        """
+        批量导入协议配置
+
+        :param query_db: orm对象
+        :param files: 上传的文件列表
+        :param operator: 操作人
+        :return: ImportResult
+        """
+        if not files:
+            raise ServiceException(message='请选择要导入的文件')
+
+        success_items: List[Dict[str, Any]] = []
+        failed_items: List[Dict[str, Any]] = []
+
+        for file in files:
+            filename = getattr(file, 'filename', '') or '未知文件'
+            try:
+                single_result = await cls.import_protocol_services(
+                    query_db, file, protocol_name=None, operator=operator
+                )
+                if single_result and getattr(single_result, 'is_success', False):
+                    success_items.append({
+                        'filename': filename,
+                        **(single_result.result or {})
+                    })
+                else:
+                    failed_items.append({
+                        'filename': filename,
+                        'reason': getattr(single_result, 'message', '导入失败')
+                    })
+            except Exception as exc:  # noqa: BLE001
+                failed_items.append({
+                    'filename': filename,
+                    'reason': str(exc)
+                })
+
+        status = ImportStatus.SUCCESS
+        if failed_items and success_items:
+            status = ImportStatus.PARTIAL
+        elif failed_items and not success_items:
+            status = ImportStatus.FAILED
+
+        return ImportResult(
+            status=status,
+            total_count=len(files),
+            success_count=len(success_items),
+            failed_count=len(failed_items),
+            data={
+                'success': success_items,
+                'failed': failed_items
+            }
         )
 
     @staticmethod

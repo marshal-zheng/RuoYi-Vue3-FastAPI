@@ -50,3 +50,13 @@ export const createProtocolFieldColumns = (
     { field: 'remark', title: '备注', editRender: { name: 'input' } },
   ];
 };
+
+export const createProtocolConfigColumns = (
+  editRender: (field: 'value1' | 'value2') => VxeTableDefines.EditRender | undefined
+): VxeTableDefines.ColumnOptions[] => [
+  { field: 'protocolName', title: '', width: 80, align: 'center' },
+  { field: 'label1', title: '', width: 120, align: 'center' },
+  { field: 'value1', title: '', minWidth: 200, editRender: editRender('value1') },
+  { field: 'label2', title: '', width: 140, align: 'center' },
+  { field: 'value2', title: '', minWidth: 200, editRender: editRender('value2') },
+];

@@ -400,7 +400,7 @@ class DeviceService:
                 })
             except Exception as exc:
                 await db.rollback()
-                raise ServiceException(message=str(exc))
+                raise ServiceException(message=str(exc) or repr(exc))
 
         return {
             'successCount': success_count,
@@ -409,12 +409,59 @@ class DeviceService:
         }
 
     @classmethod
+    async def import_devices_multi_services(
+        cls,
+        db: AsyncSession,
+        files: List[bytes],
+        operator: str
+    ):
+        """
+        批量处理多个上传文件，复用 import_devices_from_zip_services
+        """
+        total_success = 0
+        total_failed = 0
+        details: List[Dict[str, str]] = []
+
+        if not files:
+            raise ServiceException(message='未找到上传文件')
+
+        for content in files:
+            try:
+                result = await cls.import_devices_from_zip_services(db, content, operator)
+                total_success += result.get('successCount', 0)
+                total_failed += result.get('failedCount', 0)
+                details.extend(result.get('details', []))
+            except Exception as exc:  # noqa: BLE001
+                total_failed += 1
+                details.append({
+                    'fileName': 'unknown',
+                    'status': 'failed',
+                    'message': str(exc) or repr(exc),
+                })
+
+        return {
+            'successCount': total_success,
+            'failedCount': total_failed,
+            'details': details,
+        }
+
+    @classmethod
     async def _import_single_device(cls, db: AsyncSession, json_text: str, operator: str):
         """
         导入单个设备
         """
         raw_data = json.loads(json_text)
-        export_data = DeviceExportDataModel(**raw_data)
+        # 支持两种格式：带 device 包装的导出格式，或直接设备字段的简化格式
+        if 'device' in raw_data:
+            payload = raw_data
+        else:
+            payload = {
+                'device': raw_data,
+                'export_version': raw_data.get('export_version') or raw_data.get('exportVersion') or '1.0.0',
+                'export_time': raw_data.get('export_time') or raw_data.get('exportTime') or datetime.now().isoformat(),
+            }
+
+        export_data = DeviceExportDataModel(**payload)
         source = export_data.device
 
         resolved_category_id, resolved_category_name = await cls._resolve_category_info(

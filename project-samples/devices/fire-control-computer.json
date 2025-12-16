@@ -1,0 +1,29 @@
+{
+  "deviceName": "火控计算机",
+  "deviceType": "计算机",
+  "manufacturer": "火控系统研究所",
+  "model": "FCC-800",
+  "version": "V2.3",
+  "busType": "多总线",
+  "remark": "武器火控计算机，负责目标跟踪、瞄准解算、武器状态管理等功能",
+  "interfaces": [
+    {
+      "interfaceName": "RS422-雷达接口",
+      "interfaceType": "RS422",
+      "position": "left",
+      "description": "RS422接口，接收雷达目标数据"
+    },
+    {
+      "interfaceName": "1553B-RT",
+      "interfaceType": "1553B",
+      "position": "right",
+      "description": "1553B总线RT接口，与任务计算机交换火控数据"
+    },
+    {
+      "interfaceName": "LAN-火控数据",
+      "interfaceType": "LAN",
+      "position": "right",
+      "description": "以太网接口，用于火控数据高速传输"
+    }
+  ]
+}

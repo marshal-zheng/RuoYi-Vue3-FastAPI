@@ -1,0 +1,29 @@
+{
+  "deviceName": "任务计算机",
+  "deviceType": "计算机",
+  "manufacturer": "航空电子研究所",
+  "model": "MPC-1500",
+  "version": "V3.1",
+  "busType": "多总线",
+  "remark": "任务管理计算机，负责任务规划、航路管理、多传感器数据融合等功能",
+  "interfaces": [
+    {
+      "interfaceName": "1553B-RT",
+      "interfaceType": "1553B",
+      "position": "left",
+      "description": "1553B总线RT接口，与火控计算机交换武器数据"
+    },
+    {
+      "interfaceName": "LAN-任务数据",
+      "interfaceType": "LAN",
+      "position": "right",
+      "description": "以太网接口，用于任务数据传输"
+    },
+    {
+      "interfaceName": "LAN-显控接口",
+      "interfaceType": "LAN",
+      "position": "right",
+      "description": "以太网接口，连接座舱显控系统"
+    }
+  ]
+}

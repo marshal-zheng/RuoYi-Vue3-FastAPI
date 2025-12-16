@@ -1,0 +1,29 @@
+{
+  "deviceName": "综合传感器",
+  "deviceType": "采集设备",
+  "manufacturer": "传感器研究所",
+  "model": "SHB-600",
+  "version": "V1.6",
+  "busType": "多总线",
+  "remark": "综合传感器数据采集单元，汇聚各类传感器数据并通过以太网上报",
+  "interfaces": [
+    {
+      "interfaceName": "CAN-传感器数据",
+      "interfaceType": "CAN",
+      "position": "left",
+      "description": "CAN总线接口，接收燃油系统等CAN设备数据"
+    },
+    {
+      "interfaceName": "RS422-模拟量输入",
+      "interfaceType": "RS422",
+      "position": "left",
+      "description": "RS422接口，接收模拟量传感器数据"
+    },
+    {
+      "interfaceName": "LAN-传感器汇聚",
+      "interfaceType": "LAN",
+      "position": "right",
+      "description": "以太网接口，汇聚上报传感器数据"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "deviceName": "惯性导航系统",
+  "deviceType": "导航设备",
+  "manufacturer": "惯性技术研究所",
+  "model": "INS-500",
+  "version": "V3.0",
+  "busType": "RS422",
+  "remark": "高精度惯性导航系统，输出姿态角、角速度、加速度等导航参数，精度0.01°/h",
+  "interfaces": [
+    {
+      "interfaceName": "RS422-惯导输出",
+      "interfaceType": "RS422",
+      "position": "right",
+      "description": "RS422串行接口，输出惯导数据，115200bps，100Hz"
+    }
+  ]
+}

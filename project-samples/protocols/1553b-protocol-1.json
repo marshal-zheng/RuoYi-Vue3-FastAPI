@@ -4,8 +4,6 @@
   "status": "0",
   "description": "飞控计算机通过1553B总线向各子系统下发控制指令，BC→RT模式",
   "protocolConfig": {
-    "sender": "飞控计算机(BC)",
-    "receiver": "任务计算机(RT01)",
     "frequency": "50",
     "frequencyLabel": "50Hz",
     "speed": "1Mbps",

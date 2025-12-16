@@ -1,0 +1,41 @@
+{
+  "deviceName": "飞控计算机",
+  "deviceType": "计算机",
+  "manufacturer": "航空电子研究所",
+  "model": "FCC-2000",
+  "version": "V2.1",
+  "busType": "多总线",
+  "remark": "飞行控制系统核心计算机，负责飞行姿态控制、导航数据融合、舵面控制指令下发等功能",
+  "interfaces": [
+    {
+      "interfaceName": "1553B-导航输入",
+      "interfaceType": "1553B",
+      "position": "left",
+      "description": "1553B总线接口，接收导航计算机上报的导航数据"
+    },
+    {
+      "interfaceName": "LAN-飞控数据",
+      "interfaceType": "LAN",
+      "position": "right",
+      "description": "以太网接口，用于飞控数据传输，100Mbps"
+    },
+    {
+      "interfaceName": "1553B-BC",
+      "interfaceType": "1553B",
+      "position": "right",
+      "description": "1553B总线控制器接口，作为BC向各RT下发控制指令"
+    },
+    {
+      "interfaceName": "RS485-舵机控制",
+      "interfaceType": "RS485",
+      "position": "right",
+      "description": "RS485接口，用于向舵机控制器发送控制指令"
+    },
+    {
+      "interfaceName": "CAN-起落架",
+      "interfaceType": "CAN",
+      "position": "right",
+      "description": "CAN总线接口，用于起落架控制系统通信"
+    }
+  ]
+}
