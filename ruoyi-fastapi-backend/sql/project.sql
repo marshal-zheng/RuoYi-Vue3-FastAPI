@@ -184,15 +184,26 @@ INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component,
 VALUES (1071, '版本列表', 118, 11, '#', '', 1, 0, 'F', '0', '0', 'project:version:list', '#', 'admin', NOW(), 'admin', NOW(), '')
 ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), update_time = NOW();
 
+-- 仿真功能权限（统一为一个权限，简化权限管理）
+INSERT INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES (1072, '使用仿真', 118, 12, '#', '', 1, 0, 'F', '0', '0', 'simulation:use', '#', 'admin', NOW(), 'admin', NOW(), '使用仿真功能（包含所有仿真操作）')
+ON DUPLICATE KEY UPDATE parent_id = VALUES(parent_id), order_num = VALUES(order_num), perms = VALUES(perms), remark = VALUES(remark), update_time = NOW();
+
+-- 清理旧的碎片化仿真权限（1073-1087）
+DELETE FROM sys_role_menu WHERE menu_id IN (1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087);
+DELETE FROM sys_menu WHERE menu_id IN (1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087);
+
 -- 恢复管理员角色菜单
-DELETE FROM sys_role_menu WHERE role_id = 1 AND menu_id IN (4, 118, 119, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071);
+DELETE FROM sys_role_menu WHERE role_id = 1 AND menu_id IN (4, 118, 119, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072);
 
 INSERT INTO sys_role_menu (role_id, menu_id)
 VALUES 
     (1, 4),
     (1, 118), (1, 119),
     (1, 1061), (1, 1062), (1, 1063), (1, 1064),
-    (1, 1065), (1, 1066), (1, 1067), (1, 1068), (1, 1069), (1, 1070), (1, 1071)
+    (1, 1065), (1, 1066), (1, 1067), (1, 1068), (1, 1069), (1, 1070), (1, 1071),
+    -- 仿真权限（统一为一个）
+    (1, 1072)
 ON DUPLICATE KEY UPDATE menu_id = VALUES(menu_id);
 
 COMMIT;

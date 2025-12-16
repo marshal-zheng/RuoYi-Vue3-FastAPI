@@ -1,11 +1,12 @@
 import request from '@/utils/request';
 
 // 查询设备列表
-export function listDevice(query) {
+export function listDevice(query, options = {}) {
   return request({
     url: '/device/list',
     method: 'get',
     params: query,
+    ...options,
   });
 }
 

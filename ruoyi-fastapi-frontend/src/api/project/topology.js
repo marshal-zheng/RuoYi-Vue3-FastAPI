@@ -10,10 +10,11 @@ export function saveProjectTopology(data) {
 }
 
 // 获取工程拓扑数据（可选按版本维度）
-export function getProjectTopology(projectId, versionId) {
+export function getProjectTopology(projectId, versionId, options = {}) {
   return request({
     url: '/project/topology/' + projectId,
     method: 'get',
     params: versionId ? { version_id: versionId } : undefined,
+    ...options,
   });
 }

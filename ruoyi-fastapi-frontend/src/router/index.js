@@ -204,7 +204,7 @@ export const dynamicRoutes = [
     path: '/project/simulation',
     component: Layout,
     hidden: true,
-    permissions: ['project:project:query'],
+    permissions: ['simulation:use'],
     children: [
       {
         path: 'index/:projectId(\\d+)',

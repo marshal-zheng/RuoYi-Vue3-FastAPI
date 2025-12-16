@@ -159,7 +159,7 @@ async def save_project_topology(
 
 @projectController.get(
     '/topology/{project_id}',
-    dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))],
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:query'))],
 )
 async def get_project_topology(
     request: Request,

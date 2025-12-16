@@ -669,28 +669,40 @@ const { buildSimulationSummary } = useSimulationReport({
   simulationState,
 });
 
-// 加载项目信息
+// 加载项目信息（无权限时静默降级）
 async function loadProjectInfo() {
-  const res = await getProject(projectId.value);
-  projectName.value = res.data?.projectName || "未命名工程";
+  try {
+    const res = await getProject(projectId.value, { silentError: true });
+    projectName.value = res.data?.projectName || "未命名工程";
+  } catch (err) {
+    console.warn("[仿真] 无法获取工程信息，可能缺少 project:project:query 权限");
+    projectName.value = "未命名工程";
+  }
 }
 
-// 加载设备列表
+// 加载设备列表（无权限时静默降级，不影响仿真主功能）
 async function loadDeviceList() {
   loading.value = true;
-  const response = await listDevice({});
-  const devices = response?.rows || [];
-  operators.value = devices.map((device) => ({
-    name: device.deviceName,
-    value: device.remark || device.deviceDesc || "设备",
-    category: device.categoryName || device.category || "未分类",
-    deviceId: device.deviceId,
-    deviceType: device.deviceType,
-    busType: device.busType,
-    ports: normalizePorts(device.interfaces || []),
-    nodeType: "device-port-node",
-  }));
-  loading.value = false;
+  try {
+    const response = await listDevice({}, { silentError: true });
+    const devices = response?.rows || [];
+    operators.value = devices.map((device) => ({
+      name: device.deviceName,
+      value: device.remark || device.deviceDesc || "设备",
+      category: device.categoryName || device.category || "未分类",
+      deviceId: device.deviceId,
+      deviceType: device.deviceType,
+      busType: device.busType,
+      ports: normalizePorts(device.interfaces || []),
+      nodeType: "device-port-node",
+    }));
+  } catch (err) {
+    // 无设备列表权限时静默降级，仅在控制台记录
+    console.warn("[仿真] 无法加载设备库，可能缺少 device:list:list 权限");
+    operators.value = [];
+  } finally {
+    loading.value = false;
+  }
 }
 
 // 从后端加载并回显已保存的拓扑数据
@@ -708,7 +720,7 @@ function restoreSavedTopology() {
     setupEdgeEvents(graph);
     setupEdgeHoverEvents(graph);
 
-    getProjectTopology(projectId.value, versionId.value)
+    getProjectTopology(projectId.value, versionId.value, { silentError: true })
       .then((res) => {
         const topo = res?.data;
         const topoData = topo?.topologyData;
@@ -720,7 +732,10 @@ function restoreSavedTopology() {
           updateTopologyNodes();
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.warn("[仿真] 无法加载拓扑数据，可能缺少 project:project:query 权限", err);
+        ElMessage.warning("无法加载拓扑数据，请检查权限配置");
+      });
   };
 
   tryRestore();

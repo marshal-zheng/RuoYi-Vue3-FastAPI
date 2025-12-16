@@ -10,10 +10,11 @@ export function listProject(query) {
 }
 
 // 查询工程详细
-export function getProject(projectId) {
+export function getProject(projectId, options = {}) {
   return request({
     url: '/project/' + projectId,
     method: 'get',
+    ...options,
   });
 }
 

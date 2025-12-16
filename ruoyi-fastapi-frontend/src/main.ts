@@ -6,6 +6,7 @@ import { setupVXETable } from '@/plugins/vxe-table';
 
 // Iconify 图标库
 import '@iconify/iconify';
+import { Icon } from '@iconify/vue'
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
@@ -79,6 +80,7 @@ app.component('ImageUpload', ImageUpload);
 app.component('ImagePreview', ImagePreview);
 app.component('RightToolbar', RightToolbar);
 app.component('Editor', Editor);
+app.component('Icon', Icon);
 
 app.use(router);
 app.use(store);

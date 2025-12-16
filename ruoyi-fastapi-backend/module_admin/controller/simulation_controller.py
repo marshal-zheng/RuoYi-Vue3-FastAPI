@@ -101,7 +101,7 @@ async def get_fill_strategies(request: Request):
     '/sessions',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:create'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-创建会话', business_type=BusinessType.INSERT)
@@ -139,7 +139,7 @@ async def create_simulation_session(
     '/sessions/{session_id}/start',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:start'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-启动仿真', business_type=BusinessType.UPDATE)
@@ -171,7 +171,7 @@ async def start_simulation_session(
     '/sessions/{session_id}/stop',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:stop'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-停止仿真', business_type=BusinessType.UPDATE)
@@ -205,7 +205,7 @@ async def stop_simulation_session(
     '/sessions/{session_id}/status',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def get_simulation_status(
@@ -233,7 +233,7 @@ async def get_simulation_status(
     '/sessions/{session_id}/messages',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def get_simulation_messages(
@@ -263,7 +263,7 @@ async def get_simulation_messages(
     '/sessions/{session_id}/bandwidth',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def get_simulation_bandwidth(
@@ -293,7 +293,7 @@ async def get_simulation_bandwidth(
     '/sessions/{session_id}/alarms',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:data:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def get_simulation_alarms(
@@ -321,7 +321,7 @@ async def get_simulation_alarms(
     '/sessions/{session_id}/export',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:data:export'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-导出数据', business_type=BusinessType.EXPORT)
@@ -358,7 +358,7 @@ async def export_simulation_data(
     '/sessions/{session_id}/pause',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-暂停仿真', business_type=BusinessType.UPDATE)
@@ -377,7 +377,7 @@ async def pause_simulation_session(
     '/sessions/{session_id}/resume',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-继续仿真', business_type=BusinessType.UPDATE)
@@ -396,7 +396,7 @@ async def resume_simulation_session(
     '/sessions/{session_id}/speed',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def set_simulation_speed(
@@ -415,7 +415,7 @@ async def set_simulation_speed(
     '/sessions/{session_id}/step',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def step_simulation(
@@ -432,7 +432,7 @@ async def step_simulation(
     '/sessions/{session_id}/duration',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:session:control'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def set_simulation_duration(
@@ -451,7 +451,7 @@ async def set_simulation_duration(
     '/sessions/{session_id}/faults',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:inject'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-注入故障', business_type=BusinessType.INSERT)
@@ -489,7 +489,7 @@ async def inject_fault(
     '/sessions/{session_id}/faults/{fault_id}',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-清除故障', business_type=BusinessType.DELETE)
@@ -508,7 +508,7 @@ async def clear_fault(
     '/sessions/{session_id}/faults',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-清除全部故障', business_type=BusinessType.DELETE)
@@ -526,7 +526,7 @@ async def clear_all_faults(
     '/sessions/{session_id}/faults',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def list_faults(
@@ -545,7 +545,7 @@ async def list_faults(
     '/faults',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:inject'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def upsert_fault(
@@ -571,7 +571,7 @@ async def upsert_fault(
     '/faults',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def query_faults(session_id: str = Query(..., alias="sessionId")):
@@ -586,7 +586,7 @@ async def query_faults(session_id: str = Query(..., alias="sessionId")):
     '/faults/{fault_id}',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:fault:clear'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessionId")):
@@ -602,7 +602,7 @@ async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessio
     '/sessions/{session_id}/events',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:create'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-添加事件', business_type=BusinessType.INSERT)
@@ -637,7 +637,7 @@ async def add_event(
     '/sessions/{session_id}/events/{event_id}',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:update'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-更新事件', business_type=BusinessType.UPDATE)
@@ -664,7 +664,7 @@ async def update_event(
     '/sessions/{session_id}/events/{event_id}/trigger',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:trigger'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-触发事件', business_type=BusinessType.UPDATE)
@@ -699,7 +699,7 @@ async def trigger_event(
     '/sessions/{session_id}/events/{event_id}/reset',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:update'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def reset_event(
@@ -717,7 +717,7 @@ async def reset_event(
     '/sessions/{session_id}/events/{event_id}',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:delete'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 @Log(title='仿真管理-删除事件', business_type=BusinessType.DELETE)
@@ -736,7 +736,7 @@ async def remove_event(
     '/sessions/{session_id}/events',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:event:query'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def list_events(
@@ -754,7 +754,7 @@ async def list_events(
     '/topology/validate',
     dependencies=[
         Depends(LoginService.get_current_user),
-        Depends(CheckUserInterfaceAuth('simulation:topology:validate'))
+        Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
 async def validate_topology(

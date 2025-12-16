@@ -86,7 +86,7 @@
           >
             <template #default="{ row }">
               <div class="op-col__wrap">
-                <ZxButton link type="primary" @click="handleSimulateVersion(row)">仿真</ZxButton>
+                <ZxButton link type="primary" @click="handleSimulateVersion(row)" v-hasPermi="['simulation:use']">仿真</ZxButton>
                 <ZxButton link type="primary" @click="handleEditVersionTopo(row)">图编辑</ZxButton>
                 <ZxMoreAction
                   :list="getMoreActionList(row)"

@@ -207,6 +207,8 @@ service.interceptors.response.use(
     const code = res.data.code || 200;
     // 获取错误信息
     const msg = errorCode[code] || res.data.msg || errorCode['default'];
+    // 检查是否为静默模式（不弹出错误提示）
+    const silentError = (res.config as any)?.silentError === true;
     // 二进制数据则直接返回
     if (res.request.responseType === 'blob' || res.request.responseType === 'arraybuffer') {
       return res.data;
@@ -233,13 +235,19 @@ service.interceptors.response.use(
       }
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
     } else if (code === 500) {
-      ElMessage({ message: msg, type: 'error' });
+      if (!silentError) {
+        ElMessage({ message: msg, type: 'error' });
+      }
       return Promise.reject(new Error(msg));
     } else if (code === 601) {
-      ElMessage({ message: msg, type: 'warning' });
+      if (!silentError) {
+        ElMessage({ message: msg, type: 'warning' });
+      }
       return Promise.reject(new Error(msg));
     } else if (code !== 200) {
-      ElNotification.error({ title: msg });
+      if (!silentError) {
+        ElNotification.error({ title: msg });
+      }
       return Promise.reject('error');
     } else {
       attachPager(res.data);
@@ -247,6 +255,8 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
+    // 检查是否为静默模式
+    const silentError = (error.config as any)?.silentError === true;
     console.log('err' + error);
     let { message } = error;
     if (message == 'Network Error') {
@@ -256,7 +266,9 @@ service.interceptors.response.use(
     } else if (message.includes('Request failed with status code')) {
       message = '系统接口' + message.substr(message.length - 3) + '异常';
     }
-    ElMessage({ message: message, type: 'error', duration: 5 * 1000 });
+    if (!silentError) {
+      ElMessage({ message: message, type: 'error', duration: 5 * 1000 });
+    }
     return Promise.reject(error);
   }
 );

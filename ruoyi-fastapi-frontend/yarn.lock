@@ -3391,7 +3391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@npm:^1.0.10":
+"@zxio/zxui@npm:^1.0.11":
   version: 1.0.11
   resolution: "@zxio/zxui@npm:1.0.11"
   dependencies:
@@ -11778,7 +11778,7 @@ __metadata:
     "@vueuse/core": "npm:10.11.0"
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
-    "@zxio/zxui": "npm:^1.0.10"
+    "@zxio/zxui": "npm:^1.0.11"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"
     axios: "npm:0.28.1"
