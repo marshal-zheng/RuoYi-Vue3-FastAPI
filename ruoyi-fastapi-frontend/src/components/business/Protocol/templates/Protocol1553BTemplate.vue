@@ -61,37 +61,11 @@
       class="fields-table text-sm"
       @edit-closed="handleEditClosed"
     >
-      <vxe-column type="checkbox" fixed="left" width="50" />
-      <vxe-column type="seq" title="序号" tree-node width="80" />
-
-      <vxe-column field="fieldName" title="信息名称" :edit-render="{ name: 'input' }" />
-
       <vxe-column
-        field="byteCount"
-        title="字节数"
-        width="100"
-        :edit-render="{ name: 'input', props: { type: 'number' } }"
+        v-for="column in fieldColumns"
+        :key="column.field || column.type"
+        v-bind="column"
       />
-
-      <vxe-column field="byteSequence" title="字节序号" width="120" />
-
-      <vxe-column field="valueRange" title="值域及含义" :edit-render="{ name: 'textarea' }" />
-
-      <vxe-column field="unit" title="量纲" width="100" :edit-render="{ name: 'input' }" />
-
-      <vxe-column
-        field="dataType"
-        title="数据类型"
-        width="140"
-        :edit-render="{
-          name: 'DictAutocomplete',
-          props: { dictType: 'sys_protocol_data_type', placeholder: '请输入或选择' },
-        }"
-      />
-
-      <vxe-column field="scale" title="比例尺" width="100" :edit-render="{ name: 'input' }" />
-
-      <vxe-column field="remark" title="备注" :edit-render="{ name: 'input' }" />
 
       <vxe-column title="操作" width="100" fixed="right">
         <template #default="slotProps">
@@ -139,6 +113,7 @@ import {
   VxeValidationPanel,
   required,
 } from '@/components/VxeTableValidation';
+import { createProtocolFieldColumns } from './vxeColumns';
 
 const props = defineProps<{
   modelValue?: any;
@@ -153,6 +128,7 @@ const emit = defineEmits<{
 }>();
 
 const tableRef = ref<VxeTableInstance>();
+const fieldColumns = computed(() => createProtocolFieldColumns());
 
 // 获取字典数据
 const {

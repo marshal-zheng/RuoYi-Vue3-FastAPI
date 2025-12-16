@@ -57,12 +57,13 @@ const cellValue = computed({
 });
 
 // 触发 change 事件，将值同步到父组件
+// 标准化：只传递实际值，符合 Vue 组件常规约定
 const handleChange = (val: any) => {
-  emit('change', props.params, val);
+  emit('change', val);
 };
 
 // 触发 input 事件
 const handleInput = (val: any) => {
-  emit('input', props.params, val);
+  emit('input', val);
 };
 </script>
