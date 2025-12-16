@@ -47,11 +47,15 @@
       <div class="simulation-report__section">
         <h3>告警汇总</h3>
         <el-table :data="state.data.summary?.alarmStats || []" stripe>
-          <el-table-column prop="type" label="告警类型" />
-          <el-table-column prop="count" label="数量" />
-          <el-table-column prop="level" label="级别">
+          <el-table-column label="告警类型">
             <template #default="{ row }">
-              <el-tag :type="getLevelType(row.level)">{{ row.level }}</el-tag>
+              {{ getAlarmTypeLabel(row.type) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="count" label="数量" />
+          <el-table-column label="级别">
+            <template #default="{ row }">
+              <el-tag :type="getLevelType(row.level)">{{ getSeverityLabel(row.level) }}</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -119,6 +123,57 @@ function getLevelType(level) {
 }
 
 /**
+ * 告警类型标签映射
+ */
+const alarmTypeLabelMap = {
+  loopback: '回环连接',
+  multi_connection: '多端口连接',
+  disconnected_node: '孤立节点',
+  bandwidth_overflow: '带宽溢出',
+  bandwidth_limit: '带宽限速',
+  protocol_mismatch: '协议不匹配',
+  config_error: '配置错误',
+  collision: '报文冲突',
+  packet_loss: '丢包',
+  delay: '延迟注入',
+  payload_corrupt: '数据篡改',
+  noise_frame: '噪声帧',
+  error_frame: '错误帧',
+  congestion: '总线超载',
+  bandwidth_exceed: '带宽超限',
+  value_overflow: '参数越界',
+  unconfigured_port: '端口未配置',
+  insufficient_nodes: '设备不足',
+  no_connection: '缺少连接',
+  device_failure: '设备故障',
+  disconnect: '链路断开',
+};
+
+/**
+ * 获取告警类型中文标签
+ */
+function getAlarmTypeLabel(type) {
+  return alarmTypeLabelMap[type] || type;
+}
+
+/**
+ * 告警级别标签映射
+ */
+const severityLabelMap = {
+  info: '信息',
+  warning: '警告',
+  error: '错误',
+  critical: '严重',
+};
+
+/**
+ * 获取告警级别中文标签
+ */
+function getSeverityLabel(level) {
+  return severityLabelMap[level] || level;
+}
+
+/**
  * 生成报告数据对象
  */
 function getReportData() {
@@ -174,7 +229,7 @@ function exportCSV() {
   lines.push('告警类型,数量,级别');
   if (data.alarmStats.length > 0) {
     data.alarmStats.forEach((item) => {
-      lines.push(`${item.type || ''},${item.count || ''},${item.level || ''}`);
+      lines.push(`${getAlarmTypeLabel(item.type)},${item.count || ''},${getSeverityLabel(item.level)}`);
     });
   } else {
     lines.push('暂无数据');
@@ -327,7 +382,11 @@ async function exportDOCX() {
     children.push(
       createTable(
         ['告警类型', '数量', '级别'],
-        data.alarmStats.map((item) => [item.type || '-', item.count || 0, item.level || '-'])
+        data.alarmStats.map((item) => [
+          getAlarmTypeLabel(item.type),
+          item.count || 0,
+          getSeverityLabel(item.level),
+        ])
       )
     );
   } else {
