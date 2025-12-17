@@ -25,13 +25,11 @@
           @dblclick="!isAffix(tag) ? closeSelectedTag(tag) : ''"
           :title="tag.title.length > 10 ? tag.title : ''"
         >
-          <span class="inline-flex items-center whitespace-nowrap mr-2">
-            {{ tag.title }}
-          </span>
+          <span class="whitespace-nowrap">{{ tag.title }}</span>
           <zx-icon
             v-if="!isAffix(tag)"
             icon="Close"
-            class="tags-view-item__close absolute top-1/2 right-2.5 -translate-y-1/2 hidden cursor-pointer transition-opacity duration-200"
+            class="tags-view-item__close ml-1.5 flex-shrink-0 hidden cursor-pointer transition-opacity duration-200"
             :size="12"
             @click.prevent.stop="closeSelectedTag(tag)"
           />
@@ -334,11 +332,12 @@ function handleCommand(command) {
 /* 关闭按钮基础样式 */
 .tags-view-item__close {
   color: #9ca3af;
+  display: none;
 }
 
 /* hover 时显示关闭按钮 */
 .tags-view-item:not(.tags-view-item--affix):hover .tags-view-item__close {
-  display: block !important;
+  display: inline-flex !important;
 }
 
 .tags-view-item__close:hover {
@@ -358,7 +357,7 @@ function handleCommand(command) {
 
 /* 激活状态的关闭按钮 */
 .tags-view-item.is-active .tags-view-item__close {
-  display: block !important;
+  display: inline-flex !important;
   color: v-bind(theme) !important;
 }
 
