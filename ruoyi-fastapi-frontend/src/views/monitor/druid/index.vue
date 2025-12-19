@@ -1,14 +1,26 @@
 <template>
-  <div>
-    <div>我是数据监控</div>
-    <!-- <i-frame v-model:src="url"></i-frame> -->
+  <div class="p-4">
+    <h2 class="mb-4">MSW Mock 测试 (模式: {{ mockMode }})</h2>
+    <el-button type="primary" @click="testMock">测试 Mock 接口</el-button>
+    <el-button type="success" @click="testReal">测试真实接口 (用户列表)</el-button>
+    <pre v-if="result" class="mt-4 p-4 bg-gray-100 rounded">{{ result }}</pre>
   </div>
 </template>
 
 <script setup>
-import iFrame from '@/components/iFrame';
+import { ref } from 'vue'
+import request from '@/utils/request'
 
-import { ref } from 'vue';
+const mockMode = import.meta.env.VITE_ENABLE_MOCK || 'off'
+const result = ref('')
 
-const url = ref(import.meta.env.VITE_APP_BASE_API + '/druid/login.html');
+async function testMock() {
+  const data = await request({ url: '/test/mock', method: 'get' })
+  result.value = JSON.stringify(data, null, 2)
+}
+
+async function testReal() {
+  const data = await request({ url: '/system/user/list', method: 'get', params: { pageNum: 1, pageSize: 5 } })
+  result.value = JSON.stringify(data, null, 2)
+}
 </script>
