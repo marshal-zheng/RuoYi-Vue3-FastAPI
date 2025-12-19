@@ -2,4 +2,4 @@
 trigger: always_on
 ---
 
-所有回复必须使用中文
+Commit messages must be concise, limited to 100 characters, and written in English.

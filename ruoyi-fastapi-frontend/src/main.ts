@@ -105,4 +105,15 @@ app.use(ZXUI, {
 
 setupVXETable(app);
 
-app.mount('#app');
+// 启动应用（支持 MSW Mock）
+async function bootstrap() {
+  const mockMode = import.meta.env.VITE_ENABLE_MOCK ?? 'off';
+  if (mockMode !== 'off') {
+    const { setupBrowserMocks } = await import('./mocks');
+    await setupBrowserMocks();
+    console.log(`[MSW] Mock 已启动，模式: ${mockMode}`);
+  }
+  app.mount('#app');
+}
+
+bootstrap();
