@@ -47,3 +47,17 @@ export async function startBrowserMock(options: StartMockOptions = {}) {
   })
   return worker
 }
+
+// Vite HMR 热更新支持
+if (import.meta.hot) {
+  import.meta.hot.accept('./handlers/index', () => {
+    const worker = window.__MSW_WORKER__
+    const strategy = window.__MSW_STRATEGY__ ?? 'fallback'
+    const scenario = window.__MSW_SCENARIO__ ?? 'default'
+    if (worker) {
+      const handlers = createScenarioHandlers(strategy, scenario)
+      worker.resetHandlers(...handlers)
+      console.log('[MSW] Handlers 已热更新')
+    }
+  })
+}

@@ -13,7 +13,7 @@ export function createTestHandlers(strategy: MockStrategy) {
         () =>
           HttpResponse.json(
             resultSuccess({
-              message: 'mock responsesss',
+              message: 'mock ssss',
               timestamp: Date.now()
             })
           ),
