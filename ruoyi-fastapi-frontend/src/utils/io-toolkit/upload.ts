@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { http } from '@/utils/http';
 import { FileValidationOptions, FileValidationResult } from './types';
 
 export function validateFile(file: File, options: FileValidationOptions): FileValidationResult {
@@ -31,14 +32,16 @@ export async function uploadFormData(
   formData: FormData,
   options?: AxiosRequestConfig
 ): Promise<AxiosResponse> {
-  return axios.request({
-    url,
-    method: 'post',
-    data: formData,
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      ...(options?.headers || {}),
+  return http.post(
+    {
+      url,
+      data: formData,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        ...(options?.headers || {}),
+      },
+      ...options,
     },
-    ...options,
-  });
+    { isReturnNativeResponse: true }
+  );
 }

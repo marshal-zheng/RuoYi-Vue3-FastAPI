@@ -116,7 +116,6 @@
 
 <script setup>
 import variables from '@/assets/styles/theme.module.css';
-import axios from 'axios';
 import { ElLoading, ElMessage } from 'element-plus';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 import useAppStore from '@/store/modules/app';

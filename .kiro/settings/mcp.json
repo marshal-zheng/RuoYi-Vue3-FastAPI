@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "vue-grid-layout": {
+      "command": "node",
+      "args": [
+        "/Users/hqz/dev/vue-grid-layout/mcp/dist/index.js"
+      ]
+    },
+    "zxui": {
+      "command": "node",
+      "args": [
+        "/Users/hqz/Downloads/element-plus/packages/mcp/dist/stdio.js"
+      ]
+    }
+  }
+}
