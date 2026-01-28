@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from .ctx import TraceCtx
+from .ctx import TraceCtx, get_request_id
 from .middle import TraceASGIMiddleware
 
-__all__ = ('TraceASGIMiddleware', 'TraceCtx')
+__all__ = ('TraceASGIMiddleware', 'TraceCtx', 'get_request_id')
 
 __version__ = '0.1.0'
 

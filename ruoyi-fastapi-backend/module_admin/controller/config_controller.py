@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -50,7 +50,7 @@ async def add_system_config(
     add_config_result = await ConfigService.add_config_services(request, query_db, add_config)
     logger.info(add_config_result.message)
 
-    return ResponseUtil.success(msg=add_config_result.message)
+    return ResponseUtil.success(message=add_config_result.message)
 
 
 @configController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:config:edit'))])
@@ -67,7 +67,7 @@ async def edit_system_config(
     edit_config_result = await ConfigService.edit_config_services(request, query_db, edit_config)
     logger.info(edit_config_result.message)
 
-    return ResponseUtil.success(msg=edit_config_result.message)
+    return ResponseUtil.success(message=edit_config_result.message)
 
 
 @configController.delete('/refreshCache', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
@@ -76,7 +76,17 @@ async def refresh_system_config(request: Request, query_db: AsyncSession = Depen
     refresh_config_result = await ConfigService.refresh_sys_config_services(request, query_db)
     logger.info(refresh_config_result.message)
 
-    return ResponseUtil.success(msg=refresh_config_result.message)
+    return ResponseUtil.success(message=refresh_config_result.message)
+
+
+@configController.delete('', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
+@Log(title='参数管理', business_type=BusinessType.DELETE)
+async def delete_system_config_empty(request: Request, query_db: AsyncSession = Depends(get_db)):
+    delete_config = DeleteConfigModel(configIds='')
+    delete_config_result = await ConfigService.delete_config_services(request, query_db, delete_config)
+    logger.info(delete_config_result.message)
+
+    return ResponseUtil.success(message=delete_config_result.message)
 
 
 @configController.delete('/{config_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
@@ -86,7 +96,7 @@ async def delete_system_config(request: Request, config_ids: str, query_db: Asyn
     delete_config_result = await ConfigService.delete_config_services(request, query_db, delete_config)
     logger.info(delete_config_result.message)
 
-    return ResponseUtil.success(msg=delete_config_result.message)
+    return ResponseUtil.success(message=delete_config_result.message)
 
 
 @configController.get(
@@ -102,10 +112,14 @@ async def query_detail_system_config(request: Request, config_id: int, query_db:
 @configController.get('/configKey/{config_key}')
 async def query_system_config(request: Request, config_key: str):
     # 获取全量数据
-    config_query_result = await ConfigService.query_config_list_from_cache_services(request.app.state.redis, config_key)
+    redis = getattr(request.app.state, 'redis', None)
+    if redis is None:
+        config_query_result = ''
+    else:
+        config_query_result = await ConfigService.query_config_list_from_cache_services(redis, config_key)
     logger.info('获取成功')
 
-    return ResponseUtil.success(msg=config_query_result)
+    return ResponseUtil.success(message=config_query_result)
 
 
 @configController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:config:export'))])

@@ -249,6 +249,7 @@
 <script setup name="User">
 import useAppStore from '@/store/modules/app';
 import { checkPermi } from '@/utils/permission';
+import { serializeDateRange } from '@/utils/ruoyi';
 import {
   changeUserStatus,
   listUser,
@@ -312,20 +313,22 @@ watch(deptName, (val) => {
   proxy.$refs['deptTreeRef'].filter(val);
 });
 /** GridList 数据加载 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
 async function loadUserData(params) {
-  const pager = params?.pager || { page: params?.page, size: params?.size };
-  const q = { ...(params?.query || {}) };
-  const withDept = { ...q, deptId: deptSelectedId.value };
-  const finalQuery = proxy.addDateRange(withDept, withDept?.dateRange);
-  const res = await listUser({ pager, query: finalQuery });
-  currentQuery.value = finalQuery || {};
+  const query = queryTransform({ ...(params?.query || {}), deptId: deptSelectedId.value });
+  const res = await listUser({ ...params, query });
+  currentQuery.value = query;
   return res;
 }
 /** 查询部门下拉树结构 */
 function getDeptTree() {
   deptTreeSelect().then((response) => {
-    deptOptions.value = response.data;
-    enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(response.data)));
+    const data = response?.data ?? response ?? [];
+    deptOptions.value = data;
+    enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(data)));
   });
 }
 /** 过滤禁用的部门 */

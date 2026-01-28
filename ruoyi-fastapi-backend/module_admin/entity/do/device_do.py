@@ -1,9 +1,10 @@
-from sqlalchemy import Column, String, DateTime, BigInteger, ForeignKey, JSON
+from sqlalchemy import Column, String, BigInteger, ForeignKey, JSON
 from sqlalchemy.orm import relationship
+from module_admin.entity.do.base import LegacyBaseModel, TimestampMixin
 from config.database import Base
 
 
-class DeviceDO(Base):
+class DeviceDO(LegacyBaseModel):
     """
     设备数据对象
     """
@@ -19,10 +20,6 @@ class DeviceDO(Base):
     version = Column(String(50), comment='版本')
     bus_type = Column(String(50), comment='总线类型')
     remark = Column(String(500), comment='备注')
-    create_by = Column(String(64), comment='创建者')
-    create_time = Column(DateTime, comment='创建时间')
-    update_by = Column(String(64), comment='更新者')
-    update_time = Column(DateTime, comment='更新时间')
 
     # 关系：设备属于一个分类
     category = relationship("DeviceCategoryDO", back_populates="devices")
@@ -30,7 +27,7 @@ class DeviceDO(Base):
     interfaces = relationship("DeviceInterfaceDO", back_populates="device", cascade="all, delete-orphan")
 
 
-class DeviceInterfaceDO(Base):
+class DeviceInterfaceDO(Base, TimestampMixin):
     """
     设备接口数据对象
     """
@@ -44,8 +41,6 @@ class DeviceInterfaceDO(Base):
     description = Column(String(255), comment='接口描述')
     params = Column(JSON, comment='接口参数配置（JSON格式）')
     message_config = Column(JSON, comment='报文配置（JSON格式）')
-    create_time = Column(DateTime, comment='创建时间')
-    update_time = Column(DateTime, comment='更新时间')
 
     # 关系：接口属于一个设备
     device = relationship("DeviceDO", back_populates="interfaces")

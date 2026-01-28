@@ -24,8 +24,18 @@ COPY . .
 # 创建必要的目录
 RUN mkdir -p vf_admin/upload_path vf_admin/download_path vf_admin/gen_path logs
 
+# 确保脚本有执行权限
+RUN chmod +x docker-entrypoint.sh scripts/db_migrate.sh
+
+# 设置环境变量
+ENV APP_ENV=prod
+ENV PYTHONUNBUFFERED=1
+
 # 暴露端口
 EXPOSE 8000
 
-# 启动命令
+# 使用 entrypoint 进行数据库初始化
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+# 默认启动命令
 CMD ["python", "app.py"]

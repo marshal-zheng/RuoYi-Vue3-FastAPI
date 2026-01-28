@@ -2,7 +2,8 @@ import jwt
 from fastapi import Request
 from config.enums import RedisInitKeyConfig
 from config.env import JwtConfig
-from exceptions.exception import ServiceException
+from exceptions.exception import ValidationException
+from config.error_codes import ErrorCode
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.online_vo import DeleteOnlineModel, OnlineQueryModel
 from utils.common_util import CamelCaseUtil
@@ -73,4 +74,8 @@ class OnlineService:
                 await request.app.state.redis.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{token_id}')
             return CrudResponseModel(is_success=True, message='强退成功')
         else:
-            raise ServiceException(message='传入session_id为空')
+            raise ValidationException(
+                user_message='传入session_id为空',
+                developer_message='Token IDs parameter is empty',
+                field='token_ids'
+            )

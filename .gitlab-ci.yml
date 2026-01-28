@@ -1,0 +1,17 @@
+stages:
+  - security
+
+sensitive-query-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_sensitive_queries.py
+
+sensitive-db-check:
+  stage: security
+  image: python:3.11
+  script:
+    - pip install -r ruoyi-fastapi-backend/requirements.txt
+    - python ruoyi-fastapi-backend/scripts/check_sensitive_data.py
+  when: manual
+  allow_failure: true

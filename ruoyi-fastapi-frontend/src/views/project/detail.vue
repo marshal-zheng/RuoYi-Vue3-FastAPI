@@ -44,8 +44,9 @@ async function loadProjectInfo() {
 
   try {
     const response = await getProject(projectId);
-    if (response.data) {
-      projectInfo.value = response.data;
+    const data = response?.data ?? response;
+    if (data) {
+      projectInfo.value = data;
     }
   } catch (error) {
     console.warn('获取项目信息失败:', error);

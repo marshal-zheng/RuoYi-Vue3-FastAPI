@@ -6,10 +6,8 @@ from typing import Dict, List
 from zipfile import is_zipfile
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import IntegrityError
-from module_admin.dao.device_dao import DeviceDao
-from module_admin.dao.device_category_dao import DeviceCategoryDao
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
+from module_admin.repository import DeviceRepository, DeviceInterfaceRepository, DeviceCategoryRepository
 from module_admin.entity.vo.device_vo import (
     DeviceQueryModel,
     DeviceModel,
@@ -21,8 +19,10 @@ from module_admin.entity.vo.device_vo import (
     ExportDeviceInterfaceModel,
 )
 from utils.response_util import ResponseUtil
-from exceptions.exception import ServiceException
+from exceptions.exception import ValidationException, ResourceNotFoundException
+from config.error_codes import ErrorCode
 from utils.io_toolkit import JsonExporter, ZipExporter, ZipEntry, ZipImporter
+from utils.transaction_manager import transactional
 
 
 class DeviceService:
@@ -35,7 +35,15 @@ class DeviceService:
         """
         获取设备列表
         """
-        devices, total = await DeviceDao.get_device_list(db, query)
+        device_repo = DeviceRepository(db)
+        devices, total = await device_repo.search_devices(
+            device_name=query.device_name,
+            bus_type=query.bus_type,
+            device_type=query.device_type,
+            category_id=query.device_category_id,
+            page=query.page_num,
+            page_size=query.page_size
+        )
         
         # 转换为列表VO（格式化总线接口显示）
         device_list = []
@@ -81,12 +89,14 @@ class DeviceService:
         """
         获取设备详情（包含接口配置）
         """
-        device = await DeviceDao.get_device_by_id(db, device_id)
+        device_repo = DeviceRepository(db)
+        interface_repo = DeviceInterfaceRepository(db)
+        device = await device_repo.get_by_id_with_interfaces(device_id)
         if not device:
             raise HTTPException(status_code=404, detail="设备不存在")
 
         # 单独查询接口信息，避免异步懒加载导致 MissingGreenlet
-        interfaces = await DeviceDao.get_device_interfaces(db, device_id)
+        interfaces = await interface_repo.find_by_device_id(device_id)
         interface_list = []
         for interface in interfaces:
             interface_item = {
@@ -125,6 +135,7 @@ class DeviceService:
         return ResponseUtil.success(data=device_vo.model_dump(by_alias=True))
 
     @classmethod
+    @transactional()
     async def add_device(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
         """
         新增设备（包含接口）
@@ -164,18 +175,20 @@ class DeviceService:
             device_do.interfaces.append(interface_do)
         
         # 保存到数据库
-        result = await DeviceDao.add_device(db, device_do)
-        await db.commit()
+        device_repo = DeviceRepository(db)
+        result = await device_repo.add(device_do)
         
-        return ResponseUtil.success(data={'device_id': result.device_id}, msg="新增成功")
+        return ResponseUtil.success(data={'device_id': result.device_id}, message="新增成功")
 
     @classmethod
+    @transactional()
     async def update_device(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
         """
         更新设备（包含接口）
         """
         # 检查设备是否存在
-        existing = await DeviceDao.get_device_by_id(db, device_data.device_id)
+        device_repo = DeviceRepository(db)
+        existing = await device_repo.get_by_id_with_interfaces(device_data.device_id)
         if not existing:
             raise HTTPException(status_code=404, detail="设备不存在")
         
@@ -217,12 +230,12 @@ class DeviceService:
             existing.interfaces.append(interface_do)
         
         # 保存到数据库
-        await DeviceDao.update_device(db, existing)
-        await db.commit()
+        await db.flush()
         
-        return ResponseUtil.success(msg="修改成功")
+        return ResponseUtil.success(message="修改成功")
 
     @classmethod
+    @transactional()
     async def delete_device(cls, db: AsyncSession, device_ids: str):
         """
         删除设备（级联删除接口）
@@ -232,25 +245,24 @@ class DeviceService:
         if not id_list:
             raise HTTPException(status_code=400, detail="未提供有效的设备ID")
 
-        try:
-            # 先删除接口信息以避免外键约束
-            await DeviceDao.delete_interfaces_by_device_ids(db, id_list)
+        device_repo = DeviceRepository(db)
+        interface_repo = DeviceInterfaceRepository(db)
+        
+        # 先删除接口信息以避免外键约束
+        await interface_repo.delete_by_device_ids(id_list)
 
-            # 删除设备
-            deleted_count = await DeviceDao.delete_device(db, id_list)
-            await db.commit()
-        except IntegrityError as exc:
-            await db.rollback()
-            raise HTTPException(status_code=400, detail=f"设备删除失败: {exc.orig}")
+        # 删除设备
+        deleted_count = await device_repo.delete_by_device_ids(id_list)
 
-        return ResponseUtil.success(msg=f"删除成功，共删除{deleted_count}条记录")
+        return ResponseUtil.success(message=f"删除成功，共删除{deleted_count}条记录")
 
     @classmethod
     async def check_device_name_unique(cls, db: AsyncSession, device_name: str, device_id: int = None):
         """
         检查设备名称是否唯一
         """
-        existing = await DeviceDao.get_device_by_name(db, device_name)
+        device_repo = DeviceRepository(db)
+        existing = await device_repo.find_by_name(device_name)
         
         if not existing:
             return ResponseUtil.success(data=True)
@@ -261,19 +273,28 @@ class DeviceService:
         return ResponseUtil.success(data=False)
 
     @classmethod
+    @transactional()
     async def clone_device(cls, db: AsyncSession, clone_data: CloneDeviceModel, current_user: str):
         """
         克隆设备（包含接口）
         """
         # 获取源设备信息
-        source_device = await DeviceDao.get_device_by_id(db, clone_data.source_device_id)
+        device_repo = DeviceRepository(db)
+        source_device = await device_repo.get_by_id_with_interfaces(clone_data.source_device_id)
         if not source_device:
-            raise ServiceException(message='源设备不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='源设备不存在'
+            )
         
         # 检查新设备名称是否唯一
-        existing = await DeviceDao.get_device_by_name(db, clone_data.device_name)
+        existing = await device_repo.find_by_name(clone_data.device_name)
         if existing:
-            raise ServiceException(message=f'设备名称 "{clone_data.device_name}" 已存在')
+            raise ValidationException(
+                error_code=ErrorCode.RESOURCE_CONFLICT,
+                field='device_name',
+                message=f'设备名称 "{clone_data.device_name}" 已存在'
+            )
         
         # 创建新设备
         resolved_category_id, resolved_category_name = await cls._resolve_category_info(
@@ -312,10 +333,9 @@ class DeviceService:
             new_device.interfaces.append(interface_do)
         
         # 保存到数据库
-        result = await DeviceDao.add_device(db, new_device)
-        await db.commit()
+        result = await device_repo.add(new_device)
         
-        return ResponseUtil.success(data={'device_id': result.device_id}, msg="克隆成功")
+        return ResponseUtil.success(data={'device_id': result.device_id}, message="克隆成功")
 
     @classmethod
     async def export_devices_zip_services(cls, db: AsyncSession, device_ids: List[int]):
@@ -323,15 +343,20 @@ class DeviceService:
         批量导出设备数据（zip包）
         """
         if not device_ids:
-            raise ServiceException(message='请选择需要导出的设备')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='device_ids',
+                message='请选择需要导出的设备'
+            )
 
         json_exporter = JsonExporter()
         zip_exporter = ZipExporter()
         entries: List[ZipEntry] = []
         exported = 0
+        device_repo = DeviceRepository(db)
 
         for device_id in device_ids:
-            device = await DeviceDao.get_device_by_id(db, device_id)
+            device = await device_repo.get_by_id_with_interfaces(device_id)
             if not device:
                 continue
 
@@ -344,7 +369,10 @@ class DeviceService:
             exported += 1
 
         if exported == 0:
-            raise ServiceException(message='未找到可导出的设备')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='未找到可导出的设备'
+            )
 
         zip_name = f'device_export_{datetime.now().strftime("%Y%m%d%H%M%S")}.zip'
         zip_result = await zip_exporter.export(entries, filename=zip_name)
@@ -358,7 +386,10 @@ class DeviceService:
         批量导入设备（zip或单个json）
         """
         if not file_bytes:
-            raise ServiceException(message='上传文件为空')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='上传文件为空'
+            )
 
         success_count = 0
         failed_count = 0
@@ -500,7 +531,8 @@ class DeviceService:
             )
             new_device.interfaces.append(interface_do)
 
-        result = await DeviceDao.add_device(db, new_device)
+        device_repo = DeviceRepository(db)
+        result = await device_repo.add(new_device)
         await db.commit()
 
         return {
@@ -545,14 +577,15 @@ class DeviceService:
         """
         确保设备名称唯一
         """
+        device_repo = DeviceRepository(db)
         base_name = device_name or '设备'
         candidate = base_name
         suffix = 1
-        existing = await DeviceDao.get_device_by_name(db, candidate)
+        existing = await device_repo.find_by_name(candidate)
         while existing:
             candidate = f'{base_name}_{suffix}'
             suffix += 1
-            existing = await DeviceDao.get_device_by_name(db, candidate)
+            existing = await device_repo.find_by_name(candidate)
         return candidate
 
     @staticmethod
@@ -568,15 +601,16 @@ class DeviceService:
         """
         根据已知的分类ID或名称补齐另一端信息，确保数据一致。
         """
+        category_repo = DeviceCategoryRepository(db)
         resolved_id = category_id
         resolved_name = category_name
 
         if category_id and not category_name:
-            category = await DeviceCategoryDao.get_device_category_by_id(db, category_id)
+            category = await category_repo.find_by_id(category_id)
             if category:
                 resolved_name = category.name
         elif category_name and not category_id:
-            category = await DeviceCategoryDao.get_device_category_by_name(db, category_name)
+            category = await category_repo.find_by_name(category_name)
             if category:
                 resolved_id = category.device_category_id
                 resolved_name = category.name

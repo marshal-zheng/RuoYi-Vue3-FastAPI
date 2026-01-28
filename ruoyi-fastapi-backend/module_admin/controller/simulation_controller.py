@@ -81,20 +81,16 @@ async def get_fill_strategies(request: Request):
     返回:
         策略列表，包含名称、描述、图标、参数配置等信息
     """
-    try:
-        strategies = []
-        for key, definition in STRATEGY_DEFINITIONS.items():
-            strategies.append({
-                'value': key,
-                'label': definition['name'],
-                'description': definition['description'],
-                'icon': definition['icon'],
-                'params': definition['params']
-            })
-        return ResponseUtil.success(data=strategies)
-    except Exception as e:
-        logger.error(f'获取填充策略列表失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    strategies = []
+    for key, definition in STRATEGY_DEFINITIONS.items():
+        strategies.append({
+            'value': key,
+            'label': definition['name'],
+            'description': definition['description'],
+            'icon': definition['icon'],
+            'params': definition['params']
+        })
+    return ResponseUtil.success(data=strategies)
 
 
 @simulationController.post(
@@ -120,19 +116,13 @@ async def create_simulation_session(
     返回:
         会话信息（sessionId, status）
     """
-    try:
-        # 设置创建人（从CurrentUserModel对象获取用户名）
-        create_request.create_by = current_user.user.user_name if current_user.user else 'system'
-        
-        result = await SimulationService.create_session(query_db, create_request)
-        logger.info(f'创建仿真会话成功: {result}')
-        
-        return ResponseUtil.success(data=result)
-    except Exception as e:
-        import traceback
-        error_detail = traceback.format_exc()
-        logger.error(f'创建仿真会话失败: {str(e)}\n{error_detail}')
-        return ResponseUtil.error(msg=str(e) or '创建仿真会话失败，请检查数据库表是否存在')
+    # 设置创建人（从CurrentUserModel对象获取用户名）
+    create_request.create_by = current_user.user.user_name if current_user.user else 'system'
+    
+    result = await SimulationService.create_session(query_db, create_request)
+    logger.info(f'创建仿真会话成功: {result}')
+    
+    return ResponseUtil.success(data=result)
 
 
 @simulationController.post(
@@ -157,14 +147,10 @@ async def start_simulation_session(
     返回:
         操作结果
     """
-    try:
-        result = await SimulationService.start_session(query_db, session_id)
-        logger.info(f'启动仿真会话成功: {session_id}')
-        
-        return ResponseUtil.success(data=result.model_dump())
-    except Exception as e:
-        logger.error(f'启动仿真会话失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    result = await SimulationService.start_session(query_db, session_id)
+    logger.info(f'启动仿真会话成功: {session_id}')
+    
+    return ResponseUtil.success(data=result.model_dump())
 
 
 @simulationController.post(
@@ -189,16 +175,10 @@ async def stop_simulation_session(
     返回:
         操作结果
     """
-    try:
-        result = await SimulationService.stop_session(query_db, session_id)
-        logger.info(f'停止仿真会话成功: {session_id}')
-        
-        return ResponseUtil.success(data=result.model_dump())
-    except Exception as e:
-        import traceback
-        error_detail = traceback.format_exc()
-        logger.error(f'停止仿真会话失败: {str(e)}\n{error_detail}')
-        return ResponseUtil.error(msg=str(e) or '停止仿真失败')
+    result = await SimulationService.stop_session(query_db, session_id)
+    logger.info(f'停止仿真会话成功: {session_id}')
+    
+    return ResponseUtil.success(data=result.model_dump())
 
 
 @simulationController.get(
@@ -221,12 +201,8 @@ async def get_simulation_status(
     返回:
         状态信息
     """
-    try:
-        status = SimulationService.get_session_status(session_id)
-        return ResponseUtil.success(data=status)
-    except Exception as e:
-        logger.error(f'获取仿真状态失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    status = SimulationService.get_session_status(session_id)
+    return ResponseUtil.success(data=status)
 
 
 @simulationController.get(
@@ -251,12 +227,8 @@ async def get_simulation_messages(
     返回:
         报文列表
     """
-    try:
-        messages = SimulationService.get_realtime_messages(session_id, limit)
-        return ResponseUtil.success(data=messages)
-    except Exception as e:
-        logger.error(f'获取报文数据失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    messages = SimulationService.get_realtime_messages(session_id, limit)
+    return ResponseUtil.success(data=messages)
 
 
 @simulationController.get(
@@ -281,12 +253,8 @@ async def get_simulation_bandwidth(
     返回:
         带宽数据列表
     """
-    try:
-        bandwidth_data = SimulationService.get_realtime_bandwidth(session_id, port_id)
-        return ResponseUtil.success(data=bandwidth_data)
-    except Exception as e:
-        logger.error(f'获取带宽数据失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    bandwidth_data = SimulationService.get_realtime_bandwidth(session_id, port_id)
+    return ResponseUtil.success(data=bandwidth_data)
 
 
 @simulationController.get(
@@ -309,12 +277,8 @@ async def get_simulation_alarms(
     返回:
         告警列表
     """
-    try:
-        alarms = SimulationService.get_realtime_alarms(session_id)
-        return ResponseUtil.success(data=alarms)
-    except Exception as e:
-        logger.error(f'获取告警数据失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    alarms = SimulationService.get_realtime_alarms(session_id)
+    return ResponseUtil.success(data=alarms)
 
 
 @simulationController.post(
@@ -341,15 +305,11 @@ async def export_simulation_data(
     返回:
         导出数据
     """
-    try:
-        export_request.session_id = session_id
-        result = await SimulationService.export_simulation_data(query_db, export_request)
-        logger.info(f'导出仿真数据成功: {session_id}')
-        
-        return ResponseUtil.success(data=result)
-    except Exception as e:
-        logger.error(f'导出仿真数据失败: {str(e)}')
-        return ResponseUtil.error(msg=str(e))
+    export_request.session_id = session_id
+    result = await SimulationService.export_simulation_data(query_db, export_request)
+    logger.info(f'导出仿真数据成功: {session_id}')
+    
+    return ResponseUtil.success(data=result)
 
 
 # ==================== 新增：仿真控制增强 ====================
@@ -478,7 +438,12 @@ async def inject_fault(
         params = None
 
     if not fault_type or target_id is None:
-        return ResponseUtil.error(msg='faultType/targetId 不能为空')
+        from exceptions.exception import ValidationException
+        raise ValidationException(
+            user_message='必填字段缺失',
+            developer_message='faultType and targetId are required',
+            field='faultType,targetId'
+        )
 
     result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
     logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
@@ -560,7 +525,12 @@ async def upsert_fault(
     target_id = payload.get('targetId') or payload.get('target_id')
     params = payload.get('params') or payload
     if not session_id or not fault_type or target_id is None:
-        return ResponseUtil.error(msg='sessionId、faultType、targetId 为必填')
+        from exceptions.exception import ValidationException
+        raise ValidationException(
+            user_message='必填字段缺失',
+            developer_message='sessionId, faultType and targetId are required',
+            field='sessionId,faultType,targetId'
+        )
 
     result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
     logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
@@ -577,7 +547,12 @@ async def upsert_fault(
 async def query_faults(session_id: str = Query(..., alias="sessionId")):
     """查询会话故障"""
     if not session_id:
-        return ResponseUtil.error(msg='sessionId 不能为空')
+        from exceptions.exception import ValidationException
+        raise ValidationException(
+            user_message='必填字段缺失',
+            developer_message='sessionId is required',
+            field='sessionId'
+        )
     faults = SimulationService.list_faults(session_id)
     return ResponseUtil.success(data=faults)
 

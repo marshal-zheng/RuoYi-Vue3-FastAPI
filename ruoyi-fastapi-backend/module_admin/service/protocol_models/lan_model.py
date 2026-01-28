@@ -223,6 +223,8 @@ class LANModel(BaseProtocolModel):
         return base_status
 
 
+# Backward-compatible alias
+LANProtocol = LANModel
 
 
 

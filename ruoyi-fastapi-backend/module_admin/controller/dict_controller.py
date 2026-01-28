@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.enums import BusinessType
@@ -60,7 +60,7 @@ async def add_system_dict_type(
     add_dict_type_result = await DictTypeService.add_dict_type_services(request, query_db, add_dict_type)
     logger.info(add_dict_type_result.message)
 
-    return ResponseUtil.success(msg=add_dict_type_result.message)
+    return ResponseUtil.success(message=add_dict_type_result.message)
 
 
 @dictController.put('/type', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:edit'))])
@@ -77,7 +77,7 @@ async def edit_system_dict_type(
     edit_dict_type_result = await DictTypeService.edit_dict_type_services(request, query_db, edit_dict_type)
     logger.info(edit_dict_type_result.message)
 
-    return ResponseUtil.success(msg=edit_dict_type_result.message)
+    return ResponseUtil.success(message=edit_dict_type_result.message)
 
 
 @dictController.delete('/type/refreshCache', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -86,7 +86,7 @@ async def refresh_system_dict(request: Request, query_db: AsyncSession = Depends
     refresh_dict_result = await DictTypeService.refresh_sys_dict_services(request, query_db)
     logger.info(refresh_dict_result.message)
 
-    return ResponseUtil.success(msg=refresh_dict_result.message)
+    return ResponseUtil.success(message=refresh_dict_result.message)
 
 
 @dictController.delete('/type/{dict_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -96,7 +96,7 @@ async def delete_system_dict_type(request: Request, dict_ids: str, query_db: Asy
     delete_dict_type_result = await DictTypeService.delete_dict_type_services(request, query_db, delete_dict_type)
     logger.info(delete_dict_type_result.message)
 
-    return ResponseUtil.success(msg=delete_dict_type_result.message)
+    return ResponseUtil.success(message=delete_dict_type_result.message)
 
 
 @dictController.get('/type/optionselect', response_model=List[DictTypeModel])
@@ -180,7 +180,7 @@ async def add_system_dict_data(
     add_dict_data_result = await DictDataService.add_dict_data_services(request, query_db, add_dict_data)
     logger.info(add_dict_data_result.message)
 
-    return ResponseUtil.success(msg=add_dict_data_result.message)
+    return ResponseUtil.success(message=add_dict_data_result.message)
 
 
 @dictController.put('/data', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:edit'))])
@@ -197,7 +197,7 @@ async def edit_system_dict_data(
     edit_dict_data_result = await DictDataService.edit_dict_data_services(request, query_db, edit_dict_data)
     logger.info(edit_dict_data_result.message)
 
-    return ResponseUtil.success(msg=edit_dict_data_result.message)
+    return ResponseUtil.success(message=edit_dict_data_result.message)
 
 
 @dictController.delete('/data/{dict_codes}', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -207,7 +207,7 @@ async def delete_system_dict_data(request: Request, dict_codes: str, query_db: A
     delete_dict_data_result = await DictDataService.delete_dict_data_services(request, query_db, delete_dict_data)
     logger.info(delete_dict_data_result.message)
 
-    return ResponseUtil.success(msg=delete_dict_data_result.message)
+    return ResponseUtil.success(message=delete_dict_data_result.message)
 
 
 @dictController.get(

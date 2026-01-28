@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -58,7 +58,7 @@ async def add_system_job(
     add_job_result = await JobService.add_job_services(query_db, add_job)
     logger.info(add_job_result.message)
 
-    return ResponseUtil.success(msg=add_job_result.message)
+    return ResponseUtil.success(message=add_job_result.message)
 
 
 @jobController.put('/job', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:edit'))])
@@ -75,7 +75,7 @@ async def edit_system_job(
     edit_job_result = await JobService.edit_job_services(query_db, edit_job)
     logger.info(edit_job_result.message)
 
-    return ResponseUtil.success(msg=edit_job_result.message)
+    return ResponseUtil.success(message=edit_job_result.message)
 
 
 @jobController.put('/job/changeStatus', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:changeStatus'))])
@@ -96,7 +96,7 @@ async def change_system_job_status(
     edit_job_result = await JobService.edit_job_services(query_db, edit_job)
     logger.info(edit_job_result.message)
 
-    return ResponseUtil.success(msg=edit_job_result.message)
+    return ResponseUtil.success(message=edit_job_result.message)
 
 
 @jobController.put('/job/run', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:changeStatus'))])
@@ -105,7 +105,7 @@ async def execute_system_job(request: Request, execute_job: JobModel, query_db: 
     execute_job_result = await JobService.execute_job_once_services(query_db, execute_job)
     logger.info(execute_job_result.message)
 
-    return ResponseUtil.success(msg=execute_job_result.message)
+    return ResponseUtil.success(message=execute_job_result.message)
 
 
 @jobController.delete('/job/{job_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:remove'))])
@@ -115,7 +115,7 @@ async def delete_system_job(request: Request, job_ids: str, query_db: AsyncSessi
     delete_job_result = await JobService.delete_job_services(query_db, delete_job)
     logger.info(delete_job_result.message)
 
-    return ResponseUtil.success(msg=delete_job_result.message)
+    return ResponseUtil.success(message=delete_job_result.message)
 
 
 @jobController.get(
@@ -166,7 +166,7 @@ async def clear_system_job_log(request: Request, query_db: AsyncSession = Depend
     clear_job_log_result = await JobLogService.clear_job_log_services(query_db)
     logger.info(clear_job_log_result.message)
 
-    return ResponseUtil.success(msg=clear_job_log_result.message)
+    return ResponseUtil.success(message=clear_job_log_result.message)
 
 
 @jobController.delete('/jobLog/{job_log_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:remove'))])
@@ -176,7 +176,7 @@ async def delete_system_job_log(request: Request, job_log_ids: str, query_db: As
     delete_job_log_result = await JobLogService.delete_job_log_services(query_db, delete_job_log)
     logger.info(delete_job_log_result.message)
 
-    return ResponseUtil.success(msg=delete_job_log_result.message)
+    return ResponseUtil.success(message=delete_job_log_result.message)
 
 
 @jobController.post('/jobLog/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:export'))])

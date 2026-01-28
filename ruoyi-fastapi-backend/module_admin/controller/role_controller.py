@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -71,7 +71,7 @@ async def add_system_role(
     add_role_result = await RoleService.add_role_services(query_db, add_role)
     logger.info(add_role_result.message)
 
-    return ResponseUtil.success(msg=add_role_result.message)
+    return ResponseUtil.success(message=add_role_result.message)
 
 
 @roleController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -92,7 +92,7 @@ async def edit_system_role(
     edit_role_result = await RoleService.edit_role_services(query_db, edit_role)
     logger.info(edit_role_result.message)
 
-    return ResponseUtil.success(msg=edit_role_result.message)
+    return ResponseUtil.success(message=edit_role_result.message)
 
 
 @roleController.put('/dataScope', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -118,7 +118,7 @@ async def edit_system_role_datascope(
     role_data_scope_result = await RoleService.role_datascope_services(query_db, edit_role)
     logger.info(role_data_scope_result.message)
 
-    return ResponseUtil.success(msg=role_data_scope_result.message)
+    return ResponseUtil.success(message=role_data_scope_result.message)
 
 
 @roleController.delete('/{role_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:role:remove'))])
@@ -140,7 +140,7 @@ async def delete_system_role(
     delete_role_result = await RoleService.delete_role_services(query_db, delete_role)
     logger.info(delete_role_result.message)
 
-    return ResponseUtil.success(msg=delete_role_result.message)
+    return ResponseUtil.success(message=delete_role_result.message)
 
 
 @roleController.get(
@@ -158,7 +158,12 @@ async def query_detail_system_role(
     role_detail_result = await RoleService.role_detail_services(query_db, role_id)
     logger.info(f'获取role_id为{role_id}的信息成功')
 
-    return ResponseUtil.success(data=role_detail_result.model_dump(by_alias=True))
+    if role_detail_result is None:
+        role_detail_payload = {}
+    else:
+        role_detail_payload = role_detail_result.model_dump(by_alias=False)
+
+    return ResponseUtil.success(model_content=role_detail_payload)
 
 
 @roleController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:role:export'))])
@@ -201,7 +206,7 @@ async def reset_system_role_status(
     edit_role_result = await RoleService.edit_role_services(query_db, edit_role)
     logger.info(edit_role_result.message)
 
-    return ResponseUtil.success(msg=edit_role_result.message)
+    return ResponseUtil.success(message=edit_role_result.message)
 
 
 @roleController.get(
@@ -256,7 +261,7 @@ async def add_system_role_user(
     add_role_user_result = await UserService.add_user_role_services(query_db, add_role_user)
     logger.info(add_role_user_result.message)
 
-    return ResponseUtil.success(msg=add_role_user_result.message)
+    return ResponseUtil.success(message=add_role_user_result.message)
 
 
 @roleController.put('/authUser/cancel', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -267,7 +272,7 @@ async def cancel_system_role_user(
     cancel_user_role_result = await UserService.delete_user_role_services(query_db, cancel_user_role)
     logger.info(cancel_user_role_result.message)
 
-    return ResponseUtil.success(msg=cancel_user_role_result.message)
+    return ResponseUtil.success(message=cancel_user_role_result.message)
 
 
 @roleController.put('/authUser/cancelAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -280,4 +285,4 @@ async def batch_cancel_system_role_user(
     batch_cancel_user_role_result = await UserService.delete_user_role_services(query_db, batch_cancel_user_role)
     logger.info(batch_cancel_user_role_result.message)
 
-    return ResponseUtil.success(msg=batch_cancel_user_role_result.message)
+    return ResponseUtil.success(message=batch_cancel_user_role_result.message)

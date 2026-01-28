@@ -1,6 +1,6 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends, Request
-from pydantic_validation_decorator import ValidateFields
+from fastapi import APIRouter, Depends, Form, Request
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.enums import BusinessType
@@ -13,6 +13,7 @@ from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.dept_service import DeptService
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
+from utils.common_util import bytes2file_response
 from utils.response_util import ResponseUtil
 
 
@@ -47,6 +48,18 @@ async def get_system_dept_list(
     data_scope_sql: str = Depends(GetDataScope('SysDept')),
 ):
     dept_query_result = await DeptService.get_dept_list_services(query_db, dept_query, data_scope_sql)
+    logger.info('获取成功')
+
+    return ResponseUtil.success(data=dept_query_result)
+
+
+@deptController.get('/treeselect', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:list'))])
+async def get_system_dept_tree_select(
+    request: Request,
+    query_db: AsyncSession = Depends(get_db),
+    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+):
+    dept_query_result = await DeptService.get_dept_tree_services(query_db, DeptModel(**{}), data_scope_sql)
     logger.info('获取成功')
 
     return ResponseUtil.success(data=dept_query_result)
@@ -88,7 +101,7 @@ async def edit_system_dept(
     edit_dept_result = await DeptService.edit_dept_services(query_db, edit_dept)
     logger.info(edit_dept_result.message)
 
-    return ResponseUtil.success(msg=edit_dept_result.message)
+    return ResponseUtil.success(message=edit_dept_result.message)
 
 
 @deptController.delete('/{dept_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:remove'))])
@@ -111,7 +124,7 @@ async def delete_system_dept(
     delete_dept_result = await DeptService.delete_dept_services(query_db, delete_dept)
     logger.info(delete_dept_result.message)
 
-    return ResponseUtil.success(msg=delete_dept_result.message)
+    return ResponseUtil.success(message=delete_dept_result.message)
 
 
 @deptController.get(
@@ -130,3 +143,18 @@ async def query_detail_system_dept(
     logger.info(f'获取dept_id为{dept_id}的信息成功')
 
     return ResponseUtil.success(data=detail_dept_result)
+
+
+@deptController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:export'))])
+@Log(title='部门管理', business_type=BusinessType.EXPORT)
+async def export_system_dept_list(
+    request: Request,
+    dept_query: DeptQueryModel = Form(),
+    query_db: AsyncSession = Depends(get_db),
+    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+):
+    dept_query_result = await DeptService.get_dept_list_services(query_db, dept_query, data_scope_sql)
+    dept_export_result = await DeptService.export_dept_list_services(dept_query_result)
+    logger.info('导出成功')
+
+    return ResponseUtil.streaming(data=bytes2file_response(dept_export_result))

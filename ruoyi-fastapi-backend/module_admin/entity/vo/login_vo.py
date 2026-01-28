@@ -1,13 +1,14 @@
 import re
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import ConfigDict, Field, model_validator
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import List, Optional, Union
 from exceptions.exception import ModelValidatorException
 from module_admin.entity.vo.menu_vo import MenuModel
 
 
-class UserLogin(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class UserLogin(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     user_name: str = Field(description='用户名称')
     password: str = Field(description='用户密码')
@@ -17,8 +18,8 @@ class UserLogin(BaseModel):
     captcha_enabled: Optional[bool] = Field(default=None, description='是否启用验证码，前端无需传递')
 
 
-class UserRegister(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class UserRegister(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     username: str = Field(description='用户名称')
     password: str = Field(description='用户密码')
@@ -35,13 +36,13 @@ class UserRegister(BaseModel):
             raise ModelValidatorException(message='密码不能包含非法字符：< > " \' \\ |')
 
 
-class Token(BaseModel):
+class Token(CamelModelBase):
     access_token: str = Field(description='token信息')
     token_type: str = Field(description='token类型')
 
 
-class CaptchaCode(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class CaptchaCode(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     captcha_enabled: bool = Field(description='是否启用验证码')
     register_enabled: bool = Field(description='是否启用注册')
@@ -49,7 +50,7 @@ class CaptchaCode(BaseModel):
     uuid: str = Field(description='会话编号')
 
 
-class SmsCode(BaseModel):
+class SmsCode(CamelModelBase):
     is_success: Optional[bool] = Field(default=None, description='操作是否成功')
     sms_code: str = Field(description='短信验证码')
     session_id: str = Field(description='会话编号')
@@ -60,8 +61,8 @@ class MenuTreeModel(MenuModel):
     children: Optional[Union[List['MenuTreeModel'], None]] = Field(default=None, description='子菜单')
 
 
-class MetaModel(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class MetaModel(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     title: Optional[str] = Field(default=None, description='设置路由在侧边栏和面包屑中展示的名字')
     icon: Optional[str] = Field(default=None, description='设置路由的图标')
@@ -69,8 +70,8 @@ class MetaModel(BaseModel):
     link: Optional[str] = Field(default=None, description='内链地址（http(s)://开头）')
 
 
-class RouterModel(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class RouterModel(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     name: Optional[str] = Field(default=None, description='路由名称')
     path: Optional[str] = Field(default=None, description='路由地址')

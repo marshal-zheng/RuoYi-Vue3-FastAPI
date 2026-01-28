@@ -35,9 +35,25 @@ class JwtSettings(BaseSettings):
     jwt_redis_expire_minutes: int = 30
 
 
+class SensitiveDataSettings(BaseSettings):
+    """
+    敏感数据加密配置
+    """
+
+    sensitive_data_enabled: bool = True
+    sensitive_data_key: str = ''
+    sensitive_data_prefix: str = 'enc:v1:'
+    sensitive_data_deterministic: bool = False
+
+
 class DataBaseSettings(BaseSettings):
     """
     数据库配置
+    
+    Google 工程标准：
+    - 连接池大小基于 CPU 核心数计算
+    - 启用连接健康检查
+    - 合理的超时和回收配置
     """
 
     db_type: Literal['mysql', 'postgresql'] = 'mysql'
@@ -47,10 +63,18 @@ class DataBaseSettings(BaseSettings):
     db_password: str = 'admin1234'
     db_database: str = 'ruoyi-fastapi'
     db_echo: bool = True
-    db_max_overflow: int = 10
-    db_pool_size: int = 50
-    db_pool_recycle: int = 3600
-    db_pool_timeout: int = 30
+    
+    # 连接池配置 - 遵循 Google 最佳实践
+    # 公式: pool_size = (CPU 核心数 × 2) + 有效磁盘数
+    # 对于 4 核 CPU: (4 × 2) + 1 = 9，向上取整到 10
+    db_pool_size: int = 10  # 🔧 核心连接数（从 50 降低到 10）
+    db_max_overflow: int = 20  # 🔧 峰值时额外连接（从 10 增加到 20）
+    db_pool_recycle: int = 3600  # 连接回收时间（1小时）
+    db_pool_timeout: int = 30  # 获取连接超时（30秒）
+    
+    # 查询超时配置
+    db_statement_timeout: int = 30000  # SQL 语句超时（30秒，毫秒）
+    db_lock_timeout: int = 10000  # 锁等待超时（10秒，毫秒）
 
     @computed_field
     @property
@@ -70,6 +94,52 @@ class RedisSettings(BaseSettings):
     redis_username: str = ''
     redis_password: str = ''
     redis_database: int = 2
+
+
+class QueryCacheSettings(BaseSettings):
+    """
+    查询缓存配置
+    """
+
+    query_cache_enabled: bool = True
+    query_cache_default_ttl: int = 300
+    query_cache_lock_enabled: bool = True
+    
+    # COUNT 缓存配置（独立于查询缓存）
+    count_cache_enabled: bool = True
+    count_cache_default_ttl: int = 600  # COUNT 缓存时间较长，因为数据量变化频率低
+    count_cache_key_prefix: str = "count_cache"
+
+
+class AuditSettings(BaseSettings):
+    """
+    审计日志配置
+    """
+
+    audit_enabled: bool = True
+    audit_write_enabled: bool = True
+    audit_read_enabled: bool = True
+    # 仅审计指定表（逗号分隔，留空表示不限制）
+    audit_tables: str = 'sys_role,sys_dept,sys_menu,sys_job'
+    # 脱敏字段（逗号分隔）
+    audit_mask_fields: str = 'password,secret,token'
+    # 审计字段最大长度（超出截断）
+    audit_max_value_length: int = 2000
+    # 读审计采样率（0~1）
+    audit_read_sample_rate: float = 1.0
+
+
+class ErrorHandlingSettings(BaseSettings):
+    """
+    错误处理配置（双层消息设计）
+    """
+
+    # 是否在响应中包含开发者消息（开发环境=true，生产环境=false）
+    include_developer_message: bool = False
+    # 错误日志级别
+    error_log_level: str = "ERROR"
+    # 默认语言
+    default_language: str = "zh"
 
 
 class GenSettings:
@@ -170,6 +240,13 @@ class GetConfig:
         return JwtSettings()
 
     @lru_cache()
+    def get_sensitive_config(self):
+        """
+        获取敏感数据加密配置
+        """
+        return SensitiveDataSettings()
+
+    @lru_cache()
     def get_database_config(self):
         """
         获取数据库配置
@@ -201,6 +278,27 @@ class GetConfig:
         # 实例上传配置
         return UploadSettings()
 
+    @lru_cache()
+    def get_query_cache_config(self):
+        """
+        获取查询缓存配置
+        """
+        return QueryCacheSettings()
+
+    @lru_cache()
+    def get_audit_config(self):
+        """
+        获取审计日志配置
+        """
+        return AuditSettings()
+
+    @lru_cache()
+    def get_error_handling_config(self):
+        """
+        获取错误处理配置
+        """
+        return ErrorHandlingSettings()
+
     @staticmethod
     def parse_cli_args():
         """
@@ -213,8 +311,8 @@ class GetConfig:
             # 使用argparse定义命令行参数
             parser = argparse.ArgumentParser(description='命令行参数')
             parser.add_argument('--env', type=str, default='', help='运行环境')
-            # 解析命令行参数
-            args = parser.parse_args()
+            # 解析命令行参数 (使用parse_known_args以兼容pytest等工具)
+            args, unknown = parser.parse_known_args()
             # 设置环境变量，如果未设置命令行参数，默认APP_ENV为dev
             os.environ['APP_ENV'] = args.env if args.env else 'dev'
         # 读取运行环境
@@ -243,6 +341,8 @@ get_config = GetConfig()
 AppConfig = get_config.get_app_config()
 # Jwt配置
 JwtConfig = get_config.get_jwt_config()
+# 敏感数据加密配置
+SensitiveConfig = get_config.get_sensitive_config()
 # 数据库配置
 DataBaseConfig = get_config.get_database_config()
 # Redis配置
@@ -251,3 +351,9 @@ RedisConfig = get_config.get_redis_config()
 GenConfig = get_config.get_gen_config()
 # 上传配置
 UploadConfig = get_config.get_upload_config()
+# 查询缓存配置
+CacheConfig = get_config.get_query_cache_config()
+# 审计日志配置
+AuditConfig = get_config.get_audit_config()
+# 错误处理配置
+ErrorHandlingConfig = get_config.get_error_handling_config()

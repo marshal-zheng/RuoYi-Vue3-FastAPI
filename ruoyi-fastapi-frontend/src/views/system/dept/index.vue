@@ -208,7 +208,7 @@ async function loadDeptData(params) {
   };
   try {
     const response = await listDept(query);
-    const tree = proxy.handleTree(response.data, 'deptId');
+    const tree = proxy.handleTree(response?.data ?? response, 'deptId');
     return { data: tree || [], total: 0 };
   } catch (e) {
     return { data: [], total: 0 };
@@ -245,7 +245,7 @@ function reset() {
 function handleAdd(row) {
   reset();
   listDept().then((response) => {
-    deptOptions.value = proxy.handleTree(response.data, 'deptId');
+    deptOptions.value = proxy.handleTree(response?.data ?? response, 'deptId');
   });
   if (row != undefined) {
     form.value.parentId = row.deptId;
@@ -265,10 +265,10 @@ function toggleExpandAll() {
 function handleUpdate(row) {
   reset();
   listDeptExcludeChild(row.deptId).then((response) => {
-    deptOptions.value = proxy.handleTree(response.data, 'deptId');
+    deptOptions.value = proxy.handleTree(response?.data ?? response, 'deptId');
   });
   getDept(row.deptId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改部门';
   });

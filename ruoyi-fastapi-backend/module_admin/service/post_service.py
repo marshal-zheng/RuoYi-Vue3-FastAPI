@@ -1,12 +1,19 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.constant import CommonConstant
-from exceptions.exception import ServiceException
-from module_admin.dao.post_dao import PostDao
+from exceptions.exception import (
+    ResourceNotFoundException,
+    ResourceConflictException,
+    ValidationException
+)
+from config.error_codes import ErrorCode
+from module_admin.entity.do.post_do import SysPost
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.post_vo import DeletePostModel, PostModel, PostPageQueryModel
+from module_admin.repository import PostRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
+from utils.transaction_manager import transactional
 
 
 class PostService:
@@ -26,7 +33,21 @@ class PostService:
         :param is_page: 是否开启分页
         :return: 岗位列表信息对象
         """
-        post_list_result = await PostDao.get_post_list(query_db, query_object, is_page)
+        post_repo = PostRepository(query_db)
+        if is_page:
+            post_list_result = await post_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                post_code=query_object.post_code,
+                post_name=query_object.post_name,
+                status=query_object.status
+            )
+        else:
+            post_list_result = await post_repo.find_all_with_filters(
+                post_code=query_object.post_code,
+                post_name=query_object.post_name,
+                status=query_object.status
+            )
 
         return post_list_result
 
@@ -40,7 +61,8 @@ class PostService:
         :return: 校验结果
         """
         post_id = -1 if page_object.post_id is None else page_object.post_id
-        post = await PostDao.get_post_detail_by_info(query_db, PostModel(postName=page_object.post_name))
+        post_repo = PostRepository(query_db)
+        post = await post_repo.find_by_name_or_code(post_name=page_object.post_name)
         if post and post.post_id != post_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
@@ -55,12 +77,14 @@ class PostService:
         :return: 校验结果
         """
         post_id = -1 if page_object.post_id is None else page_object.post_id
-        post = await PostDao.get_post_detail_by_info(query_db, PostModel(postCode=page_object.post_code))
+        post_repo = PostRepository(query_db)
+        post = await post_repo.find_by_name_or_code(post_code=page_object.post_code)
         if post and post.post_id != post_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
 
     @classmethod
+    @transactional()
     async def add_post_services(cls, query_db: AsyncSession, page_object: PostModel):
         """
         新增岗位信息service
@@ -70,19 +94,25 @@ class PostService:
         :return: 新增岗位校验结果
         """
         if not await cls.check_post_name_unique_services(query_db, page_object):
-            raise ServiceException(message=f'新增岗位{page_object.post_name}失败，岗位名称已存在')
+            raise ResourceConflictException(
+                user_message=f'新增岗位{page_object.post_name}失败，岗位名称已存在',
+                error_code=ErrorCode.ROLE_ALREADY_EXISTS,
+                developer_message=f'Post name already exists: post_name={page_object.post_name}'
+            )
         elif not await cls.check_post_code_unique_services(query_db, page_object):
-            raise ServiceException(message=f'新增岗位{page_object.post_name}失败，岗位编码已存在')
-        else:
-            try:
-                await PostDao.add_post_dao(query_db, page_object)
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='新增成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
+            raise ResourceConflictException(
+                user_message=f'新增岗位{page_object.post_name}失败，岗位编码已存在',
+                error_code=ErrorCode.ROLE_ALREADY_EXISTS,
+                developer_message=f'Post code already exists: post_code={page_object.post_code}'
+            )
+        
+        post_repo = PostRepository(query_db)
+        db_post = SysPost(**page_object.model_dump())
+        await post_repo.add(db_post)
+        return CrudResponseModel(is_success=True, message='新增成功')
 
     @classmethod
+    @transactional()
     async def edit_post_services(cls, query_db: AsyncSession, page_object: PostModel):
         """
         编辑岗位信息service
@@ -93,23 +123,37 @@ class PostService:
         """
         edit_post = page_object.model_dump(exclude_unset=True)
         post_info = await cls.post_detail_services(query_db, page_object.post_id)
-        if post_info.post_id:
-            if not await cls.check_post_name_unique_services(query_db, page_object):
-                raise ServiceException(message=f'修改岗位{page_object.post_name}失败，岗位名称已存在')
-            elif not await cls.check_post_code_unique_services(query_db, page_object):
-                raise ServiceException(message=f'修改岗位{page_object.post_name}失败，岗位编码已存在')
-            else:
-                try:
-                    await PostDao.edit_post_dao(query_db, edit_post)
-                    await query_db.commit()
-                    return CrudResponseModel(is_success=True, message='更新成功')
-                except Exception as e:
-                    await query_db.rollback()
-                    raise e
-        else:
-            raise ServiceException(message='岗位不存在')
+        if not post_info.post_id:
+            raise ResourceNotFoundException(
+                user_message='岗位不存在',
+                error_code=ErrorCode.ROLE_NOT_FOUND,
+                developer_message=f'Post not found: post_id={page_object.post_id}'
+            )
+        
+        if not await cls.check_post_name_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                user_message=f'修改岗位{page_object.post_name}失败，岗位名称已存在',
+                error_code=ErrorCode.ROLE_ALREADY_EXISTS,
+                developer_message=f'Post name already exists: post_name={page_object.post_name}'
+            )
+        elif not await cls.check_post_code_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                user_message=f'修改岗位{page_object.post_name}失败，岗位编码已存在',
+                error_code=ErrorCode.ROLE_ALREADY_EXISTS,
+                developer_message=f'Post code already exists: post_code={page_object.post_code}'
+            )
+        
+        post_repo = PostRepository(query_db)
+        db_post = await post_repo.find_by_id(page_object.post_id)
+        if db_post:
+            for key, value in edit_post.items():
+                if hasattr(db_post, key):
+                    setattr(db_post, key, value)
+            await post_repo.update(db_post)
+        return CrudResponseModel(is_success=True, message='更新成功')
 
     @classmethod
+    @transactional()
     async def delete_post_services(cls, query_db: AsyncSession, page_object: DeletePostModel):
         """
         删除岗位信息service
@@ -118,21 +162,25 @@ class PostService:
         :param page_object: 删除岗位对象
         :return: 删除岗位校验结果
         """
-        if page_object.post_ids:
-            post_id_list = page_object.post_ids.split(',')
-            try:
-                for post_id in post_id_list:
-                    post = await cls.post_detail_services(query_db, int(post_id))
-                    if (await PostDao.count_user_post_dao(query_db, int(post_id))) > 0:
-                        raise ServiceException(message=f'{post.post_name}已分配，不能删除')
-                    await PostDao.delete_post_dao(query_db, PostModel(postId=post_id))
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
-            raise ServiceException(message='传入岗位id为空')
+        if not page_object.post_ids:
+            raise ValidationException(
+                user_message='传入岗位id为空',
+                developer_message='Post IDs parameter is empty',
+                field='post_ids'
+            )
+        
+        post_repo = PostRepository(query_db)
+        post_id_list = page_object.post_ids.split(',')
+        for post_id in post_id_list:
+            post = await cls.post_detail_services(query_db, int(post_id))
+            if (await post_repo.count_users(int(post_id))) > 0:
+                raise ResourceConflictException(
+                    user_message=f'{post.post_name}已分配，不能删除',
+                    error_code=ErrorCode.ROLE_IN_USE,
+                    developer_message=f'Post is assigned to users: post_id={post_id}'
+                )
+            await post_repo.delete_by_id(int(post_id))
+        return CrudResponseModel(is_success=True, message='删除成功')
 
     @classmethod
     async def post_detail_services(cls, query_db: AsyncSession, post_id: int):
@@ -143,7 +191,8 @@ class PostService:
         :param post_id: 岗位id
         :return: 岗位id对应的信息
         """
-        post = await PostDao.get_post_detail_by_id(query_db, post_id=post_id)
+        post_repo = PostRepository(query_db)
+        post = await post_repo.find_by_id(post_id)
         if post:
             result = PostModel(**CamelCaseUtil.transform_result(post))
         else:

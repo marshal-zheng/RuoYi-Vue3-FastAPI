@@ -1,7 +1,9 @@
 import json
 from apscheduler.events import EVENT_ALL
 from apscheduler.executors.asyncio import AsyncIOExecutor
-from apscheduler.executors.pool import ProcessPoolExecutor
+from apscheduler.executors.pool import ProcessPoolExecutor, ThreadPoolExecutor
+import os
+import sys
 from apscheduler.jobstores.memory import MemoryJobStore
 from apscheduler.jobstores.redis import RedisJobStore
 from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
@@ -16,9 +18,10 @@ from sqlalchemy.orm import sessionmaker
 from typing import Union
 from config.database import AsyncSessionLocal, quote_plus
 from config.env import DataBaseConfig, RedisConfig
-from module_admin.dao.job_dao import JobDao
 from module_admin.entity.vo.job_vo import JobLogModel, JobModel
+from module_admin.repository import JobRepository
 from module_admin.service.job_log_service import JobLogService
+from config.job_registry import JobFunctionRegistry
 from utils.log_util import logger
 import module_task  # noqa: F401
 
@@ -113,7 +116,14 @@ job_stores = {
         )
     ),
 }
-executors = {'default': AsyncIOExecutor(), 'processpool': ProcessPoolExecutor(5)}
+_is_pytest = "pytest" in sys.modules or os.getenv("PYTEST_CURRENT_TEST") is not None
+executors = {'default': AsyncIOExecutor()}
+if not _is_pytest:
+    try:
+        executors['processpool'] = ProcessPoolExecutor(5)
+    except PermissionError:
+        logger.warning("ProcessPoolExecutor unavailable; falling back to ThreadPoolExecutor")
+        executors['processpool'] = ThreadPoolExecutor(5)
 job_defaults = {'coalesce': False, 'max_instance': 1}
 scheduler = AsyncIOScheduler()
 scheduler.configure(jobstores=job_stores, executors=executors, job_defaults=job_defaults)
@@ -134,7 +144,8 @@ class SchedulerUtil:
         logger.info('开始启动定时任务...')
         scheduler.start()
         async with AsyncSessionLocal() as session:
-            job_list = await JobDao.get_job_list_for_scheduler(session)
+            job_repo = JobRepository(session)
+            job_list = await job_repo.find_all_active()
             for item in job_list:
                 cls.remove_scheduler_job(job_id=str(item.job_id))
                 cls.add_scheduler_job(item)
@@ -171,12 +182,18 @@ class SchedulerUtil:
         :param job_info: 任务对象信息
         :return:
         """
-        job_func = eval(job_info.invoke_target)
+        # 安全实现 - 使用函数注册表代替 eval()
+        try:
+            job_func = JobFunctionRegistry.get(job_info.invoke_target)
+        except ValueError as e:
+            logger.error(f"Failed to add job: {e}")
+            raise
+        
         job_executor = job_info.job_executor
         if iscoroutinefunction(job_func):
             job_executor = 'default'
         scheduler.add_job(
-            func=eval(job_info.invoke_target),
+            func=job_func,
             trigger=MyCronTrigger.from_crontab(job_info.cron_expression),
             args=job_info.job_args.split(',') if job_info.job_args else None,
             kwargs=json.loads(job_info.job_kwargs) if job_info.job_kwargs else None,
@@ -197,7 +214,13 @@ class SchedulerUtil:
         :param job_info: 任务对象信息
         :return:
         """
-        job_func = eval(job_info.invoke_target)
+        # 安全实现 - 使用函数注册表代替 eval()
+        try:
+            job_func = JobFunctionRegistry.get(job_info.invoke_target)
+        except ValueError as e:
+            logger.error(f"Failed to execute job: {e}")
+            raise
+        
         job_executor = job_info.job_executor
         if iscoroutinefunction(job_func):
             job_executor = 'default'
@@ -205,7 +228,7 @@ class SchedulerUtil:
         if job_info.status == '0':
             job_trigger = OrTrigger(triggers=[DateTrigger(), MyCronTrigger.from_crontab(job_info.cron_expression)])
         scheduler.add_job(
-            func=eval(job_info.invoke_target),
+            func=job_func,
             trigger=job_trigger,
             args=job_info.job_args.split(',') if job_info.job_args else None,
             kwargs=json.loads(job_info.job_kwargs) if job_info.job_kwargs else None,

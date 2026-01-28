@@ -1,12 +1,21 @@
+"""
+代码生成器服务层
+提供代码生成业务表和字段的业务逻辑处理
+"""
 import io
 import json
 import os
 import zipfile
 from datetime import datetime
+from typing import List
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlglot import parse as sqlglot_parse
-from sqlglot.expressions import Add, Alter, Create, Delete, Drop, Expression, Insert, Table, TruncateTable, Update
-from typing import List
+from sqlglot.expressions import (
+    Add, Alter, Create, Delete, Drop, Expression,
+    Insert, Table, TruncateTable, Update
+)
+
 from config.constant import GenConstant
 from config.env import DataBaseConfig, GenConfig
 from exceptions.exception import ServiceException
@@ -19,10 +28,11 @@ from module_generator.entity.vo.gen_vo import (
     GenTableModel,
     GenTablePageQueryModel,
 )
-from module_generator.dao.gen_dao import GenTableColumnDao, GenTableDao
+from module_generator.repository import GenTableRepository, GenTableColumnRepository
 from utils.common_util import CamelCaseUtil
 from utils.gen_util import GenUtils
 from utils.template_util import TemplateInitializer, TemplateUtils
+from utils.transaction_manager import transactional
 
 
 class GenTableService:
@@ -42,8 +52,16 @@ class GenTableService:
         :param is_page: 是否开启分页
         :return: 代码生成业务列表信息对象
         """
-        gen_table_list_result = await GenTableDao.get_gen_table_list(query_db, query_object, is_page)
-
+        table_repo = GenTableRepository(query_db)
+        gen_table_list_result = await table_repo.paginate_with_filters(
+            page=query_object.page_num,
+            page_size=query_object.page_size,
+            table_name=query_object.table_name,
+            table_comment=query_object.table_comment,
+            begin_time=query_object.begin_time,
+            end_time=query_object.end_time,
+            is_page=is_page
+        )
         return gen_table_list_result
 
     @classmethod
@@ -58,12 +76,22 @@ class GenTableService:
         :param is_page: 是否开启分页
         :return: 数据库列表信息对象
         """
-        gen_db_table_list_result = await GenTableDao.get_gen_db_table_list(query_db, query_object, is_page)
-
+        table_repo = GenTableRepository(query_db)
+        gen_db_table_list_result = await table_repo.get_db_table_list(
+            page=query_object.page_num,
+            page_size=query_object.page_size,
+            table_name=query_object.table_name,
+            table_comment=query_object.table_comment,
+            begin_time=query_object.begin_time,
+            end_time=query_object.end_time,
+            is_page=is_page
+        )
         return gen_db_table_list_result
 
     @classmethod
-    async def get_gen_db_table_list_by_name_services(cls, query_db: AsyncSession, table_names: List[str]):
+    async def get_gen_db_table_list_by_name_services(
+        cls, query_db: AsyncSession, table_names: List[str]
+    ):
         """
         根据表名称组获取数据库列表信息service
 
@@ -71,11 +99,15 @@ class GenTableService:
         :param table_names: 表名称组
         :return: 数据库列表信息对象
         """
-        gen_db_table_list_result = await GenTableDao.get_gen_db_table_list_by_names(query_db, table_names)
-
-        return [GenTableModel(**gen_table) for gen_table in CamelCaseUtil.transform_result(gen_db_table_list_result)]
+        table_repo = GenTableRepository(query_db)
+        gen_db_table_list_result = await table_repo.get_db_tables_by_names(table_names)
+        return [
+            GenTableModel(**gen_table)
+            for gen_table in CamelCaseUtil.transform_result(gen_db_table_list_result)
+        ]
 
     @classmethod
+    @transactional()
     async def import_gen_table_services(
         cls, query_db: AsyncSession, gen_table_list: List[GenTableModel], current_user: CurrentUserModel
     ):
@@ -87,27 +119,29 @@ class GenTableService:
         :param current_user: 当前用户信息对象
         :return: 导入结果
         """
-        try:
-            for table in gen_table_list:
-                table_name = table.table_name
-                GenUtils.init_table(table, current_user.user.user_name)
-                add_gen_table = await GenTableDao.add_gen_table_dao(query_db, table)
-                if add_gen_table:
-                    table.table_id = add_gen_table.table_id
-                    gen_table_columns = await GenTableColumnDao.get_gen_db_table_columns_by_name(query_db, table_name)
-                    for column in [
-                        GenTableColumnModel(**gen_table_column)
-                        for gen_table_column in CamelCaseUtil.transform_result(gen_table_columns)
-                    ]:
-                        GenUtils.init_column_field(column, table)
-                        await GenTableColumnDao.add_gen_table_column_dao(query_db, column)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='导入成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise ServiceException(message=f'导入失败, {str(e)}')
+        table_repo = GenTableRepository(query_db)
+        column_repo = GenTableColumnRepository(query_db)
+        
+        for table in gen_table_list:
+            table_name = table.table_name
+            GenUtils.init_table(table, current_user.user.user_name)
+            
+            # 新增业务表
+            add_gen_table = await table_repo.add(table.model_dump(by_alias=True))
+            if add_gen_table:
+                table.table_id = add_gen_table.table_id
+                
+                # 获取数据库字段信息
+                gen_table_columns = await column_repo.get_db_columns_by_table_name(table_name)
+                for column_data in CamelCaseUtil.transform_result(gen_table_columns):
+                    column = GenTableColumnModel(**column_data)
+                    GenUtils.init_column_field(column, table)
+                    await column_repo.add(column.model_dump(by_alias=True))
+        
+        return CrudResponseModel(is_success=True, message='导入成功')
 
     @classmethod
+    @transactional()
     async def edit_gen_table_services(cls, query_db: AsyncSession, page_object: EditGenTableModel):
         """
         编辑业务表信息service
@@ -116,27 +150,29 @@ class GenTableService:
         :param page_object: 编辑业务表对象
         :return: 编辑业务表校验结果
         """
-        edit_gen_table = page_object.model_dump(exclude_unset=True, by_alias=True)
+        table_repo = GenTableRepository(query_db)
+        column_repo = GenTableColumnRepository(query_db)
+        
         gen_table_info = await cls.get_gen_table_by_id_services(query_db, page_object.table_id)
-        if gen_table_info.table_id:
-            try:
-                edit_gen_table['options'] = json.dumps(edit_gen_table.get('params'))
-                await GenTableDao.edit_gen_table_dao(query_db, edit_gen_table)
-                for gen_table_column in page_object.columns:
-                    gen_table_column.update_by = page_object.update_by
-                    gen_table_column.update_time = datetime.now()
-                    await GenTableColumnDao.edit_gen_table_column_dao(
-                        query_db, gen_table_column.model_dump(by_alias=True)
-                    )
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='更新成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
+        if not gen_table_info.table_id:
             raise ServiceException(message='业务表不存在')
+        
+        edit_gen_table = page_object.model_dump(exclude_unset=True, by_alias=True)
+        edit_gen_table['options'] = json.dumps(edit_gen_table.get('params'))
+        
+        # 更新业务表
+        await table_repo.update(edit_gen_table)
+        
+        # 更新字段信息
+        for gen_table_column in page_object.columns:
+            gen_table_column.update_by = page_object.update_by
+            gen_table_column.update_time = datetime.now()
+            await column_repo.update(gen_table_column.model_dump(by_alias=True))
+        
+        return CrudResponseModel(is_success=True, message='更新成功')
 
     @classmethod
+    @transactional()
     async def delete_gen_table_services(cls, query_db: AsyncSession, page_object: DeleteGenTableModel):
         """
         删除业务表信息service
@@ -145,21 +181,21 @@ class GenTableService:
         :param page_object: 删除业务表对象
         :return: 删除业务表校验结果
         """
-        if page_object.table_ids:
-            table_id_list = page_object.table_ids.split(',')
-            try:
-                for table_id in table_id_list:
-                    await GenTableDao.delete_gen_table_dao(query_db, GenTableModel(tableId=table_id))
-                    await GenTableColumnDao.delete_gen_table_column_by_table_id_dao(
-                        query_db, GenTableColumnModel(tableId=table_id)
-                    )
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
+        if not page_object.table_ids:
             raise ServiceException(message='传入业务表id为空')
+        
+        table_repo = GenTableRepository(query_db)
+        column_repo = GenTableColumnRepository(query_db)
+        
+        table_id_list = [int(tid) for tid in page_object.table_ids.split(',') if tid]
+        
+        for table_id in table_id_list:
+            # 先删除字段
+            await column_repo.delete_by_table_id(table_id)
+            # 再删除表
+            await table_repo.delete_by_id(table_id)
+        
+        return CrudResponseModel(is_success=True, message='删除成功')
 
     @classmethod
     async def get_gen_table_by_id_services(cls, query_db: AsyncSession, table_id: int):
@@ -170,9 +206,11 @@ class GenTableService:
         :param table_id: 需要生成的业务表id
         :return: 需要生成的业务表id对应的信息
         """
-        gen_table = await GenTableDao.get_gen_table_by_id(query_db, table_id)
-        result = await cls.set_table_from_options(GenTableModel(**CamelCaseUtil.transform_result(gen_table)))
-
+        table_repo = GenTableRepository(query_db)
+        gen_table = await table_repo.find_by_id(table_id)
+        result = await cls.set_table_from_options(
+            GenTableModel(**CamelCaseUtil.transform_result(gen_table))
+        )
         return result
 
     @classmethod
@@ -183,13 +221,19 @@ class GenTableService:
         :param query_db: orm对象
         :return: 所有业务表信息
         """
-        gen_table_all = await GenTableDao.get_gen_table_all(query_db)
-        result = [GenTableModel(**gen_table) for gen_table in CamelCaseUtil.transform_result(gen_table_all)]
-
+        table_repo = GenTableRepository(query_db)
+        gen_table_all = await table_repo.find_all()
+        result = [
+            GenTableModel(**gen_table)
+            for gen_table in CamelCaseUtil.transform_result(gen_table_all)
+        ]
         return result
 
     @classmethod
-    async def create_table_services(cls, query_db: AsyncSession, sql: str, current_user: CurrentUserModel):
+    @transactional()
+    async def create_table_services(
+        cls, query_db: AsyncSession, sql: str, current_user: CurrentUserModel
+    ):
         """
         创建表结构service
 
@@ -199,28 +243,56 @@ class GenTableService:
         :return: 创建表结构结果
         """
         sql_statements = sqlglot_parse(sql, dialect=DataBaseConfig.sqlglot_parse_dialect)
-        if cls.__is_valid_create_table(sql_statements):
-            try:
-                table_names = cls.__get_table_names(sql_statements)
-                await GenTableDao.create_table_by_sql_dao(query_db, sql_statements)
-                gen_table_list = await cls.get_gen_db_table_list_by_name_services(query_db, table_names)
-                await cls.import_gen_table_services(query_db, gen_table_list, current_user)
-
-                return CrudResponseModel(is_success=True, message='创建表结构成功')
-            except Exception as e:
-                raise ServiceException(message=f'创建表结构异常，详细错误信息：{str(e)}')
-        else:
+        
+        if not cls.__is_valid_create_table(sql_statements):
             raise ServiceException(message='建表语句不合法')
+        
+        table_repo = GenTableRepository(query_db)
+        table_names = cls.__get_table_names(sql_statements)
+        
+        # 执行建表语句
+        await table_repo.execute_sql_statements(sql_statements)
+        
+        # 导入表结构
+        gen_table_list = await cls.get_gen_db_table_list_by_name_services(query_db, table_names)
+        await cls._import_tables_internal(query_db, gen_table_list, current_user)
+        
+        return CrudResponseModel(is_success=True, message='创建表结构成功')
 
     @classmethod
-    def __is_valid_create_table(cls, sql_statements: List[Expression]):
+    async def _import_tables_internal(
+        cls, query_db: AsyncSession, gen_table_list: List[GenTableModel], current_user: CurrentUserModel
+    ):
+        """
+        内部方法：导入表结构（不创建新事务）
+        """
+        table_repo = GenTableRepository(query_db)
+        column_repo = GenTableColumnRepository(query_db)
+        
+        for table in gen_table_list:
+            table_name = table.table_name
+            GenUtils.init_table(table, current_user.user.user_name)
+            
+            add_gen_table = await table_repo.add(table.model_dump(by_alias=True))
+            if add_gen_table:
+                table.table_id = add_gen_table.table_id
+                gen_table_columns = await column_repo.get_db_columns_by_table_name(table_name)
+                for column_data in CamelCaseUtil.transform_result(gen_table_columns):
+                    column = GenTableColumnModel(**column_data)
+                    GenUtils.init_column_field(column, table)
+                    await column_repo.add(column.model_dump(by_alias=True))
+
+    @classmethod
+    def __is_valid_create_table(cls, sql_statements: List[Expression]) -> bool:
         """
         校验sql语句是否为合法的建表语句
 
         :param sql_statements: sql语句的ast列表
         :return: 校验结果
         """
-        validate_create = [isinstance(sql_statement, Create) for sql_statement in sql_statements]
+        validate_create = [
+            isinstance(sql_statement, Create) for sql_statement in sql_statements
+        ]
         validate_forbidden_keywords = [
             isinstance(
                 sql_statement,
@@ -233,7 +305,7 @@ class GenTableService:
         return True
 
     @classmethod
-    def __get_table_names(cls, sql_statements: List[Expression]):
+    def __get_table_names(cls, sql_statements: List[Expression]) -> List[str]:
         """
         获取sql语句中所有的建表表名
 
@@ -255,18 +327,24 @@ class GenTableService:
         :param table_id: 业务表id
         :return: 预览数据列表
         """
-        gen_table = GenTableModel(
-            **CamelCaseUtil.transform_result(await GenTableDao.get_gen_table_by_id(query_db, table_id))
-        )
+        table_repo = GenTableRepository(query_db)
+        gen_table_do = await table_repo.find_by_id(table_id)
+        gen_table = GenTableModel(**CamelCaseUtil.transform_result(gen_table_do))
+        
         await cls.set_sub_table(query_db, gen_table)
         await cls.set_pk_column(gen_table)
+        
         env = TemplateInitializer.init_jinja2()
         context = TemplateUtils.prepare_context(gen_table)
-        template_list = TemplateUtils.get_template_list(gen_table.tpl_category, gen_table.tpl_web_type)
+        template_list = TemplateUtils.get_template_list(
+            gen_table.tpl_category, gen_table.tpl_web_type
+        )
+        
         preview_code_result = {}
         for template in template_list:
             render_content = env.get_template(template).render(**context)
             preview_code_result[template] = render_content
+        
         return preview_code_result
 
     @classmethod
@@ -280,18 +358,14 @@ class GenTableService:
         """
         env = TemplateInitializer.init_jinja2()
         render_info = await cls.__get_gen_render_info(query_db, table_name)
+        
         for template in render_info[0]:
-            try:
-                render_content = env.get_template(template).render(**render_info[2])
-                gen_path = cls.__get_gen_path(render_info[3], template)
-                os.makedirs(os.path.dirname(gen_path), exist_ok=True)
-                with open(gen_path, 'w', encoding='utf-8') as f:
-                    f.write(render_content)
-            except Exception as e:
-                raise ServiceException(
-                    message=f'渲染模板失败，表名：{render_info[3].table_name}，详细错误信息：{str(e)}'
-                )
-
+            render_content = env.get_template(template).render(**render_info[2])
+            gen_path = cls.__get_gen_path(render_info[3], template)
+            os.makedirs(os.path.dirname(gen_path), exist_ok=True)
+            with open(gen_path, 'w', encoding='utf-8') as f:
+                f.write(render_content)
+        
         return CrudResponseModel(is_success=True, message='生成代码成功')
 
     @classmethod
@@ -325,19 +399,26 @@ class GenTableService:
         :param table_name: 业务表名称
         :return: 生成代码渲染模板相关信息
         """
-        gen_table = GenTableModel(
-            **CamelCaseUtil.transform_result(await GenTableDao.get_gen_table_by_name(query_db, table_name))
-        )
+        table_repo = GenTableRepository(query_db)
+        gen_table_do = await table_repo.find_by_name(table_name)
+        gen_table = GenTableModel(**CamelCaseUtil.transform_result(gen_table_do))
+        
         await cls.set_sub_table(query_db, gen_table)
         await cls.set_pk_column(gen_table)
+        
         context = TemplateUtils.prepare_context(gen_table)
-        template_list = TemplateUtils.get_template_list(gen_table.tpl_category, gen_table.tpl_web_type)
-        output_files = [TemplateUtils.get_file_name(template, gen_table) for template in template_list]
+        template_list = TemplateUtils.get_template_list(
+            gen_table.tpl_category, gen_table.tpl_web_type
+        )
+        output_files = [
+            TemplateUtils.get_file_name(template, gen_table)
+            for template in template_list
+        ]
 
         return [template_list, output_files, context, gen_table]
 
     @classmethod
-    def __get_gen_path(cls, gen_table: GenTableModel, template: str):
+    def __get_gen_path(cls, gen_table: GenTableModel, template: str) -> str:
         """
         根据GenTableModel对象和模板名称生成路径
 
@@ -347,11 +428,17 @@ class GenTableService:
         """
         gen_path = gen_table.gen_path
         if gen_path == '/':
-            return os.path.join(os.getcwd(), GenConfig.GEN_PATH, TemplateUtils.get_file_name(template, gen_table))
+            return os.path.join(
+                os.getcwd(), GenConfig.GEN_PATH,
+                TemplateUtils.get_file_name(template, gen_table)
+            )
         else:
-            return os.path.join(gen_path, TemplateUtils.get_file_name(template, gen_table))
+            return os.path.join(
+                gen_path, TemplateUtils.get_file_name(template, gen_table)
+            )
 
     @classmethod
+    @transactional()
     async def sync_db_services(cls, query_db: AsyncSession, table_name: str):
         """
         同步数据库service
@@ -360,46 +447,56 @@ class GenTableService:
         :param table_name: 业务表名称
         :return: 同步数据库结果
         """
-        gen_table = await GenTableDao.get_gen_table_by_name(query_db, table_name)
-        table = GenTableModel(**CamelCaseUtil.transform_result(gen_table))
+        table_repo = GenTableRepository(query_db)
+        column_repo = GenTableColumnRepository(query_db)
+        
+        gen_table_do = await table_repo.find_by_name(table_name)
+        table = GenTableModel(**CamelCaseUtil.transform_result(gen_table_do))
         table_columns = table.columns
         table_column_map = {column.column_name: column for column in table_columns}
-        query_db_table_columns = await GenTableColumnDao.get_gen_db_table_columns_by_name(query_db, table_name)
+        
+        # 获取数据库最新字段信息
+        query_db_table_columns = await column_repo.get_db_columns_by_table_name(table_name)
         db_table_columns = [
-            GenTableColumnModel(**column) for column in CamelCaseUtil.transform_result(query_db_table_columns)
+            GenTableColumnModel(**column)
+            for column in CamelCaseUtil.transform_result(query_db_table_columns)
         ]
+        
         if not db_table_columns:
             raise ServiceException('同步数据失败，原表结构不存在')
+        
         db_table_column_names = [column.column_name for column in db_table_columns]
-        try:
-            for column in db_table_columns:
-                GenUtils.init_column_field(column, table)
-                if column.column_name in table_column_map:
-                    prev_column = table_column_map[column.column_name]
-                    column.column_id = prev_column.column_id
-                    if column.list:
-                        column.dict_type = prev_column.dict_type
-                        column.query_type = prev_column.query_type
-                    if (
-                        prev_column.is_required != ''
-                        and not column.pk
-                        and (column.insert or column.edit)
-                        and (column.usable_column or column.super_column)
-                    ):
-                        column.is_required = prev_column.is_required
-                        column.html_type = prev_column.html_type
-                    await GenTableColumnDao.edit_gen_table_column_dao(query_db, column.model_dump(by_alias=True))
-                else:
-                    await GenTableColumnDao.add_gen_table_column_dao(query_db, column)
-            del_columns = [column for column in table_columns if column.column_name not in db_table_column_names]
-            if del_columns:
-                for column in del_columns:
-                    await GenTableColumnDao.delete_gen_table_column_by_column_id_dao(query_db, column)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='同步成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        
+        # 同步字段
+        for column in db_table_columns:
+            GenUtils.init_column_field(column, table)
+            if column.column_name in table_column_map:
+                prev_column = table_column_map[column.column_name]
+                column.column_id = prev_column.column_id
+                if column.list:
+                    column.dict_type = prev_column.dict_type
+                    column.query_type = prev_column.query_type
+                if (
+                    prev_column.is_required != ''
+                    and not column.pk
+                    and (column.insert or column.edit)
+                    and (column.usable_column or column.super_column)
+                ):
+                    column.is_required = prev_column.is_required
+                    column.html_type = prev_column.html_type
+                await column_repo.update(column.model_dump(by_alias=True))
+            else:
+                await column_repo.add(column.model_dump(by_alias=True))
+        
+        # 删除已不存在的字段
+        del_columns = [
+            column for column in table_columns
+            if column.column_name not in db_table_column_names
+        ]
+        for column in del_columns:
+            await column_repo.delete_by_column_id(column.column_id)
+        
+        return CrudResponseModel(is_success=True, message='同步成功')
 
     @classmethod
     async def set_sub_table(cls, query_db: AsyncSession, gen_table: GenTableModel):
@@ -408,11 +505,13 @@ class GenTableService:
 
         :param query_db: orm对象
         :param gen_table: 业务表信息
-        :return:
         """
         if gen_table.sub_table_name:
-            sub_table = await GenTableDao.get_gen_table_by_name(query_db, gen_table.sub_table_name)
-            gen_table.sub_table = GenTableModel(**CamelCaseUtil.transform_result(sub_table))
+            table_repo = GenTableRepository(query_db)
+            sub_table = await table_repo.find_by_name(gen_table.sub_table_name)
+            gen_table.sub_table = GenTableModel(
+                **CamelCaseUtil.transform_result(sub_table)
+            )
 
     @classmethod
     async def set_pk_column(cls, gen_table: GenTableModel):
@@ -420,14 +519,15 @@ class GenTableService:
         设置主键列信息
 
         :param gen_table: 业务表信息
-        :return:
         """
         for column in gen_table.columns:
             if column.pk:
                 gen_table.pk_column = column
                 break
+        
         if gen_table.pk_column is None:
             gen_table.pk_column = gen_table.columns[0]
+        
         if gen_table.tpl_category == GenConstant.TPL_SUB:
             for column in gen_table.sub_table.columns:
                 if column.pk:
@@ -483,7 +583,9 @@ class GenTableColumnService:
     """
 
     @classmethod
-    async def get_gen_table_column_list_by_table_id_services(cls, query_db: AsyncSession, table_id: int):
+    async def get_gen_table_column_list_by_table_id_services(
+        cls, query_db: AsyncSession, table_id: int
+    ):
         """
         获取业务表字段列表信息service
 
@@ -491,8 +593,8 @@ class GenTableColumnService:
         :param table_id: 业务表格id
         :return: 业务表字段列表信息对象
         """
-        gen_table_column_list_result = await GenTableColumnDao.get_gen_table_column_list_by_table_id(query_db, table_id)
-
+        column_repo = GenTableColumnRepository(query_db)
+        gen_table_column_list_result = await column_repo.find_by_table_id(table_id)
         return [
             GenTableColumnModel(**gen_table_column)
             for gen_table_column in CamelCaseUtil.transform_result(gen_table_column_list_result)

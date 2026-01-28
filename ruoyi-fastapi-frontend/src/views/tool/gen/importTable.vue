@@ -1,52 +1,60 @@
 <template>
   <!-- 导入表 -->
-  <el-dialog title="导入表" v-model="visible" width="800px" top="5vh" append-to-body>
-    <el-form :model="queryParams" ref="queryRef" :inline="true">
-      <el-form-item label="表名称" prop="tableName">
-        <el-input
-          v-model="queryParams.tableName"
-          placeholder="请输入表名称"
-          clearable
-          style="width: 180px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="表描述" prop="tableComment">
-        <el-input
-          v-model="queryParams.tableComment"
-          placeholder="请输入表描述"
-          clearable
-          style="width: 180px"
-          @keyup.enter="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-    <el-row>
+  <ZxDialog
+    v-model="visible"
+    title="导入表"
+    width="800px"
+    height="600px"
+    @confirm="handleImportTable"
+  >
+    <div class="import-table-content">
+      <el-form :model="queryParams" ref="queryRef" :inline="true" class="search-form">
+        <el-form-item label="表名称" prop="tableName">
+          <el-input
+            v-model="queryParams.tableName"
+            placeholder="请输入表名称"
+            clearable
+            style="width: 180px"
+            @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="表描述" prop="tableComment">
+          <el-input
+            v-model="queryParams.tableComment"
+            placeholder="请输入表描述"
+            clearable
+            style="width: 180px"
+            @keyup.enter="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
+          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+      
       <el-table
         @row-click="clickRow"
-        ref="table"
+        ref="tableRef"
         :data="dbTableList"
         @selection-change="handleSelectionChange"
-        height="260px"
+        height="320px"
       >
-        <el-table-column type="selection" width="55"></el-table-column>
+        <el-table-column type="selection" width="55" />
         <el-table-column
           prop="tableName"
           label="表名称"
           :show-overflow-tooltip="true"
-        ></el-table-column>
+        />
         <el-table-column
           prop="tableComment"
           label="表描述"
           :show-overflow-tooltip="true"
-        ></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+        />
+        <el-table-column prop="createTime" label="创建时间" width="160" />
+        <el-table-column prop="updateTime" label="更新时间" width="160" />
       </el-table>
+      
       <pagination
         v-show="total > 0"
         :total="total"
@@ -54,14 +62,8 @@
         v-model:limit="queryParams.pageSize"
         @pagination="getList"
       />
-    </el-row>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button type="primary" @click="handleImportTable">确 定</el-button>
-        <el-button @click="visible = false">取 消</el-button>
-      </div>
-    </template>
-  </el-dialog>
+    </div>
+  </ZxDialog>
 </template>
 
 <script setup>
@@ -71,6 +73,7 @@ const total = ref(0);
 const visible = ref(false);
 const tables = ref([]);
 const dbTableList = ref([]);
+const tableRef = ref(null);
 const { proxy } = getCurrentInstance();
 
 const queryParams = reactive({
@@ -84,13 +87,17 @@ const emit = defineEmits(['ok']);
 
 /** 查询参数列表 */
 function show() {
+  queryParams.pageNum = 1;
+  queryParams.tableName = undefined;
+  queryParams.tableComment = undefined;
+  tables.value = [];
   getList();
   visible.value = true;
 }
 
 /** 单击选择行 */
 function clickRow(row) {
-  proxy.$refs.table.toggleRowSelection(row);
+  tableRef.value?.toggleRowSelection(row);
 }
 
 /** 多选框选中数据 */
@@ -121,16 +128,13 @@ function resetQuery() {
 /** 导入按钮操作 */
 function handleImportTable() {
   const tableNames = tables.value.join(',');
-  if (tableNames == '') {
+  if (tableNames === '') {
     proxy.$modal.msgError('请选择要导入的表');
-    return;
+    return Promise.reject();
   }
-  importTable({ tables: tableNames }).then((res) => {
-    proxy.$modal.msgSuccess(res.msg);
-    if (res.code === 200) {
-      visible.value = false;
-      emit('ok');
-    }
+  return importTable({ tables: tableNames }).then(() => {
+    visible.value = false;
+    emit('ok');
   });
 }
 
@@ -138,3 +142,15 @@ defineExpose({
   show,
 });
 </script>
+
+<style scoped>
+.import-table-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.search-form {
+  margin-bottom: 16px;
+}
+</style>

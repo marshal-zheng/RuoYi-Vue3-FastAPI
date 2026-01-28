@@ -1,9 +1,9 @@
-from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
-from config.database import Base
+from module_admin.entity.do.base import LegacyBaseModel
+from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 
 
-class SysProtocol(Base):
+class SysProtocol(LegacyBaseModel):
     """
     协议管理表
     """
@@ -13,11 +13,36 @@ class SysProtocol(Base):
     protocol_id = Column(Integer, primary_key=True, autoincrement=True, comment='协议ID')
     protocol_name = Column(String(100), nullable=False, comment='协议名称')
     protocol_type = Column(String(50), nullable=False, comment='协议类型')
-    status = Column(String(1), nullable=False, default='0', comment='状态（0正常 1停用）')
+    status = Column(String(1), nullable=False, default=StatusEnum.NORMAL.value, comment='状态（0正常 1停用）')
     description = Column(String(500), nullable=True, comment='协议描述')
     protocol_config = Column(JSON, nullable=True, comment='协议配置')
-    create_by = Column(String(64), nullable=True, default='', comment='创建者')
-    create_time = Column(DateTime, nullable=True, default=datetime.now, comment='创建时间')
-    update_by = Column(String(64), nullable=True, default='', comment='更新者')
-    update_time = Column(DateTime, nullable=True, default=datetime.now, onupdate=datetime.now, comment='更新时间')
-    del_flag = Column(String(1), nullable=True, default='0', comment='删除标志')
+    del_flag = Column(String(1), nullable=True, default=DelFlagEnum.EXIST.value, comment='删除标志')
+
+    def __init__(self, **kwargs):
+        extra_fields = {
+            'bus_speed',
+            'word_length',
+            'rt_address',
+            'sub_address',
+            'word_count',
+            'baud_rate',
+            'can_id',
+            'data_length',
+            'data_bits',
+            'stop_bits',
+            'parity',
+            'ip_address',
+            'port',
+            'protocol',
+        }
+        extras = {}
+        for key in list(kwargs.keys()):
+            if key in extra_fields:
+                extras[key] = kwargs.pop(key)
+        super().__init__(**kwargs)
+        for key, value in extras.items():
+            setattr(self, key, value)
+
+
+# Backward-compatible alias for tests/imports expecting Protocol
+Protocol = SysProtocol

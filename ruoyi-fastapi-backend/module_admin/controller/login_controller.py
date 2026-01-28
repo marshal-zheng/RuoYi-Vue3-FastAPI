@@ -75,7 +75,7 @@ async def login(
     request_from_redoc = request.headers.get('referer').endswith('redoc') if request.headers.get('referer') else False
     if request_from_swagger or request_from_redoc:
         return {'access_token': access_token, 'token_type': 'Bearer'}
-    return ResponseUtil.success(msg='登录成功', dict_content={'token': access_token})
+    return ResponseUtil.success(message='登录成功', dict_content={'token': access_token})
 
 
 @loginController.get('/getInfo', response_model=CurrentUserModel)
@@ -104,7 +104,7 @@ async def register_user(request: Request, user_register: UserRegister, query_db:
     user_register_result = await LoginService.register_user_services(request, query_db, user_register)
     logger.info(user_register_result.message)
 
-    return ResponseUtil.success(data=user_register_result, msg=user_register_result.message)
+    return ResponseUtil.success(data=user_register_result, message=user_register_result.message)
 
 
 # @loginController.post("/getSmsCode", response_model=SmsCode)
@@ -128,7 +128,7 @@ async def register_user(request: Request, user_register: UserRegister, query_db:
 #         forget_user_result = await LoginService.forget_user_services(request, query_db, forget_user)
 #         if forget_user_result.is_success:
 #             logger.info(forget_user_result.message)
-#             return ResponseUtil.success(data=forget_user_result, msg=forget_user_result.message)
+#             return ResponseUtil.success(data=forget_user_result, message=forget_user_result.message)
 #         else:
 #             logger.warning(forget_user_result.message)
 #             return ResponseUtil.failure(msg=forget_user_result.message)
@@ -149,4 +149,4 @@ async def logout(request: Request, token: Optional[str] = Depends(oauth2_scheme)
         logger.warning('登出时token已失效或算法不匹配，跳过服务端会话清理')
     else:
         logger.info('退出成功')
-    return ResponseUtil.success(msg='退出成功')
+    return ResponseUtil.success(message='退出成功')

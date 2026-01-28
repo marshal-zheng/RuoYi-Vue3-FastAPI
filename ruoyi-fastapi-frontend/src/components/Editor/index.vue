@@ -153,23 +153,20 @@ function handleBeforeUpload(file) {
 
 // 上传成功处理
 function handleUploadSuccess(res, file) {
-  // 如果上传成功
-  if (res.code == 200) {
-    // 获取富文本实例
-    let quill = toRaw(quillEditorRef.value).getQuill();
-    // 获取光标位置
-    let length = quill.selection.savedRange.index;
-    // 插入图片，res.url为服务器返回的图片链接地址
-    quill.insertEmbed(length, 'image', import.meta.env.VITE_APP_BASE_API + res.fileName);
-    // 调整光标到最后
-    quill.setSelection(length + 1);
-  } else {
-    proxy.$modal.msgError('图片插入失败');
-  }
+  // HTTP 2xx 已由拦截器判定，直接处理成功响应
+  // 获取富文本实例
+  let quill = toRaw(quillEditorRef.value).getQuill();
+  // 获取光标位置
+  let length = quill.selection.savedRange.index;
+  // 插入图片，res.url为服务器返回的图片链接地址
+  quill.insertEmbed(length, 'image', import.meta.env.VITE_APP_BASE_API + res.fileName);
+  // 调整光标到最后
+  quill.setSelection(length + 1);
 }
 
 // 上传失败处理
-function handleUploadError() {
+function handleUploadError(error) {
+  // 错误已由拦截器统一处理
   proxy.$modal.msgError('图片插入失败');
 }
 </script>

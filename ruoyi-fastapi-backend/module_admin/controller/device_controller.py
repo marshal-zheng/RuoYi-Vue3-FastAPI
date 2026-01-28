@@ -232,13 +232,18 @@ async def import_device_batch(
         import_result = await DeviceService.import_devices_multi_services(
             query_db, contents, current_user.user.user_name
         )
-        return ResponseUtil.success(msg='批量导入完成', data=import_result)
+        return ResponseUtil.success(message='批量导入完成', data=import_result)
 
     if file:
         file_bytes = await file.read()
         import_result = await DeviceService.import_devices_from_zip_services(
             query_db, file_bytes, current_user.user.user_name
         )
-        return ResponseUtil.success(msg='批量导入完成', data=import_result)
+        return ResponseUtil.success(message='批量导入完成', data=import_result)
 
-    return ResponseUtil.error(msg='未提供上传文件')
+    from exceptions.exception import ValidationException
+    raise ValidationException(
+        user_message='未提供上传文件',
+        developer_message='No file provided for device import',
+        field='file'
+    )

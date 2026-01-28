@@ -116,7 +116,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 async function getDeviceCategoryInfo(categoryId) {
   try {
     const response = await getDeviceCategory(categoryId);
-    return response.data;
+    return response?.data ?? response;
   } catch (error) {
     console.warn('获取分类详情失败:', error);
     // 使用模拟数据

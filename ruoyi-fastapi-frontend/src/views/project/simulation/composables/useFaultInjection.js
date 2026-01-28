@@ -173,8 +173,9 @@ export function useFaultInjection(sessionId) {
     if (!sessionId.value) return []
     loading.value = true
     try {
+      // http 客户端已解包 payload.data，res 直接是故障列表
       const res = await getFaultsApi(sessionId.value)
-      const list = res?.data?.data || res?.data || []
+      const list = Array.isArray(res) ? res : []
       // 只保留待生效和生效中的故障，避免已清除/过期占位
       faults.value = list
         .map(normalizeFault)

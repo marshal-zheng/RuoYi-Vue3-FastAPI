@@ -183,9 +183,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
     }
     emit('success');
   },
-  onConfirmError: (e) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
-  },
+  // 错误消息已在 http 层统一处理，无需重复显示
 });
 
 const isEdit = computed(() => !!state.data.userId);

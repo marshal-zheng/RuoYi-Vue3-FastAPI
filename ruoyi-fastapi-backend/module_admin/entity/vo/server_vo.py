@@ -1,10 +1,11 @@
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import List, Optional
 
 
-class CpuInfo(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class CpuInfo(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     cpu_num: Optional[int] = Field(default=None, description='核心数')
     used: Optional[float] = Field(default=None, description='CPU用户使用率')
@@ -12,8 +13,8 @@ class CpuInfo(BaseModel):
     free: Optional[float] = Field(default=None, description='CPU当前空闲率')
 
 
-class MemoryInfo(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class MemoryInfo(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     total: Optional[str] = Field(default=None, description='内存总量')
     used: Optional[str] = Field(default=None, description='已用内存')
@@ -21,8 +22,8 @@ class MemoryInfo(BaseModel):
     usage: Optional[float] = Field(default=None, description='使用率')
 
 
-class SysInfo(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class SysInfo(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     computer_ip: Optional[str] = Field(default=None, description='服务器IP')
     computer_name: Optional[str] = Field(default=None, description='服务器名称')
@@ -32,7 +33,7 @@ class SysInfo(BaseModel):
 
 
 class PyInfo(MemoryInfo):
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     name: Optional[str] = Field(default=None, description='Python名称')
     version: Optional[str] = Field(default=None, description='Python版本')
@@ -41,8 +42,8 @@ class PyInfo(MemoryInfo):
     home: Optional[str] = Field(default=None, description='安装路径')
 
 
-class SysFiles(BaseModel):
-    model_config = ConfigDict(alias_generator=to_camel)
+class SysFiles(CamelModelBase):
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     dir_name: Optional[str] = Field(default=None, description='盘符路径')
     sys_type_name: Optional[str] = Field(default=None, description='盘符类型')
@@ -53,12 +54,12 @@ class SysFiles(BaseModel):
     usage: Optional[str] = Field(default=None, description='资源的使用率')
 
 
-class ServerMonitorModel(BaseModel):
+class ServerMonitorModel(CamelModelBase):
     """
     服务监控对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     cpu: Optional[CpuInfo] = Field(description='CPU相关信息')
     py: Optional[PyInfo] = Field(description='Python相关信息')

@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -50,7 +50,7 @@ async def add_system_post(
     add_post_result = await PostService.add_post_services(query_db, add_post)
     logger.info(add_post_result.message)
 
-    return ResponseUtil.success(msg=add_post_result.message)
+    return ResponseUtil.success(message=add_post_result.message)
 
 
 @postController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:post:edit'))])
@@ -67,7 +67,7 @@ async def edit_system_post(
     edit_post_result = await PostService.edit_post_services(query_db, edit_post)
     logger.info(edit_post_result.message)
 
-    return ResponseUtil.success(msg=edit_post_result.message)
+    return ResponseUtil.success(message=edit_post_result.message)
 
 
 @postController.delete('/{post_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:post:remove'))])
@@ -77,7 +77,7 @@ async def delete_system_post(request: Request, post_ids: str, query_db: AsyncSes
     delete_post_result = await PostService.delete_post_services(query_db, delete_post)
     logger.info(delete_post_result.message)
 
-    return ResponseUtil.success(msg=delete_post_result.message)
+    return ResponseUtil.success(message=delete_post_result.message)
 
 
 @postController.get(

@@ -3,7 +3,6 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadPostData"
-      :show-pagination="true"
       :load-on-mounted="true"
       class="zx-grid-list--page"
     >
@@ -172,17 +171,10 @@ const data = reactive({
 
 const { form, rules } = toRefs(data);
 
+/** GridList 数据加载函数 */
 async function loadPostData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    postCode: params.query?.postCode,
-    postName: params.query?.postName,
-    status: params.query?.status,
-  };
   try {
-    const response = await listPost(queryData);
-    return { data: response.rows || [], total: response.total || 0 };
+    return await listPost(params);
   } catch (e) {
     return { data: [], total: 0 };
   }
@@ -230,7 +222,7 @@ function handleUpdate(row) {
   reset();
   const postId = row.postId || ids.value;
   getPost(postId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改岗位';
   });
@@ -271,11 +263,6 @@ function handleDelete(row) {
 }
 /** 导出按钮操作 */
 function handleExport(query) {
-  const params = {
-    postCode: query?.postCode,
-    postName: query?.postName,
-    status: query?.status,
-  };
-  proxy.download('system/post/export', params, `post_${new Date().getTime()}.xlsx`);
+  proxy.download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);
 }
 </script>

@@ -1,10 +1,13 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
-from typing import List
 from fastapi import HTTPException
-from module_admin.dao.device_category_dao import DeviceCategoryDao
 from module_admin.entity.do.device_category_do import DeviceCategoryDO
-from module_admin.entity.vo.device_category_vo import DeviceCategoryQueryModel, DeviceCategoryModel, DeviceCategoryOptionModel
+from module_admin.entity.vo.device_category_vo import (
+    DeviceCategoryQueryModel,
+    DeviceCategoryModel,
+    DeviceCategoryOptionModel
+)
+from module_admin.repository import DeviceCategoryRepository
 from utils.response_util import ResponseUtil
 
 
@@ -18,7 +21,15 @@ class DeviceCategoryService:
         """
         获取设备分类列表
         """
-        categories, total = await DeviceCategoryDao.get_device_category_list(db, query)
+        category_repo = DeviceCategoryRepository(db)
+        categories, total = await category_repo.paginate_with_filters(
+            page=query.page_num,
+            page_size=query.page_size,
+            name=query.name,
+            status=query.status,
+            begin_time=query.begin_time,
+            end_time=query.end_time
+        )
 
         category_list = [DeviceCategoryModel.model_validate(cat) for cat in categories]
         return ResponseUtil.success(
@@ -31,7 +42,8 @@ class DeviceCategoryService:
         """
         获取设备分类详情
         """
-        category = await DeviceCategoryDao.get_device_category_by_id(db, category_id)
+        category_repo = DeviceCategoryRepository(db)
+        category = await category_repo.find_by_id(category_id)
         if not category:
             raise HTTPException(status_code=404, detail="设备分类不存在")
         
@@ -43,8 +55,9 @@ class DeviceCategoryService:
         """
         新增设备分类
         """
+        category_repo = DeviceCategoryRepository(db)
         # 检查名称是否已存在
-        existing = await DeviceCategoryDao.get_device_category_by_name(db, category_data.name)
+        existing = await category_repo.find_by_name(category_data.name)
         if existing:
             raise HTTPException(status_code=400, detail=f"分类名称'{category_data.name}'已存在")
         
@@ -59,23 +72,24 @@ class DeviceCategoryService:
         )
         
         # 保存到数据库
-        result = await DeviceCategoryDao.add_device_category(db, category_do)
+        await category_repo.add(category_do)
         await db.commit()
         
-        return ResponseUtil.success(msg="新增成功")
+        return ResponseUtil.success(message="新增成功")
 
     @classmethod
     async def update_device_category(cls, db: AsyncSession, category_data: DeviceCategoryModel, current_user: str):
         """
         更新设备分类
         """
+        category_repo = DeviceCategoryRepository(db)
         # 检查分类是否存在
-        existing = await DeviceCategoryDao.get_device_category_by_id(db, category_data.device_category_id)
+        existing = await category_repo.find_by_id(category_data.device_category_id)
         if not existing:
             raise HTTPException(status_code=404, detail="设备分类不存在")
         
         # 检查名称是否与其他分类重复
-        name_check = await DeviceCategoryDao.get_device_category_by_name(db, category_data.name)
+        name_check = await category_repo.find_by_name(category_data.name)
         if name_check and name_check.device_category_id != category_data.device_category_id:
             raise HTTPException(status_code=400, detail=f"分类名称'{category_data.name}'已存在")
         
@@ -88,16 +102,17 @@ class DeviceCategoryService:
         existing.update_time = datetime.now()
         
         # 保存到数据库
-        await DeviceCategoryDao.update_device_category(db, existing)
+        await db.flush()
         await db.commit()
         
-        return ResponseUtil.success(msg="修改成功")
+        return ResponseUtil.success(message="修改成功")
 
     @classmethod
     async def delete_device_category(cls, db: AsyncSession, category_ids: str):
         """
         删除设备分类
         """
+        category_repo = DeviceCategoryRepository(db)
         # 解析ID列表
         id_list = [int(id_str) for id_str in category_ids.split(',')]
         
@@ -105,17 +120,18 @@ class DeviceCategoryService:
         # 如果有设备使用该分类，应该抛出异常
         
         # 删除分类
-        deleted_count = await DeviceCategoryDao.delete_device_category(db, id_list)
+        deleted_count = await category_repo.delete_by_ids(id_list)
         await db.commit()
         
-        return ResponseUtil.success(msg=f"删除成功，共删除{deleted_count}条记录")
+        return ResponseUtil.success(message=f"删除成功，共删除{deleted_count}条记录")
 
     @classmethod
     async def get_device_category_options(cls, db: AsyncSession):
         """
         获取设备分类选项（用于下拉选择）
         """
-        categories = await DeviceCategoryDao.get_all_device_categories(db)
+        category_repo = DeviceCategoryRepository(db)
+        categories = await category_repo.find_all_active()
         
         # 转换为选项模型
         options = [DeviceCategoryOptionModel.model_validate(cat) for cat in categories]
@@ -127,7 +143,8 @@ class DeviceCategoryService:
         """
         检查分类名称是否唯一
         """
-        existing = await DeviceCategoryDao.get_device_category_by_name(db, name)
+        category_repo = DeviceCategoryRepository(db)
+        existing = await category_repo.find_by_name(name)
         
         if not existing:
             return ResponseUtil.success(data=True)

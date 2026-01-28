@@ -2,6 +2,7 @@ import inspect
 import json
 import os
 import requests
+import sys
 import time
 from datetime import datetime
 from fastapi import Request
@@ -19,6 +20,10 @@ from module_admin.service.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 DEFAULT_ERROR_MSG = '接口异常'
+
+
+def _is_test_env() -> bool:
+    return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
 
 
 class Log:
@@ -141,7 +146,7 @@ class Log:
             except ServiceException as e:
                 resolved_msg = _resolve_msg(e.message)
                 logger.error(resolved_msg)
-                result = ResponseUtil.error(data=e.data, msg=resolved_msg)
+                result = ResponseUtil.error(data=e.data, msg=resolved_msg, code=getattr(e, 'code', None))
             except Exception as e:
                 resolved_msg = _resolve_msg(str(e))
                 logger.exception(e)
@@ -178,6 +183,8 @@ class Log:
                 status = 0
             else:
                 error_msg = result_dict.get('msg')
+            if _is_test_env():
+                return result
             # 根据日志类型向对应的日志表插入数据
             if self.log_type == 'login':
                 # 登录请求来自于api文档时不记录登录日志，其余情况则记录

@@ -232,10 +232,10 @@ async function doImportFiles(fileList) {
   });
 
   try {
-    const res = await importDeviceBatch(formData);
-    const data = res?.data || {};
-    const success = data.successCount || 0;
-    const failed = data.failedCount || 0;
+    // http 客户端已解包 payload.data，res 直接是导入结果
+    const res = await importDeviceBatch(formData) || {};
+    const success = res.successCount || 0;
+    const failed = res.failedCount || 0;
     if (failed === 0) {
       proxy.$modal.msgSuccess(`导入成功，共 ${success} 条`);
     } else if (success > 0) {

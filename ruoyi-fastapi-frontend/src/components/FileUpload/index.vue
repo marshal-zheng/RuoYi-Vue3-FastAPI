@@ -155,21 +155,16 @@ function handleExceed() {
 
 // 上传失败
 function handleUploadError(err) {
-  proxy.$modal.msgError('上传文件失败');
+  number.value--;
+  proxy.$modal.closeLoading();
+  // 错误已由拦截器统一处理
 }
 
 // 上传成功回调
 function handleUploadSuccess(res, file) {
-  if (res.code === 200) {
-    uploadList.value.push({ name: res.fileName, url: res.fileName });
-    uploadedSuccessfully();
-  } else {
-    number.value--;
-    proxy.$modal.closeLoading();
-    proxy.$modal.msgError(res.msg);
-    proxy.$refs.fileUpload.handleRemove(file);
-    uploadedSuccessfully();
-  }
+  // HTTP 2xx 已由拦截器判定，直接处理成功响应
+  uploadList.value.push({ name: res.fileName, url: res.fileName });
+  uploadedSuccessfully();
 }
 
 // 删除文件

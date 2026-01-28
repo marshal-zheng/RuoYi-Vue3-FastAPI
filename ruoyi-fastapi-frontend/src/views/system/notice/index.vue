@@ -207,17 +207,10 @@ const { state, dialogProps, dialogEvents, open: openDialog, setLoading } = useDi
   },
 });
 
+/** GridList 数据加载函数 */
 async function loadNoticeData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    noticeTitle: params.query?.noticeTitle,
-    createBy: params.query?.createBy,
-    noticeType: params.query?.noticeType,
-  };
   try {
-    const response = await listNotice(queryData);
-    return { data: response.rows || [], total: response.total || 0 };
+    return await listNotice(params);
   } catch (e) {
     return { data: [], total: 0 };
   }
@@ -254,7 +247,7 @@ async function handleUpdate(row) {
   setLoading(true);
   try {
     const response = await getNotice(noticeId);
-    openDialog(response.data);
+    openDialog(response?.data ?? response);
   } finally {
     setLoading(false);
   }

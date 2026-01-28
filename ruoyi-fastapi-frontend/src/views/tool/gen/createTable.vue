@@ -1,15 +1,21 @@
 <template>
   <!-- 创建表 -->
-  <el-dialog title="创建表" v-model="visible" width="800px" top="5vh" append-to-body>
-    <span>创建表语句(支持多个建表语句)：</span>
-    <el-input type="textarea" :rows="10" placeholder="请输入文本" v-model="content"></el-input>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button type="primary" @click="handleImportTable">确 定</el-button>
-        <el-button @click="visible = false">取 消</el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <ZxDialog
+    v-model="visible"
+    title="创建表"
+    width="800px"
+    @confirm="handleImportTable"
+  >
+    <div class="create-table-content">
+      <div class="mb-3">创建表语句(支持多个建表语句)：</div>
+      <el-input
+        type="textarea"
+        :rows="10"
+        placeholder="请输入建表语句"
+        v-model="content"
+      />
+    </div>
+  </ZxDialog>
 </template>
 
 <script setup>
@@ -22,6 +28,7 @@ const emit = defineEmits(['ok']);
 
 /** 显示弹框 */
 function show() {
+  content.value = '';
   visible.value = true;
 }
 
@@ -29,14 +36,11 @@ function show() {
 function handleImportTable() {
   if (content.value === '') {
     proxy.$modal.msgError('请输入建表语句');
-    return;
+    return Promise.reject();
   }
-  createTable({ sql: content.value }).then((res) => {
-    proxy.$modal.msgSuccess(res.msg);
-    if (res.code === 200) {
-      visible.value = false;
-      emit('ok');
-    }
+  return createTable({ sql: content.value }).then(() => {
+    visible.value = false;
+    emit('ok');
   });
 }
 
@@ -44,3 +48,15 @@ defineExpose({
   show,
 });
 </script>
+
+<style scoped>
+.create-table-content {
+  padding: 8px 0;
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+  color: var(--el-text-color-regular);
+  font-size: 14px;
+}
+</style>

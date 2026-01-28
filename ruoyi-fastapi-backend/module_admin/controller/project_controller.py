@@ -2,7 +2,7 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, File, Query, Request, UploadFile
 from fastapi.responses import StreamingResponse
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.enums import BusinessType
@@ -70,7 +70,7 @@ async def add_system_project(
     add_project_result = await ProjectService.add_project_services(query_db, add_project)
     logger.info(add_project_result.message)
 
-    return ResponseUtil.success(msg=add_project_result.message, data=add_project_result.result)
+    return ResponseUtil.success(message=add_project_result.message, data=add_project_result.result)
 
 
 @projectController.put('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))])
@@ -89,7 +89,7 @@ async def edit_system_project(
     edit_project_result = await ProjectService.edit_project_services(query_db, edit_project)
     logger.info(edit_project_result.message)
 
-    return ResponseUtil.success(msg=edit_project_result.message)
+    return ResponseUtil.success(message=edit_project_result.message)
 
 
 @projectController.delete('/{project_ids}', dependencies=[Depends(CheckUserInterfaceAuth('project:project:remove'))])
@@ -109,7 +109,7 @@ async def delete_system_project(
     delete_project_result = await ProjectService.delete_project_services(query_db, delete_project)
     logger.info(delete_project_result.message)
 
-    return ResponseUtil.success(msg=delete_project_result.message)
+    return ResponseUtil.success(message=delete_project_result.message)
 
 
 @projectController.get(
@@ -154,7 +154,7 @@ async def save_project_topology(
 
     save_result = await ProjectTopologyService.save_project_topology_services(query_db, topology)
     logger.info(save_result.message)
-    return ResponseUtil.success(msg=save_result.message)
+    return ResponseUtil.success(message=save_result.message)
 
 
 @projectController.get(
@@ -205,6 +205,26 @@ async def export_project(
 
 
 @projectController.post(
+    '/export',
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:query'))],
+)
+@Log(title='工程管理-导出', business_type=BusinessType.EXPORT)
+async def export_project_placeholder(
+    request: Request,
+    query_db: AsyncSession = Depends(get_db),
+):
+    """
+    兼容导出入口（需传入 project_id）
+    """
+    from exceptions.exception import ValidationException
+    raise ValidationException(
+        user_message='请在路径中提供project_id',
+        developer_message='Project ID is required in the path',
+        field='project_id'
+    )
+
+
+@projectController.post(
     '/export/batch',
     dependencies=[Depends(CheckUserInterfaceAuth('project:project:query'))],
 )
@@ -249,7 +269,7 @@ async def import_project(
     )
     logger.info(import_result.message)
 
-    return ResponseUtil.success(msg=import_result.message, data=import_result.result)
+    return ResponseUtil.success(message=import_result.message, data=import_result.result)
 
 
 @projectController.post(
@@ -270,4 +290,4 @@ async def import_projects_batch(
     import_result = await ProjectService.import_projects_from_zip_services(
         query_db, file_bytes, current_user.user.user_name
     )
-    return ResponseUtil.success(msg='批量导入完成', data=import_result)
+    return ResponseUtil.success(message='批量导入完成', data=import_result)

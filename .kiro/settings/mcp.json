@@ -10,6 +10,11 @@
       "command": "node",
       "args": [
         "/Users/hqz/Downloads/element-plus/packages/mcp/dist/stdio.js"
+      ],
+      "autoApprove": [
+        "get_component_example",
+        "get_component_props",
+        "list_components"
       ]
     }
   }

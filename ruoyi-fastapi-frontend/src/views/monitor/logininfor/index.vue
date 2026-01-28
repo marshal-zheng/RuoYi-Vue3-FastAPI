@@ -153,6 +153,7 @@
 </template>
 
 <script setup name="Logininfor">
+import { serializeDateRange } from '@/utils/ruoyi';
 import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from '@/api/monitor/logininfor';
 
 const { proxy } = getCurrentInstance();
@@ -166,19 +167,18 @@ const selectName = ref('');
 const defaultSort = ref({ prop: 'loginTime', order: 'descending' });
 const gridListRef = ref(null);
 
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 - 不处理参数转换 */
 async function loadLogininforData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    ipaddr: params.query?.ipaddr,
-    userName: params.query?.userName,
-    status: params.query?.status,
-    orderByColumn: params.query?.orderByColumn,
-    isAsc: params.query?.isAsc,
-  };
-  const finalParams = proxy.addDateRange(queryData, params.query?.dateRange || []);
-  const response = await list(finalParams);
-  return { data: response.rows || [], total: response.total || 0 };
+  try {
+    return await list(params);
+  } catch (e) {
+    return { data: [], total: 0 };
+  }
 }
 function onFilterChange(field, value, { handleRefresh, updateState }) {
   updateState({ [field]: value });

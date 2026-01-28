@@ -3,6 +3,7 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProtocolData"
+      :query-transform="queryTransform"
       :clear-selection-on-load="true"
       class="protocol-grid zx-grid-list--page"
     >
@@ -135,6 +136,7 @@
 </template>
 
 <script setup name="Protocol">
+import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listProtocol,
   delProtocol,
@@ -164,11 +166,14 @@ const selectedRows = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 
-/** ZxGridList 数据加载函数 */
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 */
 async function loadProtocolData(params) {
-  // 优化写法，避免无用传参和提升可读性
-  const query = { ...params, ...proxy.addDateRange({}, params.query?.dateRange) };
-  const response = await listProtocol(query);
+  const response = await listProtocol(params);
   return response;
 }
 
@@ -229,7 +234,8 @@ function handleDelete(row) {
     })
     .then((res) => {
       gridListRef.value?.refresh();
-      const summary = res?.data?.summary || {};
+      // http 客户端已解包 payload.data，直接访问字段
+      const summary = res?.summary || {};
       const successCount = Array.isArray(summary.success) ? summary.success.length : 0;
       const failCount = Array.isArray(summary.failed) ? summary.failed.length : 0;
       if (failCount === 0) {

@@ -1,17 +1,18 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
 from typing import Literal, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class MenuModel(BaseModel):
+class MenuModel(CamelModelBase):
     """
     菜单表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     menu_id: Optional[int] = Field(default=None, description='菜单ID')
     menu_name: Optional[str] = Field(default=None, description='菜单名称')
@@ -21,8 +22,8 @@ class MenuModel(BaseModel):
     component: Optional[str] = Field(default=None, description='组件路径')
     query: Optional[str] = Field(default=None, description='路由参数')
     route_name: Optional[str] = Field(default=None, description='路由名称')
-    is_frame: Optional[Literal[0, 1]] = Field(default=None, description='是否为外链（0是 1否）')
-    is_cache: Optional[Literal[0, 1]] = Field(default=None, description='是否缓存（0缓存 1不缓存）')
+    is_frame: Optional[Literal['0', '1', 0, 1]] = Field(default=None, description='是否为外链（0是 1否）')
+    is_cache: Optional[Literal['0', '1', 0, 1]] = Field(default=None, description='是否缓存（0缓存 1不缓存）')
     menu_type: Optional[Literal['M', 'C', 'F']] = Field(default=None, description='菜单类型（M目录 C菜单 F按钮）')
     visible: Optional[Literal['0', '1']] = Field(default=None, description='菜单状态（0显示 1隐藏）')
     status: Optional[Literal['0', '1']] = Field(default=None, description='菜单状态（0正常 1停用）')
@@ -60,12 +61,27 @@ class MenuModel(BaseModel):
         return self.perms
 
     def validate_fields(self):
-        self.get_menu_name()
-        self.get_order_num()
-        self.get_path()
-        self.get_component()
-        self.get_menu_type()
-        self.get_perms()
+        is_edit = self.menu_id is not None
+        if not is_edit:
+            self.get_menu_name()
+            self.get_order_num()
+            self.get_path()
+            self.get_component()
+            self.get_menu_type()
+            self.get_perms()
+            return
+        if self.menu_name is not None:
+            self.get_menu_name()
+        if self.order_num is not None:
+            self.get_order_num()
+        if self.path is not None:
+            self.get_path()
+        if self.component is not None:
+            self.get_component()
+        if self.menu_type is not None:
+            self.get_menu_type()
+        if self.perms is not None:
+            self.get_perms()
 
 
 @as_query
@@ -78,11 +94,11 @@ class MenuQueryModel(MenuModel):
     end_time: Optional[str] = Field(default=None, description='结束时间')
 
 
-class DeleteMenuModel(BaseModel):
+class DeleteMenuModel(CamelModelBase):
     """
     删除菜单模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     menu_ids: str = Field(description='需要删除的菜单ID')

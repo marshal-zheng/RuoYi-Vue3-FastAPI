@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Literal, Optional, Union
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from config.get_db import get_db
 from config.enums import BusinessType
 from config.env import UploadConfig
@@ -94,7 +94,7 @@ async def add_system_user(
     add_user_result = await UserService.add_user_services(query_db, add_user)
     logger.info(add_user_result.message)
 
-    return ResponseUtil.success(msg=add_user_result.message)
+    return ResponseUtil.success(message=add_user_result.message)
 
 
 @userController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))])
@@ -121,7 +121,7 @@ async def edit_system_user(
     edit_user_result = await UserService.edit_user_services(query_db, edit_user)
     logger.info(edit_user_result.message)
 
-    return ResponseUtil.success(msg=edit_user_result.message)
+    return ResponseUtil.success(message=edit_user_result.message)
 
 
 @userController.delete('/{user_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:user:remove'))])
@@ -137,8 +137,13 @@ async def delete_system_user(
     if user_id_list:
         if current_user.user.user_id in list(map(int, user_id_list)):
             logger.warning('当前登录用户不能删除')
-
-            return ResponseUtil.failure(msg='当前登录用户不能删除')
+            from exceptions.exception import BusinessException
+            from config.error_codes import ErrorCode
+            raise BusinessException(
+                message='当前登录用户不能删除',
+                error_code=ErrorCode.USER_NOT_FOUND,
+                http_status=400
+            )
         for user_id in user_id_list:
             await UserService.check_user_allowed_services(UserModel(userId=int(user_id)))
             if not current_user.user.admin:
@@ -147,7 +152,7 @@ async def delete_system_user(
     delete_user_result = await UserService.delete_user_services(query_db, delete_user)
     logger.info(delete_user_result.message)
 
-    return ResponseUtil.success(msg=delete_user_result.message)
+    return ResponseUtil.success(message=delete_user_result.message)
 
 
 @userController.put('/resetPwd', dependencies=[Depends(CheckUserInterfaceAuth('system:user:resetPwd'))])
@@ -172,7 +177,7 @@ async def reset_system_user_pwd(
     edit_user_result = await UserService.edit_user_services(query_db, edit_user)
     logger.info(edit_user_result.message)
 
-    return ResponseUtil.success(msg=edit_user_result.message)
+    return ResponseUtil.success(message=edit_user_result.message)
 
 
 @userController.put('/changeStatus', dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))])
@@ -197,7 +202,7 @@ async def change_system_user_status(
     edit_user_result = await UserService.edit_user_services(query_db, edit_user)
     logger.info(edit_user_result.message)
 
-    return ResponseUtil.success(msg=edit_user_result.message)
+    return ResponseUtil.success(message=edit_user_result.message)
 
 
 @userController.get('/profile', response_model=UserProfileModel)
@@ -264,8 +269,13 @@ async def change_system_user_profile_avatar(
         edit_user_result = await UserService.edit_user_services(query_db, edit_user)
         logger.info(edit_user_result.message)
 
-        return ResponseUtil.success(dict_content={'imgUrl': edit_user.avatar}, msg=edit_user_result.message)
-    return ResponseUtil.failure(msg='上传图片异常，请联系管理员')
+        return ResponseUtil.success(dict_content={'imgUrl': edit_user.avatar}, message=edit_user_result.message)
+    
+    from exceptions.exception import SystemException
+    raise SystemException(
+        user_message='上传图片失败，请重试',
+        developer_message='Avatar upload failed: file is None or empty'
+    )
 
 
 @userController.put('/profile')
@@ -289,7 +299,7 @@ async def change_system_user_profile_info(
     edit_user_result = await UserService.edit_user_services(query_db, edit_user)
     logger.info(edit_user_result.message)
 
-    return ResponseUtil.success(msg=edit_user_result.message)
+    return ResponseUtil.success(message=edit_user_result.message)
 
 
 @userController.put('/profile/updatePwd')
@@ -310,7 +320,7 @@ async def reset_system_user_password(
     reset_user_result = await UserService.reset_user_services(query_db, reset_user)
     logger.info(reset_user_result.message)
 
-    return ResponseUtil.success(msg=reset_user_result.message)
+    return ResponseUtil.success(message=reset_user_result.message)
 
 
 @userController.post('/importData', dependencies=[Depends(CheckUserInterfaceAuth('system:user:import'))])
@@ -329,7 +339,7 @@ async def batch_import_system_user(
     )
     logger.info(batch_import_result.message)
 
-    return ResponseUtil.success(msg=batch_import_result.message)
+    return ResponseUtil.success(message=batch_import_result.message)
 
 
 @userController.post('/importTemplate', dependencies=[Depends(CheckUserInterfaceAuth('system:user:import'))])
@@ -396,4 +406,4 @@ async def update_system_role_user(
     )
     logger.info(add_user_role_result.message)
 
-    return ResponseUtil.success(msg=add_user_role_result.message)
+    return ResponseUtil.success(message=add_user_role_result.message)

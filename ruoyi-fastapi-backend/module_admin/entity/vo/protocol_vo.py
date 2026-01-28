@@ -1,11 +1,12 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Optional, Any
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class ProtocolModel(BaseModel):
+class ProtocolModel(CamelModelBase):
     """
     协议管理表对应pydantic模型
     """
@@ -44,7 +45,40 @@ class ProtocolPageQueryModel(ProtocolQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteProtocolModel(BaseModel):
+class AddProtocolModel(CamelModelBase):
+    """
+    新增协议模型
+    """
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+    protocol_name: Optional[str] = Field(default=None, description='协议名称')
+    protocol_type: Optional[str] = Field(default=None, description='协议类型')
+
+    # 1553B fields
+    bus_speed: Optional[int] = Field(default=None, description='总线速率')
+    word_length: Optional[int] = Field(default=None, description='字长')
+    rt_address: Optional[int] = Field(default=None, description='RT地址')
+    sub_address: Optional[int] = Field(default=None, description='子地址')
+    word_count: Optional[int] = Field(default=None, description='字数')
+
+    # CAN fields
+    baud_rate: Optional[int] = Field(default=None, description='波特率')
+    can_id: Optional[int] = Field(default=None, description='CAN ID')
+    data_length: Optional[int] = Field(default=None, description='数据长度')
+
+    # RS422 fields
+    data_bits: Optional[int] = Field(default=None, description='数据位')
+    stop_bits: Optional[int] = Field(default=None, description='停止位')
+    parity: Optional[str] = Field(default=None, description='校验位')
+
+    # Ethernet fields
+    ip_address: Optional[str] = Field(default=None, description='IP地址')
+    port: Optional[int] = Field(default=None, description='端口')
+    protocol: Optional[str] = Field(default=None, description='传输协议')
+
+
+class DeleteProtocolModel(CamelModelBase):
     """
     删除协议模型
     """

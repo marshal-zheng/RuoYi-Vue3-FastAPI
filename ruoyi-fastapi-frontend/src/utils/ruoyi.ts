@@ -85,6 +85,35 @@ export function addDateRange(params: any, dateRange: string[], propName?: string
   return search;
 }
 
+/**
+ * 序列化日期范围参数
+ * dateRange: ['2024-01-01', '2024-01-31'] -> beginTime/endTime
+ * @param propName 自定义字段名后缀，如 'CreateTime' -> beginCreateTime/endCreateTime
+ */
+export function serializeDateRange(
+  query: Record<string, any>,
+  propName?: string
+): Record<string, any> {
+  const result = { ...query };
+  const dateRange = result.dateRange;
+
+  if (Array.isArray(dateRange) && dateRange.length >= 2) {
+    const [begin, end] = dateRange;
+    if (begin || end) {
+      if (propName) {
+        result[`begin${propName}`] = begin;
+        result[`end${propName}`] = end;
+      } else {
+        result.beginTime = begin;
+        result.endTime = end;
+      }
+    }
+    delete result.dateRange;
+  }
+
+  return result;
+}
+
 // 回显数据字典
 export function selectDictLabel(datas: DictItem[], value: string | number): string {
   if (value === undefined) {

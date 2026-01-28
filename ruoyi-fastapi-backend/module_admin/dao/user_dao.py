@@ -15,6 +15,7 @@ from module_admin.entity.vo.user_vo import (
     UserRoleQueryModel,
 )
 from utils.page_util import PageUtil
+from utils.sensitive import SensitiveDataCipher, sensitive_equals
 
 
 class UserDao:
@@ -62,8 +63,9 @@ class UserDao:
                     .where(
                         SysUser.del_flag == '0',
                         SysUser.user_name == user.user_name if user.user_name else True,
-                        SysUser.phonenumber == user.phonenumber if user.phonenumber else True,
-                        SysUser.email == user.email if user.email else True,
+                        sensitive_equals(SysUser, 'phonenumber', user.phonenumber) if user.phonenumber else True,
+                        sensitive_equals(SysUser, 'email', user.email) if user.email else True,
+                        sensitive_equals(SysUser, 'id_card', user.id_card) if getattr(user, 'id_card', None) else True,
                     )
                     .order_by(desc(SysUser.create_time))
                     .distinct()
@@ -275,52 +277,61 @@ class UserDao:
 
     @classmethod
     async def get_user_list(
-        cls, db: AsyncSession, query_object: UserPageQueryModel, data_scope_sql: str, is_page: bool = False
+        cls, db: AsyncSession, query_object: UserPageQueryModel, data_scope_sql, is_page: bool = False
     ):
         """
         根据查询参数获取用户列表信息
 
         :param db: orm对象
         :param query_object: 查询参数对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :param is_page: 是否开启分页
         :return: 用户列表信息对象
         """
-        query = (
-            select(SysUser, SysDept)
-            .where(
-                SysUser.del_flag == '0',
-                or_(
-                    SysUser.dept_id == query_object.dept_id,
-                    SysUser.dept_id.in_(
-                        select(SysDept.dept_id).where(func.find_in_set(query_object.dept_id, SysDept.ancestors))
-                    ),
-                )
-                if query_object.dept_id
-                else True,
-                SysUser.user_id == query_object.user_id if query_object.user_id is not None else True,
-                SysUser.user_name.like(f'%{query_object.user_name}%') if query_object.user_name else True,
-                SysUser.nick_name.like(f'%{query_object.nick_name}%') if query_object.nick_name else True,
-                SysUser.email.like(f'%{query_object.email}%') if query_object.email else True,
-                SysUser.phonenumber.like(f'%{query_object.phonenumber}%') if query_object.phonenumber else True,
-                SysUser.status == query_object.status if query_object.status else True,
-                SysUser.sex == query_object.sex if query_object.sex else True,
-                SysUser.create_time.between(
-                    datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
-                    datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
-                )
-                if query_object.begin_time and query_object.end_time
-                else True,
-                eval(data_scope_sql),
-            )
-            .join(
-                SysDept,
-                and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
-                isouter=True,
-            )
-            .order_by(SysUser.user_id)
-            .distinct()
-        )
+        conditions = [SysUser.del_flag == '0']
+        
+        if query_object.dept_id:
+            conditions.append(or_(
+                SysUser.dept_id == query_object.dept_id,
+                SysUser.dept_id.in_(
+                    select(SysDept.dept_id).where(func.find_in_set(query_object.dept_id, SysDept.ancestors))
+                ),
+            ))
+        if query_object.user_id is not None:
+            conditions.append(SysUser.user_id == query_object.user_id)
+        if query_object.user_name:
+            conditions.append(SysUser.user_name.like(f'%{query_object.user_name}%'))
+        if query_object.nick_name:
+            conditions.append(SysUser.nick_name.like(f'%{query_object.nick_name}%'))
+        if query_object.email:
+            email_condition = sensitive_equals(SysUser, 'email', query_object.email)
+            if email_condition is not None:
+                conditions.append(email_condition)
+        if query_object.phonenumber:
+            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            if phone_condition is not None:
+                conditions.append(phone_condition)
+        if query_object.status:
+            conditions.append(SysUser.status == query_object.status)
+        if query_object.sex:
+            conditions.append(SysUser.sex == query_object.sex)
+        if query_object.begin_time and query_object.end_time:
+            conditions.append(SysUser.create_time.between(
+                datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
+                datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
+            ))
+        
+        query = select(SysUser, SysDept).where(*conditions)
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.join(
+            SysDept,
+            and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
+            isouter=True,
+        ).order_by(SysUser.user_id).distinct()
+        
         user_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
 
         return user_list
@@ -349,6 +360,12 @@ class UserDao:
         :param user: 需要更新的用户字典
         :return: 编辑校验结果
         """
+        if 'phonenumber' in user:
+            user['phonenumber_hash'] = SensitiveDataCipher.hash(user.get('phonenumber'))
+        if 'email' in user:
+            user['email_hash'] = SensitiveDataCipher.hash(user.get('email'))
+        if 'id_card' in user:
+            user['id_card_hash'] = SensitiveDataCipher.hash(user.get('id_card'))
         await db.execute(update(SysUser), [user])
 
     @classmethod
@@ -399,70 +416,88 @@ class UserDao:
 
     @classmethod
     async def get_user_role_allocated_list_by_role_id(
-        cls, db: AsyncSession, query_object: UserRolePageQueryModel, data_scope_sql: str, is_page: bool = False
+        cls, db: AsyncSession, query_object: UserRolePageQueryModel, data_scope_sql, is_page: bool = False
     ):
         """
         根据角色id获取已分配的用户列表信息
 
         :param db: orm对象
         :param query_object: 用户角色查询对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :param is_page: 是否开启分页
         :return: 角色已分配的用户列表信息
         """
+        conditions = [
+            SysUser.del_flag == '0',
+            SysRole.role_id == query_object.role_id,
+        ]
+        if query_object.user_name:
+            conditions.append(SysUser.user_name == query_object.user_name)
+        if query_object.phonenumber:
+            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            if phone_condition is not None:
+                conditions.append(phone_condition)
+        
         query = (
             select(SysUser)
             .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
             .join(SysUserRole, SysUserRole.user_id == SysUser.user_id, isouter=True)
             .join(SysRole, SysRole.role_id == SysUserRole.role_id, isouter=True)
-            .where(
-                SysUser.del_flag == '0',
-                SysUser.user_name == query_object.user_name if query_object.user_name else True,
-                SysUser.phonenumber == query_object.phonenumber if query_object.phonenumber else True,
-                SysRole.role_id == query_object.role_id,
-                eval(data_scope_sql),
-            )
-            .distinct()
+            .where(*conditions)
         )
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.distinct()
         allocated_user_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
 
         return allocated_user_list
 
     @classmethod
     async def get_user_role_unallocated_list_by_role_id(
-        cls, db: AsyncSession, query_object: UserRolePageQueryModel, data_scope_sql: str, is_page: bool = False
+        cls, db: AsyncSession, query_object: UserRolePageQueryModel, data_scope_sql, is_page: bool = False
     ):
         """
         根据角色id获取未分配的用户列表信息
 
         :param db: orm对象
         :param query_object: 用户角色查询对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :param is_page: 是否开启分页
         :return: 角色未分配的用户列表信息
         """
+        conditions = [
+            SysUser.del_flag == '0',
+            or_(SysRole.role_id != query_object.role_id, SysRole.role_id.is_(None)),
+            ~SysUser.user_id.in_(
+                select(SysUser.user_id)
+                .select_from(SysUser)
+                .join(
+                    SysUserRole,
+                    and_(SysUserRole.user_id == SysUser.user_id, SysUserRole.role_id == query_object.role_id),
+                )
+            ),
+        ]
+        if query_object.user_name:
+            conditions.append(SysUser.user_name == query_object.user_name)
+        if query_object.phonenumber:
+            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            if phone_condition is not None:
+                conditions.append(phone_condition)
+        
         query = (
             select(SysUser)
             .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
             .join(SysUserRole, SysUserRole.user_id == SysUser.user_id, isouter=True)
             .join(SysRole, SysRole.role_id == SysUserRole.role_id, isouter=True)
-            .where(
-                SysUser.del_flag == '0',
-                SysUser.user_name == query_object.user_name if query_object.user_name else True,
-                SysUser.phonenumber == query_object.phonenumber if query_object.phonenumber else True,
-                or_(SysRole.role_id != query_object.role_id, SysRole.role_id.is_(None)),
-                ~SysUser.user_id.in_(
-                    select(SysUser.user_id)
-                    .select_from(SysUser)
-                    .join(
-                        SysUserRole,
-                        and_(SysUserRole.user_id == SysUser.user_id, SysUserRole.role_id == query_object.role_id),
-                    )
-                ),
-                eval(data_scope_sql),
-            )
-            .distinct()
+            .where(*conditions)
         )
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.distinct()
         unallocated_user_list = await PageUtil.paginate(
             db, query, query_object.page_num, query_object.page_size, is_page
         )

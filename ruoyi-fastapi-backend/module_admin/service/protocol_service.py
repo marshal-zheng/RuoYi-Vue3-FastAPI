@@ -1,7 +1,6 @@
 import io
 import uuid
 import json
-from datetime import datetime
 from typing import Dict, List, Optional, Any
 import pandas as pd
 from fastapi import UploadFile
@@ -10,18 +9,23 @@ from openpyxl.styles import Alignment, PatternFill, Border, Side, Font, Protecti
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from sqlalchemy.ext.asyncio import AsyncSession
-from exceptions.exception import ServiceException
-from module_admin.dao.protocol_dao import ProtocolDao
+from exceptions.exception import ValidationException, ResourceNotFoundException
+from config.error_codes import ErrorCode
+from module_admin.entity.do.protocol_do import SysProtocol
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.protocol_vo import (
+    AddProtocolModel,
     ProtocolModel,
     ProtocolPageQueryModel,
+    ProtocolQueryModel,
     DeleteProtocolModel
 )
+from module_admin.repository import ProtocolRepository
 from utils.common_util import CamelCaseUtil
 from utils.page_util import PageResponseModel
 from utils.io_toolkit.models import ImportResult, ImportStatus
 from utils.io_toolkit import BatchActionExecutor, BatchActionTask
+from utils.transaction_manager import transactional
 
 
 PROTOCOL_TYPE_MAPPING = {
@@ -281,6 +285,10 @@ class ProtocolService:
     协议管理模块服务层
     """
 
+    def __init__(self, protocol_dao=None):
+        if protocol_dao is not None:
+            self.protocol_dao = protocol_dao
+
     @staticmethod
     def __normalize_protocol_config_for_frontend(raw):
         """
@@ -329,8 +337,16 @@ class ProtocolService:
         :param is_page: 是否开启分页
         :return: 协议列表信息对象
         """
-        protocol_list_result = await ProtocolDao.get_protocol_list(query_db, query_object, is_page)
+        protocol_repo = ProtocolRepository(query_db)
         if is_page:
+            protocol_list_result = await protocol_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                protocol_name=query_object.protocol_name,
+                protocol_type=query_object.protocol_type,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time
+            )
             rows = CamelCaseUtil.transform_result(protocol_list_result.rows)
             for row in rows:
                 if isinstance(row, dict) and 'protocolConfig' in row:
@@ -342,9 +358,11 @@ class ProtocolService:
                 }
             )
         else:
+            protocol_list_result = await protocol_repo.find_all_active()
             return CamelCaseUtil.transform_result(protocol_list_result)
 
     @classmethod
+    @transactional()
     async def add_protocol_services(cls, query_db: AsyncSession, page_object: ProtocolModel):
         """
         新增协议信息service
@@ -353,15 +371,13 @@ class ProtocolService:
         :param page_object: 新增协议对象
         :return: 新增协议校验结果
         """
-        try:
-            await ProtocolDao.add_protocol_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='新增成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        protocol_repo = ProtocolRepository(query_db)
+        db_protocol = SysProtocol(**page_object.model_dump(by_alias=True))
+        await protocol_repo.add(db_protocol)
+        return CrudResponseModel(is_success=True, message='新增成功')
 
     @classmethod
+    @transactional()
     async def edit_protocol_services(cls, query_db: AsyncSession, page_object: ProtocolModel):
         """
         编辑协议信息service
@@ -370,15 +386,18 @@ class ProtocolService:
         :param page_object: 编辑协议对象
         :return: 编辑协议校验结果
         """
-        try:
-            await ProtocolDao.edit_protocol_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='更新成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        protocol_repo = ProtocolRepository(query_db)
+        protocol = await protocol_repo.find_by_id(page_object.protocol_id)
+        if protocol:
+            update_data = page_object.model_dump(by_alias=True, exclude_unset=True)
+            for key, value in update_data.items():
+                if hasattr(protocol, key) and value is not None:
+                    setattr(protocol, key, value)
+            await query_db.flush()
+        return CrudResponseModel(is_success=True, message='更新成功')
 
     @classmethod
+    @transactional()
     async def delete_protocol_services(cls, query_db: AsyncSession, page_object: DeleteProtocolModel):
         """
         删除协议信息service
@@ -387,13 +406,10 @@ class ProtocolService:
         :param page_object: 删除协议对象
         :return: 删除协议校验结果
         """
-        try:
-            await ProtocolDao.delete_protocol_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='删除成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        protocol_repo = ProtocolRepository(query_db)
+        protocol_id_list = [int(id) for id in page_object.protocol_ids.split(',') if id]
+        await protocol_repo.soft_delete_batch(protocol_id_list, page_object.update_by or '')
+        return CrudResponseModel(is_success=True, message='删除成功')
 
     @classmethod
     async def delete_protocol_batch_services(
@@ -406,7 +422,11 @@ class ProtocolService:
         批量删除协议，使用 BatchActionExecutor 统一结果结构
         """
         if not protocol_ids:
-            raise ServiceException(message='请选择要删除的协议')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='protocol_ids',
+                message='请选择要删除的协议'
+            )
 
         normalized_ids: List[int] = []
         invalid_ids: List[str] = []
@@ -417,15 +437,11 @@ class ProtocolService:
                 invalid_ids.append(str(pid))
 
         executor = BatchActionExecutor(concurrency=1, enable_dedup=True)
+        protocol_repo = ProtocolRepository(query_db)
 
         async def _delete_one(pid: int):
-            payload = DeleteProtocolModel(protocolIds=str(pid), update_by=operator, update_time=datetime.now())
-            try:
-                await ProtocolDao.delete_protocol_dao(query_db, payload)
-                await query_db.commit()
-            except Exception as exc:  # noqa: BLE001
-                await query_db.rollback()
-                raise exc
+            await protocol_repo.soft_delete_batch([pid], operator)
+            await query_db.commit()
 
         tasks = [
             BatchActionTask(
@@ -443,9 +459,10 @@ class ProtocolService:
         result = summary.as_dict()
         if invalid_ids:
             # 记录无法解析的ID
-            result.setdefault('failed', []).extend(
-                [{'id': bad_id, 'success': False, 'data': None, 'error': '非法ID', 'attempts': 0} for bad_id in invalid_ids]
-            )
+            result.setdefault('failed', []).extend([
+                {'id': bad_id, 'success': False, 'data': None, 'error': '非法ID', 'attempts': 0}
+                for bad_id in invalid_ids
+            ])
         return result
 
     @classmethod
@@ -457,7 +474,8 @@ class ProtocolService:
         :param protocol_id: 协议ID
         :return: 协议ID对应的信息
         """
-        protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, protocol_id)
+        protocol_repo = ProtocolRepository(query_db)
+        protocol = await protocol_repo.find_by_id(protocol_id)
         if protocol:
             result = CamelCaseUtil.transform_result(protocol)
             if isinstance(result, dict) and 'protocolConfig' in result:
@@ -476,9 +494,13 @@ class ProtocolService:
         :param protocol_id: 协议ID
         :return: 包含协议名称和Excel内容的字典
         """
-        protocol = await ProtocolDao.get_protocol_detail_by_id(query_db, protocol_id)
+        protocol_repo = ProtocolRepository(query_db)
+        protocol = await protocol_repo.find_by_id(protocol_id)
         if not protocol:
-            raise ServiceException(message='协议不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='协议不存在'
+            )
 
         protocol_data = CamelCaseUtil.transform_result(protocol)
         protocol_name = protocol_data.get('protocolName', '协议配置')
@@ -582,7 +604,8 @@ class ProtocolService:
                 ensure_dict(protocol_config.get('messageConfig')) if isinstance(protocol_config, dict) else {}
             )
             nested_message_config = (
-                ensure_dict(nested_protocol_config.get('messageConfig')) if isinstance(nested_protocol_config, dict) else {}
+                ensure_dict(nested_protocol_config.get('messageConfig'))
+                if isinstance(nested_protocol_config, dict) else {}
             )
             candidates = [
                 protocol_data.get('fieldsConfig'),
@@ -698,7 +721,10 @@ class ProtocolService:
             # 前端使用 frequencyLabel 保存中文标签，frequency 保存值
             'frequency': ['frequencyLabel', 'frequency_label', 'frequency'],
             # 前端使用 speedLabel 保存中文标签，speed 保存值；后端可能用 baudRate
-            'speed': ['speedLabel', 'speed_label', 'speed', 'baudRate', 'baud_rate', 'baudRateLabel', 'baud_rate_label'],
+            'speed': [
+                'speedLabel', 'speed_label', 'speed',
+                'baudRate', 'baud_rate', 'baudRateLabel', 'baud_rate_label'
+            ],
             # 前端使用 methodLabel 保存中文标签，method 保存值
             'method': ['methodLabel', 'method_label', 'method'],
             # 前端使用 errorHandle/errorHandleLabel，后端导出模板用 errorHandling
@@ -831,7 +857,10 @@ class ProtocolService:
                         value = field_data.get(mapped_key, '') if isinstance(field_data, dict) else ''
                     data_cell = header_sheet.cell(row=row_index, column=column_index, value=value)
                     data_cell.fill = value_fill
-            apply_range_border(header_sheet, field_table_start, field_table_start + len(fields_config), 1, len(FIELD_COLUMNS))
+            apply_range_border(
+                header_sheet, field_table_start,
+                field_table_start + len(fields_config), 1, len(FIELD_COLUMNS)
+            )
         else:
             apply_range_border(header_sheet, field_table_start, field_table_start, 1, len(FIELD_COLUMNS))
 
@@ -995,7 +1024,10 @@ class ProtocolService:
                 data_cell = header_sheet.cell(row=row_index, column=column_index, value=value)
                 data_cell.fill = value_fill
                 data_cell.protection = Protection(locked=False)
-        apply_range_border(header_sheet, field_table_start, field_table_start + len(DEFAULT_FIELD_SAMPLE), 1, len(FIELD_COLUMNS))
+        apply_range_border(
+            header_sheet, field_table_start,
+            field_table_start + len(DEFAULT_FIELD_SAMPLE), 1, len(FIELD_COLUMNS)
+        )
         header_sheet.protection.sheet = True
 
         # 同时保留单独的字段列表表，用于导入解析兼容
@@ -1051,14 +1083,24 @@ class ProtocolService:
         支持 Excel (.xlsx, .xls, .csv) 和 JSON (.json) 格式
         """
         if not file or not file.filename:
-            raise ServiceException(message='请选择要导入的文件')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='请选择要导入的文件'
+            )
         suffix = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
         if suffix not in ('xlsx', 'xls', 'csv', 'json'):
-            raise ServiceException(message='仅支持 .xlsx/.xls/.csv/.json 格式的文件')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                message='仅支持 .xlsx/.xls/.csv/.json 格式的文件'
+            )
 
         content = await file.read()
         if not content:
-            raise ServiceException(message='文件内容为空')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='文件内容为空'
+            )
 
         # JSON 格式处理
         if suffix == 'json':
@@ -1072,10 +1114,14 @@ class ProtocolService:
         header = cls.__normalize_header_enums(cls.__extract_header(sheet_map), protocol_type)
         fields = cls.__extract_fields(sheet_map)
         if not fields:
-            raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='文件中未解析到任何字段，请检查模板内容'
+            )
         return {'header': header, 'fields': fields, 'protocolType': protocol_type}
 
     @classmethod
+    @transactional()
     async def import_protocol_services(
         cls,
         query_db: AsyncSession,
@@ -1129,7 +1175,8 @@ class ProtocolService:
             protocol_name = base_name
 
         # 检查协议名称是否已存在，如果存在则添加时间戳
-        existing = await ProtocolDao.get_protocol_by_name(query_db, protocol_name)
+        protocol_repo = ProtocolRepository(query_db)
+        existing = await protocol_repo.find_by_name(protocol_name)
         if existing:
             import time
             timestamp = int(time.time())
@@ -1167,12 +1214,8 @@ class ProtocolService:
         )
 
         # 保存协议
-        try:
-            await ProtocolDao.add_protocol_dao(query_db, protocol_model)
-            await query_db.commit()
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        db_protocol = SysProtocol(**protocol_model.model_dump(by_alias=True))
+        await protocol_repo.add(db_protocol)
 
         return CrudResponseModel(
             is_success=True,
@@ -1753,7 +1796,10 @@ class ProtocolService:
         return resolved_fields
 
     @classmethod
-    def __normalize_field_row(cls, row: Dict, index: int, resolved_fields: List[Dict], code_lookup: Dict[str, str], name_lookup: Dict[str, str]):
+    def __normalize_field_row(
+        cls, row: Dict, index: int, resolved_fields: List[Dict],
+        code_lookup: Dict[str, str], name_lookup: Dict[str, str]
+    ):
         normalized_row = {str(k).strip(): row.get(k) for k in row.keys()}
         field_name = cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('field_name', []))
         field_code = cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('field_code', []))
@@ -1762,8 +1808,13 @@ class ProtocolService:
 
         unique_id = str(field_code).strip() if field_code else cls.__generate_field_id(index)
         unique_id = str(unique_id).strip() or cls.__generate_field_id(index)
-        byte_count = cls.__to_int(cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('byte_count', [])), default=1)
-        byte_sequence = cls.__format_sequence(cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('byte_sequence', [])))
+        byte_count = cls.__to_int(
+            cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('byte_count', [])),
+            default=1
+        )
+        byte_sequence = cls.__format_sequence(
+            cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('byte_sequence', []))
+        )
         value_range = cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('value_range', [])) or ''
         unit = cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('unit', [])) or ''
         data_type_raw = cls.__pick_value(normalized_row, FIELD_COLUMN_ALIASES.get('data_type', []))
@@ -1834,7 +1885,10 @@ class ProtocolService:
         return default if number is None else int(number)
 
     @classmethod
-    def __resolve_parent_id(cls, parent_ref: Optional[str], resolved_fields: List[Dict], code_lookup: Dict[str, str], name_lookup: Dict[str, str]):
+    def __resolve_parent_id(
+        cls, parent_ref: Optional[str], resolved_fields: List[Dict],
+        code_lookup: Dict[str, str], name_lookup: Dict[str, str]
+    ):
         if parent_ref is None:
             return None
         ref_text = str(parent_ref).strip()
@@ -1862,3 +1916,123 @@ class ProtocolService:
         if isinstance(number, float) and number.is_integer():
             return str(int(number))
         return str(number)
+
+    async def get_protocol_by_id(self, protocol_id: int):
+        return await self.protocol_dao.get_protocol_by_id(protocol_id)
+
+    async def get_protocol_list(self, query_object: ProtocolQueryModel):
+        rows = await self.protocol_dao.get_protocol_list(query_object)
+        return {'total': len(rows) if rows else 0, 'rows': rows}
+
+    async def add_protocol(self, protocol_data: AddProtocolModel):
+        await self._validate_protocol(protocol_data)
+        return await self.protocol_dao.add_protocol(protocol_data)
+
+    async def export_protocol(self, protocol_id: int):
+        protocol = await self.protocol_dao.get_protocol_by_id(protocol_id)
+        if not protocol:
+            raise ValueError('协议不存在')
+        fields = [
+            'protocol_id',
+            'protocol_name',
+            'protocol_type',
+            'status',
+            'description',
+            'bus_speed',
+            'word_length',
+            'rt_address',
+            'sub_address',
+            'word_count',
+            'baud_rate',
+            'can_id',
+            'data_length',
+            'data_bits',
+            'stop_bits',
+            'parity',
+            'ip_address',
+            'port',
+            'protocol',
+        ]
+        return {key: getattr(protocol, key, None) for key in fields}
+
+    async def import_protocol(self, protocol_data: dict):
+        if not isinstance(protocol_data, dict):
+            raise ValueError('导入数据格式不正确')
+        if not protocol_data.get('protocol_name') or not protocol_data.get('protocol_type'):
+            raise ValueError('导入数据格式不正确')
+        model = AddProtocolModel(**protocol_data)
+        await self._validate_protocol(model)
+        return await self.protocol_dao.add_protocol(protocol_data)
+
+    async def _validate_protocol(self, protocol_data: AddProtocolModel):
+        protocol_type = (protocol_data.protocol_type or '').upper()
+        if protocol_type == '1553B':
+            if protocol_data.rt_address is not None and not self._validate_rt_address(protocol_data.rt_address):
+                raise ValueError('RT地址必须在0-31之间')
+            if protocol_data.word_count is not None and not self._validate_word_count(protocol_data.word_count):
+                raise ValueError('字数必须在1-32之间')
+        elif protocol_type == 'CAN':
+            if protocol_data.baud_rate is not None and protocol_data.baud_rate not in {
+                125000, 250000, 500000, 1000000
+            }:
+                raise ValueError('波特率无效')
+            if protocol_data.can_id is not None and not self._validate_can_id(protocol_data.can_id, extended=False):
+                raise ValueError('CAN ID超出范围')
+        elif protocol_type == 'ETHERNET':
+            if protocol_data.ip_address is not None and not self._validate_ip_address(protocol_data.ip_address):
+                raise ValueError('IP地址格式不正确')
+        elif protocol_type == 'RS422':
+            return
+        return
+
+    @staticmethod
+    def _validate_ip_address(ip_address: str) -> bool:
+        try:
+            import ipaddress
+            ipaddress.ip_address(ip_address)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def _validate_rt_address(rt_address: int) -> bool:
+        return 0 <= rt_address <= 31
+
+    @staticmethod
+    def _validate_word_count(word_count: int) -> bool:
+        return 1 <= word_count <= 32
+
+    @staticmethod
+    def _validate_can_id(can_id: int, extended: bool = False) -> bool:
+        return 0 <= can_id <= (0x1FFFFFFF if extended else 0x7FF)
+
+    def parse_1553b_message(self, message_data: Dict[str, Any]) -> Dict[str, Any]:
+        command_word = message_data.get('command_word', 0)
+        data_words = message_data.get('data_words', [])
+        return {
+            'rt_address': (command_word >> 11) & 0x1F,
+            'tr_bit': (command_word >> 10) & 0x01,
+            'sub_address': (command_word >> 5) & 0x1F,
+            'word_count': command_word & 0x1F,
+            'data_words': data_words,
+            'status_word': message_data.get('status_word'),
+        }
+
+    def parse_can_frame(self, frame_data: Dict[str, Any]) -> Dict[str, Any]:
+        return {
+            'can_id': frame_data.get('can_id'),
+            'dlc': frame_data.get('dlc'),
+            'data': frame_data.get('data', []),
+        }
+
+    def parse_ethernet_packet(self, packet_data: Dict[str, Any]) -> Dict[str, Any]:
+        payload = packet_data.get('payload', b'')
+        payload_length = len(payload) if payload is not None else 0
+        return {
+            'src_ip': packet_data.get('src_ip'),
+            'dst_ip': packet_data.get('dst_ip'),
+            'src_port': packet_data.get('src_port'),
+            'dst_port': packet_data.get('dst_port'),
+            'protocol': packet_data.get('protocol'),
+            'payload_length': payload_length,
+        }

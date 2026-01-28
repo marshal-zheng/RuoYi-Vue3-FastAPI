@@ -1,8 +1,9 @@
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
-from exceptions.exception import ServiceException
-from module_admin.dao.log_dao import LoginLogDao, OperationLogDao
+from exceptions.exception import ValidationException
+from config.error_codes import ErrorCode
+from module_admin.entity.do.log_do import SysOperLog, SysLogininfor
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.log_vo import (
     DeleteLoginLogModel,
@@ -13,8 +14,10 @@ from module_admin.entity.vo.log_vo import (
     OperLogPageQueryModel,
     UnlockUser,
 )
+from module_admin.repository import OperLogRepository, LoginLogRepository
 from module_admin.service.dict_service import DictDataService
 from utils.excel_util import ExcelUtil
+from utils.transaction_manager import transactional
 
 
 class OperationLogService:
@@ -34,11 +37,40 @@ class OperationLogService:
         :param is_page: 是否开启分页
         :return: 操作日志列表信息对象
         """
-        operation_log_list_result = await OperationLogDao.get_operation_log_list(query_db, query_object, is_page)
+        oper_log_repo = OperLogRepository(query_db)
+        if is_page:
+            operation_log_list_result = await oper_log_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                title=query_object.title,
+                oper_name=query_object.oper_name,
+                business_type=query_object.business_type,
+                status=query_object.status,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time,
+                order_by_column=query_object.order_by_column,
+                is_asc=query_object.is_asc
+            )
+        else:
+            operation_log_list_result = await oper_log_repo.paginate_with_filters(
+                page=1,
+                page_size=10000,
+                title=query_object.title,
+                oper_name=query_object.oper_name,
+                business_type=query_object.business_type,
+                status=query_object.status,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time,
+                order_by_column=query_object.order_by_column,
+                is_asc=query_object.is_asc
+            )
+            if hasattr(operation_log_list_result, 'rows'):
+                operation_log_list_result = operation_log_list_result.rows
 
         return operation_log_list_result
 
     @classmethod
+    @transactional()
     async def add_operation_log_services(cls, query_db: AsyncSession, page_object: OperLogModel):
         """
         新增操作日志service
@@ -47,15 +79,13 @@ class OperationLogService:
         :param page_object: 新增操作日志对象
         :return: 新增操作日志校验结果
         """
-        try:
-            await OperationLogDao.add_operation_log_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='新增成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        oper_log_repo = OperLogRepository(query_db)
+        db_oper_log = SysOperLog(**page_object.model_dump())
+        await oper_log_repo.add(db_oper_log)
+        return CrudResponseModel(is_success=True, message='新增成功')
 
     @classmethod
+    @transactional()
     async def delete_operation_log_services(cls, query_db: AsyncSession, page_object: DeleteOperLogModel):
         """
         删除操作日志信息service
@@ -65,19 +95,19 @@ class OperationLogService:
         :return: 删除操作日志校验结果
         """
         if page_object.oper_ids:
-            oper_id_list = page_object.oper_ids.split(',')
-            try:
-                for oper_id in oper_id_list:
-                    await OperationLogDao.delete_operation_log_dao(query_db, OperLogModel(operId=oper_id))
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
+            oper_log_repo = OperLogRepository(query_db)
+            oper_id_list = [int(id) for id in page_object.oper_ids.split(',')]
+            await oper_log_repo.delete_by_ids(oper_id_list)
+            return CrudResponseModel(is_success=True, message='删除成功')
         else:
-            raise ServiceException(message='传入操作日志id为空')
+            raise ValidationException(
+                user_message='传入操作日志id为空',
+                developer_message='Operation log IDs parameter is empty',
+                field='oper_ids'
+            )
 
     @classmethod
+    @transactional()
     async def clear_operation_log_services(cls, query_db: AsyncSession):
         """
         清除操作日志信息service
@@ -85,13 +115,9 @@ class OperationLogService:
         :param query_db: orm对象
         :return: 清除操作日志校验结果
         """
-        try:
-            await OperationLogDao.clear_operation_log_dao(query_db)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='清除成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        oper_log_repo = OperLogRepository(query_db)
+        await oper_log_repo.clear_all()
+        return CrudResponseModel(is_success=True, message='清除成功')
 
     @classmethod
     async def export_operation_log_list_services(cls, request: Request, operation_log_list: List):
@@ -159,11 +185,38 @@ class LoginLogService:
         :param is_page: 是否开启分页
         :return: 登录日志列表信息对象
         """
-        operation_log_list_result = await LoginLogDao.get_login_log_list(query_db, query_object, is_page)
+        login_log_repo = LoginLogRepository(query_db)
+        if is_page:
+            operation_log_list_result = await login_log_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                ipaddr=query_object.ipaddr,
+                user_name=query_object.user_name,
+                status=query_object.status,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time,
+                order_by_column=query_object.order_by_column,
+                is_asc=query_object.is_asc
+            )
+        else:
+            operation_log_list_result = await login_log_repo.paginate_with_filters(
+                page=1,
+                page_size=10000,
+                ipaddr=query_object.ipaddr,
+                user_name=query_object.user_name,
+                status=query_object.status,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time,
+                order_by_column=query_object.order_by_column,
+                is_asc=query_object.is_asc
+            )
+            if hasattr(operation_log_list_result, 'rows'):
+                operation_log_list_result = operation_log_list_result.rows
 
         return operation_log_list_result
 
     @classmethod
+    @transactional()
     async def add_login_log_services(cls, query_db: AsyncSession, page_object: LogininforModel):
         """
         新增登录日志service
@@ -172,15 +225,13 @@ class LoginLogService:
         :param page_object: 新增登录日志对象
         :return: 新增登录日志校验结果
         """
-        try:
-            await LoginLogDao.add_login_log_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='新增成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        login_log_repo = LoginLogRepository(query_db)
+        db_login_log = SysLogininfor(**page_object.model_dump())
+        await login_log_repo.add(db_login_log)
+        return CrudResponseModel(is_success=True, message='新增成功')
 
     @classmethod
+    @transactional()
     async def delete_login_log_services(cls, query_db: AsyncSession, page_object: DeleteLoginLogModel):
         """
         删除操作日志信息service
@@ -190,19 +241,19 @@ class LoginLogService:
         :return: 删除操作日志校验结果
         """
         if page_object.info_ids:
-            info_id_list = page_object.info_ids.split(',')
-            try:
-                for info_id in info_id_list:
-                    await LoginLogDao.delete_login_log_dao(query_db, LogininforModel(infoId=info_id))
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
+            login_log_repo = LoginLogRepository(query_db)
+            info_id_list = [int(id) for id in page_object.info_ids.split(',')]
+            await login_log_repo.delete_by_ids(info_id_list)
+            return CrudResponseModel(is_success=True, message='删除成功')
         else:
-            raise ServiceException(message='传入登录日志id为空')
+            raise ValidationException(
+                user_message='传入登录日志id为空',
+                developer_message='Login log IDs parameter is empty',
+                field='info_ids'
+            )
 
     @classmethod
+    @transactional()
     async def clear_login_log_services(cls, query_db: AsyncSession):
         """
         清除操作日志信息service
@@ -210,13 +261,9 @@ class LoginLogService:
         :param query_db: orm对象
         :return: 清除操作日志校验结果
         """
-        try:
-            await LoginLogDao.clear_login_log_dao(query_db)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='清除成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        login_log_repo = LoginLogRepository(query_db)
+        await login_log_repo.clear_all()
+        return CrudResponseModel(is_success=True, message='清除成功')
 
     @classmethod
     async def unlock_user_services(cls, request: Request, unlock_user: UnlockUser):
@@ -225,7 +272,11 @@ class LoginLogService:
             await request.app.state.redis.delete(f'account_lock:{unlock_user.user_name}')
             return CrudResponseModel(is_success=True, message='解锁成功')
         else:
-            raise ServiceException(message='该用户未锁定')
+            raise ValidationException(
+                user_message='该用户未锁定',
+                developer_message=f'User is not locked: user_name={unlock_user.user_name}',
+                field='user_name'
+            )
 
     @staticmethod
     async def export_login_log_list_services(login_log_list: List):

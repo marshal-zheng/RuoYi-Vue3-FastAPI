@@ -180,11 +180,8 @@ function submitForm() {
         treeParentCode: info.value.treeParentCode,
         parentMenuId: info.value.parentMenuId,
       };
-      updateGenTable(genTable).then((res) => {
-        proxy.$modal.msgSuccess(res.msg);
-        if (res.code === 200) {
-          close();
-        }
+      updateGenTable(genTable).then(() => {
+        close();
       });
     } else {
       proxy.$modal.msgError('表单校验未通过，请重新检查提交内容');
@@ -210,13 +207,14 @@ function close() {
   if (tableId) {
     // 获取表详细信息
     getGenTable(tableId).then((res) => {
-      columns.value = res.data.rows;
-      info.value = res.data.info;
-      tables.value = res.data.tables;
+      // http 客户端已解包 payload.data，直接访问字段
+      columns.value = res.rows;
+      info.value = res.info;
+      tables.value = res.tables;
     });
     /** 查询字典下拉列表 */
     getDictOptionselect().then((response) => {
-      dictOptions.value = response.data;
+      dictOptions.value = response?.data ?? response;
     });
   }
 })();

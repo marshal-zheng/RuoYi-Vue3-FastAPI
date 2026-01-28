@@ -35,7 +35,7 @@
         >刷新缓存</ZxButton
       >
     </template>
-    <ZxGridList ref="gridListRef" :load-data="loadDictData" class="zx-grid-list--page">
+    <ZxGridList ref="gridListRef" :load-data="loadDictData" :query-transform="queryTransform" class="zx-grid-list--page">
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
@@ -166,6 +166,7 @@
 
 <script setup name="Dict">
 import useDictStore from '@/store/modules/dict';
+import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listType,
   getType,
@@ -195,17 +196,18 @@ const data = reactive({
 
 const { form, rules } = toRefs(data);
 
-async function loadDictData(params = {}) {
-  const { dateRange, ...restQuery } = params.query || {};
-  if (Array.isArray(dateRange) && dateRange.length === 2) {
-    params.query = {
-      ...restQuery,
-      beginTime: dateRange[0],
-      endTime: dateRange[1],
-    };
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 - 不在此处理参数转换 */
+async function loadDictData(params) {
+  try {
+    return await listType(params);
+  } catch (e) {
+    return { data: [], total: 0 };
   }
-  const response = await listType(params);
-  return response;
 }
 function cancel() {
   open.value = false;
@@ -242,7 +244,7 @@ function handleUpdate(row) {
   reset();
   const dictId = row?.dictId || ids.value;
   getType(dictId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改字典类型';
   });
@@ -281,13 +283,7 @@ function handleDelete(row) {
 }
 function handleExport() {
   const q = gridListRef.value?.getCurrentQuery?.() || {};
-  const query = { ...q };
-  if (query.dateRange && query.dateRange.length === 2) {
-    const tmp = proxy.addDateRange({}, query.dateRange);
-    delete query.dateRange;
-    Object.assign(query, tmp);
-  }
-  proxy.download('system/dict/type/export', query, `dict_${new Date().getTime()}.xlsx`);
+  proxy.download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`);
 }
 function handleRefreshCache() {
   refreshCache().then(() => {

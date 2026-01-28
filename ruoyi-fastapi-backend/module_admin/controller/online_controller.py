@@ -37,4 +37,4 @@ async def delete_monitor_online(request: Request, token_ids: str, query_db: Asyn
     delete_online_result = await OnlineService.delete_online_services(request, delete_online)
     logger.info(delete_online_result.message)
 
-    return ResponseUtil.success(msg=delete_online_result.message)
+    return ResponseUtil.success(message=delete_online_result.message)

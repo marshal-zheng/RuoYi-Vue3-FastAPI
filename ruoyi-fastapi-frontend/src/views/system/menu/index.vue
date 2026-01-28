@@ -388,7 +388,7 @@ async function loadMenuData(params) {
   };
   try {
     const response = await listMenu(query);
-    const tree = proxy.handleTree(response.data, 'menuId');
+    const tree = proxy.handleTree(response?.data ?? response, 'menuId');
     return { data: tree || [], total: 0 };
   } catch (e) {
     return { data: [], total: 0 };
@@ -406,7 +406,7 @@ function getTreeselect() {
   menuOptions.value = [];
   listMenu().then((response) => {
     const menu = { menuId: 0, menuName: '主类目', children: [] };
-    menu.children = proxy.handleTree(response.data, 'menuId');
+    menu.children = proxy.handleTree(response?.data ?? response, 'menuId');
     menuOptions.value.push(menu);
   });
 }
@@ -465,7 +465,7 @@ async function handleUpdate(row) {
   reset();
   await getTreeselect();
   getMenu(row.menuId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改菜单';
   });

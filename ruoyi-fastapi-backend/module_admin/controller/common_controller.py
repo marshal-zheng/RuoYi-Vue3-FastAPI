@@ -1,4 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, File, Query, Request, UploadFile
+from sqlalchemy.ext.asyncio import AsyncSession
+from config.get_db import get_db
 from module_admin.service.common_service import CommonService
 from module_admin.service.login_service import LoginService
 from utils.log_util import logger
@@ -34,3 +36,14 @@ async def common_download_resource(request: Request, resource: str = Query()):
     logger.info(download_resource_result.message)
 
     return ResponseUtil.streaming(data=download_resource_result.result)
+
+
+@commonController.get('/tables')
+async def get_table_names(request: Request, query_db: AsyncSession = Depends(get_db)):
+    """
+    获取数据库表名列表
+    """
+    table_list = await CommonService.get_table_names_services(query_db)
+    logger.info('获取表名列表成功')
+    
+    return ResponseUtil.success(data=table_list)

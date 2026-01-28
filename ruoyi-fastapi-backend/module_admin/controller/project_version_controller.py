@@ -74,7 +74,7 @@ async def add_project_version(
     add_version_result = await ProjectVersionService.add_project_version_services(query_db, add_version)
     logger.info(add_version_result.message)
 
-    return ResponseUtil.success(msg=add_version_result.message)
+    return ResponseUtil.success(message=add_version_result.message)
 
 
 @projectVersionController.put(
@@ -96,7 +96,7 @@ async def edit_project_version(
     edit_version_result = await ProjectVersionService.edit_project_version_services(query_db, edit_version)
     logger.info(edit_version_result.message)
 
-    return ResponseUtil.success(msg=edit_version_result.message)
+    return ResponseUtil.success(message=edit_version_result.message)
 
 
 @projectVersionController.delete(
@@ -119,7 +119,7 @@ async def delete_project_version(
     delete_version_result = await ProjectVersionService.delete_project_version_services(query_db, delete_version)
     logger.info(delete_version_result.message)
 
-    return ResponseUtil.success(msg=delete_version_result.message)
+    return ResponseUtil.success(message=delete_version_result.message)
 
 
 @projectVersionController.get(
@@ -160,7 +160,7 @@ async def clone_project_version(
     clone_version_result = await ProjectVersionService.clone_project_version_services(query_db, clone_version)
     logger.info(clone_version_result.message)
 
-    return ResponseUtil.success(msg=clone_version_result.message)
+    return ResponseUtil.success(message=clone_version_result.message)
 
 
 @projectVersionController.put(
@@ -187,7 +187,7 @@ async def lock_project_version(
     lock_version_result = await ProjectVersionService.lock_project_version_services(query_db, lock_version)
     logger.info(lock_version_result.message)
 
-    return ResponseUtil.success(msg=lock_version_result.message)
+    return ResponseUtil.success(message=lock_version_result.message)
 
 
 @projectVersionController.put(
@@ -208,7 +208,7 @@ async def unlock_project_versions_by_project(
         query_db, project_id, current_user.user.user_name
     )
     logger.info(unlock_result.message)
-    return ResponseUtil.success(msg=unlock_result.message)
+    return ResponseUtil.success(message=unlock_result.message)
 
 
 @projectVersionController.post(

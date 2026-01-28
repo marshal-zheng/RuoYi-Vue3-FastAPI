@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.get_db import get_db
@@ -49,7 +49,7 @@ async def add_system_notice(
     add_notice_result = await NoticeService.add_notice_services(query_db, add_notice)
     logger.info(add_notice_result.message)
 
-    return ResponseUtil.success(msg=add_notice_result.message)
+    return ResponseUtil.success(message=add_notice_result.message)
 
 
 @noticeController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:notice:edit'))])
@@ -66,7 +66,7 @@ async def edit_system_notice(
     edit_notice_result = await NoticeService.edit_notice_services(query_db, edit_notice)
     logger.info(edit_notice_result.message)
 
-    return ResponseUtil.success(msg=edit_notice_result.message)
+    return ResponseUtil.success(message=edit_notice_result.message)
 
 
 @noticeController.delete('/{notice_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:notice:remove'))])
@@ -76,7 +76,7 @@ async def delete_system_notice(request: Request, notice_ids: str, query_db: Asyn
     delete_notice_result = await NoticeService.delete_notice_services(query_db, delete_notice)
     logger.info(delete_notice_result.message)
 
-    return ResponseUtil.success(msg=delete_notice_result.message)
+    return ResponseUtil.success(message=delete_notice_result.message)
 
 
 @noticeController.get(

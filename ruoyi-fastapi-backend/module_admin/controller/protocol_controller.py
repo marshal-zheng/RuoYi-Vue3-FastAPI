@@ -37,16 +37,12 @@ async def get_protocol_list(
     """
     获取协议列表
     """
-    try:
-        # 获取分页数据
-        protocol_page_query_result = await ProtocolService.get_protocol_list_services(
-            query_db, protocol_page_query, is_page=True
-        )
-        logger.info('获取成功')
-        return ResponseUtil.success(model_content=protocol_page_query_result)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    # 获取分页数据
+    protocol_page_query_result = await ProtocolService.get_protocol_list_services(
+        query_db, protocol_page_query, is_page=True
+    )
+    logger.info('获取成功')
+    return ResponseUtil.success(model_content=protocol_page_query_result)
 
 
 @protocolController.post(
@@ -66,15 +62,11 @@ async def add_protocol(
     """
     新增协议
     """
-    try:
-        add_protocol.create_by = current_user.user.user_name
-        add_protocol.update_by = current_user.user.user_name
-        add_protocol_result = await ProtocolService.add_protocol_services(query_db, add_protocol)
-        logger.info(add_protocol_result.message)
-        return ResponseUtil.success(msg=add_protocol_result.message)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    add_protocol.create_by = current_user.user.user_name
+    add_protocol.update_by = current_user.user.user_name
+    add_protocol_result = await ProtocolService.add_protocol_services(query_db, add_protocol)
+    logger.info(add_protocol_result.message)
+    return ResponseUtil.success(message=add_protocol_result.message)
 
 
 @protocolController.put(
@@ -94,14 +86,10 @@ async def edit_protocol(
     """
     编辑协议
     """
-    try:
-        edit_protocol.update_by = current_user.user.user_name
-        edit_protocol_result = await ProtocolService.edit_protocol_services(query_db, edit_protocol)
-        logger.info(edit_protocol_result.message)
-        return ResponseUtil.success(msg=edit_protocol_result.message)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    edit_protocol.update_by = current_user.user.user_name
+    edit_protocol_result = await ProtocolService.edit_protocol_services(query_db, edit_protocol)
+    logger.info(edit_protocol_result.message)
+    return ResponseUtil.success(message=edit_protocol_result.message)
 
 
 @protocolController.delete(
@@ -121,14 +109,10 @@ async def delete_protocol(
     """
     删除协议
     """
-    try:
-        delete_protocol = DeleteProtocolModel(protocolIds=protocol_ids, updateBy=current_user.user.user_name)
-        delete_protocol_result = await ProtocolService.delete_protocol_services(query_db, delete_protocol)
-        logger.info(delete_protocol_result.message)
-        return ResponseUtil.success(msg=delete_protocol_result.message)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    delete_protocol = DeleteProtocolModel(protocolIds=protocol_ids, updateBy=current_user.user.user_name)
+    delete_protocol_result = await ProtocolService.delete_protocol_services(query_db, delete_protocol)
+    logger.info(delete_protocol_result.message)
+    return ResponseUtil.success(message=delete_protocol_result.message)
 
 
 @protocolController.post(
@@ -148,16 +132,12 @@ async def delete_protocol_batch(
     """
     批量删除协议（使用 BatchActionExecutor 收敛结果）
     """
-    try:
-        summary = await ProtocolService.delete_protocol_batch_services(
-            query_db=query_db,
-            protocol_ids=protocolIds,
-            operator=current_user.user.user_name,
-        )
-        return ResponseUtil.success(data={'summary': summary}, msg='批量删除完成')
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    summary = await ProtocolService.delete_protocol_batch_services(
+        query_db=query_db,
+        protocol_ids=protocolIds,
+        operator=current_user.user.user_name,
+    )
+    return ResponseUtil.success(data={'summary': summary}, message='批量删除完成')
 
 
 @protocolController.get(
@@ -171,21 +151,17 @@ async def download_protocol_import_template(
     """
     下载协议导入模板
     """
-    try:
-        export_result = await ProtocolIOAdapter.export_import_template(protocolType)
-        filename = quote(export_result.filename)
-        headers = {
-            'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
-            'download-filename': filename
-        }
-        return ResponseUtil.streaming(
-            data=bytes2file_response(export_result.content),
-            headers=headers,
-            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    export_result = await ProtocolIOAdapter.export_import_template(protocolType)
+    filename = quote(export_result.filename)
+    headers = {
+        'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
+        'download-filename': filename
+    }
+    return ResponseUtil.streaming(
+        data=bytes2file_response(export_result.content),
+        headers=headers,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
 
 @protocolController.post(
@@ -199,13 +175,9 @@ async def protocol_import_preview(
     """
     解析协议导入文件，返回预览数据
     """
-    try:
-        preview_result = await ProtocolIOAdapter.import_preview(file)
-        logger.info('协议导入文件解析成功')
-        return ResponseUtil.success(data=preview_result.data)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    preview_result = await ProtocolIOAdapter.import_preview(file)
+    logger.info('协议导入文件解析成功')
+    return ResponseUtil.success(data=preview_result.data)
 
 
 @protocolController.post(
@@ -221,21 +193,17 @@ async def export_protocol_config(
     """
     导出协议配置
     """
-    try:
-        export_result = await ProtocolIOAdapter.export_protocol_excel(query_db, protocolId)
-        filename = quote(export_result.filename)
-        headers = {
-            'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
-            'download-filename': filename
-        }
-        return ResponseUtil.streaming(
-            data=bytes2file_response(export_result.content),
-            headers=headers,
-            media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        )
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    export_result = await ProtocolIOAdapter.export_protocol_excel(query_db, protocolId)
+    filename = quote(export_result.filename)
+    headers = {
+        'Content-Disposition': f"attachment; filename*=UTF-8''{filename}",
+        'download-filename': filename
+    }
+    return ResponseUtil.streaming(
+        data=bytes2file_response(export_result.content),
+        headers=headers,
+        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
 
 @protocolController.post(
@@ -253,15 +221,11 @@ async def import_protocol(
     """
     导入协议配置
     """
-    try:
-        import_result = await ProtocolIOAdapter.import_protocol(
-            query_db, file, protocolName, current_user.user.user_name
-        )
-        logger.info('协议导入成功')
-        return ResponseUtil.success(data=import_result.data, msg='导入成功')
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    import_result = await ProtocolIOAdapter.import_protocol(
+        query_db, file, protocolName, current_user.user.user_name
+    )
+    logger.info('协议导入成功')
+    return ResponseUtil.success(data=import_result.data, message='导入成功')
 
 
 @protocolController.post(
@@ -278,17 +242,13 @@ async def import_protocol_batch(
     """
     批量导入协议配置
     """
-    try:
-        import_result = await ProtocolIOAdapter.import_protocol_batch(
-            query_db=query_db,
-            files=files,
-            operator=current_user.user.user_name
-        )
-        msg = '批量导入成功' if import_result.failed_count == 0 else '部分导入成功'
-        return ResponseUtil.success(data=import_result.model_dump(), msg=msg)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    import_result = await ProtocolIOAdapter.import_protocol_batch(
+        query_db=query_db,
+        files=files,
+        operator=current_user.user.user_name
+    )
+    msg = '批量导入成功' if import_result.failed_count == 0 else '部分导入成功'
+    return ResponseUtil.success(data=import_result.model_dump(), message=msg)
 
 
 @protocolController.get(
@@ -303,10 +263,6 @@ async def query_protocol_detail(
     """
     获取协议详情
     """
-    try:
-        protocol_detail_result = await ProtocolService.protocol_detail_services(query_db, protocol_id)
-        logger.info('获取成功')
-        return ResponseUtil.success(data=protocol_detail_result)
-    except Exception as e:
-        logger.exception(e)
-        return ResponseUtil.error(msg=str(e))
+    protocol_detail_result = await ProtocolService.protocol_detail_services(query_db, protocol_id)
+    logger.info('获取成功')
+    return ResponseUtil.success(data=protocol_detail_result)

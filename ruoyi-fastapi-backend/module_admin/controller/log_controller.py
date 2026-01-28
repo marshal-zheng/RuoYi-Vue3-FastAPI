@@ -47,7 +47,7 @@ async def clear_system_operation_log(request: Request, query_db: AsyncSession = 
     clear_operation_log_result = await OperationLogService.clear_operation_log_services(query_db)
     logger.info(clear_operation_log_result.message)
 
-    return ResponseUtil.success(msg=clear_operation_log_result.message)
+    return ResponseUtil.success(message=clear_operation_log_result.message)
 
 
 @logController.delete('/operlog/{oper_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:operlog:remove'))])
@@ -59,7 +59,7 @@ async def delete_system_operation_log(request: Request, oper_ids: str, query_db:
     )
     logger.info(delete_operation_log_result.message)
 
-    return ResponseUtil.success(msg=delete_operation_log_result.message)
+    return ResponseUtil.success(message=delete_operation_log_result.message)
 
 
 @logController.post('/operlog/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:operlog:export'))])
@@ -106,7 +106,7 @@ async def clear_system_login_log(request: Request, query_db: AsyncSession = Depe
     clear_login_log_result = await LoginLogService.clear_login_log_services(query_db)
     logger.info(clear_login_log_result.message)
 
-    return ResponseUtil.success(msg=clear_login_log_result.message)
+    return ResponseUtil.success(message=clear_login_log_result.message)
 
 
 @logController.delete(
@@ -118,7 +118,7 @@ async def delete_system_login_log(request: Request, info_ids: str, query_db: Asy
     delete_login_log_result = await LoginLogService.delete_login_log_services(query_db, delete_login_log)
     logger.info(delete_login_log_result.message)
 
-    return ResponseUtil.success(msg=delete_login_log_result.message)
+    return ResponseUtil.success(message=delete_login_log_result.message)
 
 
 @logController.get(
@@ -130,7 +130,7 @@ async def unlock_system_user(request: Request, user_name: str, query_db: AsyncSe
     unlock_user_result = await LoginLogService.unlock_user_services(request, unlock_user)
     logger.info(unlock_user_result.message)
 
-    return ResponseUtil.success(msg=unlock_user_result.message)
+    return ResponseUtil.success(message=unlock_user_result.message)
 
 
 @logController.post('/logininfor/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:logininfor:export'))])

@@ -673,7 +673,8 @@ const { buildSimulationSummary } = useSimulationReport({
 async function loadProjectInfo() {
   try {
     const res = await getProject(projectId.value, { silentError: true });
-    projectName.value = res.data?.projectName || "未命名工程";
+    // http 客户端已解包 payload.data，直接访问字段
+    projectName.value = res?.projectName || "未命名工程";
   } catch (err) {
     console.warn("[仿真] 无法获取工程信息，可能缺少 project:project:query 权限");
     projectName.value = "未命名工程";
@@ -722,8 +723,8 @@ function restoreSavedTopology() {
 
     getProjectTopology(projectId.value, versionId.value, { silentError: true })
       .then((res) => {
-        const topo = res?.data;
-        const topoData = topo?.topologyData;
+        // http 客户端已解包 payload.data，res 直接是拓扑数据
+        const topoData = res?.topologyData;
         const graphJson = topoData?.graph;
         if (graphJson) {
           graph.fromJSON(graphJson);

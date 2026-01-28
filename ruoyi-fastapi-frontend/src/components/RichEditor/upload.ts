@@ -30,15 +30,13 @@ export default class MyUploadAdapter {
             },
           })
             .then((res: any) => {
-              if (res.code === 200) {
-                resolve({
-                  default: res.url, // Assuming the backend returns the full URL in 'url' field, or construct it
-                });
-              } else {
-                reject(res.msg || 'Upload failed');
-              }
+              // HTTP 2xx 已由拦截器判定，直接处理成功响应
+              resolve({
+                default: res.url, // Assuming the backend returns the full URL in 'url' field, or construct it
+              });
             })
             .catch((error: any) => {
+              // 错误已由拦截器统一处理
               reject(error);
             });
         })

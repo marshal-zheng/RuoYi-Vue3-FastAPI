@@ -91,7 +91,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 /** 获取项目详情 */
 async function getProjectInfo(projectId) {
   const response = await getProject(projectId);
-  return response.data;
+  return response?.data ?? response;
 }
 
 /** 打开弹框 */

@@ -68,7 +68,7 @@ async def clear_monitor_cache_name(request: Request, cache_name: str):
     clear_cache_name_result = await CacheService.clear_cache_monitor_cache_name_services(request, cache_name)
     logger.info(clear_cache_name_result.message)
 
-    return ResponseUtil.success(msg=clear_cache_name_result.message)
+    return ResponseUtil.success(message=clear_cache_name_result.message)
 
 
 @cacheController.delete(
@@ -78,7 +78,7 @@ async def clear_monitor_cache_key(request: Request, cache_key: str):
     clear_cache_key_result = await CacheService.clear_cache_monitor_cache_key_services(request, cache_key)
     logger.info(clear_cache_key_result.message)
 
-    return ResponseUtil.success(msg=clear_cache_key_result.message)
+    return ResponseUtil.success(message=clear_cache_key_result.message)
 
 
 @cacheController.delete('/clearCacheAll', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))])
@@ -86,4 +86,4 @@ async def clear_monitor_cache_all(request: Request):
     clear_cache_all_result = await CacheService.clear_cache_monitor_all_services(request)
     logger.info(clear_cache_all_result.message)
 
-    return ResponseUtil.success(msg=clear_cache_all_result.message)
+    return ResponseUtil.success(message=clear_cache_all_result.message)

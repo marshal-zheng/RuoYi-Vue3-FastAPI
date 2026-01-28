@@ -3,15 +3,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.constant import CommonConstant, JobConstant
 from config.get_scheduler import SchedulerUtil
-from exceptions.exception import ServiceException
-from module_admin.dao.job_dao import JobDao
+from exceptions.exception import ValidationException, ResourceNotFoundException
+from config.error_codes import ErrorCode
+from module_admin.entity.do.job_do import SysJob
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.job_vo import DeleteJobModel, EditJobModel, JobModel, JobPageQueryModel
+from module_admin.repository import JobRepository
 from module_admin.service.dict_service import DictDataService
 from utils.common_util import CamelCaseUtil
 from utils.cron_util import CronUtil
 from utils.excel_util import ExcelUtil
 from utils.string_util import StringUtil
+from utils.transaction_manager import transactional
 
 
 class JobService:
@@ -31,7 +34,24 @@ class JobService:
         :param is_page: 是否开启分页
         :return: 定时任务列表信息对象
         """
-        job_list_result = await JobDao.get_job_list(query_db, query_object, is_page)
+        job_repo = JobRepository(query_db)
+        if is_page:
+            job_list_result = await job_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                job_name=query_object.job_name,
+                job_group=query_object.job_group,
+                status=query_object.status
+            )
+        else:
+            job_list_result = await job_repo.paginate_with_filters(
+                page=1,
+                page_size=10000,
+                job_name=query_object.job_name,
+                job_group=query_object.job_group,
+                status=query_object.status
+            )
+            job_list_result = job_list_result.rows if hasattr(job_list_result, 'rows') else job_list_result
 
         return job_list_result
 
@@ -45,12 +65,22 @@ class JobService:
         :return: 校验结果
         """
         job_id = -1 if page_object.job_id is None else page_object.job_id
-        job = await JobDao.get_job_detail_by_info(query_db, page_object)
+        job_repo = JobRepository(query_db)
+        job = await job_repo.find_by_info(
+            job_name=page_object.job_name,
+            job_group=page_object.job_group,
+            job_executor=page_object.job_executor,
+            invoke_target=page_object.invoke_target,
+            job_args=page_object.job_args,
+            job_kwargs=page_object.job_kwargs,
+            cron_expression=page_object.cron_expression
+        )
         if job and job.job_id != job_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
 
     @classmethod
+    @transactional()
     async def add_job_services(cls, query_db: AsyncSession, page_object: JobModel):
         """
         新增定时任务信息service
@@ -60,38 +90,61 @@ class JobService:
         :return: 新增定时任务校验结果
         """
         if not CronUtil.validate_cron_expression(page_object.cron_expression):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，Cron表达式不正确')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='cron_expression',
+                message=f'新增定时任务{page_object.job_name}失败，Cron表达式不正确'
+            )
         elif StringUtil.contains_ignore_case(page_object.invoke_target, CommonConstant.LOOKUP_RMI):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许rmi调用')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='invoke_target',
+                message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许rmi调用'
+            )
         elif StringUtil.contains_any_ignore_case(
             page_object.invoke_target, [CommonConstant.LOOKUP_LDAP, CommonConstant.LOOKUP_LDAPS]
         ):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许ldap(s)调用')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='invoke_target',
+                message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许ldap(s)调用'
+            )
         elif StringUtil.contains_any_ignore_case(
             page_object.invoke_target, [CommonConstant.HTTP, CommonConstant.HTTPS]
         ):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许http(s)调用')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='invoke_target',
+                message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许http(s)调用'
+            )
         elif StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_ERROR_LIST):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，目标字符串存在违规')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='invoke_target',
+                message=f'新增定时任务{page_object.job_name}失败，目标字符串存在违规'
+            )
         elif not StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_WHITE_LIST):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，目标字符串不在白名单内')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='invoke_target',
+                message=f'新增定时任务{page_object.job_name}失败，目标字符串不在白名单内'
+            )
         elif not await cls.check_job_unique_services(query_db, page_object):
-            raise ServiceException(message=f'新增定时任务{page_object.job_name}失败，定时任务已存在')
-        else:
-            try:
-                add_job = await JobDao.add_job_dao(query_db, page_object)
-                job_info = await cls.job_detail_services(query_db, add_job.job_id)
-                if job_info.status == '0':
-                    SchedulerUtil.add_scheduler_job(job_info=job_info)
-                await query_db.commit()
-                result = dict(is_success=True, message='新增成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-
-        return CrudResponseModel(**result)
+            raise ValidationException(
+                error_code=ErrorCode.RESOURCE_CONFLICT,
+                message=f'新增定时任务{page_object.job_name}失败，定时任务已存在'
+            )
+        
+        job_repo = JobRepository(query_db)
+        db_job = SysJob(**page_object.model_dump())
+        add_job = await job_repo.add(db_job)
+        job_info = await cls.job_detail_services(query_db, add_job.job_id)
+        if job_info.status == '0':
+            SchedulerUtil.add_scheduler_job(job_info=job_info)
+        return CrudResponseModel(is_success=True, message='新增成功')
 
     @classmethod
+    @transactional()
     async def edit_job_services(cls, query_db: AsyncSession, page_object: EditJobModel):
         """
         编辑定时任务信息service
@@ -107,40 +160,63 @@ class JobService:
         if job_info:
             if page_object.type != 'status':
                 if not CronUtil.validate_cron_expression(page_object.cron_expression):
-                    raise ServiceException(message=f'修改定时任务{page_object.job_name}失败，Cron表达式不正确')
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='cron_expression',
+                        message=f'修改定时任务{page_object.job_name}失败，Cron表达式不正确'
+                    )
                 elif StringUtil.contains_ignore_case(page_object.invoke_target, CommonConstant.LOOKUP_RMI):
-                    raise ServiceException(message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许rmi调用')
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='invoke_target',
+                        message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许rmi调用'
+                    )
                 elif StringUtil.contains_any_ignore_case(
                     page_object.invoke_target, [CommonConstant.LOOKUP_LDAP, CommonConstant.LOOKUP_LDAPS]
                 ):
-                    raise ServiceException(
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='invoke_target',
                         message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许ldap(s)调用'
                     )
                 elif StringUtil.contains_any_ignore_case(
                     page_object.invoke_target, [CommonConstant.HTTP, CommonConstant.HTTPS]
                 ):
-                    raise ServiceException(
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='invoke_target',
                         message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许http(s)调用'
                     )
                 elif StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_ERROR_LIST):
-                    raise ServiceException(message=f'修改定时任务{page_object.job_name}失败，目标字符串存在违规')
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='invoke_target',
+                        message=f'修改定时任务{page_object.job_name}失败，目标字符串存在违规'
+                    )
                 elif not StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_WHITE_LIST):
-                    raise ServiceException(message=f'修改定时任务{page_object.job_name}失败，目标字符串不在白名单内')
+                    raise ValidationException(
+                        error_code=ErrorCode.INVALID_INPUT,
+                        field='invoke_target',
+                        message=f'修改定时任务{page_object.job_name}失败，目标字符串不在白名单内'
+                    )
                 elif not await cls.check_job_unique_services(query_db, page_object):
-                    raise ServiceException(message=f'修改定时任务{page_object.job_name}失败，定时任务已存在')
-            try:
-                await JobDao.edit_job_dao(query_db, edit_job)
-                SchedulerUtil.remove_scheduler_job(job_id=edit_job.get('job_id'))
-                if edit_job.get('status') == '0':
-                    job_info = await cls.job_detail_services(query_db, edit_job.get('job_id'))
-                    SchedulerUtil.add_scheduler_job(job_info=job_info)
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='更新成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
-            raise ServiceException(message='定时任务不存在')
+                    raise ValidationException(
+                        error_code=ErrorCode.RESOURCE_CONFLICT,
+                        message=f'修改定时任务{page_object.job_name}失败，定时任务已存在'
+                    )
+        
+        job_repo = JobRepository(query_db)
+        db_job = await job_repo.find_by_id(page_object.job_id)
+        if db_job:
+            for key, value in edit_job.items():
+                if hasattr(db_job, key):
+                    setattr(db_job, key, value)
+            await job_repo.update(db_job)
+        SchedulerUtil.remove_scheduler_job(job_id=edit_job.get('job_id'))
+        if edit_job.get('status') == '0':
+            job_info = await cls.job_detail_services(query_db, edit_job.get('job_id'))
+            SchedulerUtil.add_scheduler_job(job_info=job_info)
+        return CrudResponseModel(is_success=True, message='更新成功')
 
     @classmethod
     async def execute_job_once_services(cls, query_db: AsyncSession, page_object: JobModel):
@@ -157,9 +233,13 @@ class JobService:
             SchedulerUtil.execute_scheduler_job_once(job_info=job_info)
             return CrudResponseModel(is_success=True, message='执行成功')
         else:
-            raise ServiceException(message='定时任务不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='定时任务不存在'
+            )
 
     @classmethod
+    @transactional()
     async def delete_job_services(cls, query_db: AsyncSession, page_object: DeleteJobModel):
         """
         删除定时任务信息service
@@ -168,19 +248,19 @@ class JobService:
         :param page_object: 删除定时任务对象
         :return: 删除定时任务校验结果
         """
-        if page_object.job_ids:
-            job_id_list = page_object.job_ids.split(',')
-            try:
-                for job_id in job_id_list:
-                    await JobDao.delete_job_dao(query_db, JobModel(jobId=job_id))
-                    SchedulerUtil.remove_scheduler_job(job_id=job_id)
-                await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
-            except Exception as e:
-                await query_db.rollback()
-                raise e
-        else:
-            raise ServiceException(message='传入定时任务id为空')
+        if not page_object.job_ids:
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='job_ids',
+                message='传入定时任务id为空'
+            )
+        
+        job_repo = JobRepository(query_db)
+        job_id_list = page_object.job_ids.split(',')
+        for job_id in job_id_list:
+            await job_repo.delete_by_id(int(job_id))
+            SchedulerUtil.remove_scheduler_job(job_id=job_id)
+        return CrudResponseModel(is_success=True, message='删除成功')
 
     @classmethod
     async def job_detail_services(cls, query_db: AsyncSession, job_id: int):
@@ -191,7 +271,8 @@ class JobService:
         :param job_id: 定时任务id
         :return: 定时任务id对应的信息
         """
-        job = await JobDao.get_job_detail_by_id(query_db, job_id=job_id)
+        job_repo = JobRepository(query_db)
+        job = await job_repo.find_by_id(job_id)
         if job:
             result = JobModel(**CamelCaseUtil.transform_result(job))
         else:

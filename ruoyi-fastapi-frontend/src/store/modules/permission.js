@@ -37,10 +37,11 @@ const usePermissionStore = defineStore('permission', {
     generateRoutes(roles) {
       return new Promise((resolve) => {
         // 向后端请求路由数据
+        // http 客户端已解包 payload.data，res 直接是路由数组
         getRouters().then((res) => {
-          const sdata = JSON.parse(JSON.stringify(res.data));
-          const rdata = JSON.parse(JSON.stringify(res.data));
-          const defaultData = JSON.parse(JSON.stringify(res.data));
+          const sdata = JSON.parse(JSON.stringify(res));
+          const rdata = JSON.parse(JSON.stringify(res));
+          const defaultData = JSON.parse(JSON.stringify(res));
 
           const sidebarRoutes = filterAsyncRouter(sdata);
           const rewriteRoutes = filterAsyncRouter(rdata, false, true);

@@ -1,0 +1,990 @@
+# 字典数据
+# Dictionary data entries
+
+dict_data:
+  # =============================================================================
+  # 用户性别 (sys_user_sex)
+  # =============================================================================
+  - dict_code: 1
+    dict_sort: 1
+    dict_label: 男
+    dict_value: "0"
+    dict_type: sys_user_sex
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 性别男
+
+  - dict_code: 2
+    dict_sort: 2
+    dict_label: 女
+    dict_value: "1"
+    dict_type: sys_user_sex
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 性别女
+
+  - dict_code: 3
+    dict_sort: 3
+    dict_label: 未知
+    dict_value: "2"
+    dict_type: sys_user_sex
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 性别未知
+
+  # =============================================================================
+  # 菜单状态 (sys_show_hide)
+  # =============================================================================
+  - dict_code: 4
+    dict_sort: 1
+    dict_label: 显示
+    dict_value: "0"
+    dict_type: sys_show_hide
+    css_class: ""
+    list_class: primary
+    is_default: "Y"
+    status: "0"
+    remark: 显示菜单
+
+  - dict_code: 5
+    dict_sort: 2
+    dict_label: 隐藏
+    dict_value: "1"
+    dict_type: sys_show_hide
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 隐藏菜单
+
+  # =============================================================================
+  # 系统开关 (sys_normal_disable)
+  # =============================================================================
+  - dict_code: 6
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: "0"
+    dict_type: sys_normal_disable
+    css_class: ""
+    list_class: primary
+    is_default: "Y"
+    status: "0"
+    remark: 正常状态
+
+  - dict_code: 7
+    dict_sort: 2
+    dict_label: 停用
+    dict_value: "1"
+    dict_type: sys_normal_disable
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 停用状态
+
+  # =============================================================================
+  # 任务状态 (sys_job_status)
+  # =============================================================================
+  - dict_code: 8
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: "0"
+    dict_type: sys_job_status
+    css_class: ""
+    list_class: primary
+    is_default: "Y"
+    status: "0"
+    remark: 正常状态
+
+  - dict_code: 9
+    dict_sort: 2
+    dict_label: 暂停
+    dict_value: "1"
+    dict_type: sys_job_status
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 停用状态
+
+  # =============================================================================
+  # 任务分组 (sys_job_group)
+  # =============================================================================
+  - dict_code: 10
+    dict_sort: 1
+    dict_label: 默认
+    dict_value: default
+    dict_type: sys_job_group
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 默认分组
+
+  - dict_code: 11
+    dict_sort: 2
+    dict_label: 数据库
+    dict_value: sqlalchemy
+    dict_type: sys_job_group
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 数据库分组
+
+  - dict_code: 12
+    dict_sort: 3
+    dict_label: redis
+    dict_value: redis
+    dict_type: sys_job_group
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: redis分组
+
+  # =============================================================================
+  # 任务执行器 (sys_job_executor)
+  # =============================================================================
+  - dict_code: 13
+    dict_sort: 1
+    dict_label: 默认
+    dict_value: default
+    dict_type: sys_job_executor
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 线程池
+
+  - dict_code: 14
+    dict_sort: 2
+    dict_label: 进程池
+    dict_value: processpool
+    dict_type: sys_job_executor
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 进程池
+
+  # =============================================================================
+  # 系统是否 (sys_yes_no)
+  # =============================================================================
+  - dict_code: 15
+    dict_sort: 1
+    dict_label: 是
+    dict_value: "Y"
+    dict_type: sys_yes_no
+    css_class: ""
+    list_class: primary
+    is_default: "Y"
+    status: "0"
+    remark: 系统默认是
+
+  - dict_code: 16
+    dict_sort: 2
+    dict_label: 否
+    dict_value: "N"
+    dict_type: sys_yes_no
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 系统默认否
+
+  # =============================================================================
+  # 通知类型 (sys_notice_type)
+  # =============================================================================
+  - dict_code: 17
+    dict_sort: 1
+    dict_label: 通知
+    dict_value: "1"
+    dict_type: sys_notice_type
+    css_class: ""
+    list_class: warning
+    is_default: "Y"
+    status: "0"
+    remark: 通知
+
+  - dict_code: 18
+    dict_sort: 2
+    dict_label: 公告
+    dict_value: "2"
+    dict_type: sys_notice_type
+    css_class: ""
+    list_class: success
+    is_default: "N"
+    status: "0"
+    remark: 公告
+
+  # =============================================================================
+  # 通知状态 (sys_notice_status)
+  # =============================================================================
+  - dict_code: 19
+    dict_sort: 1
+    dict_label: 正常
+    dict_value: "0"
+    dict_type: sys_notice_status
+    css_class: ""
+    list_class: primary
+    is_default: "Y"
+    status: "0"
+    remark: 正常状态
+
+  - dict_code: 20
+    dict_sort: 2
+    dict_label: 关闭
+    dict_value: "1"
+    dict_type: sys_notice_status
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 关闭状态
+
+  # =============================================================================
+  # 操作类型 (sys_oper_type)
+  # =============================================================================
+  - dict_code: 21
+    dict_sort: 99
+    dict_label: 其他
+    dict_value: "0"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: info
+    is_default: "N"
+    status: "0"
+    remark: 其他操作
+
+  - dict_code: 22
+    dict_sort: 1
+    dict_label: 新增
+    dict_value: "1"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: info
+    is_default: "N"
+    status: "0"
+    remark: 新增操作
+
+  - dict_code: 23
+    dict_sort: 2
+    dict_label: 修改
+    dict_value: "2"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: info
+    is_default: "N"
+    status: "0"
+    remark: 修改操作
+
+  - dict_code: 24
+    dict_sort: 3
+    dict_label: 删除
+    dict_value: "3"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 删除操作
+
+  - dict_code: 25
+    dict_sort: 4
+    dict_label: 授权
+    dict_value: "4"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: primary
+    is_default: "N"
+    status: "0"
+    remark: 授权操作
+
+  - dict_code: 26
+    dict_sort: 5
+    dict_label: 导出
+    dict_value: "5"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: warning
+    is_default: "N"
+    status: "0"
+    remark: 导出操作
+
+  - dict_code: 27
+    dict_sort: 6
+    dict_label: 导入
+    dict_value: "6"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: warning
+    is_default: "N"
+    status: "0"
+    remark: 导入操作
+
+  - dict_code: 28
+    dict_sort: 7
+    dict_label: 强退
+    dict_value: "7"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 强退操作
+
+  - dict_code: 29
+    dict_sort: 8
+    dict_label: 生成代码
+    dict_value: "8"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: warning
+    is_default: "N"
+    status: "0"
+    remark: 生成操作
+
+  - dict_code: 30
+    dict_sort: 9
+    dict_label: 清空数据
+    dict_value: "9"
+    dict_type: sys_oper_type
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 清空操作
+
+  # =============================================================================
+  # 系统状态 (sys_common_status)
+  # =============================================================================
+  - dict_code: 31
+    dict_sort: 1
+    dict_label: 成功
+    dict_value: "0"
+    dict_type: sys_common_status
+    css_class: ""
+    list_class: primary
+    is_default: "N"
+    status: "0"
+    remark: 正常状态
+
+  - dict_code: 32
+    dict_sort: 2
+    dict_label: 失败
+    dict_value: "1"
+    dict_type: sys_common_status
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 停用状态
+
+  # =============================================================================
+  # 协议类型 (sys_protocol_type)
+  # =============================================================================
+  - dict_code: 100
+    dict_sort: 1
+    dict_label: LAN
+    dict_value: LAN
+    dict_type: sys_protocol_type
+    css_class: ""
+    list_class: primary
+    is_default: "N"
+    status: "0"
+    remark: 以太网协议
+
+  - dict_code: 101
+    dict_sort: 2
+    dict_label: RS422
+    dict_value: RS422
+    dict_type: sys_protocol_type
+    css_class: ""
+    list_class: success
+    is_default: "N"
+    status: "0"
+    remark: RS422串口协议
+
+  - dict_code: 102
+    dict_sort: 3
+    dict_label: RS485
+    dict_value: RS485
+    dict_type: sys_protocol_type
+    css_class: ""
+    list_class: success
+    is_default: "N"
+    status: "0"
+    remark: RS485串口协议
+
+  - dict_code: 103
+    dict_sort: 4
+    dict_label: CAN
+    dict_value: CAN
+    dict_type: sys_protocol_type
+    css_class: ""
+    list_class: warning
+    is_default: "N"
+    status: "0"
+    remark: CAN总线协议
+
+  - dict_code: 104
+    dict_sort: 5
+    dict_label: 1553B
+    dict_value: 1553B
+    dict_type: sys_protocol_type
+    css_class: ""
+    list_class: danger
+    is_default: "N"
+    status: "0"
+    remark: 1553B总线协议
+
+  # =============================================================================
+  # 传输频率 (sys_protocol_frequency)
+  # =============================================================================
+  - dict_code: 110
+    dict_sort: 1
+    dict_label: 单次
+    dict_value: once
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 单次传输
+
+  - dict_code: 111
+    dict_sort: 2
+    dict_label: 10ms
+    dict_value: "10"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 10毫秒周期
+
+  - dict_code: 112
+    dict_sort: 3
+    dict_label: 20ms
+    dict_value: "20"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 20毫秒周期
+
+  - dict_code: 113
+    dict_sort: 4
+    dict_label: 50ms
+    dict_value: "50"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 50毫秒周期
+
+  - dict_code: 114
+    dict_sort: 5
+    dict_label: 100ms
+    dict_value: "100"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 100毫秒周期
+
+  - dict_code: 115
+    dict_sort: 6
+    dict_label: 160ms
+    dict_value: "160"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 160毫秒周期
+
+  - dict_code: 116
+    dict_sort: 7
+    dict_label: 200ms
+    dict_value: "200"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 200毫秒周期
+
+  - dict_code: 117
+    dict_sort: 8
+    dict_label: 500ms
+    dict_value: "500"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 500毫秒周期
+
+  - dict_code: 118
+    dict_sort: 9
+    dict_label: 1000ms
+    dict_value: "1000"
+    dict_type: sys_protocol_frequency
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 1000毫秒周期
+
+  # =============================================================================
+  # 以太网传输速率 (sys_protocol_speed_ethernet)
+  # =============================================================================
+  - dict_code: 120
+    dict_sort: 1
+    dict_label: 10M
+    dict_value: 10M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 10Mbps
+
+  - dict_code: 121
+    dict_sort: 2
+    dict_label: 100M
+    dict_value: 100M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 100Mbps
+
+  - dict_code: 122
+    dict_sort: 3
+    dict_label: 1000M
+    dict_value: 1000M
+    dict_type: sys_protocol_speed_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 1000Mbps
+
+  # =============================================================================
+  # RS422传输速率 (sys_protocol_speed_rs422)
+  # =============================================================================
+  - dict_code: 130
+    dict_sort: 1
+    dict_label: 9.6K
+    dict_value: 9.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 9600bps
+
+  - dict_code: 131
+    dict_sort: 2
+    dict_label: 19.2K
+    dict_value: 19.2K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 19200bps
+
+  - dict_code: 132
+    dict_sort: 3
+    dict_label: 38.4K
+    dict_value: 38.4K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 38400bps
+
+  - dict_code: 133
+    dict_sort: 4
+    dict_label: 57.6K
+    dict_value: 57.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 57600bps
+
+  - dict_code: 134
+    dict_sort: 5
+    dict_label: 115.2K
+    dict_value: 115.2K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 115200bps
+
+  - dict_code: 135
+    dict_sort: 6
+    dict_label: 230.4K
+    dict_value: 230.4K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 230400bps
+
+  - dict_code: 136
+    dict_sort: 7
+    dict_label: 460.8K
+    dict_value: 460.8K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 460800bps
+
+  - dict_code: 137
+    dict_sort: 8
+    dict_label: 921.6K
+    dict_value: 921.6K
+    dict_type: sys_protocol_speed_rs422
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 921600bps
+
+  # =============================================================================
+  # CAN传输速率 (sys_protocol_speed_can)
+  # =============================================================================
+  - dict_code: 140
+    dict_sort: 1
+    dict_label: 125K
+    dict_value: 125K
+    dict_type: sys_protocol_speed_can
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 125Kbps
+
+  - dict_code: 141
+    dict_sort: 2
+    dict_label: 250K
+    dict_value: 250K
+    dict_type: sys_protocol_speed_can
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 250Kbps
+
+  - dict_code: 142
+    dict_sort: 3
+    dict_label: 500K
+    dict_value: 500K
+    dict_type: sys_protocol_speed_can
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 500Kbps
+
+  - dict_code: 143
+    dict_sort: 4
+    dict_label: 1000K
+    dict_value: 1000K
+    dict_type: sys_protocol_speed_can
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 1000Kbps
+
+  # =============================================================================
+  # 1553B传输速率 (sys_protocol_speed_1553b)
+  # =============================================================================
+  - dict_code: 150
+    dict_sort: 1
+    dict_label: 1M
+    dict_value: 1M
+    dict_type: sys_protocol_speed_1553b
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: 1Mbps
+
+  # =============================================================================
+  # 以太网传输方式 (sys_protocol_method_ethernet)
+  # =============================================================================
+  - dict_code: 160
+    dict_sort: 1
+    dict_label: UDP单播
+    dict_value: udp_unicast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: UDP单播传输
+
+  - dict_code: 161
+    dict_sort: 2
+    dict_label: UDP组播
+    dict_value: udp_multicast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: UDP组播传输
+
+  - dict_code: 162
+    dict_sort: 3
+    dict_label: UDP广播
+    dict_value: udp_broadcast
+    dict_type: sys_protocol_method_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: UDP广播传输
+
+  - dict_code: 163
+    dict_sort: 4
+    dict_label: TCP
+    dict_value: tcp
+    dict_type: sys_protocol_method_ethernet
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: TCP传输
+
+  # =============================================================================
+  # CAN传输方式 (sys_protocol_method_can)
+  # =============================================================================
+  - dict_code: 170
+    dict_sort: 1
+    dict_label: CAN标准帧
+    dict_value: can_standard
+    dict_type: sys_protocol_method_can
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: CAN标准帧
+
+  - dict_code: 171
+    dict_sort: 2
+    dict_label: CAN扩展帧
+    dict_value: can_extended
+    dict_type: sys_protocol_method_can
+    css_class: ""
+    list_class: ""
+    is_default: "Y"
+    status: "0"
+    remark: CAN扩展帧
+
+  # =============================================================================
+  # 数据类型 (sys_protocol_data_type)
+  # =============================================================================
+  - dict_code: 180
+    dict_sort: 1
+    dict_label: UINT8
+    dict_value: UINT8
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 无符号8位整数
+
+  - dict_code: 181
+    dict_sort: 2
+    dict_label: UINT16
+    dict_value: UINT16
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 无符号16位整数
+
+  - dict_code: 182
+    dict_sort: 3
+    dict_label: UINT32
+    dict_value: UINT32
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 无符号32位整数
+
+  - dict_code: 183
+    dict_sort: 4
+    dict_label: INT8
+    dict_value: INT8
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 有符号8位整数
+
+  - dict_code: 184
+    dict_sort: 5
+    dict_label: INT16
+    dict_value: INT16
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 有符号16位整数
+
+  - dict_code: 185
+    dict_sort: 6
+    dict_label: INT32
+    dict_value: INT32
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 有符号32位整数
+
+  - dict_code: 186
+    dict_sort: 7
+    dict_label: FLOAT
+    dict_value: FLOAT
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 单精度浮点数
+
+  - dict_code: 187
+    dict_sort: 8
+    dict_label: DOUBLE
+    dict_value: DOUBLE
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 双精度浮点数
+
+  - dict_code: 188
+    dict_sort: 9
+    dict_label: STRING
+    dict_value: STRING
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 字符串
+
+  - dict_code: 189
+    dict_sort: 10
+    dict_label: BOOL
+    dict_value: BOOL
+    dict_type: sys_protocol_data_type
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 布尔值
+
+  # =============================================================================
+  # 错误处理 (sys_protocol_error_handling)
+  # =============================================================================
+  - dict_code: 190
+    dict_sort: 1
+    dict_label: 不判断
+    dict_value: none
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: info
+    is_default: "N"
+    status: "0"
+    remark: 不进行错误判断
+
+  - dict_code: 191
+    dict_sort: 2
+    dict_label: 超时重传
+    dict_value: timeout_retry
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: warning
+    is_default: "N"
+    status: "0"
+    remark: 超时后重传
+
+  - dict_code: 192
+    dict_sort: 3
+    dict_label: CRC校验
+    dict_value: crc_check
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: primary
+    is_default: "N"
+    status: "0"
+    remark: CRC循环冗余校验
+
+  - dict_code: 193
+    dict_sort: 4
+    dict_label: 奇偶校验
+    dict_value: parity_check
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: success
+    is_default: "N"
+    status: "0"
+    remark: 奇偶校验
+
+  - dict_code: 194
+    dict_sort: 5
+    dict_label: 超时重传 3 次, 100ms
+    dict_value: timeout_retry_3_100ms
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: warning
+    is_default: "Y"
+    status: "0"
+    remark: 超时重传3次，间隔100ms
+
+  - dict_code: 195
+    dict_sort: 6
+    dict_label: "-"
+    dict_value: default
+    dict_type: sys_protocol_error_handling
+    css_class: ""
+    list_class: ""
+    is_default: "N"
+    status: "0"
+    remark: 默认处理

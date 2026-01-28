@@ -1,23 +1,24 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import ConfigDict, Field, field_validator, model_validator
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
 from typing import List, Literal, Optional, Union
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class RoleModel(BaseModel):
+class RoleModel(CamelModelBase):
     """
     角色表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     role_id: Optional[int] = Field(default=None, description='角色ID')
     role_name: Optional[str] = Field(default=None, description='角色名称')
     role_key: Optional[str] = Field(default=None, description='角色权限字符串')
     role_sort: Optional[int] = Field(default=None, description='显示顺序')
-    data_scope: Optional[Literal['1', '2', '3', '4', '5']] = Field(
+    data_scope: Optional[str] = Field(
         default=None,
         description='数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）',
     )
@@ -68,28 +69,37 @@ class RoleModel(BaseModel):
         return self.role_sort
 
     def validate_fields(self):
-        self.get_role_name()
-        self.get_role_key()
-        self.get_role_sort()
+        is_edit = self.role_id is not None
+        if not is_edit:
+            self.get_role_name()
+            self.get_role_key()
+            self.get_role_sort()
+            return
+        if self.role_name is not None:
+            self.get_role_name()
+        if self.role_key is not None:
+            self.get_role_key()
+        if self.role_sort is not None:
+            self.get_role_sort()
 
 
-class RoleMenuModel(BaseModel):
+class RoleMenuModel(CamelModelBase):
     """
     角色和菜单关联表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     role_id: Optional[int] = Field(default=None, description='角色ID')
     menu_id: Optional[int] = Field(default=None, description='菜单ID')
 
 
-class RoleDeptModel(BaseModel):
+class RoleDeptModel(CamelModelBase):
     """
     角色和部门关联表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     role_id: Optional[int] = Field(default=None, description='角色ID')
     dept_id: Optional[int] = Field(default=None, description='部门ID')
@@ -114,23 +124,23 @@ class RolePageQueryModel(RoleQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class RoleMenuQueryModel(BaseModel):
+class RoleMenuQueryModel(CamelModelBase):
     """
     角色菜单查询模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     menus: List = Field(default=[], description='菜单信息')
     checked_keys: List[int] = Field(default=[], description='已选择的菜单ID信息')
 
 
-class RoleDeptQueryModel(BaseModel):
+class RoleDeptQueryModel(CamelModelBase):
     """
     角色部门查询模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     depts: List = Field(default=[], description='部门信息')
     checked_keys: List[int] = Field(default=[], description='已选择的部门ID信息')
@@ -146,12 +156,20 @@ class AddRoleModel(RoleModel):
     type: Optional[str] = Field(default=None, description='操作类型')
 
 
-class DeleteRoleModel(BaseModel):
+class EditRoleModel(AddRoleModel):
+    """
+    编辑角色模型
+    """
+
+    role_id: int = Field(description='角色ID')
+
+
+class DeleteRoleModel(CamelModelBase):
     """
     删除角色模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     role_ids: str = Field(description='需要删除的菜单ID')
     update_by: Optional[str] = Field(default=None, description='更新者')

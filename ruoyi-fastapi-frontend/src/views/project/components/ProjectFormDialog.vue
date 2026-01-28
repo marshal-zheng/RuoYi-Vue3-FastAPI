@@ -52,7 +52,8 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
       return res;
     }
     const res = await addProject(data);
-    const newId = res?.data?.projectId || res?.data?.id || res?.projectId || res?.id || null;
+    // http 客户端已解包 payload.data，res 直接是项目数据
+    const newId = res?.projectId || res?.id || null;
     emit('success', { mode: 'create', projectId: newId, data: res });
     return res;
   },

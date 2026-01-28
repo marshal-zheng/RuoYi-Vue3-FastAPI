@@ -42,21 +42,48 @@ const notifier: HttpNotifier = {
   },
 };
 
-// 自定义成功判定器
+// 自定义成功判定器（基于 HTTP 状态码）
 const successResolver: SuccessResolver = ({ response }) => {
   const payload = (response.data || {}) as Record<string, unknown>;
-  const responseCode = (payload.code as number | undefined) ?? 200;
-  const responseMsg =
-    (payload.msg as string | undefined) ||
+  const status = response.status;
+  
+  // 基于 HTTP 2xx 判定成功
+  const ok = status >= 200 && status < 300;
+  
+  if (ok) {
+    // 成功响应
+    const responseMsg =
+      (payload.message as string | undefined) ||
+      (payload.msg as string | undefined) ||
+      '操作成功';
+    
+    // 响应数据解包策略：
+    // - 如果后端返回 {"data": xxx, ...}，则解包返回 xxx
+    // - 如果后端返回 {"rows": [...], "total": n, ...}，则返回完整 payload
+    // 这样业务代码统一使用 res 访问数据（res 就是实际数据）
+    return {
+      ok: true,
+      data: payload.data !== undefined ? payload.data : payload,
+      message: responseMsg,
+      code: status,
+      raw: payload,
+    };
+  }
+  
+  // 错误响应（RFC 7807）
+  const errorMsg =
+    (payload.detail as string | undefined) ||
+    (payload.title as string | undefined) ||
     (payload.message as string | undefined) ||
-    errorCode[responseCode] ||
+    (payload.msg as string | undefined) ||
+    errorCode[status] ||
     errorCode['default'];
-
+  
   return {
-    ok: responseCode === 200,
+    ok: false,
     data: payload,
-    message: responseMsg,
-    code: responseCode,
+    message: errorMsg,
+    code: (payload.errorCode as number) || status,
     raw: payload,
   };
 };
@@ -135,17 +162,11 @@ const beforeRequestTransform: HttpTransformHook = {
   },
 };
 
-// 响应后处理钩子
+// 响应后处理钩子（RFC 7807 标准）
 const afterResponseTransform: HttpTransformHook = {
   async afterResponse(response, options, context) {
-    const { code, msg, message } = response.data as Record<string, unknown>;
-    const responseCode = (code as number) ?? 200;
-    const responseMsg =
-      (msg as string) || (message as string) || errorCode[responseCode] || errorCode['default'];
-
-    // 检查是否为静默模式
     const silentError = ((response.config as Record<string, unknown>)?.silentError as boolean) === true;
-
+    
     // 二进制数据直接返回
     if (
       response.config.responseType === 'blob' ||
@@ -153,9 +174,28 @@ const afterResponseTransform: HttpTransformHook = {
     ) {
       return response;
     }
-
+    
+    const status = response.status;
+    const payload = response.data as Record<string, unknown>;
+    
+    // 2xx 成功响应
+    if (status >= 200 && status < 300) {
+      attachPager(response.data);
+      return response;
+    }
+    
+    // RFC 7807 错误响应解析
+    const errorCode = (payload.errorCode as number) || status;
+    const errorMsg =
+      (payload.detail as string) ||
+      (payload.title as string) ||
+      (payload.message as string) ||
+      (payload.msg as string) ||
+      errorCode[status] ||
+      errorCode['default'];
+    
     // 401 未授权
-    if (responseCode === 401) {
+    if (status === 401 || errorCode === 20001 || errorCode === 20002) {
       if (!isRelogin.show) {
         isRelogin.show = true;
         ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
@@ -177,47 +217,78 @@ const afterResponseTransform: HttpTransformHook = {
       }
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
     }
-
-    // 500 服务器错误
-    if (responseCode === 500) {
+    
+    // 403 权限不足
+    if (status === 403 || errorCode === 20004) {
       if (!silentError) {
-        ElMessage({ message: responseMsg, type: 'error' });
+        ElMessage({ message: errorMsg || '权限不足', type: 'error' });
       }
-      return Promise.reject(new Error(responseMsg));
+      return Promise.reject(new Error(errorMsg || '权限不足'));
     }
-
-    // 601 警告
-    if (responseCode === 601) {
+    
+    // 422 校验错误（展示字段级错误）
+    if (status === 422 || errorCode === 10001) {
       if (!silentError) {
-        ElMessage({ message: responseMsg, type: 'warning' });
+        const errors = (payload.errors as Array<{ field: string; message: string }>) || [];
+        
+        if (errors.length > 0) {
+          // 展示字段级错误
+          const errorDetails = errors.map(e => `${e.field}: ${e.message}`).join('\n');
+          ElNotification.error({
+            title: '参数验证失败',
+            message: errorDetails,
+            duration: 5000
+          });
+        } else {
+          ElMessage({ message: errorMsg || '参数验证失败', type: 'error' });
+        }
       }
-      return Promise.reject(new Error(responseMsg));
+      return Promise.reject(new Error(errorMsg || '参数验证失败'));
     }
-
-    // 其他非 200 错误
-    if (responseCode !== 200) {
+    
+    // 500+ 系统错误
+    if (status >= 500) {
       if (!silentError) {
-        ElNotification.error({ title: responseMsg });
+        ElMessage({ message: errorMsg || '系统错误', type: 'error' });
       }
-      return Promise.reject('error');
+      return Promise.reject(new Error(errorMsg || '系统错误'));
     }
-
-    // 成功响应，附加 pager 信息（兼容旧逻辑）
-    attachPager(response.data);
+    
+    // 其他 4xx 错误
+    if (status >= 400) {
+      if (!silentError) {
+        ElNotification.error({ title: errorMsg || '操作失败' });
+      }
+      return Promise.reject(new Error(errorMsg || '操作失败'));
+    }
+    
     return response;
   },
 
   async onError(error, options, context) {
-    const axiosError = error as { config?: Record<string, unknown>; message?: string };
+    const axiosError = error as { 
+      config?: Record<string, unknown>; 
+      message?: string;
+      response?: { data?: Record<string, unknown> }
+    };
     const silentError = (axiosError.config?.silentError as boolean) === true;
-    let message = axiosError.message || '';
-
-    if (message === 'Network Error') {
-      message = '后端接口连接异常';
-    } else if (message.includes('timeout')) {
-      message = '系统接口请求超时';
-    } else if (message.includes('Request failed with status code')) {
-      message = '系统接口' + message.substr(message.length - 3) + '异常';
+    
+    // 优先从响应体获取错误信息（RFC 7807）
+    let message = '';
+    if (axiosError.response?.data) {
+      const data = axiosError.response.data;
+      message = (data.detail as string) || (data.title as string) || (data.message as string) || '';
+    }
+    
+    if (!message) {
+      message = axiosError.message || '';
+      if (message === 'Network Error') {
+        message = '后端接口连接异常';
+      } else if (message.includes('timeout')) {
+        message = '系统接口请求超时';
+      } else if (message.includes('Request failed with status code')) {
+        message = '系统接口' + message.substr(message.length - 3) + '异常';
+      }
     }
 
     if (!silentError && message) {

@@ -1,0 +1,131 @@
+# 字典类型数据
+# Dictionary type definitions
+
+dict_types:
+  # === 系统基础字典类型 ===
+  - dict_id: 1
+    dict_name: 用户性别
+    dict_type: sys_user_sex
+    status: "0"
+    remark: 用户性别列表
+
+  - dict_id: 2
+    dict_name: 菜单状态
+    dict_type: sys_show_hide
+    status: "0"
+    remark: 菜单状态列表
+
+  - dict_id: 3
+    dict_name: 系统开关
+    dict_type: sys_normal_disable
+    status: "0"
+    remark: 系统开关列表
+
+  - dict_id: 4
+    dict_name: 任务状态
+    dict_type: sys_job_status
+    status: "0"
+    remark: 任务状态列表
+
+  - dict_id: 5
+    dict_name: 任务分组
+    dict_type: sys_job_group
+    status: "0"
+    remark: 任务分组列表
+
+  - dict_id: 6
+    dict_name: 任务执行器
+    dict_type: sys_job_executor
+    status: "0"
+    remark: 任务执行器列表
+
+  - dict_id: 7
+    dict_name: 系统是否
+    dict_type: sys_yes_no
+    status: "0"
+    remark: 系统是否列表
+
+  - dict_id: 8
+    dict_name: 通知类型
+    dict_type: sys_notice_type
+    status: "0"
+    remark: 通知类型列表
+
+  - dict_id: 9
+    dict_name: 通知状态
+    dict_type: sys_notice_status
+    status: "0"
+    remark: 通知状态列表
+
+  - dict_id: 10
+    dict_name: 操作类型
+    dict_type: sys_oper_type
+    status: "0"
+    remark: 操作类型列表
+
+  - dict_id: 11
+    dict_name: 系统状态
+    dict_type: sys_common_status
+    status: "0"
+    remark: 登录状态列表
+
+  # === 协议管理相关字典类型 ===
+  - dict_id: 100
+    dict_name: 协议类型
+    dict_type: sys_protocol_type
+    status: "0"
+    remark: 协议通信类型列表
+
+  - dict_id: 101
+    dict_name: 传输频率
+    dict_type: sys_protocol_frequency
+    status: "0"
+    remark: 协议传输频率列表
+
+  - dict_id: 102
+    dict_name: 以太网传输速率
+    dict_type: sys_protocol_speed_ethernet
+    status: "0"
+    remark: 以太网协议传输速率
+
+  - dict_id: 103
+    dict_name: RS422传输速率
+    dict_type: sys_protocol_speed_rs422
+    status: "0"
+    remark: RS422协议传输速率
+
+  - dict_id: 104
+    dict_name: CAN传输速率
+    dict_type: sys_protocol_speed_can
+    status: "0"
+    remark: CAN协议传输速率
+
+  - dict_id: 105
+    dict_name: 1553B传输速率
+    dict_type: sys_protocol_speed_1553b
+    status: "0"
+    remark: 1553B协议传输速率
+
+  - dict_id: 106
+    dict_name: 以太网传输方式
+    dict_type: sys_protocol_method_ethernet
+    status: "0"
+    remark: 以太网协议传输方式
+
+  - dict_id: 107
+    dict_name: CAN传输方式
+    dict_type: sys_protocol_method_can
+    status: "0"
+    remark: CAN协议传输方式
+
+  - dict_id: 108
+    dict_name: 数据类型
+    dict_type: sys_protocol_data_type
+    status: "0"
+    remark: 协议字段数据类型
+
+  - dict_id: 109
+    dict_name: 错误处理
+    dict_type: sys_protocol_error_handling
+    status: "0"
+    remark: 协议错误处理策略

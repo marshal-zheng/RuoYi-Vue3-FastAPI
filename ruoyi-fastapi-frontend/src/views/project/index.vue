@@ -3,6 +3,7 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProjectData"
+      :query-transform="queryTransform"
       class="project-grid zx-grid-list--page"
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
@@ -229,6 +230,7 @@
 </template>
 
 <script setup name="Project">
+import { serializeDateRange } from '@/utils/ruoyi';
 import { listProject, delProject, exportProject, exportProjectBatch, importProjectBatch } from '@/api/project/project';
 import { unlockProjectVersions } from '@/api/project/version';
 import { checkPermi } from '@/utils/permission';
@@ -247,6 +249,12 @@ const multiple = ref(true);
 
 const projectDialogRef = ref();
 
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 */
 async function loadProjectData(params) {
   const response = await listProject(params);
   return response;

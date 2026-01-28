@@ -84,6 +84,9 @@ class BaseProtocolModel(ABC):
             self.message_callback(message)
 
 
+# Backward-compatible alias
+BaseProtocol = BaseProtocolModel
+
 
 
 

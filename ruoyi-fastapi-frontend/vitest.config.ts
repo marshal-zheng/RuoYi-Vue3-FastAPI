@@ -44,6 +44,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      reportsDirectory: './tests/coverage',
       exclude: [
         'node_modules/',
         'tests/',
@@ -51,16 +52,21 @@ export default defineConfig({
         '**/*.d.ts',
         '**/*.config.{js,ts}',
         '**/vite.config.ts',
-        '**/vitest.config.ts'
-      ]
+        '**/vitest.config.ts',
+        'src/main.ts',
+        'src/permission.ts'
+      ],
+      thresholds: {
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70
+      }
     },
     
-    // 浏览器测试配置
+    // 浏览器测试配置 - 禁用以支持 v8 覆盖率
     browser: {
-      enabled: true,
-      provider: 'webdriverio',
-      headless: false,
-      name: 'chrome'
+      enabled: false
     },
     
     // 测试超时配置

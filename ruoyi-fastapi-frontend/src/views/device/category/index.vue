@@ -1,6 +1,6 @@
 <template>
   <ZxContentWrap>
-    <ZxGridList ref="gridListRef" :load-data="loadCategoryData" class="zx-grid-list--page">
+    <ZxGridList ref="gridListRef" :load-data="loadCategoryData" :query-transform="queryTransform" class="zx-grid-list--page">
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
@@ -88,6 +88,7 @@
 </template>
 
 <script setup name="DeviceCategory">
+import { serializeDateRange } from '@/utils/ruoyi';
 import { listDeviceCategory, delDeviceCategory } from '@/api/device/category';
 import { CategoryFormDialog } from '@/components/business/Device';
 
@@ -101,6 +102,12 @@ const categoryDialogRef = ref();
 
 const data = reactive({});
 
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 */
 async function loadCategoryData(params) {
   const response = await listDeviceCategory(params);
   return response;

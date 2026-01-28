@@ -3,6 +3,7 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadRoleData"
+      :query-transform="queryTransform"
       :show-pagination="true"
       :load-on-mounted="true"
       class="zx-grid-list--page"
@@ -160,6 +161,7 @@
 </template>
 
 <script setup name="Role">
+import { serializeDateRange } from '@/utils/ruoyi';
 import { changeRoleStatus, delRole, listRole } from '@/api/system/role';
 import { checkPermi } from '@/utils/permission';
 import RoleFormDrawer from './components/RoleFormDrawer.vue';
@@ -176,21 +178,15 @@ const gridListRef = ref(null);
 const roleFormDrawerRef = ref(null);
 const roleDataScopeDrawerRef = ref(null);
 
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 - 不处理参数转换 */
 async function loadRoleData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    roleName: params.query?.roleName,
-    roleKey: params.query?.roleKey,
-    status: params.query?.status,
-  };
-  const finalParams = proxy.addDateRange(queryData, params.query?.dateRange || []);
   try {
-    const response = await listRole(finalParams);
-    return {
-      data: response.rows || [],
-      total: response.total || 0,
-    };
+    return await listRole(params);
   } catch (e) {
     return { data: [], total: 0 };
   }
@@ -219,15 +215,7 @@ function handleDelete(row) {
     .catch(() => {});
 }
 function handleExport(query) {
-  const params = proxy.addDateRange(
-    {
-      roleName: query?.roleName,
-      roleKey: query?.roleKey,
-      status: query?.status,
-    },
-    query?.dateRange || []
-  );
-  proxy.download('system/role/export', params, `role_${new Date().getTime()}.xlsx`);
+  proxy.download('system/role/export', query, `role_${new Date().getTime()}.xlsx`);
 }
 
 /** 多选框选中数据 */

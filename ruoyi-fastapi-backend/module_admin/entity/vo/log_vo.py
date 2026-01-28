@@ -1,16 +1,17 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Literal, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class OperLogModel(BaseModel):
+class OperLogModel(CamelModelBase):
     """
     操作日志表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     oper_id: Optional[int] = Field(default=None, description='日志主键')
     title: Optional[str] = Field(default=None, description='模块标题')
@@ -37,12 +38,12 @@ class OperLogModel(BaseModel):
     cost_time: Optional[int] = Field(default=None, description='消耗时间')
 
 
-class LogininforModel(BaseModel):
+class LogininforModel(CamelModelBase):
     """
     登录日志表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     info_id: Optional[int] = Field(default=None, description='访问ID')
     user_name: Optional[str] = Field(default=None, description='用户账号')
@@ -78,12 +79,12 @@ class OperLogPageQueryModel(OperLogQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteOperLogModel(BaseModel):
+class DeleteOperLogModel(CamelModelBase):
     """
     删除操作日志模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     oper_ids: str = Field(description='需要删除的日志主键')
 
@@ -111,21 +112,21 @@ class LoginLogPageQueryModel(LoginLogQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteLoginLogModel(BaseModel):
+class DeleteLoginLogModel(CamelModelBase):
     """
     删除登录日志模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     info_ids: str = Field(description='需要删除的访问ID')
 
 
-class UnlockUser(BaseModel):
+class UnlockUser(CamelModelBase):
     """
     解锁用户模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     user_name: str = Field(description='用户名称')

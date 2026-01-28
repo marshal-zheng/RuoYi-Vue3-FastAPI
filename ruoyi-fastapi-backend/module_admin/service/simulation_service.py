@@ -7,21 +7,31 @@ import json
 from datetime import datetime
 from typing import Dict, List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from exceptions.exception import ServiceException
-from module_admin.dao.simulation_dao import SimulationDao
-from module_admin.dao.project_topology_dao import ProjectTopologyDao
+from exceptions.exception import ValidationException, ResourceNotFoundException, SystemException
+from config.error_codes import ErrorCode
+from module_admin.entity.do.simulation_do import (
+    SimulationSessionDO,
+    SimulationMessageDO,
+    SimulationBandwidthDO,
+    SimulationAlarmDO
+)
+from module_admin.repository import (
+    SimulationSessionRepository,
+    SimulationMessageRepository,
+    SimulationBandwidthRepository,
+    SimulationAlarmRepository,
+    ProjectTopologyRepository
+)
 from module_admin.entity.vo.simulation_vo import (
-    SimulationSessionModel,
     CreateSimulationSessionModel,
-    SimulationMessageModel,
-    SimulationBandwidthModel,
-    SimulationAlarmModel,
     SimulationQueryModel,
     SimulationExportModel
 )
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.service.simulation_engine import SimulationEngine
 from utils.common_util import CamelCaseUtil
+from utils.log_util import logger
+from utils.transaction_manager import transactional
 
 
 class SimulationService:
@@ -38,6 +48,7 @@ class SimulationService:
     _session_configs: Dict[str, Dict] = {}
 
     @classmethod
+    @transactional()
     async def create_session(
         cls, query_db: AsyncSession, request: CreateSimulationSessionModel
     ) -> Dict:
@@ -53,12 +64,16 @@ class SimulationService:
         """
         try:
             # 获取拓扑数据
-            topology = await ProjectTopologyDao.get_topology_by_project_and_version(
-                query_db, request.project_id, request.version_id
+            topology_repo = ProjectTopologyRepository(query_db)
+            topology = await topology_repo.find_by_project_and_version(
+                request.project_id, request.version_id
             )
             
             if not topology or not topology.topology_data:
-                raise ServiceException(message='拓扑数据不存在，请先创建拓扑')
+                raise ResourceNotFoundException(
+                    error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                    message='拓扑数据不存在，请先创建拓扑'
+                )
             
             # 解析拓扑数据
             topology_data = topology.topology_data
@@ -67,7 +82,8 @@ class SimulationService:
             
             # 创建会话
             session_id = str(uuid.uuid4())
-            session = SimulationSessionModel(
+            session_repo = SimulationSessionRepository(query_db)
+            db_session = SimulationSessionDO(
                 session_id=session_id,
                 project_id=request.project_id,
                 version_id=request.version_id,
@@ -76,8 +92,7 @@ class SimulationService:
                 create_time=datetime.now()
             )
             
-            await SimulationDao.create_session(query_db, session)
-            await query_db.commit()
+            await session_repo.add(db_session)
             
             # 创建仿真引擎实例（传递全局策略配置）
             engine = SimulationEngine(
@@ -111,10 +126,17 @@ class SimulationService:
             # 检查是否是表不存在的错误
             error_msg = str(e)
             if "doesn't exist" in error_msg or "no such table" in error_msg.lower():
-                raise ServiceException(message='仿真数据表不存在，请先执行 sql/simulation.sql 创建数据库表')
-            raise ServiceException(message=f'创建仿真会话失败: {error_msg}\n{error_detail}')
+                raise SystemException(
+                    error_code=ErrorCode.SYSTEM_ERROR,
+                    message='仿真数据表不存在，请先执行 sql/simulation.sql 创建数据库表'
+                )
+            raise SystemException(
+                error_code=ErrorCode.SYSTEM_ERROR,
+                message=f'创建仿真会话失败: {error_msg}\n{error_detail}'
+            )
 
     @classmethod
+    @transactional()
     async def start_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         启动仿真会话
@@ -126,48 +148,49 @@ class SimulationService:
         返回:
             操作结果
         """
-        try:
-            # 获取引擎实例
-            engine = cls._active_engines.get(session_id)
-            if (not engine) or getattr(engine, "status", "") == "stopped":
-                engine = await cls._rebuild_engine(query_db, session_id)
-            
-            # 启动引擎
-            await engine.start()
-            
-            # 更新数据库状态
-            await SimulationDao.update_session_status(
-                query_db, session_id, 'running', None
-            )
-            await query_db.commit()
-            
-            return CrudResponseModel(is_success=True, message='仿真已启动')
-            
-        except ServiceException as e:
-            await query_db.rollback()
-            raise e
-        except Exception as e:
-            await query_db.rollback()
-            raise ServiceException(message=f'启动仿真失败: {str(e)}')
+        # 获取引擎实例
+        engine = cls._active_engines.get(session_id)
+        if (not engine) or getattr(engine, "status", "") == "stopped":
+            engine = await cls._rebuild_engine(query_db, session_id)
+        
+        # 启动引擎
+        await engine.start()
+        
+        # 更新数据库状态
+        session_repo = SimulationSessionRepository(query_db)
+        await session_repo.update_status(session_id, 'running', None)
+        
+        return CrudResponseModel(is_success=True, message='仿真已启动')
 
     @classmethod
     async def _rebuild_engine(cls, query_db: AsyncSession, session_id: str) -> SimulationEngine:
         """
         当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
         """
-        session = await SimulationDao.get_session_by_id(query_db, session_id)
+        session_repo = SimulationSessionRepository(query_db)
+        session = await session_repo.find_by_id(session_id)
         if not session:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         cached = cls._session_configs.get(session_id, {})
         if not cached:
-            raise ServiceException(message='仿真会话配置缺失，无法重建引擎，请重新创建会话')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='仿真会话配置缺失，无法重建引擎，请重新创建会话'
+            )
 
-        topology = await ProjectTopologyDao.get_topology_by_project_and_version(
-            query_db, session.project_id, session.version_id
+        topology_repo = ProjectTopologyRepository(query_db)
+        topology = await topology_repo.find_by_project_and_version(
+            session.project_id, session.version_id
         )
         if not topology or not topology.topology_data:
-            raise ServiceException(message='拓扑数据不存在，无法重建仿真会话')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='拓扑数据不存在，无法重建仿真会话'
+            )
 
         topology_data = topology.topology_data
         if isinstance(topology_data, str):
@@ -185,6 +208,7 @@ class SimulationService:
         return engine
 
     @classmethod
+    @transactional()
     async def stop_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         停止仿真会话
@@ -196,38 +220,29 @@ class SimulationService:
         返回:
             操作结果
         """
-        try:
-            # 获取引擎实例
-            engine = cls._active_engines.get(session_id)
-            if not engine:
-                raise ServiceException(message='仿真会话不存在或已过期')
-            
-            # 停止引擎
-            await engine.stop()
-            
-            # 保存数据到数据库
-            await cls._persist_simulation_data(query_db, engine)
-            
-            # 更新数据库状态
-            await SimulationDao.update_session_status(
-                query_db, session_id, 'stopped', datetime.now()
+        # 获取引擎实例
+        engine = cls._active_engines.get(session_id)
+        if not engine:
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
             )
-            await query_db.commit()
-            
-            # 移除引擎实例
-            del cls._active_engines[session_id]
-            cls._fault_event_offsets.pop(session_id, None)
-            
-            return CrudResponseModel(is_success=True, message='仿真已停止')
-            
-        except ServiceException as e:
-            await query_db.rollback()
-            raise e
-        except Exception as e:
-            import traceback
-            error_detail = traceback.format_exc()
-            await query_db.rollback()
-            raise ServiceException(message=f'停止仿真失败: {str(e)}\n{error_detail}')
+        
+        # 停止引擎
+        await engine.stop()
+        
+        # 保存数据到数据库
+        await cls._persist_simulation_data(query_db, engine)
+        
+        # 更新数据库状态
+        session_repo = SimulationSessionRepository(query_db)
+        await session_repo.update_status(session_id, 'stopped', datetime.now())
+        
+        # 移除引擎实例
+        del cls._active_engines[session_id]
+        cls._fault_event_offsets.pop(session_id, None)
+        
+        return CrudResponseModel(is_success=True, message='仿真已停止')
 
     @classmethod
     async def _persist_simulation_data(cls, query_db: AsyncSession, engine: SimulationEngine):
@@ -238,23 +253,27 @@ class SimulationService:
             query_db: 数据库会话
             engine: 仿真引擎实例
         """
+        message_repo = SimulationMessageRepository(query_db)
+        bandwidth_repo = SimulationBandwidthRepository(query_db)
+        alarm_repo = SimulationAlarmRepository(query_db)
+        
         # 批量保存报文
         messages = engine.get_messages()
         if messages:
-            message_models = [SimulationMessageModel(**msg) for msg in messages]
-            await SimulationDao.batch_create_messages(query_db, message_models)
+            message_dos = [SimulationMessageDO(**msg) for msg in messages]
+            await message_repo.batch_create(message_dos)
         
         # 批量保存带宽数据
         bandwidth_data = engine.get_bandwidth_data()
         if bandwidth_data:
-            bandwidth_models = [SimulationBandwidthModel(**bw) for bw in bandwidth_data]
-            await SimulationDao.batch_create_bandwidth(query_db, bandwidth_models)
+            bandwidth_dos = [SimulationBandwidthDO(**bw) for bw in bandwidth_data]
+            await bandwidth_repo.batch_create(bandwidth_dos)
         
         # 批量保存告警
         alarms = engine.get_alarms()
         if alarms:
-            alarm_models = [SimulationAlarmModel(**alarm) for alarm in alarms]
-            await SimulationDao.batch_create_alarms(query_db, alarm_models)
+            alarm_dos = [SimulationAlarmDO(**alarm) for alarm in alarms]
+            await alarm_repo.batch_create(alarm_dos)
 
     @classmethod
     def get_session_status(cls, session_id: str) -> Dict:
@@ -430,8 +449,9 @@ class SimulationService:
         返回:
             报文列表
         """
-        messages = await SimulationDao.get_messages_by_session(
-            query_db, query.session_id, query.start_time, query.end_time
+        message_repo = SimulationMessageRepository(query_db)
+        messages = await message_repo.find_by_session(
+            query.session_id, query.start_time, query.end_time
         )
         return [CamelCaseUtil.transform_result(msg) for msg in messages]
 
@@ -455,13 +475,20 @@ class SimulationService:
         
         # 获取数据
         if data_type == 'messages':
-            data = await SimulationDao.get_messages_by_session(query_db, session_id)
+            message_repo = SimulationMessageRepository(query_db)
+            data = await message_repo.find_by_session(session_id)
         elif data_type == 'bandwidth':
-            data = await SimulationDao.get_bandwidth_by_session(query_db, session_id)
+            bandwidth_repo = SimulationBandwidthRepository(query_db)
+            data = await bandwidth_repo.find_by_session(session_id)
         elif data_type == 'alarms':
-            data = await SimulationDao.get_alarms_by_session(query_db, session_id)
+            alarm_repo = SimulationAlarmRepository(query_db)
+            data = await alarm_repo.find_by_session(session_id)
         else:
-            raise ServiceException(message=f'不支持的数据类型: {data_type}')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='data_type',
+                message=f'不支持的数据类型: {data_type}'
+            )
         
         # 转换格式
         result_data = [CamelCaseUtil.transform_result(item) for item in data]
@@ -479,11 +506,16 @@ class SimulationService:
                 'message': 'CSV导出功能待实现'
             }
         else:
-            raise ServiceException(message=f'不支持的导出格式: {export_format}')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='export_format',
+                message=f'不支持的导出格式: {export_format}'
+            )
 
     # ==================== 新增：仿真控制增强 ====================
 
     @classmethod
+    @transactional()
     async def pause_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         暂停仿真会话
@@ -497,16 +529,20 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         await engine.pause()
 
-        await SimulationDao.update_session_status(query_db, session_id, 'paused', None)
-        await query_db.commit()
+        session_repo = SimulationSessionRepository(query_db)
+        await session_repo.update_status(session_id, 'paused', None)
 
         return CrudResponseModel(is_success=True, message='仿真已暂停')
 
     @classmethod
+    @transactional()
     async def resume_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         继续仿真会话
@@ -520,12 +556,15 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         await engine.resume()
 
-        await SimulationDao.update_session_status(query_db, session_id, 'running', None)
-        await query_db.commit()
+        session_repo = SimulationSessionRepository(query_db)
+        await session_repo.update_status(session_id, 'running', None)
 
         return CrudResponseModel(is_success=True, message='仿真已继续')
 
@@ -543,7 +582,10 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         clamped_speed = max(0.5, min(speed, 4.0))
         engine.set_speed(clamped_speed)
@@ -563,7 +605,10 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         await engine.step_once()
 
@@ -583,7 +628,10 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         engine.set_duration(duration)
 
@@ -614,7 +662,10 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         fault = engine.fault_injector.inject_fault(session_id, fault_type, target_id, params)
         return CamelCaseUtil.transform_result(fault)
@@ -633,13 +684,19 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         success = engine.fault_injector.clear_fault(session_id, fault_id)
         if success:
             return CrudResponseModel(is_success=True, message='故障已清除')
         else:
-            raise ServiceException(message='故障不存在或已清除')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='故障不存在或已清除'
+            )
 
     @classmethod
     def clear_all_faults(cls, session_id: str) -> CrudResponseModel:
@@ -654,7 +711,10 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         try:
             cleared_count = engine.fault_injector.clear_all_faults(session_id)
@@ -721,11 +781,17 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         event_data = engine.event_service.update_event(session_id, event_id, updates)
         if not event_data:
-            raise ServiceException(message='事件不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='事件不存在'
+            )
         return CamelCaseUtil.transform_result(event_data)
 
     @classmethod
@@ -742,14 +808,20 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         # 设置动作执行器
         cls._setup_action_executor(engine)
 
         result = engine.event_service.trigger_event(session_id, event_id)
         if not result:
-            raise ServiceException(message='事件不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='事件不存在'
+            )
         return CamelCaseUtil.transform_result(result)
 
     @classmethod
@@ -766,13 +838,19 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         success = engine.event_service.reset_event(session_id, event_id)
         if success:
             return CrudResponseModel(is_success=True, message='事件已重置')
         else:
-            raise ServiceException(message='事件不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='事件不存在'
+            )
 
     @classmethod
     def remove_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
@@ -788,13 +866,19 @@ class SimulationService:
         """
         engine = cls._active_engines.get(session_id)
         if not engine:
-            raise ServiceException(message='仿真会话不存在或已过期')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='仿真会话不存在或已过期'
+            )
 
         success = engine.event_service.remove_event(session_id, event_id)
         if success:
             return CrudResponseModel(is_success=True, message='事件已删除')
         else:
-            raise ServiceException(message='事件不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='事件不存在'
+            )
 
     @classmethod
     def list_events(cls, session_id: str) -> List[Dict]:

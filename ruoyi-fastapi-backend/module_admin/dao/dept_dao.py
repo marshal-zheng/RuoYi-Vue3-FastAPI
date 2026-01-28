@@ -6,6 +6,7 @@ from module_admin.entity.do.dept_do import SysDept
 from module_admin.entity.do.role_do import SysRoleDept  # noqa: F401
 from module_admin.entity.do.user_do import SysUser
 from module_admin.entity.vo.dept_vo import DeptModel
+from utils.sensitive import SensitiveDataCipher
 
 
 class DeptDao:
@@ -68,35 +69,29 @@ class DeptDao:
         return dept_info
 
     @classmethod
-    async def get_dept_info_for_edit_option(cls, db: AsyncSession, dept_info: DeptModel, data_scope_sql: str):
+    async def get_dept_info_for_edit_option(cls, db: AsyncSession, dept_info: DeptModel, data_scope_sql):
         """
         获取部门编辑对应的在用部门列表信息
 
         :param db: orm对象
         :param dept_info: 部门对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :return: 部门列表信息
         """
-        dept_result = (
-            (
-                await db.execute(
-                    select(SysDept)
-                    .where(
-                        SysDept.dept_id != dept_info.dept_id,
-                        ~SysDept.dept_id.in_(
-                            select(SysDept.dept_id).where(func.find_in_set(dept_info.dept_id, SysDept.ancestors))
-                        ),
-                        SysDept.del_flag == '0',
-                        SysDept.status == '0',
-                        eval(data_scope_sql),
-                    )
-                    .order_by(SysDept.order_num)
-                    .distinct()
-                )
-            )
-            .scalars()
-            .all()
+        query = select(SysDept).where(
+            SysDept.dept_id != dept_info.dept_id,
+            ~SysDept.dept_id.in_(
+                select(SysDept.dept_id).where(func.find_in_set(dept_info.dept_id, SysDept.ancestors))
+            ),
+            SysDept.del_flag == '0',
+            SysDept.status == '0',
         )
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.order_by(SysDept.order_num).distinct()
+        dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
 
@@ -116,63 +111,57 @@ class DeptDao:
         return dept_result
 
     @classmethod
-    async def get_dept_list_for_tree(cls, db: AsyncSession, dept_info: DeptModel, data_scope_sql: str):
+    async def get_dept_list_for_tree(cls, db: AsyncSession, dept_info: DeptModel, data_scope_sql):
         """
         获取所有在用部门列表信息
 
         :param db: orm对象
         :param dept_info: 部门对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :return: 在用部门列表信息
         """
-        dept_result = (
-            (
-                await db.execute(
-                    select(SysDept)
-                    .where(
-                        SysDept.status == '0',
-                        SysDept.del_flag == '0',
-                        SysDept.dept_name.like(f'%{dept_info.dept_name}%') if dept_info.dept_name else True,
-                        eval(data_scope_sql),
-                    )
-                    .order_by(SysDept.order_num)
-                    .distinct()
-                )
-            )
-            .scalars()
-            .all()
-        )
+        conditions = [
+            SysDept.status == '0',
+            SysDept.del_flag == '0',
+        ]
+        if dept_info.dept_name:
+            conditions.append(SysDept.dept_name.like(f'%{dept_info.dept_name}%'))
+        
+        query = select(SysDept).where(*conditions)
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.order_by(SysDept.order_num).distinct()
+        dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
 
     @classmethod
-    async def get_dept_list(cls, db: AsyncSession, page_object: DeptModel, data_scope_sql: str):
+    async def get_dept_list(cls, db: AsyncSession, page_object: DeptModel, data_scope_sql):
         """
         根据查询参数获取部门列表信息
 
         :param db: orm对象
         :param page_object: 不分页查询参数对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :return: 部门列表信息对象
         """
-        dept_result = (
-            (
-                await db.execute(
-                    select(SysDept)
-                    .where(
-                        SysDept.del_flag == '0',
-                        SysDept.dept_id == page_object.dept_id if page_object.dept_id is not None else True,
-                        SysDept.status == page_object.status if page_object.status else True,
-                        SysDept.dept_name.like(f'%{page_object.dept_name}%') if page_object.dept_name else True,
-                        eval(data_scope_sql),
-                    )
-                    .order_by(SysDept.order_num)
-                    .distinct()
-                )
-            )
-            .scalars()
-            .all()
-        )
+        conditions = [SysDept.del_flag == '0']
+        if page_object.dept_id is not None:
+            conditions.append(SysDept.dept_id == page_object.dept_id)
+        if page_object.status:
+            conditions.append(SysDept.status == page_object.status)
+        if page_object.dept_name:
+            conditions.append(SysDept.dept_name.like(f'%{page_object.dept_name}%'))
+        
+        query = select(SysDept).where(*conditions)
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.order_by(SysDept.order_num).distinct()
+        dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
 
@@ -200,6 +189,8 @@ class DeptDao:
         :param dept: 需要更新的部门字典
         :return: 编辑校验结果
         """
+        if 'phone' in dept:
+            dept['phone_hash'] = SensitiveDataCipher.hash(dept.get('phone'))
         await db.execute(update(SysDept), [dept])
 
     @classmethod

@@ -1,0 +1,48 @@
+# 种子数据加载清单
+# Seed Data Loading Manifest
+version: "1.0"
+
+# 加载顺序（按外键依赖）
+# Load order (by foreign key dependencies)
+load_order:
+  - depts       # 部门（无依赖）
+  - posts       # 岗位（无依赖）
+  - roles       # 角色（无依赖）
+  - menus       # 菜单（无依赖）
+  - dict_types  # 字典类型（无依赖）
+  - dict_data   # 字典数据（依赖 dict_types）
+  - configs     # 系统配置（无依赖）
+  # 以下在 overlay 中定义
+  - users       # 用户（依赖 depts）
+  - user_roles  # 用户角色关联
+  - user_posts  # 用户岗位关联
+  - role_menus  # 角色菜单关联
+  - role_depts  # 角色部门关联
+
+# 表名映射
+# Table name mappings
+table_mappings:
+  depts: sys_dept
+  posts: sys_post
+  roles: sys_role
+  menus: sys_menu
+  dict_types: sys_dict_type
+  dict_data: sys_dict_data
+  configs: sys_config
+  users: sys_user
+  user_roles: sys_user_role
+  user_posts: sys_user_post
+  role_menus: sys_role_menu
+  role_depts: sys_role_dept
+
+# 主键字段映射
+# Primary key field mappings
+primary_keys:
+  depts: dept_id
+  posts: post_id
+  roles: role_id
+  menus: menu_id
+  dict_types: dict_id
+  dict_data: dict_code
+  configs: config_id
+  users: user_id

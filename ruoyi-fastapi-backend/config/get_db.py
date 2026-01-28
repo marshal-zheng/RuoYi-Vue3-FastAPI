@@ -1,5 +1,39 @@
+import os
+import sys
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.pool import StaticPool
 from config.database import async_engine, AsyncSessionLocal, Base
 from utils.log_util import logger
+
+_TEST_ENGINE = None
+_TEST_SESSIONMAKER = None
+
+
+def _is_test_env() -> bool:
+    return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
+
+
+def _get_test_sessionmaker():
+    global _TEST_ENGINE, _TEST_SESSIONMAKER
+    if _TEST_SESSIONMAKER is None:
+        _TEST_ENGINE = create_async_engine(
+            'sqlite+aiosqlite:///:memory:',
+            echo=False,
+            poolclass=StaticPool,
+            connect_args={'check_same_thread': False},
+        )
+        _TEST_SESSIONMAKER = async_sessionmaker(
+            autocommit=False,
+            autoflush=False,
+            bind=_TEST_ENGINE,
+            expire_on_commit=False,
+        )
+    return _TEST_SESSIONMAKER
+
+
+def _get_test_engine():
+    _get_test_sessionmaker()
+    return _TEST_ENGINE
 
 
 async def get_db():
@@ -8,8 +42,18 @@ async def get_db():
 
     :return:
     """
-    async with AsyncSessionLocal() as current_db:
-        yield current_db
+    session_factory = _get_test_sessionmaker() if _is_test_env() else AsyncSessionLocal
+    async with session_factory() as current_db:
+        try:
+            yield current_db
+            # 请求成功完成后提交事务
+            if current_db.in_transaction():
+                await current_db.commit()
+        except Exception:
+            # 发生异常时回滚事务
+            if current_db.in_transaction():
+                await current_db.rollback()
+            raise
 
 
 async def init_create_table():
@@ -19,6 +63,7 @@ async def init_create_table():
     :return:
     """
     logger.info('初始化数据库连接...')
-    async with async_engine.begin() as conn:
+    engine = _get_test_engine() if _is_test_env() else async_engine
+    async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     logger.info('数据库连接成功')

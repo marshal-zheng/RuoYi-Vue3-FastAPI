@@ -10,6 +10,7 @@ from sqlalchemy.engine.row import Row
 from sqlalchemy.orm.collections import InstrumentedList
 from typing import Any, Dict, List, Literal, Union
 from config.database import Base
+from utils.sensitive.registry import get_registered_sensitive_hash_fields
 from config.env import CachePathConfig
 
 
@@ -59,6 +60,9 @@ class SqlalchemyUtil:
         if isinstance(obj, Base):
             base_dict = obj.__dict__.copy()
             base_dict.pop('_sa_instance_state', None)
+            # Remove sensitive hash fields from API responses
+            for hash_field in get_registered_sensitive_hash_fields().values():
+                base_dict.pop(hash_field, None)
             for name, value in base_dict.items():
                 if isinstance(value, InstrumentedList):
                     base_dict[name] = cls.serialize_result(value, 'snake_to_camel')
@@ -105,6 +109,24 @@ class CamelCaseUtil:
     """
     下划线形式(snake_case)转小驼峰形式(camelCase)工具方法
     """
+
+    @classmethod
+    def to_camel_case(cls, text: str):
+        """
+        将snake_case转换为camelCase
+        """
+        if text is None:
+            return ''
+        return cls.snake_to_camel(text)
+
+    @classmethod
+    def to_snake_case(cls, text: str):
+        """
+        将camelCase转换为snake_case
+        """
+        if text is None:
+            return ''
+        return SnakeCaseUtil.camel_to_snake(text)
 
     @classmethod
     def snake_to_camel(cls, snake_str: str):
@@ -156,6 +178,77 @@ class SnakeCaseUtil:
         :return: 小驼峰形式结果
         """
         return SqlalchemyUtil.serialize_result(result=result, transform_case='camel_to_snake')
+
+
+class ObjectUtil:
+    """
+    对象工具类
+    """
+
+    @staticmethod
+    def is_empty(value: Any) -> bool:
+        if value is None:
+            return True
+        if isinstance(value, str):
+            return value.strip() == ''
+        if isinstance(value, (list, tuple, set, dict)):
+            return len(value) == 0
+        return False
+
+    @staticmethod
+    def is_not_empty(value: Any) -> bool:
+        return not ObjectUtil.is_empty(value)
+
+    @staticmethod
+    def get_nested_value(data: Any, path: str, default: Any = None):
+        if data is None or not path:
+            return default
+        current = data
+        for key in path.split('.'):
+            if isinstance(current, dict) and key in current:
+                current = current[key]
+            else:
+                return default
+        return current
+
+
+class StringUtil:
+    """
+    字符串工具类
+    """
+
+    @staticmethod
+    def is_blank(text: Any) -> bool:
+        if text is None:
+            return True
+        if not isinstance(text, str):
+            return False
+        return text.strip() == ''
+
+    @staticmethod
+    def is_not_blank(text: Any) -> bool:
+        return not StringUtil.is_blank(text)
+
+    @staticmethod
+    def truncate(text: Any, max_length: int, suffix: str = '...') -> str:
+        if text is None:
+            return ''
+        text = str(text)
+        if len(text) <= max_length:
+            return text
+        return text[:max_length] + suffix
+
+    @staticmethod
+    def strip_html_tags(text: Any) -> str:
+        if text is None:
+            return ''
+        return re.sub(r'<[^>]+>', '', str(text))
+
+    @staticmethod
+    def to_title_case(text: Any) -> str:
+        if text is None:
+            return ''
+        return ' '.join(word.capitalize() for word in str(text).lower().split())
 
 
 def bytes2human(n, format_str='%(value).1f%(symbol)s'):

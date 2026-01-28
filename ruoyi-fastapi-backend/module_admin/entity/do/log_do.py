@@ -1,11 +1,13 @@
 from datetime import datetime
 from sqlalchemy import BigInteger, Column, DateTime, Index, Integer, String, Text
 from config.database import Base
+from module_admin.entity.do.enums import LoginStatusEnum, BusinessStatusEnum
 
 
 class SysLogininfor(Base):
     """
     系统访问记录
+    注: 使用 login_time 作为时间戳，不继承 LogBaseModel 避免额外的 create_time 字段
     """
 
     __tablename__ = 'sys_logininfor'
@@ -16,9 +18,9 @@ class SysLogininfor(Base):
     login_location = Column(String(255), nullable=True, default='', comment='登录地点')
     browser = Column(String(50), nullable=True, default='', comment='浏览器类型')
     os = Column(String(50), nullable=True, default='', comment='操作系统')
-    status = Column(String(1), nullable=True, default='0', comment='登录状态（0成功 1失败）')
+    status = Column(String(1), nullable=True, default=LoginStatusEnum.SUCCESS.value, comment='登录状态（0成功 1失败）')
     msg = Column(String(255), nullable=True, default='', comment='提示消息')
-    login_time = Column(DateTime, nullable=True, default=datetime.now(), comment='访问时间')
+    login_time = Column(DateTime, nullable=True, default=datetime.now, comment='访问时间')
 
     idx_sys_logininfor_s = Index('idx_sys_logininfor_s', status)
     idx_sys_logininfor_lt = Index('idx_sys_logininfor_lt', login_time)
@@ -27,6 +29,7 @@ class SysLogininfor(Base):
 class SysOperLog(Base):
     """
     操作日志记录
+    注: 使用 oper_time 作为时间戳，不继承 LogBaseModel 避免额外的 create_time 字段
     """
 
     __tablename__ = 'sys_oper_log'
@@ -44,9 +47,9 @@ class SysOperLog(Base):
     oper_location = Column(String(255), nullable=True, default='', comment='操作地点')
     oper_param = Column(String(2000), nullable=True, default='', comment='请求参数')
     json_result = Column(Text, nullable=True, default='', comment='返回参数')
-    status = Column(Integer, default=0, comment='操作状态（0正常 1异常）')
+    status = Column(Integer, default=BusinessStatusEnum.SUCCESS.value, comment='操作状态（0正常 1异常）')
     error_msg = Column(String(2000), nullable=True, default='', comment='错误消息')
-    oper_time = Column(DateTime, nullable=True, default=datetime.now(), comment='操作时间')
+    oper_time = Column(DateTime, nullable=True, default=datetime.now, comment='操作时间')
     cost_time = Column(BigInteger, default=0, comment='消耗时间')
 
     idx_sys_oper_log_bt = Index('idx_sys_oper_log_bt', business_type)

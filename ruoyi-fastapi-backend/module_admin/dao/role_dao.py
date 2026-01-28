@@ -126,39 +126,45 @@ class RoleDao:
 
     @classmethod
     async def get_role_list(
-        cls, db: AsyncSession, query_object: RolePageQueryModel, data_scope_sql: str, is_page: bool = False
+        cls, db: AsyncSession, query_object: RolePageQueryModel, data_scope_sql, is_page: bool = False
     ):
         """
         根据查询参数获取角色列表信息
 
         :param db: orm对象
         :param query_object: 查询参数对象
-        :param data_scope_sql: 数据权限对应的查询sql语句
+        :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :param is_page: 是否开启分页
         :return: 角色列表信息对象
         """
+        conditions = [SysRole.del_flag == '0']
+        
+        if query_object.role_id is not None:
+            conditions.append(SysRole.role_id == query_object.role_id)
+        if query_object.role_name:
+            conditions.append(SysRole.role_name.like(f'%{query_object.role_name}%'))
+        if query_object.role_key:
+            conditions.append(SysRole.role_key.like(f'%{query_object.role_key}%'))
+        if query_object.status:
+            conditions.append(SysRole.status == query_object.status)
+        if query_object.begin_time and query_object.end_time:
+            conditions.append(SysRole.create_time.between(
+                datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
+                datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
+            ))
+        
         query = (
             select(SysRole)
             .join(SysUserRole, SysUserRole.role_id == SysRole.role_id, isouter=True)
             .join(SysUser, SysUser.user_id == SysUserRole.user_id, isouter=True)
             .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
-            .where(
-                SysRole.del_flag == '0',
-                SysRole.role_id == query_object.role_id if query_object.role_id is not None else True,
-                SysRole.role_name.like(f'%{query_object.role_name}%') if query_object.role_name else True,
-                SysRole.role_key.like(f'%{query_object.role_key}%') if query_object.role_key else True,
-                SysRole.status == query_object.status if query_object.status else True,
-                SysRole.create_time.between(
-                    datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
-                    datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
-                )
-                if query_object.begin_time and query_object.end_time
-                else True,
-                eval(data_scope_sql),
-            )
-            .order_by(SysRole.role_sort)
-            .distinct()
+            .where(*conditions)
         )
+        # 数据权限过滤
+        if data_scope_sql is not True:
+            query = query.where(data_scope_sql)
+        
+        query = query.order_by(SysRole.role_sort).distinct()
         role_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
 
         return role_list

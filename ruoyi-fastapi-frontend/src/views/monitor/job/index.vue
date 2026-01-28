@@ -403,17 +403,10 @@ const data = reactive({
 
 const { form, rules } = toRefs(data);
 
+/** GridList 数据加载函数 */
 async function loadJobData(params) {
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    jobName: params.query?.jobName,
-    jobGroup: params.query?.jobGroup,
-    status: params.query?.status,
-  };
   try {
-    const response = await listJob(queryData);
-    return { data: response.rows || [], total: response.total || 0 };
+    return await listJob(params);
   } catch (e) {
     return { data: [], total: 0 };
   }
@@ -494,7 +487,7 @@ function handleRun(row) {
 /** 任务详细信息 */
 function handleView(row) {
   getJob(row.jobId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     openView.value = true;
   });
 }
@@ -528,7 +521,7 @@ function handleUpdate(row) {
   reset();
   const jobId = row.jobId || ids.value;
   getJob(jobId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改任务';
   });
@@ -570,11 +563,6 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport(query) {
-  const params = {
-    jobName: query?.jobName,
-    jobGroup: query?.jobGroup,
-    status: query?.status,
-  };
-  proxy.download('monitor/job/export', params, `job_${new Date().getTime()}.xlsx`);
+  proxy.download('monitor/job/export', query, `job_${new Date().getTime()}.xlsx`);
 }
 </script>

@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.enums import BusinessType
@@ -27,7 +27,7 @@ async def get_system_menu_tree(
     menu_query_result = await MenuService.get_menu_tree_services(query_db, current_user)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=menu_query_result)
+    return menu_query_result
 
 
 @menuController.get('/roleMenuTreeselect/{role_id}')
@@ -55,7 +55,7 @@ async def get_system_menu_list(
     menu_query_result = await MenuService.get_menu_list_services(query_db, menu_query, current_user)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=menu_query_result)
+    return menu_query_result
 
 
 @menuController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:add'))])
@@ -74,7 +74,7 @@ async def add_system_menu(
     add_menu_result = await MenuService.add_menu_services(query_db, add_menu)
     logger.info(add_menu_result.message)
 
-    return ResponseUtil.success(msg=add_menu_result.message)
+    return ResponseUtil.success(message=add_menu_result.message)
 
 
 @menuController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:edit'))])
@@ -91,7 +91,7 @@ async def edit_system_menu(
     edit_menu_result = await MenuService.edit_menu_services(query_db, edit_menu)
     logger.info(edit_menu_result.message)
 
-    return ResponseUtil.success(msg=edit_menu_result.message)
+    return ResponseUtil.success(message=edit_menu_result.message)
 
 
 @menuController.delete('/{menu_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:remove'))])
@@ -101,14 +101,29 @@ async def delete_system_menu(request: Request, menu_ids: str, query_db: AsyncSes
     delete_menu_result = await MenuService.delete_menu_services(query_db, delete_menu)
     logger.info(delete_menu_result.message)
 
-    return ResponseUtil.success(msg=delete_menu_result.message)
+    return ResponseUtil.success(message=delete_menu_result.message)
+
+
+@menuController.delete('/', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:remove'))])
+@Log(title='菜单管理', business_type=BusinessType.DELETE)
+async def delete_system_menu_empty(request: Request, query_db: AsyncSession = Depends(get_db)):
+    delete_menu = DeleteMenuModel(menuIds='')
+    delete_menu_result = await MenuService.delete_menu_services(query_db, delete_menu)
+    logger.info(delete_menu_result.message)
+
+    return ResponseUtil.success(message=delete_menu_result.message)
 
 
 @menuController.get(
-    '/{menu_id}', response_model=MenuModel, dependencies=[Depends(CheckUserInterfaceAuth('system:menu:query'))]
+    '/{menu_id}',
+    response_model=MenuModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:menu:query'))],
 )
 async def query_detail_system_menu(request: Request, menu_id: int, query_db: AsyncSession = Depends(get_db)):
     menu_detail_result = await MenuService.menu_detail_services(query_db, menu_id)
     logger.info(f'获取menu_id为{menu_id}的信息成功')
 
-    return ResponseUtil.success(data=menu_detail_result)
+    if menu_detail_result is None:
+        menu_detail_result = {}
+
+    return menu_detail_result

@@ -1,17 +1,18 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Pattern, Size
 from typing import Literal, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class DictTypeModel(BaseModel):
+class DictTypeModel(CamelModelBase):
     """
     字典类型表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     dict_id: Optional[int] = Field(default=None, description='字典主键')
     dict_name: Optional[str] = Field(default=None, description='字典名称')
@@ -43,12 +44,12 @@ class DictTypeModel(BaseModel):
         self.get_dict_type()
 
 
-class DictDataModel(BaseModel):
+class DictDataModel(CamelModelBase):
     """
     字典数据表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     dict_code: Optional[int] = Field(default=None, description='字典编码')
     dict_sort: Optional[int] = Field(default=None, description='字典排序')
@@ -110,12 +111,12 @@ class DictTypePageQueryModel(DictTypeQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteDictTypeModel(BaseModel):
+class DeleteDictTypeModel(CamelModelBase):
     """
     删除字典类型模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     dict_ids: str = Field(description='需要删除的字典主键')
 
@@ -139,11 +140,11 @@ class DictDataPageQueryModel(DictDataQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteDictDataModel(BaseModel):
+class DeleteDictDataModel(CamelModelBase):
     """
     删除字典数据模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     dict_codes: str = Field(description='需要删除的字典编码')

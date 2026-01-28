@@ -1,11 +1,12 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Any, Dict, List, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class ProjectModel(BaseModel):
+class ProjectModel(CamelModelBase):
     """
     工程管理表对应pydantic模型
     """
@@ -42,31 +43,52 @@ class ProjectPageQueryModel(ProjectQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteProjectModel(BaseModel):
+class AddProjectModel(CamelModelBase):
+    """
+    新增工程模型
+    """
+
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+
+    project_name: Optional[str] = Field(default=None, description='工程名称')
+    project_code: Optional[str] = Field(default=None, description='工程编码')
+    description: Optional[str] = Field(default=None, description='工程描述')
+    status: Optional[str] = Field(default=None, description='状态')
+
+
+class EditProjectModel(AddProjectModel):
+    """
+    编辑工程模型
+    """
+
+    project_id: int = Field(description='工程编号')
+
+
+class DeleteProjectModel(CamelModelBase):
     """
     删除工程模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     project_ids: str = Field(description='需要删除的工程id')
     update_by: Optional[str] = Field(default=None, description='更新者')
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
 
 
-class BatchProjectIdsModel(BaseModel):
+class BatchProjectIdsModel(CamelModelBase):
     """
     批量工程ID模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     project_ids: List[int] = Field(default_factory=list, description='工程ID列表')
 
 
 # ========== 工程导出/导入相关模型 ==========
 
-class ExportDeviceInterfaceModel(BaseModel):
+class ExportDeviceInterfaceModel(CamelModelBase):
     """
     导出设备接口模型
     """
@@ -80,7 +102,7 @@ class ExportDeviceInterfaceModel(BaseModel):
     message_config: Optional[Dict[str, Any]] = Field(default=None, description='报文配置')
 
 
-class ExportDeviceModel(BaseModel):
+class ExportDeviceModel(CamelModelBase):
     """
     导出设备模型
     """
@@ -98,7 +120,7 @@ class ExportDeviceModel(BaseModel):
     interfaces: List[ExportDeviceInterfaceModel] = Field(default_factory=list, description='接口列表')
 
 
-class ExportVersionModel(BaseModel):
+class ExportVersionModel(CamelModelBase):
     """
     导出版本模型
     """
@@ -112,7 +134,7 @@ class ExportVersionModel(BaseModel):
     topology: Optional[Dict[str, Any]] = Field(default=None, description='拓扑数据')
 
 
-class ExportProjectModel(BaseModel):
+class ExportProjectModel(CamelModelBase):
     """
     导出工程基本信息模型
     """
@@ -125,7 +147,7 @@ class ExportProjectModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class ProjectExportDataModel(BaseModel):
+class ProjectExportDataModel(CamelModelBase):
     """
     完整的工程导出数据模型
     """
@@ -138,7 +160,7 @@ class ProjectExportDataModel(BaseModel):
     devices: List[ExportDeviceModel] = Field(default_factory=list, description='设备列表')
 
 
-class ProjectImportDataModel(BaseModel):
+class ProjectImportDataModel(CamelModelBase):
     """
     工程导入数据模型（与导出模型结构一致）
     """

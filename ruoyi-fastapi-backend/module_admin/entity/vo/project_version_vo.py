@@ -1,11 +1,12 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class ProjectVersionModel(BaseModel):
+class ProjectVersionModel(CamelModelBase):
     """
     项目版本管理表对应pydantic模型
     """
@@ -51,7 +52,7 @@ class ProjectVersionPageQueryModel(ProjectVersionQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteProjectVersionModel(BaseModel):
+class DeleteProjectVersionModel(CamelModelBase):
     """
     删除项目版本模型
     """
@@ -63,7 +64,7 @@ class DeleteProjectVersionModel(BaseModel):
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
 
 
-class CloneProjectVersionModel(BaseModel):
+class CloneProjectVersionModel(CamelModelBase):
     """
     克隆项目版本模型
     """
@@ -78,7 +79,7 @@ class CloneProjectVersionModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class LockProjectVersionModel(BaseModel):
+class LockProjectVersionModel(CamelModelBase):
     """
     固化/解除固化项目版本模型
     """
@@ -93,7 +94,7 @@ class LockProjectVersionModel(BaseModel):
     update_time: Optional[datetime] = Field(default=None, description='更新时间')
 
 
-class ExportProjectVersionModel(BaseModel):
+class ExportProjectVersionModel(CamelModelBase):
     """
     导出项目版本请求模型
     """

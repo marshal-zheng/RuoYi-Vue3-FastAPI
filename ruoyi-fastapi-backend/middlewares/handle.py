@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from middlewares.cors_middleware import add_cors_middleware
 from middlewares.gzip_middleware import add_gzip_middleware
+from middlewares.audit_context_middleware import AuditContextMiddleware
 from middlewares.trace_middleware import add_trace_middleware
 
 
@@ -12,5 +13,7 @@ def handle_middleware(app: FastAPI):
     add_cors_middleware(app)
     # 加载gzip压缩中间件
     add_gzip_middleware(app)
+    # 加载审计上下文中间件（需在trace中间件之前）
+    app.add_middleware(AuditContextMiddleware)
     # 加载trace中间件
     add_trace_middleware(app)

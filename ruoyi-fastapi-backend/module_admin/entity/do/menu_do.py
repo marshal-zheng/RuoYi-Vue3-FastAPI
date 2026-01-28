@@ -1,9 +1,10 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String
-from config.database import Base
+from module_admin.entity.do.base import LegacyBaseModel
+from module_admin.entity.do.enums import VisibleEnum, StatusEnum
 
 
-class SysMenu(Base):
+class SysMenu(LegacyBaseModel):
     """
     菜单权限表
     """
@@ -21,12 +22,8 @@ class SysMenu(Base):
     is_frame = Column(Integer, default=1, comment='是否为外链（0是 1否）')
     is_cache = Column(Integer, default=0, comment='是否缓存（0缓存 1不缓存）')
     menu_type = Column(String(1), nullable=True, default='', comment='菜单类型（M目录 C菜单 F按钮）')
-    visible = Column(String(1), nullable=True, default='0', comment='菜单状态（0显示 1隐藏）')
-    status = Column(String(1), nullable=True, default='0', comment='菜单状态（0正常 1停用）')
+    visible = Column(String(1), nullable=True, default=VisibleEnum.SHOW.value, comment='菜单状态（0显示 1隐藏）')
+    status = Column(String(1), nullable=True, default=StatusEnum.NORMAL.value, comment='菜单状态（0正常 1停用）')
     perms = Column(String(100), nullable=True, default=None, comment='权限标识')
     icon = Column(String(100), nullable=True, default='#', comment='菜单图标')
-    create_by = Column(String(64), nullable=True, default='', comment='创建者')
-    create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
-    update_by = Column(String(64), nullable=True, default='', comment='更新者')
-    update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
     remark = Column(String(500), nullable=True, default='', comment='备注')

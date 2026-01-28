@@ -1,10 +1,11 @@
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import Field, ConfigDict
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Optional, List, Dict, Any
 from datetime import datetime
 
 
-class DeviceQueryModel(BaseModel):
+class DeviceQueryModel(CamelModelBase):
     """
     设备查询模型
     """
@@ -13,6 +14,8 @@ class DeviceQueryModel(BaseModel):
         populate_by_name=True
     )
     device_name: Optional[str] = Field(None, description="设备名称")
+    device_type: Optional[str] = Field(None, description="设备类型")
+    device_category_id: Optional[int] = Field(None, description="设备分类ID")
     bus_type: Optional[str] = Field(None, description="总线类型")
     begin_time: Optional[str] = Field(None, description="开始时间")
     end_time: Optional[str] = Field(None, description="结束时间")
@@ -20,7 +23,7 @@ class DeviceQueryModel(BaseModel):
     page_size: int = Field(10, description="每页数量")
 
 
-class DeviceInterfaceModel(BaseModel):
+class DeviceInterfaceModel(CamelModelBase):
     """
     设备接口模型
     """
@@ -42,7 +45,7 @@ class DeviceInterfaceModel(BaseModel):
     update_time: Optional[datetime] = Field(None, description="更新时间")
 
 
-class DeviceModel(BaseModel):
+class DeviceModel(CamelModelBase):
     """
     设备模型
     """
@@ -69,7 +72,7 @@ class DeviceModel(BaseModel):
     interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
 
 
-class DeviceListModel(BaseModel):
+class DeviceListModel(CamelModelBase):
     """
     设备列表模型（不包含接口详情）
     """
@@ -88,7 +91,7 @@ class DeviceListModel(BaseModel):
     interfaces: List[DeviceInterfaceModel] = Field(default_factory=list, description="设备接口列表")
 
 
-class CloneDeviceModel(BaseModel):
+class CloneDeviceModel(CamelModelBase):
     """
     克隆设备模型
     """
@@ -103,7 +106,7 @@ class CloneDeviceModel(BaseModel):
     create_time: Optional[datetime] = Field(None, description="创建时间")
 
 
-class ExportDeviceInterfaceModel(BaseModel):
+class ExportDeviceInterfaceModel(CamelModelBase):
     """
     导出设备接口模型
     """
@@ -121,7 +124,7 @@ class ExportDeviceInterfaceModel(BaseModel):
     message_config: Optional[Dict[str, Any]] = Field(None, description="报文配置")
 
 
-class ExportDeviceModel(BaseModel):
+class ExportDeviceModel(CamelModelBase):
     """
     导出设备模型
     """
@@ -143,7 +146,7 @@ class ExportDeviceModel(BaseModel):
     interfaces: List[ExportDeviceInterfaceModel] = Field(default_factory=list, description="接口列表")
 
 
-class DeviceExportDataModel(BaseModel):
+class DeviceExportDataModel(CamelModelBase):
     """
     设备导出数据模型
     """
@@ -158,7 +161,7 @@ class DeviceExportDataModel(BaseModel):
     device: ExportDeviceModel
 
 
-class BatchDeviceIdsModel(BaseModel):
+class BatchDeviceIdsModel(CamelModelBase):
     """
     批量设备ID模型
     """

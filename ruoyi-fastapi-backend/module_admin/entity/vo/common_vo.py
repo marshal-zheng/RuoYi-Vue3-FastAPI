@@ -1,9 +1,9 @@
-from pydantic import BaseModel, ConfigDict, Field
-from pydantic.alias_generators import to_camel
+from pydantic import Field
+from module_admin.entity.vo.base import CamelModelBase
 from typing import Any, Optional
 
 
-class CrudResponseModel(BaseModel):
+class CrudResponseModel(CamelModelBase):
     """
     操作响应模型
     """
@@ -13,12 +13,10 @@ class CrudResponseModel(BaseModel):
     result: Optional[Any] = Field(default=None, description='响应结果')
 
 
-class UploadResponseModel(BaseModel):
+class UploadResponseModel(CamelModelBase):
     """
     上传响应模型
     """
-
-    model_config = ConfigDict(alias_generator=to_camel)
 
     file_name: Optional[str] = Field(default=None, description='新文件映射路径')
     new_file_name: Optional[str] = Field(default=None, description='新文件名称')

@@ -108,8 +108,8 @@ export function useTopology(version, getGraphInstance, clearGraphContent, isSimu
 
       getProjectTopology(projectId, versionId)
         .then((res) => {
-          const topo = res?.data;
-          const topoData = topo?.topologyData;
+          // http 客户端已解包 payload.data，res 直接是拓扑数据
+          const topoData = res?.topologyData;
           const graphJson = topoData?.graph;
           if (graphJson) {
             graph.fromJSON(graphJson);

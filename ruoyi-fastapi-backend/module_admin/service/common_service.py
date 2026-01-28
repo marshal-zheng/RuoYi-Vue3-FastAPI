@@ -1,8 +1,12 @@
 import os
 from datetime import datetime
 from fastapi import BackgroundTasks, Request, UploadFile
+from sqlalchemy import text
+from sqlalchemy.ext.asyncio import AsyncSession
+from typing import List, Dict
 from config.env import UploadConfig
-from exceptions.exception import ServiceException
+from exceptions.exception import ValidationException, SystemException
+from config.error_codes import ErrorCode
 from module_admin.entity.vo.common_vo import CrudResponseModel, UploadResponseModel
 from utils.upload_util import UploadUtil
 
@@ -22,7 +26,11 @@ class CommonService:
         :return: 上传结果
         """
         if not UploadUtil.check_file_extension(file):
-            raise ServiceException(message='文件类型不合法')
+            raise ValidationException(
+                user_message='文件类型不合法',
+                developer_message=f'Invalid file extension: {file.filename}',
+                field='file'
+            )
         else:
             relative_path = f'upload/{datetime.now().strftime("%Y")}/{datetime.now().strftime("%m")}/{datetime.now().strftime("%d")}'
             dir_path = os.path.join(UploadConfig.UPLOAD_PATH, relative_path)
@@ -60,9 +68,17 @@ class CommonService:
         """
         filepath = os.path.join(UploadConfig.DOWNLOAD_PATH, file_name)
         if '..' in file_name:
-            raise ServiceException(message='文件名称不合法')
+            raise ValidationException(
+                user_message='文件名称不合法',
+                developer_message=f'Invalid file name contains ..: {file_name}',
+                field='file_name'
+            )
         elif not UploadUtil.check_file_exists(filepath):
-            raise ServiceException(message='文件不存在')
+            raise ValidationException(
+                user_message='文件不存在',
+                developer_message=f'File not found: {filepath}',
+                field='file_name'
+            )
         else:
             if delete:
                 background_tasks.add_task(UploadUtil.delete_file, filepath)
@@ -84,8 +100,53 @@ class CommonService:
             or not UploadUtil.check_file_machine(filename)
             or not UploadUtil.check_file_random_code(filename)
         ):
-            raise ServiceException(message='文件名称不合法')
+            raise ValidationException(
+                user_message='文件名称不合法',
+                developer_message=f'Invalid file name format: {filename}',
+                field='resource'
+            )
         elif not UploadUtil.check_file_exists(filepath):
-            raise ServiceException(message='文件不存在')
+            raise ValidationException(
+                user_message='文件不存在',
+                developer_message=f'File not found: {filepath}',
+                field='resource'
+            )
         else:
             return CrudResponseModel(is_success=True, result=UploadUtil.generate_file(filepath), message='下载成功')
+
+    @classmethod
+    async def get_table_names_services(cls, query_db: AsyncSession) -> List[Dict[str, str]]:
+        """
+        获取数据库中所有表名及其注释
+
+        :param query_db: 数据库会话
+        :return: 表名列表
+        """
+        # 查询所有表名和注释
+        query = text("""
+            SELECT 
+                TABLE_NAME as table_name,
+                TABLE_COMMENT as table_comment
+            FROM 
+                information_schema.TABLES
+            WHERE 
+                TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME LIKE 'sys_%'
+            ORDER BY 
+                TABLE_NAME
+        """)
+        
+        result = await query_db.execute(query)
+        tables = result.fetchall()
+        
+        # 转换为字典列表
+        table_list = []
+        for table in tables:
+            table_name = table[0]
+            table_comment = table[1] or table_name
+            table_list.append({
+                'label': f'{table_comment} ({table_name})' if table_comment else table_name,
+                'value': table_name
+            })
+        
+        return table_list

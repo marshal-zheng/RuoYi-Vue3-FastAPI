@@ -3,6 +3,7 @@
     <ZxGridList
       ref="gridListRef"
       :load-data="loadConfigData"
+      :query-transform="queryTransform"
       :show-pagination="true"
       :load-on-mounted="true"
       class="zx-grid-list--page"
@@ -170,6 +171,7 @@
 </template>
 
 <script setup name="Config">
+import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listConfig,
   getConfig,
@@ -200,23 +202,15 @@ const data = reactive({
 
 const { form, rules } = toRefs(data);
 
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** GridList 数据加载函数 - 不处理参数转换 */
 async function loadConfigData(params) {
-  const { dateRange, ...restQuery } = params.query || {};
-  const queryData = {
-    pageNum: params.page,
-    pageSize: params.size,
-    configName: restQuery?.configName,
-    configKey: restQuery?.configKey,
-    configType: restQuery?.configType,
-  };
-  // 处理日期范围
-  if (Array.isArray(dateRange) && dateRange.length === 2) {
-    queryData.beginTime = dateRange[0];
-    queryData.endTime = dateRange[1];
-  }
   try {
-    const response = await listConfig(queryData);
-    return { data: response.rows || [], total: response.total || 0 };
+    return await listConfig(params);
   } catch (e) {
     return { data: [], total: 0 };
   }
@@ -269,7 +263,7 @@ function handleUpdate(row) {
   reset();
   const configId = row.configId || ids.value;
   getConfig(configId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改参数';
   });
@@ -311,16 +305,7 @@ function handleDelete(row) {
 
 /** 导出按钮操作 */
 function handleExport(query) {
-  const params = {
-    configName: query?.configName,
-    configKey: query?.configKey,
-    configType: query?.configType,
-  };
-  if (Array.isArray(query?.dateRange) && query.dateRange.length === 2) {
-    params.beginTime = query.dateRange[0];
-    params.endTime = query.dateRange[1];
-  }
-  proxy.download('system/config/export', params, `config_${new Date().getTime()}.xlsx`);
+  proxy.download('system/config/export', query, `config_${new Date().getTime()}.xlsx`);
 }
 
 /** 刷新缓存按钮操作 */

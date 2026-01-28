@@ -1,17 +1,18 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
 from typing import Literal, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class ConfigModel(BaseModel):
+class ConfigModel(CamelModelBase):
     """
     参数配置表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     config_id: Optional[int] = Field(default=None, description='参数主键')
     config_name: Optional[str] = Field(default=None, description='参数名称')
@@ -40,9 +41,18 @@ class ConfigModel(BaseModel):
         return self.config_value
 
     def validate_fields(self):
-        self.get_config_key()
-        self.get_config_name()
-        self.get_config_value()
+        is_edit = self.config_id is not None
+        if not is_edit:
+            self.get_config_key()
+            self.get_config_name()
+            self.get_config_value()
+            return
+        if self.config_key is not None:
+            self.get_config_key()
+        if self.config_name is not None:
+            self.get_config_name()
+        if self.config_value is not None:
+            self.get_config_value()
 
 
 class ConfigQueryModel(ConfigModel):
@@ -64,11 +74,11 @@ class ConfigPageQueryModel(ConfigQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class DeleteConfigModel(BaseModel):
+class DeleteConfigModel(CamelModelBase):
     """
     删除参数配置模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     config_ids: str = Field(description='需要删除的参数主键')

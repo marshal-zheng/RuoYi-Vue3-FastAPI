@@ -226,8 +226,8 @@ const openDrawer = async (protocolData) => {
     drawerLoading.value = true;
     try {
       // 调用详情接口获取完整数据（包含 protocolConfig）
-      const res = await getProtocol(protocolData.protocolId);
-      const detail = res.data || res || {};
+      // http 客户端已解包 payload.data，res 直接是协议数据
+      const detail = await getProtocol(protocolData.protocolId) || {};
       drawer.state.data = {
         protocolId: detail.protocolId,
         protocolName: detail.protocolName || '',

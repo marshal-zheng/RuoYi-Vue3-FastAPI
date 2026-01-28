@@ -245,6 +245,8 @@ class MIL1553BModel(BaseProtocolModel):
         return False
 
 
+# Backward-compatible alias
+MIL1553BProtocol = MIL1553BModel
 
 
 

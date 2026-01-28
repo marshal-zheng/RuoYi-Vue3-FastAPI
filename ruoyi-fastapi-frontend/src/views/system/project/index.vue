@@ -160,8 +160,9 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listProject(proxy.addDateRange(queryParams.value, dateRange.value)).then((response) => {
-    projectList.value = response.data.rows;
-    total.value = response.data.total;
+    const data = response?.data ?? response;
+    projectList.value = data.rows || data;
+    total.value = data.total || 0;
     loading.value = false;
   });
 }
@@ -212,7 +213,7 @@ function handleAdd() {
 function handleDetail(row) {
   const projectId = row.projectId;
   getProject(projectId).then((response) => {
-    detailData.value = response.data;
+    detailData.value = response?.data ?? response;
     detailOpen.value = true;
   });
 }
@@ -222,7 +223,7 @@ function handleUpdate(row) {
   reset();
   const projectId = row.projectId;
   getProject(projectId).then((response) => {
-    form.value = response.data;
+    form.value = response?.data ?? response;
     open.value = true;
     title.value = '修改工程';
   });

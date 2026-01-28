@@ -1,10 +1,11 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Optional, List, Any
 
 
-class SimulationSessionModel(BaseModel):
+class SimulationSessionModel(CamelModelBase):
     """
     仿真会话模型
     """
@@ -20,11 +21,11 @@ class SimulationSessionModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class CreateSimulationSessionModel(BaseModel):
+class CreateSimulationSessionModel(CamelModelBase):
     """
     创建仿真会话请求模型
     """
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     project_id: int = Field(description='项目ID')
     version_id: int = Field(description='版本ID')
@@ -34,7 +35,7 @@ class CreateSimulationSessionModel(BaseModel):
     injection_params: Optional[dict] = Field(default=None, description='策略参数')
 
 
-class SimulationMessageModel(BaseModel):
+class SimulationMessageModel(CamelModelBase):
     """
     仿真报文模型
     """
@@ -53,7 +54,7 @@ class SimulationMessageModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class SimulationBandwidthModel(BaseModel):
+class SimulationBandwidthModel(CamelModelBase):
     """
     仿真带宽数据模型
     """
@@ -69,7 +70,7 @@ class SimulationBandwidthModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class SimulationAlarmModel(BaseModel):
+class SimulationAlarmModel(CamelModelBase):
     """
     仿真告警模型
     """
@@ -85,22 +86,22 @@ class SimulationAlarmModel(BaseModel):
     create_time: Optional[datetime] = Field(default=None, description='创建时间')
 
 
-class SimulationQueryModel(BaseModel):
+class SimulationQueryModel(CamelModelBase):
     """
     仿真数据查询模型
     """
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     session_id: str = Field(description='会话ID')
     start_time: Optional[float] = Field(default=None, description='开始时间戳')
     end_time: Optional[float] = Field(default=None, description='结束时间戳')
 
 
-class SimulationExportModel(BaseModel):
+class SimulationExportModel(CamelModelBase):
     """
     仿真数据导出模型
     """
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     session_id: str = Field(description='会话ID')
     export_format: str = Field(default='json', description='导出格式（json/csv）')

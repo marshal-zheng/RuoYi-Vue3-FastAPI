@@ -144,16 +144,18 @@ function handleExceed() {
 
 // 上传成功回调
 function handleUploadSuccess(res, file) {
-  if (res.code === 200) {
-    uploadList.value.push({ name: res.fileName, url: res.fileName });
-    uploadedSuccessfully();
-  } else {
-    number.value--;
-    proxy.$modal.closeLoading();
-    proxy.$modal.msgError(res.msg);
-    proxy.$refs.imageUpload.handleRemove(file);
-    uploadedSuccessfully();
-  }
+  // HTTP 2xx 已由拦截器判定，直接处理成功响应
+  uploadList.value.push({ name: res.fileName, url: res.fileName });
+  uploadedSuccessfully();
+}
+
+// 上传失败回调
+function handleUploadError(error, file) {
+  number.value--;
+  proxy.$modal.closeLoading();
+  // 错误已由拦截器统一处理
+  proxy.$refs.imageUpload.handleRemove(file);
+  uploadedSuccessfully();
 }
 
 // 删除图片
@@ -175,12 +177,6 @@ function uploadedSuccessfully() {
     emit('update:modelValue', listToString(fileList.value));
     proxy.$modal.closeLoading();
   }
-}
-
-// 上传失败
-function handleUploadError() {
-  proxy.$modal.msgError('上传图片失败');
-  proxy.$modal.closeLoading();
 }
 
 // 预览

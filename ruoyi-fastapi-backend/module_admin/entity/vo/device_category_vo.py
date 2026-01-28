@@ -1,11 +1,12 @@
-from pydantic import BaseModel, Field
+from pydantic import Field
+from module_admin.entity.vo.base import CamelModelBase
 from typing import Optional
 from datetime import datetime
 from module_admin.annotation.pydantic_annotation import as_query
 
 
 @as_query
-class DeviceCategoryQueryModel(BaseModel):
+class DeviceCategoryQueryModel(CamelModelBase):
     """
     设备分类查询模型
     """
@@ -17,7 +18,7 @@ class DeviceCategoryQueryModel(BaseModel):
     page_size: int = Field(10, description="每页数量")
 
 
-class DeviceCategoryModel(BaseModel):
+class DeviceCategoryModel(CamelModelBase):
     """
     设备分类模型
     """
@@ -31,16 +32,10 @@ class DeviceCategoryModel(BaseModel):
     update_time: Optional[datetime] = Field(None, description="更新时间")
     remark: Optional[str] = Field(None, max_length=500, description="备注")
 
-    class Config:
-        from_attributes = True
 
-
-class DeviceCategoryOptionModel(BaseModel):
+class DeviceCategoryOptionModel(CamelModelBase):
     """
     设备分类选项模型（用于下拉选择）
     """
     device_category_id: int = Field(..., description="设备分类ID")
     name: str = Field(..., description="分类名称")
-
-    class Config:
-        from_attributes = True

@@ -203,6 +203,9 @@ class RS485Model(BaseProtocolModel):
         return base_status
 
 
+# Backward-compatible alias
+RS485Protocol = RS485Model
+
 
 
 

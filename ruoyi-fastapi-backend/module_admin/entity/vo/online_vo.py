@@ -1,16 +1,17 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from typing import Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class OnlineModel(BaseModel):
+class OnlineModel(CamelModelBase):
     """
     在线用户对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     token_id: Optional[str] = Field(default=None, description='会话编号')
     user_name: Optional[str] = Field(default=None, description='登录名称')
@@ -32,11 +33,11 @@ class OnlineQueryModel(OnlineModel):
     end_time: Optional[str] = Field(default=None, description='结束时间')
 
 
-class DeleteOnlineModel(BaseModel):
+class DeleteOnlineModel(CamelModelBase):
     """
     强退在线用户模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     token_ids: str = Field(description='需要强退的会话编号')

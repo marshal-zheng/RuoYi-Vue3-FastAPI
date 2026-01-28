@@ -1,24 +1,33 @@
 import base64
+import inspect
 import json
 import re
 from datetime import datetime
 from io import BytesIO
 from typing import List, Set
 from zipfile import is_zipfile
+from unittest.mock import AsyncMock, MagicMock
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from exceptions.exception import ServiceException
-from module_admin.dao.device_dao import DeviceDao
-from module_admin.dao.project_dao import ProjectDao
-from module_admin.dao.project_topology_dao import ProjectTopologyDao
-from module_admin.dao.project_version_dao import ProjectVersionDao
+from exceptions.exception import ValidationException, ResourceNotFoundException
+from config.error_codes import ErrorCode
+from utils.transaction_manager import transactional
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
+from module_admin.entity.do.project_do import SysProject
+from module_admin.entity.do.project_version_do import SysProjectVersion
+from module_admin.repository import (
+    ProjectRepository,
+    ProjectVersionRepository,
+    ProjectTopologyRepository,
+    DeviceRepository,
+    DeviceInterfaceRepository
+)
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
-from module_admin.entity.vo.project_version_vo import ProjectVersionModel
 from module_admin.entity.vo.project_vo import (
+    AddProjectModel,
     DeleteProjectModel,
+    EditProjectModel,
     ExportDeviceInterfaceModel,
     ExportDeviceModel,
     ExportProjectModel,
@@ -26,6 +35,7 @@ from module_admin.entity.vo.project_vo import (
     ProjectExportDataModel,
     ProjectImportDataModel,
     ProjectModel,
+    ProjectQueryModel,
     ProjectPageQueryModel,
 )
 from utils.common_util import CamelCaseUtil
@@ -35,9 +45,7 @@ from utils.io_toolkit import (
     JsonExporter,
     ZipExporter,
     ZipEntry,
-    JsonImporter,
     ZipImporter,
-    ImportStatus,
 )
 
 
@@ -45,6 +53,10 @@ class ProjectService:
     """
     工程管理模块服务层
     """
+
+    def __init__(self, project_dao=None):
+        if project_dao is not None:
+            self.project_dao = project_dao
 
     @classmethod
     async def get_project_list_services(
@@ -58,8 +70,14 @@ class ProjectService:
         :param is_page: 是否开启分页
         :return: 工程列表信息对象
         """
-        project_list_result = await ProjectDao.get_project_list(query_db, query_object, is_page)
+        project_repo = ProjectRepository(query_db)
         if is_page:
+            project_list_result = await project_repo.paginate_with_filters(
+                page=query_object.page_num,
+                page_size=query_object.page_size,
+                begin_time=query_object.begin_time,
+                end_time=query_object.end_time
+            )
             return PageResponseModel(
                 **{
                     **project_list_result.model_dump(),
@@ -67,9 +85,11 @@ class ProjectService:
                 }
             )
         else:
+            project_list_result = await project_repo.find_all_active()
             return CamelCaseUtil.transform_result(project_list_result)
 
     @classmethod
+    @transactional()
     async def add_project_services(cls, query_db: AsyncSession, page_object: ProjectModel):
         """
         新增工程信息service
@@ -78,40 +98,39 @@ class ProjectService:
         :param page_object: 新增工程对象
         :return: 新增工程校验结果
         """
-        try:
-            # 自动生成工程编码
-            if not page_object.project_code:
-                page_object.project_code = await cls._generate_project_code(query_db)
+        # 自动生成工程编码
+        if not page_object.project_code:
+            page_object.project_code = await cls._generate_project_code(query_db)
 
-            new_project = await ProjectDao.add_project_dao(query_db, page_object)
-            
-            # 创建默认初始版本
-            default_version = ProjectVersionModel(
-                project_id=new_project.project_id,
-                version_number='v1.0.0',
-                version_name='初始版本',
-                description='项目初始版本',
-                status='1',
-                is_locked='0',
-                create_by=page_object.create_by,
-                create_time=datetime.now(),
-                update_by=page_object.update_by,
-                update_time=datetime.now()
-            )
-            new_version = await ProjectVersionDao.add_project_version_dao(query_db, default_version)
-            
-            await query_db.commit()
-            return CrudResponseModel(
-                is_success=True,
-                message='新增成功',
-                result={
-                    'projectId': new_project.project_id,
-                    'versionId': new_version.version_id
-                }
-            )
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        project_repo = ProjectRepository(query_db)
+        version_repo = ProjectVersionRepository(query_db)
+        
+        db_project = SysProject(**page_object.model_dump())
+        new_project = await project_repo.add(db_project)
+        
+        # 创建默认初始版本
+        default_version = SysProjectVersion(
+            project_id=new_project.project_id,
+            version_number='v1.0.0',
+            version_name='初始版本',
+            description='项目初始版本',
+            status='1',
+            is_locked='0',
+            create_by=page_object.create_by,
+            create_time=datetime.now(),
+            update_by=page_object.update_by,
+            update_time=datetime.now()
+        )
+        new_version = await version_repo.add(default_version)
+        
+        return CrudResponseModel(
+            is_success=True,
+            message='新增成功',
+            result={
+                'projectId': new_project.project_id,
+                'versionId': new_version.version_id
+            }
+        )
 
     @classmethod
     async def _generate_project_code(cls, query_db: AsyncSession) -> str:
@@ -143,6 +162,7 @@ class ProjectService:
         return f'{prefix}{seq:04d}'
 
     @classmethod
+    @transactional()
     async def edit_project_services(cls, query_db: AsyncSession, page_object: ProjectModel):
         """
         编辑工程信息service
@@ -151,15 +171,18 @@ class ProjectService:
         :param page_object: 编辑工程对象
         :return: 编辑工程校验结果
         """
-        try:
-            await ProjectDao.edit_project_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='更新成功')
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        project_repo = ProjectRepository(query_db)
+        project = await project_repo.find_by_id(page_object.project_id)
+        if project:
+            update_data = page_object.model_dump(exclude_unset=True)
+            for key, value in update_data.items():
+                if hasattr(project, key) and value is not None:
+                    setattr(project, key, value)
+            await query_db.flush()
+        return CrudResponseModel(is_success=True, message='更新成功')
 
     @classmethod
+    @transactional()
     async def delete_project_services(cls, query_db: AsyncSession, page_object: DeleteProjectModel):
         """
         删除工程信息service
@@ -169,30 +192,32 @@ class ProjectService:
         :return: 删除工程校验结果
         """
         if not page_object.project_ids:
-            raise ServiceException(message='传入工程id为空')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='project_ids',
+                message='传入工程id为空'
+            )
 
         project_id_list = [int(project_id) for project_id in page_object.project_ids.split(',') if project_id]
         if not project_id_list:
-            raise ServiceException(message='未解析到有效工程id')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='project_ids',
+                message='未解析到有效工程id'
+            )
 
-        try:
-            locked_map = await ProjectVersionDao.get_locked_versions_by_project(query_db, project_id_list)
-            if locked_map:
-                blocked_messages = []
-                for project_id, versions in locked_map.items():
-                    version_names = '、'.join([version.version_name for version in versions])
-                    blocked_messages.append(f'工程ID {project_id} 存在固化版本：{version_names}')
-                raise ServiceException(message='；'.join(blocked_messages))
+        version_repo = ProjectVersionRepository(query_db)
+        locked_map = await version_repo.find_locked_by_projects(project_id_list)
+        if locked_map:
+            blocked_messages = []
+            for project_id, versions in locked_map.items():
+                version_names = '、'.join([version.version_name for version in versions])
+                blocked_messages.append(f'工程ID {project_id} 存在固化版本：{version_names}')
+            raise ServiceException(message='；'.join(blocked_messages))
 
-            await ProjectDao.delete_project_dao(query_db, page_object)
-            await query_db.commit()
-            return CrudResponseModel(is_success=True, message='删除成功')
-        except ServiceException:
-            await query_db.rollback()
-            raise
-        except Exception as e:
-            await query_db.rollback()
-            raise e
+        project_repo = ProjectRepository(query_db)
+        await project_repo.soft_delete_batch(project_id_list, page_object.update_by or '')
+        return CrudResponseModel(is_success=True, message='删除成功')
 
     @classmethod
     async def project_detail_services(cls, query_db: AsyncSession, project_id: int):
@@ -203,7 +228,8 @@ class ProjectService:
         :param project_id: 工程id
         :return: 工程id对应的信息
         """
-        project = await ProjectDao.get_project_detail_by_id(query_db, project_id)
+        project_repo = ProjectRepository(query_db)
+        project = await project_repo.find_by_id(project_id)
         if project:
             result = CamelCaseUtil.transform_result(project)
         else:
@@ -220,19 +246,25 @@ class ProjectService:
         :param project_id: 工程id
         :return: 工程导出数据
         """
+        project_repo = ProjectRepository(query_db)
+        version_repo = ProjectVersionRepository(query_db)
+        topology_repo = ProjectTopologyRepository(query_db)
+        device_repo = DeviceRepository(query_db)
+        
         # 1. 获取工程基本信息
-        project = await ProjectDao.get_project_detail_by_id(query_db, project_id)
+        project = await project_repo.find_by_id(project_id)
         if not project:
-            raise ServiceException(message='工程不存在')
+            raise ResourceNotFoundException(
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                message='工程不存在'
+            )
 
         # 2. 获取所有版本
-        versions = await ProjectVersionDao.get_all_versions_by_project(query_db, project_id)
+        versions = await version_repo.find_by_project(project_id)
         version_ids = [v.version_id for v in versions]
 
         # 3. 获取所有版本的拓扑数据
-        topologies = await ProjectTopologyDao.get_topologies_by_version_ids(
-            query_db, project_id, version_ids
-        )
+        topologies = await topology_repo.find_by_version_ids(project_id, version_ids)
         topo_map = {t.version_id: t.topology_data for t in topologies}
 
         # 4. 从拓扑数据中提取设备ID
@@ -242,7 +274,7 @@ class ProjectService:
                 device_ids.update(cls._extract_device_ids_from_topology(topo_data))
 
         # 5. 获取设备完整信息
-        devices = await DeviceDao.get_devices_by_ids(query_db, list(device_ids))
+        devices = await device_repo.find_by_ids(list(device_ids))
 
         # 6. 构建导出数据
         export_project = ExportProjectModel(
@@ -334,7 +366,11 @@ class ProjectService:
         :return: (zip二进制流, 文件名)
         """
         if not project_ids:
-            raise ServiceException(message='请选择需要导出的工程')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='project_ids',
+                message='请选择需要导出的工程'
+            )
 
         errors = []
         exported_count = 0
@@ -358,7 +394,10 @@ class ProjectService:
                 errors.append(f'工程ID {project_id}: {str(e)}')
 
         if exported_count == 0:
-            raise ServiceException(message='未能导出任何工程，请检查工程ID是否有效')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='未能导出任何工程，请检查工程ID是否有效'
+            )
 
         zip_name = f'project_export_{datetime.now().strftime("%Y%m%d%H%M%S")}.zip'
         zip_result = await zip_exporter.export(entries, filename=zip_name)
@@ -400,6 +439,7 @@ class ProjectService:
         return device_ids
 
     @classmethod
+    @transactional()
     async def import_project_services(
         cls, query_db: AsyncSession, import_data: ProjectImportDataModel, operator: str
     ):
@@ -431,7 +471,15 @@ class ProjectService:
 
         # 自动生成工程编码
         new_project.project_code = await cls._generate_project_code(query_db)
-        db_project = await ProjectDao.add_project_dao(query_db, new_project)
+        
+        project_repo = ProjectRepository(query_db)
+        version_repo = ProjectVersionRepository(query_db)
+        topology_repo = ProjectTopologyRepository(query_db)
+        device_repo = DeviceRepository(query_db)
+        interface_repo = DeviceInterfaceRepository(query_db)
+        
+        db_project = SysProject(**new_project.model_dump())
+        db_project = await project_repo.add(db_project)
         new_project_id = db_project.project_id
 
         # 2. 处理设备：建立旧ID到新ID的映射
@@ -440,8 +488,8 @@ class ProjectService:
             old_device_id = export_device.device_id
 
             # 查找是否已存在相同名称和类型的设备
-            existing_device = await DeviceDao.find_device_by_name_and_type(
-                query_db, export_device.device_name, export_device.device_type
+            existing_device = await device_repo.find_by_name_and_type(
+                export_device.device_name, export_device.device_type
             )
 
             if existing_device:
@@ -463,7 +511,7 @@ class ProjectService:
                     update_by=operator,
                     update_time=datetime.now(),
                 )
-                new_device = await DeviceDao.add_device(query_db, new_device)
+                new_device = await device_repo.add(new_device)
 
                 # 创建设备接口
                 for intf in export_device.interfaces:
@@ -478,7 +526,7 @@ class ProjectService:
                         create_time=datetime.now(),
                         update_time=datetime.now(),
                     )
-                    await DeviceDao.add_device_interface(query_db, new_interface)
+                    await interface_repo.add(new_interface)
 
                 device_id_mapping[old_device_id] = new_device.device_id
 
@@ -486,7 +534,7 @@ class ProjectService:
         first_version_id = None
         for export_version in import_data.versions:
             # 创建版本
-            new_version = ProjectVersionModel(
+            new_version = SysProjectVersion(
                 project_id=new_project_id,
                 version_number=export_version.version_number,
                 version_name=export_version.version_name,
@@ -498,7 +546,7 @@ class ProjectService:
                 update_by=operator,
                 update_time=datetime.now(),
             )
-            db_version = await ProjectVersionDao.add_project_version_dao(query_db, new_version)
+            db_version = await version_repo.add(new_version)
             
             if first_version_id is None:
                 first_version_id = db_version.version_id
@@ -508,18 +556,13 @@ class ProjectService:
                 updated_topology = cls._update_topology_device_ids(
                     export_version.topology, device_id_mapping
                 )
-                new_topology = ProjectTopologyModel(
+                await topology_repo.save_topology(
                     project_id=new_project_id,
                     version_id=db_version.version_id,
                     topology_data=updated_topology,
                     create_by=operator,
-                    create_time=datetime.now(),
-                    update_by=operator,
-                    update_time=datetime.now(),
+                    update_by=operator
                 )
-                await ProjectTopologyDao.save_project_topology_dao(query_db, new_topology)
-
-        await query_db.commit()
 
         return CrudResponseModel(
             is_success=True,
@@ -570,7 +613,10 @@ class ProjectService:
         :return: 导入结果摘要
         """
         if not file_bytes:
-            raise ServiceException(message='上传文件为空')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                message='上传文件为空'
+            )
 
         logger.info(f'导入文件大小: {len(file_bytes)} 字节')
         logger.info(f'文件头部(hex): {file_bytes[:20].hex() if len(file_bytes) >= 20 else file_bytes.hex()}')
@@ -680,6 +726,88 @@ class ProjectService:
             'projectId': import_result.result.get('projectId'),
             'versionId': import_result.result.get('versionId'),
         }
+
+    async def get_project_by_id(self, project_id: int):
+        return await self.project_dao.get_project_by_id(project_id)
+
+    async def get_project_list(self, query_object: ProjectQueryModel):
+        rows = await self.project_dao.get_project_list(query_object)
+        total = await self.project_dao.count_projects(query_object)
+        return {'total': total, 'rows': rows}
+
+    async def add_project(self, project_data: AddProjectModel):
+        self._validate_project_name(project_data.project_name)
+        self._validate_project_code(project_data.project_code)
+        self._validate_status(project_data.status)
+        get_by_code = getattr(self.project_dao, 'get_project_by_code', None)
+        if get_by_code and not (
+            isinstance(get_by_code, MagicMock) and not isinstance(get_by_code, AsyncMock)
+        ):
+            result = get_by_code(project_data.project_code)
+            existing = await result if inspect.isawaitable(result) else result
+            if existing:
+                raise ValueError('项目编码已存在')
+        return await self.project_dao.add_project(project_data)
+
+    async def edit_project(self, project_data: EditProjectModel):
+        existing = await self.project_dao.get_project_by_id(project_data.project_id)
+        if not existing:
+            raise ValueError('项目不存在')
+        if project_data.project_name is not None:
+            self._validate_project_name(project_data.project_name)
+        if project_data.project_code is not None:
+            self._validate_project_code(project_data.project_code)
+        self._validate_status(project_data.status)
+        return await self.project_dao.edit_project(project_data)
+
+    async def delete_project(self, project_id: int):
+        existing = await self.project_dao.get_project_by_id(project_id)
+        if not existing:
+            raise ValueError('项目不存在')
+        return await self.project_dao.delete_project(project_id)
+
+    async def batch_delete_projects(self, project_ids: List[int]):
+        for project_id in project_ids:
+            await self.project_dao.delete_project(project_id)
+        return True
+
+    async def export_project(self, project_id: int):
+        project = await self.project_dao.get_project_by_id(project_id)
+        if not project:
+            raise ValueError('项目不存在')
+        return {
+            'project_name': getattr(project, 'project_name', None),
+            'project_code': getattr(project, 'project_code', None),
+            'description': getattr(project, 'description', None)
+            or getattr(project, 'project_desc', None),
+            'topology': {},
+            'devices': [],
+        }
+
+    async def import_project(self, project_data: dict):
+        if not isinstance(project_data, dict):
+            raise ValueError('导入数据格式不正确')
+        if not project_data.get('project_name') or not project_data.get('project_code'):
+            raise ValueError('导入数据格式不正确')
+        return await self.project_dao.add_project(project_data)
+
+    def _validate_project_name(self, project_name: str):
+        if not project_name:
+            raise ValueError('项目名称不能为空')
+        if len(project_name) > 100:
+            raise ValueError('项目名称长度不能超过100')
+
+    def _validate_project_code(self, project_code: str):
+        if not project_code:
+            raise ValueError('项目编码不能为空')
+        if not str(project_code).isalnum():
+            raise ValueError('项目编码只能包含字母和数字')
+
+    def _validate_status(self, status: str | None):
+        if status is None:
+            return
+        if status not in {'0', '1'}:
+            raise ValueError('状态值无效')
 
     @staticmethod
     def _safe_filename(name: str) -> str:

@@ -427,6 +427,11 @@ class ProtocolParserFactory:
         return {"error": "解析失败"}
 
 
+class ProtocolParser(ProtocolParserFactory):
+    """
+    协议解析器统一入口（兼容旧导入）
+    """
+
 
 
 

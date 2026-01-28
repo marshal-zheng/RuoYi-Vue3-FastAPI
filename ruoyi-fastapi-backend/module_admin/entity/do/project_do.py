@@ -1,9 +1,9 @@
-from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, Text
-from config.database import Base
+from module_admin.entity.do.base import LegacyBaseModel
+from module_admin.entity.do.enums import DelFlagEnum
 
 
-class SysProject(Base):
+class SysProject(LegacyBaseModel):
     """
     工程管理表
     """
@@ -14,8 +14,25 @@ class SysProject(Base):
     project_name = Column(String(100), nullable=True, comment='工程名称')
     project_code = Column(String(50), nullable=True, comment='工程编码')
     project_desc = Column(Text, nullable=True, comment='工程描述')
-    create_by = Column(String(64), nullable=True, default='', comment='创建人')
-    create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
-    update_by = Column(String(64), nullable=True, default='', comment='更新者')
-    update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
-    del_flag = Column(String(1), nullable=True, default='0', comment='删除标志（0代表存在 2代表删除）')
+    del_flag = Column(String(1), nullable=True, default=DelFlagEnum.EXIST.value, comment='删除标志（0代表存在 2代表删除）')
+
+    def __init__(self, **kwargs):
+        description = kwargs.pop('description', None)
+        status = kwargs.pop('status', None)
+        super().__init__(**kwargs)
+        if description is not None and self.project_desc is None:
+            self.project_desc = description
+        if status is not None:
+            self.status = status
+
+    @property
+    def description(self):
+        return self.project_desc
+
+    @description.setter
+    def description(self, value):
+        self.project_desc = value
+
+
+# Backward-compatible alias for tests/imports expecting Project
+Project = SysProject

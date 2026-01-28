@@ -120,7 +120,7 @@ async function loadOnlineData(params) {
     userName: params.query?.userName,
   };
   const response = await initData(query);
-  return { data: response.rows || [], total: response.total || 0 };
+  return response;
 }
 function onFilterChange(field, value, { handleRefresh, updateState }) {
   updateState({ [field]: value });

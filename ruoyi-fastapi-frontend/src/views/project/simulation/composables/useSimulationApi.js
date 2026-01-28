@@ -3,7 +3,6 @@
  * 封装所有仿真相关的HTTP请求，统一错误处理和loading状态管理
  */
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import {
   createSimulationSession,
   startSimulationSession,
@@ -31,15 +30,9 @@ export function useSimulationApi() {
         projectId,
         versionId
       })
-      
-      if (response.code === 200) {
-        return response.data
-      } else {
-        throw new Error(response.msg || '创建仿真会话失败')
-      }
+      return response.data
     } catch (err) {
       error.value = err.message
-      ElMessage.error(err.message)
       throw err
     } finally {
       loading.value = false
@@ -55,16 +48,9 @@ export function useSimulationApi() {
     
     try {
       const response = await startSimulationSession(sessionId)
-      
-      if (response.code === 200) {
-        ElMessage.success('仿真已启动')
-        return response.data
-      } else {
-        throw new Error(response.msg || '启动仿真失败')
-      }
+      return response.data
     } catch (err) {
       error.value = err.message
-      ElMessage.error(err.message)
       throw err
     } finally {
       loading.value = false
@@ -80,16 +66,9 @@ export function useSimulationApi() {
     
     try {
       const response = await stopSimulationSession(sessionId)
-      
-      if (response.code === 200) {
-        ElMessage.success('仿真已停止')
-        return response.data
-      } else {
-        throw new Error(response.msg || '停止仿真失败')
-      }
+      return response.data
     } catch (err) {
       error.value = err.message
-      ElMessage.error(err.message)
       throw err
     } finally {
       loading.value = false
@@ -102,12 +81,7 @@ export function useSimulationApi() {
   const fetchStatus = async (sessionId) => {
     try {
       const response = await getSimulationStatus(sessionId)
-      
-      if (response.code === 200) {
-        return response.data
-      } else {
-        throw new Error(response.msg || '获取状态失败')
-      }
+      return response.data
     } catch (err) {
       console.error('获取仿真状态失败:', err)
       return null
@@ -120,12 +94,7 @@ export function useSimulationApi() {
   const fetchMessages = async (sessionId, limit = 100) => {
     try {
       const response = await getSimulationMessages(sessionId, limit)
-      
-      if (response.code === 200) {
-        return response.data || []
-      } else {
-        throw new Error(response.msg || '获取报文数据失败')
-      }
+      return response.data || []
     } catch (err) {
       console.error('获取报文数据失败:', err)
       return []
@@ -138,12 +107,7 @@ export function useSimulationApi() {
   const fetchBandwidth = async (sessionId, portId = null) => {
     try {
       const response = await getSimulationBandwidth(sessionId, portId)
-      
-      if (response.code === 200) {
-        return response.data || []
-      } else {
-        throw new Error(response.msg || '获取带宽数据失败')
-      }
+      return response.data || []
     } catch (err) {
       console.error('获取带宽数据失败:', err)
       return []
@@ -156,12 +120,7 @@ export function useSimulationApi() {
   const fetchAlarms = async (sessionId) => {
     try {
       const response = await getSimulationAlarms(sessionId)
-      
-      if (response.code === 200) {
-        return response.data || []
-      } else {
-        throw new Error(response.msg || '获取告警数据失败')
-      }
+      return response.data || []
     } catch (err) {
       console.error('获取告警数据失败:', err)
       return []
@@ -180,16 +139,9 @@ export function useSimulationApi() {
         exportFormat,
         dataType
       })
-      
-      if (response.code === 200) {
-        ElMessage.success('导出成功')
-        return response.data
-      } else {
-        throw new Error(response.msg || '导出数据失败')
-      }
+      return response.data
     } catch (err) {
       error.value = err.message
-      ElMessage.error(err.message)
       throw err
     } finally {
       loading.value = false

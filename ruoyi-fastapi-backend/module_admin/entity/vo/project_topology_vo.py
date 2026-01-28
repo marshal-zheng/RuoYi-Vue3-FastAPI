@@ -1,11 +1,12 @@
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 
 
-class ProjectTopologyModel(BaseModel):
+class ProjectTopologyModel(CamelModelBase):
     """
     工程拓扑数据 pydantic 模型
     """

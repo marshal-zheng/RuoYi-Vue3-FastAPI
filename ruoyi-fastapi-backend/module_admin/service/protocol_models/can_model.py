@@ -204,6 +204,9 @@ class CANBusModel(BaseProtocolModel):
         return base_status
 
 
+# Backward-compatible alias
+CANProtocol = CANBusModel
+
 
 
 

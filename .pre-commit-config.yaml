@@ -1,0 +1,104 @@
+# Pre-commit configuration for RuoYi-Vue3-FastAPI
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # =============================================================================
+  # General hooks
+  # =============================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^ruoyi-fastapi-frontend/
+      - id: end-of-file-fixer
+        exclude: ^ruoyi-fastapi-frontend/
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  # =============================================================================
+  # Python - Backend
+  # =============================================================================
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
+    hooks:
+      # Linter
+      - id: ruff
+        args: [--fix]
+        files: ^ruoyi-fastapi-backend/
+      # Formatter
+      - id: ruff-format
+        files: ^ruoyi-fastapi-backend/
+
+  # =============================================================================
+  # Alembic migration checks
+  # =============================================================================
+  - repo: local
+    hooks:
+      - id: check-migration-structure
+        name: Check Alembic migration structure
+        entry: bash -c 'cd ruoyi-fastapi-backend && python -c "
+import sys
+from pathlib import Path
+versions_dir = Path(\"alembic/versions\")
+migrations = list(versions_dir.glob(\"*.py\"))
+migrations = [m for m in migrations if m.name != \"__pycache__\"]
+for m in migrations:
+    content = m.read_text()
+    if \"def upgrade()\" not in content:
+        print(f\"ERROR: {m.name} missing upgrade()\")
+        sys.exit(1)
+    if \"def downgrade()\" not in content:
+        print(f\"ERROR: {m.name} missing downgrade()\")
+        sys.exit(1)
+print(f\"Checked {len(migrations)} migration files\")
+"'
+        language: system
+        files: ^ruoyi-fastapi-backend/alembic/versions/.*\.py$
+        pass_filenames: false
+
+      - id: check-seed-data-yaml
+        name: Validate seed data YAML files
+        entry: bash -c 'cd ruoyi-fastapi-backend && python -c "
+import yaml
+from pathlib import Path
+seed_dir = Path(\"scripts/seed_data\")
+if not seed_dir.exists():
+    print(\"Seed data directory not found, skipping\")
+    exit(0)
+for f in seed_dir.rglob(\"*.yaml\"):
+    try:
+        with open(f) as fp:
+            yaml.safe_load(fp)
+        print(f\"OK: {f}\")
+    except Exception as e:
+        print(f\"ERROR: {f}: {e}\")
+        exit(1)
+"'
+        language: system
+        files: ^ruoyi-fastapi-backend/scripts/seed_data/.*\.yaml$
+        pass_filenames: false
+
+  # =============================================================================
+  # TypeScript/JavaScript - Frontend
+  # =============================================================================
+  - repo: local
+    hooks:
+      - id: frontend-lint
+        name: Frontend ESLint
+        entry: bash -c 'cd ruoyi-fastapi-frontend && npm run lint:check'
+        language: system
+        files: ^ruoyi-fastapi-frontend/src/.*\.(ts|tsx|vue)$
+        pass_filenames: false
+
+      - id: frontend-typecheck
+        name: Frontend TypeScript check
+        entry: bash -c 'cd ruoyi-fastapi-frontend && npm run type-check'
+        language: system
+        files: ^ruoyi-fastapi-frontend/src/.*\.(ts|tsx|vue)$
+        pass_filenames: false

@@ -1,6 +1,6 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Query, Request
-from pydantic_validation_decorator import ValidateFields
+from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.env import GenConfig
@@ -63,7 +63,7 @@ async def import_gen_table(
     add_gen_table_result = await GenTableService.import_gen_table_services(query_db, add_gen_table_list, current_user)
     logger.info(add_gen_table_result.message)
 
-    return ResponseUtil.success(msg=add_gen_table_result.message)
+    return ResponseUtil.success(message=add_gen_table_result.message)
 
 
 @genController.put('', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:edit'))])
@@ -81,7 +81,7 @@ async def edit_gen_table(
     edit_gen_result = await GenTableService.edit_gen_table_services(query_db, edit_gen_table)
     logger.info(edit_gen_result.message)
 
-    return ResponseUtil.success(msg=edit_gen_result.message)
+    return ResponseUtil.success(message=edit_gen_result.message)
 
 
 @genController.delete('/{table_ids}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:remove'))])
@@ -91,7 +91,7 @@ async def delete_gen_table(request: Request, table_ids: str, query_db: AsyncSess
     delete_gen_table_result = await GenTableService.delete_gen_table_services(query_db, delete_gen_table)
     logger.info(delete_gen_table_result.message)
 
-    return ResponseUtil.success(msg=delete_gen_table_result.message)
+    return ResponseUtil.success(message=delete_gen_table_result.message)
 
 
 @genController.post('/createTable', dependencies=[Depends(CheckRoleInterfaceAuth('admin'))])
@@ -105,7 +105,7 @@ async def create_table(
     create_table_result = await GenTableService.create_table_services(query_db, sql, current_user)
     logger.info(create_table_result.message)
 
-    return ResponseUtil.success(msg=create_table_result.message)
+    return ResponseUtil.success(message=create_table_result.message)
 
 
 @genController.get('/batchGenCode', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:code'))])
@@ -127,7 +127,7 @@ async def gen_code_local(request: Request, table_name: str, query_db: AsyncSessi
     gen_code_local_result = await GenTableService.generate_code_services(query_db, table_name)
     logger.info(gen_code_local_result.message)
 
-    return ResponseUtil.success(msg=gen_code_local_result.message)
+    return ResponseUtil.success(message=gen_code_local_result.message)
 
 
 @genController.get('/{table_id}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:query'))])

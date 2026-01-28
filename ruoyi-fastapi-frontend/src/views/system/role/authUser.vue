@@ -129,7 +129,7 @@ async function loadAuthUserData(params) {
     phonenumber: params.query?.phonenumber,
   };
   const response = await allocatedUserList(query);
-  return { data: response.rows || [], total: response.total || 0 };
+  return response;
 }
 
 function onFilterChange(field, value, { handleRefresh, updateState }) {

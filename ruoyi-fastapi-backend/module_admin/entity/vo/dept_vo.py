@@ -1,17 +1,18 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
+from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import Network, NotBlank, Size
 from typing import Literal, Optional
 from module_admin.annotation.pydantic_annotation import as_query
 
 
-class DeptModel(BaseModel):
+class DeptModel(CamelModelBase):
     """
     部门表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
     dept_id: Optional[int] = Field(default=None, description='部门id')
     parent_id: Optional[int] = Field(default=None, description='父部门id')
@@ -63,12 +64,12 @@ class DeptQueryModel(DeptModel):
     end_time: Optional[str] = Field(default=None, description='结束时间')
 
 
-class DeleteDeptModel(BaseModel):
+class DeleteDeptModel(CamelModelBase):
     """
     删除部门模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     dept_ids: str = Field(default=None, description='需要删除的部门id')
     update_by: Optional[str] = Field(default=None, description='更新者')
