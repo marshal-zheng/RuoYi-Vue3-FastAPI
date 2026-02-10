@@ -12,9 +12,9 @@ import pytest
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.user_do import SysUser
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.role_do import SysRole
+from module_admin.entity.do.user_do import UserDO
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.role_do import RoleDO
 from module_admin.aspect.data_scope_builder import DataScopeContext
 
 
@@ -42,7 +42,7 @@ class TestSQLInjectionProtection:
 
         for malicious_input in malicious_inputs:
             # 使用参数化查询（安全）
-            query = select(SysUser).where(SysUser.user_name == malicious_input)
+            query = select(UserDO).where(UserDO.user_name == malicious_input)
             result = await db_session.execute(query)
             users = result.scalars().all()
             
@@ -75,8 +75,8 @@ class TestSQLInjectionProtection:
             
             # 尝试构建查询条件
             try:
-                condition = context.build_condition(SysUser)
-                query = select(SysUser).where(condition)
+                condition = context.build_condition(UserDO)
+                query = select(UserDO).where(condition)
                 result = await db_session.execute(query)
                 users = result.scalars().all()
                 
@@ -104,7 +104,7 @@ class TestSQLInjectionProtection:
             try:
                 # 如果输入不是整数，应该抛出异常
                 dept_id = int(malicious_input)
-                query = select(SysDept).where(SysDept.dept_id == dept_id)
+                query = select(DeptDO).where(DeptDO.dept_id == dept_id)
                 result = await db_session.execute(query)
                 depts = result.scalars().all()
                 assert len(depts) <= 1
@@ -123,7 +123,7 @@ class TestSQLInjectionProtection:
         ]
 
         for malicious_input in malicious_inputs:
-            query = select(SysRole).where(SysRole.role_key == malicious_input)
+            query = select(RoleDO).where(RoleDO.role_key == malicious_input)
             result = await db_session.execute(query)
             roles = result.scalars().all()
             assert len(roles) <= 1
@@ -143,7 +143,7 @@ class TestSQLInjectionProtection:
 
         for malicious_input in malicious_inputs:
             # 使用参数化查询（安全）
-            query = select(SysUser).where(SysUser.user_name.like(f"%{malicious_input}%"))
+            query = select(UserDO).where(UserDO.user_name.like(f"%{malicious_input}%"))
             result = await db_session.execute(query)
             users = result.scalars().all()
             
@@ -172,10 +172,10 @@ class TestSQLInjectionProtection:
             # 如果恶意字段不在允许列表中，应该使用默认排序
             if malicious_order not in allowed_columns:
                 # 使用默认排序
-                query = select(SysUser).order_by(SysUser.user_id)
+                query = select(UserDO).order_by(UserDO.user_id)
             else:
                 # 使用指定排序
-                query = select(SysUser).order_by(getattr(SysUser, malicious_order))
+                query = select(UserDO).order_by(getattr(UserDO, malicious_order))
             
             result = await db_session.execute(query)
             users = result.scalars().all()
@@ -200,7 +200,7 @@ class TestSQLInjectionProtection:
                 ids = [int(id_str.strip()) for id_str in malicious_id_str.split(',')]
                 
                 # 使用参数化查询
-                query = select(SysUser).where(SysUser.user_id.in_(ids))
+                query = select(UserDO).where(UserDO.user_id.in_(ids))
                 result = await db_session.execute(query)
                 users = result.scalars().all()
                 assert isinstance(users, list)
@@ -277,8 +277,8 @@ class TestDataScopeSecurityEdgeCases:
             role_scopes=[]
         )
         
-        condition = context.build_condition(SysUser)
-        query = select(SysUser).where(condition)
+        condition = context.build_condition(UserDO)
+        query = select(UserDO).where(condition)
         result = await db_session.execute(query)
         users = result.scalars().all()
         
@@ -294,8 +294,8 @@ class TestDataScopeSecurityEdgeCases:
             role_scopes=[{"scope_type": "3"}]  # 本部门数据权限
         )
         
-        condition = context.build_condition(SysUser)
-        query = select(SysUser).where(condition)
+        condition = context.build_condition(UserDO)
+        query = select(UserDO).where(condition)
         result = await db_session.execute(query)
         users = result.scalars().all()
         
@@ -311,8 +311,8 @@ class TestDataScopeSecurityEdgeCases:
             role_scopes=[{"scope_type": "999"}]  # 无效的权限类型
         )
         
-        condition = context.build_condition(SysUser)
-        query = select(SysUser).where(condition)
+        condition = context.build_condition(UserDO)
+        query = select(UserDO).where(condition)
         result = await db_session.execute(query)
         users = result.scalars().all()
         
@@ -332,7 +332,7 @@ class TestParameterizedQueryBestPractices:
         """
         # 正确的做法 - 使用绑定参数
         username = "admin' OR '1'='1"
-        query = select(SysUser).where(SysUser.user_name == username)
+        query = select(UserDO).where(UserDO.user_name == username)
         result = await db_session.execute(query)
         users = result.scalars().all()
         
@@ -352,7 +352,7 @@ class TestParameterizedQueryBestPractices:
         
         # 正确的做法
         username = "admin' OR '1'='1"
-        query = select(SysUser).where(SysUser.user_name == username)
+        query = select(UserDO).where(UserDO.user_name == username)
         result = await db_session.execute(query)
         users = result.scalars().all()
         
@@ -370,18 +370,18 @@ class TestParameterizedQueryBestPractices:
         
         # 用户名条件
         username = "admin' OR '1'='1"
-        conditions.append(SysUser.user_name == username)
+        conditions.append(UserDO.user_name == username)
         
         # 状态条件
         status = "0"
-        conditions.append(SysUser.status == status)
+        conditions.append(UserDO.status == status)
         
         # 删除标志
-        conditions.append(SysUser.del_flag == "0")
+        conditions.append(UserDO.del_flag == "0")
         
         # 组合条件
         from sqlalchemy import and_
-        query = select(SysUser).where(and_(*conditions))
+        query = select(UserDO).where(and_(*conditions))
         result = await db_session.execute(query)
         users = result.scalars().all()
         

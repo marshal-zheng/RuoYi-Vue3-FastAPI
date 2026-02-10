@@ -4,7 +4,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import StatusEnum, YesNoEnum
 
 
-class SysDictType(LegacyBaseModel):
+class DictTypeDO(LegacyBaseModel):
     """
     字典类型表
     """
@@ -20,7 +20,7 @@ class SysDictType(LegacyBaseModel):
     __table_args__ = (UniqueConstraint('dict_type', name='uq_sys_dict_type_dict_type'),)
 
 
-class SysDictData(LegacyBaseModel):
+class DictDataDO(LegacyBaseModel):
     """
     字典数据表
     """

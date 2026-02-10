@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.inspection import inspect
 
 from config.env import AuditConfig
-from module_admin.entity.do.audit_log_do import SysAuditLog
+from module_admin.entity.do.audit_log_do import AuditLogDO
 from utils.audit_context import get_audit_context, append_read_audit
 from utils.sensitive.registry import get_mask_fields
 
@@ -35,7 +35,7 @@ def _get_mask_fields() -> Set[str]:
 def _should_audit_table(table_name: Optional[str]) -> bool:
     if not table_name:
         return False
-    if table_name.lower() == SysAuditLog.__tablename__:
+    if table_name.lower() == AuditLogDO.__tablename__:
         return False
     if not AUDIT_TABLES:
         return True
@@ -151,9 +151,9 @@ def _extract_table_names(statement) -> Set[str]:
     return tables
 
 
-def _build_write_audit(entry: Dict[str, Any]) -> SysAuditLog:
+def _build_write_audit(entry: Dict[str, Any]) -> AuditLogDO:
     ctx = get_audit_context()
-    return SysAuditLog(
+    return AuditLogDO(
         action=entry.get('action', ''),
         table_name=entry.get('table_name', ''),
         pk=entry.get('pk', ''),
@@ -192,7 +192,7 @@ def init_audit_logger():
         audit_entries: List[Dict[str, Any]] = []
 
         def _append_entry(obj, action: str):
-            if isinstance(obj, SysAuditLog):
+            if isinstance(obj, AuditLogDO):
                 return
             table_name = getattr(obj, '__tablename__', '')
             if not _should_audit_table(table_name):

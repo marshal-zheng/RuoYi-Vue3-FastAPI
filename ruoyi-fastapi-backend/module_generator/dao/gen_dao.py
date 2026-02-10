@@ -5,7 +5,7 @@ from sqlalchemy.orm import selectinload
 from sqlglot.expressions import Expression
 from typing import List
 from config.env import DataBaseConfig
-from module_generator.entity.do.gen_do import GenTable, GenTableColumn
+from module_generator.entity.do.gen_do import GenTableDO, GenTableColumnDO
 from module_generator.entity.vo.gen_vo import (
     GenTableBaseModel,
     GenTableColumnBaseModel,
@@ -33,7 +33,7 @@ class GenTableDao:
         gen_table_info = (
             (
                 await db.execute(
-                    select(GenTable).options(selectinload(GenTable.columns)).where(GenTable.table_id == table_id)
+                    select(GenTableDO).options(selectinload(GenTableDO.columns)).where(GenTableDO.table_id == table_id)
                 )
             )
             .scalars()
@@ -54,7 +54,7 @@ class GenTableDao:
         gen_table_info = (
             (
                 await db.execute(
-                    select(GenTable).options(selectinload(GenTable.columns)).where(GenTable.table_name == table_name)
+                    select(GenTableDO).options(selectinload(GenTableDO.columns)).where(GenTableDO.table_name == table_name)
                 )
             )
             .scalars()
@@ -71,7 +71,7 @@ class GenTableDao:
         :param db: orm对象
         :return: 所有业务表信息
         """
-        gen_table_all = (await db.execute(select(GenTable).options(selectinload(GenTable.columns)))).scalars().all()
+        gen_table_all = (await db.execute(select(GenTableDO).options(selectinload(GenTableDO.columns)))).scalars().all()
 
         return gen_table_all
 
@@ -99,16 +99,16 @@ class GenTableDao:
         :return: 代码生成业务表列表信息对象
         """
         query = (
-            select(GenTable)
-            .options(selectinload(GenTable.columns))
+            select(GenTableDO)
+            .options(selectinload(GenTableDO.columns))
             .where(
-                func.lower(GenTable.table_name).like(f'%{query_object.table_name.lower()}%')
+                func.lower(GenTableDO.table_name).like(f'%{query_object.table_name.lower()}%')
                 if query_object.table_name
                 else True,
-                func.lower(GenTable.table_comment).like(f'%{query_object.table_comment.lower()}%')
+                func.lower(GenTableDO.table_comment).like(f'%{query_object.table_comment.lower()}%')
                 if query_object.table_comment
                 else True,
-                GenTable.create_time.between(
+                GenTableDO.create_time.between(
                     datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                     datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
                 )
@@ -237,7 +237,7 @@ class GenTableDao:
         :param gen_table: 业务表对象
         :return:
         """
-        db_gen_table = GenTable(**GenTableBaseModel(**gen_table.model_dump(by_alias=True)).model_dump())
+        db_gen_table = GenTableDO(**GenTableBaseModel(**gen_table.model_dump(by_alias=True)).model_dump())
         db.add(db_gen_table)
         await db.flush()
 
@@ -252,7 +252,7 @@ class GenTableDao:
         :param gen_table: 需要更新的业务表字典
         :return:
         """
-        await db.execute(update(GenTable), [GenTableBaseModel(**gen_table).model_dump()])
+        await db.execute(update(GenTableDO), [GenTableBaseModel(**gen_table).model_dump()])
 
     @classmethod
     async def delete_gen_table_dao(cls, db: AsyncSession, gen_table: GenTableModel):
@@ -263,7 +263,7 @@ class GenTableDao:
         :param gen_table: 业务表对象
         :return:
         """
-        await db.execute(delete(GenTable).where(GenTable.table_id.in_([gen_table.table_id])))
+        await db.execute(delete(GenTableDO).where(GenTableDO.table_id.in_([gen_table.table_id])))
 
 
 class GenTableColumnDao:
@@ -283,7 +283,7 @@ class GenTableColumnDao:
         gen_table_column_list = (
             (
                 await db.execute(
-                    select(GenTableColumn).where(GenTableColumn.table_id == table_id).order_by(GenTableColumn.sort)
+                    select(GenTableColumnDO).where(GenTableColumnDO.table_id == table_id).order_by(GenTableColumnDO.sort)
                 )
             )
             .scalars()
@@ -351,7 +351,7 @@ class GenTableColumnDao:
         :param gen_table_column: 岗位对象
         :return:
         """
-        db_gen_table_column = GenTableColumn(
+        db_gen_table_column = GenTableColumnDO(
             **GenTableColumnBaseModel(**gen_table_column.model_dump(by_alias=True)).model_dump()
         )
         db.add(db_gen_table_column)
@@ -368,7 +368,7 @@ class GenTableColumnDao:
         :param gen_table_column: 需要更新的业务表字段字典
         :return:
         """
-        await db.execute(update(GenTableColumn), [GenTableColumnBaseModel(**gen_table_column).model_dump()])
+        await db.execute(update(GenTableColumnDO), [GenTableColumnBaseModel(**gen_table_column).model_dump()])
 
     @classmethod
     async def delete_gen_table_column_by_table_id_dao(cls, db: AsyncSession, gen_table_column: GenTableColumnModel):
@@ -379,7 +379,7 @@ class GenTableColumnDao:
         :param gen_table_column: 业务表字段对象
         :return:
         """
-        await db.execute(delete(GenTableColumn).where(GenTableColumn.table_id.in_([gen_table_column.table_id])))
+        await db.execute(delete(GenTableColumnDO).where(GenTableColumnDO.table_id.in_([gen_table_column.table_id])))
 
     @classmethod
     async def delete_gen_table_column_by_column_id_dao(cls, db: AsyncSession, gen_table_column: GenTableColumnModel):
@@ -390,4 +390,4 @@ class GenTableColumnDao:
         :param post: 业务表字段对象
         :return:
         """
-        await db.execute(delete(GenTableColumn).where(GenTableColumn.column_id.in_([gen_table_column.column_id])))
+        await db.execute(delete(GenTableColumnDO).where(GenTableColumnDO.column_id.in_([gen_table_column.column_id])))

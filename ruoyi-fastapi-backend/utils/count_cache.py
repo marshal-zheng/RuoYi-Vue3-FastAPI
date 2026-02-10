@@ -259,7 +259,7 @@ def invalidate_count_cache(*tables: str):
     
     使用示例：
         @invalidate_count_cache('sys_user', 'sys_user_role')
-        async def add_user(self, user: SysUser):
+        async def add_user(self, user: UserDO):
             self.db.add(user)
             await self.db.flush()
     """

@@ -29,7 +29,7 @@ from utils.cursor_pagination import CursorPaginator
 
 # 创建分页器
 paginator = CursorPaginator(
-    model=SysOperLog,
+    model=OperLogDO,
     cursor_field='oper_id',
     order_desc=True
 )
@@ -40,8 +40,8 @@ result = await paginator.paginate(
     page_size=20,
     cursor=12345,  # 上一页最后一条的 ID
     filters=[
-        SysOperLog.status == 0,
-        SysOperLog.oper_time > some_date
+        OperLogDO.status == 0,
+        OperLogDO.oper_time > some_date
     ]
 )
 

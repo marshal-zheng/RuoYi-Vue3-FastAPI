@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.dao.config_dao import ConfigDao
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.config_do import ConfigDO
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigQueryModel
 
 
@@ -27,7 +27,7 @@ def config_dao():
 @pytest.fixture
 def sample_config():
     """Create sample config for testing."""
-    return SysConfig(
+    return ConfigDO(
         config_id=1,
         config_name='Test Config',
         config_key='test.config',

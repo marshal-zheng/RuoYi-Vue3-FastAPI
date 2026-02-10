@@ -5,7 +5,7 @@ from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 from utils.sensitive import sensitive_string_with_hash
 
 
-class SysDept(LegacyBaseModel):
+class DeptDO(LegacyBaseModel):
     """
     部门表
     """

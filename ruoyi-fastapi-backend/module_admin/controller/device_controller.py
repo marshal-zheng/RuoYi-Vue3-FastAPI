@@ -60,11 +60,11 @@ async def get_device_list(
         page_num=page_num,
         page_size=page_size
     )
-    result = await DeviceService.get_device_list(
+    result = await DeviceService.get_device_list_services(
         query_db, query, current_user.user.user_name
     )
     logger.info('获取设备列表成功')
-    return result
+    return ResponseUtil.success(rows=result['rows'], dict_content={'total': result['total']})
 
 
 @deviceController.get(
@@ -83,9 +83,9 @@ async def check_device_name_unique(
     device_id = qp.get('deviceId') or qp.get('device_id')
     device_id = int(device_id) if device_id else None
     
-    result = await DeviceService.check_device_name_unique(query_db, device_name, device_id)
+    result = await DeviceService.check_device_name_unique_services(query_db, device_name, device_id)
     logger.info(f'检查设备名称唯一性: {device_name}')
-    return result
+    return ResponseUtil.success(data=result)
 
 
 @deviceController.get(
@@ -100,9 +100,9 @@ async def get_device_detail(
     """
     获取设备详情（包含接口配置）
     """
-    result = await DeviceService.get_device_detail(query_db, device_id)
+    result = await DeviceService.device_detail_services(query_db, device_id)
     logger.info(f'获取设备详情成功: {device_id}')
-    return result
+    return ResponseUtil.success(data=result)
 
 
 @deviceController.post(
@@ -119,11 +119,11 @@ async def add_device(
     """
     新增设备（包含接口）
     """
-    result = await DeviceService.add_device(
+    result = await DeviceService.add_device_services(
         query_db, device_data, current_user.user.user_name
     )
     logger.info('新增设备成功')
-    return result
+    return ResponseUtil.success(message=result.message, data=result.result)
 
 
 @deviceController.put(
@@ -140,11 +140,11 @@ async def update_device(
     """
     修改设备（包含接口）
     """
-    result = await DeviceService.update_device(
+    result = await DeviceService.edit_device_services(
         query_db, device_data, current_user.user.user_name
     )
     logger.info('修改设备成功')
-    return result
+    return ResponseUtil.success(message=result.message)
 
 
 @deviceController.post(
@@ -163,9 +163,9 @@ async def clone_device(
     """
     clone_data.create_by = current_user.user.user_name
     clone_data.create_time = datetime.now()
-    result = await DeviceService.clone_device(query_db, clone_data, current_user.user.user_name)
+    result = await DeviceService.clone_device_services(query_db, clone_data, current_user.user.user_name)
     logger.info('克隆设备成功')
-    return result
+    return ResponseUtil.success(message=result.message, data=result.result)
 
 
 @deviceController.delete(
@@ -181,9 +181,9 @@ async def delete_device(
     """
     删除设备（级联删除接口）
     """
-    result = await DeviceService.delete_device(query_db, device_ids)
+    result = await DeviceService.delete_device_services(query_db, device_ids)
     logger.info(f'删除设备成功: {device_ids}')
-    return result
+    return ResponseUtil.success(message=result.message)
 
 
 @deviceController.post(

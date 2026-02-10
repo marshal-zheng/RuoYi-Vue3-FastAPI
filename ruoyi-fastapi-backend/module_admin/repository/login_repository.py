@@ -5,8 +5,8 @@ from typing import Optional, Tuple
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.user_do import SysUser
-from module_admin.entity.do.dept_do import SysDept
+from module_admin.entity.do.user_do import UserDO
+from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 from utils.db_filters import not_deleted
 
@@ -20,7 +20,7 @@ class LoginRepository:
     async def find_user_with_dept(
         self,
         user_name: str
-    ) -> Optional[Tuple[SysUser, Optional[SysDept]]]:
+    ) -> Optional[Tuple[UserDO, Optional[DeptDO]]]:
         """
         根据用户名查询用户信息（包含部门）
         
@@ -31,17 +31,17 @@ class LoginRepository:
             (用户对象, 部门对象) 元组或 None
         """
         stmt = (
-            select(SysUser, SysDept)
+            select(UserDO, DeptDO)
             .where(
-                SysUser.user_name == user_name,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_name == user_name,
+                not_deleted(UserDO.del_flag)
             )
             .join(
-                SysDept,
+                DeptDO,
                 and_(
-                    SysUser.dept_id == SysDept.dept_id,
-                    SysDept.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysDept.del_flag)
+                    UserDO.dept_id == DeptDO.dept_id,
+                    DeptDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(DeptDO.del_flag)
                 ),
                 isouter=True
             )

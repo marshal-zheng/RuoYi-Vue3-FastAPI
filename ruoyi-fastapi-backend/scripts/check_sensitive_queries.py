@@ -13,10 +13,10 @@ from typing import Dict, List, Tuple
 
 
 SENSITIVE_FIELDS: Tuple[Tuple[str, str], ...] = (
-    ('SysUser', 'phonenumber'),
-    ('SysUser', 'email'),
-    ('SysDept', 'phone'),
-    ('SysUser', 'id_card'),
+    ('UserDO', 'phonenumber'),
+    ('UserDO', 'email'),
+    ('DeptDO', 'phone'),
+    ('UserDO', 'id_card'),
 )
 
 DISALLOWED_PATTERNS = (

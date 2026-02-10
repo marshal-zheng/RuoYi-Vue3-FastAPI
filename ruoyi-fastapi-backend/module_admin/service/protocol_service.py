@@ -11,7 +11,7 @@ from openpyxl.worksheet.datavalidation import DataValidation
 from sqlalchemy.ext.asyncio import AsyncSession
 from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
-from module_admin.entity.do.protocol_do import SysProtocol
+from module_admin.entity.do.protocol_do import ProtocolDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.protocol_vo import (
     AddProtocolModel,
@@ -372,7 +372,7 @@ class ProtocolService:
         :return: 新增协议校验结果
         """
         protocol_repo = ProtocolRepository(query_db)
-        db_protocol = SysProtocol(**page_object.model_dump(by_alias=True))
+        db_protocol = ProtocolDO(**page_object.model_dump(by_alias=True))
         await protocol_repo.add(db_protocol)
         return CrudResponseModel(is_success=True, message='新增成功')
 
@@ -1214,7 +1214,7 @@ class ProtocolService:
         )
 
         # 保存协议
-        db_protocol = SysProtocol(**protocol_model.model_dump(by_alias=True))
+        db_protocol = ProtocolDO(**protocol_model.model_dump(by_alias=True))
         await protocol_repo.add(db_protocol)
 
         return CrudResponseModel(

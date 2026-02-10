@@ -7,7 +7,7 @@ from exceptions.exception import (
     ValidationException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.post_do import SysPost
+from module_admin.entity.do.post_do import PostDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.post_vo import DeletePostModel, PostModel, PostPageQueryModel
 from module_admin.repository import PostRepository
@@ -107,7 +107,7 @@ class PostService:
             )
         
         post_repo = PostRepository(query_db)
-        db_post = SysPost(**page_object.model_dump())
+        db_post = PostDO(**page_object.model_dump())
         await post_repo.add(db_post)
         return CrudResponseModel(is_success=True, message='新增成功')
 

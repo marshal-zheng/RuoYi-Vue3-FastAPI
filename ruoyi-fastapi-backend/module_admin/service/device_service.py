@@ -18,7 +18,7 @@ from module_admin.entity.vo.device_vo import (
     ExportDeviceModel,
     ExportDeviceInterfaceModel,
 )
-from utils.response_util import ResponseUtil
+from module_admin.entity.vo.common_vo import CrudResponseModel
 from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
 from utils.io_toolkit import JsonExporter, ZipExporter, ZipEntry, ZipImporter
@@ -31,7 +31,7 @@ class DeviceService:
     """
 
     @classmethod
-    async def get_device_list(cls, db: AsyncSession, query: DeviceQueryModel, current_user: str):
+    async def get_device_list_services(cls, db: AsyncSession, query: DeviceQueryModel, current_user: str):
         """
         获取设备列表
         """
@@ -79,13 +79,13 @@ class DeviceService:
             # 仅返回驼峰格式字段，避免混用命名风格
             device_list.append(device_vo.model_dump(by_alias=True))
         
-        return ResponseUtil.success(
-            rows=device_list,
-            dict_content={'total': total}
-        )
+        return {
+            'rows': device_list,
+            'total': total,
+        }
 
     @classmethod
-    async def get_device_detail(cls, db: AsyncSession, device_id: int):
+    async def device_detail_services(cls, db: AsyncSession, device_id: int):
         """
         获取设备详情（包含接口配置）
         """
@@ -132,11 +132,11 @@ class DeviceService:
         }
 
         device_vo = DeviceModel.model_validate(device_data)
-        return ResponseUtil.success(data=device_vo.model_dump(by_alias=True))
+        return device_vo.model_dump(by_alias=True)
 
     @classmethod
     @transactional()
-    async def add_device(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
+    async def add_device_services(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
         """
         新增设备（包含接口）
         """
@@ -178,11 +178,11 @@ class DeviceService:
         device_repo = DeviceRepository(db)
         result = await device_repo.add(device_do)
         
-        return ResponseUtil.success(data={'device_id': result.device_id}, message="新增成功")
+        return CrudResponseModel(is_success=True, message='新增成功', result={'device_id': result.device_id})
 
     @classmethod
     @transactional()
-    async def update_device(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
+    async def edit_device_services(cls, db: AsyncSession, device_data: DeviceModel, current_user: str):
         """
         更新设备（包含接口）
         """
@@ -232,11 +232,11 @@ class DeviceService:
         # 保存到数据库
         await db.flush()
         
-        return ResponseUtil.success(message="修改成功")
+        return CrudResponseModel(is_success=True, message='修改成功')
 
     @classmethod
     @transactional()
-    async def delete_device(cls, db: AsyncSession, device_ids: str):
+    async def delete_device_services(cls, db: AsyncSession, device_ids: str):
         """
         删除设备（级联删除接口）
         """
@@ -254,10 +254,10 @@ class DeviceService:
         # 删除设备
         deleted_count = await device_repo.delete_by_device_ids(id_list)
 
-        return ResponseUtil.success(message=f"删除成功，共删除{deleted_count}条记录")
+        return CrudResponseModel(is_success=True, message=f'删除成功，共删除{deleted_count}条记录')
 
     @classmethod
-    async def check_device_name_unique(cls, db: AsyncSession, device_name: str, device_id: int = None):
+    async def check_device_name_unique_services(cls, db: AsyncSession, device_name: str, device_id: int = None):
         """
         检查设备名称是否唯一
         """
@@ -265,16 +265,16 @@ class DeviceService:
         existing = await device_repo.find_by_name(device_name)
         
         if not existing:
-            return ResponseUtil.success(data=True)
+            return True
         
         if device_id and existing.device_id == device_id:
-            return ResponseUtil.success(data=True)
+            return True
         
-        return ResponseUtil.success(data=False)
+        return False
 
     @classmethod
     @transactional()
-    async def clone_device(cls, db: AsyncSession, clone_data: CloneDeviceModel, current_user: str):
+    async def clone_device_services(cls, db: AsyncSession, clone_data: CloneDeviceModel, current_user: str):
         """
         克隆设备（包含接口）
         """
@@ -335,7 +335,7 @@ class DeviceService:
         # 保存到数据库
         result = await device_repo.add(new_device)
         
-        return ResponseUtil.success(data={'device_id': result.device_id}, message="克隆成功")
+        return CrudResponseModel(is_success=True, message='克隆成功', result={'device_id': result.device_id})
 
     @classmethod
     async def export_devices_zip_services(cls, db: AsyncSession, device_ids: List[int]):

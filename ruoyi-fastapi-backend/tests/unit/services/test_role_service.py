@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
 from module_admin.service.role_service import RoleService
-from module_admin.entity.do.role_do import SysRole
+from module_admin.entity.do.role_do import RoleDO
 from module_admin.entity.vo.role_vo import RoleQueryModel, AddRoleModel, EditRoleModel
 
 
@@ -35,7 +35,7 @@ def role_service(mock_role_dao):
 @pytest.fixture
 def sample_admin_role():
     """Create sample admin role."""
-    return SysRole(
+    return RoleDO(
         role_id=1,
         role_name='超级管理员',
         role_key='admin',
@@ -50,7 +50,7 @@ def sample_admin_role():
 @pytest.fixture
 def sample_common_role():
     """Create sample common role."""
-    return SysRole(
+    return RoleDO(
         role_id=2,
         role_name='普通角色',
         role_key='common',

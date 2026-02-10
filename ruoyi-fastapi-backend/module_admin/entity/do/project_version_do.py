@@ -3,7 +3,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import EnableStatusEnum, DelFlagEnum
 
 
-class SysProjectVersion(LegacyBaseModel):
+class ProjectVersionDO(LegacyBaseModel):
     """
     项目版本管理表
     """

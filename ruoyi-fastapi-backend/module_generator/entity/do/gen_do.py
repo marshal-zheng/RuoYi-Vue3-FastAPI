@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship
 from config.database import Base
 
 
-class GenTable(Base):
+class GenTableDO(Base):
     """
     代码生成业务表
     """
@@ -35,10 +35,10 @@ class GenTable(Base):
     update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
     remark = Column(String(500), nullable=True, default=None, comment='备注')
 
-    columns = relationship('GenTableColumn', order_by='GenTableColumn.sort', back_populates='tables')
+    columns = relationship('GenTableColumnDO', order_by='GenTableColumnDO.sort', back_populates='tables')
 
 
-class GenTableColumn(Base):
+class GenTableColumnDO(Base):
     """
     代码生成业务表字段
     """
@@ -71,4 +71,4 @@ class GenTableColumn(Base):
     update_by = Column(String(64), default='', comment='更新者')
     update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
 
-    tables = relationship('GenTable', back_populates='columns')
+    tables = relationship('GenTableDO', back_populates='columns')

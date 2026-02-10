@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from exceptions.exception import ValidationException, ResourceNotFoundException, ResourceConflictException
 from config.error_codes import ErrorCode
-from module_admin.entity.do.project_version_do import SysProjectVersion
+from module_admin.entity.do.project_version_do import ProjectVersionDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.project_version_vo import (
     ProjectVersionModel,
@@ -76,7 +76,7 @@ class ProjectVersionService:
                 message=f'版本号 {page_object.version_number} 已存在'
             )
         
-        db_version = SysProjectVersion(**page_object.model_dump())
+        db_version = ProjectVersionDO(**page_object.model_dump())
         await version_repo.add(db_version)
         return CrudResponseModel(is_success=True, message='新增成功')
 
@@ -220,7 +220,7 @@ class ProjectVersionService:
             )
         
         # 创建新版本
-        new_version = SysProjectVersion(
+        new_version = ProjectVersionDO(
             project_id=source_version.project_id,
             version_number=clone_object.version_number,
             version_name=clone_object.version_name,

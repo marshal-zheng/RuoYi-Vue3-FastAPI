@@ -10,8 +10,8 @@ Google 工程标准：
 from typing import List, Optional, Any
 from sqlalchemy import and_, or_
 from sqlalchemy.sql.elements import BinaryExpression, BooleanClauseList
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.user_do import UserDO
 
 
 class DataScopeType:
@@ -53,7 +53,7 @@ class DataScopeBuilder:
             SQLAlchemy 查询条件
         """
         if not model_class:
-            model_class = SysDept
+            model_class = DeptDO
         
         # 获取模型的 dept_id 字段
         dept_id_column = getattr(model_class, 'dept_id', None)
@@ -85,7 +85,7 @@ class DataScopeBuilder:
                 return or_(
                     dept_id_column == dept_id,
                     # 子部门条件需要通过 ancestors 字段判断
-                    # 在实际使用时需要 join SysDept 表
+                    # 在实际使用时需要 join DeptDO 表
                 )
             return and_(False)
         
@@ -125,7 +125,7 @@ class DataScopeBuilder:
             user_id=user_id,
             dept_id=dept_id,
             dept_ids=dept_ids,
-            model_class=SysUser
+            model_class=UserDO
         )
     
     @staticmethod
@@ -142,8 +142,8 @@ class DataScopeBuilder:
         """
         # 角色权限通常基于创建者
         if scope_type == DataScopeType.SELF_ONLY:
-            from module_admin.entity.do.role_do import SysRole
-            return SysRole.create_by == str(user_id)
+            from module_admin.entity.do.role_do import RoleDO
+            return RoleDO.create_by == str(user_id)
         
         # 其他情况返回全部
         return and_(True)
@@ -226,6 +226,6 @@ data_scope_context = DataScopeContext(
 )
 
 # 在 Repository 层使用
-condition = data_scope_context.build_condition(SysUser)
-query = select(SysUser).where(condition)
+condition = data_scope_context.build_condition(UserDO)
+query = select(UserDO).where(condition)
 """

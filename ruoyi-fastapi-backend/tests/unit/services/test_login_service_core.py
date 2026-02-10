@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.service.login_service import LoginService
 from module_admin.entity.vo.login_vo import UserLogin
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.user_do import UserDO
 from exceptions.exception import AuthException, ValidationException
 from config.error_codes import ErrorCode
 

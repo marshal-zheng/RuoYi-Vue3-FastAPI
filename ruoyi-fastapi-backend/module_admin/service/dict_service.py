@@ -12,7 +12,7 @@ from exceptions.exception import (
     ValidationException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.dict_do import SysDictData, SysDictType
+from module_admin.entity.do.dict_do import DictDataDO, DictTypeDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.dict_vo import (
     DeleteDictDataModel,
@@ -106,7 +106,7 @@ class DictTypeService:
             )
         
         dict_type_repo = DictTypeRepository(query_db)
-        db_dict_type = SysDictType(**page_object.model_dump())
+        db_dict_type = DictTypeDO(**page_object.model_dump())
         await dict_type_repo.add(db_dict_type)
         await request.app.state.redis.set(f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}', '')
         return CrudResponseModel(is_success=True, message='新增成功')
@@ -408,7 +408,7 @@ class DictDataService:
             )
         
         dict_data_repo = DictDataRepository(query_db)
-        db_dict_data = SysDictData(**page_object.model_dump())
+        db_dict_data = DictDataDO(**page_object.model_dump())
         await dict_data_repo.add(db_dict_data)
         dict_data_list = await cls.query_dict_data_list_services(query_db, page_object.dict_type)
         await request.app.state.redis.set(

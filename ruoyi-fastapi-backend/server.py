@@ -31,7 +31,7 @@ from module_admin.controller.job_controller import jobController
 from module_admin.controller.menu_controller import menuController
 from module_admin.controller.notice_controller import noticeController
 from module_admin.controller.online_controller import onlineController
-from module_admin.controller.post_controler import postController
+from module_admin.controller.post_controller import postController
 from module_admin.controller.project_controller import projectController
 from module_admin.controller.project_version_controller import projectVersionController
 from module_admin.controller.protocol_controller import protocolController

@@ -49,7 +49,7 @@ class SimulationService:
 
     @classmethod
     @transactional()
-    async def create_session(
+    async def create_session_services(
         cls, query_db: AsyncSession, request: CreateSimulationSessionModel
     ) -> Dict:
         """
@@ -137,7 +137,7 @@ class SimulationService:
 
     @classmethod
     @transactional()
-    async def start_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+    async def start_session_services(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         启动仿真会话
         
@@ -209,7 +209,7 @@ class SimulationService:
 
     @classmethod
     @transactional()
-    async def stop_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+    async def stop_session_services(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         停止仿真会话
         
@@ -276,7 +276,7 @@ class SimulationService:
             await alarm_repo.batch_create(alarm_dos)
 
     @classmethod
-    def get_session_status(cls, session_id: str) -> Dict:
+    def get_session_status_services(cls, session_id: str) -> Dict:
         """
         获取仿真会话状态
         
@@ -309,7 +309,7 @@ class SimulationService:
         return CamelCaseUtil.transform_result(status)
 
     @classmethod
-    def get_realtime_messages(cls, session_id: str, limit: int = 100) -> List[Dict]:
+    def get_realtime_messages_services(cls, session_id: str, limit: int = 100) -> List[Dict]:
         """
         获取实时报文数据（全量）
         
@@ -330,7 +330,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(msg) for msg in messages]
 
     @classmethod
-    def get_new_messages(cls, session_id: str, limit: int = 20) -> List[Dict]:
+    def get_new_messages_services(cls, session_id: str, limit: int = 20) -> List[Dict]:
         """
         获取增量报文数据（仅返回未推送过的新数据）
         
@@ -349,7 +349,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(msg) for msg in messages]
 
     @classmethod
-    def get_realtime_bandwidth(cls, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+    def get_realtime_bandwidth_services(cls, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
         """
         获取实时带宽数据（全量）
         
@@ -368,7 +368,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
 
     @classmethod
-    def get_new_bandwidth(cls, session_id: str) -> List[Dict]:
+    def get_new_bandwidth_services(cls, session_id: str) -> List[Dict]:
         """
         获取增量带宽数据（仅返回未推送过的新数据）
         
@@ -386,7 +386,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
 
     @classmethod
-    def get_realtime_alarms(cls, session_id: str) -> List[Dict]:
+    def get_realtime_alarms_services(cls, session_id: str) -> List[Dict]:
         """
         获取实时告警数据（全量）
         
@@ -404,7 +404,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
 
     @classmethod
-    def get_new_alarms(cls, session_id: str) -> List[Dict]:
+    def get_new_alarms_services(cls, session_id: str) -> List[Dict]:
         """
         获取增量告警数据（仅返回未推送过的新数据）
         
@@ -422,7 +422,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
 
     @classmethod
-    def get_new_fault_events(cls, session_id: str) -> List[Dict]:
+    def get_new_fault_events_services(cls, session_id: str) -> List[Dict]:
         """
         获取增量故障事件（创建/激活/过期/清除）
         """
@@ -436,7 +436,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(evt) for evt in events]
 
     @classmethod
-    async def get_historical_messages(
+    async def get_historical_messages_services(
         cls, query_db: AsyncSession, query: SimulationQueryModel
     ) -> List[Dict]:
         """
@@ -456,7 +456,7 @@ class SimulationService:
         return [CamelCaseUtil.transform_result(msg) for msg in messages]
 
     @classmethod
-    async def export_simulation_data(
+    async def export_simulation_data_services(
         cls, query_db: AsyncSession, export_request: SimulationExportModel
     ) -> Dict:
         """
@@ -516,7 +516,7 @@ class SimulationService:
 
     @classmethod
     @transactional()
-    async def pause_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+    async def pause_session_services(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         暂停仿真会话
 
@@ -543,7 +543,7 @@ class SimulationService:
 
     @classmethod
     @transactional()
-    async def resume_session(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
+    async def resume_session_services(cls, query_db: AsyncSession, session_id: str) -> CrudResponseModel:
         """
         继续仿真会话
 
@@ -569,7 +569,7 @@ class SimulationService:
         return CrudResponseModel(is_success=True, message='仿真已继续')
 
     @classmethod
-    def set_speed(cls, session_id: str, speed: float) -> CrudResponseModel:
+    def set_speed_services(cls, session_id: str, speed: float) -> CrudResponseModel:
         """
         设置仿真速度
 
@@ -593,7 +593,7 @@ class SimulationService:
         return CrudResponseModel(is_success=True, message=f'仿真速度已设置为 {clamped_speed}x')
 
     @classmethod
-    async def step_once(cls, session_id: str) -> CrudResponseModel:
+    async def step_once_services(cls, session_id: str) -> CrudResponseModel:
         """
         单步执行
 
@@ -615,7 +615,7 @@ class SimulationService:
         return CrudResponseModel(is_success=True, message='单步执行完成')
 
     @classmethod
-    def set_duration(cls, session_id: str, duration: Optional[float]) -> CrudResponseModel:
+    def set_duration_services(cls, session_id: str, duration: Optional[float]) -> CrudResponseModel:
         """
         设置仿真时长
 
@@ -641,7 +641,7 @@ class SimulationService:
     # ==================== 新增：故障注入 ====================
 
     @classmethod
-    def inject_fault(
+    def inject_fault_services(
         cls,
         session_id: str,
         fault_type: str,
@@ -671,7 +671,7 @@ class SimulationService:
         return CamelCaseUtil.transform_result(fault)
 
     @classmethod
-    def clear_fault(cls, session_id: str, fault_id: str) -> CrudResponseModel:
+    def clear_fault_services(cls, session_id: str, fault_id: str) -> CrudResponseModel:
         """
         清除故障
 
@@ -699,7 +699,7 @@ class SimulationService:
             )
 
     @classmethod
-    def clear_all_faults(cls, session_id: str) -> CrudResponseModel:
+    def clear_all_faults_services(cls, session_id: str) -> CrudResponseModel:
         """
         清除指定会话的所有故障
 
@@ -725,7 +725,7 @@ class SimulationService:
         return CrudResponseModel(is_success=True, message=f'已清除 {cleared_count} 个故障')
 
     @classmethod
-    def list_faults(cls, session_id: str) -> List[Dict]:
+    def list_faults_services(cls, session_id: str) -> List[Dict]:
         """
         获取故障列表
 
@@ -745,7 +745,7 @@ class SimulationService:
     # ==================== 新增：事件触发 ====================
 
     @classmethod
-    def add_event(cls, session_id: str, event: Dict) -> Dict:
+    def add_event_services(cls, session_id: str, event: Dict) -> Dict:
         """
         添加事件
 
@@ -767,7 +767,7 @@ class SimulationService:
         return CamelCaseUtil.transform_result(event_data)
 
     @classmethod
-    def update_event(cls, session_id: str, event_id: str, updates: Dict) -> Dict:
+    def update_event_services(cls, session_id: str, event_id: str, updates: Dict) -> Dict:
         """
         更新事件
 
@@ -795,7 +795,7 @@ class SimulationService:
         return CamelCaseUtil.transform_result(event_data)
 
     @classmethod
-    def trigger_event(cls, session_id: str, event_id: str) -> Dict:
+    def trigger_event_services(cls, session_id: str, event_id: str) -> Dict:
         """
         手动触发事件
 
@@ -825,7 +825,7 @@ class SimulationService:
         return CamelCaseUtil.transform_result(result)
 
     @classmethod
-    def reset_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
+    def reset_event_services(cls, session_id: str, event_id: str) -> CrudResponseModel:
         """
         重置事件状态为待触发
 
@@ -853,7 +853,7 @@ class SimulationService:
             )
 
     @classmethod
-    def remove_event(cls, session_id: str, event_id: str) -> CrudResponseModel:
+    def remove_event_services(cls, session_id: str, event_id: str) -> CrudResponseModel:
         """
         删除事件
 
@@ -881,7 +881,7 @@ class SimulationService:
             )
 
     @classmethod
-    def list_events(cls, session_id: str) -> List[Dict]:
+    def list_events_services(cls, session_id: str) -> List[Dict]:
         """
         获取事件列表
 
@@ -1009,7 +1009,7 @@ class SimulationService:
     # ==================== 新增：拓扑验证 ====================
 
     @classmethod
-    def validate_topology(cls, topology_data: Dict) -> Dict:
+    def validate_topology_services(cls, topology_data: Dict) -> Dict:
         """
         验证拓扑配置
 

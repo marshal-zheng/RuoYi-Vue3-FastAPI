@@ -4,7 +4,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import StatusEnum
 
 
-class SysNotice(LegacyBaseModel):
+class NoticeDO(LegacyBaseModel):
     """
     通知公告表
     """

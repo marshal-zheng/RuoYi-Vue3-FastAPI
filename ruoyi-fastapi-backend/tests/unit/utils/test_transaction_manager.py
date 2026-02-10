@@ -20,7 +20,7 @@ from utils.transaction_manager import (
     TransactionIsolationLevel,
     transactional
 )
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.config_do import ConfigDO
 
 
 class TestTransactionManager:
@@ -32,7 +32,7 @@ class TestTransactionManager:
         测试基本事务提交
         """
         # 创建测试数据
-        config = SysConfig(
+        config = ConfigDO(
             config_name="test_transaction",
             config_key="test.transaction.key",
             config_value="test_value",
@@ -48,7 +48,7 @@ class TestTransactionManager:
         
         # 验证数据已提交
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == "test.transaction.key")
+            select(ConfigDO).where(ConfigDO.config_key == "test.transaction.key")
         )
         saved_config = result.scalar_one_or_none()
         
@@ -68,7 +68,7 @@ class TestTransactionManager:
         
         try:
             async with TransactionManager(db_session).transaction():
-                config = SysConfig(
+                config = ConfigDO(
                     config_name="test_rollback",
                     config_key=config_key,
                     config_value="should_rollback",
@@ -85,7 +85,7 @@ class TestTransactionManager:
         
         # 验证数据已回滚
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == config_key)
+            select(ConfigDO).where(ConfigDO.config_key == config_key)
         )
         saved_config = result.scalar_one_or_none()
         
@@ -103,7 +103,7 @@ class TestTransactionManager:
         
         async with TransactionManager(db_session).transaction():
             # 外层事务
-            outer_config = SysConfig(
+            outer_config = ConfigDO(
                 config_name="outer",
                 config_key=outer_key,
                 config_value="outer_value",
@@ -116,7 +116,7 @@ class TestTransactionManager:
             # 内层事务（Savepoint）
             try:
                 async with TransactionManager(db_session).transaction(savepoint=True):
-                    inner_config = SysConfig(
+                    inner_config = ConfigDO(
                         config_name="inner",
                         config_key=inner_key,
                         config_value="inner_value",
@@ -133,14 +133,14 @@ class TestTransactionManager:
         
         # 验证外层事务已提交
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == outer_key)
+            select(ConfigDO).where(ConfigDO.config_key == outer_key)
         )
         outer_saved = result.scalar_one_or_none()
         assert outer_saved is not None
         
         # 验证内层事务已回滚
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == inner_key)
+            select(ConfigDO).where(ConfigDO.config_key == inner_key)
         )
         inner_saved = result.scalar_one_or_none()
         assert inner_saved is None
@@ -212,7 +212,7 @@ class TestTransactionalDecorator:
         """
         @transactional()
         async def create_config(db: AsyncSession, key: str, value: str):
-            config = SysConfig(
+            config = ConfigDO(
                 config_name="decorator_test",
                 config_key=key,
                 config_value=value,
@@ -228,7 +228,7 @@ class TestTransactionalDecorator:
         
         # 验证数据已提交
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == config_key)
+            select(ConfigDO).where(ConfigDO.config_key == config_key)
         )
         saved_config = result.scalar_one_or_none()
         
@@ -246,7 +246,7 @@ class TestTransactionalDecorator:
         """
         @transactional()
         async def create_and_fail(db: AsyncSession, key: str):
-            config = SysConfig(
+            config = ConfigDO(
                 config_name="decorator_rollback",
                 config_key=key,
                 config_value="should_rollback",
@@ -264,7 +264,7 @@ class TestTransactionalDecorator:
         
         # 验证数据已回滚
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == config_key)
+            select(ConfigDO).where(ConfigDO.config_key == config_key)
         )
         saved_config = result.scalar_one_or_none()
         
@@ -311,7 +311,7 @@ class TestTransactionalDecorator:
         """
         @transactional(isolation_level=TransactionIsolationLevel.SERIALIZABLE)
         async def serializable_operation(db: AsyncSession, key: str):
-            config = SysConfig(
+            config = ConfigDO(
                 config_name="isolation_test",
                 config_key=key,
                 config_value="serializable",
@@ -327,7 +327,7 @@ class TestTransactionalDecorator:
         
         # 验证数据已提交
         result = await db_session.execute(
-            select(SysConfig).where(SysConfig.config_key == config_key)
+            select(ConfigDO).where(ConfigDO.config_key == config_key)
         )
         saved_config = result.scalar_one_or_none()
         
@@ -361,7 +361,7 @@ class TestTransactionEdgeCases:
         """
         # 第一个事务
         async with TransactionManager(db_session).transaction():
-            config1 = SysConfig(
+            config1 = ConfigDO(
                 config_name="seq1",
                 config_key="test.seq.1",
                 config_value="value1",
@@ -373,7 +373,7 @@ class TestTransactionEdgeCases:
         
         # 第二个事务
         async with TransactionManager(db_session).transaction():
-            config2 = SysConfig(
+            config2 = ConfigDO(
                 config_name="seq2",
                 config_key="test.seq.2",
                 config_value="value2",
@@ -385,8 +385,8 @@ class TestTransactionEdgeCases:
         
         # 验证两个事务都已提交
         result = await db_session.execute(
-            select(SysConfig).where(
-                SysConfig.config_key.in_(["test.seq.1", "test.seq.2"])
+            select(ConfigDO).where(
+                ConfigDO.config_key.in_(["test.seq.1", "test.seq.2"])
             )
         )
         configs = result.scalars().all()
@@ -406,12 +406,12 @@ class TestTransactionEdgeCases:
         async with TransactionManager(db_session).transaction():
             # 在事务中查询
             result = await db_session.execute(
-                select(SysConfig).limit(1)
+                select(ConfigDO).limit(1)
             )
             config = result.scalar_one_or_none()
             
             # 应该能够正常查询
-            assert config is None or isinstance(config, SysConfig)
+            assert config is None or isinstance(config, ConfigDO)
 
 
 @pytest.fixture

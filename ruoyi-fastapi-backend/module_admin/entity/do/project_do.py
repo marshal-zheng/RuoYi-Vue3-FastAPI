@@ -3,7 +3,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import DelFlagEnum
 
 
-class SysProject(LegacyBaseModel):
+class ProjectDO(LegacyBaseModel):
     """
     工程管理表
     """
@@ -35,4 +35,4 @@ class SysProject(LegacyBaseModel):
 
 
 # Backward-compatible alias for tests/imports expecting Project
-Project = SysProject
+Project = ProjectDO

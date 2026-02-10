@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
 from module_admin.service.menu_service import MenuService
-from module_admin.entity.do.menu_do import SysMenu
+from module_admin.entity.do.menu_do import MenuDO
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def menu_service(mock_menu_dao):
 def sample_menus():
     """Create sample menu tree."""
     return [
-        SysMenu(
+        MenuDO(
             menu_id=1,
             menu_name='系统管理',
             parent_id=0,
@@ -44,7 +44,7 @@ def sample_menus():
             visible='0',
             status='0',
         ),
-        SysMenu(
+        MenuDO(
             menu_id=2,
             menu_name='用户管理',
             parent_id=1,
@@ -54,7 +54,7 @@ def sample_menus():
             visible='0',
             status='0',
         ),
-        SysMenu(
+        MenuDO(
             menu_id=3,
             menu_name='角色管理',
             parent_id=1,

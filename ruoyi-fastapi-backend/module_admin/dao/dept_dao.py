@@ -2,9 +2,9 @@ from sqlalchemy import bindparam, func, or_, select, update  # noqa: F401
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.util import immutabledict
 from typing import List
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.role_do import SysRoleDept  # noqa: F401
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.role_do import RoleDeptDO  # noqa: F401
+from module_admin.entity.do.user_do import UserDO
 from module_admin.entity.vo.dept_vo import DeptModel
 from utils.sensitive import SensitiveDataCipher
 
@@ -23,7 +23,7 @@ class DeptDao:
         :param dept_id: 部门id
         :return: 在用部门信息对象
         """
-        dept_info = (await db.execute(select(SysDept).where(SysDept.dept_id == dept_id))).scalars().first()
+        dept_info = (await db.execute(select(DeptDO).where(DeptDO.dept_id == dept_id))).scalars().first()
 
         return dept_info
 
@@ -37,7 +37,7 @@ class DeptDao:
         :return: 部门信息对象
         """
         dept_info = (
-            (await db.execute(select(SysDept).where(SysDept.dept_id == dept_id, SysDept.del_flag == '0')))
+            (await db.execute(select(DeptDO).where(DeptDO.dept_id == dept_id, DeptDO.del_flag == '0')))
             .scalars()
             .first()
         )
@@ -56,9 +56,9 @@ class DeptDao:
         dept_info = (
             (
                 await db.execute(
-                    select(SysDept).where(
-                        SysDept.parent_id == dept.parent_id if dept.parent_id else True,
-                        SysDept.dept_name == dept.dept_name if dept.dept_name else True,
+                    select(DeptDO).where(
+                        DeptDO.parent_id == dept.parent_id if dept.parent_id else True,
+                        DeptDO.dept_name == dept.dept_name if dept.dept_name else True,
                     )
                 )
             )
@@ -78,19 +78,19 @@ class DeptDao:
         :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :return: 部门列表信息
         """
-        query = select(SysDept).where(
-            SysDept.dept_id != dept_info.dept_id,
-            ~SysDept.dept_id.in_(
-                select(SysDept.dept_id).where(func.find_in_set(dept_info.dept_id, SysDept.ancestors))
+        query = select(DeptDO).where(
+            DeptDO.dept_id != dept_info.dept_id,
+            ~DeptDO.dept_id.in_(
+                select(DeptDO.dept_id).where(func.find_in_set(dept_info.dept_id, DeptDO.ancestors))
             ),
-            SysDept.del_flag == '0',
-            SysDept.status == '0',
+            DeptDO.del_flag == '0',
+            DeptDO.status == '0',
         )
         # 数据权限过滤
         if data_scope_sql is not True:
             query = query.where(data_scope_sql)
         
-        query = query.order_by(SysDept.order_num).distinct()
+        query = query.order_by(DeptDO.order_num).distinct()
         dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
@@ -105,7 +105,7 @@ class DeptDao:
         :return: 子部门信息列表
         """
         dept_result = (
-            (await db.execute(select(SysDept).where(func.find_in_set(dept_id, SysDept.ancestors)))).scalars().all()
+            (await db.execute(select(DeptDO).where(func.find_in_set(dept_id, DeptDO.ancestors)))).scalars().all()
         )
 
         return dept_result
@@ -121,18 +121,18 @@ class DeptDao:
         :return: 在用部门列表信息
         """
         conditions = [
-            SysDept.status == '0',
-            SysDept.del_flag == '0',
+            DeptDO.status == '0',
+            DeptDO.del_flag == '0',
         ]
         if dept_info.dept_name:
-            conditions.append(SysDept.dept_name.like(f'%{dept_info.dept_name}%'))
+            conditions.append(DeptDO.dept_name.like(f'%{dept_info.dept_name}%'))
         
-        query = select(SysDept).where(*conditions)
+        query = select(DeptDO).where(*conditions)
         # 数据权限过滤
         if data_scope_sql is not True:
             query = query.where(data_scope_sql)
         
-        query = query.order_by(SysDept.order_num).distinct()
+        query = query.order_by(DeptDO.order_num).distinct()
         dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
@@ -147,20 +147,20 @@ class DeptDao:
         :param data_scope_sql: 数据权限条件（True 表示不限制，或 SQLAlchemy 条件表达式）
         :return: 部门列表信息对象
         """
-        conditions = [SysDept.del_flag == '0']
+        conditions = [DeptDO.del_flag == '0']
         if page_object.dept_id is not None:
-            conditions.append(SysDept.dept_id == page_object.dept_id)
+            conditions.append(DeptDO.dept_id == page_object.dept_id)
         if page_object.status:
-            conditions.append(SysDept.status == page_object.status)
+            conditions.append(DeptDO.status == page_object.status)
         if page_object.dept_name:
-            conditions.append(SysDept.dept_name.like(f'%{page_object.dept_name}%'))
+            conditions.append(DeptDO.dept_name.like(f'%{page_object.dept_name}%'))
         
-        query = select(SysDept).where(*conditions)
+        query = select(DeptDO).where(*conditions)
         # 数据权限过滤
         if data_scope_sql is not True:
             query = query.where(data_scope_sql)
         
-        query = query.order_by(SysDept.order_num).distinct()
+        query = query.order_by(DeptDO.order_num).distinct()
         dept_result = (await db.execute(query)).scalars().all()
 
         return dept_result
@@ -174,7 +174,7 @@ class DeptDao:
         :param dept: 部门对象
         :return: 新增校验结果
         """
-        db_dept = SysDept(**dept.model_dump())
+        db_dept = DeptDO(**dept.model_dump())
         db.add(db_dept)
         await db.flush()
 
@@ -191,7 +191,7 @@ class DeptDao:
         """
         if 'phone' in dept:
             dept['phone_hash'] = SensitiveDataCipher.hash(dept.get('phone'))
-        await db.execute(update(SysDept), [dept])
+        await db.execute(update(DeptDO), [dept])
 
     @classmethod
     async def update_dept_children_dao(cls, db: AsyncSession, update_dept: List):
@@ -203,8 +203,8 @@ class DeptDao:
         :return:
         """
         await db.execute(
-            update(SysDept)
-            .where(SysDept.dept_id == bindparam('dept_id'))
+            update(DeptDO)
+            .where(DeptDO.dept_id == bindparam('dept_id'))
             .values(
                 {
                     'dept_id': bindparam('dept_id'),
@@ -224,7 +224,7 @@ class DeptDao:
         :param dept_id_list: 部门id列表
         :return:
         """
-        await db.execute(update(SysDept).where(SysDept.dept_id.in_(dept_id_list)).values(status='0'))
+        await db.execute(update(DeptDO).where(DeptDO.dept_id.in_(dept_id_list)).values(status='0'))
 
     @classmethod
     async def delete_dept_dao(cls, db: AsyncSession, dept: DeptModel):
@@ -236,8 +236,8 @@ class DeptDao:
         :return:
         """
         await db.execute(
-            update(SysDept)
-            .where(SysDept.dept_id == dept.dept_id)
+            update(DeptDO)
+            .where(DeptDO.dept_id == dept.dept_id)
             .values(del_flag='2', update_by=dept.update_by, update_time=dept.update_time)
         )
 
@@ -253,8 +253,8 @@ class DeptDao:
         normal_children_dept_count = (
             await db.execute(
                 select(func.count('*'))
-                .select_from(SysDept)
-                .where(SysDept.status == '0', SysDept.del_flag == '0', func.find_in_set(dept_id, SysDept.ancestors))
+                .select_from(DeptDO)
+                .where(DeptDO.status == '0', DeptDO.del_flag == '0', func.find_in_set(dept_id, DeptDO.ancestors))
             )
         ).scalar()
 
@@ -272,8 +272,8 @@ class DeptDao:
         children_dept_count = (
             await db.execute(
                 select(func.count('*'))
-                .select_from(SysDept)
-                .where(SysDept.del_flag == '0', SysDept.parent_id == dept_id)
+                .select_from(DeptDO)
+                .where(DeptDO.del_flag == '0', DeptDO.parent_id == dept_id)
                 .limit(1)
             )
         ).scalar()
@@ -291,7 +291,7 @@ class DeptDao:
         """
         dept_user_count = (
             await db.execute(
-                select(func.count('*')).select_from(SysUser).where(SysUser.dept_id == dept_id, SysUser.del_flag == '0')
+                select(func.count('*')).select_from(UserDO).where(UserDO.dept_id == dept_id, UserDO.del_flag == '0')
             )
         ).scalar()
 

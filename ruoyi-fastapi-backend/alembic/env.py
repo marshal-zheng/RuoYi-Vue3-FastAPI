@@ -35,65 +35,65 @@ from config.database import Base
 
 # 用户相关模型
 from module_admin.entity.do.user_do import (  # noqa: F401
-    SysUser,
-    SysUserRole,
-    SysUserPost,
+    UserDO,
+    UserRoleDO,
+    UserPostDO,
 )
 
 # 角色相关模型
 from module_admin.entity.do.role_do import (  # noqa: F401
-    SysRole,
-    SysRoleMenu,
-    SysRoleDept,
+    RoleDO,
+    RoleMenuDO,
+    RoleDeptDO,
 )
 
 # 菜单模型
-from module_admin.entity.do.menu_do import SysMenu  # noqa: F401
+from module_admin.entity.do.menu_do import MenuDO  # noqa: F401
 
 # 部门模型
-from module_admin.entity.do.dept_do import SysDept  # noqa: F401
+from module_admin.entity.do.dept_do import DeptDO  # noqa: F401
 
 # 岗位模型
-from module_admin.entity.do.post_do import SysPost  # noqa: F401
+from module_admin.entity.do.post_do import PostDO  # noqa: F401
 
 # 字典模型
 from module_admin.entity.do.dict_do import (  # noqa: F401
-    SysDictType,
-    SysDictData,
+    DictTypeDO,
+    DictDataDO,
 )
 
 # 配置模型
-from module_admin.entity.do.config_do import SysConfig  # noqa: F401
+from module_admin.entity.do.config_do import ConfigDO  # noqa: F401
 
 # 通知公告模型
-from module_admin.entity.do.notice_do import SysNotice  # noqa: F401
+from module_admin.entity.do.notice_do import NoticeDO  # noqa: F401
 
 # 日志模型
 from module_admin.entity.do.log_do import (  # noqa: F401
-    SysOperLog,
-    SysLogininfor,
+    OperLogDO,
+    LogininforDO,
 )
 
 # 审计日志模型
-from module_admin.entity.do.audit_log_do import SysAuditLog  # noqa: F401
+from module_admin.entity.do.audit_log_do import AuditLogDO  # noqa: F401
 
 # 定时任务模型
 from module_admin.entity.do.job_do import (  # noqa: F401
-    SysJob,
-    SysJobLog,
+    JobDO,
+    JobLogDO,
 )
 
 # 项目相关模型
-from module_admin.entity.do.project_do import SysProject  # noqa: F401
-from module_admin.entity.do.project_version_do import SysProjectVersion  # noqa: F401
-from module_admin.entity.do.project_topology_do import SysProjectTopology  # noqa: F401
+from module_admin.entity.do.project_do import ProjectDO  # noqa: F401
+from module_admin.entity.do.project_version_do import ProjectVersionDO  # noqa: F401
+from module_admin.entity.do.project_topology_do import ProjectTopologyDO  # noqa: F401
 
 # 设备相关模型
 from module_admin.entity.do.device_do import DeviceDO  # noqa: F401
 from module_admin.entity.do.device_category_do import DeviceCategoryDO  # noqa: F401
 
 # 协议模型
-from module_admin.entity.do.protocol_do import SysProtocol  # noqa: F401
+from module_admin.entity.do.protocol_do import ProtocolDO  # noqa: F401
 
 # 仿真模型
 from module_admin.entity.do.simulation_do import (  # noqa: F401

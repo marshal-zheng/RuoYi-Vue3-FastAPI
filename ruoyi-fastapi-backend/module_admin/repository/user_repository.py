@@ -8,11 +8,11 @@ from sqlalchemy import select, delete, update, and_, or_, desc, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from module_admin.entity.do.user_do import SysUser, SysUserRole, SysUserPost
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu
-from module_admin.entity.do.post_do import SysPost
-from module_admin.entity.do.menu_do import SysMenu
+from module_admin.entity.do.user_do import UserDO, UserRoleDO, UserPostDO
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO
+from module_admin.entity.do.post_do import PostDO
+from module_admin.entity.do.menu_do import MenuDO
 from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 from module_admin.repository.base_repository import BaseRepository
 from module_admin.repository.specification import Specification, equals, like
@@ -21,7 +21,7 @@ from utils.sensitive import sensitive_equals
 from utils.db_filters import not_deleted
 
 
-class UserRepository(BaseRepository[SysUser]):
+class UserRepository(BaseRepository[UserDO]):
     """
     用户 Repository
     
@@ -29,9 +29,9 @@ class UserRepository(BaseRepository[SysUser]):
     """
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysUser)
+        super().__init__(db, UserDO)
     
-    async def find_by_username(self, username: str) -> Optional[SysUser]:
+    async def find_by_username(self, username: str) -> Optional[UserDO]:
         """
         根据用户名查找用户
         
@@ -42,56 +42,56 @@ class UserRepository(BaseRepository[SysUser]):
             用户对象或 None
         """
         stmt = (
-            select(SysUser)
+            select(UserDO)
             .where(
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag),
-                SysUser.user_name == username
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag),
+                UserDO.user_name == username
             )
-            .order_by(desc(SysUser.create_time))
+            .order_by(desc(UserDO.create_time))
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_by_phone(self, phone: str) -> Optional[SysUser]:
+    async def find_by_phone(self, phone: str) -> Optional[UserDO]:
         """根据手机号查找用户"""
         if not phone:
             return None
-        phone_condition = sensitive_equals(SysUser, 'phonenumber', phone)
+        phone_condition = sensitive_equals(UserDO, 'phonenumber', phone)
         stmt = (
-            select(SysUser)
+            select(UserDO)
             .where(
-                not_deleted(SysUser.del_flag),
+                not_deleted(UserDO.del_flag),
                 phone_condition
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_by_email(self, email: str) -> Optional[SysUser]:
+    async def find_by_email(self, email: str) -> Optional[UserDO]:
         """根据邮箱查找用户"""
         if not email:
             return None
-        email_condition = sensitive_equals(SysUser, 'email', email)
+        email_condition = sensitive_equals(UserDO, 'email', email)
         stmt = (
-            select(SysUser)
+            select(UserDO)
             .where(
-                not_deleted(SysUser.del_flag),
+                not_deleted(UserDO.del_flag),
                 email_condition
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
-    async def find_by_id_card(self, id_card: str) -> Optional[SysUser]:
+    async def find_by_id_card(self, id_card: str) -> Optional[UserDO]:
         """根据身份证号查找用户"""
         if not id_card:
             return None
-        id_condition = sensitive_equals(SysUser, 'id_card', id_card)
+        id_condition = sensitive_equals(UserDO, 'id_card', id_card)
         stmt = (
-            select(SysUser)
+            select(UserDO)
             .where(
-                not_deleted(SysUser.del_flag),
+                not_deleted(UserDO.del_flag),
                 id_condition
             )
         )
@@ -112,16 +112,16 @@ class UserRepository(BaseRepository[SysUser]):
         """
         # 使用单次联合查询获取用户、部门信息
         user_dept_stmt = (
-            select(SysUser, SysDept)
-            .outerjoin(SysDept, and_(
-                SysUser.dept_id == SysDept.dept_id,
-                SysDept.status == StatusEnum.NORMAL.value,
-                not_deleted(SysDept.del_flag)
+            select(UserDO, DeptDO)
+            .outerjoin(DeptDO, and_(
+                UserDO.dept_id == DeptDO.dept_id,
+                DeptDO.status == StatusEnum.NORMAL.value,
+                not_deleted(DeptDO.del_flag)
             ))
             .where(
-                SysUser.user_id == user_id,
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_id == user_id,
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag)
             )
         )
         user_dept_result = await self.db.execute(user_dept_stmt)
@@ -141,12 +141,12 @@ class UserRepository(BaseRepository[SysUser]):
         
         # 使用单次查询获取角色信息
         role_stmt = (
-            select(SysRole)
-            .join(SysUserRole, SysUserRole.role_id == SysRole.role_id)
+            select(RoleDO)
+            .join(UserRoleDO, UserRoleDO.role_id == RoleDO.role_id)
             .where(
-                SysUserRole.user_id == user_id,
-                SysRole.status == StatusEnum.NORMAL.value,
-                not_deleted(SysRole.del_flag)
+                UserRoleDO.user_id == user_id,
+                RoleDO.status == StatusEnum.NORMAL.value,
+                not_deleted(RoleDO.del_flag)
             )
             .distinct()
         )
@@ -155,11 +155,11 @@ class UserRepository(BaseRepository[SysUser]):
         
         # 使用单次查询获取岗位信息
         post_stmt = (
-            select(SysPost)
-            .join(SysUserPost, SysUserPost.post_id == SysPost.post_id)
+            select(PostDO)
+            .join(UserPostDO, UserPostDO.post_id == PostDO.post_id)
             .where(
-                SysUserPost.user_id == user_id,
-                SysPost.status == StatusEnum.NORMAL.value
+                UserPostDO.user_id == user_id,
+                PostDO.status == StatusEnum.NORMAL.value
             )
             .distinct()
         )
@@ -178,125 +178,125 @@ class UserRepository(BaseRepository[SysUser]):
             'user_menu_info': menu_info,
         }
     
-    async def _get_active_user(self, user_id: int) -> Optional[SysUser]:
+    async def _get_active_user(self, user_id: int) -> Optional[UserDO]:
         """获取有效的用户"""
         stmt = (
-            select(SysUser)
+            select(UserDO)
             .where(
-                SysUser.user_id == user_id,
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_id == user_id,
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag)
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def _get_user_dept(self, user_id: int) -> Optional[SysDept]:
+    async def _get_user_dept(self, user_id: int) -> Optional[DeptDO]:
         """获取用户所属部门"""
         stmt = (
-            select(SysDept)
-            .select_from(SysUser)
+            select(DeptDO)
+            .select_from(UserDO)
             .join(
-                SysDept,
+                DeptDO,
                 and_(
-                    SysUser.dept_id == SysDept.dept_id,
-                    SysDept.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysDept.del_flag)
+                    UserDO.dept_id == DeptDO.dept_id,
+                    DeptDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(DeptDO.del_flag)
                 )
             )
             .where(
-                SysUser.user_id == user_id,
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_id == user_id,
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag)
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def _get_user_roles(self, user_id: int) -> List[SysRole]:
+    async def _get_user_roles(self, user_id: int) -> List[RoleDO]:
         """获取用户角色列表"""
         stmt = (
-            select(SysRole)
-            .select_from(SysUser)
-            .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+            select(RoleDO)
+            .select_from(UserDO)
+            .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
             .join(
-                SysRole,
+                RoleDO,
                 and_(
-                    SysUserRole.role_id == SysRole.role_id,
-                    SysRole.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysRole.del_flag)
+                    UserRoleDO.role_id == RoleDO.role_id,
+                    RoleDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(RoleDO.del_flag)
                 )
             )
             .where(
-                SysUser.user_id == user_id,
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_id == user_id,
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag)
             )
             .distinct()
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
-    async def _get_user_posts(self, user_id: int) -> List[SysPost]:
+    async def _get_user_posts(self, user_id: int) -> List[PostDO]:
         """获取用户岗位列表"""
         stmt = (
-            select(SysPost)
-            .select_from(SysUser)
-            .join(SysUserPost, SysUser.user_id == SysUserPost.user_id, isouter=True)
+            select(PostDO)
+            .select_from(UserDO)
+            .join(UserPostDO, UserDO.user_id == UserPostDO.user_id, isouter=True)
             .join(
-                SysPost,
+                PostDO,
                 and_(
-                    SysUserPost.post_id == SysPost.post_id,
-                    SysPost.status == StatusEnum.NORMAL.value
+                    UserPostDO.post_id == PostDO.post_id,
+                    PostDO.status == StatusEnum.NORMAL.value
                 )
             )
             .where(
-                SysUser.user_id == user_id,
-                SysUser.status == StatusEnum.NORMAL.value,
-                not_deleted(SysUser.del_flag)
+                UserDO.user_id == user_id,
+                UserDO.status == StatusEnum.NORMAL.value,
+                not_deleted(UserDO.del_flag)
             )
             .distinct()
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
-    async def _get_user_menus(self, user_id: int, role_ids: List[int]) -> List[SysMenu]:
+    async def _get_user_menus(self, user_id: int, role_ids: List[int]) -> List[MenuDO]:
         """获取用户菜单列表"""
         # 超级管理员获取所有菜单
         if 1 in role_ids:
             stmt = (
-                select(SysMenu)
-                .where(SysMenu.status == StatusEnum.NORMAL.value)
+                select(MenuDO)
+                .where(MenuDO.status == StatusEnum.NORMAL.value)
                 .distinct()
             )
         else:
             stmt = (
-                select(SysMenu)
-                .select_from(SysUser)
-                .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                select(MenuDO)
+                .select_from(UserDO)
+                .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                 .join(
-                    SysRole,
+                    RoleDO,
                     and_(
-                        SysUserRole.role_id == SysRole.role_id,
-                        SysRole.status == StatusEnum.NORMAL.value,
-                        not_deleted(SysRole.del_flag)
+                        UserRoleDO.role_id == RoleDO.role_id,
+                        RoleDO.status == StatusEnum.NORMAL.value,
+                        not_deleted(RoleDO.del_flag)
                     ),
                     isouter=True
                 )
-                .join(SysRoleMenu, SysRole.role_id == SysRoleMenu.role_id, isouter=True)
+                .join(RoleMenuDO, RoleDO.role_id == RoleMenuDO.role_id, isouter=True)
                 .join(
-                    SysMenu,
+                    MenuDO,
                     and_(
-                        SysRoleMenu.menu_id == SysMenu.menu_id,
-                        SysMenu.status == StatusEnum.NORMAL.value
+                        RoleMenuDO.menu_id == MenuDO.menu_id,
+                        MenuDO.status == StatusEnum.NORMAL.value
                     )
                 )
                 .where(
-                    SysUser.user_id == user_id,
-                    SysUser.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysUser.del_flag)
+                    UserDO.user_id == user_id,
+                    UserDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(UserDO.del_flag)
                 )
-                .order_by(SysMenu.order_num)
+                .order_by(MenuDO.order_num)
                 .distinct()
             )
         result = await self.db.execute(stmt)
@@ -329,40 +329,40 @@ class UserRepository(BaseRepository[SysUser]):
         Returns:
             分页结果
         """
-        conditions = [not_deleted(SysUser.del_flag)]
+        conditions = [not_deleted(UserDO.del_flag)]
         
         if user_id:
-            conditions.append(SysUser.user_id == user_id)
+            conditions.append(UserDO.user_id == user_id)
         
         if dept_id:
             conditions.append(
                 or_(
-                    SysUser.dept_id == dept_id,
-                    SysUser.dept_id.in_(
-                        select(SysDept.dept_id).where(func.find_in_set(dept_id, SysDept.ancestors))
+                    UserDO.dept_id == dept_id,
+                    UserDO.dept_id.in_(
+                        select(DeptDO.dept_id).where(func.find_in_set(dept_id, DeptDO.ancestors))
                     )
                 )
             )
         
         if user_name:
-            conditions.append(SysUser.user_name.like(f'%{user_name}%'))
+            conditions.append(UserDO.user_name.like(f'%{user_name}%'))
         if nick_name:
-            conditions.append(SysUser.nick_name.like(f'%{nick_name}%'))
+            conditions.append(UserDO.nick_name.like(f'%{nick_name}%'))
         if email:
-            email_condition = sensitive_equals(SysUser, 'email', email)
+            email_condition = sensitive_equals(UserDO, 'email', email)
             if email_condition is not None:
                 conditions.append(email_condition)
         if phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         if status:
-            conditions.append(SysUser.status == status)
+            conditions.append(UserDO.status == status)
         if sex:
-            conditions.append(SysUser.sex == sex)
+            conditions.append(UserDO.sex == sex)
         if begin_time and end_time:
             conditions.append(
-                SysUser.create_time.between(
+                UserDO.create_time.between(
                     datetime.combine(datetime.strptime(begin_time, '%Y-%m-%d'), time(0, 0, 0)),
                     datetime.combine(datetime.strptime(end_time, '%Y-%m-%d'), time(23, 59, 59))
                 )
@@ -376,18 +376,18 @@ class UserRepository(BaseRepository[SysUser]):
             conditions.append(data_scope_sql)
         
         query = (
-            select(SysUser, SysDept)
+            select(UserDO, DeptDO)
             .join(
-                SysDept,
+                DeptDO,
                 and_(
-                    SysUser.dept_id == SysDept.dept_id,
-                    SysDept.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysDept.del_flag)
+                    UserDO.dept_id == DeptDO.dept_id,
+                    DeptDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(DeptDO.del_flag)
                 ),
                 isouter=True
             )
             .where(*conditions)
-            .order_by(SysUser.user_id)
+            .order_by(UserDO.user_id)
             .distinct()
         )
         
@@ -405,8 +405,8 @@ class UserRepository(BaseRepository[SysUser]):
             是否成功
         """
         stmt = (
-            update(SysUser)
-            .where(SysUser.user_id == user_id)
+            update(UserDO)
+            .where(UserDO.user_id == user_id)
             .values(
                 del_flag=DelFlagEnum.DELETED.value,
                 update_by=update_by,
@@ -440,14 +440,14 @@ class UserRepository(BaseRepository[SysUser]):
             分页结果
         """
         conditions = [
-            not_deleted(SysUser.del_flag),
-            SysUserRole.role_id == role_id
+            not_deleted(UserDO.del_flag),
+            UserRoleDO.role_id == role_id
         ]
         
         if user_name:
-            conditions.append(SysUser.user_name.like(f'%{user_name}%'))
+            conditions.append(UserDO.user_name.like(f'%{user_name}%'))
         if phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         
@@ -456,19 +456,19 @@ class UserRepository(BaseRepository[SysUser]):
             conditions.append(data_scope_sql)
         
         query = (
-            select(SysUser, SysDept)
-            .join(SysUserRole, SysUser.user_id == SysUserRole.user_id)
+            select(UserDO, DeptDO)
+            .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id)
             .join(
-                SysDept,
+                DeptDO,
                 and_(
-                    SysUser.dept_id == SysDept.dept_id,
-                    SysDept.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysDept.del_flag)
+                    UserDO.dept_id == DeptDO.dept_id,
+                    DeptDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(DeptDO.del_flag)
                 ),
                 isouter=True
             )
             .where(*conditions)
-            .order_by(SysUser.user_id)
+            .order_by(UserDO.user_id)
             .distinct()
         )
         
@@ -499,19 +499,19 @@ class UserRepository(BaseRepository[SysUser]):
         """
         # 已分配该角色的用户ID子查询
         allocated_user_ids = (
-            select(SysUserRole.user_id)
-            .where(SysUserRole.role_id == role_id)
+            select(UserRoleDO.user_id)
+            .where(UserRoleDO.role_id == role_id)
         )
         
         conditions = [
-            not_deleted(SysUser.del_flag),
-            SysUser.user_id.notin_(allocated_user_ids)
+            not_deleted(UserDO.del_flag),
+            UserDO.user_id.notin_(allocated_user_ids)
         ]
         
         if user_name:
-            conditions.append(SysUser.user_name.like(f'%{user_name}%'))
+            conditions.append(UserDO.user_name.like(f'%{user_name}%'))
         if phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         
@@ -520,25 +520,25 @@ class UserRepository(BaseRepository[SysUser]):
             conditions.append(data_scope_sql)
         
         query = (
-            select(SysUser, SysDept)
+            select(UserDO, DeptDO)
             .join(
-                SysDept,
+                DeptDO,
                 and_(
-                    SysUser.dept_id == SysDept.dept_id,
-                    SysDept.status == StatusEnum.NORMAL.value,
-                    not_deleted(SysDept.del_flag)
+                    UserDO.dept_id == DeptDO.dept_id,
+                    DeptDO.status == StatusEnum.NORMAL.value,
+                    not_deleted(DeptDO.del_flag)
                 ),
                 isouter=True
             )
             .where(*conditions)
-            .order_by(SysUser.user_id)
+            .order_by(UserDO.user_id)
             .distinct()
         )
         
         return await PageUtil.paginate(self.db, query, page, page_size, True)
 
 
-    async def get_users_roles_batch(self, user_ids: List[int]) -> Dict[int, List[SysRole]]:
+    async def get_users_roles_batch(self, user_ids: List[int]) -> Dict[int, List[RoleDO]]:
         """
         P1-016: 批量获取用户角色（避免 N+1 查询）
         
@@ -552,25 +552,25 @@ class UserRepository(BaseRepository[SysUser]):
             return {}
         
         stmt = (
-            select(SysUserRole.user_id, SysRole)
-            .join(SysRole, SysUserRole.role_id == SysRole.role_id)
+            select(UserRoleDO.user_id, RoleDO)
+            .join(RoleDO, UserRoleDO.role_id == RoleDO.role_id)
             .where(
-                SysUserRole.user_id.in_(user_ids),
-                SysRole.status == StatusEnum.NORMAL.value,
-                not_deleted(SysRole.del_flag)
+                UserRoleDO.user_id.in_(user_ids),
+                RoleDO.status == StatusEnum.NORMAL.value,
+                not_deleted(RoleDO.del_flag)
             )
         )
         result = await self.db.execute(stmt)
         rows = result.all()
         
         # 组织成 {user_id: [roles]} 的映射
-        user_roles: Dict[int, List[SysRole]] = {uid: [] for uid in user_ids}
+        user_roles: Dict[int, List[RoleDO]] = {uid: [] for uid in user_ids}
         for user_id, role in rows:
             user_roles[user_id].append(role)
         
         return user_roles
     
-    async def get_users_posts_batch(self, user_ids: List[int]) -> Dict[int, List[SysPost]]:
+    async def get_users_posts_batch(self, user_ids: List[int]) -> Dict[int, List[PostDO]]:
         """
         P1-016: 批量获取用户岗位（避免 N+1 查询）
         
@@ -584,39 +584,39 @@ class UserRepository(BaseRepository[SysUser]):
             return {}
         
         stmt = (
-            select(SysUserPost.user_id, SysPost)
-            .join(SysPost, SysUserPost.post_id == SysPost.post_id)
+            select(UserPostDO.user_id, PostDO)
+            .join(PostDO, UserPostDO.post_id == PostDO.post_id)
             .where(
-                SysUserPost.user_id.in_(user_ids),
-                SysPost.status == StatusEnum.NORMAL.value
+                UserPostDO.user_id.in_(user_ids),
+                PostDO.status == StatusEnum.NORMAL.value
             )
         )
         result = await self.db.execute(stmt)
         rows = result.all()
         
         # 组织成 {user_id: [posts]} 的映射
-        user_posts: Dict[int, List[SysPost]] = {uid: [] for uid in user_ids}
+        user_posts: Dict[int, List[PostDO]] = {uid: [] for uid in user_ids}
         for user_id, post in rows:
             user_posts[user_id].append(post)
         
         return user_posts
 
 
-class UserRoleRepository(BaseRepository[SysUserRole]):
+class UserRoleRepository(BaseRepository[UserRoleDO]):
     """用户角色关联 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysUserRole)
+        super().__init__(db, UserRoleDO)
     
-    async def find_by_user_id(self, user_id: int) -> List[SysUserRole]:
+    async def find_by_user_id(self, user_id: int) -> List[UserRoleDO]:
         """根据用户ID查找关联"""
-        stmt = select(SysUserRole).where(SysUserRole.user_id == user_id)
+        stmt = select(UserRoleDO).where(UserRoleDO.user_id == user_id)
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
     async def delete_by_user_id(self, user_id: int) -> int:
         """根据用户ID删除关联"""
-        stmt = delete(SysUserRole).where(SysUserRole.user_id == user_id)
+        stmt = delete(UserRoleDO).where(UserRoleDO.user_id == user_id)
         result = await self.db.execute(stmt)
         return result.rowcount
     
@@ -624,41 +624,41 @@ class UserRoleRepository(BaseRepository[SysUserRole]):
         """根据用户ID和角色ID删除关联"""
         conditions = []
         if user_id:
-            conditions.append(SysUserRole.user_id == user_id)
+            conditions.append(UserRoleDO.user_id == user_id)
         if role_id:
-            conditions.append(SysUserRole.role_id == role_id)
+            conditions.append(UserRoleDO.role_id == role_id)
         
-        stmt = delete(SysUserRole).where(*conditions)
+        stmt = delete(UserRoleDO).where(*conditions)
         result = await self.db.execute(stmt)
         return result.rowcount
     
-    async def find_by_user_and_role(self, user_id: int, role_id: int) -> Optional[SysUserRole]:
+    async def find_by_user_and_role(self, user_id: int, role_id: int) -> Optional[UserRoleDO]:
         """根据用户ID和角色ID查找关联"""
         stmt = (
-            select(SysUserRole)
+            select(UserRoleDO)
             .where(
-                SysUserRole.user_id == user_id,
-                SysUserRole.role_id == role_id
+                UserRoleDO.user_id == user_id,
+                UserRoleDO.role_id == role_id
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
 
-class UserPostRepository(BaseRepository[SysUserPost]):
+class UserPostRepository(BaseRepository[UserPostDO]):
     """用户岗位关联 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysUserPost)
+        super().__init__(db, UserPostDO)
     
-    async def find_by_user_id(self, user_id: int) -> List[SysUserPost]:
+    async def find_by_user_id(self, user_id: int) -> List[UserPostDO]:
         """根据用户ID查找关联"""
-        stmt = select(SysUserPost).where(SysUserPost.user_id == user_id)
+        stmt = select(UserPostDO).where(UserPostDO.user_id == user_id)
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
     async def delete_by_user_id(self, user_id: int) -> int:
         """根据用户ID删除关联"""
-        stmt = delete(SysUserPost).where(SysUserPost.user_id == user_id)
+        stmt = delete(UserPostDO).where(UserPostDO.user_id == user_id)
         result = await self.db.execute(stmt)
         return result.rowcount

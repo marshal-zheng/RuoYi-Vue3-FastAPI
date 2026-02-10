@@ -41,11 +41,11 @@ async def get_device_category_list(
         page_num=page_num,
         page_size=page_size
     )
-    result = await DeviceCategoryService.get_device_category_list(
+    result = await DeviceCategoryService.get_device_category_list_services(
         query_db, query, current_user.user.user_name
     )
     logger.info('获取设备分类列表成功')
-    return result
+    return ResponseUtil.success(rows=result['rows'], dict_content={'total': result['total']})
 
 
 @deviceCategoryController.get(
@@ -60,9 +60,9 @@ async def get_device_category_detail(
     """
     获取设备分类详情
     """
-    result = await DeviceCategoryService.get_device_category_detail(query_db, category_id)
+    result = await DeviceCategoryService.device_category_detail_services(query_db, category_id)
     logger.info(f'获取设备分类详情成功: {category_id}')
-    return result
+    return ResponseUtil.success(data=result)
 
 
 @deviceCategoryController.post(
@@ -79,11 +79,11 @@ async def add_device_category(
     """
     新增设备分类
     """
-    result = await DeviceCategoryService.add_device_category(
+    result = await DeviceCategoryService.add_device_category_services(
         query_db, category_data, current_user.user.user_name
     )
     logger.info('新增设备分类成功')
-    return result
+    return ResponseUtil.success(message=result.message)
 
 
 @deviceCategoryController.put(
@@ -100,11 +100,11 @@ async def update_device_category(
     """
     修改设备分类
     """
-    result = await DeviceCategoryService.update_device_category(
+    result = await DeviceCategoryService.edit_device_category_services(
         query_db, category_data, current_user.user.user_name
     )
     logger.info('修改设备分类成功')
-    return result
+    return ResponseUtil.success(message=result.message)
 
 
 @deviceCategoryController.delete(
@@ -120,9 +120,9 @@ async def delete_device_category(
     """
     删除设备分类
     """
-    result = await DeviceCategoryService.delete_device_category(query_db, category_ids)
+    result = await DeviceCategoryService.delete_device_category_services(query_db, category_ids)
     logger.info(f'删除设备分类成功: {category_ids}')
-    return result
+    return ResponseUtil.success(message=result.message)
 
 
 @deviceCategoryController.get(
@@ -136,9 +136,9 @@ async def get_device_category_options(
     """
     获取设备分类选项（用于下拉选择）
     """
-    result = await DeviceCategoryService.get_device_category_options(query_db)
+    result = await DeviceCategoryService.get_device_category_options_services(query_db)
     logger.info('获取设备分类选项成功')
-    return result
+    return ResponseUtil.success(data=result)
 
 
 @deviceCategoryController.get(
@@ -154,5 +154,5 @@ async def check_device_category_name_unique(
     """
     检查设备分类名称是否唯一
     """
-    result = await DeviceCategoryService.check_name_unique(query_db, name, category_id)
-    return result
+    result = await DeviceCategoryService.check_device_category_name_unique_services(query_db, name, category_id)
+    return ResponseUtil.success(data=result)

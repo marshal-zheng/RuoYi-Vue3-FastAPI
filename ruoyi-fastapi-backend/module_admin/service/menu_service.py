@@ -9,7 +9,7 @@ from exceptions.exception import (
     ValidationException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.menu_do import SysMenu
+from module_admin.entity.do.menu_do import MenuDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.menu_vo import DeleteMenuModel, MenuQueryModel, MenuModel
 from module_admin.entity.vo.role_vo import RoleMenuQueryModel
@@ -183,7 +183,7 @@ class MenuService:
             )
         
         menu_repo = MenuRepository(query_db)
-        db_menu = SysMenu(**page_object.model_dump())
+        db_menu = MenuDO(**page_object.model_dump())
         await menu_repo.add(db_menu)
         await cls._invalidate_menu_cache()
         return CrudResponseModel(is_success=True, message='新增成功')

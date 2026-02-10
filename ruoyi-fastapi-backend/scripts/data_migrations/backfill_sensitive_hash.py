@@ -1,14 +1,14 @@
 from sqlalchemy import select
 
 from config.database import AsyncSessionLocal
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.user_do import UserDO
 from utils.log_util import logger
 from utils.sensitive import SensitiveDataCipher
 
 
 async def _backfill_user_hashes(session) -> dict:
-    result = await session.execute(select(SysUser))
+    result = await session.execute(select(UserDO))
     users = result.scalars().all()
     counts = {
         'phonenumber': 0,
@@ -35,7 +35,7 @@ async def _backfill_user_hashes(session) -> dict:
 
 
 async def _backfill_dept_phone_hash(session) -> int:
-    result = await session.execute(select(SysDept))
+    result = await session.execute(select(DeptDO))
     depts = result.scalars().all()
     updated = 0
     for dept in depts:

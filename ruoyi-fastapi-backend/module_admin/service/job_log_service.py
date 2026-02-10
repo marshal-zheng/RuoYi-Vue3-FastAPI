@@ -2,7 +2,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
 from typing import List
-from module_admin.entity.do.job_do import SysJobLog
+from module_admin.entity.do.job_do import JobLogDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.job_vo import DeleteJobLogModel, JobLogModel, JobLogPageQueryModel
 from module_admin.repository import JobLogRepository
@@ -64,7 +64,7 @@ class JobLogService:
         :return: 新增定时任务日志校验结果
         """
         job_log_repo = JobLogRepository(query_db)
-        db_job_log = SysJobLog(**page_object.model_dump())
+        db_job_log = JobLogDO(**page_object.model_dump())
         job_log_repo.add_sync(query_db, db_job_log)
         query_db.commit()
         result = dict(is_success=True, message='新增成功')

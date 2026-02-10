@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from sqlalchemy import asc, delete, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.log_do import SysLogininfor, SysOperLog
+from module_admin.entity.do.log_do import LogininforDO, OperLogDO
 from module_admin.entity.vo.log_vo import LogininforModel, LoginLogPageQueryModel, OperLogModel, OperLogPageQueryModel
 from utils.common_util import SnakeCaseUtil
 from utils.page_util import PageUtil
@@ -24,21 +24,21 @@ class OperationLogDao:
         :return: 操作日志列表信息对象
         """
         if query_object.is_asc == 'ascending':
-            order_by_column = asc(getattr(SysOperLog, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None))
+            order_by_column = asc(getattr(OperLogDO, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None))
         elif query_object.is_asc == 'descending':
             order_by_column = desc(
-                getattr(SysOperLog, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
+                getattr(OperLogDO, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
             )
         else:
-            order_by_column = desc(SysOperLog.oper_time)
+            order_by_column = desc(OperLogDO.oper_time)
         query = (
-            select(SysOperLog)
+            select(OperLogDO)
             .where(
-                SysOperLog.title.like(f'%{query_object.title}%') if query_object.title else True,
-                SysOperLog.oper_name.like(f'%{query_object.oper_name}%') if query_object.oper_name else True,
-                SysOperLog.business_type == query_object.business_type if query_object.business_type else True,
-                SysOperLog.status == query_object.status if query_object.status else True,
-                SysOperLog.oper_time.between(
+                OperLogDO.title.like(f'%{query_object.title}%') if query_object.title else True,
+                OperLogDO.oper_name.like(f'%{query_object.oper_name}%') if query_object.oper_name else True,
+                OperLogDO.business_type == query_object.business_type if query_object.business_type else True,
+                OperLogDO.status == query_object.status if query_object.status else True,
+                OperLogDO.oper_time.between(
                     datetime.combine(TimeFormatUtil.parse_date(query_object.begin_time), time(00, 00, 00)),
                     datetime.combine(TimeFormatUtil.parse_date(query_object.end_time), time(23, 59, 59)),
                 )
@@ -61,7 +61,7 @@ class OperationLogDao:
         :param operation_log: 操作日志对象
         :return: 新增校验结果
         """
-        db_operation_log = SysOperLog(**operation_log.model_dump())
+        db_operation_log = OperLogDO(**operation_log.model_dump())
         db.add(db_operation_log)
         await db.flush()
 
@@ -76,7 +76,7 @@ class OperationLogDao:
         :param operation_log: 操作日志对象
         :return:
         """
-        await db.execute(delete(SysOperLog).where(SysOperLog.oper_id.in_([operation_log.oper_id])))
+        await db.execute(delete(OperLogDO).where(OperLogDO.oper_id.in_([operation_log.oper_id])))
 
     @classmethod
     async def clear_operation_log_dao(cls, db: AsyncSession):
@@ -86,7 +86,7 @@ class OperationLogDao:
         :param db: orm对象
         :return:
         """
-        await db.execute(delete(SysOperLog))
+        await db.execute(delete(OperLogDO))
 
 
 class LoginLogDao:
@@ -106,21 +106,21 @@ class LoginLogDao:
         """
         if query_object.is_asc == 'ascending':
             order_by_column = asc(
-                getattr(SysLogininfor, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
+                getattr(LogininforDO, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
             )
         elif query_object.is_asc == 'descending':
             order_by_column = desc(
-                getattr(SysLogininfor, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
+                getattr(LogininforDO, SnakeCaseUtil.camel_to_snake(query_object.order_by_column), None)
             )
         else:
-            order_by_column = desc(SysLogininfor.login_time)
+            order_by_column = desc(LogininforDO.login_time)
         query = (
-            select(SysLogininfor)
+            select(LogininforDO)
             .where(
-                SysLogininfor.ipaddr.like(f'%{query_object.ipaddr}%') if query_object.ipaddr else True,
-                SysLogininfor.user_name.like(f'%{query_object.user_name}%') if query_object.user_name else True,
-                SysLogininfor.status == query_object.status if query_object.status else True,
-                SysLogininfor.login_time.between(
+                LogininforDO.ipaddr.like(f'%{query_object.ipaddr}%') if query_object.ipaddr else True,
+                LogininforDO.user_name.like(f'%{query_object.user_name}%') if query_object.user_name else True,
+                LogininforDO.status == query_object.status if query_object.status else True,
+                LogininforDO.login_time.between(
                     datetime.combine(TimeFormatUtil.parse_date(query_object.begin_time), time(00, 00, 00)),
                     datetime.combine(TimeFormatUtil.parse_date(query_object.end_time), time(23, 59, 59)),
                 )
@@ -143,7 +143,7 @@ class LoginLogDao:
         :param login_log: 登录日志对象
         :return: 新增校验结果
         """
-        db_login_log = SysLogininfor(**login_log.model_dump())
+        db_login_log = LogininforDO(**login_log.model_dump())
         db.add(db_login_log)
         await db.flush()
 
@@ -158,7 +158,7 @@ class LoginLogDao:
         :param login_log: 登录日志对象
         :return:
         """
-        await db.execute(delete(SysLogininfor).where(SysLogininfor.info_id.in_([login_log.info_id])))
+        await db.execute(delete(LogininforDO).where(LogininforDO.info_id.in_([login_log.info_id])))
 
     @classmethod
     async def clear_login_log_dao(cls, db: AsyncSession):
@@ -168,4 +168,4 @@ class LoginLogDao:
         :param db: orm对象
         :return:
         """
-        await db.execute(delete(SysLogininfor))
+        await db.execute(delete(LogininforDO))

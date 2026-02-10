@@ -1,6 +1,6 @@
 from sqlalchemy import desc, select, update, or_
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.protocol_do import SysProtocol
+from module_admin.entity.do.protocol_do import ProtocolDO
 from module_admin.entity.vo.protocol_vo import (
     ProtocolModel,
     ProtocolPageQueryModel,
@@ -25,9 +25,9 @@ class ProtocolDao:
         """
         protocol_info = (
             await db.execute(
-                select(SysProtocol).where(
-                    SysProtocol.protocol_id == protocol_id,
-                    SysProtocol.del_flag == '0'
+                select(ProtocolDO).where(
+                    ProtocolDO.protocol_id == protocol_id,
+                    ProtocolDO.del_flag == '0'
                 )
             )
         ).scalars().first()
@@ -45,9 +45,9 @@ class ProtocolDao:
         """
         protocol_info = (
             await db.execute(
-                select(SysProtocol).where(
-                    SysProtocol.protocol_name == protocol_name,
-                    SysProtocol.del_flag == '0'
+                select(ProtocolDO).where(
+                    ProtocolDO.protocol_name == protocol_name,
+                    ProtocolDO.del_flag == '0'
                 )
             )
         ).scalars().first()
@@ -64,22 +64,22 @@ class ProtocolDao:
         :param is_page: 是否开启分页
         :return: 协议列表信息对象
         """
-        query = select(SysProtocol).where(
-            SysProtocol.del_flag == '0'
-        ).order_by(desc(SysProtocol.update_time))
+        query = select(ProtocolDO).where(
+            ProtocolDO.del_flag == '0'
+        ).order_by(desc(ProtocolDO.update_time))
         
         # 协议名称搜索
         if query_object.protocol_name:
-            query = query.where(SysProtocol.protocol_name.like(f'%{query_object.protocol_name}%'))
+            query = query.where(ProtocolDO.protocol_name.like(f'%{query_object.protocol_name}%'))
         
         # 协议类型筛选
         if query_object.protocol_type:
-            query = query.where(SysProtocol.protocol_type == query_object.protocol_type)
+            query = query.where(ProtocolDO.protocol_type == query_object.protocol_type)
         
         # 日期范围筛选
         if query_object.begin_time and query_object.end_time:
             query = query.where(
-                SysProtocol.create_time.between(query_object.begin_time, query_object.end_time)
+                ProtocolDO.create_time.between(query_object.begin_time, query_object.end_time)
             )
         
         if is_page:
@@ -97,7 +97,7 @@ class ProtocolDao:
         :param protocol: 协议对象
         :return: 新增的协议对象
         """
-        db_protocol = SysProtocol(**protocol.model_dump(exclude_unset=True, by_alias=False))
+        db_protocol = ProtocolDO(**protocol.model_dump(exclude_unset=True, by_alias=False))
         db.add(db_protocol)
         await db.flush()
         return db_protocol
@@ -112,8 +112,8 @@ class ProtocolDao:
         :return: None
         """
         await db.execute(
-            update(SysProtocol)
-            .where(SysProtocol.protocol_id == protocol.protocol_id)
+            update(ProtocolDO)
+            .where(ProtocolDO.protocol_id == protocol.protocol_id)
             .values(**protocol.model_dump(exclude_unset=True, exclude={'protocol_id'}, by_alias=False))
         )
 
@@ -128,8 +128,8 @@ class ProtocolDao:
         """
         protocol_id_list = protocol.protocol_ids.split(',')
         await db.execute(
-            update(SysProtocol)
-            .where(SysProtocol.protocol_id.in_(protocol_id_list))
+            update(ProtocolDO)
+            .where(ProtocolDO.protocol_id.in_(protocol_id_list))
             .values(
                 del_flag='2',
                 update_by=protocol.update_by,

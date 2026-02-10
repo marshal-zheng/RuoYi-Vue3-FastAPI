@@ -56,13 +56,13 @@ from utils.log_util import logger
 from utils.pwd_util import PwdUtil
 
 # Import all ORM models
-from module_admin.entity.do.user_do import SysUser, SysUserRole, SysUserPost
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu, SysRoleDept
-from module_admin.entity.do.menu_do import SysMenu
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.post_do import SysPost
-from module_admin.entity.do.dict_do import SysDictType, SysDictData
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.user_do import UserDO, UserRoleDO, UserPostDO
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO, RoleDeptDO
+from module_admin.entity.do.menu_do import MenuDO
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.post_do import PostDO
+from module_admin.entity.do.dict_do import DictTypeDO, DictDataDO
+from module_admin.entity.do.config_do import ConfigDO
 
 
 class SeedDataManager:
@@ -82,14 +82,14 @@ class SeedDataManager:
     
     # ORM model mapping
     MODEL_MAP = {
-        'depts': SysDept,
-        'posts': SysPost,
-        'roles': SysRole,
-        'menus': SysMenu,
-        'dict_types': SysDictType,
-        'dict_data': SysDictData,
-        'configs': SysConfig,
-        'users': SysUser,
+        'depts': DeptDO,
+        'posts': PostDO,
+        'roles': RoleDO,
+        'menus': MenuDO,
+        'dict_types': DictTypeDO,
+        'dict_data': DictDataDO,
+        'configs': ConfigDO,
+        'users': UserDO,
     }
     
     # Primary key field mapping
@@ -312,7 +312,7 @@ class SeedDataManager:
         
         # Check if config already exists
         result = await self.session.execute(
-            select(SysConfig).where(SysConfig.config_id == 1)
+            select(ConfigDO).where(ConfigDO.config_id == 1)
         )
         if result.scalar_one_or_none():
             logger.info("System configuration already exists, skipping")
@@ -341,7 +341,7 @@ class SeedDataManager:
                 'create_time': now,
                 'update_by': '',
             }
-            config = SysConfig(**config_data_with_audit)
+            config = ConfigDO(**config_data_with_audit)
             self.session.add(config)
             count += 1
         
@@ -359,7 +359,7 @@ class SeedDataManager:
         
         # Check if admin user already exists
         result = await self.session.execute(
-            select(SysUser).where(SysUser.user_name == 'admin')
+            select(UserDO).where(UserDO.user_name == 'admin')
         )
         if result.scalar_one_or_none():
             logger.info("Admin user already exists, skipping user seeding")
@@ -380,7 +380,7 @@ class SeedDataManager:
             plain_password = user_data.pop('password', 'admin123')
             hashed_password = PwdUtil.get_password_hash(plain_password)
             
-            user = SysUser(
+            user = UserDO(
                 **user_data,
                 password=hashed_password,
                 login_date=now,
@@ -404,9 +404,9 @@ class SeedDataManager:
         logger.info("Seeding user-role associations...")
         
         result = await self.session.execute(
-            select(SysUserRole).where(
-                SysUserRole.user_id == 1,
-                SysUserRole.role_id == 1
+            select(UserRoleDO).where(
+                UserRoleDO.user_id == 1,
+                UserRoleDO.role_id == 1
             )
         )
         if result.scalar_one_or_none():
@@ -418,7 +418,7 @@ class SeedDataManager:
         
         count = 0
         for ur in user_roles:
-            self.session.add(SysUserRole(
+            self.session.add(UserRoleDO(
                 user_id=ur['user_id'],
                 role_id=ur['role_id']
             ))
@@ -432,9 +432,9 @@ class SeedDataManager:
         logger.info("Seeding user-post associations...")
         
         result = await self.session.execute(
-            select(SysUserPost).where(
-                SysUserPost.user_id == 1,
-                SysUserPost.post_id == 1
+            select(UserPostDO).where(
+                UserPostDO.user_id == 1,
+                UserPostDO.post_id == 1
             )
         )
         if result.scalar_one_or_none():
@@ -446,7 +446,7 @@ class SeedDataManager:
         
         count = 0
         for up in user_posts:
-            self.session.add(SysUserPost(
+            self.session.add(UserPostDO(
                 user_id=up['user_id'],
                 post_id=up['post_id']
             ))
@@ -464,7 +464,7 @@ class SeedDataManager:
         logger.info("Seeding role-menu associations...")
         
         result = await self.session.execute(
-            select(SysRoleMenu).where(SysRoleMenu.role_id == 2)
+            select(RoleMenuDO).where(RoleMenuDO.role_id == 2)
         )
         if result.scalar_one_or_none():
             logger.info("Role-menu associations already exist, skipping")
@@ -479,7 +479,7 @@ class SeedDataManager:
             menu_ids = rm.get('menu_ids', [])
             
             for menu_id in menu_ids:
-                self.session.add(SysRoleMenu(
+                self.session.add(RoleMenuDO(
                     role_id=role_id,
                     menu_id=menu_id
                 ))
@@ -493,7 +493,7 @@ class SeedDataManager:
         logger.info("Seeding role-dept associations...")
         
         result = await self.session.execute(
-            select(SysRoleDept).where(SysRoleDept.role_id == 2)
+            select(RoleDeptDO).where(RoleDeptDO.role_id == 2)
         )
         if result.scalar_one_or_none():
             logger.info("Role-dept associations already exist, skipping")
@@ -508,7 +508,7 @@ class SeedDataManager:
             dept_ids = rd.get('dept_ids', [])
             
             for dept_id in dept_ids:
-                self.session.add(SysRoleDept(
+                self.session.add(RoleDeptDO(
                     role_id=role_id,
                     dept_id=dept_id
                 ))
@@ -530,24 +530,24 @@ class SeedDataManager:
         
         # Delete in reverse dependency order
         # 1. Relationship tables first
-        await self.session.execute(delete(SysUserRole))
-        await self.session.execute(delete(SysUserPost))
-        await self.session.execute(delete(SysRoleMenu))
-        await self.session.execute(delete(SysRoleDept))
+        await self.session.execute(delete(UserRoleDO))
+        await self.session.execute(delete(UserPostDO))
+        await self.session.execute(delete(RoleMenuDO))
+        await self.session.execute(delete(RoleDeptDO))
         logger.info("Cleared relationship tables")
         
         # 2. Dependent entities
-        await self.session.execute(delete(SysUser))
+        await self.session.execute(delete(UserDO))
         logger.info("Cleared users")
         
         # 3. Independent entities
-        await self.session.execute(delete(SysRole))
-        await self.session.execute(delete(SysMenu))
-        await self.session.execute(delete(SysDept))
-        await self.session.execute(delete(SysPost))
-        await self.session.execute(delete(SysDictData))
-        await self.session.execute(delete(SysDictType))
-        await self.session.execute(delete(SysConfig))
+        await self.session.execute(delete(RoleDO))
+        await self.session.execute(delete(MenuDO))
+        await self.session.execute(delete(DeptDO))
+        await self.session.execute(delete(PostDO))
+        await self.session.execute(delete(DictDataDO))
+        await self.session.execute(delete(DictTypeDO))
+        await self.session.execute(delete(ConfigDO))
         logger.info("Cleared independent entities")
         
         await self.session.flush()

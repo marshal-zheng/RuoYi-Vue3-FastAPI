@@ -1,7 +1,7 @@
 from sqlalchemy import delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.post_do import SysPost
-from module_admin.entity.do.user_do import SysUserPost
+from module_admin.entity.do.post_do import PostDO
+from module_admin.entity.do.user_do import UserPostDO
 from module_admin.entity.vo.post_vo import PostModel, PostPageQueryModel
 from utils.page_util import PageUtil
 
@@ -21,7 +21,7 @@ class PostDao:
         :return: 在用岗位信息对象
         """
         post_info = (
-            (await db.execute(select(SysPost).where(SysPost.post_id == post_id, SysPost.status == '0')))
+            (await db.execute(select(PostDO).where(PostDO.post_id == post_id, PostDO.status == '0')))
             .scalars()
             .first()
         )
@@ -37,7 +37,7 @@ class PostDao:
         :param post_id: 岗位id
         :return: 岗位信息对象
         """
-        post_info = (await db.execute(select(SysPost).where(SysPost.post_id == post_id))).scalars().first()
+        post_info = (await db.execute(select(PostDO).where(PostDO.post_id == post_id))).scalars().first()
 
         return post_info
 
@@ -53,10 +53,10 @@ class PostDao:
         post_info = (
             (
                 await db.execute(
-                    select(SysPost).where(
-                        SysPost.post_name == post.post_name if post.post_name else True,
-                        SysPost.post_code == post.post_code if post.post_code else True,
-                        SysPost.post_sort == post.post_sort if post.post_sort else True,
+                    select(PostDO).where(
+                        PostDO.post_name == post.post_name if post.post_name else True,
+                        PostDO.post_code == post.post_code if post.post_code else True,
+                        PostDO.post_sort == post.post_sort if post.post_sort else True,
                     )
                 )
             )
@@ -77,13 +77,13 @@ class PostDao:
         :return: 岗位列表信息对象
         """
         query = (
-            select(SysPost)
+            select(PostDO)
             .where(
-                SysPost.post_code.like(f'%{query_object.post_code}%') if query_object.post_code else True,
-                SysPost.post_name.like(f'%{query_object.post_name}%') if query_object.post_name else True,
-                SysPost.status == query_object.status if query_object.status else True,
+                PostDO.post_code.like(f'%{query_object.post_code}%') if query_object.post_code else True,
+                PostDO.post_name.like(f'%{query_object.post_name}%') if query_object.post_name else True,
+                PostDO.status == query_object.status if query_object.status else True,
             )
-            .order_by(SysPost.post_sort)
+            .order_by(PostDO.post_sort)
             .distinct()
         )
         post_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -99,7 +99,7 @@ class PostDao:
         :param post: 岗位对象
         :return:
         """
-        db_post = SysPost(**post.model_dump())
+        db_post = PostDO(**post.model_dump())
         db.add(db_post)
         await db.flush()
 
@@ -114,7 +114,7 @@ class PostDao:
         :param post: 需要更新的岗位字典
         :return:
         """
-        await db.execute(update(SysPost), [post])
+        await db.execute(update(PostDO), [post])
 
     @classmethod
     async def delete_post_dao(cls, db: AsyncSession, post: PostModel):
@@ -125,7 +125,7 @@ class PostDao:
         :param post: 岗位对象
         :return:
         """
-        await db.execute(delete(SysPost).where(SysPost.post_id.in_([post.post_id])))
+        await db.execute(delete(PostDO).where(PostDO.post_id.in_([post.post_id])))
 
     @classmethod
     async def count_user_post_dao(cls, db: AsyncSession, post_id: int):
@@ -137,7 +137,7 @@ class PostDao:
         :return: 岗位关联的用户数量
         """
         user_post_count = (
-            await db.execute(select(func.count('*')).select_from(SysUserPost).where(SysUserPost.post_id == post_id))
+            await db.execute(select(func.count('*')).select_from(UserPostDO).where(UserPostDO.post_id == post_id))
         ).scalar()
 
         return user_post_count

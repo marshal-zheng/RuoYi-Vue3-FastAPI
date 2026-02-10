@@ -12,7 +12,7 @@ from exceptions.exception import (
     PermissionException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.role_do import SysRole, SysRoleDept, SysRoleMenu
+from module_admin.entity.do.role_do import RoleDO, RoleDeptDO, RoleMenuDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from utils.transaction_manager import transactional
 from module_admin.entity.vo.role_vo import (
@@ -250,13 +250,13 @@ class RoleService:
             )
         
         role_repo = RoleRepository(query_db)
-        db_role = SysRole(**add_role.model_dump())
+        db_role = RoleDO(**add_role.model_dump())
         add_result = await role_repo.add(db_role)
         role_id = add_result.role_id
         if page_object.menu_ids:
             role_menu_repo = RoleMenuRepository(query_db)
             for menu in page_object.menu_ids:
-                db_role_menu = SysRoleMenu(role_id=role_id, menu_id=menu)
+                db_role_menu = RoleMenuDO(role_id=role_id, menu_id=menu)
                 await role_menu_repo.add(db_role_menu)
         await cls._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='新增成功')
@@ -310,7 +310,7 @@ class RoleService:
             await role_menu_repo.delete_by_role_id(page_object.role_id)
             if page_object.menu_ids:
                 for menu in page_object.menu_ids:
-                    db_role_menu = SysRoleMenu(role_id=page_object.role_id, menu_id=menu)
+                    db_role_menu = RoleMenuDO(role_id=page_object.role_id, menu_id=menu)
                     await role_menu_repo.add(db_role_menu)
         await cls._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='更新成功')
@@ -345,7 +345,7 @@ class RoleService:
         await role_dept_repo.delete_by_role_id(page_object.role_id)
         if page_object.dept_ids and page_object.data_scope == '2':
             for dept in page_object.dept_ids:
-                db_role_dept = SysRoleDept(role_id=page_object.role_id, dept_id=dept)
+                db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
                 await role_dept_repo.add(db_role_dept)
         await cls._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='分配成功')

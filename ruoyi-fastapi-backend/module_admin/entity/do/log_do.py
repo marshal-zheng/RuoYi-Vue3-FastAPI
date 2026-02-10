@@ -4,7 +4,7 @@ from config.database import Base
 from module_admin.entity.do.enums import LoginStatusEnum, BusinessStatusEnum
 
 
-class SysLogininfor(Base):
+class LogininforDO(Base):
     """
     系统访问记录
     注: 使用 login_time 作为时间戳，不继承 LogBaseModel 避免额外的 create_time 字段
@@ -26,7 +26,7 @@ class SysLogininfor(Base):
     idx_sys_logininfor_lt = Index('idx_sys_logininfor_lt', login_time)
 
 
-class SysOperLog(Base):
+class OperLogDO(Base):
     """
     操作日志记录
     注: 使用 oper_time 作为时间戳，不继承 LogBaseModel 避免额外的 create_time 字段

@@ -12,7 +12,7 @@ from exceptions.exception import (
     AuthException,
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.user_do import SysUser, SysUserPost, SysUserRole
+from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from utils.transaction_manager import transactional
 from module_admin.entity.vo.post_vo import PostPageQueryModel
@@ -251,18 +251,18 @@ class UserService:
             )
         
         user_repo = UserRepository(query_db)
-        db_user = SysUser(**add_user.model_dump(exclude={'admin'}))
+        db_user = UserDO(**add_user.model_dump(exclude={'admin'}))
         add_result = await user_repo.add(db_user)
         user_id = add_result.user_id
         if page_object.role_ids:
             user_role_repo = UserRoleRepository(query_db)
             for role in page_object.role_ids:
-                db_user_role = SysUserRole(user_id=user_id, role_id=role)
+                db_user_role = UserRoleDO(user_id=user_id, role_id=role)
                 await user_role_repo.add(db_user_role)
         if page_object.post_ids:
             user_post_repo = UserPostRepository(query_db)
             for post in page_object.post_ids:
-                db_user_post = SysUserPost(user_id=user_id, post_id=post)
+                db_user_post = UserPostDO(user_id=user_id, post_id=post)
                 await user_post_repo.add(db_user_post)
         return CrudResponseModel(is_success=True, message='新增成功')
 
@@ -326,11 +326,11 @@ class UserService:
             await user_post_repo.delete_by_user_id(page_object.user_id)
             if page_object.role_ids:
                 for role in page_object.role_ids:
-                    db_user_role = SysUserRole(user_id=page_object.user_id, role_id=role)
+                    db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=role)
                     await user_role_repo.add(db_user_role)
             if page_object.post_ids:
                 for post in page_object.post_ids:
-                    db_user_post = SysUserPost(user_id=page_object.user_id, post_id=post)
+                    db_user_post = UserPostDO(user_id=page_object.user_id, post_id=post)
                     await user_post_repo.add(db_user_post)
         return CrudResponseModel(is_success=True, message='更新成功')
 
@@ -589,7 +589,7 @@ class UserService:
                     await DeptService.check_dept_data_scope_services(
                         query_db, add_user.dept_id, dept_data_scope_sql
                     )
-                db_user = SysUser(**add_user.model_dump(exclude={'admin'}))
+                db_user = UserDO(**add_user.model_dump(exclude={'admin'}))
                 await user_repo.add(db_user)
         return CrudResponseModel(is_success=True, message='\n'.join(add_error_result))
 
@@ -696,7 +696,7 @@ class UserService:
             role_id_list = page_object.role_ids.split(',')
             await user_role_repo.delete_by_user_id(page_object.user_id)
             for role_id in role_id_list:
-                db_user_role = SysUserRole(user_id=page_object.user_id, role_id=int(role_id))
+                db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=int(role_id))
                 await user_role_repo.add(db_user_role)
             return CrudResponseModel(is_success=True, message='分配成功')
         elif page_object.user_id and not page_object.role_ids:
@@ -711,7 +711,7 @@ class UserService:
                 if user_role:
                     continue
                 else:
-                    db_user_role = SysUserRole(user_id=int(user_id), role_id=page_object.role_id)
+                    db_user_role = UserRoleDO(user_id=int(user_id), role_id=page_object.role_id)
                     await user_role_repo.add(db_user_role)
             return CrudResponseModel(is_success=True, message='新增成功')
         else:

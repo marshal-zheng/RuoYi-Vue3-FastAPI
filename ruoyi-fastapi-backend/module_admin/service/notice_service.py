@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.constant import CommonConstant
 from exceptions.exception import ValidationException, ResourceNotFoundException, ResourceConflictException
 from config.error_codes import ErrorCode
-from module_admin.entity.do.notice_do import SysNotice
+from module_admin.entity.do.notice_do import NoticeDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.notice_vo import DeleteNoticeModel, NoticeModel, NoticePageQueryModel
 from module_admin.repository import NoticeRepository
@@ -89,7 +89,7 @@ class NoticeService:
             )
         
         notice_repo = NoticeRepository(query_db)
-        db_notice = SysNotice(**page_object.model_dump())
+        db_notice = NoticeDO(**page_object.model_dump())
         await notice_repo.add(db_notice)
         return CrudResponseModel(is_success=True, message='新增成功')
 

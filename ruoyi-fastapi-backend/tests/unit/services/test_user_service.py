@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from module_admin.service.user_service import UserService
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.user_do import UserDO
 from module_admin.entity.vo.user_vo import UserQueryModel, AddUserModel, EditUserModel
 from utils.pwd_util import PwdUtil
 
@@ -37,7 +37,7 @@ def user_service(mock_user_dao):
 @pytest.fixture
 def sample_user():
     """Create sample user for testing."""
-    return SysUser(
+    return UserDO(
         user_id=1,
         user_name='testuser',
         nick_name='Test User',
@@ -254,7 +254,7 @@ class TestUserServiceDelete:
     @pytest.mark.asyncio
     async def test_delete_admin_user_forbidden(self, user_service, mock_user_dao):
         """Test that admin user cannot be deleted."""
-        admin_user = SysUser(
+        admin_user = UserDO(
             user_id=1,
             user_name='admin',
             nick_name='Administrator',

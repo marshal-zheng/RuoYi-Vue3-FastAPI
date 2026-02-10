@@ -1,6 +1,6 @@
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.job_do import SysJob
+from module_admin.entity.do.job_do import JobDO
 from module_admin.entity.vo.job_vo import JobModel, JobPageQueryModel
 from utils.page_util import PageUtil
 
@@ -19,7 +19,7 @@ class JobDao:
         :param job_id: 定时任务id
         :return: 定时任务信息对象
         """
-        job_info = (await db.execute(select(SysJob).where(SysJob.job_id == job_id))).scalars().first()
+        job_info = (await db.execute(select(JobDO).where(JobDO.job_id == job_id))).scalars().first()
 
         return job_info
 
@@ -35,14 +35,14 @@ class JobDao:
         job_info = (
             (
                 await db.execute(
-                    select(SysJob).where(
-                        SysJob.job_name == job.job_name,
-                        SysJob.job_group == job.job_group,
-                        SysJob.job_executor == job.job_executor,
-                        SysJob.invoke_target == job.invoke_target,
-                        SysJob.job_args == job.job_args,
-                        SysJob.job_kwargs == job.job_kwargs,
-                        SysJob.cron_expression == job.cron_expression,
+                    select(JobDO).where(
+                        JobDO.job_name == job.job_name,
+                        JobDO.job_group == job.job_group,
+                        JobDO.job_executor == job.job_executor,
+                        JobDO.invoke_target == job.invoke_target,
+                        JobDO.job_args == job.job_args,
+                        JobDO.job_kwargs == job.job_kwargs,
+                        JobDO.cron_expression == job.cron_expression,
                     )
                 )
             )
@@ -63,13 +63,13 @@ class JobDao:
         :return: 定时任务列表信息对象
         """
         query = (
-            select(SysJob)
+            select(JobDO)
             .where(
-                SysJob.job_name.like(f'%{query_object.job_name}%') if query_object.job_name else True,
-                SysJob.job_group == query_object.job_group if query_object.job_group else True,
-                SysJob.status == query_object.status if query_object.status else True,
+                JobDO.job_name.like(f'%{query_object.job_name}%') if query_object.job_name else True,
+                JobDO.job_group == query_object.job_group if query_object.job_group else True,
+                JobDO.status == query_object.status if query_object.status else True,
             )
-            .order_by(SysJob.job_id)
+            .order_by(JobDO.job_id)
             .distinct()
         )
         job_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -84,7 +84,7 @@ class JobDao:
         :param db: orm对象
         :return: 定时任务列表信息对象
         """
-        job_list = (await db.execute(select(SysJob).where(SysJob.status == '0').distinct())).scalars().all()
+        job_list = (await db.execute(select(JobDO).where(JobDO.status == '0').distinct())).scalars().all()
 
         return job_list
 
@@ -97,7 +97,7 @@ class JobDao:
         :param job: 定时任务对象
         :return:
         """
-        db_job = SysJob(**job.model_dump())
+        db_job = JobDO(**job.model_dump())
         db.add(db_job)
         await db.flush()
 
@@ -112,7 +112,7 @@ class JobDao:
         :param job: 需要更新的定时任务字典
         :return:
         """
-        await db.execute(update(SysJob), [job])
+        await db.execute(update(JobDO), [job])
 
     @classmethod
     async def delete_job_dao(cls, db: AsyncSession, job: JobModel):
@@ -123,4 +123,4 @@ class JobDao:
         :param job: 定时任务对象
         :return:
         """
-        await db.execute(delete(SysJob).where(SysJob.job_id.in_([job.job_id])))
+        await db.execute(delete(JobDO).where(JobDO.job_id.in_([job.job_id])))

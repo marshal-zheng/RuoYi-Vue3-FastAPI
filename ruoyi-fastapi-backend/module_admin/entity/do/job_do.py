@@ -3,7 +3,7 @@ from module_admin.entity.do.base import LegacyBaseModel, LogBaseModel
 from module_admin.entity.do.enums import JobStatusEnum, MisfirePolicyEnum, BusinessStatusEnum
 
 
-class SysJob(LegacyBaseModel):
+class JobDO(LegacyBaseModel):
     """
     定时任务调度表
     """
@@ -29,7 +29,7 @@ class SysJob(LegacyBaseModel):
     remark = Column(String(500), nullable=True, default='', comment='备注信息')
 
 
-class SysJobLog(LogBaseModel):
+class JobLogDO(LogBaseModel):
     """
     定时任务调度日志表
     """

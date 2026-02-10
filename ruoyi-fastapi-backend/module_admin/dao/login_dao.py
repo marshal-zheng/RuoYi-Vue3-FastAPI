@@ -1,7 +1,7 @@
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.user_do import UserDO
 
 
 async def login_by_account(db: AsyncSession, user_name: str):
@@ -14,11 +14,11 @@ async def login_by_account(db: AsyncSession, user_name: str):
     """
     user = (
         await db.execute(
-            select(SysUser, SysDept)
-            .where(SysUser.user_name == user_name, SysUser.del_flag == '0')
+            select(UserDO, DeptDO)
+            .where(UserDO.user_name == user_name, UserDO.del_flag == '0')
             .join(
-                SysDept,
-                and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
+                DeptDO,
+                and_(UserDO.dept_id == DeptDO.dept_id, DeptDO.status == '0', DeptDO.del_flag == '0'),
                 isouter=True,
             )
             .distinct()

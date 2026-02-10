@@ -44,7 +44,7 @@ userController = APIRouter(prefix='/system/user', dependencies=[Depends(LoginSer
 
 @userController.get('/deptTree', dependencies=[Depends(CheckUserInterfaceAuth('system:user:list'))])
 async def get_system_dept_tree(
-    request: Request, query_db: AsyncSession = Depends(get_db), data_scope_sql: str = Depends(GetDataScope('SysDept'))
+    request: Request, query_db: AsyncSession = Depends(get_db), data_scope_sql: str = Depends(GetDataScope('DeptDO'))
 ):
     dept_query_result = await DeptService.get_dept_tree_services(query_db, DeptModel(**{}), data_scope_sql)
     logger.info('获取成功')
@@ -59,7 +59,7 @@ async def get_system_user_list(
     request: Request,
     user_page_query: UserPageQueryModel = Depends(UserPageQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     # 获取分页数据
     user_page_query_result = await UserService.get_user_list_services(
@@ -78,8 +78,8 @@ async def add_system_user(
     add_user: AddUserModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    dept_data_scope_sql: str = Depends(GetDataScope('SysDept')),
-    role_data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    dept_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await DeptService.check_dept_data_scope_services(query_db, add_user.dept_id, dept_data_scope_sql)
@@ -105,9 +105,9 @@ async def edit_system_user(
     edit_user: EditUserModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    user_data_scope_sql: str = Depends(GetDataScope('SysUser')),
-    dept_data_scope_sql: str = Depends(GetDataScope('SysDept')),
-    role_data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    dept_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     await UserService.check_user_allowed_services(edit_user)
     if not current_user.user.admin:
@@ -131,7 +131,7 @@ async def delete_system_user(
     user_ids: str,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     user_id_list = user_ids.split(',') if user_ids else []
     if user_id_list:
@@ -162,7 +162,7 @@ async def reset_system_user_pwd(
     reset_user: EditUserModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     await UserService.check_user_allowed_services(reset_user)
     if not current_user.user.admin:
@@ -187,7 +187,7 @@ async def change_system_user_status(
     change_user: EditUserModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     await UserService.check_user_allowed_services(change_user)
     if not current_user.user.admin:
@@ -228,7 +228,7 @@ async def query_detail_system_user(
     user_id: Optional[Union[int, Literal['']]] = '',
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     if user_id and not current_user.user.admin:
         await UserService.check_user_data_scope_services(query_db, user_id, data_scope_sql)
@@ -331,8 +331,8 @@ async def batch_import_system_user(
     update_support: bool = Query(alias='updateSupport'),
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    user_data_scope_sql: str = Depends(GetDataScope('SysUser')),
-    dept_data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    dept_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     batch_import_result = await UserService.batch_import_user_services(
         request, query_db, file, update_support, current_user, user_data_scope_sql, dept_data_scope_sql
@@ -356,7 +356,7 @@ async def export_system_user_list(
     request: Request,
     user_page_query: UserPageQueryModel = Form(),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     # 获取全量数据
     user_query_result = await UserService.get_user_list_services(
@@ -395,8 +395,8 @@ async def update_system_role_user(
     role_ids: str = Query(alias='roleIds'),
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    user_data_scope_sql: str = Depends(GetDataScope('SysUser')),
-    role_data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await UserService.check_user_data_scope_services(query_db, user_id, user_data_scope_sql)

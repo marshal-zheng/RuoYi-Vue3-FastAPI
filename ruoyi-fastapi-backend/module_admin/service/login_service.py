@@ -17,7 +17,7 @@ from config.get_db import get_db
 from exceptions.exception import AuthException, ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
 from module_admin.repository import LoginRepository, UserRepository
-from module_admin.entity.do.menu_do import SysMenu
+from module_admin.entity.do.menu_do import MenuDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.login_vo import MenuTreeModel, MetaModel, RouterModel, SmsCode, UserLogin, UserRegister
 from module_admin.entity.vo.user_vo import AddUserModel, CurrentUserModel, ResetUserModel, TokenData, UserInfoModel
@@ -361,7 +361,7 @@ class LoginService:
         return [router.model_dump(exclude_unset=True, by_alias=True) for router in user_router]
 
     @classmethod
-    def __generate_menus(cls, pid: int, permission_list: List[SysMenu]):
+    def __generate_menus(cls, pid: int, permission_list: List[MenuDO]):
         """
         工具方法：根据菜单信息生成菜单信息树形嵌套数据
 

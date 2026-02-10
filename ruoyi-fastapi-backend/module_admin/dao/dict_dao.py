@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from sqlalchemy import and_, delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.dict_do import SysDictType, SysDictData
+from module_admin.entity.do.dict_do import DictTypeDO, DictDataDO
 from module_admin.entity.vo.dict_vo import DictDataModel, DictDataPageQueryModel, DictTypeModel, DictTypePageQueryModel
 from utils.page_util import PageUtil
 from utils.time_format_util import list_format_datetime
@@ -21,7 +21,7 @@ class DictTypeDao:
         :param dict_id: 字典类型id
         :return: 字典类型信息对象
         """
-        dict_type_info = (await db.execute(select(SysDictType).where(SysDictType.dict_id == dict_id))).scalars().first()
+        dict_type_info = (await db.execute(select(DictTypeDO).where(DictTypeDO.dict_id == dict_id))).scalars().first()
 
         return dict_type_info
 
@@ -37,9 +37,9 @@ class DictTypeDao:
         dict_type_info = (
             (
                 await db.execute(
-                    select(SysDictType).where(
-                        SysDictType.dict_type == dict_type.dict_type if dict_type.dict_type else True,
-                        SysDictType.dict_name == dict_type.dict_name if dict_type.dict_name else True,
+                    select(DictTypeDO).where(
+                        DictTypeDO.dict_type == dict_type.dict_type if dict_type.dict_type else True,
+                        DictTypeDO.dict_name == dict_type.dict_name if dict_type.dict_name else True,
                     )
                 )
             )
@@ -57,7 +57,7 @@ class DictTypeDao:
         :param db: orm对象
         :return: 字典类型信息列表对象
         """
-        dict_type_info = (await db.execute(select(SysDictType))).scalars().all()
+        dict_type_info = (await db.execute(select(DictTypeDO))).scalars().all()
 
         return list_format_datetime(dict_type_info)
 
@@ -72,19 +72,19 @@ class DictTypeDao:
         :return: 字典类型列表信息对象
         """
         query = (
-            select(SysDictType)
+            select(DictTypeDO)
             .where(
-                SysDictType.dict_name.like(f'%{query_object.dict_name}%') if query_object.dict_name else True,
-                SysDictType.dict_type.like(f'%{query_object.dict_type}%') if query_object.dict_type else True,
-                SysDictType.status == query_object.status if query_object.status else True,
-                SysDictType.create_time.between(
+                DictTypeDO.dict_name.like(f'%{query_object.dict_name}%') if query_object.dict_name else True,
+                DictTypeDO.dict_type.like(f'%{query_object.dict_type}%') if query_object.dict_type else True,
+                DictTypeDO.status == query_object.status if query_object.status else True,
+                DictTypeDO.create_time.between(
                     datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                     datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
                 )
                 if query_object.begin_time and query_object.end_time
                 else True,
             )
-            .order_by(SysDictType.dict_id)
+            .order_by(DictTypeDO.dict_id)
             .distinct()
         )
         dict_type_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -100,7 +100,7 @@ class DictTypeDao:
         :param dict_type: 字典类型对象
         :return:
         """
-        db_dict_type = SysDictType(**dict_type.model_dump())
+        db_dict_type = DictTypeDO(**dict_type.model_dump())
         db.add(db_dict_type)
         await db.flush()
 
@@ -115,7 +115,7 @@ class DictTypeDao:
         :param dict_type: 需要更新的字典类型字典
         :return:
         """
-        await db.execute(update(SysDictType), [dict_type])
+        await db.execute(update(DictTypeDO), [dict_type])
 
     @classmethod
     async def delete_dict_type_dao(cls, db: AsyncSession, dict_type: DictTypeModel):
@@ -126,7 +126,7 @@ class DictTypeDao:
         :param dict_type: 字典类型对象
         :return:
         """
-        await db.execute(delete(SysDictType).where(SysDictType.dict_id.in_([dict_type.dict_id])))
+        await db.execute(delete(DictTypeDO).where(DictTypeDO.dict_id.in_([dict_type.dict_id])))
 
 
 class DictDataDao:
@@ -144,7 +144,7 @@ class DictDataDao:
         :return: 字典数据信息对象
         """
         dict_data_info = (
-            (await db.execute(select(SysDictData).where(SysDictData.dict_code == dict_code))).scalars().first()
+            (await db.execute(select(DictDataDO).where(DictDataDO.dict_code == dict_code))).scalars().first()
         )
 
         return dict_data_info
@@ -161,10 +161,10 @@ class DictDataDao:
         dict_data_info = (
             (
                 await db.execute(
-                    select(SysDictData).where(
-                        SysDictData.dict_type == dict_data.dict_type,
-                        SysDictData.dict_label == dict_data.dict_label,
-                        SysDictData.dict_value == dict_data.dict_value,
+                    select(DictDataDO).where(
+                        DictDataDO.dict_type == dict_data.dict_type,
+                        DictDataDO.dict_label == dict_data.dict_label,
+                        DictDataDO.dict_value == dict_data.dict_value,
                     )
                 )
             )
@@ -185,13 +185,13 @@ class DictDataDao:
         :return: 字典数据列表信息对象
         """
         query = (
-            select(SysDictData)
+            select(DictDataDO)
             .where(
-                SysDictData.dict_type == query_object.dict_type if query_object.dict_type else True,
-                SysDictData.dict_label.like(f'%{query_object.dict_label}%') if query_object.dict_label else True,
-                SysDictData.status == query_object.status if query_object.status else True,
+                DictDataDO.dict_type == query_object.dict_type if query_object.dict_type else True,
+                DictDataDO.dict_label.like(f'%{query_object.dict_label}%') if query_object.dict_label else True,
+                DictDataDO.status == query_object.status if query_object.status else True,
             )
-            .order_by(SysDictData.dict_sort)
+            .order_by(DictDataDO.dict_sort)
             .distinct()
         )
         dict_data_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -210,15 +210,15 @@ class DictDataDao:
         dict_data_list = (
             (
                 await db.execute(
-                    select(SysDictData)
-                    .select_from(SysDictType)
-                    .where(SysDictType.dict_type == dict_type if dict_type else True, SysDictType.status == '0')
+                    select(DictDataDO)
+                    .select_from(DictTypeDO)
+                    .where(DictTypeDO.dict_type == dict_type if dict_type else True, DictTypeDO.status == '0')
                     .join(
-                        SysDictData,
-                        and_(SysDictType.dict_type == SysDictData.dict_type, SysDictData.status == '0'),
+                        DictDataDO,
+                        and_(DictTypeDO.dict_type == DictDataDO.dict_type, DictDataDO.status == '0'),
                         isouter=True,
                     )
-                    .order_by(SysDictData.dict_sort)
+                    .order_by(DictDataDO.dict_sort)
                     .distinct()
                 )
             )
@@ -237,7 +237,7 @@ class DictDataDao:
         :param dict_data: 字典数据对象
         :return:
         """
-        db_data_type = SysDictData(**dict_data.model_dump())
+        db_data_type = DictDataDO(**dict_data.model_dump())
         db.add(db_data_type)
         await db.flush()
 
@@ -252,7 +252,7 @@ class DictDataDao:
         :param dict_data: 需要更新的字典数据字典
         :return:
         """
-        await db.execute(update(SysDictData), [dict_data])
+        await db.execute(update(DictDataDO), [dict_data])
 
     @classmethod
     async def delete_dict_data_dao(cls, db: AsyncSession, dict_data: DictDataModel):
@@ -263,7 +263,7 @@ class DictDataDao:
         :param dict_data: 字典数据对象
         :return:
         """
-        await db.execute(delete(SysDictData).where(SysDictData.dict_code.in_([dict_data.dict_code])))
+        await db.execute(delete(DictDataDO).where(DictDataDO.dict_code.in_([dict_data.dict_code])))
 
     @classmethod
     async def count_dict_data_dao(cls, db: AsyncSession, dict_type: str):
@@ -275,7 +275,7 @@ class DictDataDao:
         :return: 字典类型关联的字典数据数量
         """
         dict_data_count = (
-            await db.execute(select(func.count('*')).select_from(SysDictData).where(SysDictData.dict_type == dict_type))
+            await db.execute(select(func.count('*')).select_from(DictDataDO).where(DictDataDO.dict_type == dict_type))
         ).scalar()
 
         return dict_data_count

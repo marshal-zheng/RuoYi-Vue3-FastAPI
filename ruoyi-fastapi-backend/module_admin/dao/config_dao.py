@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.config_do import ConfigDO
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel
 from utils.page_util import PageUtil
 
@@ -20,7 +20,7 @@ class ConfigDao:
         :param config_id: 参数配置id
         :return: 参数配置信息对象
         """
-        config_info = (await db.execute(select(SysConfig).where(SysConfig.config_id == config_id))).scalars().first()
+        config_info = (await db.execute(select(ConfigDO).where(ConfigDO.config_id == config_id))).scalars().first()
 
         return config_info
 
@@ -36,9 +36,9 @@ class ConfigDao:
         config_info = (
             (
                 await db.execute(
-                    select(SysConfig).where(
-                        SysConfig.config_key == config.config_key if config.config_key else True,
-                        SysConfig.config_value == config.config_value if config.config_value else True,
+                    select(ConfigDO).where(
+                        ConfigDO.config_key == config.config_key if config.config_key else True,
+                        ConfigDO.config_value == config.config_value if config.config_value else True,
                     )
                 )
             )
@@ -59,19 +59,19 @@ class ConfigDao:
         :return: 参数配置列表信息对象
         """
         query = (
-            select(SysConfig)
+            select(ConfigDO)
             .where(
-                SysConfig.config_name.like(f'%{query_object.config_name}%') if query_object.config_name else True,
-                SysConfig.config_key.like(f'%{query_object.config_key}%') if query_object.config_key else True,
-                SysConfig.config_type == query_object.config_type if query_object.config_type else True,
-                SysConfig.create_time.between(
+                ConfigDO.config_name.like(f'%{query_object.config_name}%') if query_object.config_name else True,
+                ConfigDO.config_key.like(f'%{query_object.config_key}%') if query_object.config_key else True,
+                ConfigDO.config_type == query_object.config_type if query_object.config_type else True,
+                ConfigDO.create_time.between(
                     datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                     datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
                 )
                 if query_object.begin_time and query_object.end_time
                 else True,
             )
-            .order_by(SysConfig.config_id)
+            .order_by(ConfigDO.config_id)
             .distinct()
         )
         config_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -87,7 +87,7 @@ class ConfigDao:
         :param config: 参数配置对象
         :return:
         """
-        db_config = SysConfig(**config.model_dump())
+        db_config = ConfigDO(**config.model_dump())
         db.add(db_config)
         await db.flush()
 
@@ -102,7 +102,7 @@ class ConfigDao:
         :param config: 需要更新的参数配置字典
         :return:
         """
-        await db.execute(update(SysConfig), [config])
+        await db.execute(update(ConfigDO), [config])
 
     @classmethod
     async def delete_config_dao(cls, db: AsyncSession, config: ConfigModel):
@@ -113,4 +113,4 @@ class ConfigDao:
         :param config: 参数配置对象
         :return:
         """
-        await db.execute(delete(SysConfig).where(SysConfig.config_id.in_([config.config_id])))
+        await db.execute(delete(ConfigDO).where(ConfigDO.config_id.in_([config.config_id])))

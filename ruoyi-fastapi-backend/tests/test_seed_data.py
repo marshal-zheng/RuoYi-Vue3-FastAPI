@@ -17,8 +17,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from scripts.seed_data import SeedDataManager
-from module_admin.entity.do.user_do import SysUser, SysUserRole
-from module_admin.entity.do.role_do import SysRole
+from module_admin.entity.do.user_do import UserDO, UserRoleDO
+from module_admin.entity.do.role_do import RoleDO
 from utils.pwd_util import PwdUtil
 
 
@@ -73,7 +73,7 @@ class TestSeedUsers:
         
         # Verify admin user was created
         result = await test_db.execute(
-            select(SysUser).where(SysUser.user_name == 'admin')
+            select(UserDO).where(UserDO.user_name == 'admin')
         )
         admin = result.scalar_one_or_none()
         
@@ -104,7 +104,7 @@ class TestSeedUsers:
         
         # Verify test user was created (dev environment)
         result = await test_db.execute(
-            select(SysUser).where(SysUser.user_name == 'niangao')
+            select(UserDO).where(UserDO.user_name == 'niangao')
         )
         test_user = result.scalar_one_or_none()
         
@@ -120,7 +120,7 @@ class TestSeedUsers:
         await test_db.commit()
         
         # Count users before second run
-        result = await test_db.execute(select(SysUser))
+        result = await test_db.execute(select(UserDO))
         users_before = len(result.scalars().all())
         
         # Run again
@@ -128,7 +128,7 @@ class TestSeedUsers:
         await test_db.commit()
         
         # Count users after second run
-        result = await test_db.execute(select(SysUser))
+        result = await test_db.execute(select(UserDO))
         users_after = len(result.scalars().all())
         
         assert users_before == users_after, \
@@ -147,7 +147,7 @@ class TestSeedRoles:
         
         # Verify admin role was created
         result = await test_db.execute(
-            select(SysRole).where(SysRole.role_key == 'admin')
+            select(RoleDO).where(RoleDO.role_key == 'admin')
         )
         admin_role = result.scalar_one_or_none()
         
@@ -168,7 +168,7 @@ class TestSeedRoles:
         
         # Verify common role was created
         result = await test_db.execute(
-            select(SysRole).where(SysRole.role_key == 'common')
+            select(RoleDO).where(RoleDO.role_key == 'common')
         )
         common_role = result.scalar_one_or_none()
         
@@ -186,7 +186,7 @@ class TestSeedRoles:
         await test_db.commit()
         
         # Count roles before second run
-        result = await test_db.execute(select(SysRole))
+        result = await test_db.execute(select(RoleDO))
         roles_before = len(result.scalars().all())
         
         # Run again
@@ -194,7 +194,7 @@ class TestSeedRoles:
         await test_db.commit()
         
         # Count roles after second run
-        result = await test_db.execute(select(SysRole))
+        result = await test_db.execute(select(RoleDO))
         roles_after = len(result.scalars().all())
         
         assert roles_before == roles_after, \
@@ -218,9 +218,9 @@ class TestSeedUserRoles:
         
         # Verify admin user has admin role
         result = await test_db.execute(
-            select(SysUserRole).where(
-                SysUserRole.user_id == 1,
-                SysUserRole.role_id == 1
+            select(UserRoleDO).where(
+                UserRoleDO.user_id == 1,
+                UserRoleDO.role_id == 1
             )
         )
         user_role = result.scalar_one_or_none()
@@ -243,9 +243,9 @@ class TestSeedUserRoles:
         
         # Verify test user has common role (dev environment)
         result = await test_db.execute(
-            select(SysUserRole).where(
-                SysUserRole.user_id == 2,
-                SysUserRole.role_id == 2
+            select(UserRoleDO).where(
+                UserRoleDO.user_id == 2,
+                UserRoleDO.role_id == 2
             )
         )
         user_role = result.scalar_one_or_none()
@@ -267,7 +267,7 @@ class TestSeedUserRoles:
         await test_db.commit()
         
         # Count associations before second run
-        result = await test_db.execute(select(SysUserRole))
+        result = await test_db.execute(select(UserRoleDO))
         associations_before = len(result.scalars().all())
         
         # Run again
@@ -275,7 +275,7 @@ class TestSeedUserRoles:
         await test_db.commit()
         
         # Count associations after second run
-        result = await test_db.execute(select(SysUserRole))
+        result = await test_db.execute(select(UserRoleDO))
         associations_after = len(result.scalars().all())
         
         assert associations_before == associations_after, \
@@ -296,23 +296,23 @@ class TestIntegration:
         
         # Verify admin user exists
         result = await test_db.execute(
-            select(SysUser).where(SysUser.user_name == 'admin')
+            select(UserDO).where(UserDO.user_name == 'admin')
         )
         admin = result.scalar_one()
         assert admin is not None
         
         # Verify admin role exists
         result = await test_db.execute(
-            select(SysRole).where(SysRole.role_key == 'admin')
+            select(RoleDO).where(RoleDO.role_key == 'admin')
         )
         admin_role = result.scalar_one()
         assert admin_role is not None
         
         # Verify admin user has admin role
         result = await test_db.execute(
-            select(SysUserRole).where(
-                SysUserRole.user_id == admin.user_id,
-                SysUserRole.role_id == admin_role.role_id
+            select(UserRoleDO).where(
+                UserRoleDO.user_id == admin.user_id,
+                UserRoleDO.role_id == admin_role.role_id
             )
         )
         user_role = result.scalar_one()
@@ -329,13 +329,13 @@ class TestIntegration:
             await test_db.commit()
         
         # Count final records
-        result = await test_db.execute(select(SysUser))
+        result = await test_db.execute(select(UserDO))
         users = result.scalars().all()
         
-        result = await test_db.execute(select(SysRole))
+        result = await test_db.execute(select(RoleDO))
         roles = result.scalars().all()
         
-        result = await test_db.execute(select(SysUserRole))
+        result = await test_db.execute(select(UserRoleDO))
         user_roles = result.scalars().all()
         
         # In dev environment, should have 2 users, 2 roles, 2 associations

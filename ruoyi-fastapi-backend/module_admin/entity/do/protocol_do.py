@@ -3,7 +3,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 
 
-class SysProtocol(LegacyBaseModel):
+class ProtocolDO(LegacyBaseModel):
     """
     协议管理表
     """
@@ -45,4 +45,4 @@ class SysProtocol(LegacyBaseModel):
 
 
 # Backward-compatible alias for tests/imports expecting Protocol
-Protocol = SysProtocol
+Protocol = ProtocolDO

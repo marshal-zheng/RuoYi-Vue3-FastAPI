@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from module_admin.service.notice_service import NoticeService
-from module_admin.entity.do.notice_do import SysNotice
+from module_admin.entity.do.notice_do import NoticeDO
 from module_admin.entity.vo.notice_vo import NoticeModel, NoticePageQueryModel, DeleteNoticeModel
 from config.constant import CommonConstant
 from exceptions.exception import ServiceException
@@ -22,7 +22,7 @@ def mock_db():
 @pytest.fixture
 def sample_notice():
     """Create sample notice for testing."""
-    return SysNotice(
+    return NoticeDO(
         notice_id=1,
         notice_title='系统维护通知',
         notice_type='1',
@@ -37,7 +37,7 @@ def sample_notice():
 @pytest.fixture
 def sample_announcement():
     """Create sample announcement."""
-    return SysNotice(
+    return NoticeDO(
         notice_id=2,
         notice_title='重要公告',
         notice_type='2',

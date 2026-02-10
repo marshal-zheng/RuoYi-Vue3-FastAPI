@@ -1,8 +1,8 @@
 from sqlalchemy import and_, delete, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.menu_do import SysMenu
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu
-from module_admin.entity.do.user_do import SysUser, SysUserRole
+from module_admin.entity.do.menu_do import MenuDO
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO
+from module_admin.entity.do.user_do import UserDO, UserRoleDO
 from module_admin.entity.vo.menu_vo import MenuModel, MenuQueryModel
 
 
@@ -20,7 +20,7 @@ class MenuDao:
         :param menu_id: 菜单id
         :return: 菜单信息对象
         """
-        menu_info = (await db.execute(select(SysMenu).where(SysMenu.menu_id == menu_id))).scalars().first()
+        menu_info = (await db.execute(select(MenuDO).where(MenuDO.menu_id == menu_id))).scalars().first()
 
         return menu_info
 
@@ -36,10 +36,10 @@ class MenuDao:
         menu_info = (
             (
                 await db.execute(
-                    select(SysMenu).where(
-                        SysMenu.parent_id == menu.parent_id if menu.parent_id else True,
-                        SysMenu.menu_name == menu.menu_name if menu.menu_name else True,
-                        SysMenu.menu_type == menu.menu_type if menu.menu_type else True,
+                    select(MenuDO).where(
+                        MenuDO.parent_id == menu.parent_id if menu.parent_id else True,
+                        MenuDO.menu_name == menu.menu_name if menu.menu_name else True,
+                        MenuDO.menu_type == menu.menu_type if menu.menu_type else True,
                     )
                 )
             )
@@ -62,7 +62,7 @@ class MenuDao:
         role_id_list = [item.role_id for item in role]
         if 1 in role_id_list:
             menu_query_all = (
-                (await db.execute(select(SysMenu).where(SysMenu.status == '0').order_by(SysMenu.order_num).distinct()))
+                (await db.execute(select(MenuDO).where(MenuDO.status == '0').order_by(MenuDO.order_num).distinct()))
                 .scalars()
                 .all()
             )
@@ -70,20 +70,20 @@ class MenuDao:
             menu_query_all = (
                 (
                     await db.execute(
-                        select(SysMenu)
-                        .select_from(SysUser)
-                        .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
-                        .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                        select(MenuDO)
+                        .select_from(UserDO)
+                        .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
+                        .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                         .join(
-                            SysRole,
+                            RoleDO,
                             and_(
-                                SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'
+                                UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'
                             ),
                             isouter=True,
                         )
-                        .join(SysRoleMenu, SysRole.role_id == SysRoleMenu.role_id, isouter=True)
-                        .join(SysMenu, and_(SysRoleMenu.menu_id == SysMenu.menu_id, SysMenu.status == '0'))
-                        .order_by(SysMenu.order_num)
+                        .join(RoleMenuDO, RoleDO.role_id == RoleMenuDO.role_id, isouter=True)
+                        .join(MenuDO, and_(RoleMenuDO.menu_id == MenuDO.menu_id, MenuDO.status == '0'))
+                        .order_by(MenuDO.order_num)
                         .distinct()
                     )
                 )
@@ -109,12 +109,12 @@ class MenuDao:
             menu_query_all = (
                 (
                     await db.execute(
-                        select(SysMenu)
+                        select(MenuDO)
                         .where(
-                            SysMenu.status == page_object.status if page_object.status else True,
-                            SysMenu.menu_name.like(f'%{page_object.menu_name}%') if page_object.menu_name else True,
+                            MenuDO.status == page_object.status if page_object.status else True,
+                            MenuDO.menu_name.like(f'%{page_object.menu_name}%') if page_object.menu_name else True,
                         )
-                        .order_by(SysMenu.order_num)
+                        .order_by(MenuDO.order_num)
                         .distinct()
                     )
                 )
@@ -125,27 +125,27 @@ class MenuDao:
             menu_query_all = (
                 (
                     await db.execute(
-                        select(SysMenu)
-                        .select_from(SysUser)
-                        .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
-                        .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                        select(MenuDO)
+                        .select_from(UserDO)
+                        .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
+                        .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                         .join(
-                            SysRole,
+                            RoleDO,
                             and_(
-                                SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'
+                                UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'
                             ),
                             isouter=True,
                         )
-                        .join(SysRoleMenu, SysRole.role_id == SysRoleMenu.role_id, isouter=True)
+                        .join(RoleMenuDO, RoleDO.role_id == RoleMenuDO.role_id, isouter=True)
                         .join(
-                            SysMenu,
+                            MenuDO,
                             and_(
-                                SysRoleMenu.menu_id == SysMenu.menu_id,
-                                SysMenu.status == page_object.status if page_object.status else True,
-                                SysMenu.menu_name.like(f'%{page_object.menu_name}%') if page_object.menu_name else True,
+                                RoleMenuDO.menu_id == MenuDO.menu_id,
+                                MenuDO.status == page_object.status if page_object.status else True,
+                                MenuDO.menu_name.like(f'%{page_object.menu_name}%') if page_object.menu_name else True,
                             ),
                         )
-                        .order_by(SysMenu.order_num)
+                        .order_by(MenuDO.order_num)
                         .distinct()
                     )
                 )
@@ -164,7 +164,7 @@ class MenuDao:
         :param menu: 菜单对象
         :return:
         """
-        db_menu = SysMenu(**menu.model_dump())
+        db_menu = MenuDO(**menu.model_dump())
         db.add(db_menu)
         await db.flush()
 
@@ -179,7 +179,7 @@ class MenuDao:
         :param menu: 需要更新的菜单字典
         :return:
         """
-        await db.execute(update(SysMenu), [menu])
+        await db.execute(update(MenuDO), [menu])
 
     @classmethod
     async def delete_menu_dao(cls, db: AsyncSession, menu: MenuModel):
@@ -190,7 +190,7 @@ class MenuDao:
         :param menu: 菜单对象
         :return:
         """
-        await db.execute(delete(SysMenu).where(SysMenu.menu_id.in_([menu.menu_id])))
+        await db.execute(delete(MenuDO).where(MenuDO.menu_id.in_([menu.menu_id])))
 
     @classmethod
     async def has_child_by_menu_id_dao(cls, db: AsyncSession, menu_id: int):
@@ -202,7 +202,7 @@ class MenuDao:
         :return: 菜单关联子菜单的数量
         """
         menu_count = (
-            await db.execute(select(func.count('*')).select_from(SysMenu).where(SysMenu.parent_id == menu_id))
+            await db.execute(select(func.count('*')).select_from(MenuDO).where(MenuDO.parent_id == menu_id))
         ).scalar()
 
         return menu_count
@@ -217,7 +217,7 @@ class MenuDao:
         :return: 菜单关联角色数量
         """
         role_count = (
-            await db.execute(select(func.count('*')).select_from(SysRoleMenu).where(SysRoleMenu.menu_id == menu_id))
+            await db.execute(select(func.count('*')).select_from(RoleMenuDO).where(RoleMenuDO.menu_id == menu_id))
         ).scalar()
 
         return role_count

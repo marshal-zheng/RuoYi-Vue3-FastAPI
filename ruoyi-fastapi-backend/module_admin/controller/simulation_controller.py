@@ -119,7 +119,7 @@ async def create_simulation_session(
     # 设置创建人（从CurrentUserModel对象获取用户名）
     create_request.create_by = current_user.user.user_name if current_user.user else 'system'
     
-    result = await SimulationService.create_session(query_db, create_request)
+    result = await SimulationService.create_session_services(query_db, create_request)
     logger.info(f'创建仿真会话成功: {result}')
     
     return ResponseUtil.success(data=result)
@@ -147,7 +147,7 @@ async def start_simulation_session(
     返回:
         操作结果
     """
-    result = await SimulationService.start_session(query_db, session_id)
+    result = await SimulationService.start_session_services(query_db, session_id)
     logger.info(f'启动仿真会话成功: {session_id}')
     
     return ResponseUtil.success(data=result.model_dump())
@@ -175,7 +175,7 @@ async def stop_simulation_session(
     返回:
         操作结果
     """
-    result = await SimulationService.stop_session(query_db, session_id)
+    result = await SimulationService.stop_session_services(query_db, session_id)
     logger.info(f'停止仿真会话成功: {session_id}')
     
     return ResponseUtil.success(data=result.model_dump())
@@ -201,7 +201,7 @@ async def get_simulation_status(
     返回:
         状态信息
     """
-    status = SimulationService.get_session_status(session_id)
+    status = SimulationService.get_session_status_services(session_id)
     return ResponseUtil.success(data=status)
 
 
@@ -227,7 +227,7 @@ async def get_simulation_messages(
     返回:
         报文列表
     """
-    messages = SimulationService.get_realtime_messages(session_id, limit)
+    messages = SimulationService.get_realtime_messages_services(session_id, limit)
     return ResponseUtil.success(data=messages)
 
 
@@ -253,7 +253,7 @@ async def get_simulation_bandwidth(
     返回:
         带宽数据列表
     """
-    bandwidth_data = SimulationService.get_realtime_bandwidth(session_id, port_id)
+    bandwidth_data = SimulationService.get_realtime_bandwidth_services(session_id, port_id)
     return ResponseUtil.success(data=bandwidth_data)
 
 
@@ -277,7 +277,7 @@ async def get_simulation_alarms(
     返回:
         告警列表
     """
-    alarms = SimulationService.get_realtime_alarms(session_id)
+    alarms = SimulationService.get_realtime_alarms_services(session_id)
     return ResponseUtil.success(data=alarms)
 
 
@@ -306,7 +306,7 @@ async def export_simulation_data(
         导出数据
     """
     export_request.session_id = session_id
-    result = await SimulationService.export_simulation_data(query_db, export_request)
+    result = await SimulationService.export_simulation_data_services(query_db, export_request)
     logger.info(f'导出仿真数据成功: {session_id}')
     
     return ResponseUtil.success(data=result)
@@ -328,7 +328,7 @@ async def pause_simulation_session(
     query_db: AsyncSession = Depends(get_db)
 ):
     """暂停仿真会话"""
-    result = await SimulationService.pause_session(query_db, session_id)
+    result = await SimulationService.pause_session_services(query_db, session_id)
     logger.info(f'暂停仿真会话: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -347,7 +347,7 @@ async def resume_simulation_session(
     query_db: AsyncSession = Depends(get_db)
 ):
     """继续仿真会话"""
-    result = await SimulationService.resume_session(query_db, session_id)
+    result = await SimulationService.resume_session_services(query_db, session_id)
     logger.info(f'继续仿真会话: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -366,7 +366,7 @@ async def set_simulation_speed(
 ):
     """设置仿真速度（0.5x-4x）"""
     speed = body.get('speed', 1.0)
-    result = SimulationService.set_speed(session_id, speed)
+    result = SimulationService.set_speed_services(session_id, speed)
     logger.info(f'设置仿真速度: {session_id} -> {speed}x')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -383,7 +383,7 @@ async def step_simulation(
     session_id: str
 ):
     """单步执行"""
-    result = await SimulationService.step_once(session_id)
+    result = await SimulationService.step_once_services(session_id)
     logger.info(f'单步执行: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -401,7 +401,7 @@ async def set_simulation_duration(
     duration: float = None
 ):
     """设置仿真时长（秒），不传则无限制"""
-    result = SimulationService.set_duration(session_id, duration)
+    result = SimulationService.set_duration_services(session_id, duration)
     return ResponseUtil.success(data=result.model_dump())
 
 
@@ -445,7 +445,7 @@ async def inject_fault(
             field='faultType,targetId'
         )
 
-    result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
+    result = SimulationService.inject_fault_services(session_id, fault_type, target_id, params)
     logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
     return ResponseUtil.success(data=result)
 
@@ -464,7 +464,7 @@ async def clear_fault(
     fault_id: str
 ):
     """清除故障"""
-    result = SimulationService.clear_fault(session_id, fault_id)
+    result = SimulationService.clear_fault_services(session_id, fault_id)
     logger.info(f'清除故障: {session_id} -> {fault_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -482,7 +482,7 @@ async def clear_all_faults(
     session_id: str
 ):
     """清除指定会话的所有故障"""
-    result = SimulationService.clear_all_faults(session_id)
+    result = SimulationService.clear_all_faults_services(session_id)
     logger.info(f'清除全部故障: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -499,7 +499,7 @@ async def list_faults(
     session_id: str
 ):
     """获取故障列表"""
-    faults = SimulationService.list_faults(session_id)
+    faults = SimulationService.list_faults_services(session_id)
     return ResponseUtil.success(data=faults)
 
 
@@ -532,7 +532,7 @@ async def upsert_fault(
             field='sessionId,faultType,targetId'
         )
 
-    result = SimulationService.inject_fault(session_id, fault_type, target_id, params)
+    result = SimulationService.inject_fault_services(session_id, fault_type, target_id, params)
     logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
     return ResponseUtil.success(data=result)
 
@@ -553,7 +553,7 @@ async def query_faults(session_id: str = Query(..., alias="sessionId")):
             developer_message='sessionId is required',
             field='sessionId'
         )
-    faults = SimulationService.list_faults(session_id)
+    faults = SimulationService.list_faults_services(session_id)
     return ResponseUtil.success(data=faults)
 
 
@@ -566,7 +566,7 @@ async def query_faults(session_id: str = Query(..., alias="sessionId")):
 )
 async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessionId")):
     """删除会话故障"""
-    result = SimulationService.clear_fault(session_id, fault_id)
+    result = SimulationService.clear_fault_services(session_id, fault_id)
     logger.info(f'清除故障: {session_id} -> {fault_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -603,7 +603,7 @@ async def add_event(
         - pause: 暂停仿真
         - log: 记录日志
     """
-    result = SimulationService.add_event(session_id, event)
+    result = SimulationService.add_event_services(session_id, event)
     logger.info(f'添加事件: {session_id}')
     return ResponseUtil.success(data=result)
 
@@ -630,7 +630,7 @@ async def update_event(
         event_id: 事件ID
         updates: 更新内容
     """
-    result = SimulationService.update_event(session_id, event_id, updates)
+    result = SimulationService.update_event_services(session_id, event_id, updates)
     logger.info(f'更新事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result)
 
@@ -665,7 +665,7 @@ async def trigger_event(
     返回:
         触发结果，包含动作执行信息
     """
-    result = SimulationService.trigger_event(session_id, event_id)
+    result = SimulationService.trigger_event_services(session_id, event_id)
     logger.info(f'触发事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result)
 
@@ -683,7 +683,7 @@ async def reset_event(
     event_id: str
 ):
     """重置事件状态为待触发"""
-    result = SimulationService.reset_event(session_id, event_id)
+    result = SimulationService.reset_event_services(session_id, event_id)
     logger.info(f'重置事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -702,7 +702,7 @@ async def remove_event(
     event_id: str
 ):
     """删除事件"""
-    result = SimulationService.remove_event(session_id, event_id)
+    result = SimulationService.remove_event_services(session_id, event_id)
     logger.info(f'删除事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -719,7 +719,7 @@ async def list_events(
     session_id: str
 ):
     """获取事件列表"""
-    events = SimulationService.list_events(session_id)
+    events = SimulationService.list_events_services(session_id)
     return ResponseUtil.success(data=events)
 
 
@@ -737,7 +737,7 @@ async def validate_topology(
     topology_data: dict
 ):
     """验证拓扑配置完整性"""
-    result = SimulationService.validate_topology(topology_data)
+    result = SimulationService.validate_topology_services(topology_data)
     return ResponseUtil.success(data=result)
 
 
@@ -850,7 +850,7 @@ async def push_simulation_data(session_id: str):
     try:
         while True:
             # 获取实时状态
-            status = SimulationService.get_session_status(session_id)
+            status = SimulationService.get_session_status_services(session_id)
 
             state = status.get('status')
             engine_present = status.get('engine_present', True)
@@ -874,7 +874,7 @@ async def push_simulation_data(session_id: str):
             should_push = (current_time - last_push_time) >= push_interval
 
             # 收集增量数据
-            new_messages = SimulationService.get_new_messages(session_id, limit=20)
+            new_messages = SimulationService.get_new_messages_services(session_id, limit=20)
             if new_messages:
                 buffer_messages.extend(new_messages)
                 # 为每条新消息生成动画事件
@@ -883,11 +883,11 @@ async def push_simulation_data(session_id: str):
                     if animation:
                         buffer_animations.append(animation)
 
-            new_bandwidth = SimulationService.get_new_bandwidth(session_id)
+            new_bandwidth = SimulationService.get_new_bandwidth_services(session_id)
             if new_bandwidth:
                 buffer_bandwidth.extend(new_bandwidth)
 
-            new_alarms = SimulationService.get_new_alarms(session_id)
+            new_alarms = SimulationService.get_new_alarms_services(session_id)
             if new_alarms:
                 buffer_alarms.extend(new_alarms)
                 # 为告警生成错误动画
@@ -896,7 +896,7 @@ async def push_simulation_data(session_id: str):
                     if error_animation:
                         buffer_animations.append(error_animation)
 
-            new_fault_events = SimulationService.get_new_fault_events(session_id)
+            new_fault_events = SimulationService.get_new_fault_events_services(session_id)
             if new_fault_events:
                 buffer_faults.extend(new_fault_events)
 

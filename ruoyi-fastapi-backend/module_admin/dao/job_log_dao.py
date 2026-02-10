@@ -2,7 +2,7 @@ from datetime import datetime, time
 from sqlalchemy import delete, desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import Session
-from module_admin.entity.do.job_do import SysJobLog
+from module_admin.entity.do.job_do import JobLogDO
 from module_admin.entity.vo.job_vo import JobLogModel, JobLogPageQueryModel
 from utils.page_util import PageUtil
 
@@ -23,19 +23,19 @@ class JobLogDao:
         :return: 定时任务日志列表信息对象
         """
         query = (
-            select(SysJobLog)
+            select(JobLogDO)
             .where(
-                SysJobLog.job_name.like(f'%{query_object.job_name}%') if query_object.job_name else True,
-                SysJobLog.job_group == query_object.job_group if query_object.job_group else True,
-                SysJobLog.status == query_object.status if query_object.status else True,
-                SysJobLog.create_time.between(
+                JobLogDO.job_name.like(f'%{query_object.job_name}%') if query_object.job_name else True,
+                JobLogDO.job_group == query_object.job_group if query_object.job_group else True,
+                JobLogDO.status == query_object.status if query_object.status else True,
+                JobLogDO.create_time.between(
                     datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                     datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
                 )
                 if query_object.begin_time and query_object.end_time
                 else True,
             )
-            .order_by(desc(SysJobLog.create_time))
+            .order_by(desc(JobLogDO.create_time))
             .distinct()
         )
         job_log_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -51,7 +51,7 @@ class JobLogDao:
         :param job_log: 定时任务日志对象
         :return:
         """
-        db_job_log = SysJobLog(**job_log.model_dump())
+        db_job_log = JobLogDO(**job_log.model_dump())
         db.add(db_job_log)
         db.flush()
 
@@ -66,7 +66,7 @@ class JobLogDao:
         :param job_log: 定时任务日志对象
         :return:
         """
-        await db.execute(delete(SysJobLog).where(SysJobLog.job_log_id.in_([job_log.job_log_id])))
+        await db.execute(delete(JobLogDO).where(JobLogDO.job_log_id.in_([job_log.job_log_id])))
 
     @classmethod
     async def clear_job_log_dao(cls, db: AsyncSession):
@@ -76,4 +76,4 @@ class JobLogDao:
         :param db: orm对象
         :return:
         """
-        await db.execute(delete(SysJobLog))
+        await db.execute(delete(JobLogDO))

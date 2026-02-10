@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.dao.dept_dao import DeptDao
-from module_admin.entity.do.dept_do import SysDept
+from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.vo.dept_vo import DeptModel, DeptQueryModel
 
 
@@ -27,7 +27,7 @@ def dept_dao():
 @pytest.fixture
 def sample_dept():
     """Create sample department for testing."""
-    return SysDept(
+    return DeptDO(
         dept_id=100,
         parent_id=0,
         dept_name='Test Dept',
@@ -178,7 +178,7 @@ class TestDeptDaoRelations:
     @pytest.mark.asyncio
     async def test_get_children_depts(self, dept_dao, mock_db, sample_dept):
         """Test getting children departments."""
-        child_dept = SysDept(
+        child_dept = DeptDO(
             dept_id=101,
             parent_id=100,
             dept_name='Child Dept',

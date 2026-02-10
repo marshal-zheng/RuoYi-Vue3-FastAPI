@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import delete, desc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.project_topology_do import SysProjectTopology
+from module_admin.entity.do.project_topology_do import ProjectTopologyDO
 from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
 
 
@@ -21,12 +21,12 @@ class ProjectTopologyDao:
         使用子查询避免对大 JSON 字段排序导致 sort buffer 溢出
         """
         # 子查询：只查 topology_id（小字段），排序不涉及大 JSON
-        id_query = select(SysProjectTopology.topology_id).where(
-            SysProjectTopology.project_id == project_id
+        id_query = select(ProjectTopologyDO.topology_id).where(
+            ProjectTopologyDO.project_id == project_id
         )
         if version_id is not None:
-            id_query = id_query.where(SysProjectTopology.version_id == version_id)
-        id_query = id_query.order_by(desc(SysProjectTopology.update_time)).limit(1)
+            id_query = id_query.where(ProjectTopologyDO.version_id == version_id)
+        id_query = id_query.order_by(desc(ProjectTopologyDO.update_time)).limit(1)
 
         id_result = await db.execute(id_query)
         topology_id = id_result.scalar()
@@ -36,14 +36,14 @@ class ProjectTopologyDao:
 
         # 根据主键直接获取完整行，无需排序
         result = await db.execute(
-            select(SysProjectTopology).where(SysProjectTopology.topology_id == topology_id)
+            select(ProjectTopologyDO).where(ProjectTopologyDO.topology_id == topology_id)
         )
         return result.scalars().first()
 
     @classmethod
     async def save_project_topology_dao(
         cls, db: AsyncSession, topology: ProjectTopologyModel
-    ) -> SysProjectTopology:
+    ) -> ProjectTopologyDO:
         """
         保存工程拓扑数据（存在则更新，不存在则新增）
         """
@@ -53,8 +53,8 @@ class ProjectTopologyDao:
 
         if existing:
             await db.execute(
-                update(SysProjectTopology)
-                .where(SysProjectTopology.topology_id == existing.topology_id)
+                update(ProjectTopologyDO)
+                .where(ProjectTopologyDO.topology_id == existing.topology_id)
                 .values(
                     topology_data=topology.topology_data,
                     version_id=topology.version_id,
@@ -65,17 +65,17 @@ class ProjectTopologyDao:
             await db.flush()
             # 清理同一工程+版本下的历史重复拓扑记录，仅保留最新一条
             cleanup_where = [
-                SysProjectTopology.project_id == topology.project_id,
-                SysProjectTopology.topology_id != existing.topology_id,
+                ProjectTopologyDO.project_id == topology.project_id,
+                ProjectTopologyDO.topology_id != existing.topology_id,
             ]
             if topology.version_id is None:
-                cleanup_where.append(SysProjectTopology.version_id.is_(None))
+                cleanup_where.append(ProjectTopologyDO.version_id.is_(None))
             else:
-                cleanup_where.append(SysProjectTopology.version_id == topology.version_id)
-            await db.execute(delete(SysProjectTopology).where(*cleanup_where))
+                cleanup_where.append(ProjectTopologyDO.version_id == topology.version_id)
+            await db.execute(delete(ProjectTopologyDO).where(*cleanup_where))
             return existing
 
-        db_topology = SysProjectTopology(
+        db_topology = ProjectTopologyDO(
             project_id=topology.project_id,
             version_id=topology.version_id,
             topology_data=topology.topology_data,
@@ -88,28 +88,28 @@ class ProjectTopologyDao:
         await db.flush()
         # 兜底清理重复记录（并发写入等场景可能产生重复）
         cleanup_where = [
-            SysProjectTopology.project_id == topology.project_id,
-            SysProjectTopology.topology_id != db_topology.topology_id,
+            ProjectTopologyDO.project_id == topology.project_id,
+            ProjectTopologyDO.topology_id != db_topology.topology_id,
         ]
         if topology.version_id is None:
-            cleanup_where.append(SysProjectTopology.version_id.is_(None))
+            cleanup_where.append(ProjectTopologyDO.version_id.is_(None))
         else:
-            cleanup_where.append(SysProjectTopology.version_id == topology.version_id)
-        await db.execute(delete(SysProjectTopology).where(*cleanup_where))
+            cleanup_where.append(ProjectTopologyDO.version_id == topology.version_id)
+        await db.execute(delete(ProjectTopologyDO).where(*cleanup_where))
         return db_topology
 
     @classmethod
     async def get_topologies_by_version_ids(
         cls, db: AsyncSession, project_id: int, version_ids: List[int]
-    ) -> List[SysProjectTopology]:
+    ) -> List[ProjectTopologyDO]:
         """
         根据版本ID列表获取拓扑数据
         """
         if not version_ids:
             return []
-        query = select(SysProjectTopology).where(
-            SysProjectTopology.project_id == project_id,
-            SysProjectTopology.version_id.in_(version_ids)
+        query = select(ProjectTopologyDO).where(
+            ProjectTopologyDO.project_id == project_id,
+            ProjectTopologyDO.version_id.in_(version_ids)
         )
         result = await db.execute(query)
         return result.scalars().all()

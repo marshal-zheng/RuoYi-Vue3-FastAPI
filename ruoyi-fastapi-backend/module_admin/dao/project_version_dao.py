@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqlalchemy import desc, func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.project_version_do import SysProjectVersion
+from module_admin.entity.do.project_version_do import ProjectVersionDO
 from module_admin.entity.vo.project_version_vo import (
     ProjectVersionModel,
     ProjectVersionPageQueryModel,
@@ -28,9 +28,9 @@ class ProjectVersionDao:
         """
         version_info = (
             await db.execute(
-                select(SysProjectVersion).where(
-                    SysProjectVersion.version_id == version_id,
-                    SysProjectVersion.del_flag == '0'
+                select(ProjectVersionDO).where(
+                    ProjectVersionDO.version_id == version_id,
+                    ProjectVersionDO.del_flag == '0'
                 )
             )
         ).scalars().first()
@@ -49,33 +49,33 @@ class ProjectVersionDao:
         :param is_page: 是否开启分页
         :return: 版本列表信息对象
         """
-        query = select(SysProjectVersion).where(
-            SysProjectVersion.del_flag == '0'
+        query = select(ProjectVersionDO).where(
+            ProjectVersionDO.del_flag == '0'
         )
         
         # 按项目ID筛选
         if query_object.project_id:
-            query = query.where(SysProjectVersion.project_id == query_object.project_id)
+            query = query.where(ProjectVersionDO.project_id == query_object.project_id)
         
         # 按版本名称筛选
         if query_object.version_name:
             query = query.where(
-                SysProjectVersion.version_name.like(f'%{query_object.version_name}%')
+                ProjectVersionDO.version_name.like(f'%{query_object.version_name}%')
             )
         
         # 按版本号筛选
         if query_object.version_number:
             query = query.where(
-                SysProjectVersion.version_number.like(f'%{query_object.version_number}%')
+                ProjectVersionDO.version_number.like(f'%{query_object.version_number}%')
             )
         
         # 按时间范围筛选
         if query_object.begin_time and query_object.end_time:
             query = query.where(
-                SysProjectVersion.create_time.between(query_object.begin_time, query_object.end_time)
+                ProjectVersionDO.create_time.between(query_object.begin_time, query_object.end_time)
             )
         
-        query = query.order_by(desc(SysProjectVersion.create_time))
+        query = query.order_by(desc(ProjectVersionDO.create_time))
         
         if is_page:
             return await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, True)
@@ -92,7 +92,7 @@ class ProjectVersionDao:
         :param version: 版本对象
         :return: 新增的版本对象
         """
-        db_version = SysProjectVersion(**version.model_dump(exclude_unset=True))
+        db_version = ProjectVersionDO(**version.model_dump(exclude_unset=True))
         db.add(db_version)
         await db.flush()
         return db_version
@@ -107,8 +107,8 @@ class ProjectVersionDao:
         :return: None
         """
         await db.execute(
-            update(SysProjectVersion)
-            .where(SysProjectVersion.version_id == version.version_id)
+            update(ProjectVersionDO)
+            .where(ProjectVersionDO.version_id == version.version_id)
             .values(**version.model_dump(exclude_unset=True, exclude={'version_id'}))
         )
 
@@ -123,8 +123,8 @@ class ProjectVersionDao:
         """
         version_id_list = version.version_ids.split(',')
         await db.execute(
-            update(SysProjectVersion)
-            .where(SysProjectVersion.version_id.in_(version_id_list))
+            update(ProjectVersionDO)
+            .where(ProjectVersionDO.version_id.in_(version_id_list))
             .values(
                 del_flag='2',
                 update_by=version.update_by,
@@ -142,14 +142,14 @@ class ProjectVersionDao:
 
         query = (
             select(
-                SysProjectVersion.project_id,
-                func.count(SysProjectVersion.version_id).label('version_count'),
+                ProjectVersionDO.project_id,
+                func.count(ProjectVersionDO.version_id).label('version_count'),
             )
             .where(
-                SysProjectVersion.project_id.in_(project_ids),
-                SysProjectVersion.del_flag == '0',
+                ProjectVersionDO.project_id.in_(project_ids),
+                ProjectVersionDO.del_flag == '0',
             )
-            .group_by(SysProjectVersion.project_id)
+            .group_by(ProjectVersionDO.project_id)
         )
         result = await db.execute(query)
         return {row.project_id: row.version_count for row in result.all()}
@@ -162,10 +162,10 @@ class ProjectVersionDao:
         if not project_ids:
             return {}
 
-        query = select(SysProjectVersion).where(
-            SysProjectVersion.project_id.in_(project_ids),
-            SysProjectVersion.del_flag == '0',
-            SysProjectVersion.is_locked == '1',
+        query = select(ProjectVersionDO).where(
+            ProjectVersionDO.project_id.in_(project_ids),
+            ProjectVersionDO.del_flag == '0',
+            ProjectVersionDO.is_locked == '1',
         )
         result = await db.execute(query)
         locked_versions = result.scalars().all()
@@ -187,14 +187,14 @@ class ProjectVersionDao:
         :param version_id: 版本ID（编辑时传入）
         :return: 是否唯一
         """
-        query = select(SysProjectVersion).where(
-            SysProjectVersion.project_id == project_id,
-            SysProjectVersion.version_number == version_number,
-            SysProjectVersion.del_flag == '0'
+        query = select(ProjectVersionDO).where(
+            ProjectVersionDO.project_id == project_id,
+            ProjectVersionDO.version_number == version_number,
+            ProjectVersionDO.del_flag == '0'
         )
         
         if version_id:
-            query = query.where(SysProjectVersion.version_id != version_id)
+            query = query.where(ProjectVersionDO.version_id != version_id)
         
         result = await db.execute(query)
         existing_version = result.scalars().first()
@@ -224,8 +224,8 @@ class ProjectVersionDao:
             update_data['locked_time'] = None
         
         await db.execute(
-            update(SysProjectVersion)
-            .where(SysProjectVersion.version_id == lock_model.version_id)
+            update(ProjectVersionDO)
+            .where(ProjectVersionDO.version_id == lock_model.version_id)
             .values(**update_data)
         )
 
@@ -237,11 +237,11 @@ class ProjectVersionDao:
         批量解除某个项目下的固化版本
         """
         await db.execute(
-            update(SysProjectVersion)
+            update(ProjectVersionDO)
             .where(
-                SysProjectVersion.project_id == project_id,
-                SysProjectVersion.del_flag == '0',
-                SysProjectVersion.is_locked == '1',
+                ProjectVersionDO.project_id == project_id,
+                ProjectVersionDO.del_flag == '0',
+                ProjectVersionDO.is_locked == '1',
             )
             .values(
                 is_locked='0',
@@ -257,9 +257,9 @@ class ProjectVersionDao:
         """
         获取某个项目下的所有版本（用于导出）
         """
-        query = select(SysProjectVersion).where(
-            SysProjectVersion.project_id == project_id,
-            SysProjectVersion.del_flag == '0'
-        ).order_by(SysProjectVersion.create_time)
+        query = select(ProjectVersionDO).where(
+            ProjectVersionDO.project_id == project_id,
+            ProjectVersionDO.del_flag == '0'
+        ).order_by(ProjectVersionDO.create_time)
         result = await db.execute(query)
         return result.scalars().all()

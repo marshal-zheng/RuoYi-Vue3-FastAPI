@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from module_admin.service.config_service import ConfigService
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.config_do import ConfigDO
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
@@ -51,7 +51,7 @@ def mock_db():
 @pytest.fixture
 def sample_config():
     """Create sample config for testing."""
-    return SysConfig(
+    return ConfigDO(
         config_id=1,
         config_name='系统名称',
         config_key='sys.name',
@@ -65,7 +65,7 @@ def sample_config():
 @pytest.fixture
 def sample_builtin_config():
     """Create sample built-in config."""
-    return SysConfig(
+    return ConfigDO(
         config_id=2,
         config_name='内置参数',
         config_key='sys.builtin',

@@ -1,11 +1,11 @@
 from datetime import datetime, time
 from sqlalchemy import and_, delete, desc, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.menu_do import SysMenu
-from module_admin.entity.do.post_do import SysPost
-from module_admin.entity.do.role_do import SysRole, SysRoleDept, SysRoleMenu  # noqa: F401
-from module_admin.entity.do.user_do import SysUser, SysUserPost, SysUserRole
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.menu_do import MenuDO
+from module_admin.entity.do.post_do import PostDO
+from module_admin.entity.do.role_do import RoleDO, RoleDeptDO, RoleMenuDO  # noqa: F401
+from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
 from module_admin.entity.vo.user_vo import (
     UserModel,
     UserPageQueryModel,
@@ -35,9 +35,9 @@ class UserDao:
         query_user_info = (
             (
                 await db.execute(
-                    select(SysUser)
-                    .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_name == user_name)
-                    .order_by(desc(SysUser.create_time))
+                    select(UserDO)
+                    .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_name == user_name)
+                    .order_by(desc(UserDO.create_time))
                     .distinct()
                 )
             )
@@ -59,15 +59,15 @@ class UserDao:
         query_user_info = (
             (
                 await db.execute(
-                    select(SysUser)
+                    select(UserDO)
                     .where(
-                        SysUser.del_flag == '0',
-                        SysUser.user_name == user.user_name if user.user_name else True,
-                        sensitive_equals(SysUser, 'phonenumber', user.phonenumber) if user.phonenumber else True,
-                        sensitive_equals(SysUser, 'email', user.email) if user.email else True,
-                        sensitive_equals(SysUser, 'id_card', user.id_card) if getattr(user, 'id_card', None) else True,
+                        UserDO.del_flag == '0',
+                        UserDO.user_name == user.user_name if user.user_name else True,
+                        sensitive_equals(UserDO, 'phonenumber', user.phonenumber) if user.phonenumber else True,
+                        sensitive_equals(UserDO, 'email', user.email) if user.email else True,
+                        sensitive_equals(UserDO, 'id_card', user.id_card) if getattr(user, 'id_card', None) else True,
                     )
-                    .order_by(desc(SysUser.create_time))
+                    .order_by(desc(UserDO.create_time))
                     .distinct()
                 )
             )
@@ -89,8 +89,8 @@ class UserDao:
         query_user_basic_info = (
             (
                 await db.execute(
-                    select(SysUser)
-                    .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
+                    select(UserDO)
+                    .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
                     .distinct()
                 )
             )
@@ -100,12 +100,12 @@ class UserDao:
         query_user_dept_info = (
             (
                 await db.execute(
-                    select(SysDept)
-                    .select_from(SysUser)
-                    .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
+                    select(DeptDO)
+                    .select_from(UserDO)
+                    .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
                     .join(
-                        SysDept,
-                        and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
+                        DeptDO,
+                        and_(UserDO.dept_id == DeptDO.dept_id, DeptDO.status == '0', DeptDO.del_flag == '0'),
                     )
                     .distinct()
                 )
@@ -116,13 +116,13 @@ class UserDao:
         query_user_role_info = (
             (
                 await db.execute(
-                    select(SysRole)
-                    .select_from(SysUser)
-                    .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
-                    .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                    select(RoleDO)
+                    .select_from(UserDO)
+                    .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
+                    .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                     .join(
-                        SysRole,
-                        and_(SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'),
+                        RoleDO,
+                        and_(UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'),
                     )
                     .distinct()
                 )
@@ -133,11 +133,11 @@ class UserDao:
         query_user_post_info = (
             (
                 await db.execute(
-                    select(SysPost)
-                    .select_from(SysUser)
-                    .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
-                    .join(SysUserPost, SysUser.user_id == SysUserPost.user_id, isouter=True)
-                    .join(SysPost, and_(SysUserPost.post_id == SysPost.post_id, SysPost.status == '0'))
+                    select(PostDO)
+                    .select_from(UserDO)
+                    .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
+                    .join(UserPostDO, UserDO.user_id == UserPostDO.user_id, isouter=True)
+                    .join(PostDO, and_(UserPostDO.post_id == PostDO.post_id, PostDO.status == '0'))
                     .distinct()
                 )
             )
@@ -147,26 +147,26 @@ class UserDao:
         role_id_list = [item.role_id for item in query_user_role_info]
         if 1 in role_id_list:
             query_user_menu_info = (
-                (await db.execute(select(SysMenu).where(SysMenu.status == '0').distinct())).scalars().all()
+                (await db.execute(select(MenuDO).where(MenuDO.status == '0').distinct())).scalars().all()
             )
         else:
             query_user_menu_info = (
                 (
                     await db.execute(
-                        select(SysMenu)
-                        .select_from(SysUser)
-                        .where(SysUser.status == '0', SysUser.del_flag == '0', SysUser.user_id == user_id)
-                        .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                        select(MenuDO)
+                        .select_from(UserDO)
+                        .where(UserDO.status == '0', UserDO.del_flag == '0', UserDO.user_id == user_id)
+                        .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                         .join(
-                            SysRole,
+                            RoleDO,
                             and_(
-                                SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'
+                                UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'
                             ),
                             isouter=True,
                         )
-                        .join(SysRoleMenu, SysRole.role_id == SysRoleMenu.role_id, isouter=True)
-                        .join(SysMenu, and_(SysRoleMenu.menu_id == SysMenu.menu_id, SysMenu.status == '0'))
-                        .order_by(SysMenu.order_num)
+                        .join(RoleMenuDO, RoleDO.role_id == RoleMenuDO.role_id, isouter=True)
+                        .join(MenuDO, and_(RoleMenuDO.menu_id == MenuDO.menu_id, MenuDO.status == '0'))
+                        .order_by(MenuDO.order_num)
                         .distinct()
                     )
                 )
@@ -194,19 +194,19 @@ class UserDao:
         :return: 当前user_id的用户信息对象
         """
         query_user_basic_info = (
-            (await db.execute(select(SysUser).where(SysUser.del_flag == '0', SysUser.user_id == user_id).distinct()))
+            (await db.execute(select(UserDO).where(UserDO.del_flag == '0', UserDO.user_id == user_id).distinct()))
             .scalars()
             .first()
         )
         query_user_dept_info = (
             (
                 await db.execute(
-                    select(SysDept)
-                    .select_from(SysUser)
-                    .where(SysUser.del_flag == '0', SysUser.user_id == user_id)
+                    select(DeptDO)
+                    .select_from(UserDO)
+                    .where(UserDO.del_flag == '0', UserDO.user_id == user_id)
                     .join(
-                        SysDept,
-                        and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
+                        DeptDO,
+                        and_(UserDO.dept_id == DeptDO.dept_id, DeptDO.status == '0', DeptDO.del_flag == '0'),
                     )
                     .distinct()
                 )
@@ -217,13 +217,13 @@ class UserDao:
         query_user_role_info = (
             (
                 await db.execute(
-                    select(SysRole)
-                    .select_from(SysUser)
-                    .where(SysUser.del_flag == '0', SysUser.user_id == user_id)
-                    .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                    select(RoleDO)
+                    .select_from(UserDO)
+                    .where(UserDO.del_flag == '0', UserDO.user_id == user_id)
+                    .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                     .join(
-                        SysRole,
-                        and_(SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'),
+                        RoleDO,
+                        and_(UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'),
                     )
                     .distinct()
                 )
@@ -234,11 +234,11 @@ class UserDao:
         query_user_post_info = (
             (
                 await db.execute(
-                    select(SysPost)
-                    .select_from(SysUser)
-                    .where(SysUser.del_flag == '0', SysUser.user_id == user_id)
-                    .join(SysUserPost, SysUser.user_id == SysUserPost.user_id, isouter=True)
-                    .join(SysPost, and_(SysUserPost.post_id == SysPost.post_id, SysPost.status == '0'))
+                    select(PostDO)
+                    .select_from(UserDO)
+                    .where(UserDO.del_flag == '0', UserDO.user_id == user_id)
+                    .join(UserPostDO, UserDO.user_id == UserPostDO.user_id, isouter=True)
+                    .join(PostDO, and_(UserPostDO.post_id == PostDO.post_id, PostDO.status == '0'))
                     .distinct()
                 )
             )
@@ -248,17 +248,17 @@ class UserDao:
         query_user_menu_info = (
             (
                 await db.execute(
-                    select(SysMenu)
-                    .select_from(SysUser)
-                    .where(SysUser.del_flag == '0', SysUser.user_id == user_id)
-                    .join(SysUserRole, SysUser.user_id == SysUserRole.user_id, isouter=True)
+                    select(MenuDO)
+                    .select_from(UserDO)
+                    .where(UserDO.del_flag == '0', UserDO.user_id == user_id)
+                    .join(UserRoleDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
                     .join(
-                        SysRole,
-                        and_(SysUserRole.role_id == SysRole.role_id, SysRole.status == '0', SysRole.del_flag == '0'),
+                        RoleDO,
+                        and_(UserRoleDO.role_id == RoleDO.role_id, RoleDO.status == '0', RoleDO.del_flag == '0'),
                         isouter=True,
                     )
-                    .join(SysRoleMenu, SysRole.role_id == SysRoleMenu.role_id, isouter=True)
-                    .join(SysMenu, and_(SysRoleMenu.menu_id == SysMenu.menu_id, SysMenu.status == '0'))
+                    .join(RoleMenuDO, RoleDO.role_id == RoleMenuDO.role_id, isouter=True)
+                    .join(MenuDO, and_(RoleMenuDO.menu_id == MenuDO.menu_id, MenuDO.status == '0'))
                     .distinct()
                 )
             )
@@ -288,49 +288,49 @@ class UserDao:
         :param is_page: 是否开启分页
         :return: 用户列表信息对象
         """
-        conditions = [SysUser.del_flag == '0']
+        conditions = [UserDO.del_flag == '0']
         
         if query_object.dept_id:
             conditions.append(or_(
-                SysUser.dept_id == query_object.dept_id,
-                SysUser.dept_id.in_(
-                    select(SysDept.dept_id).where(func.find_in_set(query_object.dept_id, SysDept.ancestors))
+                UserDO.dept_id == query_object.dept_id,
+                UserDO.dept_id.in_(
+                    select(DeptDO.dept_id).where(func.find_in_set(query_object.dept_id, DeptDO.ancestors))
                 ),
             ))
         if query_object.user_id is not None:
-            conditions.append(SysUser.user_id == query_object.user_id)
+            conditions.append(UserDO.user_id == query_object.user_id)
         if query_object.user_name:
-            conditions.append(SysUser.user_name.like(f'%{query_object.user_name}%'))
+            conditions.append(UserDO.user_name.like(f'%{query_object.user_name}%'))
         if query_object.nick_name:
-            conditions.append(SysUser.nick_name.like(f'%{query_object.nick_name}%'))
+            conditions.append(UserDO.nick_name.like(f'%{query_object.nick_name}%'))
         if query_object.email:
-            email_condition = sensitive_equals(SysUser, 'email', query_object.email)
+            email_condition = sensitive_equals(UserDO, 'email', query_object.email)
             if email_condition is not None:
                 conditions.append(email_condition)
         if query_object.phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', query_object.phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         if query_object.status:
-            conditions.append(SysUser.status == query_object.status)
+            conditions.append(UserDO.status == query_object.status)
         if query_object.sex:
-            conditions.append(SysUser.sex == query_object.sex)
+            conditions.append(UserDO.sex == query_object.sex)
         if query_object.begin_time and query_object.end_time:
-            conditions.append(SysUser.create_time.between(
+            conditions.append(UserDO.create_time.between(
                 datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                 datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
             ))
         
-        query = select(SysUser, SysDept).where(*conditions)
+        query = select(UserDO, DeptDO).where(*conditions)
         # 数据权限过滤
         if data_scope_sql is not True:
             query = query.where(data_scope_sql)
         
         query = query.join(
-            SysDept,
-            and_(SysUser.dept_id == SysDept.dept_id, SysDept.status == '0', SysDept.del_flag == '0'),
+            DeptDO,
+            and_(UserDO.dept_id == DeptDO.dept_id, DeptDO.status == '0', DeptDO.del_flag == '0'),
             isouter=True,
-        ).order_by(SysUser.user_id).distinct()
+        ).order_by(UserDO.user_id).distinct()
         
         user_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
 
@@ -345,7 +345,7 @@ class UserDao:
         :param user: 用户对象
         :return: 新增校验结果
         """
-        db_user = SysUser(**user.model_dump(exclude={'admin'}))
+        db_user = UserDO(**user.model_dump(exclude={'admin'}))
         db.add(db_user)
         await db.flush()
 
@@ -366,7 +366,7 @@ class UserDao:
             user['email_hash'] = SensitiveDataCipher.hash(user.get('email'))
         if 'id_card' in user:
             user['id_card_hash'] = SensitiveDataCipher.hash(user.get('id_card'))
-        await db.execute(update(SysUser), [user])
+        await db.execute(update(UserDO), [user])
 
     @classmethod
     async def delete_user_dao(cls, db: AsyncSession, user: UserModel):
@@ -378,8 +378,8 @@ class UserDao:
         :return:
         """
         await db.execute(
-            update(SysUser)
-            .where(SysUser.user_id == user.user_id)
+            update(UserDO)
+            .where(UserDO.user_id == user.user_id)
             .values(del_flag='2', update_by=user.update_by, update_time=user.update_time)
         )
 
@@ -395,14 +395,14 @@ class UserDao:
         allocated_role_list = (
             (
                 await db.execute(
-                    select(SysRole)
+                    select(RoleDO)
                     .where(
-                        SysRole.del_flag == '0',
-                        SysRole.role_id != 1,
-                        SysRole.role_name == query_object.role_name if query_object.role_name else True,
-                        SysRole.role_key == query_object.role_key if query_object.role_key else True,
-                        SysRole.role_id.in_(
-                            select(SysUserRole.role_id).where(SysUserRole.user_id == query_object.user_id)
+                        RoleDO.del_flag == '0',
+                        RoleDO.role_id != 1,
+                        RoleDO.role_name == query_object.role_name if query_object.role_name else True,
+                        RoleDO.role_key == query_object.role_key if query_object.role_key else True,
+                        RoleDO.role_id.in_(
+                            select(UserRoleDO.role_id).where(UserRoleDO.user_id == query_object.user_id)
                         ),
                     )
                     .distinct()
@@ -428,21 +428,21 @@ class UserDao:
         :return: 角色已分配的用户列表信息
         """
         conditions = [
-            SysUser.del_flag == '0',
-            SysRole.role_id == query_object.role_id,
+            UserDO.del_flag == '0',
+            RoleDO.role_id == query_object.role_id,
         ]
         if query_object.user_name:
-            conditions.append(SysUser.user_name == query_object.user_name)
+            conditions.append(UserDO.user_name == query_object.user_name)
         if query_object.phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', query_object.phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         
         query = (
-            select(SysUser)
-            .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
-            .join(SysUserRole, SysUserRole.user_id == SysUser.user_id, isouter=True)
-            .join(SysRole, SysRole.role_id == SysUserRole.role_id, isouter=True)
+            select(UserDO)
+            .join(DeptDO, DeptDO.dept_id == UserDO.dept_id, isouter=True)
+            .join(UserRoleDO, UserRoleDO.user_id == UserDO.user_id, isouter=True)
+            .join(RoleDO, RoleDO.role_id == UserRoleDO.role_id, isouter=True)
             .where(*conditions)
         )
         # 数据权限过滤
@@ -468,29 +468,29 @@ class UserDao:
         :return: 角色未分配的用户列表信息
         """
         conditions = [
-            SysUser.del_flag == '0',
-            or_(SysRole.role_id != query_object.role_id, SysRole.role_id.is_(None)),
-            ~SysUser.user_id.in_(
-                select(SysUser.user_id)
-                .select_from(SysUser)
+            UserDO.del_flag == '0',
+            or_(RoleDO.role_id != query_object.role_id, RoleDO.role_id.is_(None)),
+            ~UserDO.user_id.in_(
+                select(UserDO.user_id)
+                .select_from(UserDO)
                 .join(
-                    SysUserRole,
-                    and_(SysUserRole.user_id == SysUser.user_id, SysUserRole.role_id == query_object.role_id),
+                    UserRoleDO,
+                    and_(UserRoleDO.user_id == UserDO.user_id, UserRoleDO.role_id == query_object.role_id),
                 )
             ),
         ]
         if query_object.user_name:
-            conditions.append(SysUser.user_name == query_object.user_name)
+            conditions.append(UserDO.user_name == query_object.user_name)
         if query_object.phonenumber:
-            phone_condition = sensitive_equals(SysUser, 'phonenumber', query_object.phonenumber)
+            phone_condition = sensitive_equals(UserDO, 'phonenumber', query_object.phonenumber)
             if phone_condition is not None:
                 conditions.append(phone_condition)
         
         query = (
-            select(SysUser)
-            .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
-            .join(SysUserRole, SysUserRole.user_id == SysUser.user_id, isouter=True)
-            .join(SysRole, SysRole.role_id == SysUserRole.role_id, isouter=True)
+            select(UserDO)
+            .join(DeptDO, DeptDO.dept_id == UserDO.dept_id, isouter=True)
+            .join(UserRoleDO, UserRoleDO.user_id == UserDO.user_id, isouter=True)
+            .join(RoleDO, RoleDO.role_id == UserRoleDO.role_id, isouter=True)
             .where(*conditions)
         )
         # 数据权限过滤
@@ -513,7 +513,7 @@ class UserDao:
         :param user_role: 用户角色关联对象
         :return:
         """
-        db_user_role = SysUserRole(**user_role.model_dump())
+        db_user_role = UserRoleDO(**user_role.model_dump())
         db.add(db_user_role)
 
     @classmethod
@@ -525,7 +525,7 @@ class UserDao:
         :param user_role: 用户角色关联对象
         :return:
         """
-        await db.execute(delete(SysUserRole).where(SysUserRole.user_id.in_([user_role.user_id])))
+        await db.execute(delete(UserRoleDO).where(UserRoleDO.user_id.in_([user_role.user_id])))
 
     @classmethod
     async def delete_user_role_by_user_and_role_dao(cls, db: AsyncSession, user_role: UserRoleModel):
@@ -537,9 +537,9 @@ class UserDao:
         :return:
         """
         await db.execute(
-            delete(SysUserRole).where(
-                SysUserRole.user_id == user_role.user_id if user_role.user_id else True,
-                SysUserRole.role_id == user_role.role_id if user_role.role_id else True,
+            delete(UserRoleDO).where(
+                UserRoleDO.user_id == user_role.user_id if user_role.user_id else True,
+                UserRoleDO.role_id == user_role.role_id if user_role.role_id else True,
             )
         )
 
@@ -555,8 +555,8 @@ class UserDao:
         user_role_info = (
             (
                 await db.execute(
-                    select(SysUserRole)
-                    .where(SysUserRole.user_id == user_role.user_id, SysUserRole.role_id == user_role.role_id)
+                    select(UserRoleDO)
+                    .where(UserRoleDO.user_id == user_role.user_id, UserRoleDO.role_id == user_role.role_id)
                     .distinct()
                 )
             )
@@ -575,7 +575,7 @@ class UserDao:
         :param user_post: 用户岗位关联对象
         :return:
         """
-        db_user_post = SysUserPost(**user_post.model_dump())
+        db_user_post = UserPostDO(**user_post.model_dump())
         db.add(db_user_post)
 
     @classmethod
@@ -587,14 +587,14 @@ class UserDao:
         :param user_post: 用户岗位关联对象
         :return:
         """
-        await db.execute(delete(SysUserPost).where(SysUserPost.user_id.in_([user_post.user_id])))
+        await db.execute(delete(UserPostDO).where(UserPostDO.user_id.in_([user_post.user_id])))
 
     @classmethod
     async def get_user_dept_info(cls, db: AsyncSession, dept_id: int):
         dept_basic_info = (
             (
                 await db.execute(
-                    select(SysDept).where(SysDept.dept_id == dept_id, SysDept.status == '0', SysDept.del_flag == '0')
+                    select(DeptDO).where(DeptDO.dept_id == dept_id, DeptDO.status == '0', DeptDO.del_flag == '0')
                 )
             )
             .scalars()

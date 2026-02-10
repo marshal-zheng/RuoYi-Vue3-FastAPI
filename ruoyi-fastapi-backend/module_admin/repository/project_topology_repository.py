@@ -6,32 +6,32 @@ from typing import Optional, List, Any
 from sqlalchemy import select, update, delete, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.project_topology_do import SysProjectTopology
+from module_admin.entity.do.project_topology_do import ProjectTopologyDO
 from module_admin.repository.base_repository import BaseRepository
 
 
-class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
+class ProjectTopologyRepository(BaseRepository[ProjectTopologyDO]):
     """项目拓扑 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysProjectTopology)
+        super().__init__(db, ProjectTopologyDO)
     
     async def find_by_project_and_version(
         self,
         project_id: int,
         version_id: Optional[int] = None
-    ) -> Optional[SysProjectTopology]:
+    ) -> Optional[ProjectTopologyDO]:
         """
         根据项目ID和版本ID获取拓扑数据
         使用子查询避免对大 JSON 字段排序
         """
         # 子查询获取最新的 topology_id
-        id_query = select(SysProjectTopology.topology_id).where(
-            SysProjectTopology.project_id == project_id
+        id_query = select(ProjectTopologyDO.topology_id).where(
+            ProjectTopologyDO.project_id == project_id
         )
         if version_id is not None:
-            id_query = id_query.where(SysProjectTopology.version_id == version_id)
-        id_query = id_query.order_by(desc(SysProjectTopology.update_time)).limit(1)
+            id_query = id_query.where(ProjectTopologyDO.version_id == version_id)
+        id_query = id_query.order_by(desc(ProjectTopologyDO.update_time)).limit(1)
         
         id_result = await self.db.execute(id_query)
         topology_id = id_result.scalar()
@@ -40,7 +40,7 @@ class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
             return None
         
         # 根据主键直接获取
-        stmt = select(SysProjectTopology).where(SysProjectTopology.topology_id == topology_id)
+        stmt = select(ProjectTopologyDO).where(ProjectTopologyDO.topology_id == topology_id)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
@@ -51,7 +51,7 @@ class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
         version_id: Optional[int] = None,
         create_by: Optional[str] = None,
         update_by: Optional[str] = None
-    ) -> SysProjectTopology:
+    ) -> ProjectTopologyDO:
         """
         保存拓扑数据（存在则更新，不存在则新增）
         """
@@ -61,8 +61,8 @@ class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
         if existing:
             # 更新现有记录
             stmt = (
-                update(SysProjectTopology)
-                .where(SysProjectTopology.topology_id == existing.topology_id)
+                update(ProjectTopologyDO)
+                .where(ProjectTopologyDO.topology_id == existing.topology_id)
                 .values(
                     topology_data=topology_data,
                     version_id=version_id,
@@ -78,7 +78,7 @@ class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
             return existing
         
         # 新增记录
-        db_topology = SysProjectTopology(
+        db_topology = ProjectTopologyDO(
             project_id=project_id,
             version_id=version_id,
             topology_data=topology_data,
@@ -102,29 +102,29 @@ class ProjectTopologyRepository(BaseRepository[SysProjectTopology]):
     ):
         """清理重复的拓扑记录"""
         conditions = [
-            SysProjectTopology.project_id == project_id,
-            SysProjectTopology.topology_id != keep_topology_id
+            ProjectTopologyDO.project_id == project_id,
+            ProjectTopologyDO.topology_id != keep_topology_id
         ]
         if version_id is None:
-            conditions.append(SysProjectTopology.version_id.is_(None))
+            conditions.append(ProjectTopologyDO.version_id.is_(None))
         else:
-            conditions.append(SysProjectTopology.version_id == version_id)
+            conditions.append(ProjectTopologyDO.version_id == version_id)
         
-        stmt = delete(SysProjectTopology).where(*conditions)
+        stmt = delete(ProjectTopologyDO).where(*conditions)
         await self.db.execute(stmt)
     
     async def find_by_version_ids(
         self,
         project_id: int,
         version_ids: List[int]
-    ) -> List[SysProjectTopology]:
+    ) -> List[ProjectTopologyDO]:
         """根据版本ID列表获取拓扑数据"""
         if not version_ids:
             return []
         
-        stmt = select(SysProjectTopology).where(
-            SysProjectTopology.project_id == project_id,
-            SysProjectTopology.version_id.in_(version_ids)
+        stmt = select(ProjectTopologyDO).where(
+            ProjectTopologyDO.project_id == project_id,
+            ProjectTopologyDO.version_id.in_(version_ids)
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()

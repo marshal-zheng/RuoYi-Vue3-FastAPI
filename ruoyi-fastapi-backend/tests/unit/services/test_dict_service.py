@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock
 
 from module_admin.service.dict_service import DictService
-from module_admin.entity.do.dict_do import SysDictType, SysDictData
+from module_admin.entity.do.dict_do import DictTypeDO, DictDataDO
 
 
 @pytest.fixture
@@ -38,7 +38,7 @@ def dict_service(mock_dict_dao):
 @pytest.fixture
 def sample_dict_type():
     """Create sample dictionary type."""
-    return SysDictType(
+    return DictTypeDO(
         dict_id=1,
         dict_name='用户性别',
         dict_type='sys_user_sex',
@@ -51,7 +51,7 @@ def sample_dict_type():
 def sample_dict_data():
     """Create sample dictionary data."""
     return [
-        SysDictData(
+        DictDataDO(
             dict_code=1,
             dict_type='sys_user_sex',
             dict_label='男',
@@ -59,7 +59,7 @@ def sample_dict_data():
             dict_sort=1,
             status='0',
         ),
-        SysDictData(
+        DictDataDO(
             dict_code=2,
             dict_type='sys_user_sex',
             dict_label='女',

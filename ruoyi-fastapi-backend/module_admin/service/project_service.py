@@ -14,8 +14,8 @@ from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
 from utils.transaction_manager import transactional
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
-from module_admin.entity.do.project_do import SysProject
-from module_admin.entity.do.project_version_do import SysProjectVersion
+from module_admin.entity.do.project_do import ProjectDO
+from module_admin.entity.do.project_version_do import ProjectVersionDO
 from module_admin.repository import (
     ProjectRepository,
     ProjectVersionRepository,
@@ -105,11 +105,11 @@ class ProjectService:
         project_repo = ProjectRepository(query_db)
         version_repo = ProjectVersionRepository(query_db)
         
-        db_project = SysProject(**page_object.model_dump())
+        db_project = ProjectDO(**page_object.model_dump())
         new_project = await project_repo.add(db_project)
         
         # 创建默认初始版本
-        default_version = SysProjectVersion(
+        default_version = ProjectVersionDO(
             project_id=new_project.project_id,
             version_number='v1.0.0',
             version_name='初始版本',
@@ -141,15 +141,15 @@ class ProjectService:
         :return: 工程编码
         """
         from sqlalchemy import select, func
-        from module_admin.entity.do.project_do import SysProject
+        from module_admin.entity.do.project_do import ProjectDO
         
         today = datetime.now().strftime('%Y%m%d')
         prefix = f'PRJ{today}'
         
         # 查询今天最大的编号
         result = await query_db.execute(
-            select(func.max(SysProject.project_code))
-            .where(SysProject.project_code.like(f'{prefix}%'))
+            select(func.max(ProjectDO.project_code))
+            .where(ProjectDO.project_code.like(f'{prefix}%'))
         )
         max_code = result.scalar()
         
@@ -478,7 +478,7 @@ class ProjectService:
         device_repo = DeviceRepository(query_db)
         interface_repo = DeviceInterfaceRepository(query_db)
         
-        db_project = SysProject(**new_project.model_dump())
+        db_project = ProjectDO(**new_project.model_dump())
         db_project = await project_repo.add(db_project)
         new_project_id = db_project.project_id
 
@@ -534,7 +534,7 @@ class ProjectService:
         first_version_id = None
         for export_version in import_data.versions:
             # 创建版本
-            new_version = SysProjectVersion(
+            new_version = ProjectVersionDO(
                 project_id=new_project_id,
                 version_number=export_version.version_number,
                 version_name=export_version.version_name,

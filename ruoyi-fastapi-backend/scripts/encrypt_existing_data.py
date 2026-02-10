@@ -9,15 +9,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from sqlalchemy import select, update
 from config.database import AsyncSessionLocal
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.user_do import UserDO
 from utils.log_util import logger
 from utils.sensitive import SensitiveDataCipher
 
 
 async def encrypt_user_data(session) -> dict:
     """加密用户表的敏感数据"""
-    result = await session.execute(select(SysUser))
+    result = await session.execute(select(UserDO))
     users = result.scalars().all()
     
     counts = {'phonenumber': 0, 'email': 0, 'id_card': 0}
@@ -52,7 +52,7 @@ async def encrypt_user_data(session) -> dict:
 
 async def encrypt_dept_data(session) -> int:
     """加密部门表的敏感数据"""
-    result = await session.execute(select(SysDept))
+    result = await session.execute(select(DeptDO))
     depts = result.scalars().all()
     
     updated = 0

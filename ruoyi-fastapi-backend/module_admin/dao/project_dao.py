@@ -1,6 +1,6 @@
 from sqlalchemy import desc, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.project_do import SysProject
+from module_admin.entity.do.project_do import ProjectDO
 from module_admin.entity.vo.project_vo import ProjectModel, ProjectPageQueryModel, DeleteProjectModel
 from utils.page_util import PageUtil
 
@@ -21,9 +21,9 @@ class ProjectDao:
         """
         project_info = (
             await db.execute(
-                select(SysProject).where(
-                    SysProject.project_id == project_id,
-                    SysProject.del_flag == '0'
+                select(ProjectDO).where(
+                    ProjectDO.project_id == project_id,
+                    ProjectDO.del_flag == '0'
                 )
             )
         ).scalars().first()
@@ -40,13 +40,13 @@ class ProjectDao:
         :param is_page: 是否开启分页
         :return: 工程列表信息对象
         """
-        query = select(SysProject).where(
-            SysProject.del_flag == '0'
-        ).order_by(desc(SysProject.create_time))
+        query = select(ProjectDO).where(
+            ProjectDO.del_flag == '0'
+        ).order_by(desc(ProjectDO.create_time))
         
         if query_object.begin_time and query_object.end_time:
             query = query.where(
-                SysProject.create_time.between(query_object.begin_time, query_object.end_time)
+                ProjectDO.create_time.between(query_object.begin_time, query_object.end_time)
             )
         
         if is_page:
@@ -65,7 +65,7 @@ class ProjectDao:
         :return: None
         """
         data = project.model_dump(exclude_unset=True)
-        db_project = SysProject(**data)
+        db_project = ProjectDO(**data)
         db.add(db_project)
         await db.flush()
         return db_project
@@ -80,8 +80,8 @@ class ProjectDao:
         :return: None
         """
         await db.execute(
-            update(SysProject)
-            .where(SysProject.project_id == project.project_id)
+            update(ProjectDO)
+            .where(ProjectDO.project_id == project.project_id)
             .values(**project.model_dump(exclude_unset=True, exclude={'project_id'}))
         )
 
@@ -96,8 +96,8 @@ class ProjectDao:
         """
         project_id_list = project.project_ids.split(',')
         await db.execute(
-            update(SysProject)
-            .where(SysProject.project_id.in_(project_id_list))
+            update(ProjectDO)
+            .where(ProjectDO.project_id.in_(project_id_list))
             .values(
                 del_flag='2',
                 update_by=project.update_by,

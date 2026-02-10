@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.dao.dict_dao import DictDataDao, DictTypeDao
-from module_admin.entity.do.dict_do import SysDictData, SysDictType
+from module_admin.entity.do.dict_do import DictDataDO, DictTypeDO
 from module_admin.entity.vo.dict_vo import DictDataModel, DictTypeModel
 
 
@@ -33,7 +33,7 @@ def dict_data_dao():
 @pytest.fixture
 def sample_dict_type():
     """Create sample dict type for testing."""
-    return SysDictType(
+    return DictTypeDO(
         dict_id=1,
         dict_name='Test Dict',
         dict_type='test_dict',
@@ -46,7 +46,7 @@ def sample_dict_type():
 @pytest.fixture
 def sample_dict_data():
     """Create sample dict data for testing."""
-    return SysDictData(
+    return DictDataDO(
         dict_code=1,
         dict_sort=1,
         dict_label='Test Label',

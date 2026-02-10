@@ -6,28 +6,28 @@ from typing import Optional, List
 from sqlalchemy import select, delete, func, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.dict_do import SysDictType, SysDictData
+from module_admin.entity.do.dict_do import DictTypeDO, DictDataDO
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.repository.base_repository import BaseRepository
 from utils.page_util import PageUtil
 from utils.time_format_util import list_format_datetime
 
 
-class DictTypeRepository(BaseRepository[SysDictType]):
+class DictTypeRepository(BaseRepository[DictTypeDO]):
     """字典类型 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysDictType)
+        super().__init__(db, DictTypeDO)
     
-    async def find_by_id(self, dict_id: int) -> Optional[SysDictType]:
+    async def find_by_id(self, dict_id: int) -> Optional[DictTypeDO]:
         """根据ID查找字典类型"""
-        stmt = select(SysDictType).where(SysDictType.dict_id == dict_id)
+        stmt = select(DictTypeDO).where(DictTypeDO.dict_id == dict_id)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_by_type(self, dict_type: str) -> Optional[SysDictType]:
+    async def find_by_type(self, dict_type: str) -> Optional[DictTypeDO]:
         """根据字典类型查找"""
-        stmt = select(SysDictType).where(SysDictType.dict_type == dict_type)
+        stmt = select(DictTypeDO).where(DictTypeDO.dict_type == dict_type)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
@@ -35,21 +35,21 @@ class DictTypeRepository(BaseRepository[SysDictType]):
         self,
         dict_type: Optional[str] = None,
         dict_name: Optional[str] = None
-    ) -> Optional[SysDictType]:
+    ) -> Optional[DictTypeDO]:
         """根据类型或名称查找"""
         conditions = []
         if dict_type:
-            conditions.append(SysDictType.dict_type == dict_type)
+            conditions.append(DictTypeDO.dict_type == dict_type)
         if dict_name:
-            conditions.append(SysDictType.dict_name == dict_name)
+            conditions.append(DictTypeDO.dict_name == dict_name)
         
-        stmt = select(SysDictType).where(*conditions) if conditions else select(SysDictType)
+        stmt = select(DictTypeDO).where(*conditions) if conditions else select(DictTypeDO)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
     async def find_all(self) -> List[dict]:
         """获取所有字典类型"""
-        stmt = select(SysDictType)
+        stmt = select(DictTypeDO)
         result = await self.db.execute(stmt)
         return list_format_datetime(result.scalars().all())
     
@@ -66,42 +66,42 @@ class DictTypeRepository(BaseRepository[SysDictType]):
         """分页查询字典类型"""
         conditions = []
         if dict_name:
-            conditions.append(SysDictType.dict_name.like(f'%{dict_name}%'))
+            conditions.append(DictTypeDO.dict_name.like(f'%{dict_name}%'))
         if dict_type:
-            conditions.append(SysDictType.dict_type.like(f'%{dict_type}%'))
+            conditions.append(DictTypeDO.dict_type.like(f'%{dict_type}%'))
         if status:
-            conditions.append(SysDictType.status == status)
+            conditions.append(DictTypeDO.status == status)
         if begin_time and end_time:
             conditions.append(
-                SysDictType.create_time.between(
+                DictTypeDO.create_time.between(
                     datetime.combine(datetime.strptime(begin_time, '%Y-%m-%d'), time(0, 0, 0)),
                     datetime.combine(datetime.strptime(end_time, '%Y-%m-%d'), time(23, 59, 59))
                 )
             )
         
         query = (
-            select(SysDictType)
-            .where(*conditions) if conditions else select(SysDictType)
-        ).order_by(SysDictType.dict_id).distinct()
+            select(DictTypeDO)
+            .where(*conditions) if conditions else select(DictTypeDO)
+        ).order_by(DictTypeDO.dict_id).distinct()
         
         return await PageUtil.paginate(self.db, query, page, page_size, True)
     
     async def delete_by_id(self, dict_id: int) -> int:
         """根据ID删除字典类型"""
-        stmt = delete(SysDictType).where(SysDictType.dict_id == dict_id)
+        stmt = delete(DictTypeDO).where(DictTypeDO.dict_id == dict_id)
         result = await self.db.execute(stmt)
         return result.rowcount
 
 
-class DictDataRepository(BaseRepository[SysDictData]):
+class DictDataRepository(BaseRepository[DictDataDO]):
     """字典数据 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysDictData)
+        super().__init__(db, DictDataDO)
     
-    async def find_by_code(self, dict_code: int) -> Optional[SysDictData]:
+    async def find_by_code(self, dict_code: int) -> Optional[DictDataDO]:
         """根据字典编码查找"""
-        stmt = select(SysDictData).where(SysDictData.dict_code == dict_code)
+        stmt = select(DictDataDO).where(DictDataDO.dict_code == dict_code)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
@@ -110,37 +110,37 @@ class DictDataRepository(BaseRepository[SysDictData]):
         dict_type: str,
         dict_label: str,
         dict_value: Optional[str] = None
-    ) -> Optional[SysDictData]:
+    ) -> Optional[DictDataDO]:
         """根据类型、标签、值查找"""
         conditions = [
-            SysDictData.dict_type == dict_type,
-            SysDictData.dict_label == dict_label
+            DictDataDO.dict_type == dict_type,
+            DictDataDO.dict_label == dict_label
         ]
         if dict_value:
-            conditions.append(SysDictData.dict_value == dict_value)
+            conditions.append(DictDataDO.dict_value == dict_value)
         
-        stmt = select(SysDictData).where(*conditions)
+        stmt = select(DictDataDO).where(*conditions)
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_by_type(self, dict_type: str) -> List[SysDictData]:
+    async def find_by_type(self, dict_type: str) -> List[DictDataDO]:
         """根据字典类型查找所有数据"""
         stmt = (
-            select(SysDictData)
-            .select_from(SysDictType)
+            select(DictDataDO)
+            .select_from(DictTypeDO)
             .where(
-                SysDictType.dict_type == dict_type,
-                SysDictType.status == StatusEnum.NORMAL.value
+                DictTypeDO.dict_type == dict_type,
+                DictTypeDO.status == StatusEnum.NORMAL.value
             )
             .join(
-                SysDictData,
+                DictDataDO,
                 and_(
-                    SysDictType.dict_type == SysDictData.dict_type,
-                    SysDictData.status == StatusEnum.NORMAL.value
+                    DictTypeDO.dict_type == DictDataDO.dict_type,
+                    DictDataDO.status == StatusEnum.NORMAL.value
                 ),
                 isouter=True
             )
-            .order_by(SysDictData.dict_sort)
+            .order_by(DictDataDO.dict_sort)
             .distinct()
         )
         result = await self.db.execute(stmt)
@@ -157,22 +157,22 @@ class DictDataRepository(BaseRepository[SysDictData]):
         """分页查询字典数据"""
         conditions = []
         if dict_type:
-            conditions.append(SysDictData.dict_type == dict_type)
+            conditions.append(DictDataDO.dict_type == dict_type)
         if dict_label:
-            conditions.append(SysDictData.dict_label.like(f'%{dict_label}%'))
+            conditions.append(DictDataDO.dict_label.like(f'%{dict_label}%'))
         if status:
-            conditions.append(SysDictData.status == status)
+            conditions.append(DictDataDO.status == status)
         
         query = (
-            select(SysDictData)
-            .where(*conditions) if conditions else select(SysDictData)
-        ).order_by(SysDictData.dict_sort).distinct()
+            select(DictDataDO)
+            .where(*conditions) if conditions else select(DictDataDO)
+        ).order_by(DictDataDO.dict_sort).distinct()
         
         return await PageUtil.paginate(self.db, query, page, page_size, True)
     
     async def delete_by_code(self, dict_code: int) -> int:
         """根据编码删除字典数据"""
-        stmt = delete(SysDictData).where(SysDictData.dict_code == dict_code)
+        stmt = delete(DictDataDO).where(DictDataDO.dict_code == dict_code)
         result = await self.db.execute(stmt)
         return result.rowcount
     
@@ -180,8 +180,8 @@ class DictDataRepository(BaseRepository[SysDictData]):
         """统计字典类型下的数据数量"""
         stmt = (
             select(func.count())
-            .select_from(SysDictData)
-            .where(SysDictData.dict_type == dict_type)
+            .select_from(DictDataDO)
+            .where(DictDataDO.dict_type == dict_type)
         )
         result = await self.db.execute(stmt)
         return result.scalar() or 0

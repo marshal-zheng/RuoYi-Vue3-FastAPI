@@ -7,7 +7,7 @@ from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from module_admin.service.dept_service import DeptService
-from module_admin.entity.do.dept_do import SysDept
+from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.vo.dept_vo import DeptModel, DeleteDeptModel
 from config.constant import CommonConstant
 from exceptions.exception import (
@@ -49,7 +49,7 @@ def mock_db():
 @pytest.fixture
 def sample_dept():
     """Create sample department for testing."""
-    return SysDept(
+    return DeptDO(
         dept_id=1,
         parent_id=0,
         ancestors='0',
@@ -68,7 +68,7 @@ def sample_dept():
 @pytest.fixture
 def sample_child_dept():
     """Create sample child department."""
-    return SysDept(
+    return DeptDO(
         dept_id=2,
         parent_id=1,
         ancestors='0,1',
@@ -255,7 +255,7 @@ class TestDeptServiceCreate:
     @pytest.mark.asyncio
     async def test_add_dept_parent_disabled(self, mock_db):
         """Test adding department under disabled parent."""
-        disabled_parent = SysDept(
+        disabled_parent = DeptDO(
             dept_id=1,
             parent_id=0,
             ancestors='0',
@@ -285,7 +285,7 @@ class TestDeptServiceUpdate:
     @pytest.mark.asyncio
     async def test_edit_dept_success(self, mock_db, sample_dept):
         """Test editing department successfully."""
-        parent_dept = SysDept(
+        parent_dept = DeptDO(
             dept_id=0,
             parent_id=0,
             ancestors='0',
@@ -423,8 +423,8 @@ class TestDeptServiceUtility:
 
     def test_list_to_tree_single_level(self):
         """Test converting flat list to tree - single level."""
-        dept1 = SysDept(dept_id=1, parent_id=0, dept_name='部门1', ancestors='0', status='0', del_flag='0')
-        dept2 = SysDept(dept_id=2, parent_id=0, dept_name='部门2', ancestors='0', status='0', del_flag='0')
+        dept1 = DeptDO(dept_id=1, parent_id=0, dept_name='部门1', ancestors='0', status='0', del_flag='0')
+        dept2 = DeptDO(dept_id=2, parent_id=0, dept_name='部门2', ancestors='0', status='0', del_flag='0')
         
         result = DeptService.list_to_tree([dept1, dept2])
         
@@ -434,8 +434,8 @@ class TestDeptServiceUtility:
 
     def test_list_to_tree_nested(self):
         """Test converting flat list to tree - nested."""
-        parent = SysDept(dept_id=1, parent_id=0, dept_name='父部门', ancestors='0', status='0', del_flag='0')
-        child = SysDept(dept_id=2, parent_id=1, dept_name='子部门', ancestors='0,1', status='0', del_flag='0')
+        parent = DeptDO(dept_id=1, parent_id=0, dept_name='父部门', ancestors='0', status='0', del_flag='0')
+        child = DeptDO(dept_id=2, parent_id=1, dept_name='子部门', ancestors='0,1', status='0', del_flag='0')
         
         result = DeptService.list_to_tree([parent, child])
         

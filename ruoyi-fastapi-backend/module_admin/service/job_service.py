@@ -5,7 +5,7 @@ from config.constant import CommonConstant, JobConstant
 from config.get_scheduler import SchedulerUtil
 from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
-from module_admin.entity.do.job_do import SysJob
+from module_admin.entity.do.job_do import JobDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.job_vo import DeleteJobModel, EditJobModel, JobModel, JobPageQueryModel
 from module_admin.repository import JobRepository
@@ -136,7 +136,7 @@ class JobService:
             )
         
         job_repo = JobRepository(query_db)
-        db_job = SysJob(**page_object.model_dump())
+        db_job = JobDO(**page_object.model_dump())
         add_job = await job_repo.add(db_job)
         job_info = await cls.job_detail_services(query_db, add_job.job_id)
         if job_info.status == '0':

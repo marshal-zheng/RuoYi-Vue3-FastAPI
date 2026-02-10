@@ -34,7 +34,7 @@ httpx.AsyncClient = _PatchedAsyncClient
 
 from config.env import AppConfig
 from module_admin.entity.do.base import LegacyBaseModel
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.user_do import UserDO
 
 # Test database URL (SQLite in-memory)
 TEST_DATABASE_URL = 'sqlite+aiosqlite:///:memory:'
@@ -95,9 +95,9 @@ async def db_session(test_db: AsyncSession) -> AsyncGenerator[AsyncSession, None
 
 
 @pytest.fixture
-async def test_user(db_session: AsyncSession) -> SysUser:
+async def test_user(db_session: AsyncSession) -> UserDO:
     """Create a test user in the database."""
-    user = SysUser(
+    user = UserDO(
         user_name="test_user",
         nick_name="Test User",
         password="test123",

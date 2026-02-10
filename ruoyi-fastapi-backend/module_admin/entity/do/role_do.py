@@ -3,7 +3,7 @@ from module_admin.entity.do.base import LegacyBaseModel, RelationBaseModel
 from module_admin.entity.do.enums import DataScopeEnum, StatusEnum, DelFlagEnum
 
 
-class SysRole(LegacyBaseModel):
+class RoleDO(LegacyBaseModel):
     """
     角色信息表
     """
@@ -26,7 +26,7 @@ class SysRole(LegacyBaseModel):
     remark = Column(String(500), default=None, comment='备注')
 
 
-class SysRoleDept(RelationBaseModel):
+class RoleDeptDO(RelationBaseModel):
     """
     角色和部门关联表
     """
@@ -37,7 +37,7 @@ class SysRoleDept(RelationBaseModel):
     dept_id = Column(Integer, primary_key=True, nullable=False, comment='部门ID')
 
 
-class SysRoleMenu(RelationBaseModel):
+class RoleMenuDO(RelationBaseModel):
     """
     角色和菜单关联表
     """

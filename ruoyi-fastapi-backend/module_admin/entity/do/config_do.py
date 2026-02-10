@@ -4,7 +4,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import YesNoEnum
 
 
-class SysConfig(LegacyBaseModel):
+class ConfigDO(LegacyBaseModel):
     """
     参数配置表
     """

@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from sqlalchemy import delete, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.notice_do import SysNotice
+from module_admin.entity.do.notice_do import NoticeDO
 from module_admin.entity.vo.notice_vo import NoticeModel, NoticePageQueryModel
 from utils.page_util import PageUtil
 
@@ -20,7 +20,7 @@ class NoticeDao:
         :param notice_id: 通知公告id
         :return: 通知公告信息对象
         """
-        notice_info = (await db.execute(select(SysNotice).where(SysNotice.notice_id == notice_id))).scalars().first()
+        notice_info = (await db.execute(select(NoticeDO).where(NoticeDO.notice_id == notice_id))).scalars().first()
 
         return notice_info
 
@@ -36,10 +36,10 @@ class NoticeDao:
         notice_info = (
             (
                 await db.execute(
-                    select(SysNotice).where(
-                        SysNotice.notice_title == notice.notice_title,
-                        SysNotice.notice_type == notice.notice_type,
-                        SysNotice.notice_content == notice.notice_content,
+                    select(NoticeDO).where(
+                        NoticeDO.notice_title == notice.notice_title,
+                        NoticeDO.notice_type == notice.notice_type,
+                        NoticeDO.notice_content == notice.notice_content,
                     )
                 )
             )
@@ -60,19 +60,19 @@ class NoticeDao:
         :return: 通知公告列表信息对象
         """
         query = (
-            select(SysNotice)
+            select(NoticeDO)
             .where(
-                SysNotice.notice_title.like(f'%{query_object.notice_title}%') if query_object.notice_title else True,
-                SysNotice.create_by.like(f'%{query_object.create_by}%') if query_object.create_by else True,
-                SysNotice.notice_type == query_object.notice_type if query_object.notice_type else True,
-                SysNotice.create_time.between(
+                NoticeDO.notice_title.like(f'%{query_object.notice_title}%') if query_object.notice_title else True,
+                NoticeDO.create_by.like(f'%{query_object.create_by}%') if query_object.create_by else True,
+                NoticeDO.notice_type == query_object.notice_type if query_object.notice_type else True,
+                NoticeDO.create_time.between(
                     datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                     datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
                 )
                 if query_object.begin_time and query_object.end_time
                 else True,
             )
-            .order_by(SysNotice.notice_id)
+            .order_by(NoticeDO.notice_id)
             .distinct()
         )
         notice_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
@@ -88,7 +88,7 @@ class NoticeDao:
         :param notice: 通知公告对象
         :return:
         """
-        db_notice = SysNotice(**notice.model_dump())
+        db_notice = NoticeDO(**notice.model_dump())
         db.add(db_notice)
         await db.flush()
 
@@ -103,7 +103,7 @@ class NoticeDao:
         :param notice: 需要更新的通知公告字典
         :return:
         """
-        await db.execute(update(SysNotice), [notice])
+        await db.execute(update(NoticeDO), [notice])
 
     @classmethod
     async def delete_notice_dao(cls, db: AsyncSession, notice: NoticeModel):
@@ -114,4 +114,4 @@ class NoticeDao:
         :param notice: 通知公告对象
         :return:
         """
-        await db.execute(delete(SysNotice).where(SysNotice.notice_id.in_([notice.notice_id])))
+        await db.execute(delete(NoticeDO).where(NoticeDO.notice_id.in_([notice.notice_id])))

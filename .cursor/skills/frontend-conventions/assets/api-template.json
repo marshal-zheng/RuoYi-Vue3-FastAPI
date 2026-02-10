@@ -1,0 +1,9 @@
+{
+  "description": "TypeScript API module scaffold for frontend conventions",
+  "variables": {
+    "module": "backend module name (example: system)",
+    "entity": "entity name in lowerCamelCase or kebab-case (example: config)",
+    "Entity": "entity name in PascalCase (example: Config)"
+  },
+  "content": "import request from '@/utils/request';\n\n// Query {{entity}} list\nexport function list{{Entity}}(query?: Record<string, any>) {\n  return request({\n    url: '/{{module}}/{{entity}}/list',\n    method: 'get',\n    params: query,\n  });\n}\n\n// Query {{entity}} detail\nexport function get{{Entity}}(id: number | string) {\n  return request({\n    url: '/{{module}}/{{entity}}/' + id,\n    method: 'get',\n  });\n}\n\n// Create {{entity}}\nexport function add{{Entity}}(data: Record<string, any>) {\n  return request({\n    url: '/{{module}}/{{entity}}',\n    method: 'post',\n    data,\n  });\n}\n\n// Update {{entity}}\nexport function update{{Entity}}(data: Record<string, any>) {\n  return request({\n    url: '/{{module}}/{{entity}}',\n    method: 'put',\n    data,\n  });\n}\n\n// Delete {{entity}}\nexport function del{{Entity}}(id: number | string) {\n  return request({\n    url: '/{{module}}/{{entity}}/' + id,\n    method: 'delete',\n  });\n}\n"
+}

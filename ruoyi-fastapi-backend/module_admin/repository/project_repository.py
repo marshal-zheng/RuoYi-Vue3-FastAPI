@@ -6,33 +6,33 @@ from typing import Optional, List
 from sqlalchemy import select, update, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.project_do import SysProject
+from module_admin.entity.do.project_do import ProjectDO
 from module_admin.entity.do.enums import DelFlagEnum
 from module_admin.repository.base_repository import BaseRepository
 from utils.page_util import PageUtil
 
 
-class ProjectRepository(BaseRepository[SysProject]):
+class ProjectRepository(BaseRepository[ProjectDO]):
     """项目 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysProject)
+        super().__init__(db, ProjectDO)
     
-    async def find_by_id(self, project_id: int) -> Optional[SysProject]:
+    async def find_by_id(self, project_id: int) -> Optional[ProjectDO]:
         """根据ID查找项目"""
-        stmt = select(SysProject).where(
-            SysProject.project_id == project_id,
-            SysProject.del_flag == DelFlagEnum.EXIST.value
+        stmt = select(ProjectDO).where(
+            ProjectDO.project_id == project_id,
+            ProjectDO.del_flag == DelFlagEnum.EXIST.value
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_all_active(self) -> List[SysProject]:
+    async def find_all_active(self) -> List[ProjectDO]:
         """获取所有有效项目"""
         stmt = (
-            select(SysProject)
-            .where(SysProject.del_flag == DelFlagEnum.EXIST.value)
-            .order_by(desc(SysProject.create_time))
+            select(ProjectDO)
+            .where(ProjectDO.del_flag == DelFlagEnum.EXIST.value)
+            .order_by(desc(ProjectDO.create_time))
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
@@ -45,15 +45,15 @@ class ProjectRepository(BaseRepository[SysProject]):
         end_time: Optional[str] = None
     ):
         """分页查询项目"""
-        conditions = [SysProject.del_flag == DelFlagEnum.EXIST.value]
+        conditions = [ProjectDO.del_flag == DelFlagEnum.EXIST.value]
         
         if begin_time and end_time:
-            conditions.append(SysProject.create_time.between(begin_time, end_time))
+            conditions.append(ProjectDO.create_time.between(begin_time, end_time))
         
         query = (
-            select(SysProject)
+            select(ProjectDO)
             .where(*conditions)
-            .order_by(desc(SysProject.create_time))
+            .order_by(desc(ProjectDO.create_time))
         )
         
         return await PageUtil.paginate(self.db, query, page, page_size, True)
@@ -61,8 +61,8 @@ class ProjectRepository(BaseRepository[SysProject]):
     async def soft_delete(self, project_id: int, update_by: str) -> bool:
         """软删除项目"""
         stmt = (
-            update(SysProject)
-            .where(SysProject.project_id == project_id)
+            update(ProjectDO)
+            .where(ProjectDO.project_id == project_id)
             .values(
                 del_flag=DelFlagEnum.DELETED.value,
                 update_by=update_by,
@@ -81,8 +81,8 @@ class ProjectRepository(BaseRepository[SysProject]):
         if not project_ids:
             return 0
         stmt = (
-            update(SysProject)
-            .where(SysProject.project_id.in_(project_ids))
+            update(ProjectDO)
+            .where(ProjectDO.project_id.in_(project_ids))
             .values(
                 del_flag=DelFlagEnum.DELETED.value,
                 update_by=update_by,

@@ -7,17 +7,17 @@ from typing import Optional, List, Dict, Any
 from sqlalchemy import select, delete, update, and_, or_, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu, SysRoleDept
-from module_admin.entity.do.user_do import SysUser, SysUserRole
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.menu_do import SysMenu
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO, RoleDeptDO
+from module_admin.entity.do.user_do import UserDO, UserRoleDO
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.menu_do import MenuDO
 from module_admin.entity.do.enums import StatusEnum, DelFlagEnum
 from module_admin.repository.base_repository import BaseRepository
 from utils.page_util import PageUtil
 from utils.db_filters import not_deleted
 
 
-class RoleRepository(BaseRepository[SysRole]):
+class RoleRepository(BaseRepository[RoleDO]):
     """
     角色 Repository
     
@@ -25,9 +25,9 @@ class RoleRepository(BaseRepository[SysRole]):
     """
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysRole)
+        super().__init__(db, RoleDO)
     
-    async def find_by_name(self, role_name: str) -> Optional[SysRole]:
+    async def find_by_name(self, role_name: str) -> Optional[RoleDO]:
         """
         根据角色名查找角色
         
@@ -38,47 +38,47 @@ class RoleRepository(BaseRepository[SysRole]):
             角色对象或 None
         """
         stmt = (
-            select(SysRole)
+            select(RoleDO)
             .where(
-                SysRole.status == StatusEnum.NORMAL.value,
-                not_deleted(SysRole.del_flag),
-                SysRole.role_name == role_name
+                RoleDO.status == StatusEnum.NORMAL.value,
+                not_deleted(RoleDO.del_flag),
+                RoleDO.role_name == role_name
             )
-            .order_by(desc(SysRole.create_time))
+            .order_by(desc(RoleDO.create_time))
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_by_key(self, role_key: str) -> Optional[SysRole]:
+    async def find_by_key(self, role_key: str) -> Optional[RoleDO]:
         """根据角色标识查找角色"""
         stmt = (
-            select(SysRole)
+            select(RoleDO)
             .where(
-                not_deleted(SysRole.del_flag),
-                SysRole.role_key == role_key
+                not_deleted(RoleDO.del_flag),
+                RoleDO.role_key == role_key
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
-    async def find_by_id(self, role_id: int) -> Optional[SysRole]:
+    async def find_by_id(self, role_id: int) -> Optional[RoleDO]:
         """根据角色ID查找角色（兼容旧接口）"""
         return await self.get_by_id(role_id)
     
-    async def find_active_by_id(self, role_id: int) -> Optional[SysRole]:
+    async def find_active_by_id(self, role_id: int) -> Optional[RoleDO]:
         """根据ID查找有效角色"""
         stmt = (
-            select(SysRole)
+            select(RoleDO)
             .where(
-                SysRole.role_id == role_id,
-                SysRole.status == StatusEnum.NORMAL.value,
-                not_deleted(SysRole.del_flag)
+                RoleDO.role_id == role_id,
+                RoleDO.status == StatusEnum.NORMAL.value,
+                not_deleted(RoleDO.del_flag)
             )
         )
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_all_active(self, exclude_admin: bool = True) -> List[SysRole]:
+    async def find_all_active(self, exclude_admin: bool = True) -> List[RoleDO]:
         """
         获取所有有效角色
         
@@ -89,13 +89,13 @@ class RoleRepository(BaseRepository[SysRole]):
             角色列表
         """
         conditions = [
-            SysRole.status == StatusEnum.NORMAL.value,
-            not_deleted(SysRole.del_flag)
+            RoleDO.status == StatusEnum.NORMAL.value,
+            not_deleted(RoleDO.del_flag)
         ]
         if exclude_admin:
-            conditions.append(SysRole.role_id != 1)
+            conditions.append(RoleDO.role_id != 1)
         
-        stmt = select(SysRole).where(*conditions)
+        stmt = select(RoleDO).where(*conditions)
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
@@ -122,19 +122,19 @@ class RoleRepository(BaseRepository[SysRole]):
         Returns:
             分页结果
         """
-        conditions = [not_deleted(SysRole.del_flag)]
+        conditions = [not_deleted(RoleDO.del_flag)]
         
         if role_id is not None:
-            conditions.append(SysRole.role_id == role_id)
+            conditions.append(RoleDO.role_id == role_id)
         if role_name:
-            conditions.append(SysRole.role_name.like(f'%{role_name}%'))
+            conditions.append(RoleDO.role_name.like(f'%{role_name}%'))
         if role_key:
-            conditions.append(SysRole.role_key.like(f'%{role_key}%'))
+            conditions.append(RoleDO.role_key.like(f'%{role_key}%'))
         if status:
-            conditions.append(SysRole.status == status)
+            conditions.append(RoleDO.status == status)
         if begin_time and end_time:
             conditions.append(
-                SysRole.create_time.between(
+                RoleDO.create_time.between(
                     datetime.combine(datetime.strptime(begin_time, '%Y-%m-%d'), time(0, 0, 0)),
                     datetime.combine(datetime.strptime(end_time, '%Y-%m-%d'), time(23, 59, 59))
                 )
@@ -145,12 +145,12 @@ class RoleRepository(BaseRepository[SysRole]):
             conditions.append(data_scope_sql)
         
         query = (
-            select(SysRole)
-            .join(SysUserRole, SysUserRole.role_id == SysRole.role_id, isouter=True)
-            .join(SysUser, SysUser.user_id == SysUserRole.user_id, isouter=True)
-            .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
+            select(RoleDO)
+            .join(UserRoleDO, UserRoleDO.role_id == RoleDO.role_id, isouter=True)
+            .join(UserDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
+            .join(DeptDO, DeptDO.dept_id == UserDO.dept_id, isouter=True)
             .where(*conditions)
-            .order_by(SysRole.role_sort)
+            .order_by(RoleDO.role_sort)
             .distinct()
         )
         
@@ -168,8 +168,8 @@ class RoleRepository(BaseRepository[SysRole]):
             是否成功
         """
         stmt = (
-            update(SysRole)
-            .where(SysRole.role_id == role_id)
+            update(RoleDO)
+            .where(RoleDO.role_id == role_id)
             .values(
                 del_flag=DelFlagEnum.DELETED.value,
                 update_by=update_by,
@@ -183,8 +183,8 @@ class RoleRepository(BaseRepository[SysRole]):
         """统计角色关联的用户数量"""
         stmt = (
             select(func.count())
-            .select_from(SysUserRole)
-            .where(SysUserRole.role_id == role_id)
+            .select_from(UserRoleDO)
+            .where(UserRoleDO.role_id == role_id)
         )
         result = await self.db.execute(stmt)
         return result.scalar() or 0
@@ -203,10 +203,10 @@ class RoleRepository(BaseRepository[SysRole]):
         """
         # 获取角色基本信息
         role_stmt = (
-            select(SysRole)
+            select(RoleDO)
             .where(
-                SysRole.role_id == role_id,
-                not_deleted(SysRole.del_flag)
+                RoleDO.role_id == role_id,
+                not_deleted(RoleDO.del_flag)
             )
         )
         role_result = await self.db.execute(role_stmt)
@@ -217,13 +217,13 @@ class RoleRepository(BaseRepository[SysRole]):
         
         # 获取角色关联的菜单
         menu_stmt = (
-            select(SysMenu)
-            .join(SysRoleMenu, SysRoleMenu.menu_id == SysMenu.menu_id)
+            select(MenuDO)
+            .join(RoleMenuDO, RoleMenuDO.menu_id == MenuDO.menu_id)
             .where(
-                SysRoleMenu.role_id == role_id,
-                SysMenu.status == StatusEnum.NORMAL.value
+                RoleMenuDO.role_id == role_id,
+                MenuDO.status == StatusEnum.NORMAL.value
             )
-            .order_by(SysMenu.parent_id, SysMenu.order_num)
+            .order_by(MenuDO.parent_id, MenuDO.order_num)
         )
         menu_result = await self.db.execute(menu_stmt)
         menus = menu_result.scalars().all()
@@ -234,7 +234,7 @@ class RoleRepository(BaseRepository[SysRole]):
             'menu_ids': [m.menu_id for m in menus]
         }
     
-    async def get_roles_menus_batch(self, role_ids: List[int]) -> Dict[int, List[SysMenu]]:
+    async def get_roles_menus_batch(self, role_ids: List[int]) -> Dict[int, List[MenuDO]]:
         """
         P1-018: 批量获取角色菜单（避免 N+1 查询）
         
@@ -248,19 +248,19 @@ class RoleRepository(BaseRepository[SysRole]):
             return {}
         
         stmt = (
-            select(SysRoleMenu.role_id, SysMenu)
-            .join(SysMenu, SysRoleMenu.menu_id == SysMenu.menu_id)
+            select(RoleMenuDO.role_id, MenuDO)
+            .join(MenuDO, RoleMenuDO.menu_id == MenuDO.menu_id)
             .where(
-                SysRoleMenu.role_id.in_(role_ids),
-                SysMenu.status == StatusEnum.NORMAL.value
+                RoleMenuDO.role_id.in_(role_ids),
+                MenuDO.status == StatusEnum.NORMAL.value
             )
-            .order_by(SysMenu.parent_id, SysMenu.order_num)
+            .order_by(MenuDO.parent_id, MenuDO.order_num)
         )
         result = await self.db.execute(stmt)
         rows = result.all()
         
         # 组织成 {role_id: [menus]} 的映射
-        role_menus: Dict[int, List[SysMenu]] = {rid: [] for rid in role_ids}
+        role_menus: Dict[int, List[MenuDO]] = {rid: [] for rid in role_ids}
         for role_id, menu in rows:
             role_menus[role_id].append(menu)
         
@@ -279,20 +279,20 @@ class RoleRepository(BaseRepository[SysRole]):
             权限标识列表
         """
         stmt = (
-            select(SysMenu.perms)
-            .select_from(SysUserRole)
-            .join(SysRoleMenu, SysUserRole.role_id == SysRoleMenu.role_id)
-            .join(SysMenu, SysRoleMenu.menu_id == SysMenu.menu_id)
-            .join(SysRole, and_(
-                SysUserRole.role_id == SysRole.role_id,
-                SysRole.status == StatusEnum.NORMAL.value,
-                not_deleted(SysRole.del_flag)
+            select(MenuDO.perms)
+            .select_from(UserRoleDO)
+            .join(RoleMenuDO, UserRoleDO.role_id == RoleMenuDO.role_id)
+            .join(MenuDO, RoleMenuDO.menu_id == MenuDO.menu_id)
+            .join(RoleDO, and_(
+                UserRoleDO.role_id == RoleDO.role_id,
+                RoleDO.status == StatusEnum.NORMAL.value,
+                not_deleted(RoleDO.del_flag)
             ))
             .where(
-                SysUserRole.user_id == user_id,
-                SysMenu.status == StatusEnum.NORMAL.value,
-                SysMenu.perms.isnot(None),
-                SysMenu.perms != ''
+                UserRoleDO.user_id == user_id,
+                MenuDO.status == StatusEnum.NORMAL.value,
+                MenuDO.perms.isnot(None),
+                MenuDO.perms != ''
             )
             .distinct()
         )
@@ -308,15 +308,15 @@ class RoleRepository(BaseRepository[SysRole]):
         return list(set(all_perms))
 
 
-class RoleMenuRepository(BaseRepository[SysRoleMenu]):
+class RoleMenuRepository(BaseRepository[RoleMenuDO]):
     """角色菜单关联 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysRoleMenu)
+        super().__init__(db, RoleMenuDO)
     
-    async def find_by_role_id(self, role_id: int) -> List[SysRoleMenu]:
+    async def find_by_role_id(self, role_id: int) -> List[RoleMenuDO]:
         """根据角色ID查找关联"""
-        stmt = select(SysRoleMenu).where(SysRoleMenu.role_id == role_id)
+        stmt = select(RoleMenuDO).where(RoleMenuDO.role_id == role_id)
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
@@ -324,7 +324,7 @@ class RoleMenuRepository(BaseRepository[SysRoleMenu]):
         self,
         role_id: int,
         check_strictly: bool = False
-    ) -> List[SysMenu]:
+    ) -> List[MenuDO]:
         """
         获取角色关联的菜单
         
@@ -335,55 +335,55 @@ class RoleMenuRepository(BaseRepository[SysRoleMenu]):
         Returns:
             菜单列表
         """
-        conditions = [SysRoleMenu.role_id == role_id]
+        conditions = [RoleMenuDO.role_id == role_id]
         
         if check_strictly:
             # 排除作为父菜单的菜单
             conditions.append(
-                ~SysMenu.menu_id.in_(
-                    select(SysMenu.parent_id)
-                    .select_from(SysMenu)
+                ~MenuDO.menu_id.in_(
+                    select(MenuDO.parent_id)
+                    .select_from(MenuDO)
                     .join(
-                        SysRoleMenu,
+                        RoleMenuDO,
                         and_(
-                            SysRoleMenu.menu_id == SysMenu.menu_id,
-                            SysRoleMenu.role_id == role_id
+                            RoleMenuDO.menu_id == MenuDO.menu_id,
+                            RoleMenuDO.role_id == role_id
                         )
                     )
                 )
             )
         
         stmt = (
-            select(SysMenu)
-            .join(SysRoleMenu, SysRoleMenu.menu_id == SysMenu.menu_id)
+            select(MenuDO)
+            .join(RoleMenuDO, RoleMenuDO.menu_id == MenuDO.menu_id)
             .where(*conditions)
-            .order_by(SysMenu.parent_id, SysMenu.order_num)
+            .order_by(MenuDO.parent_id, MenuDO.order_num)
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
     async def delete_by_role_id(self, role_id: int) -> int:
         """根据角色ID删除关联"""
-        stmt = delete(SysRoleMenu).where(SysRoleMenu.role_id == role_id)
+        stmt = delete(RoleMenuDO).where(RoleMenuDO.role_id == role_id)
         result = await self.db.execute(stmt)
         return result.rowcount
     
     async def batch_add(self, role_id: int, menu_ids: List[int]):
         """批量添加角色菜单关联"""
         for menu_id in menu_ids:
-            self.db.add(SysRoleMenu(role_id=role_id, menu_id=menu_id))
+            self.db.add(RoleMenuDO(role_id=role_id, menu_id=menu_id))
         await self.db.flush()
 
 
-class RoleDeptRepository(BaseRepository[SysRoleDept]):
+class RoleDeptRepository(BaseRepository[RoleDeptDO]):
     """角色部门关联 Repository"""
     
     def __init__(self, db: AsyncSession):
-        super().__init__(db, SysRoleDept)
+        super().__init__(db, RoleDeptDO)
     
-    async def find_by_role_id(self, role_id: int) -> List[SysRoleDept]:
+    async def find_by_role_id(self, role_id: int) -> List[RoleDeptDO]:
         """根据角色ID查找关联"""
-        stmt = select(SysRoleDept).where(SysRoleDept.role_id == role_id)
+        stmt = select(RoleDeptDO).where(RoleDeptDO.role_id == role_id)
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
@@ -391,7 +391,7 @@ class RoleDeptRepository(BaseRepository[SysRoleDept]):
         self,
         role_id: int,
         check_strictly: bool = False
-    ) -> List[SysDept]:
+    ) -> List[DeptDO]:
         """
         获取角色关联的部门
         
@@ -402,40 +402,40 @@ class RoleDeptRepository(BaseRepository[SysRoleDept]):
         Returns:
             部门列表
         """
-        conditions = [SysRoleDept.role_id == role_id]
+        conditions = [RoleDeptDO.role_id == role_id]
         
         if check_strictly:
             conditions.append(
-                ~SysDept.dept_id.in_(
-                    select(SysDept.parent_id)
-                    .select_from(SysDept)
+                ~DeptDO.dept_id.in_(
+                    select(DeptDO.parent_id)
+                    .select_from(DeptDO)
                     .join(
-                        SysRoleDept,
+                        RoleDeptDO,
                         and_(
-                            SysRoleDept.dept_id == SysDept.dept_id,
-                            SysRoleDept.role_id == role_id
+                            RoleDeptDO.dept_id == DeptDO.dept_id,
+                            RoleDeptDO.role_id == role_id
                         )
                     )
                 )
             )
         
         stmt = (
-            select(SysDept)
-            .join(SysRoleDept, SysRoleDept.dept_id == SysDept.dept_id)
+            select(DeptDO)
+            .join(RoleDeptDO, RoleDeptDO.dept_id == DeptDO.dept_id)
             .where(*conditions)
-            .order_by(SysDept.parent_id, SysDept.order_num)
+            .order_by(DeptDO.parent_id, DeptDO.order_num)
         )
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
     async def delete_by_role_id(self, role_id: int) -> int:
         """根据角色ID删除关联"""
-        stmt = delete(SysRoleDept).where(SysRoleDept.role_id == role_id)
+        stmt = delete(RoleDeptDO).where(RoleDeptDO.role_id == role_id)
         result = await self.db.execute(stmt)
         return result.rowcount
     
     async def batch_add(self, role_id: int, dept_ids: List[int]):
         """批量添加角色部门关联"""
         for dept_id in dept_ids:
-            self.db.add(SysRoleDept(role_id=role_id, dept_id=dept_id))
+            self.db.add(RoleDeptDO(role_id=role_id, dept_id=dept_id))
         await self.db.flush()

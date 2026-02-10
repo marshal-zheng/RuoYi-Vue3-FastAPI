@@ -1,10 +1,10 @@
 from datetime import datetime, time
 from sqlalchemy import and_, delete, desc, func, or_, select, update  # noqa: F401
 from sqlalchemy.ext.asyncio import AsyncSession
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.menu_do import SysMenu
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu, SysRoleDept
-from module_admin.entity.do.user_do import SysUser, SysUserRole
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.menu_do import MenuDO
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO, RoleDeptDO
+from module_admin.entity.do.user_do import UserDO, UserRoleDO
 from module_admin.entity.vo.role_vo import RoleDeptModel, RoleMenuModel, RoleModel, RolePageQueryModel
 from utils.page_util import PageUtil
 
@@ -26,9 +26,9 @@ class RoleDao:
         query_role_info = (
             (
                 await db.execute(
-                    select(SysRole)
-                    .where(SysRole.status == '0', SysRole.del_flag == '0', SysRole.role_name == role_name)
-                    .order_by(desc(SysRole.create_time))
+                    select(RoleDO)
+                    .where(RoleDO.status == '0', RoleDO.del_flag == '0', RoleDO.role_name == role_name)
+                    .order_by(desc(RoleDO.create_time))
                     .distinct()
                 )
             )
@@ -50,13 +50,13 @@ class RoleDao:
         query_role_info = (
             (
                 await db.execute(
-                    select(SysRole)
+                    select(RoleDO)
                     .where(
-                        SysRole.del_flag == '0',
-                        SysRole.role_name == role.role_name if role.role_name else True,
-                        SysRole.role_key == role.role_key if role.role_key else True,
+                        RoleDO.del_flag == '0',
+                        RoleDO.role_name == role.role_name if role.role_name else True,
+                        RoleDO.role_key == role.role_key if role.role_key else True,
                     )
-                    .order_by(desc(SysRole.create_time))
+                    .order_by(desc(RoleDO.create_time))
                     .distinct()
                 )
             )
@@ -78,7 +78,7 @@ class RoleDao:
         role_info = (
             (
                 await db.execute(
-                    select(SysRole).where(SysRole.role_id == role_id, SysRole.status == '0', SysRole.del_flag == '0')
+                    select(RoleDO).where(RoleDO.role_id == role_id, RoleDO.status == '0', RoleDO.del_flag == '0')
                 )
             )
             .scalars()
@@ -97,7 +97,7 @@ class RoleDao:
         :return: 当前role_id的角色信息对象
         """
         query_role_info = (
-            (await db.execute(select(SysRole).where(SysRole.del_flag == '0', SysRole.role_id == role_id).distinct()))
+            (await db.execute(select(RoleDO).where(RoleDO.del_flag == '0', RoleDO.role_id == role_id).distinct()))
             .scalars()
             .first()
         )
@@ -115,7 +115,7 @@ class RoleDao:
         role_info = (
             (
                 await db.execute(
-                    select(SysRole).where(SysRole.role_id != 1, SysRole.status == '0', SysRole.del_flag == '0')
+                    select(RoleDO).where(RoleDO.role_id != 1, RoleDO.status == '0', RoleDO.del_flag == '0')
                 )
             )
             .scalars()
@@ -137,34 +137,34 @@ class RoleDao:
         :param is_page: 是否开启分页
         :return: 角色列表信息对象
         """
-        conditions = [SysRole.del_flag == '0']
+        conditions = [RoleDO.del_flag == '0']
         
         if query_object.role_id is not None:
-            conditions.append(SysRole.role_id == query_object.role_id)
+            conditions.append(RoleDO.role_id == query_object.role_id)
         if query_object.role_name:
-            conditions.append(SysRole.role_name.like(f'%{query_object.role_name}%'))
+            conditions.append(RoleDO.role_name.like(f'%{query_object.role_name}%'))
         if query_object.role_key:
-            conditions.append(SysRole.role_key.like(f'%{query_object.role_key}%'))
+            conditions.append(RoleDO.role_key.like(f'%{query_object.role_key}%'))
         if query_object.status:
-            conditions.append(SysRole.status == query_object.status)
+            conditions.append(RoleDO.status == query_object.status)
         if query_object.begin_time and query_object.end_time:
-            conditions.append(SysRole.create_time.between(
+            conditions.append(RoleDO.create_time.between(
                 datetime.combine(datetime.strptime(query_object.begin_time, '%Y-%m-%d'), time(00, 00, 00)),
                 datetime.combine(datetime.strptime(query_object.end_time, '%Y-%m-%d'), time(23, 59, 59)),
             ))
         
         query = (
-            select(SysRole)
-            .join(SysUserRole, SysUserRole.role_id == SysRole.role_id, isouter=True)
-            .join(SysUser, SysUser.user_id == SysUserRole.user_id, isouter=True)
-            .join(SysDept, SysDept.dept_id == SysUser.dept_id, isouter=True)
+            select(RoleDO)
+            .join(UserRoleDO, UserRoleDO.role_id == RoleDO.role_id, isouter=True)
+            .join(UserDO, UserDO.user_id == UserRoleDO.user_id, isouter=True)
+            .join(DeptDO, DeptDO.dept_id == UserDO.dept_id, isouter=True)
             .where(*conditions)
         )
         # 数据权限过滤
         if data_scope_sql is not True:
             query = query.where(data_scope_sql)
         
-        query = query.order_by(SysRole.role_sort).distinct()
+        query = query.order_by(RoleDO.role_sort).distinct()
         role_list = await PageUtil.paginate(db, query, query_object.page_num, query_object.page_size, is_page)
 
         return role_list
@@ -178,7 +178,7 @@ class RoleDao:
         :param role: 角色对象
         :return:
         """
-        db_role = SysRole(**role.model_dump(exclude={'admin'}))
+        db_role = RoleDO(**role.model_dump(exclude={'admin'}))
         db.add(db_role)
         await db.flush()
 
@@ -193,7 +193,7 @@ class RoleDao:
         :param role: 需要更新的角色字典
         :return:
         """
-        await db.execute(update(SysRole), [role])
+        await db.execute(update(RoleDO), [role])
 
     @classmethod
     async def delete_role_dao(cls, db: AsyncSession, role: RoleModel):
@@ -205,8 +205,8 @@ class RoleDao:
         :return:
         """
         await db.execute(
-            update(SysRole)
-            .where(SysRole.role_id == role.role_id)
+            update(RoleDO)
+            .where(RoleDO.role_id == role.role_id)
             .values(del_flag='2', update_by=role.update_by, update_time=role.update_time)
         )
 
@@ -222,22 +222,22 @@ class RoleDao:
         role_menu_query_all = (
             (
                 await db.execute(
-                    select(SysMenu)
-                    .join(SysRoleMenu, SysRoleMenu.menu_id == SysMenu.menu_id)
+                    select(MenuDO)
+                    .join(RoleMenuDO, RoleMenuDO.menu_id == MenuDO.menu_id)
                     .where(
-                        SysRoleMenu.role_id == role.role_id,
-                        ~SysMenu.menu_id.in_(
-                            select(SysMenu.parent_id)
-                            .select_from(SysMenu)
+                        RoleMenuDO.role_id == role.role_id,
+                        ~MenuDO.menu_id.in_(
+                            select(MenuDO.parent_id)
+                            .select_from(MenuDO)
                             .join(
-                                SysRoleMenu,
-                                and_(SysRoleMenu.menu_id == SysMenu.menu_id, SysRoleMenu.role_id == role.role_id),
+                                RoleMenuDO,
+                                and_(RoleMenuDO.menu_id == MenuDO.menu_id, RoleMenuDO.role_id == role.role_id),
                             )
                         )
                         if role.menu_check_strictly
                         else True,
                     )
-                    .order_by(SysMenu.parent_id, SysMenu.order_num)
+                    .order_by(MenuDO.parent_id, MenuDO.order_num)
                 )
             )
             .scalars()
@@ -255,7 +255,7 @@ class RoleDao:
         :param role_menu: 用户角色菜单关联对象
         :return:
         """
-        db_role_menu = SysRoleMenu(**role_menu.model_dump())
+        db_role_menu = RoleMenuDO(**role_menu.model_dump())
         db.add(db_role_menu)
 
     @classmethod
@@ -267,7 +267,7 @@ class RoleDao:
         :param role_menu: 角色菜单关联对象
         :return:
         """
-        await db.execute(delete(SysRoleMenu).where(SysRoleMenu.role_id.in_([role_menu.role_id])))
+        await db.execute(delete(RoleMenuDO).where(RoleMenuDO.role_id.in_([role_menu.role_id])))
 
     @classmethod
     async def get_role_dept_dao(cls, db: AsyncSession, role: RoleModel):
@@ -281,22 +281,22 @@ class RoleDao:
         role_dept_query_all = (
             (
                 await db.execute(
-                    select(SysDept)
-                    .join(SysRoleDept, SysRoleDept.dept_id == SysDept.dept_id)
+                    select(DeptDO)
+                    .join(RoleDeptDO, RoleDeptDO.dept_id == DeptDO.dept_id)
                     .where(
-                        SysRoleDept.role_id == role.role_id,
-                        ~SysDept.dept_id.in_(
-                            select(SysDept.parent_id)
-                            .select_from(SysDept)
+                        RoleDeptDO.role_id == role.role_id,
+                        ~DeptDO.dept_id.in_(
+                            select(DeptDO.parent_id)
+                            .select_from(DeptDO)
                             .join(
-                                SysRoleDept,
-                                and_(SysRoleDept.dept_id == SysDept.dept_id, SysRoleDept.role_id == role.role_id),
+                                RoleDeptDO,
+                                and_(RoleDeptDO.dept_id == DeptDO.dept_id, RoleDeptDO.role_id == role.role_id),
                             )
                         )
                         if role.dept_check_strictly
                         else True,
                     )
-                    .order_by(SysDept.parent_id, SysDept.order_num)
+                    .order_by(DeptDO.parent_id, DeptDO.order_num)
                 )
             )
             .scalars()
@@ -314,7 +314,7 @@ class RoleDao:
         :param role_dept: 用户角色部门关联对象
         :return:
         """
-        db_role_dept = SysRoleDept(**role_dept.dict())
+        db_role_dept = RoleDeptDO(**role_dept.dict())
         db.add(db_role_dept)
 
     @classmethod
@@ -326,7 +326,7 @@ class RoleDao:
         :param role_dept: 角色部门关联对象
         :return:
         """
-        await db.execute(delete(SysRoleDept).where(SysRoleDept.role_id.in_([role_dept.role_id])))
+        await db.execute(delete(RoleDeptDO).where(RoleDeptDO.role_id.in_([role_dept.role_id])))
 
     @classmethod
     async def count_user_role_dao(cls, db: AsyncSession, role_id: int):
@@ -338,7 +338,7 @@ class RoleDao:
         :return: 角色关联用户数量
         """
         user_count = (
-            await db.execute(select(func.count('*')).select_from(SysUserRole).where(SysUserRole.role_id == role_id))
+            await db.execute(select(func.count('*')).select_from(UserRoleDO).where(UserRoleDO.role_id == role_id))
         ).scalar()
 
         return user_count

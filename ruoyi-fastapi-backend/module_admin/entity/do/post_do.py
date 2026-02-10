@@ -4,7 +4,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import StatusEnum
 
 
-class SysPost(LegacyBaseModel):
+class PostDO(LegacyBaseModel):
     """
     岗位信息表
     """

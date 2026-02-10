@@ -10,7 +10,7 @@ from exceptions.exception import (
     BusinessException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.config_do import SysConfig
+from module_admin.entity.do.config_do import ConfigDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
 from module_admin.repository import ConfigRepository
@@ -132,7 +132,7 @@ class ConfigService:
             )
         
         config_repo = ConfigRepository(query_db)
-        db_config = SysConfig(**page_object.model_dump())
+        db_config = ConfigDO(**page_object.model_dump())
         await config_repo.add(db_config)
         await request.app.state.redis.set(
             f'{RedisInitKeyConfig.SYS_CONFIG.key}:{page_object.config_key}', page_object.config_value

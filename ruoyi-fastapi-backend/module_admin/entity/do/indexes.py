@@ -15,11 +15,11 @@
 - 外键索引: fk_{table}_{ref_table}
 """
 from sqlalchemy import Index, UniqueConstraint
-from module_admin.entity.do.user_do import SysUser, SysUserRole, SysUserPost
-from module_admin.entity.do.role_do import SysRole, SysRoleMenu, SysRoleDept
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.menu_do import SysMenu
-from module_admin.entity.do.log_do import SysOperLog, SysLogininfor
+from module_admin.entity.do.user_do import UserDO, UserRoleDO, UserPostDO
+from module_admin.entity.do.role_do import RoleDO, RoleMenuDO, RoleDeptDO
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.menu_do import MenuDO
+from module_admin.entity.do.log_do import OperLogDO, LogininforDO
 
 
 class IndexStrategy:
@@ -30,19 +30,19 @@ class IndexStrategy:
         """用户表索引"""
         return [
             # 登录查询优化
-            Index('idx_user_username_status', SysUser.user_name, SysUser.status, SysUser.del_flag),
+            Index('idx_user_username_status', UserDO.user_name, UserDO.status, UserDO.del_flag),
             # 部门查询优化
-            Index('idx_user_dept', SysUser.dept_id),
+            Index('idx_user_dept', UserDO.dept_id),
             # 手机号查询（使用哈希列）
-            Index('idx_user_phone_hash', SysUser.phonenumber_hash),
+            Index('idx_user_phone_hash', UserDO.phonenumber_hash),
             # 邮箱查询（使用哈希列）
-            Index('idx_user_email_hash', SysUser.email_hash),
+            Index('idx_user_email_hash', UserDO.email_hash),
             # 身份证查询（使用哈希列）
-            Index('idx_user_id_card_hash', SysUser.id_card_hash),
+            Index('idx_user_id_card_hash', UserDO.id_card_hash),
             # 状态筛选
-            Index('idx_user_status_delflag', SysUser.status, SysUser.del_flag),
+            Index('idx_user_status_delflag', UserDO.status, UserDO.del_flag),
             # 创建时间排序
-            Index('idx_user_create_time', SysUser.create_time.desc()),
+            Index('idx_user_create_time', UserDO.create_time.desc()),
         ]
     
     @staticmethod
@@ -50,11 +50,11 @@ class IndexStrategy:
         """角色表索引"""
         return [
             # 角色键查询
-            Index('idx_role_key', SysRole.role_key),
+            Index('idx_role_key', RoleDO.role_key),
             # 状态筛选
-            Index('idx_role_status_delflag', SysRole.status, SysRole.del_flag),
+            Index('idx_role_status_delflag', RoleDO.status, RoleDO.del_flag),
             # 排序优化
-            Index('idx_role_sort', SysRole.role_sort),
+            Index('idx_role_sort', RoleDO.role_sort),
         ]
     
     @staticmethod
@@ -62,13 +62,13 @@ class IndexStrategy:
         """部门表索引"""
         return [
             # 父部门查询
-            Index('idx_dept_parent', SysDept.parent_id),
+            Index('idx_dept_parent', DeptDO.parent_id),
             # 祖先路径查询（用于查找子部门）
-            Index('idx_dept_ancestors', SysDept.ancestors),
+            Index('idx_dept_ancestors', DeptDO.ancestors),
             # 状态筛选
-            Index('idx_dept_status_delflag', SysDept.status, SysDept.del_flag),
+            Index('idx_dept_status_delflag', DeptDO.status, DeptDO.del_flag),
             # 排序优化
-            Index('idx_dept_order', SysDept.order_num),
+            Index('idx_dept_order', DeptDO.order_num),
         ]
     
     @staticmethod
@@ -76,13 +76,13 @@ class IndexStrategy:
         """菜单表索引"""
         return [
             # 父菜单查询
-            Index('idx_menu_parent', SysMenu.parent_id),
+            Index('idx_menu_parent', MenuDO.parent_id),
             # 菜单类型筛选
-            Index('idx_menu_type_status', SysMenu.menu_type, SysMenu.status),
+            Index('idx_menu_type_status', MenuDO.menu_type, MenuDO.status),
             # 权限标识查询
-            Index('idx_menu_perms', SysMenu.perms),
+            Index('idx_menu_perms', MenuDO.perms),
             # 排序优化
-            Index('idx_menu_order', SysMenu.order_num),
+            Index('idx_menu_order', MenuDO.order_num),
         ]
     
     @staticmethod
@@ -90,18 +90,18 @@ class IndexStrategy:
         """日志表索引"""
         return [
             # 操作日志 - 时间范围查询
-            Index('idx_operlog_time', SysOperLog.oper_time.desc()),
+            Index('idx_operlog_time', OperLogDO.oper_time.desc()),
             # 操作日志 - 操作人查询
-            Index('idx_operlog_name', SysOperLog.oper_name),
+            Index('idx_operlog_name', OperLogDO.oper_name),
             # 操作日志 - 业务类型
-            Index('idx_operlog_type_status', SysOperLog.business_type, SysOperLog.status),
+            Index('idx_operlog_type_status', OperLogDO.business_type, OperLogDO.status),
             
             # 登录日志 - 时间范围查询
-            Index('idx_loginlog_time', SysLogininfor.login_time.desc()),
+            Index('idx_loginlog_time', LogininforDO.login_time.desc()),
             # 登录日志 - 用户名查询
-            Index('idx_loginlog_username', SysLogininfor.user_name),
+            Index('idx_loginlog_username', LogininforDO.user_name),
             # 登录日志 - 状态筛选
-            Index('idx_loginlog_status', SysLogininfor.status),
+            Index('idx_loginlog_status', LogininforDO.status),
         ]
     
     @staticmethod
@@ -109,20 +109,20 @@ class IndexStrategy:
         """关联表索引"""
         return [
             # 用户角色关联 - 双向查询优化
-            Index('idx_user_role_user', SysUserRole.user_id),
-            Index('idx_user_role_role', SysUserRole.role_id),
+            Index('idx_user_role_user', UserRoleDO.user_id),
+            Index('idx_user_role_role', UserRoleDO.role_id),
             
             # 用户岗位关联
-            Index('idx_user_post_user', SysUserPost.user_id),
-            Index('idx_user_post_post', SysUserPost.post_id),
+            Index('idx_user_post_user', UserPostDO.user_id),
+            Index('idx_user_post_post', UserPostDO.post_id),
             
             # 角色菜单关联
-            Index('idx_role_menu_role', SysRoleMenu.role_id),
-            Index('idx_role_menu_menu', SysRoleMenu.menu_id),
+            Index('idx_role_menu_role', RoleMenuDO.role_id),
+            Index('idx_role_menu_menu', RoleMenuDO.menu_id),
             
             # 角色部门关联
-            Index('idx_role_dept_role', SysRoleDept.role_id),
-            Index('idx_role_dept_dept', SysRoleDept.dept_id),
+            Index('idx_role_dept_role', RoleDeptDO.role_id),
+            Index('idx_role_dept_dept', RoleDeptDO.dept_id),
         ]
 
 
@@ -542,7 +542,7 @@ def generate_index_migration():
 # 1. 在模型中应用索引
 from module_admin.entity.do.indexes import IndexStrategy
 
-class SysUser(Base):
+class UserDO(Base):
     __tablename__ = 'sys_user'
     # ... 字段定义 ...
     

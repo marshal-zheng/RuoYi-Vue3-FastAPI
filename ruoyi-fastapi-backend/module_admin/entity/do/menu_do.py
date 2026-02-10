@@ -4,7 +4,7 @@ from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import VisibleEnum, StatusEnum
 
 
-class SysMenu(LegacyBaseModel):
+class MenuDO(LegacyBaseModel):
     """
     菜单权限表
     """

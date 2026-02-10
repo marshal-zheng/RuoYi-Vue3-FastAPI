@@ -29,7 +29,7 @@ async def get_system_dept_tree_for_edit_option(
     request: Request,
     dept_id: int,
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_query = DeptModel(deptId=dept_id)
     dept_query_result = await DeptService.get_dept_for_edit_option_services(query_db, dept_query, data_scope_sql)
@@ -45,7 +45,7 @@ async def get_system_dept_list(
     request: Request,
     dept_query: DeptQueryModel = Depends(DeptQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_query_result = await DeptService.get_dept_list_services(query_db, dept_query, data_scope_sql)
     logger.info('获取成功')
@@ -57,7 +57,7 @@ async def get_system_dept_list(
 async def get_system_dept_tree_select(
     request: Request,
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_query_result = await DeptService.get_dept_tree_services(query_db, DeptModel(**{}), data_scope_sql)
     logger.info('获取成功')
@@ -92,7 +92,7 @@ async def edit_system_dept(
     edit_dept: DeptModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await DeptService.check_dept_data_scope_services(query_db, edit_dept.dept_id, data_scope_sql)
@@ -111,7 +111,7 @@ async def delete_system_dept(
     dept_ids: str,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_id_list = dept_ids.split(',') if dept_ids else []
     if dept_id_list:
@@ -135,7 +135,7 @@ async def query_detail_system_dept(
     dept_id: int,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await DeptService.check_dept_data_scope_services(query_db, dept_id, data_scope_sql)
@@ -151,7 +151,7 @@ async def export_system_dept_list(
     request: Request,
     dept_query: DeptQueryModel = Form(),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_query_result = await DeptService.get_dept_list_services(query_db, dept_query, data_scope_sql)
     dept_export_result = await DeptService.export_dept_list_services(dept_query_result)

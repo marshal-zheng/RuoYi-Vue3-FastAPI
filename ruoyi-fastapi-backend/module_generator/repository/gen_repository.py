@@ -10,7 +10,7 @@ from sqlalchemy.orm import selectinload
 from sqlglot.expressions import Expression
 
 from config.env import DataBaseConfig
-from module_generator.entity.do.gen_do import GenTable, GenTableColumn
+from module_generator.entity.do.gen_do import GenTableDO, GenTableColumnDO
 from module_generator.entity.vo.gen_vo import (
     GenTableBaseModel,
     GenTableColumnBaseModel,
@@ -26,7 +26,7 @@ class GenTableRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
     
-    async def find_by_id(self, table_id: int) -> Optional[GenTable]:
+    async def find_by_id(self, table_id: int) -> Optional[GenTableDO]:
         """
         根据业务表ID获取业务表信息（包含字段列表）
         
@@ -34,13 +34,13 @@ class GenTableRepository:
         :return: 业务表对象
         """
         result = await self.db.execute(
-            select(GenTable)
-            .options(selectinload(GenTable.columns))
-            .where(GenTable.table_id == table_id)
+            select(GenTableDO)
+            .options(selectinload(GenTableDO.columns))
+            .where(GenTableDO.table_id == table_id)
         )
         return result.scalars().first()
     
-    async def find_by_name(self, table_name: str) -> Optional[GenTable]:
+    async def find_by_name(self, table_name: str) -> Optional[GenTableDO]:
         """
         根据业务表名称获取业务表信息（包含字段列表）
         
@@ -48,20 +48,20 @@ class GenTableRepository:
         :return: 业务表对象
         """
         result = await self.db.execute(
-            select(GenTable)
-            .options(selectinload(GenTable.columns))
-            .where(GenTable.table_name == table_name)
+            select(GenTableDO)
+            .options(selectinload(GenTableDO.columns))
+            .where(GenTableDO.table_name == table_name)
         )
         return result.scalars().first()
     
-    async def find_all(self) -> List[GenTable]:
+    async def find_all(self) -> List[GenTableDO]:
         """
         获取所有业务表信息
         
         :return: 业务表列表
         """
         result = await self.db.execute(
-            select(GenTable).options(selectinload(GenTable.columns))
+            select(GenTableDO).options(selectinload(GenTableDO.columns))
         )
         return list(result.scalars().all())
     
@@ -91,17 +91,17 @@ class GenTableRepository:
         
         if table_name:
             conditions.append(
-                func.lower(GenTable.table_name).like(f'%{table_name.lower()}%')
+                func.lower(GenTableDO.table_name).like(f'%{table_name.lower()}%')
             )
         
         if table_comment:
             conditions.append(
-                func.lower(GenTable.table_comment).like(f'%{table_comment.lower()}%')
+                func.lower(GenTableDO.table_comment).like(f'%{table_comment.lower()}%')
             )
         
         if begin_time and end_time:
             conditions.append(
-                GenTable.create_time.between(
+                GenTableDO.create_time.between(
                     datetime.combine(
                         datetime.strptime(begin_time, '%Y-%m-%d'), time(0, 0, 0)
                     ),
@@ -112,8 +112,8 @@ class GenTableRepository:
             )
         
         query = (
-            select(GenTable)
-            .options(selectinload(GenTable.columns))
+            select(GenTableDO)
+            .options(selectinload(GenTableDO.columns))
             .where(*conditions if conditions else [True])
             .distinct()
         )
@@ -251,14 +251,14 @@ class GenTableRepository:
             sql = sql_statement.sql(dialect=DataBaseConfig.sqlglot_parse_dialect)
             await self.db.execute(text(sql))
     
-    async def add(self, gen_table_data: Dict[str, Any]) -> GenTable:
+    async def add(self, gen_table_data: Dict[str, Any]) -> GenTableDO:
         """
         新增业务表
         
         :param gen_table_data: 业务表数据字典
         :return: 新增的业务表对象
         """
-        db_gen_table = GenTable(
+        db_gen_table = GenTableDO(
             **GenTableBaseModel(**gen_table_data).model_dump()
         )
         self.db.add(db_gen_table)
@@ -272,7 +272,7 @@ class GenTableRepository:
         :param gen_table_data: 业务表数据字典（必须包含 table_id）
         """
         await self.db.execute(
-            update(GenTable),
+            update(GenTableDO),
             [GenTableBaseModel(**gen_table_data).model_dump()]
         )
     
@@ -283,7 +283,7 @@ class GenTableRepository:
         :param table_id: 业务表ID
         """
         await self.db.execute(
-            delete(GenTable).where(GenTable.table_id == table_id)
+            delete(GenTableDO).where(GenTableDO.table_id == table_id)
         )
     
     async def delete_by_ids(self, table_ids: List[int]) -> None:
@@ -293,7 +293,7 @@ class GenTableRepository:
         :param table_ids: 业务表ID列表
         """
         await self.db.execute(
-            delete(GenTable).where(GenTable.table_id.in_(table_ids))
+            delete(GenTableDO).where(GenTableDO.table_id.in_(table_ids))
         )
 
 
@@ -305,7 +305,7 @@ class GenTableColumnRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
     
-    async def find_by_table_id(self, table_id: int) -> List[GenTableColumn]:
+    async def find_by_table_id(self, table_id: int) -> List[GenTableColumnDO]:
         """
         根据业务表ID获取字段列表
         
@@ -313,9 +313,9 @@ class GenTableColumnRepository:
         :return: 字段列表
         """
         result = await self.db.execute(
-            select(GenTableColumn)
-            .where(GenTableColumn.table_id == table_id)
-            .order_by(GenTableColumn.sort)
+            select(GenTableColumnDO)
+            .where(GenTableColumnDO.table_id == table_id)
+            .order_by(GenTableColumnDO.sort)
         )
         return list(result.scalars().all())
     
@@ -367,14 +367,14 @@ class GenTableColumnRepository:
         result = await self.db.execute(query)
         return result.fetchall()
     
-    async def add(self, column_data: Dict[str, Any]) -> GenTableColumn:
+    async def add(self, column_data: Dict[str, Any]) -> GenTableColumnDO:
         """
         新增业务表字段
         
         :param column_data: 字段数据字典
         :return: 新增的字段对象
         """
-        db_column = GenTableColumn(
+        db_column = GenTableColumnDO(
             **GenTableColumnBaseModel(**column_data).model_dump()
         )
         self.db.add(db_column)
@@ -388,7 +388,7 @@ class GenTableColumnRepository:
         :param column_data: 字段数据字典（必须包含 column_id）
         """
         await self.db.execute(
-            update(GenTableColumn),
+            update(GenTableColumnDO),
             [GenTableColumnBaseModel(**column_data).model_dump()]
         )
     
@@ -399,7 +399,7 @@ class GenTableColumnRepository:
         :param table_id: 业务表ID
         """
         await self.db.execute(
-            delete(GenTableColumn).where(GenTableColumn.table_id == table_id)
+            delete(GenTableColumnDO).where(GenTableColumnDO.table_id == table_id)
         )
     
     async def delete_by_column_id(self, column_id: int) -> None:
@@ -409,7 +409,7 @@ class GenTableColumnRepository:
         :param column_id: 字段ID
         """
         await self.db.execute(
-            delete(GenTableColumn).where(GenTableColumn.column_id == column_id)
+            delete(GenTableColumnDO).where(GenTableColumnDO.column_id == column_id)
         )
     
     async def delete_by_column_ids(self, column_ids: List[int]) -> None:
@@ -419,5 +419,5 @@ class GenTableColumnRepository:
         :param column_ids: 字段ID列表
         """
         await self.db.execute(
-            delete(GenTableColumn).where(GenTableColumn.column_id.in_(column_ids))
+            delete(GenTableColumnDO).where(GenTableColumnDO.column_id.in_(column_ids))
         )

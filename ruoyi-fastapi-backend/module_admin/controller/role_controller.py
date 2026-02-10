@@ -28,7 +28,7 @@ async def get_system_role_dept_tree(
     request: Request,
     role_id: int,
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     dept_query_result = await DeptService.get_dept_tree_services(query_db, DeptModel(**{}), data_scope_sql)
     role_dept_query_result = await RoleService.get_role_dept_tree_services(query_db, role_id)
@@ -45,7 +45,7 @@ async def get_system_role_list(
     request: Request,
     role_page_query: RolePageQueryModel = Depends(RolePageQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     role_page_query_result = await RoleService.get_role_list_services(
         query_db, role_page_query, data_scope_sql, is_page=True
@@ -82,7 +82,7 @@ async def edit_system_role(
     edit_role: AddRoleModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     await RoleService.check_role_allowed_services(edit_role)
     if not current_user.user.admin:
@@ -102,7 +102,7 @@ async def edit_system_role_datascope(
     role_data_scope: AddRoleModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     await RoleService.check_role_allowed_services(role_data_scope)
     if not current_user.user.admin:
@@ -128,7 +128,7 @@ async def delete_system_role(
     role_ids: str,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     role_id_list = role_ids.split(',') if role_ids else []
     if role_id_list:
@@ -151,7 +151,7 @@ async def query_detail_system_role(
     role_id: int,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await RoleService.check_role_data_scope_services(query_db, str(role_id), data_scope_sql)
@@ -172,7 +172,7 @@ async def export_system_role_list(
     request: Request,
     role_page_query: RolePageQueryModel = Form(),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     # 获取全量数据
     role_query_result = await RoleService.get_role_list_services(
@@ -191,7 +191,7 @@ async def reset_system_role_status(
     change_role: AddRoleModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     await RoleService.check_role_allowed_services(change_role)
     if not current_user.user.admin:
@@ -218,7 +218,7 @@ async def get_system_allocated_user_list(
     request: Request,
     user_role: UserRolePageQueryModel = Depends(UserRolePageQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     role_user_allocated_page_query_result = await RoleService.get_role_user_allocated_list_services(
         query_db, user_role, data_scope_sql, is_page=True
@@ -237,7 +237,7 @@ async def get_system_unallocated_user_list(
     request: Request,
     user_role: UserRolePageQueryModel = Depends(UserRolePageQueryModel.as_query),
     query_db: AsyncSession = Depends(get_db),
-    data_scope_sql: str = Depends(GetDataScope('SysUser')),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
 ):
     role_user_unallocated_page_query_result = await RoleService.get_role_user_unallocated_list_services(
         query_db, user_role, data_scope_sql, is_page=True
@@ -254,7 +254,7 @@ async def add_system_role_user(
     add_role_user: CrudUserRoleModel = Depends(CrudUserRoleModel.as_query),
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('SysDept')),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
 ):
     if not current_user.user.admin:
         await RoleService.check_role_data_scope_services(query_db, str(add_role_user.role_id), data_scope_sql)

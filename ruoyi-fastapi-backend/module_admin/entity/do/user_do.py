@@ -4,7 +4,7 @@ from module_admin.entity.do.enums import UserTypeEnum, GenderEnum, StatusEnum, D
 from utils.sensitive import sensitive_string_with_hash
 
 
-class SysUser(LegacyBaseModel):
+class UserDO(LegacyBaseModel):
     """
     用户信息表
     """
@@ -29,7 +29,7 @@ class SysUser(LegacyBaseModel):
     remark = Column(String(500), default=None, comment='备注')
 
 
-class SysUserRole(RelationBaseModel):
+class UserRoleDO(RelationBaseModel):
     """
     用户和角色关联表
     """
@@ -40,7 +40,7 @@ class SysUserRole(RelationBaseModel):
     role_id = Column(Integer, primary_key=True, nullable=False, comment='角色ID')
 
 
-class SysUserPost(RelationBaseModel):
+class UserPostDO(RelationBaseModel):
     """
     用户与岗位关联表
     """
@@ -52,4 +52,4 @@ class SysUserPost(RelationBaseModel):
 
 
 # Backward-compatible alias for tests/imports expecting UserDO
-UserDO = SysUser
+# Legacy alias removed - UserDO is now the primary class name

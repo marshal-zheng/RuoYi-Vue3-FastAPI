@@ -12,7 +12,7 @@ from config.env import AuditConfig, JwtConfig
 from utils.audit_context import set_audit_context, pop_read_audits
 from utils.log_util import logger
 from middlewares.trace_middleware import TraceCtx
-from module_admin.entity.do.audit_log_do import SysAuditLog
+from module_admin.entity.do.audit_log_do import AuditLogDO
 
 
 class AuditContextMiddleware(BaseHTTPMiddleware):
@@ -73,7 +73,7 @@ class AuditContextMiddleware(BaseHTTPMiddleware):
 
         async with AsyncSessionLocal() as session:
             try:
-                session.add_all([SysAuditLog(**entry) for entry in entries])
+                session.add_all([AuditLogDO(**entry) for entry in entries])
                 await session.commit()
             except Exception as exc:
                 await session.rollback()

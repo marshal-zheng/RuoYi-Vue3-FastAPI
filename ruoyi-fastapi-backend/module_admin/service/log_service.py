@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from exceptions.exception import ValidationException
 from config.error_codes import ErrorCode
-from module_admin.entity.do.log_do import SysOperLog, SysLogininfor
+from module_admin.entity.do.log_do import OperLogDO, LogininforDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.log_vo import (
     DeleteLoginLogModel,
@@ -80,7 +80,7 @@ class OperationLogService:
         :return: 新增操作日志校验结果
         """
         oper_log_repo = OperLogRepository(query_db)
-        db_oper_log = SysOperLog(**page_object.model_dump())
+        db_oper_log = OperLogDO(**page_object.model_dump())
         await oper_log_repo.add(db_oper_log)
         return CrudResponseModel(is_success=True, message='新增成功')
 
@@ -226,7 +226,7 @@ class LoginLogService:
         :return: 新增登录日志校验结果
         """
         login_log_repo = LoginLogRepository(query_db)
-        db_login_log = SysLogininfor(**page_object.model_dump())
+        db_login_log = LogininforDO(**page_object.model_dump())
         await login_log_repo.add(db_login_log)
         return CrudResponseModel(is_success=True, message='新增成功')
 

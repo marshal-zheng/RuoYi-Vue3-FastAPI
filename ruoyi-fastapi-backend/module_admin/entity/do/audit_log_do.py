@@ -3,7 +3,7 @@ from sqlalchemy import BigInteger, Column, DateTime, Index, String, Text
 from config.database import Base
 
 
-class SysAuditLog(Base):
+class AuditLogDO(Base):
     """
     数据库审计日志
     """

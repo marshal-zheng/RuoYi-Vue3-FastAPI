@@ -12,22 +12,22 @@ from sqlalchemy import func, or_, select
 from sqlalchemy import inspect
 
 from config.database import async_engine, AsyncSessionLocal
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.user_do import UserDO
 from utils.log_util import logger
 
 
 CHECKS: List[Tuple[object, str, str]] = [
-    (SysUser, 'phonenumber', 'phonenumber_hash'),
-    (SysUser, 'email', 'email_hash'),
-    (SysUser, 'id_card', 'id_card_hash'),
-    (SysDept, 'phone', 'phone_hash'),
+    (UserDO, 'phonenumber', 'phonenumber_hash'),
+    (UserDO, 'email', 'email_hash'),
+    (UserDO, 'id_card', 'id_card_hash'),
+    (DeptDO, 'phone', 'phone_hash'),
 ]
 
 INDEX_CHECKS = [
-    (SysUser, 'idx_user_phone_hash'),
-    (SysUser, 'idx_user_email_hash'),
-    (SysUser, 'idx_user_id_card_hash'),
+    (UserDO, 'idx_user_phone_hash'),
+    (UserDO, 'idx_user_email_hash'),
+    (UserDO, 'idx_user_id_card_hash'),
 ]
 
 

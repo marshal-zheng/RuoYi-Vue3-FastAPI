@@ -12,7 +12,7 @@ def sensitive_equals(model, field_name: str, value: Optional[str]):
     Build a filter for sensitive fields. Prefer hash column if registered.
 
     Example:
-        cond = sensitive_equals(SysUser, 'phonenumber', query.phonenumber)
+        cond = sensitive_equals(UserDO, 'phonenumber', query.phonenumber)
     """
     if value is None or value == '':
         return None

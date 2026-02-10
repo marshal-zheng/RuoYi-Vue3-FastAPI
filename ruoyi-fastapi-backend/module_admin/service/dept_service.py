@@ -10,7 +10,7 @@ from exceptions.exception import (
     PermissionException
 )
 from config.error_codes import ErrorCode
-from module_admin.entity.do.dept_do import SysDept
+from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.dept_vo import DeleteDeptModel, DeptModel
 from module_admin.repository import DeptRepository
@@ -190,7 +190,7 @@ class DeptService:
                 field='parent_id'
             )
         page_object.ancestors = f'{parent_info.ancestors},{page_object.parent_id}'
-        db_dept = SysDept(**page_object.model_dump())
+        db_dept = DeptDO(**page_object.model_dump())
         await dept_repo.add(db_dept)
         await cls._invalidate_dept_cache()
         return CrudResponseModel(is_success=True, message='新增成功')

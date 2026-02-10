@@ -2,7 +2,7 @@ from sqlalchemy import JSON, Column, DateTime, Integer, String
 from module_admin.entity.do.base import LegacyBaseModel
 
 
-class SysProjectTopology(LegacyBaseModel):
+class ProjectTopologyDO(LegacyBaseModel):
     """
     工程拓扑数据表
     """

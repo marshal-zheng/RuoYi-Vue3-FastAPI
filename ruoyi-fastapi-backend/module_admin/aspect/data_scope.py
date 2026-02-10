@@ -9,9 +9,9 @@ from sqlalchemy import or_, and_, select, func, literal
 from sqlalchemy.sql.elements import ColumnElement
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.login_service import LoginService
-from module_admin.entity.do.dept_do import SysDept
-from module_admin.entity.do.role_do import SysRoleDept
-from module_admin.entity.do.user_do import SysUser
+from module_admin.entity.do.dept_do import DeptDO
+from module_admin.entity.do.role_do import RoleDeptDO
+from module_admin.entity.do.user_do import UserDO
 
 
 # 特殊标记值，表示不需要数据权限过滤（管理员或全部数据权限）
@@ -43,7 +43,7 @@ class GetDataScope:
         """
         获取当前用户数据权限对应的查询条件
 
-        :param query_alias: 所要查询表对应的 sqlalchemy 模型名称（SysUser/SysDept 等）
+        :param query_alias: 所要查询表对应的 sqlalchemy 模型名称（UserDO/DeptDO 等）
         :param db_alias: orm 对象别名，默认为 'db'（保留兼容性，未使用）
         :param user_alias: 用户 id 字段别名，默认为 'user_id'
         :param dept_alias: 部门 id 字段别名，默认为 'dept_id'
@@ -55,8 +55,8 @@ class GetDataScope:
         
         # 根据 query_alias 获取模型类
         self._model_map = {
-            'SysUser': SysUser,
-            'SysDept': SysDept,
+            'UserDO': UserDO,
+            'DeptDO': DeptDO,
         }
 
     def _get_model_class(self) -> Any:
@@ -101,8 +101,8 @@ class GetDataScope:
                 if has_dept_id and custom_data_scope_role_ids:
                     dept_id_col = getattr(model_class, self.dept_alias)
                     # 查询角色关联的部门ID
-                    subquery = select(SysRoleDept.dept_id).where(
-                        SysRoleDept.role_id.in_(custom_data_scope_role_ids)
+                    subquery = select(RoleDeptDO.dept_id).where(
+                        RoleDeptDO.role_id.in_(custom_data_scope_role_ids)
                     )
                     conditions.append(dept_id_col.in_(subquery))
             
@@ -117,10 +117,10 @@ class GetDataScope:
                 if has_dept_id and dept_id:
                     dept_id_col = getattr(model_class, self.dept_alias)
                     # 查询本部门及所有子部门的ID
-                    subquery = select(SysDept.dept_id).where(
+                    subquery = select(DeptDO.dept_id).where(
                         or_(
-                            SysDept.dept_id == dept_id,
-                            func.find_in_set(dept_id, SysDept.ancestors)
+                            DeptDO.dept_id == dept_id,
+                            func.find_in_set(dept_id, DeptDO.ancestors)
                         )
                     )
                     conditions.append(dept_id_col.in_(subquery))
