@@ -16,7 +16,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { ZxTabs } from '@zxio/zxui';
 import { getProject } from '@/api/project/project';
-import ContentDetailWrap from '@/components/ContentDetailWrap/index';
+import ContentDetailWrap from '@/components/ui/ContentDetailWrap/index';
 import { VersionList } from './components';
 
 const route = useRoute();
@@ -44,7 +44,7 @@ async function loadProjectInfo() {
 
   try {
     const response = await getProject(projectId);
-    const data = response?.data ?? response;
+    const data = response;
     if (data) {
       projectInfo.value = data;
     }

@@ -13,7 +13,7 @@ from typing import Any, Callable, Literal, Optional
 from user_agents import parse
 from config.enums import BusinessType
 from config.env import AppConfig
-from exceptions.exception import LoginException, ServiceException, ServiceWarning
+from exceptions.exception import LoginException, ServiceException, ServiceWarning, AppException
 from module_admin.entity.vo.log_vo import LogininforModel, OperLogModel
 from module_admin.service.log_service import LoginLogService, OperationLogService
 from module_admin.service.login_service import LoginService
@@ -139,6 +139,9 @@ class Log:
             try:
                 # 调用原始函数
                 result = await func(*args, **kwargs)
+            except AppException:
+                # 新异常体系：直接向上抛出，由全局异常处理器处理（RFC 7807）
+                raise
             except (LoginException, ServiceWarning) as e:
                 resolved_msg = _resolve_msg(e.message, default='操作警告')
                 logger.warning(resolved_msg)

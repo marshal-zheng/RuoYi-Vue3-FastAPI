@@ -197,8 +197,8 @@ async function openDrawer(roleId) {
     }
   } else {
     const menuRes = await menuTreeselect();
-    // 后端返回的数据已经是正确的树形结构，直接使用
-    menuOptions.value = menuRes.data || [];
+    // 注意：treeselect 接口直接返回树形数组，不是包装在 data 中
+    menuOptions.value = menuRes || [];
   }
 }
 

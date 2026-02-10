@@ -92,8 +92,8 @@ import {
   useVxeTableValidation,
   VxeValidationPanel,
   required,
-} from '@/components/VxeTableValidation';
-import VxeSchemaTable from '@/components/VxeSchemaTable/index.vue';
+} from '@/components/ui/VxeTableValidation';
+import VxeSchemaTable from '@/components/ui/VxeSchemaTable/index.vue';
 import { createProtocolFieldColumns, createProtocolConfigColumns } from './vxeColumns';
 
 const props = defineProps<{

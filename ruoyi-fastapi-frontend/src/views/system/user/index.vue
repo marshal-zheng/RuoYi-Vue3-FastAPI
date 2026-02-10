@@ -326,7 +326,8 @@ async function loadUserData(params) {
 /** 查询部门下拉树结构 */
 function getDeptTree() {
   deptTreeSelect().then((response) => {
-    const data = response?.data ?? response ?? [];
+    // 全局 http 工具已自动解包 response.data，直接使用 response
+    const data = response ?? [];
     deptOptions.value = data;
     enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(data)));
   });
@@ -369,7 +370,6 @@ function handleDelete(row) {
     })
     .then(() => {
       refreshList();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }

@@ -25,7 +25,7 @@ const emit = defineEmits(['update:modelValue', 'change']);
 const loadTableNames = async () => {
   try {
     const response = await getTableNames();
-    return (response?.data ?? response) || [];
+    return response || [];
   } catch (error) {
     console.error('获取表名列表失败:', error);
     return [];

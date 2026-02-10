@@ -71,7 +71,7 @@ async function openDialog(payload) {
     setLoading(true);
     try {
       const resp = await getProject(id);
-      const detail = resp?.data || {};
+      const detail = resp || {};
       open({
         projectId: detail.projectId,
         projectName: detail.projectName,

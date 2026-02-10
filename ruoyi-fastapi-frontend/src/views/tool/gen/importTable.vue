@@ -1,103 +1,118 @@
 <template>
   <!-- 导入表 -->
-  <ZxDialog
-    v-model="visible"
-    title="导入表"
-    width="800px"
-    height="600px"
-    @confirm="handleImportTable"
-  >
-    <div class="import-table-content">
-      <el-form :model="queryParams" ref="queryRef" :inline="true" class="search-form">
-        <el-form-item label="表名称" prop="tableName">
-          <el-input
-            v-model="queryParams.tableName"
-            placeholder="请输入表名称"
-            clearable
-            style="width: 180px"
-            @keyup.enter="handleQuery"
+  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadDbTableData"
+      :query-transform="queryTransform"
+      :load-on-mounted="false"
+      class="import-table-grid"
+    >
+      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <div class="zx-grid-form-bar">
+          <div class="zx-grid-form-bar__filters">
+            <el-input
+              v-model="query.tableName"
+              placeholder="请输入表名称"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+            <el-input
+              v-model="query.tableComment"
+              placeholder="请输入表描述"
+              clearable
+              style="width: 200px"
+              @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            />
+          </div>
+          <div class="zx-grid-form-bar__right">
+            <ZxButton
+              type="primary"
+              icon="Search"
+              :loading="loading"
+              @click="() => onSearch({ handleRefresh, updateState })"
+            >
+              搜索
+            </ZxButton>
+            <ZxButton icon="Refresh" @click="() => onReset({ handleRefresh, updateState })">
+              重置
+            </ZxButton>
+          </div>
+        </div>
+      </template>
+
+      <template #table="{ grid }">
+        <el-table
+          v-loading="grid.loading"
+          :data="grid.list || []"
+          @row-click="clickRow"
+          @selection-change="handleSelectionChange"
+          height="320px"
+        >
+          <el-table-column type="selection" width="55" />
+          <el-table-column
+            prop="tableName"
+            label="表名称"
+            :show-overflow-tooltip="true"
           />
-        </el-form-item>
-        <el-form-item label="表描述" prop="tableComment">
-          <el-input
-            v-model="queryParams.tableComment"
-            placeholder="请输入表描述"
-            clearable
-            style="width: 180px"
-            @keyup.enter="handleQuery"
+          <el-table-column
+            prop="tableComment"
+            label="表描述"
+            :show-overflow-tooltip="true"
           />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-        </el-form-item>
-      </el-form>
-      
-      <el-table
-        @row-click="clickRow"
-        ref="tableRef"
-        :data="dbTableList"
-        @selection-change="handleSelectionChange"
-        height="320px"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column
-          prop="tableName"
-          label="表名称"
-          :show-overflow-tooltip="true"
-        />
-        <el-table-column
-          prop="tableComment"
-          label="表描述"
-          :show-overflow-tooltip="true"
-        />
-        <el-table-column prop="createTime" label="创建时间" width="160" />
-        <el-table-column prop="updateTime" label="更新时间" width="160" />
-      </el-table>
-      
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        v-model:page="queryParams.pageNum"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
-      />
-    </div>
+          <el-table-column prop="createTime" label="创建时间" width="160" />
+          <el-table-column prop="updateTime" label="更新时间" width="160" />
+        </el-table>
+      </template>
+    </ZxGridList>
   </ZxDialog>
 </template>
 
 <script setup>
 import { listDbTable, importTable } from '@/api/tool/gen';
+import { useDialog } from '@zxio/zxui';
+import { serializeDateRange } from '@/utils/ruoyi';
 
-const total = ref(0);
-const visible = ref(false);
+const gridListRef = ref(null);
 const tables = ref([]);
-const dbTableList = ref([]);
-const tableRef = ref(null);
 const { proxy } = getCurrentInstance();
-
-const queryParams = reactive({
-  pageNum: 1,
-  pageSize: 10,
-  tableName: undefined,
-  tableComment: undefined,
-});
 
 const emit = defineEmits(['ok']);
 
+const { dialogProps, dialogEvents, open, close } = useDialog({
+  title: '导入表',
+  width: '800px',
+  height: '600px',
+  defaultData: () => ({}),
+  onConfirm: handleImportTable,
+});
+
+/** 使用 GridList 的 queryTransform 处理日期范围 */
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
+/** 加载数据库表数据 */
+async function loadDbTableData(params) {
+  return await listDbTable(params);
+}
+
 /** 查询参数列表 */
 function show() {
-  queryParams.pageNum = 1;
-  queryParams.tableName = undefined;
-  queryParams.tableComment = undefined;
   tables.value = [];
-  getList();
-  visible.value = true;
+  // 打开对话框后再加载数据
+  open();
+  // 延迟加载以确保对话框已打开
+  nextTick(() => {
+    gridListRef.value?.refresh();
+  });
 }
 
 /** 单击选择行 */
 function clickRow(row) {
-  tableRef.value?.toggleRowSelection(row);
+  const table = gridListRef.value?.$refs?.tableRef;
+  table?.toggleRowSelection(row);
 }
 
 /** 多选框选中数据 */
@@ -105,24 +120,22 @@ function handleSelectionChange(selection) {
   tables.value = selection.map((item) => item.tableName);
 }
 
-/** 查询表数据 */
-function getList() {
-  listDbTable(queryParams).then((res) => {
-    dbTableList.value = res.rows;
-    total.value = res.total;
+/** 搜索 */
+function onSearch({ handleRefresh, updateState }) {
+  updateState({ page: 1 });
+  handleRefresh();
+}
+
+/** 重置 */
+function onReset({ handleRefresh, updateState }) {
+  updateState({
+    page: 1,
+    query: {
+      tableName: undefined,
+      tableComment: undefined,
+    },
   });
-}
-
-/** 搜索按钮操作 */
-function handleQuery() {
-  queryParams.pageNum = 1;
-  getList();
-}
-
-/** 重置按钮操作 */
-function resetQuery() {
-  proxy.resetForm('queryRef');
-  handleQuery();
+  handleRefresh();
 }
 
 /** 导入按钮操作 */
@@ -130,11 +143,12 @@ function handleImportTable() {
   const tableNames = tables.value.join(',');
   if (tableNames === '') {
     proxy.$modal.msgError('请选择要导入的表');
-    return Promise.reject();
+    return false; // 返回 false 阻止关闭，不会触发额外的错误处理
   }
   return importTable({ tables: tableNames }).then(() => {
-    visible.value = false;
+    close();
     emit('ok');
+    return true; // 返回 true 表示成功
   });
 }
 
@@ -144,13 +158,18 @@ defineExpose({
 </script>
 
 <style scoped>
-.import-table-content {
-  display: flex;
-  flex-direction: column;
+.import-table-grid {
   height: 100%;
 }
 
-.search-form {
-  margin-bottom: 16px;
+.import-table-grid :deep(.zx-grid-list__content) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.import-table-grid :deep(.zx-grid-list__table) {
+  flex: 1;
+  overflow: hidden;
 }
 </style>

@@ -83,7 +83,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 
   // 错误处理回调
   onConfirmError: (error) => {
-    const errorMsg = error?.response?.data?.message || error?.message || '操作失败，请重试';
+    const errorMsg = error?.message || '操作失败，请重试';
     ElMessage.error(errorMsg);
   },
 });
@@ -91,7 +91,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 /** 获取项目详情 */
 async function getProjectInfo(projectId) {
   const response = await getProject(projectId);
-  return response?.data ?? response;
+  return response;
 }
 
 /** 打开弹框 */

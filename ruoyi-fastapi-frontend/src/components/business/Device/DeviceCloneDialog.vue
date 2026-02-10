@@ -36,7 +36,7 @@ const validateDeviceName = async (rule, value, callback) => {
   }
 
   const response = await checkDeviceNameUnique(value);
-  const isUnique = response?.data ?? response;
+  const isUnique = response;
   if (isUnique === false) {
     callback(new Error('设备名称已存在'));
   } else {

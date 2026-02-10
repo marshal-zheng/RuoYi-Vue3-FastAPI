@@ -140,6 +140,8 @@ async function openDrawer(roleId) {
   try {
     const [roleRes, deptRes] = await Promise.all([getRole(roleId), deptTreeSelect(roleId)]);
 
+    // 后端使用 ResponseUtil.success(model_content=...) 包装
+    // model_content 会被序列化为响应的顶层属性
     deptOptions.value = deptRes.depts || [];
     const roleData = roleRes.data || {};
 

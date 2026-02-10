@@ -358,7 +358,8 @@ class DictDataService:
         else:
             result = await cls._load_dict_data_and_refresh_cache(redis, dict_type, cache_key)
 
-        return CamelCaseUtil.transform_result(result)
+        # Data from cache is already in camelCase format, no need to transform again
+        return result
 
     @classmethod
     async def _load_dict_data_and_refresh_cache(cls, redis, dict_type: str, cache_key: str):

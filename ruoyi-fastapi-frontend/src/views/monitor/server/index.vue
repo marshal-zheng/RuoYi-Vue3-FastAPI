@@ -267,7 +267,7 @@ const { proxy } = getCurrentInstance();
 function getList() {
   proxy.$modal.loading('正在加载服务监控数据，请稍候！');
   getServer().then((response) => {
-    server.value = response?.data ?? response;
+    server.value = response;
     proxy.$modal.closeLoading();
   });
 }

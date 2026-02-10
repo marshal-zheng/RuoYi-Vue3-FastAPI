@@ -148,7 +148,7 @@ const { dialogProps, dialogEvents, open, close } = useDialog({
       formData.append('file', file);
 
       const backendResult = await previewProtocolImport(formData);
-      const payload = backendResult?.data || {};
+      const payload = backendResult || {};
       const fieldCount = payload?.fields?.length || 0;
       const importedProtocolType = payload?.protocolType;
       const headerValues = payload?.header ? Object.values(payload.header) : [];

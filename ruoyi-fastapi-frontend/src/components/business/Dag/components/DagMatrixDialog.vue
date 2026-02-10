@@ -1,17 +1,9 @@
 <template>
-  <ZxDialog
-    v-model="dialogVisible"
-    :title="title"
-    :width="width"
-    :height="height"
-    :fullscreen="isFullscreen"
-    :close-on-click-modal="false"
-    @close="handleClose"
-  >
+  <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <!-- 对话框头部 -->
-    <template #header="{ close }">
+    <template #header>
       <div class="matrix-dialog-header">
-        <span class="dialog-title">{{ title }}</span>
+        <span class="dialog-title">{{ props.title }}</span>
         <div class="header-actions">
           <el-button
             size="small"
@@ -19,7 +11,6 @@
             @click="toggleFullscreen"
             title="切换全屏"
           />
-          <el-button size="small" :icon="Close" @click="close" title="关闭" />
         </div>
       </div>
     </template>
@@ -27,11 +18,11 @@
     <!-- 矩阵视图内容 -->
     <DagMatrixView
       ref="matrixViewRef"
-      :graph-data="graphData"
-      :readonly="readonly"
-      :loading="loading"
-      :columns="columns"
-      :node-renderer="nodeRenderer"
+      :graph-data="props.graphData"
+      :readonly="props.readonly"
+      :loading="props.loading"
+      :columns="props.columns"
+      :node-renderer="props.nodeRenderer"
       @node-add="handleNodeAdd"
       @node-update="handleNodeUpdate"
       @node-delete="handleNodeDelete"
@@ -47,7 +38,7 @@
         </div>
         <div class="footer-right">
           <el-button @click="handleClose">关闭</el-button>
-          <el-button v-if="!readonly" type="primary" @click="handleSave" :loading="saving">
+          <el-button v-if="!props.readonly" type="primary" @click="handleSave" :loading="saving">
             保存更改
           </el-button>
         </div>
@@ -57,9 +48,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Close, FullScreen, Minus, Download } from '@element-plus/icons-vue';
+import { useDialog } from '@zxio/zxui';
 import DagMatrixView from './DagMatrixView.vue';
 
 defineOptions({
@@ -122,11 +114,38 @@ const matrixViewRef = ref(null);
 const isFullscreen = ref(false);
 const saving = ref(false);
 
-// 计算属性
-const dialogVisible = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
+// 使用 useDialog hook
+const { dialogProps, dialogEvents, open, close } = useDialog({
+  title: () => props.title,
+  width: () => props.width,
+  height: () => props.height,
+  fullscreen: () => isFullscreen.value,
+  closeOnClickModal: false,
+  defaultData: () => ({}),
+  onClose: handleClose,
 });
+
+// 监听 modelValue 变化
+watch(
+  () => props.modelValue,
+  (val) => {
+    if (val) {
+      open();
+    } else {
+      close();
+    }
+  }
+);
+
+// 监听对话框关闭，同步 modelValue
+watch(
+  () => dialogProps.modelValue,
+  (val) => {
+    if (!val) {
+      emit('update:modelValue', false);
+    }
+  }
+);
 
 // 方法
 const toggleFullscreen = () => {
@@ -187,14 +206,17 @@ const handleSave = async () => {
   }
 };
 
-const handleClose = () => {
+function handleClose() {
   emit('close');
-  dialogVisible.value = false;
-};
+  emit('update:modelValue', false);
+  close();
+}
 
 // 暴露方法
 defineExpose({
   refresh: () => matrixViewRef.value?.refresh(),
+  open,
+  close,
 });
 </script>
 

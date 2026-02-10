@@ -172,17 +172,10 @@
     </ZxGridList>
 
     <!-- 预览界面 -->
-    <ZxDialog
-      v-model="preview.open"
-      :title="preview.title"
-      width="80%"
-      height="80vh"
-      :footer="false"
-      :no-content-padding="true"
-    >
-      <el-tabs v-model="preview.activeName" class="preview-tabs">
+    <ZxDialog v-bind="previewDialogProps" v-on="previewDialogEvents">
+      <el-tabs v-model="previewState.data.activeName" class="preview-tabs">
         <el-tab-pane
-          v-for="(value, key) in preview.data"
+          v-for="(value, key) in previewState.data.codeData"
           :label="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.jinja2'))"
           :name="key.substring(key.lastIndexOf('/') + 1, key.indexOf('.jinja2'))"
           :key="value"
@@ -208,6 +201,7 @@
 
 <script setup name="Gen">
 import { listTable, previewTable, delTable, genCode, synchDb } from '@/api/tool/gen';
+import { useDialog } from '@zxio/zxui';
 import router from '@/router';
 import importTable from './importTable';
 import createTable from './createTable';
@@ -222,16 +216,23 @@ const multiple = ref(true);
 const tableNames = ref([]);
 const uniqueId = ref('');
 
-const data = reactive({
-  preview: {
-    open: false,
-    title: '代码预览',
-    data: {},
+// 使用 useDialog 管理预览对话框
+const {
+  state: previewState,
+  dialogProps: previewDialogProps,
+  dialogEvents: previewDialogEvents,
+  open: openPreview,
+} = useDialog({
+  title: '代码预览',
+  width: '80%',
+  height: '80vh',
+  footer: false,
+  noContentPadding: true,
+  defaultData: () => ({
+    codeData: {},
     activeName: 'do.py',
-  },
+  }),
 });
-
-const { preview } = toRefs(data);
 
 onActivated(() => {
   const time = route.query.t;
@@ -320,9 +321,10 @@ function openCreateTable() {
 /** 预览按钮 */
 function handlePreview(row) {
   previewTable(row.tableId).then((response) => {
-    preview.value.data = response?.data ?? response;
-    preview.value.open = true;
-    preview.value.activeName = 'do.py';
+    openPreview({
+      codeData: response,
+      activeName: 'do.py',
+    });
   });
 }
 

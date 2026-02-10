@@ -11,7 +11,7 @@
 
 <script setup lang="ts" name="InterfaceTypeSelector">
 import { ref, watch } from 'vue';
-import DictSelect from '@/components/DictSelect/index.vue';
+import DictSelect from '@/components/business/DictSelect/index.vue';
 
 interface Props {
   modelValue?: string;

@@ -6,7 +6,7 @@
 
 <script setup name="VersionPreviewDialog">
 import { useDialog } from '@zxio/zxui';
-import { Editor as RichEditor } from '@/components/RichEditor';
+import { Editor as RichEditor } from '@/components/ui/RichEditor';
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
   title: '预览版本',

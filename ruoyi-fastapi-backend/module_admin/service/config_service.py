@@ -6,7 +6,8 @@ from config.enums import RedisInitKeyConfig
 from exceptions.exception import (
     ResourceNotFoundException,
     ResourceConflictException,
-    ValidationException
+    ValidationException,
+    BusinessException
 )
 from config.error_codes import ErrorCode
 from module_admin.entity.do.config_do import SysConfig
@@ -204,11 +205,18 @@ class ConfigService:
         config_repo = ConfigRepository(query_db)
         for config_id in config_id_list:
             config_info = await cls.config_detail_services(query_db, int(config_id))
+            if not config_info.config_id:
+                raise ResourceNotFoundException(
+                    user_message=f'参数配置不存在',
+                    error_code=ErrorCode.CONFIG_NOT_FOUND,
+                    developer_message=f'Config not found: config_id={config_id}'
+                )
             if config_info.config_type == CommonConstant.YES:
-                raise ValidationException(
-                    user_message=f'内置参数{config_info.config_key}不能删除',
-                    developer_message=f'Built-in config cannot be deleted: config_key={config_info.config_key}',
-                    field='config_type'
+                raise BusinessException(
+                    message=f'内置参数【{config_info.config_key}】不能删除',
+                    error_code=ErrorCode.CONFIG_BUILTIN_CANNOT_DELETE,
+                    http_status=409,
+                    developer_message=f'Built-in config cannot be deleted: config_key={config_info.config_key}, config_id={config_id}'
                 )
             else:
                 await config_repo.delete_by_id(int(config_id))

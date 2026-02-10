@@ -107,7 +107,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   // 错误处理回调
   onConfirmError: (error) => {
     console.error('操作失败:', error);
-    const errorMsg = error?.response?.data?.message || error?.message || '操作失败，请重试';
+    const errorMsg = error?.message || '操作失败，请重试';
     ElMessage.error(errorMsg);
   },
 });
@@ -116,7 +116,7 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
 async function getDeviceCategoryInfo(categoryId) {
   try {
     const response = await getDeviceCategory(categoryId);
-    return response?.data ?? response;
+    return response;
   } catch (error) {
     console.warn('获取分类详情失败:', error);
     // 使用模拟数据

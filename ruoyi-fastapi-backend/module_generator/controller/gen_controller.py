@@ -5,6 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
 from config.env import GenConfig
 from config.get_db import get_db
+from config.error_codes import ErrorCode
+from exceptions.exception import BusinessException
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckRoleInterfaceAuth, CheckUserInterfaceAuth
 from module_admin.service.login_service import LoginService
@@ -123,7 +125,12 @@ async def batch_gen_code(request: Request, tables: str = Query(), query_db: Asyn
 async def gen_code_local(request: Request, table_name: str, query_db: AsyncSession = Depends(get_db)):
     if not GenConfig.allow_overwrite:
         logger.error('【系统预设】不允许生成文件覆盖到本地')
-        return ResponseUtil.error('【系统预设】不允许生成文件覆盖到本地')
+        raise BusinessException(
+            message='代码生成失败：系统配置不允许覆盖本地文件',
+            error_code=ErrorCode.CODEGEN_OVERWRITE_DISABLED,
+            http_status=403,
+            developer_message=f'Code generation blocked: GenConfig.allow_overwrite is False for table {table_name}'
+        )
     gen_code_local_result = await GenTableService.generate_code_services(query_db, table_name)
     logger.info(gen_code_local_result.message)
 

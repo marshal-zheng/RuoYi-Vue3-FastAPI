@@ -372,7 +372,7 @@ import {
   runJob,
   changeJobStatus,
 } from '@/api/monitor/job';
-import Crontab from '@/components/Crontab';
+import Crontab from '@/components/ui/Crontab';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -487,7 +487,7 @@ function handleRun(row) {
 /** 任务详细信息 */
 function handleView(row) {
   getJob(row.jobId).then((response) => {
-    form.value = response?.data ?? response;
+    form.value = response;
     openView.value = true;
   });
 }
@@ -521,7 +521,7 @@ function handleUpdate(row) {
   reset();
   const jobId = row.jobId || ids.value;
   getJob(jobId).then((response) => {
-    form.value = response?.data ?? response;
+    form.value = response;
     open.value = true;
     title.value = '修改任务';
   });

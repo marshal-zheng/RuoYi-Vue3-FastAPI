@@ -348,8 +348,7 @@ async function doImportFiles(fileList) {
 
   try {
     const result = await importProtocolBatch(formData);
-    const payload = result?.data || {};
-    const data = payload.data || {};
+    const data = result || {};
     successList = data.success || [];
     failList = data.failed || [];
   } catch (error) {

@@ -214,7 +214,7 @@ function close() {
     });
     /** 查询字典下拉列表 */
     getDictOptionselect().then((response) => {
-      dictOptions.value = response?.data ?? response;
+      dictOptions.value = response;
     });
   }
 })();

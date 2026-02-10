@@ -55,9 +55,9 @@
 
 <script setup>
 import { ElMessageBox } from 'element-plus';
-import Breadcrumb from '@/components/Breadcrumb';
-import TopNav from '@/components/TopNav';
-import Hamburger from '@/components/Hamburger';
+import Breadcrumb from '@/components/ui/Breadcrumb';
+import TopNav from '@/components/ui/TopNav';
+import Hamburger from '@/components/ui/Hamburger';
 import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/settings';

@@ -47,6 +47,10 @@ class ErrorCode(IntEnum):
     DICT_NOT_FOUND = 43001        # 字典不存在
     DICT_TYPE_EXISTS = 43002      # 字典类型已存在
     
+    # ==================== 业务错误 - 参数配置模块 (431xx) ====================
+    CONFIG_NOT_FOUND = 43101      # 参数配置不存在
+    CONFIG_BUILTIN_CANNOT_DELETE = 43102  # 内置参数不能删除
+    
     # ==================== 业务错误 - 项目模块 (44xxx) ====================
     PROJECT_NOT_FOUND = 44001     # 项目不存在
     PROJECT_NAME_EXISTS = 44002   # 项目名称已存在
@@ -54,6 +58,9 @@ class ErrorCode(IntEnum):
     # ==================== 业务错误 - 协议模块 (45xxx) ====================
     PROTOCOL_NOT_FOUND = 45001    # 协议不存在
     PROTOCOL_NAME_EXISTS = 45002  # 协议名称已存在
+    
+    # ==================== 业务错误 - 代码生成模块 (46xxx) ====================
+    CODEGEN_OVERWRITE_DISABLED = 46001  # 代码生成覆盖被禁用
     
     # ==================== 系统错误 (5xxxx) ====================
     SYSTEM_ERROR = 50000          # 系统未知错误
@@ -301,6 +308,24 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         error_code_name="DICT_TYPE_EXISTS"
     ),
     
+    # ==================== 业务错误 - 参数配置模块 ====================
+    ErrorCode.CONFIG_NOT_FOUND: ErrorCodeInfo(
+        code=43101,
+        title="参数配置不存在",
+        detail="未找到该参数配置，请确认配置信息",
+        http_status=404,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="CONFIG_NOT_FOUND"
+    ),
+    ErrorCode.CONFIG_BUILTIN_CANNOT_DELETE: ErrorCodeInfo(
+        code=43102,
+        title="内置参数不能删除",
+        detail="系统内置参数不允许删除",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="CONFIG_BUILTIN_CANNOT_DELETE"
+    ),
+    
     # ==================== 业务错误 - 项目模块 ====================
     ErrorCode.PROJECT_NOT_FOUND: ErrorCodeInfo(
         code=44001,
@@ -335,6 +360,16 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         http_status=409,
         error_type=ErrorType.BUSINESS,
         error_code_name="PROTOCOL_NAME_EXISTS"
+    ),
+    
+    # ==================== 业务错误 - 代码生成模块 ====================
+    ErrorCode.CODEGEN_OVERWRITE_DISABLED: ErrorCodeInfo(
+        code=46001,
+        title="代码生成失败",
+        detail="系统配置不允许覆盖本地文件",
+        http_status=403,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="CODEGEN_OVERWRITE_DISABLED"
     ),
     
     # ==================== 系统错误 ====================

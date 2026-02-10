@@ -65,7 +65,7 @@ async function loadCategories() {
     // 使用业务类型 9999 获取分类列表
     const response = await getDeviceCategoryOptions('9999');
     // 根据后端返回的数据格式处理
-    const categories = response.data || response.rows || [];
+    const categories = response || response.rows || [];
 
     // 转换为选项格式
     categoryOptions.value = categories.map((item) => ({

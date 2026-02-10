@@ -286,7 +286,7 @@ function setSubTableColumns(value) {
 /** 查询菜单下拉树结构 */
 function getMenuTreeselect() {
   listMenu().then((response) => {
-    menuOptions.value = proxy.handleTree(response?.data ?? response, 'menuId');
+    menuOptions.value = proxy.handleTree(response, 'menuId');
   });
 }
 

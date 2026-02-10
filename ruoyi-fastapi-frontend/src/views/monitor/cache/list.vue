@@ -173,7 +173,7 @@ const tableHeight = ref(window.innerHeight - 200);
 function getCacheNames() {
   loading.value = true;
   listCacheName().then((response) => {
-    cacheNames.value = response?.data ?? response;
+    cacheNames.value = response;
     loading.value = false;
   });
 }
@@ -200,7 +200,7 @@ function getCacheKeys(row) {
   }
   subLoading.value = true;
   listCacheKey(cacheName).then((response) => {
-    cacheKeys.value = response?.data ?? response;
+    cacheKeys.value = response;
     subLoading.value = false;
     nowCacheName.value = cacheName;
   });
@@ -233,7 +233,7 @@ function keyFormatter(cacheKey) {
 /** 查询缓存内容详细 */
 function handleCacheValue(cacheKey) {
   getCacheValue(nowCacheName.value, cacheKey).then((response) => {
-    cacheForm.value = response?.data ?? response;
+    cacheForm.value = response;
   });
 }
 

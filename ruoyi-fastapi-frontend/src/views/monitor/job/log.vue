@@ -333,7 +333,7 @@ function handleExport() {
   const jobId = route.params && route.params.jobId;
   if (jobId !== undefined && jobId != 0) {
     getJob(jobId).then((response) => {
-      const data = response?.data ?? response;
+      const data = response;
       queryParams.value.jobName = data.jobName;
       queryParams.value.jobGroup = data.jobGroup;
       getList();

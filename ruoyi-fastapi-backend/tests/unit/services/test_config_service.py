@@ -14,7 +14,8 @@ from config.enums import RedisInitKeyConfig
 from exceptions.exception import (
     ValidationException,
     ResourceNotFoundException,
-    ResourceConflictException
+    ResourceConflictException,
+    BusinessException
 )
 
 
@@ -441,7 +442,7 @@ class TestConfigServiceDelete:
             ))):
                 delete_obj = DeleteConfigModel(configIds='1')
                 
-                with pytest.raises(ValidationException, match='内置参数.*不能删除'):
+                with pytest.raises(BusinessException, match='内置参数.*不能删除'):
                     await ConfigService.delete_config_services(mock_request, mock_db, delete_obj)
 
 

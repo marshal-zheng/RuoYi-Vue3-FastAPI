@@ -14,7 +14,8 @@
       "autoApprove": [
         "get_component_example",
         "get_component_props",
-        "list_components"
+        "list_components",
+        "search_docs"
       ]
     }
   }

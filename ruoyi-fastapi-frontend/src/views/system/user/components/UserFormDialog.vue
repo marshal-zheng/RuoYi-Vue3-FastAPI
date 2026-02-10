@@ -197,7 +197,7 @@ async function openDialog(userId) {
     roleOptions.value = response.roles || [];
 
     if (userId) {
-      const userData = response.data || {};
+      const userData = response || {};
       open({
         userId: userData.userId,
         deptId: userData.deptId,

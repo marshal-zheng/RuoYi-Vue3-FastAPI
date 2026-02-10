@@ -397,10 +397,10 @@ function handleCreateSuccess(payload) {
   let projectId = null;
   let versionId = null;
   if (payload && typeof payload === 'object') {
-    const data = payload.data && typeof payload.data === 'object' ? payload.data : payload;
+    const data = payload;
     if (data && typeof data === 'object') {
-      projectId = data.projectId || data.id || data?.data?.projectId;
-      versionId = data.versionId || data?.data?.versionId;
+      projectId = data.projectId || data.id;
+      versionId = data.versionId;
     }
   }
   if (projectId) {
@@ -475,7 +475,7 @@ async function handleImportFileChange(event) {
   const formData = new FormData();
   formData.append('file', file);
   const result = await importProjectBatch(formData);
-  const summary = result?.data || {};
+  const summary = result || {};
   const successCount = summary.successCount || 0;
   const failedCount = summary.failedCount || 0;
 

@@ -92,12 +92,15 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance } from 'vue';
+import { computed, getCurrentInstance, ref } from 'vue';
 import { useDialog } from '@zxio/zxui';
 import { parseTime } from '@/utils/ruoyi';
 
 const { proxy } = getCurrentInstance();
-const { sys_oper_type } = proxy.useDict('sys_oper_type');
+
+// 延迟加载字典数据
+const sys_oper_type = ref([]);
+let dictLoaded = false;
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
   title: () => '操作日志详细',
@@ -120,6 +123,14 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
     operTime: '',
     errorMsg: '',
   }),
+  onOpen: () => {
+    // 只在第一次打开时加载字典
+    if (!dictLoaded) {
+      const dict = proxy.useDict('sys_oper_type');
+      sys_oper_type.value = dict.sys_oper_type?.value || [];
+      dictLoaded = true;
+    }
+  },
   onConfirm: async () => {
     close();
     return state.data;

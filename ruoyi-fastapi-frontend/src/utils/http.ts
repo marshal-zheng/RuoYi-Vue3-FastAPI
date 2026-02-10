@@ -13,7 +13,8 @@ import {
   type SuccessResolver,
   type HttpTransformHook,
 } from '@zxio/http';
-import { ElNotification, ElMessageBox, ElMessage } from 'element-plus';
+import { ElNotification, ElMessage } from 'element-plus';
+import { h } from 'vue';
 import { getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
 import cache from '@/plugins/cache';
@@ -21,6 +22,71 @@ import useUserStore from '@/store/modules/user';
 
 // 重新登录状态
 export let isRelogin = { show: false };
+
+type ReloginMode = 'auto' | 'link';
+
+// 401 重新登录交互方式：auto = 提示后自动跳转；link = 提示并提供跳转链接
+const RELOGIN_MODE: ReloginMode = 'link';
+const RELOGIN_DELAY = 1200;
+
+const buildLoginRedirectUrl = (): string => {
+  const current = `${location.pathname}${location.search}${location.hash}`;
+  const redirect = encodeURIComponent(current || '/');
+  return `/login?redirect=${redirect}`;
+};
+
+const triggerRelogin = (message: string): void => {
+  if (isRelogin.show) return;
+  if (location.pathname === '/login') return;
+
+  isRelogin.show = true;
+  const loginUrl = buildLoginRedirectUrl();
+
+  const doRedirect = (): void => {
+    useUserStore()
+      .logOut()
+      .then(() => {
+        location.href = loginUrl;
+      })
+      .finally(() => {
+        isRelogin.show = false;
+      });
+  };
+
+  if (RELOGIN_MODE === 'link') {
+    const content = h('span', null, [
+      message || '未认证，请先登录',
+      h(
+        'a',
+        {
+          href: loginUrl,
+          style: 'margin-left: 8px; color: var(--el-color-primary); text-decoration: underline;',
+          onClick: (event: MouseEvent) => {
+            event.preventDefault();
+            doRedirect();
+          },
+        },
+        '去登录'
+      ),
+    ]);
+    ElMessage({
+      message: content,
+      type: 'warning',
+      duration: 5000,
+      showClose: true,
+      onClose: () => {
+        isRelogin.show = false;
+      },
+    });
+  } else {
+    ElMessage({
+      message: `${message || '未认证，请先登录'}，即将跳转登录`,
+      type: 'warning',
+      duration: RELOGIN_DELAY,
+    });
+    window.setTimeout(doRedirect, RELOGIN_DELAY);
+  }
+};
 
 // Element Plus 通知适配器
 const notifier: HttpNotifier = {
@@ -162,10 +228,15 @@ const beforeRequestTransform: HttpTransformHook = {
   },
 };
 
+// 需要显示成功提示的请求方法
+const MUTATION_METHODS = ['post', 'put', 'delete', 'patch'];
+
 // 响应后处理钩子（RFC 7807 标准）
 const afterResponseTransform: HttpTransformHook = {
   async afterResponse(response, options, context) {
-    const silentError = ((response.config as Record<string, unknown>)?.silentError as boolean) === true;
+    const config = response.config as Record<string, unknown>;
+    const silentError = (config?.silentError as boolean) === true;
+    const silentSuccess = (config?.silentSuccess as boolean) === true;
     
     // 二进制数据直接返回
     if (
@@ -177,10 +248,21 @@ const afterResponseTransform: HttpTransformHook = {
     
     const status = response.status;
     const payload = response.data as Record<string, unknown>;
+    const method = (response.config.method || 'get').toLowerCase();
     
     // 2xx 成功响应
     if (status >= 200 && status < 300) {
       attachPager(response.data);
+      
+      // 只有写操作（POST/PUT/DELETE/PATCH）才显示成功提示
+      if (!silentSuccess && MUTATION_METHODS.includes(method)) {
+        const successMsg =
+          (payload.message as string) ||
+          (payload.msg as string) ||
+          '操作成功';
+        ElMessage.success(successMsg);
+      }
+      
       return response;
     }
     
@@ -193,28 +275,10 @@ const afterResponseTransform: HttpTransformHook = {
       (payload.msg as string) ||
       errorCode[status] ||
       errorCode['default'];
-    
+
     // 401 未授权
     if (status === 401 || errorCode === 20001 || errorCode === 20002) {
-      if (!isRelogin.show) {
-        isRelogin.show = true;
-        ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning',
-        })
-          .then(() => {
-            isRelogin.show = false;
-            useUserStore()
-              .logOut()
-              .then(() => {
-                location.href = '/index';
-              });
-          })
-          .catch(() => {
-            isRelogin.show = false;
-          });
-      }
+      triggerRelogin(errorMsg || '未认证，请先登录');
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
     }
     
@@ -269,15 +333,28 @@ const afterResponseTransform: HttpTransformHook = {
     const axiosError = error as { 
       config?: Record<string, unknown>; 
       message?: string;
-      response?: { data?: Record<string, unknown> }
+      response?: { data?: Record<string, unknown>; status?: number }
     };
     const silentError = (axiosError.config?.silentError as boolean) === true;
+    const data = axiosError.response?.data;
+    const status = axiosError.response?.status;
+    const code = (data?.code as number | undefined) || (data?.errorCode as number | undefined);
     
     // 优先从响应体获取错误信息（RFC 7807）
     let message = '';
-    if (axiosError.response?.data) {
-      const data = axiosError.response.data;
-      message = (data.detail as string) || (data.title as string) || (data.message as string) || '';
+    if (data) {
+      message =
+        (data.detail as string) ||
+        (data.title as string) ||
+        (data.message as string) ||
+        (data.msg as string) ||
+        (code ? (errorCode[code] as string | undefined) : '') ||
+        '';
+    }
+
+    if (status === 401 || code === 20001 || code === 20002) {
+      triggerRelogin(message || '未认证，请先登录');
+      throw error;
     }
     
     if (!message) {

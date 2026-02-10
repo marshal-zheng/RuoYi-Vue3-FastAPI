@@ -111,7 +111,7 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
   try {
     // 1. 获取拓扑数据
     const response: any = await getProjectTopology(projectId, versionId);
-    const topoData = response?.data?.topologyData;
+    const topoData = response?.topologyData;
     const graphJson = topoData?.graph;
 
     if (!graphJson || !graphJson.cells || graphJson.cells.length === 0) {

@@ -287,7 +287,7 @@ async function loadDeviceInfo() {
   loading.value = true;
   try {
     const response = await getDevice(id);
-    deviceInfo.value = response.data || response;
+    deviceInfo.value = response;
     loadDevicePorts();
     updateGraphData();
   } finally {

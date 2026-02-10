@@ -245,7 +245,7 @@ async function loadDictData(params) {
 /** 查询字典类型详细 */
 function getTypes(dictId) {
   getType(dictId).then((response) => {
-    const data = response?.data ?? response;
+    const data = response;
     defaultDictType.value = data.dictType;
     initialState.value = {
       ...initialState.value,
@@ -262,7 +262,7 @@ function getTypes(dictId) {
 /** 查询字典类型列表 */
 function getTypeList() {
   getDictOptionselect().then((response) => {
-    typeOptions.value = response?.data ?? response;
+    typeOptions.value = response;
   });
 }
 /** 取消按钮 */
@@ -323,7 +323,7 @@ function handleUpdate(row) {
   reset();
   const dictCode = row.dictCode || ids.value;
   getData(dictCode).then((response) => {
-    form.value = response?.data ?? response;
+    form.value = response;
     open.value = true;
     title.value = '修改字典数据';
   });
