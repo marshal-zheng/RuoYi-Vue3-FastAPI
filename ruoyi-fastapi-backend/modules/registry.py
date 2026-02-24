@@ -1,0 +1,230 @@
+"""Explicit module registry for vertical-slice loading."""
+
+from __future__ import annotations
+
+import inspect
+from collections.abc import Callable, Iterable, Sequence
+from dataclasses import dataclass, field
+from importlib import import_module
+from typing import TYPE_CHECKING, Any
+
+from modules.system.api.audit_controller import auditController
+from modules.system.api.cache_controller import cacheController
+from modules.identity.api.captcha_controller import captchaController
+from modules.system.api.common_controller import commonController
+from modules.system.api.config_controller import configController
+from modules.system.api.event_controller import eventController
+from modules.system.api.dept_controller import deptController
+from modules.system.api.dict_controller import dictController
+from modules.scheduler.api.job_controller import jobController
+from modules.system.api.log_controller import logController
+from modules.identity.api.login_controller import loginController
+from modules.system.api.menu_controller import menuController
+from modules.system.api.notice_controller import noticeController
+from modules.system.api.online_controller import onlineController
+from modules.system.api.post_controller import postController
+from modules.project.api.project_controller import projectController
+from modules.project.api.project_version_controller import projectVersionController
+from modules.system.api.resilience_controller import resilienceController
+from modules.system.api.role_controller import roleController
+from modules.system.api.server_controller import serverController
+from modules.system.api.user_controller import userController
+from module_generator.controller.gen_controller import genController
+from utils.log_util import logger
+
+if TYPE_CHECKING:
+    from container import AppContainer
+
+
+ContainerExtension = Callable[['AppContainer'], Any]
+
+
+@dataclass(frozen=True)
+class RouterRegistration:
+    """Router registration metadata."""
+
+    router: Any
+    tags: tuple[str, ...] = field(default_factory=tuple)
+
+
+@dataclass(frozen=True)
+class ModuleRegistration:
+    """Module registration metadata."""
+
+    name: str
+    version: str
+    routers: tuple[RouterRegistration, ...]
+    container_extensions: tuple[ContainerExtension, ...] = field(default_factory=tuple)
+
+    @property
+    def route_prefixes(self) -> tuple[str, ...]:
+        prefixes = []
+        for registration in self.routers:
+            prefix = registration.router.prefix or '/'
+            if prefix not in prefixes:
+                prefixes.append(prefix)
+        return tuple(prefixes)
+
+
+@dataclass(frozen=True)
+class LoadedModule:
+    """Runtime-loaded module snapshot for audit logs."""
+
+    name: str
+    version: str
+    route_prefixes: tuple[str, ...]
+    router_count: int
+
+
+def _load_optional_router(module_path: str, router_name: str) -> Any | None:
+    try:
+        module = import_module(module_path)
+        return getattr(module, router_name)
+    except Exception as exc:  # pragma: no cover - depends on optional module readiness
+        logger.warning(
+            'Skip optional module router {}.{} due to import error: {}',
+            module_path,
+            router_name,
+            exc,
+        )
+        return None
+
+
+protocolController = _load_optional_router('module_admin.controller.protocol_controller', 'protocolController')
+simulationController = _load_optional_router('module_admin.controller.simulation_controller', 'simulationController')
+deviceCategoryController = _load_optional_router('module_admin.controller.device_category_controller', 'deviceCategoryController')
+deviceController = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
+
+_module_registry: list[ModuleRegistration] = [
+    ModuleRegistration(
+        name='identity',
+        version='v1',
+        routers=(
+            RouterRegistration(router=loginController, tags=('登录模块',)),
+            RouterRegistration(router=captchaController, tags=('验证码模块',)),
+            RouterRegistration(router=userController, tags=('系统管理-用户管理',)),
+            RouterRegistration(router=roleController, tags=('系统管理-角色管理',)),
+        ),
+    ),
+    ModuleRegistration(
+        name='system',
+        version='v1',
+        routers=(
+            RouterRegistration(router=menuController, tags=('系统管理-菜单管理',)),
+            RouterRegistration(router=deptController, tags=('系统管理-部门管理',)),
+            RouterRegistration(router=postController, tags=('系统管理-岗位管理',)),
+            RouterRegistration(router=dictController, tags=('系统管理-字典管理',)),
+            RouterRegistration(router=configController, tags=('系统管理-参数管理',)),
+            RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',)),
+            RouterRegistration(router=logController, tags=('系统管理-日志管理',)),
+            RouterRegistration(router=onlineController, tags=('系统监控-在线用户',)),
+            RouterRegistration(router=serverController, tags=('系统监控-菜单管理',)),
+            RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',)),
+            RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',)),
+            RouterRegistration(router=auditController, tags=('系统监控-审计日志',)),
+            RouterRegistration(router=eventController, tags=('系统监控-事件治理',)),
+            RouterRegistration(router=commonController, tags=('通用模块',)),
+        ),
+    ),
+    ModuleRegistration(
+        name='project',
+        version='v1',
+        routers=(
+            RouterRegistration(router=projectController, tags=('工程管理',)),
+            RouterRegistration(router=projectVersionController, tags=('工程管理-版本管理',)),
+        ),
+    ),
+]
+
+if protocolController is not None:
+    _module_registry.append(
+        ModuleRegistration(
+            name='protocol',
+            version='v1',
+            routers=(RouterRegistration(router=protocolController, tags=('协议管理',)),),
+        )
+    )
+if simulationController is not None:
+    _module_registry.append(
+        ModuleRegistration(
+            name='simulation',
+            version='v1',
+            routers=(RouterRegistration(router=simulationController, tags=('仿真管理',)),),
+        )
+    )
+if deviceCategoryController is not None and deviceController is not None:
+    _module_registry.append(
+        ModuleRegistration(
+            name='device',
+            version='v1',
+            routers=(
+                RouterRegistration(router=deviceCategoryController, tags=('设备中心-分类管理',)),
+                RouterRegistration(router=deviceController, tags=('设备中心-设备管理',)),
+            ),
+        )
+    )
+
+_module_registry.extend(
+    (
+        ModuleRegistration(
+            name='scheduler',
+            version='v1',
+            routers=(RouterRegistration(router=jobController, tags=('系统监控-定时任务',)),),
+        ),
+        ModuleRegistration(
+            name='codegen',
+            version='v1',
+            routers=(RouterRegistration(router=genController, tags=('代码生成',)),),
+        ),
+    )
+)
+
+MODULE_REGISTRY: tuple[ModuleRegistration, ...] = tuple(_module_registry)
+
+
+def get_module_registry() -> tuple[ModuleRegistration, ...]:
+    """Return immutable module registry snapshot."""
+    return MODULE_REGISTRY
+
+
+def register_modules(app: Any, registry: Sequence[ModuleRegistration] | None = None) -> tuple[LoadedModule, ...]:
+    """Register routers from explicit module registry."""
+    module_registry = tuple(registry or MODULE_REGISTRY)
+    loaded_modules: list[LoadedModule] = []
+    for module in module_registry:
+        for registration in module.routers:
+            app.include_router(router=registration.router, tags=list(registration.tags))
+        loaded_modules.append(
+            LoadedModule(
+                name=module.name,
+                version=module.version,
+                route_prefixes=module.route_prefixes,
+                router_count=len(module.routers),
+            )
+        )
+    return tuple(loaded_modules)
+
+
+async def initialize_module_extensions(
+    container: AppContainer,
+    registry: Sequence[ModuleRegistration] | None = None,
+) -> None:
+    """Initialize module container extensions after app container is ready."""
+    module_registry = tuple(registry or MODULE_REGISTRY)
+    for module in module_registry:
+        for extension in module.container_extensions:
+            result = extension(container)
+            if inspect.isawaitable(result):
+                await result
+
+
+def log_loaded_modules(loaded_modules: Iterable[LoadedModule]) -> None:
+    """Log loaded modules with route prefixes and versions."""
+    for module in loaded_modules:
+        logger.info(
+            'Loaded module `{}` (version={}, prefixes={}, routers={})',
+            module.name,
+            module.version,
+            ','.join(module.route_prefixes),
+            module.router_count,
+        )

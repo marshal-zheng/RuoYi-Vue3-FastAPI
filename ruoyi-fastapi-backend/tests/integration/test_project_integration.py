@@ -51,8 +51,8 @@ class TestProjectIntegration:
     def test_project_export_endpoint(self, test_client):
         """Test project export endpoint"""
         response = test_client.post("/project/export")
-        # Should return 200, 401, or 404
-        assert response.status_code in [200, 401, 404]
+        # Endpoint now requires path/context parameters; 422 is also valid
+        assert response.status_code in [200, 401, 404, 422]
 
 
 class TestProjectServiceIntegration:
@@ -61,14 +61,8 @@ class TestProjectServiceIntegration:
     @pytest.mark.asyncio
     async def test_project_service_exists(self):
         """Test that project service can be imported"""
-        from module_admin.service.project_service import ProjectService
+        from modules.project.application.services.project_service import ProjectService
         assert ProjectService is not None
-    
-    @pytest.mark.asyncio
-    async def test_project_dao_exists(self):
-        """Test that project DAO can be imported"""
-        from module_admin.dao.project_dao import ProjectDao
-        assert ProjectDao is not None
     
     @pytest.mark.asyncio
     async def test_project_models_exist(self):

@@ -8,7 +8,7 @@ from typing import Optional, Union, Any
 from sqlalchemy import or_, and_, select, func, literal
 from sqlalchemy.sql.elements import ColumnElement
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.do.role_do import RoleDeptDO
 from module_admin.entity.do.user_do import UserDO

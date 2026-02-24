@@ -177,7 +177,7 @@ class TestInvalidInputValidation:
         - 调用 check_user_name_unique_services
         - 如果不唯一，抛出 ServiceException
         """
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'check_user_name_unique_services')
 

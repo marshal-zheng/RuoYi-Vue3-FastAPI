@@ -142,6 +142,84 @@ class ErrorHandlingSettings(BaseSettings):
     default_language: str = "zh"
 
 
+class LogSettings(BaseSettings):
+    """
+    日志配置
+    """
+
+    log_json_enabled: bool = True
+    log_level: str = "INFO"
+    log_error_file_level: str = "ERROR"
+    log_error_rotation: str = '50MB'
+    log_error_compression: str = 'zip'
+
+
+class IdempotencySettings(BaseSettings):
+    """
+    幂等中间件配置
+    """
+
+    idempotency_enabled: bool = True
+    idempotency_ttl_seconds: int = 600
+    idempotency_lock_ttl_seconds: int = 30
+    idempotency_wait_timeout_ms: int = 2000
+    # 逗号分隔：POST,PUT,...
+    idempotency_methods: str = 'POST,PUT'
+    # 逗号分隔：以 path prefix 方式匹配，'/' 表示全部路径
+    idempotency_path_prefixes: str = '/'
+    # 逗号分隔：优先排除的 path prefix
+    idempotency_exclude_paths: str = '/health,/ready,/metrics,/docs,/redoc,/openapi.json'
+    # 防止缓存超大响应体导致内存放大
+    idempotency_max_response_body_bytes: int = 2 * 1024 * 1024
+    # 防止读取超大请求体导致内存放大
+    idempotency_max_request_body_bytes: int = 2 * 1024 * 1024
+
+
+class RateLimitSettings(BaseSettings):
+    """
+    接口限流配置
+    """
+
+    rate_limit_enabled: bool = True
+    rate_limit_window_seconds: int = 60
+    # 逗号分隔：无需限流的 path prefix
+    rate_limit_exclude_paths: str = '/health,/ready,/docs,/redoc,/openapi.json,/metrics'
+    # 逗号分隔：认证类接口 path prefix（命中后归类为 auth tier）
+    rate_limit_auth_paths: str = '/login,/captchaImage,/register'
+    # 逗号分隔：写接口方法
+    rate_limit_write_methods: str = 'POST,PUT,PATCH,DELETE'
+    # 逗号分隔：可信代理 IP/CIDR（仅命中后才解析 X-Forwarded-For）
+    rate_limit_trusted_proxies: str = '127.0.0.1,::1'
+
+    # auth tier
+    rate_limit_auth_ip: int = 20
+    rate_limit_auth_user: int = 40
+    # write tier
+    rate_limit_write_ip: int = 120
+    rate_limit_write_user: int = 240
+    # read tier
+    rate_limit_read_ip: int = 600
+    rate_limit_read_user: int = 1200
+
+
+class OTelSettings(BaseSettings):
+    """
+    OpenTelemetry 配置
+    """
+
+    otel_enabled: bool = True
+    otel_service_name: str = 'ruoyi-fastapi-backend'
+    otel_service_namespace: str = 'ruoyi-fastapi'
+    otel_traces_sample_ratio: float = 1.0
+    # 例如: http://127.0.0.1:4318/v1/traces
+    otel_otlp_endpoint: str = ''
+    otel_otlp_headers: str = ''
+    otel_exporter_timeout_ms: int = 10000
+    otel_console_exporter: bool = False
+    # 逗号分隔，传递给 FastAPIInstrumentor excluded_urls
+    otel_excluded_urls: str = '/health,/ready,/metrics,/docs,/redoc,/openapi.json'
+
+
 class GenSettings:
     """
     代码生成配置
@@ -299,6 +377,34 @@ class GetConfig:
         """
         return ErrorHandlingSettings()
 
+    @lru_cache()
+    def get_log_config(self):
+        """
+        获取日志配置
+        """
+        return LogSettings()
+
+    @lru_cache()
+    def get_idempotency_config(self):
+        """
+        获取幂等配置
+        """
+        return IdempotencySettings()
+
+    @lru_cache()
+    def get_rate_limit_config(self):
+        """
+        获取限流配置
+        """
+        return RateLimitSettings()
+
+    @lru_cache()
+    def get_otel_config(self):
+        """
+        获取 OpenTelemetry 配置
+        """
+        return OTelSettings()
+
     @staticmethod
     def parse_cli_args():
         """
@@ -357,3 +463,11 @@ CacheConfig = get_config.get_query_cache_config()
 AuditConfig = get_config.get_audit_config()
 # 错误处理配置
 ErrorHandlingConfig = get_config.get_error_handling_config()
+# 日志配置
+LogConfig = get_config.get_log_config()
+# 幂等配置
+IdempotencyConfig = get_config.get_idempotency_config()
+# 限流配置
+RateLimitConfig = get_config.get_rate_limit_config()
+# OpenTelemetry 配置
+OTelConfig = get_config.get_otel_config()

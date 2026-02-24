@@ -2,7 +2,7 @@ from fastapi import Depends
 from typing import List, Union
 from exceptions.exception import PermissionException
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 
 
 class CheckUserInterfaceAuth:
@@ -34,7 +34,7 @@ class CheckUserInterfaceAuth:
             else:
                 if any([perm_str in user_auth_list for perm_str in self.perm]):
                     return True
-        raise PermissionException(data='', message='该用户无此接口权限')
+        raise PermissionException(data='', user_message='该用户无此接口权限')
 
 
 class CheckRoleInterfaceAuth:
@@ -65,4 +65,4 @@ class CheckRoleInterfaceAuth:
             else:
                 if any([role_key_str in user_role_key_list for role_key_str in self.role_key]):
                     return True
-        raise PermissionException(data='', message='该用户无此接口权限')
+        raise PermissionException(data='', user_message='该用户无此接口权限')

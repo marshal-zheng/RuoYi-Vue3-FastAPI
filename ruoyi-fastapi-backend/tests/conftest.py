@@ -3,6 +3,7 @@ Shared pytest fixtures and configuration for all tests.
 """
 
 import asyncio
+from importlib import import_module
 import sys
 from pathlib import Path
 from typing import AsyncGenerator, Generator
@@ -10,12 +11,18 @@ from typing import AsyncGenerator, Generator
 import pytest
 import httpx
 from httpx import ASGITransport
-from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+try:  # pragma: no cover - environment-dependent branch
+    import aiosqlite as _aiosqlite  # noqa: F401
+except ModuleNotFoundError:  # pragma: no cover - exercised in offline/local python env
+    from tests.fakes import aiosqlite_fallback as _aiosqlite_fallback
+
+    sys.modules['aiosqlite'] = _aiosqlite_fallback
 
 
 _OriginalAsyncClient = httpx.AsyncClient
@@ -24,7 +31,7 @@ _OriginalAsyncClient = httpx.AsyncClient
 class _PatchedAsyncClient(_OriginalAsyncClient):
     def __init__(self, *args, app=None, base_url=None, **kwargs):
         if app is not None:
-            kwargs.setdefault('transport', ASGITransport(app=app))
+            kwargs.setdefault('transport', ASGITransport(app=app, raise_app_exceptions=False))
         if base_url is not None:
             kwargs.setdefault('base_url', base_url)
         super().__init__(*args, **kwargs)
@@ -33,11 +40,28 @@ class _PatchedAsyncClient(_OriginalAsyncClient):
 httpx.AsyncClient = _PatchedAsyncClient
 
 from config.env import AppConfig
+from container import AppContainer, build_container
 from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.user_do import UserDO
 
 # Test database URL (SQLite in-memory)
 TEST_DATABASE_URL = 'sqlite+aiosqlite:///:memory:'
+
+
+def _import_orm_models() -> None:
+    """Import all ORM model modules so SQLAlchemy metadata is fully registered."""
+    backend_root = Path(__file__).parent.parent
+    model_dirs = (
+        backend_root / 'module_admin' / 'entity' / 'do',
+        backend_root / 'module_generator' / 'entity' / 'do',
+    )
+    for model_dir in model_dirs:
+        if not model_dir.exists():
+            continue
+        package_prefix = '.'.join(model_dir.relative_to(backend_root).parts)
+        for model_file in sorted(model_dir.glob('*_do.py')):
+            import_module(f'{package_prefix}.{model_file.stem}')
+    import_module('events.models')
 
 
 @pytest.fixture(scope='session')
@@ -51,6 +75,7 @@ def event_loop() -> Generator:
 @pytest.fixture(scope='session')
 async def test_engine():
     """Create test database engine."""
+    _import_orm_models()
     engine = create_async_engine(
         TEST_DATABASE_URL,
         echo=False,
@@ -137,3 +162,28 @@ def mock_redis(mocker):
     mock_client.delete.return_value = True
     mock_client.exists.return_value = False
     return mock_client
+
+
+@pytest.fixture
+def app_container() -> Generator[AppContainer, None, None]:
+    """Create app container for dependency override in tests."""
+    container = build_container()
+    yield container
+    container.reset_override()
+
+
+@pytest.fixture
+def app_container_in_server(app_container: AppContainer) -> Generator[AppContainer, None, None]:
+    """Attach test container to FastAPI app and restore after test."""
+    from server import app
+
+    previous_container = getattr(app.state, 'container', None)
+    app.state.container = app_container
+    try:
+        yield app_container
+    finally:
+        app_container.reset_override()
+        if previous_container is None:
+            delattr(app.state, 'container')
+        else:
+            app.state.container = previous_container

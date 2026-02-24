@@ -334,7 +334,7 @@ def extract_protocols_from_topology(topology_data: dict) -> list:
     if not topology_data:
         return []
 
-    def get_port_key_variants(port_id: str | int | None):
+    def get_port_key_variants(port_id: Optional[object]):
         """生成端口ID的多种变体，用于匹配不同存储格式"""
         if port_id is None:
             return []

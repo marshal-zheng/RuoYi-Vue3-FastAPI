@@ -1,9 +1,12 @@
 from redis import asyncio as aioredis
 from redis.exceptions import AuthenticationError, TimeoutError, RedisError
+
 from config.database import AsyncSessionLocal
 from config.env import RedisConfig
-from module_admin.service.config_service import ConfigService
-from module_admin.service.dict_service import DictDataService
+from module_admin.repository import ConfigRepository, DictDataRepository, DictTypeRepository
+from modules.system.application.services.config_service import ConfigService
+from modules.system.application.services.dict_data_service import DictDataService
+from ports import IRedisClient
 from utils.log_util import logger
 
 
@@ -13,7 +16,7 @@ class RedisUtil:
     """
 
     @classmethod
-    async def create_redis_pool(cls) -> aioredis.Redis:
+    async def create_redis_pool(cls) -> IRedisClient:
         """
         应用启动时初始化redis连接
 
@@ -55,7 +58,7 @@ class RedisUtil:
         logger.info('关闭redis连接成功')
 
     @classmethod
-    async def init_sys_dict(cls, redis):
+    async def init_sys_dict(cls, redis: IRedisClient):
         """
         应用启动时缓存字典表
 
@@ -63,10 +66,13 @@ class RedisUtil:
         :return:
         """
         async with AsyncSessionLocal() as session:
-            await DictDataService.init_cache_sys_dict_services(session, redis)
+            await DictDataService(
+                dict_type_repo=DictTypeRepository(session),
+                dict_data_repo=DictDataRepository(session),
+            ).init_cache_sys_dict_services(redis)
 
     @classmethod
-    async def init_sys_config(cls, redis):
+    async def init_sys_config(cls, redis: IRedisClient):
         """
         应用启动时缓存参数配置表
 
@@ -74,4 +80,4 @@ class RedisUtil:
         :return:
         """
         async with AsyncSessionLocal() as session:
-            await ConfigService.init_cache_sys_config_services(session, redis)
+            await ConfigService(config_repo=ConfigRepository(session), query_db=session).init_cache_sys_config_services(redis)

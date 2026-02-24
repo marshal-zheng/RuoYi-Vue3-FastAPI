@@ -56,14 +56,8 @@ class TestDeptServiceIntegration:
     @pytest.mark.asyncio
     async def test_dept_service_exists(self):
         """Test that department service can be imported"""
-        from module_admin.service.dept_service import DeptService
+        from modules.system.application.services.dept_service import DeptService
         assert DeptService is not None
-    
-    @pytest.mark.asyncio
-    async def test_dept_dao_exists(self):
-        """Test that department DAO can be imported"""
-        from module_admin.dao.dept_dao import DeptDao
-        assert DeptDao is not None
     
     @pytest.mark.asyncio
     async def test_dept_models_exist(self):

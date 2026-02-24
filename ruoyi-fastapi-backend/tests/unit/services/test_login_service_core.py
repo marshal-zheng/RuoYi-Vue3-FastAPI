@@ -3,16 +3,13 @@ Core authentication tests for LoginService - focusing on stability and security.
 """
 
 import pytest
-from datetime import datetime, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 from module_admin.entity.vo.login_vo import UserLogin
-from module_admin.entity.do.user_do import UserDO
-from exceptions.exception import AuthException, ValidationException
-from config.error_codes import ErrorCode
+from exceptions.exception import AuthException, ValidationException, ResourceNotFoundException
 
 
 class TestLoginServiceAuthentication:
@@ -33,6 +30,22 @@ class TestLoginServiceAuthentication:
         return AsyncMock(spec=AsyncSession)
 
     @pytest.fixture
+    def mock_login_repo(self):
+        """Create a mock login repository."""
+        repo = MagicMock()
+        repo.find_user_with_dept = AsyncMock(return_value=None)
+        return repo
+
+    @pytest.fixture
+    def login_service(self, mock_db, mock_login_repo):
+        """Create login service with injected dependencies."""
+        return LoginService(
+            query_db=mock_db,
+            login_repo=mock_login_repo,
+            user_repo=MagicMock(),
+        )
+
+    @pytest.fixture
     def valid_login(self):
         """Create valid login credentials."""
         return UserLogin(
@@ -43,23 +56,23 @@ class TestLoginServiceAuthentication:
         )
 
     @pytest.mark.asyncio
-    async def test_account_lock_prevents_login(self, mock_request, mock_db, valid_login):
+    async def test_account_lock_prevents_login(self, mock_request, login_service, valid_login):
         """Test that locked accounts cannot login."""
         # Setup: Account is locked in Redis
         mock_request.app.state.redis.get.return_value = valid_login.user_name
 
         # Execute & Assert
         with pytest.raises(AuthException) as exc_info:
-            await LoginService.authenticate_user(mock_request, mock_db, valid_login)
+            await login_service.authenticate_user(mock_request, valid_login)
 
         assert '账号已锁定' in str(exc_info.value)
 
     @pytest.mark.asyncio
-    async def test_empty_username_rejected(self, mock_request, mock_db):
+    async def test_empty_username_rejected(self, mock_request, login_service):
         """Test that empty username is rejected."""
         # Setup mocks properly
         mock_request.app.state.redis.get = AsyncMock(return_value=None)
-        mock_request.headers.get = MagicMock(return_value=None)
+        mock_request.headers = {}
         
         invalid_login = UserLogin(
             user_name='',
@@ -69,14 +82,14 @@ class TestLoginServiceAuthentication:
         )
 
         with pytest.raises((ValidationException, ValueError, AuthException)):
-            await LoginService.authenticate_user(mock_request, mock_db, invalid_login)
+            await login_service.authenticate_user(mock_request, invalid_login)
 
     @pytest.mark.asyncio
-    async def test_empty_password_rejected(self, mock_request, mock_db):
+    async def test_empty_password_rejected(self, mock_request, login_service):
         """Test that empty password is rejected."""
         # Setup mocks properly
         mock_request.app.state.redis.get = AsyncMock(return_value=None)
-        mock_request.headers.get = MagicMock(return_value=None)
+        mock_request.headers = {}
         
         invalid_login = UserLogin(
             user_name='testuser',
@@ -86,33 +99,27 @@ class TestLoginServiceAuthentication:
         )
 
         with pytest.raises((ValidationException, ValueError, AuthException)):
-            await LoginService.authenticate_user(mock_request, mock_db, invalid_login)
+            await login_service.authenticate_user(mock_request, invalid_login)
 
     @pytest.mark.asyncio
-    async def test_swagger_request_detection(self, mock_request, mock_db, valid_login):
+    async def test_swagger_request_detection(self, mock_request, login_service, mock_login_repo, valid_login):
         """Test that requests from Swagger docs are detected."""
         mock_request.headers = {'referer': 'http://localhost:8000/docs'}
         mock_request.app.state.redis.get.return_value = None
+        mock_login_repo.find_user_with_dept = AsyncMock(return_value=None)
 
-        # This should handle swagger requests differently
-        # The actual behavior depends on implementation
-        # Just verify it doesn't crash
-        try:
-            await LoginService.authenticate_user(mock_request, mock_db, valid_login)
-        except Exception as e:
-            # Expected to fail due to missing mocks, but shouldn't crash on swagger detection
-            assert not isinstance(e, AttributeError)
+        with pytest.raises(ResourceNotFoundException):
+            await login_service.authenticate_user(mock_request, valid_login)
 
     @pytest.mark.asyncio
-    async def test_redoc_request_detection(self, mock_request, mock_db, valid_login):
+    async def test_redoc_request_detection(self, mock_request, login_service, mock_login_repo, valid_login):
         """Test that requests from ReDoc are detected."""
         mock_request.headers = {'referer': 'http://localhost:8000/redoc'}
         mock_request.app.state.redis.get.return_value = None
+        mock_login_repo.find_user_with_dept = AsyncMock(return_value=None)
 
-        try:
-            await LoginService.authenticate_user(mock_request, mock_db, valid_login)
-        except Exception as e:
-            assert not isinstance(e, AttributeError)
+        with pytest.raises(ResourceNotFoundException):
+            await login_service.authenticate_user(mock_request, valid_login)
 
 
 class TestLoginServiceSecurity:

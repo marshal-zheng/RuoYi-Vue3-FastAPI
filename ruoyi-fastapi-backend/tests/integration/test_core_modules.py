@@ -69,7 +69,7 @@ class TestServiceLayerIntegration:
     @pytest.mark.asyncio
     async def test_project_service_import(self):
         """Test that ProjectService can be imported"""
-        from module_admin.service.project_service import ProjectService
+        from modules.project.application.services.project_service import ProjectService
         assert ProjectService is not None
     
     @pytest.mark.asyncio
@@ -87,60 +87,27 @@ class TestServiceLayerIntegration:
     @pytest.mark.asyncio
     async def test_role_service_import(self):
         """Test that RoleService can be imported"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         assert RoleService is not None
     
     @pytest.mark.asyncio
     async def test_dept_service_import(self):
         """Test that DeptService can be imported"""
-        from module_admin.service.dept_service import DeptService
+        from modules.system.application.services.dept_service import DeptService
         assert DeptService is not None
     
     @pytest.mark.asyncio
     async def test_dict_service_import(self):
-        """Test that DictService can be imported"""
-        from module_admin.service.dict_service import DictService
-        assert DictService is not None
+        """Test that dict services can be imported"""
+        from modules.system.application.services import DictTypeService, DictDataService
+        assert DictTypeService is not None
+        assert DictDataService is not None
     
     @pytest.mark.asyncio
     async def test_config_service_import(self):
         """Test that ConfigService can be imported"""
-        from module_admin.service.config_service import ConfigService
+        from modules.system.application.services.config_service import ConfigService
         assert ConfigService is not None
-
-
-class TestDAOLayerIntegration:
-    """Integration tests for DAO layer modules"""
-    
-    @pytest.mark.asyncio
-    async def test_project_dao_import(self):
-        """Test that ProjectDao can be imported"""
-        from module_admin.dao.project_dao import ProjectDao
-        assert ProjectDao is not None
-    
-    @pytest.mark.asyncio
-    async def test_protocol_dao_import(self):
-        """Test that ProtocolDao can be imported"""
-        from module_admin.dao.protocol_dao import ProtocolDao
-        assert ProtocolDao is not None
-    
-    @pytest.mark.asyncio
-    async def test_simulation_dao_import(self):
-        """Test that SimulationDao can be imported"""
-        from module_admin.dao.simulation_dao import SimulationDao
-        assert SimulationDao is not None
-    
-    @pytest.mark.asyncio
-    async def test_role_dao_import(self):
-        """Test that RoleDao can be imported"""
-        from module_admin.dao.role_dao import RoleDao
-        assert RoleDao is not None
-    
-    @pytest.mark.asyncio
-    async def test_dept_dao_import(self):
-        """Test that DeptDao can be imported"""
-        from module_admin.dao.dept_dao import DeptDao
-        assert DeptDao is not None
 
 
 class TestControllerLayerIntegration:
@@ -148,7 +115,7 @@ class TestControllerLayerIntegration:
     
     def test_project_controller_import(self):
         """Test that project controller can be imported"""
-        from module_admin.controller.project_controller import projectController
+        from modules.project.api.project_controller import projectController
         assert projectController is not None
     
     def test_protocol_controller_import(self):

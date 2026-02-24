@@ -1,0 +1,72 @@
+{
+  "iterations": 50000,
+  "warmup": 2000,
+  "services": {
+    "common_service": {
+      "direct_p95_us": 0.5,
+      "resolve_p95_us": 0.542,
+      "overhead_p95_us": 0.042,
+      "overhead_p95_pct": 8.399
+    },
+    "config_service": {
+      "direct_p95_us": 0.625,
+      "resolve_p95_us": 0.667,
+      "overhead_p95_us": 0.042,
+      "overhead_p95_pct": 6.719
+    },
+    "dept_service": {
+      "direct_p95_us": 0.625,
+      "resolve_p95_us": 0.708,
+      "overhead_p95_us": 0.083,
+      "overhead_p95_pct": 13.278
+    },
+    "dict_data_service": {
+      "direct_p95_us": 0.875,
+      "resolve_p95_us": 0.916,
+      "overhead_p95_us": 0.041,
+      "overhead_p95_pct": 4.687
+    },
+    "dict_type_service": {
+      "direct_p95_us": 1.833,
+      "resolve_p95_us": 2.0,
+      "overhead_p95_us": 0.167,
+      "overhead_p95_pct": 9.111
+    },
+    "user_service": {
+      "direct_p95_us": 1.792,
+      "resolve_p95_us": 1.666,
+      "overhead_p95_us": -0.126,
+      "overhead_p95_pct": -7.032
+    },
+    "menu_service": {
+      "direct_p95_us": 1.125,
+      "resolve_p95_us": 1.166,
+      "overhead_p95_us": 0.041,
+      "overhead_p95_pct": 3.644
+    },
+    "role_service": {
+      "direct_p95_us": 1.375,
+      "resolve_p95_us": 1.417,
+      "overhead_p95_us": 0.042,
+      "overhead_p95_pct": 3.055
+    },
+    "job_service": {
+      "direct_p95_us": 0.584,
+      "resolve_p95_us": 0.708,
+      "overhead_p95_us": 0.124,
+      "overhead_p95_pct": 21.229
+    },
+    "audit_log_service": {
+      "direct_p95_us": 5.167,
+      "resolve_p95_us": 5.125,
+      "overhead_p95_us": -0.042,
+      "overhead_p95_pct": -0.813
+    }
+  },
+  "summary": {
+    "avg_overhead_p95_us": 0.041,
+    "max_overhead_p95_us": 0.167,
+    "avg_overhead_p95_pct": 6.228,
+    "max_overhead_p95_pct": 21.229
+  }
+}

@@ -1,11 +1,72 @@
 stages:
   - security
+  - test
 
 sensitive-query-check:
   stage: security
   image: python:3.11
   script:
     - python ruoyi-fastapi-backend/scripts/check_sensitive_queries.py
+
+dao-import-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_no_dao_imports.py
+
+service-classmethod-regression-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_no_new_service_classmethods.py
+
+service-instantiation-regression-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_no_new_service_instantiations.py
+
+horizontal-layer-regression-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_no_new_horizontal_layer_files.py
+
+module-boundary-import-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_module_boundary_imports.py
+
+protocol-coverage-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_protocol_coverage.py --format=json
+
+protocol-update-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_protocol_updates.py
+
+cqrs-controller-cutover-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_cqrs_controller_cutover.py
+
+resilience-policy-binding-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_resilience_policy_bindings.py
+
+magic-flag-literal-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python ruoyi-fastapi-backend/scripts/check_magic_flag_literals.py
 
 sensitive-db-check:
   stage: security
@@ -15,3 +76,31 @@ sensitive-db-check:
     - python ruoyi-fastapi-backend/scripts/check_sensitive_data.py
   when: manual
   allow_failure: true
+
+migration-drift-check:
+  stage: test
+  image: python:3.11
+  services:
+    - name: mysql:8.0
+      alias: mysql
+  variables:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_ROOT_HOST: "%"
+    MYSQL_DATABASE: ruoyi_fastapi_ci
+    DB_TYPE: mysql
+    DB_HOST: mysql
+    DB_PORT: "3306"
+    DB_USERNAME: root
+    DB_PASSWORD: root
+    DB_DATABASE: ruoyi_fastapi_ci
+  script:
+    - pip install -r ruoyi-fastapi-backend/requirements.txt -r ruoyi-fastapi-backend/requirements-dev.txt
+    - python ruoyi-fastapi-backend/scripts/check_migration_drift.py
+
+architecture-regression-tests:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install -r ruoyi-fastapi-backend/requirements.txt -r ruoyi-fastapi-backend/requirements-dev.txt
+    - cd ruoyi-fastapi-backend
+    - python -m pytest -q -n 0 --no-cov tests/unit/middlewares/test_idempotency_middleware.py tests/unit/middlewares/test_rate_limit_middleware.py tests/unit/middlewares/test_request_logging_middleware.py tests/unit/middlewares/test_prometheus_middleware.py tests/unit/utils/test_otel_tracing.py tests/unit/controllers/test_simulation_controller.py tests/unit/services/test_simulation_runtime_state.py tests/unit/services/test_simulation_multi_worker_smoke.py tests/unit/services/test_simulation_service.py tests/unit/services/test_project_service.py tests/unit/services/test_project_version_service.py tests/unit/services/test_protocol_service.py tests/unit/services/test_common_service.py tests/unit/services/test_device_service.py tests/unit/services/test_device_category_service.py tests/integration/test_core_modules.py tests/integration/test_error_handling_rfc7807.py tests/integration/test_otel_trace_correlation.py

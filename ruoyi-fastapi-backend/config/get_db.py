@@ -3,6 +3,7 @@ import sys
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 from config.database import async_engine, AsyncSessionLocal, Base
+import events.models as _event_models  # noqa: F401
 from utils.log_util import logger
 
 _TEST_ENGINE = None

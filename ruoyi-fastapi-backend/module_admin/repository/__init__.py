@@ -11,7 +11,7 @@ Repository 相比 DAO 的优势：
 5. 类型安全 - 完整的类型注解
 
 使用示例:
-    from module_admin.repository.user_repository import UserRepository
+    from modules.system.infrastructure.user_repository import UserRepository
     
     # 在 Service 中使用
     class UserService:
@@ -49,28 +49,29 @@ from module_admin.repository.specification import (
 from module_admin.repository.query_builder import QueryBuilder
 
 # 业务 Repository
-from module_admin.repository.user_repository import (
+from modules.system.infrastructure.user_repository import (
     UserRepository,
-    UserRoleRepository,
-    UserPostRepository,
 )
-from module_admin.repository.role_repository import (
+from modules.system.infrastructure.role_repository import (
     RoleRepository,
-    RoleMenuRepository,
-    RoleDeptRepository,
 )
-from module_admin.repository.dept_repository import DeptRepository
-from module_admin.repository.menu_repository import MenuRepository
-from module_admin.repository.config_repository import ConfigRepository
-from module_admin.repository.post_repository import PostRepository
-from module_admin.repository.notice_repository import NoticeRepository
-from module_admin.repository.dict_repository import DictTypeRepository, DictDataRepository
-from module_admin.repository.log_repository import OperLogRepository, LoginLogRepository
-from module_admin.repository.audit_log_repository import AuditLogRepository
-from module_admin.repository.job_repository import JobRepository, JobLogRepository
-from module_admin.repository.project_repository import ProjectRepository
-from module_admin.repository.project_version_repository import ProjectVersionRepository
-from module_admin.repository.project_topology_repository import ProjectTopologyRepository
+from modules.system.infrastructure.role_dept_repository import RoleDeptRepository
+from modules.system.infrastructure.role_menu_repository import RoleMenuRepository
+from modules.system.infrastructure.user_post_repository import UserPostRepository
+from modules.system.infrastructure.user_role_repository import UserRoleRepository
+from modules.system.infrastructure.dept_repository import DeptRepository
+from modules.system.infrastructure.menu_repository import MenuRepository
+from modules.system.infrastructure.config_repository import ConfigRepository
+from modules.system.infrastructure.post_repository import PostRepository
+from modules.system.infrastructure.notice_repository import NoticeRepository
+from modules.system.infrastructure.dict_repository import DictTypeRepository, DictDataRepository
+from modules.system.infrastructure.common_repository import CommonRepository
+from modules.system.infrastructure.log_repository import OperLogRepository, LoginLogRepository
+from modules.system.infrastructure.audit_log_repository import AuditLogRepository
+from modules.scheduler.infrastructure.job_repository import JobRepository, JobLogRepository
+from modules.project.infrastructure.project_repository import ProjectRepository
+from modules.project.infrastructure.project_version_repository import ProjectVersionRepository
+from modules.project.infrastructure.project_topology_repository import ProjectTopologyRepository
 from module_admin.repository.protocol_repository import ProtocolRepository
 from module_admin.repository.device_repository import DeviceRepository, DeviceInterfaceRepository
 from module_admin.repository.device_category_repository import DeviceCategoryRepository
@@ -80,7 +81,7 @@ from module_admin.repository.simulation_repository import (
     SimulationBandwidthRepository,
     SimulationAlarmRepository,
 )
-from module_admin.repository.login_repository import LoginRepository
+from modules.identity.infrastructure.login_repository import LoginRepository
 
 __all__ = [
     # 基础类
@@ -122,6 +123,7 @@ __all__ = [
     'NoticeRepository',
     'DictTypeRepository',
     'DictDataRepository',
+    'CommonRepository',
     'OperLogRepository',
     'LoginLogRepository',
     'AuditLogRepository',

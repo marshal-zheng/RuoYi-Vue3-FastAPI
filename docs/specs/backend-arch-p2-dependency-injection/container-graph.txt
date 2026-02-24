@@ -1,0 +1,33 @@
+AppContainer
+- infrastructure: redis, scheduler
+- shared: request_session_factory, task_session_factory
+- service_provider: audit_log_service
+- service_provider: cache_service
+- service_provider: captcha_service
+- service_provider: common_service
+- service_provider: config_service
+- service_provider: dept_service
+- service_provider: device_category_service
+- service_provider: device_service
+- service_provider: dict_data_service
+- service_provider: dict_type_service
+- service_provider: event_trigger_service
+- service_provider: gen_table_column_service
+- service_provider: gen_table_service
+- service_provider: job_log_service
+- service_provider: job_service
+- service_provider: login_log_service
+- service_provider: login_service
+- service_provider: menu_service
+- service_provider: notice_service
+- service_provider: online_service
+- service_provider: operation_log_service
+- service_provider: post_service
+- service_provider: project_service
+- service_provider: project_topology_service
+- service_provider: project_version_service
+- service_provider: protocol_service
+- service_provider: role_service
+- service_provider: server_service
+- service_provider: simulation_service
+- service_provider: user_service

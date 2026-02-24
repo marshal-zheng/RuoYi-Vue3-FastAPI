@@ -18,19 +18,19 @@ class TestUserUniquenessValidation:
     
     def test_username_uniqueness_check_exists(self):
         """验证用户名唯一性检查方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'check_user_name_unique_services')
     
     def test_phone_uniqueness_check_exists(self):
         """验证手机号唯一性检查方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'check_phonenumber_unique_services')
     
     def test_email_uniqueness_check_exists(self):
         """验证邮箱唯一性检查方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'check_email_unique_services')
     
@@ -51,19 +51,19 @@ class TestRoleAssignmentValidation:
     
     def test_role_name_uniqueness_check_exists(self):
         """验证角色名称唯一性检查方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'check_role_name_unique_services')
     
     def test_role_key_uniqueness_check_exists(self):
         """验证角色权限字符唯一性检查方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'check_role_key_unique_services')
     
     def test_role_allowed_check_exists(self):
         """验证角色操作权限检查方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'check_role_allowed_services')
     
@@ -77,19 +77,26 @@ class TestRoleAssignmentValidation:
         - 不能禁用admin角色
         
         实现：check_role_allowed_services 检查 role.admin 标志
-        如果是admin角色，抛出 ServiceException
+        如果是admin角色，抛出 PermissionException
         """
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         from module_admin.entity.vo.role_vo import RoleModel
-        from exceptions.exception import ServiceException
+        from exceptions.exception import PermissionException
         
         # 创建admin角色对象
         admin_role = RoleModel(roleId=1, roleName='admin', roleKey='admin', admin=True)
-        
+
         # 验证会抛出异常
-        with pytest.raises(ServiceException) as exc_info:
+        with pytest.raises(PermissionException) as exc_info:
             import asyncio
-            asyncio.run(RoleService.check_role_allowed_services(admin_role))
+            service = RoleService(
+                role_repo=None,
+                role_menu_repo=None,
+                role_dept_repo=None,
+                user_repo=None,
+                query_db=None,
+            )
+            asyncio.run(service.check_role_allowed_services(admin_role))
         
         assert '超级管理员' in str(exc_info.value)
 
@@ -99,19 +106,19 @@ class TestMenuHierarchyValidation:
     
     def test_menu_name_uniqueness_check_exists(self):
         """验证菜单名称唯一性检查方法存在"""
-        from module_admin.service.menu_service import MenuService
+        from modules.system.application.services.menu_service import MenuService
         
         assert hasattr(MenuService, 'check_menu_name_unique_services')
     
     def test_menu_tree_builder_exists(self):
         """验证菜单树构建方法存在"""
-        from module_admin.service.menu_service import MenuService
+        from modules.system.application.services.menu_service import MenuService
         
         assert hasattr(MenuService, 'list_to_tree')
     
     def test_menu_tree_structure_is_valid(self):
         """验证菜单树结构正确"""
-        from module_admin.service.menu_service import MenuService
+        from modules.system.application.services.menu_service import MenuService
         
         # 模拟菜单数据
         class MockMenu:
@@ -155,13 +162,13 @@ class TestDepartmentTreeIntegrity:
     
     def test_dept_service_exists(self):
         """验证部门服务存在"""
-        from module_admin.service.dept_service import DeptService
+        from modules.system.application.services.dept_service import DeptService
         
         assert DeptService is not None
     
     def test_dept_data_scope_check_exists(self):
         """验证部门数据权限检查方法存在"""
-        from module_admin.service.dept_service import DeptService
+        from modules.system.application.services.dept_service import DeptService
         
         assert hasattr(DeptService, 'check_dept_data_scope_services')
     
@@ -183,19 +190,19 @@ class TestConfigurationValidation:
     
     def test_config_service_exists(self):
         """验证配置服务存在"""
-        from module_admin.service.config_service import ConfigService
+        from modules.system.application.services.config_service import ConfigService
         
         assert ConfigService is not None
     
     def test_config_key_uniqueness_check_exists(self):
         """验证配置键唯一性检查方法存在"""
-        from module_admin.service.config_service import ConfigService
+        from modules.system.application.services.config_service import ConfigService
         
         assert hasattr(ConfigService, 'check_config_key_unique_services')
     
     def test_config_cache_methods_exist(self):
         """验证配置缓存方法存在"""
-        from module_admin.service.config_service import ConfigService
+        from modules.system.application.services.config_service import ConfigService
         
         # 验证缓存相关方法
         assert hasattr(ConfigService, 'query_config_list_from_cache_services')
@@ -207,13 +214,13 @@ class TestDataScopeValidation:
     
     def test_user_data_scope_check_exists(self):
         """验证用户数据权限检查方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'check_user_data_scope_services')
     
     def test_role_data_scope_check_exists(self):
         """验证角色数据权限检查方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'check_role_data_scope_services')
     
@@ -241,7 +248,7 @@ class TestTransactionIntegrity:
     
     def test_user_add_uses_transaction(self):
         """验证用户添加使用事务"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         import inspect
         
         # 检查方法是否使用了transactional装饰器
@@ -251,7 +258,7 @@ class TestTransactionIntegrity:
     
     def test_role_add_uses_transaction(self):
         """验证角色添加使用事务"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         method = RoleService.add_role_services
         assert method is not None
@@ -278,13 +285,13 @@ class TestSoftDeleteIntegrity:
     
     def test_user_soft_delete_exists(self):
         """验证用户软删除方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'delete_user_services')
     
     def test_role_soft_delete_exists(self):
         """验证角色软删除方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'delete_role_services')
     
@@ -310,19 +317,19 @@ class TestImportExportValidation:
     
     def test_user_import_template_exists(self):
         """验证用户导入模板方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'get_user_import_template_services')
     
     def test_user_export_exists(self):
         """验证用户导出方法存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'export_user_list_services')
     
     def test_role_export_exists(self):
         """验证角色导出方法存在"""
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'export_role_list_services')
     
@@ -362,7 +369,7 @@ class TestPasswordSecurityValidation:
         - 比较新旧密码
         - 使用PwdUtil.get_password_hash加密
         """
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         assert hasattr(UserService, 'reset_user_services')
     
@@ -398,7 +405,7 @@ class TestRelationshipConstraints:
         - 调用role_repo.count_users()
         - 如果count > 0，抛出异常
         """
-        from module_admin.service.role_service import RoleService
+        from modules.system.application.services.role_service import RoleService
         
         assert hasattr(RoleService, 'delete_role_services')
     
@@ -415,7 +422,7 @@ class TestRelationshipConstraints:
         - 调用menu_repo.count_children()
         - 如果count > 0，抛出警告
         """
-        from module_admin.service.menu_service import MenuService
+        from modules.system.application.services.menu_service import MenuService
         
         assert hasattr(MenuService, 'delete_menu_services')
     

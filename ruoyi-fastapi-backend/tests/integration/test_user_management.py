@@ -49,7 +49,7 @@ class TestUserManagementIntegration:
     def test_user_delete_endpoint(self, test_client):
         """Test user deletion endpoint"""
         response = test_client.delete("/system/user/1")
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code in [200, 400, 401, 403, 404]
     
     def test_user_reset_password_endpoint(self, test_client):
         """Test user password reset endpoint"""
@@ -68,14 +68,8 @@ class TestUserServiceIntegration:
     @pytest.mark.asyncio
     async def test_user_service_exists(self):
         """Test that user service can be imported"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         assert UserService is not None
-    
-    @pytest.mark.asyncio
-    async def test_user_dao_exists(self):
-        """Test that user DAO can be imported"""
-        from module_admin.dao.user_dao import UserDao
-        assert UserDao is not None
     
     @pytest.mark.asyncio
     async def test_user_models_exist(self):

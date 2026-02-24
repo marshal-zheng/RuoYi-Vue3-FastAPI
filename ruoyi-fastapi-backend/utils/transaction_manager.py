@@ -13,7 +13,7 @@ from contextlib import asynccontextmanager
 from typing import Optional, Callable, Any
 from functools import wraps
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import event
+from sqlalchemy import event, text
 from utils.log_util import logger
 import asyncio
 import time
@@ -47,7 +47,7 @@ class TransactionManager:
         self,
         isolation_level: Optional[str] = None,
         timeout: Optional[float] = None,
-        savepoint: bool = False
+        savepoint: bool = True
     ):
         """
         事务上下文管理器
@@ -73,38 +73,65 @@ class TransactionManager:
         already_in_transaction = self.db.in_transaction()
         
         if already_in_transaction:
-            # 已有事务：使用 savepoint 或直接执行（不开启新事务）
             if savepoint:
+                # 已有事务默认开启 savepoint，保证内层异常可回滚且不污染外层事务。
                 async with self.db.begin_nested() as nested:
                     logger.debug(f"Transaction {transaction_id}: Started nested transaction (savepoint)")
                     try:
-                        yield nested
-                        logger.debug(f"Transaction {transaction_id}: Nested transaction committed")
+                        if timeout:
+                            async with asyncio.timeout(timeout):
+                                yield nested
+                        else:
+                            yield nested
+                        duration = time.time() - self._transaction_start_time
+                        logger.debug(
+                            f"Transaction {transaction_id}: Nested transaction committed "
+                            f"(duration: {duration:.3f}s)"
+                        )
+                    except asyncio.TimeoutError:
+                        duration = time.time() - self._transaction_start_time
+                        logger.error(f"Transaction {transaction_id}: Timeout after {duration:.3f}s")
+                        raise
                     except Exception as e:
-                        logger.error(f"Transaction {transaction_id}: Nested transaction rolled back - {e}")
+                        duration = time.time() - self._transaction_start_time
+                        logger.error(
+                            f"Transaction {transaction_id}: Nested transaction rolled back "
+                            f"(duration: {duration:.3f}s) - {e}"
+                        )
                         raise
             else:
-                # 已有事务且不需要 savepoint，直接使用现有事务
                 logger.debug(f"Transaction {transaction_id}: Joining existing transaction")
                 try:
-                    yield None
+                    if timeout:
+                        async with asyncio.timeout(timeout):
+                            yield None
+                    else:
+                        yield None
                     duration = time.time() - self._transaction_start_time
-                    logger.debug(f"Transaction {transaction_id}: Operation completed (duration: {duration:.3f}s)")
+                    logger.debug(
+                        f"Transaction {transaction_id}: Joined transaction completed "
+                        f"(duration: {duration:.3f}s)"
+                    )
+                except asyncio.TimeoutError:
+                    duration = time.time() - self._transaction_start_time
+                    logger.error(f"Transaction {transaction_id}: Timeout after {duration:.3f}s")
+                    raise
                 except Exception as e:
                     duration = time.time() - self._transaction_start_time
-                    logger.error(f"Transaction {transaction_id}: Operation failed (duration: {duration:.3f}s) - {e}")
+                    logger.error(
+                        f"Transaction {transaction_id}: Joined transaction failed "
+                        f"(duration: {duration:.3f}s) - {e}"
+                    )
                     raise
         else:
             # 无事务：开启新事务
             async with self.db.begin() as trans:
                 logger.debug(f"Transaction {transaction_id}: Started transaction")
                 try:
-                    # 超时控制
+                    # 超时控制：包裹调用方在 with 代码块内的执行
                     if timeout:
-                        await asyncio.wait_for(
-                            self._execute_with_transaction(trans),
-                            timeout=timeout
-                        )
+                        async with asyncio.timeout(timeout):
+                            yield trans
                     else:
                         yield trans
                     
@@ -127,9 +154,25 @@ class TransactionManager:
     
     async def _set_isolation_level(self, level: str):
         """设置事务隔离级别"""
-        # MySQL
-        await self.db.execute(f"SET TRANSACTION ISOLATION LEVEL {level}")
-        logger.debug(f"Set transaction isolation level to {level}")
+        normalized_level = (level or "").strip().upper()
+        allowed_levels = {
+            TransactionIsolationLevel.READ_UNCOMMITTED,
+            TransactionIsolationLevel.READ_COMMITTED,
+            TransactionIsolationLevel.REPEATABLE_READ,
+            TransactionIsolationLevel.SERIALIZABLE,
+        }
+        if normalized_level not in allowed_levels:
+            raise ValueError(f"Unsupported transaction isolation level: {level}")
+
+        bind = self.db.get_bind()
+        dialect_name = getattr(getattr(bind, "dialect", None), "name", "").lower()
+        # SQLite 不支持 SET TRANSACTION ISOLATION LEVEL 语句，测试环境下跳过。
+        if dialect_name == "sqlite":
+            logger.debug(f"Skip setting isolation level for sqlite: {normalized_level}")
+            return
+
+        await self.db.execute(text(f"SET TRANSACTION ISOLATION LEVEL {normalized_level}"))
+        logger.debug(f"Set transaction isolation level to {normalized_level}")
     
     @staticmethod
     async def retry_on_deadlock(
@@ -242,6 +285,15 @@ def transactional(
                 if isinstance(arg, AsyncSession):
                     db = arg
                     break
+
+            # 支持实例化 service 的构造器注入场景（self.query_db / self.db）
+            if db is None and args:
+                owner = args[0]
+                for attr in ('query_db', 'db'):
+                    candidate = getattr(owner, attr, None)
+                    if isinstance(candidate, AsyncSession):
+                        db = candidate
+                        break
             
             if db is None:
                 # 尝试从 kwargs 中查找

@@ -24,7 +24,9 @@ Skills are reusable reference guides for techniques, patterns, or tools. They he
 skills/
   skill-name/
     SKILL.md              # Main reference (required)
-    supporting-file.*     # Only if needed
+    reference/            # Optional deep guidance and long docs
+    examples/             # Optional worked examples
+    scripts/              # Optional executable helpers
 ```
 
 Personal skills: `~/.cursor/skills/`
@@ -79,6 +81,16 @@ description: Use when implementing any feature or bugfix, before writing impleme
 - Use cross-references instead of repeating content
 - One excellent example beats many mediocre ones
 
+## Supplemental Files
+
+Use these only when needed:
+- `reference/anthropic-best-practices.md` for broader authoring and structure guidance
+- `reference/testing-skills-with-subagents.md` for pressure testing and loophole-closing workflow
+- `reference/persuasion-principles.md` for pressure-design rationale
+- `reference/graphviz-conventions.dot` for `dot` diagram style conventions
+- `examples/SKILL_MD_TESTING.md` for a full worked testing campaign example
+- `scripts/render-graphs.js` to render `dot` blocks in a `SKILL.md` into SVG files
+
 ## Cross-Referencing Other Skills
 
 Use skill name only:
@@ -109,4 +121,4 @@ Use skill name only:
 - **Vague labels** — use semantic names (not helper1, step2)
 - **Verbose descriptions** — keep descriptions about when, not how
 
-See `anthropic-best-practices.md` for additional guidance.
+See `reference/anthropic-best-practices.md` for additional guidance.

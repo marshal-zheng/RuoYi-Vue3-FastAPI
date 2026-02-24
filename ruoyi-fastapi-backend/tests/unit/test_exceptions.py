@@ -113,7 +113,7 @@ class TestBusinessException:
     def test_business_exception_default_developer_message(self):
         """测试业务异常默认开发者消息（与用户消息相同）"""
         exc = BusinessException(
-            message="用户名已存在",
+            user_message="用户名已存在",
             error_code=ErrorCode.USER_ALREADY_EXISTS,
             http_status=409
         )
@@ -126,7 +126,7 @@ class TestBusinessException:
     def test_business_exception_custom_developer_message(self):
         """测试业务异常自定义开发者消息"""
         exc = BusinessException(
-            message="用户名已存在",
+            user_message="用户名已存在",
             error_code=ErrorCode.USER_ALREADY_EXISTS,
             http_status=409,
             developer_message="User with username='admin' already exists"

@@ -1,0 +1,13 @@
+{
+  "summary": {
+    "total_classes": 63,
+    "covered_classes": 63,
+    "missing_classes": 0,
+    "coverage_percent": 100.0
+  },
+  "categories": {
+    "repository": 33,
+    "service": 30
+  },
+  "missing": []
+}

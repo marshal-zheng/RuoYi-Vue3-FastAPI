@@ -1,4 +1,5 @@
 import json
+import asyncio
 from apscheduler.events import EVENT_ALL
 from apscheduler.executors.asyncio import AsyncIOExecutor
 from apscheduler.executors.pool import ProcessPoolExecutor, ThreadPoolExecutor
@@ -14,13 +15,12 @@ from apscheduler.triggers.date import DateTrigger
 from asyncio import iscoroutinefunction
 from datetime import datetime, timedelta
 from sqlalchemy.engine import create_engine
-from sqlalchemy.orm import sessionmaker
 from typing import Union
 from config.database import AsyncSessionLocal, quote_plus
 from config.env import DataBaseConfig, RedisConfig
 from module_admin.entity.vo.job_vo import JobLogModel, JobModel
-from module_admin.repository import JobRepository
-from module_admin.service.job_log_service import JobLogService
+from modules.scheduler.infrastructure.job_repository import JobLogRepository, JobRepository
+from modules.scheduler.application.job_log_service import JobLogService
 from config.job_registry import JobFunctionRegistry
 from utils.log_util import logger
 import module_task  # noqa: F401
@@ -40,7 +40,7 @@ class MyCronTrigger(CronTrigger):
         if '?' in values[3]:
             day = None
         elif 'L' in values[5]:
-            day = f"last {values[5].replace('L', '')}"
+            day = f'last {values[5].replace("L", "")}'
         elif 'W' in values[3]:
             day = cls.__find_recent_workday(int(values[3].split('W')[0]))
         else:
@@ -102,7 +102,6 @@ engine = create_engine(
     pool_recycle=DataBaseConfig.db_pool_recycle,
     pool_timeout=DataBaseConfig.db_pool_timeout,
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 job_stores = {
     'default': MemoryJobStore(),
     'sqlalchemy': SQLAlchemyJobStore(url=SQLALCHEMY_DATABASE_URL, engine=engine),
@@ -116,13 +115,13 @@ job_stores = {
         )
     ),
 }
-_is_pytest = "pytest" in sys.modules or os.getenv("PYTEST_CURRENT_TEST") is not None
+_is_pytest = 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
 executors = {'default': AsyncIOExecutor()}
 if not _is_pytest:
     try:
         executors['processpool'] = ProcessPoolExecutor(5)
     except PermissionError:
-        logger.warning("ProcessPoolExecutor unavailable; falling back to ThreadPoolExecutor")
+        logger.warning('ProcessPoolExecutor unavailable; falling back to ThreadPoolExecutor')
         executors['processpool'] = ThreadPoolExecutor(5)
 job_defaults = {'coalesce': False, 'max_instance': 1}
 scheduler = AsyncIOScheduler()
@@ -186,9 +185,9 @@ class SchedulerUtil:
         try:
             job_func = JobFunctionRegistry.get(job_info.invoke_target)
         except ValueError as e:
-            logger.error(f"Failed to add job: {e}")
+            logger.error(f'Failed to add job: {e}')
             raise
-        
+
         job_executor = job_info.job_executor
         if iscoroutinefunction(job_func):
             job_executor = 'default'
@@ -218,9 +217,9 @@ class SchedulerUtil:
         try:
             job_func = JobFunctionRegistry.get(job_info.invoke_target)
         except ValueError as e:
-            logger.error(f"Failed to execute job: {e}")
+            logger.error(f'Failed to execute job: {e}')
             raise
-        
+
         job_executor = job_info.job_executor
         if iscoroutinefunction(job_func):
             job_executor = 'default'
@@ -283,7 +282,7 @@ class SchedulerUtil:
                 # 获取任务触发器
                 job_trigger = str(query_job_info.get('trigger'))
                 # 构造日志消息
-                job_message = f"事件类型: {event_type}, 任务ID: {job_id}, 任务名称: {job_name}, 执行于{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+                job_message = f'事件类型: {event_type}, 任务ID: {job_id}, 任务名称: {job_name}, 执行于{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
                 job_log = JobLogModel(
                     jobName=job_name,
                     jobGroup=job_group,
@@ -297,6 +296,26 @@ class SchedulerUtil:
                     exceptionInfo=exception_info,
                     createTime=datetime.now(),
                 )
-                session = SessionLocal()
-                JobLogService.add_job_log_services(session, job_log)
-                session.close()
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    logger.warning('scheduler_event_listener 未检测到运行中的事件循环，跳过任务日志写入')
+                    return
+                task = loop.create_task(cls._persist_job_log(job_log))
+                task.add_done_callback(cls._log_async_task_exception)
+
+    @classmethod
+    async def _persist_job_log(cls, job_log: JobLogModel):
+        async with AsyncSessionLocal() as session:
+            job_log_service = JobLogService(
+                job_log_repo=JobLogRepository(session),
+                query_db=session,
+            )
+            await job_log_service.add_job_log_services(job_log)
+
+    @staticmethod
+    def _log_async_task_exception(task: asyncio.Task):
+        try:
+            task.result()
+        except Exception as exc:  # pragma: no cover - defensive branch
+            logger.error(f'scheduler_event_listener 任务日志写入失败: {exc}')

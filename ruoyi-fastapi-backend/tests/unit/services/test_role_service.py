@@ -1,252 +1,155 @@
 """
-Unit tests for role service.
+Unit tests for RoleService instance-method paths.
 """
 
+from types import SimpleNamespace
+from unittest.mock import AsyncMock
+
 import pytest
-from datetime import datetime
-from unittest.mock import AsyncMock, MagicMock
 
-from module_admin.service.role_service import RoleService
-from module_admin.entity.do.role_do import RoleDO
-from module_admin.entity.vo.role_vo import RoleQueryModel, AddRoleModel, EditRoleModel
-
-
-@pytest.fixture
-def mock_role_dao():
-    """Create mock role DAO."""
-    dao = MagicMock()
-    dao.get_role_by_id = AsyncMock()
-    dao.get_role_list = AsyncMock()
-    dao.add_role = AsyncMock()
-    dao.edit_role = AsyncMock()
-    dao.delete_role = AsyncMock()
-    dao.count_roles = AsyncMock()
-    return dao
+from config.constant import CommonConstant
+from exceptions.exception import PermissionException
+from module_admin.entity.vo.role_vo import RoleModel
+from modules.system.application.services.role_service import RoleService
 
 
-@pytest.fixture
-def role_service(mock_role_dao):
-    """Create role service with mocked dependencies."""
-    service = RoleService()
-    service.role_dao = mock_role_dao
-    return service
+class FakeCache:
+    def __init__(self):
+        self.key_prefix = 'cache'
+        self._store = {}
+        self.deleted_patterns = []
+        self.get = AsyncMock(side_effect=self._get_impl)
+        self.set = AsyncMock(side_effect=self._set_impl)
+        self.delete_pattern = AsyncMock(side_effect=self._delete_pattern_impl)
+
+    def build_key(self, prefix: str, payload: dict) -> str:
+        return f'{prefix}:{payload}'
+
+    async def _get_impl(self, key):
+        return self._store.get(key)
+
+    async def _set_impl(self, key, value, ttl):
+        self._store[key] = value
+
+    async def _delete_pattern_impl(self, pattern):
+        self.deleted_patterns.append(pattern)
 
 
-@pytest.fixture
-def sample_admin_role():
-    """Create sample admin role."""
-    return RoleDO(
-        role_id=1,
-        role_name='超级管理员',
-        role_key='admin',
-        role_sort=1,
-        data_scope='1',
-        status='0',
-        del_flag='0',
-        create_time=datetime.now(),
+def build_service(role_repo=None):
+    return RoleService(
+        role_repo=role_repo or AsyncMock(),
+        role_menu_repo=AsyncMock(),
+        role_dept_repo=AsyncMock(),
+        user_repo=AsyncMock(),
+        query_db=AsyncMock(),
     )
 
 
-@pytest.fixture
-def sample_common_role():
-    """Create sample common role."""
-    return RoleDO(
-        role_id=2,
-        role_name='普通角色',
-        role_key='common',
-        role_sort=2,
-        data_scope='2',
-        status='0',
-        del_flag='0',
-        create_time=datetime.now(),
-    )
+class TestRoleServiceAccessControl:
+    @pytest.mark.asyncio
+    async def test_check_role_allowed_rejects_admin(self):
+        admin_role = RoleModel(role_id=1, role_name='admin', role_key='admin')
+        service = build_service()
 
-
-class TestRoleServiceQuery:
-    """Test suite for role query operations."""
+        with pytest.raises(PermissionException):
+            await service.check_role_allowed_services(admin_role)
 
     @pytest.mark.asyncio
-    async def test_get_role_by_id_success(self, role_service, mock_role_dao, sample_admin_role):
-        """Test getting role by ID."""
-        mock_role_dao.get_role_by_id.return_value = sample_admin_role
+    async def test_check_role_allowed_passes_non_admin(self):
+        role = RoleModel(role_id=2, role_name='common', role_key='common')
+        service = build_service()
 
-        result = await role_service.get_role_by_id(1)
+        result = await service.check_role_allowed_services(role)
 
-        assert result is not None
-        assert result.role_key == 'admin'
-        assert result.role_name == '超级管理员'
+        assert result.is_success is True
+        assert result.message == '校验通过'
+
+
+class TestRoleServiceUniquenessChecks:
+    @pytest.mark.asyncio
+    async def test_check_role_name_unique_returns_not_unique(self):
+        role_repo = AsyncMock()
+        role_repo.find_by_name.return_value = SimpleNamespace(role_id=2)
+        service = build_service(role_repo=role_repo)
+        role = RoleModel(role_id=1, role_name='ops')
+
+        result = await service.check_role_name_unique_services(role)
+
+        assert result is CommonConstant.NOT_UNIQUE
 
     @pytest.mark.asyncio
-    async def test_get_role_list_with_filters(self, role_service, mock_role_dao, sample_admin_role):
-        """Test getting role list with filters."""
-        mock_role_dao.get_role_list.return_value = [sample_admin_role]
-        mock_role_dao.count_roles.return_value = 1
+    async def test_check_role_key_unique_returns_unique_when_same_id(self):
+        role_repo = AsyncMock()
+        role_repo.find_by_key.return_value = SimpleNamespace(role_id=3)
+        service = build_service(role_repo=role_repo)
+        role = RoleModel(role_id=3, role_key='ops')
 
-        query = RoleQueryModel(role_name='管理员', status='0')
-        result = await role_service.get_role_list(query)
+        result = await service.check_role_key_unique_services(role)
 
-        assert result['total'] == 1
-        assert len(result['rows']) == 1
-
-
-class TestRoleServiceCreate:
-    """Test suite for role creation."""
-
-    @pytest.mark.asyncio
-    async def test_add_role_success(self, role_service, mock_role_dao):
-        """Test adding new role."""
-        mock_role_dao.add_role.return_value = 1
-
-        role_data = AddRoleModel(
-            role_name='测试角色',
-            role_key='test',
-            role_sort=3,
-            data_scope='2',
-            status='0',
-        )
-
-        result = await role_service.add_role(role_data)
-
-        assert result == 1
-        mock_role_dao.add_role.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_add_role_duplicate_key(self, role_service, mock_role_dao, sample_admin_role):
-        """Test adding role with duplicate key."""
-        mock_role_dao.get_role_by_key = AsyncMock(return_value=sample_admin_role)
-
-        role_data = AddRoleModel(
-            role_name='测试角色',
-            role_key='admin',
-            role_sort=3,
-        )
-
-        with pytest.raises(ValueError, match='角色权限已存在'):
-            await role_service.add_role(role_data)
-
-    @pytest.mark.asyncio
-    async def test_add_role_validates_data_scope(self, role_service):
-        """Test role creation validates data scope."""
-        role_data = AddRoleModel(
-            role_name='测试角色',
-            role_key='test',
-            data_scope='9',  # Invalid
-        )
-
-        with pytest.raises(ValueError, match='数据范围无效'):
-            await role_service.add_role(role_data)
-
-
-class TestRoleServiceUpdate:
-    """Test suite for role update operations."""
-
-    @pytest.mark.asyncio
-    async def test_edit_role_success(self, role_service, mock_role_dao, sample_common_role):
-        """Test editing role."""
-        mock_role_dao.get_role_by_id.return_value = sample_common_role
-        mock_role_dao.edit_role.return_value = True
-
-        role_data = EditRoleModel(
-            role_id=2,
-            role_name='更新角色',
-            status='0',
-        )
-
-        result = await role_service.edit_role(role_data)
-
-        assert result is True
-
-    @pytest.mark.asyncio
-    async def test_edit_admin_role_forbidden(self, role_service, mock_role_dao, sample_admin_role):
-        """Test that admin role cannot be edited."""
-        mock_role_dao.get_role_by_id.return_value = sample_admin_role
-
-        role_data = EditRoleModel(role_id=1, role_name='修改管理员')
-
-        with pytest.raises(ValueError, match='不能修改超级管理员'):
-            await role_service.edit_role(role_data)
-
-
-class TestRoleServiceDelete:
-    """Test suite for role deletion."""
-
-    @pytest.mark.asyncio
-    async def test_delete_role_success(self, role_service, mock_role_dao, sample_common_role):
-        """Test deleting role."""
-        mock_role_dao.get_role_by_id.return_value = sample_common_role
-        mock_role_dao.delete_role.return_value = True
-
-        result = await role_service.delete_role(2)
-
-        assert result is True
-
-    @pytest.mark.asyncio
-    async def test_delete_admin_role_forbidden(self, role_service, mock_role_dao, sample_admin_role):
-        """Test that admin role cannot be deleted."""
-        mock_role_dao.get_role_by_id.return_value = sample_admin_role
-
-        with pytest.raises(ValueError, match='不能删除超级管理员'):
-            await role_service.delete_role(1)
-
-
-class TestRoleServicePermissions:
-    """Test suite for role permission management."""
-
-    @pytest.mark.asyncio
-    async def test_assign_menu_permissions(self, role_service, mock_role_dao):
-        """Test assigning menu permissions to role."""
-        mock_role_dao.assign_menus = AsyncMock(return_value=True)
-
-        menu_ids = [1, 2, 3, 4, 5]
-        result = await role_service.assign_menu_permissions(2, menu_ids)
-
-        assert result is True
-        mock_role_dao.assign_menus.assert_called_once_with(2, menu_ids)
-
-    @pytest.mark.asyncio
-    async def test_get_role_menu_permissions(self, role_service, mock_role_dao):
-        """Test getting role menu permissions."""
-        mock_role_dao.get_role_menus = AsyncMock(return_value=[1, 2, 3])
-
-        result = await role_service.get_role_menu_permissions(2)
-
-        assert result == [1, 2, 3]
-
-    @pytest.mark.asyncio
-    async def test_change_data_scope(self, role_service, mock_role_dao, sample_common_role):
-        """Test changing role data scope."""
-        mock_role_dao.get_role_by_id.return_value = sample_common_role
-        mock_role_dao.edit_role.return_value = True
-
-        result = await role_service.change_data_scope(2, '3', [1, 2])
-
-        assert result is True
+        assert result is CommonConstant.UNIQUE
 
 
 class TestRoleServiceDataScope:
-    """Test suite for data scope validation."""
+    @pytest.mark.asyncio
+    async def test_check_role_data_scope_raises_when_role_out_of_scope(self):
+        role_repo = AsyncMock()
 
-    def test_validate_data_scope_all(self, role_service):
-        """Test data scope: all data."""
-        assert role_service._validate_data_scope('1') is True
+        async def _paginate_with_filters(**kwargs):
+            if kwargs.get('role_id') == 1:
+                return SimpleNamespace(rows=[{'role_id': 1}])
+            return SimpleNamespace(rows=[])
 
-    def test_validate_data_scope_custom(self, role_service):
-        """Test data scope: custom."""
-        assert role_service._validate_data_scope('2') is True
+        role_repo.paginate_with_filters.side_effect = _paginate_with_filters
+        service = build_service(role_repo=role_repo)
 
-    def test_validate_data_scope_dept(self, role_service):
-        """Test data scope: department."""
-        assert role_service._validate_data_scope('3') is True
+        with pytest.raises(PermissionException):
+            await service.check_role_data_scope_services('1,2', '1=1')
 
-    def test_validate_data_scope_dept_and_below(self, role_service):
-        """Test data scope: department and below."""
-        assert role_service._validate_data_scope('4') is True
 
-    def test_validate_data_scope_self(self, role_service):
-        """Test data scope: self only."""
-        assert role_service._validate_data_scope('5') is True
+class TestRoleServiceCacheAndExport:
+    @pytest.mark.asyncio
+    async def test_role_detail_uses_cache_when_hit(self, monkeypatch):
+        cache = FakeCache()
+        key = cache.build_key('role:detail', {'role_id': 7})
+        cache._store[key] = {'roleId': 7, 'roleName': 'cached', 'roleKey': 'cached'}
 
-    def test_validate_data_scope_invalid(self, role_service):
-        """Test invalid data scope."""
-        with pytest.raises(ValueError):
-            role_service._validate_data_scope('9')
+        monkeypatch.setattr('modules.system.application.services.role_service.get_query_cache', lambda: cache)
+        service = build_service(role_repo=AsyncMock())
+
+        result = await service.role_detail_services(7)
+
+        assert result.role_id == 7
+        assert result.role_name == 'cached'
+
+    @pytest.mark.asyncio
+    async def test_invalidate_role_cache_deletes_expected_patterns(self, monkeypatch):
+        cache = FakeCache()
+        monkeypatch.setattr('modules.system.application.services.role_service.get_query_cache', lambda: cache)
+
+        await RoleService._invalidate_role_cache()
+
+        assert f'{cache.key_prefix}:role:*' in cache.deleted_patterns
+        assert f'{cache.key_prefix}:menu:role_tree:*' in cache.deleted_patterns
+        assert f'{cache.key_prefix}:menu:tree:*' in cache.deleted_patterns
+        assert f'{cache.key_prefix}:menu:list:*' in cache.deleted_patterns
+
+    @pytest.mark.asyncio
+    async def test_export_role_list_maps_status_before_export(self, monkeypatch):
+        captured = {}
+
+        def fake_export(rows, mapping):
+            captured['rows'] = rows
+            captured['mapping'] = mapping
+            return b'role-bytes'
+
+        monkeypatch.setattr('modules.system.application.services.role_service.ExcelUtil.export_list2excel', fake_export)
+        rows = [
+            {'roleId': 1, 'status': '0'},
+            {'roleId': 2, 'status': '1'},
+        ]
+
+        data = await RoleService.export_role_list_services(rows)
+
+        assert data == b'role-bytes'
+        assert captured['rows'][0]['status'] == '正常'
+        assert captured['rows'][1]['status'] == '停用'

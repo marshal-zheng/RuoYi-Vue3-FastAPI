@@ -58,14 +58,8 @@ class TestMenuServiceIntegration:
     @pytest.mark.asyncio
     async def test_menu_service_exists(self):
         """Test that menu service can be imported"""
-        from module_admin.service.menu_service import MenuService
+        from modules.system.application.services.menu_service import MenuService
         assert MenuService is not None
-    
-    @pytest.mark.asyncio
-    async def test_menu_dao_exists(self):
-        """Test that menu DAO can be imported"""
-        from module_admin.dao.menu_dao import MenuDao
-        assert MenuDao is not None
     
     @pytest.mark.asyncio
     async def test_menu_models_exist(self):

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from container.dependencies import service_provider
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
@@ -7,7 +8,7 @@ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.device_category_vo import DeviceCategoryQueryModel, DeviceCategoryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.device_category_service import DeviceCategoryService
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
@@ -27,8 +28,8 @@ async def get_device_category_list(
     end_time: str = None,
     page_num: int = 1,
     page_size: int = 10,
-    query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     获取设备分类列表
@@ -41,9 +42,7 @@ async def get_device_category_list(
         page_num=page_num,
         page_size=page_size
     )
-    result = await DeviceCategoryService.get_device_category_list_services(
-        query_db, query, current_user.user.user_name
-    )
+    result = await device_category_service.get_device_category_list_services(query, current_user.user.user_name)
     logger.info('获取设备分类列表成功')
     return ResponseUtil.success(rows=result['rows'], dict_content={'total': result['total']})
 
@@ -55,12 +54,12 @@ async def get_device_category_list(
 async def get_device_category_detail(
     request: Request,
     category_id: int,
-    query_db: AsyncSession = Depends(get_db),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     获取设备分类详情
     """
-    result = await DeviceCategoryService.device_category_detail_services(query_db, category_id)
+    result = await device_category_service.device_category_detail_services(category_id)
     logger.info(f'获取设备分类详情成功: {category_id}')
     return ResponseUtil.success(data=result)
 
@@ -75,13 +74,12 @@ async def add_device_category(
     category_data: DeviceCategoryModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     新增设备分类
     """
-    result = await DeviceCategoryService.add_device_category_services(
-        query_db, category_data, current_user.user.user_name
-    )
+    result = await device_category_service.add_device_category_services(category_data, current_user.user.user_name)
     logger.info('新增设备分类成功')
     return ResponseUtil.success(message=result.message)
 
@@ -96,13 +94,12 @@ async def update_device_category(
     category_data: DeviceCategoryModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     修改设备分类
     """
-    result = await DeviceCategoryService.edit_device_category_services(
-        query_db, category_data, current_user.user.user_name
-    )
+    result = await device_category_service.edit_device_category_services(category_data, current_user.user.user_name)
     logger.info('修改设备分类成功')
     return ResponseUtil.success(message=result.message)
 
@@ -116,11 +113,12 @@ async def delete_device_category(
     request: Request,
     category_ids: str,
     query_db: AsyncSession = Depends(get_db),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     删除设备分类
     """
-    result = await DeviceCategoryService.delete_device_category_services(query_db, category_ids)
+    result = await device_category_service.delete_device_category_services(category_ids)
     logger.info(f'删除设备分类成功: {category_ids}')
     return ResponseUtil.success(message=result.message)
 
@@ -131,12 +129,12 @@ async def delete_device_category(
 )
 async def get_device_category_options(
     request: Request,
-    query_db: AsyncSession = Depends(get_db),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     获取设备分类选项（用于下拉选择）
     """
-    result = await DeviceCategoryService.get_device_category_options_services(query_db)
+    result = await device_category_service.get_device_category_options_services()
     logger.info('获取设备分类选项成功')
     return ResponseUtil.success(data=result)
 
@@ -149,10 +147,10 @@ async def check_device_category_name_unique(
     request: Request,
     name: str,
     category_id: int = None,
-    query_db: AsyncSession = Depends(get_db),
+    device_category_service: DeviceCategoryService = Depends(service_provider('device_category_service')),
 ):
     """
     检查设备分类名称是否唯一
     """
-    result = await DeviceCategoryService.check_device_category_name_unique_services(query_db, name, category_id)
+    result = await device_category_service.check_device_category_name_unique_services(name, category_id)
     return ResponseUtil.success(data=result)

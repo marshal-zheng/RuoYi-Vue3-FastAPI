@@ -4,6 +4,7 @@
 测试全局异常处理器、HTTP状态码、RequestId追踪、双层消息设计
 """
 import pytest
+import uuid
 from httpx import AsyncClient
 from fastapi import status
 from unittest.mock import patch, AsyncMock
@@ -45,8 +46,11 @@ class TestRFC7807ErrorHandling:
     @pytest.mark.asyncio
     async def test_authentication_error_returns_401(self, async_client: AsyncClient):
         """测试认证错误返回 401 状态码"""
-        # 不带 token 访问需要认证的接口
-        response = await async_client.get("/system/user/list")
+        # 显式携带非法 token，触发认证错误
+        response = await async_client.get(
+            "/system/user/list",
+            headers={"Authorization": "Bearer invalid-token"},
+        )
         
         assert response.status_code == 401
         data = response.json()
@@ -58,40 +62,66 @@ class TestRFC7807ErrorHandling:
         assert "X-Request-Id" in response.headers
     
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="需要完整的用户权限设置，暂时跳过")
     async def test_authorization_error_returns_403(self, async_client: AsyncClient):
         """测试权限错误返回 403 状态码"""
-        pass
+        response = await async_client.put(
+            "/system/role/changeStatus",
+            json={"roleId": 1, "status": "0"},
+        )
+
+        assert response.status_code == 403
+        data = response.json()
+        assert data["status"] == 403
+        assert data["errorCode"] in (20004, 30009)
+        assert "requestId" in data
     
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="需要完整的用户权限设置，暂时跳过")
     async def test_resource_not_found_returns_404(self, async_client: AsyncClient):
         """测试资源不存在返回 404 状态码"""
-        pass
+        response = await async_client.get("/this-endpoint-does-not-exist")
+
+        assert response.status_code == 404
+        data = response.json()
+        assert data["status"] == 404
+        assert "requestId" in data
     
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="需要完整的用户权限设置，暂时跳过")
     async def test_resource_conflict_returns_409(self, async_client: AsyncClient):
         """测试资源冲突返回 409 状态码"""
-        pass
+        suffix = uuid.uuid4().hex[:8]
+        role_data = {
+            "roleName": f"Conflict Role {suffix}",
+            "roleKey": f"conflict_role_{suffix}",
+            "roleSort": 1,
+            "status": "0",
+        }
+
+        first_response = await async_client.post("/system/role", json=role_data)
+        assert first_response.status_code in (200, 201, 409)
+
+        second_response = await async_client.post("/system/role", json=role_data)
+        assert second_response.status_code == 409
+        data = second_response.json()
+        assert data["status"] == 409
+        assert "requestId" in data
     
     @pytest.mark.asyncio
     async def test_system_error_returns_500(self, async_client: AsyncClient):
         """测试系统错误返回 500 状态码"""
-        # 模拟系统错误 - 使用不需要认证的接口
-        with patch('module_admin.service.login_service.LoginService.login_services') as mock_login:
-            mock_login.side_effect = Exception("Database connection failed")
+        # 模拟系统错误
+        with patch(
+            'modules.system.api.user_controller.UserService.get_user_list_services',
+            new_callable=AsyncMock,
+        ) as mock_service:
+            mock_service.side_effect = Exception("Database connection failed")
             
-            response = await async_client.post(
-                "/login",
-                json={"username": "admin", "password": "admin123"}
-            )
+            response = await async_client.get("/system/user/list")
             
             assert response.status_code == 500
             data = response.json()
             
             assert data["status"] == 500
-            assert data["errorCode"] == 50001  # SYSTEM_ERROR
+            assert data["errorCode"] == 50000  # SYSTEM_ERROR
             assert "requestId" in data
             
             # 验证用户消息通用化（不暴露技术细节）
@@ -145,13 +175,13 @@ class TestDualLayerMessage:
         """测试系统错误不向用户暴露技术细节"""
         with patch('config.env.ErrorHandlingConfig.include_developer_message', False):
             # 模拟数据库错误
-            with patch('module_admin.service.login_service.LoginService.login_services') as mock_login:
-                mock_login.side_effect = Exception("SQL syntax error: SELECT * FROM users WHERE id='; DROP TABLE users;--")
+            with patch(
+                'modules.system.api.user_controller.UserService.get_user_list_services',
+                new_callable=AsyncMock,
+            ) as mock_service:
+                mock_service.side_effect = Exception("SQL syntax error: SELECT * FROM users WHERE id='; DROP TABLE users;--")
                 
-                response = await async_client.post(
-                    "/login",
-                    json={"username": "admin", "password": "admin123"}
-                )
+                response = await async_client.get("/system/user/list")
                 
                 assert response.status_code == 500
                 data = response.json()
@@ -167,15 +197,22 @@ class TestRequestIdTracking:
     """测试 RequestId 追踪"""
     
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="需要完整的用户权限设置，暂时跳过")
     async def test_request_id_in_success_response(self, async_client: AsyncClient):
         """测试成功响应包含 requestId"""
-        pass
+        response = await async_client.get("/health")
+
+        assert response.status_code == 200
+        data = response.json()
+        assert "requestId" in data
+        assert data["requestId"] == response.headers["X-Request-Id"]
     
     @pytest.mark.asyncio
     async def test_request_id_in_error_response(self, async_client: AsyncClient):
         """测试错误响应包含 requestId"""
-        response = await async_client.get("/system/user/list")  # 未认证
+        response = await async_client.get(
+            "/system/user/list",
+            headers={"Authorization": "Bearer invalid-token"},
+        )
         
         assert response.status_code == 401
         data = response.json()
@@ -217,16 +254,19 @@ class TestHTTPStatusCodes:
     """测试 HTTP 状态码正确性"""
     
     @pytest.mark.asyncio
-    @pytest.mark.skip(reason="需要完整的用户权限设置，暂时跳过")
     async def test_success_returns_2xx(self, async_client: AsyncClient):
         """测试成功操作返回 2xx 状态码"""
-        pass
+        response = await async_client.get("/health")
+        assert 200 <= response.status_code < 300
     
     @pytest.mark.asyncio
     async def test_client_errors_return_4xx(self, async_client: AsyncClient):
         """测试客户端错误返回 4xx 状态码"""
         # 401 未认证
-        response = await async_client.get("/system/user/list")
+        response = await async_client.get(
+            "/system/user/list",
+            headers={"Authorization": "Bearer invalid-token"},
+        )
         assert response.status_code == 401
         
         # 422 校验错误
@@ -239,12 +279,12 @@ class TestHTTPStatusCodes:
     @pytest.mark.asyncio
     async def test_server_errors_return_5xx(self, async_client: AsyncClient):
         """测试服务器错误返回 5xx 状态码"""
-        with patch('module_admin.service.login_service.LoginService.login_services') as mock_login:
-            mock_login.side_effect = Exception("Internal server error")
+        with patch(
+            'modules.system.api.user_controller.UserService.get_user_list_services',
+            new_callable=AsyncMock,
+        ) as mock_service:
+            mock_service.side_effect = Exception("Internal server error")
             
-            response = await async_client.post(
-                "/login",
-                json={"username": "admin", "password": "admin123"}
-            )
+            response = await async_client.get("/system/user/list")
             
             assert 500 <= response.status_code < 600

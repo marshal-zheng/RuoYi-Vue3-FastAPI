@@ -1,10 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [main, master, zhq-dev]
-  pull_request:
-    branches: [main, master]
+  # GitLab CI is the primary merge gate for this repository.
+  # Keep this workflow manual-only to avoid dual-gate drift.
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -90,6 +89,50 @@ jobs:
       
       - name: Run Ruff format check
         run: ruff format --check .
+
+  backend-protocol-check:
+    name: Backend Protocol Contract Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ruoyi-fastapi-backend/requirements*.txt
+
+      - name: Check DAO coupling imports
+        run: python scripts/check_no_dao_imports.py
+
+      - name: Check no new service classmethods
+        run: python scripts/check_no_new_service_classmethods.py
+
+      - name: Check no new service instantiations
+        run: python scripts/check_no_new_service_instantiations.py
+
+      - name: Check no new horizontal-layer files
+        run: python scripts/check_no_new_horizontal_layer_files.py
+
+      - name: Check module boundary imports
+        run: python scripts/check_module_boundary_imports.py
+
+      - name: Check protocol coverage
+        run: python scripts/check_protocol_coverage.py --format=json
+
+      - name: Check protocol signature sync
+        run: python scripts/check_protocol_updates.py
+
+      - name: Check CQRS controller cutover guardrail
+        run: python scripts/check_cqrs_controller_cutover.py
+
+      - name: Check resilience policy bindings
+        run: python scripts/check_resilience_policy_bindings.py
 
   backend-typecheck:
     name: Backend Type Check (mypy)

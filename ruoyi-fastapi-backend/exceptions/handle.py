@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request, status
-from fastapi.exceptions import HTTPException
+from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 from pydantic_validation_decorator import FieldValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 # 导入异常类
 from exceptions.exception import (
@@ -81,6 +82,33 @@ def handle_exception(app: FastAPI):
         )
     
     # Pydantic 校验错误处理器
+    @app.exception_handler(RequestValidationError)
+    async def request_validation_error_handler(request: Request, exc: RequestValidationError):
+        """处理 FastAPI 请求参数校验错误（422）"""
+        request_id = get_request_id()
+
+        errors = []
+        for error in exc.errors():
+            loc = [str(item) for item in error.get('loc', []) if item != 'body']
+            field = ".".join(loc) if loc else "unknown"
+            errors.append(
+                {
+                    "field": field,
+                    "message": error.get('msg', 'Validation failed'),
+                    "code": str(error.get('type', 'validation_error')).upper(),
+                }
+            )
+
+        developer_message = f"Request validation failed: {len(errors)} errors - {errors}"
+        logger.warning(f"[{request_id}] {developer_message}")
+
+        return ResponseUtil.validation_problem(
+            request=request,
+            errors=errors,
+            developer_message=developer_message,
+        )
+
+    # Pydantic 校验错误处理器
     @app.exception_handler(ValidationError)
     async def validation_error_handler(request: Request, exc: ValidationError):
         """处理 Pydantic 校验错误（422）"""
@@ -132,8 +160,8 @@ def handle_exception(app: FastAPI):
         )
     
     # HTTP 异常处理器
-    @app.exception_handler(HTTPException)
-    async def http_exception_handler(request: Request, exc: HTTPException):
+    @app.exception_handler(StarletteHTTPException)
+    async def http_exception_handler(request: Request, exc: StarletteHTTPException):
         """处理 FastAPI HTTPException"""
         request_id = get_request_id()
         

@@ -1,0 +1,31 @@
+{
+  "iterations": 50000,
+  "warmup": 2000,
+  "samples_us": {
+    "direct": {
+      "avg": 0.107,
+      "p95": 0.125,
+      "max": 12.666
+    },
+    "mediator_plain": {
+      "avg": 1.043,
+      "p95": 0.5,
+      "max": 8598.5
+    },
+    "mediator_with_pipeline": {
+      "avg": 2.272,
+      "p95": 2.0,
+      "max": 140.708
+    }
+  },
+  "overhead_p95_us": {
+    "mediator_plain_vs_direct": 0.375,
+    "mediator_pipeline_vs_direct": 1.875,
+    "mediator_pipeline_vs_plain": 1.5
+  },
+  "overhead_p95_pct": {
+    "mediator_plain_vs_direct": 300.0,
+    "mediator_pipeline_vs_direct": 1499.988,
+    "mediator_pipeline_vs_plain": 299.997
+  }
+}

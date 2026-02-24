@@ -15,6 +15,7 @@ import asyncio
 import os
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -60,7 +61,7 @@ class MigrationTester:
         """Create SQLAlchemy engine for schema inspection."""
         return create_engine(self.database_url)
     
-    def get_current_revision(self) -> str | None:
+    def get_current_revision(self) -> Optional[str]:
         """Get current database revision."""
         engine = self._create_engine()
         with engine.connect() as conn:

@@ -412,17 +412,3 @@ class TestTransactionEdgeCases:
             
             # 应该能够正常查询
             assert config is None or isinstance(config, ConfigDO)
-
-
-@pytest.fixture
-async def db_session():
-    """
-    数据库会话 fixture
-    """
-    from config.get_db import get_db
-    
-    async for session in get_db():
-        yield session
-        # 清理测试数据
-        await session.rollback()
-        break

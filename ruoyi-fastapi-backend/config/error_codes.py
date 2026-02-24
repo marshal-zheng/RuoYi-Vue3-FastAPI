@@ -14,6 +14,7 @@ class ErrorCode(IntEnum):
     REQUIRED_FIELD = 10002        # 必填字段缺失
     INVALID_FORMAT = 10003        # 格式不正确
     INVALID_VALUE = 10004         # 值不合法
+    INVALID_INPUT = 10005         # 输入参数不合法
     
     # ==================== 认证授权错误 (2xxxx) ====================
     UNAUTHORIZED = 20001          # 未认证
@@ -28,6 +29,12 @@ class ErrorCode(IntEnum):
     USER_DISABLED = 30003         # 用户已禁用
     PASSWORD_INCORRECT = 30004    # 密码错误
     USERNAME_INVALID = 30005      # 用户名不合法
+    USER_NAME_ALREADY_EXISTS = 30006  # 用户名已存在
+    USER_PHONE_ALREADY_EXISTS = 30007  # 手机号已存在
+    USER_EMAIL_ALREADY_EXISTS = 30008  # 邮箱已存在
+    ADMIN_USER_OPERATION_FORBIDDEN = 30009  # 不允许操作超级管理员
+    DATA_SCOPE_PERMISSION_DENIED = 30010  # 数据权限不足
+    INVALID_PASSWORD = 30011      # 无效密码
     
     # ==================== 业务错误 - 角色模块 (4xxxx) ====================
     ROLE_NOT_FOUND = 40001        # 角色不存在
@@ -61,6 +68,13 @@ class ErrorCode(IntEnum):
     
     # ==================== 业务错误 - 代码生成模块 (46xxx) ====================
     CODEGEN_OVERWRITE_DISABLED = 46001  # 代码生成覆盖被禁用
+
+    # ==================== 业务错误 - 通用资源模块 (47xxx) ====================
+    RESOURCE_NOT_FOUND = 47001    # 资源不存在
+    RESOURCE_CONFLICT = 47002     # 资源冲突
+    DATA_NOT_FOUND = 47003        # 数据不存在
+    DATA_ALREADY_EXISTS = 47004   # 数据已存在
+    OPERATION_NOT_ALLOWED = 47005  # 操作不允许
     
     # ==================== 系统错误 (5xxxx) ====================
     SYSTEM_ERROR = 50000          # 系统未知错误
@@ -134,6 +148,14 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         http_status=422,
         error_type=ErrorType.VALIDATION,
         error_code_name="INVALID_VALUE"
+    ),
+    ErrorCode.INVALID_INPUT: ErrorCodeInfo(
+        code=10005,
+        title="输入不合法",
+        detail="请检查输入内容是否正确",
+        http_status=422,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="INVALID_INPUT"
     ),
     
     # ==================== 认证授权错误 ====================
@@ -218,6 +240,54 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         http_status=422,
         error_type=ErrorType.VALIDATION,
         error_code_name="USERNAME_INVALID"
+    ),
+    ErrorCode.USER_NAME_ALREADY_EXISTS: ErrorCodeInfo(
+        code=30006,
+        title="用户名已存在",
+        detail="该用户名已被使用，请更换后重试",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="USER_NAME_ALREADY_EXISTS"
+    ),
+    ErrorCode.USER_PHONE_ALREADY_EXISTS: ErrorCodeInfo(
+        code=30007,
+        title="手机号已存在",
+        detail="该手机号已被使用，请更换后重试",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="USER_PHONE_ALREADY_EXISTS"
+    ),
+    ErrorCode.USER_EMAIL_ALREADY_EXISTS: ErrorCodeInfo(
+        code=30008,
+        title="邮箱已存在",
+        detail="该邮箱已被使用，请更换后重试",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="USER_EMAIL_ALREADY_EXISTS"
+    ),
+    ErrorCode.ADMIN_USER_OPERATION_FORBIDDEN: ErrorCodeInfo(
+        code=30009,
+        title="不允许操作超级管理员",
+        detail="超级管理员账号受保护，当前操作被拒绝",
+        http_status=403,
+        error_type=ErrorType.AUTHORIZATION,
+        error_code_name="ADMIN_USER_OPERATION_FORBIDDEN"
+    ),
+    ErrorCode.DATA_SCOPE_PERMISSION_DENIED: ErrorCodeInfo(
+        code=30010,
+        title="数据权限不足",
+        detail="当前账号无权访问该数据",
+        http_status=403,
+        error_type=ErrorType.AUTHORIZATION,
+        error_code_name="DATA_SCOPE_PERMISSION_DENIED"
+    ),
+    ErrorCode.INVALID_PASSWORD: ErrorCodeInfo(
+        code=30011,
+        title="密码不符合要求",
+        detail="请检查密码格式后重试",
+        http_status=422,
+        error_type=ErrorType.VALIDATION,
+        error_code_name="INVALID_PASSWORD"
     ),
     
     # ==================== 业务错误 - 角色模块 ====================
@@ -370,6 +440,46 @@ ERROR_CODE_MAP: Dict[int, ErrorCodeInfo] = {
         http_status=403,
         error_type=ErrorType.BUSINESS,
         error_code_name="CODEGEN_OVERWRITE_DISABLED"
+    ),
+    ErrorCode.RESOURCE_NOT_FOUND: ErrorCodeInfo(
+        code=47001,
+        title="资源不存在",
+        detail="请求的资源不存在，请确认后重试",
+        http_status=404,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="RESOURCE_NOT_FOUND"
+    ),
+    ErrorCode.RESOURCE_CONFLICT: ErrorCodeInfo(
+        code=47002,
+        title="资源冲突",
+        detail="请求与当前资源状态冲突",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="RESOURCE_CONFLICT"
+    ),
+    ErrorCode.DATA_NOT_FOUND: ErrorCodeInfo(
+        code=47003,
+        title="数据不存在",
+        detail="未查询到对应数据，请确认后重试",
+        http_status=404,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="DATA_NOT_FOUND"
+    ),
+    ErrorCode.DATA_ALREADY_EXISTS: ErrorCodeInfo(
+        code=47004,
+        title="数据已存在",
+        detail="数据已存在，请勿重复创建",
+        http_status=409,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="DATA_ALREADY_EXISTS"
+    ),
+    ErrorCode.OPERATION_NOT_ALLOWED: ErrorCodeInfo(
+        code=47005,
+        title="操作不允许",
+        detail="当前状态下不允许执行该操作",
+        http_status=403,
+        error_type=ErrorType.BUSINESS,
+        error_code_name="OPERATION_NOT_ALLOWED"
     ),
     
     # ==================== 系统错误 ====================

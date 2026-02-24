@@ -169,7 +169,7 @@ class TemplateUtils:
             use_web_type = 'vue/v3'
         templates = [
             'python/controller.py.jinja2',
-            'python/dao.py.jinja2',
+            'python/repository.py.jinja2',
             'python/do.py.jinja2',
             'python/service.py.jinja2',
             'python/vo.py.jinja2',
@@ -203,8 +203,8 @@ class TemplateUtils:
 
         if 'controller.py.jinja2' in template:
             return f'{python_path}/controller/{business_name}_controller.py'
-        elif 'dao.py.jinja2' in template:
-            return f'{python_path}/dao/{business_name}_dao.py'
+        elif 'repository.py.jinja2' in template:
+            return f'{python_path}/repository/{business_name}_repository.py'
         elif 'do.py.jinja2' in template:
             return f'{python_path}/entity/do/{business_name}_do.py'
         elif 'service.py.jinja2' in template:

@@ -13,7 +13,7 @@ from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 from {{ packageName }}.service.{{ businessName }}_service import {{ BusinessName }}Service
 from {{ packageName }}.entity.vo.{{ businessName }}_vo import Delete{{ BusinessName }}Model, {{ BusinessName }}Model, {{ BusinessName }}PageQueryModel
 from utils.common_util import bytes2file_response

@@ -1,14 +1,13 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
+
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from module_admin.entity.do.device_category_do import DeviceCategoryDO
-from module_admin.entity.vo.device_category_vo import (
-    DeviceCategoryQueryModel,
-    DeviceCategoryModel,
-    DeviceCategoryOptionModel
-)
-from module_admin.repository import DeviceCategoryRepository
 from module_admin.entity.vo.common_vo import CrudResponseModel
+from module_admin.entity.vo.device_category_vo import DeviceCategoryModel, DeviceCategoryOptionModel, DeviceCategoryQueryModel
+from ports import IDeviceCategoryRepository, IDeviceRepository
+from utils.transaction_manager import transactional
 
 
 class DeviceCategoryService:
@@ -16,19 +15,27 @@ class DeviceCategoryService:
     设备分类服务类
     """
 
-    @classmethod
-    async def get_device_category_list_services(cls, db: AsyncSession, query: DeviceCategoryQueryModel, current_user: str):
+    def __init__(
+        self,
+        category_repo: IDeviceCategoryRepository,
+        device_repo: IDeviceRepository,
+        query_db: AsyncSession,
+    ):
+        self.category_repo = category_repo
+        self.device_repo = device_repo
+        self.query_db = query_db
+
+    async def get_device_category_list_services(self, query: DeviceCategoryQueryModel, current_user: str):
         """
         获取设备分类列表
         """
-        category_repo = DeviceCategoryRepository(db)
-        categories, total = await category_repo.paginate_with_filters(
+        categories, total = await self.category_repo.paginate_with_filters(
             page=query.page_num,
             page_size=query.page_size,
             name=query.name,
             status=query.status,
             begin_time=query.begin_time,
-            end_time=query.end_time
+            end_time=query.end_time,
         )
 
         category_list = [DeviceCategoryModel.model_validate(cat) for cat in categories]
@@ -37,30 +44,27 @@ class DeviceCategoryService:
             'total': total,
         }
 
-    @classmethod
-    async def device_category_detail_services(cls, db: AsyncSession, category_id: int):
+    async def device_category_detail_services(self, category_id: int):
         """
         获取设备分类详情
         """
-        category_repo = DeviceCategoryRepository(db)
-        category = await category_repo.find_by_id(category_id)
+        category = await self.category_repo.find_by_id(category_id)
         if not category:
-            raise HTTPException(status_code=404, detail="设备分类不存在")
-        
+            raise HTTPException(status_code=404, detail='设备分类不存在')
+
         category_vo = DeviceCategoryModel.model_validate(category)
         return category_vo.model_dump()
 
-    @classmethod
-    async def add_device_category_services(cls, db: AsyncSession, category_data: DeviceCategoryModel, current_user: str):
+    @transactional()
+    async def add_device_category_services(self, category_data: DeviceCategoryModel, current_user: str):
         """
         新增设备分类
         """
-        category_repo = DeviceCategoryRepository(db)
         # 检查名称是否已存在
-        existing = await category_repo.find_by_name(category_data.name)
+        existing = await self.category_repo.find_by_name(category_data.name)
         if existing:
             raise HTTPException(status_code=400, detail=f"分类名称'{category_data.name}'已存在")
-        
+
         # 创建DO对象
         category_do = DeviceCategoryDO(
             name=category_data.name,
@@ -68,31 +72,29 @@ class DeviceCategoryService:
             status=category_data.status,
             create_by=current_user,
             create_time=datetime.now(),
-            remark=category_data.remark
+            remark=category_data.remark,
         )
-        
+
         # 保存到数据库
-        await category_repo.add(category_do)
-        await db.commit()
-        
+        await self.category_repo.add(category_do)
+
         return CrudResponseModel(is_success=True, message='新增成功')
 
-    @classmethod
-    async def edit_device_category_services(cls, db: AsyncSession, category_data: DeviceCategoryModel, current_user: str):
+    @transactional()
+    async def edit_device_category_services(self, category_data: DeviceCategoryModel, current_user: str):
         """
         更新设备分类
         """
-        category_repo = DeviceCategoryRepository(db)
         # 检查分类是否存在
-        existing = await category_repo.find_by_id(category_data.device_category_id)
+        existing = await self.category_repo.find_by_id(category_data.device_category_id)
         if not existing:
-            raise HTTPException(status_code=404, detail="设备分类不存在")
-        
+            raise HTTPException(status_code=404, detail='设备分类不存在')
+
         # 检查名称是否与其他分类重复
-        name_check = await category_repo.find_by_name(category_data.name)
+        name_check = await self.category_repo.find_by_name(category_data.name)
         if name_check and name_check.device_category_id != category_data.device_category_id:
             raise HTTPException(status_code=400, detail=f"分类名称'{category_data.name}'已存在")
-        
+
         # 更新字段
         existing.name = category_data.name
         existing.descr = category_data.descr
@@ -100,56 +102,49 @@ class DeviceCategoryService:
         existing.remark = category_data.remark
         existing.update_by = current_user
         existing.update_time = datetime.now()
-        
-        # 保存到数据库
-        await db.flush()
-        await db.commit()
-        
+
+        await self.category_repo.update(existing)
+
         return CrudResponseModel(is_success=True, message='修改成功')
 
-    @classmethod
-    async def delete_device_category_services(cls, db: AsyncSession, category_ids: str):
+    @transactional()
+    async def delete_device_category_services(self, category_ids: str):
         """
         删除设备分类
         """
-        category_repo = DeviceCategoryRepository(db)
         # 解析ID列表
-        id_list = [int(id_str) for id_str in category_ids.split(',')]
-        
-        # TODO: 检查分类是否被设备使用
-        # 如果有设备使用该分类，应该抛出异常
-        
+        id_list = [int(id_str) for id_str in category_ids.split(',') if id_str.strip()]
+
+        referenced_count = await self.device_repo.count_by_category_ids(id_list)
+        if referenced_count > 0:
+            raise HTTPException(status_code=400, detail='所选设备分类已被设备引用，无法删除')
+
         # 删除分类
-        deleted_count = await category_repo.delete_by_ids(id_list)
-        await db.commit()
-        
+        deleted_count = await self.category_repo.delete_by_ids(id_list)
+
         return CrudResponseModel(is_success=True, message=f'删除成功，共删除{deleted_count}条记录')
 
-    @classmethod
-    async def get_device_category_options_services(cls, db: AsyncSession):
+    async def get_device_category_options_services(self):
         """
         获取设备分类选项（用于下拉选择）
         """
-        category_repo = DeviceCategoryRepository(db)
-        categories = await category_repo.find_all_active()
-        
+        categories = await self.category_repo.find_all_active()
+
         # 转换为选项模型
         options = [DeviceCategoryOptionModel.model_validate(cat) for cat in categories]
-        
+
         return [opt.model_dump() for opt in options]
 
-    @classmethod
-    async def check_device_category_name_unique_services(cls, db: AsyncSession, name: str, category_id: int = None):
+    async def check_device_category_name_unique_services(self, name: str, category_id: int = None):
         """
         检查分类名称是否唯一
         """
-        category_repo = DeviceCategoryRepository(db)
-        existing = await category_repo.find_by_name(name)
-        
+        existing = await self.category_repo.find_by_name(name)
+
         if not existing:
             return True
-        
+
         if category_id and existing.device_category_id == category_id:
             return True
-        
+
         return False

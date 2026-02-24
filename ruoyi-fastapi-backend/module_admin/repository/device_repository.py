@@ -3,7 +3,7 @@
 展示如何使用 Repository 模式替代传统 DAO
 """
 from typing import List, Optional
-from sqlalchemy import select, delete, and_, or_
+from sqlalchemy import select, delete, and_, or_, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from module_admin.repository.base_repository import BaseRepository
@@ -173,6 +173,27 @@ class DeviceRepository(BaseRepository[DeviceDO]):
         stmt = delete(DeviceDO).where(DeviceDO.device_id.in_(device_ids))
         result = await self.db.execute(stmt)
         return result.rowcount
+
+    async def count_by_category_ids(self, category_ids: List[int]) -> int:
+        """
+        统计指定分类下的设备数量。
+
+        Args:
+            category_ids: 设备分类 ID 列表
+
+        Returns:
+            命中分类的设备数量
+        """
+        if not category_ids:
+            return 0
+
+        stmt = select(func.count()).select_from(DeviceDO).where(DeviceDO.device_category_id.in_(category_ids))
+        result = await self.db.execute(stmt)
+        return int(result.scalar() or 0)
+
+    async def commit(self) -> None:
+        """提交当前事务。"""
+        await self.db.commit()
 
 
 class DeviceInterfaceRepository(BaseRepository[DeviceInterfaceDO]):

@@ -55,12 +55,6 @@ class TestProtocolServiceIntegration:
         assert ProtocolService is not None
     
     @pytest.mark.asyncio
-    async def test_protocol_dao_exists(self):
-        """Test that protocol DAO can be imported"""
-        from module_admin.dao.protocol_dao import ProtocolDao
-        assert ProtocolDao is not None
-    
-    @pytest.mark.asyncio
     async def test_protocol_models_exist(self):
         """Test that protocol models can be imported"""
         try:

@@ -91,17 +91,25 @@ class TestProjectBusinessLogic:
     @pytest.mark.asyncio
     async def test_project_code_generation_is_unique(self):
         """Ensure project codes are unique and follow format"""
-        from module_admin.service.project_service import ProjectService
-        from unittest.mock import AsyncMock, MagicMock
+        from modules.project.application.services.project_service import ProjectService
+        from unittest.mock import AsyncMock
         
-        # Mock database session
-        mock_db = AsyncMock()
-        mock_result = MagicMock()
-        mock_result.scalar.return_value = None  # No existing codes
-        mock_db.execute.return_value = mock_result
+        project_repo = type(
+            'FakeProjectRepo',
+            (),
+            {'get_max_project_code_by_prefix': AsyncMock(return_value=None)},
+        )()
+        service = ProjectService(
+            project_repo=project_repo,
+            version_repo=AsyncMock(),
+            topology_repo=AsyncMock(),
+            device_repo=AsyncMock(),
+            interface_repo=AsyncMock(),
+            query_db=AsyncMock(),
+        )
         
         # Generate code
-        code = await ProjectService._generate_project_code(mock_db)
+        code = await service._generate_project_code()
         
         # Verify format: PRJ + YYYYMMDD + 0001
         assert code.startswith('PRJ')
@@ -121,7 +129,7 @@ class TestProjectBusinessLogic:
         versions before deletion and raises ServiceException if any are found.
         """
         # This is a documentation test that verifies the business rule exists
-        from module_admin.service.project_service import ProjectService
+        from modules.project.application.services.project_service import ProjectService
         
         # The business rule is implemented in delete_project_services method
         # It should check ProjectVersionRepository.find_locked_by_projects()

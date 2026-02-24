@@ -1,52 +1,45 @@
-from contextlib import asynccontextmanager
+import fnmatch
 import os
 import sys
-from fastapi import FastAPI
-from config.env import AppConfig, CacheConfig, AuditConfig
-from config.get_db import init_create_table
-from config.get_redis import RedisUtil
-from config.get_scheduler import SchedulerUtil
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, Response
+
 from config.database import async_engine
+from config.env import AppConfig, AuditConfig, CacheConfig
+from config.get_db import init_create_table
+from container import (
+    AppContainer,
+    attach_container,
+    build_container,
+    initialize_container_runtime,
+    shutdown_container_runtime,
+    validate_container_bindings,
+)
+from events.runtime import EventSystemRuntime
+from events.runtime_context import set_event_runtime
 from exceptions.handle import handle_exception
 from middlewares.handle import handle_middleware
-from utils.query_monitor import (
-    QueryPerformanceMonitor,
-    ConnectionPoolMonitor,
-    EnhancedQueryPerformanceMonitor,
-    ConnectionPoolHealthChecker,
+from module_admin.service.simulation_runtime_state import init_simulation_runtime_state_store
+from modules.registry import (
+    get_module_registry,
+    initialize_module_extensions,
+    log_loaded_modules,
+    register_modules,
 )
-from utils.query_cache import init_query_cache
-from utils.count_cache import init_count_cache
-from utils.audit_logger import init_audit_logger
-from module_admin.controller.cache_controller import cacheController
-from module_admin.controller.audit_controller import auditController
-from module_admin.controller.captcha_controller import captchaController
-from module_admin.controller.common_controller import commonController
-from module_admin.controller.config_controller import configController
-from module_admin.controller.dept_controller import deptController
-from module_admin.controller.dict_controller import dictController
-from module_admin.controller.log_controller import logController
-from module_admin.controller.login_controller import loginController
-from module_admin.controller.job_controller import jobController
-from module_admin.controller.menu_controller import menuController
-from module_admin.controller.notice_controller import noticeController
-from module_admin.controller.online_controller import onlineController
-from module_admin.controller.post_controller import postController
-from module_admin.controller.project_controller import projectController
-from module_admin.controller.project_version_controller import projectVersionController
-from module_admin.controller.protocol_controller import protocolController
-from module_admin.controller.simulation_controller import simulationController
-from module_admin.controller.device_category_controller import deviceCategoryController
-from module_admin.controller.device_controller import deviceController
-from module_admin.controller.role_controller import roleController
-from module_admin.controller.server_controller import serverController
-from module_admin.controller.user_controller import userController
-from module_generator.controller.gen_controller import genController
+from resilience.runtime import build_resilience_runtime
 from sub_applications.handle import handle_sub_applications
+from utils.audit_logger import init_audit_logger
 from utils.common_util import worship
 from utils.log_util import logger
+from utils.otel_tracing import init_otel_tracing
+from utils.prometheus_metrics import PrometheusMetricsRegistry, format_metric_line
+from utils.query_monitor import (
+    ConnectionPoolHealthChecker,
+    ConnectionPoolMonitor,
+    EnhancedQueryPerformanceMonitor,
+)
 from utils.response_util import ResponseUtil
-
 
 # 初始化性能监控器（可选，生产环境可设置更高阈值或禁用）
 # P1-008~012: 增强的性能监控
@@ -72,7 +65,9 @@ class DummyRedis:
     async def get(self, key):
         return self._store.get(key)
 
-    async def set(self, key, value, ex=None):
+    async def set(self, key, value, ex=None, nx=False):
+        if nx and key in self._store:
+            return None
         self._store[key] = value
         return True
 
@@ -80,11 +75,71 @@ class DummyRedis:
         self._store[key] = value
         return True
 
-    async def delete(self, key):
-        self._store.pop(key, None)
-        return True
+    async def delete(self, *keys):
+        if len(keys) == 1 and isinstance(keys[0], (list, tuple, set)):
+            keys = tuple(keys[0])
+        removed = 0
+        for key in keys:
+            if key in self._store:
+                removed += 1
+                self._store.pop(key, None)
+        return removed
+
+    async def keys(self, pattern='*'):
+        return [key for key in self._store.keys() if fnmatch.fnmatch(key, pattern)]
 
     async def exists(self, key):
+        return key in self._store
+
+    async def rpush(self, key, *values):
+        bucket = self._store.setdefault(key, [])
+        if not isinstance(bucket, list):
+            bucket = []
+            self._store[key] = bucket
+        bucket.extend(values)
+        return len(bucket)
+
+    async def lrange(self, key, start, end):
+        bucket = self._store.get(key, [])
+        if not isinstance(bucket, list):
+            return []
+        size = len(bucket)
+        if size == 0:
+            return []
+        if start < 0:
+            start = max(0, size + start)
+        if end < 0:
+            end = size + end
+        end = min(end, size - 1)
+        if start > end:
+            return []
+        return bucket[start : end + 1]
+
+    async def llen(self, key):
+        bucket = self._store.get(key, [])
+        if not isinstance(bucket, list):
+            return 0
+        return len(bucket)
+
+    async def ltrim(self, key, start, end):
+        bucket = self._store.get(key, [])
+        if not isinstance(bucket, list):
+            return True
+        size = len(bucket)
+        if size == 0:
+            return True
+        if start < 0:
+            start = max(0, size + start)
+        if end < 0:
+            end = size + end
+        end = min(end, size - 1)
+        if start > end:
+            self._store[key] = []
+            return True
+        self._store[key] = bucket[start : end + 1]
+        return True
+
+    async def expire(self, key, ttl):
         return key in self._store
 
     async def ping(self):
@@ -100,45 +155,50 @@ async def lifespan(app: FastAPI):
     logger.info(f'{AppConfig.app_name}开始启动')
     worship()
     await init_create_table()
+    init_otel_tracing(app=app, db_engine=async_engine)
+    container = build_container()
+    validate_container_bindings(container)
+    attach_container(app, container)
+    await initialize_module_extensions(container, MODULE_REGISTRY)
     
     # 初始化查询性能监控
     query_monitor.setup(async_engine)
     pool_monitor.setup(async_engine)
     logger.info('查询性能监控已启用')
     
-    if _is_test_env():
-        app.state.redis = DummyRedis()
-    else:
-        app.state.redis = await RedisUtil.create_redis_pool()
-        await RedisUtil.init_sys_dict(app.state.redis)
-        await RedisUtil.init_sys_config(app.state.redis)
-        await SchedulerUtil.init_system_scheduler()
-
-    # 初始化查询缓存（使用 Redis 连接，默认 TTL 5 分钟）
-    query_cache = init_query_cache(
-        redis_client=app.state.redis if CacheConfig.query_cache_enabled else None,
-        default_ttl=CacheConfig.query_cache_default_ttl,
-        key_prefix='query_cache',
-        is_async=True
+    app.state.redis = await initialize_container_runtime(
+        container,
+        test_mode=_is_test_env(),
+        test_redis_client=DummyRedis() if _is_test_env() else None,
     )
-    app.state.query_cache = query_cache
+
+    app.state.sim_runtime_state = init_simulation_runtime_state_store(redis_client=app.state.redis)
+
+    app.state.query_cache = container.query_cache
     if CacheConfig.query_cache_enabled:
         logger.info('查询缓存已启用')
     else:
         logger.info('查询缓存已禁用')
 
-    # 初始化 COUNT 缓存（独立于查询缓存，用于缓存分页总数）
-    count_cache = init_count_cache(
-        redis_client=app.state.redis if CacheConfig.count_cache_enabled else None,
-        default_ttl=CacheConfig.count_cache_default_ttl,
-        key_prefix=CacheConfig.count_cache_key_prefix,
-        enabled=CacheConfig.count_cache_enabled
-    )
-    app.state.count_cache = count_cache
+    app.state.count_cache = container.count_cache
     if CacheConfig.count_cache_enabled:
         logger.info('COUNT 缓存已启用')
     else:
         logger.info('COUNT 缓存已禁用')
+
+    app.state.resilience_runtime = build_resilience_runtime(redis_client=app.state.redis, db_engine=async_engine)
+    if app.state.count_cache is not None:
+        app.state.count_cache.set_resilience_executor(app.state.resilience_runtime.executor)
+
+    app.state.event_runtime = EventSystemRuntime(
+        container=container,
+        poll_interval_seconds=1.0,
+        max_batch_size=100,
+        max_retry_count=6,
+        backlog_alert_threshold=500,
+    )
+    await app.state.event_runtime.start()
+    set_event_runtime(app.state.event_runtime)
 
     # 初始化审计日志
     if AuditConfig.audit_enabled and not _is_test_env():
@@ -151,7 +211,9 @@ async def lifespan(app: FastAPI):
     app.state.query_monitor = query_monitor
     app.state.pool_monitor = pool_monitor
     app.state.pool_health_checker = pool_health_checker
+    app.state.metrics_registry = PrometheusMetricsRegistry()
     
+    log_loaded_modules(LOADED_MODULES)
     logger.info(f'{AppConfig.app_name}启动成功')
     yield
     
@@ -162,12 +224,13 @@ async def lifespan(app: FastAPI):
     logger.info(f'  慢查询数: {stats["slow_queries"]}')
     logger.info(f'  慢查询占比: {stats["slow_query_rate"]:.2f}%')
     
-    if _is_test_env():
-        if getattr(app.state, 'redis', None) is not None:
-            await app.state.redis.close()
-    else:
-        await RedisUtil.close_redis_pool(app)
-        await SchedulerUtil.close_system_scheduler()
+    app_container = getattr(app.state, 'container', None)
+    event_runtime = getattr(app.state, 'event_runtime', None)
+    if event_runtime is not None:
+        await event_runtime.stop()
+        set_event_runtime(None)
+    if isinstance(app_container, AppContainer):
+        await shutdown_container_runtime(app_container)
 
 
 # 初始化FastAPI对象
@@ -184,26 +247,42 @@ handle_sub_applications(app)
 handle_middleware(app)
 # 加载全局异常处理方法
 handle_exception(app)
+MODULE_REGISTRY = get_module_registry()
+LOADED_MODULES = register_modules(app, MODULE_REGISTRY)
 
 
 # 健康检查
 @app.get('/health', tags=['健康检查'])
 async def health_check():
-    return ResponseUtil.success(data={'status': 'ok', 'app': AppConfig.app_name, 'version': AppConfig.app_version})
+    app_container = getattr(app.state, 'container', None)
+    provider_summary = {}
+    if isinstance(app_container, AppContainer):
+        provider_summary = app_container.provider_health_summary()
+    return ResponseUtil.success(
+        data={
+            'status': 'ok',
+            'app': AppConfig.app_name,
+            'version': AppConfig.app_version,
+            'providers': provider_summary,
+        }
+    )
 
 
 @app.get('/ready', tags=['健康检查'])
 async def readiness_check():
+    app_container = getattr(app.state, 'container', None)
+    container_ready = isinstance(app_container, AppContainer) and app_container.is_runtime_ready()
     is_ready = all(
         [
             getattr(app.state, 'redis', None) is not None,
             getattr(app.state, 'query_monitor', None) is not None,
             getattr(app.state, 'pool_monitor', None) is not None,
+            container_ready,
         ]
     )
     if is_ready:
-        return ResponseUtil.success(data={'status': 'ready'})
-    return ResponseUtil.error(msg='服务未就绪', data={'status': 'not_ready'})
+        return ResponseUtil.success(data={'status': 'ready', 'containerReady': container_ready})
+    return ResponseUtil.error(msg='服务未就绪', data={'status': 'not_ready', 'containerReady': container_ready})
 
 
 @app.get('/health/db', tags=['健康检查'])
@@ -225,6 +304,32 @@ async def database_health_check():
         return ResponseUtil.success(message=health['message'], data=health)
     else:
         return ResponseUtil.success(data=health)
+
+
+@app.get('/health/deep', tags=['健康检查'])
+async def deep_health_check():
+    runtime = getattr(app.state, 'resilience_runtime', None)
+    if runtime is None:
+        return ResponseUtil.success(
+            http_status=503,
+            data={'status': 'unhealthy', 'detail': 'resilience_runtime_not_initialized'},
+        )
+
+    http_status, payload = await runtime.deep_health_checker.run()
+    return ResponseUtil.success(http_status=http_status, data=payload)
+
+
+@app.get('/health/events', tags=['健康检查'])
+async def event_health_check():
+    event_runtime = getattr(app.state, 'event_runtime', None)
+    if event_runtime is None:
+        return ResponseUtil.success(
+            http_status=503,
+            data={'status': 'unhealthy', 'detail': 'event_runtime_not_initialized'},
+        )
+    payload = await event_runtime.health()
+    status = 'healthy' if payload.get('running') else 'degraded'
+    return ResponseUtil.success(data={'status': status, **payload})
 
 
 @app.get('/health/query-stats', tags=['健康检查'])
@@ -251,33 +356,145 @@ async def query_stats():
     })
 
 
-# 加载路由列表
-controller_list = [
-    {'router': loginController, 'tags': ['登录模块']},
-    {'router': captchaController, 'tags': ['验证码模块']},
-    {'router': userController, 'tags': ['系统管理-用户管理']},
-    {'router': roleController, 'tags': ['系统管理-角色管理']},
-    {'router': menuController, 'tags': ['系统管理-菜单管理']},
-    {'router': deptController, 'tags': ['系统管理-部门管理']},
-    {'router': postController, 'tags': ['系统管理-岗位管理']},
-    {'router': dictController, 'tags': ['系统管理-字典管理']},
-    {'router': configController, 'tags': ['系统管理-参数管理']},
-    {'router': noticeController, 'tags': ['系统管理-通知公告管理']},
-    {'router': logController, 'tags': ['系统管理-日志管理']},
-    {'router': projectController, 'tags': ['工程管理']},
-    {'router': projectVersionController, 'tags': ['工程管理-版本管理']},
-    {'router': protocolController, 'tags': ['协议管理']},
-    {'router': simulationController, 'tags': ['仿真管理']},
-    {'router': deviceCategoryController, 'tags': ['设备中心-分类管理']},
-    {'router': deviceController, 'tags': ['设备中心-设备管理']},
-    {'router': onlineController, 'tags': ['系统监控-在线用户']},
-    {'router': jobController, 'tags': ['系统监控-定时任务']},
-    {'router': serverController, 'tags': ['系统监控-菜单管理']},
-    {'router': cacheController, 'tags': ['系统监控-缓存监控']},
-    {'router': auditController, 'tags': ['系统监控-审计日志']},
-    {'router': commonController, 'tags': ['通用模块']},
-    {'router': genController, 'tags': ['代码生成']},
-]
+@app.get('/metrics', tags=['健康检查'], include_in_schema=False)
+async def prometheus_metrics():
+    """
+    Prometheus 指标导出端点。
 
-for controller in controller_list:
-    app.include_router(router=controller.get('router'), tags=controller.get('tags'))
+    输出请求计数/耗时指标，以及数据库/Redis 依赖健康指标。
+    """
+    metrics_registry = getattr(app.state, 'metrics_registry', None)
+    request_metrics = ''
+    if isinstance(metrics_registry, PrometheusMetricsRegistry):
+        request_metrics = metrics_registry.render_http_metrics()
+
+    lines = [request_metrics.rstrip('\n')] if request_metrics else []
+
+    # 数据库依赖指标
+    lines.extend(
+        [
+            '# HELP db_pool_size Database connection pool configured size.',
+            '# TYPE db_pool_size gauge',
+            '# HELP db_pool_checked_out Database connection pool checked out count.',
+            '# TYPE db_pool_checked_out gauge',
+            '# HELP db_pool_overflow Database connection pool overflow count.',
+            '# TYPE db_pool_overflow gauge',
+        ]
+    )
+
+    db_pool_size = 0
+    db_pool_checked_out = 0
+    db_pool_overflow = 0
+    pool = getattr(async_engine, 'pool', None)
+    if pool is not None:
+        try:
+            db_pool_size = int(pool.size())
+            db_pool_checked_out = int(pool.checkedout())
+            db_pool_overflow = int(pool.overflow())
+        except Exception:
+            pass
+
+    lines.append(format_metric_line('db_pool_size', db_pool_size))
+    lines.append(format_metric_line('db_pool_checked_out', db_pool_checked_out))
+    lines.append(format_metric_line('db_pool_overflow', db_pool_overflow))
+
+    # 数据库查询指标（来自查询监控器）
+    lines.extend(
+        [
+            '# HELP db_queries_total Total database queries observed by monitor.',
+            '# TYPE db_queries_total counter',
+            '# HELP db_slow_queries_total Total slow database queries observed by monitor.',
+            '# TYPE db_slow_queries_total counter',
+            '# HELP db_query_avg_duration_ms Average database query duration in milliseconds.',
+            '# TYPE db_query_avg_duration_ms gauge',
+        ]
+    )
+    monitor = getattr(app.state, 'query_monitor', None)
+    db_queries_total = 0
+    db_slow_queries_total = 0
+    db_query_avg_duration_ms = 0.0
+    if monitor is not None:
+        try:
+            stats = monitor.get_stats()
+            db_queries_total = int(stats.get('total_queries', 0))
+            db_slow_queries_total = int(stats.get('slow_queries', 0))
+            db_query_avg_duration_ms = float(stats.get('avg_time', 0.0))
+        except Exception:
+            pass
+    lines.append(format_metric_line('db_queries_total', db_queries_total))
+    lines.append(format_metric_line('db_slow_queries_total', db_slow_queries_total))
+    lines.append(format_metric_line('db_query_avg_duration_ms', f'{db_query_avg_duration_ms:.6f}'))
+
+    # Redis 依赖指标
+    lines.extend(
+        [
+            '# HELP redis_up Redis health status (1=up, 0=down).',
+            '# TYPE redis_up gauge',
+        ]
+    )
+    redis_up = 0
+    redis_client = getattr(app.state, 'redis', None)
+    if redis_client is not None:
+        try:
+            pong = await redis_client.ping()
+            redis_up = 1 if pong else 0
+        except Exception:
+            redis_up = 0
+    lines.append(format_metric_line('redis_up', redis_up))
+
+    # 弹性指标
+    lines.extend(
+        [
+            '# HELP retry_attempt_total Total retry attempts triggered by resilience layer.',
+            '# TYPE retry_attempt_total counter',
+            '# HELP bulkhead_rejected_total Total requests rejected by bulkhead.',
+            '# TYPE bulkhead_rejected_total counter',
+            '# HELP saga_failed_total Total failed saga instances.',
+            '# TYPE saga_failed_total counter',
+            '# HELP circuit_breaker_state Circuit breaker state (OPEN=1, CLOSED/HALF_OPEN=0).',
+            '# TYPE circuit_breaker_state gauge',
+        ]
+    )
+    retry_attempt_total = 0
+    bulkhead_rejected_total = 0
+    saga_failed_total = 0
+    runtime = getattr(app.state, 'resilience_runtime', None)
+    if runtime is not None:
+        resilience_counters = await runtime.metrics.snapshot()
+        retry_attempt_total = int(resilience_counters.get('retry_attempt_total', 0))
+        bulkhead_rejected_total = int(resilience_counters.get('bulkhead_rejected_total', 0))
+        saga_instances = await runtime.saga_engine.list_instances(limit=500)
+        saga_failed_total = sum(
+            1
+            for item in saga_instances
+            if str(item.get('status')) in ('FAILED', 'FAILED_NEEDS_MANUAL_INTERVENTION')
+        )
+        circuit_states = await runtime.circuit_registry.list_snapshots()
+        for item in circuit_states:
+            state = str(item.get('state', 'CLOSED'))
+            value = 1 if state == 'OPEN' else 0
+            lines.append(
+                format_metric_line(
+                    'circuit_breaker_state',
+                    value,
+                    labels={
+                        'name': str(item.get('name', 'unknown')),
+                        'state': state,
+                    },
+                )
+            )
+
+    lines.append(format_metric_line('retry_attempt_total', retry_attempt_total))
+    lines.append(format_metric_line('bulkhead_rejected_total', bulkhead_rejected_total))
+    lines.append(format_metric_line('saga_failed_total', saga_failed_total))
+
+    event_runtime = getattr(app.state, 'event_runtime', None)
+    if event_runtime is not None:
+        event_metrics_text = await event_runtime.render_metrics()
+        lines.append(event_metrics_text.rstrip('\n'))
+
+    body = '\n'.join(item for item in lines if item != '') + '\n'
+    return Response(
+        content=body,
+        media_type='text/plain; version=0.0.4; charset=utf-8',
+    )

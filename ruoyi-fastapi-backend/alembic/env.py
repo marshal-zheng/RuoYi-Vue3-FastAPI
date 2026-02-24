@@ -103,6 +103,13 @@ from module_admin.entity.do.simulation_do import (  # noqa: F401
     SimulationAlarmDO,
 )
 
+# 事件模型
+from events.models import (  # noqa: F401
+    OutboxEventDO,
+    EventHistoryDO,
+    EventConsumptionLogDO,
+)
+
 # ============================================================================
 # Alembic 配置
 # ============================================================================

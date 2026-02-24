@@ -92,3 +92,7 @@ class ProtocolRepository(BaseRepository[ProtocolDO]):
         )
         result = await self.db.execute(stmt)
         return result.rowcount
+
+    async def commit(self) -> None:
+        """提交当前事务。"""
+        await self.db.commit()

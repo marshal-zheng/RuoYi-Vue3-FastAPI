@@ -3,14 +3,12 @@
 
 保持现有协议模板与解析逻辑不变，仅包装统一的返回结构，方便在业务侧复用。
 """
-from urllib.parse import quote
 from typing import Optional
 
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
 
 from utils.io_toolkit import ExportResult, ImportResult, ImportStatus
-from module_admin.service.protocol_service import ProtocolService
+from ports import IProtocolService
 
 
 class ProtocolIOAdapter:
@@ -18,9 +16,11 @@ class ProtocolIOAdapter:
     协议导入导出适配层：不改变模板生成与解析细节，只包装成统一的 Result 结构。
     """
 
-    @staticmethod
-    async def export_protocol_excel(query_db: AsyncSession, protocol_id: int) -> ExportResult:
-        raw = await ProtocolService.export_protocol_config_services(query_db, protocol_id)
+    def __init__(self, protocol_service: IProtocolService):
+        self.protocol_service = protocol_service
+
+    async def export_protocol_excel(self, protocol_id: int) -> ExportResult:
+        raw = await self.protocol_service.export_protocol_config_services(protocol_id)
         protocol_name = raw.get('protocol_name', '协议配置')
         filename = f'{protocol_name}_配置.xlsx'
         content = raw.get('content')
@@ -33,9 +33,8 @@ class ProtocolIOAdapter:
             size=len(content),
         )
 
-    @staticmethod
-    async def export_import_template(protocol_type: Optional[str] = None) -> ExportResult:
-        template_bytes = await ProtocolService.get_protocol_import_template_services(protocol_type)
+    async def export_import_template(self, protocol_type: Optional[str] = None) -> ExportResult:
+        template_bytes = await self.protocol_service.get_protocol_import_template_services(protocol_type)
         suffix = f'_{protocol_type.upper()}' if protocol_type else ''
         filename = f'协议导入模板{suffix}.xlsx'
         return ExportResult(
@@ -45,12 +44,11 @@ class ProtocolIOAdapter:
             size=len(template_bytes or b''),
         )
 
-    @staticmethod
-    async def import_preview(file: UploadFile) -> ImportResult:
+    async def import_preview(self, file: UploadFile) -> ImportResult:
         """
         复用现有解析逻辑，包装成 ImportResult，保持数据与错误表现不变。
         """
-        preview = await ProtocolService.protocol_import_preview_services(file)
+        preview = await self.protocol_service.protocol_import_preview_services(file)
         return ImportResult(
             status=ImportStatus.SUCCESS,
             total_count=1,
@@ -60,25 +58,21 @@ class ProtocolIOAdapter:
             errors=[],
         )
 
-    @staticmethod
     async def import_protocol(
-        query_db: AsyncSession,
+        self,
         file: UploadFile,
         protocol_name: Optional[str],
-        operator: str
+        operator: str,
     ) -> ImportResult:
         """
         导入协议配置，创建新协议
 
-        :param query_db: 数据库会话
         :param file: 上传的Excel文件
         :param protocol_name: 协议名称（可选）
         :param operator: 操作人
         :return: ImportResult
         """
-        result = await ProtocolService.import_protocol_services(
-            query_db, file, protocol_name, operator
-        )
+        result = await self.protocol_service.import_protocol_services(file, protocol_name, operator)
         return ImportResult(
             status=ImportStatus.SUCCESS if result.is_success else ImportStatus.FAILED,
             total_count=1,
@@ -88,18 +82,13 @@ class ProtocolIOAdapter:
             errors=[] if result.is_success else [result.message],
         )
 
-    @staticmethod
     async def import_protocol_batch(
-        query_db: AsyncSession,
+        self,
         files: list[UploadFile],
-        operator: str
+        operator: str,
     ) -> ImportResult:
         """
         批量导入协议配置
         """
-        batch_result = await ProtocolService.import_protocol_batch_services(
-            query_db=query_db,
-            files=files,
-            operator=operator
-        )
+        batch_result = await self.protocol_service.import_protocol_batch_services(files=files, operator=operator)
         return batch_result

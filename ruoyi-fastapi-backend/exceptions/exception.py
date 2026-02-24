@@ -22,6 +22,7 @@ class AppException(Exception):
     ):
         super().__init__(user_message)
         self.user_message = user_message
+        self.message = user_message
         self.developer_message = developer_message
         self.error_code = error_code
         self.http_status = http_status
@@ -36,15 +37,16 @@ class ValidationException(AppException):
     
     def __init__(
         self, 
-        user_message: str, 
+        user_message: str = "参数校验失败",
         developer_message: Optional[str] = None, 
         field: Optional[str] = None, 
+        error_code: int = ErrorCode.VALIDATION_ERROR,
         **kwargs
     ):
         super().__init__(
             user_message=user_message,
             developer_message=developer_message or f"Validation failed for field: {field}",
-            error_code=ErrorCode.VALIDATION_ERROR,
+            error_code=error_code,
             http_status=422,
             error_type=ErrorType.VALIDATION,
             error_code_name="VALIDATION_ERROR",
@@ -59,13 +61,14 @@ class AuthException(AppException):
     def __init__(
         self, 
         user_message: str = "未认证，请先登录",
-        developer_message: str = "Authentication token missing or invalid",
+        developer_message: Optional[str] = None,
+        error_code: int = ErrorCode.UNAUTHORIZED,
         **kwargs
     ):
         super().__init__(
             user_message=user_message,
-            developer_message=developer_message,
-            error_code=ErrorCode.UNAUTHORIZED,
+            developer_message=developer_message or "Authentication token missing or invalid",
+            error_code=error_code,
             http_status=401,
             error_type=ErrorType.AUTHENTICATION,
             error_code_name="UNAUTHORIZED",
@@ -81,13 +84,14 @@ class PermissionException(AppException):
         user_message: str = "权限不足，无法执行此操作",
         developer_message: Optional[str] = None,
         resource: Optional[str] = None,
+        error_code: int = ErrorCode.FORBIDDEN,
         **kwargs
     ):
         dev_msg = developer_message or f"User does not have permission to access: {resource}"
         super().__init__(
             user_message=user_message,
             developer_message=dev_msg,
-            error_code=ErrorCode.FORBIDDEN,
+            error_code=error_code,
             http_status=403,
             error_type=ErrorType.AUTHORIZATION,
             error_code_name="FORBIDDEN",
@@ -101,15 +105,15 @@ class BusinessException(AppException):
     
     def __init__(
         self, 
-        message: str, 
+        user_message: str,
         error_code: int, 
         http_status: int = 400, 
         developer_message: Optional[str] = None,
         **kwargs
     ):
         super().__init__(
-            user_message=message,
-            developer_message=developer_message or message,  # 默认相同
+            user_message=user_message,
+            developer_message=developer_message or user_message,  # 默认相同
             error_code=error_code,
             http_status=http_status,
             error_type=ErrorType.BUSINESS,
@@ -122,13 +126,13 @@ class ResourceNotFoundException(BusinessException):
     
     def __init__(
         self, 
-        user_message: str,
-        error_code: int,
+        user_message: str = "资源不存在",
+        error_code: int = ErrorCode.SYSTEM_ERROR,
         developer_message: Optional[str] = None,
         **kwargs
     ):
         super().__init__(
-            message=user_message,
+            user_message=user_message,
             error_code=error_code,
             http_status=404,
             developer_message=developer_message,
@@ -141,13 +145,13 @@ class ResourceConflictException(BusinessException):
     
     def __init__(
         self, 
-        user_message: str,
-        error_code: int,
+        user_message: str = "资源冲突",
+        error_code: int = ErrorCode.SYSTEM_ERROR,
         developer_message: Optional[str] = None,
         **kwargs
     ):
         super().__init__(
-            message=user_message,
+            user_message=user_message,
             error_code=error_code,
             http_status=409,
             developer_message=developer_message,
@@ -161,13 +165,13 @@ class SystemException(AppException):
     def __init__(
         self, 
         user_message: str = "系统繁忙，请稍后重试",
-        developer_message: str = "Internal server error",
+        developer_message: Optional[str] = None,
         error_code: int = ErrorCode.SYSTEM_ERROR,
         **kwargs
     ):
         super().__init__(
             user_message=user_message,
-            developer_message=developer_message,
+            developer_message=developer_message or "Internal server error",
             error_code=error_code,
             http_status=500,
             error_type=ErrorType.SYSTEM,
@@ -228,12 +232,14 @@ class ServiceException(AppException):
             DeprecationWarning,
             stacklevel=2
         )
+        error_code = kwargs.pop('error_code', ErrorCode.SYSTEM_ERROR)
+        http_status = kwargs.pop('http_status', 500)
         
         super().__init__(
             user_message=message,
             developer_message=developer_message or message,
-            error_code=kwargs.get('error_code', ErrorCode.SYSTEM_ERROR),
-            http_status=kwargs.get('http_status', 500),
+            error_code=error_code,
+            http_status=http_status,
             error_type=ErrorType.SYSTEM,
             **kwargs
         )

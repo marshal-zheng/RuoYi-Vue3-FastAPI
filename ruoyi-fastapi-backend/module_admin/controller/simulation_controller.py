@@ -3,10 +3,11 @@
 处理仿真相关的HTTP请求和WebSocket连接
 """
 from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect, Request, Body, Query
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 import asyncio
 import json
+import os
+import socket
 from typing import Dict, Set
 from config.get_db import get_db
 from config.enums import BusinessType
@@ -14,11 +15,10 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.simulation_vo import (
     CreateSimulationSessionModel,
-    SimulationQueryModel,
     SimulationExportModel
 )
-from module_admin.service.simulation_service import SimulationService
-from module_admin.service.login_service import LoginService
+from module_admin.service.simulation_service import SimulationService, get_simulation_service
+from modules.identity.application.services.login_service import LoginService
 from module_admin.service.data_injection_strategy import STRATEGY_DEFINITIONS
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
@@ -31,41 +31,91 @@ simulationController = APIRouter(
 
 # WebSocket连接管理
 class ConnectionManager:
-    """WebSocket连接管理器"""
+    """WebSocket connection manager with session-level producer tasks."""
     
     def __init__(self):
         self.active_connections: Dict[str, Set[WebSocket]] = {}
+        self._producer_tasks: Dict[str, asyncio.Task] = {}
+        self._lock = asyncio.Lock()
     
     async def connect(self, websocket: WebSocket, session_id: str):
-        """连接WebSocket"""
         await websocket.accept()
-        if session_id not in self.active_connections:
-            self.active_connections[session_id] = set()
-        self.active_connections[session_id].add(websocket)
+        async with self._lock:
+            if session_id not in self.active_connections:
+                self.active_connections[session_id] = set()
+            self.active_connections[session_id].add(websocket)
     
-    def disconnect(self, websocket: WebSocket, session_id: str):
-        """断开WebSocket"""
-        if session_id in self.active_connections:
-            self.active_connections[session_id].discard(websocket)
-            if not self.active_connections[session_id]:
-                del self.active_connections[session_id]
+    async def ensure_session_producer(self, session_id: str, simulation_service: SimulationService):
+        async with self._lock:
+            task = self._producer_tasks.get(session_id)
+            if task and not task.done():
+                return
+            task = asyncio.create_task(push_simulation_data(session_id, simulation_service))
+            self._producer_tasks[session_id] = task
+            task.add_done_callback(lambda done_task, sid=session_id: self._cleanup_producer_task(sid, done_task))
+
+    def _cleanup_producer_task(self, session_id: str, task: asyncio.Task):
+        if not task.cancelled():
+            try:
+                exc = task.exception()
+            except Exception:
+                exc = None
+            if exc:
+                logger.error(f'会话级推送任务异常退出: {session_id}, error={exc}')
+        current = self._producer_tasks.get(session_id)
+        if current is task:
+            self._producer_tasks.pop(session_id, None)
+
+    async def disconnect(self, websocket: WebSocket, session_id: str):
+        should_stop_producer = False
+        async with self._lock:
+            if session_id in self.active_connections:
+                self.active_connections[session_id].discard(websocket)
+                if not self.active_connections[session_id]:
+                    del self.active_connections[session_id]
+                    should_stop_producer = True
+        if should_stop_producer:
+            await self.stop_session_producer(session_id)
+
+    async def has_connections(self, session_id: str) -> bool:
+        async with self._lock:
+            return bool(self.active_connections.get(session_id))
+
+    async def stop_session_producer(self, session_id: str):
+        task = None
+        async with self._lock:
+            task = self._producer_tasks.pop(session_id, None)
+        if task and not task.done():
+            current_task = asyncio.current_task()
+            if current_task is task:
+                task.cancel()
+                return
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
     
     async def broadcast(self, session_id: str, message: dict):
-        """广播消息到所有连接"""
-        if session_id in self.active_connections:
-            disconnected = set()
-            for connection in self.active_connections[session_id]:
-                try:
-                    await connection.send_json(message)
-                except Exception:
-                    disconnected.add(connection)
-            
-            # 清理断开的连接
-            for conn in disconnected:
-                self.disconnect(conn, session_id)
+        async with self._lock:
+            targets = list(self.active_connections.get(session_id, set()))
+        if not targets:
+            return
+
+        disconnected = []
+        for connection in targets:
+            try:
+                await connection.send_json(message)
+            except Exception:
+                disconnected.append(connection)
+
+        for connection in disconnected:
+            await self.disconnect(connection, session_id)
 
 
 manager = ConnectionManager()
+SESSION_PRODUCER_OWNER_TTL_SECONDS = 10
+SESSION_PRODUCER_WORKER_ID = f'{socket.gethostname()}:{os.getpid()}'
 
 
 @simulationController.get(
@@ -104,7 +154,7 @@ async def get_fill_strategies(request: Request):
 async def create_simulation_session(
     request: Request,
     create_request: CreateSimulationSessionModel,
-    query_db: AsyncSession = Depends(get_db),
+    simulation_service: SimulationService = Depends(get_simulation_service),
     current_user = Depends(LoginService.get_current_user)
 ):
     """
@@ -116,10 +166,10 @@ async def create_simulation_session(
     返回:
         会话信息（sessionId, status）
     """
-    # 设置创建人（从CurrentUserModel对象获取用户名）
-    create_request.create_by = current_user.user.user_name if current_user.user else 'system'
-    
-    result = await SimulationService.create_session_services(query_db, create_request)
+    result = await simulation_service.create_session(
+        create_request,
+        operator=current_user.user.user_name if current_user.user else 'system',
+    )
     logger.info(f'创建仿真会话成功: {result}')
     
     return ResponseUtil.success(data=result)
@@ -136,7 +186,7 @@ async def create_simulation_session(
 async def start_simulation_session(
     request: Request,
     session_id: str,
-    query_db: AsyncSession = Depends(get_db)
+    simulation_service: SimulationService = Depends(get_simulation_service)
 ):
     """
     启动仿真会话
@@ -147,7 +197,7 @@ async def start_simulation_session(
     返回:
         操作结果
     """
-    result = await SimulationService.start_session_services(query_db, session_id)
+    result = await simulation_service.start_session(session_id)
     logger.info(f'启动仿真会话成功: {session_id}')
     
     return ResponseUtil.success(data=result.model_dump())
@@ -164,7 +214,7 @@ async def start_simulation_session(
 async def stop_simulation_session(
     request: Request,
     session_id: str,
-    query_db: AsyncSession = Depends(get_db)
+    simulation_service: SimulationService = Depends(get_simulation_service)
 ):
     """
     停止仿真会话
@@ -175,7 +225,7 @@ async def stop_simulation_session(
     返回:
         操作结果
     """
-    result = await SimulationService.stop_session_services(query_db, session_id)
+    result = await simulation_service.stop_session(session_id)
     logger.info(f'停止仿真会话成功: {session_id}')
     
     return ResponseUtil.success(data=result.model_dump())
@@ -190,7 +240,8 @@ async def stop_simulation_session(
 )
 async def get_simulation_status(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     获取仿真会话状态
@@ -201,7 +252,7 @@ async def get_simulation_status(
     返回:
         状态信息
     """
-    status = SimulationService.get_session_status_services(session_id)
+    status = await simulation_service.get_shared_session_status(session_id)
     return ResponseUtil.success(data=status)
 
 
@@ -215,7 +266,8 @@ async def get_simulation_status(
 async def get_simulation_messages(
     request: Request,
     session_id: str,
-    limit: int = 100
+    limit: int = 100,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     获取仿真报文数据
@@ -227,7 +279,7 @@ async def get_simulation_messages(
     返回:
         报文列表
     """
-    messages = SimulationService.get_realtime_messages_services(session_id, limit)
+    messages = await simulation_service.read_messages_with_fallback(session_id, limit)
     return ResponseUtil.success(data=messages)
 
 
@@ -241,7 +293,8 @@ async def get_simulation_messages(
 async def get_simulation_bandwidth(
     request: Request,
     session_id: str,
-    port_id: str = None
+    port_id: str = None,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     获取仿真带宽数据
@@ -253,7 +306,11 @@ async def get_simulation_bandwidth(
     返回:
         带宽数据列表
     """
-    bandwidth_data = SimulationService.get_realtime_bandwidth_services(session_id, port_id)
+    bandwidth_data = await simulation_service.read_bandwidth_with_fallback(
+        session_id,
+        port_id=port_id,
+        limit=400,
+    )
     return ResponseUtil.success(data=bandwidth_data)
 
 
@@ -266,7 +323,8 @@ async def get_simulation_bandwidth(
 )
 async def get_simulation_alarms(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     获取仿真告警数据
@@ -277,7 +335,7 @@ async def get_simulation_alarms(
     返回:
         告警列表
     """
-    alarms = SimulationService.get_realtime_alarms_services(session_id)
+    alarms = await simulation_service.read_alarms_with_fallback(session_id, 200)
     return ResponseUtil.success(data=alarms)
 
 
@@ -293,7 +351,7 @@ async def export_simulation_data(
     request: Request,
     session_id: str,
     export_request: SimulationExportModel,
-    query_db: AsyncSession = Depends(get_db)
+    simulation_service: SimulationService = Depends(get_simulation_service)
 ):
     """
     导出仿真数据
@@ -306,7 +364,7 @@ async def export_simulation_data(
         导出数据
     """
     export_request.session_id = session_id
-    result = await SimulationService.export_simulation_data_services(query_db, export_request)
+    result = await simulation_service.export_simulation_data(export_request)
     logger.info(f'导出仿真数据成功: {session_id}')
     
     return ResponseUtil.success(data=result)
@@ -325,10 +383,10 @@ async def export_simulation_data(
 async def pause_simulation_session(
     request: Request,
     session_id: str,
-    query_db: AsyncSession = Depends(get_db)
+    simulation_service: SimulationService = Depends(get_simulation_service)
 ):
     """暂停仿真会话"""
-    result = await SimulationService.pause_session_services(query_db, session_id)
+    result = await simulation_service.pause_session(session_id)
     logger.info(f'暂停仿真会话: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -344,10 +402,10 @@ async def pause_simulation_session(
 async def resume_simulation_session(
     request: Request,
     session_id: str,
-    query_db: AsyncSession = Depends(get_db)
+    simulation_service: SimulationService = Depends(get_simulation_service)
 ):
     """继续仿真会话"""
-    result = await SimulationService.resume_session_services(query_db, session_id)
+    result = await simulation_service.resume_session(session_id)
     logger.info(f'继续仿真会话: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -362,11 +420,12 @@ async def resume_simulation_session(
 async def set_simulation_speed(
     request: Request,
     session_id: str,
-    body: dict
+    body: dict,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """设置仿真速度（0.5x-4x）"""
-    speed = body.get('speed', 1.0)
-    result = SimulationService.set_speed_services(session_id, speed)
+    speed = simulation_service.resolve_speed_input(body)
+    result = await simulation_service.set_speed(session_id, speed)
     logger.info(f'设置仿真速度: {session_id} -> {speed}x')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -380,10 +439,11 @@ async def set_simulation_speed(
 )
 async def step_simulation(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """单步执行"""
-    result = await SimulationService.step_once_services(session_id)
+    result = await simulation_service.step_once(session_id)
     logger.info(f'单步执行: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -398,10 +458,12 @@ async def step_simulation(
 async def set_simulation_duration(
     request: Request,
     session_id: str,
-    duration: float = None
+    duration: float = None,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """设置仿真时长（秒），不传则无限制"""
-    result = SimulationService.set_duration_services(session_id, duration)
+    normalized_duration = simulation_service.resolve_duration_input(duration=duration, payload=None)
+    result = await simulation_service.set_duration(session_id, normalized_duration)
     return ResponseUtil.success(data=result.model_dump())
 
 
@@ -420,7 +482,8 @@ async def inject_fault(
     session_id: str,
     fault_type: str = None,
     target_id: str = None,
-    payload: dict = Body(None)
+    payload: dict = Body(None),
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     注入故障
@@ -430,24 +493,18 @@ async def inject_fault(
         target_id: 链路ID或节点ID
         params: {loss_rate, delay_ms, count 等}
     """
-    if payload:
-        fault_type = payload.get('faultType') or payload.get('fault_type') or fault_type
-        target_id = payload.get('targetId') or payload.get('target_id') or target_id
-        params = payload.get('params') or payload
-    else:
-        params = None
-
-    if not fault_type or target_id is None:
-        from exceptions.exception import ValidationException
-        raise ValidationException(
-            user_message='必填字段缺失',
-            developer_message='faultType and targetId are required',
-            field='faultType,targetId'
-        )
-
-    result = SimulationService.inject_fault_services(session_id, fault_type, target_id, params)
-    logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
-    return ResponseUtil.success(data=result)
+    injection = simulation_service.apply_fault_injection(
+        session_id=session_id,
+        fault_type=fault_type,
+        target_id=target_id,
+        payload=payload,
+        require_session_id=False,
+    )
+    logger.info(
+        f"注入故障: {injection['session_id']} -> "
+        f"{injection['fault_type']}@{injection['target_id']}"
+    )
+    return ResponseUtil.success(data=injection['result'])
 
 
 @simulationController.delete(
@@ -461,10 +518,11 @@ async def inject_fault(
 async def clear_fault(
     request: Request,
     session_id: str,
-    fault_id: str
+    fault_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """清除故障"""
-    result = SimulationService.clear_fault_services(session_id, fault_id)
+    result = simulation_service.clear_fault(session_id, fault_id)
     logger.info(f'清除故障: {session_id} -> {fault_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -479,10 +537,11 @@ async def clear_fault(
 @Log(title='仿真管理-清除全部故障', business_type=BusinessType.DELETE)
 async def clear_all_faults(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """清除指定会话的所有故障"""
-    result = SimulationService.clear_all_faults_services(session_id)
+    result = simulation_service.clear_all_faults(session_id)
     logger.info(f'清除全部故障: {session_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -496,10 +555,11 @@ async def clear_all_faults(
 )
 async def list_faults(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """获取故障列表"""
-    faults = SimulationService.list_faults_services(session_id)
+    faults = simulation_service.list_faults(session_id)
     return ResponseUtil.success(data=faults)
 
 
@@ -515,26 +575,21 @@ async def list_faults(
 )
 async def upsert_fault(
     request: Request,
-    payload: dict = Body(...)
+    payload: dict = Body(...),
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     新增/更新故障规则
     """
-    session_id = payload.get('sessionId') or payload.get('session_id')
-    fault_type = payload.get('faultType') or payload.get('fault_type')
-    target_id = payload.get('targetId') or payload.get('target_id')
-    params = payload.get('params') or payload
-    if not session_id or not fault_type or target_id is None:
-        from exceptions.exception import ValidationException
-        raise ValidationException(
-            user_message='必填字段缺失',
-            developer_message='sessionId, faultType and targetId are required',
-            field='sessionId,faultType,targetId'
-        )
-
-    result = SimulationService.inject_fault_services(session_id, fault_type, target_id, params)
-    logger.info(f'注入故障: {session_id} -> {fault_type}@{target_id}')
-    return ResponseUtil.success(data=result)
+    injection = simulation_service.apply_fault_injection(
+        payload=payload,
+        require_session_id=True,
+    )
+    logger.info(
+        f"注入故障: {injection['session_id']} -> "
+        f"{injection['fault_type']}@{injection['target_id']}"
+    )
+    return ResponseUtil.success(data=injection['result'])
 
 
 @simulationController.get(
@@ -544,16 +599,13 @@ async def upsert_fault(
         Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
-async def query_faults(session_id: str = Query(..., alias="sessionId")):
+async def query_faults(
+    session_id: str = Query(..., alias="sessionId"),
+    simulation_service: SimulationService = Depends(get_simulation_service),
+):
     """查询会话故障"""
-    if not session_id:
-        from exceptions.exception import ValidationException
-        raise ValidationException(
-            user_message='必填字段缺失',
-            developer_message='sessionId is required',
-            field='sessionId'
-        )
-    faults = SimulationService.list_faults_services(session_id)
+    normalized_session_id = simulation_service.require_session_id(session_id)
+    faults = simulation_service.list_faults(normalized_session_id)
     return ResponseUtil.success(data=faults)
 
 
@@ -564,10 +616,15 @@ async def query_faults(session_id: str = Query(..., alias="sessionId")):
         Depends(CheckUserInterfaceAuth('simulation:use'))
     ]
 )
-async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessionId")):
+async def delete_fault(
+    fault_id: str,
+    session_id: str = Query(..., alias="sessionId"),
+    simulation_service: SimulationService = Depends(get_simulation_service),
+):
     """删除会话故障"""
-    result = SimulationService.clear_fault_services(session_id, fault_id)
-    logger.info(f'清除故障: {session_id} -> {fault_id}')
+    normalized_session_id = simulation_service.require_session_id(session_id)
+    result = simulation_service.clear_fault(normalized_session_id, fault_id)
+    logger.info(f'清除故障: {normalized_session_id} -> {fault_id}')
     return ResponseUtil.success(data=result.model_dump())
 
 
@@ -584,7 +641,8 @@ async def delete_fault(fault_id: str, session_id: str = Query(..., alias="sessio
 async def add_event(
     request: Request,
     session_id: str,
-    event: dict
+    event: dict,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     添加事件
@@ -603,7 +661,7 @@ async def add_event(
         - pause: 暂停仿真
         - log: 记录日志
     """
-    result = SimulationService.add_event_services(session_id, event)
+    result = simulation_service.add_event(session_id, event)
     logger.info(f'添加事件: {session_id}')
     return ResponseUtil.success(data=result)
 
@@ -620,7 +678,8 @@ async def update_event(
     request: Request,
     session_id: str,
     event_id: str,
-    updates: dict
+    updates: dict,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     更新事件配置
@@ -630,7 +689,7 @@ async def update_event(
         event_id: 事件ID
         updates: 更新内容
     """
-    result = SimulationService.update_event_services(session_id, event_id, updates)
+    result = simulation_service.update_event(session_id, event_id, updates)
     logger.info(f'更新事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result)
 
@@ -646,7 +705,8 @@ async def update_event(
 async def trigger_event(
     request: Request,
     session_id: str,
-    event_id: str
+    event_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """
     手动触发事件
@@ -665,7 +725,7 @@ async def trigger_event(
     返回:
         触发结果，包含动作执行信息
     """
-    result = SimulationService.trigger_event_services(session_id, event_id)
+    result = simulation_service.trigger_event(session_id, event_id)
     logger.info(f'触发事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result)
 
@@ -680,10 +740,11 @@ async def trigger_event(
 async def reset_event(
     request: Request,
     session_id: str,
-    event_id: str
+    event_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """重置事件状态为待触发"""
-    result = SimulationService.reset_event_services(session_id, event_id)
+    result = simulation_service.reset_event(session_id, event_id)
     logger.info(f'重置事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -699,10 +760,11 @@ async def reset_event(
 async def remove_event(
     request: Request,
     session_id: str,
-    event_id: str
+    event_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """删除事件"""
-    result = SimulationService.remove_event_services(session_id, event_id)
+    result = simulation_service.remove_event(session_id, event_id)
     logger.info(f'删除事件: {session_id} -> {event_id}')
     return ResponseUtil.success(data=result.model_dump())
 
@@ -716,10 +778,11 @@ async def remove_event(
 )
 async def list_events(
     request: Request,
-    session_id: str
+    session_id: str,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """获取事件列表"""
-    events = SimulationService.list_events_services(session_id)
+    events = simulation_service.list_events(session_id)
     return ResponseUtil.success(data=events)
 
 
@@ -734,10 +797,11 @@ async def list_events(
 )
 async def validate_topology(
     request: Request,
-    topology_data: dict
+    topology_data: dict,
+    simulation_service: SimulationService = Depends(get_simulation_service),
 ):
     """验证拓扑配置完整性"""
-    result = SimulationService.validate_topology_services(topology_data)
+    result = simulation_service.validate_topology(topology_data)
     return ResponseUtil.success(data=result)
 
 
@@ -772,18 +836,21 @@ async def websocket_endpoint(
         await websocket.close(code=1008, reason='Unauthorized')
         return
 
+    container = getattr(websocket.app.state, 'container', None)
+    if container is None:
+        logger.error('WebSocket容器未初始化，拒绝连接')
+        await websocket.close(code=1011, reason='Container unavailable')
+        return
+    simulation_service: SimulationService = container.simulation_service(query_db)
+
     await manager.connect(websocket, session_id)
+    await manager.ensure_session_producer(session_id, simulation_service)
     logger.info(f'WebSocket连接建立: {session_id}')
-    
+
     try:
-        # 启动数据推送任务
-        push_task = asyncio.create_task(push_simulation_data(session_id))
-        
-        # 保持连接并处理客户端消息
         while True:
             try:
                 data = await websocket.receive_text()
-                # 处理客户端消息（如心跳）
                 message = json.loads(data)
                 if message.get('type') == 'ping':
                     await websocket.send_json({'type': 'pong'})
@@ -792,222 +859,27 @@ async def websocket_endpoint(
             except Exception as e:
                 logger.error(f'WebSocket消息处理错误: {str(e)}')
                 break
-        
-        # 取消推送任务
-        push_task.cancel()
-        
     except Exception as e:
         logger.error(f'WebSocket错误: {str(e)}')
     finally:
-        manager.disconnect(websocket, session_id)
+        await manager.disconnect(websocket, session_id)
         logger.info(f'WebSocket连接断开: {session_id}')
 
 
-async def push_simulation_data(session_id: str):
+async def push_simulation_data(session_id: str, simulation_service: SimulationService):
     """
-    推送仿真数据到WebSocket客户端（增量推送，优化性能）
+    推送仿真数据到WebSocket客户端。
     
     参数:
         session_id: 会话ID
-    
-    消息类型:
-        - status: 仿真状态
-        - messages: 报文数据
-        - bandwidth: 带宽数据
-        - alarms: 告警数据
-        - animation: 动画事件（traffic/error/node_active）
-        - event: 事件触发通知
-        - faults: 故障事件
+
+    说明:
+        具体推送编排逻辑由 SimulationService 统一管理，controller 仅负责转调。
     """
-    import time
-    last_push_time = time.time()
-    base_interval = 0.1  # 基础 100ms
-    buffer_messages = []
-    buffer_bandwidth = []
-    buffer_alarms = []
-    buffer_animations = []
-    buffer_faults = []
-
-    def compute_interval(speed: float) -> float:
-        # 根据速度缩放推送频率，限制区间 [20ms, 200ms]
-        clamped = max(0.5, min(speed or 1.0, 4.0))
-        return max(0.02, min(0.2, base_interval / clamped))
-
-    def compute_limits(speed: float) -> Dict[str, int]:
-        """
-        根据速度动态调整单次推送批量，避免高倍速堆积/低倍速浪费带宽
-        """
-        clamped = max(0.5, min(speed or 1.0, 4.0))
-        msg_limit = int(50 * clamped)
-        bw_limit = int(200 * clamped)
-        return {
-            "messages": max(50, min(msg_limit, 200)),
-            "bandwidth": max(100, min(bw_limit, 400)),
-            "animations": 20,
-            "faults": 50,
-        }
-
-    try:
-        while True:
-            # 获取实时状态
-            status = SimulationService.get_session_status_services(session_id)
-
-            state = status.get('status')
-            engine_present = status.get('engine_present', True)
-
-            if state == 'not_found':
-                break
-
-            # 引擎缺失但会话仍在（已停止）时，仅推送状态并等待复活
-            if not engine_present or state == 'stopped':
-                await manager.broadcast(session_id, jsonable_encoder({
-                    'type': 'status',
-                    'data': status,
-                    'timestamp': time.time()
-                }))
-                await asyncio.sleep(0.5)
-                continue
-
-            push_interval = compute_interval(status.get('speed', 1.0))
-            limits = compute_limits(status.get('speed', 1.0))
-            current_time = time.time()
-            should_push = (current_time - last_push_time) >= push_interval
-
-            # 收集增量数据
-            new_messages = SimulationService.get_new_messages_services(session_id, limit=20)
-            if new_messages:
-                buffer_messages.extend(new_messages)
-                # 为每条新消息生成动画事件
-                for msg in new_messages:
-                    animation = _build_animation_event(msg)
-                    if animation:
-                        buffer_animations.append(animation)
-
-            new_bandwidth = SimulationService.get_new_bandwidth_services(session_id)
-            if new_bandwidth:
-                buffer_bandwidth.extend(new_bandwidth)
-
-            new_alarms = SimulationService.get_new_alarms_services(session_id)
-            if new_alarms:
-                buffer_alarms.extend(new_alarms)
-                # 为告警生成错误动画
-                for alarm in new_alarms:
-                    error_animation = _build_error_animation(alarm)
-                    if error_animation:
-                        buffer_animations.append(error_animation)
-
-            new_fault_events = SimulationService.get_new_fault_events_services(session_id)
-            if new_fault_events:
-                buffer_faults.extend(new_fault_events)
-
-            # 节流：达到推送间隔时批量推送
-            if should_push:
-                # 推送状态（每次都推送，数据量小）
-                await manager.broadcast(session_id, jsonable_encoder({
-                    'type': 'status',
-                    'data': status,
-                    'timestamp': current_time
-                }))
-
-                # 推送缓冲的报文
-                if buffer_messages:
-                    await manager.broadcast(session_id, jsonable_encoder({
-                        'type': 'messages',
-                        'data': buffer_messages[-limits["messages"]:],  # 动态限制单次推送数量
-                        'timestamp': current_time
-                    }))
-                    buffer_messages.clear()
-
-                # 推送缓冲的带宽数据
-                if buffer_bandwidth:
-                    await manager.broadcast(session_id, jsonable_encoder({
-                        'type': 'bandwidth',
-                        'data': buffer_bandwidth[-limits["bandwidth"]:],
-                        'timestamp': current_time
-                    }))
-                    buffer_bandwidth.clear()
-
-                # 推送缓冲的告警
-                if buffer_alarms:
-                    await manager.broadcast(session_id, jsonable_encoder({
-                        'type': 'alarms',
-                        'data': buffer_alarms,
-                        'timestamp': current_time
-                    }))
-                    buffer_alarms.clear()
-
-                # 推送动画事件
-                if buffer_animations:
-                    await manager.broadcast(session_id, jsonable_encoder({
-                        'type': 'animation',
-                        'data': buffer_animations[-limits["animations"]:],  # 限制动画事件数量
-                        'timestamp': current_time
-                    }))
-                    buffer_animations.clear()
-
-                if buffer_faults:
-                    await manager.broadcast(session_id, jsonable_encoder({
-                        'type': 'faults',
-                        'data': buffer_faults[-limits["faults"]:],
-                        'timestamp': current_time
-                    }))
-                    buffer_faults.clear()
-
-                last_push_time = current_time
-
-            # 短间隔轮询（50ms），但批量推送（100ms）
-            await asyncio.sleep(0.05)
-            
-    except asyncio.CancelledError:
-        pass
-    except Exception as e:
-        logger.error(f'推送仿真数据错误: {str(e)}')
-
-
-def _build_animation_event(message: dict) -> dict:
-    """根据报文构建动画事件"""
-    protocol_type = message.get('protocolType') or message.get('protocol_type', 'LAN')
-    sender_node = message.get('senderNodeId') or message.get('sender_node_id')
-    receiver_node = message.get('receiverNodeId') or message.get('receiver_node_id')
-
-    if not sender_node or not receiver_node:
-        return None
-
-    # 协议颜色映射
-    protocol_colors = {
-        '1553B': '#F97316',  # 橙色
-        'CAN': '#3B82F6',    # 蓝色
-        'RS422': '#22C55E',  # 绿色
-        'RS485': '#22C55E',  # 绿色
-        'LAN': '#FFFFFF',    # 白色
-    }
-
-    return {
-        'type': 'traffic',
-        'edgeId': f"{sender_node}-{receiver_node}",
-        'sourceNodeId': sender_node,
-        'targetNodeId': receiver_node,
-        'protocol': protocol_type,
-        'color': protocol_colors.get(protocol_type, '#FFFFFF'),
-        'duration': 500,  # 动画时长（毫秒）
-    }
-
-
-def _build_error_animation(alarm: dict) -> dict:
-    """根据告警构建错误动画事件"""
-    alarm_type = alarm.get('alarmType') or alarm.get('alarm_type')
-    affected_nodes = alarm.get('affectedNodes') or alarm.get('affected_nodes', [])
-    details = alarm.get('details', {})
-
-    if alarm_type in ('collision', 'bandwidth_exceed', 'congestion'):
-        edge_id = details.get('edge_id') or details.get('bus_id')
-        if edge_id or affected_nodes:
-            return {
-                'type': 'error',
-                'edgeId': edge_id,
-                'nodeIds': affected_nodes,
-                'alarmType': alarm_type,
-                'duration': 1000,
-            }
-
-    return None
+    await simulation_service.stream_session_updates(
+        session_id,
+        has_connections=manager.has_connections,
+        broadcast=manager.broadcast,
+        worker_id=SESSION_PRODUCER_WORKER_ID,
+        owner_ttl_seconds=SESSION_PRODUCER_OWNER_TTL_SECONDS,
+    )

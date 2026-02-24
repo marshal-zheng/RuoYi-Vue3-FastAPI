@@ -13,17 +13,28 @@ from typing import Any, Callable, Literal, Optional
 from user_agents import parse
 from config.enums import BusinessType
 from config.env import AppConfig
+from config.error_codes import ErrorCode, ErrorType
+from container.wiring import get_app_container
 from exceptions.exception import LoginException, ServiceException, ServiceWarning, AppException
 from module_admin.entity.vo.log_vo import LogininforModel, OperLogModel
-from module_admin.service.log_service import LoginLogService, OperationLogService
-from module_admin.service.login_service import LoginService
+from modules.identity.application.services.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
+
 DEFAULT_ERROR_MSG = '接口异常'
 
 
 def _is_test_env() -> bool:
     return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
+
+
+def _resolve_request_service(request: Request, provider_name: str, query_db: AsyncSession):
+    try:
+        container = get_app_container(request)
+        return container.resolve_service(provider_name, query_db)
+    except Exception as exc:
+        logger.warning(f'Log decorator 解析服务失败 provider={provider_name}: {exc}')
+        return None
 
 
 class Log:
@@ -133,7 +144,8 @@ class Log:
                     loginTime=oper_time.strftime('%Y-%m-%d %H:%M:%S'),
                 )
                 kwargs['form_data'].login_info = login_log
-            def _resolve_msg(msg: str | None, default: str = DEFAULT_ERROR_MSG) -> str:
+
+            def _resolve_msg(msg: Optional[str], default: str = DEFAULT_ERROR_MSG) -> str:
                 return msg if msg else default
 
             try:
@@ -151,9 +163,16 @@ class Log:
                 logger.error(resolved_msg)
                 result = ResponseUtil.error(data=e.data, msg=resolved_msg, code=getattr(e, 'code', None))
             except Exception as e:
-                resolved_msg = _resolve_msg(str(e))
                 logger.exception(e)
-                result = ResponseUtil.error(msg=resolved_msg)
+                result = ResponseUtil.problem_details(
+                    request=request,
+                    error_code=ErrorCode.SYSTEM_ERROR,
+                    user_message='系统繁忙，请稍后重试',
+                    developer_message=f'Unhandled exception in log wrapper: {type(e).__name__}: {e}',
+                    http_status=500,
+                    error_type=ErrorType.SYSTEM,
+                    error_code_name='SYSTEM_ERROR',
+                )
             # 获取请求耗时
             cost_time = float(time.time() - start_time) * 100
             # 判断请求是否来自api文档
@@ -202,7 +221,11 @@ class Log:
                     login_log['msg'] = result_dict.get('msg')
 
                     if query_db:
-                        await LoginLogService.add_login_log_services(query_db, LogininforModel(**login_log))
+                        login_log_service = _resolve_request_service(request, 'login_log_service', query_db)
+                        if login_log_service:
+                            await login_log_service.add_login_log_services(LogininforModel(**login_log))
+                        else:
+                            logger.warning('Log decorator 无法解析 login_log_service，跳过登录日志入库')
                     else:
                         logger.warning('Log decorator 未获取到 AsyncSession，跳过登录日志入库')
             else:
@@ -210,10 +233,15 @@ class Log:
                     logger.warning('Log decorator 未获取到 AsyncSession，跳过操作日志入库')
                     return result
 
+                operation_log_service = _resolve_request_service(request, 'operation_log_service', query_db)
+                if not operation_log_service:
+                    logger.warning('Log decorator 无法解析 operation_log_service，跳过操作日志入库')
+                    return result
+
                 current_user = await LoginService.get_current_user(request, token, query_db)
                 oper_name = current_user.user.user_name
                 dept_name = current_user.user.dept.dept_name if current_user.user.dept else None
-                
+
                 # 动态调整 title：如果是保存拓扑且有 versionId，记录为"工程管理-版本"
                 log_title = self.title
                 if self.title == '工程管理-拓扑' and oper_param:
@@ -223,7 +251,7 @@ class Log:
                             log_title = '工程管理-版本'
                     except Exception:
                         pass
-                
+
                 operation_log = OperLogModel(
                     title=log_title,
                     businessType=self.business_type,
@@ -242,7 +270,7 @@ class Log:
                     operTime=oper_time,
                     costTime=int(cost_time),
                 )
-                await OperationLogService.add_operation_log_services(query_db, operation_log)
+                await operation_log_service.add_operation_log_services(operation_log)
 
             return result
 

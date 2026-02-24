@@ -13,6 +13,7 @@
 | `seed_data.py` | 种子数据初始化 |
 | `test_migrations.py` | 迁移测试脚本 |
 | `wait_for_db.py` | 等待数据库就绪 |
+| `check_no_new_horizontal_layer_files.py` | 横向分层目录新增文件防回退检查 |
 
 ## 索引分析工具
 

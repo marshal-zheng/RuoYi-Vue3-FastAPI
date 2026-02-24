@@ -31,7 +31,7 @@ class TestUserAuthenticationWorkflow:
     
     def test_login_service_exists(self):
         """验证登录服务存在"""
-        from module_admin.service.login_service import LoginService
+        from modules.identity.application.services.login_service import LoginService
         
         # 验证服务类存在
         assert LoginService is not None
@@ -41,7 +41,7 @@ class TestUserAuthenticationWorkflow:
     
     def test_user_service_password_operations(self):
         """验证用户服务存在"""
-        from module_admin.service.user_service import UserService
+        from modules.system.application.services.user_service import UserService
         
         # 验证服务类存在
         assert UserService is not None
@@ -53,7 +53,7 @@ class TestProjectManagementWorkflow:
     @pytest.mark.asyncio
     async def test_project_service_crud_methods_exist(self):
         """验证项目服务的CRUD方法存在"""
-        from module_admin.service.project_service import ProjectService
+        from modules.project.application.services.project_service import ProjectService
         
         # 验证CRUD方法存在
         assert hasattr(ProjectService, 'add_project_services')
@@ -65,7 +65,7 @@ class TestProjectManagementWorkflow:
     @pytest.mark.asyncio
     async def test_project_export_import_methods_exist(self):
         """验证项目导入导出方法存在"""
-        from module_admin.service.project_service import ProjectService
+        from modules.project.application.services.project_service import ProjectService
         
         # 验证导入导出方法存在
         assert hasattr(ProjectService, 'export_project_services')
@@ -76,15 +76,24 @@ class TestProjectManagementWorkflow:
     @pytest.mark.asyncio
     async def test_project_code_format_validation(self):
         """验证项目编码格式正确"""
-        from module_admin.service.project_service import ProjectService
-        from unittest.mock import AsyncMock, MagicMock
-        
-        mock_db = AsyncMock()
-        mock_result = MagicMock()
-        mock_result.scalar.return_value = None
-        mock_db.execute.return_value = mock_result
-        
-        code = await ProjectService._generate_project_code(mock_db)
+        from modules.project.application.services.project_service import ProjectService
+        from unittest.mock import AsyncMock
+
+        project_repo = type(
+            'FakeProjectRepo',
+            (),
+            {'get_max_project_code_by_prefix': AsyncMock(return_value=None)},
+        )()
+        service = ProjectService(
+            project_repo=project_repo,
+            version_repo=AsyncMock(),
+            topology_repo=AsyncMock(),
+            device_repo=AsyncMock(),
+            interface_repo=AsyncMock(),
+            query_db=AsyncMock(),
+        )
+
+        code = await service._generate_project_code()
         
         # 验证格式：PRJ + 8位日期 + 4位序号
         assert code.startswith('PRJ')
@@ -139,21 +148,21 @@ class TestSimulationExecutionWorkflow:
         from module_admin.service.simulation_service import SimulationService
         
         # 验证生命周期方法
-        assert hasattr(SimulationService, 'create_session')
-        assert hasattr(SimulationService, 'start_session')
-        assert hasattr(SimulationService, 'stop_session')
-        assert hasattr(SimulationService, 'pause_session')
-        assert hasattr(SimulationService, 'resume_session')
+        assert hasattr(SimulationService, 'create_session_services')
+        assert hasattr(SimulationService, 'start_session_services')
+        assert hasattr(SimulationService, 'stop_session_services')
+        assert hasattr(SimulationService, 'pause_session_services')
+        assert hasattr(SimulationService, 'resume_session_services')
     
     def test_simulation_service_data_methods_exist(self):
         """验证仿真数据获取方法存在"""
         from module_admin.service.simulation_service import SimulationService
         
         # 验证数据获取方法
-        assert hasattr(SimulationService, 'get_realtime_messages')
-        assert hasattr(SimulationService, 'get_realtime_bandwidth')
-        assert hasattr(SimulationService, 'get_realtime_alarms')
-        assert hasattr(SimulationService, 'get_session_status')
+        assert hasattr(SimulationService, 'get_realtime_messages_services')
+        assert hasattr(SimulationService, 'get_realtime_bandwidth_services')
+        assert hasattr(SimulationService, 'get_realtime_alarms_services')
+        assert hasattr(SimulationService, 'get_session_status_services')
     
     def test_simulation_engine_exists(self):
         """验证仿真引擎类存在"""
@@ -325,7 +334,7 @@ class TestVersionControlWorkflow:
     
     def test_project_version_service_exists(self):
         """验证项目版本服务存在"""
-        from module_admin.service.project_version_service import ProjectVersionService
+        from modules.project.application.services.project_version_service import ProjectVersionService
         
         assert ProjectVersionService is not None
         

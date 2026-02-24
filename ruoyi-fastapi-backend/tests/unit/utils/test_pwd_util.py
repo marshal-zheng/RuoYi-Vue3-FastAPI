@@ -3,7 +3,7 @@ Unit tests for password utility functions.
 """
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given, settings, strategies as st
 
 from utils.pwd_util import PwdUtil
 
@@ -86,6 +86,7 @@ class TestPwdUtil:
 
     @given(st.text(min_size=1, max_size=50))
     @pytest.mark.slow
+    @settings(deadline=None)
     @pytest.mark.hypothesis(deadline=None)
     def test_password_round_trip(self, password: str):
         """Property test: any password should hash and verify correctly."""
@@ -94,6 +95,7 @@ class TestPwdUtil:
 
     @given(st.text(min_size=1, max_size=50), st.text(min_size=1, max_size=50))
     @pytest.mark.slow
+    @settings(deadline=None)
     @pytest.mark.hypothesis(deadline=None)
     def test_different_passwords_dont_match(self, password1: str, password2: str):
         """Property test: different passwords should not verify."""

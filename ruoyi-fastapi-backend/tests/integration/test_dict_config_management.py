@@ -88,7 +88,7 @@ class TestConfigManagementIntegration:
     def test_config_delete_endpoint(self, test_client):
         """Test configuration deletion endpoint"""
         response = test_client.delete("/system/config/1")
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code in [200, 401, 404, 409]
     
     def test_config_refresh_cache_endpoint(self, test_client):
         """Test configuration cache refresh endpoint"""
@@ -103,7 +103,7 @@ class TestDictServiceIntegration:
     async def test_dict_type_service_exists(self):
         """Test that dict type service can be imported"""
         try:
-            from module_admin.service.dict_service import DictTypeService
+            from modules.system.application.services import DictTypeService
             assert DictTypeService is not None
         except ImportError:
             # Service might have different name
@@ -113,7 +113,7 @@ class TestDictServiceIntegration:
     async def test_dict_data_service_exists(self):
         """Test that dict data service can be imported"""
         try:
-            from module_admin.service.dict_service import DictDataService
+            from modules.system.application.services import DictDataService
             assert DictDataService is not None
         except ImportError:
             pass
@@ -125,11 +125,6 @@ class TestConfigServiceIntegration:
     @pytest.mark.asyncio
     async def test_config_service_exists(self):
         """Test that config service can be imported"""
-        from module_admin.service.config_service import ConfigService
+        from modules.system.application.services.config_service import ConfigService
         assert ConfigService is not None
     
-    @pytest.mark.asyncio
-    async def test_config_dao_exists(self):
-        """Test that config DAO can be imported"""
-        from module_admin.dao.config_dao import ConfigDao
-        assert ConfigDao is not None

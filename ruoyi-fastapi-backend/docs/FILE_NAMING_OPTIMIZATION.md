@@ -63,7 +63,7 @@ pytest tests/unit/test_exceptions.py tests/unit/test_response_util.py tests/unit
 ### 导入验证
 ```bash
 # 验证服务层导入
-python -c "from module_admin.service.user_service import UserService; from module_admin.service.project_service import ProjectService"
+python -c "from modules.system.application.services.user_service import UserService; from modules.project.application.services.project_service import ProjectService"
 # 结果: ✅ 成功
 
 # 验证异常处理导入

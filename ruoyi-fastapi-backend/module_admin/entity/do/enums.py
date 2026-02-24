@@ -120,10 +120,17 @@ class EnableStatusEnum(str, PyEnum):
     ENABLED = '1'  # 启用
 
 
+class LockStatusEnum(str, PyEnum):
+    """固化状态枚举"""
+    UNLOCKED = '0'  # 未固化
+    LOCKED = '1'  # 已固化
+
+
 class SimulationStatusEnum(str, PyEnum):
     """仿真状态枚举"""
     CREATED = 'created'
     RUNNING = 'running'
+    PAUSED = 'paused'
     STOPPED = 'stopped'
 
 
