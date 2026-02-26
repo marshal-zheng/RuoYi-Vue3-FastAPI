@@ -25,13 +25,19 @@
             />
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center">
-            <span class="text-lg font-bold text-slate-100 tabular-nums">{{ Math.round(item.loadPercent) }}%</span>
-            <span class="text-[10px] text-slate-500 uppercase tracking-wider font-medium mt-0.5">{{ item.protocol }}</span>
+            <span class="text-lg font-bold text-slate-100 tabular-nums"
+              >{{ Math.round(item.loadPercent) }}%</span
+            >
+            <span class="text-[10px] text-slate-500 uppercase tracking-wider font-medium mt-0.5">{{
+              item.protocol
+            }}</span>
           </div>
         </div>
         <!-- 信息 -->
         <div class="mt-3 space-y-1">
-          <div class="text-xs font-medium text-slate-300">{{ formatBandwidth(item.bandwidthMbps) }}</div>
+          <div class="text-xs font-medium text-slate-300">
+            {{ formatBandwidth(item.bandwidthMbps) }}
+          </div>
           <div class="text-[10px] text-slate-500">{{ item.messageCount }} 报文</div>
         </div>
       </div>
@@ -46,7 +52,10 @@
 
     <!-- 趋势图视图 -->
     <div v-else class="w-full h-48 relative">
-      <div v-if="bandwidthData.length === 0" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500">
+      <div
+        v-if="bandwidthData.length === 0"
+        class="absolute inset-0 flex flex-col items-center justify-center text-slate-500"
+      >
         <el-icon class="text-4xl mb-3 text-slate-600"><DataLine /></el-icon>
         <div class="text-sm font-medium">暂无带宽数据</div>
         <div class="text-xs text-slate-600 mt-1">等待仿真开始</div>
@@ -57,9 +66,9 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
-import { DataLine } from '@element-plus/icons-vue'
-import * as echarts from 'echarts'
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { DataLine } from '@element-plus/icons-vue';
+import * as echarts from 'echarts';
 
 const props = defineProps({
   bandwidthData: {
@@ -74,25 +83,25 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const emit = defineEmits(['port-click', 'update:showTrend'])
+const emit = defineEmits(['port-click', 'update:showTrend']);
 
 const showTrend = computed({
   get: () => props.showTrend,
   set: (val) => emit('update:showTrend', val),
-})
-const chartRef = ref(null)
-let chartInstance = null
-let resizeObserver = null
+});
+const chartRef = ref(null);
+let chartInstance = null;
+let resizeObserver = null;
 
 const groupedBandwidth = computed(() => {
-  const grouped = {}
+  const grouped = {};
 
   props.bandwidthData.forEach((item) => {
-    const protocol = item.protocolType || 'unknown'
-    const load = Number((item.loadPercent || 0).toFixed(2))
-    const bw = Number((item.bandwidthMbps || 0).toFixed(3))
+    const protocol = item.protocolType || 'unknown';
+    const load = Number((item.loadPercent || 0).toFixed(2));
+    const bw = Number((item.bandwidthMbps || 0).toFixed(3));
     if (!grouped[protocol]) {
       grouped[protocol] = {
         protocol,
@@ -100,41 +109,41 @@ const groupedBandwidth = computed(() => {
         loadPercent: 0,
         messageCount: 0,
         ports: [],
-      }
+      };
     }
-    grouped[protocol].bandwidthMbps += bw
-    grouped[protocol].loadPercent = Math.max(grouped[protocol].loadPercent, load)
-    grouped[protocol].messageCount += item.messageCount || 0
-    grouped[protocol].ports.push(item)
-  })
+    grouped[protocol].bandwidthMbps += bw;
+    grouped[protocol].loadPercent = Math.max(grouped[protocol].loadPercent, load);
+    grouped[protocol].messageCount += item.messageCount || 0;
+    grouped[protocol].ports.push(item);
+  });
 
-  return Object.values(grouped)
-})
+  return Object.values(grouped);
+});
 
 function getStrokeClass(loadPercent) {
-  if (loadPercent > 95) return 'stroke-red-500'
-  if (loadPercent > 80) return 'stroke-amber-500'
-  return 'stroke-emerald-500'
+  if (loadPercent > 95) return 'stroke-red-500';
+  if (loadPercent > 80) return 'stroke-amber-500';
+  return 'stroke-emerald-500';
 }
 
 function getStrokeDasharray(percent) {
-  const circumference = 2 * Math.PI * 45
-  const progress = (percent / 100) * circumference
-  return `${progress} ${circumference}`
+  const circumference = 2 * Math.PI * 45;
+  const progress = (percent / 100) * circumference;
+  return `${progress} ${circumference}`;
 }
 
 function formatBandwidth(mbps) {
-  const safe = Number(mbps || 0)
+  const safe = Number(mbps || 0);
   if (safe >= 1000) {
-    return `${(safe / 1000).toFixed(2)} Gbps`
+    return `${(safe / 1000).toFixed(2)} Gbps`;
   }
-  return `${safe.toFixed(2)} Mbps`
+  return `${safe.toFixed(2)} Mbps`;
 }
 
 function initChart() {
-  if (!chartRef.value) return
+  if (!chartRef.value) return;
 
-  chartInstance = echarts.init(chartRef.value, 'dark')
+  chartInstance = echarts.init(chartRef.value, 'dark');
 
   const option = {
     backgroundColor: 'transparent',
@@ -157,15 +166,15 @@ function initChart() {
         },
       },
       formatter: (params) => {
-        let result = `<div style="margin-bottom: 4px; font-weight: 600;">${params[0].axisValue}</div>`
+        let result = `<div style="margin-bottom: 4px; font-weight: 600;">${params[0].axisValue}</div>`;
         params.forEach((param) => {
-          const val = Number(param.value?.[1] ?? 0).toFixed(2)
+          const val = Number(param.value?.[1] ?? 0).toFixed(2);
           result += `<div style="margin: 2px 0;">
             <span style="display: inline-block; width: 10px; height: 10px; background: ${param.color}; border-radius: 50%; margin-right: 6px;"></span>
             ${param.seriesName}: <span style="font-weight: 600; color: ${param.color};">${val}%</span>
-          </div>`
-        })
-        return result
+          </div>`;
+        });
+        return result;
       },
     },
     legend: {
@@ -179,19 +188,19 @@ function initChart() {
     xAxis: {
       type: 'time',
       boundaryGap: false,
-      axisLine: { 
+      axisLine: {
         lineStyle: { color: '#334155', width: 1 },
       },
-      axisLabel: { 
+      axisLabel: {
         color: '#94a3b8',
         fontSize: 10,
         rotate: 0,
         formatter: (value) => {
-          const date = new Date(value)
-          const hours = date.getHours().toString().padStart(2, '0')
-          const minutes = date.getMinutes().toString().padStart(2, '0')
-          const seconds = date.getSeconds().toString().padStart(2, '0')
-          return `${hours}:${minutes}:${seconds}`
+          const date = new Date(value);
+          const hours = date.getHours().toString().padStart(2, '0');
+          const minutes = date.getMinutes().toString().padStart(2, '0');
+          const seconds = date.getSeconds().toString().padStart(2, '0');
+          return `${hours}:${minutes}:${seconds}`;
         },
       },
       splitLine: {
@@ -201,8 +210,8 @@ function initChart() {
       axisPointer: {
         label: {
           formatter: (params) => {
-            const date = new Date(params.value)
-            return `${date.toLocaleTimeString('zh-CN', { hour12: false })}`
+            const date = new Date(params.value);
+            return `${date.toLocaleTimeString('zh-CN', { hour12: false })}`;
           },
         },
       },
@@ -213,79 +222,79 @@ function initChart() {
       nameTextStyle: { color: '#94a3b8', fontSize: 11 },
       min: 0,
       max: 100,
-      axisLine: { 
+      axisLine: {
         lineStyle: { color: '#334155', width: 1 },
       },
-      axisLabel: { 
+      axisLabel: {
         color: '#94a3b8',
         fontSize: 10,
         formatter: '{value}%',
       },
-      splitLine: { 
+      splitLine: {
         show: true,
         lineStyle: { color: 'rgba(51, 65, 85, 0.3)', type: 'dashed' },
       },
     },
     series: [],
-  }
+  };
 
-  chartInstance.setOption(option)
+  chartInstance.setOption(option);
 }
 
 function updateChart() {
-  if (!chartInstance) return
-  
+  if (!chartInstance) return;
+
   if (!props.bandwidthData || props.bandwidthData.length === 0) {
     chartInstance.setOption({
       series: [],
       legend: { data: [] },
-    })
-    return
+    });
+    return;
   }
 
   // 按协议类型分组数据
-  const seriesData = {}
+  const seriesData = {};
   const protocolColors = {
-    '1553B': '#3b82f6',   // 蓝色
-    'CAN': '#10b981',     // 绿色
-    'RS422': '#f59e0b',   // 橙色
-    'LAN': '#8b5cf6',     // 紫色
-    'unknown': '#64748b', // 灰色
-  }
-  
+    '1553B': '#3b82f6', // 蓝色
+    CAN: '#10b981', // 绿色
+    RS422: '#f59e0b', // 橙色
+    LAN: '#8b5cf6', // 紫色
+    unknown: '#64748b', // 灰色
+  };
+
   // 渐变色配置
   const gradientColors = {
     '1553B': ['rgba(59, 130, 246, 0.4)', 'rgba(59, 130, 246, 0.05)'],
-    'CAN': ['rgba(16, 185, 129, 0.4)', 'rgba(16, 185, 129, 0.05)'],
-    'RS422': ['rgba(245, 158, 11, 0.4)', 'rgba(245, 158, 11, 0.05)'],
-    'LAN': ['rgba(139, 92, 246, 0.4)', 'rgba(139, 92, 246, 0.05)'],
-    'unknown': ['rgba(100, 116, 139, 0.4)', 'rgba(100, 116, 139, 0.05)'],
-  }
+    CAN: ['rgba(16, 185, 129, 0.4)', 'rgba(16, 185, 129, 0.05)'],
+    RS422: ['rgba(245, 158, 11, 0.4)', 'rgba(245, 158, 11, 0.05)'],
+    LAN: ['rgba(139, 92, 246, 0.4)', 'rgba(139, 92, 246, 0.05)'],
+    unknown: ['rgba(100, 116, 139, 0.4)', 'rgba(100, 116, 139, 0.05)'],
+  };
 
   // 处理数据：按时间戳排序，按协议分组
   const sortedData = [...props.bandwidthData].sort((a, b) => {
-    const timeA = (a.timestamp || 0) * 1000
-    const timeB = (b.timestamp || 0) * 1000
-    return timeA - timeB
-  })
+    const timeA = (a.timestamp || 0) * 1000;
+    const timeB = (b.timestamp || 0) * 1000;
+    return timeA - timeB;
+  });
 
   sortedData.forEach((item) => {
-    const protocol = item.protocolType || 'unknown'
+    const protocol = item.protocolType || 'unknown';
     if (!seriesData[protocol]) {
-      seriesData[protocol] = []
+      seriesData[protocol] = [];
     }
-    const timestamp = (item.timestamp || 0) * 1000
-    const loadPercent = Number((item.loadPercent || 0).toFixed(2))
-    seriesData[protocol].push([timestamp, loadPercent])
-  })
+    const timestamp = (item.timestamp || 0) * 1000;
+    const loadPercent = Number((item.loadPercent || 0).toFixed(2));
+    seriesData[protocol].push([timestamp, loadPercent]);
+  });
 
   // 生成系列配置
   const series = Object.entries(seriesData)
     .filter(([_, data]) => data.length > 0)
     .map(([name, data], index) => {
-      const color = protocolColors[name] || `hsl(${(index * 60) % 360}, 70%, 60%)`
-      const gradients = gradientColors[name] || [`${color}40`, `${color}05`]
-      
+      const color = protocolColors[name] || `hsl(${(index * 60) % 360}, 70%, 60%)`;
+      const gradients = gradientColors[name] || [`${color}40`, `${color}05`];
+
       return {
         name,
         type: 'line',
@@ -332,85 +341,88 @@ function updateChart() {
         animation: true,
         animationDuration: 1000,
         animationEasing: 'cubicOut',
-      }
-    })
+      };
+    });
 
   // 更新图表
-  chartInstance.setOption({
-    legend: { 
-      data: Object.keys(seriesData).filter(key => seriesData[key].length > 0),
-      selected: Object.keys(seriesData).reduce((acc, key) => {
-        acc[key] = true
-        return acc
-      }, {}),
+  chartInstance.setOption(
+    {
+      legend: {
+        data: Object.keys(seriesData).filter((key) => seriesData[key].length > 0),
+        selected: Object.keys(seriesData).reduce((acc, key) => {
+          acc[key] = true;
+          return acc;
+        }, {}),
+      },
+      series,
     },
-    series,
-  }, { notMerge: false })
+    { notMerge: false }
+  );
 
   // 自适应调整Y轴范围
   if (series.length > 0) {
-    const allValues = series.flatMap(s => s.data.map(d => d[1]))
-    const maxValue = Math.max(...allValues, 0)
-    const minValue = Math.min(...allValues, 0)
-    
+    const allValues = series.flatMap((s) => s.data.map((d) => d[1]));
+    const maxValue = Math.max(...allValues, 0);
+    const minValue = Math.min(...allValues, 0);
+
     chartInstance.setOption({
       yAxis: {
         min: Math.max(0, Math.floor(minValue / 10) * 10 - 5),
         max: Math.min(100, Math.ceil(maxValue / 10) * 10 + 5),
       },
-    })
+    });
   }
 }
 
-watch(() => props.bandwidthData, updateChart, { deep: true, immediate: true })
+watch(() => props.bandwidthData, updateChart, { deep: true, immediate: true });
 
 watch(showTrend, (show) => {
   if (show) {
     nextTick(() => {
       setTimeout(() => {
-        initChart()
-        updateChart()
-      }, 100)
-    })
+        initChart();
+        updateChart();
+      }, 100);
+    });
   } else {
     if (chartInstance) {
-      chartInstance.dispose()
-      chartInstance = null
+      chartInstance.dispose();
+      chartInstance = null;
     }
   }
-})
+});
 
 onMounted(() => {
   if (showTrend.value) {
     nextTick(() => {
       setTimeout(() => {
-        initChart()
-        updateChart()
-      }, 100)
-    })
+        initChart();
+        updateChart();
+      }, 100);
+    });
   }
 
   // 监听容器大小变化
   if (chartRef.value) {
     resizeObserver = new ResizeObserver(() => {
       if (chartInstance) {
-        chartInstance.resize()
+        chartInstance.resize();
       }
-    })
-    resizeObserver.observe(chartRef.value)
+    });
+    resizeObserver.observe(chartRef.value);
   }
-})
+});
 
 onUnmounted(() => {
   if (resizeObserver) {
-    resizeObserver.disconnect()
-    resizeObserver = null
+    resizeObserver.disconnect();
+    resizeObserver = null;
   }
   if (chartInstance) {
-    chartInstance.dispose()
-    chartInstance = null
+    chartInstance.dispose();
+    chartInstance = null;
   }
-})
+});
 </script>
 
 <style scoped>

@@ -44,11 +44,11 @@ const usePermissionStore = defineStore('permission', {
     setFirstMenuPath(path: string) {
       this.firstMenuPath = path || '/index';
     },
-    generateRoutes(roles: string[]) {
-      return new Promise((resolve) => {
+    generateRoutes() {
+      return new Promise<any[]>((resolve) => {
         // 向后端请求路由数据
         // http 客户端已解包 payload.data，res 直接是路由数组
-        getRouters().then((res) => {
+        getRouters().then((res: any) => {
           const sdata = JSON.parse(JSON.stringify(res));
           const rdata = JSON.parse(JSON.stringify(res));
           const defaultData = JSON.parse(JSON.stringify(res));
@@ -77,7 +77,11 @@ const usePermissionStore = defineStore('permission', {
 });
 
 // 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(asyncRouterMap: any[], lastRouter: any = false, type: boolean = false): any[] {
+function filterAsyncRouter(
+  asyncRouterMap: any[],
+  lastRouter: any = false,
+  type: boolean = false
+): any[] {
   return asyncRouterMap.filter((route) => {
     if (type && route.children) {
       route.children = filterChildren(route.children);

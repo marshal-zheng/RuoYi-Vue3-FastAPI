@@ -217,7 +217,9 @@ function exportCSV() {
   lines.push('协议类型,平均带宽,峰值带宽,平均负载');
   if (data.bandwidthStats.length > 0) {
     data.bandwidthStats.forEach((item) => {
-      lines.push(`${item.protocol || ''},${item.avgBandwidth || ''},${item.maxBandwidth || ''},${item.avgLoad || ''}`);
+      lines.push(
+        `${item.protocol || ''},${item.avgBandwidth || ''},${item.maxBandwidth || ''},${item.avgLoad || ''}`
+      );
     });
   } else {
     lines.push('暂无数据');
@@ -229,7 +231,9 @@ function exportCSV() {
   lines.push('告警类型,数量,级别');
   if (data.alarmStats.length > 0) {
     data.alarmStats.forEach((item) => {
-      lines.push(`${getAlarmTypeLabel(item.type)},${item.count || ''},${getSeverityLabel(item.level)}`);
+      lines.push(
+        `${getAlarmTypeLabel(item.type)},${item.count || ''},${getSeverityLabel(item.level)}`
+      );
     });
   } else {
     lines.push('暂无数据');
@@ -317,9 +321,7 @@ async function exportDOCX() {
       alignment: AlignmentType.CENTER,
     }),
     new Paragraph({
-      children: [
-        new TextRun({ text: `导出时间：${data.exportTime}`, size: 20, color: '666666' }),
-      ],
+      children: [new TextRun({ text: `导出时间：${data.exportTime}`, size: 20, color: '666666' })],
       alignment: AlignmentType.CENTER,
     }),
     new Paragraph({ text: '' }),

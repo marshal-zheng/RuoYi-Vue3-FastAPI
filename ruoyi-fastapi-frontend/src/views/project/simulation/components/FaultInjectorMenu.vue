@@ -5,7 +5,9 @@
     :style="{ left: position.x + 'px', top: position.y + 'px' }"
     @click.stop
   >
-    <div class="px-4 py-2.5 text-xs font-semibold text-slate-400 bg-slate-900/50 border-b border-slate-700/50">
+    <div
+      class="px-4 py-2.5 text-xs font-semibold text-slate-400 bg-slate-900/50 border-b border-slate-700/50"
+    >
       故障注入
     </div>
     <div class="py-2">
@@ -24,7 +26,11 @@
   <!-- 参数配置对话框 -->
   <el-dialog v-model="showParamsDialog" :title="currentFault?.label" width="400px" append-to-body>
     <el-form :model="faultParams" label-width="100px">
-      <el-form-item v-for="param in currentFault?.params || []" :key="param.name" :label="param.label">
+      <el-form-item
+        v-for="param in currentFault?.params || []"
+        :key="param.name"
+        :label="param.label"
+      >
         <el-input-number
           v-if="param.type === 'number'"
           v-model="faultParams[param.name]"
@@ -42,18 +48,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { Link, Warning, CircleClose, Delete, Timer } from '@element-plus/icons-vue'
-import { FaultType, FAULT_TYPE_CONFIG } from '../composables/useFaultInjection'
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { Link, Warning, CircleClose, Delete, Timer } from '@element-plus/icons-vue';
+import { FaultType, FAULT_TYPE_CONFIG } from '../composables/useFaultInjection';
 
-const emit = defineEmits(['inject', 'clear'])
+const emit = defineEmits(['inject', 'clear']);
 
-const visible = ref(false)
-const position = ref({ x: 0, y: 0 })
-const target = ref(null)
-const showParamsDialog = ref(false)
-const currentFault = ref(null)
-const faultParams = ref({})
+const visible = ref(false);
+const position = ref({ x: 0, y: 0 });
+const target = ref(null);
+const showParamsDialog = ref(false);
+const currentFault = ref(null);
+const faultParams = ref({});
 
 const iconMap = {
   Disconnect: Link,
@@ -62,12 +68,12 @@ const iconMap = {
   CircleClose,
   Delete,
   Timer,
-}
+};
 
 const menuItems = computed(() => {
-  if (!target.value) return []
+  if (!target.value) return [];
 
-  const targetType = target.value.type
+  const targetType = target.value.type;
   return Object.entries(FAULT_TYPE_CONFIG)
     .filter(([, config]) => config.targetType === targetType)
     .map(([type, config]) => ({
@@ -75,34 +81,34 @@ const menuItems = computed(() => {
       label: config.label,
       icon: iconMap[config.icon] || Warning,
       params: config.params,
-    }))
-})
+    }));
+});
 
 function show(event, targetInfo) {
-  position.value = { x: event.clientX, y: event.clientY }
-  target.value = targetInfo
-  visible.value = true
+  position.value = { x: event.clientX, y: event.clientY };
+  target.value = targetInfo;
+  visible.value = true;
 }
 
 function hide() {
-  visible.value = false
-  target.value = null
+  visible.value = false;
+  target.value = null;
 }
 
 function handleClick(item) {
-  currentFault.value = item
+  currentFault.value = item;
 
   if (item.params && item.params.length > 0) {
-    faultParams.value = {}
+    faultParams.value = {};
     item.params.forEach((param) => {
-      faultParams.value[param.name] = param.default
-    })
-    showParamsDialog.value = true
+      faultParams.value[param.name] = param.default;
+    });
+    showParamsDialog.value = true;
   } else {
-    confirmInject()
+    confirmInject();
   }
 
-  hide()
+  hide();
 }
 
 function confirmInject() {
@@ -111,26 +117,26 @@ function confirmInject() {
     targetId: target.value?.target?.id,
     targetType: target.value?.type,
     params: { ...faultParams.value },
-  })
+  });
 
-  showParamsDialog.value = false
-  currentFault.value = null
-  faultParams.value = {}
+  showParamsDialog.value = false;
+  currentFault.value = null;
+  faultParams.value = {};
 }
 
 function handleClickOutside() {
   if (visible.value) {
-    hide()
+    hide();
   }
 }
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
+  document.addEventListener('click', handleClickOutside);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+  document.removeEventListener('click', handleClickOutside);
+});
 
-defineExpose({ show, hide })
+defineExpose({ show, hide });
 </script>

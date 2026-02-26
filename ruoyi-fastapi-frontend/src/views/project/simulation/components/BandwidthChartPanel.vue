@@ -2,7 +2,7 @@
   <transition name="fade-slide">
     <zx-floating-panel
       v-if="visible"
-       :showCollapseBtn="false"
+      :showCollapseBtn="false"
       :position="position"
       :size="size"
       :collapsed-size="collapsedSize"
@@ -18,7 +18,7 @@
             实时
           </el-tag>
           <el-tag v-else-if="isWaiting" type="info" size="small" effect="plain"> 待机 </el-tag>
-          
+
           <div class="flex items-center gap-2 ml-auto">
             <el-segmented v-model="viewMode" :options="viewOptions" size="small" />
             <el-select
@@ -37,9 +37,8 @@
       </template>
 
       <div class="bandwidth-chart-panel monitor-panel">
-
         <!-- 实时图表区域 -->
-        <div 
+        <div
           class="chart-wrapper"
           @mousemove="handleChartMouseMove"
           @mouseleave="handleChartMouseLeave"
@@ -76,15 +75,15 @@
           </div>
 
           <!-- 垂直指示线 -->
-          <div 
-            v-if="chartTooltip.visible" 
+          <div
+            v-if="chartTooltip.visible"
             class="chart-crosshair"
             :style="{ left: chartTooltip.lineX + 'px' }"
           ></div>
 
           <!-- 数据点高亮 -->
-          <div 
-            v-if="chartTooltip.visible" 
+          <div
+            v-if="chartTooltip.visible"
             class="chart-highlight-dot"
             :style="{ left: chartTooltip.dotX + 'px', top: chartTooltip.dotY + 'px' }"
           ></div>
@@ -92,8 +91,8 @@
 
         <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
         <Teleport to="body">
-          <div 
-            v-if="chartTooltip.visible" 
+          <div
+            v-if="chartTooltip.visible"
             class="chart-tooltip-fixed bandwidth"
             :style="{ left: chartTooltip.tooltipX + 'px', top: chartTooltip.tooltipY + 'px' }"
           >
@@ -543,7 +542,7 @@ function handleChartMouseMove(event) {
 
   // 找到最近的数据点
   const relativeX = mouseX - padding.left;
-  
+
   // 检查是否在图表区域内
   if (relativeX < 0 || relativeX > chartWidth) {
     chartTooltip.value.visible = false;
@@ -555,7 +554,7 @@ function handleChartMouseMove(event) {
   if (index >= 0 && index < data.length) {
     const value = data[index];
     const maxY = Math.max(yAxisMax.value, 0.001);
-    
+
     // 计算数据点的实际位置（相对于canvas）
     const pointX = padding.left + index * pointWidth;
     const pointY = height - padding.bottom - (value / maxY) * chartHeight;
@@ -565,7 +564,7 @@ function handleChartMouseMove(event) {
     const tooltipHeight = 70;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // 转换为视口坐标
     let tooltipX = rect.left + pointX + 12;
     let tooltipY = rect.top + pointY - tooltipHeight / 2;
@@ -583,9 +582,9 @@ function handleChartMouseMove(event) {
 
     // 格式化带宽值
     const formatted = formatBandwidth(value);
-    
+
     // 计算时间（假设每个点代表1秒，从当前时间往前推）
-    const secondsAgo = (data.length - 1 - index);
+    const secondsAgo = data.length - 1 - index;
     const time = secondsAgo === 0 ? '现在' : `-${secondsAgo}s`;
 
     chartTooltip.value = {
@@ -869,7 +868,8 @@ defineExpose({
 }
 
 @keyframes pulse-highlight {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 1;
   }
@@ -1047,7 +1047,6 @@ defineExpose({
     }
   }
 }
-
 </style>
 
 <style lang="less">

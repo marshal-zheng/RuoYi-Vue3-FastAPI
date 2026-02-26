@@ -3,12 +3,7 @@
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="create-table-content">
       <div class="mb-3">创建表语句(支持多个建表语句)：</div>
-      <el-input
-        type="textarea"
-        :rows="10"
-        placeholder="请输入建表语句"
-        v-model="state.data.sql"
-      />
+      <el-input type="textarea" :rows="10" placeholder="请输入建表语句" v-model="state.data.sql" />
     </div>
   </ZxDialog>
 </template>

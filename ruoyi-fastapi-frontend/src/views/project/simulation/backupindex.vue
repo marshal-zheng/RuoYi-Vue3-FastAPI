@@ -67,17 +67,19 @@
             </div>
             <div class="panel-actions">
               <div class="view-toggle">
-                <span 
-                  class="toggle-item" 
+                <span
+                  class="toggle-item"
                   :class="{ active: !dashboardShowTrend }"
                   @click="dashboardShowTrend = false"
-                >仪表</span>
+                  >仪表</span
+                >
                 <span class="toggle-divider">|</span>
-                <span 
-                  class="toggle-item" 
+                <span
+                  class="toggle-item"
                   :class="{ active: dashboardShowTrend }"
                   @click="dashboardShowTrend = true"
-                >趋势</span>
+                  >趋势</span
+                >
               </div>
             </div>
           </div>
@@ -92,7 +94,7 @@
       </zx-floating-panel>
 
       <zx-floating-panel
-      :showCollapseBtn="false"
+        :showCollapseBtn="false"
         title="告警信息"
         :position="{ top: '550px', right: '28px' }"
         :size="{ width: '320px', maxHeight: '420px' }"
@@ -651,12 +653,18 @@ watch(isRunning, (running) => {
 /* 拓扑画布网格背景 - 深色主题优化 */
 .sim-canvas {
   background-color: #0a0f1a;
-  background-image: 
+  background-image:
     linear-gradient(rgba(77, 125, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(77, 125, 255, 0.03) 1px, transparent 1px),
     radial-gradient(circle at 50% 50%, rgba(77, 125, 255, 0.02) 0%, transparent 50%);
-  background-size: 20px 20px, 20px 20px, 100% 100%;
-  background-position: 0 0, 0 0, center center;
+  background-size:
+    20px 20px,
+    20px 20px,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    center center;
 }
 
 .sim-canvas :deep(.xflow-dag),
@@ -680,9 +688,9 @@ watch(isRunning, (running) => {
 }
 
 .simulation-shell {
-  background: radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%),
-    #0b1220;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%), #0b1220;
 }
 
 .floating-panel {
@@ -733,8 +741,13 @@ watch(isRunning, (running) => {
 }
 
 @keyframes live-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }
 
 .panel-actions {

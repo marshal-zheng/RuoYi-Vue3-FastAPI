@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full text-slate-300">
     <!-- 工具栏 -->
-  <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
+    <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
       <ProtocolTypeSelector
         v-model="localFilter.protocolType"
         placeholder="协议"
@@ -64,135 +64,136 @@
         class="!w-24 sim-input-dark flex-shrink-0"
         @input="handleFilterChange"
       /> -->
-    <el-popover v-model:visible="showAdvanced" placement="bottom-start" :width="520" trigger="click">
-      <div class="advanced-search__panel">
-        <div class="flex items-center justify-between mb-2">
-          <span class="text-xs text-slate-400">报文/字段多条件检索</span>
-          <el-select
-            v-model="conditionLogic"
-            size="small"
-            class="!w-32 sim-select-dark"
-            popper-class="sim-popper-dark"
-            @change="handleAdvancedChange"
-          >
-            <el-option label="满足全部(AND)" value="and" />
-            <el-option label="满足任一(OR)" value="or" />
-          </el-select>
-        </div>
-        <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
-          <div
-            v-for="cond in advancedConditions"
-            :key="cond.id"
-            class="flex items-center gap-2"
-          >
+      <el-popover
+        v-model:visible="showAdvanced"
+        placement="bottom-start"
+        :width="520"
+        trigger="click"
+      >
+        <div class="advanced-search__panel">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-slate-400">报文/字段多条件检索</span>
             <el-select
-              v-model="cond.type"
-              placeholder="条件类型"
+              v-model="conditionLogic"
               size="small"
-              class="!w-28 sim-select-dark"
+              class="!w-32 sim-select-dark"
               popper-class="sim-popper-dark"
               @change="handleAdvancedChange"
             >
-              <el-option label="报文HEX包含" value="payload" />
-              <el-option label="字段键/值" value="field" />
-              <el-option label="节点/端口" value="node" />
-              <el-option label="协议匹配" value="protocol" />
-              <el-option label="大小范围" value="size" />
-              <el-option label="时延范围" value="latency" />
+              <el-option label="满足全部(AND)" value="and" />
+              <el-option label="满足任一(OR)" value="or" />
             </el-select>
-
-            <template v-if="cond.type === 'node'">
+          </div>
+          <div class="space-y-2 max-h-60 overflow-y-auto pr-1">
+            <div v-for="cond in advancedConditions" :key="cond.id" class="flex items-center gap-2">
               <el-select
-                v-model="cond.field"
-                placeholder="字段"
+                v-model="cond.type"
+                placeholder="条件类型"
                 size="small"
-                class="!w-32 sim-select-dark"
+                class="!w-28 sim-select-dark"
                 popper-class="sim-popper-dark"
                 @change="handleAdvancedChange"
               >
-                <el-option label="源节点" value="senderNodeId" />
-                <el-option label="源端口" value="senderPortId" />
-                <el-option label="目标节点" value="receiverNodeId" />
-                <el-option label="目标端口" value="receiverPortId" />
+                <el-option label="报文HEX包含" value="payload" />
+                <el-option label="字段键/值" value="field" />
+                <el-option label="节点/端口" value="node" />
+                <el-option label="协议匹配" value="protocol" />
+                <el-option label="大小范围" value="size" />
+                <el-option label="时延范围" value="latency" />
               </el-select>
-              <el-input
-                v-model="cond.value"
-                size="small"
-                placeholder="请输入值"
-                class="!w-36 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-            </template>
 
-            <template v-else-if="cond.type === 'field'">
-              <el-input
-                v-model="cond.key"
-                size="small"
-                placeholder="字段名(可选)"
-                class="!w-32 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-              <el-input
-                v-model="cond.value"
-                size="small"
-                placeholder="字段值"
-                class="!w-36 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-            </template>
+              <template v-if="cond.type === 'node'">
+                <el-select
+                  v-model="cond.field"
+                  placeholder="字段"
+                  size="small"
+                  class="!w-32 sim-select-dark"
+                  popper-class="sim-popper-dark"
+                  @change="handleAdvancedChange"
+                >
+                  <el-option label="源节点" value="senderNodeId" />
+                  <el-option label="源端口" value="senderPortId" />
+                  <el-option label="目标节点" value="receiverNodeId" />
+                  <el-option label="目标端口" value="receiverPortId" />
+                </el-select>
+                <el-input
+                  v-model="cond.value"
+                  size="small"
+                  placeholder="请输入值"
+                  class="!w-36 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+              </template>
 
-            <template v-else-if="cond.type === 'size' || cond.type === 'latency'">
-              <el-input
-                v-model.number="cond.min"
-                size="small"
-                placeholder="最小"
-                class="!w-24 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-              <span class="text-xs text-slate-400">~</span>
-              <el-input
-                v-model.number="cond.max"
-                size="small"
-                placeholder="最大"
-                class="!w-24 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-              <span class="text-xs text-slate-500">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
-            </template>
+              <template v-else-if="cond.type === 'field'">
+                <el-input
+                  v-model="cond.key"
+                  size="small"
+                  placeholder="字段名(可选)"
+                  class="!w-32 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+                <el-input
+                  v-model="cond.value"
+                  size="small"
+                  placeholder="字段值"
+                  class="!w-36 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+              </template>
 
-            <template v-else>
-              <el-input
-                v-model="cond.value"
-                size="small"
-                placeholder="请输入值"
-                class="!w-48 sim-input-dark"
-                @input="handleAdvancedChange"
-              />
-            </template>
+              <template v-else-if="cond.type === 'size' || cond.type === 'latency'">
+                <el-input
+                  v-model.number="cond.min"
+                  size="small"
+                  placeholder="最小"
+                  class="!w-24 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+                <span class="text-xs text-slate-400">~</span>
+                <el-input
+                  v-model.number="cond.max"
+                  size="small"
+                  placeholder="最大"
+                  class="!w-24 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+                <span class="text-xs text-slate-500">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
+              </template>
 
-            <el-button
-              circle
-              size="small"
-              class="sim-btn-dark !border-slate-700"
-              @click="removeCondition(cond.id)"
-            >
-              <el-icon><Close /></el-icon>
+              <template v-else>
+                <el-input
+                  v-model="cond.value"
+                  size="small"
+                  placeholder="请输入值"
+                  class="!w-48 sim-input-dark"
+                  @input="handleAdvancedChange"
+                />
+              </template>
+
+              <el-button
+                circle
+                size="small"
+                class="sim-btn-dark !border-slate-700"
+                @click="removeCondition(cond.id)"
+              >
+                <el-icon><Close /></el-icon>
+              </el-button>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center justify-between">
+            <div class="flex items-center gap-2 text-xs text-slate-500">
+              <el-button text size="small" type="primary" @click="addCondition">
+                新增条件
+              </el-button>
+              <span>当前 {{ activeConditionCount }} 条</span>
+            </div>
+            <el-button size="small" type="primary" @click="applyAdvancedSearch">
+              应用检索
             </el-button>
           </div>
         </div>
-        <div class="mt-3 flex items-center justify-between">
-          <div class="flex items-center gap-2 text-xs text-slate-500">
-            <el-button text size="small" type="primary" @click="addCondition">
-              新增条件
-            </el-button>
-            <span>当前 {{ activeConditionCount }} 条</span>
-          </div>
-          <el-button size="small" type="primary" @click="applyAdvancedSearch">
-            应用检索
-          </el-button>
-        </div>
-      </div>
-      <!-- <template #reference>
+        <!-- <template #reference>
         <el-button
           size="small"
           class="sim-btn-dark flex-shrink-0"
@@ -204,11 +205,21 @@
           </span>
         </el-button>
       </template> -->
-    </el-popover>
-      <el-checkbox v-model="localFilter.errorOnly" size="small" class="flex-shrink-0" @change="handleFilterChange">
+      </el-popover>
+      <el-checkbox
+        v-model="localFilter.errorOnly"
+        size="small"
+        class="flex-shrink-0"
+        @change="handleFilterChange"
+      >
         错误
       </el-checkbox>
-      <el-checkbox v-model="localAutoScroll" size="small" class="flex-shrink-0" @change="handleAutoScrollChange">
+      <el-checkbox
+        v-model="localAutoScroll"
+        size="small"
+        class="flex-shrink-0"
+        @change="handleAutoScrollChange"
+      >
         自动滚动
       </el-checkbox>
       <el-dropdown @command="handleExport" class="flex-shrink-0">
@@ -222,21 +233,23 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-    <span class="text-xs text-slate-500 flex-shrink-0 ml-auto">共 {{ filteredMessages.length }} 条</span>
+      <span class="text-xs text-slate-500 flex-shrink-0 ml-auto"
+        >共 {{ filteredMessages.length }} 条</span
+      >
     </div>
-  <div v-if="activeConditionCount" class="px-3 pb-2 flex flex-wrap gap-2">
-    <el-tag
-      v-for="cond in normalizedConditions"
-      :key="cond.id"
-      closable
-      size="small"
-      type="info"
-      effect="dark"
-      @close="removeCondition(cond.id)"
-    >
-      {{ describeCondition(cond) }}
-    </el-tag>
-  </div>
+    <div v-if="activeConditionCount" class="px-3 pb-2 flex flex-wrap gap-2">
+      <el-tag
+        v-for="cond in normalizedConditions"
+        :key="cond.id"
+        closable
+        size="small"
+        type="info"
+        effect="dark"
+        @close="removeCondition(cond.id)"
+      >
+        {{ describeCondition(cond) }}
+      </el-tag>
+    </div>
 
     <!-- 报文列表 -->
     <div class="flex-1 overflow-hidden w-full" ref="listRef">
@@ -258,8 +271,13 @@
     </div>
 
     <!-- 报文详情 -->
-    <div v-if="selectedMessage" class="border-t border-slate-700/50 max-h-28 overflow-y-auto bg-slate-900/50">
-      <div class="pro-card-header flex justify-between items-center text-xs font-semibold text-slate-300">
+    <div
+      v-if="selectedMessage"
+      class="border-t border-slate-700/50 max-h-28 overflow-y-auto bg-slate-900/50"
+    >
+      <div
+        class="pro-card-header flex justify-between items-center text-xs font-semibold text-slate-300"
+      >
         <span>报文详情</span>
         <el-button :icon="Close" circle size="small" @click="selectedMessage = null" />
       </div>
@@ -285,10 +303,10 @@
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed, h } from 'vue'
-import { ArrowDown, Document, Close } from '@element-plus/icons-vue'
-import { formatTimestamp } from '../utils/timeFormatter'
-import { PortPairSelector, ProtocolTypeSelector } from './selector'
+import { ref, watch, nextTick, onMounted, onBeforeUnmount, computed, h } from 'vue';
+import { ArrowDown, Document, Close } from '@element-plus/icons-vue';
+import { formatTimestamp } from '../utils/timeFormatter';
+import { PortPairSelector, ProtocolTypeSelector } from './selector';
 
 const props = defineProps({
   messages: {
@@ -307,27 +325,27 @@ const props = defineProps({
     type: Number,
     default: 1,
   },
-})
+});
 
-const emit = defineEmits(['message-select', 'filter-change', 'export', 'auto-scroll-change'])
+const emit = defineEmits(['message-select', 'filter-change', 'export', 'auto-scroll-change']);
 
-const tableRef = ref(null)
-const listRef = ref(null)
-const tableWidth = ref(0)
-const tableHeight = ref(200)
-const resizeObserver = ref(null)
-const rowHeight = 36
+const tableRef = ref(null);
+const listRef = ref(null);
+const tableWidth = ref(0);
+const tableHeight = ref(200);
+const resizeObserver = ref(null);
+const rowHeight = 36;
 
-const selectedId = ref(null)
-const selectedMessage = ref(null)
-const localAutoScroll = ref(props.autoScroll)
-const safeMessages = computed(() => (Array.isArray(props.messages) ? props.messages : []))
-const playSpeed = computed(() => Math.max(0.5, Math.min(Number(props.speed) || 1, 4)))
+const selectedId = ref(null);
+const selectedMessage = ref(null);
+const localAutoScroll = ref(props.autoScroll);
+const safeMessages = computed(() => (Array.isArray(props.messages) ? props.messages : []));
+const playSpeed = computed(() => Math.max(0.5, Math.min(Number(props.speed) || 1, 4)));
 
-let conditionUid = 0
-const showAdvanced = ref(false)
-const advancedConditions = ref([createCondition('payload')])
-const conditionLogic = ref('and')
+let conditionUid = 0;
+const showAdvanced = ref(false);
+const advancedConditions = ref([createCondition('payload')]);
+const conditionLogic = ref('and');
 
 const localFilter = ref({
   protocolType: '',
@@ -336,7 +354,7 @@ const localFilter = ref({
   portPair: '',
   keyword: '',
   errorOnly: false,
-})
+});
 
 const normalizedConditions = computed(() =>
   advancedConditions.value
@@ -346,50 +364,46 @@ const normalizedConditions = computed(() =>
     }))
     .filter((cond) => {
       if (cond.type === 'size' || cond.type === 'latency') {
-        return cond.min !== undefined || cond.max !== undefined
+        return cond.min !== undefined || cond.max !== undefined;
       }
-      return Boolean(String(cond.value || cond.key || '').trim())
+      return Boolean(String(cond.value || cond.key || '').trim());
     })
-)
+);
 
-const activeConditionCount = computed(() => normalizedConditions.value.length)
+const activeConditionCount = computed(() => normalizedConditions.value.length);
 
 const keywordTokens = computed(() =>
   localFilter.value.keyword ? [localFilter.value.keyword] : []
-)
+);
 const payloadTokens = computed(() =>
-  normalizedConditions.value
-    .filter((c) => c.type === 'payload' && c.value)
-    .map((c) => c.value)
-)
+  normalizedConditions.value.filter((c) => c.type === 'payload' && c.value).map((c) => c.value)
+);
 const nodeTokens = computed(() =>
-  normalizedConditions.value
-    .filter((c) => c.type === 'node' && c.value)
-    .map((c) => c.value)
-)
+  normalizedConditions.value.filter((c) => c.type === 'node' && c.value).map((c) => c.value)
+);
 const fieldTokens = computed(() =>
   normalizedConditions.value
     .filter((c) => c.type === 'field')
     .flatMap((c) => [c.value, c.key])
     .filter(Boolean)
-)
+);
 const protocolTokens = computed(() => {
-  const tokens = []
-  if (localFilter.value.protocolType) tokens.push(localFilter.value.protocolType)
+  const tokens = [];
+  if (localFilter.value.protocolType) tokens.push(localFilter.value.protocolType);
   normalizedConditions.value
     .filter((c) => c.type === 'protocol' && c.value)
-    .forEach((c) => tokens.push(c.value))
-  return tokens
-})
+    .forEach((c) => tokens.push(c.value));
+  return tokens;
+});
 
 // 上层已按同样条件过滤过，这里直接透传，避免重复全量遍历
-const filteredMessages = computed(() => safeMessages.value)
+const filteredMessages = computed(() => safeMessages.value);
 
 function getLatencyMs(message) {
-  const send = message?.sendTimestamp ?? message?.timestamp
-  const recv = message?.receiveTimestamp
-  if (!send || !recv) return null
-  return Math.max(0, (recv - send) * 1000)
+  const send = message?.sendTimestamp ?? message?.timestamp;
+  const recv = message?.receiveTimestamp;
+  if (!send || !recv) return null;
+  return Math.max(0, (recv - send) * 1000);
 }
 
 function createCondition(type = 'payload') {
@@ -401,26 +415,26 @@ function createCondition(type = 'payload') {
     field: 'senderNodeId',
     min: null,
     max: null,
-  }
+  };
 }
 
 function addCondition() {
-  advancedConditions.value.push(createCondition('payload'))
-  handleAdvancedChange()
+  advancedConditions.value.push(createCondition('payload'));
+  handleAdvancedChange();
 }
 
 function removeCondition(id) {
-  advancedConditions.value = advancedConditions.value.filter((c) => c.id !== id)
-  handleAdvancedChange()
+  advancedConditions.value = advancedConditions.value.filter((c) => c.id !== id);
+  handleAdvancedChange();
 }
 
 function handleAdvancedChange() {
-  emitFilterChange()
+  emitFilterChange();
 }
 
 function applyAdvancedSearch() {
-  showAdvanced.value = false
-  emitFilterChange()
+  showAdvanced.value = false;
+  emitFilterChange();
 }
 
 function emitFilterChange() {
@@ -428,174 +442,176 @@ function emitFilterChange() {
     ...localFilter.value,
     conditionLogic: conditionLogic.value,
     conditions: normalizedConditions.value,
-  })
+  });
 }
 
 // 增量累积节点/端口对选项，避免每次全量遍历 5w 条窗口
-const senderNodeOptions = ref([])
-const receiverNodeOptions = ref([])
-const portPairOptions = ref([])
-const senderNodeMap = ref(new Map())
-const receiverNodeMap = ref(new Map())
-const portPairMap = ref(new Map())
-const lastProcessedCount = ref(0)
+const senderNodeOptions = ref([]);
+const receiverNodeOptions = ref([]);
+const portPairOptions = ref([]);
+const senderNodeMap = ref(new Map());
+const receiverNodeMap = ref(new Map());
+const portPairMap = ref(new Map());
+const lastProcessedCount = ref(0);
 
 const buildPortPairKey = (msg) => {
-  const sNode = msg?.senderNodeId || msg?.senderNodeName || ''
-  const sPort = msg?.senderPortId || msg?.senderPortName || ''
-  const rNode = msg?.receiverNodeId || msg?.receiverNodeName || ''
-  const rPort = msg?.receiverPortId || msg?.receiverPortName || ''
-  if (!sPort && !rPort) return ''
-  return [sNode, sPort, rNode, rPort].join('||')
-}
+  const sNode = msg?.senderNodeId || msg?.senderNodeName || '';
+  const sPort = msg?.senderPortId || msg?.senderPortName || '';
+  const rNode = msg?.receiverNodeId || msg?.receiverNodeName || '';
+  const rPort = msg?.receiverPortId || msg?.receiverPortName || '';
+  if (!sPort && !rPort) return '';
+  return [sNode, sPort, rNode, rPort].join('||');
+};
 
 const buildPortPairLabel = (msg) => {
-  const senderNode = msg?.senderNodeName || msg?.senderNodeId || '源节点'
-  const senderPort = msg?.senderPortName || msg?.senderPortId || '-'
-  const receiverNode = msg?.receiverNodeName || msg?.receiverNodeId || '目标节点'
-  const receiverPort = msg?.receiverPortName || msg?.receiverPortId || '-'
-  return `${senderNode}/${senderPort} → ${receiverNode}/${receiverPort}`
-}
+  const senderNode = msg?.senderNodeName || msg?.senderNodeId || '源节点';
+  const senderPort = msg?.senderPortName || msg?.senderPortId || '-';
+  const receiverNode = msg?.receiverNodeName || msg?.receiverNodeId || '目标节点';
+  const receiverPort = msg?.receiverPortName || msg?.receiverPortId || '-';
+  return `${senderNode}/${senderPort} → ${receiverNode}/${receiverPort}`;
+};
 
 watch(
   safeMessages,
   (list) => {
     // 如果过滤重置导致数量变少，整体重建一次
     if (!Array.isArray(list) || list.length < lastProcessedCount.value) {
-      senderNodeMap.value = new Map()
-      receiverNodeMap.value = new Map()
-      portPairMap.value = new Map()
-      lastProcessedCount.value = 0
+      senderNodeMap.value = new Map();
+      receiverNodeMap.value = new Map();
+      portPairMap.value = new Map();
+      lastProcessedCount.value = 0;
     }
 
-    const delta = list.slice(lastProcessedCount.value)
+    const delta = list.slice(lastProcessedCount.value);
     delta.forEach((m) => {
-      const senderId = m?.senderNodeId || m?.senderNodeName
-      const senderLabel = m?.senderNodeName || m?.senderNodeId
+      const senderId = m?.senderNodeId || m?.senderNodeName;
+      const senderLabel = m?.senderNodeName || m?.senderNodeId;
       if (senderId && !senderNodeMap.value.has(senderId)) {
-        senderNodeMap.value.set(senderId, senderLabel)
+        senderNodeMap.value.set(senderId, senderLabel);
       }
 
-      const receiverId = m?.receiverNodeId || m?.receiverNodeName
-      const receiverLabel = m?.receiverNodeName || m?.receiverNodeId
+      const receiverId = m?.receiverNodeId || m?.receiverNodeName;
+      const receiverLabel = m?.receiverNodeName || m?.receiverNodeId;
       if (receiverId && !receiverNodeMap.value.has(receiverId)) {
-        receiverNodeMap.value.set(receiverId, receiverLabel)
+        receiverNodeMap.value.set(receiverId, receiverLabel);
       }
 
-      const pairKey = buildPortPairKey(m)
+      const pairKey = buildPortPairKey(m);
       if (pairKey && !portPairMap.value.has(pairKey)) {
         portPairMap.value.set(pairKey, {
           value: pairKey,
           label: buildPortPairLabel(m),
-        })
+        });
       }
-    })
+    });
 
-    lastProcessedCount.value = list.length
+    lastProcessedCount.value = list.length;
     senderNodeOptions.value = Array.from(senderNodeMap.value.entries()).map(([value, label]) => ({
       value,
       label,
-    }))
-    receiverNodeOptions.value = Array.from(receiverNodeMap.value.entries()).map(([value, label]) => ({
-      value,
-      label,
-    }))
-    portPairOptions.value = Array.from(portPairMap.value.values())
+    }));
+    receiverNodeOptions.value = Array.from(receiverNodeMap.value.entries()).map(
+      ([value, label]) => ({
+        value,
+        label,
+      })
+    );
+    portPairOptions.value = Array.from(portPairMap.value.values());
   },
   { immediate: true }
-)
+);
 
 function formatTime(timestamp) {
-  return formatTimestamp(timestamp)
+  return formatTimestamp(timestamp);
 }
 
 function truncateHex(hex) {
-  if (!hex) return ''
+  if (!hex) return '';
   if (hex.length > 32) {
-    return hex.substring(0, 32) + '...'
+    return hex.substring(0, 32) + '...';
   }
-  return hex
+  return hex;
 }
 
 function highlightText(text, tokens) {
-  const value = String(text || '')
-  if (!tokens || tokens.length === 0) return value
-  const lower = value.toLowerCase()
-  const targetTokens = [...new Set(tokens.map((t) => String(t || '').toLowerCase()).filter(Boolean))].filter(
-    (t) => lower.includes(t)
-  )
-  if (!targetTokens.length) return value
+  const value = String(text || '');
+  if (!tokens || tokens.length === 0) return value;
+  const lower = value.toLowerCase();
+  const targetTokens = [
+    ...new Set(tokens.map((t) => String(t || '').toLowerCase()).filter(Boolean)),
+  ].filter((t) => lower.includes(t));
+  if (!targetTokens.length) return value;
 
-  const segments = []
-  let cursor = 0
+  const segments = [];
+  let cursor = 0;
 
   const findNext = () => {
-    let pos = -1
-    let tok = ''
+    let pos = -1;
+    let tok = '';
     targetTokens.forEach((t) => {
-      const idx = lower.indexOf(t, cursor)
+      const idx = lower.indexOf(t, cursor);
       if (idx !== -1 && (pos === -1 || idx < pos)) {
-        pos = idx
-        tok = t
+        pos = idx;
+        tok = t;
       }
-    })
-    return { pos, tok }
-  }
+    });
+    return { pos, tok };
+  };
 
   while (cursor < value.length) {
-    const { pos, tok } = findNext()
+    const { pos, tok } = findNext();
     if (pos === -1) {
-      segments.push(value.slice(cursor))
-      break
+      segments.push(value.slice(cursor));
+      break;
     }
     if (pos > cursor) {
-      segments.push(value.slice(cursor, pos))
+      segments.push(value.slice(cursor, pos));
     }
-    segments.push(h('span', { class: 'highlight-token' }, value.slice(pos, pos + tok.length)))
-    cursor = pos + tok.length
+    segments.push(h('span', { class: 'highlight-token' }, value.slice(pos, pos + tok.length)));
+    cursor = pos + tok.length;
   }
 
-  return segments
+  return segments;
 }
 
 function parseHex(hex) {
-  if (!hex) return []
-  const bytes = []
+  if (!hex) return [];
+  const bytes = [];
   for (let i = 0; i < hex.length; i += 2) {
-    bytes.push(hex.substring(i, i + 2).toUpperCase())
+    bytes.push(hex.substring(i, i + 2).toUpperCase());
   }
-  return bytes
+  return bytes;
 }
 
 function formatLatency(message) {
-  const send = message?.sendTimestamp ?? message?.timestamp
-  const recv = message?.receiveTimestamp
-  if (!send || !recv) return '-'
-  const diffMs = Math.max(0, (recv - send) * 1000)
-  return `${diffMs.toFixed(2)} ms`
+  const send = message?.sendTimestamp ?? message?.timestamp;
+  const recv = message?.receiveTimestamp;
+  if (!send || !recv) return '-';
+  const diffMs = Math.max(0, (recv - send) * 1000);
+  return `${diffMs.toFixed(2)} ms`;
 }
 
 function handleSelect(message) {
-  selectedId.value = message.messageId
-  selectedMessage.value = message
-  emit('message-select', message)
+  selectedId.value = message.messageId;
+  selectedMessage.value = message;
+  emit('message-select', message);
 }
 
 function handleFilterChange() {
-  emitFilterChange()
+  emitFilterChange();
 }
 
 function handleExport(format) {
-  emit('export', format)
+  emit('export', format);
 }
 
 function handleAutoScrollChange(val) {
-  localAutoScroll.value = val
-  emit('auto-scroll-change', val)
+  localAutoScroll.value = val;
+  emit('auto-scroll-change', val);
   if (val) {
-    restartAutoScroll()
+    restartAutoScroll();
   } else {
-    stopAutoScroll()
+    stopAutoScroll();
   }
 }
 
@@ -682,89 +698,88 @@ const baseColumns = [
     cellRenderer: ({ cellData }) =>
       highlightText(truncateHex(cellData), [...payloadTokens.value, ...keywordTokens.value]),
   },
-]
+];
 
 const tableColumns = computed(() => {
-  const perColWidth = Math.max(Math.floor(tableWidth.value / baseColumns.length), 120)
+  const perColWidth = Math.max(Math.floor(tableWidth.value / baseColumns.length), 120);
   return baseColumns.map((col) => ({
     ...col,
     width: Math.max(perColWidth, col.minWidth || 0),
     flexGrow: 1,
-  }))
-})
+  }));
+});
 
 function getRowClass({ rowData }) {
-  const classes = []
-  if (rowData.isError) classes.push('protocol-analyzer__row--error')
-  if (selectedId.value === rowData.messageId) classes.push('protocol-analyzer__row--selected')
-  return classes.join(' ')
+  const classes = [];
+  if (rowData.isError) classes.push('protocol-analyzer__row--error');
+  if (selectedId.value === rowData.messageId) classes.push('protocol-analyzer__row--selected');
+  return classes.join(' ');
 }
 
 function handleRowClick({ rowData }) {
-  handleSelect(rowData)
+  handleSelect(rowData);
 }
 
 function scrollToBottom() {
-  if (!tableRef.value || !localAutoScroll.value || filteredMessages.value.length === 0) return
+  if (!tableRef.value || !localAutoScroll.value || filteredMessages.value.length === 0) return;
 
-  const duration = Math.max(80, 320 / playSpeed.value)
+  const duration = Math.max(80, 320 / playSpeed.value);
 
   const smoothScroll = (container, target) => {
-    const start = container.scrollTop
-    const change = target - start
-    const startTime = performance.now()
-    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+    const start = container.scrollTop;
+    const change = target - start;
+    const startTime = performance.now();
+    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
     const step = (now) => {
-      const elapsed = now - startTime
-      const progress = Math.min(1, elapsed / duration)
-      const eased = easeOutCubic(progress)
-      container.scrollTop = start + change * eased
+      const elapsed = now - startTime;
+      const progress = Math.min(1, elapsed / duration);
+      const eased = easeOutCubic(progress);
+      container.scrollTop = start + change * eased;
       if (progress < 1) {
-        requestAnimationFrame(step)
+        requestAnimationFrame(step);
       }
-    }
-    requestAnimationFrame(step)
-  }
+    };
+    requestAnimationFrame(step);
+  };
 
   nextTick(() => {
-    const tableEl = tableRef.value?.$el
+    const tableEl = tableRef.value?.$el;
     const scrollContainer =
-      tableEl?.querySelector('.el-table-v2__body') ||
-      tableEl?.querySelector('.el-scrollbar__wrap')
+      tableEl?.querySelector('.el-table-v2__body') || tableEl?.querySelector('.el-scrollbar__wrap');
 
     if (scrollContainer) {
-      smoothScroll(scrollContainer, scrollContainer.scrollHeight)
+      smoothScroll(scrollContainer, scrollContainer.scrollHeight);
     }
-  })
+  });
 }
 
 watch(
   () => filteredMessages.value.length,
   () => {
-    scrollToBottom()
+    scrollToBottom();
   },
   { flush: 'post' }
-)
+);
 
 watch(
   () => props.autoScroll,
   (val) => {
-    localAutoScroll.value = val
+    localAutoScroll.value = val;
     if (val) {
-      scrollToBottom()
+      scrollToBottom();
     }
   }
-)
+);
 
 function exportData(format) {
-  const data = filteredMessages.value
+  const data = filteredMessages.value;
 
   if (format === 'json') {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
-    downloadBlob(blob, 'messages.json')
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    downloadBlob(blob, 'messages.json');
   } else if (format === 'csv') {
-    const headers = ['时间', '源节点', '目标节点', '协议', '大小', '数据']
+    const headers = ['时间', '源节点', '目标节点', '协议', '大小', '数据'];
     const rows = data.map((m) => [
       formatTime(m.sendTimestamp || m.timestamp || m.receiveTimestamp),
       m.senderNodeName || m.senderNodeId,
@@ -772,47 +787,47 @@ function exportData(format) {
       m.protocolType,
       m.sizeBytes,
       m.payloadHex,
-    ])
-    const csv = [headers, ...rows].map((row) => row.join(',')).join('\n')
-    const blob = new Blob([csv], { type: 'text/csv' })
-    downloadBlob(blob, 'messages.csv')
+    ]);
+    const csv = [headers, ...rows].map((row) => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    downloadBlob(blob, 'messages.csv');
   }
 }
 
 function downloadBlob(blob, filename) {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-defineExpose({ exportData })
+defineExpose({ exportData });
 
 function updateTableSize() {
-  if (!listRef.value) return
-  const { clientWidth, clientHeight } = listRef.value
-  tableWidth.value = clientWidth
-  tableHeight.value = Math.max(clientHeight, 160)
+  if (!listRef.value) return;
+  const { clientWidth, clientHeight } = listRef.value;
+  tableWidth.value = clientWidth;
+  tableHeight.value = Math.max(clientHeight, 160);
 }
 
 onMounted(() => {
   nextTick(() => {
-    updateTableSize()
+    updateTableSize();
     if (listRef.value) {
-      resizeObserver.value = new ResizeObserver(updateTableSize)
-      resizeObserver.value.observe(listRef.value)
+      resizeObserver.value = new ResizeObserver(updateTableSize);
+      resizeObserver.value.observe(listRef.value);
     }
     if (localAutoScroll.value && props.messages.length > 0) {
-      scrollToBottom()
+      scrollToBottom();
     }
-  })
-})
+  });
+});
 
 onBeforeUnmount(() => {
-  resizeObserver.value?.disconnect()
-})
+  resizeObserver.value?.disconnect();
+});
 </script>
 
 <style scoped>

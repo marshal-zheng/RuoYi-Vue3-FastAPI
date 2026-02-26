@@ -13,7 +13,7 @@ import {
   type SuccessResolver,
   type HttpTransformHook,
 } from '@zxio/http';
-import { ElNotification, ElMessage } from 'element-plus';
+import { ElNotification, ElMessage, ElMessageBox } from 'element-plus';
 import { h } from 'vue';
 import { getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
@@ -96,7 +96,14 @@ const notifier: HttpNotifier = {
       ElMessage[level](payload.content);
     } else if (channel === 'modal') {
       ElMessageBox.alert(payload.content, payload.title || '提示', {
-        type: level === 'success' ? 'success' : level === 'error' ? 'error' : level === 'warning' ? 'warning' : 'info',
+        type:
+          level === 'success'
+            ? 'success'
+            : level === 'error'
+              ? 'error'
+              : level === 'warning'
+                ? 'warning'
+                : 'info',
       });
     }
   },
@@ -112,17 +119,15 @@ const notifier: HttpNotifier = {
 const successResolver: SuccessResolver = ({ response }) => {
   const payload = (response.data || {}) as Record<string, unknown>;
   const status = response.status;
-  
+
   // 基于 HTTP 2xx 判定成功
   const ok = status >= 200 && status < 300;
-  
+
   if (ok) {
     // 成功响应
     const responseMsg =
-      (payload.message as string | undefined) ||
-      (payload.msg as string | undefined) ||
-      '操作成功';
-    
+      (payload.message as string | undefined) || (payload.msg as string | undefined) || '操作成功';
+
     // 响应数据解包策略：
     // - 如果后端返回 {"data": xxx, ...}，则解包返回 xxx
     // - 如果后端返回 {"rows": [...], "total": n, ...}，则返回完整 payload
@@ -135,7 +140,7 @@ const successResolver: SuccessResolver = ({ response }) => {
       raw: payload,
     };
   }
-  
+
   // 错误响应（RFC 7807）
   const errorMsg =
     (payload.detail as string | undefined) ||
@@ -144,7 +149,7 @@ const successResolver: SuccessResolver = ({ response }) => {
     (payload.msg as string | undefined) ||
     errorCode[status] ||
     errorCode['default'];
-  
+
   return {
     ok: false,
     data: payload,
@@ -163,7 +168,9 @@ const gridListPlugin = createGridListPlugin({
   totalField: 'total',
   listField: 'rows',
   resolveList(payload) {
-    return (payload.rows as unknown[]) || (payload.data as unknown[]) || (payload.list as unknown[]);
+    return (
+      (payload.rows as unknown[]) || (payload.data as unknown[]) || (payload.list as unknown[])
+    );
   },
   resolveTotal(payload) {
     return payload.total as number | undefined;
@@ -237,71 +244,65 @@ const afterResponseTransform: HttpTransformHook = {
     const config = response.config as Record<string, unknown>;
     const silentError = (config?.silentError as boolean) === true;
     const silentSuccess = (config?.silentSuccess as boolean) === true;
-    
+
     // 二进制数据直接返回
-    if (
-      response.config.responseType === 'blob' ||
-      response.config.responseType === 'arraybuffer'
-    ) {
+    if (response.config.responseType === 'blob' || response.config.responseType === 'arraybuffer') {
       return response;
     }
-    
+
     const status = response.status;
     const payload = response.data as Record<string, unknown>;
     const method = (response.config.method || 'get').toLowerCase();
-    
+
     // 2xx 成功响应
     if (status >= 200 && status < 300) {
       attachPager(response.data);
-      
+
       // 只有写操作（POST/PUT/DELETE/PATCH）才显示成功提示
       if (!silentSuccess && MUTATION_METHODS.includes(method)) {
-        const successMsg =
-          (payload.message as string) ||
-          (payload.msg as string) ||
-          '操作成功';
+        const successMsg = (payload.message as string) || (payload.msg as string) || '操作成功';
         ElMessage.success(successMsg);
       }
-      
+
       return response;
     }
-    
+
     // RFC 7807 错误响应解析
-    const errorCode = (payload.errorCode as number) || status;
+    const bizErrorCode = (payload.errorCode as number) || status;
     const errorMsg =
       (payload.detail as string) ||
       (payload.title as string) ||
       (payload.message as string) ||
       (payload.msg as string) ||
-      errorCode[status] ||
-      errorCode['default'];
+      (errorCode as any)[status] ||
+      (errorCode as any)['default'];
 
     // 401 未授权
-    if (status === 401 || errorCode === 20001 || errorCode === 20002) {
+    if (status === 401 || bizErrorCode === 20001 || bizErrorCode === 20002) {
       triggerRelogin(errorMsg || '未认证，请先登录');
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
     }
-    
+
     // 403 权限不足
-    if (status === 403 || errorCode === 20004) {
+    if (status === 403 || bizErrorCode === 20004) {
       if (!silentError) {
         ElMessage({ message: errorMsg || '权限不足', type: 'error' });
       }
       return Promise.reject(new Error(errorMsg || '权限不足'));
     }
-    
+
     // 422 校验错误（展示字段级错误）
     if (status === 422 || errorCode === 10001) {
       if (!silentError) {
         const errors = (payload.errors as Array<{ field: string; message: string }>) || [];
-        
+
         if (errors.length > 0) {
           // 展示字段级错误
-          const errorDetails = errors.map(e => `${e.field}: ${e.message}`).join('\n');
+          const errorDetails = errors.map((e) => `${e.field}: ${e.message}`).join('\n');
           ElNotification.error({
             title: '参数验证失败',
             message: errorDetails,
-            duration: 5000
+            duration: 5000,
           });
         } else {
           ElMessage({ message: errorMsg || '参数验证失败', type: 'error' });
@@ -309,7 +310,7 @@ const afterResponseTransform: HttpTransformHook = {
       }
       return Promise.reject(new Error(errorMsg || '参数验证失败'));
     }
-    
+
     // 500+ 系统错误
     if (status >= 500) {
       if (!silentError) {
@@ -317,7 +318,7 @@ const afterResponseTransform: HttpTransformHook = {
       }
       return Promise.reject(new Error(errorMsg || '系统错误'));
     }
-    
+
     // 其他 4xx 错误
     if (status >= 400) {
       if (!silentError) {
@@ -325,21 +326,21 @@ const afterResponseTransform: HttpTransformHook = {
       }
       return Promise.reject(new Error(errorMsg || '操作失败'));
     }
-    
+
     return response;
   },
 
   async onError(error, options, context) {
-    const axiosError = error as { 
-      config?: Record<string, unknown>; 
+    const axiosError = error as {
+      config?: Record<string, unknown>;
       message?: string;
-      response?: { data?: Record<string, unknown>; status?: number }
+      response?: { data?: Record<string, unknown>; status?: number };
     };
     const silentError = (axiosError.config?.silentError as boolean) === true;
     const data = axiosError.response?.data;
     const status = axiosError.response?.status;
     const code = (data?.code as number | undefined) || (data?.errorCode as number | undefined);
-    
+
     // 优先从响应体获取错误信息（RFC 7807）
     let message = '';
     if (data) {
@@ -356,7 +357,7 @@ const afterResponseTransform: HttpTransformHook = {
       triggerRelogin(message || '未认证，请先登录');
       throw error;
     }
-    
+
     if (!message) {
       message = axiosError.message || '';
       if (message === 'Network Error') {

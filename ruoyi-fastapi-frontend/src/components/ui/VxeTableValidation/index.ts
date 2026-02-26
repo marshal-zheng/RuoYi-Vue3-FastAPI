@@ -86,7 +86,7 @@ export type {
 export {
   // 工具函数
   isEmpty,
-  parseNumber,  // 解析数值
+  parseNumber, // 解析数值
   getLength,
   validateByRule,
 

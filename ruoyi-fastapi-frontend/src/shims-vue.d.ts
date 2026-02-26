@@ -53,6 +53,63 @@ declare module '@/components/DictTag' {
   export default component;
 }
 
+// 声明 layout / ui 组件目录路径（moduleResolution: bundler 不自动解析 .vue 目录索引）
+declare module '@/layout/index' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/layout/components/InnerLink' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/ParentView' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/SvgIcon' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/Pagination' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/RightToolbar' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/Editor' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/FileUpload' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/ImageUpload' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/ImagePreview' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+declare module '@/components/ui/DictTag' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<{}, {}, any>;
+  export default component;
+}
+
 // 声明App组件
 declare module './App.tsx' {
   import type { DefineComponent } from 'vue';

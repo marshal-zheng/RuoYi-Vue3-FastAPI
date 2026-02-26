@@ -4,7 +4,7 @@
  * @see https://www.w3.org/WAI/GL/task-forces/silver/wiki/Visual_Contrast_of_Text_Subgroup
  */
 // Types
-import type { RGB } from '@/util';
+import type { RGB } from '@/utils/colorUtils';
 
 // MAGICAL NUMBERS
 

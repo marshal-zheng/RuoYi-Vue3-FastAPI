@@ -1,4 +1,5 @@
 import type { VxeTableDefines } from 'vxe-table';
+import type { VxeSchemaColumn } from '@/components/ui/VxeSchemaTable/index.vue';
 
 type DataTypeEditProps = {
   dictType?: string;
@@ -18,7 +19,7 @@ const DEFAULT_DATA_TYPE_PROPS: Required<Pick<DataTypeEditProps, 'dictType' | 'pl
 
 export const createProtocolFieldColumns = (
   options: FieldColumnsOptions = {}
-): VxeTableDefines.ColumnOptions[] => {
+): VxeSchemaColumn[] => {
   const dataTypeProps = {
     ...DEFAULT_DATA_TYPE_PROPS,
     ...(options.dataTypeProps ?? {}),
@@ -52,8 +53,8 @@ export const createProtocolFieldColumns = (
 };
 
 export const createProtocolConfigColumns = (
-  editRender: (field: 'value1' | 'value2') => VxeTableDefines.EditRender | undefined
-): VxeTableDefines.ColumnOptions[] => [
+  editRender: (field: 'value1' | 'value2') => any
+): VxeSchemaColumn[] => [
   { field: 'protocolName', title: '', width: 80, align: 'center' },
   { field: 'label1', title: '', width: 120, align: 'center' },
   { field: 'value1', title: '', minWidth: 200, editRender: editRender('value1') },

@@ -37,11 +37,7 @@ async function handleBlobResponse(response, defaultName, mimeType) {
 async function printErrMsg(data) {
   try {
     const text =
-      typeof data === 'string'
-        ? data
-        : typeof data?.text === 'function'
-          ? await data.text()
-          : '';
+      typeof data === 'string' ? data : typeof data?.text === 'function' ? await data.text() : '';
     if (!text) {
       ElMessage.error('下载文件出现错误，请联系管理员！');
       return;

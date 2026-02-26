@@ -40,6 +40,7 @@ class OutboxDispatcher:
         base_backoff_seconds: float = 1.0,
         max_backoff_seconds: float = 60.0,
         backlog_alert_threshold: int = 500,
+        idle_max_interval_seconds: float = 30.0,
     ) -> None:
         self._session_factory = session_factory
         self._event_bus = event_bus
@@ -50,6 +51,7 @@ class OutboxDispatcher:
         self._base_backoff_seconds = max(float(base_backoff_seconds), 0.1)
         self._max_backoff_seconds = max(float(max_backoff_seconds), self._base_backoff_seconds)
         self._backlog_alert_threshold = max(int(backlog_alert_threshold), 1)
+        self._idle_max_interval = max(float(idle_max_interval_seconds), self._poll_interval)
 
         self._task: asyncio.Task | None = None
         self._stop_event = asyncio.Event()
@@ -57,6 +59,7 @@ class OutboxDispatcher:
         self._last_error: str | None = None
         self._backlog: int = 0
         self._lag_seconds: float = 0.0
+        self._consecutive_idle: int = 0
 
     async def start(self) -> None:
         if self._task is not None and not self._task.done():
@@ -197,18 +200,32 @@ class OutboxDispatcher:
             lag_seconds=self._lag_seconds,
         )
 
+    def _idle_backoff_interval(self) -> float:
+        """Exponential backoff: poll_interval * 2^n, capped at idle_max_interval."""
+        if self._consecutive_idle <= 0:
+            return self._poll_interval
+        exponent = min(self._consecutive_idle, 20)
+        interval = self._poll_interval * (2 ** exponent)
+        return min(interval, self._idle_max_interval)
+
     async def _run_loop(self) -> None:
         while not self._stop_event.is_set():
             try:
                 processed = await self.dispatch_batch()
                 self._last_error = None
-                sleep_for = self._poll_interval if processed == 0 else 0.05
+                if processed > 0:
+                    self._consecutive_idle = 0
+                    sleep_for = 0.05
+                else:
+                    self._consecutive_idle += 1
+                    sleep_for = self._idle_backoff_interval()
             except asyncio.CancelledError:
                 raise
             except Exception as exc:  # pragma: no cover - defensive branch
                 self._last_error = str(exc)
                 logger.bind(event='outbox_dispatch_loop_error').exception('outbox_dispatch_loop_error')
-                sleep_for = self._poll_interval
+                self._consecutive_idle += 1
+                sleep_for = self._idle_backoff_interval()
 
             try:
                 await asyncio.wait_for(self._stop_event.wait(), timeout=sleep_for)

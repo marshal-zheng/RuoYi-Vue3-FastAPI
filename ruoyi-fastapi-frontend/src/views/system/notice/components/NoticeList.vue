@@ -159,7 +159,7 @@ function handleAdd() {
 async function handleUpdate(row?: any) {
   const noticeId = row?.noticeId || ids.value[0];
   if (!noticeId) return;
-  
+
   try {
     const response = await getNotice(noticeId);
     noticeDlgRef.value?.open(response);

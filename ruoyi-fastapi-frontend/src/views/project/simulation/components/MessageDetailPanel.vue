@@ -269,7 +269,11 @@ function getValueClass(value) {
 }
 
 .info-card {
-  background: linear-gradient(135deg, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%, var(--sim-fill-lighter, rgba(15, 23, 42, 0.6)) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%,
+    var(--sim-fill-lighter, rgba(15, 23, 42, 0.6)) 100%
+  );
   border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
   border-radius: 8px;
   padding: 12px;
@@ -345,7 +349,11 @@ function getValueClass(value) {
 }
 
 .field-card {
-  background: linear-gradient(135deg, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%, var(--sim-bg-elevated, #1e293b) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%,
+    var(--sim-bg-elevated, #1e293b) 100%
+  );
   border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
   border-radius: 6px;
   padding: 8px 10px;

@@ -212,7 +212,6 @@ function handleDelete(row) {
   const protocolIds = (protocolIdsRaw || []).filter((id) => id !== undefined && id !== null);
   let confirmMessage = '';
 
-
   if (row?.protocolId) {
     confirmMessage = '是否确认删除协议"' + row.protocolName + '"？';
   } else {
@@ -254,7 +253,7 @@ function handleDelete(row) {
 
 /** 批量删除按钮操作 */
 function handleBatchDelete() {
-  console.log('ids', ids)
+  console.log('ids', ids);
   if (ids.value.length === 0) {
     proxy.$modal.msgWarning('请选择要删除的协议');
     return;

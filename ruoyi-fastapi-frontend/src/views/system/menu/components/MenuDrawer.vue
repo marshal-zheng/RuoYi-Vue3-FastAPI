@@ -30,11 +30,7 @@
           @show="onIconPopoverShow"
         >
           <template #reference>
-            <el-input
-              v-model="drawer.state.data.icon"
-              placeholder="点击选择图标"
-              readonly
-            >
+            <el-input v-model="drawer.state.data.icon" placeholder="点击选择图标" readonly>
               <template #prepend>
                 <svg-icon
                   v-if="drawer.state.data.icon"
@@ -45,7 +41,11 @@
               </template>
             </el-input>
           </template>
-          <IconSelect ref="iconSelectRef" :active-icon="drawer.state.data.icon" @selected="onIconSelected" />
+          <IconSelect
+            ref="iconSelectRef"
+            :active-icon="drawer.state.data.icon"
+            @selected="onIconSelected"
+          />
         </el-popover>
       </el-form-item>
 
@@ -95,7 +95,10 @@
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="component">
         <template #label>
           <span>
-            <el-tooltip content="访问的组件路径，如：`system/user/index`，默认在`views`目录下" placement="top">
+            <el-tooltip
+              content="访问的组件路径，如：`system/user/index`，默认在`views`目录下"
+              placement="top"
+            >
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
             组件路径
@@ -107,7 +110,10 @@
       <el-form-item v-if="drawer.state.data.menuType !== 'M'" prop="perms">
         <template #label>
           <span>
-            <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasPermi('system:user:list')`)" placement="top">
+            <el-tooltip
+              content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasPermi('system:user:list')`)"
+              placement="top"
+            >
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
             权限字符
@@ -119,7 +125,10 @@
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="query">
         <template #label>
           <span>
-            <el-tooltip content="访问路由的默认传递参数，如：`{&quot;id&quot;: 1, &quot;name&quot;: &quot;ry&quot;}`" placement="top">
+            <el-tooltip
+              content='访问路由的默认传递参数，如：`{"id": 1, "name": "ry"}`'
+              placement="top"
+            >
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
             路由参数
@@ -131,7 +140,10 @@
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="isCache">
         <template #label>
           <span>
-            <el-tooltip content="选择是则会被`keep-alive`缓存，需要匹配组件的`name`和地址保持一致" placement="top">
+            <el-tooltip
+              content="选择是则会被`keep-alive`缓存，需要匹配组件的`name`和地址保持一致"
+              placement="top"
+            >
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
             是否缓存
@@ -153,11 +165,7 @@
           </span>
         </template>
         <el-radio-group v-model="drawer.state.data.visible">
-          <el-radio
-            v-for="dict in sysShowHide"
-            :key="dict.value"
-            :value="dict.value"
-          >
+          <el-radio v-for="dict in sysShowHide" :key="dict.value" :value="dict.value">
             {{ dict.label }}
           </el-radio>
         </el-radio-group>
@@ -173,11 +181,7 @@
           </span>
         </template>
         <el-radio-group v-model="drawer.state.data.status">
-          <el-radio
-            v-for="dict in sysNormalDisable"
-            :key="dict.value"
-            :value="dict.value"
-          >
+          <el-radio v-for="dict in sysNormalDisable" :key="dict.value" :value="dict.value">
             {{ dict.label }}
           </el-radio>
         </el-radio-group>
@@ -279,7 +283,7 @@ const drawer = useDrawer<MenuForm>({
 async function openDrawer(data?: MenuForm) {
   // 先打开抽屉
   drawer.open(data);
-  
+
   // 加载菜单树数据
   const response = await treeselect();
   const menus = response;

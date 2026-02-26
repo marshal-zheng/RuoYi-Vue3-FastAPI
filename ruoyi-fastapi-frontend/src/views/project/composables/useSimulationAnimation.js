@@ -126,7 +126,13 @@ export function useSimulationAnimation() {
    * @param {Object} callbacks - 回调函数
    * @param {String} busType - 总线类型
    */
-  function animateEdgeToken(edge, direction = 'forward', duration = 950, callbacks = {}, busType = 'default') {
+  function animateEdgeToken(
+    edge,
+    direction = 'forward',
+    duration = 950,
+    callbacks = {},
+    busType = 'default'
+  ) {
     if (!edge) {
       if (callbacks.onCancelled) {
         callbacks.onCancelled();
@@ -144,7 +150,8 @@ export function useSimulationAnimation() {
 
     // 获取边的总线类型
     const edgeData = edge.getData?.() || {};
-    const actualBusType = busType !== 'default' ? busType : (edgeData.busType || edgeData.interfaceType || 'default');
+    const actualBusType =
+      busType !== 'default' ? busType : edgeData.busType || edgeData.interfaceType || 'default';
 
     const edgeView = graph.findViewByCell?.(edge);
     const pathElement =

@@ -1,4 +1,6 @@
 // Composables
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - composables/defaults is an optional internal module
 import { injectDefaults, internalUseDefaults } from '@/composables/defaults';
 
 // Utilities

@@ -35,11 +35,11 @@
         >刷新缓存</ZxButton
       >
     </template>
-    
-    <ZxGridList 
-      ref="gridListRef" 
-      :load-data="loadDictData" 
-      :query-transform="queryTransform" 
+
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadDictData"
+      :query-transform="queryTransform"
       class="zx-grid-list--page"
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
@@ -144,93 +144,93 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
-import { parseTime, serializeDateRange } from '@/utils/ruoyi'
-import { listType, getType, delType, refreshCache } from '@/api/system/dict/type'
-import useDictStore from '@/store/modules/dict'
-import DictDlg from './DictDlg.vue'
+import { ref, getCurrentInstance } from 'vue';
+import { parseTime, serializeDateRange } from '@/utils/ruoyi';
+import { listType, getType, delType, refreshCache } from '@/api/system/dict/type';
+import useDictStore from '@/store/modules/dict';
+import DictDlg from './DictDlg.vue';
 
-const { proxy } = getCurrentInstance()!
-const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable')
+const { proxy } = getCurrentInstance()!;
+const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable');
 
-const ids = ref<number[]>([])
-const single = ref(true)
-const multiple = ref(true)
-const gridListRef = ref<any>(null)
-const dictDlgRef = ref<any>(null)
+const ids = ref<number[]>([]);
+const single = ref(true);
+const multiple = ref(true);
+const gridListRef = ref<any>(null);
+const dictDlgRef = ref<any>(null);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
 function queryTransform(query: Record<string, any>) {
-  return serializeDateRange(query)
+  return serializeDateRange(query);
 }
 
 /** GridList 数据加载函数 */
 async function loadDictData(params: Record<string, any>) {
   try {
-    return await listType(params)
+    return await listType(params);
   } catch (e) {
-    return { data: [], total: 0 }
+    return { data: [], total: 0 };
   }
 }
 
 function onFilterChange(key: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [key]: value })
-  handleRefresh()
+  updateState({ [key]: value });
+  handleRefresh();
 }
 
 function onSearch({ handleRefresh }: any) {
-  handleRefresh()
+  handleRefresh();
 }
 
 /** 刷新列表 */
 function handleRefresh() {
-  gridListRef.value?.refresh()
+  gridListRef.value?.refresh();
 }
 
 /** 多选框选中数据 */
 function handleSelectionChange(selection: any[]) {
-  ids.value = selection.map((item) => item.dictId)
-  single.value = selection.length !== 1
-  multiple.value = !selection.length
+  ids.value = selection.map((item) => item.dictId);
+  single.value = selection.length !== 1;
+  multiple.value = !selection.length;
 }
 
 /** 新增按钮操作 */
 function handleAdd() {
-  dictDlgRef.value?.open()
+  dictDlgRef.value?.open();
 }
 
 /** 修改按钮操作 */
 async function handleUpdate(row?: any) {
-  const dictId = row?.dictId || ids.value
-  const response = await getType(dictId)
-  const data = response
-  dictDlgRef.value?.open(data)
+  const dictId = row?.dictId || ids.value;
+  const response = await getType(dictId);
+  const data = response;
+  dictDlgRef.value?.open(data);
 }
 
 /** 删除按钮操作 */
 function handleDelete(row?: any) {
-  const dictIds = row?.dictId || ids.value
-  ;(proxy as any).$modal
+  const dictIds = row?.dictId || ids.value;
+  (proxy as any).$modal
     .confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？')
     .then(() => delType(dictIds))
     .then(() => {
-      handleRefresh()
-      ;(proxy as any).$modal.msgSuccess('删除成功')
+      handleRefresh();
+      (proxy as any).$modal.msgSuccess('删除成功');
     })
-    .catch(() => {})
+    .catch(() => {});
 }
 
 /** 导出按钮操作 */
 function handleExport() {
-  const q = gridListRef.value?.getCurrentQuery?.() || {}
-  ;(proxy as any).download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`)
+  const q = gridListRef.value?.getCurrentQuery?.() || {};
+  (proxy as any).download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`);
 }
 
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    ;(proxy as any).$modal.msgSuccess('刷新成功')
-    useDictStore().cleanDict()
-  })
+    (proxy as any).$modal.msgSuccess('刷新成功');
+    useDictStore().cleanDict();
+  });
 }
 </script>

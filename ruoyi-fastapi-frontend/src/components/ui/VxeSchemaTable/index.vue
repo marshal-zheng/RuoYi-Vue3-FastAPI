@@ -134,13 +134,14 @@ const SchemaColumn = defineComponent({
         children && children.length
           ? () => children
           : column.slot
-          ? (scope: any) => parentSlots?.[column.slot]?.({ ...scope, dataSource: dataSourceCtx })
-          : column.render
-          ? (scope: any) => column.render?.({ ...scope, dataSource: dataSourceCtx })
-          : undefined;
+            ? (scope: any) => parentSlots?.[column.slot]?.({ ...scope, dataSource: dataSourceCtx })
+            : column.render
+              ? (scope: any) => column.render?.({ ...scope, dataSource: dataSourceCtx })
+              : undefined;
 
       const headerSlot = column.headerSlot
-        ? (scope: any) => parentSlots?.[column.headerSlot]?.({ ...scope, dataSource: dataSourceCtx })
+        ? (scope: any) =>
+            parentSlots?.[column.headerSlot]?.({ ...scope, dataSource: dataSourceCtx })
         : undefined;
 
       return h(resolveComponent('vxe-column') as any, column, {

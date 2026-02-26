@@ -104,7 +104,9 @@
                       class="-mt-1 flex-shrink-0"
                     />
                     <div class="flex-1 min-w-0">
-                      <h3 class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight">
+                      <h3
+                        class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight"
+                      >
                         <router-link
                           :to="'/project/project-detail/index/' + project.projectId"
                           class="hover:text-[#0052d9] transition-colors no-underline"
@@ -231,7 +233,13 @@
 
 <script setup name="Project">
 import { serializeDateRange } from '@/utils/ruoyi';
-import { listProject, delProject, exportProject, exportProjectBatch, importProjectBatch } from '@/api/project/project';
+import {
+  listProject,
+  delProject,
+  exportProject,
+  exportProjectBatch,
+  importProjectBatch,
+} from '@/api/project/project';
 import { unlockProjectVersions } from '@/api/project/version';
 import { checkPermi } from '@/utils/permission';
 import { Document, Delete, Unlock, Download, Edit, View } from '@element-plus/icons-vue';

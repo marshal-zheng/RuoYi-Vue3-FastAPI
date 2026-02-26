@@ -12,12 +12,12 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: "",
+    default: '',
   },
   options: {
     type: Array,
@@ -25,7 +25,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "源/目标端口",
+    default: '源/目标端口',
   },
   loading: {
     type: Boolean,
@@ -33,14 +33,14 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const selectedValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
+  set: (val) => emit('update:modelValue', val),
 });
 
 const handleChange = (value) => {
-  emit("change", value);
+  emit('change', value);
 };
 </script>

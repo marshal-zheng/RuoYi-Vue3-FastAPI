@@ -24,9 +24,9 @@ export function resolveWidgetColumn(
 }
 
 const mergeEditRender = (
-  base?: VxeTableDefines.EditRender,
-  override?: VxeTableDefines.EditRender
-): VxeTableDefines.EditRender | undefined => {
+  base?: any,
+  override?: any
+): any => {
   if (!base) return override;
   if (!override) return base;
   return {

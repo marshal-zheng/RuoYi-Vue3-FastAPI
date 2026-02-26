@@ -25,40 +25,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
-import { useDialog } from '@zxio/zxui'
-import { addPost, updatePost } from '@/api/system/post'
-import { useDict } from '@/utils/dict'
+import { ref, getCurrentInstance } from 'vue';
+import { useDialog } from '@zxio/zxui';
+import { addPost, updatePost } from '@/api/system/post';
+import { useDict } from '@/utils/dict';
 
 const emit = defineEmits<{
-  (e: 'confirm'): void
-}>()
+  (e: 'confirm'): void;
+}>();
 
-const { proxy } = getCurrentInstance() as any
+const { proxy } = getCurrentInstance() as any;
 
 // 延迟加载字典数据
-const sysNormalDisable = ref<any[]>([])
-let dictLoaded = false
+const sysNormalDisable = ref<any[]>([]);
+let dictLoaded = false;
 
 interface PostForm {
-  postId?: number
-  postName: string
-  postCode: string
-  postSort: number
-  status: string
-  remark: string
+  postId?: number;
+  postName: string;
+  postCode: string;
+  postSort: number;
+  status: string;
+  remark: string;
 }
 
-const formRef = ref()
+const formRef = ref();
 
 const rules = {
   postName: [{ required: true, message: '岗位名称不能为空', trigger: 'blur' }],
   postCode: [{ required: true, message: '岗位编码不能为空', trigger: 'blur' }],
-  postSort: [{ required: true, message: '岗位顺序不能为空', trigger: 'blur' }]
-}
+  postSort: [{ required: true, message: '岗位顺序不能为空', trigger: 'blur' }],
+};
 
 const { state, dialogProps, dialogEvents, open } = useDialog<PostForm>({
-  title: (data: PostForm) => data.postId ? '修改岗位' : '添加岗位',
+  title: (data: PostForm) => (data.postId ? '修改岗位' : '添加岗位'),
   width: '500px',
   defaultData: () => ({
     postId: undefined,
@@ -66,26 +66,26 @@ const { state, dialogProps, dialogEvents, open } = useDialog<PostForm>({
     postCode: '',
     postSort: 0,
     status: '0',
-    remark: ''
+    remark: '',
   }),
   onOpen: () => {
     // 只在第一次打开时加载字典
     if (!dictLoaded) {
-      const dict = useDict('sys_normal_disable')
-      sysNormalDisable.value = dict.sys_normal_disable?.value || []
-      dictLoaded = true
+      const dict = useDict('sys_normal_disable');
+      sysNormalDisable.value = dict.sys_normal_disable?.value || [];
+      dictLoaded = true;
     }
   },
   onConfirm: async (data: PostForm) => {
     if (data.postId) {
-      await updatePost(data)
+      await updatePost(data);
     } else {
-      await addPost(data)
+      await addPost(data);
     }
-    emit('confirm')
-    return true
-  }
-})
+    emit('confirm');
+    return true;
+  },
+});
 
-defineExpose({ open })
+defineExpose({ open });
 </script>

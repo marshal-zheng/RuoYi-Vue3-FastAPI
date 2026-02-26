@@ -7,16 +7,11 @@
     <template #header>
       <div class="flex items-center gap-2.5 font-semibold text-base">
         <el-icon :size="20" class="text-cyan-400"><Lightning /></el-icon>
-        <span>{{ dialog.state.data?.eventId ? "编辑事件" : "添加事件" }}</span>
+        <span>{{ dialog.state.data?.eventId ? '编辑事件' : '添加事件' }}</span>
       </div>
     </template>
 
-    <el-form
-      ref="formRef"
-      :model="formData"
-      :rules="formRules"
-      label-width="90px"
-    >
+    <el-form ref="formRef" :model="formData" :rules="formRules" label-width="90px">
       <el-form-item label="事件名称" prop="name">
         <el-input
           v-model="formData.name"
@@ -35,29 +30,15 @@
       </el-form-item>
 
       <el-form-item v-if="formData.conditionType === 'time'" label="触发时间">
-        <el-input-number
-          v-model="formData.conditionValue.time"
-          :min="0"
-          style="width: 120px"
-        />
+        <el-input-number v-model="formData.conditionValue.time" :min="0" style="width: 120px" />
         <span class="ml-2 text-slate-400">秒</span>
       </el-form-item>
 
-      <el-form-item
-        v-if="formData.conditionType === 'message_count'"
-        label="报文数量"
-      >
-        <el-input-number
-          v-model="formData.conditionValue.count"
-          :min="1"
-          style="width: 120px"
-        />
+      <el-form-item v-if="formData.conditionType === 'message_count'" label="报文数量">
+        <el-input-number v-model="formData.conditionValue.count" :min="1" style="width: 120px" />
       </el-form-item>
 
-      <el-form-item
-        v-if="formData.conditionType === 'bandwidth_threshold'"
-        label="阈值"
-      >
+      <el-form-item v-if="formData.conditionType === 'bandwidth_threshold'" label="阈值">
         <el-input-number
           v-model="formData.conditionValue.threshold"
           :min="0"
@@ -70,7 +51,11 @@
       <el-divider>触发动作</el-divider>
 
       <el-form-item label="动作类型" prop="actionType">
-        <ActionTypeSelector v-model="formData.actionType" style="width: 100%" popper-class="sim-popper-dark" />
+        <ActionTypeSelector
+          v-model="formData.actionType"
+          style="width: 100%"
+          popper-class="sim-popper-dark"
+        />
       </el-form-item>
 
       <!-- 发送指令表单 -->
@@ -100,10 +85,7 @@
             popper-class="sim-popper-dark"
           />
         </el-form-item>
-        <el-form-item
-          v-if="formData.actionParams.commandType === 'custom'"
-          label="报文内容"
-        >
+        <el-form-item v-if="formData.actionParams.commandType === 'custom'" label="报文内容">
           <el-input
             v-model="formData.actionParams.payload"
             placeholder="十六进制，如: AA55010100"
@@ -163,20 +145,14 @@
           />
         </el-form-item>
         <el-form-item label="目标ID">
-          <el-input
-            v-model="formData.actionParams.targetId"
-            placeholder="链路ID或节点ID"
-          />
+          <el-input v-model="formData.actionParams.targetId" placeholder="链路ID或节点ID" />
         </el-form-item>
       </template>
 
       <!-- 记录日志表单 -->
       <template v-if="formData.actionType === 'log'">
         <el-form-item label="日志内容">
-          <el-input
-            v-model="formData.actionParams.message"
-            placeholder="请输入日志内容"
-          />
+          <el-input v-model="formData.actionParams.message" placeholder="请输入日志内容" />
         </el-form-item>
         <el-form-item label="日志级别">
           <LogLevelSelector
@@ -191,9 +167,9 @@
 </template>
 
 <script setup name="EventFormDialog">
-import { ref, reactive, watch } from "vue";
-import { Lightning } from "@element-plus/icons-vue";
-import { useDialog } from "@zxio/zxui";
+import { ref, reactive, watch } from 'vue';
+import { Lightning } from '@element-plus/icons-vue';
+import { useDialog } from '@zxio/zxui';
 import {
   ConditionTypeSelector,
   ActionTypeSelector,
@@ -202,7 +178,7 @@ import {
   FaultTypeSelector,
   LogLevelSelector,
   NodeSelector,
-} from "./selector";
+} from './selector';
 
 const props = defineProps({
   nodes: {
@@ -211,36 +187,32 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits(['submit']);
 
 const formRef = ref(null);
 
 const formData = reactive({
-  name: "",
-  conditionType: "manual",
+  name: '',
+  conditionType: 'manual',
   conditionValue: {},
-  actionType: "send_command",
+  actionType: 'send_command',
   actionParams: {
-    commandType: "self_check",
-    protocolType: "LAN",
-    level: "info",
+    commandType: 'self_check',
+    protocolType: 'LAN',
+    level: 'info',
   },
 });
 
 const formRules = {
-  name: [{ required: true, message: "请输入事件名称", trigger: "blur" }],
-  conditionType: [
-    { required: true, message: "请选择条件类型", trigger: "change" },
-  ],
-  actionType: [
-    { required: true, message: "请选择动作类型", trigger: "change" },
-  ],
+  name: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+  conditionType: [{ required: true, message: '请选择条件类型', trigger: 'change' }],
+  actionType: [{ required: true, message: '请选择动作类型', trigger: 'change' }],
 };
 
 const dialog = useDialog({
-  title: "添加事件",
-  width: "560px",
-  okText: "保存",
+  title: '添加事件',
+  width: '560px',
+  okText: '保存',
   formRef,
   formModel: formData,
   preValidate: true,
@@ -259,7 +231,7 @@ async function handleSubmit() {
     name: formData.name,
     condition: {
       type: formData.conditionType,
-      value: formData.conditionType === "manual" ? {} : formData.conditionValue,
+      value: formData.conditionType === 'manual' ? {} : formData.conditionValue,
     },
     action: {
       type: formData.actionType,
@@ -268,9 +240,9 @@ async function handleSubmit() {
   };
 
   if (dialog.state.data?.eventId) {
-    emit("submit", dialog.state.data.eventId, config);
+    emit('submit', dialog.state.data.eventId, config);
   } else {
-    emit("submit", null, config);
+    emit('submit', null, config);
   }
 
   dialog.close();
@@ -279,27 +251,27 @@ async function handleSubmit() {
 }
 
 function resetForm() {
-  formData.name = "";
-  formData.conditionType = "manual";
+  formData.name = '';
+  formData.conditionType = 'manual';
   formData.conditionValue = {};
-  formData.actionType = "send_command";
+  formData.actionType = 'send_command';
   formData.actionParams = {
-    commandType: "self_check",
-    protocolType: "LAN",
-    level: "info",
+    commandType: 'self_check',
+    protocolType: 'LAN',
+    level: 'info',
   };
 }
 
 function open(eventData = null) {
   if (eventData) {
-    formData.name = eventData.name || "";
-    formData.conditionType = eventData.condition?.type || "manual";
+    formData.name = eventData.name || '';
+    formData.conditionType = eventData.condition?.type || 'manual';
     formData.conditionValue = { ...eventData.condition?.value };
-    formData.actionType = eventData.action?.type || "send_command";
+    formData.actionType = eventData.action?.type || 'send_command';
     formData.actionParams = {
-      commandType: "self_check",
-      protocolType: "LAN",
-      level: "info",
+      commandType: 'self_check',
+      protocolType: 'LAN',
+      level: 'info',
       ...eventData.action?.params,
     };
     dialog.open({ eventId: eventData.eventId });
@@ -313,34 +285,34 @@ watch(
   () => formData.conditionType,
   (type) => {
     switch (type) {
-      case "manual":
+      case 'manual':
         formData.conditionValue = {};
         break;
-      case "time":
+      case 'time':
         formData.conditionValue = { time: 10 };
         break;
-      case "message_count":
+      case 'message_count':
         formData.conditionValue = { count: 100 };
         break;
-      case "bandwidth_threshold":
+      case 'bandwidth_threshold':
         formData.conditionValue = { threshold: 80 };
         break;
     }
-  },
+  }
 );
 
 watch(
   () => formData.actionType,
   (type) => {
     const defaults = {
-      send_command: { commandType: "self_check", protocolType: "LAN" },
-      send_message: { protocolType: "LAN" },
-      inject_fault: { faultType: "packet_loss" },
-      log: { level: "info" },
+      send_command: { commandType: 'self_check', protocolType: 'LAN' },
+      send_message: { protocolType: 'LAN' },
+      inject_fault: { faultType: 'packet_loss' },
+      log: { level: 'info' },
       pause: {},
     };
     formData.actionParams = defaults[type] || {};
-  },
+  }
 );
 
 defineExpose({
@@ -349,7 +321,7 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-@import (reference) "../styles/simulation-dialog-theme.less";
+@import (reference) '../styles/simulation-dialog-theme.less';
 
 :deep(.el-form) {
   .el-form-item__label {

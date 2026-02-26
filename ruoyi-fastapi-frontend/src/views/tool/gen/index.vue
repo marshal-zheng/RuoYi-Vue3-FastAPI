@@ -18,11 +18,7 @@
               v-hasPermi="['tool:gen:code']"
               >生成</ZxButton
             >
-            <ZxButton
-              type="primary"
-              icon="Plus"
-              @click="openCreateTable"
-              v-hasRole="['admin']"
+            <ZxButton type="primary" icon="Plus" @click="openCreateTable" v-hasRole="['admin']"
               >创建</ZxButton
             >
             <ZxButton
@@ -93,16 +89,8 @@
               <span>{{ (grid.page - 1) * grid.size + scope.$index + 1 }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="表名称"
-            prop="tableName"
-            :show-overflow-tooltip="true"
-          />
-          <el-table-column
-            label="表描述"
-            prop="tableComment"
-            :show-overflow-tooltip="true"
-          />
+          <el-table-column label="表名称" prop="tableName" :show-overflow-tooltip="true" />
+          <el-table-column label="表描述" prop="tableComment" :show-overflow-tooltip="true" />
           <el-table-column label="实体" prop="className" :show-overflow-tooltip="true" />
           <el-table-column label="创建时间" prop="createTime" width="160">
             <template #default="scope">
@@ -114,11 +102,7 @@
               <span>{{ parseTime(scope.row.updateTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="操作"
-            width="330"
-            class-name="small-padding fixed-width"
-          >
+          <el-table-column label="操作" width="330" class-name="small-padding fixed-width">
             <template #default="scope">
               <el-tooltip content="预览" placement="top">
                 <el-button
@@ -251,13 +235,13 @@ async function loadTableData(params) {
     tableName: restQuery?.tableName,
     tableComment: restQuery?.tableComment,
   };
-  
+
   // 处理日期范围
   if (Array.isArray(dateRange) && dateRange.length === 2) {
     queryData.beginTime = dateRange[0];
     queryData.endTime = dateRange[1];
   }
-  
+
   try {
     const response = await listTable(queryData);
     return response;

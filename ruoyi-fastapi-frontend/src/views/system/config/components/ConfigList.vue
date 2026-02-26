@@ -136,12 +136,7 @@
 import { ref, getCurrentInstance } from 'vue';
 import { parseTime } from '@/utils/ruoyi';
 import { serializeDateRange } from '@/utils/ruoyi';
-import {
-  listConfig,
-  getConfig,
-  delConfig,
-  refreshCache,
-} from '@/api/system/config';
+import { listConfig, getConfig, delConfig, refreshCache } from '@/api/system/config';
 import ConfigDlg from './ConfigDlg.vue';
 import DictSelect from '@/components/business/DictSelect/index.vue';
 
@@ -221,6 +216,6 @@ function handleExport(query: Record<string, any>) {
 
 /** 刷新缓存按钮操作 */
 async function handleRefreshCache() {
-  await refreshCache()
+  await refreshCache();
 }
 </script>

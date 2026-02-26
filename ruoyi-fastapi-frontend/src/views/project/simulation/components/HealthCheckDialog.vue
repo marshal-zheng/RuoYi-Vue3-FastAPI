@@ -1,6 +1,6 @@
 <template>
-  <ZxDialog 
-    v-bind="dialog.dialogProps.value" 
+  <ZxDialog
+    v-bind="dialog.dialogProps.value"
     v-on="dialog.dialogEvents.value"
     class="simulation-dialog health-check-dialog"
   >
@@ -60,22 +60,14 @@
             :key="category"
             :name="category"
           >
-          <template #title>
-            <div class="flex items-center justify-between w-full pr-3">
-              <span class="font-medium text-slate-200">{{ category }}</span>
+            <template #title>
+              <div class="flex items-center justify-between w-full pr-3">
+                <span class="font-medium text-slate-200">{{ category }}</span>
                 <div class="flex gap-1.5">
-                  <el-tag
-                    v-if="getCategoryStats(items).error > 0"
-                    type="danger"
-                    size="small"
-                  >
+                  <el-tag v-if="getCategoryStats(items).error > 0" type="danger" size="small">
                     {{ getCategoryStats(items).error }} 错误
                   </el-tag>
-                  <el-tag
-                    v-if="getCategoryStats(items).warning > 0"
-                    type="warning"
-                    size="small"
-                  >
+                  <el-tag v-if="getCategoryStats(items).warning > 0" type="warning" size="small">
                     {{ getCategoryStats(items).warning }} 警告
                   </el-tag>
                   <el-tag

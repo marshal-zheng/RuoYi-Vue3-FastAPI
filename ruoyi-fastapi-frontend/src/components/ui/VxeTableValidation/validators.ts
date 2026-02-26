@@ -46,7 +46,12 @@ const typeValidators: Record<string, (value: any) => boolean> = {
     const num = parseNumber(value);
     return num !== null;
   },
-  boolean: (value) => typeof value === 'boolean' || value === 'true' || value === 'false' || value === 0 || value === 1,
+  boolean: (value) =>
+    typeof value === 'boolean' ||
+    value === 'true' ||
+    value === 'false' ||
+    value === 0 ||
+    value === 1,
   array: (value) => Array.isArray(value),
   object: (value) => typeof value === 'object' && value !== null && !Array.isArray(value),
   date: (value) => {
@@ -314,7 +319,8 @@ export const port = (message?: string): ValidationRule => ({
 
 /** IP地址校验 */
 export const ipAddress = (message?: string): ValidationRule => ({
-  pattern: /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
+  pattern:
+    /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/,
   message: message || '请输入有效的IP地址',
 });
 
@@ -507,7 +513,9 @@ export const createValueRangeValidator = (options: {
         if (!range) return;
 
         // 尝试从值域中提取数值范围
-        const rangeMatch = String(valueRange).match(/(-?\d+(?:\.\d+)?)\s*[-~,]\s*(-?\d+(?:\.\d+)?)/);
+        const rangeMatch = String(valueRange).match(
+          /(-?\d+(?:\.\d+)?)\s*[-~,]\s*(-?\d+(?:\.\d+)?)/
+        );
         if (rangeMatch) {
           const minVal = parseFloat(rangeMatch[1]);
           const maxVal = parseFloat(rangeMatch[2]);

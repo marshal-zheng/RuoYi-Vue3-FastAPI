@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse } from 'msw';
 
-import type { MockStrategy } from '../types'
-import { resultSuccess } from '../utils/response'
-import { withBackendFallback } from '../utils/with-backend-fallback'
+import type { MockStrategy } from '../types';
+import { resultSuccess } from '../utils/response';
+import { withBackendFallback } from '../utils/with-backend-fallback';
 
 export function createTestHandlers(strategy: MockStrategy) {
   return [
@@ -14,11 +14,11 @@ export function createTestHandlers(strategy: MockStrategy) {
           HttpResponse.json(
             resultSuccess({
               message: 'mock ssss',
-              timestamp: Date.now()
+              timestamp: Date.now(),
             })
           ),
         { strategy, tag: 'test:mock' }
       )
-    )
-  ]
+    ),
+  ];
 }

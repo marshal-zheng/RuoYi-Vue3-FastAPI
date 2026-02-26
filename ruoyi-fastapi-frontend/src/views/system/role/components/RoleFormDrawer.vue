@@ -47,8 +47,12 @@
       </el-form-item>
       <el-form-item label="菜单权限">
         <div class="tree-toolbar">
-          <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand">展开/折叠</el-checkbox>
-          <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll">全选/全不选</el-checkbox>
+          <el-checkbox v-model="menuExpand" @change="handleCheckedTreeExpand"
+            >展开/折叠</el-checkbox
+          >
+          <el-checkbox v-model="menuNodeAll" @change="handleCheckedTreeNodeAll"
+            >全选/全不选</el-checkbox
+          >
           <el-checkbox v-model="drawer.state.data.menuCheckStrictly">父子联动</el-checkbox>
         </div>
         <el-tree

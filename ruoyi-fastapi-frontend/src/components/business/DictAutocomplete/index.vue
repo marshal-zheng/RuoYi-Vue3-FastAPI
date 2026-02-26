@@ -98,7 +98,7 @@ const filterOptions = (queryString) => {
 };
 
 const handleSelect = (item) => {
-  console.log('itemsssss', item)
+  console.log('itemsssss', item);
   inputValue.value = item.label;
   emitValue(item.value);
   emit('dict-change', item._raw ?? item);

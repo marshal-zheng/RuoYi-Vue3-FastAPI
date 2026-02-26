@@ -46,9 +46,7 @@
           <span>{{ getSelectedEdgeInfo() }}</span>
         </div>
       </div>
-      <div v-if="!edgeAvailable" class="edge-hint">
-        请选择或悬停一条链路后再应用模板
-      </div>
+      <div v-if="!edgeAvailable" class="edge-hint">请选择或悬停一条链路后再应用模板</div>
       <div class="grid grid-cols-2 gap-2">
         <button
           v-for="tpl in templates"
@@ -59,7 +57,12 @@
           :disabled="!edgeAvailable"
           @click="edgeAvailable && $emit('apply-template', tpl)"
         >
-          <div class="text-xs font-semibold" :class="edgeAvailable ? 'text-slate-200' : 'text-slate-500'">{{ tpl.label }}</div>
+          <div
+            class="text-xs font-semibold"
+            :class="edgeAvailable ? 'text-slate-200' : 'text-slate-500'"
+          >
+            {{ tpl.label }}
+          </div>
           <div class="text-[11px] text-slate-500">{{ tpl.tip }}</div>
         </button>
       </div>
@@ -86,7 +89,9 @@
             <div class="flex items-center gap-2">
               <span class="tag">{{ faultLabel(fault.faultType) }}</span>
               <span class="text-[11px] text-slate-400 truncate">
-                {{ fault.targetType === 'edge' ? '链路' : fault.targetType }}：{{ faultTargetLabel(fault) }}
+                {{ fault.targetType === 'edge' ? '链路' : fault.targetType }}：{{
+                  faultTargetLabel(fault)
+                }}
               </span>
             </div>
             <div class="text-[11px] text-slate-500 mt-0.5 truncate">
@@ -96,7 +101,9 @@
               {{ statusText(fault.status) }}
             </div>
           </div>
-          <el-button size="small" text type="primary" @click="$emit('clear', fault.faultId)">清除</el-button>
+          <el-button size="small" text type="primary" @click="$emit('clear', fault.faultId)"
+            >清除</el-button
+          >
         </div>
       </div>
     </section>
@@ -137,11 +144,36 @@ defineEmits(['apply-template', 'clear', 'clear-all', 'refresh', 'close']);
 
 const templates = [
   { name: 'disconnect', label: '断链', tip: '立即断开链路', payload: { type: 'disconnect' } },
-  { name: 'loss10', label: '丢包10%', tip: '10%概率丢弃', payload: { type: 'packet_loss', params: { lossRate: 10 } } },
-  { name: 'delay50', label: '延时50ms', tip: '固定延时+抖动', payload: { type: 'delay', params: { delayMs: 50, jitterMs: 10 } } },
-  { name: 'limit', label: '限速QPS20', tip: '节流窗口', payload: { type: 'bandwidth_limit', params: { messagesPerSecond: 20 } } },
-  { name: 'bitflip', label: 'bit flip', tip: '随机篡改payload', payload: { type: 'payload_corrupt', params: { bitFlipCount: 2 } } },
-  { name: 'noise', label: '噪声帧', tip: '随机无效帧', payload: { type: 'noise_frame', params: { length: 16 } } },
+  {
+    name: 'loss10',
+    label: '丢包10%',
+    tip: '10%概率丢弃',
+    payload: { type: 'packet_loss', params: { lossRate: 10 } },
+  },
+  {
+    name: 'delay50',
+    label: '延时50ms',
+    tip: '固定延时+抖动',
+    payload: { type: 'delay', params: { delayMs: 50, jitterMs: 10 } },
+  },
+  {
+    name: 'limit',
+    label: '限速QPS20',
+    tip: '节流窗口',
+    payload: { type: 'bandwidth_limit', params: { messagesPerSecond: 20 } },
+  },
+  {
+    name: 'bitflip',
+    label: 'bit flip',
+    tip: '随机篡改payload',
+    payload: { type: 'payload_corrupt', params: { bitFlipCount: 2 } },
+  },
+  {
+    name: 'noise',
+    label: '噪声帧',
+    tip: '随机无效帧',
+    payload: { type: 'noise_frame', params: { length: 16 } },
+  },
 ];
 
 const orderedFaults = computed(() => {
@@ -185,7 +217,8 @@ function faultTargetLabel(fault) {
 
 function briefParams(params = {}) {
   const parts = [];
-  if (params.lossRate !== undefined) parts.push(`丢包${Math.round(params.lossRate * 100 || params.lossRate)}%`);
+  if (params.lossRate !== undefined)
+    parts.push(`丢包${Math.round(params.lossRate * 100 || params.lossRate)}%`);
   if (params.delayMs !== undefined) parts.push(`延时${params.delayMs}ms`);
   if (params.jitterMs) parts.push(`抖动±${params.jitterMs}ms`);
   if (params.messagesPerSecond) parts.push(`QPS<=${params.messagesPerSecond}`);
@@ -363,14 +396,22 @@ function getSelectedEdgeInfo() {
 
 /* 刷新按钮样式 - 使用CSS变量 */
 .refresh-btn {
-  background: linear-gradient(135deg, var(--sim-accent-bg, rgba(34, 211, 238, 0.15)), rgba(45, 212, 191, 0.15)) !important;
+  background: linear-gradient(
+    135deg,
+    var(--sim-accent-bg, rgba(34, 211, 238, 0.15)),
+    rgba(45, 212, 191, 0.15)
+  ) !important;
   border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.4)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
   transition: all var(--sim-transition-normal, 0.3s ease);
 }
 .refresh-btn:hover {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.25), rgba(45, 212, 191, 0.25)) !important;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 211, 238, 0.25),
+    rgba(45, 212, 191, 0.25)
+  ) !important;
   border-color: var(--sim-accent-light, rgba(34, 211, 238, 0.6)) !important;
   box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px rgba(34, 211, 238, 0.2));
   transform: translateY(-1px);
@@ -381,7 +422,11 @@ function getSelectedEdgeInfo() {
 
 /* 清除全部按钮样式 - 使用CSS变量 */
 .clear-all-btn {
-  background: linear-gradient(135deg, var(--sim-danger-bg, rgba(239, 68, 68, 0.15)), rgba(220, 38, 38, 0.15)) !important;
+  background: linear-gradient(
+    135deg,
+    var(--sim-danger-bg, rgba(239, 68, 68, 0.15)),
+    rgba(220, 38, 38, 0.15)
+  ) !important;
   border: 1px solid var(--sim-danger-border, rgba(239, 68, 68, 0.4)) !important;
   color: var(--sim-danger, #ef4444) !important;
   font-weight: 600;
@@ -412,7 +457,8 @@ function getSelectedEdgeInfo() {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
   }
   50% {

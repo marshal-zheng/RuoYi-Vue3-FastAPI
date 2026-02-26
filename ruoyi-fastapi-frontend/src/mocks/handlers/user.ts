@@ -1,23 +1,11 @@
 // @ts-nocheck
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse } from 'msw';
 
-import type { MockStrategy } from '../types'
-import {
-  buildAccountCollections,
-  createDeptTree,
-  createUserList
-} from '../factories'
-import {
-  pagination,
-  resultError,
-  resultSuccess
-} from '../utils/response'
-import {
-  getRequestToken,
-  getSearchParams,
-  readJsonBody
-} from '../utils/request'
-import { withBackendFallback } from '../utils/with-backend-fallback'
+import type { MockStrategy } from '../types';
+import { buildAccountCollections, createDeptTree, createUserList } from '../factories';
+import { pagination, resultError, resultSuccess } from '../utils/response';
+import { getRequestToken, getSearchParams, readJsonBody } from '../utils/request';
+import { withBackendFallback } from '../utils/with-backend-fallback';
 
 const accountCollections = buildAccountCollections([
   {
@@ -35,8 +23,8 @@ const accountCollections = buildAccountCollections([
       status: '0',
       sex: '1',
       phonenumber: '15888888888',
-      remark: '管理员'
-    }
+      remark: '管理员',
+    },
   },
   {
     username: 'editor',
@@ -53,17 +41,17 @@ const accountCollections = buildAccountCollections([
       status: '0',
       sex: '0',
       phonenumber: '15666666666',
-      remark: '编辑员'
-    }
-  }
-])
+      remark: '编辑员',
+    },
+  },
+]);
 
-const mockUsers = createUserList(40, index => ({
+const mockUsers = createUserList(40, (index) => ({
   userId: index + 10,
   userName: `user${index + 1}`,
   nickName: `Mock用户${index + 1}`,
-  status: index % 6 === 0 ? '1' : '0'
-}))
+  status: index % 6 === 0 ? '1' : '0',
+}));
 
 export function createUserHandlers(strategy: MockStrategy) {
   return [
@@ -75,32 +63,28 @@ export function createUserHandlers(strategy: MockStrategy) {
             resultSuccess({
               captchaEnabled: false,
               img: '',
-              uuid: `mock-uuid-${Date.now()}`
+              uuid: `mock-uuid-${Date.now()}`,
             })
           ),
         { strategy, tag: 'user:captcha' }
       )
     ),
     http.post('/dev-api/login', async ({ request }) => {
-      const payload =
-        (await readJsonBody<{ username?: string; password?: string }>(request)) ??
-        {}
+      const payload = (await readJsonBody<{ username?: string; password?: string }>(request)) ?? {};
       return withBackendFallback(
         request,
         () => {
-          const { username = '', password = '' } = payload
+          const { username = '', password = '' } = payload;
           if (!username) {
-            return HttpResponse.json(resultError('用户名不能为空', { code: 500 }))
+            return HttpResponse.json(resultError('用户名不能为空', { code: 500 }));
           }
           if (!password) {
-            return HttpResponse.json(resultError('密码不能为空', { code: 500 }))
+            return HttpResponse.json(resultError('密码不能为空', { code: 500 }));
           }
 
-          const account = accountCollections.credentials[username]
+          const account = accountCollections.credentials[username];
           if (!account || account.password !== password) {
-            return HttpResponse.json(
-              resultError('用户名或密码错误', { code: 500 })
-            )
+            return HttpResponse.json(resultError('用户名或密码错误', { code: 500 }));
           }
 
           return HttpResponse.json(
@@ -108,31 +92,30 @@ export function createUserHandlers(strategy: MockStrategy) {
               code: 200,
               msg: '登录成功',
               type: 'success',
-              token: account.token
+              token: account.token,
             },
             { status: 200 }
-          )
+          );
         },
         { strategy, tag: 'user:login' }
-      )
+      );
     }),
     http.get('/dev-api/getInfo', ({ request }) =>
       withBackendFallback(
         request,
         () => {
-          const token = getRequestToken(request)
+          const token = getRequestToken(request);
           if (!token) {
             return HttpResponse.json(resultError('Token 不能为空', { code: 401 }), {
-              status: 401
-            })
+              status: 401,
+            });
           }
 
-          const info = accountCollections.accountsByToken[token]
+          const info = accountCollections.accountsByToken[token];
           if (!info) {
-            return HttpResponse.json(
-              resultError('登录信息已过期，请重新登录', { code: 401 }),
-              { status: 401 }
-            )
+            return HttpResponse.json(resultError('登录信息已过期，请重新登录', { code: 401 }), {
+              status: 401,
+            });
           }
 
           return HttpResponse.json(
@@ -144,10 +127,10 @@ export function createUserHandlers(strategy: MockStrategy) {
               roles: info.roles,
               permissions: info.permissions,
               isDefaultModifyPwd: false,
-              isPasswordExpired: false
+              isPasswordExpired: false,
             },
             { status: 200 }
-          )
+          );
         },
         { strategy, tag: 'user:getInfo' }
       )
@@ -163,26 +146,25 @@ export function createUserHandlers(strategy: MockStrategy) {
       withBackendFallback(
         request,
         () => {
-          const searchParams = getSearchParams(request)
-          const page = Number(searchParams.get('pageNum') ?? 1)
-          const size = Number(searchParams.get('pageSize') ?? 10)
-          const rows = pagination(page, size, mockUsers)
+          const searchParams = getSearchParams(request);
+          const page = Number(searchParams.get('pageNum') ?? 1);
+          const size = Number(searchParams.get('pageSize') ?? 10);
+          const rows = pagination(page, size, mockUsers);
           return HttpResponse.json(
             resultSuccess({
               rows,
-              total: mockUsers.length
+              total: mockUsers.length,
             })
-          )
+          );
         },
         { strategy, tag: 'user:list' }
       )
     ),
     http.get('/dev-api/system/user/deptTree', ({ request }) =>
-      withBackendFallback(
-        request,
-        () => HttpResponse.json(resultSuccess(createDeptTree())),
-        { strategy, tag: 'user:deptTree' }
-      )
-    )
-  ]
+      withBackendFallback(request, () => HttpResponse.json(resultSuccess(createDeptTree())), {
+        strategy,
+        tag: 'user:deptTree',
+      })
+    ),
+  ];
 }

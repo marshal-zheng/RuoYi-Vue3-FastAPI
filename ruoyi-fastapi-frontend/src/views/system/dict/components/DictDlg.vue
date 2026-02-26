@@ -22,60 +22,60 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
-import { useDialog } from '@zxio/zxui'
-import { addType, updateType } from '@/api/system/dict/type'
-import { useDict } from '@/utils/dict'
+import { ref, getCurrentInstance } from 'vue';
+import { useDialog } from '@zxio/zxui';
+import { addType, updateType } from '@/api/system/dict/type';
+import { useDict } from '@/utils/dict';
 
-const { proxy } = getCurrentInstance() as any
+const { proxy } = getCurrentInstance() as any;
 
 // 延迟加载字典数据
-let sysNormalDisable = ref<any[]>([])
-let dictLoaded = false
+let sysNormalDisable = ref<any[]>([]);
+let dictLoaded = false;
 
 interface DictForm {
-  dictId?: number
-  dictName: string
-  dictType: string
-  status: string
-  remark: string
+  dictId?: number;
+  dictName: string;
+  dictType: string;
+  status: string;
+  remark: string;
 }
 
-const formRef = ref()
+const formRef = ref();
 
 const rules = {
   dictName: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
-  dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }]
-}
+  dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
+};
 
 const { state, dialogProps, dialogEvents, open } = useDialog<DictForm>({
-  title: (data: DictForm) => data.dictId ? '修改字典类型' : '添加字典类型',
+  title: (data: DictForm) => (data.dictId ? '修改字典类型' : '添加字典类型'),
   width: '500px',
   defaultData: () => ({
     dictId: undefined,
     dictName: '',
     dictType: '',
     status: '0',
-    remark: ''
+    remark: '',
   }),
   onOpen: () => {
     // 只在第一次打开时加载字典
     if (!dictLoaded) {
-      const dict = useDict('sys_normal_disable')
+      const dict = useDict('sys_normal_disable');
       // useDict 返回的键名是原始的 dictType，不是驼峰命名
-      sysNormalDisable.value = dict.sys_normal_disable?.value || []
-      dictLoaded = true
+      sysNormalDisable.value = dict.sys_normal_disable?.value || [];
+      dictLoaded = true;
     }
   },
   onConfirm: async (data: DictForm) => {
     if (data.dictId) {
-      await updateType(data)
+      await updateType(data);
     } else {
-      await addType(data)
+      await addType(data);
     }
-    return true
-  }
-})
+    return true;
+  },
+});
 
-defineExpose({ open })
+defineExpose({ open });
 </script>

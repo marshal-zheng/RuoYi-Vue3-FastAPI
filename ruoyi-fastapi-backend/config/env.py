@@ -207,7 +207,7 @@ class OTelSettings(BaseSettings):
     OpenTelemetry 配置
     """
 
-    otel_enabled: bool = True
+    otel_enabled: bool = False
     otel_service_name: str = 'ruoyi-fastapi-backend'
     otel_service_namespace: str = 'ruoyi-fastapi'
     otel_traces_sample_ratio: float = 1.0

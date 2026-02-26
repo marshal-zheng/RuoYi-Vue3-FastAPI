@@ -103,9 +103,13 @@
       <el-descriptions-item label="工程编号">{{ detailData.projectId }}</el-descriptions-item>
       <el-descriptions-item label="工程描述">{{ detailData.projectDesc }}</el-descriptions-item>
       <el-descriptions-item label="创建人">{{ detailData.createBy }}</el-descriptions-item>
-      <el-descriptions-item label="创建时间">{{ parseTime(detailData.createTime) }}</el-descriptions-item>
+      <el-descriptions-item label="创建时间">{{
+        parseTime(detailData.createTime)
+      }}</el-descriptions-item>
       <el-descriptions-item label="更新人">{{ detailData.updateBy }}</el-descriptions-item>
-      <el-descriptions-item label="更新时间">{{ parseTime(detailData.updateTime) }}</el-descriptions-item>
+      <el-descriptions-item label="更新时间">{{
+        parseTime(detailData.updateTime)
+      }}</el-descriptions-item>
     </el-descriptions>
     <template #footer>
       <div class="dialog-footer">
@@ -162,7 +166,7 @@ function handleAdd() {
 async function handleUpdate(row?: any) {
   const projectId = row?.projectId || ids.value[0];
   if (!projectId) return;
-  
+
   try {
     const response = await getProject(projectId);
     projectDlgRef.value?.open(response);

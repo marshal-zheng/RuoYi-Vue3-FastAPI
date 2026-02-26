@@ -13,15 +13,23 @@
       </button>
     </div>
     <div class="flex flex-col gap-3">
-      <div class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30">
+      <div
+        class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30"
+      >
         <span class="text-xs text-slate-400 uppercase tracking-wider">设备名称</span>
-        <span class="text-sm text-slate-100 font-medium">{{ node?.name || node?.label || '-' }}</span>
+        <span class="text-sm text-slate-100 font-medium">{{
+          node?.name || node?.label || '-'
+        }}</span>
       </div>
-      <div class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30">
+      <div
+        class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30"
+      >
         <span class="text-xs text-slate-400 uppercase tracking-wider">设备类型</span>
         <span class="text-sm text-slate-100 font-medium">{{ node?.deviceType || '-' }}</span>
       </div>
-      <div class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30">
+      <div
+        class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/30 border border-slate-700/30"
+      >
         <span class="text-xs text-slate-400 uppercase tracking-wider">总线类型</span>
         <span class="text-sm text-slate-100 font-medium">{{ node?.busType || '-' }}</span>
       </div>
@@ -37,8 +45,12 @@
             :key="port.id"
             class="flex justify-between items-center py-2 px-3 rounded-md bg-slate-800/40 border border-slate-700/40 hover:bg-slate-800/60 hover:border-slate-600/50 transition-all duration-200 cursor-pointer group"
           >
-            <span class="text-xs text-slate-200 font-medium group-hover:text-slate-100">{{ port.interfaceName || port.id }}</span>
-            <span class="text-xs text-primary-400 font-mono group-hover:text-primary-300">{{ port.interfaceType }}</span>
+            <span class="text-xs text-slate-200 font-medium group-hover:text-slate-100">{{
+              port.interfaceName || port.id
+            }}</span>
+            <span class="text-xs text-primary-400 font-mono group-hover:text-primary-300">{{
+              port.interfaceType
+            }}</span>
           </div>
         </div>
       </div>
@@ -47,14 +59,14 @@
 </template>
 
 <script setup>
-import { Close } from '@element-plus/icons-vue'
+import { Close } from '@element-plus/icons-vue';
 
 defineProps({
   node: {
     type: Object,
     default: null,
   },
-})
+});
 
-defineEmits(['close'])
+defineEmits(['close']);
 </script>

@@ -227,9 +227,7 @@ const closeIconClass = computed(() =>
 const iconBtnClass = computed(() =>
   isDark.value ? 'hover:bg-slate-700/60 text-slate-100' : 'hover:bg-white/50'
 );
-const closeBtnClass = computed(() =>
-  isDark.value ? 'hover:bg-red-500/10' : 'hover:bg-red-50'
-);
+const closeBtnClass = computed(() => (isDark.value ? 'hover:bg-red-500/10' : 'hover:bg-red-50'));
 
 const collapsedClass = computed(() =>
   isDark.value
@@ -237,7 +235,9 @@ const collapsedClass = computed(() =>
     : 'bg-white border border-gray-200 shadow-lg hover:shadow-xl'
 );
 
-const collapseIconClass = computed(() => (isDark.value ? 'text-slate-100 text-xl' : 'text-blue-600 text-xl'));
+const collapseIconClass = computed(() =>
+  isDark.value ? 'text-slate-100 text-xl' : 'text-blue-600 text-xl'
+);
 
 const collapsedStyle = computed(() => {
   return {

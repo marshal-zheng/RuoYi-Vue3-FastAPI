@@ -1,9 +1,9 @@
 // @ts-nocheck
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse } from 'msw';
 
-import type { MockStrategy } from '../types'
-import { resultSuccess } from '../utils/response'
-import { withBackendFallback } from '../utils/with-backend-fallback'
+import type { MockStrategy } from '../types';
+import { resultSuccess } from '../utils/response';
+import { withBackendFallback } from '../utils/with-backend-fallback';
 
 export function createMonitorHandlers(strategy: MockStrategy) {
   return [
@@ -20,13 +20,13 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                 sys: 12.5,
                 used: 25.3,
                 wait: 0.5,
-                free: 61.7
+                free: 61.7,
               },
               mem: {
                 total: 16.0,
                 used: 8.5,
                 free: 7.5,
-                usage: 53.1
+                usage: 53.1,
               },
               jvm: {
                 total: 512,
@@ -37,14 +37,14 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                 name: 'Java HotSpot(TM) 64-Bit Server VM',
                 startTime: '2024-01-01 08:00:00',
                 runTime: '10天 5小时 30分钟',
-                usage: 50.0
+                usage: 50.0,
               },
               sys: {
                 computerName: 'mock-server',
                 computerIp: '192.168.1.100',
                 userDir: '/home/app',
                 osName: 'Linux',
-                osArch: 'amd64'
+                osArch: 'amd64',
               },
               sysFiles: [
                 {
@@ -54,9 +54,9 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                   total: '500 GB',
                   free: '300 GB',
                   used: '200 GB',
-                  usage: 40.0
-                }
-              ]
+                  usage: 40.0,
+                },
+              ],
             })
           ),
         { strategy, tag: 'monitor:server' }
@@ -80,15 +80,15 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                 used_memory_peak_human: '256M',
                 maxmemory_human: '512M',
                 aof_enabled: '0',
-                rdb_last_bgsave_status: 'ok'
+                rdb_last_bgsave_status: 'ok',
               },
               dbSize: 1024,
               commandStats: [
                 { name: 'get', value: 50000 },
                 { name: 'set', value: 30000 },
                 { name: 'del', value: 5000 },
-                { name: 'keys', value: 1000 }
-              ]
+                { name: 'keys', value: 1000 },
+              ],
             })
           ),
         { strategy, tag: 'monitor:cache' }
@@ -110,7 +110,7 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                   loginLocation: '内网IP',
                   browser: 'Chrome 120',
                   os: 'Windows 10',
-                  loginTime: new Date().toISOString()
+                  loginTime: new Date().toISOString(),
                 },
                 {
                   tokenId: 'mock-token-002',
@@ -119,14 +119,14 @@ export function createMonitorHandlers(strategy: MockStrategy) {
                   loginLocation: '内网IP',
                   browser: 'Firefox 121',
                   os: 'macOS',
-                  loginTime: new Date(Date.now() - 3600000).toISOString()
-                }
+                  loginTime: new Date(Date.now() - 3600000).toISOString(),
+                },
               ],
-              total: 2
+              total: 2,
             })
           ),
         { strategy, tag: 'monitor:online' }
       )
-    )
-  ]
+    ),
+  ];
 }

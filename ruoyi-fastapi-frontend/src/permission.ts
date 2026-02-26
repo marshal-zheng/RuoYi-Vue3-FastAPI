@@ -57,7 +57,7 @@ router.beforeEach(
     NProgress.start();
     if (getToken()) {
       const permissionStore = usePermissionStore();
-      to.meta.title && useSettingsStore().setTitle(to.meta.title);
+      to.meta.title && useSettingsStore().setTitle(to.meta.title as string);
       /* has token*/
       if (to.path === '/login') {
         next({ path: '/' });

@@ -1,88 +1,88 @@
 // @ts-nocheck
-import { fakerZH_CN as faker } from '@faker-js/faker'
+import { fakerZH_CN as faker } from '@faker-js/faker';
 
 export interface MockUser {
-  userId: number
-  deptId: number
-  userName: string
-  nickName: string
-  email: string
-  phonenumber: string
-  sex: '0' | '1' | '2'
-  avatar: string
-  status: '0' | '1'
-  delFlag: '0'
-  loginIp: string
-  loginDate: string
-  createBy: string
-  createTime: string
-  updateBy: string | null
-  updateTime: string | null
-  remark: string
+  userId: number;
+  deptId: number;
+  userName: string;
+  nickName: string;
+  email: string;
+  phonenumber: string;
+  sex: '0' | '1' | '2';
+  avatar: string;
+  status: '0' | '1';
+  delFlag: '0';
+  loginIp: string;
+  loginDate: string;
+  createBy: string;
+  createTime: string;
+  updateBy: string | null;
+  updateTime: string | null;
+  remark: string;
 }
 
 export interface MockAccountConfig {
-  username: string
-  password: string
-  roles?: string[]
-  permissions?: string[]
-  name?: string
-  introduction?: string
-  avatar?: string
-  userOverrides?: Partial<MockUser>
+  username: string;
+  password: string;
+  roles?: string[];
+  permissions?: string[];
+  name?: string;
+  introduction?: string;
+  avatar?: string;
+  userOverrides?: Partial<MockUser>;
 }
 
 export interface MockAccountInfo {
-  roles: string[]
-  introduction: string
-  avatar: string
-  name: string
-  user: MockUser
-  permissions: string[]
+  roles: string[];
+  introduction: string;
+  avatar: string;
+  name: string;
+  user: MockUser;
+  permissions: string[];
 }
 
 export interface AccountCollections {
-  credentials: Record<string, { password: string; token: string }>
-  accountsByToken: Record<string, MockAccountInfo>
+  credentials: Record<string, { password: string; token: string }>;
+  accountsByToken: Record<string, MockAccountInfo>;
 }
 
-let userSeed = 1
+let userSeed = 1;
 
 function nextUserId() {
-  return userSeed++
+  return userSeed++;
 }
 
 function formatDateTime(date: Date): string {
-  const pad = (value: number) => value.toString().padStart(2, '0')
-  const year = date.getFullYear()
-  const month = pad(date.getMonth() + 1)
-  const day = pad(date.getDate())
-  const hours = pad(date.getHours())
-  const minutes = pad(date.getMinutes())
-  const seconds = pad(date.getSeconds())
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  const pad = (value: number) => value.toString().padStart(2, '0');
+  const year = date.getFullYear();
+  const month = pad(date.getMonth() + 1);
+  const day = pad(date.getDate());
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+  const seconds = pad(date.getSeconds());
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 function randomPhone(): string {
-  return faker.phone.number('1##########')
+  return faker.phone.number('1##########');
 }
 
 function randomDateTime(): string {
-  return formatDateTime(faker.date.recent({ days: 30 }))
+  return formatDateTime(faker.date.recent({ days: 30 }));
 }
 
 export function resetUserSeed() {
-  userSeed = 1
+  userSeed = 1;
 }
 
 export function createUser(overrides: Partial<MockUser> = {}): MockUser {
-  const nickName = overrides.nickName ?? faker.person.fullName()
+  const nickName = overrides.nickName ?? faker.person.fullName();
   const userName =
     overrides.userName ??
     faker.internet
       .userName({ firstName: nickName })
       .replace(/[^a-zA-Z0-9]/g, '')
-      .toLowerCase()
+      .toLowerCase();
 
   return {
     userId: overrides.userId ?? nextUserId(),
@@ -101,72 +101,63 @@ export function createUser(overrides: Partial<MockUser> = {}): MockUser {
     createTime: overrides.createTime ?? randomDateTime(),
     updateBy:
       overrides.updateBy ??
-      (faker.datatype.boolean()
-        ? faker.helpers.arrayElement(['admin', 'editor'])
-        : null),
-    updateTime:
-      overrides.updateTime ??
-      (faker.datatype.boolean() ? randomDateTime() : null),
+      (faker.datatype.boolean() ? faker.helpers.arrayElement(['admin', 'editor']) : null),
+    updateTime: overrides.updateTime ?? (faker.datatype.boolean() ? randomDateTime() : null),
     remark: overrides.remark ?? faker.lorem.sentence({ min: 4, max: 12 }),
-  }
+  };
 }
 
 export function createUserList(
   count: number,
   overrides?: (index: number) => Partial<MockUser>
 ): MockUser[] {
-  resetUserSeed()
+  resetUserSeed();
   return Array.from({ length: count }, (_, idx) => {
-    const userOverrides = overrides ? overrides(idx) : {}
+    const userOverrides = overrides ? overrides(idx) : {};
     return createUser({
       userId: userOverrides?.userId ?? nextUserId(),
-      ...userOverrides
-    })
-  })
+      ...userOverrides,
+    });
+  });
 }
 
-export function buildAccountCollections(
-  configs: MockAccountConfig[]
-): AccountCollections {
-  const now = Date.now()
-  const credentials: AccountCollections['credentials'] = {}
-  const accountsByToken: AccountCollections['accountsByToken'] = {}
+export function buildAccountCollections(configs: MockAccountConfig[]): AccountCollections {
+  const now = Date.now();
+  const credentials: AccountCollections['credentials'] = {};
+  const accountsByToken: AccountCollections['accountsByToken'] = {};
 
   configs.forEach((config, index) => {
     const baseUser = createUser({
       userName: config.username,
       nickName: config.name ?? faker.person.fullName(),
       userId: config.userOverrides?.userId ?? nextUserId(),
-      ...config.userOverrides
-    })
+      ...config.userOverrides,
+    });
 
     const accountInfo: MockAccountInfo = {
       roles: config.roles ?? ['user'],
-      introduction:
-        config.introduction ?? `Mock account for ${baseUser.nickName}`,
+      introduction: config.introduction ?? `Mock account for ${baseUser.nickName}`,
       avatar:
         config.avatar ??
         faker.image.avatarGitHub() ??
-        `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-          baseUser.nickName
-        )}`,
+        `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(baseUser.nickName)}`,
       name: config.name ?? baseUser.nickName,
       user: baseUser,
-      permissions: config.permissions ?? []
-    }
+      permissions: config.permissions ?? [],
+    };
 
-    const token = `mock-token-${config.username}-${now}-${index}`
+    const token = `mock-token-${config.username}-${now}-${index}`;
 
     credentials[config.username] = {
       password: config.password,
-      token
-    }
+      token,
+    };
 
-    accountsByToken[token] = accountInfo
-  })
+    accountsByToken[token] = accountInfo;
+  });
 
   return {
     credentials,
-    accountsByToken
-  }
+    accountsByToken,
+  };
 }

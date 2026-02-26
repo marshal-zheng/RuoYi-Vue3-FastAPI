@@ -42,3 +42,9 @@ Shared and support files live in:
   - test evidence (commands run and results)
   - screenshots or API examples when UI/contract behavior changes
   - migration notes when `alembic/` or SQL files are touched
+
+## Frontend Debugging (Chrome DevTools MCP)
+- Chrome DevTools MCP 已集成到本项目，启动时需确保 `--autoConnect` 参数已开启。
+- 前端开发服务器：`cd ruoyi-fastapi-frontend && yarn dev`
+- 前端 lint / type-check / test：`cd ruoyi-fastapi-frontend && yarn lint:check && yarn type-check && yarn test:run`
+- 具体调试闭环流程请遵循 `.cursor/rules/frontend-debug-loop.mdc`。

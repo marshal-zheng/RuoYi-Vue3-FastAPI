@@ -19,13 +19,12 @@
               class="toggle-item"
               :class="{ active: !localShowTrend }"
               @click="updateTrend(false)"
-            >仪表</span>
+              >仪表</span
+            >
             <span class="toggle-divider">|</span>
-            <span
-              class="toggle-item"
-              :class="{ active: localShowTrend }"
-              @click="updateTrend(true)"
-            >趋势</span>
+            <span class="toggle-item" :class="{ active: localShowTrend }" @click="updateTrend(true)"
+              >趋势</span
+            >
           </div>
         </div>
       </div>

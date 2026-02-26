@@ -1,6 +1,6 @@
 // @ts-nocheck
-import { createHandlers } from '../handlers'
+import { createHandlers } from '../handlers';
 
 export function createPureScenarioHandlers() {
-  return createHandlers('pure')
+  return createHandlers('pure');
 }

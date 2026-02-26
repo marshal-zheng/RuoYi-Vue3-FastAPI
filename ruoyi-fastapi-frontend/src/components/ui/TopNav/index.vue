@@ -235,7 +235,9 @@ onMounted(() => {
 
 /* Default (Border OFF): Stronger background, no border */
 .topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active,
-.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-sub-menu.is-active .el-sub-menu__title {
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border)
+  > .el-sub-menu.is-active
+  .el-sub-menu__title {
   background-color: rgba(255, 255, 255, 0.15) !important; /* Subtler background */
   box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15); /* Inner glow for depth */
   border-bottom-color: transparent !important;
@@ -243,7 +245,9 @@ onMounted(() => {
 
 /* Border ON: Subtle background, white border */
 .topmenu-container.el-menu--horizontal.has-bottom-border > .el-menu-item.is-active,
-.topmenu-container.el-menu--horizontal.has-bottom-border > .el-sub-menu.is-active .el-sub-menu__title {
+.topmenu-container.el-menu--horizontal.has-bottom-border
+  > .el-sub-menu.is-active
+  .el-sub-menu__title {
   background-color: rgba(0, 0, 0, 0.1) !important;
   border-bottom-color: #ffffff !important;
 }
@@ -259,7 +263,9 @@ onMounted(() => {
 
 /* Fix for active item focus state to match active state */
 .topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active:focus,
-.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-sub-menu.is-active .el-sub-menu__title:focus {
+.topmenu-container.el-menu--horizontal:not(.has-bottom-border)
+  > .el-sub-menu.is-active
+  .el-sub-menu__title:focus {
   background-color: rgba(255, 255, 255, 0.15) !important;
   box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15);
 }

@@ -1,6 +1,6 @@
 /**
  * UI Components Unified Export
- * 
+ *
  * All pure UI components (no API calls) are exported from here.
  * Usage: import { Pagination, SvgIcon } from '@/components/ui'
  */
@@ -26,7 +26,7 @@ export { default as FileUpload } from './FileUpload/index.vue';
 
 // Editors
 export { default as Editor } from './Editor/index.vue';
-export { Editor as RichEditor } from './RichEditor/index.ts';
+export { Editor as RichEditor } from './RichEditor/index';
 
 // Form & Input
 export { default as IconSelect } from './IconSelect/index.vue';

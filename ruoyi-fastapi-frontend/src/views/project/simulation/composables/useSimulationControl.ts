@@ -1,9 +1,9 @@
 /**
  * 仿真控制 Composable
- * 
+ *
  * 管理仿真会话的生命周期和状态
  */
-import { ref, reactive, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue'
+import { ref, reactive, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue';
 import {
   createSimulationSession,
   startSimulationSession,
@@ -12,7 +12,7 @@ import {
   stopSimulationSession,
   stepSimulationSession,
   setSimulationSpeed,
-} from '@/api/simulation/simulation'
+} from '@/api/simulation/simulation';
 
 /**
  * 仿真状态枚举
@@ -22,9 +22,9 @@ export const SimulationStatus = {
   RUNNING: 'running',
   PAUSED: 'paused',
   STOPPED: 'stopped',
-} as const
+} as const;
 
-export type SimulationStatusType = typeof SimulationStatus[keyof typeof SimulationStatus]
+export type SimulationStatusType = (typeof SimulationStatus)[keyof typeof SimulationStatus];
 
 /**
  * 仿真速度范围
@@ -33,34 +33,34 @@ export const SpeedRange = {
   MIN: 0.5,
   MAX: 4.0,
   DEFAULT: 1.0,
-}
+};
 
 interface SimulationState {
-  status: SimulationStatusType
-  elapsedTime: number
-  speed: number
-  messageCount: number
-  alarmCount: number
-  startTime: number | null
+  status: SimulationStatusType;
+  elapsedTime: number;
+  speed: number;
+  messageCount: number;
+  alarmCount: number;
+  startTime: number | null;
 }
 
 interface SessionOptions {
-  speed?: number
-  [key: string]: any
+  speed?: number;
+  [key: string]: any;
 }
 
 interface StatusUpdate {
-  status?: SimulationStatusType
-  speed?: number
-  elapsedTime?: number
-  messageCount?: number
-  alarmCount?: number
+  status?: SimulationStatusType;
+  speed?: number;
+  elapsedTime?: number;
+  messageCount?: number;
+  alarmCount?: number;
 }
 
 interface StatsUpdate {
-  messageCount?: number
-  alarmCount?: number
-  elapsedTime?: number
+  messageCount?: number;
+  alarmCount?: number;
+  elapsedTime?: number;
 }
 
 /**
@@ -70,9 +70,9 @@ interface StatsUpdate {
  */
 export function clampSpeed(speed: number): number {
   if (typeof speed !== 'number' || isNaN(speed)) {
-    return SpeedRange.DEFAULT
+    return SpeedRange.DEFAULT;
   }
-  return Math.max(SpeedRange.MIN, Math.min(SpeedRange.MAX, speed))
+  return Math.max(SpeedRange.MIN, Math.min(SpeedRange.MAX, speed));
 }
 
 /**
@@ -81,16 +81,19 @@ export function clampSpeed(speed: number): number {
  * @param {string} targetStatus - 目标状态
  * @returns {boolean} 是否可以转换
  */
-export function isValidTransition(currentStatus: SimulationStatusType, targetStatus: SimulationStatusType): boolean {
+export function isValidTransition(
+  currentStatus: SimulationStatusType,
+  targetStatus: SimulationStatusType
+): boolean {
   const validTransitions: Record<SimulationStatusType, SimulationStatusType[]> = {
     [SimulationStatus.IDLE]: [SimulationStatus.RUNNING],
     [SimulationStatus.RUNNING]: [SimulationStatus.PAUSED, SimulationStatus.STOPPED],
     [SimulationStatus.PAUSED]: [SimulationStatus.RUNNING, SimulationStatus.STOPPED],
     [SimulationStatus.STOPPED]: [SimulationStatus.RUNNING],
-  }
+  };
 
-  const allowed = validTransitions[currentStatus] || []
-  return allowed.includes(targetStatus)
+  const allowed = validTransitions[currentStatus] || [];
+  return allowed.includes(targetStatus);
 }
 
 /**
@@ -101,7 +104,7 @@ export function isValidTransition(currentStatus: SimulationStatusType, targetSta
  */
 export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<number | undefined>) {
   // 会话ID
-  const sessionId: Ref<string | null> = ref(null)
+  const sessionId: Ref<string | null> = ref(null);
 
   // 仿真状态
   const simulationState = reactive<SimulationState>({
@@ -111,36 +114,44 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     messageCount: 0,
     alarmCount: 0,
     startTime: null,
-  })
+  });
 
   // 计时器
-  let timerInterval: number | null = null
+  let timerInterval: number | null = null;
 
   // 计算属性
-  const isRunning: ComputedRef<boolean> = computed(() => simulationState.status === SimulationStatus.RUNNING)
-  const isPaused: ComputedRef<boolean> = computed(() => simulationState.status === SimulationStatus.PAUSED)
-  const isStopped: ComputedRef<boolean> = computed(() => simulationState.status === SimulationStatus.STOPPED)
-  const isIdle: ComputedRef<boolean> = computed(() => simulationState.status === SimulationStatus.IDLE)
+  const isRunning: ComputedRef<boolean> = computed(
+    () => simulationState.status === SimulationStatus.RUNNING
+  );
+  const isPaused: ComputedRef<boolean> = computed(
+    () => simulationState.status === SimulationStatus.PAUSED
+  );
+  const isStopped: ComputedRef<boolean> = computed(
+    () => simulationState.status === SimulationStatus.STOPPED
+  );
+  const isIdle: ComputedRef<boolean> = computed(
+    () => simulationState.status === SimulationStatus.IDLE
+  );
 
   // 最近一次前端主动设置速度的时间戳（用于防止状态回写冲掉本地设置）
-  const lastSpeedSetAt: Ref<number> = ref(0)
+  const lastSpeedSetAt: Ref<number> = ref(0);
 
   /**
    * 启动计时器
    */
   function startTimer() {
     if (timerInterval) {
-      clearInterval(timerInterval)
+      clearInterval(timerInterval);
     }
 
-    const startTimestamp = Date.now() - simulationState.elapsedTime * 1000
+    const startTimestamp = Date.now() - simulationState.elapsedTime * 1000;
 
     timerInterval = window.setInterval(() => {
       if (simulationState.status === SimulationStatus.RUNNING) {
-        const elapsed = (Date.now() - startTimestamp) / 1000
-        simulationState.elapsedTime = elapsed * simulationState.speed
+        const elapsed = (Date.now() - startTimestamp) / 1000;
+        simulationState.elapsedTime = elapsed * simulationState.speed;
       }
-    }, 100) // 每100ms更新一次
+    }, 100); // 每100ms更新一次
   }
 
   /**
@@ -148,8 +159,8 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   function stopTimer() {
     if (timerInterval) {
-      clearInterval(timerInterval)
-      timerInterval = null
+      clearInterval(timerInterval);
+      timerInterval = null;
     }
   }
 
@@ -161,14 +172,14 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
       projectId: projectId.value,
       versionId: versionId?.value,
       ...options,
-    })
+    });
 
     if (response?.sessionId) {
-      sessionId.value = response.sessionId
-      return response.sessionId
+      sessionId.value = response.sessionId;
+      return response.sessionId;
     }
 
-    throw new Error('创建仿真会话失败')
+    throw new Error('创建仿真会话失败');
   }
 
   /**
@@ -176,26 +187,26 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   async function start(options: SessionOptions = {}) {
     if (!isValidTransition(simulationState.status, SimulationStatus.RUNNING)) {
-      throw new Error('当前状态不允许启动仿真')
+      throw new Error('当前状态不允许启动仿真');
     }
 
     // 如果没有会话，先创建
     if (!sessionId.value) {
-      await createSession(options)
+      await createSession(options);
     }
 
     // 启动仿真
     await startSimulationSession(sessionId.value!, {
       speed: simulationState.speed,
       ...options,
-    })
+    });
 
     // 更新状态
-    simulationState.status = SimulationStatus.RUNNING
-    simulationState.startTime = Date.now()
+    simulationState.status = SimulationStatus.RUNNING;
+    simulationState.startTime = Date.now();
 
     // 启动计时器
-    startTimer()
+    startTimer();
   }
 
   /**
@@ -203,17 +214,17 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   async function pause() {
     if (!isValidTransition(simulationState.status, SimulationStatus.PAUSED)) {
-      throw new Error('当前状态不允许暂停仿真')
+      throw new Error('当前状态不允许暂停仿真');
     }
 
     if (!sessionId.value) {
-      throw new Error('仿真会话不存在')
+      throw new Error('仿真会话不存在');
     }
 
-    await pauseSimulationSession(sessionId.value)
+    await pauseSimulationSession(sessionId.value);
 
-    simulationState.status = SimulationStatus.PAUSED
-    stopTimer()
+    simulationState.status = SimulationStatus.PAUSED;
+    stopTimer();
   }
 
   /**
@@ -221,17 +232,17 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   async function resume() {
     if (!isValidTransition(simulationState.status, SimulationStatus.RUNNING)) {
-      throw new Error('当前状态不允许继续仿真')
+      throw new Error('当前状态不允许继续仿真');
     }
 
     if (!sessionId.value) {
-      throw new Error('仿真会话不存在')
+      throw new Error('仿真会话不存在');
     }
 
-    await resumeSimulationSession(sessionId.value)
+    await resumeSimulationSession(sessionId.value);
 
-    simulationState.status = SimulationStatus.RUNNING
-    startTimer()
+    simulationState.status = SimulationStatus.RUNNING;
+    startTimer();
   }
 
   /**
@@ -241,17 +252,17 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     if (!isValidTransition(simulationState.status, SimulationStatus.STOPPED)) {
       // 如果是 idle 状态，直接返回
       if (simulationState.status === SimulationStatus.IDLE) {
-        return
+        return;
       }
-      throw new Error('当前状态不允许停止仿真')
+      throw new Error('当前状态不允许停止仿真');
     }
 
     if (sessionId.value) {
-      await stopSimulationSession(sessionId.value)
+      await stopSimulationSession(sessionId.value);
     }
 
-    simulationState.status = SimulationStatus.STOPPED
-    stopTimer()
+    simulationState.status = SimulationStatus.STOPPED;
+    stopTimer();
   }
 
   /**
@@ -259,39 +270,39 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   async function step() {
     if (simulationState.status !== SimulationStatus.PAUSED) {
-      throw new Error('只有在暂停状态下才能单步执行')
+      throw new Error('只有在暂停状态下才能单步执行');
     }
 
     if (!sessionId.value) {
-      throw new Error('仿真会话不存在')
+      throw new Error('仿真会话不存在');
     }
 
-    await stepSimulationSession(sessionId.value)
+    await stepSimulationSession(sessionId.value);
 
     // 更新时间（假设每步100ms）
-    simulationState.elapsedTime += 0.1
+    simulationState.elapsedTime += 0.1;
   }
 
   /**
    * 设置仿真速度
    */
   async function setSpeed(speed: number) {
-    const clampedSpeed = clampSpeed(speed)
-    const prevSpeed = simulationState.speed
-    simulationState.speed = clampedSpeed
-    lastSpeedSetAt.value = Date.now()
+    const clampedSpeed = clampSpeed(speed);
+    const prevSpeed = simulationState.speed;
+    simulationState.speed = clampedSpeed;
+    lastSpeedSetAt.value = Date.now();
 
     // 后端对 <1x 可能异常，传输时最低保持 1x，前端仍按 clampedSpeed 展示/动画
-    const backendSpeed = Math.max(1, clampedSpeed)
+    const backendSpeed = Math.max(1, clampedSpeed);
 
     // 仅在有有效会话且处于运行/暂停时下发后端
     if (sessionId.value && (isRunning.value || isPaused.value)) {
       try {
-        await setSimulationSpeed(sessionId.value, backendSpeed)
+        await setSimulationSpeed(sessionId.value, backendSpeed);
       } catch (err) {
         // 回滚到上一次速度，避免卡死
-        simulationState.speed = prevSpeed
-        throw err
+        simulationState.speed = prevSpeed;
+        throw err;
       }
     }
   }
@@ -300,27 +311,27 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    * 同步后端状态（WS 状态推送）
    */
   function syncStatus(status: StatusUpdate) {
-    if (!status || typeof status !== 'object') return
+    if (!status || typeof status !== 'object') return;
 
     if (status.status) {
-      simulationState.status = status.status
+      simulationState.status = status.status;
     }
     if (status.speed !== undefined) {
-      const now = Date.now()
-      const incoming = clampSpeed(Number(status.speed))
+      const now = Date.now();
+      const incoming = clampSpeed(Number(status.speed));
       // 如果刚刚（1秒内）本地设置过速度，则不被后端回写立即覆盖
       if (now - lastSpeedSetAt.value > 1000) {
-        simulationState.speed = incoming
+        simulationState.speed = incoming;
       }
     }
     if (status.elapsedTime !== undefined) {
-      simulationState.elapsedTime = Number(status.elapsedTime) || 0
+      simulationState.elapsedTime = Number(status.elapsedTime) || 0;
     }
     if (status.messageCount !== undefined) {
-      simulationState.messageCount = Number(status.messageCount) || 0
+      simulationState.messageCount = Number(status.messageCount) || 0;
     }
     if (status.alarmCount !== undefined) {
-      simulationState.alarmCount = Number(status.alarmCount) || 0
+      simulationState.alarmCount = Number(status.alarmCount) || 0;
     }
   }
 
@@ -328,14 +339,14 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    * 重置状态
    */
   function reset() {
-    stopTimer()
-    sessionId.value = null
-    simulationState.status = SimulationStatus.IDLE
-    simulationState.elapsedTime = 0
-    simulationState.speed = SpeedRange.DEFAULT
-    simulationState.messageCount = 0
-    simulationState.alarmCount = 0
-    simulationState.startTime = null
+    stopTimer();
+    sessionId.value = null;
+    simulationState.status = SimulationStatus.IDLE;
+    simulationState.elapsedTime = 0;
+    simulationState.speed = SpeedRange.DEFAULT;
+    simulationState.messageCount = 0;
+    simulationState.alarmCount = 0;
+    simulationState.startTime = null;
   }
 
   /**
@@ -343,20 +354,20 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   function updateStats(stats: StatsUpdate) {
     if (stats.messageCount !== undefined) {
-      simulationState.messageCount = stats.messageCount
+      simulationState.messageCount = stats.messageCount;
     }
     if (stats.alarmCount !== undefined) {
-      simulationState.alarmCount = stats.alarmCount
+      simulationState.alarmCount = stats.alarmCount;
     }
     if (stats.elapsedTime !== undefined) {
-      simulationState.elapsedTime = stats.elapsedTime
+      simulationState.elapsedTime = stats.elapsedTime;
     }
   }
 
   // 清理
   onUnmounted(() => {
-    stopTimer()
-  })
+    stopTimer();
+  });
 
   return {
     // 状态
@@ -378,7 +389,7 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     syncStatus,
     reset,
     updateStats,
-  }
+  };
 }
 
-export default useSimulationControl
+export default useSimulationControl;

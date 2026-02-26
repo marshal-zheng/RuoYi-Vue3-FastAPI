@@ -15,7 +15,7 @@ interface AppState {
 const useAppStore = defineStore('app', {
   state: (): AppState => ({
     sidebar: {
-      opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
+      opened: Cookies.get('sidebarStatus') ? !!+(Cookies.get('sidebarStatus') ?? '0') : true,
       withoutAnimation: false,
       hide: false,
     },
@@ -25,7 +25,7 @@ const useAppStore = defineStore('app', {
   actions: {
     toggleSideBar(withoutAnimation?: boolean) {
       if (this.sidebar.hide) {
-        return false;
+        return;
       }
       this.sidebar.opened = !this.sidebar.opened;
       this.sidebar.withoutAnimation = withoutAnimation || false;

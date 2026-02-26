@@ -87,10 +87,10 @@ function handleFileChange(fileList) {
   if (fileList.length === 0) {
     return;
   }
-  
+
   const file = fileList[0];
   const fileObj = file.raw || file;
-  
+
   // 文件类型验证（ZxUpload 已经做了基础验证，这里做二次确认）
   const isValidType = /\.(xlsx|xls|csv|json)$/i.test(fileObj.name);
   if (!isValidType) {
@@ -105,7 +105,6 @@ function handleFileChange(fileList) {
 function handleExceed() {
   ElMessage.warning('只能上传一个文件，请删除后重新上传');
 }
-
 
 // 下载模板
 async function downloadTemplate() {
@@ -224,7 +223,6 @@ defineExpose({ open, close });
     }
   }
 }
-
 
 .dialog-footer {
   display: flex;

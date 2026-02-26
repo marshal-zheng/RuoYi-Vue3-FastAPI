@@ -18,8 +18,13 @@
             <ZxIcon :icon="card.icon" :size="14" />
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="text-[11px] text-white/80 font-semibold tracking-wide">{{ card.label }}</span>
-            <span class="text-[13px] font-semibold font-mono text-white/80" :class="card.valueClass">
+            <span class="text-[11px] text-white/80 font-semibold tracking-wide">{{
+              card.label
+            }}</span>
+            <span
+              class="text-[13px] font-semibold font-mono text-white/80"
+              :class="card.valueClass"
+            >
               {{ card.value }}
             </span>
           </div>
@@ -174,7 +179,8 @@ const toneMap = {
     border: 'border-white/5',
     borderActive: 'border-orange-500/30 bg-orange-500/[0.08]',
     icon: 'bg-gradient-to-br from-orange-400/80 to-orange-600/80',
-    iconActive: 'bg-gradient-to-br from-orange-500 to-orange-600 shadow-[0_0_6px_rgba(249,115,22,0.4)]',
+    iconActive:
+      'bg-gradient-to-br from-orange-500 to-orange-600 shadow-[0_0_6px_rgba(249,115,22,0.4)]',
     value: 'text-white/70',
     valueActive: 'text-orange-500',
   },

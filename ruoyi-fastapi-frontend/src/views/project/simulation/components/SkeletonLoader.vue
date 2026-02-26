@@ -7,7 +7,12 @@
       </div>
       <div class="skeleton-chart__body">
         <div class="skeleton-bars">
-          <div v-for="i in 8" :key="i" class="skeleton-bar" :style="{ height: `${Math.random() * 60 + 20}%` }"></div>
+          <div
+            v-for="i in 8"
+            :key="i"
+            class="skeleton-bar"
+            :style="{ height: `${Math.random() * 60 + 20}%` }"
+          ></div>
         </div>
       </div>
     </div>
@@ -35,7 +40,12 @@
     </div>
 
     <div v-else class="skeleton-default">
-      <div v-for="i in 3" :key="i" class="skeleton-line" :class="`skeleton-line--${i % 2 === 0 ? 'long' : 'medium'}`"></div>
+      <div
+        v-for="i in 3"
+        :key="i"
+        class="skeleton-line"
+        :class="`skeleton-line--${i % 2 === 0 ? 'long' : 'medium'}`"
+      ></div>
     </div>
   </div>
 </template>
@@ -45,17 +55,17 @@ defineProps({
   type: {
     type: String,
     default: 'default',
-    validator: (value) => ['chart', 'table', 'card', 'default'].includes(value)
+    validator: (value) => ['chart', 'table', 'card', 'default'].includes(value),
   },
   rows: {
     type: Number,
-    default: 5
+    default: 5,
   },
   columns: {
     type: Number,
-    default: 4
-  }
-})
+    default: 4,
+  },
+});
 </script>
 
 <style lang="less" scoped>
@@ -76,7 +86,12 @@ defineProps({
 .skeleton-line,
 .skeleton-circle,
 .skeleton-bar {
-  background: linear-gradient(90deg, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 25%, var(--sim-bg-hover, #334155) 37%, var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 63%);
+  background: linear-gradient(
+    90deg,
+    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 25%,
+    var(--sim-bg-hover, #334155) 37%,
+    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 63%
+  );
   background-size: 400px 100%;
   animation: skeleton-loading 1.4s ease infinite;
   border-radius: 4px;

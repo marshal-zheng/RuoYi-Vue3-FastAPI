@@ -17,10 +17,7 @@
                 >点击拓扑图中的 <strong>链路</strong> 选择目标</template
               >
               <template v-else
-                >已锁定
-                <strong class="text-cyan-400">{{
-                  getSelectedEdgeId()
-                }}</strong></template
+                >已锁定 <strong class="text-cyan-400">{{ getSelectedEdgeId() }}</strong></template
               >
             </span>
           </div>
@@ -33,13 +30,7 @@
             >
               取消
             </el-button>
-            <el-button
-              class="exit-mode-btn"
-              size="small"
-              @click="exitFaultMode"
-            >
-              关闭
-            </el-button>
+            <el-button class="exit-mode-btn" size="small" @click="exitFaultMode"> 关闭 </el-button>
           </div>
         </div>
         <div class="banner-progress"></div>
@@ -76,10 +67,7 @@
           :class="{ 'fault-target-canvas': isFaultInjectionMode }"
         >
           <!-- 故障注入模式下的选中链路高亮层 -->
-          <div
-            v-if="isFaultInjectionMode && selectedEdge"
-            class="selected-edge-indicator"
-          >
+          <div v-if="isFaultInjectionMode && selectedEdge" class="selected-edge-indicator">
             <div class="indicator-ring"></div>
             <span class="indicator-text">已锁定目标链路</span>
           </div>
@@ -205,11 +193,7 @@
     </aside>
 
     <!-- 节点编辑抽屉 -->
-    <NodeEditDrawer
-      ref="nodeEditDrawerRef"
-      :node-data="currentNode"
-      @submit="handleNodeUpdate"
-    />
+    <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
 
     <!-- 事件触发面板 -->
     <EventTriggerPanel
@@ -226,88 +210,85 @@
     <SimulationReportDialog ref="reportDialogRef" />
 
     <!-- 健康自检对话框 -->
-    <HealthCheckDialog
-      ref="healthCheckDialogRef"
-      @recheck="handleHealthCheck"
-    />
+    <HealthCheckDialog ref="healthCheckDialogRef" @recheck="handleHealthCheck" />
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from "vue";
-import { throttle } from "lodash-es";
-import { useRoute, useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
-import { Warning } from "@element-plus/icons-vue";
+import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
+import { throttle } from 'lodash-es';
+import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
+import { Warning } from '@element-plus/icons-vue';
 
 // 组件导入
-import XflowDAG from "@/components/business/Dag/index.vue";
-import SimulationHeader from "./components/SimulationHeader.vue";
-import BandwidthChartPanel from "./components/BandwidthChartPanel.vue";
-import AlarmPanelFloating from "./components/AlarmPanelFloating.vue";
-import SimulationSideDock from "./components/SimulationSideDock.vue";
-import ProtocolAnalyzer from "./components/ProtocolAnalyzer.vue";
-import EdgeTooltip from "./components/EdgeTooltip.vue";
-import FaultBoardFloating from "./components/FaultBoardFloating.vue";
-import EventTriggerPanel from "./components/EventTriggerPanel.vue";
-import SimulationReportDialog from "./components/SimulationReportDialog.vue";
-import HealthCheckDialog from "./components/HealthCheckDialog.vue";
-import TimingLatencyPanel from "./components/TimingLatencyPanel.vue";
-import DataInjectionPanel from "./components/DataInjectionPanel.vue";
-import { NodeEditDrawer } from "../components";
+import XflowDAG from '@/components/business/Dag/index.vue';
+import SimulationHeader from './components/SimulationHeader.vue';
+import BandwidthChartPanel from './components/BandwidthChartPanel.vue';
+import AlarmPanelFloating from './components/AlarmPanelFloating.vue';
+import SimulationSideDock from './components/SimulationSideDock.vue';
+import ProtocolAnalyzer from './components/ProtocolAnalyzer.vue';
+import EdgeTooltip from './components/EdgeTooltip.vue';
+import FaultBoardFloating from './components/FaultBoardFloating.vue';
+import EventTriggerPanel from './components/EventTriggerPanel.vue';
+import SimulationReportDialog from './components/SimulationReportDialog.vue';
+import HealthCheckDialog from './components/HealthCheckDialog.vue';
+import TimingLatencyPanel from './components/TimingLatencyPanel.vue';
+import DataInjectionPanel from './components/DataInjectionPanel.vue';
+import { NodeEditDrawer } from '../components';
 
 // Composables 导入
-import { useSimulationControl } from "./composables/useSimulationControl";
-import { useSimulationData } from "./composables/useSimulationData";
-import { useTopologyAnimation } from "./composables/useTopologyAnimation";
-import { useFaultInjection } from "./composables/useFaultInjection";
-import { useFaultInjectionUI } from "./composables/useFaultInjectionUI";
-import { useAlarmHandler } from "./composables/useAlarmHandler";
-import { useSimulationReport } from "./composables/useSimulationReport";
-import { useEventTrigger } from "./composables/useEventTrigger";
-import { useHealthCheck } from "./composables/useHealthCheck";
-import useAppStore from "@/store/modules/app";
+import { useSimulationControl } from './composables/useSimulationControl';
+import { useSimulationData } from './composables/useSimulationData';
+import { useTopologyAnimation } from './composables/useTopologyAnimation';
+import { useFaultInjection } from './composables/useFaultInjection';
+import { useFaultInjectionUI } from './composables/useFaultInjectionUI';
+import { useAlarmHandler } from './composables/useAlarmHandler';
+import { useSimulationReport } from './composables/useSimulationReport';
+import { useEventTrigger } from './composables/useEventTrigger';
+import { useHealthCheck } from './composables/useHealthCheck';
+import useAppStore from '@/store/modules/app';
 
 // 样式导入 - 注意：simulation-theme.css 已内部导入 variables.css
-import "./styles/simulation-theme.css";
-import "./styles/global-popper-dark.css"; // 全局 Popper 深色样式（Teleport到body的元素）
-import "./styles/fault-injection-mode.less";
-import "./styles/aviation-dark-theme.less";
-import "./styles/simulation-dialog-theme.less";
+import './styles/simulation-theme.css';
+import './styles/global-popper-dark.css'; // 全局 Popper 深色样式（Teleport到body的元素）
+import './styles/fault-injection-mode.less';
+import './styles/aviation-dark-theme.less';
+import './styles/simulation-dialog-theme.less';
 
 // API 导入
-import { listDevice } from "@/api/device/device";
-import { getProject } from "@/api/project/project";
-import { getProjectTopology } from "@/api/project/topology";
+import { listDevice } from '@/api/device/device';
+import { getProject } from '@/api/project/project';
+import { getProjectTopology } from '@/api/project/topology';
 
-defineOptions({ name: "SimulationConsole" });
+defineOptions({ name: 'SimulationConsole' });
 
 // 路由
 const route = useRoute();
 const router = useRouter();
 const projectId = computed(() => Number(route.params.projectId));
 const versionId = computed(() =>
-  route.query.versionId ? Number(route.query.versionId) : undefined,
+  route.query.versionId ? Number(route.query.versionId) : undefined
 );
 const appStore = useAppStore();
 
 // 项目信息
-const projectName = ref("");
+const projectName = ref('');
 
 // DAG 组件
 const dagRef = ref(null);
 const operators = ref([]);
 const loading = ref(false);
-const layoutMode = ref("horizontal");
+const layoutMode = ref('horizontal');
 const dndConfig = {
-  title: "设备库",
-  searchPlaceholder: "搜索设备...",
+  title: '设备库',
+  searchPlaceholder: '搜索设备...',
   textConfig: {
-    loadingText: "正在加载设备库...",
-    emptySearchText: "没有找到匹配的设备",
-    emptySearchDesc: "请尝试使用其他关键词搜索",
-    emptyDataText: "暂无可用设备",
-    emptyDataDesc: "请先添加设备数据",
+    loadingText: '正在加载设备库...',
+    emptySearchText: '没有找到匹配的设备',
+    emptySearchDesc: '请尝试使用其他关键词搜索',
+    emptyDataText: '暂无可用设备',
+    emptyDataDesc: '请先添加设备数据',
   },
 };
 
@@ -366,17 +347,17 @@ const healthReport = ref(null);
 
 // 协议参数持久化辅助：将必需字段写入 port.params，供健康检查使用
 const PARAM_ALIAS_MAP = {
-  baudRate: ["baudRate", "speed", "dataRate"],
-  ipAddress: ["ipAddress", "ip", "host"],
-  port: ["port", "lanPort"],
-  protocol: ["protocol", "proto", "protocolType"],
-  busAddress: ["busAddress"],
-  rtAddress: ["rtAddress"],
-  subAddress: ["subAddress"],
+  baudRate: ['baudRate', 'speed', 'dataRate'],
+  ipAddress: ['ipAddress', 'ip', 'host'],
+  port: ['port', 'lanPort'],
+  protocol: ['protocol', 'proto', 'protocolType'],
+  busAddress: ['busAddress'],
+  rtAddress: ['rtAddress'],
+  subAddress: ['subAddress'],
 };
 
 const normalizePortParams = (port = {}) => {
-  const interfaceType = (port.interfaceType || port.busType || "").toUpperCase();
+  const interfaceType = (port.interfaceType || port.busType || '').toUpperCase();
   const requiredParams = PROTOCOL_REQUIRED_PARAMS?.[interfaceType];
   if (!requiredParams || requiredParams.length === 0) return port;
 
@@ -389,7 +370,7 @@ const normalizePortParams = (port = {}) => {
     for (const source of sources) {
       for (const alias of aliases) {
         const val = source?.[alias];
-        if (val !== undefined && val !== null && val !== "") return val;
+        if (val !== undefined && val !== null && val !== '') return val;
       }
     }
     return undefined;
@@ -397,9 +378,9 @@ const normalizePortParams = (port = {}) => {
 
   requiredParams.forEach((key) => {
     const currentVal = params[key];
-    if (currentVal === undefined || currentVal === null || currentVal === "") {
+    if (currentVal === undefined || currentVal === null || currentVal === '') {
       const value = pickValue(key);
-      if (value !== undefined && value !== null && value !== "") {
+      if (value !== undefined && value !== null && value !== '') {
         params[key] = value;
       }
     }
@@ -427,22 +408,11 @@ const normalizeGraphPorts = (graph) => {
 
 // 故障注入
 const faultInjection = useFaultInjection(sessionId);
-const {
-  faults,
-  injectFault,
-  ingestFaultEvents,
-  loading: faultsLoading,
-} = faultInjection;
+const { faults, injectFault, ingestFaultEvents, loading: faultsLoading } = faultInjection;
 
 // 事件触发
-const {
-  eventList,
-  loadEvents,
-  createEvent,
-  updateEvent,
-  deleteEvent,
-  triggerEvent,
-} = useEventTrigger(sessionId);
+const { eventList, loadEvents, createEvent, updateEvent, deleteEvent, triggerEvent } =
+  useEventTrigger(sessionId);
 
 // 获取拓扑节点列表（用于事件触发面板的设备选择）
 const topologyNodes = ref([]);
@@ -470,13 +440,13 @@ const simulationSummary = ref(null);
 
 // 数据注入策略配置
 const injectionStrategy = ref({
-  strategy: "random",
+  strategy: 'random',
   params: {
-    valueRange: "0~255",
+    valueRange: '0~255',
     startValue: 0,
     step: 1,
-    fixedValue: "0",
-    presetValues: "0,1,2,3,4,5",
+    fixedValue: '0',
+    presetValues: '0,1,2,3,4,5',
     amplitude: 100,
     offset: 0,
     frequency: 1,
@@ -492,30 +462,29 @@ const dockState = reactive({
 });
 
 const dockItems = [
-  { key: "bandwidth", label: "带宽", icon: "ri:activity-line" },
-  { key: "alarm", label: "告警", icon: "ri:alarm-warning-line" },
-  { key: "timing", label: "时序", icon: "ri:bar-chart-2-line" },
-  { key: "fault", label: "故障", icon: "ri:bug-line" },
-  { key: "injection", label: "注入", icon: "ri:settings-3-line" },
+  { key: 'bandwidth', label: '带宽', icon: 'ri:activity-line' },
+  { key: 'alarm', label: '告警', icon: 'ri:alarm-warning-line' },
+  { key: 'timing', label: '时序', icon: 'ri:bar-chart-2-line' },
+  { key: 'fault', label: '故障', icon: 'ri:bug-line' },
+  { key: 'injection', label: '注入', icon: 'ri:settings-3-line' },
 ];
 const activeDockKeys = computed(() => {
   const keys = [];
-  if (dockState.bandwidth) keys.push("bandwidth");
-  if (dockState.alarm) keys.push("alarm");
-  if (dockState.timing) keys.push("timing");
-  if (dockState.fault) keys.push("fault");
-  if (dockState.injection) keys.push("injection");
+  if (dockState.bandwidth) keys.push('bandwidth');
+  if (dockState.alarm) keys.push('alarm');
+  if (dockState.timing) keys.push('timing');
+  if (dockState.fault) keys.push('fault');
+  if (dockState.injection) keys.push('injection');
   return keys;
 });
 const dockBadges = computed(() => {
   const uniqueAlarmCount = alarmData.value?.length
     ? new Set(alarmData.value.map((item) => item.alarmId)).size
     : 0;
-  const activeFaultCount =
-    faults.value?.filter?.((f) => f.status === "active").length || 0;
+  const activeFaultCount = faults.value?.filter?.((f) => f.status === 'active').length || 0;
   return {
-    alarm: uniqueAlarmCount || "",
-    fault: activeFaultCount || "",
+    alarm: uniqueAlarmCount || '',
+    fault: activeFaultCount || '',
   };
 });
 
@@ -524,7 +493,7 @@ const dockDisabledItems = computed(() => {
   const disabled = {};
   // 仿真未运行时禁用故障注入
   if (!isRunning.value) {
-    disabled.fault = "请先启动仿真后再进行故障注入";
+    disabled.fault = '请先启动仿真后再进行故障注入';
   }
   return disabled;
 });
@@ -568,8 +537,8 @@ function buildPeerDeviceNameByPort(node) {
     if (!portId || !peerName) return;
     const key = String(portId);
     const keys = [key];
-    if (key.startsWith("port-")) {
-      keys.push(key.replace(/^port-/, ""));
+    if (key.startsWith('port-')) {
+      keys.push(key.replace(/^port-/, ''));
     }
 
     keys.forEach((k) => {
@@ -607,7 +576,7 @@ function buildPeerDeviceNameByPort(node) {
 
     const peerNode = graph.getCellById(peerNodeId);
     const data = peerNode?.getData?.() || {};
-    const deviceName = data.name || data.label || data.deviceName || "";
+    const deviceName = data.name || data.label || data.deviceName || '';
 
     registerPeer(localPortId, deviceName);
   });
@@ -674,10 +643,10 @@ async function loadProjectInfo() {
   try {
     const res = await getProject(projectId.value, { silentError: true });
     // http 客户端已解包 payload.data，直接访问字段
-    projectName.value = res?.projectName || "未命名工程";
+    projectName.value = res?.projectName || '未命名工程';
   } catch (err) {
-    console.warn("[仿真] 无法获取工程信息，可能缺少 project:project:query 权限");
-    projectName.value = "未命名工程";
+    console.warn('[仿真] 无法获取工程信息，可能缺少 project:project:query 权限');
+    projectName.value = '未命名工程';
   }
 }
 
@@ -689,17 +658,17 @@ async function loadDeviceList() {
     const devices = response?.rows || [];
     operators.value = devices.map((device) => ({
       name: device.deviceName,
-      value: device.remark || device.deviceDesc || "设备",
-      category: device.categoryName || device.category || "未分类",
+      value: device.remark || device.deviceDesc || '设备',
+      category: device.categoryName || device.category || '未分类',
       deviceId: device.deviceId,
       deviceType: device.deviceType,
       busType: device.busType,
       ports: normalizePorts(device.interfaces || []),
-      nodeType: "device-port-node",
+      nodeType: 'device-port-node',
     }));
   } catch (err) {
     // 无设备列表权限时静默降级，仅在控制台记录
-    console.warn("[仿真] 无法加载设备库，可能缺少 device:list:list 权限");
+    console.warn('[仿真] 无法加载设备库，可能缺少 device:list:list 权限');
     operators.value = [];
   } finally {
     loading.value = false;
@@ -734,8 +703,8 @@ function restoreSavedTopology() {
         }
       })
       .catch((err) => {
-        console.warn("[仿真] 无法加载拓扑数据，可能缺少 project:project:query 权限", err);
-        ElMessage.warning("无法加载拓扑数据，请检查权限配置");
+        console.warn('[仿真] 无法加载拓扑数据，可能缺少 project:project:query 权限', err);
+        ElMessage.warning('无法加载拓扑数据，请检查权限配置');
       });
   };
 
@@ -746,12 +715,12 @@ function restoreSavedTopology() {
 function setupEdgeHoverEvents(graph) {
   if (!graph) return;
 
-  graph.on("edge:mouseenter", ({ edge, e }) => {
+  graph.on('edge:mouseenter', ({ edge, e }) => {
     hoveredEdge.value = edge;
     tooltipPosition.value = { x: e.clientX, y: e.clientY };
   });
 
-  graph.on("edge:mouseleave", () => {
+  graph.on('edge:mouseleave', () => {
     hoveredEdge.value = null;
   });
 }
@@ -760,7 +729,7 @@ function setupEdgeHoverEvents(graph) {
 async function handleStart() {
   const graph = getGraphInstance();
   if (!graph) {
-    ElMessage.error("图实例不存在");
+    ElMessage.error('图实例不存在');
     return;
   }
 
@@ -768,12 +737,12 @@ async function handleStart() {
   const edges = graph.getEdges?.() || [];
 
   if (nodes.length < 2) {
-    ElMessage.warning("请至少放置两个设备节点");
+    ElMessage.warning('请至少放置两个设备节点');
     return;
   }
 
   if (!edges.length) {
-    ElMessage.warning("请先建立设备之间的连接");
+    ElMessage.warning('请先建立设备之间的连接');
     return;
   }
 
@@ -781,8 +750,7 @@ async function handleStart() {
   if (!passed) return;
 
   // 构建数据注入策略参数
-  const strategyConfig =
-    injectionPanelRef.value?.getConfig?.() || injectionStrategy.value;
+  const strategyConfig = injectionPanelRef.value?.getConfig?.() || injectionStrategy.value;
   const startOptions = {
     injection_strategy: strategyConfig.strategy,
     injection_params: strategyConfig.params,
@@ -790,7 +758,7 @@ async function handleStart() {
 
   await start(startOptions);
   startAnimation();
-  ElMessage.success("仿真已启动");
+  ElMessage.success('仿真已启动');
 }
 
 function handlePause() {
@@ -822,7 +790,7 @@ const handleStep = throttle(
         bandwidthChartRef.value?.stepScanline();
       })
       .catch((err) => {
-        const message = err?.message || "单步执行失败";
+        const message = err?.message || '单步执行失败';
         ElMessage.error(message);
       })
       .finally(() => {
@@ -830,7 +798,7 @@ const handleStep = throttle(
       });
   },
   500,
-  { trailing: false },
+  { trailing: false }
 );
 
 function handleSpeedChange(speed) {
@@ -851,7 +819,7 @@ function handleNodeDblclick({ node }) {
   // 构建端口到对端设备名的映射
   const peerDeviceNameByPort = buildPeerDeviceNameByPort(node);
   // 转为普通 JSON
-  const jsonNode = typeof node?.toJSON === "function" ? node.toJSON() : node;
+  const jsonNode = typeof node?.toJSON === 'function' ? node.toJSON() : node;
   // 附加映射数据
   const nodeData = jsonNode?.data || {};
   currentNode.value = {
@@ -881,7 +849,7 @@ function handleNodeUpdate({ nodeId, name, ports }) {
       label: name,
       ports: normalizedPorts,
     },
-    { overwrite: false },
+    { overwrite: false }
   );
 }
 
@@ -929,10 +897,8 @@ function handleMessageSelect(message) {
         const sourceId = e.getSourceCellId?.();
         const targetId = e.getTargetCellId?.();
         return (
-          (sourceId === message.senderNodeId &&
-            targetId === message.receiverNodeId) ||
-          (sourceId === message.receiverNodeId &&
-            targetId === message.senderNodeId)
+          (sourceId === message.senderNodeId && targetId === message.receiverNodeId) ||
+          (sourceId === message.receiverNodeId && targetId === message.senderNodeId)
         );
       });
       if (edge) {
@@ -979,57 +945,57 @@ function handleInjectionStrategyApply(config) {
 // 事件触发处理
 async function handleEventCreate(config) {
   if (!sessionId.value) {
-    ElMessage.warning("请先启动仿真会话后再添加事件");
+    ElMessage.warning('请先启动仿真会话后再添加事件');
     return;
   }
   try {
     await createEvent(config);
-    ElMessage.success("事件创建成功");
+    ElMessage.success('事件创建成功');
   } catch (err) {
-    console.error("创建事件失败", err);
-    ElMessage.error(err?.message || "创建事件失败");
+    console.error('创建事件失败', err);
+    ElMessage.error(err?.message || '创建事件失败');
   }
 }
 
 async function handleEventEdit(eventId, config) {
   if (!sessionId.value) {
-    ElMessage.warning("当前无仿真会话，无法更新事件");
+    ElMessage.warning('当前无仿真会话，无法更新事件');
     return;
   }
   try {
     await updateEvent(eventId, config);
-    ElMessage.success("事件更新成功");
+    ElMessage.success('事件更新成功');
   } catch (err) {
-    console.error("更新事件失败", err);
-    ElMessage.error(err?.message || "更新事件失败");
+    console.error('更新事件失败', err);
+    ElMessage.error(err?.message || '更新事件失败');
   }
 }
 
 async function handleEventDelete(eventId) {
   if (!sessionId.value) {
-    ElMessage.warning("当前无仿真会话，无法删除事件");
+    ElMessage.warning('当前无仿真会话，无法删除事件');
     return;
   }
   try {
     await deleteEvent(eventId);
-    ElMessage.success("事件删除成功");
+    ElMessage.success('事件删除成功');
   } catch (err) {
-    console.error("删除事件失败", err);
-    ElMessage.error(err?.message || "删除事件失败");
+    console.error('删除事件失败', err);
+    ElMessage.error(err?.message || '删除事件失败');
   }
 }
 
 async function handleEventTrigger(eventId) {
   if (!sessionId.value) {
-    ElMessage.warning("当前无仿真会话，无法触发事件");
+    ElMessage.warning('当前无仿真会话，无法触发事件');
     return;
   }
   try {
     await triggerEvent(eventId);
-    ElMessage.success("事件已触发");
+    ElMessage.success('事件已触发');
   } catch (err) {
-    console.error("触发事件失败", err);
-    ElMessage.error(err?.message || "触发事件失败");
+    console.error('触发事件失败', err);
+    ElMessage.error(err?.message || '触发事件失败');
   }
 }
 
@@ -1037,7 +1003,7 @@ async function handleEventTrigger(eventId) {
 function handleHealthCheck() {
   const graph = getGraphInstance();
   if (!graph) {
-    ElMessage.error("图实例不存在");
+    ElMessage.error('图实例不存在');
     return;
   }
   const report = runHealthCheck(graph);
@@ -1053,7 +1019,7 @@ function handleShowEvents() {
 // 显示仿真报告
 function handleShowReport() {
   if (!sessionId.value) {
-    ElMessage.warning("当前无仿真会话，无法生成报告");
+    ElMessage.warning('当前无仿真会话，无法生成报告');
     return;
   }
   simulationSummary.value = buildSimulationSummary();
@@ -1068,12 +1034,12 @@ async function runPreflightCheck(graph) {
   healthReport.value = report;
   if (!report.canSimulate || report.errorChecks > 0) {
     healthCheckDialogRef.value?.open(report);
-    ElMessage.error("拓扑检查未通过，无法启动仿真");
+    ElMessage.error('拓扑检查未通过，无法启动仿真');
     return false;
   }
   if (report.warningChecks > 0) {
     healthCheckDialogRef.value?.open(report);
-    ElMessage.warning("存在警告，请确认后继续");
+    ElMessage.warning('存在警告，请确认后继续');
   }
   return true;
 }
@@ -1092,11 +1058,11 @@ watch(
       refreshFaults();
       loadEvents();
     } else {
-      console.log('eventList.valuesss', eventList.value)
+      console.log('eventList.valuesss', eventList.value);
       eventList.value = [];
     }
   },
-  { immediate: true },
+  { immediate: true }
 );
 
 // 监听故障面板打开，自动获取故障列表
@@ -1106,7 +1072,7 @@ watch(
     if (opened && sessionId.value) {
       refreshFaults();
     }
-  },
+  }
 );
 
 // 生命周期
@@ -1135,7 +1101,7 @@ watch(isRunning, (running) => {
 </script>
 
 <style scoped>
-@import "./styles/animation.css";
+@import './styles/animation.css';
 
 /* 拓扑画布网格背景 - 深色主题优化 */
 .sim-canvas {
@@ -1143,11 +1109,7 @@ watch(isRunning, (running) => {
   background-image:
     linear-gradient(rgba(77, 125, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(77, 125, 255, 0.03) 1px, transparent 1px),
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(77, 125, 255, 0.02) 0%,
-      transparent 50%
-    );
+    radial-gradient(circle at 50% 50%, rgba(77, 125, 255, 0.02) 0%, transparent 50%);
   background-size:
     20px 20px,
     20px 20px,
@@ -1193,17 +1155,8 @@ watch(isRunning, (running) => {
 
 .simulation-shell {
   background:
-    radial-gradient(
-      circle at 20% 20%,
-      rgba(59, 130, 246, 0.07),
-      transparent 30%
-    ),
-    radial-gradient(
-      circle at 80% 0%,
-      rgba(52, 211, 153, 0.05),
-      transparent 25%
-    ),
-    #0b1220;
+    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
+    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%), #0b1220;
 }
 
 .floating-panel {
@@ -1322,7 +1275,7 @@ watch(isRunning, (running) => {
 
 /* 侧边栏顶部光晕 */
 .sim-side-dock-aside::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
@@ -1338,7 +1291,7 @@ watch(isRunning, (running) => {
 
 /* 侧边栏底部光晕 */
 .sim-side-dock-aside::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 0;
   left: 0;

@@ -29,7 +29,7 @@
         <!-- 时序视图模式 -->
         <div v-if="viewMode === 'timing'" class="timing-view">
           <!-- 时序图表区域 -->
-          <div 
+          <div
             class="timing-chart-wrapper"
             @mousemove="handleTimingMouseMove"
             @mouseleave="handleTimingMouseLeave"
@@ -48,31 +48,28 @@
 
             <!-- 图例 -->
             <div class="chart-legend">
-              <span class="legend-item">
-                <span class="legend-line latency"></span>时延
-              </span>
+              <span class="legend-item"> <span class="legend-line latency"></span>时延 </span>
             </div>
 
             <!-- 垂直指示线 -->
-            <div 
-              v-if="timingTooltip.visible" 
+            <div
+              v-if="timingTooltip.visible"
               class="chart-crosshair"
               :style="{ left: timingTooltip.lineX + 'px' }"
             ></div>
 
             <!-- 数据点高亮 -->
-            <div 
-              v-if="timingTooltip.visible" 
+            <div
+              v-if="timingTooltip.visible"
               class="chart-highlight-dot"
               :style="{ left: timingTooltip.dotX + 'px', top: timingTooltip.dotY + 'px' }"
             ></div>
-
           </div>
 
           <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
           <Teleport to="body">
-            <div 
-              v-if="timingTooltip.visible" 
+            <div
+              v-if="timingTooltip.visible"
               class="chart-tooltip-fixed timing"
               :style="{ left: timingTooltip.tooltipX + 'px', top: timingTooltip.tooltipY + 'px' }"
             >
@@ -144,7 +141,7 @@
           </div>
 
           <!-- 分组带宽图表 -->
-          <div 
+          <div
             class="grouped-chart-wrapper"
             @mousemove="handleBandwidthMouseMove"
             @mouseleave="handleBandwidthMouseLeave"
@@ -174,27 +171,29 @@
             </div>
 
             <!-- 垂直指示线 -->
-            <div 
-              v-if="bandwidthTooltip.visible" 
+            <div
+              v-if="bandwidthTooltip.visible"
               class="chart-crosshair bandwidth"
               :style="{ left: bandwidthTooltip.lineX + 'px' }"
             ></div>
-
           </div>
 
           <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
           <Teleport to="body">
-            <div 
-              v-if="bandwidthTooltip.visible && bandwidthTooltip.groups.length > 0" 
+            <div
+              v-if="bandwidthTooltip.visible && bandwidthTooltip.groups.length > 0"
               class="chart-tooltip-fixed bandwidth"
-              :style="{ left: bandwidthTooltip.tooltipX + 'px', top: bandwidthTooltip.tooltipY + 'px' }"
+              :style="{
+                left: bandwidthTooltip.tooltipX + 'px',
+                top: bandwidthTooltip.tooltipY + 'px',
+              }"
             >
               <div class="tooltip-header">
                 <span class="tooltip-time">{{ bandwidthTooltip.time }}</span>
               </div>
               <div class="tooltip-body">
-                <div 
-                  v-for="(item, idx) in bandwidthTooltip.groups" 
+                <div
+                  v-for="(item, idx) in bandwidthTooltip.groups"
                   :key="item.key"
                   class="tooltip-row"
                 >
@@ -214,11 +213,7 @@
               <span>平均</span>
               <span>峰值</span>
             </div>
-            <div
-              v-for="(group, index) in groupedBandwidthStats"
-              :key="group.key"
-              class="stats-row"
-            >
+            <div v-for="(group, index) in groupedBandwidthStats" :key="group.key" class="stats-row">
               <span class="group-name">
                 <span class="color-dot" :style="{ background: getGroupColor(index) }"></span>
                 {{ group.label }}
@@ -227,9 +222,7 @@
               <span class="stat-avg">{{ group.avg }}</span>
               <span class="stat-peak">{{ group.peak }}</span>
             </div>
-            <div v-if="groupedBandwidthStats.length === 0" class="stats-empty">
-              暂无数据
-            </div>
+            <div v-if="groupedBandwidthStats.length === 0" class="stats-empty">暂无数据</div>
           </div>
         </div>
       </div>
@@ -291,11 +284,11 @@ const bandwidthGroupBuffer = ref(new Map());
 // Tooltip状态
 const timingTooltip = ref({
   visible: false,
-  lineX: 0,      // 垂直指示线位置
-  dotX: 0,       // 高亮点X
-  dotY: 0,       // 高亮点Y
-  tooltipX: 0,   // tooltip X
-  tooltipY: 0,   // tooltip Y
+  lineX: 0, // 垂直指示线位置
+  dotX: 0, // 高亮点X
+  dotY: 0, // 高亮点Y
+  tooltipX: 0, // tooltip X
+  tooltipY: 0, // tooltip Y
   index: 0,
   latency: '',
   protocol: '',
@@ -308,7 +301,7 @@ const bandwidthTooltip = ref({
   lineX: 0,
   tooltipX: 0,
   tooltipY: 0,
-  groups: [],    // 多条线的数据
+  groups: [], // 多条线的数据
 });
 
 // 动画相关
@@ -336,7 +329,10 @@ const hasData = computed(() => {
 // 是否正在运行
 const isRunning = computed(() => {
   if (!hasData.value) return false;
-  const latestMsgTime = Math.max(...props.messages.map((m) => m.receiveTimestamp || m.sendTimestamp || 0), 0);
+  const latestMsgTime = Math.max(
+    ...props.messages.map((m) => m.receiveTimestamp || m.sendTimestamp || 0),
+    0
+  );
   const latestBwTime = Math.max(...props.bandwidthData.map((d) => d.timestamp || 0), 0);
   const latestTime = Math.max(latestMsgTime, latestBwTime);
   const now = Date.now() / 1000;
@@ -366,26 +362,28 @@ const latencyScale = computed(() => {
 
 // Y轴范围（使用 min-max 范围来放大细微波动）
 const latencyAxisRange = computed(() => {
-  const latencies = timingBuffer.value.map((t) => t.latency * latencyScale.value).filter((l) => l > 0);
-  
+  const latencies = timingBuffer.value
+    .map((t) => t.latency * latencyScale.value)
+    .filter((l) => l > 0);
+
   if (latencies.length === 0) {
     return { min: 0, max: latencyUnit.value === 'μs' ? 100 : 10 };
   }
-  
+
   const dataMin = Math.min(...latencies);
   const dataMax = Math.max(...latencies);
   const range = dataMax - dataMin;
-  
+
   // 如果波动范围太小，扩展范围以显示细微变化
   // 至少保证有 20% 的数据范围作为显示范围
   const minRange = dataMax * 0.2 || 1;
   const effectiveRange = Math.max(range, minRange);
-  
+
   // 在数据范围基础上增加 10% 的边距
   const padding = effectiveRange * 0.1;
   let axisMin = Math.max(0, dataMin - padding);
   let axisMax = dataMax + padding;
-  
+
   // 如果数据变化很小（< 5%），使用居中显示
   if (range < dataMax * 0.05 && dataMax > 0) {
     const center = (dataMin + dataMax) / 2;
@@ -393,11 +391,11 @@ const latencyAxisRange = computed(() => {
     axisMin = Math.max(0, center - halfRange);
     axisMax = center + halfRange;
   }
-  
+
   // 美化刻度值
   const niceMax = niceNumber(axisMax);
   const niceMin = axisMin > 0 ? Math.floor(axisMin / (niceMax * 0.1)) * (niceMax * 0.1) : 0;
-  
+
   return { min: niceMin, max: niceMax };
 });
 
@@ -418,14 +416,14 @@ const latencyAxisLabels = computed(() => {
   const unit = latencyUnit.value;
   const { min, max } = latencyAxisRange.value;
   const mid = (min + max) / 2;
-  
+
   const formatVal = (val) => {
     if (val >= 100) return val.toFixed(0);
     if (val >= 10) return val.toFixed(0);
     if (val >= 1) return val.toFixed(1);
     return val.toFixed(2);
   };
-  
+
   return {
     max: `${formatVal(max)} ${unit}`,
     mid: `${formatVal(mid)} ${unit}`,
@@ -460,7 +458,7 @@ const latencyStats = computed(() => {
 
 function formatLatency(ms) {
   if (ms <= 0) return '0';
-  // 小于 0.001ms (1μs) 
+  // 小于 0.001ms (1μs)
   if (ms < 0.001) return `${(ms * 1000000).toFixed(1)} ns`;
   // 小于 1ms，用微秒
   if (ms < 1) return `${(ms * 1000).toFixed(1)} μs`;
@@ -646,7 +644,7 @@ function handleTimingMouseMove(event) {
 
   // 找到最近的数据点
   const relativeX = mouseX - padding.left;
-  
+
   // 检查是否在图表区域内
   if (relativeX < 0 || relativeX > chartWidth) {
     timingTooltip.value.visible = false;
@@ -660,7 +658,7 @@ function handleTimingMouseMove(event) {
     const scale = latencyScale.value;
     const { min: axisMin, max: axisMax } = latencyAxisRange.value;
     const axisRange = axisMax - axisMin;
-    
+
     // 计算数据点的实际位置（相对于canvas）
     const pointX = padding.left + index * pointWidth;
     const scaledLatency = point.latency * scale;
@@ -672,7 +670,7 @@ function handleTimingMouseMove(event) {
     const tooltipHeight = 100;
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // 转换为视口坐标
     let tooltipX = rect.left + pointX + 12;
     let tooltipY = rect.top + pointY - tooltipHeight / 2;
@@ -691,7 +689,7 @@ function handleTimingMouseMove(event) {
     timingTooltip.value = {
       visible: true,
       lineX: pointX,
-      dotX: pointX - 6,  // 调整为圆点中心
+      dotX: pointX - 6, // 调整为圆点中心
       dotY: pointY - 6,
       tooltipX,
       tooltipY,
@@ -718,10 +716,11 @@ const groupedBandwidth = computed(() => {
   const groups = new Map();
 
   props.bandwidthData.forEach((item) => {
-    const key = groupBy.value === 'protocol' 
-      ? (item.protocolType || item.protocol_type || 'unknown')
-      : (item.portId || item.port_id || 'unknown');
-    
+    const key =
+      groupBy.value === 'protocol'
+        ? item.protocolType || item.protocol_type || 'unknown'
+        : item.portId || item.port_id || 'unknown';
+
     if (!groups.has(key)) {
       groups.set(key, []);
     }
@@ -913,7 +912,10 @@ function drawBandwidthChart() {
     // 绘制最新点
     if (sortedItems.length > 0) {
       const lastX = padding.left + (sortedItems.length - 1) * pointWidth;
-      const lastBw = sortedItems[sortedItems.length - 1].bandwidthMbps || sortedItems[sortedItems.length - 1].bandwidth_mbps || 0;
+      const lastBw =
+        sortedItems[sortedItems.length - 1].bandwidthMbps ||
+        sortedItems[sortedItems.length - 1].bandwidth_mbps ||
+        0;
       const lastY = height - padding.bottom - (lastBw / maxBandwidth) * chartHeight;
 
       ctx.beginPath();
@@ -928,7 +930,7 @@ function drawBandwidthChart() {
 function handleBandwidthMouseMove(event) {
   const canvas = bandwidthCanvasRef.value;
   const groups = groupedBandwidth.value;
-  
+
   if (!canvas || groups.size === 0) {
     bandwidthTooltip.value.visible = false;
     return;
@@ -954,7 +956,7 @@ function handleBandwidthMouseMove(event) {
     const sortedItems = [...items]
       .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
       .slice(-60);
-    
+
     if (sortedItems.length > maxDataLength) {
       maxDataLength = sortedItems.length;
     }
@@ -975,15 +977,15 @@ function handleBandwidthMouseMove(event) {
     const sortedItems = [...items]
       .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
       .slice(-60);
-    
+
     if (index >= 0 && index < sortedItems.length) {
       const item = sortedItems[index];
       const bandwidth = item.bandwidthMbps || item.bandwidth_mbps || 0;
-      
+
       if (!timestamp && item.timestamp) {
         timestamp = item.timestamp;
       }
-      
+
       tooltipGroups.push({
         key,
         label: key,
@@ -1012,7 +1014,7 @@ function handleBandwidthMouseMove(event) {
   const tooltipHeight = 30 + tooltipGroups.length * 26;
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
-  
+
   // 转换为视口坐标
   let tooltipX = rect.left + pointX + 12;
   let tooltipY = rect.top + 20;
@@ -1277,7 +1279,8 @@ onUnmounted(() => {
   }
 
   @keyframes pulse-highlight {
-    0%, 100% {
+    0%,
+    100% {
       transform: scale(1);
       opacity: 1;
     }
@@ -1320,7 +1323,8 @@ onUnmounted(() => {
   .grid-lines {
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
     background-size: 20px 20px;
   }

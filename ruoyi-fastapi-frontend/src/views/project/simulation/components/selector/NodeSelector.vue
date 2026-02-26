@@ -10,12 +10,12 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: "",
+    default: '',
   },
   nodes: {
     type: Array,
@@ -23,15 +23,15 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: "选择设备",
+    default: '选择设备',
   },
 });
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const selectedValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
+  set: (val) => emit('update:modelValue', val),
 });
 
 const nodeOptions = computed(() => {
@@ -45,6 +45,6 @@ const nodeOptions = computed(() => {
 });
 
 const handleChange = (value) => {
-  emit("change", value);
+  emit('change', value);
 };
 </script>

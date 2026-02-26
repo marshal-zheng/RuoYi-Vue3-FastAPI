@@ -126,9 +126,16 @@ def init_otel_tracing(app, db_engine=None) -> bool:
             tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter(**exporter_kwargs)))
             processor_count += 1
 
-        if OTelConfig.otel_console_exporter or processor_count == 0:
+        if OTelConfig.otel_console_exporter:
             tracer_provider.add_span_processor(BatchSpanProcessor(ConsoleSpanExporter()))
             processor_count += 1
+
+        if processor_count == 0:
+            logger.warning(
+                'OpenTelemetry enabled but no exporter configured '
+                '(set OTEL_OTLP_ENDPOINT or OTEL_CONSOLE_EXPORTER=true). '
+                'Tracing will be a no-op.'
+            )
 
         trace.set_tracer_provider(tracer_provider)
 

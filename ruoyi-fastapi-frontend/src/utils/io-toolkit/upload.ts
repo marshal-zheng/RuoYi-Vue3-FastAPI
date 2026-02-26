@@ -12,7 +12,10 @@ export function validateFile(file: File, options: FileValidationOptions): FileVa
   }
 
   if (typeof options.maxSize === 'number' && file.size > options.maxSize) {
-    return { valid: false, error: `文件过大，最大支持 ${(options.maxSize / 1024 / 1024).toFixed(1)}MB` };
+    return {
+      valid: false,
+      error: `文件过大，最大支持 ${(options.maxSize / 1024 / 1024).toFixed(1)}MB`,
+    };
   }
 
   if (typeof options.minSize === 'number' && file.size < options.minSize) {

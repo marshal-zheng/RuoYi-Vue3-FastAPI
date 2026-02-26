@@ -25,62 +25,62 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useDialog } from '@zxio/zxui'
-import { addConfig, updateConfig } from '@/api/system/config'
-import { useDict } from '@/utils/dict'
+import { ref } from 'vue';
+import { useDialog } from '@zxio/zxui';
+import { addConfig, updateConfig } from '@/api/system/config';
+import { useDict } from '@/utils/dict';
 
-const emit = defineEmits<{ confirm: [] }>()
+const emit = defineEmits<{ confirm: [] }>();
 
 // 延迟加载字典数据
-const sysYesNo = ref<any[]>([])
-let dictLoaded = false
+const sysYesNo = ref<any[]>([]);
+let dictLoaded = false;
 
 interface ConfigForm {
-  configId?: number
-  configName: string
-  configKey: string
-  configValue: string
-  configType: string
-  remark: string
+  configId?: number;
+  configName: string;
+  configKey: string;
+  configValue: string;
+  configType: string;
+  remark: string;
 }
 
-const formRef = ref()
+const formRef = ref();
 
 const rules = {
   configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
   configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
-  configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }]
-}
+  configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }],
+};
 
 const { state, dialogProps, dialogEvents, open } = useDialog<ConfigForm>({
-  title: (data: ConfigForm) => data.configId ? '修改参数配置' : '添加参数配置',
+  title: (data: ConfigForm) => (data.configId ? '修改参数配置' : '添加参数配置'),
   defaultData: () => ({
     configId: undefined,
     configName: '',
     configKey: '',
     configValue: '',
     configType: 'Y',
-    remark: ''
+    remark: '',
   }),
   onOpen: () => {
     // 只在第一次打开时加载字典
     if (!dictLoaded) {
-      const dict = useDict('sys_yes_no')
-      sysYesNo.value = dict.sys_yes_no?.value || []
-      dictLoaded = true
+      const dict = useDict('sys_yes_no');
+      sysYesNo.value = dict.sys_yes_no?.value || [];
+      dictLoaded = true;
     }
   },
   onConfirm: async (data) => {
     if (data.configId) {
-      await updateConfig(data)
+      await updateConfig(data);
     } else {
-      await addConfig(data)
+      await addConfig(data);
     }
-    emit('confirm')
-    return true
-  }
-})
+    emit('confirm');
+    return true;
+  },
+});
 
-defineExpose({ open })
+defineExpose({ open });
 </script>

@@ -3,104 +3,104 @@
  *
  * 管理仿真过程中的自定义事件触发功能
  */
-import { ref, computed, watch, type Ref, type ComputedRef } from "vue";
+import { ref, computed, watch, type Ref, type ComputedRef } from 'vue';
 import {
   createEvent as createEventApi,
   updateEvent as updateEventApi,
   deleteEvent as deleteEventApi,
   triggerEvent as triggerEventApi,
   getEvents as getEventsApi,
-} from "@/api/simulation/simulation";
+} from '@/api/simulation/simulation';
 
 /**
  * 事件条件类型
  */
 export const ConditionType = {
-  TIME: "time", // 时间点
-  MESSAGE_COUNT: "message_count", // 报文数量
-  BANDWIDTH_THRESHOLD: "bandwidth_threshold", // 带宽阈值
-  MESSAGE_CONTENT: "message_content", // 特定报文内容
-} as const
+  TIME: 'time', // 时间点
+  MESSAGE_COUNT: 'message_count', // 报文数量
+  BANDWIDTH_THRESHOLD: 'bandwidth_threshold', // 带宽阈值
+  MESSAGE_CONTENT: 'message_content', // 特定报文内容
+} as const;
 
-export type ConditionTypeValue = typeof ConditionType[keyof typeof ConditionType]
+export type ConditionTypeValue = (typeof ConditionType)[keyof typeof ConditionType];
 
 /**
  * 事件动作类型
  */
 export const ActionType = {
-  SEND_COMMAND: "send_command", // 发送指令（A设备给B设备发指令，如自检、上电等）
-  SEND_MESSAGE: "send_message", // 发送特定报文
-  INJECT_FAULT: "inject_fault", // 注入故障
-  PAUSE: "pause", // 暂停仿真
-  LOG: "log", // 记录日志
-} as const
+  SEND_COMMAND: 'send_command', // 发送指令（A设备给B设备发指令，如自检、上电等）
+  SEND_MESSAGE: 'send_message', // 发送特定报文
+  INJECT_FAULT: 'inject_fault', // 注入故障
+  PAUSE: 'pause', // 暂停仿真
+  LOG: 'log', // 记录日志
+} as const;
 
-export type ActionTypeValue = typeof ActionType[keyof typeof ActionType]
+export type ActionTypeValue = (typeof ActionType)[keyof typeof ActionType];
 
 interface ConditionParam {
-  name: string
-  label: string
-  type: 'number' | 'string' | 'select'
-  default?: any
-  min?: number
-  max?: number
-  options?: string[] | Array<{ value: string; label: string }>
+  name: string;
+  label: string;
+  type: 'number' | 'string' | 'select';
+  default?: any;
+  min?: number;
+  max?: number;
+  options?: string[] | Array<{ value: string; label: string }>;
 }
 
 interface ActionParam {
-  name: string
-  label: string
-  type: 'node' | 'string' | 'select'
-  description?: string
-  condition?: string
-  options?: string[] | Array<{ value: string; label: string }>
-  default?: string
+  name: string;
+  label: string;
+  type: 'node' | 'string' | 'select';
+  description?: string;
+  condition?: string;
+  options?: string[] | Array<{ value: string; label: string }>;
+  default?: string;
 }
 
 interface ConditionTypeConfig {
-  label: string
-  description: string
-  params: ConditionParam[]
+  label: string;
+  description: string;
+  params: ConditionParam[];
 }
 
 interface ActionTypeConfig {
-  label: string
-  description: string
-  params: ActionParam[]
+  label: string;
+  description: string;
+  params: ActionParam[];
 }
 
 interface EventCondition {
-  type: ConditionTypeValue | 'manual'
-  value: Record<string, any>
+  type: ConditionTypeValue | 'manual';
+  value: Record<string, any>;
 }
 
 interface EventAction {
-  type: ActionTypeValue
-  params: Record<string, any>
+  type: ActionTypeValue;
+  params: Record<string, any>;
 }
 
 interface EventConfig {
-  name: string
-  condition: EventCondition
-  action: EventAction
+  name: string;
+  condition: EventCondition;
+  action: EventAction;
 }
 
 interface Event {
-  eventId: string
-  name: string
-  condition: EventCondition
-  action: EventAction
-  status: 'pending' | 'triggered' | 'disabled'
-  triggerCount: number
-  createTime: number
-  lastTriggerTime?: number
+  eventId: string;
+  name: string;
+  condition: EventCondition;
+  action: EventAction;
+  status: 'pending' | 'triggered' | 'disabled';
+  triggerCount: number;
+  createTime: number;
+  lastTriggerTime?: number;
 }
 
 interface SimulationState {
-  elapsedTime: number
-  messageCount: number
-  bandwidthByPort?: Record<string, { loadPercent: number }>
-  latestMessage?: any
+  elapsedTime: number;
+  messageCount: number;
+  bandwidthByPort?: Record<string, { loadPercent: number }>;
+  latestMessage?: any;
 }
 
 /**
@@ -108,61 +108,61 @@ interface SimulationState {
  */
 export const CONDITION_TYPE_CONFIG: Record<string, ConditionTypeConfig> = {
   manual: {
-    label: "手动触发",
-    description: "无自动条件，需要手动触发",
+    label: '手动触发',
+    description: '无自动条件，需要手动触发',
     params: [],
   },
   [ConditionType.TIME]: {
-    label: "时间点",
-    description: "在指定仿真时间触发",
+    label: '时间点',
+    description: '在指定仿真时间触发',
     params: [
       {
-        name: "time",
-        label: "触发时间(秒)",
-        type: "number",
+        name: 'time',
+        label: '触发时间(秒)',
+        type: 'number',
         default: 10,
         min: 0,
       },
     ],
   },
   [ConditionType.MESSAGE_COUNT]: {
-    label: "报文数量",
-    description: "当报文数量达到指定值时触发",
+    label: '报文数量',
+    description: '当报文数量达到指定值时触发',
     params: [
       {
-        name: "count",
-        label: "报文数量",
-        type: "number",
+        name: 'count',
+        label: '报文数量',
+        type: 'number',
         default: 100,
         min: 1,
       },
     ],
   },
   [ConditionType.BANDWIDTH_THRESHOLD]: {
-    label: "带宽阈值",
-    description: "当带宽超过指定阈值时触发",
+    label: '带宽阈值',
+    description: '当带宽超过指定阈值时触发',
     params: [
       {
-        name: "threshold",
-        label: "阈值(%)",
-        type: "number",
+        name: 'threshold',
+        label: '阈值(%)',
+        type: 'number',
         default: 80,
         min: 0,
         max: 100,
       },
-      { name: "portId", label: "端口ID", type: "string", default: "" },
+      { name: 'portId', label: '端口ID', type: 'string', default: '' },
     ],
   },
   [ConditionType.MESSAGE_CONTENT]: {
-    label: "报文内容",
-    description: "当收到包含指定内容的报文时触发",
+    label: '报文内容',
+    description: '当收到包含指定内容的报文时触发',
     params: [
-      { name: "pattern", label: "匹配模式", type: "string", default: "" },
+      { name: 'pattern', label: '匹配模式', type: 'string', default: '' },
       {
-        name: "protocolType",
-        label: "协议类型",
-        type: "select",
-        options: ["1553B", "CAN", "RS422", "LAN"],
+        name: 'protocolType',
+        label: '协议类型',
+        type: 'select',
+        options: ['1553B', 'CAN', 'RS422', 'LAN'],
       },
     ],
   },
@@ -173,112 +173,112 @@ export const CONDITION_TYPE_CONFIG: Record<string, ConditionTypeConfig> = {
  */
 export const ACTION_TYPE_CONFIG: Record<ActionTypeValue, ActionTypeConfig> = {
   [ActionType.SEND_COMMAND]: {
-    label: "发送指令",
-    description: "A设备给B设备发送指令（自检、上电、复位等）",
+    label: '发送指令',
+    description: 'A设备给B设备发送指令（自检、上电、复位等）',
     params: [
       {
-        name: "sourceNodeId",
-        label: "源设备",
-        type: "node",
-        description: "发送指令的设备",
+        name: 'sourceNodeId',
+        label: '源设备',
+        type: 'node',
+        description: '发送指令的设备',
       },
       {
-        name: "targetNodeId",
-        label: "目标设备",
-        type: "node",
-        description: "接收指令的设备",
+        name: 'targetNodeId',
+        label: '目标设备',
+        type: 'node',
+        description: '接收指令的设备',
       },
       {
-        name: "commandType",
-        label: "指令类型",
-        type: "select",
+        name: 'commandType',
+        label: '指令类型',
+        type: 'select',
         options: [
-          { value: "self_check", label: "自检指令" },
-          { value: "power_on", label: "上电指令" },
-          { value: "power_off", label: "断电指令" },
-          { value: "reset", label: "复位指令" },
-          { value: "status_query", label: "状态查询" },
-          { value: "heartbeat", label: "心跳" },
-          { value: "custom", label: "自定义报文" },
+          { value: 'self_check', label: '自检指令' },
+          { value: 'power_on', label: '上电指令' },
+          { value: 'power_off', label: '断电指令' },
+          { value: 'reset', label: '复位指令' },
+          { value: 'status_query', label: '状态查询' },
+          { value: 'heartbeat', label: '心跳' },
+          { value: 'custom', label: '自定义报文' },
         ],
-        default: "self_check",
+        default: 'self_check',
       },
       {
-        name: "payload",
-        label: "报文内容(Hex)",
-        type: "string",
-        description: "自定义报文时填写，如: AA55010100",
+        name: 'payload',
+        label: '报文内容(Hex)',
+        type: 'string',
+        description: '自定义报文时填写，如: AA55010100',
         condition: 'commandType === "custom"',
       },
       {
-        name: "protocolType",
-        label: "协议类型",
-        type: "select",
-        options: ["1553B", "CAN", "RS422", "RS485", "LAN"],
-        default: "LAN",
+        name: 'protocolType',
+        label: '协议类型',
+        type: 'select',
+        options: ['1553B', 'CAN', 'RS422', 'RS485', 'LAN'],
+        default: 'LAN',
       },
     ],
   },
   [ActionType.SEND_MESSAGE]: {
-    label: "发送报文",
-    description: "发送指定的报文",
+    label: '发送报文',
+    description: '发送指定的报文',
     params: [
-      { name: "sourceNodeId", label: "源节点", type: "node" },
-      { name: "targetNodeId", label: "目标节点", type: "node" },
-      { name: "payload", label: "报文内容(Hex)", type: "string" },
+      { name: 'sourceNodeId', label: '源节点', type: 'node' },
+      { name: 'targetNodeId', label: '目标节点', type: 'node' },
+      { name: 'payload', label: '报文内容(Hex)', type: 'string' },
       {
-        name: "protocolType",
-        label: "协议类型",
-        type: "select",
-        options: ["1553B", "CAN", "RS422", "RS485", "LAN"],
-        default: "LAN",
+        name: 'protocolType',
+        label: '协议类型',
+        type: 'select',
+        options: ['1553B', 'CAN', 'RS422', 'RS485', 'LAN'],
+        default: 'LAN',
       },
     ],
   },
   [ActionType.INJECT_FAULT]: {
-    label: "注入故障",
-    description: "注入指定类型的故障",
+    label: '注入故障',
+    description: '注入指定类型的故障',
     params: [
       {
-        name: "faultType",
-        label: "故障类型",
-        type: "select",
+        name: 'faultType',
+        label: '故障类型',
+        type: 'select',
         options: [
-          { value: "disconnect", label: "链路断开" },
-          { value: "error_frame", label: "错误帧" },
-          { value: "packet_loss", label: "丢包" },
-          { value: "delay", label: "延迟" },
-          { value: "device_failure", label: "设备故障" },
+          { value: 'disconnect', label: '链路断开' },
+          { value: 'error_frame', label: '错误帧' },
+          { value: 'packet_loss', label: '丢包' },
+          { value: 'delay', label: '延迟' },
+          { value: 'device_failure', label: '设备故障' },
         ],
       },
       {
-        name: "targetId",
-        label: "目标ID",
-        type: "string",
-        description: "链路ID或节点ID",
+        name: 'targetId',
+        label: '目标ID',
+        type: 'string',
+        description: '链路ID或节点ID',
       },
     ],
   },
   [ActionType.PAUSE]: {
-    label: "暂停仿真",
-    description: "暂停仿真运行",
+    label: '暂停仿真',
+    description: '暂停仿真运行',
     params: [],
   },
   [ActionType.LOG]: {
-    label: "记录日志",
-    description: "记录自定义日志信息",
+    label: '记录日志',
+    description: '记录自定义日志信息',
     params: [
-      { name: "message", label: "日志内容", type: "string" },
+      { name: 'message', label: '日志内容', type: 'string' },
       {
-        name: "level",
-        label: "日志级别",
-        type: "select",
+        name: 'level',
+        label: '日志级别',
+        type: 'select',
         options: [
-          { value: "info", label: "信息" },
-          { value: "warning", label: "警告" },
-          { value: "error", label: "错误" },
+          { value: 'info', label: '信息' },
+          { value: 'warning', label: '警告' },
+          { value: 'error', label: '错误' },
         ],
-        default: "info",
+        default: 'info',
       },
     ],
   },
@@ -311,19 +311,16 @@ export function matchCondition(condition: EventCondition, state: SimulationState
       }
       // 检查任意端口
       return Object.values(state.bandwidthByPort || {}).some(
-        (b) => b.loadPercent >= value.threshold,
+        (b) => b.loadPercent >= value.threshold
       );
 
     case ConditionType.MESSAGE_CONTENT:
       if (!state.latestMessage) return false;
-      if (
-        value.protocolType &&
-        state.latestMessage.protocolType !== value.protocolType
-      ) {
+      if (value.protocolType && state.latestMessage.protocolType !== value.protocolType) {
         return false;
       }
       if (value.pattern) {
-        const content = state.latestMessage.payloadHex || "";
+        const content = state.latestMessage.payloadHex || '';
         return content.includes(value.pattern);
       }
       return true;
@@ -347,12 +344,12 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
 
   // 计算属性：待触发事件数量
   const pendingEventCount: ComputedRef<number> = computed(() => {
-    return eventList.value.filter((e) => e.status === "pending").length;
+    return eventList.value.filter((e) => e.status === 'pending').length;
   });
 
   // 计算属性：已触发事件数量
   const triggeredEventCount: ComputedRef<number> = computed(() => {
-    return eventList.value.filter((e) => e.status === "triggered").length;
+    return eventList.value.filter((e) => e.status === 'triggered').length;
   });
 
   /**
@@ -369,7 +366,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
       const response = await getEventsApi(sessionId.value);
       eventList.value = response || [];
     } catch (error) {
-      console.error("加载事件列表失败:", error);
+      console.error('加载事件列表失败:', error);
     } finally {
       loading.value = false;
     }
@@ -382,7 +379,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    */
   async function createEvent(config: EventConfig): Promise<Event> {
     if (!sessionId.value) {
-      throw new Error("仿真会话不存在");
+      throw new Error('仿真会话不存在');
     }
 
     const { name, condition, action } = config;
@@ -410,7 +407,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
       name,
       condition,
       action,
-      status: "pending",
+      status: 'pending',
       triggerCount: 0,
       createTime: Date.now(),
     };
@@ -430,7 +427,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    */
   async function updateEvent(eventId: string, config: Partial<EventConfig>) {
     if (!sessionId.value) {
-      throw new Error("仿真会话不存在");
+      throw new Error('仿真会话不存在');
     }
 
     await updateEventApi(sessionId.value, eventId, config);
@@ -450,7 +447,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    */
   async function deleteEvent(eventId: string) {
     if (!sessionId.value) {
-      throw new Error("仿真会话不存在");
+      throw new Error('仿真会话不存在');
     }
 
     await deleteEventApi(sessionId.value, eventId);
@@ -469,7 +466,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    */
   async function triggerEvent(eventId: string) {
     if (!sessionId.value) {
-      throw new Error("仿真会话不存在");
+      throw new Error('仿真会话不存在');
     }
 
     await triggerEventApi(sessionId.value, eventId);
@@ -477,7 +474,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     // 更新本地状态
     const event = eventList.value.find((e) => e.eventId === eventId);
     if (event) {
-      event.status = "triggered";
+      event.status = 'triggered';
       event.triggerCount += 1;
       event.lastTriggerTime = Date.now();
     }
@@ -492,7 +489,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
   async function setEventEnabled(eventId: string, enabled: boolean) {
     const event = eventList.value.find((e) => e.eventId === eventId);
     if (event) {
-      event.status = enabled ? "pending" : "disabled";
+      event.status = enabled ? 'pending' : 'disabled';
       await updateEvent(eventId, { status: event.status } as any);
     }
   }
@@ -502,7 +499,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    * @param {Object} state - 当前仿真状态
    */
   function checkAndTriggerEvents(state: SimulationState) {
-    const pendingEvents = eventList.value.filter((e) => e.status === "pending");
+    const pendingEvents = eventList.value.filter((e) => e.status === 'pending');
 
     for (const event of pendingEvents) {
       if (matchCondition(event.condition, state)) {
@@ -528,7 +525,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
         eventList.value = [];
       }
     },
-    { immediate: true },
+    { immediate: true }
   );
 
   return {

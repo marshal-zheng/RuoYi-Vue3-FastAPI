@@ -119,70 +119,70 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue'
-import { parseTime } from '@/utils/ruoyi'
-import { listPost, getPost, delPost } from '@/api/system/post'
-import PostDlg from './PostDlg.vue'
+import { ref, getCurrentInstance } from 'vue';
+import { parseTime } from '@/utils/ruoyi';
+import { listPost, getPost, delPost } from '@/api/system/post';
+import PostDlg from './PostDlg.vue';
 
-const { proxy } = getCurrentInstance()!
-const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable')
+const { proxy } = getCurrentInstance()!;
+const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable');
 
-const ids = ref<number[]>([])
-const single = ref(true)
-const multiple = ref(true)
-const gridListRef = ref<any>(null)
-const postDlgRef = ref<any>(null)
+const ids = ref<number[]>([]);
+const single = ref(true);
+const multiple = ref(true);
+const gridListRef = ref<any>(null);
+const postDlgRef = ref<any>(null);
 
 async function loadPostData(params: Record<string, any>) {
   try {
-    return await listPost(params)
+    return await listPost(params);
   } catch (e) {
-    return { data: [], total: 0 }
+    return { data: [], total: 0 };
   }
 }
 
 function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value })
-  handleRefresh()
+  updateState({ [field]: value });
+  handleRefresh();
 }
 
 function onSearch({ handleRefresh }: any) {
-  handleRefresh()
+  handleRefresh();
 }
 
 function handleRefresh() {
-  gridListRef.value?.refresh()
+  gridListRef.value?.refresh();
 }
 
 function handleSelectionChange(selection: any[]) {
-  ids.value = selection.map((item) => item.postId)
-  single.value = selection.length !== 1
-  multiple.value = !selection.length
+  ids.value = selection.map((item) => item.postId);
+  single.value = selection.length !== 1;
+  multiple.value = !selection.length;
 }
 
 function handleAdd() {
-  postDlgRef.value?.open()
+  postDlgRef.value?.open();
 }
 
 async function handleUpdate(row?: any) {
-  const postId = row?.postId || ids.value
-  const response = await getPost(postId)
-  const data = response
-  postDlgRef.value?.open(data)
+  const postId = row?.postId || ids.value;
+  const response = await getPost(postId);
+  const data = response;
+  postDlgRef.value?.open(data);
 }
 
 function handleDelete(row?: any) {
-  const postIds = row?.postId || ids.value
-  ;(proxy as any).$modal
+  const postIds = row?.postId || ids.value;
+  (proxy as any).$modal
     .confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
     .then(() => delPost(postIds))
     .then(() => {
-      handleRefresh()
+      handleRefresh();
     })
-    .catch(() => {})
+    .catch(() => {});
 }
 
 function handleExport(query: Record<string, any>) {
-  ;(proxy as any).download('system/post/export', query, `post_${new Date().getTime()}.xlsx`)
+  (proxy as any).download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);
 }
 </script>

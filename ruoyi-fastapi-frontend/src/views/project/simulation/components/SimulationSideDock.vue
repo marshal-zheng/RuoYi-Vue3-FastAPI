@@ -2,22 +2,22 @@
   <div class="flex flex-col items-center w-full h-full py-2">
     <!-- 顶部装饰线 -->
     <div class="dock-decoration-line mb-4"></div>
-    
+
     <!-- 功能按钮组 -->
     <div class="flex flex-col items-center gap-5 w-full">
       <button
         type="button"
-        class="collapse-btn relative w-[60px] h-10 flex items-center justify-center
-               cursor-pointer transition-all duration-300 ease-out overflow-hidden
-               text-cyan-400/80 hover:text-cyan-300"
+        class="collapse-btn relative w-[60px] h-10 flex items-center justify-center cursor-pointer transition-all duration-300 ease-out overflow-hidden text-cyan-400/80 hover:text-cyan-300"
         @click="$emit('toggle-all')"
       >
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/8 to-transparent"></div>
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/8 to-transparent"
+        ></div>
         <div class="absolute inset-0 collapse-glow opacity-0 transition-opacity duration-300"></div>
         <div class="absolute inset-0 collapse-shine opacity-0"></div>
         <div class="relative z-10 flex items-center justify-center gap-1.5">
-          <zx-icon 
-            :name="allCollapsed ? 'ri:expand-left-right-line' : 'ri:contract-left-right-line'" 
+          <zx-icon
+            :name="allCollapsed ? 'ri:expand-left-right-line' : 'ri:contract-left-right-line'"
             class="text-[16px] transition-transform duration-300 collapse-icon"
           />
           <span class="text-[11px] font-bold tracking-widest collapse-text">
@@ -36,69 +36,76 @@
       >
         <button
           type="button"
-          class="dock-btn group relative w-[60px] h-14 flex flex-col items-center justify-center rounded-xl
-                 transition-all duration-300 ease-out overflow-hidden
-                 border-[1.5px]"
+          class="dock-btn group relative w-[60px] h-14 flex flex-col items-center justify-center rounded-xl transition-all duration-300 ease-out overflow-hidden border-[1.5px]"
           :class="getButtonClass(item.key)"
           :disabled="isItemDisabled(item.key)"
           @click="!isItemDisabled(item.key) && $emit('toggle', item.key)"
         >
           <!-- 背景渐变层 -->
-          <div class="absolute inset-0 bg-gradient-to-b from-slate-800/95 to-slate-900/98 
-                      group-hover:from-slate-700/98 group-hover:to-slate-800"
-               :class="{ 'disabled-overlay': isItemDisabled(item.key) }"></div>
-          
+          <div
+            class="absolute inset-0 bg-gradient-to-b from-slate-800/95 to-slate-900/98 group-hover:from-slate-700/98 group-hover:to-slate-800"
+            :class="{ 'disabled-overlay': isItemDisabled(item.key) }"
+          ></div>
+
           <!-- 顶部光晕 -->
-          <div v-if="!isItemDisabled(item.key)" 
-               class="absolute inset-0 bg-radial-cyan-top opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          
+          <div
+            v-if="!isItemDisabled(item.key)"
+            class="absolute inset-0 bg-radial-cyan-top opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></div>
+
           <!-- 激活状态背景 -->
-          <div v-if="activeKeys.includes(item.key)" 
-               class="absolute inset-0 bg-gradient-to-b from-cyan-400/20 to-cyan-400/5"></div>
-          
+          <div
+            v-if="activeKeys.includes(item.key)"
+            class="absolute inset-0 bg-gradient-to-b from-cyan-400/20 to-cyan-400/5"
+          ></div>
+
           <!-- 内容 -->
-          <div class="relative z-10 flex flex-col items-center justify-center gap-1"
-               :class="{ 'disabled-content': isItemDisabled(item.key) }">
-            <zx-icon 
-              :name="item.icon" 
+          <div
+            class="relative z-10 flex flex-col items-center justify-center gap-1"
+            :class="{ 'disabled-content': isItemDisabled(item.key) }"
+          >
+            <zx-icon
+              :name="item.icon"
               class="text-[22px] transition-transform duration-200"
               :class="[
                 activeKeys.includes(item.key) ? 'icon-glow' : '',
-                !isItemDisabled(item.key) ? 'group-hover:scale-110' : ''
+                !isItemDisabled(item.key) ? 'group-hover:scale-110' : '',
               ]"
             />
-            <span class="text-[13px] font-bold leading-none tracking-wider"
-                  :class="activeKeys.includes(item.key) ? 'text-glow' : ''">
+            <span
+              class="text-[13px] font-bold leading-none tracking-wider"
+              :class="activeKeys.includes(item.key) ? 'text-glow' : ''"
+            >
               {{ item.label }}
             </span>
           </div>
-          
+
           <!-- 禁用锁定图标 -->
-          <div v-if="isItemDisabled(item.key)" 
-               class="absolute top-1 right-1 w-4 h-4 rounded-full bg-slate-600/70 flex items-center justify-center z-20 border border-cyan-300/30">
+          <div
+            v-if="isItemDisabled(item.key)"
+            class="absolute top-1 right-1 w-4 h-4 rounded-full bg-slate-600/70 flex items-center justify-center z-20 border border-cyan-300/30"
+          >
             <zx-icon name="ri:lock-line" class="text-[10px] text-cyan-200/80" />
           </div>
-          
+
           <!-- 徽章 -->
-          <span 
-            v-if="badges[item.key] && !isItemDisabled(item.key)" 
-            class="absolute -top-[1.5px] -right-[1.2px] min-w-[20px] h-5 px-1.5 rounded-full
-                   bg-gradient-to-br from-red-500 to-red-600 text-white text-[11px] font-extrabold
-                   inline-flex items-center justify-center z-20 border-2 border-slate-900/90
-                   shadow-[0_3px_10px_rgba(239,68,68,0.5),0_0_16px_rgba(239,68,68,0.35)]">
+          <span
+            v-if="badges[item.key] && !isItemDisabled(item.key)"
+            class="absolute -top-[1.5px] -right-[1.2px] min-w-[20px] h-5 px-1.5 rounded-full bg-gradient-to-br from-red-500 to-red-600 text-white text-[11px] font-extrabold inline-flex items-center justify-center z-20 border-2 border-slate-900/90 shadow-[0_3px_10px_rgba(239,68,68,0.5),0_0_16px_rgba(239,68,68,0.35)]"
+          >
             {{ badges[item.key] }}
           </span>
-          
+
           <!-- 激活指示条 - 增强版 -->
-          <span 
-            v-if="activeKeys.includes(item.key)" 
-            class="absolute -left-px top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-md
-                   bg-gradient-to-b from-cyan-300 via-cyan-400 to-cyan-500 indicator-glow-enhanced">
+          <span
+            v-if="activeKeys.includes(item.key)"
+            class="absolute -left-px top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-md bg-gradient-to-b from-cyan-300 via-cyan-400 to-cyan-500 indicator-glow-enhanced"
+          >
           </span>
         </button>
       </el-tooltip>
     </div>
-    
+
     <!-- 底部装饰线 -->
     <div class="dock-decoration-line mt-auto"></div>
   </div>
@@ -164,26 +171,26 @@ function getButtonClass(key) {
   &:hover {
     transform: scale(1.05);
     text-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
-    
+
     .collapse-glow {
       opacity: 1;
     }
-    
+
     .collapse-shine {
       opacity: 1;
       animation: shine-sweep 1.2s ease-in-out;
     }
-    
+
     .collapse-text {
       letter-spacing: 0.15em;
     }
-    
+
     .collapse-icon {
       filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.8));
       transform: rotate(180deg);
     }
   }
-  
+
   &:active {
     transform: scale(0.98);
   }
@@ -226,7 +233,7 @@ function getButtonClass(key) {
 
 /* 功能按钮默认阴影 */
 .shadow-default {
-  box-shadow: 
+  box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.35),
     0 2px 4px rgba(0, 0, 0, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
@@ -234,7 +241,7 @@ function getButtonClass(key) {
 }
 
 .dock-btn.shadow-default:hover {
-  box-shadow: 
+  box-shadow:
     0 8px 24px rgba(34, 211, 238, 0.18),
     0 4px 12px rgba(0, 0, 0, 0.3),
     0 0 32px rgba(34, 211, 238, 0.1),
@@ -244,7 +251,7 @@ function getButtonClass(key) {
 
 /* 激活状态阴影 */
 .shadow-cyan {
-  box-shadow: 
+  box-shadow:
     0 6px 24px rgba(34, 211, 238, 0.3),
     0 2px 8px rgba(0, 0, 0, 0.25),
     0 0 40px rgba(34, 211, 238, 0.15),
@@ -253,7 +260,7 @@ function getButtonClass(key) {
 }
 
 .dock-btn--active:hover {
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(34, 211, 238, 0.4),
     0 4px 12px rgba(0, 0, 0, 0.2),
     0 0 48px rgba(34, 211, 238, 0.2),
@@ -263,7 +270,11 @@ function getButtonClass(key) {
 
 /* 径向渐变背景 */
 .bg-radial-cyan-top {
-  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(34, 211, 238, 0.12) 0%, transparent 60%);
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    rgba(34, 211, 238, 0.12) 0%,
+    transparent 60%
+  );
 }
 
 /* 图标发光 */
@@ -278,14 +289,14 @@ function getButtonClass(key) {
 
 /* 指示条发光 */
 .indicator-glow {
-  box-shadow: 
+  box-shadow:
     0 0 8px rgba(34, 211, 238, 0.8),
     0 0 16px rgba(34, 211, 238, 0.4);
 }
 
 /* 指示条增强发光 */
 .indicator-glow-enhanced {
-  box-shadow: 
+  box-shadow:
     0 0 12px rgba(34, 211, 238, 0.9),
     0 0 24px rgba(34, 211, 238, 0.6),
     0 0 36px rgba(34, 211, 238, 0.3),
@@ -294,7 +305,7 @@ function getButtonClass(key) {
 
 /* 禁用状态 */
 .dock-btn--disabled {
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(148, 163, 184, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transform: none !important;
@@ -326,5 +337,3 @@ function getButtonClass(key) {
   color: #e2e8f0 !important;
 }
 </style>
-
-

@@ -23,7 +23,7 @@ const pendingDictRequests = new Map<string, Promise<any>>();
  * 获取字典数据
  */
 export function useDict(...args: string[]) {
-  console.log(3333)
+  console.log(3333);
   const res = ref<Record<string, DictItem[]>>({});
   return (() => {
     args.forEach((dictType: string, index: number) => {
@@ -33,9 +33,9 @@ export function useDict(...args: string[]) {
         res.value[dictType] = dicts;
       } else {
         // Check if there's already a pending request for this dict type
-        console.log('dictType', dictType)
+        console.log('dictType', dictType);
         let dictPromise = pendingDictRequests.get(dictType);
-        
+
         if (!dictPromise) {
           // Create new request and cache the promise
           dictPromise = getDicts(dictType)
@@ -58,10 +58,10 @@ export function useDict(...args: string[]) {
               // Clean up pending request
               pendingDictRequests.delete(dictType);
             });
-          
+
           pendingDictRequests.set(dictType, dictPromise);
         }
-        
+
         // Use the cached promise (either new or existing)
         dictPromise.then((dictData: DictItem[]) => {
           res.value[dictType] = dictData;

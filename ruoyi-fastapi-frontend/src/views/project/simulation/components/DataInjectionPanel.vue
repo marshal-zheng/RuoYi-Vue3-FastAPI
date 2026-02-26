@@ -27,10 +27,10 @@
       <!-- 全局策略选择 -->
       <div class="strategy-section">
         <div class="section-label">全局填充策略</div>
-        <el-select 
-          v-model="globalStrategy" 
-          placeholder="选择策略" 
-          size="small" 
+        <el-select
+          v-model="globalStrategy"
+          placeholder="选择策略"
+          size="small"
           class="w-full strategy-select"
           popper-class="sim-popper-dark"
         >
@@ -382,7 +382,11 @@ defineExpose({
 
 /* 确认策略按钮样式 - 使用CSS变量 */
 .apply-btn {
-  background: linear-gradient(135deg, var(--sim-accent-bg, rgba(34, 211, 238, 0.2)), rgba(45, 212, 191, 0.2)) !important;
+  background: linear-gradient(
+    135deg,
+    var(--sim-accent-bg, rgba(34, 211, 238, 0.2)),
+    rgba(45, 212, 191, 0.2)
+  ) !important;
   border: 1px solid var(--sim-border-focus, rgba(34, 211, 238, 0.5)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;

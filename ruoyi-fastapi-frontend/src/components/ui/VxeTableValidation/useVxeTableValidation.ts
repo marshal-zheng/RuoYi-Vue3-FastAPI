@@ -126,10 +126,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
    * @param ctx 校验上下文
    * @returns 校验结果
    */
-  const validate = async (
-    data: T[],
-    ctx?: ValidationContext
-  ): Promise<ValidationResult> => {
+  const validate = async (data: T[], ctx?: ValidationContext): Promise<ValidationResult> => {
     validating.value = true;
     const allIssues: ValidationIssue[] = [];
     const mergedContext = { ...validationContext.value, ...ctx };
@@ -218,16 +215,13 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
    * };
    * ```
    */
-  const validateOrThrow = async (
-    data: T[],
-    ctx?: ValidationContext
-  ): Promise<ValidationResult> => {
+  const validateOrThrow = async (data: T[], ctx?: ValidationContext): Promise<ValidationResult> => {
     const result = await validate(data, ctx);
 
     if (!result.valid) {
       const error = new Error(
         `校验失败：发现 ${result.errorCount} 个错误` +
-        (result.warningCount > 0 ? `，${result.warningCount} 个警告` : '')
+          (result.warningCount > 0 ? `，${result.warningCount} 个警告` : '')
       );
       (error as any).validationResult = result;
       (error as any).isValidationError = true;
@@ -243,10 +237,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
    * @param ctx 校验上下文
    * @returns true 表示通过，false 表示有错误
    */
-  const isValid = async (
-    data: T[],
-    ctx?: ValidationContext
-  ): Promise<boolean> => {
+  const isValid = async (data: T[], ctx?: ValidationContext): Promise<boolean> => {
     const result = await validate(data, ctx);
     return result.valid;
   };
@@ -254,10 +245,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
   /**
    * 校验单行
    */
-  const validateRow = async (
-    row: T,
-    rowIndex: number
-  ): Promise<ValidationIssue[]> => {
+  const validateRow = async (row: T, rowIndex: number): Promise<ValidationIssue[]> => {
     const rowIssues: ValidationIssue[] = [];
 
     Object.entries(currentRules.value).forEach(([field, fieldRules]) => {
@@ -281,10 +269,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
     });
 
     // 更新该行的问题
-    issues.value = [
-      ...issues.value.filter((i) => i.rowIndex !== rowIndex),
-      ...rowIssues,
-    ];
+    issues.value = [...issues.value.filter((i) => i.rowIndex !== rowIndex), ...rowIssues];
 
     return rowIssues;
   };
@@ -322,9 +307,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
     // 更新该字段的问题
     const cellKey = `${rowIndex}-${field}`;
     issues.value = [
-      ...issues.value.filter(
-        (i) => !(i.rowIndex === rowIndex && i.field === field)
-      ),
+      ...issues.value.filter((i) => !(i.rowIndex === rowIndex && i.field === field)),
       ...fieldIssues,
     ];
 
@@ -375,13 +358,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
   /**
    * 获取单元格的样式类（用于 cell-class-name）
    */
-  const getCellClassName = ({
-    rowIndex,
-    column,
-  }: {
-    rowIndex: number;
-    column: any;
-  }): string => {
+  const getCellClassName = ({ rowIndex, column }: { rowIndex: number; column: any }): string => {
     const field = column?.field;
     if (!field) return '';
 
@@ -410,7 +387,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
   /**
    * 转换为 VXE-Table 的 edit-rules 格式
    */
-  const toVxeEditRules = (): Record<string, VxeEditRule[]> => {
+  const toVxeEditRules = (): Record<string, any[]> => {
     const vxeRules: Record<string, VxeEditRule[]> = {};
 
     Object.entries(currentRules.value).forEach(([field, fieldRules]) => {
@@ -428,9 +405,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
         }
         if (rule.message) {
           vxeRule.message =
-            typeof rule.message === 'function'
-              ? rule.message(undefined, {})
-              : rule.message;
+            typeof rule.message === 'function' ? rule.message(undefined, {}) : rule.message;
         }
 
         // 如果有自定义校验器，转换为 VXE 格式
@@ -511,9 +486,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
    * 移除全局校验器
    */
   const removeGlobalValidator = (name: string) => {
-    currentGlobalValidators.value = currentGlobalValidators.value.filter(
-      (v) => v.name !== name
-    );
+    currentGlobalValidators.value = currentGlobalValidators.value.filter((v) => v.name !== name);
   };
 
   /**
@@ -557,8 +530,8 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
 
     // 核心方法
     validate,
-    validateOrThrow,  // 校验失败时抛出错误，用于阻断保存
-    isValid,          // 简化版，直接返回布尔值
+    validateOrThrow, // 校验失败时抛出错误，用于阻断保存
+    isValid, // 简化版，直接返回布尔值
     validateRow,
     validateField,
     clearValidation,

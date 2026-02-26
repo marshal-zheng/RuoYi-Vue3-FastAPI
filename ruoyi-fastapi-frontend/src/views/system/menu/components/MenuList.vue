@@ -124,11 +124,11 @@
     </template>
   </ZxGridList>
 
-  <MenuDrawer 
-    ref="menuDrawerRef" 
-    :sys-show-hide="sys_show_hide" 
+  <MenuDrawer
+    ref="menuDrawerRef"
+    :sys-show-hide="sys_show_hide"
     :sys-normal-disable="sys_normal_disable"
-    @success="gridListRef?.refresh()" 
+    @success="gridListRef?.refresh()"
   />
 </template>
 
@@ -138,12 +138,15 @@ import { listMenu, getMenu, delMenu } from '@/api/system/menu';
 import MenuDrawer from './MenuDrawer.vue';
 
 const { proxy } = getCurrentInstance()!;
-const { sys_normal_disable, sys_show_hide } = (proxy as any).useDict('sys_normal_disable', 'sys_show_hide');
+const { sys_normal_disable, sys_show_hide } = (proxy as any).useDict(
+  'sys_normal_disable',
+  'sys_show_hide'
+);
 const { parseTime } = proxy as any;
 
 const isExpandAll = ref(false);
 const refreshTable = ref(true);
-const gridListRef = ref<InstanceType<typeof import('@zxio/zxui')['ZxGridList']> | null>(null);
+const gridListRef = ref<InstanceType<(typeof import('@zxio/zxui'))['ZxGridList']> | null>(null);
 const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null);
 
 async function loadMenuData(params: any) {

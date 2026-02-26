@@ -3,34 +3,34 @@
  * 管理告警列表、过滤、统计
  * 告警只在浮动面板中显示，不使用弹框通知
  */
-import { ref, computed, type Ref, type ComputedRef } from 'vue'
+import { ref, computed, type Ref, type ComputedRef } from 'vue';
 
 interface Alarm {
-  alarmId: string
-  severity?: string
-  alarmType?: string
-  message: string
-  timestamp: number
-  affectedNodes?: string[]
-  read?: boolean
+  alarmId: string;
+  severity?: string;
+  alarmType?: string;
+  message: string;
+  timestamp: number;
+  affectedNodes?: string[];
+  read?: boolean;
 }
 
 interface AlarmStats {
-  total: number
-  info: number
-  warning: number
-  error: number
-  critical: number
-  byType: Record<string, number>
+  total: number;
+  info: number;
+  warning: number;
+  error: number;
+  critical: number;
+  byType: Record<string, number>;
 }
 
-type SeverityLevel = 'info' | 'warning' | 'error' | 'critical'
+type SeverityLevel = 'info' | 'warning' | 'error' | 'critical';
 
 export function useAlarmManager() {
-  const alarms: Ref<Alarm[]> = ref([]) // 告警列表
-  const filterSeverity: Ref<SeverityLevel | null> = ref(null) // 过滤严重程度
-  const filterType: Ref<string | null> = ref(null) // 过滤告警类型
-  const searchKeyword: Ref<string> = ref('') // 搜索关键字
+  const alarms: Ref<Alarm[]> = ref([]); // 告警列表
+  const filterSeverity: Ref<SeverityLevel | null> = ref(null); // 过滤严重程度
+  const filterType: Ref<string | null> = ref(null); // 过滤告警类型
+  const searchKeyword: Ref<string> = ref(''); // 搜索关键字
 
   /**
    * 添加告警（去重处理）
@@ -38,48 +38,50 @@ export function useAlarmManager() {
   const addAlarm = (alarm: Alarm | Alarm[]) => {
     if (Array.isArray(alarm)) {
       // 过滤掉已存在的告警（基于 alarmId 去重）
-      const existingIds = new Set(alarms.value.map(a => a.alarmId))
-      const newAlarms = alarm.filter(a => !existingIds.has(a.alarmId))
+      const existingIds = new Set(alarms.value.map((a) => a.alarmId));
+      const newAlarms = alarm.filter((a) => !existingIds.has(a.alarmId));
       if (newAlarms.length > 0) {
-        alarms.value = [...alarms.value, ...newAlarms]
+        alarms.value = [...alarms.value, ...newAlarms];
       }
     } else {
       // 检查是否已存在
-      const exists = alarms.value.some(a => a.alarmId === alarm.alarmId)
+      const exists = alarms.value.some((a) => a.alarmId === alarm.alarmId);
       if (!exists) {
-        alarms.value.push(alarm)
+        alarms.value.push(alarm);
       }
     }
-  }
+  };
 
   /**
    * 过滤后的告警列表
    */
   const filteredAlarms: ComputedRef<Alarm[]> = computed(() => {
-    let result = alarms.value
+    let result = alarms.value;
 
     // 按严重程度过滤
     if (filterSeverity.value) {
-      result = result.filter(alarm => alarm.severity === filterSeverity.value)
+      result = result.filter((alarm) => alarm.severity === filterSeverity.value);
     }
 
     // 按类型过滤
     if (filterType.value) {
-      result = result.filter(alarm => alarm.alarmType === filterType.value)
+      result = result.filter((alarm) => alarm.alarmType === filterType.value);
     }
 
     // 按关键字搜索
     if (searchKeyword.value) {
-      const keyword = searchKeyword.value.toLowerCase()
-      result = result.filter(alarm => 
-        alarm.message.toLowerCase().includes(keyword) ||
-        (alarm.affectedNodes && JSON.stringify(alarm.affectedNodes).toLowerCase().includes(keyword))
-      )
+      const keyword = searchKeyword.value.toLowerCase();
+      result = result.filter(
+        (alarm) =>
+          alarm.message.toLowerCase().includes(keyword) ||
+          (alarm.affectedNodes &&
+            JSON.stringify(alarm.affectedNodes).toLowerCase().includes(keyword))
+      );
     }
 
     // 按时间戳倒序排列（最新的在前）
-    return result.sort((a, b) => b.timestamp - a.timestamp)
-  })
+    return result.sort((a, b) => b.timestamp - a.timestamp);
+  });
 
   /**
    * 告警统计
@@ -91,45 +93,45 @@ export function useAlarmManager() {
       warning: 0,
       error: 0,
       critical: 0,
-      byType: {}
-    }
+      byType: {},
+    };
 
-    const list = filteredAlarms.value
-    stats.total = list.length
+    const list = filteredAlarms.value;
+    stats.total = list.length;
 
-    list.forEach(alarm => {
+    list.forEach((alarm) => {
       if (alarm.severity) {
-        const severity = alarm.severity as keyof Omit<AlarmStats, 'total' | 'byType'>
+        const severity = alarm.severity as keyof Omit<AlarmStats, 'total' | 'byType'>;
         if (severity in stats && typeof stats[severity] === 'number') {
-          (stats[severity] as number)++
+          (stats[severity] as number)++;
         }
       }
 
       if (alarm.alarmType) {
-        stats.byType[alarm.alarmType] = (stats.byType[alarm.alarmType] || 0) + 1
+        stats.byType[alarm.alarmType] = (stats.byType[alarm.alarmType] || 0) + 1;
       }
-    })
+    });
 
-    return stats
-  })
+    return stats;
+  });
 
   /**
    * 获取告警类型列表
    */
   const alarmTypes: ComputedRef<string[]> = computed(() => {
-    const types = new Set<string>()
-    alarms.value.forEach(alarm => {
+    const types = new Set<string>();
+    alarms.value.forEach((alarm) => {
       if (alarm.alarmType) {
-        types.add(alarm.alarmType)
+        types.add(alarm.alarmType);
       }
-    })
-    return Array.from(types)
-  })
+    });
+    return Array.from(types);
+  });
 
   /**
    * 获取严重程度列表
    */
-  const severityLevels: SeverityLevel[] = ['info', 'warning', 'error', 'critical']
+  const severityLevels: SeverityLevel[] = ['info', 'warning', 'error', 'critical'];
 
   /**
    * 获取严重程度颜色
@@ -139,10 +141,10 @@ export function useAlarmManager() {
       info: '#909399',
       warning: '#E6A23C',
       error: '#F56C6C',
-      critical: '#C03639'
-    }
-    return colorMap[severity || ''] || colorMap.warning
-  }
+      critical: '#C03639',
+    };
+    return colorMap[severity || ''] || colorMap.warning;
+  };
 
   /**
    * 获取严重程度标签
@@ -152,10 +154,10 @@ export function useAlarmManager() {
       info: '信息',
       warning: '警告',
       error: '错误',
-      critical: '严重'
-    }
-    return labelMap[severity || ''] || severity || ''
-  }
+      critical: '严重',
+    };
+    return labelMap[severity || ''] || severity || '';
+  };
 
   /**
    * 获取告警类型标签
@@ -183,88 +185,88 @@ export function useAlarmManager() {
       no_connection: '缺少连接',
       device_failure: '设备故障',
       disconnect: '链路断开',
-    }
-    return labelMap[type || ''] || type || ''
-  }
+    };
+    return labelMap[type || ''] || type || '';
+  };
 
   /**
    * 清除指定告警
    */
   const removeAlarm = (alarmId: string) => {
-    const index = alarms.value.findIndex(alarm => alarm.alarmId === alarmId)
+    const index = alarms.value.findIndex((alarm) => alarm.alarmId === alarmId);
     if (index !== -1) {
-      alarms.value.splice(index, 1)
+      alarms.value.splice(index, 1);
     }
-  }
+  };
 
   /**
    * 清除所有告警
    */
   const clearAllAlarms = () => {
-    alarms.value = []
-  }
+    alarms.value = [];
+  };
 
   /**
    * 清除已读告警
    */
   const clearReadAlarms = () => {
-    alarms.value = alarms.value.filter(alarm => !alarm.read)
-  }
+    alarms.value = alarms.value.filter((alarm) => !alarm.read);
+  };
 
   /**
    * 标记告警为已读
    */
   const markAsRead = (alarmId: string) => {
-    const alarm = alarms.value.find(a => a.alarmId === alarmId)
+    const alarm = alarms.value.find((a) => a.alarmId === alarmId);
     if (alarm) {
-      alarm.read = true
+      alarm.read = true;
     }
-  }
+  };
 
   /**
    * 标记所有告警为已读
    */
   const markAllAsRead = () => {
-    alarms.value.forEach(alarm => {
-      alarm.read = true
-    })
-  }
+    alarms.value.forEach((alarm) => {
+      alarm.read = true;
+    });
+  };
 
   /**
    * 导出告警数据
    */
   const exportAlarms = (format: 'json' | 'csv' = 'json'): string => {
     if (format === 'json') {
-      return JSON.stringify(alarms.value, null, 2)
+      return JSON.stringify(alarms.value, null, 2);
     } else if (format === 'csv') {
-      const headers = ['告警ID', '类型', '严重程度', '消息', '时间戳', '受影响节点']
-      const rows = alarms.value.map(alarm => [
+      const headers = ['告警ID', '类型', '严重程度', '消息', '时间戳', '受影响节点'];
+      const rows = alarms.value.map((alarm) => [
         alarm.alarmId,
         getAlarmTypeLabel(alarm.alarmType),
         getSeverityLabel(alarm.severity),
         alarm.message,
         new Date(alarm.timestamp * 1000).toLocaleString(),
-        JSON.stringify(alarm.affectedNodes || [])
-      ])
-      
+        JSON.stringify(alarm.affectedNodes || []),
+      ]);
+
       const csvContent = [
         headers.join(','),
-        ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
-      ].join('\n')
-      
-      return csvContent
+        ...rows.map((row) => row.map((cell) => `"${cell}"`).join(',')),
+      ].join('\n');
+
+      return csvContent;
     }
-    return ''
-  }
+    return '';
+  };
 
   /**
    * 重置过滤器
    */
   const resetFilters = () => {
-    filterSeverity.value = null
-    filterType.value = null
-    searchKeyword.value = ''
-  }
+    filterSeverity.value = null;
+    filterType.value = null;
+    searchKeyword.value = '';
+  };
 
   return {
     alarms,
@@ -285,6 +287,6 @@ export function useAlarmManager() {
     getSeverityLabel,
     getAlarmTypeLabel,
     exportAlarms,
-    resetFilters
-  }
+    resetFilters,
+  };
 }

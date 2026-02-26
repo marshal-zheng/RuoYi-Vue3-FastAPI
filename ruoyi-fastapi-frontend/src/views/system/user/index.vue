@@ -2,7 +2,7 @@
   <ZxContentWrap title="用户管理" contentPadding="0px 20px 20px 0">
     <template #header-right>
       <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:user:add']"
-        >新增</ZxButton
+        >新增用户</ZxButton
       >
       <ZxButton
         type="success"
@@ -259,6 +259,7 @@ import {
 } from '@/api/system/user';
 import UserFormDialog from './components/UserFormDialog.vue';
 import UserImportDialog from './components/UserImportDialog.vue';
+
 
 const router = useRouter();
 const appStore = useAppStore();

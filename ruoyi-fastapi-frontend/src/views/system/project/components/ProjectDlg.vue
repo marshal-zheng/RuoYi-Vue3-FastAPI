@@ -2,7 +2,12 @@
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <el-form :model="state.data" :rules="formRules" label-width="80px">
       <el-form-item label="工程描述" prop="projectDesc">
-        <el-input v-model="state.data.projectDesc" type="textarea" :rows="4" placeholder="请输入工程描述" />
+        <el-input
+          v-model="state.data.projectDesc"
+          type="textarea"
+          :rows="4"
+          placeholder="请输入工程描述"
+        />
       </el-form-item>
     </el-form>
   </ZxDialog>

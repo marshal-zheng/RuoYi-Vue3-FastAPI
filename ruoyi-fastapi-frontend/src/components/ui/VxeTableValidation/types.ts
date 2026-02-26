@@ -20,7 +20,17 @@ export interface ValidationRule {
   /** 触发时机 */
   trigger?: ValidationTrigger | ValidationTrigger[];
   /** 数据类型校验 */
-  type?: 'string' | 'number' | 'integer' | 'float' | 'boolean' | 'array' | 'object' | 'date' | 'url' | 'email';
+  type?:
+    | 'string'
+    | 'number'
+    | 'integer'
+    | 'float'
+    | 'boolean'
+    | 'array'
+    | 'object'
+    | 'date'
+    | 'url'
+    | 'email';
   /** 最小值（数字）或最小长度（字符串/数组） */
   min?: number;
   /** 最大值（数字）或最大长度（字符串/数组） */
@@ -65,7 +75,10 @@ export interface GlobalValidator {
   /** 校验器名称 */
   name: string;
   /** 校验器函数 */
-  validator: (data: any[], context?: ValidationContext) => ValidationIssue | ValidationIssue[] | null;
+  validator: (
+    data: any[],
+    context?: ValidationContext
+  ) => ValidationIssue | ValidationIssue[] | null;
   /** 校验级别 */
   level?: ValidationLevel;
 }
@@ -123,7 +136,12 @@ export interface VxeEditRule {
   pattern?: RegExp | string;
   message?: string;
   trigger?: string;
-  validator?: (params: { cellValue: any; row: any; rowIndex: number; column: any }) => void | Error | Promise<void | Error>;
+  validator?: (params: {
+    cellValue: any;
+    row: any;
+    rowIndex: number;
+    column: any;
+  }) => void | Error | Promise<void | Error>;
 }
 
 /** useVxeTableValidation 配置 */

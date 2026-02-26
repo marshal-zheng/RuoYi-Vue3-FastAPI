@@ -237,7 +237,7 @@ function getFormData() {
       port: config.port || '',
       // CAN 协议字段
       canId: config.canId || '',
-      id: config.canId || '',  // 兼容后端可能使用 id 字段
+      id: config.canId || '', // 兼容后端可能使用 id 字段
       // 1553B 协议字段
       subAddress: config.subAddress || '',
       // 通用

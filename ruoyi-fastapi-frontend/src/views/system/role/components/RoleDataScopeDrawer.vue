@@ -29,8 +29,12 @@
       </el-form-item>
       <el-form-item label="数据权限" v-show="drawer.state.data.dataScope === '2'">
         <div class="tree-toolbar">
-          <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand">展开/折叠</el-checkbox>
-          <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll">全选/全不选</el-checkbox>
+          <el-checkbox v-model="deptExpand" @change="handleCheckedTreeExpand"
+            >展开/折叠</el-checkbox
+          >
+          <el-checkbox v-model="deptNodeAll" @change="handleCheckedTreeNodeAll"
+            >全选/全不选</el-checkbox
+          >
           <el-checkbox v-model="drawer.state.data.deptCheckStrictly">父子联动</el-checkbox>
         </div>
         <el-tree

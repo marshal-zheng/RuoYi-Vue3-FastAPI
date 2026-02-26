@@ -9,26 +9,26 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { faultTypeOptions } from "../eventOptions";
+import { computed } from 'vue';
+import { faultTypeOptions } from '../eventOptions';
 
 const props = defineProps({
   modelValue: {
     type: String,
-    default: "packet_loss",
+    default: 'packet_loss',
   },
 });
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const selectedValue = computed({
   get: () => props.modelValue,
-  set: (val) => emit("update:modelValue", val),
+  set: (val) => emit('update:modelValue', val),
 });
 
 const options = faultTypeOptions;
 
 const handleChange = (value) => {
-  emit("change", value);
+  emit('change', value);
 };
 </script>

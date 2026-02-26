@@ -1,25 +1,22 @@
 // @ts-nocheck
-export type Recordable<T = any> = Record<string, T>
+export type Recordable<T = any> = Record<string, T>;
 
 export interface ResultOptions {
-  msg?: string
+  msg?: string;
 }
 
 export interface ErrorOptions<T = null> {
-  code?: number
-  data?: T
+  code?: number;
+  data?: T;
 }
 
-export function resultSuccess<T = Recordable>(
-  data: T,
-  { msg = '操作成功' }: ResultOptions = {}
-) {
+export function resultSuccess<T = Recordable>(data: T, { msg = '操作成功' }: ResultOptions = {}) {
   return {
     code: 200,
     data,
     msg,
-    type: 'success'
-  }
+    type: 'success',
+  };
 }
 
 export function resultError<T = null>(
@@ -30,8 +27,8 @@ export function resultError<T = null>(
     code,
     data,
     msg,
-    type: 'error'
-  }
+    type: 'error',
+  };
 }
 
 export function resultPageSuccess<T = any>(
@@ -40,27 +37,23 @@ export function resultPageSuccess<T = any>(
   list: T[],
   { msg = '操作成功' }: ResultOptions = {}
 ) {
-  const pageData = pagination(page, pageSize, list)
+  const pageData = pagination(page, pageSize, list);
   return {
     ...resultSuccess({
       records: pageData,
       total: list.length,
       size: pageSize,
       current: page,
-      pages: Math.ceil(list.length / pageSize)
+      pages: Math.ceil(list.length / pageSize),
     }),
-    msg
-  }
+    msg,
+  };
 }
 
-export function pagination<T = any>(
-  pageNo: number,
-  pageSize: number,
-  array: T[]
-): T[] {
-  const offset = (pageNo - 1) * Number(pageSize)
-  const size = Number(pageSize)
+export function pagination<T = any>(pageNo: number, pageSize: number, array: T[]): T[] {
+  const offset = (pageNo - 1) * Number(pageSize);
+  const size = Number(pageSize);
   return offset + size >= array.length
     ? array.slice(offset, array.length)
-    : array.slice(offset, offset + size)
+    : array.slice(offset, offset + size);
 }

@@ -8,19 +8,23 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import request from '@/utils/request'
+import { ref } from 'vue';
+import request from '@/utils/request';
 
-const mockMode = import.meta.env.VITE_ENABLE_MOCK || 'off'
-const result = ref('')
+const mockMode = import.meta.env.VITE_ENABLE_MOCK || 'off';
+const result = ref('');
 
 async function testMock() {
-  const data = await request({ url: '/test/mock', method: 'get' })
-  result.value = JSON.stringify(data, null, 2)
+  const data = await request({ url: '/test/mock', method: 'get' });
+  result.value = JSON.stringify(data, null, 2);
 }
 
 async function testReal() {
-  const data = await request({ url: '/system/user/list', method: 'get', params: { pageNum: 1, pageSize: 5 } })
-  result.value = JSON.stringify(data, null, 2)
+  const data = await request({
+    url: '/system/user/list',
+    method: 'get',
+    params: { pageNum: 1, pageSize: 5 },
+  });
+  result.value = JSON.stringify(data, null, 2);
 }
 </script>

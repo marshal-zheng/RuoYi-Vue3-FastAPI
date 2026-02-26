@@ -115,13 +115,9 @@ watch(
 
 const hasIssues = computed(() => props.issues.length > 0);
 
-const errorCount = computed(
-  () => props.issues.filter((i) => i.level === 'error').length
-);
+const errorCount = computed(() => props.issues.filter((i) => i.level === 'error').length);
 
-const warningCount = computed(
-  () => props.issues.filter((i) => i.level === 'warning').length
-);
+const warningCount = computed(() => props.issues.filter((i) => i.level === 'warning').length);
 
 const sortedIssues = computed(() => {
   const levelPriority: Record<ValidationLevel, number> = {
@@ -207,9 +203,15 @@ const contentStyle = computed(() => ({
   .header-icon {
     font-size: 16px;
 
-    &.icon-error { color: var(--el-color-danger); }
-    &.icon-warning { color: var(--el-color-warning); }
-    &.icon-success { color: var(--el-color-success); }
+    &.icon-error {
+      color: var(--el-color-danger);
+    }
+    &.icon-warning {
+      color: var(--el-color-warning);
+    }
+    &.icon-success {
+      color: var(--el-color-success);
+    }
   }
 
   .header-badge {
@@ -235,17 +237,25 @@ const contentStyle = computed(() => ({
   cursor: pointer;
   transition: background 0.2s;
 
-  &:last-child { border-bottom: none; }
-  &:hover { background: var(--el-fill-color-light); }
+  &:last-child {
+    border-bottom: none;
+  }
+  &:hover {
+    background: var(--el-fill-color-light);
+  }
 
   &.issue-error {
     background: rgba(245, 108, 108, 0.05);
-    &:hover { background: rgba(245, 108, 108, 0.1); }
+    &:hover {
+      background: rgba(245, 108, 108, 0.1);
+    }
   }
 
   &.issue-warning {
     background: rgba(230, 162, 60, 0.05);
-    &:hover { background: rgba(230, 162, 60, 0.1); }
+    &:hover {
+      background: rgba(230, 162, 60, 0.1);
+    }
   }
 }
 
@@ -255,9 +265,15 @@ const contentStyle = computed(() => ({
   margin-right: 10px;
   margin-top: 2px;
 
-  &.icon-error { color: var(--el-color-danger); }
-  &.icon-warning { color: var(--el-color-warning); }
-  &.icon-info { color: var(--el-color-info); }
+  &.icon-error {
+    color: var(--el-color-danger);
+  }
+  &.icon-warning {
+    color: var(--el-color-warning);
+  }
+  &.icon-info {
+    color: var(--el-color-info);
+  }
 }
 
 .issue-body {
@@ -298,6 +314,8 @@ const contentStyle = computed(() => ({
   color: var(--el-color-success);
   font-size: 14px;
 
-  .success-icon { font-size: 20px; }
+  .success-icon {
+    font-size: 20px;
+  }
 }
 </style>

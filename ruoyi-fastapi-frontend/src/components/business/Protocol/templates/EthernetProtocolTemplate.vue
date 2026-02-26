@@ -19,12 +19,7 @@
             @click="runValidation"
           >
             校验诊断
-            <el-badge
-              v-if="errorCount > 0"
-              :value="errorCount"
-              type="danger"
-              class="ml-1"
-            />
+            <el-badge v-if="errorCount > 0" :value="errorCount" type="danger" class="ml-1" />
           </zx-button>
         </div>
       </slot>
@@ -65,14 +60,7 @@
       :hooks="schemaTableHooks"
     >
       <template #actions="{ row }">
-        <zx-button
-          v-if="row"
-          link
-          type="danger"
-          icon="Delete"
-          size="small"
-          @click="removeRow(row)"
-        >
+        <zx-button v-if="row" link type="danger" icon="Delete" size="small" @click="removeRow(row)">
           删除
         </zx-button>
       </template>
@@ -193,7 +181,10 @@ const calculateFrameLength = (fields: any[]): number => {
 // 解析速率为 bps
 const parseDataRate = (rate: string): number => {
   if (!rate) return 0;
-  const match = rate.replace(/\s/g, '').toLowerCase().match(/^(\d+(?:\.\d+)?)(g|m|k)?bps$/i);
+  const match = rate
+    .replace(/\s/g, '')
+    .toLowerCase()
+    .match(/^(\d+(?:\.\d+)?)(g|m|k)?bps$/i);
   if (!match) return 0;
   const value = parseFloat(match[1]);
   const unit = (match[2] || '').toLowerCase();
@@ -218,9 +209,7 @@ const {
 } = useVxeTableValidation({
   // 字段校验规则 - 类似 Element Plus 的配置方式
   rules: {
-    fieldName: [
-      required('信息名称不能为空'),
-    ],
+    fieldName: [required('信息名称不能为空')],
     byteCount: [
       // 条件校验：只在没有数据类型时要求手动填写
       {
@@ -239,12 +228,8 @@ const {
         message: '字节数不能超过 65535',
       },
     ],
-    scale: [
-      scaleValidator('比例尺不能为0'),
-    ],
-    remark: [
-      warning(lengthRange(0, 500, '备注建议不超过500字')),
-    ],
+    scale: [scaleValidator('比例尺不能为0')],
+    remark: [warning(lengthRange(0, 500, '备注建议不超过500字'))],
   },
   // 字段显示名称映射
   fieldLabels: {
@@ -584,7 +569,7 @@ function configEditRender(field: 'value1' | 'value2') {
       input: (cellParams: any, value: any) => handleUpdate(cellParams, value),
     },
   };
-};
+}
 
 const configTableEditConfig = {
   trigger: 'click',
@@ -789,11 +774,11 @@ defineExpose({
   runValidation,
   validationIssues,
   // 供父组件阻断保存使用
-  validateBeforeSave,  // 推荐：返回 boolean
-  validate,            // 返回完整结果
-  validateOrThrow,     // 失败时抛出错误
-  isValid,             // 简化版
-  hasErrors,           // 是否有错误
+  validateBeforeSave, // 推荐：返回 boolean
+  validate, // 返回完整结果
+  validateOrThrow, // 失败时抛出错误
+  isValid, // 简化版
+  hasErrors, // 是否有错误
 });
 </script>
 

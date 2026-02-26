@@ -1,77 +1,77 @@
 /**
  * 仿真数据管理 Composable
- * 
+ *
  * 管理仿真过程中的带宽、报文、告警数据
  */
-import { ref, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue'
-import { useSimulationWebSocket } from './useSimulationWebSocket'
+import { ref, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue';
+import { useSimulationWebSocket } from './useSimulationWebSocket';
 
 interface Message {
-  timestamp: number
-  sendTimestamp?: number
-  receiveTimestamp?: number
-  payloadHex?: string
-  fieldValues?: Record<string, any>
-  senderNodeId?: string
-  receiverNodeId?: string
-  senderNodeName?: string
-  receiverNodeName?: string
-  protocolType?: string
-  senderPortId?: string
-  receiverPortId?: string
-  fillStrategy?: string
-  sizeBytes?: number
-  isError?: boolean
+  timestamp: number;
+  sendTimestamp?: number;
+  receiveTimestamp?: number;
+  payloadHex?: string;
+  fieldValues?: Record<string, any>;
+  senderNodeId?: string;
+  receiverNodeId?: string;
+  senderNodeName?: string;
+  receiverNodeName?: string;
+  protocolType?: string;
+  senderPortId?: string;
+  receiverPortId?: string;
+  fillStrategy?: string;
+  sizeBytes?: number;
+  isError?: boolean;
 }
 
 interface MessageFilter {
-  protocolType?: string
-  senderNodeId?: string
-  receiverNodeId?: string
-  keyword?: string
-  startTime?: number
-  endTime?: number
-  errorOnly?: boolean
-  conditions?: FilterCondition[]
-  conditionLogic?: 'and' | 'or'
+  protocolType?: string;
+  senderNodeId?: string;
+  receiverNodeId?: string;
+  keyword?: string;
+  startTime?: number;
+  endTime?: number;
+  errorOnly?: boolean;
+  conditions?: FilterCondition[];
+  conditionLogic?: 'and' | 'or';
 }
 
 interface FilterCondition {
-  type?: string
-  operator?: string
-  value?: string
-  key?: string
-  field?: string
-  min?: number
-  max?: number
+  type?: string;
+  operator?: string;
+  value?: string;
+  key?: string;
+  field?: string;
+  min?: number;
+  max?: number;
 }
 
 interface BandwidthData {
-  timestamp: number
-  protocolType?: string
-  nodeId?: string
-  portId?: string
+  timestamp: number;
+  protocolType?: string;
+  nodeId?: string;
+  portId?: string;
 }
 
 interface AlarmData {
-  alarmId: string
-  level?: string
-  type?: string
-  timestamp: number
+  alarmId: string;
+  level?: string;
+  type?: string;
+  timestamp: number;
 }
 
 interface AlarmFilter {
-  level?: string
-  type?: string
+  level?: string;
+  type?: string;
 }
 
 interface FaultEventData {
-  [key: string]: any
+  [key: string]: any;
 }
 
 interface IncrementalData<T> {
-  newData: T[]
-  newIndex: number
+  newData: T[];
+  newIndex: number;
 }
 
 /**
@@ -81,96 +81,101 @@ const DATA_LIMITS = {
   // 为避免前端内存爆炸，保留一个滑动窗口；总数显示继续累加
   MAX_MESSAGES: 50000,
   MAX_BANDWIDTH_POINTS: 600, // 最大带宽数据点（10分钟，每秒1个）
-  MAX_ALARMS: 1000,         // 最大告警数量
-}
+  MAX_ALARMS: 1000, // 最大告警数量
+};
 
 /**
  * 计算报文时延（毫秒）
  */
 function getLatencyMs(message: Message): number | null {
-  const send = message?.sendTimestamp ?? message?.timestamp
-  const recv = message?.receiveTimestamp
-  if (!send || !recv) return null
-  return Math.max(0, (recv - send) * 1000)
+  const send = message?.sendTimestamp ?? message?.timestamp;
+  const recv = message?.receiveTimestamp;
+  if (!send || !recv) return null;
+  return Math.max(0, (recv - send) * 1000);
 }
 
 /**
  * 单条条件匹配
  */
 function matchesCondition(message: Message, condition: FilterCondition): boolean | null {
-  if (!condition) return null
-  const type = condition.type || 'payload'
-  const operator = (condition.operator || 'includes').toLowerCase()
+  if (!condition) return null;
+  const type = condition.type || 'payload';
+  const operator = (condition.operator || 'includes').toLowerCase();
 
   if (type === 'payload') {
-    const payload = String(message?.payloadHex || '').toLowerCase()
-    const value = String(condition.value || '').toLowerCase()
-    if (!value) return null
-    if (operator === 'startswith') return payload.startsWith(value)
-    if (operator === 'equals') return payload === value
-    return payload.includes(value)
+    const payload = String(message?.payloadHex || '').toLowerCase();
+    const value = String(condition.value || '').toLowerCase();
+    if (!value) return null;
+    if (operator === 'startswith') return payload.startsWith(value);
+    if (operator === 'equals') return payload === value;
+    return payload.includes(value);
   }
 
   if (type === 'field') {
-    const fieldValues = message?.fieldValues || {}
-    const keyFilter = String(condition.key || '').toLowerCase()
-    const valueFilter = String(condition.value || '').toLowerCase()
-    if (!keyFilter && !valueFilter) return null
+    const fieldValues = message?.fieldValues || {};
+    const keyFilter = String(condition.key || '').toLowerCase();
+    const valueFilter = String(condition.value || '').toLowerCase();
+    if (!keyFilter && !valueFilter) return null;
     return Object.entries(fieldValues).some(([k, v]) => {
-      const kText = String(k || '').toLowerCase()
-      const vText = String(v ?? '').toLowerCase()
-      if (keyFilter && !kText.includes(keyFilter)) return false
-      if (valueFilter) return vText.includes(valueFilter) || (!keyFilter && kText.includes(valueFilter))
-      return true
-    })
+      const kText = String(k || '').toLowerCase();
+      const vText = String(v ?? '').toLowerCase();
+      if (keyFilter && !kText.includes(keyFilter)) return false;
+      if (valueFilter)
+        return vText.includes(valueFilter) || (!keyFilter && kText.includes(valueFilter));
+      return true;
+    });
   }
 
   if (type === 'node') {
-    const field = condition.field || 'senderNodeId'
-    const target = String((message as any)?.[field] || '').toLowerCase()
-    const value = String(condition.value || '').toLowerCase()
-    if (!value) return null
-    return target.includes(value)
+    const field = condition.field || 'senderNodeId';
+    const target = String((message as any)?.[field] || '').toLowerCase();
+    const value = String(condition.value || '').toLowerCase();
+    if (!value) return null;
+    return target.includes(value);
   }
 
   if (type === 'protocol') {
-    const protocol = String(message?.protocolType || '').toLowerCase()
-    const value = String(condition.value || '').toLowerCase()
-    if (!value) return null
-    if (operator === 'equals') return protocol === value
-    return protocol.includes(value)
+    const protocol = String(message?.protocolType || '').toLowerCase();
+    const value = String(condition.value || '').toLowerCase();
+    if (!value) return null;
+    if (operator === 'equals') return protocol === value;
+    return protocol.includes(value);
   }
 
   if (type === 'size') {
-    const size = Number(message?.sizeBytes || 0)
-    const min = condition.min !== undefined && condition.min !== null ? Number(condition.min) : null
-    const max = condition.max !== undefined && condition.max !== null ? Number(condition.max) : null
-    if (min === null && max === null) return null
-    if (Number.isFinite(min) && size < min!) return false
-    if (Number.isFinite(max) && size > max!) return false
-    return true
+    const size = Number(message?.sizeBytes || 0);
+    const min =
+      condition.min !== undefined && condition.min !== null ? Number(condition.min) : null;
+    const max =
+      condition.max !== undefined && condition.max !== null ? Number(condition.max) : null;
+    if (min === null && max === null) return null;
+    if (Number.isFinite(min) && size < min!) return false;
+    if (Number.isFinite(max) && size > max!) return false;
+    return true;
   }
 
   if (type === 'latency') {
-    const latency = getLatencyMs(message)
-    if (latency === null) return false
-    const min = condition.min !== undefined && condition.min !== null ? Number(condition.min) : null
-    const max = condition.max !== undefined && condition.max !== null ? Number(condition.max) : null
-    if (min === null && max === null) return null
-    if (Number.isFinite(min) && latency < min!) return false
-    if (Number.isFinite(max) && latency > max!) return false
-    return true
+    const latency = getLatencyMs(message);
+    if (latency === null) return false;
+    const min =
+      condition.min !== undefined && condition.min !== null ? Number(condition.min) : null;
+    const max =
+      condition.max !== undefined && condition.max !== null ? Number(condition.max) : null;
+    if (min === null && max === null) return null;
+    if (Number.isFinite(min) && latency < min!) return false;
+    if (Number.isFinite(max) && latency > max!) return false;
+    return true;
   }
 
-  return null
+  return null;
 }
 
 /**
  * 多条件匹配（支持 AND / OR）
  */
 function matchesConditions(message: Message, filter: MessageFilter): boolean {
-  const conditions = Array.isArray(filter?.conditions) ? filter.conditions : []
-  if (!conditions.length) return true
+  const conditions = Array.isArray(filter?.conditions) ? filter.conditions : [];
+  if (!conditions.length) return true;
 
   const normalized = conditions
     .map((c) => ({
@@ -179,20 +184,20 @@ function matchesConditions(message: Message, filter: MessageFilter): boolean {
     }))
     .filter((c) => {
       if (c.type === 'size' || c.type === 'latency') {
-        return c.min !== undefined || c.max !== undefined
+        return c.min !== undefined || c.max !== undefined;
       }
-      return Boolean(String(c.value || c.key || '').trim())
-    })
+      return Boolean(String(c.value || c.key || '').trim());
+    });
 
-  if (!normalized.length) return true
+  if (!normalized.length) return true;
 
-  const logic = (filter?.conditionLogic || 'and').toLowerCase() === 'or' ? 'or' : 'and'
+  const logic = (filter?.conditionLogic || 'and').toLowerCase() === 'or' ? 'or' : 'and';
   const results = normalized
     .map((cond) => matchesCondition(message, cond))
-    .filter((res) => res !== null)
+    .filter((res) => res !== null);
 
-  if (!results.length) return true
-  return logic === 'or' ? results.some(Boolean) : results.every(Boolean)
+  if (!results.length) return true;
+  return logic === 'or' ? results.some(Boolean) : results.every(Boolean);
 }
 
 /**
@@ -203,32 +208,32 @@ function matchesConditions(message: Message, filter: MessageFilter): boolean {
  */
 export function filterMessages(messages: Message[], filter: MessageFilter): Message[] {
   if (!messages || !Array.isArray(messages)) {
-    return []
+    return [];
   }
 
   if (!filter || Object.keys(filter).length === 0) {
-    return messages
+    return messages;
   }
 
-  return messages.filter(msg => {
+  return messages.filter((msg) => {
     // 协议类型过滤
     if (filter.protocolType && msg.protocolType !== filter.protocolType) {
-      return false
+      return false;
     }
 
     // 源节点过滤
     if (filter.senderNodeId && msg.senderNodeId !== filter.senderNodeId) {
-      return false
+      return false;
     }
 
     // 目标节点过滤
     if (filter.receiverNodeId && msg.receiverNodeId !== filter.receiverNodeId) {
-      return false
+      return false;
     }
 
     // 关键字过滤（搜索报文内容）
     if (filter.keyword) {
-      const keyword = filter.keyword.toLowerCase()
+      const keyword = filter.keyword.toLowerCase();
       const searchFields = [
         msg.senderNodeName,
         msg.receiverNodeName,
@@ -238,33 +243,35 @@ export function filterMessages(messages: Message[], filter: MessageFilter): Mess
         msg.receiverPortId,
         msg.fillStrategy,
         ...(msg.fieldValues ? Object.values(msg.fieldValues) : []),
-      ].filter(Boolean).map(s => String(s).toLowerCase())
+      ]
+        .filter(Boolean)
+        .map((s) => String(s).toLowerCase());
 
-      if (!searchFields.some(field => field.includes(keyword))) {
-        return false
+      if (!searchFields.some((field) => field.includes(keyword))) {
+        return false;
       }
     }
 
     // 时间范围过滤
     if (filter.startTime && msg.timestamp < filter.startTime) {
-      return false
+      return false;
     }
     if (filter.endTime && msg.timestamp > filter.endTime) {
-      return false
+      return false;
     }
 
     // 错误报文过滤
     if (filter.errorOnly && !msg.isError) {
-      return false
+      return false;
     }
 
     // 多条件过滤
     if (!matchesConditions(msg, filter)) {
-      return false
+      return false;
     }
 
-    return true
-  })
+    return true;
+  });
 }
 
 /**
@@ -274,7 +281,7 @@ export function filterMessages(messages: Message[], filter: MessageFilter): Mess
  * @returns {boolean} 是否匹配
  */
 export function matchesFilter(message: Message, filter: MessageFilter): boolean {
-  return filterMessages([message], filter).length > 0
+  return filterMessages([message], filter).length > 0;
 }
 
 /**
@@ -285,10 +292,15 @@ export function matchesFilter(message: Message, filter: MessageFilter): boolean 
  */
 export function cleanupOldData<T>(data: T[], maxLength: number): T[] {
   // maxLength 无效或无限时不做截断
-  if (!Array.isArray(data) || !Number.isFinite(maxLength) || maxLength <= 0 || data.length <= maxLength) {
-    return data
+  if (
+    !Array.isArray(data) ||
+    !Number.isFinite(maxLength) ||
+    maxLength <= 0 ||
+    data.length <= maxLength
+  ) {
+    return data;
   }
-  return data.slice(-maxLength)
+  return data.slice(-maxLength);
 }
 
 /**
@@ -299,14 +311,14 @@ export function cleanupOldData<T>(data: T[], maxLength: number): T[] {
  */
 export function extractIncrementalData<T>(data: T[], lastIndex: number): IncrementalData<T> {
   if (!Array.isArray(data)) {
-    return { newData: [], newIndex: 0 }
+    return { newData: [], newIndex: 0 };
   }
 
-  const newData = data.slice(lastIndex)
+  const newData = data.slice(lastIndex);
   return {
     newData,
     newIndex: data.length,
-  }
+  };
 }
 
 /**
@@ -316,217 +328,223 @@ export function extractIncrementalData<T>(data: T[], lastIndex: number): Increme
  */
 export function useSimulationData(sessionId: Ref<string | null>) {
   // 原始数据
-  const bandwidthData: Ref<BandwidthData[]> = ref([])
-  const messageData: Ref<Message[]> = ref([])
-  const alarmData: Ref<AlarmData[]> = ref([])
-  const faultEventData: Ref<FaultEventData[]> = ref([])
+  const bandwidthData: Ref<BandwidthData[]> = ref([]);
+  const messageData: Ref<Message[]> = ref([]);
+  const alarmData: Ref<AlarmData[]> = ref([]);
+  const faultEventData: Ref<FaultEventData[]> = ref([]);
 
   // 过滤条件
-  const messageFilter: Ref<MessageFilter> = ref({})
-  const alarmFilter: Ref<AlarmFilter> = ref({})
+  const messageFilter: Ref<MessageFilter> = ref({});
+  const alarmFilter: Ref<AlarmFilter> = ref({});
 
   // 增量数据追踪
-  const lastMessageIndex: Ref<number> = ref(0)
-  const lastBandwidthIndex: Ref<number> = ref(0)
-  const lastAlarmIndex: Ref<number> = ref(0)
-  const lastFaultEventIndex: Ref<number> = ref(0)
+  const lastMessageIndex: Ref<number> = ref(0);
+  const lastBandwidthIndex: Ref<number> = ref(0);
+  const lastAlarmIndex: Ref<number> = ref(0);
+  const lastFaultEventIndex: Ref<number> = ref(0);
 
   // WebSocket 连接
-  const wsManager = useSimulationWebSocket()
+  const wsManager = useSimulationWebSocket();
 
   // 计算属性：过滤后的报文
   const filteredMessages: ComputedRef<Message[]> = computed(() => {
-    return filterMessages(messageData.value, messageFilter.value)
-  })
+    return filterMessages(messageData.value, messageFilter.value);
+  });
 
   // 计算属性：过滤后的告警
   const filteredAlarms: ComputedRef<AlarmData[]> = computed(() => {
     if (!alarmFilter.value || Object.keys(alarmFilter.value).length === 0) {
-      return alarmData.value
+      return alarmData.value;
     }
 
-    return alarmData.value.filter(alarm => {
+    return alarmData.value.filter((alarm) => {
       if (alarmFilter.value.level && alarm.level !== alarmFilter.value.level) {
-        return false
+        return false;
       }
       if (alarmFilter.value.type && alarm.type !== alarmFilter.value.type) {
-        return false
+        return false;
       }
-      return true
-    })
-  })
+      return true;
+    });
+  });
 
   // 计算属性：按协议类型分组的带宽数据
   const bandwidthByProtocol: ComputedRef<Record<string, BandwidthData[]>> = computed(() => {
-    const grouped: Record<string, BandwidthData[]> = {}
-    bandwidthData.value.forEach(item => {
-      const protocol = item.protocolType || 'unknown'
+    const grouped: Record<string, BandwidthData[]> = {};
+    bandwidthData.value.forEach((item) => {
+      const protocol = item.protocolType || 'unknown';
       if (!grouped[protocol]) {
-        grouped[protocol] = []
+        grouped[protocol] = [];
       }
-      grouped[protocol].push(item)
-    })
-    return grouped
-  })
+      grouped[protocol].push(item);
+    });
+    return grouped;
+  });
 
   // 计算属性：最新的带宽数据（每个端口）
   const latestBandwidth: ComputedRef<BandwidthData[]> = computed(() => {
-    const latest: Record<string, BandwidthData> = {}
-    bandwidthData.value.forEach(item => {
-      const key = `${item.nodeId}:${item.portId}`
+    const latest: Record<string, BandwidthData> = {};
+    bandwidthData.value.forEach((item) => {
+      const key = `${item.nodeId}:${item.portId}`;
       if (!latest[key] || item.timestamp > latest[key].timestamp) {
-        latest[key] = item
+        latest[key] = item;
       }
-    })
-    return Object.values(latest)
-  })
+    });
+    return Object.values(latest);
+  });
 
   /**
    * 更新带宽数据
    */
   function updateBandwidthData(newData: BandwidthData[]) {
-    if (!newData || !Array.isArray(newData)) return
+    if (!newData || !Array.isArray(newData)) return;
 
     bandwidthData.value = cleanupOldData(
       [...bandwidthData.value, ...newData],
       DATA_LIMITS.MAX_BANDWIDTH_POINTS
-    )
+    );
   }
 
   /**
    * 更新报文数据
    */
   function updateMessageData(newData: Message[]) {
-    if (!newData || !Array.isArray(newData)) return
+    if (!newData || !Array.isArray(newData)) return;
 
     messageData.value = cleanupOldData(
       [...messageData.value, ...newData],
       DATA_LIMITS.MAX_MESSAGES
-    )
+    );
   }
 
   /**
    * 更新告警数据
    */
   function updateAlarmData(newData: AlarmData[]) {
-    if (!newData || !Array.isArray(newData)) return
+    if (!newData || !Array.isArray(newData)) return;
 
-    alarmData.value = cleanupOldData(
-      [...alarmData.value, ...newData],
-      DATA_LIMITS.MAX_ALARMS
-    )
+    alarmData.value = cleanupOldData([...alarmData.value, ...newData], DATA_LIMITS.MAX_ALARMS);
   }
 
   /**
    * 设置报文过滤条件
    */
   function setMessageFilter(filter: MessageFilter) {
-    messageFilter.value = filter || {}
+    messageFilter.value = filter || {};
     // 过滤条件变化后清空累计数量，等待新数据重新累计
-    messageData.value = []
-    lastMessageIndex.value = 0
-    wsManager.messagesData.value = []
+    messageData.value = [];
+    lastMessageIndex.value = 0;
+    wsManager.messagesData.value = [];
   }
 
   /**
    * 设置告警过滤条件
    */
   function setAlarmFilter(filter: AlarmFilter) {
-    alarmFilter.value = filter || {}
+    alarmFilter.value = filter || {};
   }
 
   /**
    * 清空所有数据
    */
   function clearData() {
-    bandwidthData.value = []
-    messageData.value = []
-    alarmData.value = []
-    faultEventData.value = []
-    lastMessageIndex.value = 0
-    lastBandwidthIndex.value = 0
-    lastAlarmIndex.value = 0
-    lastFaultEventIndex.value = 0
+    bandwidthData.value = [];
+    messageData.value = [];
+    alarmData.value = [];
+    faultEventData.value = [];
+    lastMessageIndex.value = 0;
+    lastBandwidthIndex.value = 0;
+    lastAlarmIndex.value = 0;
+    lastFaultEventIndex.value = 0;
   }
 
   /**
    * 获取增量报文数据
    */
   function getNewMessages(): Message[] {
-    const result = extractIncrementalData(messageData.value, lastMessageIndex.value)
-    lastMessageIndex.value = result.newIndex
-    return result.newData
+    const result = extractIncrementalData(messageData.value, lastMessageIndex.value);
+    lastMessageIndex.value = result.newIndex;
+    return result.newData;
   }
 
   /**
    * 获取增量带宽数据
    */
   function getNewBandwidth(): BandwidthData[] {
-    const result = extractIncrementalData(bandwidthData.value, lastBandwidthIndex.value)
-    lastBandwidthIndex.value = result.newIndex
-    return result.newData
+    const result = extractIncrementalData(bandwidthData.value, lastBandwidthIndex.value);
+    lastBandwidthIndex.value = result.newIndex;
+    return result.newData;
   }
 
   /**
    * 获取增量告警数据
    */
   function getNewAlarms(): AlarmData[] {
-    const result = extractIncrementalData(alarmData.value, lastAlarmIndex.value)
-    lastAlarmIndex.value = result.newIndex
-    return result.newData
+    const result = extractIncrementalData(alarmData.value, lastAlarmIndex.value);
+    lastAlarmIndex.value = result.newIndex;
+    return result.newData;
   }
 
   /**
    * 获取增量故障事件
    */
   function getNewFaultEvents(): FaultEventData[] {
-    const result = extractIncrementalData(faultEventData.value, lastFaultEventIndex.value)
-    lastFaultEventIndex.value = result.newIndex
-    return result.newData
+    const result = extractIncrementalData(faultEventData.value, lastFaultEventIndex.value);
+    lastFaultEventIndex.value = result.newIndex;
+    return result.newData;
   }
 
   // 监听 WebSocket 数据
-  watch(() => wsManager.messagesData.value, (newData) => {
-    if (newData && newData.length > 0) {
-      updateMessageData(newData)
+  watch(
+    () => wsManager.messagesData.value,
+    (newData) => {
+      if (newData && newData.length > 0) {
+        updateMessageData(newData);
+      }
     }
-  })
+  );
 
-  watch(() => wsManager.bandwidthData.value, (newData) => {
-    if (newData && newData.length > 0) {
-      updateBandwidthData(newData)
+  watch(
+    () => wsManager.bandwidthData.value,
+    (newData) => {
+      if (newData && newData.length > 0) {
+        updateBandwidthData(newData);
+      }
     }
-  })
+  );
 
-  watch(() => wsManager.alarmsData.value, (newData) => {
-    if (newData && newData.length > 0) {
-      updateAlarmData(newData)
+  watch(
+    () => wsManager.alarmsData.value,
+    (newData) => {
+      if (newData && newData.length > 0) {
+        updateAlarmData(newData);
+      }
     }
-  })
+  );
 
-  watch(() => wsManager.faultEventsData.value, (newData) => {
-    if (newData && newData.length > 0) {
-      faultEventData.value = cleanupOldData(
-        [...faultEventData.value, ...newData],
-        200
-      )
+  watch(
+    () => wsManager.faultEventsData.value,
+    (newData) => {
+      if (newData && newData.length > 0) {
+        faultEventData.value = cleanupOldData([...faultEventData.value, ...newData], 200);
+      }
     }
-  })
+  );
 
   // 监听会话ID变化，连接/断开 WebSocket
   watch(sessionId, (newSessionId, oldSessionId) => {
     if (oldSessionId) {
-      wsManager.disconnect()
+      wsManager.disconnect();
     }
     if (newSessionId) {
-      wsManager.connect(newSessionId)
+      wsManager.connect(newSessionId);
     }
-  })
+  });
 
   // 清理
   onUnmounted(() => {
-    wsManager.disconnect()
-  })
+    wsManager.disconnect();
+  });
 
   return {
     // 数据
@@ -555,8 +573,7 @@ export function useSimulationData(sessionId: Ref<string | null>) {
     getNewBandwidth,
     getNewAlarms,
     getNewFaultEvents,
-
-  }
+  };
 }
 
-export default useSimulationData
+export default useSimulationData;

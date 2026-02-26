@@ -5,7 +5,7 @@
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['device:list:add']"
-              >新增</ZxButton
+              >新加</ZxButton
             >
             <ZxUpload
               ref="uploadRef"
@@ -198,12 +198,9 @@ function handleBatchExport() {
     return;
   }
   exporting.value = true;
-  download(
-    '/device/export/batch',
-    { deviceIds: ids.value },
-    `device_export_${Date.now()}.zip`,
-    { headers: { 'Content-Type': 'application/json' } }
-  ).finally(() => {
+  download('/device/export/batch', { deviceIds: ids.value }, `device_export_${Date.now()}.zip`, {
+    headers: { 'Content-Type': 'application/json' },
+  }).finally(() => {
     exporting.value = false;
   });
 }
@@ -233,7 +230,7 @@ async function doImportFiles(fileList) {
 
   try {
     // http 客户端已解包 payload.data，res 直接是导入结果
-    const res = await importDeviceBatch(formData) || {};
+    const res = (await importDeviceBatch(formData)) || {};
     const success = res.successCount || 0;
     const failed = res.failedCount || 0;
     if (failed === 0) {

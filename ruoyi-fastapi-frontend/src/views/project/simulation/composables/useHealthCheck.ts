@@ -13,33 +13,33 @@
 /**
  * 检查结果状态
  */
-export type CheckStatus = 'success' | 'warning' | 'error'
+export type CheckStatus = 'success' | 'warning' | 'error';
 
 /**
  * 检查项结果
  */
 export interface CheckItem {
-  id: string
-  category: string
-  name: string
-  status: CheckStatus
-  message: string
-  suggestion?: string
-  details?: Record<string, any>
+  id: string;
+  category: string;
+  name: string;
+  status: CheckStatus;
+  message: string;
+  suggestion?: string;
+  details?: Record<string, any>;
 }
 
 /**
  * 健康检查报告
  */
 export interface HealthReport {
-  healthy: boolean
-  canSimulate: boolean
-  totalChecks: number
-  passedChecks: number
-  warningChecks: number
-  errorChecks: number
-  items: CheckItem[]
-  timestamp: string
+  healthy: boolean;
+  canSimulate: boolean;
+  totalChecks: number;
+  passedChecks: number;
+  warningChecks: number;
+  errorChecks: number;
+  items: CheckItem[];
+  timestamp: string;
 }
 
 // 协议类型必需参数配置
@@ -83,7 +83,10 @@ export function useHealthCheck() {
    * @param {Function} isSimulationToken - 判断是否为仿真令牌的函数
    * @returns {HealthReport} 健康检查报告
    */
-  function runHealthCheck(graph: any, isSimulationToken: (node: any) => boolean = () => false): HealthReport {
+  function runHealthCheck(
+    graph: any,
+    isSimulationToken: (node: any) => boolean = () => false
+  ): HealthReport {
     const items: CheckItem[] = [];
     const timestamp = new Date().toISOString();
 
@@ -570,7 +573,11 @@ export function useHealthCheck() {
 
       // RS422/RS485: 检查数据位、停止位、校验方式一致性
       if (['RS422', 'RS485'].includes(sourceType)) {
-        if (sourceParams.dataBits && targetParams.dataBits && sourceParams.dataBits !== targetParams.dataBits) {
+        if (
+          sourceParams.dataBits &&
+          targetParams.dataBits &&
+          sourceParams.dataBits !== targetParams.dataBits
+        ) {
           parameterIssues.push({
             edgeId: edge.id,
             issue: 'databits-mismatch',
@@ -578,7 +585,11 @@ export function useHealthCheck() {
           });
         }
 
-        if (sourceParams.parity && targetParams.parity && sourceParams.parity !== targetParams.parity) {
+        if (
+          sourceParams.parity &&
+          targetParams.parity &&
+          sourceParams.parity !== targetParams.parity
+        ) {
           parameterIssues.push({
             edgeId: edge.id,
             issue: 'parity-mismatch',

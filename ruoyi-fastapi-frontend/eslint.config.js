@@ -5,6 +5,83 @@ import vue from 'eslint-plugin-vue';
 import vueParser from 'vue-eslint-parser';
 import prettier from 'eslint-plugin-prettier';
 import prettierConfig from 'eslint-config-prettier';
+import globals from 'globals';
+
+// Vue / vue-router / pinia 自动导入的全局变量（对应 unplugin-auto-import imports: ['vue','vue-router','pinia']）
+const autoImportGlobals = {
+  // Vue Composition API
+  ref: 'readonly',
+  reactive: 'readonly',
+  computed: 'readonly',
+  watch: 'readonly',
+  watchEffect: 'readonly',
+  watchPostEffect: 'readonly',
+  watchSyncEffect: 'readonly',
+  onMounted: 'readonly',
+  onUnmounted: 'readonly',
+  onBeforeMount: 'readonly',
+  onBeforeUnmount: 'readonly',
+  onUpdated: 'readonly',
+  onBeforeUpdate: 'readonly',
+  onActivated: 'readonly',
+  onDeactivated: 'readonly',
+  onErrorCaptured: 'readonly',
+  onRenderTracked: 'readonly',
+  onRenderTriggered: 'readonly',
+  onServerPrefetch: 'readonly',
+  nextTick: 'readonly',
+  provide: 'readonly',
+  inject: 'readonly',
+  toRef: 'readonly',
+  toRefs: 'readonly',
+  toValue: 'readonly',
+  unref: 'readonly',
+  isRef: 'readonly',
+  isProxy: 'readonly',
+  isReactive: 'readonly',
+  isReadonly: 'readonly',
+  readonly: 'readonly',
+  shallowRef: 'readonly',
+  shallowReactive: 'readonly',
+  shallowReadonly: 'readonly',
+  triggerRef: 'readonly',
+  customRef: 'readonly',
+  markRaw: 'readonly',
+  toRaw: 'readonly',
+  effectScope: 'readonly',
+  getCurrentScope: 'readonly',
+  onScopeDispose: 'readonly',
+  useAttrs: 'readonly',
+  useSlots: 'readonly',
+  useCssVars: 'readonly',
+  useTemplateRef: 'readonly',
+  // Vue defineXxx 宏（Vue SFC <script setup>）
+  defineProps: 'readonly',
+  defineEmits: 'readonly',
+  defineExpose: 'readonly',
+  defineOptions: 'readonly',
+  defineSlots: 'readonly',
+  defineModel: 'readonly',
+  withDefaults: 'readonly',
+  // vue-router
+  useRouter: 'readonly',
+  useRoute: 'readonly',
+  useLink: 'readonly',
+  onBeforeRouteLeave: 'readonly',
+  onBeforeRouteUpdate: 'readonly',
+  // pinia
+  defineStore: 'readonly',
+  storeToRefs: 'readonly',
+  acceptHMRUpdate: 'readonly',
+  getActivePinia: 'readonly',
+  setActivePinia: 'readonly',
+  createPinia: 'readonly',
+  mapActions: 'readonly',
+  mapGetters: 'readonly',
+  mapState: 'readonly',
+  mapStores: 'readonly',
+  mapWritableState: 'readonly',
+};
 
 export default [
   // 忽略的文件和目录
@@ -44,15 +121,9 @@ export default [
         sourceType: 'module'
       },
       globals: {
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        exports: 'readonly',
-        global: 'readonly'
+        ...globals.browser,
+        ...globals.node,
+        ...autoImportGlobals,
       }
     },
     plugins: {
@@ -62,14 +133,29 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...typescript.configs.recommended.rules,
-      
+
       // TypeScript 相关规则
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-inferrable-types': 'off',
       '@typescript-eslint/ban-ts-comment': 'warn',
-      
+      '@typescript-eslint/no-unused-expressions': 'warn',
+      '@typescript-eslint/no-this-alias': 'warn',
+
+      // TypeScript 已覆盖这些规则，禁用 ESLint 原版避免误报
+      'no-undef': 'off',
+      'no-redeclare': 'off',
+      'no-unused-expressions': 'off',
+      'no-prototype-builtins': 'off',
+      'no-useless-escape': 'warn',
+      'no-setter-return': 'warn',
+      'no-empty': 'warn',
+
+      // TypeScript recommended 中过于严格的规则降级
+      '@typescript-eslint/no-empty-object-type': 'warn',
+      '@typescript-eslint/no-unsafe-function-type': 'warn',
+
       // 通用规则
       'no-console': 'warn',
       'no-debugger': 'warn',
@@ -101,11 +187,9 @@ export default [
         extraFileExtensions: ['.vue']
       },
       globals: {
-        defineProps: 'readonly',
-        defineEmits: 'readonly',
-        defineExpose: 'readonly',
-        withDefaults: 'readonly',
-        console: 'readonly'
+        ...globals.browser,
+        ...globals.node,
+        ...autoImportGlobals,
       }
     },
     plugins: {
@@ -121,7 +205,20 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/require-v-for-key': 'error',
       'vue/no-use-v-if-with-v-for': 'error',
-      
+
+      // TypeScript 已覆盖，禁用 ESLint 原版避免误报
+      'no-undef': 'off',
+      'no-redeclare': 'off',
+      'no-unused-expressions': 'off',
+      'no-prototype-builtins': 'off',
+      'no-useless-escape': 'warn',
+      'no-setter-return': 'warn',
+      'no-empty': 'warn',
+
+      // TypeScript recommended 中过于严格的规则降级
+      '@typescript-eslint/no-empty-object-type': 'warn',
+      '@typescript-eslint/no-unsafe-function-type': 'warn',
+
       // TypeScript 相关规则
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'off',

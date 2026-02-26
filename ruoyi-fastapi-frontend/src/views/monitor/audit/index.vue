@@ -91,12 +91,32 @@
             sortable="custom"
             :sort-orders="['descending', 'ascending']"
           />
-          <el-table-column label="表名" align="center" prop="tableName" :show-overflow-tooltip="true" />
+          <el-table-column
+            label="表名"
+            align="center"
+            prop="tableName"
+            :show-overflow-tooltip="true"
+          />
           <el-table-column label="主键" align="center" prop="pk" :show-overflow-tooltip="true" />
-          <el-table-column label="操作人" align="center" prop="operatorName" :show-overflow-tooltip="true" />
-          <el-table-column label="操作IP" align="center" prop="operatorIp" :show-overflow-tooltip="true" />
+          <el-table-column
+            label="操作人"
+            align="center"
+            prop="operatorName"
+            :show-overflow-tooltip="true"
+          />
+          <el-table-column
+            label="操作IP"
+            align="center"
+            prop="operatorIp"
+            :show-overflow-tooltip="true"
+          />
           <el-table-column label="请求方法" align="center" prop="requestMethod" />
-          <el-table-column label="请求路径" align="center" prop="requestPath" :show-overflow-tooltip="true" />
+          <el-table-column
+            label="请求路径"
+            align="center"
+            prop="requestPath"
+            :show-overflow-tooltip="true"
+          />
           <el-table-column
             label="时间"
             align="center"

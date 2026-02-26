@@ -24,7 +24,11 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="手机号码" prop="phonenumber">
-            <el-input v-model="state.data.phonenumber" placeholder="请输入手机号码" maxlength="11" />
+            <el-input
+              v-model="state.data.phonenumber"
+              placeholder="请输入手机号码"
+              maxlength="11"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -77,7 +81,12 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="岗位">
-            <el-select v-model="state.data.postIds" multiple placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="state.data.postIds"
+              multiple
+              placeholder="请选择"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in postOptions"
                 :key="item.postId"
@@ -90,7 +99,12 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="角色">
-            <el-select v-model="state.data.roleIds" multiple placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="state.data.roleIds"
+              multiple
+              placeholder="请选择"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in roleOptions"
                 :key="item.roleId"
@@ -143,7 +157,7 @@ const formRules = computed(() => ({
     : [
         { required: true, message: '用户密码不能为空', trigger: 'blur' },
         { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' },
-        { pattern: /^[^<>"'|\\]+$/, message: "不能包含非法字符：< > \" ' \\ |", trigger: 'blur' },
+        { pattern: /^[^<>"'|\\]+$/, message: '不能包含非法字符：< > " \' \\ |', trigger: 'blur' },
       ],
   email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
   phonenumber: [

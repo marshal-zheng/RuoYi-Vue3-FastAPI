@@ -6,7 +6,7 @@ import { setupVXETable } from '@/plugins/vxe-table';
 
 // Iconify 图标库
 import '@iconify/iconify';
-import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';

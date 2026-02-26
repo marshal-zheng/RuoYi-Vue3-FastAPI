@@ -46,6 +46,7 @@ class EventSystemRuntime:
         max_batch_size: int = 100,
         max_retry_count: int = 6,
         backlog_alert_threshold: int = 500,
+        idle_max_interval_seconds: float = 30.0,
     ) -> None:
         self._container = container
         self.metrics = EventMetrics()
@@ -63,6 +64,7 @@ class EventSystemRuntime:
             max_batch_size=max_batch_size,
             max_retry_count=max_retry_count,
             backlog_alert_threshold=backlog_alert_threshold,
+            idle_max_interval_seconds=idle_max_interval_seconds,
         )
         self._register_builtin_handlers()
 

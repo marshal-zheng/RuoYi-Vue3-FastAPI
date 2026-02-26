@@ -20,7 +20,7 @@
         <div class="flex-1 p-6 lg:p-10 bg-gray-50 relative flex items-center">
           <div class="w-full max-w-md mx-auto">
             <div class="bg-white rounded-lg shadow p-8">
-              <Logo :collapse="false" variant="login" class="mb-6"/>
+              <Logo :collapse="false" variant="login" class="mb-6" />
               <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
                 <el-form-item prop="username">
                   <el-input
@@ -46,13 +46,17 @@
                     @keyup.enter="handleLogin"
                   >
                     <template #prefix>
-                      <ZxIcon icon="mdi:lock-outline" :size="20" class="el-input__icon input-icon" />
+                      <ZxIcon
+                        icon="mdi:lock-outline"
+                        :size="20"
+                        class="el-input__icon input-icon"
+                      />
                     </template>
                     <template #suffix>
-                      <ZxIcon 
-                        :icon="showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'" 
-                        :size="20" 
-                        class="el-input__icon input-icon cursor-pointer" 
+                      <ZxIcon
+                        :icon="showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'"
+                        :size="20"
+                        class="el-input__icon input-icon cursor-pointer"
                         @click="showPassword = !showPassword"
                       />
                     </template>
@@ -70,10 +74,14 @@
                       @keyup.enter="handleLogin"
                     >
                       <template #prefix>
-                        <ZxIcon icon="mdi:shield-check-outline" :size="20" class="el-input__icon input-icon" />
+                        <ZxIcon
+                          icon="mdi:shield-check-outline"
+                          :size="20"
+                          class="el-input__icon input-icon"
+                        />
                       </template>
                     </el-input>
-                    <div 
+                    <div
                       class="relative cursor-pointer w-[120px] h-[40px] flex items-center justify-center border border-gray-300 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-sm select-none overflow-hidden group active:scale-[0.98]"
                       @click="getCode"
                       title="点击刷新验证码"
@@ -84,9 +92,7 @@
                 </el-form-item>
 
                 <div class="flex justify-between items-center mb-4">
-                  <el-checkbox v-model="loginForm.rememberMe">
-                    记住密码
-                  </el-checkbox>
+                  <el-checkbox v-model="loginForm.rememberMe"> 记住密码 </el-checkbox>
                 </div>
 
                 <el-form-item>

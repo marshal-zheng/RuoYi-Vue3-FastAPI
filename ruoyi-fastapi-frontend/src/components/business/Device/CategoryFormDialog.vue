@@ -85,8 +85,7 @@ const openDialog = async (payload?: { id?: number }) => {
   if (payload?.id) {
     const detail = await getDeviceCategory(payload.id);
     open({
-      device_category_id:
-        detail?.deviceCategoryId || detail?.device_category_id || payload.id,
+      device_category_id: detail?.deviceCategoryId || detail?.device_category_id || payload.id,
       name: detail?.name || '',
       remark: detail?.remark || '',
     });

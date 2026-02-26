@@ -42,12 +42,9 @@
         <el-col :span="12">
           <el-form-item label="部门状态">
             <el-radio-group v-model="state.data.status">
-              <el-radio
-                v-for="dict in sys_normal_disable"
-                :key="dict.value"
-                :value="dict.value"
-                >{{ dict.label }}</el-radio
-              >
+              <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{
+                dict.label
+              }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -113,7 +110,7 @@ const { state, dialogProps, dialogEvents, open } = useDialog<DeptForm>({
       sys_normal_disable.value = dict.sys_normal_disable?.value || [];
       dictLoaded = true;
     }
-    
+
     if (data?.deptId) {
       const response = await listDeptExcludeChild(data.deptId);
       deptOptions.value = proxy.handleTree(response, 'deptId');

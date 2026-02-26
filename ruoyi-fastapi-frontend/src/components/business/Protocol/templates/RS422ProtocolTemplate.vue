@@ -50,13 +50,7 @@
       :hooks="schemaTableHooks"
     >
       <template #actions="{ row }">
-        <el-button
-          v-if="row"
-          link
-          type="danger"
-          size="small"
-          @click="removeRow(row)"
-        >
+        <el-button v-if="row" link type="danger" size="small" @click="removeRow(row)">
           删除
         </el-button>
       </template>
@@ -474,7 +468,7 @@ function configEditRender(field: 'value1' | 'value2') {
       input: (cellParams: any, value: any) => handleUpdate(cellParams, value),
     },
   };
-};
+}
 
 const configTableEditConfig = {
   trigger: 'click',

@@ -23,7 +23,7 @@ interface UserState {
 
 const useUserStore = defineStore('user', {
   state: (): UserState => ({
-    token: getToken(),
+    token: getToken() || '',
     id: '',
     name: '',
     nickName: '',
@@ -81,7 +81,7 @@ const useUserStore = defineStore('user', {
     // 退出系统
     logOut() {
       return new Promise((resolve) => {
-        logout(this.token)
+        logout()
           .catch((error) => {
             console.warn('Logout request failed, fallback to client-side cleanup only.', error);
           })
