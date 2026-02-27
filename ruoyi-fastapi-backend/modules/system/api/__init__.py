@@ -4,6 +4,7 @@ from modules.system.api.audit_controller import auditController
 from modules.system.api.cache_controller import cacheController
 from modules.system.api.common_controller import commonController
 from modules.system.api.config_controller import configController
+from modules.system.api.dev_menu_sync_controller import devMenuSyncController
 from modules.system.api.dept_controller import deptController
 from modules.system.api.dict_controller import dictController
 from modules.system.api.log_controller import logController
@@ -21,6 +22,7 @@ __all__ = [
     'cacheController',
     'commonController',
     'configController',
+    'devMenuSyncController',
     'deptController',
     'dictController',
     'logController',

@@ -26,4 +26,5 @@ class MenuDO(LegacyBaseModel):
     status = Column(String(1), nullable=True, default=StatusEnum.NORMAL.value, comment='菜单状态（0正常 1停用）')
     perms = Column(String(100), nullable=True, default=None, comment='权限标识')
     icon = Column(String(100), nullable=True, default='#', comment='菜单图标')
+    managed_by_seed = Column(Integer, nullable=False, default=0, comment='是否由种子声明管理(0否1是)')
     remark = Column(String(500), nullable=True, default='', comment='备注')

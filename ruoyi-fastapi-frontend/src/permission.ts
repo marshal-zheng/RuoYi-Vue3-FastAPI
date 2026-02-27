@@ -3,33 +3,12 @@ import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from '@/utils/auth';
-import { isHttp, isPathMatch } from '@/utils/validate';
+import { isPathMatch } from '@/utils/validate';
 import { isRelogin } from '@/utils/request';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
-import type { RouteLocationNormalized, NavigationGuardNext, RouteRecordRaw } from 'vue-router';
-
-// 定义路由元信息接口
-interface RouteMeta {
-  title?: string;
-  icon?: string;
-  noCache?: boolean;
-  link?: string;
-}
-
-// 定义动态路由接口
-interface DynamicRoute {
-  name?: string;
-  path: string;
-  hidden?: boolean;
-  redirect?: string;
-  component?: any;
-  query?: string;
-  alwaysShow?: boolean;
-  meta?: RouteMeta;
-  children?: DynamicRoute[];
-}
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 
 NProgress.configure({ showSpinner: false });
 
@@ -72,13 +51,7 @@ router.beforeEach(
             .getInfo()
             .then(() => {
               isRelogin.show = false;
-              permissionStore.generateRoutes().then((accessRoutes: DynamicRoute[]) => {
-                // 根据roles权限生成可访问的路由表
-                accessRoutes.forEach((route: DynamicRoute) => {
-                  if (!isHttp(route.path)) {
-                    router.addRoute(route as RouteRecordRaw); // 动态添加可访问路由表
-                  }
-                });
+              permissionStore.generateRoutes().then(() => {
                 const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
                 if (redirectPath) {
                   next({ path: redirectPath, replace: true });

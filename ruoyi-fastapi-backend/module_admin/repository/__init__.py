@@ -74,6 +74,7 @@ from modules.project.infrastructure.project_version_repository import ProjectVer
 from modules.project.infrastructure.project_topology_repository import ProjectTopologyRepository
 from module_admin.repository.protocol_repository import ProtocolRepository
 from module_admin.repository.device_repository import DeviceRepository, DeviceInterfaceRepository
+from module_admin.repository.datasource_repository import DataSourceRepository
 from module_admin.repository.device_category_repository import DeviceCategoryRepository
 from module_admin.repository.simulation_repository import (
     SimulationSessionRepository,
@@ -135,6 +136,7 @@ __all__ = [
     'ProtocolRepository',
     'DeviceRepository',
     'DeviceInterfaceRepository',
+    'DataSourceRepository',
     'DeviceCategoryRepository',
     'SimulationSessionRepository',
     'SimulationMessageRepository',

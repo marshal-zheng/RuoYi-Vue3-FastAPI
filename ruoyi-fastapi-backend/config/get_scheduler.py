@@ -88,6 +88,7 @@ class MyCronTrigger(CronTrigger):
 SQLALCHEMY_DATABASE_URL = (
     f'mysql+pymysql://{DataBaseConfig.db_username}:{quote_plus(DataBaseConfig.db_password)}@'
     f'{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{DataBaseConfig.db_database}'
+    f'?charset=utf8mb4'
 )
 if DataBaseConfig.db_type == 'postgresql':
     SQLALCHEMY_DATABASE_URL = (

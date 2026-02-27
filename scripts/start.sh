@@ -60,6 +60,16 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
+# 开发态菜单热同步开关（仅影响开发模式）
+DEV_MENU_SYNC="${DEV_MENU_SYNC:-true}"
+VITE_DEV_MENU_SYNC="${VITE_DEV_MENU_SYNC:-1}"
+VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS="${VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS:-1000}"
+export DEV_MENU_SYNC
+export VITE_DEV_MENU_SYNC
+export VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS
+
+echo -e "${BLUE}🧭 开发态菜单热同步: 后端 DEV_MENU_SYNC=${DEV_MENU_SYNC}, 前端 VITE_DEV_MENU_SYNC=${VITE_DEV_MENU_SYNC}, 轮询=${VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS}ms${NC}"
+
 # 检查并启动系统服务
 echo -e "${BLUE}🔍 检查系统服务...${NC}"
 
@@ -110,6 +120,18 @@ fi
 
 # 激活虚拟环境并启动后端
 source venv/bin/activate
+
+# 启动前自动执行 Alembic 迁移，避免新字段导致运行时 500
+RUN_ALEMBIC_MIGRATION="${RUN_ALEMBIC_MIGRATION:-true}"
+if [ "$RUN_ALEMBIC_MIGRATION" = "true" ]; then
+    echo -e "${BLUE}🗃️ 执行数据库迁移（alembic upgrade head）...${NC}"
+    if ! alembic upgrade head; then
+        echo -e "${RED}❌ Alembic 迁移失败，请检查数据库连接与迁移脚本${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}✅ 数据库迁移完成${NC}"
+fi
+
 python app.py &
 BACKEND_PID=$!
 echo -e "${GREEN}✅ 后端服务已启动 (PID: $BACKEND_PID)${NC}"

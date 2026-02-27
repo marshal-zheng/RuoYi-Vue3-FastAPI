@@ -5,8 +5,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response
 
-from config.database import async_engine
-from config.env import AppConfig, AuditConfig, CacheConfig
+from config.database import AsyncSessionLocal, async_engine
+from config.env import AppConfig, AuditConfig, CacheConfig, DevMenuSyncConfig
 from config.get_db import init_create_table
 from container import (
     AppContainer,
@@ -26,6 +26,13 @@ from modules.registry import (
     initialize_module_extensions,
     log_loaded_modules,
     register_modules,
+)
+from modules.system.runtime import (
+    DEFAULT_BASE_MENU_FILE,
+    DEFAULT_OVERLAY_FILE,
+    DevMenuReconcileService,
+    DevMenuSyncRuntime,
+    is_dev_menu_sync_enabled,
 )
 from resilience.runtime import build_resilience_runtime
 from sub_applications.handle import handle_sub_applications
@@ -200,6 +207,31 @@ async def lifespan(app: FastAPI):
     await app.state.event_runtime.start()
     set_event_runtime(app.state.event_runtime)
 
+    app.state.dev_menu_sync_runtime = None
+    if is_dev_menu_sync_enabled():
+        app.state.dev_menu_sync_runtime = DevMenuSyncRuntime(
+            service_factory=lambda: DevMenuReconcileService(query_db=AsyncSessionLocal()),
+            watch_paths=(DEFAULT_BASE_MENU_FILE, DEFAULT_OVERLAY_FILE),
+        )
+        await app.state.dev_menu_sync_runtime.start()
+        logger.info(
+            '开发态菜单热同步已启用，监听文件: {}, {}',
+            str(DEFAULT_BASE_MENU_FILE),
+            str(DEFAULT_OVERLAY_FILE),
+        )
+    else:
+        if DevMenuSyncConfig.dev_menu_sync and AppConfig.app_env != 'dev':
+            logger.warning(
+                '检测到 DEV_MENU_SYNC=true 但 APP_ENV={}，已拒绝启用开发态菜单热同步',
+                AppConfig.app_env,
+            )
+        else:
+            logger.info(
+                '开发态菜单热同步未启用（APP_ENV={}, DEV_MENU_SYNC={}）',
+                AppConfig.app_env,
+                DevMenuSyncConfig.dev_menu_sync,
+            )
+
     # 初始化审计日志
     if AuditConfig.audit_enabled and not _is_test_env():
         init_audit_logger()
@@ -226,6 +258,9 @@ async def lifespan(app: FastAPI):
     
     app_container = getattr(app.state, 'container', None)
     event_runtime = getattr(app.state, 'event_runtime', None)
+    dev_menu_sync_runtime = getattr(app.state, 'dev_menu_sync_runtime', None)
+    if dev_menu_sync_runtime is not None:
+        await dev_menu_sync_runtime.stop()
     if event_runtime is not None:
         await event_runtime.stop()
         set_event_runtime(None)

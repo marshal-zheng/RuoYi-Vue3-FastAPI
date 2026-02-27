@@ -1,13 +1,26 @@
 import auth from '@/plugins/auth';
 import router, { constantRoutes, dynamicRoutes } from '@/router';
 import { getRouters } from '@/api/menu';
-import Layout from '@/layout/index';
-import ParentView from '@/components/ui/ParentView';
-import InnerLink from '@/layout/components/InnerLink';
+import Layout from '@/layout/index.vue';
+import ParentView from '@/components/ui/ParentView/index.vue';
+import InnerLink from '@/layout/components/InnerLink/index.vue';
+import { defineStore } from 'pinia';
+import { isHttp } from '@/utils/validate';
 import type { RouteRecordRaw } from 'vue-router';
 
 // 匹配views里面所有的.vue文件
 const modules = import.meta.glob('./../../views/**/*.vue');
+const NOT_FOUND_ROUTE_PATH = '/:pathMatch(.*)*';
+let reloadPromise: Promise<void> | null = null;
+let registeredRouteRemovers: Array<() => void> = [];
+
+interface RouteBundle {
+  sidebarRoutes: RouteRecordRaw[];
+  rewriteRoutes: RouteRecordRaw[];
+  defaultRoutes: RouteRecordRaw[];
+  asyncRoutes: RouteRecordRaw[];
+  firstMenuPath: string;
+}
 
 interface PermissionState {
   routes: RouteRecordRaw[];
@@ -16,6 +29,7 @@ interface PermissionState {
   topbarRouters: RouteRecordRaw[];
   sidebarRouters: RouteRecordRaw[];
   firstMenuPath: string;
+  registeredRouteNames: string[];
 }
 
 const usePermissionStore = defineStore('permission', {
@@ -26,14 +40,15 @@ const usePermissionStore = defineStore('permission', {
     topbarRouters: [],
     sidebarRouters: [],
     firstMenuPath: '/index',
+    registeredRouteNames: [],
   }),
   actions: {
     setRoutes(routes: RouteRecordRaw[]) {
       this.addRoutes = routes;
-      this.routes = constantRoutes.concat(routes);
+      this.routes = getConstantRouteRecords().concat(routes);
     },
     setDefaultRoutes(routes: RouteRecordRaw[]) {
-      this.defaultRoutes = constantRoutes.concat(routes);
+      this.defaultRoutes = getConstantRouteRecords().concat(routes);
     },
     setTopbarRoutes(routes: RouteRecordRaw[]) {
       this.topbarRouters = routes;
@@ -44,37 +59,138 @@ const usePermissionStore = defineStore('permission', {
     setFirstMenuPath(path: string) {
       this.firstMenuPath = path || '/index';
     },
-    generateRoutes() {
-      return new Promise<any[]>((resolve) => {
-        // 向后端请求路由数据
-        // http 客户端已解包 payload.data，res 直接是路由数组
-        getRouters().then((res: any) => {
-          const sdata = JSON.parse(JSON.stringify(res));
-          const rdata = JSON.parse(JSON.stringify(res));
-          const defaultData = JSON.parse(JSON.stringify(res));
-
-          const sidebarRoutes = filterAsyncRouter(sdata);
-          const rewriteRoutes = filterAsyncRouter(rdata, false, true);
-          const defaultRoutes = filterAsyncRouter(defaultData);
-          const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
-          asyncRoutes.forEach((route) => {
-            router.addRoute(route);
-          });
-          this.setRoutes(rewriteRoutes);
-          this.setSidebarRouters(constantRoutes.concat(sidebarRoutes));
-          this.setDefaultRoutes(sidebarRoutes);
-          this.setTopbarRoutes(defaultRoutes);
-          const landingCandidates = constantRoutes
-            .filter((route) => !route.hidden)
-            .concat(sidebarRoutes);
-          const firstMenuPath = findFirstMenuPath(landingCandidates);
-          this.setFirstMenuPath(firstMenuPath);
-          resolve(rewriteRoutes);
-        });
+    setRegisteredRouteNames(routeNames: string[]) {
+      this.registeredRouteNames = toUniqueRouteNames(routeNames);
+    },
+    appendRegisteredRouteNames(routeNames: string[]) {
+      this.registeredRouteNames = toUniqueRouteNames(this.registeredRouteNames.concat(routeNames));
+    },
+    registerDynamicRouteRecords(routes: RouteRecordRaw[]) {
+      routes.forEach((route) => {
+        if (!isHttp(route.path)) {
+          const routeName = typeof route.name === 'string' ? route.name : undefined;
+          if (routeName && router.hasRoute(routeName)) {
+            router.removeRoute(routeName);
+          }
+          const removeRoute = router.addRoute(route);
+          if (typeof removeRoute === 'function') {
+            registeredRouteRemovers.push(removeRoute);
+          }
+        }
       });
+      this.appendRegisteredRouteNames(collectRouteNames(routes));
+    },
+    removeRegisteredDynamicRoutes() {
+      [...registeredRouteRemovers].reverse().forEach((removeRoute) => {
+        try {
+          removeRoute();
+        } catch (error) {
+          console.warn('[dev-menu-hot-sync] dynamic route remover failed:', error);
+        }
+      });
+      registeredRouteRemovers = [];
+      [...this.registeredRouteNames].reverse().forEach((routeName) => {
+        if (router.hasRoute(routeName)) {
+          router.removeRoute(routeName);
+        }
+      });
+      this.setRegisteredRouteNames([]);
+    },
+    async fetchRouteBundle(): Promise<RouteBundle> {
+      const rawRoutes = normalizeBackendRoutes(await getRouters());
+      const sdata = JSON.parse(JSON.stringify(rawRoutes));
+      const rdata = JSON.parse(JSON.stringify(rawRoutes));
+      const defaultData = JSON.parse(JSON.stringify(rawRoutes));
+      const sidebarRoutes = filterAsyncRouter(sdata);
+      const rewriteRoutes = filterAsyncRouter(rdata, false, true);
+      const defaultRoutes = filterAsyncRouter(defaultData);
+      const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
+      const landingCandidates = getConstantRouteRecords()
+        .filter((route) => !(route as any).hidden)
+        .concat(sidebarRoutes);
+      return {
+        sidebarRoutes,
+        rewriteRoutes,
+        defaultRoutes,
+        asyncRoutes,
+        firstMenuPath: findFirstMenuPath(landingCandidates),
+      };
+    },
+    applyRouteBundle(bundle: RouteBundle) {
+      this.setRoutes(bundle.rewriteRoutes);
+      this.setSidebarRouters(getConstantRouteRecords().concat(bundle.sidebarRoutes));
+      this.setDefaultRoutes(bundle.sidebarRoutes);
+      this.setTopbarRoutes(bundle.defaultRoutes);
+      this.setFirstMenuPath(bundle.firstMenuPath);
+      this.registerDynamicRouteRecords(bundle.rewriteRoutes);
+      this.registerDynamicRouteRecords(bundle.asyncRoutes);
+    },
+    async generateRoutes() {
+      const bundle = await this.fetchRouteBundle();
+      this.removeRegisteredDynamicRoutes();
+      this.applyRouteBundle(bundle);
+      return bundle.rewriteRoutes;
+    },
+    async reloadDynamicRoutes(reason: string = 'signature_changed'): Promise<void> {
+      if (reloadPromise) {
+        return reloadPromise;
+      }
+      reloadPromise = (async () => {
+        const currentPath = router.currentRoute.value.fullPath || router.currentRoute.value.path;
+        try {
+          const bundle = await this.fetchRouteBundle();
+          this.removeRegisteredDynamicRoutes();
+          this.applyRouteBundle(bundle);
+          if (!hasAccessibleMatch(currentPath)) {
+            await router.replace(this.firstMenuPath || '/index');
+          }
+          console.info('[dev-menu-hot-sync] dynamic routes reloaded:', reason);
+        } catch (error) {
+          console.error('[dev-menu-hot-sync] dynamic routes reload failed:', error);
+        }
+      })().finally(() => {
+        reloadPromise = null;
+      });
+      return reloadPromise;
     },
   },
 });
+
+function getConstantRouteRecords(): RouteRecordRaw[] {
+  return constantRoutes as unknown as RouteRecordRaw[];
+}
+
+function normalizeBackendRoutes(raw: any): any[] {
+  if (Array.isArray(raw)) {
+    return raw;
+  }
+  if (raw && Array.isArray(raw.data)) {
+    return raw.data;
+  }
+  return [];
+}
+
+function collectRouteNames(routes: RouteRecordRaw[]): string[] {
+  const names: string[] = [];
+  routes.forEach((route) => {
+    if (typeof route.name === 'string') {
+      names.push(route.name);
+    }
+    if (route.children && route.children.length) {
+      names.push(...collectRouteNames(route.children));
+    }
+  });
+  return names;
+}
+
+function toUniqueRouteNames(routeNames: string[]): string[] {
+  return Array.from(new Set(routeNames.filter(Boolean)));
+}
+
+function hasAccessibleMatch(path: string): boolean {
+  const resolved = router.resolve(path);
+  return resolved.matched.some((record) => record.path !== NOT_FOUND_ROUTE_PATH);
+}
 
 // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(

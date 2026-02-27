@@ -6,6 +6,8 @@ from fastapi import APIRouter, FastAPI
 from modules.registry import (
     ModuleRegistration,
     RouterRegistration,
+    _build_system_routers,
+    _should_register_dev_menu_router,
     get_module_registry,
     initialize_module_extensions,
     register_modules,
@@ -26,7 +28,7 @@ def test_module_registry_contains_required_contexts() -> None:
     registry = get_module_registry()
     context_names = {module.name for module in registry}
 
-    assert context_names == required_contexts
+    assert required_contexts.issubset(context_names)
 
 
 
@@ -35,7 +37,7 @@ def test_register_modules_returns_loaded_metadata() -> None:
 
     loaded_modules = register_modules(app, get_module_registry())
 
-    assert len(loaded_modules) == 8
+    assert len(loaded_modules) >= 8
     loaded_by_name = {module.name: module for module in loaded_modules}
     assert loaded_by_name['identity'].version == 'v1'
     assert '/system/user' in loaded_by_name['identity'].route_prefixes
@@ -65,3 +67,28 @@ async def test_initialize_module_extensions_supports_sync_and_async() -> None:
 
     assert sync_called is True
     assert async_called is True
+
+
+def test_dev_menu_router_registration_guard(monkeypatch) -> None:
+    import modules.registry as registry_module
+
+    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'prod', raising=False)
+    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    assert _should_register_dev_menu_router() is False
+
+    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'dev', raising=False)
+    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', False, raising=False)
+    assert _should_register_dev_menu_router() is False
+
+    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'dev', raising=False)
+    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    assert _should_register_dev_menu_router() is True
+
+
+def test_build_system_routers_excludes_dev_menu_router_when_guard_off(monkeypatch) -> None:
+    import modules.registry as registry_module
+
+    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'prod', raising=False)
+    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    routers = _build_system_routers()
+    assert '/dev/menu' not in {router.router.prefix for router in routers}

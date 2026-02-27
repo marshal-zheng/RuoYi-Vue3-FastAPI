@@ -44,6 +44,7 @@ import {
   selectDictLabel,
   selectDictLabels,
 } from '@/utils/ruoyi';
+import { startDevMenuHotSync } from '@/plugins/dev-menu-hot-sync';
 
 // 分页组件
 import Pagination from '@/components/ui/Pagination';
@@ -104,6 +105,8 @@ app.use(ZXUI, {
 });
 
 setupVXETable(app);
+
+startDevMenuHotSync();
 
 // 启动应用（支持 MSW Mock）
 async function bootstrap() {

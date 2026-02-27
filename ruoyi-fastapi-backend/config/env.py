@@ -24,6 +24,17 @@ class AppSettings(BaseSettings):
     app_same_time_login: bool = True
 
 
+class DevMenuSyncSettings(BaseSettings):
+    """
+    开发态菜单热同步配置
+    """
+
+    dev_menu_sync: bool = False
+    dev_menu_sync_poll_interval_seconds: float = 0.5
+    dev_menu_sync_debounce_seconds: float = 0.2
+    dev_menu_sync_auto_startup: bool = True
+
+
 class JwtSettings(BaseSettings):
     """
     Jwt配置
@@ -399,6 +410,13 @@ class GetConfig:
         return RateLimitSettings()
 
     @lru_cache()
+    def get_dev_menu_sync_config(self):
+        """
+        获取开发态菜单热同步配置
+        """
+        return DevMenuSyncSettings()
+
+    @lru_cache()
     def get_otel_config(self):
         """
         获取 OpenTelemetry 配置
@@ -469,5 +487,7 @@ LogConfig = get_config.get_log_config()
 IdempotencyConfig = get_config.get_idempotency_config()
 # 限流配置
 RateLimitConfig = get_config.get_rate_limit_config()
+# 开发态菜单热同步配置
+DevMenuSyncConfig = get_config.get_dev_menu_sync_config()
 # OpenTelemetry 配置
 OTelConfig = get_config.get_otel_config()

@@ -445,13 +445,16 @@ class EnhancedQueryPerformanceMonitor(QueryPerformanceMonitor):
         threshold_ms: float = 100,
         log_all: bool = False,
         n_plus_one_threshold: int = 5,
-        auto_analyze_slow: bool = True
+        auto_analyze_slow: bool = True,
+        n_plus_one_enabled: bool = False,
     ):
         super().__init__(threshold_ms, log_all)
         self.n_plus_one_detector = NPlusOneDetector(threshold=n_plus_one_threshold)
         self.explain_analyzer = QueryExplainAnalyzer()
         self.auto_analyze_slow = auto_analyze_slow
         self.slow_queries: List[Dict[str, Any]] = []
+        # 默认关闭 N+1 检测，避免在日常开发/测试中产生大量告警
+        self.n_plus_one_enabled = n_plus_one_enabled
     
     def setup(self, engine: AsyncEngine):
         """设置监控器到数据库引擎"""
@@ -471,8 +474,9 @@ class EnhancedQueryPerformanceMonitor(QueryPerformanceMonitor):
             # 更新统计
             self._update_stats(total_time_ms)
             
-            # N+1 检测
-            self.n_plus_one_detector.record_query(statement)
+            # N+1 检测（可配置，默认关闭）
+            if self.n_plus_one_enabled:
+                self.n_plus_one_detector.record_query(statement)
             
             # 记录慢查询
             if total_time_ms > self.threshold_ms:
@@ -603,7 +607,8 @@ def get_pool_health_checker() -> Optional[ConnectionPoolHealthChecker]:
 def setup_enhanced_monitoring(
     engine: AsyncEngine,
     threshold_ms: float = 100,
-    n_plus_one_threshold: int = 5
+    n_plus_one_threshold: int = 5,
+    n_plus_one_enabled: bool = False,
 ) -> tuple:
     """
     设置增强监控
@@ -620,7 +625,8 @@ def setup_enhanced_monitoring(
     
     _enhanced_monitor = EnhancedQueryPerformanceMonitor(
         threshold_ms=threshold_ms,
-        n_plus_one_threshold=n_plus_one_threshold
+        n_plus_one_threshold=n_plus_one_threshold,
+        n_plus_one_enabled=n_plus_one_enabled,
     )
     _enhanced_monitor.setup(engine)
     

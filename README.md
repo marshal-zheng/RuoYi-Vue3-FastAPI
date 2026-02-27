@@ -87,6 +87,31 @@ yarn lint            # 代码检查
 yarn test            # 运行测试
 ```
 
+### 开发态菜单热同步（默认推荐）
+
+目标：在开发模式下，修改 `menus.yaml` 后无需重登即可看到菜单变化。
+
+开关配置：
+- 后端 `ruoyi-fastapi-backend/.env.dev`：
+  - `DEV_MENU_SYNC=true`
+- 前端 `ruoyi-fastapi-frontend/.env.development`：
+  - `VITE_DEV_MENU_SYNC='1'`
+  - `VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS='1000'`
+
+行为说明：
+- 新增菜单：自动同步到 `sys_menu`，前端自动热更新动态路由。
+- 删除菜单：自动清理 `managed_by_seed=true` 范围内菜单与角色菜单关联，并触发前端平滑降级跳转。
+- 生产模式默认不启用该能力，不改变既有发布链路。
+
+快速回退（仅开发环境）：
+- 后端设为 `DEV_MENU_SYNC=false`
+- 前端设为 `VITE_DEV_MENU_SYNC='0'`
+
+专项回归验证（推荐）：
+```bash
+./scripts/verify-dev-menu-hot-sync.sh
+```
+
 ### 方式二：Docker 本地开发（推荐）
 
 使用 Docker Compose 一键启动完整开发环境，无需手动配置数据库和 Redis：

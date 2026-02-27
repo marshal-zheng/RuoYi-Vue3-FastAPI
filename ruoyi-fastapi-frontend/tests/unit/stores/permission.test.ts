@@ -1,437 +1,207 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
-import usePermissionStore from '@/store/modules/permission'
-import * as menuApi from '@/api/menu'
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
 
-// Mock dependencies
-vi.mock('@/api/menu')
+const { registeredRouteNames, routeRemoverSpy, mockResolve, mockRouter, getRoutersMock } = vi.hoisted(() => {
+  const names = new Set<string>();
+  const removerSpy = vi.fn();
+  const resolve = vi.fn((path: string) => ({
+    matched: path === '/missing' ? [{ path: '/:pathMatch(.*)*' }] : [{ path: '/system' }],
+  }));
+  const router = {
+    addRoute: vi.fn((route: Record<string, any>) => {
+      if (typeof route.name === 'string') {
+        names.add(route.name);
+      }
+      return () => {
+        if (typeof route.name === 'string') {
+          names.delete(route.name);
+        }
+        removerSpy(route);
+      };
+    }),
+    removeRoute: vi.fn((routeName: string) => {
+      names.delete(routeName);
+    }),
+    hasRoute: vi.fn((routeName: string) => names.has(routeName)),
+    resolve,
+    replace: vi.fn().mockResolvedValue(undefined),
+    currentRoute: {
+      value: {
+        path: '/system/user',
+        fullPath: '/system/user',
+      },
+    },
+  };
+  return {
+    registeredRouteNames: names,
+    routeRemoverSpy: removerSpy,
+    mockResolve: resolve,
+    mockRouter: router,
+    getRoutersMock: vi.fn(),
+  };
+});
+
+vi.mock('@/api/menu', () => ({
+  getRouters: getRoutersMock,
+}));
 vi.mock('@/router', () => ({
-  default: {
-    addRoute: vi.fn()
-  },
+  default: mockRouter,
   constantRoutes: [
     { path: '/login', name: 'Login', hidden: true },
-    { path: '/', name: 'Index', hidden: false }
+    { path: '/index', name: 'Index', hidden: false },
   ],
-  dynamicRoutes: []
-}))
-vi.mock('@/layout/index', () => ({ default: {} }))
-vi.mock('@/components/ParentView', () => ({ default: {} }))
-vi.mock('@/layout/components/InnerLink', () => ({ default: {} }))
+  dynamicRoutes: [
+    { path: '/audit', name: 'AuditRoute', permissions: ['monitor:audit:list'] },
+  ],
+}));
+vi.mock('@/layout/index.vue', () => ({ default: {} }));
+vi.mock('@/components/ui/ParentView/index.vue', () => ({ default: {} }));
+vi.mock('@/layout/components/InnerLink/index.vue', () => ({ default: {} }));
 vi.mock('@/plugins/auth', () => ({
   default: {
     hasPermiOr: vi.fn(() => true),
-    hasRoleOr: vi.fn(() => true)
-  }
-}))
+    hasRoleOr: vi.fn(() => true),
+  },
+}));
 
-describe('Permission Store', () => {
+async function loadPermissionStore() {
+  const module = await import('@/store/modules/permission');
+  return module.default;
+}
+
+describe('permission store route hot reload', () => {
   beforeEach(() => {
-    setActivePinia(createPinia())
-    vi.clearAllMocks()
-  })
+    setActivePinia(createPinia());
+    vi.clearAllMocks();
+    registeredRouteNames.clear();
+    mockRouter.currentRoute.value.path = '/system/user';
+    mockRouter.currentRoute.value.fullPath = '/system/user';
+    mockResolve.mockImplementation((path: string) => ({
+      matched: path === '/missing' ? [{ path: '/:pathMatch(.*)*' }] : [{ path: '/system' }],
+    }));
+  });
 
-  describe('State', () => {
-    it('should initialize with default state', () => {
-      const store = usePermissionStore()
-
-      expect(store.routes).toEqual([])
-      expect(store.addRoutes).toEqual([])
-      expect(store.defaultRoutes).toEqual([])
-      expect(store.topbarRouters).toEqual([])
-      expect(store.sidebarRouters).toEqual([])
-      expect(store.firstMenuPath).toBe('/index')
-    })
-  })
-
-  describe('Actions', () => {
-    describe('setRoutes', () => {
-      it('should set routes correctly', () => {
-        const store = usePermissionStore()
-        const routes = [
-          { path: '/system', name: 'System' },
-          { path: '/monitor', name: 'Monitor' }
-        ]
-
-        store.setRoutes(routes)
-
-        expect(store.addRoutes).toEqual(routes)
-        expect(store.routes.length).toBeGreaterThan(routes.length)
-      })
-
-      it('should merge with constant routes', () => {
-        const store = usePermissionStore()
-        const routes = [{ path: '/system', name: 'System' }]
-
-        store.setRoutes(routes)
-
-        expect(store.routes).toContainEqual({ path: '/system', name: 'System' })
-      })
-    })
-
-    describe('setDefaultRoutes', () => {
-      it('should set default routes', () => {
-        const store = usePermissionStore()
-        const routes = [{ path: '/system', name: 'System' }]
-
-        store.setDefaultRoutes(routes)
-
-        expect(store.defaultRoutes.length).toBeGreaterThan(0)
-      })
-    })
-
-    describe('setTopbarRoutes', () => {
-      it('should set topbar routes', () => {
-        const store = usePermissionStore()
-        const routes = [
-          { path: '/system', name: 'System' },
-          { path: '/monitor', name: 'Monitor' }
-        ]
-
-        store.setTopbarRoutes(routes)
-
-        expect(store.topbarRouters).toEqual(routes)
-      })
-    })
-
-    describe('setSidebarRouters', () => {
-      it('should set sidebar routes', () => {
-        const store = usePermissionStore()
-        const routes = [{ path: '/system', name: 'System' }]
-
-        store.setSidebarRouters(routes)
-
-        expect(store.sidebarRouters).toEqual(routes)
-      })
-    })
-
-    describe('setFirstMenuPath', () => {
-      it('should set first menu path', () => {
-        const store = usePermissionStore()
-
-        store.setFirstMenuPath('/system/user')
-
-        expect(store.firstMenuPath).toBe('/system/user')
-      })
-
-      it('should use default path when null', () => {
-        const store = usePermissionStore()
-
-        store.setFirstMenuPath(null)
-
-        expect(store.firstMenuPath).toBe('/index')
-      })
-
-      it('should use default path when empty string', () => {
-        const store = usePermissionStore()
-
-        store.setFirstMenuPath('')
-
-        expect(store.firstMenuPath).toBe('/index')
-      })
-    })
-
-    describe('generateRoutes', () => {
-      it('should generate routes from API', async () => {
-        const mockRoutes = [
+  it('generates routes and registers them into router', async () => {
+    getRoutersMock.mockResolvedValue([
+      {
+        path: '/system',
+        component: 'Layout',
+        name: 'System',
+        hidden: false,
+        children: [
           {
-            path: '/system',
-            component: 'Layout',
-            name: 'System',
-            meta: { title: '系统管理' },
-            children: [
-              {
-                path: 'user',
-                component: 'system/user/index',
-                name: 'User',
-                meta: { title: '用户管理' }
-              }
-            ]
-          }
-        ]
-
-        vi.mocked(menuApi.getRouters).mockResolvedValue({
-          data: mockRoutes
-        } as any)
-
-        const store = usePermissionStore()
-        const result = await store.generateRoutes([])
-
-        expect(menuApi.getRouters).toHaveBeenCalled()
-        expect(result).toBeDefined()
-        expect(store.routes.length).toBeGreaterThan(0)
-      })
-
-      it('should handle empty routes from API', async () => {
-        vi.mocked(menuApi.getRouters).mockResolvedValue({
-          data: []
-        } as any)
-
-        const store = usePermissionStore()
-        const result = await store.generateRoutes([])
-
-        expect(result).toEqual([])
-      })
-
-      it('should set sidebar routes', async () => {
-        const mockRoutes = [
-          {
-            path: '/system',
-            component: 'Layout',
-            name: 'System',
-            children: []
-          }
-        ]
-
-        vi.mocked(menuApi.getRouters).mockResolvedValue({
-          data: mockRoutes
-        } as any)
-
-        const store = usePermissionStore()
-        await store.generateRoutes([])
-
-        expect(store.sidebarRouters.length).toBeGreaterThan(0)
-      })
-
-      it('should set topbar routes', async () => {
-        const mockRoutes = [
-          {
-            path: '/system',
-            component: 'Layout',
-            name: 'System'
-          }
-        ]
-
-        vi.mocked(menuApi.getRouters).mockResolvedValue({
-          data: mockRoutes
-        } as any)
-
-        const store = usePermissionStore()
-        await store.generateRoutes([])
-
-        expect(store.topbarRouters).toBeDefined()
-      })
-
-      it('should find first menu path', async () => {
-        const mockRoutes = [
-          {
-            path: '/system',
-            component: 'Layout',
-            name: 'System',
+            path: 'user',
+            component: 'system/user/index',
+            name: 'SystemUser',
             hidden: false,
-            children: [
-              {
-                path: 'user',
-                component: 'system/user/index',
-                name: 'User',
-                hidden: false
-              }
-            ]
-          }
-        ]
+          },
+        ],
+      },
+    ] as any);
 
-        vi.mocked(menuApi.getRouters).mockResolvedValue({
-          data: mockRoutes
-        } as any)
+    const usePermissionStore = await loadPermissionStore();
+    const store = usePermissionStore();
+    await store.generateRoutes();
 
-        const store = usePermissionStore()
-        await store.generateRoutes([])
+    expect(getRoutersMock).toHaveBeenCalledTimes(1);
+    expect(mockRouter.addRoute).toHaveBeenCalled();
+    expect(store.firstMenuPath).toBe('/system/user');
+    expect(store.registeredRouteNames).toContain('System');
+    expect(store.registeredRouteNames).toContain('AuditRoute');
+  });
 
-        expect(store.firstMenuPath).toBeDefined()
-      })
+  it('falls back to first menu path when current route disappears after reload', async () => {
+    getRoutersMock.mockResolvedValue([
+      {
+        path: '/system',
+        component: 'Layout',
+        name: 'System',
+        hidden: false,
+        children: [
+          {
+            path: 'user',
+            component: 'system/user/index',
+            name: 'SystemUser',
+            hidden: false,
+          },
+        ],
+      },
+    ] as any);
 
-      it('should handle API errors', async () => {
-        vi.mocked(menuApi.getRouters).mockRejectedValue(new Error('API Error'))
+    const usePermissionStore = await loadPermissionStore();
+    const store = usePermissionStore();
+    await store.generateRoutes();
 
-        const store = usePermissionStore()
+    mockRouter.currentRoute.value.path = '/missing';
+    mockRouter.currentRoute.value.fullPath = '/missing';
+    await store.reloadDynamicRoutes('signature_changed');
 
-        await expect(store.generateRoutes([])).rejects.toThrow('API Error')
-      })
-    })
-  })
+    expect(mockRouter.replace).toHaveBeenCalledWith('/system/user');
+  });
 
-  describe('Route Processing', () => {
-    it('should handle Layout component', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          component: 'Layout',
-          name: 'System'
-        }
-      ]
+  it('keeps existing routes when reload request fails', async () => {
+    getRoutersMock.mockResolvedValue([
+      {
+        path: '/system',
+        component: 'Layout',
+        name: 'System',
+        hidden: false,
+      },
+    ] as any);
 
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
+    const usePermissionStore = await loadPermissionStore();
+    const store = usePermissionStore();
+    await store.generateRoutes();
+    const registeredBefore = [...store.registeredRouteNames];
+    const removerCallCountBefore = routeRemoverSpy.mock.calls.length;
 
-      const store = usePermissionStore()
-      await store.generateRoutes([])
+    getRoutersMock.mockRejectedValue(new Error('network down'));
+    await store.reloadDynamicRoutes('signature_changed');
 
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
+    expect(store.registeredRouteNames).toEqual(registeredBefore);
+    expect(mockRouter.removeRoute).not.toHaveBeenCalled();
+    expect(routeRemoverSpy.mock.calls.length).toBe(removerCallCountBefore);
+  });
 
-    it('should handle ParentView component', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          component: 'ParentView',
-          name: 'System'
-        }
-      ]
+  it('removes unnamed dynamic routes via route remover callbacks', async () => {
+    getRoutersMock.mockResolvedValueOnce([
+      {
+        path: '/anonymous',
+        component: 'Layout',
+        hidden: false,
+        children: [
+          {
+            path: 'page',
+            component: 'system/user/index',
+            hidden: false,
+          },
+        ],
+      },
+    ] as any);
 
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
+    getRoutersMock.mockResolvedValueOnce([
+      {
+        path: '/next',
+        component: 'Layout',
+        hidden: false,
+        children: [
+          {
+            path: 'page',
+            component: 'system/user/index',
+            hidden: false,
+          },
+        ],
+      },
+    ] as any);
 
-      const store = usePermissionStore()
-      await store.generateRoutes([])
+    const usePermissionStore = await loadPermissionStore();
+    const store = usePermissionStore();
+    await store.generateRoutes();
+    await store.generateRoutes();
 
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-
-    it('should handle InnerLink component', async () => {
-      const mockRoutes = [
-        {
-          path: '/link',
-          component: 'InnerLink',
-          name: 'Link'
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-
-    it('should handle nested routes', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          component: 'Layout',
-          children: [
-            {
-              path: 'user',
-              component: 'system/user/index',
-              children: [
-                {
-                  path: 'profile',
-                  component: 'system/user/profile/index'
-                }
-              ]
-            }
-          ]
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-
-    it('should remove empty children', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          component: 'Layout',
-          children: []
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-  })
-
-  describe('Hidden Routes', () => {
-    it('should skip hidden routes when finding first menu', async () => {
-      const mockRoutes = [
-        {
-          path: '/hidden',
-          component: 'Layout',
-          hidden: true,
-          children: [
-            {
-              path: 'page',
-              component: 'hidden/page/index'
-            }
-          ]
-        },
-        {
-          path: '/visible',
-          component: 'Layout',
-          hidden: false,
-          children: [
-            {
-              path: 'page',
-              component: 'visible/page/index'
-            }
-          ]
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.firstMenuPath).not.toContain('hidden')
-    })
-  })
-
-  describe('Edge Cases', () => {
-    it('should handle routes without component', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          name: 'System'
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-
-    it('should handle routes with null children', async () => {
-      const mockRoutes = [
-        {
-          path: '/system',
-          component: 'Layout',
-          children: null
-        }
-      ]
-
-      vi.mocked(menuApi.getRouters).mockResolvedValue({
-        data: mockRoutes
-      } as any)
-
-      const store = usePermissionStore()
-      await store.generateRoutes([])
-
-      expect(store.routes.length).toBeGreaterThan(0)
-    })
-  })
-})
+    expect(routeRemoverSpy).toHaveBeenCalled();
+    expect(
+      routeRemoverSpy.mock.calls.some((call) => (call[0] as { path?: string }).path === '/anonymous')
+    ).toBe(true);
+  });
+});

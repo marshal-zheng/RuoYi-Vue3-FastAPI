@@ -8,11 +8,13 @@ from dataclasses import dataclass, field
 from importlib import import_module
 from typing import TYPE_CHECKING, Any
 
+from config.env import AppConfig, DevMenuSyncConfig
 from modules.system.api.audit_controller import auditController
 from modules.system.api.cache_controller import cacheController
 from modules.identity.api.captcha_controller import captchaController
 from modules.system.api.common_controller import commonController
 from modules.system.api.config_controller import configController
+from modules.system.api.dev_menu_sync_controller import devMenuSyncController
 from modules.system.api.event_controller import eventController
 from modules.system.api.dept_controller import deptController
 from modules.system.api.dict_controller import dictController
@@ -94,6 +96,33 @@ protocolController = _load_optional_router('module_admin.controller.protocol_con
 simulationController = _load_optional_router('module_admin.controller.simulation_controller', 'simulationController')
 deviceCategoryController = _load_optional_router('module_admin.controller.device_category_controller', 'deviceCategoryController')
 deviceController = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
+datasourceController = _load_optional_router('module_admin.controller.datasource_controller', 'datasourceController')
+
+
+def _should_register_dev_menu_router() -> bool:
+    return AppConfig.app_env == 'dev' and bool(DevMenuSyncConfig.dev_menu_sync)
+
+
+def _build_system_routers() -> tuple[RouterRegistration, ...]:
+    routers: list[RouterRegistration] = [
+        RouterRegistration(router=menuController, tags=('系统管理-菜单管理',)),
+        RouterRegistration(router=deptController, tags=('系统管理-部门管理',)),
+        RouterRegistration(router=postController, tags=('系统管理-岗位管理',)),
+        RouterRegistration(router=dictController, tags=('系统管理-字典管理',)),
+        RouterRegistration(router=configController, tags=('系统管理-参数管理',)),
+        RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',)),
+        RouterRegistration(router=logController, tags=('系统管理-日志管理',)),
+        RouterRegistration(router=onlineController, tags=('系统监控-在线用户',)),
+        RouterRegistration(router=serverController, tags=('系统监控-菜单管理',)),
+        RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',)),
+        RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',)),
+        RouterRegistration(router=auditController, tags=('系统监控-审计日志',)),
+        RouterRegistration(router=eventController, tags=('系统监控-事件治理',)),
+    ]
+    if _should_register_dev_menu_router():
+        routers.append(RouterRegistration(router=devMenuSyncController, tags=('系统管理-开发态菜单热同步',)))
+    routers.append(RouterRegistration(router=commonController, tags=('通用模块',)))
+    return tuple(routers)
 
 _module_registry: list[ModuleRegistration] = [
     ModuleRegistration(
@@ -109,22 +138,7 @@ _module_registry: list[ModuleRegistration] = [
     ModuleRegistration(
         name='system',
         version='v1',
-        routers=(
-            RouterRegistration(router=menuController, tags=('系统管理-菜单管理',)),
-            RouterRegistration(router=deptController, tags=('系统管理-部门管理',)),
-            RouterRegistration(router=postController, tags=('系统管理-岗位管理',)),
-            RouterRegistration(router=dictController, tags=('系统管理-字典管理',)),
-            RouterRegistration(router=configController, tags=('系统管理-参数管理',)),
-            RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',)),
-            RouterRegistration(router=logController, tags=('系统管理-日志管理',)),
-            RouterRegistration(router=onlineController, tags=('系统监控-在线用户',)),
-            RouterRegistration(router=serverController, tags=('系统监控-菜单管理',)),
-            RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',)),
-            RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',)),
-            RouterRegistration(router=auditController, tags=('系统监控-审计日志',)),
-            RouterRegistration(router=eventController, tags=('系统监控-事件治理',)),
-            RouterRegistration(router=commonController, tags=('通用模块',)),
-        ),
+        routers=_build_system_routers(),
     ),
     ModuleRegistration(
         name='project',
@@ -161,6 +175,15 @@ if deviceCategoryController is not None and deviceController is not None:
                 RouterRegistration(router=deviceCategoryController, tags=('设备中心-分类管理',)),
                 RouterRegistration(router=deviceController, tags=('设备中心-设备管理',)),
             ),
+        )
+    )
+
+if datasourceController is not None:
+    _module_registry.append(
+        ModuleRegistration(
+            name='datasource',
+            version='v1',
+            routers=(RouterRegistration(router=datasourceController, tags=('数据源中心',)),),
         )
     )
 
