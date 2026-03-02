@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from config.env import LogConfig
 from middlewares.rate_limit_middleware import add_rate_limit_middleware
 from middlewares.idempotency_middleware import add_idempotency_middleware
 from middlewares.prometheus_middleware import add_prometheus_metrics_middleware
@@ -31,4 +32,5 @@ def handle_middleware(app: FastAPI):
     # 加载 Prometheus 请求指标中间件（跳过 /metrics 避免自采集噪音）
     add_prometheus_metrics_middleware(app, exclude_paths=('/metrics',))
     # 加载请求日志中间件（放在最外层，记录最终响应状态与整体耗时）
-    add_request_logging_middleware(app)
+    if LogConfig.request_logging_enabled:
+        add_request_logging_middleware(app)

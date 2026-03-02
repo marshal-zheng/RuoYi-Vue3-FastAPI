@@ -50,6 +50,13 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+tests/coverage/
+ruoyi-fastapi-backend/tests/coverage/
+ruoyi-fastapi-frontend/tests/coverage/
+ruoyi-fastapi-frontend/tests/reports/
+logs/
+ruoyi-fastapi-backend/logs/
+ruoyi-fastapi-backend/htmlcov/
 
 # Translations
 *.mo
@@ -153,4 +160,3 @@ ehthumbs.db
 Thumbs.db
 
 RuoYi-Vue3/*
-

@@ -1,7 +1,7 @@
 """事件驱动基础表
 
 Revision ID: 20260222_event_arch
-Revises: 20260127_sensitive_hash
+Revises: 20260210_complete_simulation
 Create Date: 2026-02-22 10:00:00.000000
 """
 
@@ -12,7 +12,7 @@ from sqlalchemy import inspect
 
 # revision identifiers, used by Alembic.
 revision = '20260222_event_arch'
-down_revision = '20260127_sensitive_hash'
+down_revision = '20260210_complete_simulation'
 branch_labels = None
 depends_on = None
 

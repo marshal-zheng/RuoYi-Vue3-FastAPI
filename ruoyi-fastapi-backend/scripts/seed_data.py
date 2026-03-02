@@ -52,6 +52,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.database import AsyncSessionLocal
+from modules.system.runtime.menu_registry_loader import MenuRegistryLoader
 from utils.log_util import logger
 from utils.pwd_util import PwdUtil
 
@@ -114,8 +115,11 @@ class SeedDataManager:
         self.env = env
         self.session: AsyncSession = None
         self.data_dir = Path(__file__).parent / 'seed_data'
+        self.registry_path = self.data_dir / 'menus.registry.yaml'
+        self.menu_registry_loader = MenuRegistryLoader(self.registry_path)
         self._manifest: dict = None
         self._overlay_data: dict = None
+        self._registry_payload = None
         logger.info(f"Initializing SeedDataManager for environment: {env}")
     
     def load_manifest(self) -> dict:
@@ -160,6 +164,12 @@ class SeedDataManager:
             else:
                 self._overlay_data = {}
         return self._overlay_data
+
+    def load_menu_registry_payload(self):
+        """Load menu registry payload from single source file."""
+        if self._registry_payload is None:
+            self._registry_payload = self.menu_registry_loader.load_registry(self.registry_path)
+        return self._registry_payload
     
     def merge_data(
         self,
@@ -199,6 +209,21 @@ class SeedDataManager:
                     result_map[key] = item.copy()
         
         return list(result_map.values())
+
+    async def _load_role_key_to_id(self) -> dict[str, int]:
+        rows = await self.session.execute(select(RoleDO.role_key, RoleDO.role_id).where(RoleDO.del_flag != '2'))
+        role_key_to_id: dict[str, int] = {}
+        for row in rows.all():
+            role_key = str(row.role_key or '').strip()
+            if not role_key:
+                continue
+            role_key_to_id[role_key] = int(row.role_id)
+        return role_key_to_id
+
+    def _load_registry_menus(self) -> list[dict[str, Any]]:
+        payload = self.load_menu_registry_payload()
+        menu_map = self.menu_registry_loader.build_menu_target_map(payload)
+        return [menu_map[menu_id] for menu_id in sorted(menu_map.keys())]
     
     async def seed_all(self, reset: bool = False) -> None:
         """
@@ -278,7 +303,10 @@ class SeedDataManager:
             return
         
         # Load data
-        data = self.load_base_data(entity)
+        if entity == 'menus':
+            data = self._load_registry_menus()
+        else:
+            data = self.load_base_data(entity)
         if not data:
             logger.info(f"No {entity} data found")
             return
@@ -457,33 +485,25 @@ class SeedDataManager:
     
     async def seed_role_menus(self) -> None:
         """
-        Create role-menu associations from overlay.
-        
-        Supports both flat menu_ids list and expanded format.
+        Create role-menu associations from menus.registry.yaml.
         """
         logger.info("Seeding role-menu associations...")
         
         result = await self.session.execute(
-            select(RoleMenuDO).where(RoleMenuDO.role_id == 2)
+            select(RoleMenuDO).limit(1)
         )
         if result.scalar_one_or_none():
             logger.info("Role-menu associations already exist, skipping")
             return
-        
-        overlay = self.load_overlay()
-        role_menus = overlay.get('role_menus', [])
-        
+
+        payload = self.load_menu_registry_payload()
+        role_key_to_id = await self._load_role_key_to_id()
+        target_state = self.menu_registry_loader.build_target_state(payload, role_key_to_id)
+
         count = 0
-        for rm in role_menus:
-            role_id = rm['role_id']
-            menu_ids = rm.get('menu_ids', [])
-            
-            for menu_id in menu_ids:
-                self.session.add(RoleMenuDO(
-                    role_id=role_id,
-                    menu_id=menu_id
-                ))
-                count += 1
+        for role_id, menu_id in sorted(target_state.target_role_menu_pairs):
+            self.session.add(RoleMenuDO(role_id=role_id, menu_id=menu_id))
+            count += 1
         
         await self.session.flush()
         logger.info(f"Created {count} role-menu associations")

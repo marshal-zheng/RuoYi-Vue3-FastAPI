@@ -46,22 +46,20 @@ async def test_runtime_startup_sync_runs_once(monkeypatch) -> None:
 async def test_runtime_file_change_triggers_sync(tmp_path) -> None:
     from modules.system.runtime.dev_menu_sync_runtime import DevMenuSyncRuntime
 
-    base_file = tmp_path / 'menus.yaml'
-    overlay_file = tmp_path / 'dev.yaml'
-    base_file.write_text('menus: []\n', encoding='utf-8')
-    overlay_file.write_text('menus: []\n', encoding='utf-8')
+    registry_file = tmp_path / 'menus.registry.yaml'
+    registry_file.write_text('version: \"1\"\\nmenus: []\\nrole_grants: []\\n', encoding='utf-8')
 
     service = SimpleNamespace(sync_once=AsyncMock(return_value=SimpleNamespace(success=True)))
     runtime = DevMenuSyncRuntime(
         service_factory=lambda: service,
-        watch_paths=(base_file, overlay_file),
+        watch_paths=(registry_file,),
         poll_interval_seconds=0.01,
         debounce_seconds=0.0,
     )
 
     await runtime.start()
     await asyncio.sleep(0.03)
-    base_file.write_text('menus:\n  - menu_id: 1\n', encoding='utf-8')
+    registry_file.write_text('version: \"1\"\\nmenus:\\n  - menu_id: 1\\nrole_grants: []\\n', encoding='utf-8')
     await asyncio.sleep(0.05)
     await runtime.stop()
 

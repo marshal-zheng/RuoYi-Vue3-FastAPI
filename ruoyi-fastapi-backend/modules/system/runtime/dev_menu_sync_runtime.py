@@ -81,11 +81,17 @@ class DevMenuSyncRuntime:
         """Stop runtime loop."""
         self._stop_event.set()
         if self._watch_task is not None:
-            self._watch_task.cancel()
             try:
-                await self._watch_task
-            except asyncio.CancelledError:
-                pass
+                await asyncio.wait_for(
+                    self._watch_task,
+                    timeout=max(self._poll_interval_seconds + self._debounce_seconds, 0.1),
+                )
+            except asyncio.TimeoutError:
+                self._watch_task.cancel()
+                try:
+                    await self._watch_task
+                except asyncio.CancelledError:
+                    pass
         self._watch_task = None
 
     async def trigger_sync(self, trigger: str) -> None:
@@ -134,8 +140,10 @@ class DevMenuSyncRuntime:
                 self._snapshot_mtimes()
             try:
                 await asyncio.wait_for(self._stop_event.wait(), timeout=self._poll_interval_seconds)
-            except TimeoutError:
+            except asyncio.TimeoutError:
                 continue
+            except asyncio.CancelledError:
+                break
 
     def _snapshot_mtimes(self) -> None:
         self._known_mtimes = {

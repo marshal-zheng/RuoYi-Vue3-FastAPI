@@ -62,6 +62,13 @@ resilience-policy-binding-check:
   script:
     - python ruoyi-fastapi-backend/scripts/check_resilience_policy_bindings.py
 
+menu-registry-check:
+  stage: security
+  image: python:3.11
+  script:
+    - pip install -r ruoyi-fastapi-backend/requirements.txt
+    - python ruoyi-fastapi-backend/scripts/check_menu_registry.py --strict
+
 magic-flag-literal-check:
   stage: security
   image: python:3.11

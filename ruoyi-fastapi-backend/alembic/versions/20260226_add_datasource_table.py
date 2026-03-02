@@ -7,6 +7,7 @@ Create Date: 2026-02-26
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import inspect
 
 
 # revision identifiers
@@ -17,6 +18,11 @@ depends_on = None
 
 
 def upgrade() -> None:
+    bind = op.get_bind()
+    inspector = inspect(bind)
+    if 'sys_datasource' in inspector.get_table_names():
+        return
+
     op.create_table(
         'sys_datasource',
         sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),

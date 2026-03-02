@@ -28,8 +28,7 @@ from modules.registry import (
     register_modules,
 )
 from modules.system.runtime import (
-    DEFAULT_BASE_MENU_FILE,
-    DEFAULT_OVERLAY_FILE,
+    DEFAULT_MENU_REGISTRY_FILE,
     DevMenuReconcileService,
     DevMenuSyncRuntime,
     is_dev_menu_sync_enabled,
@@ -211,13 +210,12 @@ async def lifespan(app: FastAPI):
     if is_dev_menu_sync_enabled():
         app.state.dev_menu_sync_runtime = DevMenuSyncRuntime(
             service_factory=lambda: DevMenuReconcileService(query_db=AsyncSessionLocal()),
-            watch_paths=(DEFAULT_BASE_MENU_FILE, DEFAULT_OVERLAY_FILE),
+            watch_paths=(DEFAULT_MENU_REGISTRY_FILE,),
         )
         await app.state.dev_menu_sync_runtime.start()
         logger.info(
-            '开发态菜单热同步已启用，监听文件: {}, {}',
-            str(DEFAULT_BASE_MENU_FILE),
-            str(DEFAULT_OVERLAY_FILE),
+            '开发态菜单热同步已启用，监听文件: {}',
+            str(DEFAULT_MENU_REGISTRY_FILE),
         )
     else:
         if DevMenuSyncConfig.dev_menu_sync and AppConfig.app_env != 'dev':

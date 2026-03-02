@@ -134,6 +134,29 @@ jobs:
       - name: Check resilience policy bindings
         run: python scripts/check_resilience_policy_bindings.py
 
+  menu-registry-check:
+    name: Menu Registry Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ruoyi-fastapi-backend/requirements*.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check menu registry
+        run: python scripts/check_menu_registry.py --strict
+
   backend-typecheck:
     name: Backend Type Check (mypy)
     runs-on: ubuntu-latest

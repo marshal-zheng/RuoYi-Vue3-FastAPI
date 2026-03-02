@@ -16,7 +16,7 @@ from module_admin.entity.do.user_do import UserDO, UserRoleDO
 
 def _write_yaml(path: Path, payload: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(yaml.safe_dump(payload, allow_unicode=True), encoding='utf-8')
+    path.write_text(yaml.safe_dump(payload, allow_unicode=True, sort_keys=False), encoding='utf-8')
 
 
 def _menu_payload(menu_id: int, name: str) -> dict:
@@ -38,6 +38,19 @@ def _menu_payload(menu_id: int, name: str) -> dict:
         'icon': 'menu',
         'remark': '',
         'managed_by_seed': True,
+    }
+
+
+def _registry_payload(menus: list[dict], role_key: str, menu_ids: list[int]) -> dict:
+    return {
+        'version': '1',
+        'menus': menus,
+        'role_grants': [
+            {
+                'role_key': role_key,
+                'menu_ids': menu_ids,
+            }
+        ],
     }
 
 
@@ -65,6 +78,7 @@ async def test_menu_sync_and_signature_change_flow(test_db: AsyncSession, tmp_pa
 
     user_id = 8200
     role_id = 8300
+    role_key = 'dev-e2e'
     old_menu_id = 8400
     new_menu_id = 8500
 
@@ -82,7 +96,7 @@ async def test_menu_sync_and_signature_change_flow(test_db: AsyncSession, tmp_pa
         RoleDO(
             role_id=role_id,
             role_name='dev-e2e-role',
-            role_key='dev-e2e',
+            role_key=role_key,
             role_sort=1,
             status='0',
             del_flag='0',
@@ -92,13 +106,10 @@ async def test_menu_sync_and_signature_change_flow(test_db: AsyncSession, tmp_pa
     test_db.add(RoleMenuDO(role_id=role_id, menu_id=old_menu_id))
     await test_db.flush()
 
-    base_file = tmp_path / 'base' / 'menus.yaml'
-    overlay_file = tmp_path / 'overlays' / 'dev.yaml'
+    registry_file = tmp_path / 'menus.registry.yaml'
+    _write_yaml(registry_file, _registry_payload([_menu_payload(old_menu_id, 'old-menu')], role_key, [old_menu_id]))
 
-    _write_yaml(base_file, {'menus': [_menu_payload(old_menu_id, 'old-menu')]})
-    _write_yaml(overlay_file, {})
-
-    reconcile_service = DevMenuReconcileService(query_db=test_db, base_menu_file=base_file, overlay_file=overlay_file)
+    reconcile_service = DevMenuReconcileService(query_db=test_db, registry_file=registry_file)
     signature_service = DevMenuSignatureService(query_db=test_db)
 
     first_report = await reconcile_service.sync_once(trigger='startup', dry_run=False)
@@ -106,7 +117,7 @@ async def test_menu_sync_and_signature_change_flow(test_db: AsyncSession, tmp_pa
 
     signature_before = await signature_service.get_user_signature(user_id)
 
-    _write_yaml(base_file, {'menus': [_menu_payload(new_menu_id, 'new-menu')]})
+    _write_yaml(registry_file, _registry_payload([_menu_payload(new_menu_id, 'new-menu')], role_key, [new_menu_id]))
     second_report = await reconcile_service.sync_once(trigger='file_change', dry_run=False)
     assert second_report.success is True
     assert second_report.deleted == 1
@@ -126,4 +137,5 @@ async def test_menu_sync_and_signature_change_flow(test_db: AsyncSession, tmp_pa
     assert old_menu_id not in menu_ids
     assert new_menu_id in menu_ids
     assert (role_id, old_menu_id) not in role_menu_pairs
+    assert (role_id, new_menu_id) in role_menu_pairs
     assert signature_before != signature_after

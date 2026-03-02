@@ -1,11 +1,13 @@
 import argparse
 import os
 import sys
-from dotenv import load_dotenv
 from functools import lru_cache
+from pathlib import Path
+from typing import Literal
+
+from dotenv import load_dotenv
 from pydantic import computed_field
 from pydantic_settings import BaseSettings
-from typing import Literal
 
 
 class AppSettings(BaseSettings):
@@ -20,6 +22,7 @@ class AppSettings(BaseSettings):
     app_port: int = 9099
     app_version: str = '1.0.0'
     app_reload: bool = True
+    app_access_log: bool = False
     app_ip_location_query: bool = True
     app_same_time_login: bool = True
 
@@ -160,6 +163,7 @@ class LogSettings(BaseSettings):
 
     log_json_enabled: bool = True
     log_level: str = "INFO"
+    request_logging_enabled: bool = False
     log_error_file_level: str = "ERROR"
     log_error_rotation: str = '50MB'
     log_error_compression: str = 'zip'
@@ -428,6 +432,7 @@ class GetConfig:
         """
         解析命令行参数
         """
+        backend_root = Path(__file__).resolve().parents[1]
         if 'uvicorn' in sys.argv[0]:
             # 使用uvicorn启动时，命令行参数需要按照uvicorn的文档进行配置，无法自定义参数
             pass
@@ -447,7 +452,7 @@ class GetConfig:
         if run_env != '':
             env_file = f'.env.{run_env}'
         # 加载配置
-        load_dotenv(env_file)
+        load_dotenv(backend_root / env_file)
 
         # 统一数据库默认配置，避免被历史 .env 文件中空密码覆盖
         # 当前项目约定：开发环境使用 root/admin1234 连接 ruoyi-fastapi 库

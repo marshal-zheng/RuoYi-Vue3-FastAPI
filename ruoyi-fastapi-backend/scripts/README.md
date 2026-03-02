@@ -125,15 +125,26 @@ python scripts/seed_data.py --env prod
 ```
 seed_data/
 ├── manifest.yaml          # 数据加载清单
+├── menus.registry.yaml    # 菜单+授权唯一声明源
 ├── base/                  # 基础数据
 │   ├── configs.yaml       # 系统配置
 │   ├── depts.yaml         # 部门数据
 │   ├── dict_types.yaml    # 字典类型
 │   ├── dict_data.yaml     # 字典数据
-│   ├── menus.yaml         # 菜单数据
 │   ├── posts.yaml         # 岗位数据
 │   └── roles.yaml         # 角色数据
 └── overlays/              # 环境覆盖
-    ├── dev.yaml           # 开发环境
+    ├── dev.yaml           # 开发环境（不再承载 role_menus）
     └── prod.yaml          # 生产环境
+```
+
+### 菜单声明工具链
+
+```bash
+# 新增/删除菜单脚手架
+python scripts/menu_registry_tool.py add --parent-id 0 --menu-name 示例 --path demo --component demo/index
+python scripts/menu_registry_tool.py remove --menu-id 9999 --cascade
+
+# 本地与 CI 校验
+python scripts/check_menu_registry.py --strict
 ```
