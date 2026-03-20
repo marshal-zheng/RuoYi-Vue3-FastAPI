@@ -96,7 +96,7 @@ class TestAuthenticationIntegration:
     
     def test_logout_endpoint(self, test_client):
         """Test logout endpoint"""
-        response = test_client.post("/logout")
+        response = test_client.post("/auth/logout")
         assert response.status_code in [200, 401, 404]
     
     def test_get_info_endpoint(self, test_client):

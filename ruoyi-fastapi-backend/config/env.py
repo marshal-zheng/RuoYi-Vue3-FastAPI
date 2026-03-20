@@ -49,6 +49,57 @@ class JwtSettings(BaseSettings):
     jwt_redis_expire_minutes: int = 30
 
 
+class SecuritySettings(BaseSettings):
+    """
+    安全硬切配置（JWT/CSRF/CSP/Origin）
+    """
+
+    security_hard_cut_mode: bool = True
+
+    security_jwt_sign_algorithm: str = 'RS256'
+    security_jwt_allowed_algorithms: str = 'RS256,EdDSA'
+    security_jwt_issuer: str = 'ruoyi-fastapi'
+    security_jwt_audience_api: str = 'ruoyi-api'
+    security_jwt_audience_embed: str = 'ruoyi-embed'
+    security_jwt_audience_ws: str = 'ruoyi-ws'
+    security_jwt_private_key_pem: str = ''
+    security_jwt_public_key_pem: str = ''
+    security_jwt_max_expire_seconds: int = 600
+    security_jwt_clock_skew_seconds: int = 60
+    security_key_rotation_grace_seconds: int = 900
+    security_refresh_expire_seconds: int = 604800
+    security_access_cookie_name: str = 'ruoyi_at'
+    security_refresh_cookie_name: str = 'ruoyi_rt'
+    security_cookie_samesite: str = 'lax'
+
+    security_m2m_expire_seconds: int = 600
+    security_embed_access_expire_seconds: int = 300
+    security_embed_grant_ttl_seconds: int = 60
+    security_ws_ticket_ttl_seconds: int = 30
+
+    security_allowed_origins: str = (
+        'http://localhost,http://127.0.0.1,http://localhost:80,http://127.0.0.1:80,'
+        'http://localhost:5173,http://127.0.0.1:5173,http://localhost:3100,http://127.0.0.1:3100'
+    )
+    security_cors_allow_credentials: bool = False
+
+    security_csrf_enabled: bool = True
+    security_csrf_protected_paths: str = '/auth/refresh,/auth/logout,/auth/embed,/auth/ws-ticket'
+    security_csrf_header_name: str = 'X-CSRF-Token'
+    security_csrf_cookie_name: str = 'csrf_token'
+    security_csrf_token_ttl_seconds: int = 604800
+
+    security_csp_enabled: bool = True
+    security_csp_script_src: str = "'self'"
+    security_csp_style_src: str = "'self' 'unsafe-inline'"
+    security_csp_img_src: str = "'self' data:"
+    security_csp_connect_src: str = "'self'"
+    security_frame_ancestors: str = "'self'"
+    security_hsts_enabled: bool = True
+    security_hsts_max_age: int = 31536000
+    security_event_alert_threshold: int = 20
+
+
 class SensitiveDataSettings(BaseSettings):
     """
     敏感数据加密配置
@@ -77,7 +128,7 @@ class DataBaseSettings(BaseSettings):
     db_password: str = 'admin1234'
     db_database: str = 'ruoyi-fastapi'
     db_echo: bool = True
-    
+
     # 连接池配置 - 遵循 Google 最佳实践
     # 公式: pool_size = (CPU 核心数 × 2) + 有效磁盘数
     # 对于 4 核 CPU: (4 × 2) + 1 = 9，向上取整到 10
@@ -85,7 +136,7 @@ class DataBaseSettings(BaseSettings):
     db_max_overflow: int = 20  # 🔧 峰值时额外连接（从 10 增加到 20）
     db_pool_recycle: int = 3600  # 连接回收时间（1小时）
     db_pool_timeout: int = 30  # 获取连接超时（30秒）
-    
+
     # 查询超时配置
     db_statement_timeout: int = 30000  # SQL 语句超时（30秒，毫秒）
     db_lock_timeout: int = 10000  # 锁等待超时（10秒，毫秒）
@@ -118,7 +169,7 @@ class QueryCacheSettings(BaseSettings):
     query_cache_enabled: bool = True
     query_cache_default_ttl: int = 300
     query_cache_lock_enabled: bool = True
-    
+
     # COUNT 缓存配置（独立于查询缓存）
     count_cache_enabled: bool = True
     count_cache_default_ttl: int = 600  # COUNT 缓存时间较长，因为数据量变化频率低
@@ -316,7 +367,7 @@ class GetConfig:
     def __init__(self):
         self.parse_cli_args()
 
-    @lru_cache()
+    @lru_cache
     def get_app_config(self):
         """
         获取应用配置
@@ -324,7 +375,7 @@ class GetConfig:
         # 实例化应用配置模型
         return AppSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_jwt_config(self):
         """
         获取Jwt配置
@@ -332,14 +383,21 @@ class GetConfig:
         # 实例化Jwt配置模型
         return JwtSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_sensitive_config(self):
         """
         获取敏感数据加密配置
         """
         return SensitiveDataSettings()
 
-    @lru_cache()
+    @lru_cache
+    def get_security_config(self):
+        """
+        获取安全硬切配置
+        """
+        return SecuritySettings()
+
+    @lru_cache
     def get_database_config(self):
         """
         获取数据库配置
@@ -347,7 +405,7 @@ class GetConfig:
         # 实例化数据库配置模型
         return DataBaseSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_redis_config(self):
         """
         获取Redis配置
@@ -355,7 +413,7 @@ class GetConfig:
         # 实例化Redis配置模型
         return RedisSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_gen_config(self):
         """
         获取代码生成配置
@@ -363,7 +421,7 @@ class GetConfig:
         # 实例化代码生成配置
         return GenSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_upload_config(self):
         """
         获取数据库配置
@@ -371,56 +429,56 @@ class GetConfig:
         # 实例上传配置
         return UploadSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_query_cache_config(self):
         """
         获取查询缓存配置
         """
         return QueryCacheSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_audit_config(self):
         """
         获取审计日志配置
         """
         return AuditSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_error_handling_config(self):
         """
         获取错误处理配置
         """
         return ErrorHandlingSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_log_config(self):
         """
         获取日志配置
         """
         return LogSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_idempotency_config(self):
         """
         获取幂等配置
         """
         return IdempotencySettings()
 
-    @lru_cache()
+    @lru_cache
     def get_rate_limit_config(self):
         """
         获取限流配置
         """
         return RateLimitSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_dev_menu_sync_config(self):
         """
         获取开发态菜单热同步配置
         """
         return DevMenuSyncSettings()
 
-    @lru_cache()
+    @lru_cache
     def get_otel_config(self):
         """
         获取 OpenTelemetry 配置
@@ -472,6 +530,8 @@ AppConfig = get_config.get_app_config()
 JwtConfig = get_config.get_jwt_config()
 # 敏感数据加密配置
 SensitiveConfig = get_config.get_sensitive_config()
+# 安全硬切配置
+SecurityConfig = get_config.get_security_config()
 # 数据库配置
 DataBaseConfig = get_config.get_database_config()
 # Redis配置

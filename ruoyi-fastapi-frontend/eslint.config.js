@@ -160,6 +160,13 @@ export default [
       'no-console': 'warn',
       'no-debugger': 'warn',
       'no-unused-vars': 'off',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "AssignmentExpression[left.property.name='innerHTML']",
+          message: '禁止直接写入 innerHTML，请使用安全渲染方案。',
+        },
+      ],
       
       // Prettier 相关
       'prettier/prettier': [
@@ -200,11 +207,18 @@ export default [
     rules: {
       // Vue 相关规则
       'vue/no-unused-vars': 'warn',
-      'vue/no-v-html': 'off',
+      'vue/no-v-html': 'error',
       'vue/require-default-prop': 'off',
       'vue/multi-word-component-names': 'off',
       'vue/require-v-for-key': 'error',
       'vue/no-use-v-if-with-v-for': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "AssignmentExpression[left.property.name='innerHTML']",
+          message: '禁止直接写入 innerHTML，请使用安全渲染方案。',
+        },
+      ],
 
       // TypeScript 已覆盖，禁用 ESLint 原版避免误报
       'no-undef': 'off',

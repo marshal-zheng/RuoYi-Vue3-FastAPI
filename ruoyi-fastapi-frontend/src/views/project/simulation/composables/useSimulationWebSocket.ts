@@ -5,7 +5,7 @@
  */
 import { ref, shallowRef, onUnmounted, type Ref, type ShallowRef } from 'vue';
 import { ElMessage } from 'element-plus';
-import { getToken } from '@/utils/auth';
+import request from '@/utils/request';
 
 /**
  * WebSocket消息类型
@@ -140,17 +140,39 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
    * 连接WebSocket
    */
   const connect = (sessionId: string): void => {
+    void connectInternal(sessionId);
+  };
+
+  const connectInternal = async (sessionId: string): Promise<void> => {
     if (ws.value && ws.value.readyState === WebSocket.OPEN) {
       console.log('WebSocket已连接');
       return;
     }
 
-    // 构建WebSocket URL，携带token以通过后端鉴权
-    const buildWsUrl = (): string => {
+    let wsTicket = '';
+    try {
+      const ticketResp = await request<{ wsTicket?: string; ws_ticket?: string }>({
+        url: '/auth/ws-ticket',
+        method: 'post',
+        data: { session_id: sessionId },
+      });
+      wsTicket = ticketResp.wsTicket || ticketResp.ws_ticket || '';
+    } catch (err) {
+      console.error('获取WebSocket票据失败:', err);
+      ElMessage.error('获取实时连接凭据失败');
+      return;
+    }
+
+    if (!wsTicket) {
+      ElMessage.error('实时连接凭据为空');
+      return;
+    }
+
+    // 构建WebSocket URL，携带一次性ticket通过后端鉴权
+    const buildWsUrl = (ticket: string): string => {
       const baseApi = import.meta.env.VITE_APP_BASE_API || '';
-      const token = getToken();
-      const tokenQuery = token ? `?token=${encodeURIComponent(token)}` : '';
-      const relativePath = `/simulation/sessions/${sessionId}/ws${tokenQuery}`;
+      const ticketQuery = `?ticket=${encodeURIComponent(ticket)}`;
+      const relativePath = `/simulation/sessions/${sessionId}/ws${ticketQuery}`;
 
       // 如果 baseApi 是完整的 http(s) 地址，直接转换为 ws(s) 连接到真实后端
       if (/^https?:\/\//i.test(baseApi)) {
@@ -167,7 +189,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
       return `${protocol}//${wsHost}${apiPrefix}${relativePath}`;
     };
 
-    const wsUrl = buildWsUrl();
+    const wsUrl = buildWsUrl(wsTicket);
 
     try {
       ws.value = new WebSocket(wsUrl);

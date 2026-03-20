@@ -10,9 +10,8 @@ export function getDevMenuSignature() {
   return request<DevMenuSignaturePayload>({
     url: '/dev/menu/signature',
     method: 'get',
-    headers: {
-      silentError: true,
-    },
+    silentError: true,
+    skipRelogin: true,
   });
 }
 

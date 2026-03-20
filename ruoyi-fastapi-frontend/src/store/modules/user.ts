@@ -1,8 +1,9 @@
 import { login, logout, getInfo } from '@/api/login';
-import { getToken, setToken, removeToken } from '@/utils/auth';
+import { clearSecurityTokens, getToken, setCsrfToken, setToken } from '@/utils/auth';
 import { isHttp, isEmpty } from '@/utils/validate';
 import { clampBcryptPassword } from '@/utils/password';
 import defAva from '@/assets/images/profile.jpg';
+import request from '@/utils/request';
 
 interface UserInfo {
   username: string;
@@ -40,13 +41,65 @@ const useUserStore = defineStore('user', {
       const uuid = userInfo.uuid;
       return new Promise((resolve, reject) => {
         login(username, password, code, uuid)
-          .then((res) => {
+          .then(async (res) => {
             setToken(res.token);
             this.token = res.token;
+            const loginCsrfToken = res.csrfToken || res.csrf_token || '';
+            if (loginCsrfToken) {
+              setCsrfToken(loginCsrfToken);
+              resolve(res);
+              return;
+            }
+            try {
+              const csrfResp = await request<{ csrfToken?: string; csrf_token?: string }>({
+                url: '/auth/csrf-token',
+                method: 'post',
+                silentSuccess: true,
+              });
+              const csrfToken = csrfResp.csrfToken || csrfResp.csrf_token || '';
+              if (csrfToken) {
+                setCsrfToken(csrfToken);
+              }
+            } catch (csrfError) {
+              console.warn('获取CSRF token失败，后续敏感操作可能被后端拒绝', csrfError);
+            }
             resolve(res);
           })
           .catch((error) => {
             reject(error);
+          });
+      });
+    },
+    // 新标签页/刷新后的会话恢复
+    restoreSession() {
+      return new Promise<boolean>((resolve) => {
+        request<{ token?: string; csrfToken?: string; csrf_token?: string }>({
+          url: '/auth/refresh',
+          method: 'post',
+          isToken: false,
+          silentSuccess: true,
+          silentError: true,
+        })
+          .then((res) => {
+            const token = res.token || '';
+            if (!token) {
+              clearSecurityTokens();
+              this.token = '';
+              resolve(false);
+              return;
+            }
+            setToken(token);
+            this.token = token;
+            const csrfToken = res.csrfToken || res.csrf_token || '';
+            if (csrfToken) {
+              setCsrfToken(csrfToken);
+            }
+            resolve(true);
+          })
+          .catch(() => {
+            clearSecurityTokens();
+            this.token = '';
+            resolve(false);
           });
       });
     },
@@ -89,7 +142,7 @@ const useUserStore = defineStore('user', {
             this.token = '';
             this.roles = [];
             this.permissions = [];
-            removeToken();
+            clearSecurityTokens();
             resolve(undefined);
           });
       });

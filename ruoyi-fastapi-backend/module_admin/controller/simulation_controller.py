@@ -823,14 +823,31 @@ async def websocket_endpoint(
             "data": {...}
         }
     """
-    token = (
-        websocket.query_params.get('token')
-        or websocket.headers.get('Authorization')
-        or websocket.cookies.get('Admin-Token')
+    ticket = websocket.query_params.get('ticket')
+    security_service = getattr(websocket.app.state, 'security_token_service', None)
+    if security_service is None:
+        logger.error('安全令牌服务未初始化，拒绝连接')
+        await websocket.close(code=1011, reason='Security service unavailable')
+        return
+
+    origin = security_service.extract_origin(
+        origin=websocket.headers.get('origin'),
+        referer=websocket.headers.get('referer'),
     )
+    request_id = websocket.headers.get('x-request-id', '')
+    source_ip = websocket.client.host if websocket.client else ''
 
     try:
-        await LoginService.get_current_user_from_token(websocket, token, query_db)
+        if not ticket:
+            raise ValueError('missing ws ticket')
+        security_service.ensure_origin_allowed(origin)
+        await security_service.consume_ws_ticket(
+            ticket=ticket,
+            origin=str(origin),
+            session_id=session_id,
+            request_id=request_id,
+            source_ip=source_ip,
+        )
     except Exception as e:
         logger.warning(f'WebSocket认证失败: {str(e)}')
         await websocket.close(code=1008, reason='Unauthorized')

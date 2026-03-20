@@ -142,9 +142,11 @@ export function param2Obj(url: string): Record<string, string> {
  * @returns {string}
  */
 export function html2Text(val: string): string {
-  const div = document.createElement('div');
-  div.innerHTML = val;
-  return div.textContent || div.innerText || '';
+  if (!val) {
+    return '';
+  }
+  const doc = new DOMParser().parseFromString(val, 'text/html');
+  return doc.body.textContent || '';
 }
 
 /**

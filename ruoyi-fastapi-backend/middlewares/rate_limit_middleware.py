@@ -7,12 +7,10 @@ import json
 import time
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-import jwt
 from fastapi import FastAPI
-from jwt.exceptions import InvalidTokenError
 from starlette.types import ASGIApp, Message, Scope, Send
 
-from config.env import JwtConfig, RateLimitConfig
+from config.env import RateLimitConfig
 from middlewares.trace_middleware import get_request_id
 from utils.log_util import logger
 
@@ -95,7 +93,7 @@ class RateLimitASGIMiddleware:
         headers = self._extract_headers(scope.get('headers', []))
         tier = self._resolve_tier(path=path, method=method)
         ip_identifier = self._resolve_client_ip(scope, headers)
-        user_identifier = self._resolve_user_identifier(headers)
+        user_identifier = await self._resolve_user_identifier(scope, headers)
         ip_limit, user_limit = self._limits_for_tier(tier)
 
         now = int(time.time())
@@ -234,8 +232,7 @@ class RateLimitASGIMiddleware:
             return True
         return any(client_addr in network for network in self._trusted_proxy_networks)
 
-    @staticmethod
-    def _resolve_user_identifier(headers: Dict[str, str]) -> Optional[str]:
+    async def _resolve_user_identifier(self, scope: Scope, headers: Dict[str, str]) -> Optional[str]:
         auth_header = headers.get('authorization', '')
         if not auth_header.lower().startswith('bearer '):
             return None
@@ -244,15 +241,27 @@ class RateLimitASGIMiddleware:
         if not token:
             return None
 
-        try:
-            payload = jwt.decode(token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm])
-            user_id = payload.get('user_id') or payload.get('userId')
-            return str(user_id) if user_id is not None else None
-        except InvalidTokenError:
+        service = self._resolve_security_service(scope)
+        if service is None:
             return None
+        try:
+            user_ctx = await service.extract_user_context_from_token(token)
+            if not user_ctx:
+                return None
+            user_id = user_ctx.get('userId')
+            return str(user_id) if user_id else None
         except Exception as exc:
             logger.warning(f'rate limit decode token failed: {exc}')
             return None
+
+    @staticmethod
+    def _resolve_security_service(scope: Scope) -> Optional[Any]:
+        app = scope.get('app')
+        state = getattr(app, 'state', None) if app else None
+        service = getattr(state, 'security_token_service', None) if state else None
+        if service and hasattr(service, 'extract_user_context_from_token'):
+            return service
+        return None
 
     def _counter_key(self, tier: str, scope_kind: str, identifier: str, bucket: int) -> str:
         return f'{self.key_prefix}:{tier}:{scope_kind}:{identifier}:{bucket}'

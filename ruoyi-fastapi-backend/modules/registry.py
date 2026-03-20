@@ -21,6 +21,7 @@ from modules.system.api.dict_controller import dictController
 from modules.scheduler.api.job_controller import jobController
 from modules.system.api.log_controller import logController
 from modules.identity.api.login_controller import loginController
+from modules.identity.api.security_controller import securityController
 from modules.system.api.menu_controller import menuController
 from modules.system.api.notice_controller import noticeController
 from modules.system.api.online_controller import onlineController
@@ -130,6 +131,7 @@ _module_registry: list[ModuleRegistration] = [
         version='v1',
         routers=(
             RouterRegistration(router=loginController, tags=('登录模块',)),
+            RouterRegistration(router=securityController, tags=('安全鉴权模块',)),
             RouterRegistration(router=captchaController, tags=('验证码模块',)),
             RouterRegistration(router=userController, tags=('系统管理-用户管理',)),
             RouterRegistration(router=roleController, tags=('系统管理-角色管理',)),

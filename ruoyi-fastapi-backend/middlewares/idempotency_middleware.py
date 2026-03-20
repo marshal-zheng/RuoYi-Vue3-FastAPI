@@ -17,11 +17,9 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 from urllib.parse import parse_qsl
 
 from fastapi import FastAPI
-import jwt
-from jwt.exceptions import InvalidTokenError
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from config.env import IdempotencyConfig, JwtConfig
+from config.env import IdempotencyConfig
 from middlewares.trace_middleware import get_request_id
 from utils.log_util import logger
 
@@ -109,7 +107,7 @@ class IdempotencyASGIMiddleware:
             await self.app(scope, receive, send)
             return
 
-        identity_scope = self._resolve_identity_scope(scope, request_headers)
+        identity_scope = await self._resolve_identity_scope(scope, request_headers)
         request_body = await self._drain_request_body(receive)
         replay_receive = self._build_replay_receive(request_body)
         content_type = request_headers.get('content-type', '')
@@ -314,7 +312,7 @@ class IdempotencyASGIMiddleware:
             return f'content-length-exceeds-limit:{content_length}'
         return None
 
-    def _resolve_identity_scope(self, scope: Scope, headers: Dict[str, str]) -> str:
+    async def _resolve_identity_scope(self, scope: Scope, headers: Dict[str, str]) -> str:
         auth_header = headers.get('authorization', '')
         if not auth_header.lower().startswith('bearer '):
             return f'anon:{self._resolve_client_ip(scope)}'
@@ -324,17 +322,20 @@ class IdempotencyASGIMiddleware:
             return f'anon:{self._resolve_client_ip(scope)}'
 
         token_hash = hashlib.sha256(token.encode('utf-8')).hexdigest()[:24]
-        try:
-            payload = jwt.decode(token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm])
-        except InvalidTokenError:
+        service = self._resolve_security_service(scope)
+        if service is None:
             return f'token:{token_hash}'
+        try:
+            payload = await service.extract_user_context_from_token(token)
         except Exception as exc:
             logger.warning(f'idempotency decode token failed: {exc}')
             return f'token:{token_hash}'
+        if not payload:
+            return f'token:{token_hash}'
 
-        user_id = payload.get('user_id') or payload.get('userId') or payload.get('sub')
-        tenant_id = payload.get('tenant_id') or payload.get('tenantId')
-        session_id = payload.get('session_id') or payload.get('sessionId')
+        user_id = payload.get('userId')
+        tenant_id = payload.get('tenantId')
+        session_id = payload.get('sessionId')
 
         segments: List[str] = []
         if user_id is not None:
@@ -346,6 +347,15 @@ class IdempotencyASGIMiddleware:
         if segments:
             return '|'.join(segments)
         return f'token:{token_hash}'
+
+    @staticmethod
+    def _resolve_security_service(scope: Scope) -> Optional[Any]:
+        app = scope.get('app')
+        state = getattr(app, 'state', None) if app else None
+        service = getattr(state, 'security_token_service', None) if state else None
+        if service and hasattr(service, 'extract_user_context_from_token'):
+            return service
+        return None
 
     @staticmethod
     def _resolve_client_ip(scope: Scope) -> str:

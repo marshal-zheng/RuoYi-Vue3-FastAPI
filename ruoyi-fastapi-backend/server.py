@@ -27,6 +27,7 @@ from modules.registry import (
     log_loaded_modules,
     register_modules,
 )
+from modules.identity.application.services.security_token_service import SecurityTokenService
 from modules.system.runtime import (
     DEFAULT_MENU_REGISTRY_FILE,
     DevMenuReconcileService,
@@ -177,6 +178,7 @@ async def lifespan(app: FastAPI):
         test_mode=_is_test_env(),
         test_redis_client=DummyRedis() if _is_test_env() else None,
     )
+    app.state.security_token_service = SecurityTokenService(app.state.redis)
 
     app.state.sim_runtime_state = init_simulation_runtime_state_store(redis_client=app.state.redis)
 

@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-03-03T09:25:41.606709+00:00",
+  "spec": "jwt-security-hardcut",
+  "mappingVersion": "2026-03-03",
+  "coverage": {
+    "acceptanceCriteriaCount": 37,
+    "standardsCount": 25,
+    "standards": [
+      "CSP-Level-3",
+      "NIST-SP-800-63B",
+      "NIST-SP-800-63B-5.1",
+      "OWASP-API-Top10-2023-API8",
+      "OWASP-ASVS-4.0.3-V1.1",
+      "OWASP-ASVS-4.0.3-V10.3",
+      "OWASP-ASVS-4.0.3-V14.4",
+      "OWASP-ASVS-4.0.3-V14.5",
+      "OWASP-ASVS-4.0.3-V2.1",
+      "OWASP-ASVS-4.0.3-V3.4",
+      "OWASP-ASVS-4.0.3-V3.5",
+      "OWASP-ASVS-4.0.3-V4.3",
+      "OWASP-ASVS-4.0.3-V5.3",
+      "OWASP-SAMM-Governance",
+      "OWASP-SAMM-Verification",
+      "OWASP-WebSocket-Security",
+      "RFC-6455",
+      "RFC-6455-7.4.1",
+      "RFC-7517",
+      "RFC-7519",
+      "RFC-7523",
+      "RFC-8725",
+      "RFC-8725-2.7",
+      "RFC-8725-3.1",
+      "RFC-8725-3.8"
+    ]
+  },
+  "tasks": {
+    "total": 14,
+    "completed": 14
+  },
+  "riskWaivers": []
+}

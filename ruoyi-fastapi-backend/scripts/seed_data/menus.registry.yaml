@@ -68,23 +68,6 @@ menus:
   perms: ''
   icon: build
   remark: 工程管理目录
-- menu_id: 5
-  menu_name: 数据源中心
-  managed_by_seed: true
-  parent_id: 0
-  order_num: 5
-  path: datasource
-  component: null
-  query: null
-  route_name: ''
-  is_frame: 1
-  is_cache: 0
-  menu_type: M
-  visible: '0'
-  status: '0'
-  perms: ''
-  icon: server
-  remark: 数据源中心目录
 - menu_id: 100
   menu_name: 用户管理
   managed_by_seed: true
@@ -425,23 +408,6 @@ menus:
   perms: monitor:operlog:list
   icon: form
   remark: 工程操作日志
-- menu_id: 120
-  menu_name: 数据源管理
-  managed_by_seed: true
-  parent_id: 5
-  order_num: 1
-  path: index
-  component: datasource/index
-  query: null
-  route_name: ''
-  is_frame: 1
-  is_cache: 0
-  menu_type: C
-  visible: '0'
-  status: '0'
-  perms: datasource:list
-  icon: datasource
-  remark: 数据源管理菜单
 - menu_id: 500
   menu_name: 操作日志
   managed_by_seed: true

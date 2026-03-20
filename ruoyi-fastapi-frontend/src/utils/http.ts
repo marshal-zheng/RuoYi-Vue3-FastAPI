@@ -15,7 +15,7 @@ import {
 } from '@zxio/http';
 import { ElNotification, ElMessage, ElMessageBox } from 'element-plus';
 import { h } from 'vue';
-import { getToken } from '@/utils/auth';
+import { getCsrfToken, getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
 import cache from '@/plugins/cache';
 import useUserStore from '@/store/modules/user';
@@ -33,6 +33,21 @@ const buildLoginRedirectUrl = (): string => {
   const current = `${location.pathname}${location.search}${location.hash}`;
   const redirect = encodeURIComponent(current || '/');
   return `/login?redirect=${redirect}`;
+};
+
+const readConfigFlag = (config: Record<string, unknown> | undefined, key: string): boolean => {
+  if (!config) {
+    return false;
+  }
+  if (config[key] === true) {
+    return true;
+  }
+  const headers = config.headers as Record<string, unknown> | undefined;
+  return headers?.[key] === true;
+};
+
+const shouldSkipRelogin = (config: Record<string, unknown> | undefined): boolean => {
+  return readConfigFlag(config, 'skipRelogin');
 };
 
 const triggerRelogin = (message: string): void => {
@@ -231,6 +246,18 @@ const beforeRequestTransform: HttpTransformHook = {
       }
     }
 
+    // 对写操作自动附加 CSRF Header（token 仅保存在内存中）
+    const method = (config.method || 'get').toLowerCase();
+    if (['post', 'put', 'patch', 'delete'].includes(method)) {
+      const csrfToken = getCsrfToken();
+      if (csrfToken) {
+        if (!config.headers) {
+          config.headers = {};
+        }
+        (config.headers as Record<string, string>)['X-CSRF-Token'] = csrfToken;
+      }
+    }
+
     return config;
   },
 };
@@ -242,8 +269,9 @@ const MUTATION_METHODS = ['post', 'put', 'delete', 'patch'];
 const afterResponseTransform: HttpTransformHook = {
   async afterResponse(response, options, context) {
     const config = response.config as Record<string, unknown>;
-    const silentError = (config?.silentError as boolean) === true;
-    const silentSuccess = (config?.silentSuccess as boolean) === true;
+    const silentError = readConfigFlag(config, 'silentError');
+    const silentSuccess = readConfigFlag(config, 'silentSuccess');
+    const skipRelogin = shouldSkipRelogin(config);
 
     // 二进制数据直接返回
     if (response.config.responseType === 'blob' || response.config.responseType === 'arraybuffer') {
@@ -279,8 +307,10 @@ const afterResponseTransform: HttpTransformHook = {
 
     // 401 未授权
     if (status === 401 || bizErrorCode === 20001 || bizErrorCode === 20002) {
-      triggerRelogin(errorMsg || '未认证，请先登录');
-      return Promise.reject('无效的会话，或者会话已过期，请重新登录。');
+      if (!skipRelogin) {
+        triggerRelogin(errorMsg || '未认证，请先登录');
+      }
+      return Promise.reject(new Error('无效的会话，或者会话已过期，请重新登录。'));
     }
 
     // 403 权限不足
@@ -292,7 +322,7 @@ const afterResponseTransform: HttpTransformHook = {
     }
 
     // 422 校验错误（展示字段级错误）
-    if (status === 422 || errorCode === 10001) {
+    if (status === 422 || bizErrorCode === 10001) {
       if (!silentError) {
         const errors = (payload.errors as Array<{ field: string; message: string }>) || [];
 
@@ -336,7 +366,8 @@ const afterResponseTransform: HttpTransformHook = {
       message?: string;
       response?: { data?: Record<string, unknown>; status?: number };
     };
-    const silentError = (axiosError.config?.silentError as boolean) === true;
+    const silentError = readConfigFlag(axiosError.config, 'silentError');
+    const skipRelogin = shouldSkipRelogin(axiosError.config);
     const data = axiosError.response?.data;
     const status = axiosError.response?.status;
     const code = (data?.code as number | undefined) || (data?.errorCode as number | undefined);
@@ -354,7 +385,9 @@ const afterResponseTransform: HttpTransformHook = {
     }
 
     if (status === 401 || code === 20001 || code === 20002) {
-      triggerRelogin(message || '未认证，请先登录');
+      if (!skipRelogin) {
+        triggerRelogin(message || '未认证，请先登录');
+      }
       throw error;
     }
 

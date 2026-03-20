@@ -1,0 +1,51 @@
+{
+  "version": "2026-03-03",
+  "controls": [
+    {"id": "R1.AC1", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["docs/specs/jwt-security-hardcut/design.md", "docs/specs/jwt-security-hardcut/tasks.md"]},
+    {"id": "R1.AC2", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["ruoyi-fastapi-backend/scripts/check_security_mapping.py"]},
+    {"id": "R1.AC3", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["docs/specs/jwt-security-hardcut/standards-mapping.json"]},
+
+    {"id": "R2.AC1", "standards": ["RFC-7519", "RFC-8725-3.1"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R2.AC2", "standards": ["RFC-7519"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R2.AC3", "standards": ["RFC-8725-3.1", "RFC-8725-3.8"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R2.AC4", "standards": ["RFC-8725-2.7"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py", "ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py"]},
+
+    {"id": "R3.AC1", "standards": ["OWASP-ASVS-4.0.3-V2.1"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/login_service.py"]},
+    {"id": "R3.AC2", "standards": ["OWASP-API-Top10-2023-API8"], "evidence": ["ruoyi-fastapi-backend/middlewares/token_source_guard_middleware.py", "ruoyi-fastapi-backend/tests/unit/middlewares/test_token_source_guard_middleware.py"]},
+    {"id": "R3.AC3", "standards": ["OWASP-ASVS-4.0.3-V14.4"], "evidence": ["ruoyi-fastapi-backend/middlewares/cors_middleware.py"]},
+    {"id": "R3.AC4", "standards": ["RFC-7523"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py", "ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+
+    {"id": "R4.AC1", "standards": ["OWASP-ASVS-4.0.3-V4.3"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R4.AC2", "standards": ["RFC-7519"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R4.AC3", "standards": ["OWASP-ASVS-4.0.3-V3.4"], "evidence": ["ruoyi-fastapi-backend/tests/unit/services/test_security_token_service.py"]},
+    {"id": "R4.AC4", "standards": ["OWASP-ASVS-4.0.3-V14.5"], "evidence": ["ruoyi-fastapi-frontend/src/security/embedBridge.ts", "ruoyi-fastapi-frontend/src/security/embedBridge.test.ts"]},
+    {"id": "R4.AC5", "standards": ["OWASP-ASVS-4.0.3-V4.3"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py"]},
+
+    {"id": "R5.AC1", "standards": ["RFC-6455"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py", "ruoyi-fastapi-backend/module_admin/controller/simulation_controller.py"]},
+    {"id": "R5.AC2", "standards": ["OWASP-WebSocket-Security"], "evidence": ["ruoyi-fastapi-backend/module_admin/controller/simulation_controller.py"]},
+    {"id": "R5.AC3", "standards": ["RFC-6455-7.4.1"], "evidence": ["ruoyi-fastapi-backend/module_admin/controller/simulation_controller.py"]},
+
+    {"id": "R6.AC1", "standards": ["OWASP-ASVS-4.0.3-V3.5"], "evidence": ["ruoyi-fastapi-backend/middlewares/csrf_guard_middleware.py"]},
+    {"id": "R6.AC2", "standards": ["OWASP-ASVS-4.0.3-V3.5"], "evidence": ["ruoyi-fastapi-backend/tests/unit/middlewares/test_csrf_guard_middleware.py"]},
+    {"id": "R6.AC3", "standards": ["OWASP-ASVS-4.0.3-V3.5"], "evidence": ["ruoyi-fastapi-backend/middlewares/csrf_guard_middleware.py"]},
+
+    {"id": "R7.AC1", "standards": ["CSP-Level-3"], "evidence": ["ruoyi-fastapi-backend/middlewares/security_headers_middleware.py"]},
+    {"id": "R7.AC2", "standards": ["OWASP-ASVS-4.0.3-V5.3"], "evidence": ["ruoyi-fastapi-frontend/eslint.config.js"]},
+    {"id": "R7.AC3", "standards": ["NIST-SP-800-63B-5.1"], "evidence": ["ruoyi-fastapi-frontend/src/views/login.vue"]},
+    {"id": "R7.AC4", "standards": ["OWASP-ASVS-4.0.3-V5.3"], "evidence": ["ruoyi-fastapi-frontend/eslint.config.js"]},
+    {"id": "R7.AC5", "standards": ["OWASP-ASVS-4.0.3-V3.4"], "evidence": ["ruoyi-fastapi-frontend/src/utils/auth.ts", "ruoyi-fastapi-frontend/src/utils/auth.test.ts"]},
+
+    {"id": "R8.AC1", "standards": ["RFC-7517"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py"]},
+    {"id": "R8.AC2", "standards": ["RFC-7517", "RFC-8725"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R8.AC3", "standards": ["NIST-SP-800-63B"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R8.AC4", "standards": ["RFC-7517", "RFC-7523"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py"]},
+
+    {"id": "R9.AC1", "standards": ["OWASP-ASVS-4.0.3-V10.3"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R9.AC2", "standards": ["OWASP-ASVS-4.0.3-V10.3"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
+    {"id": "R9.AC3", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["ruoyi-fastapi-backend/modules/identity/api/security_controller.py"]},
+
+    {"id": "R10.AC1", "standards": ["OWASP-SAMM-Verification"], "evidence": [".github/workflows/ci.yml", ".gitlab-ci.yml"]},
+    {"id": "R10.AC2", "standards": ["OWASP-SAMM-Verification"], "evidence": [".github/workflows/ci.yml", ".gitlab-ci.yml"]},
+    {"id": "R10.AC3", "standards": ["OWASP-SAMM-Governance"], "evidence": ["ruoyi-fastapi-backend/scripts/generate_security_evidence.py"]}
+  ]
+}

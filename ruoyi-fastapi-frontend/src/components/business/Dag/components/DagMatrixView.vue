@@ -96,10 +96,9 @@
         <template v-for="column in props.columns" :key="column.key">
           <el-table-column :label="column.title" :width="column.width">
             <template #default="{ row }">
-              <div
-                v-if="column.cellRenderer"
-                v-html="renderCustomCell(column.cellRenderer, row)"
-              ></div>
+              <div v-if="column.cellRenderer" class="custom-cell-text">
+                {{ renderCustomCell(column.cellRenderer, row) }}
+              </div>
               <span v-else>-</span>
             </template>
           </el-table-column>

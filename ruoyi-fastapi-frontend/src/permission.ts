@@ -13,6 +13,7 @@ import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
 NProgress.configure({ showSpinner: false });
 
 const whiteList: string[] = ['/login', '/register'];
+let restoringSessionPromise: Promise<boolean> | null = null;
 
 const isWhiteList = (path: string): boolean => {
   return whiteList.some((pattern) => isPathMatch(pattern, path));
@@ -31,12 +32,25 @@ const resolveLandingRedirect = (path: string, firstMenuPath: string): string => 
   return '';
 };
 
+const restoreSessionOnce = (): Promise<boolean> => {
+  if (!restoringSessionPromise) {
+    restoringSessionPromise = useUserStore()
+      .restoreSession()
+      .finally(() => {
+        restoringSessionPromise = null;
+      });
+  }
+  return restoringSessionPromise;
+};
+
 router.beforeEach(
   (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     NProgress.start();
     if (getToken()) {
       const permissionStore = usePermissionStore();
-      to.meta.title && useSettingsStore().setTitle(to.meta.title as string);
+      if (to.meta.title) {
+        useSettingsStore().setTitle(to.meta.title as string);
+      }
       /* has token*/
       if (to.path === '/login') {
         next({ path: '/' });
@@ -84,8 +98,19 @@ router.beforeEach(
         // 在免登录白名单，直接进入
         next();
       } else {
-        next(`/login?redirect=${to.fullPath}`); // 否则全部重定向到登录页
-        NProgress.done();
+        restoreSessionOnce()
+          .then((restored) => {
+            if (restored) {
+              next({ ...to, replace: true });
+              return;
+            }
+            next(`/login?redirect=${to.fullPath}`);
+            NProgress.done();
+          })
+          .catch(() => {
+            next(`/login?redirect=${to.fullPath}`);
+            NProgress.done();
+          });
       }
     }
   }

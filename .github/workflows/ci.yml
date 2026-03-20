@@ -134,6 +134,24 @@ jobs:
       - name: Check resilience policy bindings
         run: python scripts/check_resilience_policy_bindings.py
 
+  backend-security-mapping:
+    name: Backend Security Mapping Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate standards mapping
+        run: python scripts/check_security_mapping.py
+
   menu-registry-check:
     name: Menu Registry Check
     runs-on: ubuntu-latest
@@ -206,8 +224,86 @@ jobs:
           pip install -r requirements-dev.txt
       
       - name: Run tests
-        run: pytest tests/ -v --tb=short || true
-        # 使用 || true 因为测试可能尚未完善
+        run: pytest tests/ -v --tb=short
+
+  backend-security-test:
+    name: Backend Security Regression Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ruoyi-fastapi-backend/requirements*.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Run security middleware/service tests
+        run: |
+          pytest tests/unit/middlewares/test_rate_limit_middleware.py -v
+          pytest tests/unit/middlewares/test_idempotency_middleware.py -v
+          pytest tests/unit/middlewares/test_request_logging_middleware.py -v
+          pytest tests/unit/middlewares/test_csrf_guard_middleware.py -v
+          pytest tests/unit/middlewares/test_token_source_guard_middleware.py -v
+          pytest tests/unit/services/test_security_token_service.py -v
+
+  backend-sast:
+    name: Backend SAST (Bandit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ruoyi-fastapi-backend/requirements*.txt
+
+      - name: Install Bandit
+        run: pip install bandit
+
+      - name: Run Bandit
+        run: bandit -r . -ll
+
+  backend-dependency-audit:
+    name: Backend Dependency Audit
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: ruoyi-fastapi-backend/requirements*.txt
+
+      - name: Install dependencies and audit tool
+        run: |
+          pip install -r requirements.txt
+          pip install pip-audit
+
+      - name: Run pip-audit
+        run: pip-audit
 
   backend-migration-check:
     name: Backend Migration Check

@@ -17,6 +17,13 @@ interface LoadingInstance {
   close(): void;
 }
 
+interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+  isToken?: boolean;
+  silentSuccess?: boolean;
+  silentError?: boolean;
+  skipRelogin?: boolean;
+}
+
 let downloadLoadingInstance: LoadingInstance;
 
 // 重新导出 isRelogin
@@ -26,14 +33,14 @@ export { isRelogin };
  * 兼容层请求函数
  * 保持与原有 request(config) 调用方式一致
  */
-function request<T = any>(config: AxiosRequestConfig): Promise<T> {
+function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> {
   const { method = 'get', ...restConfig } = config;
   const lowerMethod = method.toLowerCase();
 
   // 提取自定义 headers 配置
   const headers = (config.headers || {}) as Record<string, unknown>;
-  const withToken = headers.isToken !== false;
-  const silentError = headers.silentError === true;
+  const withToken = config.isToken !== false && headers.isToken !== false;
+  const silentError = config.silentError === true || headers.silentError === true;
 
   // 构建请求配置
   const httpConfig = {

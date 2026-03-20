@@ -1,38 +1,38 @@
-import json
-import jwt
 import os
 import random
 import sys
 import uuid
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
+from typing import Any
+
 from fastapi import Depends, Form, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jwt.exceptions import InvalidTokenError
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any, Dict, List, Optional, Union
+
 from config.constant import CommonConstant, MenuConstant
 from config.enums import RedisInitKeyConfig
-from config.env import AppConfig, JwtConfig
-from config.get_db import get_db
-from exceptions.exception import AuthException, ValidationException, ResourceNotFoundException
+from config.env import AppConfig, SecurityConfig
 from config.error_codes import ErrorCode
+from config.get_db import get_db
+from exceptions.exception import AuthException, ResourceNotFoundException, ValidationException
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.do.menu_do import MenuDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.login_vo import MenuTreeModel, MetaModel, RouterModel, SmsCode, UserLogin, UserRegister
-from module_admin.entity.vo.user_vo import AddUserModel, CurrentUserModel, ResetUserModel, TokenData, UserInfoModel
+from module_admin.entity.vo.user_vo import AddUserModel, CurrentUserModel, ResetUserModel, UserInfoModel
+from modules.identity.application.services.security_token_service import SecurityTokenService
+from ports import ILoginRepository, IUserRepository, IUserService
 from utils.common_util import CamelCaseUtil
 from utils.log_util import logger
 from utils.message_util import message_service
 from utils.pwd_util import PwdUtil
-from ports import ILoginRepository, IUserRepository, IUserService
 
 
 def _is_test_env() -> bool:
     return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login', auto_error=not _is_test_env())
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login', auto_error=False)
 
 
 class CustomOAuth2PasswordRequestForm(OAuth2PasswordRequestForm):
@@ -46,11 +46,11 @@ class CustomOAuth2PasswordRequestForm(OAuth2PasswordRequestForm):
         username: str = Form(),
         password: str = Form(),
         scope: str = Form(default=''),
-        client_id: Optional[str] = Form(default=None),
-        client_secret: Optional[str] = Form(default=None),
-        code: Optional[str] = Form(default=''),
-        uuid: Optional[str] = Form(default=''),
-        login_info: Optional[Dict[str, str]] = Form(default=None),
+        client_id: str | None = Form(default=None),
+        client_secret: str | None = Form(default=None),
+        code: str | None = Form(default=''),
+        uuid: str | None = Form(default=''),
+        login_info: dict[str, str] | None = Form(default=None),
     ):
         super().__init__(
             grant_type=grant_type,
@@ -72,10 +72,10 @@ class LoginService:
 
     def __init__(
         self,
-        query_db: Optional[AsyncSession] = None,
-        login_repo: Optional[ILoginRepository] = None,
-        user_repo: Optional[IUserRepository] = None,
-        user_service: Optional[IUserService] = None,
+        query_db: AsyncSession | None = None,
+        login_repo: ILoginRepository | None = None,
+        user_repo: IUserRepository | None = None,
+        user_service: IUserService | None = None,
     ):
         self.query_db = query_db
         self.login_repo = login_repo
@@ -97,7 +97,7 @@ class LoginService:
             raise RuntimeError('user_repo dependency is not configured')
         return self.user_repo
 
-    def _resolve_user_service(self, user_service: Optional[IUserService] = None) -> IUserService:
+    def _resolve_user_service(self, user_service: IUserService | None = None) -> IUserService:
         resolved = user_service or self.user_service
         if resolved is None:
             raise RuntimeError('user_service dependency is not configured')
@@ -111,7 +111,6 @@ class LoginService:
         :param login_user: 登录用户对象
         :return: 校验结果
         """
-        login_user = self.__normalize_login_payload(login_user)
         normalized_username = (login_user.user_name or '').strip()
         if not normalized_username:
             raise ValidationException(
@@ -249,22 +248,17 @@ class LoginService:
             )
         return True
 
-    async def create_access_token(self, data: dict, expires_delta: Union[timedelta, None] = None):
+    async def create_access_token(self, data: dict, expires_delta: timedelta | None = None):
         """
-        根据登录信息创建当前用户token
+        统一改造后此接口废弃，token签发统一由SecurityTokenService负责。
 
         :param data: 登录信息
         :param expires_delta: token有效期
         :return: token
         """
-        to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-        else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=30)
-        to_encode.update({'exp': expire})
-        encoded_jwt = jwt.encode(to_encode, JwtConfig.jwt_secret_key, algorithm=JwtConfig.jwt_algorithm)
-        return encoded_jwt
+        _ = data
+        _ = expires_delta
+        raise RuntimeError('create_access_token 已废弃，请使用 SecurityTokenService.issue_access_token')
 
     @staticmethod
     async def get_current_user(
@@ -281,10 +275,19 @@ class LoginService:
         :return: 当前用户信息对象
         :raise: 令牌异常AuthException
         """
-        if _is_test_env() and not token:
+        resolved_token = LoginService._resolve_http_token(request, token)
+        if _is_test_env() and not resolved_token:
             return LoginService._build_test_current_user()
         service = LoginService._resolve_from_context(request, query_db)
-        return await service._resolve_current_user(request, token)
+        return await service._resolve_current_user(request, resolved_token)
+
+    @staticmethod
+    def _resolve_http_token(request: Request, token: str | None) -> str:
+        raw_token = (token or '').strip()
+        if raw_token:
+            return raw_token
+        cookie_token = (request.cookies.get(SecurityConfig.security_access_cookie_name, '') or '').strip()
+        return cookie_token
 
     @staticmethod
     def _build_test_current_user() -> CurrentUserModel:
@@ -293,7 +296,7 @@ class LoginService:
         return CurrentUserModel(permissions=['*:*:*'], roles=[], user=user)
 
     @staticmethod
-    async def get_current_user_from_token(context: Any, token: Optional[str], query_db: AsyncSession):
+    async def get_current_user_from_token(context: Any, token: str | None, query_db: AsyncSession):
         """
         根据显式传入的token获取当前用户信息（用于WebSocket等无法通过oauth2_scheme注入的场景）
 
@@ -317,7 +320,16 @@ class LoginService:
             raise RuntimeError('Container login_service binding is invalid')
         return service
 
-    async def _resolve_current_user(self, context: Any, token: Optional[str]):
+    @staticmethod
+    def _resolve_security_service(context: Any) -> SecurityTokenService:
+        app = getattr(context, 'app', None)
+        state = getattr(app, 'state', None) if app else None
+        service = getattr(state, 'security_token_service', None) if state else None
+        if not isinstance(service, SecurityTokenService):
+            raise RuntimeError('SecurityTokenService is not initialized')
+        return service
+
+    async def _resolve_current_user(self, context: Any, token: str | None):
         """
         统一的token解析逻辑，支持HTTP请求和WebSocket连接
         """
@@ -325,77 +337,60 @@ class LoginService:
             logger.warning('用户token不合法')
             raise AuthException(data='', user_message='用户token不合法')
 
-        try:
-            if token.startswith('Bearer'):
-                token = token.split(' ')[1]
-            payload = jwt.decode(token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm])
-            user_id: str = payload.get('user_id')
-            session_id: str = payload.get('session_id')
-            if not user_id:
-                logger.warning('用户token不合法')
-                raise AuthException(data='', user_message='用户token不合法')
-            token_data = TokenData(user_id=int(user_id))
-        except InvalidTokenError:
-            logger.warning('用户token已失效，请重新登录')
-            raise AuthException(data='', user_message='用户token已失效，请重新登录')
+        if token.startswith('Bearer '):
+            token = token.split(' ', 1)[1]
+
+        security_service = self._resolve_security_service(context)
+        payload = await security_service.verify_access_token(
+            token,
+            audience=SecurityConfig.security_jwt_audience_api,
+            enforce_replay=False,
+            enforce_session=True,
+        )
+        token_use = str(payload.get('token_use') or '')
+        if token_use not in {'user_access', 'embed_access'}:
+            raise AuthException(data='', user_message='用户token不合法')
+
+        user_id_raw = payload.get('user_id')
+        if user_id_raw is None:
+            subject = str(payload.get('sub') or '')
+            if subject.startswith('user:'):
+                user_id_raw = subject.split(':', 1)[1]
+            elif subject.isdigit():
+                user_id_raw = subject
+
+        if user_id_raw is None or not str(user_id_raw).isdigit():
+            logger.warning('用户token缺少合法user_id: {}', payload.get('sub'))
+            raise AuthException(data='', user_message='用户token不合法')
+        user_id = int(str(user_id_raw))
+
         user_repo = self._require_user_repo()
-        query_user = await user_repo.get_user_with_relations(user_id=token_data.user_id)
+        query_user = await user_repo.get_user_with_relations(user_id=user_id)
         if query_user.get('user_basic_info') is None:
             logger.warning('用户token不合法')
             raise AuthException(data='', user_message='用户token不合法')
 
-        app = getattr(context, 'app', None)
-        redis_client = getattr(app, 'state', None).redis if app and hasattr(app, 'state') else None
-        if redis_client is None:
-            logger.warning('Redis客户端不可用')
-            raise AuthException(data='', user_message='用户token不合法')
-
-        if AppConfig.app_same_time_login:
-            redis_token = await redis_client.get(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}')
+        role_id_list = [item.role_id for item in query_user.get('user_role_info')]
+        if 1 in role_id_list:
+            permissions = ['*:*:*']
         else:
-            # 此方法可实现同一账号同一时间只能登录一次
-            redis_token = await redis_client.get(
-                f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{query_user.get("user_basic_info").user_id}'
-            )
+            permissions = [row.perms for row in query_user.get('user_menu_info')]
+        post_ids = ','.join([str(row.post_id) for row in query_user.get('user_post_info')])
+        role_ids = ','.join([str(row.role_id) for row in query_user.get('user_role_info')])
+        roles = [row.role_key for row in query_user.get('user_role_info')]
 
-        if token == redis_token:
-            if AppConfig.app_same_time_login:
-                await redis_client.set(
-                    f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}',
-                    redis_token,
-                    ex=timedelta(minutes=JwtConfig.jwt_redis_expire_minutes),
-                )
-            else:
-                await redis_client.set(
-                    f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{query_user.get("user_basic_info").user_id}',
-                    redis_token,
-                    ex=timedelta(minutes=JwtConfig.jwt_redis_expire_minutes),
-                )
-
-            role_id_list = [item.role_id for item in query_user.get('user_role_info')]
-            if 1 in role_id_list:
-                permissions = ['*:*:*']
-            else:
-                permissions = [row.perms for row in query_user.get('user_menu_info')]
-            post_ids = ','.join([str(row.post_id) for row in query_user.get('user_post_info')])
-            role_ids = ','.join([str(row.role_id) for row in query_user.get('user_role_info')])
-            roles = [row.role_key for row in query_user.get('user_role_info')]
-
-            current_user = CurrentUserModel(
-                permissions=permissions,
-                roles=roles,
-                user=UserInfoModel(
-                    **CamelCaseUtil.transform_result(query_user.get('user_basic_info')),
-                    postIds=post_ids,
-                    roleIds=role_ids,
-                    dept=CamelCaseUtil.transform_result(query_user.get('user_dept_info')),
-                    role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
-                ),
-            )
-            return current_user
-
-        logger.warning('用户token已失效，请重新登录')
-        raise AuthException(data='', user_message='用户token已失效，请重新登录')
+        current_user = CurrentUserModel(
+            permissions=permissions,
+            roles=roles,
+            user=UserInfoModel(
+                **CamelCaseUtil.transform_result(query_user.get('user_basic_info')),
+                postIds=post_ids,
+                roleIds=role_ids,
+                dept=CamelCaseUtil.transform_result(query_user.get('user_dept_info')),
+                role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
+            ),
+        )
+        return current_user
 
     async def get_current_user_routers(self, user_id: int):
         """
@@ -419,7 +414,7 @@ class LoginService:
         return [router.model_dump(exclude_unset=True, by_alias=True) for router in user_router]
 
     @staticmethod
-    def __generate_menus(pid: int, permission_list: List[MenuDO]):
+    def __generate_menus(pid: int, permission_list: list[MenuDO]):
         """
         工具方法：根据菜单信息生成菜单信息树形嵌套数据
 
@@ -427,7 +422,7 @@ class LoginService:
         :param permission_list: 菜单列表信息
         :return: 菜单信息树形嵌套数据
         """
-        menu_list: List[MenuTreeModel] = []
+        menu_list: list[MenuTreeModel] = []
         for permission in permission_list:
             if permission.parent_id == pid:
                 children = LoginService.__generate_menus(permission.menu_id, permission_list)
@@ -439,14 +434,14 @@ class LoginService:
         return menu_list
 
     @staticmethod
-    def __generate_user_router_menu(permission_list: List[MenuTreeModel]):
+    def __generate_user_router_menu(permission_list: list[MenuTreeModel]):
         """
         工具方法：根据菜单树信息生成路由信息树形嵌套数据
 
         :param permission_list: 菜单树列表信息
         :return: 路由信息树形嵌套数据
         """
-        router_list: List[RouterModel] = []
+        router_list: list[RouterModel] = []
         for permission in permission_list:
             router = RouterModel(
                 hidden=True if permission.visible == '1' else False,
@@ -468,7 +463,7 @@ class LoginService:
                 router.children = LoginService.__generate_user_router_menu(c_menus)
             elif RouterUtil.is_menu_frame(permission):
                 router.meta = None
-                children_list: List[RouterModel] = []
+                children_list: list[RouterModel] = []
                 children = RouterModel(
                     path=permission.path,
                     component=permission.component,
@@ -486,7 +481,7 @@ class LoginService:
             elif permission.parent_id == 0 and RouterUtil.is_inner_link(permission):
                 router.meta = MetaModel(title=permission.menu_name, icon=permission.icon)
                 router.path = '/'
-                children_list: List[RouterModel] = []
+                children_list: list[RouterModel] = []
                 router_path = RouterUtil.inner_link_replace_each(permission.path)
                 children = RouterModel(
                     path=router_path,
@@ -509,7 +504,7 @@ class LoginService:
         self,
         request: Request,
         user_register: UserRegister,
-        user_service: Optional[IUserService] = None,
+        user_service: IUserService | None = None,
     ):
         """
         用户注册services
@@ -599,7 +594,7 @@ class LoginService:
         self,
         request: Request,
         forget_user: ResetUserModel,
-        user_service: Optional[IUserService] = None,
+        user_service: IUserService | None = None,
     ):
         """
         用户忘记密码services
@@ -640,37 +635,6 @@ class LoginService:
         # await request.app.state.redis.delete(f'{current_user.user.user_id}_session_id')
 
         return True
-
-    @staticmethod
-    def __normalize_login_payload(login_user: UserLogin) -> UserLogin:
-        """
-        当客户端误以application/json格式调用/login时，兼容解析JSON串，避免将其整体写入password
-        """
-        raw_password = (login_user.password or '').strip()
-        if not raw_password.startswith('{') or not raw_password.endswith('}'):
-            return login_user
-        try:
-            payload = json.loads(raw_password)
-        except json.JSONDecodeError:
-            return login_user
-        logger.warning('检测到JSON格式登录请求体，已自动兼容解析，请尽快改为表单方式提交')
-        payload_username = payload.get('username') or payload.get('userName')
-        payload_password = payload.get('password')
-        payload_code = payload.get('code')
-        payload_uuid = payload.get('uuid')
-        payload_login_info = payload.get('loginInfo') or payload.get('login_info')
-        merged = login_user.model_dump()
-        if payload_username:
-            merged['user_name'] = payload_username
-        if payload_password:
-            merged['password'] = payload_password
-        if payload_code:
-            merged['code'] = payload_code
-        if payload_uuid:
-            merged['uuid'] = payload_uuid
-        if payload_login_info:
-            merged['login_info'] = payload_login_info
-        return UserLogin(**merged)
 
 class RouterUtil:
     """

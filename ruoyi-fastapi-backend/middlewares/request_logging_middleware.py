@@ -11,14 +11,11 @@ Logs one event per request with normalized fields:
 - duration_ms
 """
 import time
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
-import jwt
 from fastapi import FastAPI
-from jwt.exceptions import InvalidTokenError
 from starlette.types import ASGIApp, Message, Scope, Send
 
-from config.env import JwtConfig
 from middlewares.trace_middleware import TraceCtx, get_request_id
 from utils.log_util import logger
 
@@ -36,7 +33,7 @@ class RequestLoggingASGIMiddleware:
         method = str(scope.get('method', ''))
         path = str(scope.get('path', ''))
         headers = self._extract_headers(scope.get('headers', []))
-        user_id = self._resolve_user_id(headers)
+        user_id = await self._resolve_user_id(scope, headers)
         client_ip = self._resolve_client_ip(scope, headers)
         traceparent = headers.get('traceparent')
         status_code = 500
@@ -97,8 +94,7 @@ class RequestLoggingASGIMiddleware:
             return str(client[0])
         return 'unknown'
 
-    @staticmethod
-    def _resolve_user_id(headers: Dict[str, str]) -> Optional[str]:
+    async def _resolve_user_id(self, scope: Scope, headers: Dict[str, str]) -> Optional[str]:
         authorization = headers.get('authorization', '')
         if not authorization.lower().startswith('bearer '):
             return None
@@ -107,14 +103,26 @@ class RequestLoggingASGIMiddleware:
         if not token:
             return None
 
-        try:
-            payload = jwt.decode(token, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm])
-            user_id = payload.get('user_id') or payload.get('userId')
-            return str(user_id) if user_id is not None else None
-        except InvalidTokenError:
+        service = self._resolve_security_service(scope)
+        if service is None:
             return None
+        try:
+            payload = await service.extract_user_context_from_token(token)
+            if not payload:
+                return None
+            user_id = payload.get('userId')
+            return str(user_id) if user_id else None
         except Exception:
             return None
+
+    @staticmethod
+    def _resolve_security_service(scope: Scope) -> Optional[Any]:
+        app = scope.get('app')
+        state = getattr(app, 'state', None) if app else None
+        service = getattr(state, 'security_token_service', None) if state else None
+        if service and hasattr(service, 'extract_user_context_from_token'):
+            return service
+        return None
 
     @staticmethod
     def _emit_request_log(

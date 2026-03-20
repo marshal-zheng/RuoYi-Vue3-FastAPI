@@ -2,17 +2,24 @@ import asyncio
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
-import jwt
 import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from config.env import JwtConfig
 from middlewares.idempotency_middleware import IdempotencyASGIMiddleware
 
 
 def _build_app(**middleware_overrides) -> FastAPI:
     app = FastAPI()
+    class _FakeSecurityTokenService:
+        @staticmethod
+        async def extract_user_context_from_token(token: str):
+            if token.startswith('token-user-'):
+                user_id = token.replace('token-user-', '')
+                return {'userId': user_id, 'sessionId': f's-{user_id}', 'tenantId': 't-1'}
+            return None
+
+    app.state.security_token_service = _FakeSecurityTokenService()
     middleware_config = {
         'enabled': True,
         'ttl_seconds': 120,
@@ -113,8 +120,8 @@ async def test_concurrent_retry_same_key_executes_once():
 async def test_same_key_different_user_should_not_replay():
     app = _build_app()
     transport = ASGITransport(app=app)
-    token_a = jwt.encode({'user_id': '1001'}, JwtConfig.jwt_secret_key, algorithm=JwtConfig.jwt_algorithm)
-    token_b = jwt.encode({'user_id': '1002'}, JwtConfig.jwt_secret_key, algorithm=JwtConfig.jwt_algorithm)
+    token_a = 'token-user-1001'
+    token_b = 'token-user-1002'
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
         headers_a = {'X-Idempotency-Key': 'idem-key-user', 'Authorization': f'Bearer {token_a}'}

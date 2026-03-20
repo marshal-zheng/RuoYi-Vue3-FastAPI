@@ -1,14 +1,21 @@
-import jwt
 import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from config.env import JwtConfig
 from middlewares.rate_limit_middleware import RateLimitASGIMiddleware
 
 
 def _build_app(**middleware_overrides) -> FastAPI:
     app = FastAPI()
+    class _FakeSecurityTokenService:
+        @staticmethod
+        async def extract_user_context_from_token(token: str):
+            if token.startswith('token-user-'):
+                user_id = token.replace('token-user-', '')
+                return {'userId': user_id}
+            return None
+
+    app.state.security_token_service = _FakeSecurityTokenService()
     middleware_config = {
         'enabled': True,
         'window_seconds': 60,
@@ -64,7 +71,7 @@ async def test_auth_tier_ip_limit():
 async def test_write_tier_user_limit():
     app = _build_app()
     transport = ASGITransport(app=app)
-    token = jwt.encode({'user_id': '42'}, JwtConfig.jwt_secret_key, algorithm=JwtConfig.jwt_algorithm)
+    token = 'token-user-42'
     headers = {'Authorization': f'Bearer {token}'}
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:

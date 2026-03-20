@@ -1,12 +1,10 @@
 import sys
 import types
 
-import jwt
 import pytest
 from fastapi import FastAPI
 from httpx import ASGITransport, AsyncClient
 
-from config.env import JwtConfig
 from middlewares.request_logging_middleware import RequestLoggingASGIMiddleware
 
 
@@ -35,6 +33,14 @@ class _CaptureLogger:
 
 def _build_app() -> FastAPI:
     app = FastAPI()
+    class _FakeSecurityTokenService:
+        @staticmethod
+        async def extract_user_context_from_token(token: str):
+            if token == 'token-user-9527':
+                return {'userId': '9527', 'userName': 'admin'}
+            return None
+
+    app.state.security_token_service = _FakeSecurityTokenService()
     app.add_middleware(RequestLoggingASGIMiddleware)
 
     @app.get('/ok')
@@ -54,7 +60,7 @@ async def test_request_log_contains_required_fields(monkeypatch):
     capture_logger = _CaptureLogger()
     monkeypatch.setattr('middlewares.request_logging_middleware.logger', capture_logger)
 
-    token = jwt.encode({'user_id': '9527'}, JwtConfig.jwt_secret_key, algorithm=JwtConfig.jwt_algorithm)
+    token = 'token-user-9527'
     headers = {
         'Authorization': f'Bearer {token}',
         'X-Forwarded-For': '10.0.0.1',

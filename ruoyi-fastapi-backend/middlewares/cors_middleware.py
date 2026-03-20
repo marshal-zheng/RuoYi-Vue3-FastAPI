@@ -1,6 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from config.env import SecurityConfig
+
+
+def _parse_csv(raw: str) -> list[str]:
+    return [item.strip() for item in (raw or '').split(',') if item.strip()]
+
 
 def add_cors_middleware(app: FastAPI):
     """
@@ -9,23 +15,14 @@ def add_cors_middleware(app: FastAPI):
     :param app: FastAPI对象
     :return:
     """
-    # 前端页面url
-    origins = [
-        'http://localhost',
-        'http://127.0.0.1',
-        'http://localhost:80',
-        'http://127.0.0.1:80',
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
-        'http://localhost:3100',
-        'http://127.0.0.1:3100',
-    ]
+    # 前端页面url（硬切后统一由安全配置控制）
+    origins = _parse_csv(SecurityConfig.security_allowed_origins)
 
     # 后台api允许跨域
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=['*'],
-        allow_headers=['*'],
+        allow_credentials=SecurityConfig.security_cors_allow_credentials,
+        allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+        allow_headers=['Authorization', 'Content-Type', 'X-CSRF-Token', 'X-Requested-With'],
     )

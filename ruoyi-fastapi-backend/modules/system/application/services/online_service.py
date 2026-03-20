@@ -1,10 +1,10 @@
-import jwt
 from fastapi import Request
 from config.enums import RedisInitKeyConfig
-from config.env import JwtConfig
+from config.env import SecurityConfig
 from exceptions.exception import ValidationException
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.online_vo import DeleteOnlineModel, OnlineQueryModel
+from modules.identity.application.services.security_token_service import SecurityTokenService
 from utils.common_util import CamelCaseUtil
 
 
@@ -25,18 +25,31 @@ class OnlineService:
         if not access_token_keys:
             access_token_keys = []
         access_token_values_list = [await request.app.state.redis.get(key) for key in access_token_keys]
+        security_service = getattr(request.app.state, 'security_token_service', None)
         online_info_list = []
         for item in access_token_values_list:
-            payload = jwt.decode(item, JwtConfig.jwt_secret_key, algorithms=[JwtConfig.jwt_algorithm])
+            token = item.decode('utf-8') if isinstance(item, bytes) else str(item)
+            if not token or not isinstance(security_service, SecurityTokenService):
+                continue
+            try:
+                payload = await security_service.verify_access_token(
+                    token,
+                    audience=SecurityConfig.security_jwt_audience_api,
+                    enforce_replay=False,
+                    enforce_session=False,
+                )
+            except Exception:
+                continue
+            login_info = payload.get('login_info') or {}
             online_dict = dict(
-                token_id=payload.get('session_id'),
+                token_id=payload.get('session_id') or '',
                 user_name=payload.get('user_name'),
                 dept_name=payload.get('dept_name'),
-                ipaddr=payload.get('login_info').get('ipaddr'),
-                login_location=payload.get('login_info').get('loginLocation'),
-                browser=payload.get('login_info').get('browser'),
-                os=payload.get('login_info').get('os'),
-                login_time=payload.get('login_info').get('loginTime'),
+                ipaddr=login_info.get('ipaddr'),
+                login_location=login_info.get('loginLocation'),
+                browser=login_info.get('browser'),
+                os=login_info.get('os'),
+                login_time=login_info.get('loginTime'),
             )
             if query_object.user_name and not query_object.ipaddr:
                 if query_object.user_name == payload.get('user_name'):
@@ -67,8 +80,11 @@ class OnlineService:
         """
         if page_object.token_ids:
             token_id_list = page_object.token_ids.split(',')
+            security_service = getattr(request.app.state, 'security_token_service', None)
             for token_id in token_id_list:
                 await request.app.state.redis.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{token_id}')
+                if isinstance(security_service, SecurityTokenService):
+                    await security_service.revoke_user_session(token_id)
             return CrudResponseModel(is_success=True, message='强退成功')
         else:
             raise ValidationException(

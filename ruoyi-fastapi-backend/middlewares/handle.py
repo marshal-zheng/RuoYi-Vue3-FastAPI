@@ -9,6 +9,9 @@ from middlewares.gzip_middleware import add_gzip_middleware
 from middlewares.audit_context_middleware import AuditContextMiddleware
 from middlewares.trace_middleware import add_trace_middleware
 from resilience.degradation import add_degradation_header_middleware
+from middlewares.csrf_guard_middleware import add_csrf_guard_middleware
+from middlewares.security_headers_middleware import add_security_headers_middleware
+from middlewares.token_source_guard_middleware import add_token_source_guard_middleware
 
 
 def handle_middleware(app: FastAPI):
@@ -21,8 +24,14 @@ def handle_middleware(app: FastAPI):
     add_idempotency_middleware(app)
     # 加载跨域中间件
     add_cors_middleware(app)
+    # 拒绝 query/cookie/form token 认证来源
+    add_token_source_guard_middleware(app)
+    # 加载CSRF防护中间件（只保护指定Cookie身份端点）
+    add_csrf_guard_middleware(app)
     # 加载gzip压缩中间件
     add_gzip_middleware(app)
+    # 加载安全响应头中间件（CSP/HSTS等）
+    add_security_headers_middleware(app)
     # 加载审计上下文中间件（需在trace中间件之前）
     app.add_middleware(AuditContextMiddleware)
     # 加载trace中间件
