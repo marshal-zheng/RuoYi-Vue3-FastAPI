@@ -38,7 +38,7 @@
      - `GET /saga/instances`
      - `POST /saga/{saga_id}/compensate`
 8. CI 防回退
-   - 新增 `ruoyi-fastapi-backend/scripts/check_resilience_policy_bindings.py`
+   - 新增历史 resilience 绑定治理脚本（已移除）
    - 已接入 `.gitlab-ci.yml` 与 `.github/workflows/ci.yml`
 
 ## 关键接入点
@@ -54,11 +54,11 @@
 
 ## 回归与验证
 
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_resilience_policy_bindings.py`
+- 历史 resilience 绑定治理脚本（已移除）
   - 结果：passed（14 operations discovered）
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_no_new_service_instantiations.py`
+- 历史“禁止新增 service 即时实例化”治理脚本（已移除）
   - 结果：passed（15 tracked entries，均位于暂缓域 `simulation`）
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_no_new_service_classmethods.py`
+- 历史“禁止新增 service classmethod”治理脚本（已移除）
   - 结果：passed（0 tracked entries）
 - `python3 -m ruff check --select F401,F821,F822,F823 ruoyi-fastapi-backend/resilience ruoyi-fastapi-backend/module_admin/controller/resilience_controller.py ruoyi-fastapi-backend/utils/count_cache.py ruoyi-fastapi-backend/middlewares/handle.py ruoyi-fastapi-backend/server.py ruoyi-fastapi-backend/tests/unit/resilience`
   - 结果：passed

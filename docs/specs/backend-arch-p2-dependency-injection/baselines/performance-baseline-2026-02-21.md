@@ -10,15 +10,11 @@
 
 1) 容器启动阶段开销（build + validate）
 
-```bash
-cd ruoyi-fastapi-backend && venv/bin/python scripts/benchmark_container_bootstrap.py --iterations 1000 --warmup 20 > ../docs/specs/backend-arch-p2-dependency-injection/baselines/di-bootstrap-benchmark-2026-02-21.json
-```
+采集说明：该结果由历史容器启动微基准脚本生成，脚本已从当前仓库移除，产物保留在 `di-bootstrap-benchmark-2026-02-21.json`。
 
 2) 服务解析对比（direct provider call vs `resolve_service`）
 
-```bash
-cd ruoyi-fastapi-backend && venv/bin/python scripts/benchmark_di_resolution.py --iterations 50000 --warmup 2000 > ../docs/specs/backend-arch-p2-dependency-injection/baselines/di-resolution-benchmark-2026-02-21.json
-```
+采集说明：该结果由历史容器解析微基准脚本生成，脚本已从当前仓库移除，产物保留在 `di-resolution-benchmark-2026-02-21.json`。
 
 原始产物：
 - `docs/specs/backend-arch-p2-dependency-injection/baselines/di-bootstrap-benchmark-2026-02-21.json`

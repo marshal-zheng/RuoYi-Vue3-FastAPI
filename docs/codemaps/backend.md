@@ -82,9 +82,9 @@
 **关键文件：**
 - `ruoyi-fastapi-backend/tests/unit/` — 单元测试（中间件、服务、控制器等）。
 - `ruoyi-fastapi-backend/tests/integration/` — 集成测试（核心业务链路与错误处理）。
-- `ruoyi-fastapi-backend/scripts/check_no_dao_imports.py` — 禁止运行时依赖 DAO 的守卫。
-- `ruoyi-fastapi-backend/scripts/check_migration_drift.py` — 迁移漂移校验。
+- `ruoyi-fastapi-backend/scripts/db.py` — 统一数据库工作流入口。
+- `ruoyi-fastapi-backend/docs/REPOSITORY_LAYER_POLICY.md` — 仓储层约束说明。
 
-**依赖关系：** CI 调用 `scripts/*` 与 `tests/*` 形成架构和行为双重门禁。
+**依赖关系：** 开发与部署主链路依赖 `db.py` 与 `tests/*`；历史治理脚本已移出当前仓库，不再属于默认日常路径。
 
 **架构模式：** 分层测试策略；规则脚本前置；回归集优先覆盖核心模块。

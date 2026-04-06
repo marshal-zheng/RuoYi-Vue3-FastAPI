@@ -32,7 +32,7 @@
   - 对超大 service/repository 文件按子领域拆分。
   - 保证相关 API、应用服务、领域规则与仓储实现在同一上下文可定位。
   - 禁止新增横向分层目录下新业务代码。
-  - 本轮进展：`simulation` 场景提取 `ACL + ports + adapter` 子模块，剥离跨上下文拓扑读取逻辑；新增 `scripts/check_no_new_horizontal_layer_files.py` 与 baseline，门禁阻断横向分层目录新增业务文件。系统域完成 `config/dept/menu/notice/post/role/user/dict` 服务与仓储拆分迁移并删除旧文件；项目域完成 `project/project_topology/project_version` 服务与仓储迁移至 `modules/project`，并删除旧实现。
+  - 本轮进展：`simulation` 场景提取 `ACL + ports + adapter` 子模块，剥离跨上下文拓扑读取逻辑；补齐历史“横向分层目录新增业务文件”治理脚本与 baseline（脚本现已移除）。系统域完成 `config/dept/menu/notice/post/role/user/dict` 服务与仓储拆分迁移并删除旧文件；项目域完成 `project/project_topology/project_version` 服务与仓储迁移至 `modules/project`，并删除旧实现。
   _需求追溯: R1.AC3, R1.AC4, R6.AC2_
 
 - [x] 6. 执行一次性迁移并删除旧结构
@@ -46,5 +46,5 @@
   - 在 CI 增加跨上下文违规导入检查。
   - 增加目录归属检查与架构巡检报告。
   - 执行上下文级回归测试与权限回归。
-  - 本轮进展：新增 `scripts/check_module_boundary_imports.py`，校验 `modules/*` 跨上下文运行时导入仅允许经 `modules.<context>.ports`，并接入 `.gitlab-ci.yml` 与 `.github/workflows/ci.yml`。目录归属门禁延续 `check_no_new_horizontal_layer_files.py`；更新巡检报告 `docs/specs/backend-arch-p3-vertical-slice-ddd/reports/module-boundary-report-2026-02-22.json`（`scanned_files=206, violations_count=0`）；已执行 `system/identity/project` 服务与集成回归及容器回归。
+  - 本轮进展：补齐历史模块边界治理脚本，校验 `modules/*` 跨上下文运行时导入仅允许经 `modules.<context>.ports`，并接入当时的 CI 门禁；目录归属门禁延续历史目录归属治理脚本（脚本现已移除）。更新巡检报告 `docs/specs/backend-arch-p3-vertical-slice-ddd/reports/module-boundary-report-2026-02-22.json`（`scanned_files=206, violations_count=0`）；已执行 `system/identity/project` 服务与集成回归及容器回归。
   _需求追溯: R6.AC1, R6.AC2, R6.AC3, R6.AC4_

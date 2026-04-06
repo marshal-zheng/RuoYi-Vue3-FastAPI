@@ -2,6 +2,7 @@
 import { http, HttpResponse } from 'msw';
 
 import type { MockStrategy } from '../types';
+import { createApiPath } from '../constants';
 import { buildAccountCollections, createDeptTree, createUserList } from '../factories';
 import { pagination, resultError, resultSuccess } from '../utils/response';
 import { getRequestToken, getSearchParams, readJsonBody } from '../utils/request';
@@ -55,7 +56,7 @@ const mockUsers = createUserList(40, (index) => ({
 
 export function createUserHandlers(strategy: MockStrategy) {
   return [
-    http.get('/dev-api/captchaImage', ({ request }) =>
+    http.get(createApiPath('/captchaImage'), ({ request }) =>
       withBackendFallback(
         request,
         () =>
@@ -69,7 +70,7 @@ export function createUserHandlers(strategy: MockStrategy) {
         { strategy, tag: 'user:captcha' }
       )
     ),
-    http.post('/dev-api/login', async ({ request }) => {
+    http.post(createApiPath('/login'), async ({ request }) => {
       const payload = (await readJsonBody<{ username?: string; password?: string }>(request)) ?? {};
       return withBackendFallback(
         request,
@@ -100,7 +101,7 @@ export function createUserHandlers(strategy: MockStrategy) {
         { strategy, tag: 'user:login' }
       );
     }),
-    http.get('/dev-api/getInfo', ({ request }) =>
+    http.get(createApiPath('/getInfo'), ({ request }) =>
       withBackendFallback(
         request,
         () => {
@@ -135,14 +136,14 @@ export function createUserHandlers(strategy: MockStrategy) {
         { strategy, tag: 'user:getInfo' }
       )
     ),
-    http.post('/dev-api/logout', ({ request }) =>
+    http.post(createApiPath('/logout'), ({ request }) =>
       withBackendFallback(
         request,
         () => HttpResponse.json(resultSuccess(null, { msg: '退出成功' })),
         { strategy, tag: 'user:logout' }
       )
     ),
-    http.get('/dev-api/system/user/list', ({ request }) =>
+    http.get(createApiPath('/system/user/list'), ({ request }) =>
       withBackendFallback(
         request,
         () => {
@@ -160,7 +161,7 @@ export function createUserHandlers(strategy: MockStrategy) {
         { strategy, tag: 'user:list' }
       )
     ),
-    http.get('/dev-api/system/user/deptTree', ({ request }) =>
+    http.get(createApiPath('/system/user/deptTree'), ({ request }) =>
       withBackendFallback(request, () => HttpResponse.json(resultSuccess(createDeptTree())), {
         strategy,
         tag: 'user:deptTree',

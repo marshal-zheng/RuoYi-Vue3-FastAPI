@@ -8,31 +8,34 @@ from dataclasses import dataclass, field
 from importlib import import_module
 from typing import TYPE_CHECKING, Any
 
+from fastapi import Depends
+
 from config.env import AppConfig, DevMenuSyncConfig
-from modules.system.api.audit_controller import auditController
-from modules.system.api.cache_controller import cacheController
+from module_generator.controller.gen_controller import genController
 from modules.identity.api.captcha_controller import captchaController
-from modules.system.api.common_controller import commonController
-from modules.system.api.config_controller import configController
-from modules.system.api.dev_menu_sync_controller import devMenuSyncController
-from modules.system.api.event_controller import eventController
-from modules.system.api.dept_controller import deptController
-from modules.system.api.dict_controller import dictController
-from modules.scheduler.api.job_controller import jobController
-from modules.system.api.log_controller import logController
 from modules.identity.api.login_controller import loginController
 from modules.identity.api.security_controller import securityController
+from modules.project.api.project_controller import projectController
+from modules.project.api.project_version_controller import projectVersionController
+from modules.scheduler.api.job_controller import jobController
+from modules.system.api.audit_controller import auditController
+from modules.system.api.cache_controller import cacheController
+from modules.system.api.common_controller import commonController
+from modules.system.api.config_controller import configController
+from modules.system.api.dept_controller import deptController
+from modules.system.api.dev_menu_sync_controller import devMenuSyncController
+from modules.system.api.dict_controller import dictController
+from modules.system.api.event_controller import eventController
+from modules.system.api.log_controller import logController
 from modules.system.api.menu_controller import menuController
 from modules.system.api.notice_controller import noticeController
 from modules.system.api.online_controller import onlineController
 from modules.system.api.post_controller import postController
-from modules.project.api.project_controller import projectController
-from modules.project.api.project_version_controller import projectVersionController
 from modules.system.api.resilience_controller import resilienceController
 from modules.system.api.role_controller import roleController
 from modules.system.api.server_controller import serverController
 from modules.system.api.user_controller import userController
-from module_generator.controller.gen_controller import genController
+from modules.system.application.services.capability_gate_service import require_capability_enabled
 from utils.log_util import logger
 
 if TYPE_CHECKING:
@@ -48,6 +51,7 @@ class RouterRegistration:
 
     router: Any
     tags: tuple[str, ...] = field(default_factory=tuple)
+    capability_module_key: str | None = None
 
 
 @dataclass(frozen=True)
@@ -97,28 +101,25 @@ protocolController = _load_optional_router('module_admin.controller.protocol_con
 simulationController = _load_optional_router('module_admin.controller.simulation_controller', 'simulationController')
 deviceCategoryController = _load_optional_router('module_admin.controller.device_category_controller', 'deviceCategoryController')
 deviceController = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
-datasourceController = _load_optional_router('module_admin.controller.datasource_controller', 'datasourceController')
-
-
 def _should_register_dev_menu_router() -> bool:
     return AppConfig.app_env == 'dev' and bool(DevMenuSyncConfig.dev_menu_sync)
 
 
 def _build_system_routers() -> tuple[RouterRegistration, ...]:
     routers: list[RouterRegistration] = [
-        RouterRegistration(router=menuController, tags=('系统管理-菜单管理',)),
-        RouterRegistration(router=deptController, tags=('系统管理-部门管理',)),
-        RouterRegistration(router=postController, tags=('系统管理-岗位管理',)),
-        RouterRegistration(router=dictController, tags=('系统管理-字典管理',)),
-        RouterRegistration(router=configController, tags=('系统管理-参数管理',)),
-        RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',)),
-        RouterRegistration(router=logController, tags=('系统管理-日志管理',)),
-        RouterRegistration(router=onlineController, tags=('系统监控-在线用户',)),
-        RouterRegistration(router=serverController, tags=('系统监控-菜单管理',)),
-        RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',)),
-        RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',)),
-        RouterRegistration(router=auditController, tags=('系统监控-审计日志',)),
-        RouterRegistration(router=eventController, tags=('系统监控-事件治理',)),
+        RouterRegistration(router=menuController, tags=('系统管理-菜单管理',), capability_module_key='platform'),
+        RouterRegistration(router=deptController, tags=('系统管理-部门管理',), capability_module_key='platform'),
+        RouterRegistration(router=postController, tags=('系统管理-岗位管理',), capability_module_key='platform'),
+        RouterRegistration(router=dictController, tags=('系统管理-字典管理',), capability_module_key='platform'),
+        RouterRegistration(router=configController, tags=('系统管理-参数管理',), capability_module_key='platform'),
+        RouterRegistration(router=noticeController, tags=('系统管理-通知公告管理',), capability_module_key='platform'),
+        RouterRegistration(router=logController, tags=('系统管理-日志管理',), capability_module_key='platform'),
+        RouterRegistration(router=onlineController, tags=('系统监控-在线用户',), capability_module_key='platform'),
+        RouterRegistration(router=serverController, tags=('系统监控-菜单管理',), capability_module_key='platform'),
+        RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',), capability_module_key='platform'),
+        RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',), capability_module_key='platform'),
+        RouterRegistration(router=auditController, tags=('系统监控-审计日志',), capability_module_key='platform'),
+        RouterRegistration(router=eventController, tags=('系统监控-事件治理',), capability_module_key='platform'),
     ]
     if _should_register_dev_menu_router():
         routers.append(RouterRegistration(router=devMenuSyncController, tags=('系统管理-开发态菜单热同步',)))
@@ -133,8 +134,8 @@ _module_registry: list[ModuleRegistration] = [
             RouterRegistration(router=loginController, tags=('登录模块',)),
             RouterRegistration(router=securityController, tags=('安全鉴权模块',)),
             RouterRegistration(router=captchaController, tags=('验证码模块',)),
-            RouterRegistration(router=userController, tags=('系统管理-用户管理',)),
-            RouterRegistration(router=roleController, tags=('系统管理-角色管理',)),
+            RouterRegistration(router=userController, tags=('系统管理-用户管理',), capability_module_key='platform'),
+            RouterRegistration(router=roleController, tags=('系统管理-角色管理',), capability_module_key='platform'),
         ),
     ),
     ModuleRegistration(
@@ -146,8 +147,8 @@ _module_registry: list[ModuleRegistration] = [
         name='project',
         version='v1',
         routers=(
-            RouterRegistration(router=projectController, tags=('工程管理',)),
-            RouterRegistration(router=projectVersionController, tags=('工程管理-版本管理',)),
+            RouterRegistration(router=projectController, tags=('工程管理',), capability_module_key='platform'),
+            RouterRegistration(router=projectVersionController, tags=('工程管理-版本管理',), capability_module_key='platform'),
         ),
     ),
 ]
@@ -180,26 +181,17 @@ if deviceCategoryController is not None and deviceController is not None:
         )
     )
 
-if datasourceController is not None:
-    _module_registry.append(
-        ModuleRegistration(
-            name='datasource',
-            version='v1',
-            routers=(RouterRegistration(router=datasourceController, tags=('数据源中心',)),),
-        )
-    )
-
 _module_registry.extend(
     (
         ModuleRegistration(
             name='scheduler',
             version='v1',
-            routers=(RouterRegistration(router=jobController, tags=('系统监控-定时任务',)),),
+            routers=(RouterRegistration(router=jobController, tags=('系统监控-定时任务',), capability_module_key='platform'),),
         ),
         ModuleRegistration(
             name='codegen',
             version='v1',
-            routers=(RouterRegistration(router=genController, tags=('代码生成',)),),
+            routers=(RouterRegistration(router=genController, tags=('代码生成',), capability_module_key='platform'),),
         ),
     )
 )
@@ -218,7 +210,10 @@ def register_modules(app: Any, registry: Sequence[ModuleRegistration] | None = N
     loaded_modules: list[LoadedModule] = []
     for module in module_registry:
         for registration in module.routers:
-            app.include_router(router=registration.router, tags=list(registration.tags))
+            dependencies = []
+            if registration.capability_module_key:
+                dependencies.append(Depends(require_capability_enabled(registration.capability_module_key)))
+            app.include_router(router=registration.router, tags=list(registration.tags), dependencies=dependencies)
         loaded_modules.append(
             LoadedModule(
                 name=module.name,

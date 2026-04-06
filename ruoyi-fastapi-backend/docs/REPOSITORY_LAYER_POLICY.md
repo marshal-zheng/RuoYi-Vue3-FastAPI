@@ -19,13 +19,9 @@ To reduce architecture drift, runtime code must use the repository layer as the 
 
 ## Enforcement
 
-CI executes:
+当前仓库不再保留独立的 DAO 导入治理脚本。
 
-```bash
-python ruoyi-fastapi-backend/scripts/check_no_dao_imports.py
-```
-
-If runtime modules import `module_admin.dao`, the pipeline fails.
+若运行时代码重新引入 `module_admin.dao`，应通过仓储层评审、针对性回归测试与本策略文档一起发现并阻断。
 
 ## Scope
 

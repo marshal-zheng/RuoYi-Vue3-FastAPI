@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from typing import Literal
@@ -17,7 +18,7 @@ class AppSettings(BaseSettings):
 
     app_env: str = 'dev'
     app_name: str = 'RuoYi-FasAPI'
-    app_root_path: str = '/dev-api'
+    app_root_path: str = '/api'
     app_host: str = '0.0.0.0'
     app_port: int = 9099
     app_version: str = '1.0.0'
@@ -147,6 +148,108 @@ class DataBaseSettings(BaseSettings):
         if self.db_type == 'postgresql':
             return 'postgres'
         return self.db_type
+
+
+class DataBaseWorkflowSettings(BaseSettings):
+    """
+    数据库工作流配置
+    """
+
+    db_workflow_mode: Literal['migration', 'development'] = 'migration'
+    db_dev_sync_engine: str = 'atlas'
+    db_workflow_managed_scope: tuple[str, ...] = (
+        'schema',
+        'menus',
+        'role_menus',
+        'dict_types',
+        'dict_data',
+        'configs',
+        'release_visibility',
+    )
+    db_workflow_status_command: str = 'python scripts/db.py status'
+    db_workflow_dev_sync_command: str = 'python scripts/db.py dev-sync'
+    db_workflow_finalize_command: str = 'python scripts/db.py finalize --message "<描述>"'
+    db_workflow_deploy_command: str = 'python scripts/db.py deploy --revision head'
+    db_workflow_verify_command: str = 'python scripts/db.py verify --ci'
+
+
+@dataclass(frozen=True)
+class DataBaseWorkflowStatus:
+    """
+    数据库工作流状态快照，供启动脚本、CLI 和运行时日志复用
+    """
+
+    workflow_mode: Literal['migration', 'development']
+    db_dev_sync_engine: str
+    db_target: str
+    startup_action: Literal['dev-sync', 'deploy']
+    deploy_path: str
+    workflow_stage: str = 'deployment'
+    allowed_actions: tuple[str, ...] = ('status', 'finalize', 'deploy', 'verify')
+    managed_scope: tuple[str, ...] = (
+        'schema',
+        'menus',
+        'role_menus',
+        'dict_types',
+        'dict_data',
+        'configs',
+        'release_visibility',
+    )
+    status_path: str = 'python scripts/db.py status'
+    dev_sync_path: str = 'python scripts/db.py dev-sync'
+    finalize_path: str = 'python scripts/db.py finalize --message "<描述>"'
+    verify_path: str = 'python scripts/db.py verify --ci'
+    schema_drift: str = 'unknown'
+    managed_data_drift: str = 'unknown'
+    visibility_drift: str = 'unknown'
+    pending_release_bundle: str = 'unknown'
+    last_successful_action: str = 'unknown'
+
+
+def format_database_target(database_config: DataBaseSettings | None = None) -> str:
+    """
+    生成脱敏后的数据库目标摘要
+    """
+    database_config = database_config or DataBaseConfig
+    return (
+        f'{database_config.db_type}://'
+        f'{database_config.db_host}:{database_config.db_port}/'
+        f'{database_config.db_database}'
+    )
+
+
+def get_database_workflow_status(
+    database_config: DataBaseSettings | None = None,
+    workflow_config: DataBaseWorkflowSettings | None = None,
+) -> DataBaseWorkflowStatus:
+    """
+    统一读取数据库工作流状态，避免不同入口重复拼装模式信息
+    """
+    database_config = database_config or DataBaseConfig
+    workflow_config = workflow_config or DataBaseWorkflowConfig
+
+    startup_action: Literal['dev-sync', 'deploy'] = 'deploy'
+    workflow_stage = 'deployment'
+    allowed_actions: tuple[str, ...] = ('status', 'finalize', 'deploy', 'verify')
+    if workflow_config.db_workflow_mode == 'development':
+        workflow_stage = 'development'
+        startup_action = 'dev-sync'
+        allowed_actions = ('status', 'dev-sync', 'finalize', 'verify')
+
+    return DataBaseWorkflowStatus(
+        workflow_mode=workflow_config.db_workflow_mode,
+        db_dev_sync_engine=workflow_config.db_dev_sync_engine,
+        db_target=format_database_target(database_config),
+        startup_action=startup_action,
+        deploy_path=workflow_config.db_workflow_deploy_command,
+        workflow_stage=workflow_stage,
+        allowed_actions=allowed_actions,
+        managed_scope=workflow_config.db_workflow_managed_scope,
+        status_path=workflow_config.db_workflow_status_command,
+        dev_sync_path=workflow_config.db_workflow_dev_sync_command,
+        finalize_path=workflow_config.db_workflow_finalize_command,
+        verify_path=workflow_config.db_workflow_verify_command,
+    )
 
 
 class RedisSettings(BaseSettings):
@@ -406,6 +509,13 @@ class GetConfig:
         return DataBaseSettings()
 
     @lru_cache
+    def get_database_workflow_config(self):
+        """
+        获取数据库工作流配置
+        """
+        return DataBaseWorkflowSettings()
+
+    @lru_cache
     def get_redis_config(self):
         """
         获取Redis配置
@@ -520,6 +630,8 @@ class GetConfig:
         os.environ['DB_USERNAME'] = os.environ.get('DB_USERNAME', 'root')
         os.environ['DB_PASSWORD'] = os.environ.get('DB_PASSWORD', 'root')
         os.environ['DB_DATABASE'] = os.environ.get('DB_DATABASE', 'ruoyi-fastapi')
+        os.environ['DB_WORKFLOW_MODE'] = os.environ.get('DB_WORKFLOW_MODE') or 'migration'
+        os.environ['DB_DEV_SYNC_ENGINE'] = os.environ.get('DB_DEV_SYNC_ENGINE') or 'atlas'
 
 
 # 实例化获取配置类
@@ -534,6 +646,8 @@ SensitiveConfig = get_config.get_sensitive_config()
 SecurityConfig = get_config.get_security_config()
 # 数据库配置
 DataBaseConfig = get_config.get_database_config()
+# 数据库工作流配置
+DataBaseWorkflowConfig = get_config.get_database_workflow_config()
 # Redis配置
 RedisConfig = get_config.get_redis_config()
 # 代码生成配置

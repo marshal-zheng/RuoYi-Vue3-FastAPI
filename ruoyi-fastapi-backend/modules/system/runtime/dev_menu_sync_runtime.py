@@ -1,4 +1,4 @@
-"""Development-mode menu sync runtime."""
+"""Deprecated development-mode menu sync runtime kept only for compatibility."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from utils.log_util import logger
 
 
 def is_dev_menu_sync_enabled() -> bool:
-    """Return whether dev menu sync should run in current process."""
+    """Deprecated compatibility helper for legacy callers."""
     return AppConfig.app_env == 'dev' and bool(DevMenuSyncConfig.dev_menu_sync)
 
 
@@ -36,7 +36,7 @@ class DevMenuSyncState:
 
 
 class DevMenuSyncRuntime:
-    """Runtime loop that performs startup sync and file-change sync in dev mode."""
+    """Deprecated runtime loop superseded by `python scripts/db.py dev-sync`."""
 
     def __init__(
         self,

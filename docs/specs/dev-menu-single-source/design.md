@@ -1,5 +1,7 @@
 # 开发态菜单单一事实源技术设计
 
+> 注：当前仓库公开入口已收敛为 `ruoyi-fastapi-backend/scripts/db.py` 与 `ruoyi-fastapi-backend/scripts/menu.py`。本文中涉及种子发布的表述保留为历史设计语境，不再指向已删除脚本。
+
 ## 架构概述
 
 本设计将菜单与菜单授权声明收敛到单文件 `ruoyi-fastapi-backend/scripts/seed_data/menus.registry.yaml`，并让开发态热同步与生产种子初始化复用同一套加载/校验逻辑，实现“加上即出现、删掉即消失、无重登、无多入口心智”。
@@ -8,7 +10,7 @@
 
 1. 单一事实源覆盖全环境（dev/prod）：
 - 菜单结构（`sys_menu` 目标态）与角色菜单授权（`sys_role_menu` 目标态）只从 `menus.registry.yaml` 读取。
-- 生产环境仅通过常规 `seed_data.py`/发布流程生效，不启用热同步。
+- 生产环境仅通过正式发布流程生效，不启用热同步。
 
 2. 开发态仅增加“触发方式”，不改变权限语义：
 - 仍基于现有 RBAC 规则展示菜单。
@@ -33,7 +35,7 @@
 - 后端运行时监听：`ruoyi-fastapi-backend/modules/system/runtime/dev_menu_sync_runtime.py`
 - Dev API：`ruoyi-fastapi-backend/modules/system/api/dev_menu_sync_controller.py`
 - 服务启动挂载：`ruoyi-fastapi-backend/server.py`
-- 生产种子入口：`ruoyi-fastapi-backend/scripts/seed_data.py`
+- 生产发布入口：`ruoyi-fastapi-backend/scripts/db.py`
 - 前端热重建：`ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts`、`ruoyi-fastapi-frontend/src/store/modules/permission.ts`
 
 ## 数据流图
@@ -57,7 +59,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-  P1["CI 通过 registry 校验"] --> P2["发布执行 alembic upgrade + seed_data.py --env prod"]
+  P1["CI 通过 registry 校验"] --> P2["发布执行 db.py deploy"]
   P2 --> P3["MenuRegistryLoader 输出目标态"]
   P3 --> P4["事务对齐 sys_menu/sys_role_menu"]
   P4 --> P5["生产接口按既有 RBAC 返回 /getRouters"]
@@ -97,7 +99,7 @@ flowchart TD
 
 ### 3. SeedDataManager（改造）
 
-现状文件：`ruoyi-fastapi-backend/scripts/seed_data.py`
+现状文件：`ruoyi-fastapi-backend/scripts/internal/bootstrap_seed.py`
 
 改造点：
 - `seed_entity('menus')` 改为使用 `MenuRegistryLoader` 的菜单目标态。

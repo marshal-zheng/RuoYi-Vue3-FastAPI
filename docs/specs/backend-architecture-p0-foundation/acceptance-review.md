@@ -20,7 +20,7 @@
 
 | Requirement | 状态 | 证据 | 说明 |
 | --- | --- | --- | --- |
-| R1 新增数据访问只走 repository，不新增 DAO | 通过 | `ruoyi-fastapi-backend/scripts/check_no_dao_imports.py`；`dao-import-check` in `.gitlab-ci.yml` | DAO 退役检查脚本可执行且通过。 |
+| R1 新增数据访问只走 repository，不新增 DAO | 通过 | `ruoyi-fastapi-backend/docs/REPOSITORY_LAYER_POLICY.md`；`dao-import-check` in `.gitlab-ci.yml` | DAO 退役检查在当轮通过，历史脚本现已移除。 |
 | R2 现有 service 持久化访问只走 repository | 通过 | 已整改：`module_admin/service/project_service.py`、`module_admin/service/protocol_service.py`、`module_admin/service/common_service.py`、`module_admin/service/project_version_service.py`、`module_admin/service/device_service.py`、`module_admin/service/device_category_service.py`、`module_admin/service/job_log_service.py`；规则扫描：`rg ... module_admin/service` 无命中 | service 层已清零直连 `query_db/db` 持久化调用。 |
 | R3 service 依赖走构造注入 + FastAPI provider | 部分通过 | 正向样例：`module_admin/service/dict_service.py:38` + `module_admin/controller/dict_controller.py`；新增：`module_admin/service/project_service.py` + `get_project_service`、`module_admin/service/protocol_service.py` + `get_protocol_service`、`module_admin/service/project_topology_service.py` + `get_project_topology_service`；反例：`module_admin/service/simulation_service.py` 仍以 `@classmethod + query_db` 为主 | 已扩展 provider 覆盖面，但仍存在“实例化 DI”与“classmethod + query_db 参数”混用。 |
 | R4 controller 保持薄边界 | 部分通过 | 已改进：`module_admin/controller/project_controller.py`、`module_admin/controller/protocol_controller.py`、`module_admin/controller/simulation_controller.py`（故障参数解析/校验下沉到 service） | 控制器仍有部分业务参数组装逻辑（如 websocket 推送聚合逻辑）。 |
@@ -33,7 +33,7 @@
 | R11 结构化请求日志字段完整 | 通过 | `middlewares/request_logging_middleware.py`；`utils/log_util.py`；`tests/unit/middlewares/test_request_logging_middleware.py` | 已包含 `request_id/trace_id/user_id/path/method/status/duration`。 |
 | R12 HTTP/DB/Redis OTel spans 关联 | 通过 | `utils/otel_tracing.py` + `server.py` 初始化；`tests/unit/utils/test_otel_tracing.py`；`tests/integration/test_otel_trace_correlation.py` | 启动链路与端到端 trace 关联均有自动化验证证据。 |
 | R13 暴露 Prometheus `/metrics` | 通过 | `server.py:324`；`middlewares/prometheus_middleware.py`；`utils/prometheus_metrics.py`；`tests/unit/middlewares/test_prometheus_middleware.py` | 请求与依赖指标可抓取。 |
-| R14 ORM/Alembic 漂移前置拦截 | 通过 | `migration-drift-check` in `.gitlab-ci.yml` + `scripts/check_migration_drift.py` | 以 GitLab CI 为发布门禁，漂移检查可阻断合并。 |
+| R14 ORM/Alembic 漂移前置拦截 | 通过 | `migration-drift-check` in `.gitlab-ci.yml` + `ruoyi-fastapi-backend/scripts/db.py` | 当轮漂移检查门禁已生效；历史独立 drift 脚本现已移除。 |
 | R15 状态/删除标志不用魔法值 | 部分通过 | 正向：`module_admin/entity/do/project_version_do.py`、`module_admin/service/project_version_service.py` 使用枚举；范围外未做全仓硬约束 | 变更模块基本达成，但缺少全局 lint 规则约束。 |
 
 ## 覆盖质量评估
@@ -66,7 +66,7 @@
   - 结果：60 passed
 - `python3 -m pytest -q -n 0 --no-cov tests/integration/test_error_handling_rfc7807.py`
   - 结果：16 errors（`ModuleNotFoundError: aiosqlite`）
-- `python3 scripts/check_no_dao_imports.py`
+- 历史 DAO 导入治理脚本（已移除）
   - 结果：passed
 
 ## 增量复审（2026-02-11，continue）
@@ -85,7 +85,7 @@
     验证存在有效 OTel span 时日志 `trace_id` 与 span trace id 对齐。
 - R15（魔法值治理）补强：
   - `login_service` 的 `status == '1'` 已替换为 `StatusEnum.DISABLED.value`。
-  - 新增 CI 检查脚本 `scripts/check_magic_flag_literals.py`，并在 GitLab CI 增加 `magic-flag-literal-check` job。
+  - 新增历史魔法值治理脚本，并在 GitLab CI 增加 `magic-flag-literal-check` job；该脚本现已移除。
 
 ### 本轮测试记录
 
@@ -95,7 +95,7 @@
   - 结果：21 passed
 - `python3 -m pytest -q -n 0 --no-cov tests/unit/services/test_login_service_core.py`
   - 结果：17 passed
-- `python3 ruoyi-fastapi-backend/scripts/check_magic_flag_literals.py`
+- 历史魔法值治理脚本（已移除）
   - 结果：passed
 - `python3 -m pytest -q -n 0 --no-cov tests/integration/test_error_handling_rfc7807.py`
   - 结果：16 errors（本地环境缺失 `aiosqlite`）

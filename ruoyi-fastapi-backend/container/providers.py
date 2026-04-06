@@ -399,23 +399,9 @@ def _login_log_service_factory(session: AsyncSession | None) -> Any:
     )
 
 
-def _datasource_service_factory(session: AsyncSession | None) -> Any:
-    if session is None:
-        raise RuntimeError('datasource_service requires request session')
-
-    from module_admin.repository.datasource_repository import DataSourceRepository
-    from module_admin.service.datasource_service import DataSourceService
-
-    return DataSourceService(
-        datasource_repo=DataSourceRepository(session),
-        query_db=session,
-    )
-
-
 SERVICE_FACTORY_REGISTRY = _discover_service_providers()
 SERVICE_FACTORY_REGISTRY.update(
     {
-        'datasource_service': _datasource_service_factory,
         'common_service': _common_service_factory,
         'config_service': _config_service_factory,
         'dept_service': _dept_service_factory,

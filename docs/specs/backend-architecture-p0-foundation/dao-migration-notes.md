@@ -6,7 +6,7 @@
 
 ## 结论摘要
 
-- DAO 目录级退役已完成：`module_admin/dao`、`module_generator/dao` 不在仓库中，`scripts/check_no_dao_imports.py` 校验通过。
+- DAO 目录级退役已完成：`module_admin/dao`、`module_generator/dao` 不在仓库中；当轮历史 DAO 导入治理脚本校验通过，该脚本现已移除。
 - Repository-only 改造已覆盖 P0 重点链路（`ProjectService`、`ProtocolService`、`CommonService`）的服务层直连 SQLAlchemy 会话调用。
 - 全仓仍存在部分 service 直接调用 `flush/commit`，说明 R2 在“全量后端范围”下仍为部分达成。
 
@@ -27,7 +27,7 @@
 ## 验证结果
 
 - DAO 退役检查：
-  - 命令：`python3 scripts/check_no_dao_imports.py`
+  - 命令：历史 DAO 导入治理脚本（已移除）
   - 结果：`DAO decommission check passed`
 - 回归单测（35 条）：
   - `tests/unit/services/test_project_service.py`

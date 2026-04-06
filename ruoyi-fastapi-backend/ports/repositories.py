@@ -97,25 +97,6 @@ class IAuditLogRepository(Protocol):
 
 
 @runtime_checkable
-class IDataSourceRepository(Protocol):
-    """Protocol contract for DataSourceRepository."""
-
-    async def find_by_name(self, name: str) -> Any | None: ...
-    async def paginate_with_filters(
-        self,
-        page: int,
-        page_size: int,
-        name: str | None = None,
-        type: str | None = None,
-        status: str | None = None,
-    ) -> tuple[list[Any], int]: ...
-    async def add(self, entity: Any) -> Any: ...
-    async def update(self, entity: Any) -> Any: ...
-    async def soft_delete_by_ids(self, ids: list[Any]) -> int: ...
-    async def get_by_id(self, id: Any, **kwargs: Any) -> Any | None: ...
-
-
-@runtime_checkable
 class ICommonRepository(Protocol):
     """Protocol contract for `CommonRepository`."""
 
@@ -1071,7 +1052,6 @@ class IUserRoleRepository(Protocol):
 __all__ = [
     'IAuditLogRepository',
     'IBaseRepository',
-    'IDataSourceRepository',
     'ICommonRepository',
     'IConfigRepository',
     'IDeptRepository',

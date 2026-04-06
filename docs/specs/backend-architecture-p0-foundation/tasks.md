@@ -77,7 +77,7 @@
 
 - [x] T5.1 Add Alembic migration drift check to CI
   - DoD: PR pipeline fails on model/migration mismatch.
-  - Note: Added CI job `migration-drift-check` (MySQL service) and script `ruoyi-fastapi-backend/scripts/check_migration_drift.py` to run `alembic upgrade head` + `alembic check` and fail on drift.
+  - Note: Added CI job `migration-drift-check` (MySQL service); the historical drift check script has since been removed, and the capability is now represented by `ruoyi-fastapi-backend/scripts/db.py verify`.
 
 - [x] T5.2 Replace magic status/deletion string literals with enums/constants
   - DoD: no new raw literals for status and deletion flags in changed modules.

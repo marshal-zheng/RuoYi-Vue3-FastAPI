@@ -2,7 +2,7 @@
   "version": "2026-03-03",
   "controls": [
     {"id": "R1.AC1", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["docs/specs/jwt-security-hardcut/design.md", "docs/specs/jwt-security-hardcut/tasks.md"]},
-    {"id": "R1.AC2", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["ruoyi-fastapi-backend/scripts/check_security_mapping.py"]},
+    {"id": "R1.AC2", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["docs/specs/jwt-security-hardcut/design.md"]},
     {"id": "R1.AC3", "standards": ["OWASP-ASVS-4.0.3-V1.1"], "evidence": ["docs/specs/jwt-security-hardcut/standards-mapping.json"]},
 
     {"id": "R2.AC1", "standards": ["RFC-7519", "RFC-8725-3.1"], "evidence": ["ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py"]},
@@ -46,6 +46,6 @@
 
     {"id": "R10.AC1", "standards": ["OWASP-SAMM-Verification"], "evidence": [".github/workflows/ci.yml", ".gitlab-ci.yml"]},
     {"id": "R10.AC2", "standards": ["OWASP-SAMM-Verification"], "evidence": [".github/workflows/ci.yml", ".gitlab-ci.yml"]},
-    {"id": "R10.AC3", "standards": ["OWASP-SAMM-Governance"], "evidence": ["ruoyi-fastapi-backend/scripts/generate_security_evidence.py"]}
+    {"id": "R10.AC3", "standards": ["OWASP-SAMM-Governance"], "evidence": ["docs/specs/jwt-security-hardcut/release-evidence.json"]}
   ]
 }

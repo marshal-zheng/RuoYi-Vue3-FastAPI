@@ -136,7 +136,7 @@
 - [x] **[P1-007] 分析索引使用情况** ✅ 已完成 (2026-01-27)
   - 影响: 索引优化
   - 预计: 2 小时
-  - 状态: ✅ 已完成 - `IndexAnalyzer` 类 + `scripts/analyze_indexes.py`
+  - 状态: ✅ 已完成 - `IndexAnalyzer` 类 + `scripts/manual/analyze_indexes.py`
   - 验收:
     - 支持 MySQL 和 PostgreSQL 双数据库 ✅
     - `analyze_index_usage()` - 分析索引使用情况 ✅
@@ -561,7 +561,7 @@
   - `generate_report()` - 生成完整分析报告
 
 **新增文件**:
-- `scripts/analyze_indexes.py` - 索引分析脚本（支持 JSON/Markdown/Console 输出）
+- `scripts/manual/analyze_indexes.py` - 索引分析脚本（支持 JSON/Markdown/Console 输出）
 
 **修改文件**:
 - `module_admin/entity/do/indexes.py` - 完善 IndexAnalyzer 类

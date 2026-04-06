@@ -36,12 +36,13 @@ src/mocks/
 
 ```ts
 import { http, HttpResponse } from 'msw'
+import { createApiPath } from '../constants'
 import { withBackendFallback } from '../utils/with-backend-fallback'
 import { resultSuccess } from '../utils/response'
 
 export function createFooHandlers(strategy: MockStrategy) {
   return [
-    http.get('/dev-api/foo', ({ request }) =>
+    http.get(createApiPath('/foo'), ({ request }) =>
       withBackendFallback(
         request,
         () => HttpResponse.json(resultSuccess({ foo: 'bar' })),
@@ -51,6 +52,8 @@ export function createFooHandlers(strategy: MockStrategy) {
   ]
 }
 ```
+
+`createApiPath` 会读取 `VITE_APP_BASE_API`，默认统一使用 `/api`，避免 Mock handler 和运行时请求前缀再次分叉。
 
 2. 在 `src/mocks/handlers/index.ts` 中汇总：
 

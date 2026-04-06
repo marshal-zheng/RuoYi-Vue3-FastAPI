@@ -122,7 +122,13 @@ migration-drift-check:
     DB_USERNAME: root
     DB_PASSWORD: root
     DB_DATABASE: ruoyi_fastapi_ci
+    DB_WORKFLOW_MODE: migration
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/.+$/'
   script:
+    - echo "Running formal migration drift gate for MR/default/release pipelines"
     - pip install -r ruoyi-fastapi-backend/requirements.txt -r ruoyi-fastapi-backend/requirements-dev.txt
     - python ruoyi-fastapi-backend/scripts/check_migration_drift.py
 

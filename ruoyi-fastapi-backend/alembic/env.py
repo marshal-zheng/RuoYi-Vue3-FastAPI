@@ -65,6 +65,12 @@ from module_admin.entity.do.dict_do import (  # noqa: F401
 # 配置模型
 from module_admin.entity.do.config_do import ConfigDO  # noqa: F401
 
+# 统一数据库工作流元数据模型
+from module_admin.entity.do.db_workflow_do import (  # noqa: F401
+    DbWorkflowArtifactDO,
+    DbWorkflowObjectDO,
+)
+
 # 通知公告模型
 from module_admin.entity.do.notice_do import NoticeDO  # noqa: F401
 
@@ -150,6 +156,10 @@ def get_database_url() -> str:
     Returns:
         str: 同步数据库连接 URL
     """
+    override_url = os.getenv('ALEMBIC_DATABASE_URL')
+    if override_url:
+        return override_url
+
     db_type = DataBaseConfig.db_type
     host = DataBaseConfig.db_host
     port = DataBaseConfig.db_port

@@ -61,6 +61,13 @@
         <el-color-picker v-model="theme" :predefine="predefineColors" @change="themeChange" />
       </span>
     </div>
+
+    <div class="drawer-item">
+      <span>暗黑模式</span>
+      <span class="comp-style">
+        <el-switch :model-value="settingsStore.isDark" @change="settingsStore.toggleTheme()" class="drawer-switch" />
+      </span>
+    </div>
     <el-divider />
 
     <h3 class="drawer-title">系统布局配置</h3>

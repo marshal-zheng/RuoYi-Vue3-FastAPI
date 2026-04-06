@@ -8,9 +8,7 @@
 
 ## 采样方法（可复现）
 
-```bash
-cd ruoyi-fastapi-backend && venv/bin/python scripts/benchmark_cqrs_query_dispatch.py --iterations 50000 --warmup 2000 > ../docs/specs/backend-arch-p4-cqrs/baselines/cqrs-query-dispatch-benchmark-2026-02-22.json
-```
+采集说明：该结果由历史 CQRS 查询派发微基准脚本生成，脚本已从当前仓库移除，产物保留在 `cqrs-query-dispatch-benchmark-2026-02-22.json`。
 
 原始产物：
 - `docs/specs/backend-arch-p4-cqrs/baselines/cqrs-query-dispatch-benchmark-2026-02-22.json`

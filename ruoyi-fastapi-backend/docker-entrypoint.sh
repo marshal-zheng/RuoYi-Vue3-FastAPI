@@ -1,6 +1,6 @@
 #!/bin/bash
 # Docker entrypoint script for RuoYi-FastAPI backend
-# Handles database initialization before starting the application
+# Handles the unified formal deploy chain before starting the application
 
 set -e
 
@@ -17,31 +17,33 @@ if [ "${SKIP_DB_INIT}" = "true" ]; then
 else
     # Step 1: Wait for database
     echo "[1/3] Waiting for database..."
-    if python scripts/wait_for_db.py; then
+    if python scripts/db.py wait-db; then
         echo "Database is ready!"
     else
         echo "ERROR: Database connection failed"
         exit 1
     fi
 
-    # Step 2: Run Alembic migrations
+    # Step 2: Run the formal deploy chain
     echo ""
-    echo "[2/3] Running database migrations..."
-    if python -m alembic upgrade head; then
-        echo "Migrations completed successfully"
+    echo "[2/3] Running formal database deploy chain..."
+    echo "Docker/shared/test/staging/prod/customer upgrades use deploy --revision head only"
+    if python scripts/db.py deploy --revision head; then
+        echo "Formal deploy chain completed successfully"
     else
-        echo "ERROR: Migration failed"
+        echo "ERROR: Formal deploy chain failed"
         exit 1
     fi
 
-    # Step 3: Seed initial data
+    # Step 3: Seed bootstrap-only data after baseline bundles are deployed
     echo ""
-    echo "[3/3] Seeding initial data..."
-    if python scripts/seed_data.py --env "${APP_ENV:-prod}"; then
-        echo "Seed data loaded successfully"
+    echo "[3/3] Seeding bootstrap-only data..."
+    echo "Fresh install order: schema migration -> baseline bundles -> bootstrap seed"
+    if python scripts/db.py bootstrap-seed --env "${APP_ENV:-prod}"; then
+        echo "Bootstrap seed loaded successfully"
     else
-        echo "WARNING: Seed data loading failed (may already exist)"
-        # Don't exit on seed failure - data might already exist
+        echo "ERROR: Bootstrap seed loading failed"
+        exit 1
     fi
 fi
 

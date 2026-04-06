@@ -6,64 +6,98 @@ import createVitePlugins from './vite/plugins'
 
 const baseUrl = 'http://127.0.0.1:8088'
 
+function normalizeApiPrefix(value?: string): string {
+  if (!value) return '/api'
+  const withLeadingSlash = value.startsWith('/') ? value : `/${value}`
+  return withLeadingSlash.replace(/\/+$/, '') || '/api'
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 // ZXUI 本地直连时需要排除预构建的包
 const zxuiExcludeDeps = [
   '@zxio/zxui',
   '@zxio/components',
-  '@zxio/utils',
-  '@zxio/hooks',
   '@zxio/constants',
+  '@zxio/hooks',
   '@zxio/shared',
-  '@zxio/types',
-  '@zxio/tokens',
-  '@zxio/chart',
-  '@zxio/http',
-  '@zxio/text-editor',
   '@zxio/theme-chalk',
+  '@zxio/tokens',
+  '@zxio/types',
+  '@zxio/utils',
 ]
 
-// 生成 ZXUI 本地直连别名配置
-function createZxuiLocalAlias(localPath: string): Alias[] {
+// 生成 ZXUI 本地直连别名配置（与 ZXUI 官方 host contract 对齐）
+function createZxuiLocalAlias(repoRoot: string): Alias[] {
+  const packagesRoot = path.resolve(repoRoot, 'packages')
+
   return [
-    // 直连 ZXUI 入口（全量安装）
-    { find: /^@zxio\/zxui$/, replacement: `${localPath}/zxui/index.ts` },
-    // 兼容 es/lib 子路径（若业务有使用 @zxio/zxui/es/... 或 lib/...）
-    { find: /^@zxio\/zxui\/(es|lib)\/(.*)$/, replacement: `${localPath}/$2` },
-    // 样式相关
-    { find: '@zxio/zxui/theme-chalk', replacement: `${localPath}/theme-chalk` },
-    { find: '@zxio/theme-chalk', replacement: `${localPath}/theme-chalk` },
-    // 直连各子包（按需引用）
-    { find: '@zxio/components', replacement: `${localPath}/components` },
-    { find: '@zxio/utils', replacement: `${localPath}/utils` },
-    { find: '@zxio/hooks', replacement: `${localPath}/hooks` },
-    { find: '@zxio/constants', replacement: `${localPath}/constants` },
-    { find: '@zxio/shared', replacement: `${localPath}/shared` },
-    { find: '@zxio/types', replacement: `${localPath}/types` },
-    { find: '@zxio/tokens', replacement: `${localPath}/tokens` },
-    { find: '@zxio/chart', replacement: `${localPath}/chart` },
-    { find: '@zxio/http', replacement: `${localPath}/http` },
-    { find: '@zxio/text-editor', replacement: `${localPath}/text-editor` },
+    {
+      find: /^@zxio\/theme-default\/theme\.css$/,
+      replacement: path.resolve(packagesRoot, 'theme-default/theme.css'),
+    },
+    {
+      find: /^@zxio\/zxui\/style$/,
+      replacement: path.resolve(packagesRoot, 'zxui/style.ts'),
+    },
+    {
+      find: /^@zxio\/zxui\/style\.css$/,
+      replacement: path.resolve(packagesRoot, 'zxui/style/index.css'),
+    },
+    {
+      find: /^@zxio\/zxui$/,
+      replacement: path.resolve(packagesRoot, 'zxui/index.ts'),
+    },
+    {
+      find: /^@zxio\/zxui\/(.*)$/,
+      replacement: `${path.resolve(packagesRoot, 'zxui')}/$1`,
+    },
+    {
+      find: /^@zxio\/theme-chalk\/src\/(.*)$/,
+      replacement: `${path.resolve(packagesRoot, 'theme-chalk/src')}/$1`,
+    },
+    {
+      find: /^@zxio\/theme-chalk\/(.+\.css)$/,
+      replacement: `${path.resolve(packagesRoot, 'theme-chalk/dist')}/$1`,
+    },
+    {
+      find: /^@zxio\/tokens\/tokens\.css$/,
+      replacement: path.resolve(packagesRoot, 'tokens/tokens.css'),
+    },
+    {
+      find: /^@zxio\/(components|constants|hooks|shared|tokens|types|utils)$/,
+      replacement: `${packagesRoot}/$1`,
+    },
+    {
+      find: /^@zxio\/(components|constants|hooks|shared|tokens|types|utils)\/(.*)$/,
+      replacement: `${packagesRoot}/$1/$2`,
+    },
   ]
 }
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd())
-  const { VITE_APP_ENV, VITE_ZXUI_LOCAL, VITE_ZXUI_LOCAL_PATH } = env
+  const { VITE_APP_ENV, VITE_ZXUI_LOCAL, VITE_ZXIO_REPO_ROOT } = env
+  const apiPrefix = normalizeApiPrefix(env.VITE_APP_BASE_API)
   
   // 测试环境配置
   const isTest = mode === 'test' || process.env.NODE_ENV === 'test'
   
   // 是否启用 ZXUI 本地直连模式（仅开发环境有效）
   const useZxuiLocal = command === 'serve' && VITE_ZXUI_LOCAL === 'true'
+
+  if (useZxuiLocal && !VITE_ZXIO_REPO_ROOT) {
+    throw new Error(
+      'ZXUI 本地直连模式已启用，但缺少 VITE_ZXIO_REPO_ROOT 环境变量。' +
+      '请在 .env.development 或 .env.local 中设置 VITE_ZXIO_REPO_ROOT 为 ZXUI monorepo 绝对路径。'
+    )
+  }
   
   // ZXUI 本地直连别名
-  const zxuiLocalAlias = useZxuiLocal ? createZxuiLocalAlias(VITE_ZXUI_LOCAL_PATH) : []
-  
-  if (useZxuiLocal) {
-    console.log('\n🔗 ZXUI 本地直连模式已启用')
-    console.log(`   路径: ${VITE_ZXUI_LOCAL_PATH}\n`)
-  }
+  const zxuiLocalAlias = useZxuiLocal ? createZxuiLocalAlias(VITE_ZXIO_REPO_ROOT) : []
 
   // 基础别名配置
   const baseAlias: Alias[] = [
@@ -95,15 +129,15 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       host: true,
       open: true,
       proxy: {
-      // https://cn.vitejs.dev/config/#server-proxy
-      '/dev-api': {
-        target: baseUrl,
-        changeOrigin: true,
-        ws: true, // 支持 WebSocket 代理
-        // 将 /dev-api 重写为空（开发环境代理）
-        rewrite: (p) => p.replace(/^\/dev-api/, '')
+        // https://cn.vitejs.dev/config/#server-proxy
+        [apiPrefix]: {
+          target: baseUrl,
+          changeOrigin: true,
+          ws: true, // 支持 WebSocket 代理
+          // 将统一的 API 前缀重写为空，由后端直接处理真实路由
+          rewrite: (p) => p.replace(new RegExp(`^${escapeRegExp(apiPrefix)}`), '') || '/',
+        },
       }
-    }
     },
     optimizeDeps: {
       include: ['@iconify/iconify'],

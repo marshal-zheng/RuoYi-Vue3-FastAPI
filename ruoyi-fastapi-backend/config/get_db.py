@@ -1,5 +1,6 @@
 import os
 import sys
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
 from config.database import async_engine, AsyncSessionLocal, Base
@@ -59,12 +60,21 @@ async def get_db():
 
 async def init_create_table():
     """
-    应用启动时初始化数据库连接
+    应用启动时初始化数据库连接。
+    测试环境保留 create_all 以兼容内存 SQLite；
+    非测试环境只做连接探活，schema 变更必须由显式工作流处理。
 
     :return:
     """
-    logger.info('初始化数据库连接...')
-    engine = _get_test_engine() if _is_test_env() else async_engine
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    if _is_test_env():
+        logger.info('初始化测试环境数据库结构...')
+        engine = _get_test_engine()
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info('测试环境数据库结构初始化完成')
+        return
+
+    logger.info('初始化数据库连接（非测试环境不执行自动建表）...')
+    async with async_engine.connect() as conn:
+        await conn.execute(text('SELECT 1'))
     logger.info('数据库连接成功')

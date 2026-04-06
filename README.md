@@ -111,7 +111,7 @@ yarn test            # 运行测试
 专项回归验证（推荐）：
 ```bash
 ./scripts/verify-dev-menu-hot-sync.sh
-cd ruoyi-fastapi-backend && python scripts/check_menu_registry.py --strict
+cd ruoyi-fastapi-backend && python scripts/menu.py check --strict
 ```
 
 ### 方式二：Docker 本地开发（推荐）
@@ -145,10 +145,13 @@ docker-compose down
 
 ```bash
 # 首次使用 - 自动安装所有依赖并配置环境
-./setup.sh
+./scripts/setup.sh
 
 # 日常开发 - 快速启动前后端服务
-./start.sh
+./scripts/start.sh
+
+# 停止当前仓库的前后端开发实例
+./scripts/stop.sh
 ```
 
 > 详细说明请查看 [QUICK_START.md](./QUICK_START.md)
@@ -168,15 +171,15 @@ docker-compose down
 ```bash
 # 创建数据库
 mysql -u root -p -e "CREATE DATABASE \`ruoyi-fastapi\` CHARACTER SET utf8mb4;"
-
-# 导入初始数据
-mysql -u root -p ruoyi-fastapi < ruoyi-fastapi-backend/sql/ruoyi-fastapi.sql
 ```
 
 #### 3. 启动后端
 
 ```bash
 cd ruoyi-fastapi-backend
+
+# 如果走开发态统一工作流，先安装 Atlas CLI
+brew install atlas
 
 # 1. 创建虚拟环境（推荐）
 python3 -m venv venv
@@ -187,17 +190,21 @@ source venv/bin/activate  # macOS/Linux
 pip install -r requirements.txt
 
 # 3. 配置环境变量
-cp .env.example .env.dev
 # 编辑 .env.dev，配置数据库和 Redis 连接信息
 
-# 4. 启动开发服务器
+# 4. 初始化数据库工作流
+python scripts/db.py deploy --revision head
+python scripts/db.py bootstrap-seed --env dev
+python scripts/db.py dev-sync
+
+# 5. 启动开发服务器
 python app.py --env=dev
 ```
 
 后端服务：
-- API 地址：http://localhost:8000
-- API 文档：http://localhost:8000/docs
-- 健康检查：http://localhost:8000/health
+- API 地址：http://localhost:8088
+- API 文档：http://localhost:8088/docs
+- 健康检查：http://localhost:8088/health
 
 #### 4. 启动前端
 

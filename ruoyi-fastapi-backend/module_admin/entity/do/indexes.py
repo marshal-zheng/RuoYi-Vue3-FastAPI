@@ -569,5 +569,5 @@ async def analyze_indexes(db: AsyncSession):
 python -c "from module_admin.entity.do.indexes import generate_index_migration; generate_index_migration()"
 
 # 4. 运行索引分析脚本
-python scripts/analyze_indexes.py --output report.json
+python scripts/manual/analyze_indexes.py --output report.json
 """

@@ -20,9 +20,9 @@
 
 ## 证据
 
-- `python3 ruoyi-fastapi-backend/scripts/check_resilience_policy_bindings.py`
-- `python3 ruoyi-fastapi-backend/scripts/check_no_new_service_instantiations.py`
-- `python3 ruoyi-fastapi-backend/scripts/check_no_new_service_classmethods.py`
+- 历史 resilience 绑定治理脚本（已移除）
+- 历史“禁止新增 service 即时实例化”治理脚本（已移除）
+- 历史“禁止新增 service classmethod”治理脚本（已移除）
 - `python3 -m ruff check --select F401,F821,F822,F823 ...`
 - `PYTHONPYCACHEPREFIX=/tmp python3 -m py_compile ...`
 - `cd ruoyi-fastapi-backend && venv/bin/python -m pytest -q -n 0 --no-cov <architecture-regression-tests 清单>`

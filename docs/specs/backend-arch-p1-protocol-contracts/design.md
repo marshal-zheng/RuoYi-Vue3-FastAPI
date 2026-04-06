@@ -35,10 +35,8 @@ flowchart LR
 : 基础设施契约定义（`IRedisClient`、`ICacheProvider`、`IAuditLogger`、`IEventBus`）。
 - `ports/__init__.py`
 : 统一导出，作为唯一导入入口。
-- `scripts/check_protocol_coverage.py`
-: 校验公开实现类的 Protocol 覆盖率。
-- `scripts/check_protocol_updates.py`
-: 校验“公开方法变更是否同步更新 Protocol”。
+- 历史协议治理脚本（已移除）
+: 曾用于校验公开实现类的 Protocol 覆盖率，以及“公开方法变更是否同步更新 Protocol”。
 
 强约束：
 
@@ -60,8 +58,8 @@ flowchart LR
 
 P1 不新增业务 HTTP API，仅新增工程治理入口：
 
-- `python scripts/check_protocol_updates.py`
-- `python scripts/check_protocol_coverage.py --format=json`
+- 历史协议更新治理脚本（已移除）
+- 历史协议覆盖率治理脚本（已移除，曾支持 JSON 报告）
 
 返回码：
 
@@ -90,6 +88,6 @@ P1 无数据库 schema 变更。
 - 单元测试：
   - 使用 Protocol mock 验证依赖替换能力。
 - CI 门禁：
-  - `check_protocol_updates` 与 `check_protocol_coverage` 必须通过。
+  - 历史协议治理脚本门禁必须通过。
 - 回归测试：
   - 现有业务测试全量通过，确保仅类型边界变化不破坏行为。

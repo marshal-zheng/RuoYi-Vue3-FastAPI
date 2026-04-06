@@ -54,9 +54,9 @@
 - `ruoyi-fastapi-backend/alembic/env.py` — 迁移环境配置、模型导入与在线/离线迁移。
 - `ruoyi-fastapi-backend/alembic/versions/*.py` — 版本化迁移脚本。
 - `ruoyi-fastapi-backend/alembic.ini` — Alembic 主配置。
-- `ruoyi-fastapi-backend/scripts/check_migration_drift.py` — 迁移漂移检查。
+- `ruoyi-fastapi-backend/scripts/db.py` — 统一数据库工作流入口。
 
-**依赖关系：** `alembic/env.py` 依赖 `config/env.py` 和 `module_admin/entity/do/*`；CI 依赖漂移检查脚本与迁移命令验证变更可执行性。
+**依赖关系：** `alembic/env.py` 依赖 `config/env.py` 和 `module_admin/entity/do/*`；日常开发/部署通过 `db.py` 串联迁移、发布与校验。
 
 **架构模式：** 版本化迁移；在线/离线双模式；结构漂移门禁。
 
@@ -65,12 +65,12 @@
 **用途：** 用可维护的 YAML 声明初始化基础数据，支持环境覆盖与幂等执行。
 
 **关键文件：**
-- `ruoyi-fastapi-backend/scripts/seed_data.py` — 种子数据装载主流程。
+- `ruoyi-fastapi-backend/scripts/internal/bootstrap_seed.py` — bootstrap 种子数据执行器。
 - `ruoyi-fastapi-backend/scripts/seed_data/manifest.yaml` — 加载顺序、表映射、主键映射。
 - `ruoyi-fastapi-backend/scripts/seed_data/base/*.yaml` — 基础种子数据。
 - `ruoyi-fastapi-backend/scripts/seed_data/overlays/*.yaml` — 环境差异覆盖数据。
 - `ruoyi-fastapi-backend/sql/*.sql` — 初始化 SQL 与增量脚本。
 
-**依赖关系：** `seed_data.py` 依赖 ORM 模型与 `config/database.py`；根目录 `scripts/setup.sh`/`scripts/start.sh` 依赖 `sql/*.sql` 初始化或增量更新数据库。
+**依赖关系：** `bootstrap_seed.py` 依赖 ORM 模型与 `config/database.py`；初始化种子通过 `python scripts/db.py bootstrap-seed` 进入主链路。
 
 **架构模式：** Base + Overlay 数据分层；按依赖顺序加载；脚本化初始化流程。

@@ -48,5 +48,5 @@
   - 移除旧式上帝 Service 入口，不保留并行逻辑。
   - 完成 Handler、管道、控制器端到端测试。
   - 校验 API 契约与性能基线。
-  - 本轮进展：`config/dict/dept/post/role/user` 导出接口已改为先走 `mediator.query(...)` 获取读模型，再执行导出映射，移除导出场景下的旧列表查询入口；`dept/role/user` 写路径控制器业务校验已全部下沉到 CommandHandler。新增 `scripts/check_cqrs_controller_cutover.py` 并接入 `.gitlab-ci.yml` / `.github/workflows/ci.yml`，阻断系统控制器回退直调业务 service。新增 `tests/integration/test_system_cqrs_cutover.py` 覆盖读链路契约、写链路与 Query/Command pipeline 的端到端验收。新增 `scripts/benchmark_cqrs_query_dispatch.py` 与 `baselines/cqrs-query-dispatch-benchmark-2026-02-22.json`，并在 `baselines/performance-baseline-2026-02-22.md` 归档可复验基线结果。
+  - 本轮进展：`config/dict/dept/post/role/user` 导出接口已改为先走 `mediator.query(...)` 获取读模型，再执行导出映射，移除导出场景下的旧列表查询入口；`dept/role/user` 写路径控制器业务校验已全部下沉到 CommandHandler。补齐历史控制器切换治理脚本并接入当时的 CI 门禁，阻断系统控制器回退直调业务 service。新增 `tests/integration/test_system_cqrs_cutover.py` 覆盖读链路契约、写链路与 Query/Command pipeline 的端到端验收。新增历史 CQRS 查询派发微基准脚本与 `baselines/cqrs-query-dispatch-benchmark-2026-02-22.json`，并在 `baselines/performance-baseline-2026-02-22.md` 归档可复验基线结果；相关脚本现已移除。
   _需求追溯: R6.AC1, R6.AC2, R6.AC3, R6.AC4_

@@ -25,7 +25,7 @@ COPY . .
 RUN mkdir -p vf_admin/upload_path vf_admin/download_path vf_admin/gen_path logs
 
 # 确保脚本有执行权限
-RUN chmod +x docker-entrypoint.sh scripts/db_migrate.sh
+RUN chmod +x docker-entrypoint.sh
 
 # 设置环境变量
 ENV APP_ENV=prod

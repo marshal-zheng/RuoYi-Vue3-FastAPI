@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+import asyncio
+
 from sqlalchemy import select
 
 from config.database import AsyncSessionLocal
@@ -63,3 +67,12 @@ async def migrate() -> None:
         user_counts['id_card'],
         updated_depts,
     )
+
+
+def main() -> int:
+    asyncio.run(migrate())
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

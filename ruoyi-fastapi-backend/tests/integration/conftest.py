@@ -3,13 +3,13 @@ Integration test fixtures and configuration
 """
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
 from fastapi.testclient import TestClient
+from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from config.get_db import get_db
 from container import build_container
 from server import DummyRedis, app
-from config.get_db import get_db
 
 
 @pytest.fixture(scope="function")

@@ -46,7 +46,7 @@ flowchart TD
 
 - 按依赖类型与业务关键级别装载策略模板。
 - 策略配置集中管理，支持灰度与回滚。
-- 外部调用绑定由 `scripts/check_resilience_policy_bindings.py` 在 CI 中强制校验。
+- 外部调用绑定曾由历史 resilience 治理脚本在 CI 中强制校验；该脚本现已移除。
 
 ## API 接口设计
 

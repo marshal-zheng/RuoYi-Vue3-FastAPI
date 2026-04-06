@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response
 
-from config.database import AsyncSessionLocal, async_engine
+from config.database import async_engine
 from config.env import AppConfig, AuditConfig, CacheConfig, DevMenuSyncConfig
 from config.get_db import init_create_table
 from container import (
@@ -28,12 +28,6 @@ from modules.registry import (
     register_modules,
 )
 from modules.identity.application.services.security_token_service import SecurityTokenService
-from modules.system.runtime import (
-    DEFAULT_MENU_REGISTRY_FILE,
-    DevMenuReconcileService,
-    DevMenuSyncRuntime,
-    is_dev_menu_sync_enabled,
-)
 from resilience.runtime import build_resilience_runtime
 from sub_applications.handle import handle_sub_applications
 from utils.audit_logger import init_audit_logger
@@ -161,6 +155,7 @@ class DummyRedis:
 async def lifespan(app: FastAPI):
     logger.info(f'{AppConfig.app_name}开始启动')
     worship()
+    # 仅初始化运行时数据库连接；非测试环境 schema 变更由 dev-sync/deploy 工作流负责。
     await init_create_table()
     init_otel_tracing(app=app, db_engine=async_engine)
     container = build_container()
@@ -209,28 +204,16 @@ async def lifespan(app: FastAPI):
     set_event_runtime(app.state.event_runtime)
 
     app.state.dev_menu_sync_runtime = None
-    if is_dev_menu_sync_enabled():
-        app.state.dev_menu_sync_runtime = DevMenuSyncRuntime(
-            service_factory=lambda: DevMenuReconcileService(query_db=AsyncSessionLocal()),
-            watch_paths=(DEFAULT_MENU_REGISTRY_FILE,),
-        )
-        await app.state.dev_menu_sync_runtime.start()
-        logger.info(
-            '开发态菜单热同步已启用，监听文件: {}',
-            str(DEFAULT_MENU_REGISTRY_FILE),
+    if DevMenuSyncConfig.dev_menu_sync:
+        logger.warning(
+            'DEV_MENU_SYNC 已弃用并在应用启动链路中被忽略；请改用 `python scripts/db.py dev-sync` 或 `./scripts/start.sh` 在启动前完成统一同步',
         )
     else:
-        if DevMenuSyncConfig.dev_menu_sync and AppConfig.app_env != 'dev':
-            logger.warning(
-                '检测到 DEV_MENU_SYNC=true 但 APP_ENV={}，已拒绝启用开发态菜单热同步',
-                AppConfig.app_env,
-            )
-        else:
-            logger.info(
-                '开发态菜单热同步未启用（APP_ENV={}, DEV_MENU_SYNC={}）',
-                AppConfig.app_env,
-                DevMenuSyncConfig.dev_menu_sync,
-            )
+        logger.info(
+            '开发态菜单热同步已弃用；统一数据库工作流负责启动前同步（APP_ENV={}, DEV_MENU_SYNC={}）',
+            AppConfig.app_env,
+            DevMenuSyncConfig.dev_menu_sync,
+        )
 
     # 初始化审计日志
     if AuditConfig.audit_enabled and not _is_test_env():
@@ -258,9 +241,6 @@ async def lifespan(app: FastAPI):
     
     app_container = getattr(app.state, 'container', None)
     event_runtime = getattr(app.state, 'event_runtime', None)
-    dev_menu_sync_runtime = getattr(app.state, 'dev_menu_sync_runtime', None)
-    if dev_menu_sync_runtime is not None:
-        await dev_menu_sync_runtime.stop()
     if event_runtime is not None:
         await event_runtime.stop()
         set_event_runtime(None)

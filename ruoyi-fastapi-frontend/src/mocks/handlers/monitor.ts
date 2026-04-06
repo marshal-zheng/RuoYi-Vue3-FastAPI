@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { http, HttpResponse } from 'msw';
 
+import { createApiPath } from '../constants';
 import type { MockStrategy } from '../types';
 import { resultSuccess } from '../utils/response';
 import { withBackendFallback } from '../utils/with-backend-fallback';
@@ -8,7 +9,7 @@ import { withBackendFallback } from '../utils/with-backend-fallback';
 export function createMonitorHandlers(strategy: MockStrategy) {
   return [
     // 服务器监控信息
-    http.get('/dev-api/monitor/server', ({ request }) =>
+    http.get(createApiPath('/monitor/server'), ({ request }) =>
       withBackendFallback(
         request,
         () =>
@@ -64,7 +65,7 @@ export function createMonitorHandlers(strategy: MockStrategy) {
     ),
 
     // 缓存监控信息
-    http.get('/dev-api/monitor/cache', ({ request }) =>
+    http.get(createApiPath('/monitor/cache'), ({ request }) =>
       withBackendFallback(
         request,
         () =>
@@ -96,7 +97,7 @@ export function createMonitorHandlers(strategy: MockStrategy) {
     ),
 
     // 在线用户列表
-    http.get('/dev-api/monitor/online/list', ({ request }) =>
+    http.get(createApiPath('/monitor/online/list'), ({ request }) =>
       withBackendFallback(
         request,
         () =>

@@ -113,19 +113,6 @@ class IConfigService(IBaseService, Protocol):
 
 
 @runtime_checkable
-class IDataSourceService(IBaseService, Protocol):
-    """Protocol contract for DataSourceService."""
-
-    async def get_datasource_list_services(self, query: Any) -> Any: ...
-    async def datasource_detail_services(self, datasource_id: int) -> Any: ...
-    async def add_datasource_services(self, data: Any, current_user: str) -> Any: ...
-    async def edit_datasource_services(self, data: Any, current_user: str) -> Any: ...
-    async def delete_datasource_services(self, datasource_ids: str) -> Any: ...
-    async def test_connection_services(self, config: Any) -> Any: ...
-    async def test_saved_connection_services(self, datasource_id: int) -> Any: ...
-
-
-@runtime_checkable
 class IDeptService(IBaseService, Protocol):
     """Protocol contract for `DeptService`."""
 
@@ -1239,7 +1226,6 @@ __all__ = [
     'ICaptchaService',
     'ICommonService',
     'IConfigService',
-    'IDataSourceService',
     'IDeptService',
     'IDeviceCategoryService',
     'IDeviceService',

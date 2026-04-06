@@ -1,13 +1,14 @@
 // @ts-nocheck
 import { http, HttpResponse } from 'msw';
 
+import { createApiPath } from '../constants';
 import type { MockStrategy } from '../types';
 import { resultSuccess } from '../utils/response';
 import { withBackendFallback } from '../utils/with-backend-fallback';
 
 export function createTestHandlers(strategy: MockStrategy) {
   return [
-    http.get('/dev-api/test/mock', ({ request }) =>
+    http.get(createApiPath('/test/mock'), ({ request }) =>
       withBackendFallback(
         request,
         () =>

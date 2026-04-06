@@ -43,17 +43,17 @@
 
 ## 验收证据
 
-### 1) 架构门禁脚本
+### 1) 历史架构门禁记录
 
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_no_new_service_classmethods.py`
+- 历史“禁止新增 service classmethod”治理脚本（已移除）
   - 结果：passed（0 tracked entries）
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_no_new_service_instantiations.py`
+- 历史“禁止新增 service 即时实例化”治理脚本（已移除）
   - 结果：passed（15 tracked entries，均位于暂缓 `simulation` 模块）
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_protocol_updates.py`
+- 历史协议变更治理脚本（已移除）
   - 结果：passed
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_protocol_coverage.py --format=json`
+- 历史协议覆盖率治理脚本（已移除，JSON 模式）
   - 结果：coverage 100%（63/63）
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/check_resilience_policy_bindings.py`
+- 历史 resilience 绑定治理脚本（已移除）
   - 结果：passed（14 operations discovered）
 
 ### 2) 注入链路 + 事务边界回归
@@ -66,8 +66,8 @@
 
 ### 3) 容器依赖图
 
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/export_container_graph.py --format dot --output ../docs/specs/backend-arch-p2-dependency-injection/container-graph.dot`
-- `cd ruoyi-fastapi-backend && venv/bin/python scripts/export_container_graph.py --format text --output ../docs/specs/backend-arch-p2-dependency-injection/container-graph.txt`
+- 使用历史容器图导出工具（已移除）生成 `container-graph.dot`
+- 使用历史容器图导出工具（已移除）生成 `container-graph.txt`
 
 产物已更新：
 - `docs/specs/backend-arch-p2-dependency-injection/container-graph.dot`
@@ -77,8 +77,8 @@
 
 - 基线文档：`docs/specs/backend-arch-p2-dependency-injection/baselines/performance-baseline-2026-02-21.md`
 - 基准脚本与产物：
-  - `cd ruoyi-fastapi-backend && venv/bin/python scripts/benchmark_container_bootstrap.py --iterations 1000 --warmup 20 > ../docs/specs/backend-arch-p2-dependency-injection/baselines/di-bootstrap-benchmark-2026-02-21.json`
-  - `cd ruoyi-fastapi-backend && venv/bin/python scripts/benchmark_di_resolution.py --iterations 50000 --warmup 2000 > ../docs/specs/backend-arch-p2-dependency-injection/baselines/di-resolution-benchmark-2026-02-21.json`
+  - 历史容器启动微基准脚本（已移除）生成 `di-bootstrap-benchmark-2026-02-21.json`
+  - 历史容器解析微基准脚本（已移除）生成 `di-resolution-benchmark-2026-02-21.json`
 - 快照结论：
   - 容器 build+validate：`total p95 = 0.003ms`
   - 服务解析额外开销（`resolve_service` 对比 direct call）：`avg_overhead_p95_us = 0.041`，`max_overhead_p95_us = 0.167`

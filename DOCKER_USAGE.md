@@ -80,7 +80,7 @@ docker-compose -f docker-compose.yml down
 | MySQL | 3307 | localhost:3307 |
 | Redis | 6379 | localhost:6379 |
 
-**注意：** Docker 环境中后端直接暴露，不使用 `/dev-api` 前缀。前端通过 Vite 代理访问后端时会自动添加前缀。
+**注意：** 直接访问后端端口时不使用 `/api` 前缀；前端统一通过 `/api` 前缀，再由 Vite 代理或 Nginx 转发到后端真实路由。
 
 ### 生产环境端口
 
