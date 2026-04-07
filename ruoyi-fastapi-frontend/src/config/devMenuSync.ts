@@ -1,9 +1,9 @@
 const DEFAULT_POLL_INTERVAL_MS = 30000;
 const MIN_POLL_INTERVAL_MS = 5000;
 const MAX_POLL_INTERVAL_MS = 120000;
-const DEFAULT_SYNC_MODE = 'poll';
+const DEFAULT_SYNC_MODE = 'sse';
 
-export type DevMenuSyncMode = 'poll' | 'manual';
+export type DevMenuSyncMode = 'sse' | 'poll' | 'manual';
 
 export function parseBooleanEnv(raw: string | undefined): boolean {
   if (!raw) {
@@ -32,13 +32,26 @@ export function normalizeDevMenuSyncMode(raw: string | undefined): DevMenuSyncMo
   if (normalized === 'manual') {
     return 'manual';
   }
-  return 'poll';
+  if (normalized === 'poll') {
+    return 'poll';
+  }
+  return 'sse';
 }
 
-export const isDevMenuSyncEnabled =
-  import.meta.env.DEV && parseBooleanEnv(import.meta.env.VITE_DEV_MENU_SYNC);
+function resolveDevMenuSyncEnabled(raw: string | undefined): boolean {
+  if (!import.meta.env.DEV) {
+    return false;
+  }
+  if (raw === undefined) {
+    return true;
+  }
+  return parseBooleanEnv(raw);
+}
+
+export const isDevMenuSyncEnabled = resolveDevMenuSyncEnabled(import.meta.env.VITE_DEV_MENU_SYNC);
 
 export const devMenuSyncMode = normalizeDevMenuSyncMode(import.meta.env.VITE_DEV_MENU_SYNC_MODE);
+export const isDevMenuSyncSseEnabled = isDevMenuSyncEnabled && devMenuSyncMode === 'sse';
 export const isDevMenuSyncPollingEnabled = isDevMenuSyncEnabled && devMenuSyncMode === 'poll';
 
 export const devMenuSyncPollIntervalMs = normalizePollIntervalMs(

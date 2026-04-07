@@ -3,6 +3,7 @@ from __future__ import annotations
 import pytest
 from fastapi import APIRouter, FastAPI
 
+import modules.registry as registry_module
 from modules.registry import (
     ModuleRegistration,
     RouterRegistration,
@@ -70,25 +71,14 @@ async def test_initialize_module_extensions_supports_sync_and_async() -> None:
 
 
 def test_dev_menu_router_registration_guard(monkeypatch) -> None:
-    import modules.registry as registry_module
-
-    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'prod', raising=False)
-    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    monkeypatch.setattr(registry_module, 'is_dev_managed_data_hot_reconcile_enabled', lambda: False)
     assert _should_register_dev_menu_router() is False
 
-    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'dev', raising=False)
-    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', False, raising=False)
-    assert _should_register_dev_menu_router() is False
-
-    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'dev', raising=False)
-    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    monkeypatch.setattr(registry_module, 'is_dev_managed_data_hot_reconcile_enabled', lambda: True)
     assert _should_register_dev_menu_router() is True
 
 
 def test_build_system_routers_excludes_dev_menu_router_when_guard_off(monkeypatch) -> None:
-    import modules.registry as registry_module
-
-    monkeypatch.setattr(registry_module.AppConfig, 'app_env', 'prod', raising=False)
-    monkeypatch.setattr(registry_module.DevMenuSyncConfig, 'dev_menu_sync', True, raising=False)
+    monkeypatch.setattr(registry_module, 'is_dev_managed_data_hot_reconcile_enabled', lambda: False)
     routers = _build_system_routers()
     assert '/dev/menu' not in {router.router.prefix for router in routers}

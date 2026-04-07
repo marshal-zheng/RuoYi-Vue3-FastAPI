@@ -21,17 +21,22 @@ from utils.log_util import logger
 
 
 class RequestLoggingASGIMiddleware:
-    def __init__(self, app: ASGIApp) -> None:
+    def __init__(self, app: ASGIApp, exclude_paths: tuple[str, ...] = ()) -> None:
         self.app = app
+        self._exclude_paths = frozenset(path for path in exclude_paths if path)
 
     async def __call__(self, scope: Scope, receive, send: Send) -> None:
         if scope.get('type') != 'http':
             await self.app(scope, receive, send)
             return
 
+        path = str(scope.get('path', ''))
+        if path in self._exclude_paths:
+            await self.app(scope, receive, send)
+            return
+
         started_at = time.perf_counter()
         method = str(scope.get('method', ''))
-        path = str(scope.get('path', ''))
         headers = self._extract_headers(scope.get('headers', []))
         user_id = await self._resolve_user_id(scope, headers)
         client_ip = self._resolve_client_ip(scope, headers)
@@ -194,5 +199,5 @@ class RequestLoggingASGIMiddleware:
         return trace_id
 
 
-def add_request_logging_middleware(app: FastAPI) -> None:
-    app.add_middleware(RequestLoggingASGIMiddleware)
+def add_request_logging_middleware(app: FastAPI, *, exclude_paths: tuple[str, ...] = ()) -> None:
+    app.add_middleware(RequestLoggingASGIMiddleware, exclude_paths=exclude_paths)

@@ -42,4 +42,4 @@ def handle_middleware(app: FastAPI):
     add_prometheus_metrics_middleware(app, exclude_paths=('/metrics',))
     # 加载请求日志中间件（放在最外层，记录最终响应状态与整体耗时）
     if LogConfig.request_logging_enabled:
-        add_request_logging_middleware(app)
+        add_request_logging_middleware(app, exclude_paths=('/dev/menu/events',))

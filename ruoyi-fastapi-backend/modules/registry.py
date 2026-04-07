@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING, Any
 
 from fastapi import Depends
 
-from config.env import AppConfig, DevMenuSyncConfig
 from module_generator.controller.gen_controller import genController
 from modules.identity.api.captcha_controller import captchaController
 from modules.identity.api.login_controller import loginController
@@ -36,6 +35,7 @@ from modules.system.api.role_controller import roleController
 from modules.system.api.server_controller import serverController
 from modules.system.api.user_controller import userController
 from modules.system.application.services.capability_gate_service import require_capability_enabled
+from modules.system.runtime import is_dev_managed_data_hot_reconcile_enabled
 from utils.log_util import logger
 
 if TYPE_CHECKING:
@@ -102,7 +102,7 @@ simulationController = _load_optional_router('module_admin.controller.simulation
 deviceCategoryController = _load_optional_router('module_admin.controller.device_category_controller', 'deviceCategoryController')
 deviceController = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
 def _should_register_dev_menu_router() -> bool:
-    return AppConfig.app_env == 'dev' and bool(DevMenuSyncConfig.dev_menu_sync)
+    return is_dev_managed_data_hot_reconcile_enabled()
 
 
 def _build_system_routers() -> tuple[RouterRegistration, ...]:

@@ -19,6 +19,12 @@ const isWhiteList = (path: string): boolean => {
   return whiteList.some((pattern) => isPathMatch(pattern, path));
 };
 
+const isAuthExpiredError = (error: unknown): boolean => {
+  const message = (error as { message?: string })?.message || '';
+  const status = (error as { response?: { status?: number } })?.response?.status;
+  return status === 401 || message.includes('401') || message.includes('会话已过期');
+};
+
 const resolveLandingRedirect = (path: string, firstMenuPath: string): string => {
   if (!firstMenuPath) {
     return '';
@@ -74,11 +80,14 @@ router.beforeEach(
                 }
               });
             })
-            .catch((err: Error) => {
+            .catch((err: unknown) => {
               useUserStore()
-                .logOut()
+                .logOut({ silentSuccess: true, silentError: true })
                 .then(() => {
-                  ElMessage.error(err);
+                  if (!isAuthExpiredError(err)) {
+                    const errorMsg = (err as { message?: string })?.message || '获取用户信息失败';
+                    ElMessage.error(errorMsg);
+                  }
                   next({ path: '/' });
                 });
             });

@@ -1,41 +1,45 @@
 # Q: 开发模式新增/删除菜单后为什么会 404？现在应该怎么做？
 
 ## 结论（当前标准流程）
-- 开发模式下已经支持菜单声明式热同步，不需要再「退出登录再登录」。
-- 菜单与授权只维护在 `ruoyi-fastapi-backend/scripts/seed_data/menus.registry.yaml`。
+- 开发模式下已经支持基于模块声明的受管数据热对齐，不需要再「退出登录再登录」。
+- 菜单与授权只维护在 `ruoyi-fastapi-backend/capabilities/modules/*.module.yaml`。
+- 标准心智是“启动前全量 `dev-sync`，启动后开发态热对齐，正式发布仍走 `finalize -> deploy`”。
 
 ## 生效条件
 - 后端（`ruoyi-fastapi-backend/.env.dev`）：
   - `APP_ENV=dev`
-  - `DEV_MENU_SYNC=true`
-- 前端（`ruoyi-fastapi-frontend/.env.development`）：
-  - `VITE_DEV_MENU_SYNC='1'`
-  - `VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS='1000'`（默认 1 秒轮询）
+  - `DB_WORKFLOW_MODE=development`
+  - `DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED=true`（默认值）
+- 前端：
+  - 开发环境默认会尝试连接 `SSE`，无需额外开关
+  - `VITE_DEV_MENU_SYNC='0'` 只保留为直接运行 `yarn dev` 时的兼容禁用开关
 
 ## 正确用法
-1. 在 `ruoyi-fastapi-backend/scripts/seed_data/menus.registry.yaml` 新增/修改/删除菜单。
-2. 授权在同一文件的 `role_grants` 中声明，角色标识使用 `role_key`（不是 `role_id`）。
-3. 菜单条目必须声明 `managed_by_seed: true`。
-4. 菜单 `component` 必须与前端组件路径匹配（例如 `system/user/index` 对应 `src/views/system/user/index.vue`）。
-5. 保存后等待一个轮询周期（通常 1~3 秒），侧栏与路由会自动重建。
+1. 通过 `./scripts/start.sh` 启动项目；若当前是 `DB_WORKFLOW_MODE=development`，脚本会先执行一次统一 `dev-sync`。
+2. 在 `ruoyi-fastapi-backend/capabilities/modules/*.module.yaml` 新增/修改/删除菜单，并在同文件维护 `role_grants`。
+3. 角色授权声明使用 `role_key`，菜单 `component` 必须与前端组件路径匹配（例如 `system/user/index` 对应 `src/views/system/user/index.vue`）。
+4. 保存后等待约 1 秒；后端会感知模块声明变化，前端会通过 `SSE` 自动刷新动态路由。
+5. 如果需要手动兜底，可调用 `POST /dev/menu/sync` 或在浏览器执行 `window.__DEV_MENU_SYNC__.refreshRoutes()`。
 
 ## 机制说明（为什么不再需要重登）
-- 后端监听 `menus.registry.yaml` 变更，执行事务同步：
-  - `sys_menu` 声明式对齐（新增/更新/删除）
-  - 仅对 `managed_by_seed=1` 范围执行破坏性操作
-  - `sys_role_menu` 对受管菜单执行全量声明对齐（未声明即删除）
-  - 失效 `query_cache:menu:*`、`query_cache:role:*`
-- 前端轮询 `/dev/menu/signature`，签名变化时自动 `reloadDynamicRoutes()`。
+- `./scripts/start.sh` 会先执行统一工作流入口，确保应用启动前数据库已经和 capability 声明对齐。
+- 后端启动后监听 `capabilities/modules/*.module.yaml` 变更，执行开发态 managed-data fast reconcile：
+  - `sys_menu`、`sys_role_menu`、字典和配置按声明目标态快速对齐
+  - 失效菜单、角色、字典和配置相关缓存
+  - 成功时广播 `/dev/menu/events` 的 `menu_changed` 事件
+- 前端优先使用 `SSE` 自动刷新；只有持续重连失败时，才退化到低频签名检查。
 
 ## 排查清单（仍出现 404 时）
-1. 调试接口是否可用：`GET /dev/menu/signature`（开发态开启时应返回 200）。
-2. 查看后端日志是否有 `Dev menu sync failed`。
-3. 执行校验：`cd ruoyi-fastapi-backend && python scripts/check_menu_registry.py --strict`。
-4. 检查 `component` 路径是否与 `src/views` 实际文件一致。
-5. 确认前端轮询开关未关闭（`VITE_DEV_MENU_SYNC='1'`）。
+1. 确认 `APP_ENV=dev` 且 `DB_WORKFLOW_MODE=development`，并且 `./scripts/start.sh` 启动时没有在 `dev-sync` 阶段失败。
+2. 调试接口是否可用：`GET /dev/menu/events` 或 `GET /dev/menu/signature`（开发态开启时应返回 200）。
+3. 查看后端日志是否有 `dev_managed_data_hot_reconcile` summary，或手动同步失败日志。
+4. 执行校验：`cd ruoyi-fastapi-backend && python scripts/menu.py check`。
+5. 必要时执行工作流校验：`cd ruoyi-fastapi-backend && python scripts/db.py verify --ci`。
+6. 检查 `component` 路径是否与 `src/views` 实际文件一致。
+7. 如直接运行前端 `yarn dev`，确认没有把 `VITE_DEV_MENU_SYNC='0'` 留在本地环境中。
 
 ## 回退方式（不影响生产）
-- 仅开发态启用该能力，生产态默认不启用。
-- 如需回退旧行为，只需关闭开关：
-  - 后端：`DEV_MENU_SYNC=false`
-  - 前端：`VITE_DEV_MENU_SYNC='0'`
+- 仅开发态启用该能力，生产态和正式发布链路不受影响。
+- 如需临时关闭运行时热对齐：
+  - 后端：`DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED=false`
+  - 如直接运行前端 `yarn dev`，可额外设 `VITE_DEV_MENU_SYNC='0'`

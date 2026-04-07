@@ -5,12 +5,12 @@ schema_revision: baseline
 release_key: bootstrap-default
 generated_at: '2026-04-04T08:32:27Z'
 message: Initial managed-data baseline
-idempotency_key: db47aa5da00cd4ee9311e6602667deab7293b295db9aa45137fc1256b9a5dd6d
+idempotency_key: 16ff9e60d88f299b0c6e267c7f05db43729631a3725898ffb9ac00da151248bb
 artifacts:
 - artifact_type: managed-data
   filename: managed-data.yaml
-  checksum: c6e732faf43e3f0a53f198a492ec111b02eb5a74393a032bb70fc4f442cc69b9
-  idempotency_key: 20260404_001_initial-baseline:managed-data:c6e732faf43e3f0a53f198a492ec111b02eb5a74393a032bb70fc4f442cc69b9
+  checksum: 7cc63022f35a8ee16528e3b605c45a10a8a115ebac7bc8bae8b0581b35df1b62
+  idempotency_key: 20260404_001_initial-baseline:managed-data:7cc63022f35a8ee16528e3b605c45a10a8a115ebac7bc8bae8b0581b35df1b62
 - artifact_type: release-manifest
   filename: release.manifest.yaml
   checksum: 40bab74288b419686b3aa166dafcf9125c984c85c0c119c071bf8eb987380c00

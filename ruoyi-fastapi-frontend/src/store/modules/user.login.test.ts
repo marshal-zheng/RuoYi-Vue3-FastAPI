@@ -64,4 +64,17 @@ describe('user store login flow', () => {
       })
     );
   });
+
+  it('passes silent options when logging out', async () => {
+    logoutMock.mockResolvedValue(undefined);
+
+    const useUserStore = (await import('@/store/modules/user')).default;
+    const store = useUserStore();
+    await store.logOut({ silentSuccess: true, silentError: true });
+
+    expect(logoutMock).toHaveBeenCalledWith({
+      silentSuccess: true,
+      silentError: true,
+    });
+  });
 });

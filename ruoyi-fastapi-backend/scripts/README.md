@@ -48,9 +48,13 @@ python scripts/db.py bootstrap-seed --env dev
 
 - 默认模式是 `DB_WORKFLOW_MODE=migration`。
 - 只有显式设置 `DB_WORKFLOW_MODE=development`，才允许执行 `python scripts/db.py dev-sync`。
+- `./scripts/start.sh` 在开发态会先读取 `python scripts/db.py status`，当状态要求 `startup_action=dev-sync` 时统一执行启动前全量对齐。
+- 应用启动后的开发态热对齐只在 `APP_ENV=dev && DB_WORKFLOW_MODE=development` 下启用，属于运行时体验增强，不会写入正式 release bundle。
 - 正式受管声明只认 `capabilities/modules/*.module.yaml` 与 `scripts/seed_data/release-plan.yaml`。
 - `scripts/seed_data/menus.registry.yaml`、`base/dict_types.yaml`、`base/dict_data.yaml`、`base/configs.yaml` 只保留空壳占位；非空会被 `menu.py check` / `db.py verify --ci` 阻断。
-- `./scripts/start.sh` 在开发态只认统一 `dev-sync`，不再支持旧的启动前开发态开关。
+- 正式 `finalize / deploy / verify` 链路不读取任何开发态热对齐运行时状态，输入输出契约保持不变。
+- `DEV_MENU_SYNC` 是后端兼容别名，等价映射到 `DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED`；`VITE_DEV_MENU_SYNC*` 只保留为前端直启时的兼容调试开关。
+- `./scripts/start.sh` 会记录 legacy `DEV_MENU_SYNC` / `VITE_DEV_MENU_SYNC*`，但不再把它们注入前后端进程。
 - 共享环境、容器启动、测试、预发、生产和客户升级只允许走 `deploy`。
 - `python scripts/db.py status` 现在只输出轻量路由状态；深度检查统一走 `python scripts/db.py verify --ci`。
 

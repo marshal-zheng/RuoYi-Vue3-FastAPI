@@ -1,15 +1,18 @@
 version: '1'
 bundle_id: 20260404_001_initial-baseline
 artifact_type: managed-data
-managed_object_count: 304
-operation_count: 304
+managed_object_count: 296
+operation_count: 296
 summary:
   by_operation:
-    upsert-row: 211
-    ensure-link: 93
+    upsert-row: 207
+    ensure-link: 89
   by_entity:
-    sys_menu: 100
-    sys_role_menu: 93
+    sys_menu: 96
+    sys_role_menu: 89
+    sys_dict_type: 21
+    sys_dict_data: 84
+    sys_config: 6
     sys_dict_type: 21
     sys_dict_data: 84
     sys_config: 6

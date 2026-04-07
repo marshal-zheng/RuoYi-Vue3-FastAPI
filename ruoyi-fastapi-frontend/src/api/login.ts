@@ -49,10 +49,16 @@ export function getInfo() {
 }
 
 // 退出方法
-export function logout() {
+interface LogoutRequestOptions {
+  silentSuccess?: boolean;
+  silentError?: boolean;
+}
+
+export function logout(options: LogoutRequestOptions = {}) {
   return request({
     url: '/auth/logout',
     method: 'post',
+    ...options,
   });
 }
 

@@ -87,31 +87,39 @@ yarn lint            # 代码检查
 yarn test            # 运行测试
 ```
 
-### 开发态菜单热同步（默认推荐）
+### 开发态受管数据热对齐（默认推荐）
 
-目标：在开发模式下，修改 `menus.registry.yaml` 后无需重登即可看到菜单变化。
+目标：在开发模式下，修改 `capabilities/modules/*.module.yaml` 后，无需重登即可看到菜单、角色授权、字典和配置变化。
+
+标准流程：
+- 使用 `./scripts/start.sh` 启动项目；脚本会先按后端工作流状态执行统一启动动作。
+- 当 `DB_WORKFLOW_MODE=development` 时，启动前会自动执行一次 `python scripts/db.py dev-sync`，保证应用启动时数据库已经和声明对齐。
+- 应用启动后，后端只在 `APP_ENV=dev && DB_WORKFLOW_MODE=development` 下开启开发态热对齐；前端开发环境默认通过 `SSE` 订阅 `/dev/menu/events`，菜单变化后自动刷新动态路由。
 
 开关配置：
 - 后端 `ruoyi-fastapi-backend/.env.dev`：
-  - `DEV_MENU_SYNC=true`
+  - `APP_ENV=dev`
+  - `DB_WORKFLOW_MODE=development`
+  - `DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED=true`（默认即开启）
 - 前端 `ruoyi-fastapi-frontend/.env.development`：
-  - `VITE_DEV_MENU_SYNC='1'`
-  - `VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS='1000'`
+  - 默认无需额外开关；开发环境会自动尝试 `SSE`
+  - `VITE_DEV_MENU_SYNC='0'` 仅保留为直接运行 `yarn dev` 时的兼容禁用开关，不是标准工作流必需项
 
 行为说明：
-- 菜单与授权单一事实源：`ruoyi-fastapi-backend/scripts/seed_data/menus.registry.yaml`。
-- 授权声明使用 `role_grants.role_key`，运行时映射 `role_id`；不会自动给新菜单授予默认角色。
-- 新增/修改/删除菜单：自动对齐 `sys_menu`，并对受管菜单执行 `sys_role_menu` 全量声明对齐。
-- 生产模式默认不启用该能力，不改变既有发布链路。
+- 受管声明单一事实源：`ruoyi-fastapi-backend/capabilities/modules/*.module.yaml`，正式模块选择仍由 `scripts/seed_data/release-plan.yaml` 控制。
+- 开发态热对齐只是运行时体验增强：不会写入 release bundle，不改变 `finalize / deploy / verify` 的输入输出契约。
+- 正式发布仍然遵循 `python scripts/db.py finalize --message "..."` -> `python scripts/db.py deploy --revision head`。
+- `DEV_MENU_SYNC` / `VITE_DEV_MENU_SYNC` 属于 legacy 兼容名；`./scripts/start.sh` 会记录但不再把它们注入前后端进程，避免旧开关误导当前运行时。
 
 快速回退（仅开发环境）：
-- 后端设为 `DEV_MENU_SYNC=false`
-- 前端设为 `VITE_DEV_MENU_SYNC='0'`
+- 后端设为 `DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED=false`
+- 如直接运行前端 `yarn dev`，可额外设 `VITE_DEV_MENU_SYNC='0'`
 
 专项回归验证（推荐）：
 ```bash
 ./scripts/verify-dev-menu-hot-sync.sh
-cd ruoyi-fastapi-backend && python scripts/menu.py check --strict
+cd ruoyi-fastapi-backend && python scripts/menu.py check
+cd ruoyi-fastapi-backend && python scripts/db.py verify --ci
 ```
 
 ### 方式二：Docker 本地开发（推荐）

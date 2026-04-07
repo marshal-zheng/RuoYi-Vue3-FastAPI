@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Literal
 
 from dotenv import load_dotenv
-from pydantic import computed_field
+from pydantic import AliasChoices, Field, computed_field
 from pydantic_settings import BaseSettings
 
 
@@ -28,15 +28,44 @@ class AppSettings(BaseSettings):
     app_same_time_login: bool = True
 
 
-class DevMenuSyncSettings(BaseSettings):
+class DevManagedDataHotReconcileSettings(BaseSettings):
     """
-    开发态菜单热同步配置
+    开发态受管数据热对齐配置
     """
 
-    dev_menu_sync: bool = False
-    dev_menu_sync_poll_interval_seconds: float = 0.5
-    dev_menu_sync_debounce_seconds: float = 0.2
-    dev_menu_sync_auto_startup: bool = True
+    dev_managed_data_hot_reconcile_enabled: bool = Field(
+        default=True,
+        validation_alias=AliasChoices(
+            'DEV_MANAGED_DATA_HOT_RECONCILE_ENABLED',
+            'DEV_MENU_SYNC',
+        ),
+    )
+    dev_managed_data_watch_interval_ms: int = 200
+    dev_managed_data_debounce_ms: int = 250
+    dev_managed_data_retry_backoff_ms: int = 1000
+    dev_managed_data_retry_max_backoff_ms: int = 30000
+    dev_managed_data_sse_heartbeat_seconds: int = 15
+    dev_managed_data_sse_replay_buffer_size: int = 1
+
+    @property
+    def dev_menu_sync(self) -> bool:
+        """Compatibility alias for legacy runtime guards."""
+        return self.dev_managed_data_hot_reconcile_enabled
+
+    @property
+    def dev_menu_sync_poll_interval_seconds(self) -> float:
+        """Compatibility alias for legacy runtime code paths."""
+        return self.dev_managed_data_watch_interval_ms / 1000
+
+    @property
+    def dev_menu_sync_debounce_seconds(self) -> float:
+        """Compatibility alias for legacy runtime code paths."""
+        return self.dev_managed_data_debounce_ms / 1000
+
+    @property
+    def dev_menu_sync_auto_startup(self) -> bool:
+        """Compatibility alias for legacy runtime code paths."""
+        return False
 
 
 class JwtSettings(BaseSettings):
@@ -582,11 +611,18 @@ class GetConfig:
         return RateLimitSettings()
 
     @lru_cache
+    def get_dev_managed_data_hot_reconcile_config(self):
+        """
+        获取开发态受管数据热对齐配置
+        """
+        return DevManagedDataHotReconcileSettings()
+
+    @lru_cache
     def get_dev_menu_sync_config(self):
         """
-        获取开发态菜单热同步配置
+        获取开发态菜单热同步配置（兼容别名）
         """
-        return DevMenuSyncSettings()
+        return self.get_dev_managed_data_hot_reconcile_config()
 
     @lru_cache
     def get_otel_config(self):
@@ -666,7 +702,9 @@ LogConfig = get_config.get_log_config()
 IdempotencyConfig = get_config.get_idempotency_config()
 # 限流配置
 RateLimitConfig = get_config.get_rate_limit_config()
-# 开发态菜单热同步配置
-DevMenuSyncConfig = get_config.get_dev_menu_sync_config()
+# 开发态受管数据热对齐配置
+DevManagedDataHotReconcileConfig = get_config.get_dev_managed_data_hot_reconcile_config()
+# 开发态菜单热同步配置（兼容别名）
+DevMenuSyncConfig = DevManagedDataHotReconcileConfig
 # OpenTelemetry 配置
 OTelConfig = get_config.get_otel_config()

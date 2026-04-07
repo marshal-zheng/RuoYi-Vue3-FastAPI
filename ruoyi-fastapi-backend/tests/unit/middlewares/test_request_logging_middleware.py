@@ -31,7 +31,7 @@ class _CaptureLogger:
         return _CaptureBoundLogger(self.events, kwargs)
 
 
-def _build_app() -> FastAPI:
+def _build_app(*, exclude_paths: tuple[str, ...] = ()) -> FastAPI:
     app = FastAPI()
     class _FakeSecurityTokenService:
         @staticmethod
@@ -41,7 +41,7 @@ def _build_app() -> FastAPI:
             return None
 
     app.state.security_token_service = _FakeSecurityTokenService()
-    app.add_middleware(RequestLoggingASGIMiddleware)
+    app.add_middleware(RequestLoggingASGIMiddleware, exclude_paths=exclude_paths)
 
     @app.get('/ok')
     async def ok_endpoint():
@@ -50,6 +50,10 @@ def _build_app() -> FastAPI:
     @app.get('/boom')
     async def boom_endpoint():
         raise RuntimeError('boom')
+
+    @app.get('/dev/menu/events')
+    async def dev_menu_events_endpoint():
+        return {'ok': True}
 
     return app
 
@@ -159,3 +163,17 @@ async def test_request_log_uses_traceparent_when_otel_span_unavailable(monkeypat
     assert len(capture_logger.events) == 1
     payload = capture_logger.events[0]['payload']
     assert payload['trace_id'] == trace_id
+
+
+@pytest.mark.asyncio
+async def test_request_log_skips_excluded_dev_menu_events_path(monkeypatch):
+    app = _build_app(exclude_paths=('/dev/menu/events',))
+    capture_logger = _CaptureLogger()
+    monkeypatch.setattr('middlewares.request_logging_middleware.logger', capture_logger)
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url='http://testserver') as client:
+        response = await client.get('/dev/menu/events')
+
+    assert response.status_code == 200
+    assert capture_logger.events == []

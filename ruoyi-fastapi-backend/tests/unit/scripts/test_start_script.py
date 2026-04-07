@@ -7,6 +7,7 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 START_SCRIPT = REPO_ROOT / 'scripts' / 'start.sh'
 FUNCTIONS_START = 'extract_status_field() {'
 FUNCTIONS_END = 'echo "🚀 启动 RuoYi-Vue3-FastAPI 项目"'
+RUNTIME_PRELUDE_END = '# 检查并启动系统服务'
 
 
 def _write_start_workflow_functions(tmp_path: Path) -> Path:
@@ -16,6 +17,15 @@ def _write_start_workflow_functions(tmp_path: Path) -> Path:
     functions_path = tmp_path / 'start_workflow_functions.sh'
     functions_path.write_text(script_text[start:end], encoding='utf-8')
     return functions_path
+
+
+def _write_start_runtime_prelude(tmp_path: Path) -> Path:
+    script_text = START_SCRIPT.read_text(encoding='utf-8')
+    start = script_text.index(FUNCTIONS_END)
+    end = script_text.index(RUNTIME_PRELUDE_END)
+    runtime_path = tmp_path / 'start_runtime_prelude.sh'
+    runtime_path.write_text(script_text[start:end], encoding='utf-8')
+    return runtime_path
 
 
 def _run_start_workflow(
@@ -82,6 +92,30 @@ set -e
 PROJECT_ROOT='/tmp/repo'
 {prelude}
 source "{functions_path}"
+{body}
+"""
+
+    return subprocess.run(
+        ['/bin/bash', '-lc', script],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+
+def _run_start_runtime_prelude(
+    tmp_path: Path,
+    *,
+    prelude: str,
+    body: str,
+) -> subprocess.CompletedProcess[str]:
+    runtime_path = _write_start_runtime_prelude(tmp_path)
+    script = f"""
+set -e
+PROJECT_ROOT='/tmp/repo'
+{prelude}
+source "{runtime_path}"
 {body}
 """
 
@@ -256,3 +290,22 @@ sleep() {
     )
 
     assert result.returncode == 0
+
+
+def test_start_script_clears_legacy_dev_menu_sync_env_before_runtime_boot(tmp_path: Path) -> None:
+    result = _run_start_runtime_prelude(
+        tmp_path,
+        prelude="""
+export DEV_MENU_SYNC=true
+export VITE_DEV_MENU_SYNC=1
+export VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS=1000
+""",
+        body="""
+[ -z "${DEV_MENU_SYNC+x}" ]
+[ -z "${VITE_DEV_MENU_SYNC+x}" ]
+[ -z "${VITE_DEV_MENU_SYNC_POLL_INTERVAL_MS+x}" ]
+""",
+    )
+
+    assert result.returncode == 0
+    assert '旧菜单热同步开关仅保留兼容记录，不再注入运行时' in result.stdout

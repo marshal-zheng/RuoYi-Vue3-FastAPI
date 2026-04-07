@@ -59,7 +59,7 @@ const triggerRelogin = (message: string): void => {
 
   const doRedirect = (): void => {
     useUserStore()
-      .logOut()
+      .logOut({ silentSuccess: true, silentError: true })
       .then(() => {
         location.href = loginUrl;
       })
@@ -388,7 +388,7 @@ const afterResponseTransform: HttpTransformHook = {
       if (!skipRelogin) {
         triggerRelogin(message || '未认证，请先登录');
       }
-      throw error;
+      throw new Error('登录状态已过期，请重新登录');
     }
 
     if (!message) {

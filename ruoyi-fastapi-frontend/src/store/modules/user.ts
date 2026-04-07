@@ -12,6 +12,11 @@ interface UserInfo {
   uuid: string;
 }
 
+interface LogoutOptions {
+  silentSuccess?: boolean;
+  silentError?: boolean;
+}
+
 interface UserState {
   token: string;
   id: string | number;
@@ -132,9 +137,9 @@ const useUserStore = defineStore('user', {
       });
     },
     // 退出系统
-    logOut() {
+    logOut(options: LogoutOptions = {}) {
       return new Promise((resolve) => {
-        logout()
+        logout(options)
           .catch((error) => {
             console.warn('Logout request failed, fallback to client-side cleanup only.', error);
           })

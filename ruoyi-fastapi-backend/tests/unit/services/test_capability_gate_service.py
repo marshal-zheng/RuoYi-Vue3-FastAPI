@@ -4,7 +4,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from modules.system.application.services.capability_gate_service import CapabilityGateService
+from modules.system.application.services.capability_gate_service import (
+    CapabilityGateService,
+    get_capability_gate_service,
+    invalidate_capability_gate_service,
+)
 from scripts.internal.db_workflow.capability_models import CapabilityRuntimeGate
 
 
@@ -64,3 +68,33 @@ async def test_runtime_gate_defaults_to_disabled_when_config_missing_or_invalid(
         )
         is False
     )
+
+
+def test_capability_gate_service_is_reloaded_after_invalidation(monkeypatch) -> None:
+    service_versions: list[str] = []
+
+    def fake_from_declarations(cls, *, modules_root=None):
+        version = f'v{len(service_versions) + 1}'
+        service_versions.append(version)
+        return CapabilityGateService(
+            runtime_gates={
+                'platform': CapabilityRuntimeGate(
+                    module_key='platform',
+                    config_key=f'capability.platform.{version}.enabled',
+                    default_enabled=False,
+                )
+            }
+        )
+
+    request = SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace()))
+    monkeypatch.setattr(CapabilityGateService, 'from_declarations', classmethod(fake_from_declarations))
+
+    first_service = get_capability_gate_service(request)
+    second_service = get_capability_gate_service(request)
+    invalidate_capability_gate_service(request.app)
+    third_service = get_capability_gate_service(request)
+
+    assert first_service is second_service
+    assert first_service.get_runtime_gate('platform').config_key == 'capability.platform.v1.enabled'
+    assert third_service is not first_service
+    assert third_service.get_runtime_gate('platform').config_key == 'capability.platform.v2.enabled'

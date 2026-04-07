@@ -6,7 +6,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Response
 
 from config.database import async_engine
-from config.env import AppConfig, AuditConfig, CacheConfig, DevMenuSyncConfig
+from config.env import (
+    AppConfig,
+    AuditConfig,
+    CacheConfig,
+    DataBaseWorkflowConfig,
+    DevManagedDataHotReconcileConfig,
+)
 from config.get_db import init_create_table
 from container import (
     AppContainer,
@@ -21,6 +27,7 @@ from events.runtime_context import set_event_runtime
 from exceptions.handle import handle_exception
 from middlewares.handle import handle_middleware
 from module_admin.service.simulation_runtime_state import init_simulation_runtime_state_store
+from modules.system.application.services.capability_gate_service import invalidate_capability_gate_service
 from modules.registry import (
     get_module_registry,
     initialize_module_extensions,
@@ -28,7 +35,14 @@ from modules.registry import (
     register_modules,
 )
 from modules.identity.application.services.security_token_service import SecurityTokenService
+from modules.system.runtime import (
+    DevManagedDataHotReconcileRuntime,
+    DevMenuEventBroker,
+    HotReconcileCallbackResult,
+    is_dev_managed_data_hot_reconcile_enabled,
+)
 from resilience.runtime import build_resilience_runtime
+from scripts.internal.db_workflow.managed_data_fast_reconcile_service import ManagedDataFastReconcileService
 from sub_applications.handle import handle_sub_applications
 from utils.audit_logger import init_audit_logger
 from utils.common_util import worship
@@ -57,6 +71,25 @@ pool_health_checker = ConnectionPoolHealthChecker(
 
 def _is_test_env() -> bool:
     return 'pytest' in sys.modules or os.getenv('PYTEST_CURRENT_TEST') is not None
+
+
+def _managed_data_hot_reconcile_change_count(report) -> int:
+    return int(
+        report.applied_operations
+        + report.metadata_updated_objects
+        + report.metadata_deactivated_objects
+    )
+
+
+def _log_managed_data_hot_reconcile_summary(report) -> None:
+    logger.bind(
+        event='dev_managed_data_hot_reconcile',
+        trigger=report.trigger,
+        duration_ms=report.duration_ms,
+        success=report.success,
+        change_count=_managed_data_hot_reconcile_change_count(report),
+        error=report.error,
+    ).log('INFO' if report.success else 'ERROR', 'dev_managed_data_hot_reconcile')
 
 
 class DummyRedis:
@@ -204,15 +237,59 @@ async def lifespan(app: FastAPI):
     set_event_runtime(app.state.event_runtime)
 
     app.state.dev_menu_sync_runtime = None
-    if DevMenuSyncConfig.dev_menu_sync:
-        logger.warning(
-            'DEV_MENU_SYNC 已弃用并在应用启动链路中被忽略；请改用 `python scripts/db.py dev-sync` 或 `./scripts/start.sh` 在启动前完成统一同步',
+    app.state.dev_managed_data_hot_reconcile_runtime = None
+    app.state.dev_menu_event_broker = None
+    app.state.dev_managed_data_hot_reconcile_event_broker = None
+    if is_dev_managed_data_hot_reconcile_enabled():
+        hot_reconcile_runtime: DevManagedDataHotReconcileRuntime | None = None
+        event_broker = DevMenuEventBroker()
+
+        async def _on_manifest_change(trigger, _snapshot, _diff):
+            assert hot_reconcile_runtime is not None
+            report = await ManagedDataFastReconcileService(redis_client=app.state.redis).reconcile(
+                trigger=trigger,
+                previous_compiled_checksum=hot_reconcile_runtime.state.last_applied_compiled_checksum,
+            )
+            _log_managed_data_hot_reconcile_summary(report)
+            event_id = None
+            if report.success and report.skipped_reason != 'compiled_checksum_unchanged':
+                invalidate_capability_gate_service(app)
+            if report.success and report.menu_reload_required:
+                event_id = event_broker.publish_menu_changed(
+                    trigger=report.trigger,
+                    compiled_checksum=report.compiled_checksum or None,
+                    synced_at=report.synced_at,
+                )
+            return HotReconcileCallbackResult(
+                success=report.success,
+                compiled_checksum=report.compiled_checksum or None,
+                synced_at=report.synced_at,
+                error=report.error,
+                event_id=event_id,
+            )
+
+        hot_reconcile_runtime = DevManagedDataHotReconcileRuntime(on_manifest_change=_on_manifest_change)
+        await hot_reconcile_runtime.start()
+        app.state.dev_menu_sync_runtime = hot_reconcile_runtime
+        app.state.dev_managed_data_hot_reconcile_runtime = hot_reconcile_runtime
+        app.state.dev_menu_event_broker = event_broker
+        app.state.dev_managed_data_hot_reconcile_event_broker = event_broker
+        logger.info(
+            '开发态受管数据热对齐运行时已启用（modules_root={}, watch_interval_ms={}, debounce_ms={}, '
+            'retry_backoff_ms={}, retry_max_backoff_ms={}, sse_heartbeat_seconds={}）',
+            hot_reconcile_runtime.modules_root,
+            DevManagedDataHotReconcileConfig.dev_managed_data_watch_interval_ms,
+            DevManagedDataHotReconcileConfig.dev_managed_data_debounce_ms,
+            DevManagedDataHotReconcileConfig.dev_managed_data_retry_backoff_ms,
+            DevManagedDataHotReconcileConfig.dev_managed_data_retry_max_backoff_ms,
+            DevManagedDataHotReconcileConfig.dev_managed_data_sse_heartbeat_seconds,
         )
     else:
         logger.info(
-            '开发态菜单热同步已弃用；统一数据库工作流负责启动前同步（APP_ENV={}, DEV_MENU_SYNC={}）',
+            '开发态受管数据热对齐运行时未启用（APP_ENV={}, DB_WORKFLOW_MODE={}, enabled={}）',
             AppConfig.app_env,
-            DevMenuSyncConfig.dev_menu_sync,
+            DataBaseWorkflowConfig.db_workflow_mode,
+            DevManagedDataHotReconcileConfig.dev_managed_data_hot_reconcile_enabled,
         )
 
     # 初始化审计日志
@@ -241,6 +318,12 @@ async def lifespan(app: FastAPI):
     
     app_container = getattr(app.state, 'container', None)
     event_runtime = getattr(app.state, 'event_runtime', None)
+    hot_reconcile_runtime = getattr(app.state, 'dev_managed_data_hot_reconcile_runtime', None)
+    dev_menu_event_broker = getattr(app.state, 'dev_menu_event_broker', None)
+    if hot_reconcile_runtime is not None:
+        await hot_reconcile_runtime.stop()
+    if dev_menu_event_broker is not None:
+        await dev_menu_event_broker.close()
     if event_runtime is not None:
         await event_runtime.stop()
         set_event_runtime(None)

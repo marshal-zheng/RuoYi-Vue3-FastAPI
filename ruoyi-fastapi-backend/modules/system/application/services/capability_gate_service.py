@@ -94,6 +94,16 @@ def get_capability_gate_service(request: Request) -> CapabilityGateService:
     return service
 
 
+def invalidate_capability_gate_service(target: Any) -> None:
+    state = getattr(target, 'state', target)
+    if state is None:
+        return
+    try:
+        delattr(state, 'capability_gate_service')
+    except AttributeError:
+        return
+
+
 def require_capability_enabled(module_key: str):
     async def _dependency(request: Request) -> bool:
         service = get_capability_gate_service(request)
