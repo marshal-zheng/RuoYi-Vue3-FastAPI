@@ -4,7 +4,9 @@ import asyncio
 
 import pytest
 
-from module_admin.entity.vo.user_vo import UserPageQueryModel
+from module_admin.entity.vo.post_vo import PostModel
+from module_admin.entity.vo.role_vo import RoleModel
+from module_admin.entity.vo.user_vo import UserDetailModel, UserPageQueryModel
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.handlers.query.user_query_handlers import (
     GetUserAuthRoleQueryHandler,
@@ -172,6 +174,38 @@ class _UserServiceStub:
         }
 
 
+class _ModelBackedUserServiceStub(_UserServiceStub):
+    async def user_detail_services(self, query_db, user_id, posts=None, roles=None):
+        self.detail_called_with = (query_db, user_id, posts, roles)
+        return UserDetailModel(
+            data={
+                'userId': user_id,
+                'userName': 'admin',
+                'nickName': '管理员',
+            },
+            postIds=[1],
+            posts=[
+                PostModel(
+                    postId=1,
+                    postCode='dev',
+                    postName='研发工程师',
+                    postSort=1,
+                    status='0',
+                )
+            ],
+            roleIds=[1],
+            roles=[
+                RoleModel(
+                    roleId=1,
+                    roleName='管理员',
+                    roleKey='admin',
+                    roleSort=1,
+                    status='0',
+                )
+            ],
+        )
+
+
 @pytest.mark.asyncio
 async def test_user_query_handlers_success() -> None:
     dept_service = _DeptServiceStub()
@@ -232,6 +266,42 @@ async def test_user_query_handlers_success() -> None:
     assert user_service.scope_check_called_with == (query_db, 1, ' AND user_id in (1)')
     assert role_service.options_call_count > 0
     assert post_service.list_called_with is not None
+
+
+@pytest.mark.asyncio
+async def test_user_detail_query_handler_keeps_camel_case_for_nested_option_models() -> None:
+    post_service = _PostServiceStub()
+    role_service = _RoleServiceStub()
+    user_service = _ModelBackedUserServiceStub()
+    query_db = object()
+    handler = GetUserDetailQueryHandler(user_service, role_service, post_service)
+
+    detail_result = await handler.handle(
+        GetUserDetailQuery(
+            query_db=query_db,
+            user_id=1,
+            data_scope_sql='',
+            require_scope_check=False,
+        )
+    )
+
+    assert detail_result.posts == [
+        {
+            'postId': 1,
+            'postCode': 'dev',
+            'postName': '研发工程师',
+            'postSort': 1,
+            'status': '0',
+            'createBy': None,
+            'createTime': None,
+            'updateBy': None,
+            'updateTime': None,
+            'remark': None,
+        }
+    ]
+    assert detail_result.roles[0]['roleName'] == '管理员'
+    assert 'post_name' not in detail_result.posts[0]
+    assert 'role_name' not in detail_result.roles[0]
 
 
 @pytest.mark.asyncio

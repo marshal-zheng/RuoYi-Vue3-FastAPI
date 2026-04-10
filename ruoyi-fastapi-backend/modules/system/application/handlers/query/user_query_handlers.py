@@ -36,7 +36,9 @@ if TYPE_CHECKING:
 
 def _extract_payload(raw: Any) -> dict[str, Any]:
     if hasattr(raw, 'model_dump'):
-        return raw.model_dump(by_alias=False)
+        # API read models should keep camelCase aliases for nested option payloads
+        # such as posts/roles, otherwise the frontend cannot resolve postName/roleName.
+        return raw.model_dump(by_alias=True)
     if isinstance(raw, dict):
         return raw
     return {}
