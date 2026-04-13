@@ -1,3 +1,4 @@
+import { defineStore } from 'pinia';
 import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 interface TagView {

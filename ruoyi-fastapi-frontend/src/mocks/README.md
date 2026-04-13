@@ -4,18 +4,35 @@
 
 ### 运行模式
 
-- `yarn dev`（`mode=development`）  
-  `.env.development` 中设置 `VITE_ENABLE_MOCK='fallback'`：优先请求真实后端，返回 `404` 或网络异常时自动降级到 Mock。
-- `yarn dev-mock`  
-  脚本会通过 `cross-env VITE_ENABLE_MOCK=pure vite` 启动，始终返回 Mock 数据，可完全脱离后端。
-- 生产构建 (`yarn build` / `yarn build:stage`)  
-  `.env.production` / `.env.staging` 默认 `VITE_ENABLE_MOCK='off'`，如需远程演示可改为 `fallback` 或 `pure`。
+业务级运行模式优先由 `VITE_APP_RUNTIME_MODE` 控制，只有以下三种值：
 
-单一环境变量即可控制：
+```bash
+VITE_APP_RUNTIME_MODE=real|fallback|demo-offline
+```
+
+| 运行模式       | 适用场景                   | MSW 行为                                                                 | 数据来源与限制                                                                                                   |
+| -------------- | -------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `real`         | 生产构建、联调真实后端     | 不启动 MSW                                                               | 所有请求都走真实后端；不初始化 `src/demo/**`、不写入 `ruoyi-demo-offline` IndexedDB。                             |
+| `fallback`     | 本地开发补齐缺失接口       | 真实后端优先；`404` 或网络异常时由 `src/mocks/handlers/**` 返回兜底数据  | 可能访问真实后端，不保证完全离线；只用于开发，不用于客户静态演示。                                               |
+| `demo-offline` | 无后端静态演示、客户离线包 | 使用 `src/demo/handlers/**` 注册纯 MSW HTTP/WebSocket handler，禁止穿透后端 | 数据来自标准场景包并持久化到 `ruoyi-demo-offline` IndexedDB；未覆盖 `/api/**` 返回 `501 DEMO_API_NOT_IMPLEMENTED`。 |
+
+旧变量 `VITE_ENABLE_MOCK` 仍保留兼容映射：`off -> real`、`fallback -> fallback`、`pure -> demo-offline`。
 
 ```bash
 VITE_ENABLE_MOCK=off|fallback|pure
 ```
+
+常用命令：
+
+```bash
+yarn dev                 # .env.development 默认 fallback
+yarn dev:mock            # demo-offline 开发预览
+yarn build:prod          # real 生产构建
+yarn build:demo-offline  # demo-offline 静态演示构建，输出 dist-demo-offline/
+yarn preview:demo-offline # 预览 dist-demo-offline/
+```
+
+`demo-offline` 静态产物输出到 `dist-demo-offline/`，生产构建继续使用 `dist/`。演示产物必须通过 HTTP(S) 服务器访问，不能直接用 `file://` 打开。MSW service worker 需要浏览器 origin 和 scope，Vite 静态资源、动态导入以及 WebSocket 拦截也都按 HTTP(S) 运行环境设计。本地验收请使用 `yarn preview:demo-offline` 或等价静态服务器。
 
 ### 目录结构
 
@@ -29,6 +46,8 @@ src/mocks/
   server.ts              # Node/Vitest 使用的 setupServer
   index.ts               # 对外暴露的入口
 ```
+
+`demo-offline` 的 IndexedDB 场景包、仓储、服务与 handler 位于 `src/demo/**`。`src/mocks/**` 继续承担传统 fallback/pure mock 入口与 Node/Vitest MSW server 能力，两者不要混写业务数据。
 
 ### 新增接口 Mock
 
@@ -95,5 +114,7 @@ afterAll(() => server.close())
 ### 注意事项
 
 - `public/mockServiceWorker.js` 由 `npx msw init public --save` 生成，请勿手动修改。
-- 如需彻底禁用 Mock，可在 `.env.local` 或运行环境中设置 `VITE_ENABLE_MOCK=off`。
+- 如需彻底禁用 Mock，可在 `.env.local` 或运行环境中设置 `VITE_APP_RUNTIME_MODE=real` 或 `VITE_ENABLE_MOCK=off`。
+- 客户静态演示请使用 `demo-offline`，不要使用 `fallback`；`fallback` 会尝试真实后端，只适合开发兜底。
+- `demo-offline` 的场景运维、AI 扩展和数据隔离边界见 `docs/specs/frontend-demo-offline-runtime/runbook.md`。
 - 旧的 `mock/` 目录已被 MSW 替代，可分阶段迁移或删除。

@@ -30,7 +30,7 @@ describe('Project API', () => {
 
       const result = await projectApi.listProject({ page_num: 1, page_size: 10 })
 
-      expect(request.get).toHaveBeenCalledWith('/system/project/list', {
+      expect(request.get).toHaveBeenCalledWith('/project/list', {
         params: { page_num: 1, page_size: 10 }
       })
       expect(result.data.rows.length).toBe(2)
@@ -72,7 +72,7 @@ describe('Project API', () => {
 
       const result = await projectApi.getProject(1)
 
-      expect(request.get).toHaveBeenCalledWith('/system/project/1')
+      expect(request.get).toHaveBeenCalledWith('/project/1')
       expect(result.data.project_id).toBe(1)
     })
 
@@ -100,7 +100,7 @@ describe('Project API', () => {
 
       const result = await projectApi.addProject(projectData)
 
-      expect(request.post).toHaveBeenCalledWith('/system/project', projectData)
+      expect(request.post).toHaveBeenCalledWith('/project', projectData)
       expect(result.data.project_id).toBe(1)
     })
 
@@ -137,7 +137,7 @@ describe('Project API', () => {
 
       const result = await projectApi.updateProject(projectData)
 
-      expect(request.put).toHaveBeenCalledWith('/system/project', projectData)
+      expect(request.put).toHaveBeenCalledWith('/project', projectData)
       expect(result.code).toBe(200)
     })
 
@@ -158,7 +158,7 @@ describe('Project API', () => {
 
       const result = await projectApi.delProject(1)
 
-      expect(request.delete).toHaveBeenCalledWith('/system/project/1')
+      expect(request.delete).toHaveBeenCalledWith('/project/1')
       expect(result.code).toBe(200)
     })
 
@@ -169,7 +169,7 @@ describe('Project API', () => {
 
       const result = await projectApi.delProject([1, 2, 3])
 
-      expect(request.delete).toHaveBeenCalledWith('/system/project/1,2,3')
+      expect(request.delete).toHaveBeenCalledWith('/project/1,2,3')
     })
 
     it('should handle delete error', async () => {
@@ -188,7 +188,7 @@ describe('Project API', () => {
 
       const result = await projectApi.exportProject(1)
 
-      expect(request.get).toHaveBeenCalledWith('/system/project/export/1', {
+      expect(request.get).toHaveBeenCalledWith('/project/export/1', {
         responseType: 'blob'
       })
       expect(result.data).toBeInstanceOf(Blob)
@@ -242,7 +242,7 @@ describe('Project API', () => {
 
       const result = await projectApi.getProjectTopology(1)
 
-      expect(request.get).toHaveBeenCalledWith('/system/project/1/topology')
+      expect(request.get).toHaveBeenCalledWith('/project/1/topology')
       expect(result.data.nodes.length).toBe(2)
       expect(result.data.edges.length).toBe(1)
     })
@@ -275,7 +275,7 @@ describe('Project API', () => {
 
       const result = await projectApi.updateProjectTopology(1, topologyData)
 
-      expect(request.put).toHaveBeenCalledWith('/system/project/1/topology', topologyData)
+      expect(request.put).toHaveBeenCalledWith('/project/1/topology', topologyData)
       expect(result.code).toBe(200)
     })
 

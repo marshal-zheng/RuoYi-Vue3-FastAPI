@@ -31,7 +31,12 @@
                     size="large"
                   >
                     <template #prefix>
-                      <ZxIcon icon="mdi:account" :size="20" class="el-input__icon input-icon" />
+                      <ZxIcon
+                        icon="mdi:account"
+                        :size="16"
+                        color="var(--el-input-icon-color)"
+                        class-name="login-input-icon"
+                      />
                     </template>
                   </el-input>
                 </el-form-item>
@@ -48,15 +53,17 @@
                     <template #prefix>
                       <ZxIcon
                         icon="mdi:lock-outline"
-                        :size="20"
-                        class="el-input__icon input-icon"
+                        :size="16"
+                        color="var(--el-input-icon-color)"
+                        class-name="login-input-icon"
                       />
                     </template>
                     <template #suffix>
                       <ZxIcon
                         :icon="showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'"
-                        :size="20"
-                        class="el-input__icon input-icon cursor-pointer"
+                        :size="16"
+                        color="var(--el-input-icon-color)"
+                        class-name="login-input-icon login-input-icon--action"
                         @click="showPassword = !showPassword"
                       />
                     </template>
@@ -76,8 +83,9 @@
                       <template #prefix>
                         <ZxIcon
                           icon="mdi:shield-check-outline"
-                          :size="20"
-                          class="el-input__icon input-icon"
+                          :size="16"
+                          color="var(--el-input-icon-color)"
+                          class-name="login-input-icon"
                         />
                       </template>
                     </el-input>
@@ -231,7 +239,21 @@ getCookie();
   display: block;
 }
 
+.login-form :deep(.el-input) {
+  height: 40px;
+  line-height: 40px;
+}
+
+.login-form :deep(.el-input__wrapper) {
+  height: 40px;
+  min-height: 40px;
+  align-items: center;
+  background-color: #fff;
+}
+
 .login-form :deep(.el-input__inner) {
+  height: 38px;
+  line-height: 38px;
   background-color: #fff !important;
 }
 
@@ -254,9 +276,20 @@ getCookie();
   align-items: center;
 }
 
-.login-form :deep(.el-input.is-active .el-input__inner),
-.login-form :deep(.el-input__inner:focus) {
-  border-color: #409eff;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.1);
+.login-form :deep(.login-input-icon) {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--el-input-icon-color);
+  cursor: default;
+}
+
+.login-form :deep(.login-input-icon--action) {
+  cursor: pointer;
+}
+
+.login-form :deep(.el-input.is-active .el-input__wrapper),
+.login-form :deep(.el-input__wrapper.is-focus) {
+  box-shadow: 0 0 0 1px var(--el-color-primary) inset;
 }
 </style>

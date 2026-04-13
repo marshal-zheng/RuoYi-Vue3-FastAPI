@@ -275,7 +275,7 @@ describe('Helpers Utils', () => {
   })
 
   describe('debounce', () => {
-    it('should debounce function calls', (done) => {
+    it('should debounce function calls', async () => {
       let callCount = 0
       const debouncedFn = debounce(() => {
         callCount++
@@ -285,13 +285,13 @@ describe('Helpers Utils', () => {
       debouncedFn()
       debouncedFn()
 
-      setTimeout(() => {
+      await new Promise<void>((resolve) => setTimeout(() => {
         expect(callCount).toBe(1)
-        done()
-      }, 150)
+        resolve()
+      }, 150))
     })
 
-    it('should pass arguments to debounced function', (done) => {
+    it('should pass arguments to debounced function', async () => {
       let receivedArg: any
       const debouncedFn = debounce((arg: any) => {
         receivedArg = arg
@@ -299,15 +299,15 @@ describe('Helpers Utils', () => {
 
       debouncedFn('test')
 
-      setTimeout(() => {
+      await new Promise<void>((resolve) => setTimeout(() => {
         expect(receivedArg).toBe('test')
-        done()
-      }, 150)
+        resolve()
+      }, 150))
     })
   })
 
   describe('throttle', () => {
-    it('should throttle function calls', (done) => {
+    it('should throttle function calls', async () => {
       let callCount = 0
       const throttledFn = throttle(() => {
         callCount++
@@ -319,11 +319,11 @@ describe('Helpers Utils', () => {
 
       expect(callCount).toBe(1)
 
-      setTimeout(() => {
+      await new Promise<void>((resolve) => setTimeout(() => {
         throttledFn()
         expect(callCount).toBe(2)
-        done()
-      }, 150)
+        resolve()
+      }, 150))
     })
 
     it('should pass arguments to throttled function', () => {

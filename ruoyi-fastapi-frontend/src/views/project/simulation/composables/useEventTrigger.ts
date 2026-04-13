@@ -69,13 +69,16 @@ interface ActionTypeConfig {
   params: ActionParam[];
 }
 
+type EventConditionType = ConditionTypeValue | 'manual' | (string & {});
+type EventActionType = ActionTypeValue | (string & {});
+
 interface EventCondition {
-  type: ConditionTypeValue | 'manual';
+  type: EventConditionType;
   value: Record<string, any>;
 }
 
 interface EventAction {
-  type: ActionTypeValue;
+  type: EventActionType;
   params: Record<string, any>;
 }
 
@@ -88,17 +91,17 @@ interface EventConfig {
 interface Event {
   eventId: string;
   name: string;
-  condition: EventCondition;
-  action: EventAction;
+  condition?: EventCondition;
+  action?: EventAction;
   status: 'pending' | 'triggered' | 'disabled';
-  triggerCount: number;
-  createTime: number;
+  triggerCount?: number;
+  createTime?: number;
   lastTriggerTime?: number;
 }
 
 interface SimulationState {
-  elapsedTime: number;
-  messageCount: number;
+  elapsedTime?: number;
+  messageCount?: number;
   bandwidthByPort?: Record<string, { loadPercent: number }>;
   latestMessage?: any;
 }
@@ -171,7 +174,7 @@ export const CONDITION_TYPE_CONFIG: Record<string, ConditionTypeConfig> = {
 /**
  * 动作类型配置
  */
-export const ACTION_TYPE_CONFIG: Record<ActionTypeValue, ActionTypeConfig> = {
+export const ACTION_TYPE_CONFIG: Record<string, ActionTypeConfig> = {
   [ActionType.SEND_COMMAND]: {
     label: '发送指令',
     description: 'A设备给B设备发送指令（自检、上电、复位等）',
@@ -290,7 +293,10 @@ export const ACTION_TYPE_CONFIG: Record<ActionTypeValue, ActionTypeConfig> = {
  * @param {Object} state - 当前仿真状态
  * @returns {boolean} 是否匹配
  */
-export function matchCondition(condition: EventCondition, state: SimulationState): boolean {
+export function matchCondition(
+  condition: EventCondition | null | undefined,
+  state: SimulationState | null | undefined
+): boolean {
   if (!condition || !state) {
     return false;
   }
@@ -299,15 +305,15 @@ export function matchCondition(condition: EventCondition, state: SimulationState
 
   switch (type) {
     case ConditionType.TIME:
-      return state.elapsedTime >= value.time;
+      return (state.elapsedTime || 0) >= value.time;
 
     case ConditionType.MESSAGE_COUNT:
-      return state.messageCount >= value.count;
+      return (state.messageCount || 0) >= value.count;
 
     case ConditionType.BANDWIDTH_THRESHOLD:
       if (value.portId) {
         const portBandwidth = state.bandwidthByPort?.[value.portId];
-        return portBandwidth && portBandwidth.loadPercent >= value.threshold;
+        return !!portBandwidth && portBandwidth.loadPercent >= value.threshold;
       }
       // 检查任意端口
       return Object.values(state.bandwidthByPort || {}).some(
@@ -352,6 +358,13 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     return eventList.value.filter((e) => e.status === 'triggered').length;
   });
 
+  function unwrapEventList(response: any): Event[] {
+    if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.data)) return response.data;
+    if (Array.isArray(response?.rows)) return response.rows;
+    return [];
+  }
+
   /**
    * 加载事件列表
    */
@@ -364,7 +377,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     loading.value = true;
     try {
       const response = await getEventsApi(sessionId.value);
-      eventList.value = response || [];
+      eventList.value = unwrapEventList(response);
     } catch (error) {
       console.error('加载事件列表失败:', error);
     } finally {
@@ -402,8 +415,9 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
       actionParams: action.params,
     });
 
+    const responseData = (response as any)?.data || response;
     const event: Event = {
-      eventId: response?.eventId || `event-${Date.now()}`,
+      eventId: responseData?.eventId || `event-${Date.now()}`,
       name,
       condition,
       action,
@@ -475,7 +489,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     const event = eventList.value.find((e) => e.eventId === eventId);
     if (event) {
       event.status = 'triggered';
-      event.triggerCount += 1;
+      event.triggerCount = (event.triggerCount || 0) + 1;
       event.lastTriggerTime = Date.now();
     }
     await loadEvents();
@@ -498,7 +512,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    * 检查并触发匹配的事件
    * @param {Object} state - 当前仿真状态
    */
-  function checkAndTriggerEvents(state: SimulationState) {
+  function checkAndTriggerEvents(state: SimulationState | null | undefined) {
     const pendingEvents = eventList.value.filter((e) => e.status === 'pending');
 
     for (const event of pendingEvents) {

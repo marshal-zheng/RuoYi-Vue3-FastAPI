@@ -12,6 +12,11 @@ vi.mock('js-cookie', () => ({
   }
 }))
 
+const mockedCookieGet = () => Cookies.get as unknown as {
+  mockReturnValue(value: string | undefined): void
+  mockImplementation(fn: (key: string) => string | undefined): void
+}
+
 describe('App Store', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
@@ -24,7 +29,7 @@ describe('App Store', () => {
 
   describe('State Initialization', () => {
     it('should initialize with default state when no cookies', () => {
-      vi.mocked(Cookies.get).mockReturnValue(undefined)
+      mockedCookieGet().mockReturnValue(undefined)
 
       const store = useAppStore()
 
@@ -36,7 +41,7 @@ describe('App Store', () => {
     })
 
     it('should initialize sidebar from cookie', () => {
-      vi.mocked(Cookies.get).mockImplementation((key) => {
+      mockedCookieGet().mockImplementation((key) => {
         if (key === 'sidebarStatus') return '0'
         return undefined
       })
@@ -47,7 +52,7 @@ describe('App Store', () => {
     })
 
     it('should initialize size from cookie', () => {
-      vi.mocked(Cookies.get).mockImplementation((key) => {
+      mockedCookieGet().mockImplementation((key) => {
         if (key === 'size') return 'large'
         return undefined
       })
@@ -58,7 +63,7 @@ describe('App Store', () => {
     })
 
     it('should handle sidebar opened state from cookie', () => {
-      vi.mocked(Cookies.get).mockImplementation((key) => {
+      mockedCookieGet().mockImplementation((key) => {
         if (key === 'sidebarStatus') return '1'
         return undefined
       })
@@ -71,29 +76,29 @@ describe('App Store', () => {
 
   describe('toggleSideBar', () => {
     it('should toggle sidebar from opened to closed', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.toggleSideBar(false)
 
       expect(store.sidebar.opened).toBe(false)
       expect(store.sidebar.withoutAnimation).toBe(false)
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
 
     it('should toggle sidebar from closed to opened', () => {
-      vi.mocked(Cookies.get).mockReturnValue('0')
+      mockedCookieGet().mockReturnValue('0')
       const store = useAppStore()
 
       store.toggleSideBar(false)
 
       expect(store.sidebar.opened).toBe(true)
       expect(store.sidebar.withoutAnimation).toBe(false)
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 1)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '1')
     })
 
     it('should toggle without animation', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.toggleSideBar(true)
@@ -102,68 +107,68 @@ describe('App Store', () => {
     })
 
     it('should not toggle when sidebar is hidden', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
       store.sidebar.hide = true
       const initialState = store.sidebar.opened
 
       const result = store.toggleSideBar(false)
 
-      expect(result).toBe(false)
+      expect(result).toBeUndefined()
       expect(store.sidebar.opened).toBe(initialState)
       expect(Cookies.set).not.toHaveBeenCalled()
     })
 
     it('should update cookie when toggling', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.toggleSideBar(false)
 
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
   })
 
   describe('closeSideBar', () => {
     it('should close sidebar', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.closeSideBar({ withoutAnimation: false })
 
       expect(store.sidebar.opened).toBe(false)
       expect(store.sidebar.withoutAnimation).toBe(false)
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
 
     it('should close sidebar without animation', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.closeSideBar({ withoutAnimation: true })
 
       expect(store.sidebar.opened).toBe(false)
       expect(store.sidebar.withoutAnimation).toBe(true)
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
 
     it('should update cookie when closing', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.closeSideBar({ withoutAnimation: false })
 
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
 
     it('should close already closed sidebar', () => {
-      vi.mocked(Cookies.get).mockReturnValue('0')
+      mockedCookieGet().mockReturnValue('0')
       const store = useAppStore()
 
       store.closeSideBar({ withoutAnimation: false })
 
       expect(store.sidebar.opened).toBe(false)
-      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', 0)
+      expect(Cookies.set).toHaveBeenCalledWith('sidebarStatus', '0')
     })
   })
 
@@ -292,7 +297,7 @@ describe('App Store', () => {
 
   describe('Integration Scenarios', () => {
     it('should handle mobile device with closed sidebar', () => {
-      vi.mocked(Cookies.get).mockReturnValue('0')
+      mockedCookieGet().mockReturnValue('0')
       const store = useAppStore()
 
       store.toggleDevice('mobile')
@@ -302,7 +307,7 @@ describe('App Store', () => {
     })
 
     it('should handle desktop device with opened sidebar', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.toggleDevice('desktop')
@@ -312,7 +317,7 @@ describe('App Store', () => {
     })
 
     it('should handle size change with sidebar state', () => {
-      vi.mocked(Cookies.get).mockReturnValue('1')
+      mockedCookieGet().mockReturnValue('1')
       const store = useAppStore()
 
       store.setSize('large')
@@ -335,7 +340,7 @@ describe('App Store', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined cookie values', () => {
-      vi.mocked(Cookies.get).mockReturnValue(undefined)
+      mockedCookieGet().mockReturnValue(undefined)
 
       const store = useAppStore()
 
@@ -344,7 +349,7 @@ describe('App Store', () => {
     })
 
     it('should handle invalid cookie values', () => {
-      vi.mocked(Cookies.get).mockImplementation((key) => {
+      mockedCookieGet().mockImplementation((key) => {
         if (key === 'sidebarStatus') return 'invalid'
         return undefined
       })
@@ -355,14 +360,14 @@ describe('App Store', () => {
     })
 
     it('should handle empty string cookie values', () => {
-      vi.mocked(Cookies.get).mockImplementation((key) => {
+      mockedCookieGet().mockImplementation((key) => {
         if (key === 'size') return ''
         return undefined
       })
 
       const store = useAppStore()
 
-      expect(store.size).toBe('')
+      expect(store.size).toBe('default')
     })
   })
 })

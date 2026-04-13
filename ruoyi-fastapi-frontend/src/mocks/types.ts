@@ -1,8 +1,11 @@
 // @ts-nocheck
+import type { RequestHandler, WebSocketHandler } from 'msw';
+
 export type MockStrategy = 'fallback' | 'pure';
 export type MockMode = 'off' | MockStrategy;
 
 export type MockScenario = 'default' | 'pure';
+export type MockRuntimeHandler = RequestHandler | WebSocketHandler;
 
 export type OnUnhandledRequestHandler = (
   request: Request,
@@ -18,5 +21,6 @@ export type OnUnhandledRequestOption = 'bypass' | 'warn' | 'error' | OnUnhandled
 export interface StartMockOptions {
   strategy?: MockStrategy;
   scenario?: MockScenario;
+  handlers?: MockRuntimeHandler[];
   onUnhandledRequest?: OnUnhandledRequestOption;
 }

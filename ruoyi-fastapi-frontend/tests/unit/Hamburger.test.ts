@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, fireEvent } from '@testing-library/vue';
-import Hamburger from '@/components/Hamburger/index.vue';
+import Hamburger from '@/components/ui/Hamburger/index.vue';
 
 describe('Hamburger Component', () => {
   it('renders correctly', () => {
@@ -31,17 +31,12 @@ describe('Hamburger Component', () => {
   });
 
   it('emits toggleClick event when clicked', async () => {
-    const mockToggleClick = vi.fn();
-    const { container } = render(Hamburger, {
-      props: {
-        onToggleClick: mockToggleClick,
-      },
-    });
+    const { container, emitted } = render(Hamburger);
 
     const clickableDiv = container.querySelector('div');
     await fireEvent.click(clickableDiv!);
 
-    expect(mockToggleClick).toHaveBeenCalledTimes(1);
+    expect(emitted('toggleClick')).toHaveLength(1);
   });
 
   it('has correct default props', () => {

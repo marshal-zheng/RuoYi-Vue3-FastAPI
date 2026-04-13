@@ -65,7 +65,11 @@
     <div class="drawer-item">
       <span>暗黑模式</span>
       <span class="comp-style">
-        <el-switch :model-value="settingsStore.isDark" @change="settingsStore.toggleTheme()" class="drawer-switch" />
+        <el-switch
+          :model-value="settingsStore.isDark"
+          @change="settingsStore.toggleTheme()"
+          class="drawer-switch"
+        />
       </span>
     </div>
     <el-divider />

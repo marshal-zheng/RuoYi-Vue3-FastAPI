@@ -1,4 +1,5 @@
 import defaultSettings from '@/settings';
+import { defineStore } from 'pinia';
 import { useDark, useToggle } from '@vueuse/core';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 
@@ -16,7 +17,13 @@ const {
   dynamicTitle,
 } = defaultSettings;
 
-const storageSetting = JSON.parse(localStorage.getItem('layout-setting') || '{}');
+function getStorageSetting(): Record<string, any> {
+  try {
+    return JSON.parse(localStorage.getItem('layout-setting') || '{}');
+  } catch {
+    return {};
+  }
+}
 
 interface SettingsState {
   title: string;
@@ -33,23 +40,26 @@ interface SettingsState {
 }
 
 const useSettingsStore = defineStore('settings', {
-  state: (): SettingsState => ({
-    title: '',
-    theme: storageSetting.theme || '#0052D9',
-    sideTheme: storageSetting.sideTheme || sideTheme,
-    showSettings: showSettings,
-    topNav: storageSetting.topNav === undefined ? topNav : storageSetting.topNav,
-    tagsView: storageSetting.tagsView === undefined ? tagsView : storageSetting.tagsView,
-    fixedHeader:
-      storageSetting.fixedHeader === undefined ? fixedHeader : storageSetting.fixedHeader,
-    sidebarLogo:
-      storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
-    dynamicTitle:
-      storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle,
-    topNavBorder:
-      storageSetting.topNavBorder === undefined ? topNavBorder : storageSetting.topNavBorder,
-    isDark: isDark.value,
-  }),
+  state: (): SettingsState => {
+    const storageSetting = getStorageSetting();
+    return {
+      title: '',
+      theme: storageSetting.theme || '#0052D9',
+      sideTheme: storageSetting.sideTheme || sideTheme,
+      showSettings: showSettings,
+      topNav: storageSetting.topNav === undefined ? topNav : storageSetting.topNav,
+      tagsView: storageSetting.tagsView === undefined ? tagsView : storageSetting.tagsView,
+      fixedHeader:
+        storageSetting.fixedHeader === undefined ? fixedHeader : storageSetting.fixedHeader,
+      sidebarLogo:
+        storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
+      dynamicTitle:
+        storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle,
+      topNavBorder:
+        storageSetting.topNavBorder === undefined ? topNavBorder : storageSetting.topNavBorder,
+      isDark: isDark.value,
+    };
+  },
   actions: {
     // 修改布局设置
     changeSetting(data: { key: string; value: any }) {

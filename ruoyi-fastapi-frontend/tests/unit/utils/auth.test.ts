@@ -2,189 +2,142 @@
  * Auth 工具函数测试
  * 测试 Token 管理功能
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import Cookies from 'js-cookie'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-
-// Mock js-cookie
-vi.mock('js-cookie')
+import { beforeEach, describe, expect, it } from 'vitest';
+import {
+  clearSecurityTokens,
+  getCsrfToken,
+  getToken,
+  removeToken,
+  setCsrfToken,
+  setToken,
+} from '@/utils/auth';
 
 describe('Auth Utils', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    sessionStorage.clear();
+    document.cookie = 'csrf_token=; Max-Age=0; path=/';
+    clearSecurityTokens();
+  });
 
   describe('getToken', () => {
-    it('should get token from cookies', () => {
-      const mockToken = 'test-token-123'
-      vi.mocked(Cookies.get).mockReturnValue(mockToken)
-
-      const token = getToken()
-
-      expect(Cookies.get).toHaveBeenCalledWith('Admin-Token')
-      expect(token).toBe(mockToken)
-    })
-
     it('should return undefined when no token exists', () => {
-      vi.mocked(Cookies.get).mockReturnValue(undefined)
+      expect(getToken()).toBeUndefined();
+    });
 
-      const token = getToken()
+    it('should return the in-memory token after setToken', () => {
+      setToken('test-token-123');
 
-      expect(token).toBeUndefined()
-    })
+      expect(getToken()).toBe('test-token-123');
+    });
 
-    it('should handle empty token', () => {
-      vi.mocked(Cookies.get).mockReturnValue('')
+    it('should treat empty token as absent', () => {
+      setToken('');
 
-      const token = getToken()
-
-      expect(token).toBe('')
-    })
-  })
+      expect(getToken()).toBeUndefined();
+    });
+  });
 
   describe('setToken', () => {
-    it('should set token in cookies', () => {
-      const mockToken = 'new-token-456'
-      vi.mocked(Cookies.set).mockReturnValue(mockToken)
+    it('should set token in session storage and memory', () => {
+      const result = setToken('new-token-456');
 
-      const result = setToken(mockToken)
+      expect(result).toBe('new-token-456');
+      expect(getToken()).toBe('new-token-456');
+      expect(sessionStorage.getItem('ruoyi_access_token')).toBe('new-token-456');
+    });
 
-      expect(Cookies.set).toHaveBeenCalledWith('Admin-Token', mockToken)
-      expect(result).toBe(mockToken)
-    })
+    it('should remove session storage token for empty string token', () => {
+      setToken('existing-token');
+      const result = setToken('');
 
-    it('should handle empty string token', () => {
-      vi.mocked(Cookies.set).mockReturnValue('')
-
-      const result = setToken('')
-
-      expect(Cookies.set).toHaveBeenCalledWith('Admin-Token', '')
-      expect(result).toBe('')
-    })
+      expect(result).toBe('');
+      expect(getToken()).toBeUndefined();
+      expect(sessionStorage.getItem('ruoyi_access_token')).toBeNull();
+    });
 
     it('should handle long token strings', () => {
-      const longToken = 'a'.repeat(1000)
-      vi.mocked(Cookies.set).mockReturnValue(longToken)
+      const longToken = 'a'.repeat(1000);
 
-      const result = setToken(longToken)
+      const result = setToken(longToken);
 
-      expect(Cookies.set).toHaveBeenCalledWith('Admin-Token', longToken)
-      expect(result).toBe(longToken)
-    })
+      expect(result).toBe(longToken);
+      expect(getToken()).toBe(longToken);
+    });
 
     it('should handle special characters in token', () => {
-      const specialToken = 'token-with-!@#$%^&*()'
-      vi.mocked(Cookies.set).mockReturnValue(specialToken)
+      const specialToken = 'token-with-!@#$%^&*()';
 
-      const result = setToken(specialToken)
+      const result = setToken(specialToken);
 
-      expect(Cookies.set).toHaveBeenCalledWith('Admin-Token', specialToken)
-    })
-  })
+      expect(result).toBe(specialToken);
+      expect(getToken()).toBe(specialToken);
+    });
+  });
 
   describe('removeToken', () => {
-    it('should remove token from cookies', () => {
-      vi.mocked(Cookies.remove).mockReturnValue(undefined)
+    it('should remove token from memory and session storage', () => {
+      setToken('token-to-remove');
 
-      removeToken()
+      removeToken();
 
-      expect(Cookies.remove).toHaveBeenCalledWith('Admin-Token')
-    })
+      expect(getToken()).toBeUndefined();
+      expect(sessionStorage.getItem('ruoyi_access_token')).toBeNull();
+    });
 
     it('should not throw error when removing non-existent token', () => {
-      vi.mocked(Cookies.remove).mockReturnValue(undefined)
-
-      expect(() => removeToken()).not.toThrow()
-    })
+      expect(() => removeToken()).not.toThrow();
+    });
 
     it('should be callable multiple times', () => {
-      vi.mocked(Cookies.remove).mockReturnValue(undefined)
+      removeToken();
+      removeToken();
+      removeToken();
 
-      removeToken()
-      removeToken()
-      removeToken()
-
-      expect(Cookies.remove).toHaveBeenCalledTimes(3)
-    })
-  })
+      expect(getToken()).toBeUndefined();
+    });
+  });
 
   describe('Token Workflow', () => {
     it('should handle complete token lifecycle', () => {
-      const token = 'lifecycle-token'
-      
-      // Set token
-      vi.mocked(Cookies.set).mockReturnValue(token)
-      setToken(token)
-      expect(Cookies.set).toHaveBeenCalledWith('Admin-Token', token)
+      setToken('lifecycle-token');
+      expect(getToken()).toBe('lifecycle-token');
 
-      // Get token
-      vi.mocked(Cookies.get).mockReturnValue(token)
-      const retrieved = getToken()
-      expect(retrieved).toBe(token)
-
-      // Remove token
-      vi.mocked(Cookies.remove).mockReturnValue(undefined)
-      removeToken()
-      expect(Cookies.remove).toHaveBeenCalledWith('Admin-Token')
-
-      // Verify token is gone
-      vi.mocked(Cookies.get).mockReturnValue(undefined)
-      const afterRemove = getToken()
-      expect(afterRemove).toBeUndefined()
-    })
+      removeToken();
+      expect(getToken()).toBeUndefined();
+    });
 
     it('should handle token update', () => {
-      const oldToken = 'old-token'
-      const newToken = 'new-token'
+      setToken('old-token');
+      setToken('new-token');
 
-      // Set old token
-      vi.mocked(Cookies.set).mockReturnValue(oldToken)
-      setToken(oldToken)
+      expect(getToken()).toBe('new-token');
+      expect(sessionStorage.getItem('ruoyi_access_token')).toBe('new-token');
+    });
+  });
 
-      // Update to new token
-      vi.mocked(Cookies.set).mockReturnValue(newToken)
-      setToken(newToken)
+  describe('CSRF Token Workflow', () => {
+    it('should set and get csrf token from memory and session storage', () => {
+      const result = setCsrfToken('csrf-token');
 
-      expect(Cookies.set).toHaveBeenCalledTimes(2)
-      expect(Cookies.set).toHaveBeenLastCalledWith('Admin-Token', newToken)
-    })
-  })
+      expect(result).toBe('csrf-token');
+      expect(getCsrfToken()).toBe('csrf-token');
+      expect(sessionStorage.getItem('ruoyi_csrf_token')).toBe('csrf-token');
+    });
 
-  describe('Edge Cases', () => {
-    it('should handle null-like values in setToken', () => {
-      // @ts-ignore - testing edge case
-      vi.mocked(Cookies.set).mockReturnValue(null)
-      // @ts-ignore - testing edge case
-      const result = setToken(null)
+    it('should read csrf token from cookie when memory is empty', () => {
+      document.cookie = 'csrf_token=cookie-csrf-token; path=/';
 
-      expect(Cookies.set).toHaveBeenCalled()
-    })
+      expect(getCsrfToken()).toBe('cookie-csrf-token');
+      expect(sessionStorage.getItem('ruoyi_csrf_token')).toBe('cookie-csrf-token');
+    });
 
-    it('should handle concurrent token operations', () => {
-      const tokens = ['token1', 'token2', 'token3']
-      
-      tokens.forEach(token => {
-        vi.mocked(Cookies.set).mockReturnValue(token)
-        setToken(token)
-      })
+    it('should clear csrf token with removeToken', () => {
+      setCsrfToken('csrf-token');
 
-      expect(Cookies.set).toHaveBeenCalledTimes(3)
-    })
+      removeToken();
 
-    it('should maintain token key consistency', () => {
-      const tokenKey = 'Admin-Token'
-
-      vi.mocked(Cookies.get).mockReturnValue('test')
-      getToken()
-      expect(Cookies.get).toHaveBeenCalledWith(tokenKey)
-
-      vi.mocked(Cookies.set).mockReturnValue('test')
-      setToken('test')
-      expect(Cookies.set).toHaveBeenCalledWith(tokenKey, 'test')
-
-      vi.mocked(Cookies.remove).mockReturnValue(undefined)
-      removeToken()
-      expect(Cookies.remove).toHaveBeenCalledWith(tokenKey)
-    })
-  })
-})
+      expect(getCsrfToken()).toBeUndefined();
+      expect(sessionStorage.getItem('ruoyi_csrf_token')).toBeNull();
+    });
+  });
+});

@@ -24,6 +24,14 @@ interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   skipRelogin?: boolean;
 }
 
+interface RequestClient {
+  <T = any>(config: ExtendedAxiosRequestConfig): Promise<T>;
+  get<T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  post<T = any>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  put<T = any>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  delete<T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
+}
+
 let downloadLoadingInstance: LoadingInstance;
 
 // 重新导出 isRelogin
@@ -68,6 +76,32 @@ function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> {
       return http.request<T>({ ...httpConfig, method }, requestOptions);
   }
 }
+
+const requestClient = request as RequestClient;
+
+requestClient.get = <T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T> => {
+  return request<T>({ ...config, url, method: 'get' });
+};
+
+requestClient.post = <T = any>(
+  url: string,
+  data?: unknown,
+  config?: ExtendedAxiosRequestConfig
+): Promise<T> => {
+  return request<T>({ ...config, url, method: 'post', data });
+};
+
+requestClient.put = <T = any>(
+  url: string,
+  data?: unknown,
+  config?: ExtendedAxiosRequestConfig
+): Promise<T> => {
+  return request<T>({ ...config, url, method: 'put', data });
+};
+
+requestClient.delete = <T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T> => {
+  return request<T>({ ...config, url, method: 'delete' });
+};
 
 // ==================== 下载方法 ====================
 
@@ -139,4 +173,4 @@ export function download(
     });
 }
 
-export default request;
+export default requestClient;

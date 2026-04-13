@@ -11,14 +11,16 @@ type DictRendererEvents = {
   change?: (args: Record<string, unknown>) => void;
 };
 
+type DictRendererProps = {
+  dictType?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  inputType?: string;
+  clearable?: boolean;
+};
+
 type DictRendererOptions = {
-  props?: {
-    dictType?: string;
-    placeholder?: string;
-    disabled?: boolean;
-    inputType?: string;
-    clearable?: boolean;
-  };
+  props?: DictRendererProps | ((params: DictRendererParams) => DictRendererProps);
   events?: DictRendererEvents;
 };
 

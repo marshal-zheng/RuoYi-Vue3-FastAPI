@@ -59,7 +59,7 @@ import { useDialog } from '@zxio/zxui';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
-const { proxy } = getCurrentInstance();
+const proxy = getCurrentInstance()?.proxy as any;
 
 // 延迟加载字典数据
 const sys_normal_disable = ref<any[]>([]);
@@ -78,7 +78,7 @@ interface DeptForm {
 
 const emit = defineEmits(['success']);
 
-const deptOptions = ref([]);
+const deptOptions = ref<any[]>([]);
 
 const formRules = {
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],

@@ -9,6 +9,8 @@ interface BandwidthDataPoint {
   timestamp: number;
   portId: string;
   bandwidthMbps: number;
+  bandwidth?: number;
+  protocol?: string;
   messageCount?: number;
 }
 
@@ -244,6 +246,112 @@ export function useBandwidthData() {
     stopAutoClean();
   };
 
+  const getBandwidthValue = (item: Partial<BandwidthDataPoint>): number => {
+    return Math.max(0, Number(item.bandwidth ?? item.bandwidthMbps ?? 0));
+  };
+
+  const addDataPoint = (data: Partial<BandwidthDataPoint> & Record<string, any>) => {
+    const bandwidth = getBandwidthValue(data);
+    rawData.value.push({
+      timestamp: Number(data.timestamp ?? Date.now()),
+      portId: String(data.portId ?? data.protocol ?? 'default'),
+      bandwidth,
+      bandwidthMbps: bandwidth,
+      protocol: data.protocol,
+      messageCount: data.messageCount,
+    });
+
+    if (rawData.value.length > 100) {
+      rawData.value = rawData.value.slice(-100);
+    }
+    rawData.value.sort((a, b) => a.timestamp - b.timestamp);
+  };
+
+  const bandwidthHistory = rawData;
+
+  const currentBandwidth = computed(() => {
+    const latest = rawData.value[rawData.value.length - 1];
+    return latest ? getBandwidthValue(latest) : 0;
+  });
+
+  const peakBandwidth = computed(() => {
+    return rawData.value.length ? Math.max(...rawData.value.map(getBandwidthValue)) : 0;
+  });
+
+  const averageBandwidth = computed(() => {
+    if (!rawData.value.length) return 0;
+    return (
+      rawData.value.reduce((sum, item) => sum + getBandwidthValue(item), 0) / rawData.value.length
+    );
+  });
+
+  const getProtocolStats = () => {
+    return rawData.value.reduce<Record<string, { total: number; count: number }>>((stats, item) => {
+      const protocol = item.protocol || 'unknown';
+      stats[protocol] ||= { total: 0, count: 0 };
+      stats[protocol].total += getBandwidthValue(item);
+      stats[protocol].count += 1;
+      return stats;
+    }, {});
+  };
+
+  const getProtocolUtilization = (protocol: string): number => {
+    const stats = getProtocolStats();
+    const protocolTotal = stats[protocol]?.total || 0;
+    const total = Object.values(stats).reduce((sum, item) => sum + item.total, 0);
+    return total ? (protocolTotal / total) * 100 : 0;
+  };
+
+  const getUtilization = (maxBandwidth: number): number => {
+    if (maxBandwidth <= 0) {
+      throw new Error('最大带宽必须大于 0');
+    }
+    return (currentBandwidth.value / maxBandwidth) * 100;
+  };
+
+  const getTimeWindow = (startTime: number, endTime: number) => {
+    return rawData.value.filter((item) => item.timestamp >= startTime && item.timestamp <= endTime);
+  };
+
+  const getWindowAverage = (startTime: number, endTime: number): number => {
+    const windowData = getTimeWindow(startTime, endTime);
+    if (!windowData.length) return 0;
+    return windowData.reduce((sum, item) => sum + getBandwidthValue(item), 0) / windowData.length;
+  };
+
+  const getWindowPeak = (startTime: number, endTime: number): number => {
+    const windowData = getTimeWindow(startTime, endTime);
+    return windowData.length ? Math.max(...windowData.map(getBandwidthValue)) : 0;
+  };
+
+  const getVariance = (): number => {
+    if (!rawData.value.length) return 0;
+    const average = averageBandwidth.value;
+    return (
+      rawData.value.reduce((sum, item) => {
+        const diff = getBandwidthValue(item) - average;
+        return sum + diff * diff;
+      }, 0) / rawData.value.length
+    );
+  };
+
+  const getStandardDeviation = (): number => Math.sqrt(getVariance());
+
+  const detectSpikes = (multiplier = 2) => {
+    const average = averageBandwidth.value;
+    const threshold = average * multiplier;
+    return rawData.value.filter((item) => getBandwidthValue(item) >= threshold);
+  };
+
+  const exportCSV = (): string => {
+    const lines = rawData.value.map(
+      (item) => `${item.timestamp},${getBandwidthValue(item)},${item.protocol || ''}`
+    );
+    return ['timestamp,bandwidth,protocol', ...lines].join('\n');
+  };
+
+  const exportJSON = (): string => JSON.stringify(rawData.value);
+
   // 监听数据变化，自动启动清理
   watch(
     () => rawData.value.length,
@@ -270,5 +378,23 @@ export function useBandwidthData() {
     clearData,
     startAutoClean,
     stopAutoClean,
+
+    bandwidthHistory,
+    currentBandwidth,
+    peakBandwidth,
+    averageBandwidth,
+    addDataPoint,
+    clear: clearData,
+    getProtocolStats,
+    getProtocolUtilization,
+    getUtilization,
+    getTimeWindow,
+    getWindowAverage,
+    getWindowPeak,
+    getVariance,
+    getStandardDeviation,
+    detectSpikes,
+    exportCSV,
+    exportJSON,
   };
 }

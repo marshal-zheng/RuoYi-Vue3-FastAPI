@@ -1,12 +1,10 @@
 // @ts-nocheck
+import { resolveRuntimeConfig } from '@/demo/runtime/mode';
 import { startBrowserMock } from './browser';
 import type { MockMode, MockScenario, MockStrategy, StartMockOptions } from './types';
 
 function resolveModeFromEnv(): MockMode {
-  const raw = import.meta.env.VITE_ENABLE_MOCK;
-  if (raw === 'pure') return 'pure';
-  if (raw === 'fallback') return 'fallback';
-  return 'off';
+  return resolveRuntimeConfig().mockMode;
 }
 
 function resolveScenario(strategy: MockStrategy, scenario?: MockScenario) {

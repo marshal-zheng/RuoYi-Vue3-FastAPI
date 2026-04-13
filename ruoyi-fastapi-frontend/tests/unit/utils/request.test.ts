@@ -271,7 +271,7 @@ describe('request utility', () => {
         }
       }
 
-      expect(error.response?.data.msg).toBe('Invalid input')
+      expect((error.response?.data as { msg?: string }).msg).toBe('Invalid input')
     })
 
     it('should provide default error message', () => {
@@ -285,7 +285,7 @@ describe('request utility', () => {
         }
       }
 
-      const defaultMsg = error.response?.data.msg || '请求失败'
+      const defaultMsg = (error.response?.data as { msg?: string }).msg || '请求失败'
       expect(defaultMsg).toBe('请求失败')
     })
   })

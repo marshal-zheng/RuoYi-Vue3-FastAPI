@@ -40,7 +40,7 @@
             placeholder="公告类型"
             clearable
             style="width: 200px"
-            @change="(v) => onFilterChange('noticeType', v, { handleRefresh, updateState })"
+            @change="(v: any) => onFilterChange('noticeType', v, { handleRefresh, updateState })"
           >
             <el-option
               v-for="dict in sys_notice_type"
@@ -115,9 +115,10 @@
 
 <script setup lang="ts" name="NoticeList">
 import { listNotice, getNotice, delNotice } from '@/api/system/notice';
+import { parseTime } from '@/utils/ruoyi';
 import NoticeDlg from './NoticeDlg.vue';
 
-const { proxy } = getCurrentInstance();
+const proxy = getCurrentInstance()?.proxy as any;
 const { sys_notice_status, sys_notice_type } = proxy.useDict(
   'sys_notice_status',
   'sys_notice_type'
@@ -126,8 +127,8 @@ const { sys_notice_status, sys_notice_type } = proxy.useDict(
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref(null);
-const noticeDlgRef = ref(null);
+const gridListRef = ref<any>(null);
+const noticeDlgRef = ref<any>(null);
 
 async function loadNoticeData(params: any) {
   try {

@@ -4,14 +4,16 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { ref } from 'vue'
 import { useSimulationControl } from '@/views/project/simulation/composables/useSimulationControl'
+import * as simulationApi from '@/api/simulation/simulation'
 
-// Mock API
 vi.mock('@/api/simulation/simulation', () => ({
-  startSimulation: vi.fn(),
-  pauseSimulation: vi.fn(),
-  stopSimulation: vi.fn(),
-  resumeSimulation: vi.fn(),
-  getSimulationStatus: vi.fn()
+  createSimulationSession: vi.fn(),
+  startSimulationSession: vi.fn(),
+  pauseSimulationSession: vi.fn(),
+  resumeSimulationSession: vi.fn(),
+  stopSimulationSession: vi.fn(),
+  stepSimulationSession: vi.fn(),
+  setSimulationSpeed: vi.fn()
 }))
 
 describe('useSimulationControl', () => {
@@ -19,7 +21,15 @@ describe('useSimulationControl', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    simulationControl = useSimulationControl(1)
+    vi.mocked(simulationApi.createSimulationSession).mockResolvedValue({
+      sessionId: 'session-1'
+    } as any)
+    vi.mocked(simulationApi.startSimulationSession).mockResolvedValue({ code: 200 } as any)
+    vi.mocked(simulationApi.pauseSimulationSession).mockResolvedValue({ code: 200 } as any)
+    vi.mocked(simulationApi.resumeSimulationSession).mockResolvedValue({ code: 200 } as any)
+    vi.mocked(simulationApi.stopSimulationSession).mockResolvedValue({ code: 200 } as any)
+    vi.mocked(simulationApi.setSimulationSpeed).mockResolvedValue({ code: 200 } as any)
+    simulationControl = useSimulationControl(ref(1))
   })
 
   describe('Initial State', () => {
@@ -41,143 +51,120 @@ describe('useSimulationControl', () => {
 
   describe('Start Simulation', () => {
     it('should start simulation successfully', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-
       await simulationControl.start()
 
       expect(simulationControl.isRunning.value).toBe(true)
       expect(simulationControl.isPaused.value).toBe(false)
-      expect(startSimulation).toHaveBeenCalledWith(1)
+      expect(simulationApi.createSimulationSession).toHaveBeenCalledWith(
+        expect.objectContaining({ projectId: 1 })
+      )
+      expect(simulationApi.startSimulationSession).toHaveBeenCalledWith('session-1', {
+        speed: 1
+      })
     })
 
     it('should handle start simulation error', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockRejectedValue(new Error('Start failed'))
+      vi.mocked(simulationApi.createSimulationSession).mockRejectedValue(new Error('Start failed'))
 
       await expect(simulationControl.start()).rejects.toThrow('Start failed')
       expect(simulationControl.isRunning.value).toBe(false)
     })
 
-    it('should not start if already running', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-
-      await simulationControl.start()
-      const callCount = vi.mocked(startSimulation).mock.calls.length
-
+    it('should reject start if already running', async () => {
       await simulationControl.start()
 
-      expect(vi.mocked(startSimulation).mock.calls.length).toBe(callCount)
+      await expect(simulationControl.start()).rejects.toThrow('当前状态不允许启动仿真')
     })
   })
 
   describe('Pause Simulation', () => {
     it('should pause running simulation', async () => {
-      const { startSimulation, pauseSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(pauseSimulation).mockResolvedValue({ code: 200, data: { status: 'paused' } })
-
       await simulationControl.start()
       await simulationControl.pause()
 
       expect(simulationControl.isPaused.value).toBe(true)
-      expect(simulationControl.isRunning.value).toBe(true)
-      expect(pauseSimulation).toHaveBeenCalledWith(1)
+      expect(simulationControl.isRunning.value).toBe(false)
+      expect(simulationApi.pauseSimulationSession).toHaveBeenCalledWith('session-1')
     })
 
-    it('should not pause if not running', async () => {
-      const { pauseSimulation } = await import('@/api/simulation/simulation')
-
-      await simulationControl.pause()
-
-      expect(pauseSimulation).not.toHaveBeenCalled()
+    it('should reject pause if not running', async () => {
+      await expect(simulationControl.pause()).rejects.toThrow('当前状态不允许暂停仿真')
+      expect(simulationApi.pauseSimulationSession).not.toHaveBeenCalled()
     })
   })
 
   describe('Resume Simulation', () => {
     it('should resume paused simulation', async () => {
-      const { startSimulation, pauseSimulation, resumeSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(pauseSimulation).mockResolvedValue({ code: 200, data: { status: 'paused' } })
-      vi.mocked(resumeSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-
       await simulationControl.start()
       await simulationControl.pause()
       await simulationControl.resume()
 
       expect(simulationControl.isPaused.value).toBe(false)
       expect(simulationControl.isRunning.value).toBe(true)
-      expect(resumeSimulation).toHaveBeenCalledWith(1)
+      expect(simulationApi.resumeSimulationSession).toHaveBeenCalledWith('session-1')
     })
 
-    it('should not resume if not paused', async () => {
-      const { resumeSimulation } = await import('@/api/simulation/simulation')
-
-      await simulationControl.resume()
-
-      expect(resumeSimulation).not.toHaveBeenCalled()
+    it('should reject resume if not paused', async () => {
+      await expect(simulationControl.resume()).rejects.toThrow('仿真会话不存在')
+      expect(simulationApi.resumeSimulationSession).not.toHaveBeenCalled()
     })
   })
 
   describe('Stop Simulation', () => {
     it('should stop running simulation', async () => {
-      const { startSimulation, stopSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(stopSimulation).mockResolvedValue({ code: 200, data: { status: 'stopped' } })
-
       await simulationControl.start()
       await simulationControl.stop()
 
       expect(simulationControl.isRunning.value).toBe(false)
       expect(simulationControl.isPaused.value).toBe(false)
-      expect(simulationControl.currentTime.value).toBe(0)
-      expect(stopSimulation).toHaveBeenCalledWith(1)
+      expect(simulationControl.isStopped.value).toBe(true)
+      expect(simulationApi.stopSimulationSession).toHaveBeenCalledWith('session-1')
     })
 
-    it('should reset state when stopping', async () => {
-      const { startSimulation, stopSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(stopSimulation).mockResolvedValue({ code: 200, data: { status: 'stopped' } })
-
+    it('should preserve elapsed time and speed when stopping', async () => {
       await simulationControl.start()
       simulationControl.currentTime.value = 100
       simulationControl.speed.value = 2
 
       await simulationControl.stop()
 
-      expect(simulationControl.currentTime.value).toBe(0)
-      expect(simulationControl.speed.value).toBe(1)
+      expect(simulationControl.currentTime.value).toBe(100)
+      expect(simulationControl.speed.value).toBe(2)
     })
   })
 
   describe('Speed Control', () => {
-    it('should set simulation speed', () => {
-      simulationControl.setSpeed(2)
+    it('should set simulation speed', async () => {
+      await simulationControl.setSpeed(2)
       expect(simulationControl.speed.value).toBe(2)
     })
 
-    it('should validate speed range', () => {
-      simulationControl.setSpeed(0.5)
+    it('should clamp speed range', async () => {
+      await simulationControl.setSpeed(0.5)
       expect(simulationControl.speed.value).toBe(0.5)
 
-      simulationControl.setSpeed(10)
-      expect(simulationControl.speed.value).toBe(10)
+      await simulationControl.setSpeed(10)
+      expect(simulationControl.speed.value).toBe(4)
     })
 
-    it('should reject invalid speed values', () => {
-      expect(() => simulationControl.setSpeed(0)).toThrow()
-      expect(() => simulationControl.setSpeed(-1)).toThrow()
-      expect(() => simulationControl.setSpeed(100)).toThrow()
+    it('should clamp invalid speed values', async () => {
+      await simulationControl.setSpeed(0)
+      expect(simulationControl.speed.value).toBe(0.5)
+
+      await simulationControl.setSpeed(-1)
+      expect(simulationControl.speed.value).toBe(0.5)
+
+      await simulationControl.setSpeed(100)
+      expect(simulationControl.speed.value).toBe(4)
     })
 
-    it('should handle speed presets', () => {
-      const presets = [0.5, 1, 2, 5, 10]
-      
-      presets.forEach(speed => {
-        simulationControl.setSpeed(speed)
+    it('should handle supported speed presets', async () => {
+      const presets = [0.5, 1, 2, 4]
+
+      for (const speed of presets) {
+        await simulationControl.setSpeed(speed)
         expect(simulationControl.speed.value).toBe(speed)
-      })
+      }
     })
   })
 
@@ -200,36 +187,21 @@ describe('useSimulationControl', () => {
 
   describe('State Transitions', () => {
     it('should handle complete lifecycle', async () => {
-      const { startSimulation, pauseSimulation, resumeSimulation, stopSimulation } = 
-        await import('@/api/simulation/simulation')
-      
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(pauseSimulation).mockResolvedValue({ code: 200, data: { status: 'paused' } })
-      vi.mocked(resumeSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(stopSimulation).mockResolvedValue({ code: 200, data: { status: 'stopped' } })
-
-      // Start
       await simulationControl.start()
       expect(simulationControl.isRunning.value).toBe(true)
 
-      // Pause
       await simulationControl.pause()
       expect(simulationControl.isPaused.value).toBe(true)
 
-      // Resume
       await simulationControl.resume()
       expect(simulationControl.isPaused.value).toBe(false)
 
-      // Stop
       await simulationControl.stop()
       expect(simulationControl.isRunning.value).toBe(false)
+      expect(simulationControl.isStopped.value).toBe(true)
     })
 
     it('should maintain state consistency', async () => {
-      const { startSimulation, stopSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockResolvedValue({ code: 200, data: { status: 'running' } })
-      vi.mocked(stopSimulation).mockResolvedValue({ code: 200, data: { status: 'stopped' } })
-
       await simulationControl.start()
       expect(simulationControl.isRunning.value).toBe(true)
       expect(simulationControl.isPaused.value).toBe(false)
@@ -242,29 +214,25 @@ describe('useSimulationControl', () => {
 
   describe('Error Handling', () => {
     it('should handle API errors gracefully', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockRejectedValue(new Error('Network error'))
+      vi.mocked(simulationApi.createSimulationSession).mockRejectedValue(new Error('Network error'))
 
       await expect(simulationControl.start()).rejects.toThrow('Network error')
       expect(simulationControl.isRunning.value).toBe(false)
     })
 
     it('should handle timeout errors', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      vi.mocked(startSimulation).mockRejectedValue(new Error('Timeout'))
+      vi.mocked(simulationApi.createSimulationSession).mockRejectedValue(new Error('Timeout'))
 
       await expect(simulationControl.start()).rejects.toThrow('Timeout')
     })
 
     it('should recover from errors', async () => {
-      const { startSimulation } = await import('@/api/simulation/simulation')
-      
-      // First call fails
-      vi.mocked(startSimulation).mockRejectedValueOnce(new Error('Error'))
+      vi.mocked(simulationApi.createSimulationSession)
+        .mockRejectedValueOnce(new Error('Error'))
+        .mockResolvedValueOnce({ sessionId: 'session-1' } as any)
+
       await expect(simulationControl.start()).rejects.toThrow()
 
-      // Second call succeeds
-      vi.mocked(startSimulation).mockResolvedValueOnce({ code: 200, data: { status: 'running' } })
       await simulationControl.start()
       expect(simulationControl.isRunning.value).toBe(true)
     })

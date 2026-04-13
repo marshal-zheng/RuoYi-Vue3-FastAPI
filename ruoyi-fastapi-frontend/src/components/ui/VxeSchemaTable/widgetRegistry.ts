@@ -23,10 +23,7 @@ export function resolveWidgetColumn(
   return resolver ? resolver(column) : {};
 }
 
-const mergeEditRender = (
-  base?: any,
-  override?: any
-): any => {
+const mergeEditRender = (base?: any, override?: any): any => {
   if (!base) return override;
   if (!override) return base;
   return {

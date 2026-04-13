@@ -260,7 +260,6 @@ import {
 import UserFormDialog from './components/UserFormDialog.vue';
 import UserImportDialog from './components/UserImportDialog.vue';
 
-
 const router = useRouter();
 const appStore = useAppStore();
 const { proxy } = getCurrentInstance();

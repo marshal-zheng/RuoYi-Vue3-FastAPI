@@ -32,8 +32,9 @@ describe('useEventTrigger', () => {
   })
 
   describe('Initialization', () => {
-    it('should initialize with empty event list', () => {
+    it('should initialize with empty event list', async () => {
       const { eventList, loading } = useEventTrigger(sessionId)
+      await Promise.resolve()
 
       expect(eventList.value).toEqual([])
       expect(loading.value).toBe(false)
@@ -260,7 +261,9 @@ describe('useEventTrigger', () => {
   describe('setEventEnabled', () => {
     it('should enable event', async () => {
       vi.mocked(simulationApi.updateEvent).mockResolvedValue({} as any)
-      vi.mocked(simulationApi.getEvents).mockResolvedValue({ data: [] } as any)
+      vi.mocked(simulationApi.getEvents).mockResolvedValue({
+        data: [{ eventId: 'event-1', name: 'Test', status: 'pending' }]
+      } as any)
 
       const { setEventEnabled, eventList } = useEventTrigger(sessionId)
 
@@ -273,7 +276,9 @@ describe('useEventTrigger', () => {
 
     it('should disable event', async () => {
       vi.mocked(simulationApi.updateEvent).mockResolvedValue({} as any)
-      vi.mocked(simulationApi.getEvents).mockResolvedValue({ data: [] } as any)
+      vi.mocked(simulationApi.getEvents).mockResolvedValue({
+        data: [{ eventId: 'event-1', name: 'Test', status: 'disabled' }]
+      } as any)
 
       const { setEventEnabled, eventList } = useEventTrigger(sessionId)
 

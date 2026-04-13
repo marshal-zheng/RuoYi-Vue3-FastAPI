@@ -415,6 +415,7 @@ export function useVxeTableValidation<T = any>(options: UseVxeTableValidationOpt
             if (errorMsg) {
               return new Error(errorMsg);
             }
+            return undefined;
           };
         }
 

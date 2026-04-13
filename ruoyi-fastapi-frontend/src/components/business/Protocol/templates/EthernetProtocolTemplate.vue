@@ -150,7 +150,7 @@ const fieldSchemaColumns = computed(() => [
     field: '__actions',
     title: '操作',
     width: 80,
-    fixed: 'right',
+    fixed: 'right' as const,
     slot: 'actions',
   },
 ]);

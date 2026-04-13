@@ -1,4 +1,5 @@
 import Cookies from 'js-cookie';
+import { defineStore } from 'pinia';
 
 interface SidebarState {
   opened: boolean;

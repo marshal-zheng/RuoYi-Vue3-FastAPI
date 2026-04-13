@@ -7,6 +7,7 @@ import { ref, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'v
 import { useSimulationWebSocket } from './useSimulationWebSocket';
 
 interface Message {
+  [key: string]: any;
   timestamp: number;
   sendTimestamp?: number;
   receiveTimestamp?: number;
@@ -47,6 +48,7 @@ interface FilterCondition {
 }
 
 interface BandwidthData {
+  [key: string]: any;
   timestamp: number;
   protocolType?: string;
   nodeId?: string;
@@ -54,7 +56,8 @@ interface BandwidthData {
 }
 
 interface AlarmData {
-  alarmId: string;
+  [key: string]: any;
+  alarmId?: string;
   level?: string;
   type?: string;
   timestamp: number;
@@ -326,12 +329,13 @@ export function extractIncrementalData<T>(data: T[], lastIndex: number): Increme
  * @param {Ref<string>} sessionId - 会话ID
  * @returns {Object} 数据管理方法和状态
  */
-export function useSimulationData(sessionId: Ref<string | null>) {
+export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
   // 原始数据
   const bandwidthData: Ref<BandwidthData[]> = ref([]);
   const messageData: Ref<Message[]> = ref([]);
   const alarmData: Ref<AlarmData[]> = ref([]);
   const faultEventData: Ref<FaultEventData[]> = ref([]);
+  const statistics: Ref<Record<string, any>> = ref({});
 
   // 过滤条件
   const messageFilter: Ref<MessageFilter> = ref({});
@@ -452,6 +456,7 @@ export function useSimulationData(sessionId: Ref<string | null>) {
     messageData.value = [];
     alarmData.value = [];
     faultEventData.value = [];
+    statistics.value = {};
     lastMessageIndex.value = 0;
     lastBandwidthIndex.value = 0;
     lastAlarmIndex.value = 0;
@@ -492,6 +497,154 @@ export function useSimulationData(sessionId: Ref<string | null>) {
     const result = extractIncrementalData(faultEventData.value, lastFaultEventIndex.value);
     lastFaultEventIndex.value = result.newIndex;
     return result.newData;
+  }
+
+  function addMessage(message: Partial<Message> & Record<string, any>) {
+    const nextMessage = message as Message;
+    const latest = messageData.value[messageData.value.length - 1];
+    messageData.value.push(nextMessage);
+    if (latest && (nextMessage.timestamp || 0) < (latest.timestamp || 0)) {
+      messageData.value.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+    }
+    if (messageData.value.length >= 1500) {
+      messageData.value.splice(0, messageData.value.length - 1000);
+    }
+  }
+
+  function addAlarm(alarm: Partial<AlarmData> & Record<string, any>) {
+    alarmData.value = cleanupOldData(
+      [...alarmData.value, alarm as AlarmData],
+      DATA_LIMITS.MAX_ALARMS
+    );
+  }
+
+  function updateStatistics(nextStatistics: Record<string, any>) {
+    statistics.value = { ...(nextStatistics || {}) };
+  }
+
+  function getMessagesByProtocol(protocol: string) {
+    return messageData.value.filter(
+      (message) => (message.protocol || message.protocolType) === protocol
+    );
+  }
+
+  function getMessagesByTimeRange(startTime: number, endTime: number) {
+    return messageData.value.filter(
+      (message) => message.timestamp >= startTime && message.timestamp <= endTime
+    );
+  }
+
+  function getLatestMessages(limit: number) {
+    return [...messageData.value]
+      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))
+      .slice(0, limit);
+  }
+
+  function getAlarmsByLevel(level: string) {
+    return alarmData.value.filter((alarm) => alarm.level === level);
+  }
+
+  function getAlarmsByType(type: string) {
+    return alarmData.value.filter((alarm) => alarm.type === type);
+  }
+
+  function getAlarmCounts() {
+    return alarmData.value.reduce<Record<string, number>>((counts, alarm) => {
+      const level = alarm.level || 'unknown';
+      counts[level] = (counts[level] || 0) + 1;
+      return counts;
+    }, {});
+  }
+
+  function clearAcknowledgedAlarms() {
+    alarmData.value = alarmData.value.filter((alarm) => !alarm.acknowledged);
+  }
+
+  function getMessageRate() {
+    const total = Number(statistics.value.total_messages || statistics.value.total || 0);
+    const duration = Number(statistics.value.duration || 0);
+    return duration ? total / duration : 0;
+  }
+
+  function getProtocolDistribution() {
+    const source = (statistics.value.messages_by_protocol || {}) as Record<string, unknown>;
+    const total = Object.values(source).reduce<number>((sum, value) => sum + Number(value || 0), 0);
+    if (!total) return {};
+    return Object.entries(source).reduce<Record<string, number>>((result, [protocol, count]) => {
+      result[protocol] = (Number(count || 0) / total) * 100;
+      return result;
+    }, {});
+  }
+
+  function getAverageLatency() {
+    const latencies = messageData.value
+      .map((message) => {
+        const sent = message.sent_time ?? message.sendTimestamp;
+        const received = message.received_time ?? message.receiveTimestamp;
+        return sent !== undefined && received !== undefined
+          ? Number(received) - Number(sent)
+          : null;
+      })
+      .filter((latency): latency is number => latency !== null);
+
+    return latencies.length
+      ? latencies.reduce((sum, latency) => sum + latency, 0) / latencies.length
+      : 0;
+  }
+
+  function detectPattern(protocol: string) {
+    const messages = getMessagesByProtocol(protocol).sort(
+      (a, b) => (a.timestamp || 0) - (b.timestamp || 0)
+    );
+    if (messages.length < 3) {
+      return { isPeriodic: false, period: 0 };
+    }
+    const intervals = messages.slice(1).map((message, index) => {
+      return (message.timestamp || 0) - (messages[index].timestamp || 0);
+    });
+    const period = intervals.reduce((sum, interval) => sum + interval, 0) / intervals.length;
+    const isPeriodic = intervals.every((interval) => Math.abs(interval - period) <= period * 0.1);
+    return { isPeriodic, period };
+  }
+
+  function getCommunicationPairs() {
+    return messageData.value.reduce<Record<string, number>>((pairs, message) => {
+      const source = message.source || message.senderNodeId || message.senderNodeName;
+      const target = message.target || message.receiverNodeId || message.receiverNodeName;
+      if (!source || !target) return pairs;
+      const key = `${source}->${target}`;
+      pairs[key] = (pairs[key] || 0) + 1;
+      return pairs;
+    }, {});
+  }
+
+  function exportMessagesCSV() {
+    const lines = messageData.value.map((message) => {
+      return [
+        message.id || '',
+        message.timestamp || '',
+        message.protocol || message.protocolType || '',
+        message.source || message.senderNodeId || '',
+        message.target || message.receiverNodeId || '',
+      ].join(',');
+    });
+    return ['id,timestamp,protocol,source,target', ...lines].join('\n');
+  }
+
+  function exportAlarmsJSON() {
+    return JSON.stringify(alarmData.value);
+  }
+
+  function exportSummary() {
+    return { ...statistics.value };
+  }
+
+  function clearMessages() {
+    messageData.value = [];
+  }
+
+  function clearAlarms() {
+    alarmData.value = [];
   }
 
   // 监听 WebSocket 数据
@@ -550,7 +703,10 @@ export function useSimulationData(sessionId: Ref<string | null>) {
     // 数据
     bandwidthData,
     messageData,
+    messages: messageData,
     alarmData,
+    alarms: alarmData,
+    statistics,
     statusData: wsManager.statusData,
     filteredMessages,
     filteredAlarms,
@@ -569,6 +725,27 @@ export function useSimulationData(sessionId: Ref<string | null>) {
     setMessageFilter,
     setAlarmFilter,
     clearData,
+    clear: clearData,
+    addMessage,
+    addAlarm,
+    updateStatistics,
+    getMessagesByProtocol,
+    getMessagesByTimeRange,
+    getLatestMessages,
+    getAlarmsByLevel,
+    getAlarmsByType,
+    getAlarmCounts,
+    clearAcknowledgedAlarms,
+    getMessageRate,
+    getProtocolDistribution,
+    getAverageLatency,
+    detectPattern,
+    getCommunicationPairs,
+    exportMessagesCSV,
+    exportAlarmsJSON,
+    exportSummary,
+    clearMessages,
+    clearAlarms,
     getNewMessages,
     getNewBandwidth,
     getNewAlarms,

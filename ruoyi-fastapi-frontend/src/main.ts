@@ -3,11 +3,9 @@ import { createApp } from 'vue';
 import Cookies from 'js-cookie';
 import { setupVXETable } from '@/plugins/vxe-table';
 
-import ZXUI from '@zxio/zxui';
+import ZXUI from '@zxio/zxui'
 import '@zxio/theme-default/theme.css'
 import '@zxio/zxui/style'
-
-import '@zxio/zxui/theme-chalk/dark/css-vars.css'
 
 // Iconify 图标库
 import '@iconify/iconify';
@@ -17,7 +15,6 @@ import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import 'element-plus/theme-chalk/dark/css-vars.css';
 import locale from 'element-plus/es/locale/lang/zh-cn';
-// import '@zxio/zxui/theme-chalk/index.css';
 
 import '@/assets/styles/theme.module.css'; // 统一主题源文件
 import '@/assets/styles/index.css'; // global css
@@ -41,6 +38,7 @@ import elementIcons from '@/components/ui/SvgIcon/svgicon';
 import './permission'; // permission control
 
 import { useDict } from '@/utils/dict';
+import { resolveRuntimeConfig, type RuntimeConfig } from '@/demo/runtime/mode';
 import {
   parseTime,
   resetForm,
@@ -113,14 +111,42 @@ setupVXETable(app);
 
 startDevMenuHotSync();
 
-// 启动应用（支持 MSW Mock）
-async function bootstrap() {
-  const mockMode = import.meta.env.VITE_ENABLE_MOCK ?? 'off';
-  if (mockMode !== 'off') {
-    const { setupBrowserMocks } = await import('./mocks');
-    await setupBrowserMocks();
-    console.log(`[MSW] Mock 已启动，模式: ${mockMode}`);
+function clearDemoRuntimeDevtools() {
+  if (typeof window === 'undefined') {
+    return;
   }
+
+  delete (window as Window & { __DEMO_RUNTIME__?: unknown }).__DEMO_RUNTIME__;
+}
+
+async function setupRuntimeMocks(runtimeConfig: RuntimeConfig) {
+  clearDemoRuntimeDevtools();
+
+  if (runtimeConfig.mode === 'fallback') {
+    const { setupBrowserMocks } = await import('./mocks');
+    await setupBrowserMocks({
+      strategy: 'fallback',
+      scenario: 'default',
+    });
+    // eslint-disable-next-line no-console
+    console.info('[Runtime] fallback 模式已启动：真实接口优先，404/网络异常回退到 Mock。');
+    return;
+  }
+
+  if (runtimeConfig.mode === 'demo-offline') {
+    const { setupDemoOfflineRuntime } = await import('@/demo/runtime/bootstrap');
+    await setupDemoOfflineRuntime(runtimeConfig);
+    // eslint-disable-next-line no-console
+    console.info(
+      `[Runtime] demo-offline 模式已启动：纯前端演示数据，场景 ${runtimeConfig.scenarioId}。`
+    );
+  }
+}
+
+// 启动应用（支持 real / fallback / demo-offline 三种运行模式）
+async function bootstrap() {
+  const runtimeConfig = resolveRuntimeConfig();
+  await setupRuntimeMocks(runtimeConfig);
   app.mount('#app');
 }
 

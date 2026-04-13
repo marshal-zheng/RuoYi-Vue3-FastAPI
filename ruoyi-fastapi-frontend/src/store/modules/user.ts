@@ -1,4 +1,5 @@
 import { login, logout, getInfo } from '@/api/login';
+import { defineStore } from 'pinia';
 import { clearSecurityTokens, getToken, setCsrfToken, setToken } from '@/utils/auth';
 import { isHttp, isEmpty } from '@/utils/validate';
 import { clampBcryptPassword } from '@/utils/password';
@@ -156,3 +157,4 @@ const useUserStore = defineStore('user', {
 });
 
 export default useUserStore;
+export { useUserStore };

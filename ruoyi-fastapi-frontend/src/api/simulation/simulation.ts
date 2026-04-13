@@ -1,48 +1,37 @@
 import request from '@/utils/request';
 
+type SessionId = string | number;
+
 /**
  * 创建仿真会话
  * @param data - { projectId, versionId }
  */
 export function createSimulationSession(data: Record<string, any>) {
-  return request({
-    url: '/simulation/sessions',
-    method: 'post',
-    data: data,
-  });
+  return request.post('/simulation/sessions', data);
 }
 
 /**
  * 启动仿真会话
  * @param sessionId - 会话ID
  */
-export function startSimulationSession(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/start`,
-    method: 'post',
-  });
+export function startSimulationSession(sessionId: SessionId, data?: Record<string, any>) {
+  return request.post(`/simulation/sessions/${sessionId}/start`, data);
 }
 
 /**
  * 停止仿真会话
  * @param sessionId - 会话ID
  */
-export function stopSimulationSession(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/stop`,
-    method: 'post',
-  });
+export function stopSimulationSession(sessionId: SessionId) {
+  return request.post(`/simulation/sessions/${sessionId}/stop`);
 }
 
 /**
  * 获取仿真会话状态
  * @param sessionId - 会话ID
  */
-export function getSimulationStatus(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/status`,
-    method: 'get',
-  });
+export function getSimulationStatus(sessionId: SessionId) {
+  return request.get(`/simulation/sessions/${sessionId}/status`);
 }
 
 /**
@@ -50,11 +39,12 @@ export function getSimulationStatus(sessionId: string) {
  * @param sessionId - 会话ID
  * @param limit - 限制数量
  */
-export function getSimulationMessages(sessionId: string, limit: number = 100) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/messages`,
-    method: 'get',
-    params: { limit },
+export function getSimulationMessages(
+  sessionId: SessionId,
+  limitOrParams: number | Record<string, any> = 100
+) {
+  return request.get(`/simulation/sessions/${sessionId}/messages`, {
+    params: typeof limitOrParams === 'number' ? { limit: limitOrParams } : limitOrParams,
   });
 }
 
@@ -63,10 +53,8 @@ export function getSimulationMessages(sessionId: string, limit: number = 100) {
  * @param sessionId - 会话ID
  * @param portId - 端口ID（可选）
  */
-export function getSimulationBandwidth(sessionId: string, portId: string | null = null) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/bandwidth`,
-    method: 'get',
+export function getSimulationBandwidth(sessionId: SessionId, portId: string | null = null) {
+  return request.get(`/simulation/sessions/${sessionId}/bandwidth`, {
     params: portId ? { portId } : {},
   });
 }
@@ -75,11 +63,10 @@ export function getSimulationBandwidth(sessionId: string, portId: string | null 
  * 获取仿真告警数据
  * @param sessionId - 会话ID
  */
-export function getSimulationAlarms(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/alarms`,
-    method: 'get',
-  });
+export function getSimulationAlarms(sessionId: SessionId, params?: Record<string, any>) {
+  return params
+    ? request.get(`/simulation/sessions/${sessionId}/alarms`, { params })
+    : request.get(`/simulation/sessions/${sessionId}/alarms`);
 }
 
 /**
@@ -87,22 +74,15 @@ export function getSimulationAlarms(sessionId: string) {
  * @param sessionId - 会话ID
  * @param data - { exportFormat, dataType }
  */
-export function exportSimulationData(sessionId: string, data: Record<string, any>) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/export`,
-    method: 'post',
-    data: data,
-  });
+export function exportSimulationData(sessionId: SessionId, data: Record<string, any>) {
+  return request.post(`/simulation/sessions/${sessionId}/export`, data);
 }
 
 /**
  * 获取可用的数据填充策略列表
  */
 export function getFillStrategies() {
-  return request({
-    url: '/simulation/strategies',
-    method: 'get',
-  });
+  return request.get('/simulation/strategies');
 }
 
 // ==================== 新增仿真控制接口 ====================
@@ -111,32 +91,24 @@ export function getFillStrategies() {
  * 暂停仿真会话
  * @param sessionId - 会话ID
  */
-export function pauseSimulationSession(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/pause`,
-    method: 'post',
-  });
+export function pauseSimulationSession(sessionId: SessionId) {
+  return request.post(`/simulation/sessions/${sessionId}/pause`);
 }
 
 /**
  * 继续仿真会话
  * @param sessionId - 会话ID
  */
-export function resumeSimulationSession(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/resume`,
-    method: 'post',
-  });
+export function resumeSimulationSession(sessionId: SessionId) {
+  return request.post(`/simulation/sessions/${sessionId}/resume`);
 }
 
 /**
  * 单步执行仿真
  * @param sessionId - 会话ID
  */
-export function stepSimulationSession(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/step`,
-    method: 'post',
+export function stepSimulationSession(sessionId: SessionId) {
+  return request.post(`/simulation/sessions/${sessionId}/step`, undefined, {
     headers: {
       repeatSubmit: false,
     },
@@ -148,12 +120,8 @@ export function stepSimulationSession(sessionId: string) {
  * @param sessionId - 会话ID
  * @param speed - 速度倍率 (0.5-4.0)
  */
-export function setSimulationSpeed(sessionId: string, speed: number) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/speed`,
-    method: 'post',
-    data: { speed },
-  });
+export function setSimulationSpeed(sessionId: SessionId, speed: number) {
+  return request.post(`/simulation/sessions/${sessionId}/speed`, { speed });
 }
 
 // ==================== 故障注入接口 ====================
@@ -163,14 +131,10 @@ export function setSimulationSpeed(sessionId: string, speed: number) {
  * @param sessionId - 会话ID
  * @param data - 故障配置
  */
-export function injectFault(sessionId: string, data: Record<string, any>) {
-  return request({
-    url: `/simulation/faults`,
-    method: 'post',
-    data: {
-      sessionId,
-      ...data,
-    },
+export function injectFault(sessionId: SessionId, data: Record<string, any>) {
+  return request.post('/simulation/faults', {
+    sessionId,
+    ...data,
   });
 }
 
@@ -179,10 +143,8 @@ export function injectFault(sessionId: string, data: Record<string, any>) {
  * @param sessionId - 会话ID
  * @param faultId - 故障ID
  */
-export function clearFault(sessionId: string, faultId: string) {
-  return request({
-    url: `/simulation/faults/${faultId}`,
-    method: 'delete',
+export function clearFault(sessionId: SessionId, faultId: string) {
+  return request.delete(`/simulation/faults/${faultId}`, {
     params: { sessionId },
   });
 }
@@ -191,21 +153,16 @@ export function clearFault(sessionId: string, faultId: string) {
  * 清除指定会话的所有故障
  * @param sessionId - 会话ID
  */
-export function clearAllFaults(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/faults`,
-    method: 'delete',
-  });
+export function clearAllFaults(sessionId: SessionId) {
+  return request.delete(`/simulation/sessions/${sessionId}/faults`);
 }
 
 /**
  * 获取故障列表
  * @param sessionId - 会话ID
  */
-export function getFaults(sessionId: string) {
-  return request({
-    url: `/simulation/faults`,
-    method: 'get',
+export function getFaults(sessionId: SessionId) {
+  return request.get('/simulation/faults', {
     params: { sessionId },
   });
 }
@@ -217,12 +174,8 @@ export function getFaults(sessionId: string) {
  * @param sessionId - 会话ID
  * @param data - 事件配置
  */
-export function createEvent(sessionId: string, data: Record<string, any>) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/events`,
-    method: 'post',
-    data,
-  });
+export function createEvent(sessionId: SessionId, data: Record<string, any>) {
+  return request.post(`/simulation/sessions/${sessionId}/events`, data);
 }
 
 /**
@@ -231,12 +184,8 @@ export function createEvent(sessionId: string, data: Record<string, any>) {
  * @param eventId - 事件ID
  * @param data - 事件配置
  */
-export function updateEvent(sessionId: string, eventId: string, data: Record<string, any>) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/events/${eventId}`,
-    method: 'put',
-    data,
-  });
+export function updateEvent(sessionId: SessionId, eventId: string, data: Record<string, any>) {
+  return request.put(`/simulation/sessions/${sessionId}/events/${eventId}`, data);
 }
 
 /**
@@ -244,11 +193,8 @@ export function updateEvent(sessionId: string, eventId: string, data: Record<str
  * @param sessionId - 会话ID
  * @param eventId - 事件ID
  */
-export function deleteEvent(sessionId: string, eventId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/events/${eventId}`,
-    method: 'delete',
-  });
+export function deleteEvent(sessionId: SessionId, eventId: string) {
+  return request.delete(`/simulation/sessions/${sessionId}/events/${eventId}`);
 }
 
 /**
@@ -256,20 +202,44 @@ export function deleteEvent(sessionId: string, eventId: string) {
  * @param sessionId - 会话ID
  * @param eventId - 事件ID
  */
-export function triggerEvent(sessionId: string, eventId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/events/${eventId}/trigger`,
-    method: 'post',
-  });
+export function triggerEvent(sessionId: SessionId, eventIdOrData: string | Record<string, any>) {
+  if (typeof eventIdOrData !== 'string') {
+    return request.post(`/simulation/${sessionId}/event`, eventIdOrData);
+  }
+  return request.post(`/simulation/sessions/${sessionId}/events/${eventIdOrData}/trigger`);
 }
 
 /**
  * 获取事件列表
  * @param sessionId - 会话ID
  */
-export function getEvents(sessionId: string) {
-  return request({
-    url: `/simulation/sessions/${sessionId}/events`,
-    method: 'get',
+export function getEvents(sessionId: SessionId) {
+  return request.get(`/simulation/sessions/${sessionId}/events`);
+}
+
+export function startSimulation(projectId: number | string, config: Record<string, any> = {}) {
+  return request.post('/simulation/start', {
+    project_id: projectId,
+    config,
   });
+}
+
+export const pauseSimulation = pauseSimulationSession;
+export const resumeSimulation = resumeSimulationSession;
+export const stopSimulation = stopSimulationSession;
+
+export function getSimulationStatistics(sessionId: SessionId) {
+  return request.get(`/simulation/${sessionId}/statistics`);
+}
+
+export function exportSimulationResults(sessionId: SessionId, format: string) {
+  return request.get(`/simulation/${sessionId}/export`, {
+    params: { format },
+    responseType: 'blob',
+  });
+}
+
+export function connectSimulationWebSocket(sessionId: SessionId) {
+  const base = import.meta.env.VITE_APP_WS_API || '';
+  return new WebSocket(`${base}/simulation/${sessionId}/ws`);
 }

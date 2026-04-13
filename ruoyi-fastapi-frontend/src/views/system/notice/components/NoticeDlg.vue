@@ -44,7 +44,7 @@ import { useDialog } from '@zxio/zxui';
 import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
-const { proxy } = getCurrentInstance();
+const proxy = getCurrentInstance()?.proxy as any;
 
 // 延迟加载字典数据
 const sys_notice_status = ref<any[]>([]);

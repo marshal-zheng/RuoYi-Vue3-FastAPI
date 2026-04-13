@@ -3,7 +3,16 @@
  *
  * 管理仿真会话的生命周期和状态
  */
-import { ref, reactive, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue';
+import {
+  ref,
+  reactive,
+  computed,
+  watch,
+  onUnmounted,
+  isRef,
+  type Ref,
+  type ComputedRef,
+} from 'vue';
 import {
   createSimulationSession,
   startSimulationSession,
@@ -102,7 +111,13 @@ export function isValidTransition(
  * @param {Ref<number|undefined>} versionId - 版本ID
  * @returns {Object} 仿真控制方法和状态
  */
-export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<number | undefined>) {
+export function useSimulationControl(
+  projectId: Ref<number> | number,
+  versionId?: Ref<number | undefined> | number
+) {
+  const projectIdRef = isRef(projectId) ? projectId : ref(projectId);
+  const versionIdRef = isRef(versionId) ? versionId : ref(versionId);
+
   // 会话ID
   const sessionId: Ref<string | null> = ref(null);
 
@@ -132,6 +147,28 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
   const isIdle: ComputedRef<boolean> = computed(
     () => simulationState.status === SimulationStatus.IDLE
   );
+  const currentTime = computed({
+    get: () => simulationState.elapsedTime,
+    set: (value: number) => {
+      simulationState.elapsedTime = value;
+    },
+  });
+  const speed = computed({
+    get: () => simulationState.speed,
+    set: (value: number) => {
+      simulationState.speed = value;
+    },
+  });
+  const formattedTime = computed(() => {
+    const totalMilliseconds = Math.max(0, simulationState.elapsedTime) * 1000;
+    const hours = Math.floor(totalMilliseconds / 3600000);
+    const minutes = Math.floor((totalMilliseconds % 3600000) / 60000);
+    const seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+    const milliseconds = Math.floor(totalMilliseconds % 1000);
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(
+      seconds
+    ).padStart(2, '0')}.${String(milliseconds).padStart(3, '0')}`;
+  });
 
   // 最近一次前端主动设置速度的时间戳（用于防止状态回写冲掉本地设置）
   const lastSpeedSetAt: Ref<number> = ref(0);
@@ -169,8 +206,8 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
    */
   async function createSession(options: SessionOptions = {}): Promise<string> {
     const response = await createSimulationSession({
-      projectId: projectId.value,
-      versionId: versionId?.value,
+      projectId: projectIdRef.value,
+      versionId: versionIdRef?.value,
       ...options,
     });
 
@@ -307,6 +344,13 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     }
   }
 
+  function updateTime(time: number) {
+    if (time < 0) {
+      throw new Error('仿真时间不能为负数');
+    }
+    simulationState.elapsedTime = time;
+  }
+
   /**
    * 同步后端状态（WS 状态推送）
    */
@@ -377,6 +421,9 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     isPaused,
     isStopped,
     isIdle,
+    currentTime,
+    speed,
+    formattedTime,
 
     // 方法
     createSession,
@@ -386,6 +433,7 @@ export function useSimulationControl(projectId: Ref<number>, versionId?: Ref<num
     stop,
     step,
     setSpeed,
+    updateTime,
     syncStatus,
     reset,
     updateStats,

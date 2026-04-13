@@ -226,7 +226,7 @@ export function useFaultInjection(sessionId: Ref<string | null>) {
   const faultsByTarget: ComputedRef<Record<string, Fault[]>> = computed(() => {
     const grouped: Record<string, Fault[]> = {};
     faults.value.forEach((fault) => {
-      const key = fault.targetKey || fault.targetId || fault.target;
+      const key = fault.targetKey || fault.targetId;
       if (!key) return;
       if (!grouped[key]) grouped[key] = [];
       grouped[key].push(fault);

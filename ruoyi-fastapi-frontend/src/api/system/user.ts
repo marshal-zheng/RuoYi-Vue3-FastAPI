@@ -153,3 +153,25 @@ export function deptTreeSelect() {
     method: 'get',
   });
 }
+
+export function login(data: Record<string, any>) {
+  return request({
+    url: '/login',
+    method: 'post',
+    data,
+  });
+}
+
+export function logout() {
+  return request({
+    url: '/logout',
+    method: 'post',
+  });
+}
+
+export const getUserInfo = getUserProfile;
+export const updateProfile = updateUserProfile;
+
+export function changePassword(data: { old_password?: string; new_password?: string }) {
+  return updateUserPwd(data.old_password || '', data.new_password || '');
+}

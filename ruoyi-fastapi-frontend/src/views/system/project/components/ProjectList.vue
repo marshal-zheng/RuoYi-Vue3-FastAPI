@@ -30,7 +30,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             style="width: 240px"
-            @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+            @change="(v: any) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
           />
         </div>
         <div class="zx-grid-form-bar__right">
@@ -121,15 +121,15 @@
 
 <script setup lang="ts" name="ProjectList">
 import { listProject, getProject, delProject } from '@/api/system/project';
-import { serializeDateRange } from '@/utils/ruoyi';
+import { parseTime, serializeDateRange } from '@/utils/ruoyi';
 import ProjectDlg from './ProjectDlg.vue';
 
-const { proxy } = getCurrentInstance();
+const proxy = getCurrentInstance()?.proxy as any;
 
 const ids = ref<number[]>([]);
 const multiple = ref(true);
-const gridListRef = ref(null);
-const projectDlgRef = ref(null);
+const gridListRef = ref<any>(null);
+const projectDlgRef = ref<any>(null);
 const detailOpen = ref(false);
 const detailData = ref<any>({});
 

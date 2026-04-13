@@ -1,3 +1,5 @@
+import { defineStore } from 'pinia';
+
 interface DictEntry {
   key: string;
   value: any;

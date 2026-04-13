@@ -2,7 +2,7 @@
   <vxe-table ref="tableRef" v-bind="normalizedTableProps" v-on="tableListeners">
     <SchemaColumn
       v-for="column in normalizedColumns"
-      :key="column.field || column.type"
+      :key="String(column.field || column.type || '')"
       :column="column"
     />
   </vxe-table>
@@ -100,8 +100,8 @@ const SchemaColumn = defineComponent({
       ? useDataSource(columnProps.column.dataSource)
       : null;
 
-    const resolvedColumn = computed(() => {
-      const column = { ...columnProps.column };
+    const resolvedColumn = computed<VxeSchemaColumn>(() => {
+      const column: VxeSchemaColumn = { ...columnProps.column };
 
       if (dataSourceCtx) {
         const baseEdit = column.editRender || { name: 'select' };
@@ -122,26 +122,28 @@ const SchemaColumn = defineComponent({
 
     return () => {
       const column = resolvedColumn.value;
+      const RecursiveSchemaColumn = resolveComponent('SchemaColumn') as any;
 
       const children = column.children?.map((child, idx) =>
-        h(SchemaColumn, {
+        h(RecursiveSchemaColumn, {
           column: child,
           key: child.field || child.type || idx,
         })
       );
 
+      const slotName = column.slot;
       const defaultSlot =
         children && children.length
           ? () => children
-          : column.slot
-            ? (scope: any) => parentSlots?.[column.slot]?.({ ...scope, dataSource: dataSourceCtx })
+          : slotName
+            ? (scope: any) => parentSlots?.[slotName]?.({ ...scope, dataSource: dataSourceCtx })
             : column.render
               ? (scope: any) => column.render?.({ ...scope, dataSource: dataSourceCtx })
               : undefined;
 
-      const headerSlot = column.headerSlot
-        ? (scope: any) =>
-            parentSlots?.[column.headerSlot]?.({ ...scope, dataSource: dataSourceCtx })
+      const headerSlotName = column.headerSlot;
+      const headerSlot = headerSlotName
+        ? (scope: any) => parentSlots?.[headerSlotName]?.({ ...scope, dataSource: dataSourceCtx })
         : undefined;
 
       return h(resolveComponent('vxe-column') as any, column, {
@@ -152,7 +154,10 @@ const SchemaColumn = defineComponent({
   },
 });
 
-function normalizeColumns(columns: VxeSchemaColumn[], widgets?: VxeWidgetResolverMap) {
+function normalizeColumns(
+  columns: VxeSchemaColumn[],
+  widgets?: VxeWidgetResolverMap
+): VxeSchemaColumn[] {
   return columns.map((column) => {
     const widgetColumn = resolveWidgetColumn(column, widgets);
     const merged = mergeColumnOptions(widgetColumn, column);

@@ -42,6 +42,12 @@ const emit = defineEmits<{ success: [data?: any] }>();
 
 const formRef = ref<FormInstance>();
 
+interface CategoryForm {
+  device_category_id: number | null;
+  name: string;
+  remark: string;
+}
+
 const formRules = {
   name: [
     { required: true, message: '请输入分类名称', trigger: 'blur' },
@@ -50,8 +56,10 @@ const formRules = {
   remark: [{ max: 500, message: '备注不能超过 500 个字符', trigger: 'blur' }],
 };
 
-const { state, dialogProps, dialogEvents, open, close } = useDialog<any>({
-  title: (data) => (data?.device_category_id ? '修改设备分类' : '添加设备分类'),
+let state = {} as { data: CategoryForm };
+
+const dialogController = useDialog<CategoryForm>({
+  title: (data: CategoryForm) => (data?.device_category_id ? '修改设备分类' : '添加设备分类'),
   width: '600px',
   okText: computed(() => (state.data.device_category_id ? '保存' : '创建')),
   formRef,
@@ -63,8 +71,8 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog<any>({
     name: '',
     remark: '',
   }),
-  onConfirm: async (data) => {
-    const submitData: any = {
+  onConfirm: async (data: CategoryForm) => {
+    const submitData = {
       device_category_id: data.device_category_id,
       name: data.name,
       remark: data.remark,
@@ -78,8 +86,11 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog<any>({
     emit('success', res);
     return res;
   },
-  onConfirmError: (_e) => {},
+  onConfirmError: (_e: unknown) => {},
 });
+
+state = dialogController.state;
+const { dialogProps, dialogEvents, open, close } = dialogController;
 
 const openDialog = async (payload?: { id?: number }) => {
   if (payload?.id) {

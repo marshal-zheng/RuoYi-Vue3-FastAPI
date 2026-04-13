@@ -4,6 +4,12 @@ declare module '*.vue' {
   export default component;
 }
 
+declare module '@wangeditor/editor-for-vue' {
+  import type { DefineComponent } from 'vue';
+  export const Editor: DefineComponent<Record<string, any>, Record<string, any>, any>;
+  export const Toolbar: DefineComponent<Record<string, any>, Record<string, any>, any>;
+}
+
 // 声明组件模块
 declare module '@/components/SvgIcon' {
   import type { DefineComponent } from 'vue';

@@ -119,17 +119,11 @@ export function selectDictLabel(datas: DictItem[], value: string | number): stri
   if (value === undefined) {
     return '';
   }
-  var actions: string[] = [];
-  Object.keys(datas).some((key) => {
-    if (datas[Number(key)].value == '' + value) {
-      actions.push(datas[Number(key)].label);
-      return true;
-    }
-  });
-  if (actions.length === 0) {
-    actions.push(String(value));
+  const matched = datas.find((item) => item.value == '' + value);
+  if (matched) {
+    return matched.label;
   }
-  return actions.join('');
+  return String(value);
 }
 
 // 回显数据字典（字符串数组）
@@ -141,25 +135,17 @@ export function selectDictLabels(
   if (value === undefined || (Array.isArray(value) && value.length === 0)) {
     return '';
   }
-  if (Array.isArray(value)) {
-    value = value.join(',');
-  }
-  var actions: string[] = [];
-  var currentSeparator = undefined === separator ? ',' : separator;
-  var temp = value.split(currentSeparator);
-  Object.keys(value.split(currentSeparator)).some((val) => {
-    var match = false;
-    Object.keys(datas).some((key) => {
-      if (datas[Number(key)].value == '' + temp[Number(val)]) {
-        actions.push(datas[Number(key)].label + currentSeparator);
-        match = true;
-      }
-    });
-    if (!match) {
-      actions.push(temp[Number(val)] + currentSeparator);
-    }
-  });
-  return actions.join('').substring(0, actions.join('').length - 1);
+  const currentSeparator = separator ?? ',';
+  const values = Array.isArray(value)
+    ? value
+    : value.split(value.includes(currentSeparator) ? currentSeparator : ',');
+
+  return values
+    .map((item) => {
+      const matched = datas.find((dict) => dict.value == '' + item);
+      return matched ? matched.label : item;
+    })
+    .join(currentSeparator);
 }
 
 // 字符串格式化(%s )
@@ -284,11 +270,11 @@ export function tansParams(params: any): string {
 }
 
 // 返回项目路径
-export function getNormalPath(p: string): string {
-  if (p.length === 0 || !p || p == 'undefined') {
+export function getNormalPath(p?: string): string {
+  if (!p || p == 'undefined') {
     return '';
   }
-  let res = p.replace('//', '/');
+  let res = p.replace(/\/+/g, '/');
   if (res[res.length - 1] === '/') {
     return res.slice(0, res.length - 1);
   }

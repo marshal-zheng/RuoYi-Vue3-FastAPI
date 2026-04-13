@@ -27,7 +27,7 @@
             placeholder="部门状态"
             clearable
             style="width: 200px"
-            @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
+            @change="(v: any) => onFilterChange('status', v, { handleRefresh, updateState })"
           >
             <el-option
               v-for="dict in sys_normal_disable"
@@ -105,15 +105,16 @@
 
 <script setup lang="ts" name="DeptList">
 import { listDept, getDept, delDept } from '@/api/system/dept';
+import { parseTime } from '@/utils/ruoyi';
 import DeptDlg from './DeptDlg.vue';
 
-const { proxy } = getCurrentInstance();
+const proxy = getCurrentInstance()?.proxy as any;
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
-const gridListRef = ref(null);
-const deptDlgRef = ref(null);
+const gridListRef = ref<any>(null);
+const deptDlgRef = ref<any>(null);
 
 async function loadDeptData(params: any) {
   const query = {

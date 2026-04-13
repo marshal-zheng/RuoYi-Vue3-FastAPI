@@ -229,7 +229,7 @@ describe('Permission Utils', () => {
 
     it('should handle case-sensitive role matching', () => {
       vi.mocked(useUserStore).mockReturnValue({
-        roles: ['admin'],
+        roles: ['editor'],
       } as any)
 
       const result = checkRole(['ADMIN'])
@@ -334,10 +334,10 @@ describe('Permission Utils', () => {
 
     it('should handle multiple role checks in sequence', () => {
       vi.mocked(useUserStore).mockReturnValue({
-        roles: ['admin', 'editor'],
+        roles: ['editor', 'operator'],
       } as any)
 
-      expect(checkRole(['admin'])).toBe(true)
+      expect(checkRole(['operator'])).toBe(true)
       expect(checkRole(['editor'])).toBe(true)
       expect(checkRole(['viewer'])).toBe(false)
     })

@@ -82,6 +82,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd())
   const { VITE_APP_ENV, VITE_ZXUI_LOCAL, VITE_ZXIO_REPO_ROOT } = env
   const apiPrefix = normalizeApiPrefix(env.VITE_APP_BASE_API)
+  const buildOutDir = mode === 'demo-offline' ? 'dist-demo-offline' : 'dist'
   
   // 测试环境配置
   const isTest = mode === 'test' || process.env.NODE_ENV === 'test'
@@ -150,7 +151,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     },
     // 构建配置
     build: {
-      outDir: 'dist',
+      outDir: buildOutDir,
       emptyOutDir: true
     }
   }

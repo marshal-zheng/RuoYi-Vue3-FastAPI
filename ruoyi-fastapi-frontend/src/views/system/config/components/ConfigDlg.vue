@@ -71,7 +71,7 @@ const { state, dialogProps, dialogEvents, open } = useDialog<ConfigForm>({
       dictLoaded = true;
     }
   },
-  onConfirm: async (data) => {
+  onConfirm: async (data: ConfigForm) => {
     if (data.configId) {
       await updateConfig(data);
     } else {

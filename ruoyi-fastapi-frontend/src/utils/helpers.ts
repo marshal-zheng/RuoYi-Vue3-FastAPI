@@ -546,11 +546,14 @@ export function findChildrenWithProvide(
   if (Array.isArray(vnode)) {
     return vnode.map((child) => findChildrenWithProvide(key, child)).flat(1);
   } else if (vnode.suspense) {
-    return findChildrenWithProvide(key, vnode.ssContent!);
+    const suspenseContent = (vnode as typeof vnode & { ssContent?: VNodeChild }).ssContent;
+    return findChildrenWithProvide(key, suspenseContent);
   } else if (Array.isArray(vnode.children)) {
     return vnode.children.map((child) => findChildrenWithProvide(key, child)).flat(1);
   } else if (vnode.component) {
-    if (Object.getOwnPropertySymbols(vnode.component.provides).includes(key as symbol)) {
+    const provides = (vnode.component as ComponentInternalInstance & { provides?: object })
+      .provides;
+    if (provides && Object.getOwnPropertySymbols(provides).includes(key as symbol)) {
       return [vnode.component];
     } else if (vnode.component.subTree) {
       return findChildrenWithProvide(key, vnode.component.subTree).flat(1);

@@ -53,7 +53,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.pauseSimulation(1)
 
-      expect(request.post).toHaveBeenCalledWith('/simulation/1/pause')
+      expect(request.post).toHaveBeenCalledWith('/simulation/sessions/1/pause')
       expect(result.data.status).toBe('paused')
     })
   })
@@ -69,7 +69,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.resumeSimulation(1)
 
-      expect(request.post).toHaveBeenCalledWith('/simulation/1/resume')
+      expect(request.post).toHaveBeenCalledWith('/simulation/sessions/1/resume')
       expect(result.data.status).toBe('running')
     })
   })
@@ -89,7 +89,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.stopSimulation(1)
 
-      expect(request.post).toHaveBeenCalledWith('/simulation/1/stop')
+      expect(request.post).toHaveBeenCalledWith('/simulation/sessions/1/stop')
       expect(result.data.status).toBe('stopped')
       expect(result.data.duration).toBe(100.5)
     })
@@ -111,7 +111,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.getSimulationStatus(1)
 
-      expect(request.get).toHaveBeenCalledWith('/simulation/1/status')
+      expect(request.get).toHaveBeenCalledWith('/simulation/sessions/1/status')
       expect(result.data.status).toBe('running')
       expect(result.data.current_time).toBe(50.5)
     })
@@ -134,7 +134,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.setSimulationSpeed(1, 2.0)
 
-      expect(request.post).toHaveBeenCalledWith('/simulation/1/speed', { speed: 2.0 })
+      expect(request.post).toHaveBeenCalledWith('/simulation/sessions/1/speed', { speed: 2.0 })
       expect(result.data.speed).toBe(2.0)
     })
 
@@ -229,7 +229,7 @@ describe('Simulation API', () => {
         end_time: 10
       })
 
-      expect(request.get).toHaveBeenCalledWith('/simulation/1/messages', {
+      expect(request.get).toHaveBeenCalledWith('/simulation/sessions/1/messages', {
         params: { start_time: 0, end_time: 10 }
       })
       expect(result.data.messages.length).toBe(2)
@@ -273,7 +273,7 @@ describe('Simulation API', () => {
 
       const result = await simulationApi.getSimulationAlarms(1)
 
-      expect(request.get).toHaveBeenCalledWith('/simulation/1/alarms')
+      expect(request.get).toHaveBeenCalledWith('/simulation/sessions/1/alarms')
       expect(result.data.alarms.length).toBe(2)
     })
 
@@ -361,7 +361,7 @@ describe('Simulation API', () => {
         data: JSON.stringify({ type: 'message', data: {} })
       }
 
-      ws.onmessage(mockEvent)
+      ws.onmessage(mockEvent as MessageEvent)
 
       expect(messageHandler).toHaveBeenCalled()
     })
