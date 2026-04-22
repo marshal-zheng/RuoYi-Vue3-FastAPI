@@ -17,7 +17,7 @@
         <div class="absolute inset-0 collapse-shine opacity-0"></div>
         <div class="relative z-10 flex items-center justify-center gap-1.5">
           <zx-icon
-            :name="allCollapsed ? 'ri:expand-left-right-line' : 'ri:contract-left-right-line'"
+            :name="allCollapsed ? 'Expand' : 'Fold'"
             class="text-[16px] transition-transform duration-300 collapse-icon"
           />
           <span class="text-[11px] font-bold tracking-widest collapse-text">
@@ -85,7 +85,7 @@
             v-if="isItemDisabled(item.key)"
             class="absolute top-1 right-1 w-4 h-4 rounded-full bg-slate-600/70 flex items-center justify-center z-20 border border-cyan-300/30"
           >
-            <zx-icon name="ri:lock-line" class="text-[10px] text-cyan-200/80" />
+            <zx-icon name="Lock" class="text-[10px] text-cyan-200/80" />
           </div>
 
           <!-- 徽章 -->

@@ -23,9 +23,9 @@ export async function setupBrowserMocks(options: StartMockOptions = {}) {
   const scenario = resolveScenario(strategy, options.scenario);
 
   return startBrowserMock({
+    ...options,
     strategy,
     scenario,
-    onUnhandledRequest: options.onUnhandledRequest,
   });
 }
 

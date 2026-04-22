@@ -56,8 +56,8 @@ function createMenuMeta(menu: DemoMenu): DemoRouteMeta {
   const rawMeta = (menu.meta ?? {}) as Record<string, unknown>;
   return {
     ...rawMeta,
-    title: String(rawMeta.title ?? menu.name),
-    icon: rawMeta.icon as string | undefined,
+    title: String(rawMeta.title ?? menu.menuName ?? menu.name),
+    icon: (menu.icon as string | undefined) ?? (rawMeta.icon as string | undefined),
     noCache: Boolean(rawMeta.noCache ?? false),
     link: (rawMeta.link as string | null | undefined) ?? (isHttpPath(menu.path) ? menu.path : null),
   };
@@ -65,7 +65,7 @@ function createMenuMeta(menu: DemoMenu): DemoRouteMeta {
 
 function createRoute(menu: DemoMenu, children: DemoRouteRecord[]): DemoRouteRecord {
   const route: DemoRouteRecord = {
-    name: menu.name,
+    name: String(menu.routeName ?? menu.name),
     path: normalizeTopLevelPath(menu),
     hidden: menu.visible === '1',
     component:
@@ -129,6 +129,7 @@ export class DemoSystemService {
     const menus = await this.systemRepository.listMenus();
     const accessibleMenus = menus.filter(
       (menu) =>
+        menu.menuType !== 'F' &&
         menu.status === '0' &&
         (roleKeys.includes('admin') ||
           menu.roles.length === 0 ||

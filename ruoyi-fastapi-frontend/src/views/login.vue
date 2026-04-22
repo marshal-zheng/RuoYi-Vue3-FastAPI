@@ -9,7 +9,12 @@
           <div class="flex justify-center items-center h-full absolute inset-0 p-8">
             <div class="text-center">
               <div class="login-illustration">
-                <img src="@/assets/images/login-box-bg.svg" alt="登录插图" class="w-80 mx-auto" />
+                <div
+                  class="login-illustration-svg w-80 mx-auto"
+                  role="img"
+                  aria-label="登录插图"
+                  v-html="loginIllustration"
+                ></div>
               </div>
               <div class="text-3xl text-white font-bold mb-4">{{ `欢迎使用${displayTitle}` }}</div>
             </div>
@@ -32,7 +37,7 @@
                   >
                     <template #prefix>
                       <ZxIcon
-                        icon="mdi:account"
+                        icon="User"
                         :size="16"
                         color="var(--el-input-icon-color)"
                         class-name="login-input-icon"
@@ -52,7 +57,7 @@
                   >
                     <template #prefix>
                       <ZxIcon
-                        icon="mdi:lock-outline"
+                        icon="Lock"
                         :size="16"
                         color="var(--el-input-icon-color)"
                         class-name="login-input-icon"
@@ -60,7 +65,7 @@
                     </template>
                     <template #suffix>
                       <ZxIcon
-                        :icon="showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'"
+                        :icon="showPassword ? 'View' : 'Hide'"
                         :size="16"
                         color="var(--el-input-icon-color)"
                         class-name="login-input-icon login-input-icon--action"
@@ -82,7 +87,7 @@
                     >
                       <template #prefix>
                         <ZxIcon
-                          icon="mdi:shield-check-outline"
+                          icon="CircleCheck"
                           :size="16"
                           color="var(--el-input-icon-color)"
                           class-name="login-input-icon"
@@ -128,6 +133,7 @@ import { getCodeImg } from '@/api/login';
 import Cookies from 'js-cookie';
 import useUserStore from '@/store/modules/user';
 import Logo from '@/layout/components/Sidebar/Logo.vue';
+import loginIllustration from '@/assets/images/login-box-bg.svg?raw';
 
 const title = import.meta.env.VITE_APP_TITLE;
 const displayTitle = computed(() => {
@@ -187,7 +193,7 @@ function handleLogin() {
       // 调用action的登录方法
       userStore
         .login(loginForm.value)
-        .then(() => {
+        .then(async () => {
           const query = route.query;
           const otherQueryParams = Object.keys(query).reduce((acc, cur) => {
             if (cur !== 'redirect') {
@@ -195,14 +201,20 @@ function handleLogin() {
             }
             return acc;
           }, {});
-          router.push({ path: redirect.value || '/', query: otherQueryParams });
+          try {
+            await router.push({ path: redirect.value || '/', query: otherQueryParams });
+          } catch {
+            loading.value = false;
+          }
         })
         .catch(() => {
-          loading.value = false;
           // 重新获取验证码
           if (captchaEnabled.value) {
             getCode();
           }
+        })
+        .finally(() => {
+          loading.value = false;
         });
     }
   });
@@ -291,5 +303,11 @@ getCookie();
 .login-form :deep(.el-input.is-active .el-input__wrapper),
 .login-form :deep(.el-input__wrapper.is-focus) {
   box-shadow: 0 0 0 1px var(--el-color-primary) inset;
+}
+
+.login-illustration-svg :deep(svg) {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 </style>

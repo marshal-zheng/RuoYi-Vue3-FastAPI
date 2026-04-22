@@ -69,18 +69,18 @@ router.beforeEach(
           // 判断当前用户是否已拉取完user_info信息
           useUserStore()
             .getInfo()
+            .then(() => permissionStore.generateRoutes())
             .then(() => {
               isRelogin.show = false;
-              permissionStore.generateRoutes().then(() => {
-                const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
-                if (redirectPath) {
-                  next({ path: redirectPath, replace: true });
-                } else {
-                  next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
-                }
-              });
+              const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
+              if (redirectPath) {
+                next({ path: redirectPath, replace: true });
+              } else {
+                next({ ...to, replace: true }); // hack方法 确保addRoutes已完成
+              }
             })
             .catch((err: unknown) => {
+              isRelogin.show = false;
               useUserStore()
                 .logOut({ silentSuccess: true, silentError: true })
                 .then(() => {

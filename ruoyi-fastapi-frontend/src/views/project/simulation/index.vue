@@ -462,11 +462,11 @@ const dockState = reactive({
 });
 
 const dockItems = [
-  { key: 'bandwidth', label: '带宽', icon: 'ri:activity-line' },
-  { key: 'alarm', label: '告警', icon: 'ri:alarm-warning-line' },
-  { key: 'timing', label: '时序', icon: 'ri:bar-chart-2-line' },
-  { key: 'fault', label: '故障', icon: 'ri:bug-line' },
-  { key: 'injection', label: '注入', icon: 'ri:settings-3-line' },
+  { key: 'bandwidth', label: '带宽', icon: 'TrendCharts' },
+  { key: 'alarm', label: '告警', icon: 'Bell' },
+  { key: 'timing', label: '时序', icon: 'Timer' },
+  { key: 'fault', label: '故障', icon: 'Warning' },
+  { key: 'injection', label: '注入', icon: 'MagicStick' },
 ];
 const activeDockKeys = computed(() => {
   const keys = [];

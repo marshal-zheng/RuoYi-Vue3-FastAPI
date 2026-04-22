@@ -1,6 +1,7 @@
-import { createWebHistory, createRouter } from 'vue-router';
+import { createRouter } from 'vue-router';
 /* Layout */
 import Layout from '@/layout';
+import { createAppHistory } from '@/router/history';
 
 /**
  * Note: 路由配置项
@@ -168,7 +169,7 @@ export const dynamicRoutes = [
         path: 'index/:projectId(\\d+)',
         component: () => import('@/views/project/detail'),
         name: 'ProjectDetail',
-        meta: { title: '工程详情', activeMenu: '/project/project' },
+        meta: { title: '工程详情', activeMenu: '/project/detail-entry' },
       },
     ],
   },
@@ -196,7 +197,7 @@ export const dynamicRoutes = [
         path: 'index/:projectId(\\d+)',
         component: () => import('@/views/project/topo'),
         name: 'ProjectTopo',
-        meta: { title: '拓扑设计', activeMenu: '/project/project' },
+        meta: { title: '拓扑设计', activeMenu: '/project/topology-entry' },
       },
     ],
   },
@@ -210,14 +211,14 @@ export const dynamicRoutes = [
         path: 'index/:projectId(\\d+)',
         component: () => import('@/views/project/simulation/index.vue'),
         name: 'ProjectSimulation',
-        meta: { title: '版本仿真', activeMenu: '/project/project' },
+        meta: { title: '版本仿真', activeMenu: '/project/simulation-entry' },
       },
     ],
   },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createAppHistory(),
   routes: constantRoutes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

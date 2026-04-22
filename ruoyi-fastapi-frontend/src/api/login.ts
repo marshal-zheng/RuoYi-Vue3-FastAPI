@@ -3,12 +3,12 @@ import { clampBcryptPassword } from '@/utils/password';
 
 // 登录方法
 export function login(username: string, password: string, code: string, uuid: string) {
-  const data = {
+  const data = new URLSearchParams({
     username,
     password: clampBcryptPassword(password),
     code,
     uuid,
-  };
+  });
   return request({
     url: '/login',
     headers: {
@@ -17,7 +17,7 @@ export function login(username: string, password: string, code: string, uuid: st
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     method: 'post',
-    data: data,
+    data,
   });
 }
 

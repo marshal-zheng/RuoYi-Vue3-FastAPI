@@ -19,6 +19,32 @@ export function getDemoRequestToken(request: Request): string | undefined {
 }
 
 export async function readDemoRequestBody<T extends object>(request: Request): Promise<T> {
+  const contentType = request.headers.get('content-type')?.toLowerCase() ?? '';
+
+  if (contentType.includes('application/json')) {
+    try {
+      return (await request.clone().json()) as T;
+    } catch {
+      // 交给后续兜底解析处理
+    }
+  }
+
+  if (
+    contentType.includes('application/x-www-form-urlencoded') ||
+    contentType.includes('multipart/form-data')
+  ) {
+    try {
+      const formData = await request.clone().formData();
+      const entries = Array.from(formData.entries());
+
+      if (entries.length > 0) {
+        return Object.fromEntries(entries) as T;
+      }
+    } catch {
+      // 某些运行时下 formData() 不可用时，继续尝试 text() 解析
+    }
+  }
+
   const text = await request.clone().text();
 
   if (!text.trim()) {
@@ -29,6 +55,10 @@ export async function readDemoRequestBody<T extends object>(request: Request): P
 
   if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
     return JSON.parse(trimmed) as T;
+  }
+
+  if (!trimmed.includes('=') && !trimmed.includes('&')) {
+    return {} as T;
   }
 
   const params = new URLSearchParams(trimmed);

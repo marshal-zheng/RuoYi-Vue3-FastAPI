@@ -28,6 +28,7 @@ import XflowDAG from '@/components/business/Dag/index.vue';
 import { NodeEditDrawer } from './components';
 import { listDevice } from '@/api/device/device';
 import { saveProjectTopology, getProjectTopology } from '@/api/project/topology';
+import { isDemoOfflineMode, resolveRuntimeConfig } from '@/demo/runtime/mode';
 import { ElMessage } from 'element-plus';
 import { getPortColor } from '@/constants/portColor';
 
@@ -200,7 +201,9 @@ async function loadDeviceList() {
     operators.value = devicesWithPorts;
   } catch (error) {
     void error;
-    ElMessage.error('加载设备列表失败，请稍后重试');
+    if (!isDemoOfflineMode(resolveRuntimeConfig().mode)) {
+      ElMessage.error('加载设备列表失败，请稍后重试');
+    }
     operators.value = [];
   } finally {
     loading.value = false;

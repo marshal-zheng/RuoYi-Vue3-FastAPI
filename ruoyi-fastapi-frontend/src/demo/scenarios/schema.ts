@@ -29,6 +29,15 @@ export interface DemoRole {
   roleName: string;
   menuIds: number[];
   permissions: string[];
+  roleSort?: number;
+  dataScope?: string;
+  menuCheckStrictly?: boolean;
+  deptCheckStrictly?: boolean;
+  deptIds?: number[];
+  status?: '0' | '1';
+  remark?: string;
+  createTime?: string;
+  updateTime?: string;
 }
 
 export interface DemoPermission {
@@ -41,6 +50,8 @@ export interface DemoMenu {
   menuId: number;
   parentId: number;
   name: string;
+  menuName?: string;
+  routeName?: string;
   path: string;
   component?: string;
   redirect?: string;
@@ -49,24 +60,90 @@ export interface DemoMenu {
   status: '0' | '1';
   roles: string[];
   perms?: string;
+  menuType?: 'M' | 'C' | 'F';
+  icon?: string;
+  isFrame?: '0' | '1';
+  isCache?: '0' | '1';
+  query?: string;
+  createTime?: string;
+  updateTime?: string;
+  remark?: string;
   meta?: DemoRecord;
+}
+
+export interface DemoDictType {
+  dictId: number;
+  dictName: string;
+  dictType: string;
+  status: '0' | '1';
+  remark?: string;
+  createTime?: string;
+  updateTime?: string;
 }
 
 export interface DemoDictData {
   id: number;
+  dictId?: number;
   dictType: string;
   dictLabel: string;
   dictValue: string;
   dictSort: number;
   status: '0' | '1';
+  cssClass?: string;
+  listClass?: string;
+  isDefault?: 'Y' | 'N';
+  remark?: string;
+  createTime?: string;
+  updateTime?: string;
 }
 
 export interface DemoDepartment {
   deptId: number;
   parentId: number;
+  ancestors?: string;
   deptName: string;
   orderNum: number;
   status: '0' | '1';
+  leader?: string;
+  phone?: string;
+  email?: string;
+  createTime?: string;
+  updateTime?: string;
+}
+
+export interface DemoPost {
+  postId: number;
+  postCode: string;
+  postName: string;
+  postSort: number;
+  status: '0' | '1';
+  remark?: string;
+  createTime?: string;
+  updateTime?: string;
+}
+
+export interface DemoSystemUser {
+  userId: number;
+  deptId: number;
+  userName: string;
+  nickName: string;
+  userType?: string;
+  email?: string;
+  phonenumber?: string;
+  sex?: '0' | '1' | '2';
+  avatar?: string;
+  password?: string;
+  status: '0' | '1';
+  delFlag?: '0' | '2';
+  loginIp?: string;
+  loginDate?: string;
+  createBy?: string;
+  createTime?: string;
+  updateBy?: string;
+  updateTime?: string;
+  remark?: string;
+  roleIds: number[];
+  postIds: number[];
 }
 
 export interface DemoProject {
@@ -166,8 +243,11 @@ export interface DemoScenarioPackage {
   };
   system: {
     menus: DemoMenu[];
+    dictTypes: DemoDictType[];
     dicts: DemoDictData[];
     departments: DemoDepartment[];
+    posts: DemoPost[];
+    users: DemoSystemUser[];
   };
   project: {
     projects: DemoProject[];
@@ -218,40 +298,56 @@ export function describeDemoScenarioPackage(
 export function validateDemoScenarioPackage(
   scenarioPackage: DemoScenarioPackage
 ): DemoScenarioPackage {
-  if (scenarioPackage.schemaVersion !== DEMO_SCENARIO_SCHEMA_VERSION) {
+  const normalizedScenarioPackage: DemoScenarioPackage = {
+    ...scenarioPackage,
+    system: {
+      ...scenarioPackage.system,
+      menus: scenarioPackage.system?.menus ?? [],
+      dictTypes: scenarioPackage.system?.dictTypes ?? [],
+      dicts: scenarioPackage.system?.dicts ?? [],
+      departments: scenarioPackage.system?.departments ?? [],
+      posts: scenarioPackage.system?.posts ?? [],
+      users: scenarioPackage.system?.users ?? [],
+    },
+  };
+
+  if (normalizedScenarioPackage.schemaVersion !== DEMO_SCENARIO_SCHEMA_VERSION) {
     throw new Error(
-      `Unsupported demo scenario schema version "${scenarioPackage.schemaVersion}". Expected ${DEMO_SCENARIO_SCHEMA_VERSION}.`
+      `Unsupported demo scenario schema version "${normalizedScenarioPackage.schemaVersion}". Expected ${DEMO_SCENARIO_SCHEMA_VERSION}.`
     );
   }
 
-  if (!hasText(scenarioPackage.scenario?.id)) {
+  if (!hasText(normalizedScenarioPackage.scenario?.id)) {
     throw new Error('Invalid demo scenario package: scenario.id is required.');
   }
 
-  if (!hasText(scenarioPackage.scenario?.version)) {
+  if (!hasText(normalizedScenarioPackage.scenario?.version)) {
     throw new Error('Invalid demo scenario package: scenario.version is required.');
   }
 
-  if (!hasText(scenarioPackage.scenario?.fingerprint)) {
+  if (!hasText(normalizedScenarioPackage.scenario?.fingerprint)) {
     throw new Error('Invalid demo scenario package: scenario.fingerprint is required.');
   }
 
-  ensureArray(scenarioPackage.auth?.accounts, 'auth.accounts');
-  ensureArray(scenarioPackage.auth?.roles, 'auth.roles');
-  ensureArray(scenarioPackage.auth?.permissions, 'auth.permissions');
-  ensureArray(scenarioPackage.system?.menus, 'system.menus');
-  ensureArray(scenarioPackage.system?.dicts, 'system.dicts');
-  ensureArray(scenarioPackage.system?.departments, 'system.departments');
-  ensureArray(scenarioPackage.project?.projects, 'project.projects');
-  ensureArray(scenarioPackage.project?.versions, 'project.versions');
-  ensureArray(scenarioPackage.project?.topologies, 'project.topologies');
-  ensureArray(scenarioPackage.simulation?.sessions, 'simulation.sessions');
-  ensureArray(scenarioPackage.simulation?.messages, 'simulation.messages');
-  ensureArray(scenarioPackage.simulation?.bandwidth, 'simulation.bandwidth');
-  ensureArray(scenarioPackage.simulation?.alarms, 'simulation.alarms');
-  ensureArray(scenarioPackage.simulation?.faults, 'simulation.faults');
-  ensureArray(scenarioPackage.simulation?.events, 'simulation.events');
-  ensureArray(scenarioPackage.simulation?.streamFrames, 'simulation.streamFrames');
+  ensureArray(normalizedScenarioPackage.auth?.accounts, 'auth.accounts');
+  ensureArray(normalizedScenarioPackage.auth?.roles, 'auth.roles');
+  ensureArray(normalizedScenarioPackage.auth?.permissions, 'auth.permissions');
+  ensureArray(normalizedScenarioPackage.system?.menus, 'system.menus');
+  ensureArray(normalizedScenarioPackage.system?.dictTypes, 'system.dictTypes');
+  ensureArray(normalizedScenarioPackage.system?.dicts, 'system.dicts');
+  ensureArray(normalizedScenarioPackage.system?.departments, 'system.departments');
+  ensureArray(normalizedScenarioPackage.system?.posts, 'system.posts');
+  ensureArray(normalizedScenarioPackage.system?.users, 'system.users');
+  ensureArray(normalizedScenarioPackage.project?.projects, 'project.projects');
+  ensureArray(normalizedScenarioPackage.project?.versions, 'project.versions');
+  ensureArray(normalizedScenarioPackage.project?.topologies, 'project.topologies');
+  ensureArray(normalizedScenarioPackage.simulation?.sessions, 'simulation.sessions');
+  ensureArray(normalizedScenarioPackage.simulation?.messages, 'simulation.messages');
+  ensureArray(normalizedScenarioPackage.simulation?.bandwidth, 'simulation.bandwidth');
+  ensureArray(normalizedScenarioPackage.simulation?.alarms, 'simulation.alarms');
+  ensureArray(normalizedScenarioPackage.simulation?.faults, 'simulation.faults');
+  ensureArray(normalizedScenarioPackage.simulation?.events, 'simulation.events');
+  ensureArray(normalizedScenarioPackage.simulation?.streamFrames, 'simulation.streamFrames');
 
-  return scenarioPackage;
+  return normalizedScenarioPackage;
 }

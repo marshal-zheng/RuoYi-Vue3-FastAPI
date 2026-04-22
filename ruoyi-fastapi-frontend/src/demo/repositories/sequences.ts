@@ -1,6 +1,15 @@
 import type { DemoOfflineDb } from '@/demo/db';
 
-export type DemoSequenceName = 'projects' | 'projectVersions' | 'dicts' | 'menus' | 'departments';
+export type DemoSequenceName =
+  | 'projects'
+  | 'projectVersions'
+  | 'roles'
+  | 'menus'
+  | 'dictTypes'
+  | 'dicts'
+  | 'departments'
+  | 'posts'
+  | 'users';
 
 export async function nextDemoSequence(
   db: DemoOfflineDb,

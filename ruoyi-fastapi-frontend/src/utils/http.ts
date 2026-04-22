@@ -18,6 +18,7 @@ import { h } from 'vue';
 import { getCsrfToken, getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
 import cache from '@/plugins/cache';
+import { isHashRouteMode } from '@/router/history';
 import useUserStore from '@/store/modules/user';
 
 // 重新登录状态
@@ -29,9 +30,24 @@ type ReloginMode = 'auto' | 'link';
 const RELOGIN_MODE: ReloginMode = 'link';
 const RELOGIN_DELAY = 1200;
 
+const readCurrentSpaPath = (): string => {
+  if (typeof window === 'undefined') {
+    return '/';
+  }
+  if (isHashRouteMode()) {
+    const hashPath = window.location.hash.replace(/^#/, '');
+    return hashPath || '/';
+  }
+  return `${location.pathname}${location.search}${location.hash}` || '/';
+};
+
+const isLoginRoute = (): boolean => {
+  const currentPath = readCurrentSpaPath();
+  return currentPath === '/login' || currentPath.startsWith('/login?');
+};
+
 const buildLoginRedirectUrl = (): string => {
-  const current = `${location.pathname}${location.search}${location.hash}`;
-  const redirect = encodeURIComponent(current || '/');
+  const redirect = encodeURIComponent(readCurrentSpaPath());
   return `/login?redirect=${redirect}`;
 };
 
@@ -52,7 +68,7 @@ const shouldSkipRelogin = (config: Record<string, unknown> | undefined): boolean
 
 const triggerRelogin = (message: string): void => {
   if (isRelogin.show) return;
-  if (location.pathname === '/login') return;
+  if (isLoginRoute()) return;
 
   isRelogin.show = true;
   const loginUrl = buildLoginRedirectUrl();

@@ -6,11 +6,51 @@ export function getRequestToken(request: Request): string | undefined {
 }
 
 export async function readJsonBody<T = any>(request: Request): Promise<T | undefined> {
+  const contentType = request.headers.get('content-type')?.toLowerCase() ?? '';
+
+  if (contentType.includes('application/json')) {
+    try {
+      return await request.clone().json();
+    } catch (error) {
+      return undefined;
+    }
+  }
+
+  if (
+    contentType.includes('application/x-www-form-urlencoded') ||
+    contentType.includes('multipart/form-data')
+  ) {
+    try {
+      const formData = await request.clone().formData();
+      const entries = Array.from(formData.entries());
+      if (entries.length > 0) {
+        return Object.fromEntries(entries) as T;
+      }
+    } catch (error) {
+      // fallback to text parsing below
+    }
+  }
+
   try {
-    return await request.clone().json();
+    const text = await request.clone().text();
+    const trimmed = text.trim();
+
+    if (!trimmed) {
+      return undefined;
+    }
+
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      return JSON.parse(trimmed) as T;
+    }
+
+    if (trimmed.includes('=') || trimmed.includes('&')) {
+      return Object.fromEntries(new URLSearchParams(trimmed).entries()) as T;
+    }
   } catch (error) {
     return undefined;
   }
+
+  return undefined;
 }
 
 export function getSearchParams(request: Request): URLSearchParams {

@@ -4,8 +4,10 @@ import type {
   DemoAccount,
   DemoDepartment,
   DemoDictData,
+  DemoDictType,
   DemoMenu,
   DemoPermission,
+  DemoPost,
   DemoProject,
   DemoProjectVersion,
   DemoRole,
@@ -16,6 +18,7 @@ import type {
   DemoSimulationFrame,
   DemoSimulationMessage,
   DemoSimulationSession,
+  DemoSystemUser,
   DemoTopology,
 } from '@/demo/scenarios';
 
@@ -57,8 +60,11 @@ export class DemoOfflineDb extends Dexie {
   roles!: Table<DemoRole, number>;
   permissions!: Table<DemoPermission, string>;
   menus!: Table<DemoMenu, number>;
+  dictTypes!: Table<DemoDictType, number>;
   dicts!: Table<DemoDictData, number>;
   departments!: Table<DemoDepartment, number>;
+  posts!: Table<DemoPost, number>;
+  systemUsers!: Table<DemoSystemUser, number>;
   authSessions!: Table<DemoAuthSession, string>;
   csrfTokens!: Table<DemoCsrfToken, string>;
   wsTickets!: Table<DemoWsTicket, string>;
@@ -85,6 +91,33 @@ export class DemoOfflineDb extends Dexie {
       menus: '&menuId, parentId, path, *roles',
       dicts: '&id, dictType, dictValue',
       departments: '&deptId, parentId',
+      authSessions: '&token, username, expiresAt',
+      csrfTokens: '&token, sessionToken, expiresAt',
+      wsTickets: '&ticket, sessionId, expiresAt, used',
+      projects: '&projectId, projectName, status, createTime',
+      projectVersions: '&versionId, projectId, versionName, locked, createTime',
+      topologies: '&id, projectId, versionId',
+      simulationSessions: '&sessionId, projectId, versionId, status',
+      simulationMessages: '&id, sessionId, timestamp',
+      simulationBandwidth: '&id, sessionId, portId, timestamp',
+      simulationAlarms: '&alarmId, sessionId, timestamp, severity',
+      simulationFaults: '&faultId, sessionId, timestamp',
+      simulationEvents: '&eventId, sessionId, triggerTime',
+      simulationFrames: '&frameId, sessionId, order',
+      sequences: '&name',
+    });
+
+    this.version(2).stores({
+      meta: '&key',
+      accounts: '&username, userId, *roleIds',
+      roles: '&roleId, roleKey, status',
+      permissions: '&id, code',
+      menus: '&menuId, parentId, path, menuName, menuType, *roles',
+      dictTypes: '&dictId, dictType, dictName, status',
+      dicts: '&id, dictId, dictType, dictValue, status',
+      departments: '&deptId, parentId, status',
+      posts: '&postId, postCode, postName, status',
+      systemUsers: '&userId, deptId, userName, status, *roleIds, *postIds',
       authSessions: '&token, username, expiresAt',
       csrfTokens: '&token, sessionToken, expiresAt',
       wsTickets: '&ticket, sessionId, expiresAt, used',

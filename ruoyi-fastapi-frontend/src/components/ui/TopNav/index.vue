@@ -127,7 +127,7 @@ function resolveMenuIcon(icon) {
   if (!icon) {
     return '';
   }
-  // 如果已经是带前缀的写法（例如 'mdi:home' 或 'svg-icon:xxx'），直接返回
+  // 如果已经是带前缀的写法（例如 'svg-icon:xxx' 或 'custom:icon'），直接返回
   if (typeof icon === 'string' && icon.includes(':')) {
     return icon;
   }

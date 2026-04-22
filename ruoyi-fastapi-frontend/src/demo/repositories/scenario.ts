@@ -96,8 +96,11 @@ export class ScenarioRepository {
       },
       system: {
         menus: await this.db.menus.toArray(),
+        dictTypes: await this.db.dictTypes.toArray(),
         dicts: await this.db.dicts.toArray(),
         departments: await this.db.departments.toArray(),
+        posts: await this.db.posts.toArray(),
+        users: await this.db.systemUsers.toArray(),
       },
       project: {
         projects: await this.db.projects.toArray(),
@@ -133,8 +136,11 @@ export class ScenarioRepository {
       await this.db.roles.bulkPut(scenarioPackage.auth.roles);
       await this.db.permissions.bulkPut(scenarioPackage.auth.permissions);
       await this.db.menus.bulkPut(scenarioPackage.system.menus);
+      await this.db.dictTypes.bulkPut(scenarioPackage.system.dictTypes);
       await this.db.dicts.bulkPut(scenarioPackage.system.dicts);
       await this.db.departments.bulkPut(scenarioPackage.system.departments);
+      await this.db.posts.bulkPut(scenarioPackage.system.posts);
+      await this.db.systemUsers.bulkPut(scenarioPackage.system.users);
       await this.db.projects.bulkPut(scenarioPackage.project.projects);
       await this.db.projectVersions.bulkPut(scenarioPackage.project.versions);
       await this.db.topologies.bulkPut(scenarioPackage.project.topologies);
@@ -156,6 +162,10 @@ export class ScenarioRepository {
           value: maxNumericValue(scenarioPackage.project.versions, 'versionId') + 1,
         },
         {
+          name: 'roles',
+          value: maxNumericValue(scenarioPackage.auth.roles, 'roleId') + 1,
+        },
+        {
           name: 'dicts',
           value: maxNumericValue(scenarioPackage.system.dicts, 'id') + 1,
         },
@@ -164,8 +174,20 @@ export class ScenarioRepository {
           value: maxNumericValue(scenarioPackage.system.menus, 'menuId') + 1,
         },
         {
+          name: 'dictTypes',
+          value: maxNumericValue(scenarioPackage.system.dictTypes, 'dictId') + 1,
+        },
+        {
           name: 'departments',
           value: maxNumericValue(scenarioPackage.system.departments, 'deptId') + 1,
+        },
+        {
+          name: 'posts',
+          value: maxNumericValue(scenarioPackage.system.posts, 'postId') + 1,
+        },
+        {
+          name: 'users',
+          value: maxNumericValue(scenarioPackage.system.users, 'userId') + 1,
         },
       ]);
       await this.db.meta.put(metaRecord(activeScenario));
@@ -189,8 +211,11 @@ export class ScenarioRepository {
       this.db.roles,
       this.db.permissions,
       this.db.menus,
+      this.db.dictTypes,
       this.db.dicts,
       this.db.departments,
+      this.db.posts,
+      this.db.systemUsers,
       this.db.authSessions,
       this.db.csrfTokens,
       this.db.wsTickets,

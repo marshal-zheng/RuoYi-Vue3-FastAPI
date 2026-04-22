@@ -203,10 +203,10 @@ const toneMap = {
 };
 
 const statConfigs = [
-  { key: 'critical', label: '严重', icon: 'mdi:alert-octagon', tone: 'red' },
-  { key: 'error', label: '错误', icon: 'mdi:alert-circle-outline', tone: 'orange' },
-  { key: 'warning', label: '警告', icon: 'mdi:alert-outline', tone: 'amber' },
-  { key: 'total', label: '总计', icon: 'mdi:clipboard-list-outline', tone: 'violet' },
+  { key: 'critical', label: '严重', icon: 'WarningFilled', tone: 'red' },
+  { key: 'error', label: '错误', icon: 'CircleCloseFilled', tone: 'orange' },
+  { key: 'warning', label: '警告', icon: 'Warning', tone: 'amber' },
+  { key: 'total', label: '总计', icon: 'Tickets', tone: 'violet' },
 ];
 
 const statCards = computed(() => {

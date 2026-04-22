@@ -5,6 +5,7 @@ import type { DemoRuntimeLogger } from '@/demo/runtime/logger';
 import { createDemoAuthHandlers } from './auth';
 import { createDemoProjectHandlers } from './project';
 import { createDemoSimulationHandlers } from './simulation';
+import { createDemoSystemAdminHandlers } from './system-admin';
 import { createDemoSystemHandlers } from './system';
 
 export interface CreateDemoOfflineHandlersOptions {
@@ -88,6 +89,7 @@ export function createDemoOfflineHandlers({
   return [
     ...createDemoAuthHandlers({ config, logger }),
     ...createDemoSystemHandlers({ config, logger }),
+    ...createDemoSystemAdminHandlers({ config, logger }),
     ...createDemoProjectHandlers({ config, logger }),
     ...createDemoSimulationHandlers({ config, logger }),
     createDemoApiCatchAllHandler(config, logger),

@@ -27,10 +27,13 @@ describe('ScenarioRepository', () => {
     expect(result.imported).toBe(true);
     expect(result.activeScenario).toMatchObject({
       scenarioId: 'default',
-      fingerprint: 'default-demo-offline-v1',
+      fingerprint: 'default-demo-offline-v4',
     });
     await expect(db.projects.count()).resolves.toBe(1);
     await expect(db.projectVersions.count()).resolves.toBe(1);
+    await expect(db.systemUsers.count()).resolves.toBe(4);
+    await expect(db.dictTypes.count()).resolves.toBe(3);
+    await expect(db.posts.count()).resolves.toBe(3);
     await expect(db.sequences.get('projects')).resolves.toMatchObject({
       value: 1002,
     });
@@ -144,10 +147,15 @@ describe('ScenarioRepository', () => {
       schemaVersion: 1,
       scenario: {
         id: 'default',
-        fingerprint: 'default-demo-offline-v1',
+        fingerprint: 'default-demo-offline-v4',
       },
       auth: {
         accounts: expect.any(Array),
+      },
+      system: {
+        users: expect.any(Array),
+        posts: expect.any(Array),
+        dictTypes: expect.any(Array),
       },
       project: {
         projects: expect.any(Array),
