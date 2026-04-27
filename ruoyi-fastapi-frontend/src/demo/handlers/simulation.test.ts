@@ -1,7 +1,6 @@
 import 'fake-indexeddb/auto';
 
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { setupServer } from 'msw/node';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DemoOfflineDb, replaceDemoOfflineDb } from '@/demo/db';
 import { createDemoOfflineHandlers } from '@/demo/handlers';
@@ -10,6 +9,7 @@ import type { DemoRuntimeLogger } from '@/demo/runtime/logger';
 import type { RuntimeConfig } from '@/demo/runtime/mode';
 import { defaultDemoScenario } from '@/demo/scenarios';
 import { DemoAuthService } from '@/demo/services';
+import { mockServer } from '../../../tests/mocks/server';
 
 const runtimeConfig: RuntimeConfig = {
   mode: 'demo-offline',
@@ -26,8 +26,6 @@ const logger: DemoRuntimeLogger = {
   warn: vi.fn(),
   error: vi.fn(),
 };
-
-const server = setupServer(...createDemoOfflineHandlers({ config: runtimeConfig, logger }));
 
 let db: DemoOfflineDb;
 
@@ -83,22 +81,14 @@ function waitForOpen(socket: WebSocket): Promise<void> {
 }
 
 describe('demo-offline simulation handlers', () => {
-  beforeAll(() => {
-    server.listen();
-  });
-
-  afterAll(() => {
-    server.close();
-  });
-
   beforeEach(async () => {
     db = new DemoOfflineDb(`demo-simulation-handler-test-${crypto.randomUUID()}`);
     replaceDemoOfflineDb(db);
     await new ScenarioRepository(db).ensureScenario(defaultDemoScenario);
+    mockServer.use(...createDemoOfflineHandlers({ config: runtimeConfig, logger }));
   });
 
   afterEach(async () => {
-    server.resetHandlers();
     await db.delete();
     replaceDemoOfflineDb(undefined);
   });
@@ -115,10 +105,10 @@ describe('demo-offline simulation handlers', () => {
       }),
     });
     const created = await createResponse.json();
-    const sessionId = created.data.sessionId;
+    const sessionId = created.sessionId;
 
     expect(createResponse.status).toBe(200);
-    expect(created.data).toMatchObject({
+    expect(created).toMatchObject({
       sessionId: 'demo-session-1001',
       projectId: 1001,
       versionId: 2001,
@@ -130,7 +120,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const statusPayload = await statusResponse.json();
     expect(statusResponse.status).toBe(200);
-    expect(statusPayload.data).toMatchObject({
+    expect(statusPayload).toMatchObject({
       sessionId,
       status: 'running',
       messageCount: 1,
@@ -142,7 +132,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const messagesPayload = await messagesResponse.json();
     expect(messagesResponse.status).toBe(200);
-    expect(messagesPayload.data).toEqual([
+    expect(messagesPayload).toEqual([
       expect.objectContaining({
         id: 'message-1',
         senderNodeName: '平台控制器',
@@ -158,7 +148,7 @@ describe('demo-offline simulation handlers', () => {
     );
     const bandwidthPayload = await bandwidthResponse.json();
     expect(bandwidthResponse.status).toBe(200);
-    expect(bandwidthPayload.data).toEqual([
+    expect(bandwidthPayload).toEqual([
       expect.objectContaining({
         portId: 'bus-a',
         bandwidthMbps: 42,
@@ -170,7 +160,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const alarmsPayload = await alarmsResponse.json();
     expect(alarmsResponse.status).toBe(200);
-    expect(alarmsPayload.data).toEqual([
+    expect(alarmsPayload).toEqual([
       expect.objectContaining({
         alarmId: 'alarm-1',
         message: '离线演示告警样例',
@@ -182,7 +172,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const faultsPayload = await faultsResponse.json();
     expect(faultsResponse.status).toBe(200);
-    expect(faultsPayload.data).toEqual([
+    expect(faultsPayload).toEqual([
       expect.objectContaining({
         faultId: 'fault-1',
         status: 'pending',
@@ -194,7 +184,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const eventsPayload = await eventsResponse.json();
     expect(eventsResponse.status).toBe(200);
-    expect(eventsPayload.data).toEqual([
+    expect(eventsPayload).toEqual([
       expect.objectContaining({
         eventId: 'event-1',
         status: 'pending',
@@ -211,7 +201,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const exportPayload = await exportResponse.json();
     expect(exportResponse.status).toBe(200);
-    expect(exportPayload.data).toMatchObject({
+    expect(exportPayload).toMatchObject({
       fileName: 'demo-session-1001-simulation-export.json',
       fileSize: expect.any(Number),
     });
@@ -221,7 +211,7 @@ describe('demo-offline simulation handlers', () => {
     });
     const strategiesPayload = await strategiesResponse.json();
     expect(strategiesResponse.status).toBe(200);
-    expect(strategiesPayload.data).toEqual(
+    expect(strategiesPayload).toEqual(
       expect.arrayContaining([expect.objectContaining({ value: 'preset' })])
     );
   });
@@ -239,7 +229,6 @@ describe('demo-offline simulation handlers', () => {
 
     expect(ticketResponse.status).toBe(200);
     expect(ticketPayload).toMatchObject({
-      code: 200,
       wsTicket: expect.stringMatching(/^demo-ws-ticket-/),
       expiresIn: 30,
     });
@@ -316,17 +305,14 @@ describe('demo-offline simulation handlers', () => {
 
       expect(response.status).toBe(501);
       expect(payload).toMatchObject({
-        code: 501,
-        type: 'error',
-        data: {
-          reason: 'DEMO_NOT_SUPPORTED',
-          capability: testCase.capability,
-          method: testCase.method,
-          mode: 'demo-offline',
-          scenarioId: 'default',
-        },
+        type: 'about:blank',
+        title: 'Demo Capability Not Supported',
+        status: 501,
+        instance: testCase.input,
+        errorCode: 'DEMO_NOT_SUPPORTED',
       });
-      expect(payload.msg).toContain('DEMO_NOT_SUPPORTED');
+      expect(payload.detail).toContain('DEMO_NOT_SUPPORTED');
+      expect(payload.detail).toContain(testCase.capability);
     }
   });
 });

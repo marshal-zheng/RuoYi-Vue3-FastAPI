@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { fakerZH_CN as faker } from '@faker-js/faker';
 
 export interface DeptNode {

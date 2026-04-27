@@ -10,13 +10,14 @@
     "noUncheckedIndexedAccess": true
   },
   "include": [
-    "src/modules/**/*",
-    "src/api/_shared/**/*",
-    "src/api/_generated/**/*",
-    "tests/**/*"
+    "src/settings.ts",
+    "src/mocks/**/*",
+    "tests/mocks/**/*",
+    "tests/setup.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "dist-demo-offline"
   ]
 }

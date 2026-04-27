@@ -33,7 +33,7 @@ describe('DemoProjectService', () => {
 
   it('normalizes project fields and persists project CRUD to IndexedDB', async () => {
     await expect(projectService.listProjects({ projectName: '星载' })).resolves.toMatchObject({
-      rows: [
+      items: [
         expect.objectContaining({
           projectId: 1001,
           projectName: '星载总线演示项目',
@@ -92,7 +92,7 @@ describe('DemoProjectService', () => {
 
   it('supports version clone, lock lifecycle, and topology persistence', async () => {
     await expect(projectService.listProjectVersions({ projectId: 1001 })).resolves.toMatchObject({
-      rows: [
+      items: [
         expect.objectContaining({
           versionId: 2001,
           projectId: 1001,

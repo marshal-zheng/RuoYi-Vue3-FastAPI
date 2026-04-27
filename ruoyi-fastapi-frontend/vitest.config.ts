@@ -98,7 +98,10 @@ export default defineConfig({
     
     // 环境变量
     env: {
-      NODE_ENV: 'test'
+      NODE_ENV: 'test',
+      VITE_APP_BASE_API: '/api',
+      VITE_APP_RUNTIME_MODE: 'real',
+      VITE_ENABLE_MOCK: 'off'
     }
   }
 })

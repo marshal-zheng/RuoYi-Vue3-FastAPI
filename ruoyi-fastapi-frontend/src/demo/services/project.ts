@@ -11,7 +11,7 @@ import { DemoAuthError } from './auth';
 const DEFAULT_PAGE_SIZE = 10;
 
 export interface DemoProjectListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   projectName?: string;
   beginTime?: string;
@@ -19,7 +19,7 @@ export interface DemoProjectListQuery {
 }
 
 export interface DemoProjectVersionListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   projectId?: number | string;
   versionName?: string;
@@ -94,9 +94,9 @@ export interface DemoProjectTopologyDetail {
 }
 
 export interface DemoPageResult<T> {
-  rows: T[];
+  items: T[];
   total: number;
-  pageNum: number;
+  page: number;
   pageSize: number;
 }
 
@@ -176,13 +176,13 @@ function withinDateRange(value: string, beginTime?: string, endTime?: string): b
   return true;
 }
 
-function paginate<T>(rows: T[], pageNum: number, pageSize: number): DemoPageResult<T> {
-  const start = (pageNum - 1) * pageSize;
+function paginate<T>(items: T[], page: number, pageSize: number): DemoPageResult<T> {
+  const start = (page - 1) * pageSize;
 
   return {
-    rows: rows.slice(start, start + pageSize),
-    total: rows.length,
-    pageNum,
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
     pageSize,
   };
 }
@@ -349,10 +349,10 @@ export class DemoProjectService {
   ) {}
 
   async listProjects(query: DemoProjectListQuery = {}): Promise<DemoPageResult<DemoProjectDetail>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const source = await this.projectRepository.list({
-      pageNum: 1,
+      page: 1,
       pageSize: Number.MAX_SAFE_INTEGER,
       filters: {
         projectName: query.projectName,
@@ -361,12 +361,12 @@ export class DemoProjectService {
       sortOrder: 'desc',
     });
 
-    const rows = source.rows
+    const rows = source.items
       .map(normalizeProject)
       .filter((item) => withinDateRange(item.createTime, query.beginTime, query.endTime))
       .sort(sortByUpdateTime);
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getProject(projectId: number): Promise<DemoProjectDetail> {
@@ -438,15 +438,15 @@ export class DemoProjectService {
   async listProjectVersions(
     query: DemoProjectVersionListQuery = {}
   ): Promise<DemoPageResult<DemoProjectVersionDetail>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const projectId = resolveOptionalNumber(query.projectId);
 
     if (!projectId) {
       return {
-        rows: [],
+        items: [],
         total: 0,
-        pageNum,
+        page,
         pageSize,
       };
     }
@@ -462,7 +462,7 @@ export class DemoProjectService {
       .filter((item) => withinDateRange(item.createTime, query.beginTime, query.endTime))
       .sort(sortByUpdateTime);
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getProjectVersion(versionId: number): Promise<DemoProjectVersionDetail> {

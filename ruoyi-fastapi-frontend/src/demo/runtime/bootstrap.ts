@@ -1,5 +1,6 @@
 import { setupBrowserMocks } from '@/mocks';
 import { createDemoOfflineHandlers } from '@/demo/handlers';
+import type { StartOptions } from 'msw/browser';
 
 import type { RuntimeConfig } from './mode';
 import { createDemoRuntimeLogger } from './logger';
@@ -11,13 +12,17 @@ export interface DemoOfflineRuntime {
   snapshot: DemoRuntimeSnapshot;
 }
 
-function createDemoUnhandledRequestHandler(config: RuntimeConfig) {
+type UnhandledRequestCallback = Exclude<
+  NonNullable<StartOptions['onUnhandledRequest']>,
+  'bypass' | 'warn' | 'error'
+>;
+
+function createDemoUnhandledRequestHandler(config: RuntimeConfig): UnhandledRequestCallback {
   return (
     request: Request,
     print: {
-      info(...args: unknown[]): void;
-      warning(...args: unknown[]): void;
-      error(...args: unknown[]): void;
+      warning(): void;
+      error(): void;
     }
   ) => {
     const url = new URL(request.url);
@@ -25,13 +30,14 @@ function createDemoUnhandledRequestHandler(config: RuntimeConfig) {
       url.pathname === config.apiPrefix || url.pathname.startsWith(`${config.apiPrefix}/`);
 
     if (isApiRequest) {
-      print.error(
+      console.error(
         `[DemoRuntime] ${request.method} ${url.pathname} 未被 demo-offline handler 覆盖。`
       );
+      print.error();
       return;
     }
 
-    print.info(`[DemoRuntime] 非 API 请求旁路：${request.method} ${url.pathname}`);
+    console.info(`[DemoRuntime] 非 API 请求旁路：${request.method} ${url.pathname}`);
   };
 }
 

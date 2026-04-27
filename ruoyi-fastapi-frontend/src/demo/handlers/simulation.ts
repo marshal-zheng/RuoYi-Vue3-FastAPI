@@ -25,18 +25,13 @@ export interface CreateDemoSimulationHandlersOptions {
   logger: DemoRuntimeLogger;
 }
 
-interface DemoNotSupportedPayload {
-  code: 501;
-  msg: string;
-  type: 'error';
-  data: {
-    reason: 'DEMO_NOT_SUPPORTED';
-    capability: 'simulation-control' | 'simulation-write';
-    method: string;
-    path: string;
-    mode: 'demo-offline';
-    scenarioId: string;
-  };
+interface DemoNotSupportedProblem {
+  type: 'about:blank';
+  title: string;
+  status: 501;
+  detail: string;
+  instance: string;
+  errorCode: 'DEMO_NOT_SUPPORTED';
 }
 
 function createAuthService(): DemoAuthService {
@@ -60,22 +55,17 @@ function createNotSupportedPayload(
   request: Request,
   config: RuntimeConfig,
   capability: 'simulation-control' | 'simulation-write'
-): DemoNotSupportedPayload {
+): DemoNotSupportedProblem {
   const url = new URL(request.url);
   const path = `${url.pathname}${url.search}`;
 
   return {
-    code: 501,
-    msg: `DEMO_NOT_SUPPORTED: ${request.method} ${path} 在 demo-offline 中暂不支持`,
-    type: 'error',
-    data: {
-      reason: 'DEMO_NOT_SUPPORTED',
-      capability,
-      method: request.method,
-      path,
-      mode: 'demo-offline',
-      scenarioId: config.scenarioId,
-    },
+    type: 'about:blank',
+    title: 'Demo Capability Not Supported',
+    status: 501,
+    detail: `DEMO_NOT_SUPPORTED: ${request.method} ${path} 在 demo-offline(${config.scenarioId}) 中暂不支持 ${capability}`,
+    instance: path,
+    errorCode: 'DEMO_NOT_SUPPORTED',
   };
 }
 
@@ -91,8 +81,8 @@ function demoNotSupportedResponse(
   logger.info('demo-offline 拒绝仿真写操作。', {
     handler: handlerName,
     capability,
-    method: payload.data.method,
-    path: payload.data.path,
+    method: request.method,
+    path: new URL(request.url).pathname,
   });
 
   return demoJsonResponse(config, handlerName, payload, 501);

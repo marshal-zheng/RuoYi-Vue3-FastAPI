@@ -1,7 +1,6 @@
-// @ts-nocheck
 import { http, HttpResponse } from 'msw';
 
-import type { MockStrategy } from '../types';
+import type { MockRuntimeHandler, MockStrategy } from '../types';
 import { createApiPath } from '../constants';
 import { buildAccountCollections, createDeptTree, createUserList } from '../factories';
 import { pagination, resultError, resultSuccess } from '../utils/response';
@@ -54,7 +53,7 @@ const mockUsers = createUserList(40, (index) => ({
   status: index % 6 === 0 ? '1' : '0',
 }));
 
-export function createUserHandlers(strategy: MockStrategy) {
+export function createUserHandlers(strategy: MockStrategy): MockRuntimeHandler[] {
   return [
     http.get(createApiPath('/captchaImage'), ({ request }) =>
       withBackendFallback(
@@ -90,9 +89,6 @@ export function createUserHandlers(strategy: MockStrategy) {
 
           return HttpResponse.json(
             {
-              code: 200,
-              msg: '登录成功',
-              type: 'success',
               token: account.token,
             },
             { status: 200 }
@@ -121,9 +117,6 @@ export function createUserHandlers(strategy: MockStrategy) {
 
           return HttpResponse.json(
             {
-              code: 200,
-              msg: '操作成功',
-              type: 'success',
               user: info.user,
               roles: info.roles,
               permissions: info.permissions,
@@ -137,10 +130,42 @@ export function createUserHandlers(strategy: MockStrategy) {
       )
     ),
     http.post(createApiPath('/logout'), ({ request }) =>
+      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+        strategy,
+        tag: 'user:logout',
+      })
+    ),
+    http.post(createApiPath('/auth/logout'), ({ request }) =>
+      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+        strategy,
+        tag: 'user:authLogout',
+      })
+    ),
+    http.post(createApiPath('/auth/csrf-token'), ({ request }) =>
       withBackendFallback(
         request,
-        () => HttpResponse.json(resultSuccess(null, { msg: '退出成功' })),
-        { strategy, tag: 'user:logout' }
+        () =>
+          HttpResponse.json(
+            resultSuccess({
+              csrfToken: 'mock-csrf-token',
+              csrf_token: 'mock-csrf-token',
+            })
+          ),
+        { strategy, tag: 'user:csrfToken' }
+      )
+    ),
+    http.post(createApiPath('/auth/refresh'), ({ request }) =>
+      withBackendFallback(
+        request,
+        () =>
+          HttpResponse.json(
+            resultSuccess({
+              token: 'mock-token-refreshed',
+              csrfToken: 'mock-csrf-refreshed',
+              csrf_token: 'mock-csrf-refreshed',
+            })
+          ),
+        { strategy, tag: 'user:refresh' }
       )
     ),
     http.get(createApiPath('/system/user/list'), ({ request }) =>
@@ -148,13 +173,15 @@ export function createUserHandlers(strategy: MockStrategy) {
         request,
         () => {
           const searchParams = getSearchParams(request);
-          const page = Number(searchParams.get('pageNum') ?? 1);
+          const page = Number(searchParams.get('page') ?? 1);
           const size = Number(searchParams.get('pageSize') ?? 10);
-          const rows = pagination(page, size, mockUsers);
+          const items = pagination(page, size, mockUsers);
           return HttpResponse.json(
             resultSuccess({
-              rows,
+              items,
               total: mockUsers.length,
+              page,
+              pageSize: size,
             })
           );
         },

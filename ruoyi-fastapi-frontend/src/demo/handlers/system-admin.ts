@@ -33,7 +33,9 @@ async function ensureCurrentUser(request: Request) {
   return createAuthService().getInfo(getDemoRequestToken(request));
 }
 
-async function ensureCurrentOperator(request: Request): Promise<{ userId: number; userName: string }> {
+async function ensureCurrentOperator(
+  request: Request
+): Promise<{ userId: number; userName: string }> {
   const currentUser = await ensureCurrentUser(request);
   const user = currentUser.user as Record<string, unknown>;
   return {
@@ -73,8 +75,8 @@ export function createDemoSystemAdminHandlers({
       try {
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listUsers({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           userName: readSearchParam(request, 'userName'),
           phonenumber: readSearchParam(request, 'phonenumber'),
           status: readSearchParam(request, 'status') as '0' | '1' | undefined,
@@ -97,9 +99,10 @@ export function createDemoSystemAdminHandlers({
       try {
         await ensureCurrentUser(request);
         const userId = Number(params.userId);
-        const detail = Number.isFinite(userId) && userId > 0
-          ? await createSystemAdminService().getUserDetail(userId)
-          : await createSystemAdminService().getUserDetail();
+        const detail =
+          Number.isFinite(userId) && userId > 0
+            ? await createSystemAdminService().getUserDetail(userId)
+            : await createSystemAdminService().getUserDetail();
 
         return demoJsonResponse(config, 'system-admin:user:get', {
           code: 200,
@@ -179,8 +182,14 @@ export function createDemoSystemAdminHandlers({
     http.put(path('/system/user/changeStatus'), async ({ request }) => {
       try {
         const operator = await ensureCurrentOperator(request);
-        const body = await readDemoRequestBody<{ userId?: string | number; status?: '0' | '1' }>(request);
-        await createSystemAdminService().changeUserStatus(body.userId ?? '', body.status ?? '0', operator.userName);
+        const body = await readDemoRequestBody<{ userId?: string | number; status?: '0' | '1' }>(
+          request
+        );
+        await createSystemAdminService().changeUserStatus(
+          body.userId ?? '',
+          body.status ?? '0',
+          operator.userName
+        );
 
         return demoJsonResponse(config, 'system-admin:user:change-status', {
           code: 200,
@@ -195,7 +204,9 @@ export function createDemoSystemAdminHandlers({
     http.put(path('/system/user/resetPwd'), async ({ request }) => {
       try {
         const operator = await ensureCurrentOperator(request);
-        const body = await readDemoRequestBody<{ userId?: string | number; password?: string }>(request);
+        const body = await readDemoRequestBody<{ userId?: string | number; password?: string }>(
+          request
+        );
         await createSystemAdminService().resetUserPassword(body, operator.userName);
 
         return demoJsonResponse(config, 'system-admin:user:reset-pwd', {
@@ -310,7 +321,11 @@ export function createDemoSystemAdminHandlers({
       try {
         const operator = await ensureCurrentOperator(request);
         const body = await readDemoRequestBody(request);
-        await createSystemAdminService().updateUserProfile(operator.userId, body, operator.userName);
+        await createSystemAdminService().updateUserProfile(
+          operator.userId,
+          body,
+          operator.userName
+        );
 
         return demoJsonResponse(config, 'system-admin:user:update-profile', {
           code: 200,
@@ -326,7 +341,11 @@ export function createDemoSystemAdminHandlers({
       try {
         const operator = await ensureCurrentOperator(request);
         const body = await readDemoRequestBody(request);
-        await createSystemAdminService().updateProfilePassword(operator.userId, body, operator.userName);
+        await createSystemAdminService().updateProfilePassword(
+          operator.userId,
+          body,
+          operator.userName
+        );
 
         return demoJsonResponse(config, 'system-admin:user:update-profile-pwd', {
           code: 200,
@@ -375,8 +394,8 @@ export function createDemoSystemAdminHandlers({
       try {
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listRoles({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           roleName: readSearchParam(request, 'roleName'),
           roleKey: readSearchParam(request, 'roleKey'),
           status: readSearchParam(request, 'status') as '0' | '1' | undefined,
@@ -460,8 +479,14 @@ export function createDemoSystemAdminHandlers({
     http.put(path('/system/role/changeStatus'), async ({ request }) => {
       try {
         const operator = await ensureCurrentOperator(request);
-        const body = await readDemoRequestBody<{ roleId?: string | number; status?: '0' | '1' }>(request);
-        await createSystemAdminService().changeRoleStatus(body.roleId ?? '', body.status ?? '0', operator.userName);
+        const body = await readDemoRequestBody<{ roleId?: string | number; status?: '0' | '1' }>(
+          request
+        );
+        await createSystemAdminService().changeRoleStatus(
+          body.roleId ?? '',
+          body.status ?? '0',
+          operator.userName
+        );
 
         return demoJsonResponse(config, 'system-admin:role:change-status', {
           code: 200,
@@ -493,8 +518,8 @@ export function createDemoSystemAdminHandlers({
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listAllocatedUsers({
           roleId: readSearchParam(request, 'roleId'),
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           userName: readSearchParam(request, 'userName'),
           phonenumber: readSearchParam(request, 'phonenumber'),
         } as Record<string, unknown>);
@@ -514,8 +539,8 @@ export function createDemoSystemAdminHandlers({
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listUnallocatedUsers({
           roleId: readSearchParam(request, 'roleId'),
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           userName: readSearchParam(request, 'userName'),
           phonenumber: readSearchParam(request, 'phonenumber'),
         } as Record<string, unknown>);
@@ -765,7 +790,9 @@ export function createDemoSystemAdminHandlers({
     http.get(path('/system/dept/:deptId'), async ({ request, params }) => {
       try {
         await ensureCurrentUser(request);
-        const data = await createSystemAdminService().getDepartmentDetail(String(params.deptId ?? ''));
+        const data = await createSystemAdminService().getDepartmentDetail(
+          String(params.deptId ?? '')
+        );
 
         return demoJsonResponse(config, 'system-admin:dept:get', {
           code: 200,
@@ -829,8 +856,8 @@ export function createDemoSystemAdminHandlers({
       try {
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listDictTypes({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           dictName: readSearchParam(request, 'dictName'),
           dictType: readSearchParam(request, 'dictType'),
           status: readSearchParam(request, 'status') as '0' | '1' | undefined,
@@ -851,7 +878,9 @@ export function createDemoSystemAdminHandlers({
     http.get(path('/system/dict/type/:dictId'), async ({ request, params }) => {
       try {
         await ensureCurrentUser(request);
-        const data = await createSystemAdminService().getDictTypeDetail(String(params.dictId ?? ''));
+        const data = await createSystemAdminService().getDictTypeDetail(
+          String(params.dictId ?? '')
+        );
 
         return demoJsonResponse(config, 'system-admin:dict-type:get', {
           code: 200,
@@ -954,8 +983,8 @@ export function createDemoSystemAdminHandlers({
       try {
         await ensureCurrentUser(request);
         const page = await createSystemAdminService().listDictData({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           dictType: readSearchParam(request, 'dictType'),
           dictLabel: readSearchParam(request, 'dictLabel'),
           status: readSearchParam(request, 'status') as '0' | '1' | undefined,

@@ -20,9 +20,9 @@ type DemoStatus = '0' | '1';
 type DemoMenuType = 'M' | 'C' | 'F';
 
 export interface DemoPageResult<T> {
-  rows: T[];
+  items: T[];
   total: number;
-  pageNum: number;
+  page: number;
   pageSize: number;
 }
 
@@ -40,7 +40,7 @@ export interface DemoSystemTreeNode {
 }
 
 export interface DemoUserListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   userName?: string;
   phonenumber?: string;
@@ -51,7 +51,7 @@ export interface DemoUserListQuery {
 }
 
 export interface DemoRoleListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   roleName?: string;
   roleKey?: string;
@@ -71,7 +71,7 @@ export interface DemoDeptListQuery {
 }
 
 export interface DemoDictTypeListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   dictName?: string;
   dictType?: string;
@@ -81,7 +81,7 @@ export interface DemoDictTypeListQuery {
 }
 
 export interface DemoDictDataListQuery {
-  pageNum?: number | string;
+  page?: number | string;
   pageSize?: number | string;
   dictType?: string;
   dictLabel?: string;
@@ -235,9 +235,7 @@ function ensureNumber(value: number | string | null | undefined, fieldLabel: str
   return parsed;
 }
 
-function parseIdList(
-  value: string | number | Array<string | number> | null | undefined
-): number[] {
+function parseIdList(value: string | number | Array<string | number> | null | undefined): number[] {
   if (value === undefined || value === null || value === '') {
     return [];
   }
@@ -281,12 +279,12 @@ function withinDateRange(value: string | undefined, beginTime?: string, endTime?
   return true;
 }
 
-function paginate<T>(rows: T[], pageNum: number, pageSize: number): DemoPageResult<T> {
-  const start = (pageNum - 1) * pageSize;
+function paginate<T>(items: T[], page: number, pageSize: number): DemoPageResult<T> {
+  const start = (page - 1) * pageSize;
   return {
-    rows: rows.slice(start, start + pageSize),
-    total: rows.length,
-    pageNum,
+    items: items.slice(start, start + pageSize),
+    total: items.length,
+    page,
     pageSize,
   };
 }
@@ -314,16 +312,7 @@ function buildTree<T extends { id: number; parentId: number }>(
   return rows
     .filter((row) => row.parentId === parentId)
     .sort((left, right) => left.id - right.id)
-    .map((row) =>
-      render(
-        row,
-        buildTree(
-          rows,
-          render,
-          row.id
-        )
-      )
-    );
+    .map((row) => render(row, buildTree(rows, render, row.id)));
 }
 
 function createDelimitedFile(
@@ -368,7 +357,8 @@ function normalizeMenu(menu: DemoMenu): DemoMenu {
   const routeName = normalizeText(menu.routeName ?? menu.name, `Menu${menu.menuId}`);
   const icon = normalizeText(menu.icon ?? meta.icon);
   const menuType =
-    menu.menuType ?? (hasText(menu.perms) && !hasText(menu.component) ? 'F' : menu.parentId === 0 ? 'M' : 'C');
+    menu.menuType ??
+    (hasText(menu.perms) && !hasText(menu.component) ? 'F' : menu.parentId === 0 ? 'M' : 'C');
 
   return {
     ...menu,
@@ -511,7 +501,7 @@ export class DemoSystemAdminService {
   ) {}
 
   async listUsers(query: DemoUserListQuery = {}): Promise<DemoPageResult<Record<string, unknown>>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const [users, departments, roles] = await Promise.all([
       this.repository.listUsers(),
@@ -519,7 +509,9 @@ export class DemoSystemAdminService {
       this.repository.listRoles(),
     ]);
 
-    const deptIds = query.deptId ? this.collectDeptIds(departments, ensureNumber(query.deptId, '部门')) : [];
+    const deptIds = query.deptId
+      ? this.collectDeptIds(departments, ensureNumber(query.deptId, '部门'))
+      : [];
 
     const rows = users
       .map(normalizeUser)
@@ -532,7 +524,10 @@ export class DemoSystemAdminService {
           return false;
         }
 
-        if (hasText(query.userName) && !user.userName.toLowerCase().includes(query.userName.toLowerCase())) {
+        if (
+          hasText(query.userName) &&
+          !user.userName.toLowerCase().includes(query.userName.toLowerCase())
+        ) {
           return false;
         }
 
@@ -570,11 +565,14 @@ export class DemoSystemAdminService {
         };
       });
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getUserDetail(userId?: number): Promise<Record<string, unknown>> {
-    const [roles, posts] = await Promise.all([this.getAssignableRoles(), this.getAssignablePosts()]);
+    const [roles, posts] = await Promise.all([
+      this.getAssignableRoles(),
+      this.getAssignablePosts(),
+    ]);
 
     if (!userId) {
       return {
@@ -596,7 +594,9 @@ export class DemoSystemAdminService {
     return {
       ...normalizedUser,
       dept: departments.find((item) => item.deptId === normalizedUser.deptId),
-      role: allRoles.filter((item) => normalizedUser.roleIds.includes(item.roleId)).map(normalizeRole),
+      role: allRoles
+        .filter((item) => normalizedUser.roleIds.includes(item.roleId))
+        .map(normalizeRole),
       posts,
       roles,
       postIds: normalizedUser.postIds,
@@ -660,7 +660,8 @@ export class DemoSystemAdminService {
   async updateUser(payload: DemoUserPayload, operator: string): Promise<void> {
     const userId = ensureNumber(payload.userId, '用户ID');
     const current = normalizeUser(await this.requireUser(userId));
-    const deptId = payload.deptId !== undefined ? ensureNumber(payload.deptId, '归属部门') : current.deptId;
+    const deptId =
+      payload.deptId !== undefined ? ensureNumber(payload.deptId, '归属部门') : current.deptId;
     await this.requireDepartment(deptId);
 
     const roleIds =
@@ -687,7 +688,9 @@ export class DemoSystemAdminService {
       nickName: normalizeText(payload.nickName, current.nickName),
       email: payload.email !== undefined ? normalizeText(payload.email) : current.email,
       phonenumber:
-        payload.phonenumber !== undefined ? normalizeText(payload.phonenumber) : current.phonenumber,
+        payload.phonenumber !== undefined
+          ? normalizeText(payload.phonenumber)
+          : current.phonenumber,
       sex: payload.sex ?? current.sex,
       avatar: payload.avatar !== undefined ? normalizeText(payload.avatar) : current.avatar,
       status: payload.status ?? current.status,
@@ -699,7 +702,10 @@ export class DemoSystemAdminService {
     });
 
     await this.repository.saveUser(user);
-    await this.syncAccountByUser(user, payload.password ? normalizeText(payload.password) : undefined);
+    await this.syncAccountByUser(
+      user,
+      payload.password ? normalizeText(payload.password) : undefined
+    );
   }
 
   async deleteUsers(userIds: Array<number | string>, currentUserId?: number): Promise<void> {
@@ -712,7 +718,9 @@ export class DemoSystemAdminService {
       throw new DemoSystemAdminError('当前登录用户不能删除', 400);
     }
 
-    const users = await Promise.all(normalizedUserIds.map((userId) => this.repository.getUser(userId)));
+    const users = await Promise.all(
+      normalizedUserIds.map((userId) => this.repository.getUser(userId))
+    );
     const existingUsers = users.filter((item): item is DemoSystemUser => Boolean(item));
     const usernames = existingUsers.map((item) => item.userName);
 
@@ -722,7 +730,11 @@ export class DemoSystemAdminService {
     }
   }
 
-  async changeUserStatus(userId: number | string, status: DemoStatus, operator: string): Promise<void> {
+  async changeUserStatus(
+    userId: number | string,
+    status: DemoStatus,
+    operator: string
+  ): Promise<void> {
     const current = normalizeUser(await this.requireUser(ensureNumber(userId, '用户ID')));
     const nextUser = normalizeUser({
       ...current,
@@ -763,10 +775,16 @@ export class DemoSystemAdminService {
     ]);
 
     const normalizedUser = normalizeUser(user);
-    const normalizedRoles = roles.map(normalizeRole).sort((left, right) => left.roleId - right.roleId);
+    const normalizedRoles = roles
+      .map(normalizeRole)
+      .sort((left, right) => left.roleId - right.roleId);
 
     return {
-      user: toUserAuthPayload(normalizedUser, departments.map(normalizeDepartment), normalizedRoles),
+      user: toUserAuthPayload(
+        normalizedUser,
+        departments.map(normalizeDepartment),
+        normalizedRoles
+      ),
       roles: normalizedRoles.map((role) => ({
         ...role,
         flag: normalizedUser.roleIds.includes(role.roleId),
@@ -799,7 +817,11 @@ export class DemoSystemAdminService {
     const normalizedUser = normalizeUser(user);
 
     return {
-      data: toUserAuthPayload(normalizedUser, departments.map(normalizeDepartment), roles.map(normalizeRole)),
+      data: toUserAuthPayload(
+        normalizedUser,
+        departments.map(normalizeDepartment),
+        roles.map(normalizeRole)
+      ),
       postGroup: posts
         .filter((item) => normalizedUser.postIds.includes(item.postId))
         .sort((left, right) => left.postSort - right.postSort)
@@ -813,14 +835,20 @@ export class DemoSystemAdminService {
     };
   }
 
-  async updateUserProfile(userId: number, payload: DemoUserPayload, operator: string): Promise<void> {
+  async updateUserProfile(
+    userId: number,
+    payload: DemoUserPayload,
+    operator: string
+  ): Promise<void> {
     const current = normalizeUser(await this.requireUser(userId));
     const nextUser = normalizeUser({
       ...current,
       nickName: payload.nickName !== undefined ? normalizeText(payload.nickName) : current.nickName,
       email: payload.email !== undefined ? normalizeText(payload.email) : current.email,
       phonenumber:
-        payload.phonenumber !== undefined ? normalizeText(payload.phonenumber) : current.phonenumber,
+        payload.phonenumber !== undefined
+          ? normalizeText(payload.phonenumber)
+          : current.phonenumber,
       sex: payload.sex ?? current.sex,
       avatar: payload.avatar !== undefined ? normalizeText(payload.avatar) : current.avatar,
       remark: payload.remark !== undefined ? normalizeText(payload.remark) : current.remark,
@@ -876,15 +904,21 @@ export class DemoSystemAdminService {
   }
 
   async listRoles(query: DemoRoleListQuery = {}): Promise<DemoPageResult<DemoRole>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const rows = (await this.repository.listRoles())
       .map(normalizeRole)
       .filter((role) => {
-        if (hasText(query.roleName) && !role.roleName.toLowerCase().includes(query.roleName.toLowerCase())) {
+        if (
+          hasText(query.roleName) &&
+          !role.roleName.toLowerCase().includes(query.roleName.toLowerCase())
+        ) {
           return false;
         }
-        if (hasText(query.roleKey) && !role.roleKey.toLowerCase().includes(query.roleKey.toLowerCase())) {
+        if (
+          hasText(query.roleKey) &&
+          !role.roleKey.toLowerCase().includes(query.roleKey.toLowerCase())
+        ) {
           return false;
         }
         if (hasText(query.status) && role.status !== query.status) {
@@ -892,9 +926,12 @@ export class DemoSystemAdminService {
         }
         return withinDateRange(role.createTime, query.beginTime, query.endTime);
       })
-      .sort((left, right) => Number(left.roleSort) - Number(right.roleSort) || left.roleId - right.roleId);
+      .sort(
+        (left, right) =>
+          Number(left.roleSort) - Number(right.roleSort) || left.roleId - right.roleId
+      );
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getRoleDetail(roleId: number | string): Promise<Record<string, unknown>> {
@@ -980,7 +1017,7 @@ export class DemoSystemAdminService {
     const deptIds =
       payload.deptIds !== undefined
         ? await this.validateDeptIds(parseIdList(payload.deptIds))
-        : current.deptIds ?? [];
+        : (current.deptIds ?? []);
     const permissions = unique(
       (await this.repository.listMenus())
         .map(normalizeMenu)
@@ -1008,7 +1045,11 @@ export class DemoSystemAdminService {
     await this.syncAccountsByRole(roleId);
   }
 
-  async changeRoleStatus(roleId: number | string, status: DemoStatus, _operator: string): Promise<void> {
+  async changeRoleStatus(
+    roleId: number | string,
+    status: DemoStatus,
+    _operator: string
+  ): Promise<void> {
     const normalizedRoleId = ensureNumber(roleId, '角色ID');
     if (normalizedRoleId === 1 && status === '1') {
       throw new DemoSystemAdminError('超级管理员角色不能停用', 400);
@@ -1030,7 +1071,7 @@ export class DemoSystemAdminService {
     const deptIds =
       payload.deptIds !== undefined
         ? await this.validateDeptIds(parseIdList(payload.deptIds))
-        : current.deptIds ?? [];
+        : (current.deptIds ?? []);
 
     await this.repository.saveRole(
       normalizeRole({
@@ -1060,12 +1101,16 @@ export class DemoSystemAdminService {
     await this.repository.deleteRoles(normalizedRoleIds);
   }
 
-  async listAllocatedUsers(payload: DemoRoleUserPayload): Promise<DemoPageResult<Record<string, unknown>>> {
+  async listAllocatedUsers(
+    payload: DemoRoleUserPayload
+  ): Promise<DemoPageResult<Record<string, unknown>>> {
     const roleId = ensureNumber(payload.roleId, '角色ID');
     return this.listUsersByRole(roleId, true, payload);
   }
 
-  async listUnallocatedUsers(payload: DemoRoleUserPayload): Promise<DemoPageResult<Record<string, unknown>>> {
+  async listUnallocatedUsers(
+    payload: DemoRoleUserPayload
+  ): Promise<DemoPageResult<Record<string, unknown>>> {
     const roleId = ensureNumber(payload.roleId, '角色ID');
     return this.listUsersByRole(roleId, false, payload);
   }
@@ -1140,7 +1185,10 @@ export class DemoSystemAdminService {
     return (await this.repository.listMenus())
       .map(normalizeMenu)
       .filter((menu) => {
-        if (hasText(query.menuName) && !menu.menuName?.toLowerCase().includes(query.menuName.toLowerCase())) {
+        if (
+          hasText(query.menuName) &&
+          !menu.menuName?.toLowerCase().includes(query.menuName.toLowerCase())
+        ) {
           return false;
         }
         if (hasText(query.status) && menu.status !== query.status) {
@@ -1210,14 +1258,19 @@ export class DemoSystemAdminService {
     const menuId = ensureNumber(payload.menuId, '菜单ID');
     const current = normalizeMenu(await this.requireMenu(menuId));
     const parentId =
-      payload.parentId !== undefined ? resolveOptionalNumber(payload.parentId) ?? 0 : current.parentId;
+      payload.parentId !== undefined
+        ? (resolveOptionalNumber(payload.parentId) ?? 0)
+        : current.parentId;
 
     if (parentId === menuId) {
       throw new DemoSystemAdminError('上级菜单不能选择自己', 400);
     }
 
     if (parentId) {
-      const descendants = this.collectMenuIds((await this.repository.listMenus()).map(normalizeMenu), menuId);
+      const descendants = this.collectMenuIds(
+        (await this.repository.listMenus()).map(normalizeMenu),
+        menuId
+      );
       if (descendants.includes(parentId)) {
         throw new DemoSystemAdminError('上级菜单不能选择当前菜单的子节点', 400);
       }
@@ -1227,13 +1280,21 @@ export class DemoSystemAdminService {
       normalizeMenu({
         ...current,
         parentId,
-        name: payload.menuName !== undefined ? normalizeText(payload.menuName, current.name) : current.name,
+        name:
+          payload.menuName !== undefined
+            ? normalizeText(payload.menuName, current.name)
+            : current.name,
         routeName:
-          payload.menuName !== undefined ? normalizeText(payload.menuName, current.routeName) : current.routeName,
+          payload.menuName !== undefined
+            ? normalizeText(payload.menuName, current.routeName)
+            : current.routeName,
         menuName:
-          payload.menuName !== undefined ? normalizeText(payload.menuName, current.menuName) : current.menuName,
+          payload.menuName !== undefined
+            ? normalizeText(payload.menuName, current.menuName)
+            : current.menuName,
         path: payload.path !== undefined ? normalizeText(payload.path) : current.path,
-        component: payload.component !== undefined ? normalizeText(payload.component) : current.component,
+        component:
+          payload.component !== undefined ? normalizeText(payload.component) : current.component,
         orderNum: payload.orderNum !== undefined ? Number(payload.orderNum) : current.orderNum,
         visible: payload.visible ?? current.visible,
         status: payload.status ?? current.status,
@@ -1319,10 +1380,15 @@ export class DemoSystemAdminService {
     return normalizeDepartment(await this.requireDepartment(ensureNumber(deptId, '部门ID')));
   }
 
-  async createDepartment(payload: DemoDeptPayload, operator: string): Promise<Record<string, unknown>> {
+  async createDepartment(
+    payload: DemoDeptPayload,
+    operator: string
+  ): Promise<Record<string, unknown>> {
     const deptId = await nextDemoSequence(this.db, 'departments', 1);
     const parentId = resolveOptionalNumber(payload.parentId) ?? 0;
-    const parent = parentId ? normalizeDepartment(await this.requireDepartment(parentId)) : undefined;
+    const parent = parentId
+      ? normalizeDepartment(await this.requireDepartment(parentId))
+      : undefined;
     const now = new Date().toISOString();
 
     const department = normalizeDepartment({
@@ -1353,7 +1419,9 @@ export class DemoSystemAdminService {
     const deptId = ensureNumber(payload.deptId, '部门ID');
     const current = normalizeDepartment(await this.requireDepartment(deptId));
     const parentId =
-      payload.parentId !== undefined ? resolveOptionalNumber(payload.parentId) ?? 0 : current.parentId;
+      payload.parentId !== undefined
+        ? (resolveOptionalNumber(payload.parentId) ?? 0)
+        : current.parentId;
 
     if (parentId === deptId) {
       throw new DemoSystemAdminError('上级部门不能选择自己', 400);
@@ -1365,14 +1433,17 @@ export class DemoSystemAdminService {
       throw new DemoSystemAdminError('上级部门不能选择当前部门的子节点', 400);
     }
 
-    const parent = parentId ? normalizeDepartment(await this.requireDepartment(parentId)) : undefined;
+    const parent = parentId
+      ? normalizeDepartment(await this.requireDepartment(parentId))
+      : undefined;
 
     await this.repository.saveDepartment(
       normalizeDepartment({
         ...current,
         parentId,
         ancestors: buildAncestors(parent),
-        deptName: payload.deptName !== undefined ? normalizeText(payload.deptName) : current.deptName,
+        deptName:
+          payload.deptName !== undefined ? normalizeText(payload.deptName) : current.deptName,
         orderNum: payload.orderNum !== undefined ? Number(payload.orderNum) : current.orderNum,
         leader: payload.leader !== undefined ? normalizeText(payload.leader) : current.leader,
         phone: payload.phone !== undefined ? normalizeText(payload.phone) : current.phone,
@@ -1407,11 +1478,13 @@ export class DemoSystemAdminService {
   }
 
   async getDepartmentTreeSelect(): Promise<DemoSystemTreeNode[]> {
-    return this.buildDepartmentSelectTree((await this.repository.listDepartments()).map(normalizeDepartment));
+    return this.buildDepartmentSelectTree(
+      (await this.repository.listDepartments()).map(normalizeDepartment)
+    );
   }
 
   async listDictTypes(query: DemoDictTypeListQuery = {}): Promise<DemoPageResult<DemoDictType>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const rows = (await this.repository.listDictTypes())
       .map(normalizeDictType)
@@ -1435,7 +1508,7 @@ export class DemoSystemAdminService {
       })
       .sort(sortByText((item) => `${item.dictName}-${item.dictId}`));
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getDictTypeDetail(dictId: number | string): Promise<DemoDictType> {
@@ -1518,7 +1591,9 @@ export class DemoSystemAdminService {
       return;
     }
 
-    const dictTypes = await Promise.all(normalizedDictIds.map((dictId) => this.requireDictType(dictId)));
+    const dictTypes = await Promise.all(
+      normalizedDictIds.map((dictId) => this.requireDictType(dictId))
+    );
     const dictTypeValues = new Set(dictTypes.map((item) => item.dictType));
     const dictRows = (await this.repository.listDictData()).map(normalizeDictData);
     const deleteCodes = dictRows
@@ -1545,7 +1620,7 @@ export class DemoSystemAdminService {
   async listDictData(
     query: DemoDictDataListQuery = {}
   ): Promise<DemoPageResult<DemoDictData & { dictCode: number }>> {
-    const pageNum = resolvePage(query.pageNum, 1);
+    const page = resolvePage(query.page, 1);
     const pageSize = resolvePage(query.pageSize, DEFAULT_PAGE_SIZE);
     const rows = (await this.repository.listDictData())
       .map(normalizeDictData)
@@ -1566,11 +1641,13 @@ export class DemoSystemAdminService {
       })
       .sort((left, right) => left.dictSort - right.dictSort || left.dictCode - right.dictCode);
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   async getDictDataDetail(dictCode: number | string): Promise<Record<string, unknown>> {
-    const dictData = normalizeDictData(await this.requireDictData(ensureNumber(dictCode, '字典编码')));
+    const dictData = normalizeDictData(
+      await this.requireDictData(ensureNumber(dictCode, '字典编码'))
+    );
     return {
       ...dictData,
       dictCode: dictData.id,
@@ -1624,11 +1701,14 @@ export class DemoSystemAdminService {
       id: dictCode,
       dictId: dictTypeEntity.dictId,
       dictType,
-      dictLabel: payload.dictLabel !== undefined ? normalizeText(payload.dictLabel) : current.dictLabel,
-      dictValue: payload.dictValue !== undefined ? normalizeText(payload.dictValue) : current.dictValue,
+      dictLabel:
+        payload.dictLabel !== undefined ? normalizeText(payload.dictLabel) : current.dictLabel,
+      dictValue:
+        payload.dictValue !== undefined ? normalizeText(payload.dictValue) : current.dictValue,
       dictSort: payload.dictSort !== undefined ? Number(payload.dictSort) : current.dictSort,
       cssClass: payload.cssClass !== undefined ? normalizeText(payload.cssClass) : current.cssClass,
-      listClass: payload.listClass !== undefined ? normalizeText(payload.listClass) : current.listClass,
+      listClass:
+        payload.listClass !== undefined ? normalizeText(payload.listClass) : current.listClass,
       status: payload.status ?? current.status,
       remark: payload.remark !== undefined ? normalizeText(payload.remark) : current.remark,
       updateTime: new Date().toISOString(),
@@ -1644,11 +1724,15 @@ export class DemoSystemAdminService {
   }
 
   async exportUsers(query: DemoUserListQuery = {}): Promise<DemoGeneratedFile> {
-    const page = await this.listUsers({ ...query, pageNum: 1, pageSize: Number.MAX_SAFE_INTEGER });
+    const page = await this.listUsers({
+      ...query,
+      page: 1,
+      pageSize: Number.MAX_SAFE_INTEGER,
+    });
     return createDelimitedFile(
       'demo-users.tsv',
       ['用户编号', '用户名称', '用户昵称', '部门', '手机号', '状态', '创建时间'],
-      page.rows.map((row) => [
+      page.items.map((row) => [
         Number(row.userId),
         normalizeText(row.userName),
         normalizeText(row.nickName),
@@ -1661,11 +1745,15 @@ export class DemoSystemAdminService {
   }
 
   async exportRoles(query: DemoRoleListQuery = {}): Promise<DemoGeneratedFile> {
-    const page = await this.listRoles({ ...query, pageNum: 1, pageSize: Number.MAX_SAFE_INTEGER });
+    const page = await this.listRoles({
+      ...query,
+      page: 1,
+      pageSize: Number.MAX_SAFE_INTEGER,
+    });
     return createDelimitedFile(
       'demo-roles.tsv',
       ['角色编号', '角色名称', '权限字符', '显示顺序', '状态', '创建时间'],
-      page.rows.map((row) => [
+      page.items.map((row) => [
         row.roleId,
         row.roleName,
         row.roleKey,
@@ -1677,11 +1765,15 @@ export class DemoSystemAdminService {
   }
 
   async exportDictTypes(query: DemoDictTypeListQuery = {}): Promise<DemoGeneratedFile> {
-    const page = await this.listDictTypes({ ...query, pageNum: 1, pageSize: Number.MAX_SAFE_INTEGER });
+    const page = await this.listDictTypes({
+      ...query,
+      page: 1,
+      pageSize: Number.MAX_SAFE_INTEGER,
+    });
     return createDelimitedFile(
       'demo-dict-types.tsv',
       ['字典编号', '字典名称', '字典类型', '状态', '备注', '创建时间'],
-      page.rows.map((row) => [
+      page.items.map((row) => [
         row.dictId,
         row.dictName,
         row.dictType,
@@ -1693,11 +1785,15 @@ export class DemoSystemAdminService {
   }
 
   async exportDictData(query: DemoDictDataListQuery = {}): Promise<DemoGeneratedFile> {
-    const page = await this.listDictData({ ...query, pageNum: 1, pageSize: Number.MAX_SAFE_INTEGER });
+    const page = await this.listDictData({
+      ...query,
+      page: 1,
+      pageSize: Number.MAX_SAFE_INTEGER,
+    });
     return createDelimitedFile(
       'demo-dict-data.tsv',
       ['字典编码', '字典标签', '字典键值', '字典类型', '排序', '状态', '备注'],
-      page.rows.map((row) => [
+      page.items.map((row) => [
         Number(row.dictCode),
         normalizeText(row.dictLabel),
         normalizeText(row.dictValue),
@@ -1722,8 +1818,14 @@ export class DemoSystemAdminService {
     allocated: boolean,
     payload: DemoRoleUserPayload
   ): Promise<DemoPageResult<Record<string, unknown>>> {
-    const pageNum = resolvePage((payload as Record<string, unknown>).pageNum as string | number | undefined, 1);
-    const pageSize = resolvePage((payload as Record<string, unknown>).pageSize as string | number | undefined, DEFAULT_PAGE_SIZE);
+    const page = resolvePage(
+      (payload as Record<string, unknown>).page as string | number | undefined,
+      1
+    );
+    const pageSize = resolvePage(
+      (payload as Record<string, unknown>).pageSize as string | number | undefined,
+      DEFAULT_PAGE_SIZE
+    );
     const [users, departments, roles] = await Promise.all([
       this.repository.listUsers(),
       this.repository.listDepartments(),
@@ -1746,9 +1848,11 @@ export class DemoSystemAdminService {
         return true;
       })
       .sort((left, right) => left.userId - right.userId)
-      .map((user) => toUserAuthPayload(user, departments.map(normalizeDepartment), roles.map(normalizeRole)));
+      .map((user) =>
+        toUserAuthPayload(user, departments.map(normalizeDepartment), roles.map(normalizeRole))
+      );
 
-    return paginate(rows, pageNum, pageSize);
+    return paginate(rows, page, pageSize);
   }
 
   private buildDepartmentSelectTree(departments: DemoDepartment[]): DemoSystemTreeNode[] {
@@ -1792,7 +1896,9 @@ export class DemoSystemAdminService {
   }
 
   private collectDeptIds(departments: DemoDepartment[], deptId: number): number[] {
-    const childIds = departments.filter((item) => item.parentId === deptId).map((item) => item.deptId);
+    const childIds = departments
+      .filter((item) => item.parentId === deptId)
+      .map((item) => item.deptId);
     return [deptId, ...childIds.flatMap((childId) => this.collectDeptIds(departments, childId))];
   }
 
@@ -1844,7 +1950,10 @@ export class DemoSystemAdminService {
   private async getAssignableRoles(): Promise<DemoRole[]> {
     return (await this.repository.listRoles())
       .map(normalizeRole)
-      .sort((left, right) => Number(left.roleSort) - Number(right.roleSort) || left.roleId - right.roleId);
+      .sort(
+        (left, right) =>
+          Number(left.roleSort) - Number(right.roleSort) || left.roleId - right.roleId
+      );
   }
 
   private async getAssignablePosts(): Promise<DemoPost[]> {
@@ -1872,11 +1981,16 @@ export class DemoSystemAdminService {
       this.repository.getAccountByUsername(user.userName),
       this.repository.listRoles(),
     ]);
-    const currentRoles = roles.map(normalizeRole).filter((role) => user.roleIds.includes(role.roleId));
+    const currentRoles = roles
+      .map(normalizeRole)
+      .filter((role) => user.roleIds.includes(role.roleId));
     const account: DemoAccount = {
       username: user.userName,
       password:
-        password ?? normalizeText(user.password) ?? existingAccount?.password ?? DEFAULT_USER_PASSWORD,
+        password ??
+        normalizeText(user.password) ??
+        existingAccount?.password ??
+        DEFAULT_USER_PASSWORD,
       userId: user.userId,
       roleIds: user.roleIds,
       roles: currentRoles.map((role) => role.roleKey),

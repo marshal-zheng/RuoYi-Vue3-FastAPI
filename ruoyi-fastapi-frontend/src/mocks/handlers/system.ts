@@ -1,15 +1,14 @@
-// @ts-nocheck
 import { http, HttpResponse } from 'msw';
 
 import { createApiPath } from '../constants';
-import type { MockStrategy } from '../types';
+import type { MockRuntimeHandler, MockStrategy } from '../types';
 import { createDeptTree, createDictData, createSystemRoutes } from '../factories';
 import { resultSuccess } from '../utils/response';
 import { withBackendFallback } from '../utils/with-backend-fallback';
 
 const systemRoutes = createSystemRoutes();
 
-export function createSystemHandlers(strategy: MockStrategy) {
+export function createSystemHandlers(strategy: MockStrategy): MockRuntimeHandler[] {
   return [
     http.get(createApiPath('/getRouters'), ({ request }) =>
       withBackendFallback(request, () => HttpResponse.json(resultSuccess(systemRoutes)), {

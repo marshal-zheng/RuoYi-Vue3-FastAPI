@@ -99,16 +99,21 @@ export function createHandlers(strategy: MockStrategy) {
 
 ### Node / 测试环境
 
-如需在单元测试中使用 Mock，可在测试入口引入：
+Vitest 已在 `tests/setup.ts` 统一接入 MSW Node server：
 
 ```ts
-import { createMockServer } from '@/mocks/server'
+import { setupMockServerLifecycle } from './mocks/lifecycle'
 
-const server = createMockServer()
+setupMockServerLifecycle()
+```
 
-beforeAll(() => server.listen())
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())
+统一生命周期使用 `onUnhandledRequest: 'error'`。HTTP 合约测试必须通过真实 API 函数和请求兼容层进入请求链路，再由 MSW handler 返回契约响应；禁止在 API 合约测试中直接 mock 请求兼容层。需要临时覆盖响应时，在测试内使用 `mockServer.use(...)` 注册更具体的 handler。
+
+Mock 类型必须保持可编译，`src/mocks/**` 不允许使用 TypeScript 检查禁用注释。本地治理命令：
+
+```bash
+yarn type-check:strict
+bash scripts/check-mock-standards.sh
 ```
 
 ### 注意事项

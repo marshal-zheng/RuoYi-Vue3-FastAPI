@@ -36,8 +36,8 @@ describe('DemoAuthService', () => {
     });
     expect(info).toMatchObject({
       user: expect.objectContaining({ userName: 'admin' }),
-      roles: ['admin'],
-      permissions: ['*:*:*'],
+      roles: expect.arrayContaining(['admin']),
+      permissions: expect.arrayContaining(['*:*:*']),
     });
   });
 

@@ -1,5 +1,8 @@
 import { vi } from 'vitest';
 import '@testing-library/jest-dom';
+import { setupMockServerLifecycle } from './mocks/lifecycle';
+
+setupMockServerLifecycle();
 
 // 全局模拟配置
 Object.defineProperty(window, 'matchMedia', {
@@ -17,22 +20,40 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // 模拟 ResizeObserver
-if (!globalThis.ResizeObserver) {
-  globalThis.ResizeObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-  }));
+class ResizeObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
 }
 
+Object.defineProperty(globalThis, 'ResizeObserver', {
+  writable: true,
+  configurable: true,
+  value: ResizeObserverMock,
+});
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  configurable: true,
+  value: ResizeObserverMock,
+});
+
 // 模拟 IntersectionObserver
-if (!globalThis.IntersectionObserver) {
-  globalThis.IntersectionObserver = vi.fn().mockImplementation(() => ({
-    observe: vi.fn(),
-    unobserve: vi.fn(),
-    disconnect: vi.fn(),
-  }));
+class IntersectionObserverMock {
+  observe = vi.fn();
+  unobserve = vi.fn();
+  disconnect = vi.fn();
 }
+
+Object.defineProperty(globalThis, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserverMock,
+});
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserverMock,
+});
 
 // 模拟 localStorage
 const localStorageMock: Storage = {

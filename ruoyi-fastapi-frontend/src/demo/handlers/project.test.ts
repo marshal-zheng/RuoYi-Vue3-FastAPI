@@ -1,7 +1,6 @@
 import 'fake-indexeddb/auto';
 
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { setupServer } from 'msw/node';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { DemoOfflineDb, replaceDemoOfflineDb } from '@/demo/db';
 import { createDemoOfflineHandlers } from '@/demo/handlers';
@@ -10,6 +9,7 @@ import type { DemoRuntimeLogger } from '@/demo/runtime/logger';
 import type { RuntimeConfig } from '@/demo/runtime/mode';
 import { defaultDemoScenario } from '@/demo/scenarios';
 import { DemoAuthService } from '@/demo/services';
+import { mockServer } from '../../../tests/mocks/server';
 
 const runtimeConfig: RuntimeConfig = {
   mode: 'demo-offline',
@@ -27,8 +27,6 @@ const logger: DemoRuntimeLogger = {
   error: vi.fn(),
 };
 
-const server = setupServer(...createDemoOfflineHandlers({ config: runtimeConfig, logger }));
-
 let db: DemoOfflineDb;
 
 async function createAuthHeaders(): Promise<HeadersInit> {
@@ -45,22 +43,14 @@ async function createAuthHeaders(): Promise<HeadersInit> {
 }
 
 describe('demo-offline project handlers', () => {
-  beforeAll(() => {
-    server.listen();
-  });
-
-  afterAll(() => {
-    server.close();
-  });
-
   beforeEach(async () => {
     db = new DemoOfflineDb(`demo-project-handler-test-${crypto.randomUUID()}`);
     replaceDemoOfflineDb(db);
     await new ScenarioRepository(db).ensureScenario(defaultDemoScenario);
+    mockServer.use(...createDemoOfflineHandlers({ config: runtimeConfig, logger }));
   });
 
   afterEach(async () => {
-    server.resetHandlers();
     await db.delete();
     replaceDemoOfflineDb(undefined);
   });
@@ -79,13 +69,13 @@ describe('demo-offline project handlers', () => {
     const created = await createResponse.json();
 
     expect(createResponse.status).toBe(200);
-    expect(created.data).toMatchObject({
+    expect(created).toMatchObject({
       projectName: 'HTTP 新建工程',
       projectDesc: '来自 handler 测试',
       createBy: 'admin',
     });
 
-    const projectId = created.data.projectId;
+    const projectId = created.projectId;
 
     const listResponse = await fetch('/api/project/list?projectName=HTTP', {
       headers,
@@ -93,7 +83,7 @@ describe('demo-offline project handlers', () => {
     const listPayload = await listResponse.json();
 
     expect(listResponse.status).toBe(200);
-    expect(listPayload.data.rows).toEqual(
+    expect(listPayload.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           projectId,
@@ -119,7 +109,7 @@ describe('demo-offline project handlers', () => {
     const topologyPayload = await topologyResponse.json();
 
     expect(topologyResponse.status).toBe(200);
-    expect(topologyPayload.data).toMatchObject({
+    expect(topologyPayload).toMatchObject({
       projectId,
       topologyData: {
         graph: {
@@ -134,7 +124,7 @@ describe('demo-offline project handlers', () => {
     const getTopologyPayload = await getTopologyResponse.json();
 
     expect(getTopologyResponse.status).toBe(200);
-    expect(getTopologyPayload.data.topologyData.graph).toEqual({
+    expect(getTopologyPayload.topologyData.graph).toEqual({
       cells: [{ id: 'http-node' }],
     });
   });

@@ -73,8 +73,8 @@ export function createDemoProjectHandlers({
       try {
         await createAuthService().getInfo(getDemoRequestToken(request));
         const page = await createProjectService().listProjects({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           projectName: readSearchParam(request, 'projectName'),
           beginTime: readSearchParam(request, 'beginTime'),
           endTime: readSearchParam(request, 'endTime'),
@@ -180,8 +180,8 @@ export function createDemoProjectHandlers({
       try {
         await createAuthService().getInfo(getDemoRequestToken(request));
         const page = await createProjectService().listProjectVersions({
-          pageNum: readSearchParam(request, 'pageNum', 'page'),
-          pageSize: readSearchParam(request, 'pageSize', 'size'),
+          page: readSearchParam(request, 'page'),
+          pageSize: readSearchParam(request, 'pageSize'),
           projectId: readSearchParam(request, 'projectId'),
           versionName: readSearchParam(request, 'versionName'),
           beginTime: readSearchParam(request, 'beginTime'),

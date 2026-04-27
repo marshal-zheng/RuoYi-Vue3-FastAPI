@@ -3,7 +3,7 @@ import type { Table, UpdateSpec } from 'dexie';
 export type DemoRepositoryId = string | number;
 
 export interface DemoQuery<T extends object = Record<string, unknown>> {
-  pageNum?: number;
+  page?: number;
   pageSize?: number;
   filters?: Partial<Record<Extract<keyof T, string>, unknown>>;
   sortBy?: Extract<keyof T, string>;
@@ -11,9 +11,9 @@ export interface DemoQuery<T extends object = Record<string, unknown>> {
 }
 
 export interface DemoPage<T> {
-  rows: T[];
+  items: T[];
   total: number;
-  pageNum: number;
+  page: number;
   pageSize: number;
 }
 
@@ -55,7 +55,7 @@ export abstract class DexieDemoRepository<T extends object, ID extends DemoRepos
   ) {}
 
   async list(query: DemoQuery<T> = {}): Promise<DemoPage<T>> {
-    const pageNum = Math.max(Number(query.pageNum ?? 1), 1);
+    const page = Math.max(Number(query.page ?? 1), 1);
     const pageSize = Math.max(Number(query.pageSize ?? 10), 1);
     const filters = query.filters ?? {};
     const filterEntries = Object.entries(filters);
@@ -76,12 +76,12 @@ export abstract class DexieDemoRepository<T extends object, ID extends DemoRepos
       );
     }
 
-    const start = (pageNum - 1) * pageSize;
+    const start = (page - 1) * pageSize;
 
     return {
-      rows: filteredRows.slice(start, start + pageSize),
+      items: filteredRows.slice(start, start + pageSize),
       total: filteredRows.length,
-      pageNum,
+      page,
       pageSize,
     };
   }

@@ -16,16 +16,12 @@ export interface CreateDemoOfflineHandlersOptions {
 export type DemoOfflineHandler = HttpHandler | WebSocketHandler;
 
 export interface DemoApiNotImplementedPayload {
-  code: 501;
-  msg: string;
-  type: 'error';
-  data: {
-    reason: 'DEMO_API_NOT_IMPLEMENTED';
-    method: string;
-    path: string;
-    mode: 'demo-offline';
-    scenarioId: string;
-  };
+  type: 'about:blank';
+  title: string;
+  status: 501;
+  detail: string;
+  instance: string;
+  errorCode: 'DEMO_API_NOT_IMPLEMENTED';
 }
 
 export function isDemoApiRequest(request: Request, apiPrefix: string): boolean {
@@ -41,16 +37,12 @@ export function createDemoApiNotImplementedPayload(
   const path = `${url.pathname}${url.search}`;
 
   return {
-    code: 501,
-    msg: `DEMO_API_NOT_IMPLEMENTED: ${request.method} ${path} 尚未在 demo-offline 中实现`,
-    type: 'error',
-    data: {
-      reason: 'DEMO_API_NOT_IMPLEMENTED',
-      method: request.method,
-      path,
-      mode: 'demo-offline',
-      scenarioId: config.scenarioId,
-    },
+    type: 'about:blank',
+    title: 'Demo API Not Implemented',
+    status: 501,
+    detail: `DEMO_API_NOT_IMPLEMENTED: ${request.method} ${path} 尚未在 demo-offline 中实现`,
+    instance: path,
+    errorCode: 'DEMO_API_NOT_IMPLEMENTED',
   };
 }
 
@@ -63,7 +55,10 @@ export function createDemoApiCatchAllHandler(
     ({ request }) => {
       const payload = createDemoApiNotImplementedPayload(request, config);
 
-      logger.warn('未覆盖 API 已被 demo-offline catch-all 拦截。', payload.data);
+      logger.warn('未覆盖 API 已被 demo-offline catch-all 拦截。', {
+        errorCode: payload.errorCode,
+        instance: payload.instance,
+      });
 
       return HttpResponse.json(payload, {
         status: 501,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { fakerZH_CN as faker } from '@faker-js/faker';
 
 export interface MockUser {
@@ -64,7 +63,7 @@ function formatDateTime(date: Date): string {
 }
 
 function randomPhone(): string {
-  return faker.phone.number('1##########');
+  return `1${faker.string.numeric(10)}`;
 }
 
 function randomDateTime(): string {
@@ -80,7 +79,7 @@ export function createUser(overrides: Partial<MockUser> = {}): MockUser {
   const userName =
     overrides.userName ??
     faker.internet
-      .userName({ firstName: nickName })
+      .username({ firstName: nickName })
       .replace(/[^a-zA-Z0-9]/g, '')
       .toLowerCase();
 
@@ -91,9 +90,9 @@ export function createUser(overrides: Partial<MockUser> = {}): MockUser {
     nickName,
     email: overrides.email ?? faker.internet.email({ firstName: nickName }),
     phonenumber: overrides.phonenumber ?? randomPhone(),
-    sex: overrides.sex ?? faker.helpers.arrayElement(['0', '1', '2']),
+    sex: overrides.sex ?? faker.helpers.arrayElement(['0', '1', '2'] as const),
     avatar: overrides.avatar ?? '',
-    status: overrides.status ?? faker.helpers.arrayElement(['0', '1']),
+    status: overrides.status ?? faker.helpers.arrayElement(['0', '1'] as const),
     delFlag: '0',
     loginIp: overrides.loginIp ?? faker.internet.ipv4(),
     loginDate: overrides.loginDate ?? randomDateTime(),

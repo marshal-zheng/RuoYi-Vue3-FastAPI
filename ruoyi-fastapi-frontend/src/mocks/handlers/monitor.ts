@@ -1,12 +1,11 @@
-// @ts-nocheck
 import { http, HttpResponse } from 'msw';
 
 import { createApiPath } from '../constants';
-import type { MockStrategy } from '../types';
-import { resultSuccess } from '../utils/response';
+import type { MockRuntimeHandler, MockStrategy } from '../types';
+import { pagination, resultSuccess } from '../utils/response';
 import { withBackendFallback } from '../utils/with-backend-fallback';
 
-export function createMonitorHandlers(strategy: MockStrategy) {
+export function createMonitorHandlers(strategy: MockStrategy): MockRuntimeHandler[] {
   return [
     // 服务器监控信息
     http.get(createApiPath('/monitor/server'), ({ request }) =>
@@ -100,32 +99,39 @@ export function createMonitorHandlers(strategy: MockStrategy) {
     http.get(createApiPath('/monitor/online/list'), ({ request }) =>
       withBackendFallback(
         request,
-        () =>
-          HttpResponse.json(
+        () => {
+          const searchParams = new URL(request.url).searchParams;
+          const page = Number(searchParams.get('page') ?? 1);
+          const pageSize = Number(searchParams.get('pageSize') ?? 10);
+          const items = pagination(page, pageSize, [
+            {
+              tokenId: 'mock-token-001',
+              userName: 'admin',
+              ipaddr: '192.168.1.1',
+              loginLocation: '内网IP',
+              browser: 'Chrome 120',
+              os: 'Windows 10',
+              loginTime: new Date().toISOString(),
+            },
+            {
+              tokenId: 'mock-token-002',
+              userName: 'test',
+              ipaddr: '192.168.1.2',
+              loginLocation: '内网IP',
+              browser: 'Firefox 121',
+              os: 'macOS',
+              loginTime: new Date(Date.now() - 3600000).toISOString(),
+            },
+          ]);
+          return HttpResponse.json(
             resultSuccess({
-              rows: [
-                {
-                  tokenId: 'mock-token-001',
-                  userName: 'admin',
-                  ipaddr: '192.168.1.1',
-                  loginLocation: '内网IP',
-                  browser: 'Chrome 120',
-                  os: 'Windows 10',
-                  loginTime: new Date().toISOString(),
-                },
-                {
-                  tokenId: 'mock-token-002',
-                  userName: 'test',
-                  ipaddr: '192.168.1.2',
-                  loginLocation: '内网IP',
-                  browser: 'Firefox 121',
-                  os: 'macOS',
-                  loginTime: new Date(Date.now() - 3600000).toISOString(),
-                },
-              ],
+              items,
               total: 2,
+              page,
+              pageSize,
             })
-          ),
+          );
+        },
         { strategy, tag: 'monitor:online' }
       )
     ),

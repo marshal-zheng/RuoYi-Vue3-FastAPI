@@ -24,12 +24,12 @@ describe('DemoSystemAdminService', () => {
 
   it('lists offline users with department and role context', async () => {
     const page = await systemAdminService.listUsers({
-      pageNum: 1,
+      page: 1,
       pageSize: 20,
     });
 
     expect(page.total).toBe(4);
-    expect(page.rows).toEqual(
+    expect(page.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           userName: 'admin',
@@ -50,11 +50,11 @@ describe('DemoSystemAdminService', () => {
 
     const scoped = await systemAdminService.listUsers({
       deptId: 102,
-      pageNum: 1,
+      page: 1,
       pageSize: 20,
     });
 
-    expect(scoped.rows.map((row) => row.userName)).toEqual(
+    expect(scoped.items.map((row) => row.userName)).toEqual(
       expect.arrayContaining(['demo_user', 'data_viewer', 'qa_case'])
     );
   });
@@ -169,7 +169,7 @@ describe('DemoSystemAdminService', () => {
 
     const dictTypes = await systemAdminService.listDictTypes({
       dictType: 'sys_demo_case',
-      pageNum: 1,
+      page: 1,
       pageSize: 10,
     });
     expect(dictTypes.total).toBe(1);
@@ -177,10 +177,10 @@ describe('DemoSystemAdminService', () => {
 
     const dictData = await systemAdminService.listDictData({
       dictType: 'sys_demo_case',
-      pageNum: 1,
+      page: 1,
       pageSize: 10,
     });
-    expect(dictData.rows).toEqual(
+    expect(dictData.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           dictLabel: '启用',
@@ -190,6 +190,8 @@ describe('DemoSystemAdminService', () => {
     );
 
     const deptList = await systemAdminService.listDepartmentsExcludeChildren(102);
-    expect(deptList.map((item) => item.deptId)).not.toEqual(expect.arrayContaining([102, 103, 104]));
+    expect(deptList.map((item) => item.deptId)).not.toEqual(
+      expect.arrayContaining([102, 103, 104])
+    );
   });
 });

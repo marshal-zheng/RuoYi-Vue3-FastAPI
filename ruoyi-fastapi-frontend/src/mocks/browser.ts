@@ -1,12 +1,11 @@
-// @ts-nocheck
-import { setupWorker, type SetupWorkerApi } from 'msw/browser';
+import { setupWorker, type SetupWorker } from 'msw/browser';
 
 import { createScenarioHandlers } from './scenarios';
 import type { MockRuntimeHandler, MockScenario, MockStrategy, StartMockOptions } from './types';
 
 declare global {
   interface Window {
-    __MSW_WORKER__?: SetupWorkerApi;
+    __MSW_WORKER__?: SetupWorker;
     __MSW_STRATEGY__?: MockStrategy;
     __MSW_SCENARIO__?: MockScenario;
     __MSW_RUNTIME_HANDLERS__?: MockRuntimeHandler[];
@@ -17,7 +16,7 @@ function ensureWorker(
   strategy: MockStrategy,
   scenario: MockScenario,
   handlers: MockRuntimeHandler[]
-): SetupWorkerApi {
+): SetupWorker {
   const existing = window.__MSW_WORKER__;
   if (existing) {
     existing.resetHandlers(...handlers);
@@ -35,14 +34,17 @@ function ensureWorker(
   return worker;
 }
 
-export async function startBrowserMock(options: StartMockOptions = {}) {
+export async function startBrowserMock(
+  options: StartMockOptions = {}
+): Promise<SetupWorker | undefined> {
   if (typeof window === 'undefined') {
     return undefined;
   }
 
   const strategy: MockStrategy = options.strategy ?? 'fallback';
   const scenario: MockScenario = options.scenario ?? (strategy === 'pure' ? 'pure' : 'default');
-  const handlers = options.handlers ?? createScenarioHandlers(strategy, scenario);
+  const handlers: MockRuntimeHandler[] =
+    options.handlers ?? createScenarioHandlers(strategy, scenario);
 
   const worker = ensureWorker(strategy, scenario, handlers);
   await worker.start({

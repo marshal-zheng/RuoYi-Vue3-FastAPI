@@ -4,6 +4,55 @@ import type { DemoRuntimeLogger } from '@/demo/runtime/logger';
 import type { RuntimeConfig } from '@/demo/runtime/mode';
 import { DemoAuthError } from '@/demo/services';
 
+type JsonRecord = Record<string, unknown>;
+
+function isRecord(value: unknown): value is JsonRecord {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function normalizeLegacyPageShape(payload: unknown): unknown {
+  if (Array.isArray(payload)) {
+    return payload.map((item) => normalizeLegacyPageShape(item));
+  }
+
+  if (!isRecord(payload)) {
+    return payload;
+  }
+
+  const normalized: JsonRecord = {};
+
+  Object.entries(payload).forEach(([key, value]) => {
+    normalized[key] = normalizeLegacyPageShape(value);
+  });
+
+  return normalized;
+}
+
+function normalizeLegacySuccessPayload(payload: unknown): unknown {
+  if (!isRecord(payload)) {
+    return normalizeLegacyPageShape(payload);
+  }
+
+  const isLegacyEnvelope =
+    payload.type === 'success' &&
+    typeof payload.code === 'number' &&
+    ('data' in payload || 'msg' in payload);
+
+  if (isLegacyEnvelope) {
+    if ('data' in payload) {
+      return normalizeLegacyPageShape(payload.data);
+    }
+
+    const unwrapped = { ...payload };
+    delete unwrapped.code;
+    delete unwrapped.msg;
+    delete unwrapped.type;
+    return normalizeLegacyPageShape(unwrapped);
+  }
+
+  return normalizeLegacyPageShape(payload);
+}
+
 export function createDemoApiPath(config: RuntimeConfig, path: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${config.apiPrefix}${normalizedPath}`;
@@ -71,7 +120,7 @@ export function demoJsonResponse(
   payload: JsonBodyType,
   status = 200
 ): Response {
-  return HttpResponse.json(payload, {
+  return HttpResponse.json(normalizeLegacySuccessPayload(payload) as JsonBodyType, {
     status,
     headers: {
       'X-Demo-Runtime': 'demo-offline',
@@ -100,12 +149,12 @@ export function demoErrorResponse(
     config,
     handlerName,
     {
-      code: authError.code,
-      msg: authError.message,
-      type: 'error',
-      data: {
-        reason: authError.name,
-      },
+      type: 'about:blank',
+      title: authError.message,
+      status: authError.status,
+      detail: authError.message,
+      instance: '',
+      errorCode: authError.code,
     },
     authError.status
   );

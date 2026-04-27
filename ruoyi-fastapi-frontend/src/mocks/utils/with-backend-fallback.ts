@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { bypass } from 'msw';
 
 import type { MockStrategy } from '../types';

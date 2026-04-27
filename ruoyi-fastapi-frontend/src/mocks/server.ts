@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { setupServer, type SetupServerApi } from 'msw/node';
 
 import { createScenarioHandlers } from './scenarios';

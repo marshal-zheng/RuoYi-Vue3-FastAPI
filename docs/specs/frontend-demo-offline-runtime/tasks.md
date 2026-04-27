@@ -58,7 +58,7 @@
   - 说明 demo 账号、菜单权限、场景数据与 IndexedDB 的本地隔离边界，避免被误认为真实生产数据。
   _需求追溯: R2.AC4, R7.AC3, R8.AC3, R8.AC4_
 
-- [ ] 9. 完成测试矩阵与静态产物验收
+- [x] 9. 完成测试矩阵与静态产物验收
   - 为运行模式解析、Dexie 仓储、场景导入/重置、认证服务、项目/版本服务、仿真 HTTP/WebSocket handler 补齐单元与集成测试。
   - 增加未实现 API catch-all、会话恢复、页面刷新后数据保留、场景切换不混数、仿真 ping/pong 的关键回归测试。
   - 执行 `yarn lint:check`、`yarn type-check`、`yarn test:run`、`yarn build:prod`、`yarn build:demo-offline`，并通过静态服务预览验证登录、菜单、项目 CRUD、版本 CRUD、拓扑保存和仿真只读实时页。

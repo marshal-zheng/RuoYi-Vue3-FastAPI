@@ -1,17 +1,16 @@
-// @ts-nocheck
 export function getRequestToken(request: Request): string | undefined {
   const raw = request.headers.get('authorization');
   if (!raw) return undefined;
   return raw.replace(/^Bearer\s+/i, '');
 }
 
-export async function readJsonBody<T = any>(request: Request): Promise<T | undefined> {
+export async function readJsonBody<T = unknown>(request: Request): Promise<T | undefined> {
   const contentType = request.headers.get('content-type')?.toLowerCase() ?? '';
 
   if (contentType.includes('application/json')) {
     try {
       return await request.clone().json();
-    } catch (error) {
+    } catch {
       return undefined;
     }
   }
@@ -26,7 +25,7 @@ export async function readJsonBody<T = any>(request: Request): Promise<T | undef
       if (entries.length > 0) {
         return Object.fromEntries(entries) as T;
       }
-    } catch (error) {
+    } catch {
       // fallback to text parsing below
     }
   }
@@ -46,7 +45,7 @@ export async function readJsonBody<T = any>(request: Request): Promise<T | undef
     if (trimmed.includes('=') || trimmed.includes('&')) {
       return Object.fromEntries(new URLSearchParams(trimmed).entries()) as T;
     }
-  } catch (error) {
+  } catch {
     return undefined;
   }
 

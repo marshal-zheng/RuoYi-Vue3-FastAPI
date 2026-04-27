@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { resolveRuntimeConfig } from '@/demo/runtime/mode';
 import { startBrowserMock } from './browser';
 import type { MockMode, MockScenario, MockStrategy, StartMockOptions } from './types';
@@ -7,7 +6,7 @@ function resolveModeFromEnv(): MockMode {
   return resolveRuntimeConfig().mockMode;
 }
 
-function resolveScenario(strategy: MockStrategy, scenario?: MockScenario) {
+function resolveScenario(strategy: MockStrategy, scenario?: MockScenario): MockScenario {
   if (scenario) return scenario;
   return strategy === 'pure' ? 'pure' : 'default';
 }

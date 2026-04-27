@@ -36,21 +36,18 @@ describe('demo-offline HTTP boundaries', () => {
   });
 
   it('builds deterministic not-implemented payloads', () => {
-    const request = new Request('http://localhost/api/project/unknown?pageNum=1', {
+    const request = new Request('http://localhost/api/project/unknown?page=1', {
       method: 'POST',
     });
 
     expect(createDemoApiNotImplementedPayload(request, runtimeConfig)).toEqual({
-      code: 501,
-      msg: 'DEMO_API_NOT_IMPLEMENTED: POST /api/project/unknown?pageNum=1 尚未在 demo-offline 中实现',
-      type: 'error',
-      data: {
-        reason: 'DEMO_API_NOT_IMPLEMENTED',
-        method: 'POST',
-        path: '/api/project/unknown?pageNum=1',
-        mode: 'demo-offline',
-        scenarioId: 'default',
-      },
+      type: 'about:blank',
+      title: 'Demo API Not Implemented',
+      status: 501,
+      detail:
+        'DEMO_API_NOT_IMPLEMENTED: POST /api/project/unknown?page=1 尚未在 demo-offline 中实现',
+      instance: '/api/project/unknown?page=1',
+      errorCode: 'DEMO_API_NOT_IMPLEMENTED',
     });
   });
 

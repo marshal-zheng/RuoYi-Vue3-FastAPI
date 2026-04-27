@@ -144,6 +144,14 @@ describe('Login Page E2E Tests', () => {
 - `URL.createObjectURL`
 - `fetch`
 
+同时统一启动 MSW Node server，测试生命周期为：
+
+- `beforeAll`: `mockServer.listen({ onUnhandledRequest: 'error' })`
+- `afterEach`: `mockServer.resetHandlers()`
+- `afterAll`: `mockServer.close()`
+
+这意味着任何未被 handler 覆盖的 HTTP 请求都会让测试失败。API 合约测试应调用真实 API 函数，走 `@/utils/request` 与 HTTP transform，再用 `tests/mocks/api-contract-handlers.ts` 或测试内 `mockServer.use(...)` 提供响应。
+
 ## 📊 测试报告
 
 ### HTML 报告
@@ -202,6 +210,17 @@ const mockFn = vi.fn()
 vi.mock('@/api/user', () => ({
   getUserInfo: vi.fn().mockResolvedValue({ name: 'Test User' })
 }))
+```
+
+HTTP 合约相关测试不要 mock 请求兼容层。纯 store/composable 单元测试可以 mock 上层 API 模块或浏览器存储；只要测试目标涉及请求契约、错误映射、分页解包、导出响应、限流/503 等 HTTP 行为，就必须使用 MSW。
+
+本地提交前建议运行：
+
+```bash
+yarn type-check
+yarn type-check:strict
+bash scripts/check-mock-standards.sh
+yarn test:run
 ```
 
 ## 🐛 常见问题
