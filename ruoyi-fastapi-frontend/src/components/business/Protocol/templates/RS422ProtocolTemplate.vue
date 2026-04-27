@@ -580,6 +580,7 @@ const removeRow = (row: any) => {
     localConfig.fields = localConfig.fields.filter(
       (item: any) => item.id !== row.id && item.parentId !== row.id
     );
+    // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
     ElMessage.success('删除成功');
   }
 };
@@ -602,6 +603,7 @@ const removeSelectRow = async () => {
       localConfig.fields = localConfig.fields.filter(
         (item: any) => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
       );
+      // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
       ElMessage.success('删除成功');
     })
     .catch(() => {});

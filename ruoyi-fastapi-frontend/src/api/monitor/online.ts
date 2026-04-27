@@ -14,5 +14,6 @@ export function forceLogout(tokenId: string) {
   return request({
     url: '/monitor/online/' + tokenId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.online.force-logout' },
   });
 }

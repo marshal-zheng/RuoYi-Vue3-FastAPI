@@ -1,383 +1,88 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import * as configApi from '@/api/system/config'
-import request from '@/utils/request'
+import { beforeEach, describe, expect, it } from 'vitest';
 
-// Mock request module
-vi.mock('@/utils/request')
+import * as configApi from '@/api/system/config';
+import {
+  createApiContractHandlers,
+  createStatusHandler,
+} from '../../mocks/api-contract-handlers';
+import { mockServer } from '../../mocks/server';
 
-describe('Config API', () => {
+describe('Config API contract', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    mockServer.use(...createApiContractHandlers());
+  });
 
-  describe('listConfig', () => {
-    it('should call request with correct params', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+  it('loads paged configs with query params through the HTTP contract', async () => {
+    const result = await configApi.listConfig({
+      configName: '系统名称',
+      configKey: 'sys.index.skinName',
+      page: 2,
+      pageSize: 20,
+    });
 
-      const query = { configName: '系统名称', pageNum: 1, pageSize: 10 }
-      await configApi.listConfig(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/list',
-        method: 'get',
-        params: query
-      })
-    })
-
-    it('should handle query with config key', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const query = { configKey: 'sys.user.initPassword' }
-      await configApi.listConfig(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/list',
-        method: 'get',
-        params: query
-      })
-    })
-
-    it('should handle query with config type', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const query = { configType: 'Y' }
-      await configApi.listConfig(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/list',
-        method: 'get',
-        params: query
-      })
-    })
-
-    it('should handle date range query', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const query = {
-        beginTime: '2024-01-01',
-        endTime: '2024-12-31'
-      }
-      await configApi.listConfig(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/list',
-        method: 'get',
-        params: query
-      })
-    })
-  })
-
-  describe('getConfig', () => {
-    it('should get config by id', async () => {
-      const mockResponse = {
-        data: {
-          configId: 1,
-          configName: '主框架页-默认皮肤样式名称',
+    expect(result).toMatchObject({
+      total: 1,
+      page: 2,
+      pageSize: 20,
+      items: [
+        expect.objectContaining({
+          configName: '系统名称',
           configKey: 'sys.index.skinName',
-          configValue: 'skin-blue'
-        }
-      }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+        }),
+      ],
+    });
+    expect(result.pager).toMatchObject({ mode: 'offset', page: 2, size: 20, total: 1 });
+  });
 
-      await configApi.getConfig(1)
+  it('loads config detail and key-value lookups via MSW', async () => {
+    await expect(configApi.getConfig(1)).resolves.toMatchObject({
+      configId: 1,
+      configValue: 'skin-blue',
+    });
 
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/1',
-        method: 'get'
-      })
-    })
+    await expect(configApi.getConfig('1')).resolves.toMatchObject({
+      configId: 1,
+      configKey: 'sys.index.skinName',
+    });
 
-    it('should handle string id', async () => {
-      const mockResponse = { data: { configId: '1' } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+    await expect(configApi.getConfigKey('sys.index.skinName')).resolves.toBe('skin-blue');
+    await expect(configApi.getConfigKey('sys.account.captchaEnabled')).resolves.toBe('true');
+  });
 
-      await configApi.getConfig('1')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/1',
-        method: 'get'
-      })
-    })
-  })
-
-  describe('getConfigKey', () => {
-    it('should get config value by key', async () => {
-      const mockResponse = { data: 'skin-blue' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.index.skinName')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.index.skinName',
-        method: 'get'
-      })
-    })
-
-    it('should handle different config keys', async () => {
-      const mockResponse = { data: '123456' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.user.initPassword')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.user.initPassword',
-        method: 'get'
-      })
-    })
-
-    it('should handle boolean config values', async () => {
-      const mockResponse = { data: 'true' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.account.captchaEnabled')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.account.captchaEnabled',
-        method: 'get'
-      })
-    })
-  })
-
-  describe('addConfig', () => {
-    it('should add new config', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
+  it('handles config mutations through real request serialization', async () => {
+    await expect(
+      configApi.addConfig({
         configName: '测试参数',
         configKey: 'test.config.key',
         configValue: 'test-value',
         configType: 'N',
-        remark: '测试用'
-      }
-
-      await configApi.addConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'post',
-        data
       })
-    })
+    ).resolves.toMatchObject({
+      configId: 1,
+      configKey: 'test.config.key',
+      configValue: 'test-value',
+    });
 
-    it('should add built-in config', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
-        configName: '内置参数',
-        configKey: 'sys.builtin.key',
-        configValue: 'value',
-        configType: 'Y'
-      }
-
-      await configApi.addConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'post',
-        data
-      })
-    })
-  })
-
-  describe('updateConfig', () => {
-    it('should update config', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
+    await expect(
+      configApi.updateConfig({
         configId: 1,
         configName: '更新参数',
-        configValue: 'updated-value'
-      }
-
-      await configApi.updateConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'put',
-        data
+        configValue: 'updated-value',
       })
-    })
+    ).resolves.toMatchObject({
+      configId: 1,
+      configValue: 'updated-value',
+    });
 
-    it('should update config key', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+    await expect(configApi.delConfig('1,2,3')).resolves.toBeNull();
+    await expect(configApi.refreshCache()).resolves.toBeNull();
+  });
 
-      const data = {
-        configId: 1,
-        configKey: 'updated.key'
-      }
+  it('surfaces config API failures from the request error mapping', async () => {
+    mockServer.use(createStatusHandler('get', '/system/config/list', 503));
+    await expect(configApi.listConfig({})).rejects.toMatchObject({ status: 503 });
 
-      await configApi.updateConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'put',
-        data
-      })
-    })
-  })
-
-  describe('delConfig', () => {
-    it('should delete config by id', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.delConfig(1)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/1',
-        method: 'delete'
-      })
-    })
-
-    it('should handle multiple ids', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.delConfig('1,2,3')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/1,2,3',
-        method: 'delete'
-      })
-    })
-  })
-
-  describe('refreshCache', () => {
-    it('should refresh config cache', async () => {
-      const mockResponse = { code: 200, msg: '刷新成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.refreshCache()
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/refreshCache',
-        method: 'delete'
-      })
-    })
-
-    it('should handle cache refresh errors', async () => {
-      const error = { code: 500, msg: '刷新失败' }
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(configApi.refreshCache()).rejects.toEqual(error)
-    })
-  })
-
-  describe('Config Types', () => {
-    it('should handle system built-in config', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
-        configName: '系统内置参数',
-        configKey: 'sys.builtin',
-        configValue: 'value',
-        configType: 'Y'
-      }
-
-      await configApi.addConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'post',
-        data
-      })
-    })
-
-    it('should handle custom config', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
-        configName: '自定义参数',
-        configKey: 'custom.config',
-        configValue: 'value',
-        configType: 'N'
-      }
-
-      await configApi.addConfig(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config',
-        method: 'post',
-        data
-      })
-    })
-  })
-
-  describe('Special Config Keys', () => {
-    it('should get captcha enabled config', async () => {
-      const mockResponse = { data: 'true' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.account.captchaEnabled')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.account.captchaEnabled',
-        method: 'get'
-      })
-    })
-
-    it('should get init password config', async () => {
-      const mockResponse = { data: '123456' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.user.initPassword')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.user.initPassword',
-        method: 'get'
-      })
-    })
-
-    it('should get skin name config', async () => {
-      const mockResponse = { data: 'skin-blue' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await configApi.getConfigKey('sys.index.skinName')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/config/configKey/sys.index.skinName',
-        method: 'get'
-      })
-    })
-  })
-
-  describe('Error Handling', () => {
-    it('should handle network errors', async () => {
-      const error = new Error('Network Error')
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(configApi.listConfig({})).rejects.toThrow('Network Error')
-    })
-
-    it('should handle API errors', async () => {
-      const error = { code: 500, msg: '服务器错误' }
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(configApi.getConfig(1)).rejects.toEqual(error)
-    })
-
-    it('should handle config not found', async () => {
-      const error = { code: 404, msg: '参数不存在' }
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(configApi.getConfigKey('non.existent.key')).rejects.toEqual(error)
-    })
-
-    it('should handle permission errors', async () => {
-      const error = { code: 403, msg: '无权限' }
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(configApi.delConfig(1)).rejects.toEqual(error)
-    })
-  })
-})
+    mockServer.use(createStatusHandler('get', '/system/config/list', 429));
+    await expect(configApi.listConfig({})).rejects.toMatchObject({ status: 429 });
+  });
+});

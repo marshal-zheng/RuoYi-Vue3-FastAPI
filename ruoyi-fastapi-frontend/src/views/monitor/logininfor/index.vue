@@ -208,7 +208,6 @@ function handleDelete(row) {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
@@ -221,7 +220,6 @@ function handleClean() {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('清空成功');
     })
     .catch(() => {});
 }
@@ -233,9 +231,7 @@ function handleUnlock() {
     .then(function () {
       return unlockLogininfor(username);
     })
-    .then(() => {
-      proxy.$modal.msgSuccess('用户' + username + '解锁成功');
-    })
+    .then(() => {})
     .catch(() => {});
 }
 function handleExport(query) {

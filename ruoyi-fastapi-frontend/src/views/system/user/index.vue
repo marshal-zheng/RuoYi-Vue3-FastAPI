@@ -290,19 +290,6 @@ const columns = ref([
   { key: 6, label: `创建时间`, visible: true },
 ]);
 
-const data = reactive({
-  queryParams: {
-    pageNum: 1,
-    pageSize: 10,
-    userName: undefined,
-    phonenumber: undefined,
-    status: undefined,
-    deptId: undefined,
-  },
-});
-
-const { queryParams } = toRefs(data);
-
 /** 通过条件过滤节点  */
 const filterNode = (value, data) => {
   if (!value) return true;
@@ -386,13 +373,8 @@ function handleStatusChange(row) {
   let text = row.status === '0' ? '启用' : '停用';
   proxy.$modal
     .confirm('确认要"' + text + '""' + row.userName + '"用户吗?')
-    .then(function () {
-      return changeUserStatus(row.userId, row.status);
-    })
-    .then(() => {
-      proxy.$modal.msgSuccess(text + '成功');
-    })
-    .catch(function () {
+    .then(() => changeUserStatus(row.userId, row.status))
+    .catch(() => {
       row.status = row.status === '0' ? '1' : '0';
     });
 }
@@ -430,8 +412,8 @@ function handleResetPwd(row) {
       },
     })
     .then(({ value }) => {
-      resetUserPwd(row.userId, value).then((response) => {
-        proxy.$modal.msgSuccess('修改成功，新密码是：' + value);
+      resetUserPwd(row.userId, value).then(() => {
+        proxy.$modal.alertSuccess('修改成功，新密码是：' + value);
       });
     })
     .catch(() => {});

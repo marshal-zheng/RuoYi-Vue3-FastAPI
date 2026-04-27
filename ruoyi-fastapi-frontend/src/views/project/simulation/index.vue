@@ -654,8 +654,8 @@ async function loadProjectInfo() {
 async function loadDeviceList() {
   loading.value = true;
   try {
-    const response = await listDevice({}, { silentError: true });
-    const devices = response?.rows || [];
+    const response = await listDevice({ page: 1, pageSize: 9999 }, { silentError: true });
+    const devices = response?.items || [];
     operators.value = devices.map((device) => ({
       name: device.deviceName,
       value: device.remark || device.deviceDesc || '设备',
@@ -758,7 +758,6 @@ async function handleStart() {
 
   await start(startOptions);
   startAnimation();
-  ElMessage.success('仿真已启动');
 }
 
 function handlePause() {
@@ -950,10 +949,8 @@ async function handleEventCreate(config) {
   }
   try {
     await createEvent(config);
-    ElMessage.success('事件创建成功');
   } catch (err) {
     console.error('创建事件失败', err);
-    ElMessage.error(err?.message || '创建事件失败');
   }
 }
 
@@ -964,10 +961,8 @@ async function handleEventEdit(eventId, config) {
   }
   try {
     await updateEvent(eventId, config);
-    ElMessage.success('事件更新成功');
   } catch (err) {
     console.error('更新事件失败', err);
-    ElMessage.error(err?.message || '更新事件失败');
   }
 }
 
@@ -978,10 +973,8 @@ async function handleEventDelete(eventId) {
   }
   try {
     await deleteEvent(eventId);
-    ElMessage.success('事件删除成功');
   } catch (err) {
     console.error('删除事件失败', err);
-    ElMessage.error(err?.message || '删除事件失败');
   }
 }
 
@@ -992,10 +985,8 @@ async function handleEventTrigger(eventId) {
   }
   try {
     await triggerEvent(eventId);
-    ElMessage.success('事件已触发');
   } catch (err) {
     console.error('触发事件失败', err);
-    ElMessage.error(err?.message || '触发事件失败');
   }
 }
 

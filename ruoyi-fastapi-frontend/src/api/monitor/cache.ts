@@ -37,6 +37,7 @@ export function clearCacheName(cacheName: string) {
   return request({
     url: '/monitor/cache/clearCacheName/' + cacheName,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.cache.clear' },
   });
 }
 
@@ -45,6 +46,7 @@ export function clearCacheKey(cacheKey: string) {
   return request({
     url: '/monitor/cache/clearCacheKey/' + cacheKey,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.cache.clear' },
   });
 }
 
@@ -53,5 +55,6 @@ export function clearCacheAll() {
   return request({
     url: '/monitor/cache/clearCacheAll',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.cache.clear' },
   });
 }

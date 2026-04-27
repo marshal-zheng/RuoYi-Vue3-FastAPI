@@ -23,7 +23,7 @@ async function testReal() {
   const data = await request({
     url: '/system/user/list',
     method: 'get',
-    params: { pageNum: 1, pageSize: 5 },
+    params: { page: 1, pageSize: 5 },
   });
   result.value = JSON.stringify(data, null, 2);
 }

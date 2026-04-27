@@ -71,8 +71,6 @@ const dialog = useDialog({
       description: formData.description,
     });
 
-    proxy.$modal.msgSuccess('版本克隆成功');
-
     if (onSuccessCallback) {
       onSuccessCallback();
     }

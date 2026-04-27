@@ -258,14 +258,14 @@ function buildBeforeUpload(conf: FormElement): string {
   if (conf.fileSize) {
     rightSizeCode = `let isRightSize = file.size / ${unitNum} < ${conf.fileSize}
     if(!isRightSize){
-      proxy.$modal.msgError('文件大小超过 ${conf.fileSize}${conf.sizeUnit}')
+      ElMessage.error('文件大小超过 ${conf.fileSize}${conf.sizeUnit}')
     }`;
     returnList.push('isRightSize');
   }
   if (conf.accept) {
     acceptCode = `let isAccept = new RegExp('${conf.accept}').test(file.type)
     if(!isAccept){
-      proxy.$modal.msgError('应该选择${conf.accept}类型的文件')
+      ElMessage.error('应该选择${conf.accept}类型的文件')
     }`;
     returnList.push('isAccept');
   }

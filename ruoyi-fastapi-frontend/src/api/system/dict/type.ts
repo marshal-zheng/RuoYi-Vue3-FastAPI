@@ -23,6 +23,7 @@ export function addType(data: Record<string, any>) {
     url: '/system/dict/type',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dict-type.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateType(data: Record<string, any>) {
     url: '/system/dict/type',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dict-type.update' },
   });
 }
 
@@ -40,6 +42,7 @@ export function delType(dictId: number | string) {
   return request({
     url: '/system/dict/type/' + dictId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.dict-type.delete' },
   });
 }
 
@@ -48,6 +51,7 @@ export function refreshCache() {
   return request({
     url: '/system/dict/type/refreshCache',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.dict-type.refresh-cache' },
   });
 }
 

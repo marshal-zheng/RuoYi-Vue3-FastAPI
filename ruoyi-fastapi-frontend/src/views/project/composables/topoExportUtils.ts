@@ -3,7 +3,7 @@
  * 负责将拓扑图渲染成图片供 Word 导出使用
  */
 
-/* eslint-disable no-console, @typescript-eslint/no-explicit-any, no-undef */
+/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
 import { Graph } from '@antv/x6';
 import { Export } from '@antv/x6-plugin-export';
 import { getProjectTopology } from '@/api/project/topology';

@@ -83,8 +83,7 @@ function close() {
 function submitForm() {
   const userId = form.value.userId;
   const rIds = roleIds.value.join(',');
-  updateAuthRole({ userId: userId, roleIds: rIds }).then((response) => {
-    proxy.$modal.msgSuccess('授权成功');
+  updateAuthRole({ userId: userId, roleIds: rIds }).then(() => {
     close();
   });
 }

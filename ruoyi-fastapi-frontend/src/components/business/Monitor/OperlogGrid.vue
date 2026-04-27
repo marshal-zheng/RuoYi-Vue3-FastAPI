@@ -164,8 +164,8 @@ const initialState = computed(() => ({
 }));
 
 async function loadOperlogData(params) {
-  const { pageNum, pageSize, dateRange, ...query } = params || {};
-  let requestParams = { pageNum, pageSize, ...query };
+  const { page, size, dateRange, ...query } = params || {};
+  let requestParams = { page, pageSize: size, ...query };
   if (dateRange && dateRange.length === 2) {
     requestParams = proxy.addDateRange(requestParams, dateRange);
     delete requestParams.dateRange;
@@ -207,7 +207,6 @@ function deleteSelected() {
     })
     .then(() => {
       gridListRef.value && gridListRef.value.refresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
@@ -220,7 +219,6 @@ function cleanAll() {
     })
     .then(() => {
       gridListRef.value && gridListRef.value.refresh();
-      proxy.$modal.msgSuccess('清空成功');
     })
     .catch(() => {});
 }

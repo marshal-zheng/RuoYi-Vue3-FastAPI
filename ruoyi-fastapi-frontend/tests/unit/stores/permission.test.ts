@@ -110,6 +110,35 @@ describe('permission store route hot reload', () => {
     expect(store.registeredRouteNames).toContain('AuditRoute');
   });
 
+  it('accepts collection-style router payloads from the new HTTP contract', async () => {
+    getRoutersMock.mockResolvedValue({
+      items: [
+        {
+          path: '/system',
+          component: 'Layout',
+          name: 'System',
+          hidden: false,
+          children: [
+            {
+              path: 'user',
+              component: 'system/user/index',
+              name: 'SystemUser',
+              hidden: false,
+            },
+          ],
+        },
+      ],
+    } as any);
+
+    const usePermissionStore = await loadPermissionStore();
+    const store = usePermissionStore();
+    await store.generateRoutes();
+
+    expect(mockRouter.addRoute).toHaveBeenCalled();
+    expect(store.firstMenuPath).toBe('/system/user');
+    expect(store.registeredRouteNames).toContain('System');
+  });
+
   it('falls back to first menu path when current route disappears after reload', async () => {
     getRoutersMock.mockResolvedValue([
       {

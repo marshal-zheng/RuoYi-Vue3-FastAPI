@@ -164,8 +164,8 @@ async function loadDeviceList() {
   loading.value = true;
   try {
     // 从后端获取设备列表
-    const response = await listDevice({});
-    const devices = response?.rows || [];
+    const response = await listDevice({ page: 1, pageSize: 9999 });
+    const devices = response?.items || [];
 
     if (devices.length === 0) {
       operators.value = [];
@@ -482,7 +482,7 @@ function buildTopologySavePayload() {
 /**
  * 保存工程拓扑
  */
-function handleSaveTopo() {
+async function handleSaveTopo() {
   const currentProjectId = getProjectIdNumber();
   if (!currentProjectId) {
     ElMessage.error('保存失败：缺少工程ID');
@@ -494,14 +494,10 @@ function handleSaveTopo() {
     return;
   }
 
-  saveProjectTopology(payload)
-    .then(() => {
-      ElMessage.success('拓扑保存成功');
-      router.push(`/project/project-detail/index/${currentProjectId}`);
-    })
-    .catch(() => {
-      ElMessage.error('拓扑保存失败，请稍后重试');
-    });
+  try {
+    await saveProjectTopology(payload);
+    router.push(`/project/project-detail/index/${currentProjectId}`);
+  } catch {}
 }
 
 /**

@@ -18,6 +18,7 @@ export function login(username: string, password: string, code: string, uuid: st
     },
     method: 'post',
     data,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -37,6 +38,7 @@ export function register(data: Record<string, any>) {
     },
     method: 'post',
     data: payload,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -58,6 +60,7 @@ export function logout(options: LogoutRequestOptions = {}) {
   return request({
     url: '/auth/logout',
     method: 'post',
+    feedback: { mode: 'silent' },
     ...options,
   });
 }
@@ -71,5 +74,6 @@ export function getCodeImg() {
     },
     method: 'get',
     timeout: 20000,
+    feedback: { mode: 'silent' },
   });
 }

@@ -3,30 +3,25 @@
  * 这些类型用于补充自动生成的类型，或定义前端特有的类型
  */
 
+import type { HttpOffsetPage, ProblemDetails } from '@/types/http-contract';
+
 /**
- * 统一API响应结构
+ * 资源导向成功响应
  */
-export interface ApiResponse<T = unknown> {
-  code: number;
-  msg: string;
-  data: T;
-}
+export type ApiResponse<T = unknown> = T;
 
 /**
  * 分页请求参数
  */
 export interface PageRequest {
-  pageNum?: number;
+  page?: number;
   pageSize?: number;
 }
 
 /**
  * 分页响应结构
  */
-export interface PageResponse<T> {
-  rows: T[];
-  total: number;
-}
+export type PageResponse<T> = HttpOffsetPage<T>;
 
 /**
  * 通用查询参数
@@ -62,7 +57,12 @@ export interface TreeNode<T = unknown> {
 /**
  * 操作结果
  */
-export type OperationResult = ApiResponse<null>;
+export type OperationResult = null;
+
+/**
+ * 标准错误响应
+ */
+export type ErrorResponse = ProblemDetails;
 
 /**
  * 批量操作请求

@@ -14,6 +14,7 @@ export function delLogininfor(infoId: number | string) {
   return request({
     url: '/monitor/logininfor/' + infoId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.logininfor.clear' },
   });
 }
 
@@ -22,6 +23,7 @@ export function unlockLogininfor(userName: string) {
   return request({
     url: '/monitor/logininfor/unlock/' + userName,
     method: 'get',
+    feedback: { mode: 'auto', key: 'monitor.logininfor.unlock' },
   });
 }
 
@@ -30,5 +32,6 @@ export function cleanLogininfor() {
   return request({
     url: '/monitor/logininfor/clean',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.logininfor.clear' },
   });
 }

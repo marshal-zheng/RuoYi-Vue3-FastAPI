@@ -188,7 +188,7 @@ async function loadRoleData(params) {
   try {
     return await listRole(params);
   } catch (e) {
-    return { data: [], total: 0 };
+    return { items: [], total: 0 };
   }
 }
 
@@ -210,7 +210,6 @@ function handleDelete(row) {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
@@ -233,9 +232,7 @@ function handleStatusChange(row) {
     .then(function () {
       return changeRoleStatus(row.roleId, row.status);
     })
-    .then(() => {
-      proxy.$modal.msgSuccess(text + '成功');
-    })
+    .then(() => {})
     .catch(function () {
       row.status = row.status === '0' ? '1' : '0';
     });

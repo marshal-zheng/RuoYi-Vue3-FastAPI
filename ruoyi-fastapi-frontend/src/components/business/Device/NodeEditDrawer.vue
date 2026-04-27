@@ -151,6 +151,7 @@ const handleSubmit = async () => {
       name: formData.name,
     });
 
+    // message-governance-allow-local: 节点抽屉仅提交本地画布状态
     ElMessage.success('保存成功');
     handleClose();
   } catch (error) {

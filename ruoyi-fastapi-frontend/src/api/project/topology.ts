@@ -7,6 +7,7 @@ export function saveProjectTopology(data: Record<string, any>) {
     url: '/project/topology/save',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'project.topology.update' },
   });
 }
 

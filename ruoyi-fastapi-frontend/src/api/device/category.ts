@@ -23,6 +23,7 @@ export function addDeviceCategory(data: Record<string, any>) {
     url: '/device/category',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'device.category.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateDeviceCategory(data: Record<string, any>) {
     url: '/device/category',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'device.category.update' },
   });
 }
 
@@ -40,6 +42,7 @@ export function delDeviceCategory(categoryId: number | string) {
   return request({
     url: '/device/category/' + categoryId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'device.category.delete' },
   });
 }
 
@@ -50,6 +53,7 @@ export function exportDeviceCategory(query?: Record<string, any>) {
     method: 'post',
     params: query,
     responseType: 'blob',
+    feedback: { mode: 'silent' },
   });
 }
 

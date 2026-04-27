@@ -16,7 +16,6 @@
 <script setup lang="ts" name="ProjectDlg">
 import { addProject, updateProject } from '@/api/system/project';
 import { useDialog } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 
 interface ProjectForm {
   projectId?: number;
@@ -39,16 +38,11 @@ const { state, dialogProps, dialogEvents, open } = useDialog<ProjectForm>({
   onConfirm: async (data: ProjectForm) => {
     if (data.projectId !== undefined) {
       await updateProject(data);
-      ElMessage.success('修改成功');
     } else {
       await addProject(data);
-      ElMessage.success('新增成功');
     }
     emit('success');
     return true;
-  },
-  onConfirmError: (e: any) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 

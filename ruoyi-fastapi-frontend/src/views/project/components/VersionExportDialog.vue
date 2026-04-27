@@ -16,7 +16,8 @@
 </template>
 
 <script setup name="VersionExportDialog">
-import { getCurrentInstance, ref } from 'vue';
+import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 import { Loading } from '@element-plus/icons-vue';
 import { useDialog } from '@zxio/zxui';
 import {
@@ -27,7 +28,6 @@ import {
 import { exportTopologyAsImage } from '../composables/topoExportUtils';
 import { FileTypeSelector } from './selector';
 
-const { proxy } = getCurrentInstance();
 const exporting = ref(false);
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
@@ -42,7 +42,7 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
   }),
   onConfirm: async (data) => {
     if (!data.format) {
-      proxy.$modal.msgError('请选择导出格式');
+      ElMessage.error('请选择导出格式');
       return;
     }
 
@@ -90,7 +90,6 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
     link.click();
     URL.revokeObjectURL(link.href);
 
-    proxy.$modal.msgSuccess('导出成功');
     return data;
   },
 });

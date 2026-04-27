@@ -150,6 +150,7 @@
 </template>
 
 <script setup name="GenEdit">
+import { ElMessage } from 'element-plus';
 import { getGenTable, updateGenTable } from '@/api/tool/gen';
 import { optionselect as getDictOptionselect } from '@/api/system/dict/type';
 import basicInfoForm from './basicInfoForm';
@@ -184,7 +185,7 @@ function submitForm() {
         close();
       });
     } else {
-      proxy.$modal.msgError('表单校验未通过，请重新检查提交内容');
+      ElMessage.error('表单校验未通过，请重新检查提交内容');
     }
   });
 }
@@ -198,7 +199,7 @@ function getFormPromise(form) {
 }
 
 function close() {
-  const obj = { path: '/tool/gen', query: { t: Date.now(), pageNum: route.query.pageNum } };
+  const obj = { path: '/tool/gen', query: { t: Date.now(), page: route.query.page } };
   proxy.$tab.closeOpenPage(obj);
 }
 
@@ -208,8 +209,11 @@ function close() {
     // 获取表详细信息
     getGenTable(tableId).then((res) => {
       // http 客户端已解包 payload.data，直接访问字段
-      columns.value = res.rows;
-      info.value = res.info;
+      columns.value = res.columns;
+      info.value = {
+        ...res.info,
+        columns: res.columns,
+      };
       tables.value = res.tables;
     });
     /** 查询字典下拉列表 */

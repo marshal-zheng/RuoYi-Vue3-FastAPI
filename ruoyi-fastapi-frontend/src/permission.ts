@@ -1,5 +1,4 @@
 import router from './router';
-import { ElMessage } from 'element-plus';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { getToken } from '@/utils/auth';
@@ -86,7 +85,7 @@ router.beforeEach(
                 .then(() => {
                   if (!isAuthExpiredError(err)) {
                     const errorMsg = (err as { message?: string })?.message || '获取用户信息失败';
-                    ElMessage.error(errorMsg);
+                    console.error('[permission] restore user info failed:', errorMsg, err);
                   }
                   next({ path: '/' });
                 });

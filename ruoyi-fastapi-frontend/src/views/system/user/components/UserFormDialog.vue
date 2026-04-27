@@ -130,9 +130,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useDialog } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { getUser, addUser, updateUser } from '@/api/system/user';
-import { height } from 'happy-dom/lib/PropertySymbol.js';
 
 const props = defineProps({
   deptOptions: { type: Array, default: () => [] },
@@ -190,10 +188,8 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   onConfirm: async (data) => {
     if (data.userId) {
       await updateUser(data);
-      ElMessage.success('修改成功');
     } else {
       await addUser(data);
-      ElMessage.success('新增成功');
     }
     emit('success');
   },

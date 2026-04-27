@@ -67,6 +67,7 @@
 
 <script setup>
 import 'vue-cropper/dist/index.css';
+import { ElMessage } from 'element-plus';
 import { VueCropper } from 'vue-cropper';
 import { uploadAvatar } from '@/api/system/user';
 import useUserStore from '@/store/modules/user';
@@ -116,7 +117,7 @@ function changeScale(num) {
 /** 上传预处理 */
 function beforeUpload(file) {
   if (file.type.indexOf('image/') == -1) {
-    proxy.$modal.msgError('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。');
+    ElMessage.error('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。');
   } else {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -135,7 +136,6 @@ function uploadImg() {
       open.value = false;
       options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
       userStore.avatar = options.img;
-      proxy.$modal.msgSuccess('修改成功');
       visible.value = false;
     });
   });

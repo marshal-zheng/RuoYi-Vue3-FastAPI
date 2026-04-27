@@ -1,314 +1,113 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import * as roleApi from '@/api/system/role'
-import request from '@/utils/request'
+import { beforeEach, describe, expect, it } from 'vitest';
 
-// Mock request module
-vi.mock('@/utils/request')
+import * as roleApi from '@/api/system/role';
+import {
+  createApiContractHandlers,
+  createStatusHandler,
+} from '../../mocks/api-contract-handlers';
+import { mockServer } from '../../mocks/server';
 
-describe('Role API', () => {
+describe('Role API contract', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-  })
+    mockServer.use(...createApiContractHandlers());
+  });
 
-  describe('listRole', () => {
-    it('should call request with correct params', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+  it('loads role list and detail through the HTTP contract', async () => {
+    const result = await roleApi.listRole({ page: 2, pageSize: 20, roleName: 'admin' });
 
-      const query = { pageNum: 1, pageSize: 10, roleName: 'admin' }
-      await roleApi.listRole(query)
+    expect(result).toMatchObject({
+      total: 1,
+      page: 2,
+      pageSize: 20,
+      items: [
+        expect.objectContaining({
+          roleName: 'admin',
+          roleKey: 'admin',
+        }),
+      ],
+    });
+    expect(result.pager).toMatchObject({ mode: 'offset', page: 2, size: 20, total: 1 });
 
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/list',
-        method: 'get',
-        params: query
-      })
-    })
+    await expect(roleApi.getRole(1)).resolves.toMatchObject({
+      roleId: 1,
+      roleKey: 'admin',
+    });
+    await expect(roleApi.getRole('1')).resolves.toMatchObject({
+      roleId: 1,
+      roleName: '超级管理员',
+    });
+  });
 
-    it('should handle empty query', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.listRole({})
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/list',
-        method: 'get',
-        params: {}
-      })
-    })
-  })
-
-  describe('getRole', () => {
-    it('should get role by id', async () => {
-      const mockResponse = { data: { roleId: 1, roleName: 'admin' } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.getRole(1)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/1',
-        method: 'get'
-      })
-    })
-
-    it('should handle string id', async () => {
-      const mockResponse = { data: { roleId: '1', roleName: 'admin' } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.getRole('1')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/1',
-        method: 'get'
-      })
-    })
-  })
-
-  describe('addRole', () => {
-    it('should add new role', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
+  it('handles role mutations through real request serialization', async () => {
+    await expect(
+      roleApi.addRole({
         roleName: '测试角色',
         roleKey: 'test',
         roleSort: 1,
-        status: '0'
-      }
-
-      await roleApi.addRole(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role',
-        method: 'post',
-        data
+        status: '0',
+        menuIds: [1, 2, 3],
       })
-    })
+    ).resolves.toMatchObject({
+      roleId: 1,
+      roleKey: 'test',
+      menuIds: [1, 2, 3],
+    });
 
-    it('should handle role with menu ids', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
-        roleName: '测试角色',
-        roleKey: 'test',
-        menuIds: [1, 2, 3]
-      }
-
-      await roleApi.addRole(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role',
-        method: 'post',
-        data
-      })
-    })
-  })
-
-  describe('updateRole', () => {
-    it('should update role', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
+    await expect(
+      roleApi.updateRole({
         roleId: 1,
         roleName: '更新角色',
-        roleKey: 'updated'
-      }
-
-      await roleApi.updateRole(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role',
-        method: 'put',
-        data
+        roleKey: 'updated',
       })
-    })
-  })
+    ).resolves.toMatchObject({
+      roleId: 1,
+      roleKey: 'updated',
+    });
 
-  describe('dataScope', () => {
-    it('should update role data scope', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = {
+    await expect(
+      roleApi.dataScope({
         roleId: 1,
         dataScope: '2',
-        deptIds: [1, 2, 3]
-      }
-
-      await roleApi.dataScope(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/dataScope',
-        method: 'put',
-        data
+        deptIds: [1, 2, 3],
       })
-    })
-  })
+    ).resolves.toMatchObject({
+      roleId: 1,
+      dataScope: '2',
+      deptIds: [1, 2, 3],
+    });
 
-  describe('changeRoleStatus', () => {
-    it('should change role status', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+    await expect(roleApi.changeRoleStatus(1, '1')).resolves.toMatchObject({
+      roleId: 1,
+      status: '1',
+    });
 
-      await roleApi.changeRoleStatus(1, '1')
+    await expect(roleApi.delRole('1,2,3')).resolves.toBeNull();
+  });
 
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/changeStatus',
-        method: 'put',
-        data: { roleId: 1, status: '1' }
-      })
-    })
+  it('covers role authorization and dept tree endpoints via MSW', async () => {
+    await expect(roleApi.allocatedUserList({ roleId: 1 })).resolves.toMatchObject({
+      items: [expect.objectContaining({ userName: 'admin' })],
+    });
+    await expect(roleApi.unallocatedUserList({ roleId: 1 })).resolves.toMatchObject({
+      items: [expect.objectContaining({ userName: 'guest' })],
+    });
+    await expect(roleApi.authUserCancel({ roleId: 1, userId: 2 })).resolves.toMatchObject({
+      roleId: 1,
+      userId: 2,
+    });
+    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: '2,3' })).resolves.toBeNull();
+    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: '2,3' })).resolves.toBeNull();
+    await expect(roleApi.deptTreeSelect(1)).resolves.toMatchObject({
+      roleId: 1,
+      checkedKeys: [100],
+    });
+  });
 
-    it('should handle enable status', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
+  it('surfaces role API failures from the request error mapping', async () => {
+    mockServer.use(createStatusHandler('get', '/system/role/list', 503));
+    await expect(roleApi.listRole({})).rejects.toMatchObject({ status: 503 });
 
-      await roleApi.changeRoleStatus(1, '0')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/changeStatus',
-        method: 'put',
-        data: { roleId: 1, status: '0' }
-      })
-    })
-  })
-
-  describe('delRole', () => {
-    it('should delete role by id', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.delRole(1)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/1',
-        method: 'delete'
-      })
-    })
-
-    it('should handle multiple ids', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.delRole('1,2,3')
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/1,2,3',
-        method: 'delete'
-      })
-    })
-  })
-
-  describe('allocatedUserList', () => {
-    it('should get allocated user list', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const query = { roleId: 1, pageNum: 1, pageSize: 10 }
-      await roleApi.allocatedUserList(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/authUser/allocatedList',
-        method: 'get',
-        params: query
-      })
-    })
-  })
-
-  describe('unallocatedUserList', () => {
-    it('should get unallocated user list', async () => {
-      const mockResponse = { data: { rows: [], total: 0 } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const query = { roleId: 1, pageNum: 1, pageSize: 10 }
-      await roleApi.unallocatedUserList(query)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/authUser/unallocatedList',
-        method: 'get',
-        params: query
-      })
-    })
-  })
-
-  describe('authUserCancel', () => {
-    it('should cancel user authorization', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = { roleId: 1, userId: 2 }
-      await roleApi.authUserCancel(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/authUser/cancel',
-        method: 'put',
-        data
-      })
-    })
-  })
-
-  describe('authUserCancelAll', () => {
-    it('should batch cancel user authorization', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = { roleId: 1, userIds: '2,3,4' }
-      await roleApi.authUserCancelAll(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/authUser/cancelAll',
-        method: 'put',
-        params: data
-      })
-    })
-  })
-
-  describe('authUserSelectAll', () => {
-    it('should batch select users for authorization', async () => {
-      const mockResponse = { code: 200, msg: '操作成功' }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      const data = { roleId: 1, userIds: '2,3,4' }
-      await roleApi.authUserSelectAll(data)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/authUser/selectAll',
-        method: 'put',
-        params: data
-      })
-    })
-  })
-
-  describe('deptTreeSelect', () => {
-    it('should get dept tree by role id', async () => {
-      const mockResponse = { data: { depts: [], checkedKeys: [] } }
-      vi.mocked(request).mockResolvedValue(mockResponse)
-
-      await roleApi.deptTreeSelect(1)
-
-      expect(request).toHaveBeenCalledWith({
-        url: '/system/role/deptTree/1',
-        method: 'get'
-      })
-    })
-  })
-
-  describe('Error Handling', () => {
-    it('should handle network errors', async () => {
-      const error = new Error('Network Error')
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(roleApi.listRole({})).rejects.toThrow('Network Error')
-    })
-
-    it('should handle API errors', async () => {
-      const error = { code: 500, msg: '服务器错误' }
-      vi.mocked(request).mockRejectedValue(error)
-
-      await expect(roleApi.getRole(1)).rejects.toEqual(error)
-    })
-  })
-})
+    mockServer.use(createStatusHandler('get', '/system/role/list', 429));
+    await expect(roleApi.listRole({})).rejects.toMatchObject({ status: 429 });
+  });
+});

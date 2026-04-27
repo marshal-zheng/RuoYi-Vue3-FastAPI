@@ -301,7 +301,7 @@ onMounted(() => {
     }
   })
   clipboard.on('error', e => {
-    proxy.$modal.msgError('代码复制失败')
+    ElNotification({ title: '错误', message: '代码复制失败', type: 'error' })
   })
 })
 </script>

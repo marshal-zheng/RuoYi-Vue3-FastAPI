@@ -12,16 +12,18 @@ import { http, isRelogin } from './http';
 import { blobValidate } from '@/utils/ruoyi';
 import { saveAs } from 'file-saver';
 import errorCode from '@/utils/errorCode';
+import type { FeedbackOptions } from '@/utils/feedback/types';
 
 interface LoadingInstance {
   close(): void;
 }
 
-interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
   isToken?: boolean;
   silentSuccess?: boolean;
   silentError?: boolean;
   skipRelogin?: boolean;
+  feedback?: FeedbackOptions;
 }
 
 interface RequestClient {
@@ -59,7 +61,8 @@ function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> {
   // 请求选项
   const requestOptions = {
     withToken,
-    showErrorMessage: !silentError,
+    showErrorMessage: false,
+    showSuccessMessage: false,
   };
 
   // 根据方法类型调用对应的 http 方法
@@ -119,9 +122,17 @@ const resolveDownloadErrorMessage = async (data: unknown): Promise<string> => {
     return Promise.resolve()
       .then(() => JSON.parse(trimmed))
       .then((rspObj: Record<string, unknown>) => {
-        const code = rspObj?.code as number | undefined;
-        const msg = rspObj?.msg as string | undefined;
-        return (code ? errorCode[code] : undefined) || msg || errorCode['default'];
+        const status = rspObj?.status as number | undefined;
+        const code = rspObj?.errorCode as number | undefined;
+        const detail = rspObj?.detail as string | undefined;
+        const title = rspObj?.title as string | undefined;
+        return (
+          detail ||
+          title ||
+          (code ? errorCode[code] : undefined) ||
+          (status ? errorCode[status] : undefined) ||
+          errorCode['default']
+        );
       })
       .catch(() => trimmed.slice(0, 200) || fallback);
   }
@@ -149,8 +160,9 @@ export function download(
         data: params,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         responseType: 'blob',
+        feedback: { mode: 'silent' },
         ...config,
-      },
+      } as ExtendedAxiosRequestConfig,
       { isReturnNativeResponse: false, isTransformResponse: false }
     )
     .then(async (data: Blob) => {

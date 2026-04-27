@@ -14,6 +14,7 @@ export function getProject(projectId: number | string) {
   return request({
     url: '/project/' + projectId,
     method: 'get',
+    feedback: { mode: 'auto' },
   });
 }
 
@@ -23,6 +24,7 @@ export function addProject(data: Record<string, any>) {
     url: '/project',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'project.project.create' },
   });
 }
 
@@ -32,6 +34,7 @@ export function updateProject(data: Record<string, any>) {
     url: '/project',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'project.project.update' },
   });
 }
 
@@ -40,5 +43,6 @@ export function delProject(projectId: number | string) {
   return request({
     url: '/project/' + projectId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'project.project.delete' },
   });
 }

@@ -32,6 +32,7 @@ export function updateGenTable(data: Record<string, any>) {
     url: '/tool/gen',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'tool.gen.update' },
   });
 }
 
@@ -41,6 +42,7 @@ export function importTable(data: Record<string, any>) {
     url: '/tool/gen/importTable',
     method: 'post',
     params: data,
+    feedback: { mode: 'auto', key: 'tool.gen.import-table' },
   });
 }
 
@@ -50,6 +52,7 @@ export function createTable(data: Record<string, any>) {
     url: '/tool/gen/createTable',
     method: 'post',
     params: data,
+    feedback: { mode: 'auto', key: 'tool.gen.create-table' },
   });
 }
 
@@ -66,6 +69,7 @@ export function delTable(tableId: number | string) {
   return request({
     url: '/tool/gen/' + tableId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'tool.gen.delete' },
   });
 }
 
@@ -74,6 +78,7 @@ export function genCode(tableName: string) {
   return request({
     url: '/tool/gen/genCode/' + tableName,
     method: 'get',
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -82,5 +87,6 @@ export function synchDb(tableName: string) {
   return request({
     url: '/tool/gen/synchDb/' + tableName,
     method: 'get',
+    feedback: { mode: 'auto', key: 'tool.gen.sync-db' },
   });
 }

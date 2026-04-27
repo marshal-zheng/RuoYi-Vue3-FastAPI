@@ -14,6 +14,7 @@ export function getMenu(menuId: number | string) {
   return request({
     url: '/system/menu/' + menuId,
     method: 'get',
+    feedback: { mode: 'auto' },
   });
 }
 
@@ -39,6 +40,7 @@ export function addMenu(data: Record<string, any>) {
     url: '/system/menu',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.menu.create' },
   });
 }
 
@@ -48,6 +50,7 @@ export function updateMenu(data: Record<string, any>) {
     url: '/system/menu',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.menu.update' },
   });
 }
 
@@ -56,5 +59,6 @@ export function delMenu(menuId: number | string) {
   return request({
     url: '/system/menu/' + menuId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.menu.delete' },
   });
 }

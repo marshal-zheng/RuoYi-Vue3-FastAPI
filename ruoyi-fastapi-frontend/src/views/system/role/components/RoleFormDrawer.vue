@@ -81,7 +81,6 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue';
 import { useDrawer } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { addRole, getRole, updateRole } from '@/api/system/role';
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu';
 
@@ -125,16 +124,11 @@ const drawer = useDrawer({
     const submitData = { ...drawer.state.data, menuIds: getMenuAllCheckedKeys() };
     if (submitData.roleId) {
       await updateRole(submitData);
-      ElMessage.success('修改成功');
     } else {
       await addRole(submitData);
-      ElMessage.success('新增成功');
     }
     emit('success');
     return true;
-  },
-  onConfirmError: (e) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 
@@ -180,7 +174,7 @@ async function openDrawer(roleId) {
       const [roleRes, menuRes] = await Promise.all([getRole(roleId), roleMenuTreeselect(roleId)]);
       // 后端返回的数据已经是正确的树形结构，直接使用
       menuOptions.value = menuRes.menus || [];
-      const roleData = roleRes.data || {};
+      const roleData = roleRes || {};
       drawer.state.data = {
         roleId: roleData.roleId,
         roleName: roleData.roleName,

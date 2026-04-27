@@ -56,7 +56,6 @@
 <script setup lang="ts" name="DeptDlg">
 import { addDept, updateDept, listDept, listDeptExcludeChild } from '@/api/system/dept';
 import { useDialog } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
 const proxy = getCurrentInstance()?.proxy as any;
@@ -122,16 +121,11 @@ const { state, dialogProps, dialogEvents, open } = useDialog<DeptForm>({
   onConfirm: async (data: DeptForm) => {
     if (data.deptId !== undefined) {
       await updateDept(data);
-      ElMessage.success('修改成功');
     } else {
       await addDept(data);
-      ElMessage.success('新增成功');
     }
     emit('success');
     return true;
-  },
-  onConfirmError: (e: any) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 

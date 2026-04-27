@@ -163,6 +163,7 @@
 
 <script setup name="VersionList">
 import { ref, reactive, watch, getCurrentInstance } from 'vue';
+import { ElMessage } from 'element-plus';
 import { View, Delete, Lock, CopyDocument, Download } from '@element-plus/icons-vue';
 import {
   listProjectVersion,
@@ -208,9 +209,10 @@ const editVersionForm = reactive({
 async function loadVersionData(params = {}) {
   if (!props.projectId) {
     return {
-      rows: [],
-      list: [],
+      items: [],
       total: 0,
+      page: 1,
+      pageSize: 10,
     };
   }
 
@@ -220,7 +222,6 @@ async function loadVersionData(params = {}) {
   };
 
   const response = await listProjectVersion(queryParams);
-  response.list = response.rows || [];
   return response;
 }
 
@@ -360,7 +361,6 @@ function handleDeleteVersion(row, handleRefresh) {
     .then(async () => {
       try {
         await delProjectVersion(versionIds);
-        proxy.$modal.msgSuccess('删除成功');
         if (handleRefresh) {
           handleRefresh();
         } else if (versionGridListRef.value) {
@@ -387,7 +387,7 @@ function handleAddVersion() {
 /** 仿真版本（跳转到仿真页面） */
 function handleSimulateVersion(row) {
   if (!props.projectId) {
-    proxy.$modal.msgError('缺少工程ID，无法打开仿真页面');
+    ElMessage.error('缺少工程ID，无法打开仿真页面');
     return;
   }
   proxy.$router.push({
@@ -401,7 +401,7 @@ function handleSimulateVersion(row) {
 /** 编辑版本拓扑（跳转到拓扑图进行编辑） */
 function handleEditVersionTopo(row) {
   if (!props.projectId) {
-    proxy.$modal.msgError('缺少工程ID，无法打开拓扑图');
+    ElMessage.error('缺少工程ID，无法打开拓扑图');
     return;
   }
   proxy.$router.push({
@@ -416,7 +416,7 @@ function handleEditVersionTopo(row) {
 async function handleSaveEditVersion() {
   // 验证表单
   if (!editVersionForm.versionNumber || !editVersionForm.versionName) {
-    proxy.$modal.msgError('版本号和版本名称不能为空');
+    ElMessage.error('版本号和版本名称不能为空');
     return;
   }
 
@@ -429,13 +429,9 @@ async function handleSaveEditVersion() {
   };
 
   if (editVersionForm.versionId) {
-    // 编辑
     await updateProjectVersion(data);
-    proxy.$modal.msgSuccess('版本编辑成功');
   } else {
-    // 新增
     await addProjectVersion(data);
-    proxy.$modal.msgSuccess('版本新增成功');
   }
 
   editVersionDialog.value = false;
@@ -456,7 +452,6 @@ function handleLockVersion(row, handleRefresh) {
           versionId: row.versionId,
           isLocked: '1',
         });
-        proxy.$modal.msgSuccess('版本固化成功');
         if (handleRefresh) {
           handleRefresh();
         } else if (versionGridListRef.value) {
@@ -479,7 +474,6 @@ function handleUnlockVersion(row, handleRefresh) {
           versionId: row.versionId,
           isLocked: '0',
         });
-        proxy.$modal.msgSuccess('解除固化成功');
         if (handleRefresh) {
           handleRefresh();
         } else if (versionGridListRef.value) {

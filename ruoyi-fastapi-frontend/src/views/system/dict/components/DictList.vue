@@ -169,7 +169,7 @@ async function loadDictData(params: Record<string, any>) {
   try {
     return await listType(params);
   } catch (e) {
-    return { data: [], total: 0 };
+    return { items: [], total: 0 };
   }
 }
 
@@ -215,7 +215,6 @@ function handleDelete(row?: any) {
     .then(() => delType(dictIds))
     .then(() => {
       handleRefresh();
-      (proxy as any).$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
@@ -229,7 +228,6 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    (proxy as any).$modal.msgSuccess('刷新成功');
     useDictStore().cleanDict();
   });
 }

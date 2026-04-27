@@ -23,6 +23,7 @@ export function addProjectVersion(data: Record<string, any>) {
     url: '/project/version',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'project.version.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateProjectVersion(data: Record<string, any>) {
     url: '/project/version',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'project.version.update' },
   });
 }
 
@@ -40,6 +42,7 @@ export function delProjectVersion(versionId: number | string) {
   return request({
     url: '/project/version/' + versionId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'project.version.delete' },
   });
 }
 
@@ -49,6 +52,7 @@ export function cloneProjectVersion(data: Record<string, any>) {
     url: '/project/version/clone',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'project.version.clone' },
   });
 }
 
@@ -58,6 +62,13 @@ export function lockProjectVersion(data: Record<string, any>) {
     url: '/project/version/lock',
     method: 'put',
     data: data,
+    feedback: {
+      mode: 'auto',
+      key: 'project.version.lock-state',
+      successContext: {
+        action: data?.isLocked === '1' ? 'lock' : 'unlock',
+      },
+    },
   });
 }
 
@@ -66,6 +77,10 @@ export function unlockProjectVersions(projectId: number | string) {
   return request({
     url: `/project/version/unlock/project/${projectId}`,
     method: 'put',
+    feedback: {
+      mode: 'auto',
+      key: 'project.version.unlock-project',
+    },
   });
 }
 
@@ -78,6 +93,7 @@ export function exportProjectVersion(data: Record<string, any>) {
     responseType: 'blob',
     // 导出包含拓扑图生成，耗时较长，单独放宽超时时间
     timeout: 120000,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -88,6 +104,7 @@ export function exportProjectVersionExcel(versionId: number | string) {
     method: 'get',
     responseType: 'blob',
     timeout: 120000,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -98,5 +115,6 @@ export function exportProjectVersionXml(versionId: number | string) {
     method: 'get',
     responseType: 'blob',
     timeout: 120000,
+    feedback: { mode: 'silent' },
   });
 }

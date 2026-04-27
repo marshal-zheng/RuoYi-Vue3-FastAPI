@@ -7,7 +7,9 @@ type SessionId = string | number;
  * @param data - { projectId, versionId }
  */
 export function createSimulationSession(data: Record<string, any>) {
-  return request.post('/simulation/sessions', data);
+  return request.post('/simulation/sessions', data, {
+    feedback: { mode: 'silent' },
+  });
 }
 
 /**
@@ -15,7 +17,9 @@ export function createSimulationSession(data: Record<string, any>) {
  * @param sessionId - 会话ID
  */
 export function startSimulationSession(sessionId: SessionId, data?: Record<string, any>) {
-  return request.post(`/simulation/sessions/${sessionId}/start`, data);
+  return request.post(`/simulation/sessions/${sessionId}/start`, data, {
+    feedback: { mode: 'auto', key: 'simulation.session.start' },
+  });
 }
 
 /**
@@ -23,7 +27,9 @@ export function startSimulationSession(sessionId: SessionId, data?: Record<strin
  * @param sessionId - 会话ID
  */
 export function stopSimulationSession(sessionId: SessionId) {
-  return request.post(`/simulation/sessions/${sessionId}/stop`);
+  return request.post(`/simulation/sessions/${sessionId}/stop`, undefined, {
+    feedback: { mode: 'silent' },
+  });
 }
 
 /**
@@ -75,7 +81,9 @@ export function getSimulationAlarms(sessionId: SessionId, params?: Record<string
  * @param data - { exportFormat, dataType }
  */
 export function exportSimulationData(sessionId: SessionId, data: Record<string, any>) {
-  return request.post(`/simulation/sessions/${sessionId}/export`, data);
+  return request.post(`/simulation/sessions/${sessionId}/export`, data, {
+    feedback: { mode: 'silent' },
+  });
 }
 
 /**
@@ -92,7 +100,9 @@ export function getFillStrategies() {
  * @param sessionId - 会话ID
  */
 export function pauseSimulationSession(sessionId: SessionId) {
-  return request.post(`/simulation/sessions/${sessionId}/pause`);
+  return request.post(`/simulation/sessions/${sessionId}/pause`, undefined, {
+    feedback: { mode: 'silent' },
+  });
 }
 
 /**
@@ -100,7 +110,9 @@ export function pauseSimulationSession(sessionId: SessionId) {
  * @param sessionId - 会话ID
  */
 export function resumeSimulationSession(sessionId: SessionId) {
-  return request.post(`/simulation/sessions/${sessionId}/resume`);
+  return request.post(`/simulation/sessions/${sessionId}/resume`, undefined, {
+    feedback: { mode: 'silent' },
+  });
 }
 
 /**
@@ -112,6 +124,7 @@ export function stepSimulationSession(sessionId: SessionId) {
     headers: {
       repeatSubmit: false,
     },
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -121,7 +134,13 @@ export function stepSimulationSession(sessionId: SessionId) {
  * @param speed - 速度倍率 (0.5-4.0)
  */
 export function setSimulationSpeed(sessionId: SessionId, speed: number) {
-  return request.post(`/simulation/sessions/${sessionId}/speed`, { speed });
+  return request.post(
+    `/simulation/sessions/${sessionId}/speed`,
+    { speed },
+    {
+      feedback: { mode: 'silent' },
+    }
+  );
 }
 
 // ==================== 故障注入接口 ====================
@@ -132,10 +151,16 @@ export function setSimulationSpeed(sessionId: SessionId, speed: number) {
  * @param data - 故障配置
  */
 export function injectFault(sessionId: SessionId, data: Record<string, any>) {
-  return request.post('/simulation/faults', {
-    sessionId,
-    ...data,
-  });
+  return request.post(
+    '/simulation/faults',
+    {
+      sessionId,
+      ...data,
+    },
+    {
+      feedback: { mode: 'manual' },
+    }
+  );
 }
 
 /**
@@ -146,6 +171,7 @@ export function injectFault(sessionId: SessionId, data: Record<string, any>) {
 export function clearFault(sessionId: SessionId, faultId: string) {
   return request.delete(`/simulation/faults/${faultId}`, {
     params: { sessionId },
+    feedback: { mode: 'manual' },
   });
 }
 
@@ -154,7 +180,9 @@ export function clearFault(sessionId: SessionId, faultId: string) {
  * @param sessionId - 会话ID
  */
 export function clearAllFaults(sessionId: SessionId) {
-  return request.delete(`/simulation/sessions/${sessionId}/faults`);
+  return request.delete(`/simulation/sessions/${sessionId}/faults`, {
+    feedback: { mode: 'manual' },
+  });
 }
 
 /**
@@ -175,7 +203,9 @@ export function getFaults(sessionId: SessionId) {
  * @param data - 事件配置
  */
 export function createEvent(sessionId: SessionId, data: Record<string, any>) {
-  return request.post(`/simulation/sessions/${sessionId}/events`, data);
+  return request.post(`/simulation/sessions/${sessionId}/events`, data, {
+    feedback: { mode: 'auto', key: 'simulation.event.create' },
+  });
 }
 
 /**
@@ -185,7 +215,9 @@ export function createEvent(sessionId: SessionId, data: Record<string, any>) {
  * @param data - 事件配置
  */
 export function updateEvent(sessionId: SessionId, eventId: string, data: Record<string, any>) {
-  return request.put(`/simulation/sessions/${sessionId}/events/${eventId}`, data);
+  return request.put(`/simulation/sessions/${sessionId}/events/${eventId}`, data, {
+    feedback: { mode: 'auto', key: 'simulation.event.update' },
+  });
 }
 
 /**
@@ -194,7 +226,9 @@ export function updateEvent(sessionId: SessionId, eventId: string, data: Record<
  * @param eventId - 事件ID
  */
 export function deleteEvent(sessionId: SessionId, eventId: string) {
-  return request.delete(`/simulation/sessions/${sessionId}/events/${eventId}`);
+  return request.delete(`/simulation/sessions/${sessionId}/events/${eventId}`, {
+    feedback: { mode: 'auto', key: 'simulation.event.delete' },
+  });
 }
 
 /**
@@ -204,9 +238,17 @@ export function deleteEvent(sessionId: SessionId, eventId: string) {
  */
 export function triggerEvent(sessionId: SessionId, eventIdOrData: string | Record<string, any>) {
   if (typeof eventIdOrData !== 'string') {
-    return request.post(`/simulation/${sessionId}/event`, eventIdOrData);
+    return request.post(`/simulation/${sessionId}/event`, eventIdOrData, {
+      feedback: { mode: 'auto', key: 'simulation.event.trigger' },
+    });
   }
-  return request.post(`/simulation/sessions/${sessionId}/events/${eventIdOrData}/trigger`);
+  return request.post(
+    `/simulation/sessions/${sessionId}/events/${eventIdOrData}/trigger`,
+    undefined,
+    {
+      feedback: { mode: 'auto', key: 'simulation.event.trigger' },
+    }
+  );
 }
 
 /**
@@ -218,10 +260,16 @@ export function getEvents(sessionId: SessionId) {
 }
 
 export function startSimulation(projectId: number | string, config: Record<string, any> = {}) {
-  return request.post('/simulation/start', {
-    project_id: projectId,
-    config,
-  });
+  return request.post(
+    '/simulation/start',
+    {
+      project_id: projectId,
+      config,
+    },
+    {
+      feedback: { mode: 'silent' },
+    }
+  );
 }
 
 export const pauseSimulation = pauseSimulationSession;

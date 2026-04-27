@@ -21,7 +21,6 @@
 <script setup>
 import { ref, computed, getCurrentInstance } from 'vue';
 import { useDialog } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { getProject, addProject, updateProject } from '@/api/project/project';
 
 const emit = defineEmits(['success']);
@@ -56,9 +55,6 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
     const newId = res?.projectId || res?.id || null;
     emit('success', { mode: 'create', projectId: newId, data: res });
     return res;
-  },
-  onConfirmError: (e) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 

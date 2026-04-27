@@ -186,12 +186,9 @@ function toggleExpandAll() {
 }
 
 async function handleUpdate(row: any) {
-  try {
-    const response = await getMenu(row.menuId);
-    menuDrawerRef.value?.open(response);
-  } catch (e) {
-    (proxy as any).$modal.msgError('获取数据失败');
-  }
+  const response = await getMenu(row.menuId).catch(() => null);
+  if (!response) return;
+  menuDrawerRef.value?.open(response);
 }
 
 function handleDelete(row: any) {
@@ -200,7 +197,6 @@ function handleDelete(row: any) {
     .then(() => delMenu(row.menuId))
     .then(() => {
       gridListRef.value?.refresh();
-      (proxy as any).$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }

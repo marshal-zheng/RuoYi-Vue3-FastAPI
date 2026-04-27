@@ -85,7 +85,6 @@ export function useTopology(version, getGraphInstance, clearGraphContent, isSimu
     }
 
     await saveProjectTopology(payload);
-    ElMessage.success('拓扑保存成功');
     return true;
   }
 

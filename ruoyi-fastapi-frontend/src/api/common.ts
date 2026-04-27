@@ -7,5 +7,6 @@ export function getTableNames() {
   return request({
     url: '/common/tables',
     method: 'get',
+    feedback: { mode: 'silent' },
   });
 }

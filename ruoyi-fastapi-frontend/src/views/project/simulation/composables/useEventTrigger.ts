@@ -360,8 +360,8 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
 
   function unwrapEventList(response: any): Event[] {
     if (Array.isArray(response)) return response;
+    if (Array.isArray(response?.items)) return response.items;
     if (Array.isArray(response?.data)) return response.data;
-    if (Array.isArray(response?.rows)) return response.rows;
     return [];
   }
 
@@ -415,15 +415,15 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
       actionParams: action.params,
     });
 
-    const responseData = (response as any)?.data || response;
+    const eventResponse = response as Partial<Event> | undefined;
     const event: Event = {
-      eventId: responseData?.eventId || `event-${Date.now()}`,
+      eventId: eventResponse?.eventId || `event-${Date.now()}`,
       name,
       condition,
       action,
-      status: 'pending',
-      triggerCount: 0,
-      createTime: Date.now(),
+      status: eventResponse?.status || 'pending',
+      triggerCount: eventResponse?.triggerCount || 0,
+      createTime: eventResponse?.createTime || Date.now(),
     };
 
     eventList.value.push(event);

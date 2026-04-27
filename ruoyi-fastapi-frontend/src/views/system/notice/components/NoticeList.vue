@@ -161,12 +161,9 @@ async function handleUpdate(row?: any) {
   const noticeId = row?.noticeId || ids.value[0];
   if (!noticeId) return;
 
-  try {
-    const response = await getNotice(noticeId);
-    noticeDlgRef.value?.open(response);
-  } catch (e) {
-    proxy.$modal.msgError('获取数据失败');
-  }
+  const response = await getNotice(noticeId).catch(() => null);
+  if (!response) return;
+  noticeDlgRef.value?.open(response);
 }
 
 function handleDelete(row?: any) {

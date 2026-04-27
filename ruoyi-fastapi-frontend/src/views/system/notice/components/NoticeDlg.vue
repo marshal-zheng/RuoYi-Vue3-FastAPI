@@ -41,7 +41,6 @@
 <script setup lang="ts" name="NoticeDlg">
 import { addNotice, updateNotice } from '@/api/system/notice';
 import { useDialog } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
 const proxy = getCurrentInstance()?.proxy as any;
@@ -88,16 +87,11 @@ const { state, dialogProps, dialogEvents, open } = useDialog<NoticeForm>({
   onConfirm: async (data: NoticeForm) => {
     if (data.noticeId !== undefined) {
       await updateNotice(data);
-      ElMessage.success('修改成功');
     } else {
       await addNotice(data);
-      ElMessage.success('新增成功');
     }
     emit('success');
     return true;
-  },
-  onConfirmError: (e: any) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 

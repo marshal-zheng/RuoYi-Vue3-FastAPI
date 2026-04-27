@@ -36,6 +36,7 @@ export function addUser(data: Record<string, any>) {
     url: '/system/user',
     method: 'post',
     data: payload,
+    feedback: { mode: 'auto', key: 'system.user.create' },
   });
 }
 
@@ -46,6 +47,7 @@ export function updateUser(data: Record<string, any>) {
     url: '/system/user',
     method: 'put',
     data: payload,
+    feedback: { mode: 'auto', key: 'system.user.update' },
   });
 }
 
@@ -54,6 +56,7 @@ export function delUser(userId: number | string) {
   return request({
     url: '/system/user/' + userId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.user.delete' },
   });
 }
 
@@ -70,6 +73,7 @@ export function resetUserPwd(userId: number | string, password: string) {
     url: '/system/user/resetPwd',
     method: 'put',
     data: data,
+    feedback: { mode: 'manual', key: 'system.user.reset-password' },
   });
 }
 
@@ -83,6 +87,7 @@ export function changeUserStatus(userId: number | string, status: string) {
     url: '/system/user/changeStatus',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.user.change-status' },
   });
 }
 
@@ -100,6 +105,7 @@ export function updateUserProfile(data: Record<string, any>) {
     url: '/system/user/profile',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.user.update-profile' },
   });
 }
 
@@ -116,6 +122,7 @@ export function updateUserPwd(oldPassword: string, newPassword: string) {
     url: '/system/user/profile/updatePwd',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.user.update-password' },
   });
 }
 
@@ -126,6 +133,7 @@ export function uploadAvatar(data: FormData) {
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     data: data,
+    feedback: { mode: 'auto', key: 'system.user.upload-avatar' },
   });
 }
 
@@ -143,6 +151,7 @@ export function updateAuthRole(data: Record<string, any>) {
     url: '/system/user/authRole',
     method: 'put',
     params: data,
+    feedback: { mode: 'auto', key: 'system.user.assign-role' },
   });
 }
 
@@ -159,6 +168,7 @@ export function login(data: Record<string, any>) {
     url: '/login',
     method: 'post',
     data,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -166,6 +176,7 @@ export function logout() {
   return request({
     url: '/logout',
     method: 'post',
+    feedback: { mode: 'silent' },
   });
 }
 

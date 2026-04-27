@@ -153,12 +153,9 @@ function toggleExpandAll() {
 }
 
 async function handleUpdate(row: any) {
-  try {
-    const response = await getDept(row.deptId);
-    deptDlgRef.value?.open(response);
-  } catch (e) {
-    proxy.$modal.msgError('获取数据失败');
-  }
+  const response = await getDept(row.deptId).catch(() => null);
+  if (!response) return;
+  deptDlgRef.value?.open(response);
 }
 
 function handleDelete(row: any) {

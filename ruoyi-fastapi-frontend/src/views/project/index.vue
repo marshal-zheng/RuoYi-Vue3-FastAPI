@@ -317,10 +317,10 @@ async function handleDelete(row) {
       projectIds = ids.value;
     }
   } else if (ids.value.length > 1) {
-    proxy.$modal.msgError('批量删除暂不支持，请逐个删除项目以确保安全性');
+    ElMessage.error('批量删除暂不支持，请逐个删除项目以确保安全性');
     return;
   } else {
-    proxy.$modal.msgError('请选择要删除的项目');
+    ElMessage.error('请选择要删除的项目');
     return;
   }
 
@@ -381,14 +381,13 @@ function handleEdit(project) {
 
 function handleUnlockProjectVersions(project) {
   if (!project?.projectId) {
-    proxy.$modal.msgError('工程ID不存在，无法操作');
+    ElMessage.error('工程ID不存在，无法操作');
     return;
   }
   proxy.$modal
     .confirm(`是否批量解除工程"${project.projectName}"下的所有固化版本？`)
     .then(async () => {
       await unlockProjectVersions(project.projectId);
-      proxy.$modal.msgSuccess('批量解除固化成功');
     })
     .catch(() => {});
 }
@@ -397,7 +396,6 @@ function handleCreateSuccess(payload) {
   // 编辑模式：刷新列表即可
   if (payload?.mode === 'edit') {
     refreshList();
-    proxy.$modal.msgSuccess('修改成功');
     return;
   }
 
@@ -422,14 +420,13 @@ function handleCreateSuccess(payload) {
     });
   } else {
     refreshList();
-    proxy.$modal.msgSuccess('新增成功');
   }
 }
 
 // ========== 工程导出功能 ==========
 async function handleExport(project) {
   if (!project?.projectId) {
-    proxy.$modal.msgError('工程ID不存在，无法导出');
+    ElMessage.error('工程ID不存在，无法导出');
     return;
   }
 
@@ -444,7 +441,7 @@ async function handleExport(project) {
 
 async function handleBatchExport() {
   if (!ids.value.length) {
-    proxy.$modal.msgError('请先勾选要导出的工程');
+    ElMessage.error('请先勾选要导出的工程');
     return;
   }
 
@@ -456,7 +453,7 @@ async function handleBatchExport() {
 
     ElMessage.success('批量导出任务已完成');
   } catch (error) {
-    proxy.$modal.msgError(error?.msg || '批量导出失败');
+    ElMessage.error(error?.detail || error?.message || '批量导出失败');
   }
 }
 
@@ -476,23 +473,18 @@ async function handleImportFileChange(event) {
 
   const validation = validateFile(file, { accept: ['.zip'], maxSize: 50 * 1024 * 1024 });
   if (!validation.valid) {
-    proxy.$modal.msgError(validation.error || '文件校验失败');
+    ElMessage.error(validation.error || '文件校验失败');
     return;
   }
 
   const formData = new FormData();
   formData.append('file', file);
   const result = await importProjectBatch(formData);
-  const summary = result || {};
-  const successCount = summary.successCount || 0;
-  const failedCount = summary.failedCount || 0;
-
-  if (failedCount > 0) {
-    ElMessage.warning(`导入完成，成功 ${successCount} 个，失败 ${failedCount} 个`);
-  } else {
-    ElMessage.success(`导入完成，成功 ${successCount} 个工程`);
+  const summary = result?.summary || {};
+  const successCount = summary.succeeded || 0;
+  if (successCount > 0) {
+    refreshList();
   }
-  refreshList();
 }
 </script>
 <style scoped>

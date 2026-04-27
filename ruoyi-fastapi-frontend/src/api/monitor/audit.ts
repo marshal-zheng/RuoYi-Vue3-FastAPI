@@ -14,6 +14,7 @@ export function delAuditLog(auditId: number | string) {
   return request({
     url: '/monitor/audit/' + auditId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.audit.delete' },
   });
 }
 
@@ -22,5 +23,6 @@ export function cleanAuditLog() {
   return request({
     url: '/monitor/audit/clean',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.audit.clear' },
   });
 }

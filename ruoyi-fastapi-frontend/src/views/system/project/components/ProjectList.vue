@@ -167,22 +167,16 @@ async function handleUpdate(row?: any) {
   const projectId = row?.projectId || ids.value[0];
   if (!projectId) return;
 
-  try {
-    const response = await getProject(projectId);
-    projectDlgRef.value?.open(response);
-  } catch (e) {
-    proxy.$modal.msgError('获取数据失败');
-  }
+  const response = await getProject(projectId).catch(() => null);
+  if (!response) return;
+  projectDlgRef.value?.open(response);
 }
 
 async function handleDetail(row: any) {
-  try {
-    const response = await getProject(row.projectId);
-    detailData.value = response;
-    detailOpen.value = true;
-  } catch (e) {
-    proxy.$modal.msgError('获取数据失败');
-  }
+  const response = await getProject(row.projectId).catch(() => null);
+  if (!response) return;
+  detailData.value = response;
+  detailOpen.value = true;
 }
 
 function handleDelete(row?: any) {
@@ -192,7 +186,6 @@ function handleDelete(row?: any) {
     .then(() => delProject(projectIds))
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }

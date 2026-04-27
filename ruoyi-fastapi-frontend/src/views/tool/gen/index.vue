@@ -187,6 +187,7 @@
 import { listTable, previewTable, delTable, genCode, synchDb } from '@/api/tool/gen';
 import { useDialog } from '@zxio/zxui';
 import router from '@/router';
+import { ElMessage } from 'element-plus';
 import importTable from './importTable';
 import createTable from './createTable';
 
@@ -230,7 +231,7 @@ onActivated(() => {
 async function loadTableData(params) {
   const { dateRange, ...restQuery } = params.query || {};
   const queryData = {
-    pageNum: params.page,
+    page: params.page,
     pageSize: params.size,
     tableName: restQuery?.tableName,
     tableComment: restQuery?.tableComment,
@@ -246,7 +247,7 @@ async function loadTableData(params) {
     const response = await listTable(queryData);
     return response;
   } catch (e) {
-    return { data: [], total: 0 };
+    return { items: [], total: 0, page: params.page, pageSize: params.size };
   }
 }
 
@@ -267,12 +268,12 @@ function handleRefresh() {
 function handleGenTable(row) {
   const tbNames = row?.tableName || tableNames.value;
   if (!tbNames || tbNames === '') {
-    proxy.$modal.msgError('请选择要生成的数据');
+    ElMessage.error('请选择要生成的数据');
     return;
   }
   if (row?.genType === '1') {
     genCode(row.tableName).then(() => {
-      proxy.$modal.msgSuccess('成功生成到自定义路径：' + row.genPath);
+      ElMessage.success('成功生成到自定义路径：' + row.genPath);
     });
   } else {
     proxy.$download.zip('/tool/gen/batchGenCode?tables=' + tbNames, 'vfadmin.zip');
@@ -286,7 +287,6 @@ function handleSynchDb(row) {
     .confirm('确认要强制同步"' + tableName + '"表结构吗？')
     .then(() => synchDb(tableName))
     .then(() => {
-      proxy.$modal.msgSuccess('同步成功');
       handleRefresh();
     })
     .catch(() => {});
@@ -314,7 +314,7 @@ function handlePreview(row) {
 
 /** 复制代码成功 */
 function copyTextSuccess() {
-  proxy.$modal.msgSuccess('复制成功');
+  ElMessage.success('复制成功');
 }
 
 /** 多选框选中数据 */
@@ -331,7 +331,7 @@ function handleEditTable(row) {
   const currentPage = gridListRef.value?.getState()?.page || 1;
   router.push({
     path: '/tool/gen-edit/index/' + tableId,
-    query: { pageNum: currentPage },
+    query: { page: currentPage },
   });
 }
 
@@ -343,7 +343,6 @@ function handleDelete(row) {
     .then(() => delTable(tableIds))
     .then(() => {
       handleRefresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }

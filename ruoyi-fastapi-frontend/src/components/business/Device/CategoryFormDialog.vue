@@ -34,13 +34,12 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import type { FormInstance } from 'element-plus';
 import { useDialog } from '@zxio/zxui';
 import { addDeviceCategory, updateDeviceCategory, getDeviceCategory } from '@/api/device/category';
 
 const emit = defineEmits<{ success: [data?: any] }>();
 
-const formRef = ref<FormInstance>();
+const formRef = ref();
 
 interface CategoryForm {
   device_category_id: number | null;

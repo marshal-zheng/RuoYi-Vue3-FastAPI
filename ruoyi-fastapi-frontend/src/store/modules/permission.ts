@@ -164,6 +164,9 @@ function normalizeBackendRoutes(raw: any): any[] {
   if (Array.isArray(raw)) {
     return raw;
   }
+  if (raw && Array.isArray(raw.items)) {
+    return raw.items;
+  }
   if (raw && Array.isArray(raw.data)) {
     return raw.data;
   }

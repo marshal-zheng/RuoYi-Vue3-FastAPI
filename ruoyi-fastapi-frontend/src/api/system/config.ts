@@ -31,6 +31,7 @@ export function addConfig(data: Record<string, any>) {
     url: '/system/config',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.config.create' },
   });
 }
 
@@ -40,6 +41,7 @@ export function updateConfig(data: Record<string, any>) {
     url: '/system/config',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.config.update' },
   });
 }
 
@@ -48,6 +50,7 @@ export function delConfig(configId: number | string) {
   return request({
     url: '/system/config/' + configId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.config.delete' },
   });
 }
 
@@ -56,5 +59,6 @@ export function refreshCache() {
   return request({
     url: '/system/config/refreshCache',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.config.update' },
   });
 }

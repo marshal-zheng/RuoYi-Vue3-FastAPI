@@ -25,5 +25,6 @@ export function postDevMenuSync(payload: DevMenuSyncPayload) {
     url: '/dev/menu/sync',
     method: 'post',
     data: payload,
+    feedback: { mode: 'auto', key: 'system.dev-menu.sync' },
   });
 }

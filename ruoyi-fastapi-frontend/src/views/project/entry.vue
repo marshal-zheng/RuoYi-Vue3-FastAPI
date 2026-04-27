@@ -38,7 +38,7 @@ interface ProjectVersionSummary {
 }
 
 interface PageResult<T> {
-  rows?: T[];
+  items?: T[];
 }
 
 const route = useRoute();
@@ -74,11 +74,11 @@ function normalizeId(value: unknown): number | null {
 }
 
 function getFirstRow<T>(page: PageResult<T> | undefined): T | undefined {
-  return Array.isArray(page?.rows) ? page.rows[0] : undefined;
+  return Array.isArray(page?.items) ? page.items[0] : undefined;
 }
 
 async function resolveFirstProject(): Promise<ProjectSummary | null> {
-  const page = (await listProject({ pageNum: 1, pageSize: 1 })) as PageResult<ProjectSummary>;
+  const page = (await listProject({ page: 1, pageSize: 1 })) as PageResult<ProjectSummary>;
   const project = getFirstRow(page);
   const projectId = normalizeId((project as Record<string, unknown> | undefined)?.projectId);
 
@@ -95,7 +95,7 @@ async function resolveFirstProject(): Promise<ProjectSummary | null> {
 async function resolveFirstVersion(projectId: number): Promise<ProjectVersionSummary | null> {
   const page = (await listProjectVersion({
     projectId,
-    pageNum: 1,
+    page: 1,
     pageSize: 1,
   })) as PageResult<ProjectVersionSummary>;
   const version = getFirstRow(page);

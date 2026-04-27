@@ -15,11 +15,9 @@
 </template>
 
 <script setup name="DeviceCloneDialog">
-import { ref, reactive, getCurrentInstance } from 'vue';
+import { ref, reactive } from 'vue';
 import { cloneDevice, checkDeviceNameUnique } from '@/api/device/device';
 import { useDialog } from '@zxio/zxui';
-
-const { proxy } = getCurrentInstance();
 
 const formRef = ref(null);
 
@@ -66,8 +64,6 @@ const dialog = useDialog({
       sourceDeviceId: formData.sourceDeviceId,
       deviceName: formData.deviceName,
     });
-
-    proxy.$modal.msgSuccess('设备克隆成功');
 
     if (onSuccessCallback) {
       onSuccessCallback();

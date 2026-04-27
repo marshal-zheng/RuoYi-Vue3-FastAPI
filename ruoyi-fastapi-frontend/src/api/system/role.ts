@@ -23,6 +23,7 @@ export function addRole(data: Record<string, any>) {
     url: '/system/role',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.role.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateRole(data: Record<string, any>) {
     url: '/system/role',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.role.update' },
   });
 }
 
@@ -41,6 +43,7 @@ export function dataScope(data: Record<string, any>) {
     url: '/system/role/dataScope',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.role.data-scope' },
   });
 }
 
@@ -54,6 +57,7 @@ export function changeRoleStatus(roleId: number | string, status: string) {
     url: '/system/role/changeStatus',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.role.change-status' },
   });
 }
 
@@ -62,6 +66,7 @@ export function delRole(roleId: number | string) {
   return request({
     url: '/system/role/' + roleId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.role.delete' },
   });
 }
 
@@ -89,6 +94,7 @@ export function authUserCancel(data: Record<string, any>) {
     url: '/system/role/authUser/cancel',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
   });
 }
 
@@ -98,6 +104,7 @@ export function authUserCancelAll(data: Record<string, any>) {
     url: '/system/role/authUser/cancelAll',
     method: 'put',
     params: data,
+    feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
   });
 }
 
@@ -107,6 +114,7 @@ export function authUserSelectAll(data: Record<string, any>) {
     url: '/system/role/authUser/selectAll',
     method: 'put',
     params: data,
+    feedback: { mode: 'auto', key: 'system.role.auth-user.assign' },
   });
 }
 

@@ -22,6 +22,7 @@ export function getDept(deptId: number | string) {
   return request({
     url: '/system/dept/' + deptId,
     method: 'get',
+    feedback: { mode: 'auto' },
   });
 }
 
@@ -31,6 +32,7 @@ export function addDept(data: Record<string, any>) {
     url: '/system/dept',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dept.create' },
   });
 }
 
@@ -40,6 +42,7 @@ export function updateDept(data: Record<string, any>) {
     url: '/system/dept',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dept.update' },
   });
 }
 
@@ -48,5 +51,6 @@ export function delDept(deptId: number | string) {
   return request({
     url: '/system/dept/' + deptId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.dept.delete' },
   });
 }

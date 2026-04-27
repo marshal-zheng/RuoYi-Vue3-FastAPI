@@ -26,7 +26,6 @@
 
 <script setup name="DeviceClazzDialog">
 import { ref, computed } from 'vue';
-import { ElMessage } from 'element-plus';
 import { useDialog } from '@zxio/zxui';
 import { getDeviceCategory, addDeviceCategory, updateDeviceCategory } from '@/api/device/category';
 
@@ -80,35 +79,13 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   // 确认回调
   onConfirm: async (data) => {
     if (data.categoryId) {
-      // 修改
-      try {
-        const response = await updateDeviceCategory(data);
-        ElMessage.success('修改成功');
-        emit('success');
-        return response;
-      } catch (error) {
-        console.warn('修改分类失败:', error);
-        throw new Error('修改失败，接口暂不可用');
-      }
-    } else {
-      // 新增
-      try {
-        const response = await addDeviceCategory(data);
-        ElMessage.success('新增成功');
-        emit('success');
-        return response;
-      } catch (error) {
-        console.warn('新增分类失败:', error);
-        throw new Error('新增失败，接口暂不可用');
-      }
+      const response = await updateDeviceCategory(data);
+      emit('success');
+      return response;
     }
-  },
-
-  // 错误处理回调
-  onConfirmError: (error) => {
-    console.error('操作失败:', error);
-    const errorMsg = error?.message || '操作失败，请重试';
-    ElMessage.error(errorMsg);
+    const response = await addDeviceCategory(data);
+    emit('success');
+    return response;
   },
 });
 

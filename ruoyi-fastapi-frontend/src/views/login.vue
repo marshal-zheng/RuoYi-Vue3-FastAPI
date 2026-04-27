@@ -9,14 +9,16 @@
           <div class="flex justify-center items-center h-full absolute inset-0 p-8">
             <div class="text-center">
               <div class="login-illustration">
-                <div
+                <img
                   class="login-illustration-svg w-80 mx-auto"
-                  role="img"
+                  :src="loginIllustrationSrc"
                   aria-label="登录插图"
-                  v-html="loginIllustration"
-                ></div>
+                  alt="登录插图"
+                />
               </div>
-              <div class="text-3xl text-white font-bold mb-4">{{ `欢迎使用${displayTitle}` }}</div>
+              <div class="text-3xl text-white font-bold mb-4">
+                {{ `欢迎使用${displayTitle}` }}
+              </div>
             </div>
           </div>
         </div>
@@ -140,6 +142,9 @@ const displayTitle = computed(() => {
   const t = title ?? '';
   return t.includes('系统') ? t : `${t}系统`;
 });
+const loginIllustrationSrc = computed(
+  () => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(loginIllustration)}`
+);
 const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
@@ -202,7 +207,10 @@ function handleLogin() {
             return acc;
           }, {});
           try {
-            await router.push({ path: redirect.value || '/', query: otherQueryParams });
+            await router.push({
+              path: redirect.value || '/',
+              query: otherQueryParams,
+            });
           } catch {
             loading.value = false;
           }

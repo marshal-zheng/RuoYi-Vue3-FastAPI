@@ -122,7 +122,7 @@ const userIds = ref([]);
 
 async function loadAuthUserData(params) {
   const query = {
-    pageNum: params.page,
+    page: params.page,
     pageSize: params.size,
     roleId: route.params.roleId,
     userName: params.query?.userName,
@@ -165,7 +165,6 @@ function cancelAuthUser(row) {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('取消授权成功');
     })
     .catch(() => {});
 }
@@ -180,7 +179,6 @@ function cancelAuthUserAll() {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('取消授权成功');
     })
     .catch(() => {});
 }

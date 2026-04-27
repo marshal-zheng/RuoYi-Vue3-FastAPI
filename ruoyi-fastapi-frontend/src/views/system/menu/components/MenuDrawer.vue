@@ -194,7 +194,6 @@
 import { ref } from 'vue';
 import { addMenu, updateMenu, treeselect } from '@/api/system/menu';
 import { useDrawer } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { QuestionFilled, Search } from '@element-plus/icons-vue';
 import { IconSelect } from '@/components/ui';
 
@@ -266,16 +265,11 @@ const drawer = useDrawer<MenuForm>({
   onConfirm: async (data: MenuForm) => {
     if (data.menuId !== undefined) {
       await updateMenu(data);
-      ElMessage.success('修改成功');
     } else {
       await addMenu(data);
-      ElMessage.success('新增成功');
     }
     emit('success');
     return true;
-  },
-  onConfirmError: (e: any) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 

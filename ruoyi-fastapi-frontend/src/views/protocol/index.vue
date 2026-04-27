@@ -231,23 +231,11 @@ function handleDelete(row) {
       // 单个仍可用批量接口，保持一致的结果结构
       return delProtocolBatch(protocolIds);
     })
-    .then((res) => {
+    .then(() => {
       gridListRef.value?.refresh();
-      // http 客户端已解包 payload.data，直接访问字段
-      const summary = res?.summary || {};
-      const successCount = Array.isArray(summary.success) ? summary.success.length : 0;
-      const failCount = Array.isArray(summary.failed) ? summary.failed.length : 0;
-      if (failCount === 0) {
-        proxy.$modal.msgSuccess('删除成功');
-      } else if (successCount > 0) {
-        proxy.$modal.msgWarning(`部分成功：成功 ${successCount} 个，失败 ${failCount} 个`);
-      } else {
-        proxy.$modal.msgError('删除失败');
-      }
     })
     .catch((err) => {
       if (err?.message === 'no_ids') return;
-      proxy.$modal.msgError(err?.message || '删除失败');
     });
 }
 
@@ -255,7 +243,7 @@ function handleDelete(row) {
 function handleBatchDelete() {
   console.log('ids', ids);
   if (ids.value.length === 0) {
-    proxy.$modal.msgWarning('请选择要删除的协议');
+    ElMessage.warning('请选择要删除的协议');
     return;
   }
   handleDelete({});
@@ -266,10 +254,8 @@ const handleProtocolSaveSuccess = async (data) => {
   try {
     if (data.protocolId) {
       await updateProtocol(data);
-      proxy.$modal.msgSuccess('修改成功');
     } else {
       await addProtocol(data);
-      proxy.$modal.msgSuccess('新增成功');
     }
     protocolDrawerRef.value?.close();
     gridListRef.value?.refresh();
@@ -342,19 +328,14 @@ async function doImportFiles(fileList) {
     formData.append('files', fileObj);
   });
 
-  let successList = [];
-  let failList = [];
+  let successCount = 0;
 
   try {
     const result = await importProtocolBatch(formData);
-    const data = result || {};
-    successList = data.success || [];
-    failList = data.failed || [];
-  } catch (error) {
-    failList = (fileList || []).map((file) => ({
-      name: file?.name || file?.raw?.name || '未知文件',
-      reason: error?.message || '导入失败',
-    }));
+    const batchResults = Array.isArray(result?.results) ? result.results : [];
+    successCount = batchResults.filter((item) => item.success).length;
+  } catch (_error) {
+    successCount = 0;
   }
 
   // 清空文件列表
@@ -362,21 +343,8 @@ async function doImportFiles(fileList) {
   importFileList.value = [];
   importing.value = false;
 
-  // 显示导入结果
-  if (successList.length > 0 && failList.length === 0) {
-    ElMessage.success(`批量导入成功，共导入 ${successList.length} 个协议`);
-  } else if (successList.length === 0 && failList.length > 0) {
-    if (failList.length === 1) {
-      proxy.$modal.msgError(`导入失败：${failList[0].reason}`);
-    } else {
-      proxy.$modal.msgError(`批量导入失败，共 ${failList.length} 个文件导入失败`);
-    }
-  } else {
-    ElMessage.warning(`批量导入完成：成功 ${successList.length} 个，失败 ${failList.length} 个`);
-  }
-
   // 刷新列表
-  if (successList.length > 0) {
+  if (successCount > 0) {
     gridListRef.value?.refresh();
   }
 }

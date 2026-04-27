@@ -56,7 +56,6 @@
 <script setup>
 import { ref, nextTick } from 'vue';
 import { useDrawer } from '@zxio/zxui';
-import { ElMessage } from 'element-plus';
 import { getRole, dataScope, deptTreeSelect } from '@/api/system/role';
 
 const emit = defineEmits(['success']);
@@ -90,12 +89,8 @@ const drawer = useDrawer({
   async onConfirm() {
     const submitData = { ...drawer.state.data, deptIds: getDeptAllCheckedKeys() };
     await dataScope(submitData);
-    ElMessage.success('修改成功');
     emit('success');
     return true;
-  },
-  onConfirmError: (e) => {
-    ElMessage.error(e?.message || '提交失败，请重试');
   },
 });
 
@@ -144,10 +139,8 @@ async function openDrawer(roleId) {
   try {
     const [roleRes, deptRes] = await Promise.all([getRole(roleId), deptTreeSelect(roleId)]);
 
-    // 后端使用 ResponseUtil.success(model_content=...) 包装
-    // model_content 会被序列化为响应的顶层属性
     deptOptions.value = deptRes.depts || [];
-    const roleData = roleRes.data || {};
+    const roleData = roleRes || {};
 
     drawer.state.data = {
       roleId: roleData.roleId,

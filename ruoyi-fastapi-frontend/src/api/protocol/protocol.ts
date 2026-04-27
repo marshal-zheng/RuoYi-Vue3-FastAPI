@@ -23,6 +23,7 @@ export function addProtocol(data: Record<string, any>) {
     url: '/system/protocol',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'protocol.protocol.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateProtocol(data: Record<string, any>) {
     url: '/system/protocol',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'protocol.protocol.update' },
   });
 }
 
@@ -40,6 +42,7 @@ export function delProtocol(protocolId: number | string) {
   return request({
     url: '/system/protocol/' + protocolId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'protocol.protocol.delete' },
   });
 }
 
@@ -49,6 +52,7 @@ export function delProtocolBatch(protocolIds: (number | string)[]) {
     url: '/system/protocol/deleteBatch',
     method: 'post',
     data: { protocolIds },
+    feedback: { mode: 'auto', key: 'protocol.protocol.delete-batch' },
   });
 }
 
@@ -58,6 +62,7 @@ export function exportProtocol(query?: Record<string, any>) {
     url: '/system/protocol/export',
     method: 'get',
     params: query,
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -68,6 +73,7 @@ export function downloadProtocolImportTemplate(params?: Record<string, any>) {
     method: 'get',
     params,
     responseType: 'blob',
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -78,6 +84,7 @@ export function previewProtocolImport(data: FormData) {
     method: 'post',
     data,
     headers: { 'Content-Type': 'multipart/form-data' },
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -89,6 +96,7 @@ export function importProtocol(formData: FormData) {
     data: formData,
     // 批量导入需要连续发起多次请求，关闭全局防重复提交校验避免被拦截
     headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    feedback: { mode: 'auto', key: 'protocol.protocol.import' },
   });
 }
 
@@ -99,5 +107,6 @@ export function importProtocolBatch(formData: FormData) {
     method: 'post',
     data: formData,
     headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    feedback: { mode: 'auto', key: 'protocol.protocol.import-batch' },
   });
 }

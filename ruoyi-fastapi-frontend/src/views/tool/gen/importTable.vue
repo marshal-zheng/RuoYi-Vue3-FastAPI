@@ -62,6 +62,7 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import { listDbTable, importTable } from '@/api/tool/gen';
 import { useDialog } from '@zxio/zxui';
 import { serializeDateRange } from '@/utils/ruoyi';
@@ -134,7 +135,7 @@ function onReset({ handleRefresh, updateState }) {
 function handleImportTable() {
   const tableNames = tables.value.join(',');
   if (tableNames === '') {
-    proxy.$modal.msgError('请选择要导入的表');
+    ElMessage.error('请选择要导入的表');
     return false; // 返回 false 阻止关闭，不会触发额外的错误处理
   }
   return importTable({ tables: tableNames }).then(() => {

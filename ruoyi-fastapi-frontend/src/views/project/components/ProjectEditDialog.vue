@@ -20,7 +20,6 @@
 
 <script setup name="ProjectEditDialog">
 import { ref, computed } from 'vue';
-import { ElMessage } from 'element-plus';
 import { useDialog } from '@zxio/zxui';
 import { getProject, addProject, updateProject } from '@/api/project';
 
@@ -67,24 +66,13 @@ const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog(
   // 确认回调
   onConfirm: async (data) => {
     if (data.projectId) {
-      // 修改
       const response = await updateProject(data);
-      ElMessage.success('修改成功');
-      emit('success');
-      return response;
-    } else {
-      // 新增
-      const response = await addProject(data);
-      ElMessage.success('新增成功');
       emit('success');
       return response;
     }
-  },
-
-  // 错误处理回调
-  onConfirmError: (error) => {
-    const errorMsg = error?.message || '操作失败，请重试';
-    ElMessage.error(errorMsg);
+    const response = await addProject(data);
+    emit('success');
+    return response;
   },
 });
 

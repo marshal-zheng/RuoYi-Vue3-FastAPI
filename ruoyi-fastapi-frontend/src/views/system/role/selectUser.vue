@@ -52,7 +52,7 @@
       <pagination
         v-show="total > 0"
         :total="total"
-        v-model:page="queryParams.pageNum"
+        v-model:page="queryParams.page"
         v-model:limit="queryParams.pageSize"
         @pagination="getList"
       />
@@ -67,6 +67,7 @@
 </template>
 
 <script setup name="SelectUser">
+import { ElMessage } from 'element-plus';
 import { authUserSelectAll, unallocatedUserList } from '@/api/system/role';
 
 const props = defineProps({
@@ -84,7 +85,7 @@ const total = ref(0);
 const userIds = ref([]);
 
 const queryParams = reactive({
-  pageNum: 1,
+  page: 1,
   pageSize: 10,
   roleId: undefined,
   userName: undefined,
@@ -108,13 +109,13 @@ function handleSelectionChange(selection) {
 // 查询表数据
 function getList() {
   unallocatedUserList(queryParams).then((res) => {
-    userList.value = res.rows;
+    userList.value = res.items;
     total.value = res.total;
   });
 }
 /** 搜索按钮操作 */
 function handleQuery() {
-  queryParams.pageNum = 1;
+  queryParams.page = 1;
   getList();
 }
 /** 重置按钮操作 */
@@ -128,11 +129,10 @@ function handleSelectUser() {
   const roleId = queryParams.roleId;
   const uIds = userIds.value.join(',');
   if (uIds == '') {
-    proxy.$modal.msgError('请选择要分配的用户');
+    ElMessage.error('请选择要分配的用户');
     return;
   }
-  authUserSelectAll({ roleId: roleId, userIds: uIds }).then((res) => {
-    proxy.$modal.msgSuccess(res.msg);
+  authUserSelectAll({ roleId: roleId, userIds: uIds }).then(() => {
     visible.value = false;
     emit('ok');
   });

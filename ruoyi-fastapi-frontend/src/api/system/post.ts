@@ -23,6 +23,7 @@ export function addPost(data: Record<string, any>) {
     url: '/system/post',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.post.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updatePost(data: Record<string, any>) {
     url: '/system/post',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.post.update' },
   });
 }
 
@@ -40,5 +42,6 @@ export function delPost(postId: number | string) {
   return request({
     url: '/system/post/' + postId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.post.delete' },
   });
 }

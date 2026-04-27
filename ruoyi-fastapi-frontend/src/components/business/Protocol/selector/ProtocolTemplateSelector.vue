@@ -42,12 +42,12 @@ const selectedValue = computed({
 });
 
 const loadOptions = async (_keyword?: string) => {
-  const queryParams: any = { pageNum: 1, pageSize: 9999 };
+  const queryParams: any = { page: 1, pageSize: 9999 };
   if (props.protocolType) {
     queryParams.protocolType = props.protocolType;
   }
   const response: any = await listProtocol(queryParams);
-  const list = response?.rows || [];
+  const list = response?.items || [];
   lastOptions.value = list;
   return list;
 };

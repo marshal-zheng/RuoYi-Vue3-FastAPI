@@ -23,6 +23,7 @@ export function addJob(data: Record<string, any>) {
     url: '/monitor/job',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.create' },
   });
 }
 
@@ -32,6 +33,7 @@ export function updateJob(data: Record<string, any>) {
     url: '/monitor/job',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.update' },
   });
 }
 
@@ -40,6 +42,7 @@ export function delJob(jobId: number | string) {
   return request({
     url: '/monitor/job/' + jobId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.job.delete' },
   });
 }
 
@@ -53,6 +56,7 @@ export function changeJobStatus(jobId: number | string, status: string) {
     url: '/monitor/job/changeStatus',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.change-status' },
   });
 }
 
@@ -66,5 +70,6 @@ export function runJob(jobId: number | string, jobGroup: string) {
     url: '/monitor/job/run',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'monitor.job.run' },
   });
 }

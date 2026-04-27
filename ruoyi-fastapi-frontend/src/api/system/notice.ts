@@ -14,6 +14,7 @@ export function getNotice(noticeId: number | string) {
   return request({
     url: '/system/notice/' + noticeId,
     method: 'get',
+    feedback: { mode: 'auto' },
   });
 }
 
@@ -23,6 +24,7 @@ export function addNotice(data: Record<string, any>) {
     url: '/system/notice',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.notice.create' },
   });
 }
 
@@ -32,6 +34,7 @@ export function updateNotice(data: Record<string, any>) {
     url: '/system/notice',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.notice.update' },
   });
 }
 
@@ -40,5 +43,6 @@ export function delNotice(noticeId: number | string) {
   return request({
     url: '/system/notice/' + noticeId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.notice.delete' },
   });
 }

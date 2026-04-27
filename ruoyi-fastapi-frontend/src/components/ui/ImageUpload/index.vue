@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import { getToken } from '@/utils/auth';
 import { isExternal } from '@/utils/validate';
 
@@ -119,17 +120,17 @@ function handleBeforeUpload(file) {
     isImg = file.type.indexOf('image') > -1;
   }
   if (!isImg) {
-    proxy.$modal.msgError(`文件格式不正确，请上传${props.fileType.join('/')}图片格式文件!`);
+    ElMessage.error(`文件格式不正确，请上传${props.fileType.join('/')}图片格式文件!`);
     return false;
   }
   if (file.name.includes(',')) {
-    proxy.$modal.msgError('文件名不正确，不能包含英文逗号!');
+    ElMessage.error('文件名不正确，不能包含英文逗号!');
     return false;
   }
   if (props.fileSize) {
     const isLt = file.size / 1024 / 1024 < props.fileSize;
     if (!isLt) {
-      proxy.$modal.msgError(`上传头像图片大小不能超过 ${props.fileSize} MB!`);
+      ElMessage.error(`上传头像图片大小不能超过 ${props.fileSize} MB!`);
       return false;
     }
   }
@@ -139,7 +140,7 @@ function handleBeforeUpload(file) {
 
 // 文件个数超出
 function handleExceed() {
-  proxy.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`);
+  ElMessage.error(`上传文件数量不能超过 ${props.limit} 个!`);
 }
 
 // 上传成功回调

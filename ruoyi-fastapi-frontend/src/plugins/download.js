@@ -15,6 +15,7 @@ async function requestFile(config) {
   return http.get(
     {
       responseType: 'blob',
+      feedback: { mode: 'silent' },
       ...config,
     },
     downloadRequestOptions
@@ -43,7 +44,12 @@ async function printErrMsg(data) {
       return;
     }
     const rspObj = JSON.parse(text);
-    const errMsg = errorCode[rspObj?.code] || rspObj?.msg || errorCode['default'];
+    const errMsg =
+      rspObj?.detail ||
+      rspObj?.title ||
+      errorCode[rspObj?.errorCode] ||
+      errorCode[rspObj?.status] ||
+      errorCode['default'];
     ElMessage.error(errMsg);
   } catch (error) {
     console.error(error);

@@ -42,7 +42,6 @@
 import { ref, computed, getCurrentInstance } from 'vue';
 import { useDialog } from '@zxio/zxui';
 import { getToken } from '@/utils/auth';
-import { height } from 'happy-dom/lib/PropertySymbol.js';
 
 const { proxy } = getCurrentInstance();
 
@@ -77,6 +76,42 @@ function handleUploadProgress() {
   isUploading.value = true;
 }
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildImportResultHtml(response) {
+  const summary = response?.summary || {};
+  const results = Array.isArray(response?.results) ? response.results : [];
+  const total = Number(summary.total ?? results.length ?? 0);
+  const succeeded = Number(summary.succeeded ?? results.filter((item) => item.success).length);
+  const failed = Number(summary.failed ?? results.filter((item) => !item.success).length);
+  const lines = [`<p>共 ${total} 条，成功 ${succeeded} 条，失败 ${failed} 条。</p>`];
+
+  if (results.length > 0) {
+    lines.push('<ol style="padding-left: 18px;">');
+    results.forEach((item) => {
+      const rowLabel = item.rowNumber ? `第 ${escapeHtml(item.rowNumber)} 行` : '未知行';
+      const userName = item.userName ? `，账号 ${escapeHtml(item.userName)}` : '';
+      if (item.success) {
+        const action = item.action === 'updated' ? '更新成功' : '创建成功';
+        lines.push(`<li>${rowLabel}${userName}：${action}</li>`);
+        return;
+      }
+      const detail = item.error?.detail || item.error?.title || '导入失败';
+      lines.push(`<li>${rowLabel}${userName}：${escapeHtml(detail)}</li>`);
+    });
+    lines.push('</ol>');
+  }
+
+  return lines.join('');
+}
+
 /** 文件上传成功处理 */
 function handleUploadSuccess(response) {
   isUploading.value = false;
@@ -85,7 +120,7 @@ function handleUploadSuccess(response) {
 
   proxy.$alert(
     "<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" +
-      response.msg +
+      buildImportResultHtml(response) +
       '</div>',
     '导入结果',
     { dangerouslyUseHTMLString: true }

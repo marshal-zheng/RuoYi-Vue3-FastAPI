@@ -333,16 +333,14 @@ function submitForm() {
   proxy.$refs['dataRef'].validate((valid) => {
     if (valid) {
       if (form.value.dictCode != undefined) {
-        updateData(form.value).then((response) => {
+        updateData(form.value).then(() => {
           useDictStore().removeDict(defaultDictType.value);
-          proxy.$modal.msgSuccess('修改成功');
           open.value = false;
           refreshList();
         });
       } else {
-        addData(form.value).then((response) => {
+        addData(form.value).then(() => {
           useDictStore().removeDict(defaultDictType.value);
-          proxy.$modal.msgSuccess('新增成功');
           open.value = false;
           refreshList();
         });
@@ -360,7 +358,6 @@ function handleDelete(row) {
     })
     .then(() => {
       refreshList();
-      proxy.$modal.msgSuccess('删除成功');
       useDictStore().removeDict(defaultDictType.value);
     })
     .catch(() => {});

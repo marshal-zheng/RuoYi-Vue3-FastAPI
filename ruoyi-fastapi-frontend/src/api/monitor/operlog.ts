@@ -14,6 +14,7 @@ export function delOperlog(operId: number | string) {
   return request({
     url: '/monitor/operlog/' + operId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.operlog.delete' },
   });
 }
 
@@ -22,5 +23,6 @@ export function cleanOperlog() {
   return request({
     url: '/monitor/operlog/clean',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.operlog.clear' },
   });
 }

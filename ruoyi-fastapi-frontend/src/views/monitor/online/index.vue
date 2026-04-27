@@ -114,7 +114,7 @@ const gridListRef = ref(null);
 
 async function loadOnlineData(params) {
   const query = {
-    pageNum: params.page,
+    page: params.page,
     pageSize: params.size,
     ipaddr: params.query?.ipaddr,
     userName: params.query?.userName,
@@ -138,7 +138,6 @@ function handleForceLogout(row) {
     })
     .then(() => {
       gridListRef.value?.refresh();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }

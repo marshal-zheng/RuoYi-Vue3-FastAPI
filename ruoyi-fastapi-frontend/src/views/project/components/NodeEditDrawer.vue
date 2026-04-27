@@ -111,6 +111,7 @@ const drawer = useDrawer({
       ports: portList.value,
     });
 
+    // message-governance-allow-local: 节点抽屉仅提交本地画布状态
     ElMessage.success('保存成功');
     return true;
   },

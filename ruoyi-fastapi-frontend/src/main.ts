@@ -3,9 +3,9 @@ import { createApp } from 'vue';
 import Cookies from 'js-cookie';
 import { setupVXETable } from '@/plugins/vxe-table';
 
-import ZXUI from '@zxio/zxui'
-import '@zxio/theme-default/theme.css'
-import '@zxio/zxui/style'
+import ZXUI from '@zxio/zxui';
+import '@zxio/theme-default/theme.css';
+import '@zxio/zxui/style';
 
 // Iconify 图标库
 import '@iconify/iconify';
@@ -48,6 +48,7 @@ import {
   selectDictLabels,
 } from '@/utils/ruoyi';
 import { startDevMenuHotSync } from '@/plugins/dev-menu-hot-sync';
+import { assertFeedbackRegistry } from '@/utils/feedback/registry';
 
 // 分页组件
 import Pagination from '@/components/ui/Pagination';
@@ -86,7 +87,6 @@ app.component('RightToolbar', RightToolbar);
 app.component('Editor', Editor);
 app.component('Icon', Icon);
 
-app.use(router);
 app.use(store);
 app.use(plugins);
 app.use(elementIcons);
@@ -146,7 +146,9 @@ async function setupRuntimeMocks(runtimeConfig: RuntimeConfig) {
 // 启动应用（支持 real / fallback / demo-offline 三种运行模式）
 async function bootstrap() {
   const runtimeConfig = resolveRuntimeConfig();
+  assertFeedbackRegistry();
   await setupRuntimeMocks(runtimeConfig);
+  app.use(router);
   app.mount('#app');
 }
 

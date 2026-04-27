@@ -5,8 +5,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import { useUserStore } from '@/store/modules/user'
 import { login as loginApi, logout as logoutApi, getInfo as getInfoApi } from '@/api/login'
-import request from '@/utils/request'
 import { clearSecurityTokens, getToken, setCsrfToken, setToken } from '@/utils/auth'
+import {
+  createApiContractHandlers,
+  createStatusHandler,
+} from '../../mocks/api-contract-handlers'
+import { mockServer } from '../../mocks/server'
 
 vi.mock('@/api/login', () => ({
   login: vi.fn(),
@@ -14,12 +18,9 @@ vi.mock('@/api/login', () => ({
   getInfo: vi.fn()
 }))
 
-vi.mock('@/utils/request', () => ({
-  default: vi.fn()
-}))
-
 vi.mock('@/utils/auth', () => ({
   clearSecurityTokens: vi.fn(),
+  getCsrfToken: vi.fn(() => ''),
   getToken: vi.fn(() => ''),
   setCsrfToken: vi.fn(),
   setToken: vi.fn()
@@ -29,8 +30,8 @@ describe('User Store', () => {
   beforeEach(() => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
+    mockServer.use(...createApiContractHandlers())
     vi.mocked(getToken).mockReturnValue('')
-    ;(request as any).mockResolvedValue({ csrfToken: 'csrf-token-from-refresh' })
   })
 
   describe('Initial State', () => {
@@ -74,7 +75,7 @@ describe('User Store', () => {
       expect(setToken).toHaveBeenCalledWith('test-token-123')
       expect(setCsrfToken).toHaveBeenCalledWith('csrf-token-123')
       expect(store.token).toBe('test-token-123')
-      expect(request).not.toHaveBeenCalled()
+      expect(setCsrfToken).toHaveBeenCalledTimes(1)
     })
 
     it('should request csrf token when login response does not include one', async () => {
@@ -88,11 +89,6 @@ describe('User Store', () => {
         uuid: 'uuid-1'
       })
 
-      expect(request).toHaveBeenCalledWith({
-        url: '/auth/csrf-token',
-        method: 'post',
-        silentSuccess: true
-      })
       expect(setCsrfToken).toHaveBeenCalledWith('csrf-token-from-refresh')
     })
 
@@ -116,22 +112,18 @@ describe('User Store', () => {
   describe('Session Restore', () => {
     it('should restore session when refresh returns token', async () => {
       const store = useUserStore()
-      ;(request as any).mockResolvedValue({
-        token: 'refreshed-token',
-        csrf_token: 'refreshed-csrf'
-      })
 
       await expect(store.restoreSession()).resolves.toBe(true)
 
-      expect(setToken).toHaveBeenCalledWith('refreshed-token')
-      expect(setCsrfToken).toHaveBeenCalledWith('refreshed-csrf')
-      expect(store.token).toBe('refreshed-token')
+      expect(setToken).toHaveBeenCalledWith('jwt-token-restored')
+      expect(setCsrfToken).toHaveBeenCalledWith('csrf-token-restored')
+      expect(store.token).toBe('jwt-token-restored')
     })
 
     it('should clear local security state when refresh fails', async () => {
       const store = useUserStore()
       store.token = 'stale-token'
-      ;(request as any).mockRejectedValue(new Error('Unauthorized'))
+      mockServer.use(createStatusHandler('post', '/auth/refresh', 401))
 
       await expect(store.restoreSession()).resolves.toBe(false)
 

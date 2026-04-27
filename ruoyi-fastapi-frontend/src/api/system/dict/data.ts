@@ -31,6 +31,7 @@ export function addData(data: Record<string, any>) {
     url: '/system/dict/data',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dict-data.create' },
   });
 }
 
@@ -40,6 +41,7 @@ export function updateData(data: Record<string, any>) {
     url: '/system/dict/data',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'system.dict-data.update' },
   });
 }
 
@@ -48,5 +50,6 @@ export function delData(dictCode: number | string) {
   return request({
     url: '/system/dict/data/' + dictCode,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'system.dict-data.delete' },
   });
 }

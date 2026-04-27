@@ -304,7 +304,7 @@ async function loadProjectInfo() {
 async function loadDeviceList() {
   loading.value = true;
   const response = await listDevice({});
-  const devices = response?.rows || [];
+  const devices = response?.items || [];
   operators.value = devices.map((device) => ({
     name: device.deviceName,
     value: device.remark || device.deviceDesc || '设备',

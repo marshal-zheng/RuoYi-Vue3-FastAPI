@@ -45,10 +45,7 @@ export const http = {
   /**
    * 分页查询
    */
-  page<T>(
-    url: string,
-    params?: Record<string, unknown>
-  ): Promise<PageResponse<T> & { code: number; msg: string }> {
+  page<T>(url: string, params?: Record<string, unknown>): Promise<PageResponse<T>> {
     return request.get(url, { params });
   },
 } as const;

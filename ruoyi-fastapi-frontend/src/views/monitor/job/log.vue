@@ -158,7 +158,7 @@
     <pagination
       v-show="total > 0"
       :total="total"
-      v-model:page="queryParams.pageNum"
+      v-model:page="queryParams.page"
       v-model:limit="queryParams.pageSize"
       @pagination="getList"
     />
@@ -239,7 +239,7 @@ const route = useRoute();
 const data = reactive({
   form: {},
   queryParams: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10,
     dictName: undefined,
     dictType: undefined,
@@ -253,7 +253,7 @@ const { queryParams, form, rules } = toRefs(data);
 function getList() {
   loading.value = true;
   listJobLog(proxy.addDateRange(queryParams.value, dateRange.value)).then((response) => {
-    jobLogList.value = response.rows;
+    jobLogList.value = response.items;
     total.value = response.total;
     loading.value = false;
   });
@@ -273,7 +273,7 @@ function handleClose() {
 }
 /** 搜索按钮操作 */
 function handleQuery() {
-  queryParams.value.pageNum = 1;
+  queryParams.value.page = 1;
   getList();
 }
 /** 重置按钮操作 */
@@ -301,7 +301,6 @@ function handleDelete(row) {
     })
     .then(() => {
       getList();
-      proxy.$modal.msgSuccess('删除成功');
     })
     .catch(() => {});
 }
@@ -314,7 +313,6 @@ function handleClean() {
     })
     .then(() => {
       getList();
-      proxy.$modal.msgSuccess('清空成功');
     })
     .catch(() => {});
 }

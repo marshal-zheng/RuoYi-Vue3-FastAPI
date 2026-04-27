@@ -140,6 +140,7 @@
 </template>
 
 <script setup name="Device">
+import { ElMessage } from 'element-plus';
 import { listDevice, delDevice, importDeviceBatch } from '@/api/device/device';
 import { download } from '@/utils/request';
 import DeviceNameDialog from '@/components/business/Device/DeviceNameDialog.vue';
@@ -194,7 +195,7 @@ function handleSelectionChange(selection) {
 
 function handleBatchExport() {
   if (multiple.value) {
-    proxy.$modal.msgWarning('请先选择需要导出的设备');
+    ElMessage.warning('请先选择需要导出的设备');
     return;
   }
   exporting.value = true;
@@ -231,18 +232,13 @@ async function doImportFiles(fileList) {
   try {
     // http 客户端已解包 payload.data，res 直接是导入结果
     const res = (await importDeviceBatch(formData)) || {};
-    const success = res.successCount || 0;
-    const failed = res.failedCount || 0;
-    if (failed === 0) {
-      proxy.$modal.msgSuccess(`导入成功，共 ${success} 条`);
-    } else if (success > 0) {
-      proxy.$modal.msgWarning(`部分成功：成功 ${success} 条，失败 ${failed} 条`);
-    } else {
-      proxy.$modal.msgError('导入失败');
+    const summary = res.summary || {};
+    const success = summary.succeeded || 0;
+    if (success > 0) {
+      refreshList();
     }
-    refreshList();
-  } catch (err) {
-    proxy.$modal.msgError(err?.message || '导入失败');
+  } catch (_err) {
+    // 统一反馈层已负责展示 HTTP/业务失败提示
   } finally {
     importing.value = false;
     if (importTimer) {
@@ -288,7 +284,6 @@ function handleDelete(row) {
     })
     .then(() => {
       refreshList();
-      proxy.$modal.msgSuccess('删除成功');
     });
 }
 

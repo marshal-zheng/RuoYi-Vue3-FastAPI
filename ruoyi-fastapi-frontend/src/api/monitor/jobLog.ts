@@ -14,6 +14,7 @@ export function delJobLog(jobLogId: number | string) {
   return request({
     url: '/monitor/jobLog/' + jobLogId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.job.delete' },
   });
 }
 
@@ -22,5 +23,6 @@ export function cleanJobLog() {
   return request({
     url: '/monitor/jobLog/clean',
     method: 'delete',
+    feedback: { mode: 'auto', key: 'monitor.job-log.clear' },
   });
 }

@@ -21,7 +21,6 @@
 <script setup name="CategorySelector">
 import { ref, onMounted } from 'vue';
 import { getDeviceCategoryOptions } from '@/api/device/category';
-import { ElMessage } from 'element-plus';
 
 // Props
 const props = defineProps({
@@ -64,8 +63,11 @@ async function loadCategories() {
   try {
     // 使用业务类型 9999 获取分类列表
     const response = await getDeviceCategoryOptions('9999');
-    // 根据后端返回的数据格式处理
-    const categories = response || response.rows || [];
+    const categories = Array.isArray(response?.items)
+      ? response.items
+      : Array.isArray(response)
+        ? response
+        : [];
 
     // 转换为选项格式
     categoryOptions.value = categories.map((item) => ({

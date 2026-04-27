@@ -25,6 +25,7 @@ export function addDevice(data: Record<string, any>) {
     url: '/device',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'device.device.create' },
   });
 }
 
@@ -34,6 +35,7 @@ export function updateDevice(data: Record<string, any>) {
     url: '/device',
     method: 'put',
     data: data,
+    feedback: { mode: 'auto', key: 'device.device.update' },
   });
 }
 
@@ -42,6 +44,7 @@ export function delDevice(deviceId: number | string) {
   return request({
     url: '/device/' + deviceId,
     method: 'delete',
+    feedback: { mode: 'auto', key: 'device.device.delete' },
   });
 }
 
@@ -52,6 +55,7 @@ export function exportDevice(query?: Record<string, any>) {
     method: 'post',
     params: query,
     responseType: 'blob',
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -62,6 +66,7 @@ export function exportDeviceBatch(data: Record<string, any>) {
     method: 'post',
     data,
     responseType: 'blob',
+    feedback: { mode: 'silent' },
   });
 }
 
@@ -72,6 +77,7 @@ export function importDeviceBatch(formData: FormData) {
     method: 'post',
     data: formData,
     headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    feedback: { mode: 'auto', key: 'device.device.import-batch' },
   });
 }
 
@@ -93,5 +99,6 @@ export function cloneDevice(data: Record<string, any>) {
     url: '/device/clone',
     method: 'post',
     data: data,
+    feedback: { mode: 'auto', key: 'device.device.clone' },
   });
 }

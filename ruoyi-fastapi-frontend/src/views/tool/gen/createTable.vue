@@ -9,10 +9,10 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import { createTable } from '@/api/tool/gen';
 import { useDialog } from '@zxio/zxui';
 
-const { proxy } = getCurrentInstance();
 const emit = defineEmits(['ok']);
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
@@ -30,7 +30,7 @@ function show() {
 /** 导入按钮操作 */
 function handleImportTable() {
   if (state.data.sql === '') {
-    proxy.$modal.msgError('请输入建表语句');
+    ElMessage.error('请输入建表语句');
     return Promise.reject();
   }
   return createTable({ sql: state.data.sql }).then(() => {

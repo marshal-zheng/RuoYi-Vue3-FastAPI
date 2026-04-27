@@ -225,11 +225,9 @@ async function handleSave() {
     };
     if (submitData.deviceId) {
       await updateDevice(submitData);
-      ElMessage.success('设备配置保存成功');
       router.push('/device/list');
     } else {
-      const response = await addDevice(submitData);
-      ElMessage.success('设备创建成功');
+      await addDevice(submitData);
       router.push('/device/list');
     }
   } finally {
@@ -697,6 +695,7 @@ async function handleDeletePort(interfaceId) {
     if (normalizePortKey(selectedPortId.value) === normalizePortKey(interfaceId)) {
       selectedPortId.value = null;
     }
+    // message-governance-allow-local: 本地端口草稿编辑反馈，不对应服务端 CRUD 结果
     ElMessage.success('删除成功');
     syncDevicePorts();
     updateGraphData();
@@ -723,6 +722,7 @@ async function handlePortSubmit(formData) {
         messageConfig: oldPort.messageConfig,
       };
     }
+    // message-governance-allow-local: 本地端口草稿编辑反馈，不对应服务端 CRUD 结果
     ElMessage.success('修改成功');
   } else {
     // 新增模式：如果选择了多个位置，为每个位置创建一个端口
