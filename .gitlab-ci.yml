@@ -2,6 +2,21 @@ stages:
   - security
   - test
 
+frontend-message-governance-check:
+  stage: security
+  image: node:20
+  script:
+    - corepack enable
+    - cd ruoyi-fastapi-frontend
+    - yarn install --immutable
+    - node ../scripts/check_message_governance_frontend.mjs
+
+backend-message-governance-check:
+  stage: security
+  image: python:3.11
+  script:
+    - python scripts/check_message_governance_backend.py
+
 sensitive-query-check:
   stage: security
   image: python:3.11
@@ -96,6 +111,21 @@ magic-flag-literal-check:
   image: python:3.11
   script:
     - python ruoyi-fastapi-backend/scripts/check_magic_flag_literals.py
+
+frontend-quality-gates:
+  stage: test
+  image: node:20
+  script:
+    - corepack enable
+    - cd ruoyi-fastapi-frontend
+    - yarn install --immutable
+    - yarn lint:check
+    - yarn type-check
+    - yarn type-check:strict
+    - bash scripts/check-mock-standards.sh
+    - yarn test:run
+    - yarn build:prod
+    - yarn build:demo-offline
 
 sensitive-db-check:
   stage: security

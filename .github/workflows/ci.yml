@@ -30,9 +30,18 @@ jobs:
       
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Message Governance Scan
+        run: node ../scripts/check_message_governance_frontend.mjs
+
+      - name: Mock standards scan
+        run: bash scripts/check-mock-standards.sh
       
       - name: Type check
         run: npm run type-check
+
+      - name: Strict mock type check
+        run: npm run type-check:strict
       
       - name: Lint
         run: npm run lint:check
@@ -62,6 +71,32 @@ jobs:
       
       - name: Run tests
         run: npm run test:run
+
+  frontend-build:
+    name: Frontend Production & Demo Builds
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ruoyi-fastapi-frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: ruoyi-fastapi-frontend/yarn.lock
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build production
+        run: npm run build:prod
+
+      - name: Build demo offline
+        run: npm run build:demo-offline
 
   # ==================== 后端检查 ====================
   backend-lint:
@@ -118,6 +153,9 @@ jobs:
 
       - name: Check no new horizontal-layer files
         run: python scripts/check_no_new_horizontal_layer_files.py
+
+      - name: Message governance scan
+        run: python ../scripts/check_message_governance_backend.py
 
       - name: Check module boundary imports
         run: python scripts/check_module_boundary_imports.py
