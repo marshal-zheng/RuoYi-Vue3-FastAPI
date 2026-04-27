@@ -1,7 +1,7 @@
 """
-集成测试：RFC 7807 错误处理系统
+集成测试：RFC 9457 Problem Details 错误处理系统
 
-测试全局异常处理器、HTTP状态码、RequestId追踪、双层消息设计
+测试全局异常处理器、HTTP 状态码与追踪头契约。
 """
 import pytest
 import uuid
@@ -25,7 +25,7 @@ class TestRFC7807ErrorHandling:
         assert response.status_code == 422
         data = response.json()
         
-        # 验证 RFC 7807 字段
+        # 验证 RFC 9457 字段
         assert "type" in data
         assert "title" in data
         assert "status" in data
@@ -131,11 +131,11 @@ class TestRFC7807ErrorHandling:
 
 
 class TestDualLayerMessage:
-    """测试双层消息设计"""
+    """测试错误响应不泄露未审计开发者信息"""
     
     @pytest.mark.asyncio
-    async def test_developer_message_in_dev_environment(self, async_client: AsyncClient):
-        """测试开发环境包含 developerMessage"""
+    async def test_dev_environment_still_hides_developer_message(self, async_client: AsyncClient):
+        """测试开发环境也不返回 developerMessage"""
         with patch('config.env.ErrorHandlingConfig.include_developer_message', True):
             # 触发一个业务错误 - 使用不存在的用户登录
             response = await async_client.post(
@@ -143,12 +143,11 @@ class TestDualLayerMessage:
                 json={"username": "nonexistent", "password": "wrong"}
             )
             
-            # 登录失败会返回业务错误
             data = response.json()
             
-            # 开发环境应包含 developerMessage（如果有错误）
             if response.status_code >= 400:
-                assert "developerMessage" in data or "detail" in data
+                assert "developerMessage" not in data
+                assert "detail" in data
     
     @pytest.mark.asyncio
     async def test_no_developer_message_in_prod_environment(self, async_client: AsyncClient):
@@ -198,13 +197,13 @@ class TestRequestIdTracking:
     
     @pytest.mark.asyncio
     async def test_request_id_in_success_response(self, async_client: AsyncClient):
-        """测试成功响应包含 requestId"""
-        response = await async_client.get("/health")
+        """测试成功响应只在响应头返回追踪标识，不污染响应体"""
+        response = await async_client.get("/captchaImage")
 
         assert response.status_code == 200
         data = response.json()
-        assert "requestId" in data
-        assert data["requestId"] == response.headers["X-Request-Id"]
+        assert "requestId" not in data
+        assert "X-Request-Id" in response.headers
     
     @pytest.mark.asyncio
     async def test_request_id_in_error_response(self, async_client: AsyncClient):
@@ -256,7 +255,7 @@ class TestHTTPStatusCodes:
     @pytest.mark.asyncio
     async def test_success_returns_2xx(self, async_client: AsyncClient):
         """测试成功操作返回 2xx 状态码"""
-        response = await async_client.get("/health")
+        response = await async_client.get("/captchaImage")
         assert 200 <= response.status_code < 300
     
     @pytest.mark.asyncio

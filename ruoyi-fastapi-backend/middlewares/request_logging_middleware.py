@@ -16,7 +16,7 @@ from typing import Any, Dict, Optional
 from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Scope, Send
 
-from middlewares.trace_middleware import TraceCtx, get_request_id
+from middlewares.trace_middleware import TraceCtx, get_request_id, get_trace_id
 from utils.log_util import logger
 
 
@@ -140,8 +140,8 @@ class RequestLoggingASGIMiddleware:
         client_ip: str,
         traceparent: Optional[str],
     ) -> None:
-        request_id = get_request_id() or TraceCtx.get_id() or TraceCtx.set_id()
-        trace_id = RequestLoggingASGIMiddleware._resolve_trace_id(request_id, traceparent)
+        request_id = get_request_id() or TraceCtx.get_request_id() or TraceCtx.set_request_id()
+        trace_id = get_trace_id() or RequestLoggingASGIMiddleware._resolve_trace_id(request_id, traceparent)
         level = 'INFO'
         if status_code >= 500:
             level = 'ERROR'

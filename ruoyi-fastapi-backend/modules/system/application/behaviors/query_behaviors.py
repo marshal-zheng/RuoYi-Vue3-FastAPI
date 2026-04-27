@@ -28,8 +28,8 @@ class QueryPerformanceBehavior(IPipelineBehavior[Any, Any]):
 
     async def handle(self, request: Any, next_handler: QueryNextHandler) -> Any:
         query_type = type(request).__name__
-        trace_id = getattr(request, 'trace_id', None) or TraceCtx.get_id() or ''
-        request_id = getattr(request, 'request_id', None) or TraceCtx.get_id() or ''
+        trace_id = getattr(request, 'trace_id', None) or TraceCtx.get_trace_id() or ''
+        request_id = getattr(request, 'request_id', None) or TraceCtx.get_request_id() or ''
 
         started_at = time.perf_counter()
         try:

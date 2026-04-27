@@ -17,7 +17,7 @@ async def common_upload(
     upload_result = await common_service.upload_service(request, file)
     logger.info('上传成功')
 
-    return ResponseUtil.success(model_content=upload_result.result)
+    return ResponseUtil.ok_resource(upload_result.result)
 
 
 @commonController.get('/download')
@@ -57,4 +57,4 @@ async def get_table_names(
     table_list = await common_service.get_table_names_services()
     logger.info('获取表名列表成功')
 
-    return ResponseUtil.success(data=table_list)
+    return ResponseUtil.ok_resource(table_list)

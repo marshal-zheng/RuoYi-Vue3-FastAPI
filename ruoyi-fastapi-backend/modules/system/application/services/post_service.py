@@ -34,7 +34,7 @@ class PostService:
         """
         if is_page:
             post_list_result = await self.post_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 post_code=query_object.post_code,
                 post_name=query_object.post_name,
@@ -97,8 +97,8 @@ class PostService:
             )
 
         db_post = PostDO(**page_object.model_dump())
-        await self.post_repo.add(db_post)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        add_result = await self.post_repo.add(db_post)
+        return CrudResponseModel(is_success=True, message='新增成功', result={'postId': add_result.post_id})
 
     @transactional()
     async def edit_post_services(self, page_object: PostModel):

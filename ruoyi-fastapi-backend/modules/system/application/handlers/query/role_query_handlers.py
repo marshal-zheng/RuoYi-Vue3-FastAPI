@@ -107,21 +107,21 @@ class GetRoleListQueryHandler(IQueryHandler[GetRoleListQuery, RolePageReadModel]
         )
 
         if request.is_page:
-            rows = [_to_role_item(row) for row in list_result.rows]
+            items = [_to_role_item(row) for row in list_result.items]
             return RolePageReadModel(
-                rows=rows,
-                page_num=list_result.page_num,
+                items=items,
+                page=list_result.page,
                 page_size=list_result.page_size,
                 total=list_result.total,
                 has_next=list_result.has_next,
             )
 
-        rows = [_to_role_item(row) for row in list_result]
+        items = [_to_role_item(row) for row in list_result]
         return RolePageReadModel(
-            rows=rows,
-            page_num=1,
-            page_size=len(rows),
-            total=len(rows),
+            items=items,
+            page=1,
+            page_size=len(items),
+            total=len(items),
             has_next=False,
         )
 
@@ -156,10 +156,10 @@ class GetRoleAllocatedUsersQueryHandler(IQueryHandler[GetRoleAllocatedUsersQuery
             is_page=request.is_page,
         )
 
-        rows = [_to_role_user_item(row) for row in page_result.rows]
+        items = [_to_role_user_item(row) for row in page_result.items]
         return RoleUserPageReadModel(
-            rows=rows,
-            page_num=page_result.page_num,
+            items=items,
+            page=page_result.page,
             page_size=page_result.page_size,
             total=page_result.total,
             has_next=page_result.has_next,
@@ -179,10 +179,10 @@ class GetRoleUnallocatedUsersQueryHandler(IQueryHandler[GetRoleUnallocatedUsersQ
             is_page=request.is_page,
         )
 
-        rows = [_to_role_user_item(row) for row in page_result.rows]
+        items = [_to_role_user_item(row) for row in page_result.items]
         return RoleUserPageReadModel(
-            rows=rows,
-            page_num=page_result.page_num,
+            items=items,
+            page=page_result.page,
             page_size=page_result.page_size,
             total=page_result.total,
             has_next=page_result.has_next,

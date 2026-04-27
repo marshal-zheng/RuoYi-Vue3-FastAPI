@@ -19,11 +19,22 @@ from modules.system.application.queries import (
     GetMenuTreeQuery,
     GetRoleMenuTreeQuery,
 )
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 menuController = APIRouter(prefix='/system/menu', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_menu_detail(request: Request, *, menu_id: int, mediator: Mediator):
+    detail_query = GetMenuDetailQuery(
+        menu_id=menu_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    menu_detail_result = await mediator.query(detail_query)
+    return menu_detail_result or {}
 
 
 @menuController.get('/treeselect')
@@ -40,7 +51,7 @@ async def get_system_menu_tree(
     menu_query_result = await mediator.query(menu_query)
     logger.info('获取成功')
 
-    return menu_query_result
+    return ResponseUtil.ok_collection(items=menu_query_result)
 
 
 @menuController.get('/roleMenuTreeselect/{role_id}')
@@ -59,7 +70,7 @@ async def get_system_role_menu_tree(
     role_menu_query_result = await mediator.query(role_menu_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=role_menu_query_result)
+    return ResponseUtil.ok_resource(role_menu_query_result)
 
 
 @menuController.get(
@@ -80,7 +91,7 @@ async def get_system_menu_list(
     menu_query_result = await mediator.query(list_query)
     logger.info('获取成功')
 
-    return menu_query_result
+    return ResponseUtil.ok_collection(items=menu_query_result)
 
 
 @menuController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:add'))])
@@ -110,7 +121,10 @@ async def add_system_menu(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    menu_id = require_int_value(add_result.data, 'menuId', 'menu_id', contract_name='system.menu.create')
+    resource = await _load_menu_detail(request, menu_id=int(menu_id), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/menu/{menu_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @menuController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:edit'))])
@@ -138,7 +152,8 @@ async def edit_system_menu(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_menu_detail(request, menu_id=edit_menu.menu_id, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @menuController.delete('/{menu_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:remove'))])
@@ -163,7 +178,7 @@ async def delete_system_menu(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @menuController.delete('/', dependencies=[Depends(CheckUserInterfaceAuth('system:menu:remove'))])
@@ -187,7 +202,7 @@ async def delete_system_menu_empty(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @menuController.get(
@@ -200,15 +215,6 @@ async def query_detail_system_menu(
     menu_id: int,
     mediator: Mediator = Depends(provide_system_mediator),
 ):
-    detail_query = GetMenuDetailQuery(
-        menu_id=menu_id,
-        trace_id=request.headers.get('x-trace-id'),
-        request_id=request.headers.get('x-request-id'),
-    )
-    menu_detail_result = await mediator.query(detail_query)
+    menu_detail_result = await _load_menu_detail(request, menu_id=menu_id, mediator=mediator)
     logger.info(f'获取menu_id为{menu_id}的信息成功')
-
-    if menu_detail_result is None:
-        menu_detail_result = {}
-
-    return menu_detail_result
+    return ResponseUtil.ok_resource(menu_detail_result)

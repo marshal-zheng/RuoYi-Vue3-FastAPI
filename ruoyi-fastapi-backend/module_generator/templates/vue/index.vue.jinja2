@@ -164,7 +164,7 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page.sync="queryParams.pageNum"
+      :page.sync="queryParams.page"
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
@@ -387,7 +387,7 @@ export default {
       {% endfor %}
       // 查询参数
       queryParams: {
-        pageNum: 1,
+        page: 1,
         pageSize: 10,
         {% for column in columns %}
         {% if column.query %}
@@ -433,7 +433,7 @@ export default {
       {% endif %}
       {% endfor %}
       list{{ BusinessName }}(this.queryParams).then(response => {
-        this.{{ businessName }}List = response.rows;
+        this.{{ businessName }}List = response.items;
         this.total = response.total;
         this.loading = false;
       });
@@ -461,7 +461,7 @@ export default {
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
+      this.queryParams.page = 1;
       this.getList();
     },
     /** 重置按钮操作 */
@@ -492,14 +492,14 @@ export default {
       this.reset();
       const {{ pkColumn.python_field }} = row.{{ pkColumn.python_field }} || this.ids;
       get{{ BusinessName }}({{ pkColumn.python_field }}).then(response => {
-        this.form = response.data;
+        this.form = response;
         {% for column in columns %}
         {% if column.html_type == "checkbox" %}
         this.form.{{ column.python_field }} = this.form.{{ column.python_field }}.split(",");
         {% endif %}
         {% endfor %}
         {% if table.sub %}
-        this.{{ subclassName }}List = response.data.{{ subclassName }}List;
+        this.{{ subclassName }}List = response.{{ subclassName }}List;
         {% endif %}
         this.open = true;
         this.title = "修改{{ functionName }}";
@@ -518,14 +518,12 @@ export default {
           this.form.{{ subclassName }}List = this.{{ subclassName }}List;
           {% endif %}
           if (this.form.{{ pkColumn.python_field }} != null) {
-            update{{ BusinessName }}(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+            update{{ BusinessName }}(this.form).then(() => {
               this.open = false;
               this.getList();
             });
           } else {
-            add{{ BusinessName }}(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
+            add{{ BusinessName }}(this.form).then(() => {
               this.open = false;
               this.getList();
             });
@@ -540,7 +538,6 @@ export default {
         return del{{ BusinessName }}({{ pkColumn.python_field }}s);
       }).then(() => {
         this.getList();
-        this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
     {% if table.sub %}

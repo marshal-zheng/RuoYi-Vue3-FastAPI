@@ -22,4 +22,4 @@ async def get_monitor_server_info(
     server_info_query_result = await server_service.get_server_monitor_info()
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=server_info_query_result)
+    return ResponseUtil.ok_resource(server_info_query_result)

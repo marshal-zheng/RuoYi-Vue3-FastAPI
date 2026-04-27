@@ -20,33 +20,31 @@ class SharedModelBase(BaseModel):
     )
 
 
-class ApiResponse(SharedModelBase, Generic[T]):
-    """Standard API envelope."""
+class ResourceResponse(SharedModelBase, Generic[T]):
+    """Typed resource response helper for internal service boundaries."""
 
-    code: int = Field(default=200, description='Response code')
-    msg: str = Field(default='success', description='Response message')
     data: T | None = Field(default=None, description='Response payload')
 
 
 class PageResponse(SharedModelBase, Generic[T]):
-    """Standard paginated response."""
+    """Offset paginated response aligned with the HTTP contract."""
 
-    rows: list[T] = Field(default_factory=list, description='Result rows')
-    total: int = Field(default=0, description='Total rows')
-    code: int = Field(default=200, description='Response code')
-    msg: str = Field(default='success', description='Response message')
-
-
-class SuccessResponse(ApiResponse[Any]):
-    """Shortcut for successful operations."""
-
-    code: int = Field(default=200, description='Response code')
-    msg: str = Field(default='操作成功', description='Response message')
+    items: list[T] = Field(default_factory=list, description='Result items')
+    total: int = Field(default=0, description='Total items')
+    page: int = Field(default=1, description='Current page number')
+    page_size: int = Field(default=10, description='Page size')
 
 
-class ErrorResponse(ApiResponse[None]):
-    """Shortcut for error operations."""
+class SuccessResponse(ResourceResponse[Any]):
+    """Shortcut for successful resource responses."""
 
-    code: int = Field(default=500, description='Response code')
-    msg: str = Field(default='操作失败', description='Response message')
-    data: None = Field(default=None, description='Response payload')
+    data: Any | None = Field(default=None, description='Response payload')
+
+
+class ErrorResponse(SharedModelBase):
+    """Internal error pointer; public HTTP errors use RFC 9457 Problem Details."""
+
+    type: str = Field(default='about:blank', description='Problem type URI')
+    title: str = Field(default='请求失败', description='Short summary')
+    status: int = Field(default=500, description='HTTP status')
+    detail: str = Field(default='请求失败', description='Detailed explanation')

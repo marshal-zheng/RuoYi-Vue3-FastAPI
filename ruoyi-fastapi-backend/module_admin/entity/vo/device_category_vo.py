@@ -14,7 +14,7 @@ class DeviceCategoryQueryModel(CamelModelBase):
     status: Optional[str] = Field(None, description="状态（0正常 1停用）")
     begin_time: Optional[str] = Field(None, description="开始时间")
     end_time: Optional[str] = Field(None, description="结束时间")
-    page_num: int = Field(1, description="页码")
+    page: int = Field(1, description="页码")
     page_size: int = Field(10, description="每页数量")
 
 

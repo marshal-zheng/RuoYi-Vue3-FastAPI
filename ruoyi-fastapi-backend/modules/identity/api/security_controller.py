@@ -92,8 +92,8 @@ async def register_m2m_client(
         jwk=payload.jwk,
         enabled=payload.enabled,
     )
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'clientId': payload.client_id,
             'tenantId': payload.tenant_id,
             'integrationId': payload.integration_id,
@@ -165,7 +165,7 @@ async def upsert_embed_policy(
         path_pattern=payload.path_pattern,
         enabled=payload.enabled,
     )
-    return ResponseUtil.success(data=payload.model_dump())
+    return ResponseUtil.ok_resource(payload.model_dump())
 
 
 @securityController.post('/auth/embed/grants')
@@ -199,7 +199,7 @@ async def issue_embed_grant(
         request_id=request.headers.get('X-Request-Id', ''),
         source_ip=_client_ip(request),
     )
-    return ResponseUtil.success(data={'embedGrant': grant, 'expiresIn': ttl, 'tokenType': 'Bearer'})
+    return ResponseUtil.ok_resource({'embedGrant': grant, 'expiresIn': ttl, 'tokenType': 'Bearer'})
 
 
 @securityController.post('/auth/embed/exchange')
@@ -217,8 +217,8 @@ async def exchange_embed_grant(
         request_id=request.headers.get('X-Request-Id', ''),
         source_ip=_client_ip(request),
     )
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'accessToken': access_token,
             'tokenType': 'Bearer',
             'expiresIn': expires_in,
@@ -242,7 +242,7 @@ async def issue_ws_ticket(
         origin=str(origin),
         session_id=payload.session_id,
     )
-    return ResponseUtil.success(data={'wsTicket': ticket, 'expiresIn': ttl})
+    return ResponseUtil.ok_resource({'wsTicket': ticket, 'expiresIn': ttl})
 
 
 @securityController.post('/auth/csrf-token', dependencies=[Depends(LoginService.get_current_user)])
@@ -254,7 +254,7 @@ async def issue_csrf_token(
     subject = str(current_user.user.user_id if current_user.user else '')
     token, ttl = await service.issue_csrf_token(subject)
 
-    response = ResponseUtil.success(data={'csrfToken': token, 'expiresIn': ttl})
+    response = ResponseUtil.ok_resource({'csrfToken': token, 'expiresIn': ttl})
     expires = datetime.now(UTC) + timedelta(seconds=ttl)
     response.set_cookie(
         SecurityConfig.security_csrf_cookie_name,
@@ -276,7 +276,7 @@ async def list_signing_keys(
     request: Request,
 ):
     service = _resolve_security_service(request)
-    return ResponseUtil.success(data={'keys': service.list_signing_keys()})
+    return ResponseUtil.ok_resource({'keys': service.list_signing_keys()})
 
 
 @securityController.post(
@@ -293,7 +293,7 @@ async def rotate_signing_keys(
         algorithm=payload.algorithm,
         operator=current_user.user.user_name if current_user.user else 'system',
     )
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @securityController.post(
@@ -310,7 +310,7 @@ async def revoke_signing_keys(
         kid=payload.kid,
         operator=current_user.user.user_name if current_user.user else 'system',
     )
-    return ResponseUtil.success(message='密钥吊销成功')
+    return ResponseUtil.no_content()
 
 
 @securityController.get(
@@ -322,4 +322,4 @@ async def get_security_report(
 ):
     service = _resolve_security_service(request)
     report = await service.get_security_event_report(limit=200)
-    return ResponseUtil.success(data=report)
+    return ResponseUtil.ok_resource(report)

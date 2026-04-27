@@ -32,7 +32,7 @@ class _ConfigServiceStub:
         self.list_called_with = (query, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'configId': 1,
                         'configName': '系统参数',
@@ -41,7 +41,7 @@ class _ConfigServiceStub:
                         'configType': 'N',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -80,7 +80,7 @@ async def test_config_query_handlers_success() -> None:
 
     list_result = await list_handler.handle(
         GetConfigListQuery(
-            query=ConfigPageQueryModel(pageNum=1, pageSize=10),
+            query=ConfigPageQueryModel(page=1, pageSize=10),
             is_page=True,
             operator='admin',
         )
@@ -101,7 +101,7 @@ async def test_config_query_handlers_success() -> None:
 
     assert isinstance(list_result, ConfigPageReadModel)
     assert list_result.total == 1
-    assert list_result.rows[0].config_key == 'sys.test.key'
+    assert list_result.items[0].config_key == 'sys.test.key'
     assert isinstance(detail_result, ConfigDetailReadModel)
     assert detail_result.config_id == 1
     assert isinstance(key_result, ConfigValueReadModel)
@@ -135,7 +135,7 @@ async def test_system_mediator_dispatches_config_read_queries() -> None:
 
     list_result = await mediator.query(
         GetConfigListQuery(
-            query=ConfigPageQueryModel(pageNum=1, pageSize=10),
+            query=ConfigPageQueryModel(page=1, pageSize=10),
             is_page=True,
         )
     )
@@ -150,6 +150,6 @@ async def test_system_mediator_dispatches_config_read_queries() -> None:
     assert isinstance(list_result, ConfigPageReadModel)
     assert isinstance(detail_result, ConfigDetailReadModel)
     assert isinstance(key_result, ConfigValueReadModel)
-    assert list_result.rows[0].config_key == 'sys.test.key'
+    assert list_result.items[0].config_key == 'sys.test.key'
     assert detail_result.config_id == 1
     assert key_result.config_value == 'cached-value'

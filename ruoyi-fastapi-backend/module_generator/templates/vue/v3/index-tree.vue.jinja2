@@ -325,7 +325,7 @@ function getList() {
   {% endif %}
   {% endfor %}
   list{{ BusinessName }}(queryParams.value).then(response => {
-    {{ businessName }}List.value = proxy.handleTree(response.data, "{{ treeCode }}", "{{ treeParentCode }}");
+    {{ businessName }}List.value = proxy.handleTree(response, "{{ treeCode }}", "{{ treeParentCode }}");
     loading.value = false;
   });
 }
@@ -335,7 +335,7 @@ function getTreeselect() {
   list{{ BusinessName }}().then(response => {
     {{ businessName }}Options.value = [];
     const data = { {{ treeCode }}: 0, {{ treeName }}: '顶级节点', children: [] };
-    data.children = proxy.handleTree(response.data, "{{ treeCode }}", "{{ treeParentCode }}");
+    data.children = proxy.handleTree(response, "{{ treeCode }}", "{{ treeParentCode }}");
     {{ businessName }}Options.value.push(data);
   });
 }
@@ -407,7 +407,7 @@ function handleUpdate(row) {
     form.value.{{ treeParentCode }} = row.{{ treeParentCode }};
   }
   get{{ BusinessName }}(row.{{ pkColumn.python_field }}).then(response => {
-    form.value = response.data;
+    form.value = response;
     {% for column in columns %}
     {% if column.html_type == "checkbox" %}
     form.value.{{ column.python_field }} = form.value.{{ column.python_field }}.split(",");
@@ -428,14 +428,12 @@ function submitForm() {
       {% endif %}
       {% endfor %}
       if (form.value.{{ pkColumn.python_field }} != null) {
-        update{{ BusinessName }}(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功");
+        update{{ BusinessName }}(form.value).then(() => {
           open.value = false;
           getList();
         });
       } else {
-        add{{ BusinessName }}(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功");
+        add{{ BusinessName }}(form.value).then(() => {
           open.value = false;
           getList();
         });
@@ -450,7 +448,6 @@ function handleDelete(row) {
     return del{{ BusinessName }}(row.{{ pkColumn.python_field }});
   }).then(() => {
     getList();
-    proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
 

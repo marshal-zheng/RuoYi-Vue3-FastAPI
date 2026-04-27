@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 from fastapi import Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Callable, List, Optional, Union
+from typing import Any, Callable, List, Optional, Union
 from config.constant import CommonConstant
 from exceptions.exception import (
     ValidationException,
@@ -42,6 +42,51 @@ from utils.excel_util import ExcelUtil
 from utils.page_util import PageResponseModel
 from utils.pwd_util import PwdUtil
 from ports import IConfigService, IDeptService, IUserPostRepository, IUserRepository, IUserRoleRepository
+
+
+def _normalize_user_import_row(row) -> dict[str, Any]:
+    normalized = dict(row)
+    sex_map = {'男': '0', '女': '1', '未知': '2'}
+    status_map = {'正常': StatusEnum.NORMAL.value, '停用': StatusEnum.DISABLED.value}
+    normalized['sex'] = sex_map.get(normalized.get('sex'), normalized.get('sex'))
+    normalized['status'] = status_map.get(normalized.get('status'), normalized.get('status'))
+    return normalized
+
+
+def _build_import_success_result(
+    *,
+    row_number: int,
+    user_name: str,
+    action: str,
+    item_id: int | str,
+) -> dict[str, Any]:
+    return {
+        'itemId': item_id,
+        'success': True,
+        'rowNumber': row_number,
+        'userName': user_name,
+        'action': action,
+    }
+
+
+def _build_import_failure_result(
+    *,
+    row_number: int,
+    user_name: str,
+    item_id: int | str,
+    exc: Exception,
+) -> dict[str, Any]:
+    return {
+        'itemId': item_id,
+        'success': False,
+        'rowNumber': row_number,
+        'userName': user_name or None,
+        'error': {
+            'errorCode': getattr(exc, 'error_code', None),
+            'title': '导入失败',
+            'detail': getattr(exc, 'user_message', None) or str(exc) or '用户导入失败',
+        },
+    }
 
 
 class UserService:
@@ -98,7 +143,7 @@ class UserService:
         user_repo = self._user_repo(query_db)
         if is_page:
             query_result = await user_repo.paginate_with_dept(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 user_id=query_object.user_id,
                 user_name=query_object.user_name,
@@ -112,7 +157,7 @@ class UserService:
             user_list_result = PageResponseModel(
                 **{
                     **query_result.model_dump(by_alias=True),
-                    'rows': [{**row[0], 'dept': row[1]} for row in query_result.rows],
+                    'items': [{**row[0], 'dept': row[1]} for row in query_result.items],
                 }
             )
         else:
@@ -129,9 +174,9 @@ class UserService:
                 data_scope_sql=data_scope_sql,
             )
             user_list_result = []
-            rows = query_result.rows if hasattr(query_result, 'rows') else query_result
-            if rows:
-                user_list_result = [{**row[0], 'dept': row[1]} for row in rows]
+            items = query_result.items if hasattr(query_result, 'items') else query_result
+            if items:
+                user_list_result = [{**row[0], 'dept': row[1]} for row in items]
         return user_list_result
     async def check_user_allowed_services(self, check_user: UserModel):
         """
@@ -157,8 +202,8 @@ class UserService:
         users = await user_repo.paginate_with_dept(
             page=1, page_size=10000, user_id=user_id, data_scope_sql=data_scope_sql
         )
-        rows = users.rows if hasattr(users, 'rows') else users
-        if rows:
+        items = users.items if hasattr(users, 'items') else users
+        if items:
             return CrudResponseModel(is_success=True, message='校验通过')
         else:
             raise AuthException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
@@ -265,7 +310,7 @@ class UserService:
             for post in page_object.post_ids:
                 db_user_post = UserPostDO(user_id=user_id, post_id=post)
                 await user_post_repo.add(db_user_post)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'userId': user_id})
     @transactional()
     async def edit_user_services(self, query_db: AsyncSession, page_object: EditUserModel):
         """
@@ -487,60 +532,64 @@ class UserService:
         df = pd.read_excel(io.BytesIO(contents))
         await file.close()
         df.rename(columns=header_dict, inplace=True)
-        add_error_result = []
-        count = 0
+        results: list[dict[str, Any]] = []
+        succeeded = 0
+        failed = 0
         user_repo = self._user_repo(query_db)
         config_service = self._require_config_service()
         dept_service = self._require_dept_service()
         for index, row in df.iterrows():
-            count = count + 1
-            if row['sex'] == '男':
-                row['sex'] = '0'
-            if row['sex'] == '女':
-                row['sex'] = '1'
-            if row['sex'] == '未知':
-                row['sex'] = '2'
-            if row['status'] == '正常':
-                row['status'] = StatusEnum.NORMAL.value
-            if row['status'] == '停用':
-                row['status'] = StatusEnum.DISABLED.value
-            add_user = UserModel(
-                deptId=row['dept_id'],
-                userName=row['user_name'],
-                password=PwdUtil.get_password_hash(
-                    await config_service.query_config_list_from_cache_services(
-                        request.app.state.redis, 'sys.user.initPassword'
-                    )
-                ),
-                nickName=row['nick_name'],
-                email=row['email'],
-                phonenumber=str(row['phonenumber']),
-                sex=row['sex'],
-                status=row['status'],
-                createBy=current_user.user.user_name,
-                createTime=datetime.now(),
-                updateBy=current_user.user.user_name,
-                updateTime=datetime.now(),
-            )
-            user_info = await user_repo.find_by_username(row['user_name'])
-            if user_info:
-                if update_support:
+            row_number = int(index) + 1
+            row_data = _normalize_user_import_row(row)
+            user_name = str(row_data.get('user_name') or '').strip()
+            item_id = user_name or row_number
+            try:
+                add_user = UserModel(
+                    deptId=row_data['dept_id'],
+                    userName=row_data['user_name'],
+                    password=PwdUtil.get_password_hash(
+                        await config_service.query_config_list_from_cache_services(
+                            request.app.state.redis, 'sys.user.initPassword'
+                        )
+                    ),
+                    nickName=row_data['nick_name'],
+                    email=row_data['email'],
+                    phonenumber=str(row_data['phonenumber']),
+                    sex=row_data['sex'],
+                    status=row_data['status'],
+                    createBy=current_user.user.user_name,
+                    createTime=datetime.now(),
+                    updateBy=current_user.user.user_name,
+                    updateTime=datetime.now(),
+                )
+                user_info = await user_repo.find_by_username(row_data['user_name'])
+                if user_info:
+                    if not update_support:
+                        raise ValidationException(
+                            user_message=f'用户账号{row_data["user_name"]}已存在',
+                            error_code=ErrorCode.USER_ALREADY_EXISTS,
+                            field='user_name',
+                        )
                     edit_user_model = UserModel(
                         userId=user_info.user_id,
-                        deptId=row['dept_id'],
-                        userName=row['user_name'],
-                        nickName=row['nick_name'],
-                        email=row['email'],
-                        phonenumber=str(row['phonenumber']),
-                        sex=row['sex'],
-                        status=row['status'],
+                        deptId=row_data['dept_id'],
+                        userName=row_data['user_name'],
+                        nickName=row_data['nick_name'],
+                        email=row_data['email'],
+                        phonenumber=str(row_data['phonenumber']),
+                        sex=row_data['sex'],
+                        status=row_data['status'],
                         updateBy=current_user.user.user_name,
                         updateTime=datetime.now(),
                     )
                     edit_user_model.validate_fields()
                     await self.check_user_allowed_services(edit_user_model)
                     if not current_user.user.admin:
-                        await self.check_user_data_scope_services(query_db, edit_user_model.user_id, user_data_scope_sql)
+                        await self.check_user_data_scope_services(
+                            query_db,
+                            edit_user_model.user_id,
+                            user_data_scope_sql,
+                        )
                         await dept_service.check_dept_data_scope_services(edit_user_model.dept_id, dept_data_scope_sql)
                     edit_user = edit_user_model.model_dump(exclude_unset=True)
                     db_user = await user_repo.get_by_id(user_info.user_id)
@@ -549,15 +598,53 @@ class UserService:
                             if hasattr(db_user, key):
                                 setattr(db_user, key, value)
                         await user_repo.update(db_user)
+                    results.append(
+                        _build_import_success_result(
+                            row_number=row_number,
+                            user_name=row_data['user_name'],
+                            action='updated',
+                            item_id=user_info.user_id,
+                        )
+                    )
+                    succeeded += 1
                 else:
-                    add_error_result.append(f'{count}.用户账号{row["user_name"]}已存在')
-            else:
-                add_user.validate_fields()
-                if not current_user.user.admin:
-                    await dept_service.check_dept_data_scope_services(add_user.dept_id, dept_data_scope_sql)
-                db_user = UserDO(**add_user.model_dump(exclude={'admin'}))
-                await user_repo.add(db_user)
-        return CrudResponseModel(is_success=True, message='\n'.join(add_error_result))
+                    add_user.validate_fields()
+                    if not current_user.user.admin:
+                        await dept_service.check_dept_data_scope_services(add_user.dept_id, dept_data_scope_sql)
+                    db_user = UserDO(**add_user.model_dump(exclude={'admin'}))
+                    await user_repo.add(db_user)
+                    results.append(
+                        _build_import_success_result(
+                            row_number=row_number,
+                            user_name=row_data['user_name'],
+                            action='created',
+                            item_id=row_data['user_name'],
+                        )
+                    )
+                    succeeded += 1
+            except Exception as exc:
+                failed += 1
+                results.append(
+                    _build_import_failure_result(
+                        row_number=row_number,
+                        user_name=user_name,
+                        item_id=item_id,
+                        exc=exc,
+                    )
+                )
+
+        return CrudResponseModel(
+            is_success=True,
+            message='导入完成',
+            result={
+                'results': results,
+                'summary': {
+                    'total': len(results),
+                    'succeeded': succeeded,
+                    'failed': failed,
+                },
+            },
+        )
     @staticmethod
     async def get_user_import_template_services():
         """

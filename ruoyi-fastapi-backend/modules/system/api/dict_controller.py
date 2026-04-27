@@ -41,12 +41,31 @@ from modules.system.application.queries import (
     GetDictTypeOptionsQuery,
 )
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 dictController = APIRouter(prefix='/system/dict', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_dict_type_detail(request: Request, *, dict_id: int, mediator: Mediator):
+    detail_query = GetDictTypeDetailQuery(
+        dict_id=dict_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
+
+
+async def _load_dict_data_detail(request: Request, *, dict_code: int, mediator: Mediator):
+    detail_query = GetDictDataDetailQuery(
+        dict_code=dict_code,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
 
 
 @dictController.get(
@@ -66,7 +85,7 @@ async def get_system_dict_type_list(
     dict_type_page_query_result = await mediator.query(dict_type_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=dict_type_page_query_result)
+    return ResponseUtil.ok_resource(dict_type_page_query_result)
 
 
 @dictController.post('/type', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:add'))])
@@ -91,7 +110,10 @@ async def add_system_dict_type(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    dict_id = require_int_value(add_result.data, 'dictId', 'dict_id', contract_name='system.dict-type.create')
+    resource = await _load_dict_type_detail(request, dict_id=int(dict_id), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/dict/type/{dict_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @dictController.put('/type', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:edit'))])
@@ -116,7 +138,8 @@ async def edit_system_dict_type(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_dict_type_detail(request, dict_id=edit_dict_type.dict_id, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @dictController.delete('/type/refreshCache', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -138,7 +161,7 @@ async def refresh_system_dict(
     message = refresh_result.data.get('message') if refresh_result.data else '刷新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.ok_resource({'status': 'refreshed'})
 
 
 @dictController.delete('/type/{dict_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -163,7 +186,7 @@ async def delete_system_dict_type(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @dictController.get('/type/optionselect', response_model=list[DictTypeModel])
@@ -178,7 +201,7 @@ async def query_system_dict_type_options(
     dict_type_query_result = await mediator.query(dict_type_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dict_type_query_result)
+    return ResponseUtil.ok_resource(dict_type_query_result)
 
 
 @dictController.get(
@@ -197,7 +220,7 @@ async def query_detail_system_dict_type(
     dict_type_detail_result = await mediator.query(detail_query)
     logger.info(f'获取dict_id为{dict_id}的信息成功')
 
-    return ResponseUtil.success(data=dict_type_detail_result)
+    return ResponseUtil.ok_resource(dict_type_detail_result)
 
 
 @dictController.post('/type/export', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:export'))])
@@ -215,7 +238,7 @@ async def export_system_dict_type_list(
         request_id=request.headers.get('x-request-id'),
     )
     dict_type_query_result = await mediator.query(dict_type_query)
-    dict_type_rows = [row.model_dump(by_alias=True) for row in dict_type_query_result.rows]
+    dict_type_rows = [row.model_dump(by_alias=True) for row in dict_type_query_result.items]
     dict_type_export_result = await dict_type_service.export_dict_type_list_services(dict_type_rows)
     logger.info('导出成功')
 
@@ -237,7 +260,7 @@ async def query_system_dict_type_data(
     dict_data_query_result = await mediator.query(dict_data_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dict_data_query_result)
+    return ResponseUtil.ok_resource(dict_data_query_result)
 
 
 @dictController.get(
@@ -257,7 +280,7 @@ async def get_system_dict_data_list(
     dict_data_page_query_result = await mediator.query(dict_data_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=dict_data_page_query_result)
+    return ResponseUtil.ok_resource(dict_data_page_query_result)
 
 
 @dictController.post('/data', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:add'))])
@@ -282,7 +305,10 @@ async def add_system_dict_data(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    dict_code = require_int_value(add_result.data, 'dictCode', 'dict_code', contract_name='system.dict-data.create')
+    resource = await _load_dict_data_detail(request, dict_code=int(dict_code), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/dict/data/{dict_code}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @dictController.put('/data', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:edit'))])
@@ -307,7 +333,8 @@ async def edit_system_dict_data(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_dict_data_detail(request, dict_code=edit_dict_data.dict_code, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @dictController.delete('/data/{dict_codes}', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:remove'))])
@@ -332,7 +359,7 @@ async def delete_system_dict_data(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @dictController.get(
@@ -353,7 +380,7 @@ async def query_detail_system_dict_data(
     detail_dict_data_result = await mediator.query(detail_query)
     logger.info(f'获取dict_code为{dict_code}的信息成功')
 
-    return ResponseUtil.success(data=detail_dict_data_result)
+    return ResponseUtil.ok_resource(detail_dict_data_result)
 
 
 @dictController.post('/data/export', dependencies=[Depends(CheckUserInterfaceAuth('system:dict:export'))])
@@ -371,7 +398,7 @@ async def export_system_dict_data_list(
         request_id=request.headers.get('x-request-id'),
     )
     dict_data_query_result = await mediator.query(dict_data_query)
-    dict_data_rows = [row.model_dump(by_alias=True) for row in dict_data_query_result.rows]
+    dict_data_rows = [row.model_dump(by_alias=True) for row in dict_data_query_result.items]
     dict_data_export_result = await dict_data_service.export_dict_data_list_services(dict_data_rows)
     logger.info('导出成功')
 

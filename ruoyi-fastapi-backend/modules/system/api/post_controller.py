@@ -17,12 +17,22 @@ from modules.system.application.commands import AddPostCommand, DeletePostComman
 from modules.system.application.mediator import Mediator
 from modules.system.application.queries import GetPostDetailQuery, GetPostListQuery
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 postController = APIRouter(prefix='/system/post', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_post_detail(request: Request, *, post_id: int, mediator: Mediator):
+    detail_query = GetPostDetailQuery(
+        post_id=post_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
 
 
 @postController.get(
@@ -42,7 +52,7 @@ async def get_system_post_list(
     post_page_query_result = await mediator.query(list_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=post_page_query_result)
+    return ResponseUtil.ok_resource(post_page_query_result)
 
 
 @postController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:post:add'))])
@@ -72,7 +82,10 @@ async def add_system_post(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    post_id = require_int_value(add_result.data, 'postId', 'post_id', contract_name='system.post.create')
+    resource = await _load_post_detail(request, post_id=int(post_id), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/post/{post_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @postController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:post:edit'))])
@@ -100,7 +113,8 @@ async def edit_system_post(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_post_detail(request, post_id=edit_post.post_id, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @postController.delete('/{post_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:post:remove'))])
@@ -125,7 +139,7 @@ async def delete_system_post(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @postController.get(
@@ -144,7 +158,7 @@ async def query_detail_system_post(
     post_detail_result = await mediator.query(detail_query)
     logger.info(f'获取post_id为{post_id}的信息成功')
 
-    return ResponseUtil.success(data=post_detail_result)
+    return ResponseUtil.ok_resource(post_detail_result)
 
 
 @postController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:post:export'))])
@@ -162,7 +176,7 @@ async def export_system_post_list(
         request_id=request.headers.get('x-request-id'),
     )
     post_query_result = await mediator.query(list_query)
-    post_rows = [row.model_dump(by_alias=True) for row in post_query_result.rows]
+    post_rows = [row.model_dump(by_alias=True) for row in post_query_result.items]
     post_export_result = await post_service.export_post_list_services(post_rows)
     logger.info('导出成功')
 

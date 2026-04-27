@@ -31,7 +31,7 @@ async def get_system_audit_log_list(
         query_db, audit_log_page_query, is_page=True
     )
     logger.info('获取成功')
-    return ResponseUtil.success(model_content=audit_log_page_query_result)
+    return ResponseUtil.ok_resource(audit_log_page_query_result)
 
 
 @auditController.delete('/audit/clean', dependencies=[Depends(CheckUserInterfaceAuth('monitor:audit:remove'))])
@@ -43,7 +43,7 @@ async def clear_system_audit_log(
 ):
     clear_audit_log_result = await audit_log_service.clear_audit_log_services(query_db)
     logger.info(clear_audit_log_result.message)
-    return ResponseUtil.success(message=clear_audit_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @auditController.delete('/audit/{audit_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:audit:remove'))])
@@ -57,4 +57,4 @@ async def delete_system_audit_log(
     delete_audit_log = DeleteAuditLogModel(auditIds=audit_ids)
     delete_audit_log_result = await audit_log_service.delete_audit_log_services(query_db, delete_audit_log)
     logger.info(delete_audit_log_result.message)
-    return ResponseUtil.success(message=delete_audit_log_result.message)
+    return ResponseUtil.no_content()

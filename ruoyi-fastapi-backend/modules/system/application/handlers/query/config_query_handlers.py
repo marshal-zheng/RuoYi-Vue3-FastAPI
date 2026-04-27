@@ -41,21 +41,21 @@ class GetConfigListQueryHandler(IQueryHandler[GetConfigListQuery, ConfigPageRead
         list_result = await self._config_service.get_config_list_services(request.query, is_page=request.is_page)
 
         if request.is_page:
-            rows = [_to_config_list_item(row) for row in list_result.rows]
+            items = [_to_config_list_item(row) for row in list_result.items]
             return ConfigPageReadModel(
-                rows=rows,
-                page_num=list_result.page_num,
+                items=items,
+                page=list_result.page,
                 page_size=list_result.page_size,
                 total=list_result.total,
                 has_next=list_result.has_next,
             )
 
-        rows = [_to_config_list_item(row) for row in list_result]
+        items = [_to_config_list_item(row) for row in list_result]
         return ConfigPageReadModel(
-            rows=rows,
-            page_num=1,
-            page_size=len(rows),
-            total=len(rows),
+            items=items,
+            page=1,
+            page_size=len(items),
+            total=len(items),
             has_next=False,
         )
 

@@ -80,8 +80,8 @@ class CommandAuthAuditBehavior(IPipelineBehavior[Any, CommandResult[Any]]):
     @staticmethod
     def _bind_audit_context(request: Any) -> None:
         operator = getattr(request, 'operator', None)
-        request_id = getattr(request, 'request_id', None) or TraceCtx.get_id() or TraceCtx.set_id()
-        trace_id = getattr(request, 'trace_id', None) or request_id
+        request_id = getattr(request, 'request_id', None) or TraceCtx.get_request_id() or TraceCtx.set_request_id()
+        trace_id = getattr(request, 'trace_id', None) or TraceCtx.get_trace_id() or request_id
 
         context = dict(get_audit_context())
         context['request_id'] = request_id
@@ -148,8 +148,8 @@ class CommandLoggingBehavior(IPipelineBehavior[Any, CommandResult[Any]]):
     async def handle(self, request: Any, next_handler: CommandNextHandler) -> CommandResult[Any]:
         command_type = type(request).__name__
         operator = getattr(request, 'operator', None)
-        trace_id = getattr(request, 'trace_id', None) or TraceCtx.get_id() or ''
-        request_id = getattr(request, 'request_id', None) or TraceCtx.get_id() or ''
+        trace_id = getattr(request, 'trace_id', None) or TraceCtx.get_trace_id() or ''
+        request_id = getattr(request, 'request_id', None) or TraceCtx.get_request_id() or ''
 
         started_at = time.perf_counter()
         try:

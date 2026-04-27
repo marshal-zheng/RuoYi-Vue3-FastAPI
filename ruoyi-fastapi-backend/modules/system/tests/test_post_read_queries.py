@@ -26,7 +26,7 @@ class _PostServiceStub:
         self.list_called_with = (query, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'postId': 1,
                         'postCode': 'dev',
@@ -35,7 +35,7 @@ class _PostServiceStub:
                         'status': '0',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -69,7 +69,7 @@ async def test_post_query_handlers_success() -> None:
 
     list_result = await list_handler.handle(
         GetPostListQuery(
-            query=PostPageQueryModel(pageNum=1, pageSize=10),
+            query=PostPageQueryModel(page=1, pageSize=10),
             is_page=True,
             operator='admin',
         )
@@ -77,9 +77,9 @@ async def test_post_query_handlers_success() -> None:
     detail_result = await detail_handler.handle(GetPostDetailQuery(post_id=1, operator='admin'))
 
     assert isinstance(list_result, PostPageReadModel)
-    assert isinstance(list_result.rows[0], PostItemReadModel)
+    assert isinstance(list_result.items[0], PostItemReadModel)
     assert isinstance(detail_result, PostDetailReadModel)
-    assert list_result.rows[0].post_code == 'dev'
+    assert list_result.items[0].post_code == 'dev'
     assert detail_result.post_id == 1
 
 
@@ -90,7 +90,7 @@ async def test_system_mediator_dispatches_post_read_queries() -> None:
 
     list_result = await mediator.query(
         GetPostListQuery(
-            query=PostPageQueryModel(pageNum=1, pageSize=10),
+            query=PostPageQueryModel(page=1, pageSize=10),
             is_page=True,
         )
     )
@@ -98,4 +98,4 @@ async def test_system_mediator_dispatches_post_read_queries() -> None:
 
     assert isinstance(list_result, PostPageReadModel)
     assert isinstance(detail_result, PostDetailReadModel)
-    assert list_result.rows[0].post_code == 'dev'
+    assert list_result.items[0].post_code == 'dev'

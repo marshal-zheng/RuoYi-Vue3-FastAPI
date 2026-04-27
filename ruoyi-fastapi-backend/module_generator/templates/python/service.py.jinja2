@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.constant import CommonConstant
 from exceptions.exception import ServiceException
-from module_admin.entity.vo.common_vo import CrudResponseModel
 {% if dicts %}
 from modules.system.application.services import DictDataService
 {% endif %}
@@ -90,11 +89,13 @@ class {{ BusinessName }}Service:
             if add_{{ businessName }}:
                 for sub_table in page_object.{{ subclassName }}_list:
                     await {{ businessName }}_repo.add_{{ subTable.business_name }}(sub_table)
+            created_{{ pk_field }} = add_{{ businessName }}.{{ pk_field }}
             {% else %}
-            await {{ businessName }}_repo.add_{{ businessName }}(page_object)
+            add_{{ businessName }} = await {{ businessName }}_repo.add_{{ businessName }}(page_object)
+            created_{{ pk_field }} = add_{{ businessName }}.{{ pk_field }}
             {% endif %}
             await query_db.commit()
-            return CrudResponseModel(is_success=True, message='新增成功')
+            return await cls.{{ businessName }}_detail_services(query_db, created_{{ pk_field }})
         except Exception as e:
             await query_db.rollback()
             raise e
@@ -129,7 +130,7 @@ class {{ BusinessName }}Service:
                     await {{ businessName }}_repo.add_{{ subTable.business_name }}(sub_table)
                 {% endif %}
                 await query_db.commit()
-                return CrudResponseModel(is_success=True, message='更新成功')
+                return await cls.{{ businessName }}_detail_services(query_db, page_object.{{ pk_field }})
             except Exception as e:
                 await query_db.rollback()
                 raise e
@@ -159,7 +160,7 @@ class {{ BusinessName }}Service:
                         {{ BusinessName }}Model({{ pkField }}={{ pk_field }})
                     )
                 await query_db.commit()
-                return CrudResponseModel(is_success=True, message='删除成功')
+                return None
             except Exception as e:
                 await query_db.rollback()
                 raise e

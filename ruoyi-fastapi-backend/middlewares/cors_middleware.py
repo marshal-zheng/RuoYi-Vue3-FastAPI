@@ -25,4 +25,13 @@ def add_cors_middleware(app: FastAPI):
         allow_credentials=SecurityConfig.security_cors_allow_credentials,
         allow_methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
         allow_headers=['Authorization', 'Content-Type', 'X-CSRF-Token', 'X-Requested-With'],
+        expose_headers=[
+            'X-Request-Id',
+            'X-Trace-Id',
+            'Location',
+            'Retry-After',
+            'RateLimit-Limit',
+            'RateLimit-Remaining',
+            'RateLimit-Reset',
+        ],
     )

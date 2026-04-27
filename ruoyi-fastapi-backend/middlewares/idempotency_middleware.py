@@ -2,7 +2,7 @@
 Idempotency middleware for write endpoints.
 
 Behavior:
-- Activate only for configured methods/paths and when X-Idempotency-Key exists.
+- Activate only for configured methods/paths and when Idempotency-Key exists.
 - Cache first successful (2xx) response by key + request fingerprint within TTL.
 - Replay cached response for retries with same key + same payload.
 - Return HTTP 409 when same key is reused with different payload.
@@ -19,8 +19,8 @@ from urllib.parse import parse_qsl
 from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
-from config.env import IdempotencyConfig
-from middlewares.trace_middleware import get_request_id
+from config.env import ErrorHandlingConfig, IdempotencyConfig
+from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.log_util import logger
 
 _HOP_BY_HOP_HEADERS = {
@@ -93,7 +93,7 @@ class IdempotencyASGIMiddleware:
             return
 
         request_headers = self._extract_request_headers(scope.get('headers', []))
-        idempotency_key = request_headers.get('x-idempotency-key', '').strip()
+        idempotency_key = request_headers.get('idempotency-key', '').strip()
         if not idempotency_key:
             await self.app(scope, receive, send)
             return
@@ -401,7 +401,7 @@ class IdempotencyASGIMiddleware:
                 status_code=409,
                 title='幂等键冲突',
                 detail=(
-                    '相同 X-Idempotency-Key 对应的请求体不一致，'
+                    '相同 Idempotency-Key 对应的请求体不一致，'
                     f'key={idempotency_key}'
                 ),
                 error_code=40901,
@@ -441,7 +441,7 @@ class IdempotencyASGIMiddleware:
     ) -> None:
         request_id = get_request_id()
         payload = {
-            'type': 'https://api.example.com/problems/idempotency',
+            'type': f"{str(ErrorHandlingConfig.problem_type_base_url).rstrip('/')}/idempotency-conflict",
             'title': title,
             'status': status_code,
             'detail': detail,
@@ -449,6 +449,9 @@ class IdempotencyASGIMiddleware:
             'errorCode': error_code,
             'requestId': request_id,
         }
+        trace_id = get_trace_id()
+        if trace_id:
+            payload['traceId'] = trace_id
         body = json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
         headers: List[Tuple[bytes, bytes]] = [
             (b'content-type', b'application/problem+json; charset=utf-8'),
@@ -456,6 +459,8 @@ class IdempotencyASGIMiddleware:
         ]
         if request_id:
             headers.append((b'x-request-id', request_id.encode('latin-1', errors='ignore')))
+        if trace_id:
+            headers.append((b'x-trace-id', trace_id.encode('latin-1', errors='ignore')))
         await send({'type': 'http.response.start', 'status': int(status_code), 'headers': headers})
         await send({'type': 'http.response.body', 'body': body, 'more_body': False})
 

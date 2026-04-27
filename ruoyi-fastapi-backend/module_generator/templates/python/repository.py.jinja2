@@ -132,7 +132,7 @@ class {{ BusinessName }}Repository:
             .order_by({{ ClassName }}.{{ pk_field }})
             .distinct()
         )
-        {{ businessName }}_list = await PageUtil.paginate(self.db, query, query_object.page_num, query_object.page_size, is_page)
+        {{ businessName }}_list = await PageUtil.paginate(self.db, query, query_object.page, query_object.page_size, is_page)
 
         return {{ businessName }}_list
 

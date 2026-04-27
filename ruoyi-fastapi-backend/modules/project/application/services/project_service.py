@@ -36,7 +36,6 @@ from ports import (
 from utils.common_util import CamelCaseUtil
 from utils.io_toolkit import JsonExporter, ZipEntry, ZipExporter, ZipImporter
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.transaction_manager import transactional
 
 
@@ -97,14 +96,11 @@ class ProjectService:
         :return: 工程列表信息对象
         """
         if is_page:
-            project_list_result = await self.project_repo.paginate_with_filters(
-                page=query_object.page_num,
+            return await self.project_repo.paginate_with_filters(
+                page=query_object.page,
                 page_size=query_object.page_size,
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
-            )
-            return PageResponseModel(
-                **{**project_list_result.model_dump(), 'rows': CamelCaseUtil.transform_result(project_list_result.rows)}
             )
 
         project_list_result = await self.project_repo.find_all_active()

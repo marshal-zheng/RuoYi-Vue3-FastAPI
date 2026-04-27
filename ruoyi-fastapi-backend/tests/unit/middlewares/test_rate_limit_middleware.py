@@ -64,7 +64,10 @@ async def test_auth_tier_ip_limit():
     assert resp2.status_code == 200
     assert resp3.status_code == 429
     assert resp3.headers.get('retry-after') is not None
-    assert resp3.headers.get('x-ratelimit-tier') == 'auth'
+    assert resp3.headers.get('ratelimit-limit') == '2'
+    assert resp3.headers.get('ratelimit-remaining') == '0'
+    assert resp3.json()['status'] == 429
+    assert resp3.json()['errorCode'] == 42901
 
 
 @pytest.mark.asyncio
@@ -82,8 +85,9 @@ async def test_write_tier_user_limit():
     assert resp1.status_code == 200
     assert resp2.status_code == 200
     assert resp3.status_code == 429
-    assert resp3.headers.get('x-ratelimit-tier') == 'write'
-    assert resp3.json().get('data', {}).get('scope') == 'user'
+    assert resp3.headers.get('ratelimit-limit') == '2'
+    assert resp3.headers.get('ratelimit-remaining') == '0'
+    assert resp3.json()['detail'].startswith('请求已触发限流')
 
 
 @pytest.mark.asyncio
@@ -99,8 +103,9 @@ async def test_read_tier_ip_limit():
     assert resp1.status_code == 200
     assert resp2.status_code == 200
     assert resp3.status_code == 429
-    assert resp3.headers.get('x-ratelimit-tier') == 'read'
-    assert resp1.headers.get('x-ratelimit-limit') == '2'
+    assert resp3.headers.get('ratelimit-limit') == '2'
+    assert resp1.headers.get('ratelimit-limit') == '2'
+    assert resp1.headers.get('ratelimit-remaining') == '1'
 
 
 @pytest.mark.asyncio

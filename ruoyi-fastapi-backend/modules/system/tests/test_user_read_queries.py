@@ -96,7 +96,7 @@ class _UserServiceStub:
         self.list_called_with = (query_db, query, data_scope_sql, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'userId': 1,
                         'userName': 'admin',
@@ -105,7 +105,7 @@ class _UserServiceStub:
                         'dept': {'deptId': 100, 'deptName': '研发部'},
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -226,7 +226,7 @@ async def test_user_query_handlers_success() -> None:
     list_result = await list_handler.handle(
         GetUserListQuery(
             query_db=query_db,
-            query=UserPageQueryModel(pageNum=1, pageSize=10),
+            query=UserPageQueryModel(page=1, pageSize=10),
             data_scope_sql=' AND user_id in (1)',
             is_page=True,
             operator='admin',
@@ -368,7 +368,7 @@ async def test_system_mediator_dispatches_user_read_queries() -> None:
     list_result = await mediator.query(
         GetUserListQuery(
             query_db=query_db,
-            query=UserPageQueryModel(pageNum=1, pageSize=10),
+            query=UserPageQueryModel(page=1, pageSize=10),
             data_scope_sql=' AND user_id in (1)',
             is_page=True,
         )

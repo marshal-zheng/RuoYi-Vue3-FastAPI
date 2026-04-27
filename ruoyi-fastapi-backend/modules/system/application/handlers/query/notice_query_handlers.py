@@ -36,21 +36,21 @@ class GetNoticeListQueryHandler(IQueryHandler[GetNoticeListQuery, NoticePageRead
         list_result = await self._notice_service.get_notice_list_services(request.query, is_page=request.is_page)
 
         if request.is_page:
-            rows = [_to_notice_item(row) for row in list_result.rows]
+            items = [_to_notice_item(row) for row in list_result.items]
             return NoticePageReadModel(
-                rows=rows,
-                page_num=list_result.page_num,
+                items=items,
+                page=list_result.page,
                 page_size=list_result.page_size,
                 total=list_result.total,
                 has_next=list_result.has_next,
             )
 
-        rows = [_to_notice_item(row) for row in list_result]
+        items = [_to_notice_item(row) for row in list_result]
         return NoticePageReadModel(
-            rows=rows,
-            page_num=1,
-            page_size=len(rows),
-            total=len(rows),
+            items=items,
+            page=1,
+            page_size=len(items),
+            total=len(items),
             has_next=False,
         )
 

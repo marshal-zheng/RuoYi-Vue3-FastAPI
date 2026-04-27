@@ -72,7 +72,7 @@ class _RoleServiceStub:
         self.list_called_with = (query, data_scope_sql, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'roleId': 1,
                         'roleName': '管理员',
@@ -80,7 +80,7 @@ class _RoleServiceStub:
                         'status': '0',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -109,7 +109,7 @@ class _RoleServiceStub:
     async def get_role_user_allocated_list_services(self, query, data_scope_sql, is_page=False):
         self.allocated_called_with = (query, data_scope_sql, is_page)
         return PageResponseModel(
-            rows=[
+            items=[
                 {
                     'userId': 1,
                     'userName': 'admin',
@@ -117,7 +117,7 @@ class _RoleServiceStub:
                     'status': '0',
                 }
             ],
-            page_num=1,
+            page=1,
             page_size=10,
             total=1,
             has_next=False,
@@ -126,7 +126,7 @@ class _RoleServiceStub:
     async def get_role_user_unallocated_list_services(self, query, data_scope_sql, is_page=False):
         self.unallocated_called_with = (query, data_scope_sql, is_page)
         return PageResponseModel(
-            rows=[
+            items=[
                 {
                     'userId': 2,
                     'userName': 'test',
@@ -134,7 +134,7 @@ class _RoleServiceStub:
                     'status': '0',
                 }
             ],
-            page_num=1,
+            page=1,
             page_size=10,
             total=1,
             has_next=False,
@@ -157,7 +157,7 @@ async def test_role_query_handlers_success() -> None:
     )
     list_result = await list_handler.handle(
         GetRoleListQuery(
-            query=RolePageQueryModel(pageNum=1, pageSize=10),
+            query=RolePageQueryModel(page=1, pageSize=10),
             data_scope_sql=' AND role_id in (1)',
             is_page=True,
             operator='admin',
@@ -173,7 +173,7 @@ async def test_role_query_handlers_success() -> None:
     )
     allocated_result = await allocated_handler.handle(
         GetRoleAllocatedUsersQuery(
-            query=UserRolePageQueryModel(roleId=1, pageNum=1, pageSize=10),
+            query=UserRolePageQueryModel(roleId=1, page=1, pageSize=10),
             data_scope_sql=' AND user_id in (1)',
             is_page=True,
             operator='admin',
@@ -181,7 +181,7 @@ async def test_role_query_handlers_success() -> None:
     )
     unallocated_result = await unallocated_handler.handle(
         GetRoleUnallocatedUsersQuery(
-            query=UserRolePageQueryModel(roleId=1, pageNum=1, pageSize=10),
+            query=UserRolePageQueryModel(roleId=1, page=1, pageSize=10),
             data_scope_sql=' AND user_id in (1,2)',
             is_page=True,
             operator='admin',
@@ -235,7 +235,7 @@ async def test_system_mediator_dispatches_role_read_queries() -> None:
 
     list_result = await mediator.query(
         GetRoleListQuery(
-            query=RolePageQueryModel(pageNum=1, pageSize=10),
+            query=RolePageQueryModel(page=1, pageSize=10),
             data_scope_sql=' AND role_id in (1)',
             is_page=True,
         )

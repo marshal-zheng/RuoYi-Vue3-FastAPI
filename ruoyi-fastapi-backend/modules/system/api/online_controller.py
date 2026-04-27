@@ -9,16 +9,13 @@ from module_admin.entity.vo.online_vo import DeleteOnlineModel, OnlineQueryModel
 from modules.identity.ports import get_current_user
 from modules.system.application.services.online_service import OnlineService
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 
 
 onlineController = APIRouter(prefix='/monitor/online', dependencies=[Depends(get_current_user)])
 
 
-@onlineController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('monitor:online:list'))]
-)
+@onlineController.get('/list', dependencies=[Depends(CheckUserInterfaceAuth('monitor:online:list'))])
 async def get_monitor_online_list(
     request: Request,
     online_page_query: OnlineQueryModel = Depends(OnlineQueryModel.as_query),
@@ -28,9 +25,7 @@ async def get_monitor_online_list(
     online_query_result = await online_service.get_online_list_services(request, online_page_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(
-        model_content=PageResponseModel(rows=online_query_result, total=len(online_query_result))
-    )
+    return ResponseUtil.ok_collection(items=online_query_result)
 
 
 @onlineController.delete('/{token_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:online:forceLogout'))])
@@ -45,4 +40,4 @@ async def delete_monitor_online(
     delete_online_result = await online_service.delete_online_services(request, delete_online)
     logger.info(delete_online_result.message)
 
-    return ResponseUtil.success(message=delete_online_result.message)
+    return ResponseUtil.no_content()

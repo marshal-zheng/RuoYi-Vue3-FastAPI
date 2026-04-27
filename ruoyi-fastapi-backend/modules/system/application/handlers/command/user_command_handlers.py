@@ -16,6 +16,7 @@ from modules.system.application.commands.user_commands import (
     ResetUserPasswordCommand,
 )
 from modules.system.application.contracts import CommandResult, ICommandHandler
+from modules.system.application.handlers.command.result_data import command_result_data
 from modules.system.application.event_factory import build_system_event
 
 if TYPE_CHECKING:
@@ -66,7 +67,7 @@ class AddUserCommandHandler(ICommandHandler[AddUserCommand, dict[str, str]]):
         return CommandResult(
             success=create_result.is_success,
             status='created' if create_result.is_success else 'failed',
-            data={'message': create_result.message},
+            data=command_result_data(create_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -97,7 +98,10 @@ class EditUserCommandHandler(ICommandHandler[EditUserCommand, dict[str, str]]):
                 request.user_data_scope_sql,
             )
             if edit_type not in {'status', 'avatar', 'pwd'}:
-                await self._dept_service.check_dept_data_scope_services(request.user.dept_id, request.dept_data_scope_sql)
+                await self._dept_service.check_dept_data_scope_services(
+                    request.user.dept_id,
+                    request.dept_data_scope_sql,
+                )
                 role_ids = _serialize_role_ids(request.user.role_ids)
                 if role_ids:
                     await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
@@ -116,7 +120,7 @@ class EditUserCommandHandler(ICommandHandler[EditUserCommand, dict[str, str]]):
         return CommandResult(
             success=update_result.is_success,
             status='updated' if update_result.is_success else 'failed',
-            data={'message': update_result.message},
+            data=command_result_data(update_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -156,7 +160,7 @@ class DeleteUserCommandHandler(ICommandHandler[DeleteUserCommand, dict[str, str]
         return CommandResult(
             success=delete_result.is_success,
             status='deleted' if delete_result.is_success else 'failed',
-            data={'message': delete_result.message},
+            data=command_result_data(delete_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -180,7 +184,7 @@ class ResetUserPasswordCommandHandler(ICommandHandler[ResetUserPasswordCommand, 
         return CommandResult(
             success=reset_result.is_success,
             status='updated' if reset_result.is_success else 'failed',
-            data={'message': reset_result.message},
+            data=command_result_data(reset_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -212,7 +216,7 @@ class ImportUsersCommandHandler(ICommandHandler[ImportUsersCommand, dict[str, st
         return CommandResult(
             success=import_result.is_success,
             status='imported' if import_result.is_success else 'failed',
-            data={'message': import_result.message},
+            data=command_result_data(import_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -250,7 +254,7 @@ class AssignUserRolesCommandHandler(ICommandHandler[AssignUserRolesCommand, dict
         return CommandResult(
             success=assign_result.is_success,
             status='granted' if assign_result.is_success else 'failed',
-            data={'message': assign_result.message},
+            data=command_result_data(assign_result),
             events=(event,),
             metadata=_build_metadata(request),
         )

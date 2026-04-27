@@ -23,11 +23,31 @@ from modules.system.application.queries import (
     GetDeptTreeSelectQuery,
 )
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 deptController = APIRouter(prefix='/system/dept', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_dept_detail(
+    request: Request,
+    *,
+    dept_id: int,
+    current_user: CurrentUserModel,
+    data_scope_sql: str,
+    mediator: Mediator,
+    require_scope_check: bool | None = None,
+):
+    detail_query = GetDeptDetailQuery(
+        dept_id=dept_id,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin if require_scope_check is None else require_scope_check,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
 
 
 @deptController.get(
@@ -50,7 +70,7 @@ async def get_system_dept_tree_for_edit_option(
     dept_query_result = await mediator.query(dept_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dept_query_result)
+    return ResponseUtil.ok_resource(dept_query_result)
 
 
 @deptController.get(
@@ -71,7 +91,7 @@ async def get_system_dept_list(
     dept_query_result = await mediator.query(query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dept_query_result)
+    return ResponseUtil.ok_resource(dept_query_result)
 
 
 @deptController.get('/treeselect', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:list'))])
@@ -88,7 +108,7 @@ async def get_system_dept_tree_select(
     dept_query_result = await mediator.query(dept_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dept_query_result)
+    return ResponseUtil.ok_resource(dept_query_result)
 
 
 @deptController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:add'))])
@@ -117,7 +137,17 @@ async def add_system_dept(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(data={'isSuccess': add_result.success, 'message': message})
+    dept_id = require_int_value(add_result.data, 'deptId', 'dept_id', contract_name='system.dept.create')
+    resource = await _load_dept_detail(
+        request,
+        dept_id=int(dept_id),
+        current_user=current_user,
+        data_scope_sql='',
+        mediator=mediator,
+        require_scope_check=False,
+    )
+    location = ResponseUtil.build_absolute_location(request, f'/system/dept/{dept_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @deptController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:edit'))])
@@ -147,7 +177,14 @@ async def edit_system_dept(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_dept_detail(
+        request,
+        dept_id=edit_dept.dept_id,
+        current_user=current_user,
+        data_scope_sql=data_scope_sql,
+        mediator=mediator,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @deptController.delete('/{dept_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:remove'))])
@@ -177,7 +214,7 @@ async def delete_system_dept(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @deptController.get(
@@ -200,7 +237,7 @@ async def query_detail_system_dept(
     detail_dept_result = await mediator.query(detail_query)
     logger.info(f'获取dept_id为{dept_id}的信息成功')
 
-    return ResponseUtil.success(data=detail_dept_result)
+    return ResponseUtil.ok_resource(detail_dept_result)
 
 
 @deptController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:export'))])

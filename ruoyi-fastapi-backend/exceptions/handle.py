@@ -24,14 +24,31 @@ from exceptions.exception import (
 from utils.response_util import ResponseUtil
 
 # 导入错误码和消息
-from config.error_codes import ErrorCode, ErrorType, get_error_info
-from config.error_messages import get_user_message, get_developer_message
+from config.error_codes import ErrorCode, ErrorType
 
 # 导入日志和 RequestId
 from utils.log_util import logger
 from middlewares.trace_middleware import get_request_id
 
 DEFAULT_ERROR_MSG = '接口异常'
+
+_PROBLEM_TYPE_SLUGS = {
+    ErrorCode.VALIDATION_ERROR: 'validation-error',
+    ErrorCode.UNAUTHORIZED: 'unauthorized',
+    ErrorCode.FORBIDDEN: 'forbidden',
+    ErrorCode.SYSTEM_ERROR: None,
+    ErrorCode.DATABASE_ERROR: 'database-error',
+    ErrorCode.EXTERNAL_SERVICE_ERROR: 'external-service-error',
+    ErrorCode.CACHE_ERROR: 'cache-error',
+}
+
+
+def _resolve_problem_type_slug(error_code: int | None, fallback: str | None = None) -> str | None:
+    if fallback:
+        return str(fallback).strip().lower().replace('_', '-')
+    if error_code is None:
+        return None
+    return _PROBLEM_TYPE_SLUGS.get(int(error_code))
 
 
 def handle_exception(app: FastAPI):
@@ -69,16 +86,19 @@ def handle_exception(app: FastAPI):
             logger.info(log_message)
         
         # 返回 RFC 7807 响应
+        errors = None
+        field = exc.extra.get('field') if hasattr(exc, 'extra') else None
+        if exc.http_status == 422 and field:
+            errors = [{'field': field, 'message': exc.user_message, 'code': 'value_error'}]
+
         return ResponseUtil.problem_details(
             request=request,
-            error_code=exc.error_code,
-            user_message=exc.user_message,
-            developer_message=exc.developer_message,
             http_status=exc.http_status,
-            error_type=exc.error_type,
-            error_code_name=exc.error_code_name,
-            data=exc.data,
-            **exc.extra
+            title=exc.user_message,
+            detail=exc.user_message,
+            type_slug=_resolve_problem_type_slug(exc.error_code, exc.error_code_name),
+            error_code=exc.error_code,
+            errors=errors,
         )
     
     # Pydantic 校验错误处理器
@@ -95,7 +115,7 @@ def handle_exception(app: FastAPI):
                 {
                     "field": field,
                     "message": error.get('msg', 'Validation failed'),
-                    "code": str(error.get('type', 'validation_error')).upper(),
+                    "code": str(error.get('type', 'validation_error')),
                 }
             )
 
@@ -105,7 +125,6 @@ def handle_exception(app: FastAPI):
         return ResponseUtil.validation_problem(
             request=request,
             errors=errors,
-            developer_message=developer_message,
         )
 
     # Pydantic 校验错误处理器
@@ -121,7 +140,7 @@ def handle_exception(app: FastAPI):
             errors.append({
                 "field": field,
                 "message": error["msg"],
-                "code": error["type"].upper()
+                "code": error["type"]
             })
         
         # 开发者消息：详细错误信息
@@ -134,7 +153,6 @@ def handle_exception(app: FastAPI):
         return ResponseUtil.validation_problem(
             request=request,
             errors=errors,
-            developer_message=developer_message
         )
     
     # FieldValidationError 处理器（兼容旧代码）
@@ -147,7 +165,7 @@ def handle_exception(app: FastAPI):
         errors = [{
             "field": "unknown",
             "message": exc.message,
-            "code": "FIELD_VALIDATION_ERROR"
+            "code": "field_validation_error"
         }]
         
         developer_message = f"Field validation failed: {exc.message}"
@@ -156,7 +174,6 @@ def handle_exception(app: FastAPI):
         return ResponseUtil.validation_problem(
             request=request,
             errors=errors,
-            developer_message=developer_message
         )
     
     # HTTP 异常处理器
@@ -180,11 +197,11 @@ def handle_exception(app: FastAPI):
         # 返回 RFC 7807 响应
         return ResponseUtil.problem_details(
             request=request,
-            error_code=exc.status_code,
-            user_message=user_message,
-            developer_message=developer_message,
             http_status=exc.status_code,
-            error_type=ErrorType.SYSTEM
+            title=user_message,
+            detail=user_message,
+            type_slug=None if exc.status_code >= 500 else f'http-{exc.status_code}',
+            error_code=exc.status_code,
         )
     
     # 通用异常处理器（兜底）
@@ -214,10 +231,9 @@ def handle_exception(app: FastAPI):
         # 返回 RFC 7807 响应
         return ResponseUtil.problem_details(
             request=request,
-            error_code=ErrorCode.SYSTEM_ERROR,
-            user_message=user_message,
-            developer_message=developer_message,
             http_status=500,
-            error_type=ErrorType.SYSTEM,
-            error_code_name="SYSTEM_ERROR"
+            title=user_message,
+            detail=user_message,
+            type_slug=_resolve_problem_type_slug(ErrorCode.SYSTEM_ERROR),
+            error_code=ErrorCode.SYSTEM_ERROR,
         )

@@ -34,8 +34,8 @@ class RoleItemReadModel(CamelModelBase):
 class RolePageReadModel(CamelModelBase):
     """Read model for paged role list."""
 
-    rows: list[RoleItemReadModel] = Field(default_factory=list, description='Current page rows')
-    page_num: int | None = Field(default=None, description='Current page number')
+    items: list[RoleItemReadModel] = Field(default_factory=list, description='Current page items')
+    page: int | None = Field(default=None, description='Current page number')
     page_size: int | None = Field(default=None, description='Page size')
     total: int = Field(default=0, description='Total records')
     has_next: bool | None = Field(default=None, description='Whether next page exists')
@@ -67,8 +67,8 @@ class RoleUserItemReadModel(CamelModelBase):
 class RoleUserPageReadModel(CamelModelBase):
     """Read model for paged role-user list."""
 
-    rows: list[RoleUserItemReadModel] = Field(default_factory=list, description='Current page rows')
-    page_num: int | None = Field(default=None, description='Current page number')
+    items: list[RoleUserItemReadModel] = Field(default_factory=list, description='Current page items')
+    page: int | None = Field(default=None, description='Current page number')
     page_size: int | None = Field(default=None, description='Page size')
     total: int = Field(default=0, description='Total records')
     has_next: bool | None = Field(default=None, description='Whether next page exists')

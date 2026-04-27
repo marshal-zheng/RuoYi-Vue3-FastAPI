@@ -72,15 +72,15 @@ class TestConfigServiceQuery:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = [sample_config]
+            mock_result.items = [sample_config]
             mock_result.total = 1
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
-            query = ConfigPageQueryModel(page_num=1, page_size=10)
+            query = ConfigPageQueryModel(page=1, pageSize=10)
             result = await ConfigService(mock_repo, mock_db).get_config_list_services(query, is_page=True)
             
             assert result.total == 1
-            assert len(result.rows) == 1
+            assert len(result.items) == 1
 
     @pytest.mark.asyncio
     async def test_get_config_list_without_pagination(self, mock_db, sample_config):
@@ -88,10 +88,10 @@ class TestConfigServiceQuery:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = [sample_config]
+            mock_result.items = [sample_config]
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
-            query = ConfigPageQueryModel(page_num=1, page_size=10)
+            query = ConfigPageQueryModel(page=1, pageSize=10)
             result = await ConfigService(mock_repo, mock_db).get_config_list_services(query, is_page=False)
             
             assert isinstance(result, list)
@@ -102,7 +102,7 @@ class TestConfigServiceQuery:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = [sample_config]
+            mock_result.items = [sample_config]
             mock_result.total = 1
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
@@ -110,8 +110,8 @@ class TestConfigServiceQuery:
                 config_name='系统',
                 config_key='sys',
                 config_type='N',
-                page_num=1,
-                page_size=10
+                page=1,
+                pageSize=10
             )
             result = await ConfigService(mock_repo, mock_db).get_config_list_services(query, is_page=True)
             
@@ -151,7 +151,7 @@ class TestConfigServiceCache:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = [{'configKey': 'sys.name', 'configValue': 'RuoYi'}]
+            mock_result.items = [{'configKey': 'sys.name', 'configValue': 'RuoYi'}]
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
             await ConfigService(mock_repo, mock_db).init_cache_sys_config_services(mock_redis)
@@ -167,7 +167,7 @@ class TestConfigServiceCache:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = []
+            mock_result.items = []
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
             await ConfigService(mock_repo, mock_db).init_cache_sys_config_services(mock_redis)
@@ -190,7 +190,7 @@ class TestConfigServiceCache:
         with patch('modules.system.application.services.config_service.ConfigRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_result = MagicMock()
-            mock_result.rows = []
+            mock_result.items = []
             mock_repo.paginate_with_filters = AsyncMock(return_value=mock_result)
             
             result = await ConfigService(mock_repo, mock_db).refresh_sys_config_services(mock_redis)

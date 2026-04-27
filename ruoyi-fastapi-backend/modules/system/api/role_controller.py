@@ -32,12 +32,34 @@ from modules.system.application.queries import (
     GetRoleUnallocatedUsersQuery,
 )
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 roleController = APIRouter(prefix='/system/role', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_role_detail(
+    request: Request,
+    *,
+    role_id: int,
+    mediator: Mediator,
+    data_scope_sql: str = '',
+    require_scope_check: bool = False,
+):
+    role_detail_query = GetRoleDetailQuery(
+        role_id=role_id,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=require_scope_check,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    role_detail_result = await mediator.query(role_detail_query)
+    if role_detail_result is None:
+        return {}
+    return role_detail_result.model_dump(by_alias=False)
 
 
 @roleController.get('/deptTree/{role_id}', dependencies=[Depends(CheckUserInterfaceAuth('system:role:query'))])
@@ -56,7 +78,7 @@ async def get_system_role_dept_tree(
     role_dept_query_result = await mediator.query(dept_tree_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=role_dept_query_result)
+    return ResponseUtil.ok_resource(role_dept_query_result)
 
 
 @roleController.get(
@@ -78,7 +100,7 @@ async def get_system_role_list(
     role_page_query_result = await mediator.query(role_list_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=role_page_query_result)
+    return ok_page_result(role_page_query_result)
 
 
 @roleController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:role:add'))])
@@ -106,7 +128,10 @@ async def add_system_role(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    role_id = require_int_value(add_result.data, 'roleId', 'role_id', contract_name='system.role.create')
+    resource = await _load_role_detail(request, role_id=role_id, mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/role/{role_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @roleController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -135,7 +160,14 @@ async def edit_system_role(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_role_detail(
+        request,
+        role_id=edit_role.role_id,
+        mediator=mediator,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @roleController.put('/dataScope', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -169,7 +201,14 @@ async def edit_system_role_datascope(
     message = grant_result.data.get('message') if grant_result.data else '分配成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_role_detail(
+        request,
+        role_id=role_data_scope.role_id,
+        mediator=mediator,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @roleController.delete('/{role_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:role:remove'))])
@@ -196,7 +235,7 @@ async def delete_system_role(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @roleController.get(
@@ -209,19 +248,16 @@ async def query_detail_system_role(
     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
-    role_detail_query = GetRoleDetailQuery(
+    role_detail_result = await _load_role_detail(
+        request,
         role_id=role_id,
+        mediator=mediator,
         data_scope_sql=data_scope_sql,
         require_scope_check=not current_user.user.admin,
-        trace_id=request.headers.get('x-trace-id'),
-        request_id=request.headers.get('x-request-id'),
     )
-    role_detail_result = await mediator.query(role_detail_query)
     logger.info(f'获取role_id为{role_id}的信息成功')
 
-    role_detail_payload = {} if role_detail_result is None else role_detail_result.model_dump(by_alias=False)
-
-    return ResponseUtil.success(model_content=role_detail_payload)
+    return ResponseUtil.ok_resource(role_detail_result)
 
 
 @roleController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:role:export'))])
@@ -241,7 +277,7 @@ async def export_system_role_list(
         request_id=request.headers.get('x-request-id'),
     )
     role_query_result = await mediator.query(role_list_query)
-    role_rows = [row.model_dump(by_alias=True) for row in role_query_result.rows]
+    role_rows = [row.model_dump(by_alias=True) for row in role_query_result.items]
     role_export_result = await role_service.export_role_list_services(role_rows)
     logger.info('导出成功')
 
@@ -278,7 +314,14 @@ async def reset_system_role_status(
     message = change_status_result.data.get('message') if change_status_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_role_detail(
+        request,
+        role_id=change_role.role_id,
+        mediator=mediator,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @roleController.get(
@@ -302,7 +345,7 @@ async def get_system_allocated_user_list(
     role_user_allocated_page_query_result = await mediator.query(allocated_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=role_user_allocated_page_query_result)
+    return ok_page_result(role_user_allocated_page_query_result)
 
 
 @roleController.get(
@@ -326,7 +369,7 @@ async def get_system_unallocated_user_list(
     role_user_unallocated_page_query_result = await mediator.query(unallocated_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=role_user_unallocated_page_query_result)
+    return ok_page_result(role_user_unallocated_page_query_result)
 
 
 @roleController.put('/authUser/selectAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -352,7 +395,7 @@ async def add_system_role_user(
     message = grant_result.data.get('message') if grant_result.data else '分配成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @roleController.put('/authUser/cancel', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -375,7 +418,7 @@ async def cancel_system_role_user(
     message = cancel_result.data.get('message') if cancel_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @roleController.put('/authUser/cancelAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
@@ -398,4 +441,4 @@ async def batch_cancel_system_role_user(
     message = cancel_result.data.get('message') if cancel_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()

@@ -13,7 +13,7 @@ class EventHistoryQuery(BaseModel):
     event_type: str | None = Field(default=None, alias='eventType')
     begin_time: datetime | None = Field(default=None, alias='beginTime')
     end_time: datetime | None = Field(default=None, alias='endTime')
-    page_num: int = Field(default=1, alias='pageNum')
+    page: int = Field(default=1)
     page_size: int = Field(default=20, alias='pageSize')
 
     model_config = ConfigDict(populate_by_name=True)

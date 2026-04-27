@@ -49,6 +49,7 @@ from modules.system.application.queries import (
     GetUserProfileQuery,
 )
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.pwd_util import PwdUtil
@@ -57,6 +58,42 @@ from utils.upload_util import UploadUtil
 from utils.validation_util import ValidateFields
 
 userController = APIRouter(prefix='/system/user', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_user_detail(
+    request: Request,
+    *,
+    user_id: int | str | Literal[''],
+    query_db: AsyncSession,
+    mediator: Mediator,
+    data_scope_sql: str = '',
+    require_scope_check: bool = False,
+):
+    user_detail_query = GetUserDetailQuery(
+        query_db=query_db,
+        user_id=user_id,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=require_scope_check,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(user_detail_query)
+
+
+async def _load_user_profile(
+    request: Request,
+    *,
+    query_db: AsyncSession,
+    user_id: int,
+    mediator: Mediator,
+):
+    profile_query = GetUserProfileQuery(
+        query_db=query_db,
+        user_id=user_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(profile_query)
 
 
 @userController.get('/deptTree', dependencies=[Depends(CheckUserInterfaceAuth('system:user:list'))])
@@ -73,7 +110,7 @@ async def get_system_dept_tree(
     dept_query_result = await mediator.query(dept_tree_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=dept_query_result)
+    return ResponseUtil.ok_collection(items=dept_query_result)
 
 
 @userController.get(
@@ -97,7 +134,7 @@ async def get_system_user_list(
     user_page_query_result = await mediator.query(user_list_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=user_page_query_result)
+    return ok_page_result(user_page_query_result)
 
 
 @userController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:user:add'))])
@@ -131,7 +168,17 @@ async def add_system_user(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    user_id = require_int_value(add_result.data, 'userId', 'user_id', contract_name='system.user.create')
+    resource = await _load_user_detail(
+        request,
+        user_id=user_id,
+        query_db=query_db,
+        data_scope_sql=dept_data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+        mediator=mediator,
+    )
+    location = ResponseUtil.build_absolute_location(request, f'/system/user/{user_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @userController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))])
@@ -164,7 +211,15 @@ async def edit_system_user(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_user_detail(
+        request,
+        user_id=edit_user.user_id,
+        query_db=query_db,
+        data_scope_sql=user_data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+        mediator=mediator,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @userController.delete('/{user_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:user:remove'))])
@@ -200,7 +255,7 @@ async def delete_system_user(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @userController.put('/resetPwd', dependencies=[Depends(CheckUserInterfaceAuth('system:user:resetPwd'))])
@@ -233,7 +288,7 @@ async def reset_system_user_pwd(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @userController.put('/changeStatus', dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))])
@@ -266,7 +321,15 @@ async def change_system_user_status(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_user_detail(
+        request,
+        user_id=change_user.user_id,
+        query_db=query_db,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin,
+        mediator=mediator,
+    )
+    return ResponseUtil.ok_resource(resource)
 
 
 @userController.get('/profile', response_model=UserProfileModel)
@@ -276,16 +339,15 @@ async def query_detail_system_user_profile(
     current_user: CurrentUserModel = Depends(get_current_user),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
-    profile_query = GetUserProfileQuery(
+    profile_user_result = await _load_user_profile(
+        request,
         query_db=query_db,
         user_id=current_user.user.user_id,
-        trace_id=request.headers.get('x-trace-id'),
-        request_id=request.headers.get('x-request-id'),
+        mediator=mediator,
     )
-    profile_user_result = await mediator.query(profile_query)
     logger.info(f'获取user_id为{current_user.user.user_id}的信息成功')
 
-    return ResponseUtil.success(model_content=profile_user_result)
+    return ResponseUtil.ok_resource(profile_user_result)
 
 
 @userController.get(
@@ -302,18 +364,17 @@ async def query_detail_system_user(
     data_scope_sql: str = Depends(GetDataScope('UserDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
-    user_detail_query = GetUserDetailQuery(
-        query_db=query_db,
+    detail_user_result = await _load_user_detail(
+        request,
         user_id=user_id,
+        query_db=query_db,
         data_scope_sql=data_scope_sql,
         require_scope_check=bool(user_id and not current_user.user.admin),
-        trace_id=request.headers.get('x-trace-id'),
-        request_id=request.headers.get('x-request-id'),
+        mediator=mediator,
     )
-    detail_user_result = await mediator.query(user_detail_query)
     logger.info(f'获取user_id为{user_id}的信息成功')
 
-    return ResponseUtil.success(model_content=detail_user_result)
+    return ResponseUtil.ok_resource(detail_user_result)
 
 
 @userController.post('/profile/avatar')
@@ -332,7 +393,10 @@ async def change_system_user_profile_avatar(
         dir_path = Path(UploadConfig.UPLOAD_PATH) / relative_path
         with suppress(FileExistsError):
             dir_path.mkdir(parents=True)
-        avatar_name = f'avatar_{datetime.now().strftime("%Y%m%d%H%M%S")}{UploadConfig.UPLOAD_MACHINE}{UploadUtil.generate_random_number()}.png'
+        avatar_name = (
+            f'avatar_{datetime.now().strftime("%Y%m%d%H%M%S")}'
+            f'{UploadConfig.UPLOAD_MACHINE}{UploadUtil.generate_random_number()}.png'
+        )
         avatar_path = dir_path / avatar_name
         with avatar_path.open('wb') as f:
             f.write(avatarfile)
@@ -354,7 +418,7 @@ async def change_system_user_profile_avatar(
         message = edit_result.data.get('message') if edit_result.data else '更新成功'
         logger.info(message)
 
-        return ResponseUtil.success(dict_content={'imgUrl': edit_user.avatar}, message=message)
+        return ResponseUtil.ok_resource({'imgUrl': edit_user.avatar})
 
     raise SystemException(
         user_message='上传图片失败, 请重试',
@@ -392,7 +456,13 @@ async def change_system_user_profile_info(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    profile_user_result = await _load_user_profile(
+        request,
+        query_db=query_db,
+        user_id=current_user.user.user_id,
+        mediator=mediator,
+    )
+    return ResponseUtil.ok_resource(profile_user_result)
 
 
 @userController.put('/profile/updatePwd')
@@ -422,7 +492,7 @@ async def reset_system_user_password(
     message = reset_result.data.get('message') if reset_result.data else '重置成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @userController.post('/importData', dependencies=[Depends(CheckUserInterfaceAuth('system:user:import'))])
@@ -450,10 +520,13 @@ async def batch_import_system_user(
         request_id=request.headers.get('x-request-id'),
     )
     import_result = await mediator.send(import_command)
-    message = import_result.data.get('message') if import_result.data else '导入成功'
-    logger.info(message)
+    logger.info('导入完成')
 
-    return ResponseUtil.success(message=message)
+    result = import_result.data or {'results': [], 'summary': {'total': 0, 'succeeded': 0, 'failed': 0}}
+    return ResponseUtil.batch_result(
+        results=result.get('results', []),
+        summary=result.get('summary', {'total': 0, 'succeeded': 0, 'failed': 0}),
+    )
 
 
 @userController.post('/importTemplate', dependencies=[Depends(CheckUserInterfaceAuth('system:user:import'))])
@@ -487,7 +560,7 @@ async def export_system_user_list(
         request_id=request.headers.get('x-request-id'),
     )
     user_query_result = await mediator.query(user_list_query)
-    user_rows = [row.model_dump(by_alias=True) for row in user_query_result.rows]
+    user_rows = [row.model_dump(by_alias=True) for row in user_query_result.items]
     user_export_result = await user_service.export_user_list_services(user_rows)
     logger.info('导出成功')
 
@@ -514,7 +587,7 @@ async def get_system_allocated_role_list(
     user_role_allocated_query_result = await mediator.query(auth_role_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=user_role_allocated_query_result)
+    return ResponseUtil.ok_resource(user_role_allocated_query_result)
 
 
 @userController.put(
@@ -547,4 +620,4 @@ async def update_system_role_user(
     message = assign_result.data.get('message') if assign_result.data else '分配成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()

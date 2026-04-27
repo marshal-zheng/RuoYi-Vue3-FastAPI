@@ -5,7 +5,9 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from module_admin.entity.vo.project_vo import ProjectPageQueryModel
 from modules.project.application.services.project_service import ProjectService
+from utils.page_util import PageResponseModel
 
 
 class FixedDatetime:
@@ -95,6 +97,49 @@ class TestProjectServiceTopologyMapping:
         # source should remain unchanged
         assert source['graph']['cells'][0]['data']['deviceId'] == 10
         assert source['nodes'][0]['data']['deviceId'] == 10
+
+
+class TestProjectServiceListContract:
+    @pytest.mark.asyncio
+    async def test_get_project_list_uses_page_contract(self):
+        paged_result = PageResponseModel(
+            items=[{'projectId': 11, 'projectName': 'demo'}],
+            page=2,
+            pageSize=20,
+            total=5,
+        )
+        project_repo = type(
+            'FakeProjectRepo',
+            (),
+            {
+                'paginate_with_filters': AsyncMock(return_value=paged_result),
+            },
+        )()
+        service = ProjectService(
+            project_repo=project_repo,
+            version_repo=AsyncMock(),
+            topology_repo=AsyncMock(),
+            device_repo=AsyncMock(),
+            interface_repo=AsyncMock(),
+            query_db=AsyncMock(),
+        )
+
+        result = await service.get_project_list_services(ProjectPageQueryModel(page=2, pageSize=20), is_page=True)
+
+        assert result is paged_result
+        assert result.model_dump(by_alias=True) == {
+            'items': [{'projectId': 11, 'projectName': 'demo'}],
+            'page': 2,
+            'pageSize': 20,
+            'total': 5,
+        }
+        assert not hasattr(result, 'rows')
+        project_repo.paginate_with_filters.assert_awaited_once_with(
+            page=2,
+            page_size=20,
+            begin_time=None,
+            end_time=None,
+        )
 
 
 class TestProjectServiceFilename:

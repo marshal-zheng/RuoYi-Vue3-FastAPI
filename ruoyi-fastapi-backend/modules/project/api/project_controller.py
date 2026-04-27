@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from container.dependencies import service_provider
 from config.enums import BusinessType
 from config.get_db import get_db
+from exceptions.exception import ValidationException
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
@@ -22,6 +23,7 @@ from module_admin.entity.vo.user_vo import CurrentUserModel
 from modules.identity.ports import get_current_user
 from modules.project.application.services.project_service import ProjectService
 from modules.project.application.services.project_topology_service import ProjectTopologyService, get_project_topology_service
+from utils.http_contract_responses import import_summary_to_batch_contract, require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
@@ -30,6 +32,11 @@ import re
 
 
 projectController = APIRouter(prefix='/project', dependencies=[Depends(get_current_user)])
+
+
+async def _load_project_detail(project_id: int, project_service: ProjectService):
+    detail_project_result = await project_service.get_project_detail(project_id)
+    return detail_project_result or {}
 
 
 @projectController.get(
@@ -48,7 +55,7 @@ async def get_system_project_list(
     project_query_result = await project_service.get_project_list(project_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=project_query_result)
+    return ResponseUtil.ok_resource(project_query_result)
 
 
 @projectController.post('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))])
@@ -68,7 +75,10 @@ async def add_system_project(
     )
     logger.info(add_project_result.message)
 
-    return ResponseUtil.success(message=add_project_result.message, data=add_project_result.result)
+    project_id = require_int_value(add_project_result.result, 'projectId', 'project_id', contract_name='project.create')
+    resource = await _load_project_detail(project_id, project_service)
+    location = ResponseUtil.build_absolute_location(request, f'/project/{project_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @projectController.put('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:edit'))])
@@ -88,7 +98,15 @@ async def edit_system_project(
     )
     logger.info(edit_project_result.message)
 
-    return ResponseUtil.success(message=edit_project_result.message)
+    if not edit_project.project_id:
+        raise ValidationException(
+            user_message='工程ID不能为空',
+            developer_message='projectId is required for project update',
+            field='projectId',
+        )
+
+    resource = await _load_project_detail(edit_project.project_id, project_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @projectController.delete('/{project_ids}', dependencies=[Depends(CheckUserInterfaceAuth('project:project:remove'))])
@@ -109,7 +127,7 @@ async def delete_system_project(
     )
     logger.info(delete_project_result.message)
 
-    return ResponseUtil.success(message=delete_project_result.message)
+    return ResponseUtil.no_content()
 
 
 @projectController.get(
@@ -128,7 +146,7 @@ async def query_detail_system_project(
     detail_project_result = await project_service.get_project_detail(project_id)
     logger.info(f'获取project_id为{project_id}的信息成功')
 
-    return ResponseUtil.success(data=detail_project_result)
+    return ResponseUtil.ok_resource(detail_project_result)
 
 
 @projectController.post(
@@ -151,7 +169,13 @@ async def save_project_topology(
         operator=current_user.user.user_name,
     )
     logger.info(save_result.message)
-    return ResponseUtil.success(message=save_result.message)
+    return ResponseUtil.ok_resource(
+        {
+            'projectId': topology.project_id,
+            'versionId': topology.version_id,
+            'status': 'saved',
+        }
+    )
 
 
 @projectController.get(
@@ -170,7 +194,7 @@ async def get_project_topology(
     topo_result = await topology_service.get_project_topology(project_id, version_id)
     logger.info(f'获取project_id为{project_id}的拓扑数据成功')
 
-    return ResponseUtil.success(data=topo_result)
+    return ResponseUtil.ok_resource(topo_result)
 
 
 @projectController.get(
@@ -260,7 +284,10 @@ async def import_project(
     import_result = await project_service.import_project(import_data, current_user.user.user_name)
     logger.info(import_result.message)
 
-    return ResponseUtil.success(message=import_result.message, data=import_result.result)
+    project_id = require_int_value(import_result.result, 'projectId', 'project_id', contract_name='project.import')
+    resource = await _load_project_detail(project_id, project_service)
+    location = ResponseUtil.build_absolute_location(request, f'/project/{project_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @projectController.post(
@@ -279,4 +306,9 @@ async def import_projects_batch(
     """
     file_bytes = await file.read()
     import_result = await project_service.import_projects_from_zip(file_bytes, current_user.user.user_name)
-    return ResponseUtil.success(message='批量导入完成', data=import_result)
+    results, summary = import_summary_to_batch_contract(
+        import_result.get('details'),
+        item_id_keys=('projectId', 'fileName'),
+        data_keys=('projectId', 'versionId', 'fileName'),
+    )
+    return ResponseUtil.batch_result(results=results, summary=summary)

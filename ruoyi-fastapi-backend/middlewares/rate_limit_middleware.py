@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from starlette.types import ASGIApp, Message, Scope, Send
 
 from config.env import RateLimitConfig
-from middlewares.trace_middleware import get_request_id
+from middlewares.trace_middleware import get_request_id, get_trace_id
 from utils.log_util import logger
 
 
@@ -147,10 +147,9 @@ class RateLimitASGIMiddleware:
         async def send_with_headers(message: Message) -> None:
             if message.get('type') == 'http.response.start':
                 message_headers = list(message.get('headers', []))
-                message_headers.append((b'x-ratelimit-tier', tier.encode('latin-1')))
-                message_headers.append((b'x-ratelimit-limit', str(effective_limit).encode('ascii')))
-                message_headers.append((b'x-ratelimit-remaining', str(max(0, effective_remaining)).encode('ascii')))
-                message_headers.append((b'x-ratelimit-reset', str(reset_at).encode('ascii')))
+                message_headers.append((b'ratelimit-limit', str(effective_limit).encode('ascii')))
+                message_headers.append((b'ratelimit-remaining', str(max(0, effective_remaining)).encode('ascii')))
+                message_headers.append((b'ratelimit-reset', str(reset_at).encode('ascii')))
                 message['headers'] = message_headers
             await send(message)
 
@@ -339,35 +338,30 @@ class RateLimitASGIMiddleware:
     ) -> None:
         request_id = get_request_id()
         payload = {
-            'type': 'https://api.example.com/problems/rate-limit',
+            'type': 'about:blank',
             'title': '请求过于频繁',
             'status': 429,
-            'detail': f'{tier} tier {scope_kind} limit exceeded, retry after {retry_after}s',
+            'detail': f'请求已触发限流，请在 {retry_after} 秒后重试',
             'instance': str(scope.get('path', '')),
             'errorCode': 42901,
             'requestId': request_id,
-            'data': {
-                'tier': tier,
-                'scope': scope_kind,
-                'identifier': identifier,
-                'limit': limit,
-                'count': count,
-                'retryAfterSeconds': retry_after,
-                'resetAt': reset_at,
-            },
         }
+        trace_id = get_trace_id()
+        if trace_id:
+            payload['traceId'] = trace_id
         body = json.dumps(payload, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
         headers: List[Tuple[bytes, bytes]] = [
             (b'content-type', b'application/problem+json; charset=utf-8'),
             (b'content-length', str(len(body)).encode('ascii')),
             (b'retry-after', str(retry_after).encode('ascii')),
-            (b'x-ratelimit-tier', tier.encode('latin-1')),
-            (b'x-ratelimit-limit', str(limit).encode('ascii')),
-            (b'x-ratelimit-remaining', b'0'),
-            (b'x-ratelimit-reset', str(reset_at).encode('ascii')),
+            (b'ratelimit-limit', str(limit).encode('ascii')),
+            (b'ratelimit-remaining', b'0'),
+            (b'ratelimit-reset', str(reset_at).encode('ascii')),
         ]
         if request_id:
             headers.append((b'x-request-id', request_id.encode('latin-1', errors='ignore')))
+        if trace_id:
+            headers.append((b'x-trace-id', trace_id.encode('latin-1', errors='ignore')))
         await send({'type': 'http.response.start', 'status': 429, 'headers': headers})
         await send({'type': 'http.response.body', 'body': body, 'more_body': False})
 

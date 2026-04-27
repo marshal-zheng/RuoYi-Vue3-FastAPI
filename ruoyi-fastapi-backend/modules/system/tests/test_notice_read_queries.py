@@ -26,7 +26,7 @@ class _NoticeServiceStub:
         self.list_called_with = (query, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'noticeId': 1,
                         'noticeTitle': '系统公告',
@@ -34,7 +34,7 @@ class _NoticeServiceStub:
                         'status': '0',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -66,7 +66,7 @@ async def test_notice_query_handlers_success() -> None:
 
     list_result = await list_handler.handle(
         GetNoticeListQuery(
-            query=NoticePageQueryModel(pageNum=1, pageSize=10),
+            query=NoticePageQueryModel(page=1, pageSize=10),
             is_page=True,
             operator='admin',
         )
@@ -74,9 +74,9 @@ async def test_notice_query_handlers_success() -> None:
     detail_result = await detail_handler.handle(GetNoticeDetailQuery(notice_id=1, operator='admin'))
 
     assert isinstance(list_result, NoticePageReadModel)
-    assert isinstance(list_result.rows[0], NoticeItemReadModel)
+    assert isinstance(list_result.items[0], NoticeItemReadModel)
     assert isinstance(detail_result, NoticeDetailReadModel)
-    assert list_result.rows[0].notice_title == '系统公告'
+    assert list_result.items[0].notice_title == '系统公告'
     assert detail_result.notice_id == 1
 
 
@@ -87,7 +87,7 @@ async def test_system_mediator_dispatches_notice_read_queries() -> None:
 
     list_result = await mediator.query(
         GetNoticeListQuery(
-            query=NoticePageQueryModel(pageNum=1, pageSize=10),
+            query=NoticePageQueryModel(page=1, pageSize=10),
             is_page=True,
         )
     )
@@ -95,4 +95,4 @@ async def test_system_mediator_dispatches_notice_read_queries() -> None:
 
     assert isinstance(list_result, NoticePageReadModel)
     assert isinstance(detail_result, NoticeDetailReadModel)
-    assert list_result.rows[0].notice_title == '系统公告'
+    assert list_result.items[0].notice_title == '系统公告'

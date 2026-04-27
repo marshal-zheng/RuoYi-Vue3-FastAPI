@@ -142,8 +142,8 @@ async def get_dev_menu_signature(
     runtime = _get_dev_menu_runtime(request)
     sync_state = runtime.state if runtime is not None else None
     synced_at = sync_state.last_sync_at.isoformat() if sync_state and sync_state.last_sync_at else None
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'signature': signature,
             'syncedAt': synced_at,
             'lastSyncStatus': _sync_state_status(sync_state),
@@ -160,8 +160,8 @@ async def get_dev_menu_status(
     runtime = _get_dev_menu_runtime(request)
     sync_state = runtime.state if runtime is not None else None
     modules_root_exists, manifest_count = _runtime_manifest_health(runtime)
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'enabled': True,
             'modulesRoot': str(runtime.modules_root) if runtime is not None else None,
             'modulesRootExists': modules_root_exists,
@@ -271,8 +271,8 @@ async def post_dev_menu_sync(
         report.applied_operations,
         report.skipped_reason,
     )
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'trigger': report.trigger,
             'dryRun': report.dry_run,
             'success': report.success,

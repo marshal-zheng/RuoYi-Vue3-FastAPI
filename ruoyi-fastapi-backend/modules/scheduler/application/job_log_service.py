@@ -29,7 +29,7 @@ class JobLogService:
         """
         if is_page:
             job_log_list_result = await self.job_log_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 job_name=query_object.job_name,
                 job_group=query_object.job_group,
@@ -47,8 +47,8 @@ class JobLogService:
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            if hasattr(job_log_list_result, 'rows'):
-                job_log_list_result = job_log_list_result.rows
+            if hasattr(job_log_list_result, 'items'):
+                job_log_list_result = job_log_list_result.items
 
         return job_log_list_result
 

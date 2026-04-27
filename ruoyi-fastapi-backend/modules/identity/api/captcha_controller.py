@@ -37,8 +37,6 @@ async def get_captcha_image(
     )
     logger.info(f'编号为{session_id}的会话获取图片验证码成功')
 
-    return ResponseUtil.success(
-        model_content=CaptchaCode(
-            captchaEnabled=captcha_enabled, registerEnabled=register_enabled, img=image, uuid=session_id
-        )
+    return ResponseUtil.ok_resource(
+        CaptchaCode(captchaEnabled=captcha_enabled, registerEnabled=register_enabled, img=image, uuid=session_id)
     )

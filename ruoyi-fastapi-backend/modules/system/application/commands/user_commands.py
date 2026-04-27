@@ -73,8 +73,8 @@ class ImportUsersCommand(_UserDbCommandContext):
     file: Any = Field(description='Uploaded file object')
     update_support: bool = Field(description='Whether to update existing users')
     current_user: CurrentUserModel = Field(description='Current login user context')
-    user_data_scope_sql: str = Field(description='User data-scope SQL')
-    dept_data_scope_sql: str = Field(description='Dept data-scope SQL')
+    user_data_scope_sql: Any = Field(description='User data-scope SQL')
+    dept_data_scope_sql: Any = Field(description='Dept data-scope SQL')
 
 
 class AssignUserRolesCommand(_UserDbCommandContext):

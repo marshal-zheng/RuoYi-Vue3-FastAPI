@@ -53,7 +53,7 @@ class DeviceService:
             bus_type=query.bus_type,
             device_type=query.device_type,
             category_id=query.device_category_id,
-            page=query.page_num,
+            page=query.page,
             page_size=query.page_size,
         )
 
@@ -89,7 +89,9 @@ class DeviceService:
             device_list.append(device_vo.model_dump(by_alias=True))
 
         return {
-            'rows': device_list,
+            'items': device_list,
+            'page': query.page,
+            'pageSize': query.page_size,
             'total': total,
         }
 
@@ -232,7 +234,7 @@ class DeviceService:
         if new_interfaces:
             await self.interface_repo.add_all(new_interfaces)
 
-        return CrudResponseModel(is_success=True, message='修改成功')
+        return CrudResponseModel(is_success=True, message='修改成功', result={'device_id': existing.device_id})
 
     @transactional()
     async def delete_device_services(self, device_ids: str):

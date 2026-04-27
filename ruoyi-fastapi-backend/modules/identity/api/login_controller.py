@@ -21,6 +21,7 @@ from modules.identity.application.services.login_service import (
     oauth2_scheme,
 )
 from ports import IUserService
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
@@ -190,14 +191,13 @@ async def login(
     if request_from_swagger or request_from_redoc:
         return {'access_token': access_token, 'token_type': 'Bearer'}
 
-    response = ResponseUtil.success(
-        message='登录成功',
-        dict_content={
+    response = ResponseUtil.ok_resource(
+        {
             'token': access_token,
             'expiresIn': SecurityConfig.security_jwt_max_expire_seconds,
             'refreshExpiresIn': SecurityConfig.security_refresh_expire_seconds,
             'csrfToken': csrf_token,
-        },
+        }
     )
     _set_auth_cookies(
         response,
@@ -268,14 +268,13 @@ async def refresh_session(request: Request):
     )
     csrf_token, csrf_ttl = await security_service.issue_csrf_token(user_id)
 
-    response = ResponseUtil.success(
-        message='刷新成功',
-        dict_content={
+    response = ResponseUtil.ok_resource(
+        {
             'token': access_token,
             'expiresIn': SecurityConfig.security_jwt_max_expire_seconds,
             'refreshExpiresIn': SecurityConfig.security_refresh_expire_seconds,
             'csrfToken': csrf_token,
-        },
+        }
     )
     _set_auth_cookies(
         response,
@@ -293,7 +292,7 @@ async def get_login_user_info(
     request: Request, current_user: CurrentUserModel = Depends(LoginService.get_current_user)
 ):
     logger.info('获取成功')
-    return ResponseUtil.success(model_content=current_user)
+    return ResponseUtil.ok_resource(current_user)
 
 
 @loginController.get('/getRouters')
@@ -304,19 +303,24 @@ async def get_login_user_routers(
 ):
     logger.info('获取成功')
     user_routers = await login_service.get_current_user_routers(current_user.user.user_id)
-    return ResponseUtil.success(data=user_routers)
+    return ResponseUtil.ok_resource(user_routers)
 
 
-@loginController.post('/register', response_model=CrudResponseModel)
+@loginController.post('/register')
 async def register_user(
     request: Request,
     user_register: UserRegister,
+    query_db: AsyncSession = Depends(get_db),
     login_service: LoginService = Depends(service_provider('login_service')),
     user_service: IUserService = Depends(service_provider('user_service')),
 ):
     user_register_result = await login_service.register_user_services(request, user_register, user_service)
     logger.info(user_register_result.message)
-    return ResponseUtil.success(data=user_register_result, message=user_register_result.message)
+    result_payload = user_register_result.result if isinstance(user_register_result.result, dict) else {}
+    user_id = require_int_value(result_payload, 'userId', 'user_id', contract_name='identity.register')
+    resource = await user_service.user_detail_services(query_db, user_id)
+    location = ResponseUtil.build_absolute_location(request, f'/system/user/{user_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @loginController.post('/auth/logout')
@@ -358,6 +362,6 @@ async def logout(
     else:
         logger.info('退出成功')
 
-    response = ResponseUtil.success(message='退出成功')
+    response = ResponseUtil.no_content()
     _clear_auth_cookies(response, request=request)
     return response

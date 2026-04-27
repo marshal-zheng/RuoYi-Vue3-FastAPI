@@ -23,7 +23,7 @@ async def get_monitor_cache_info(
     cache_info_query_result = await cache_service.get_cache_monitor_statistical_info_services(request)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=cache_info_query_result)
+    return ResponseUtil.ok_resource(cache_info_query_result)
 
 
 @cacheController.get(
@@ -39,7 +39,7 @@ async def get_monitor_cache_name(
     cache_name_list_result = await cache_service.get_cache_monitor_cache_name_services()
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=cache_name_list_result)
+    return ResponseUtil.ok_resource(cache_name_list_result)
 
 
 @cacheController.get(
@@ -56,7 +56,7 @@ async def get_monitor_cache_key(
     cache_key_list_result = await cache_service.get_cache_monitor_cache_key_services(request, cache_name)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=cache_key_list_result)
+    return ResponseUtil.ok_resource(cache_key_list_result)
 
 
 @cacheController.get(
@@ -74,7 +74,7 @@ async def get_monitor_cache_value(
     cache_value_list_result = await cache_service.get_cache_monitor_cache_value_services(request, cache_name, cache_key)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data=cache_value_list_result)
+    return ResponseUtil.ok_resource(cache_value_list_result)
 
 
 @cacheController.delete(
@@ -88,7 +88,7 @@ async def clear_monitor_cache_name(
     clear_cache_name_result = await cache_service.clear_cache_monitor_cache_name_services(request, cache_name)
     logger.info(clear_cache_name_result.message)
 
-    return ResponseUtil.success(message=clear_cache_name_result.message)
+    return ResponseUtil.no_content()
 
 
 @cacheController.delete(
@@ -102,7 +102,7 @@ async def clear_monitor_cache_key(
     clear_cache_key_result = await cache_service.clear_cache_monitor_cache_key_services(request, cache_key)
     logger.info(clear_cache_key_result.message)
 
-    return ResponseUtil.success(message=clear_cache_key_result.message)
+    return ResponseUtil.no_content()
 
 
 @cacheController.delete('/clearCacheAll', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))])
@@ -113,4 +113,4 @@ async def clear_monitor_cache_all(
     clear_cache_all_result = await cache_service.clear_cache_monitor_all_services(request)
     logger.info(clear_cache_all_result.message)
 
-    return ResponseUtil.success(message=clear_cache_all_result.message)
+    return ResponseUtil.no_content()

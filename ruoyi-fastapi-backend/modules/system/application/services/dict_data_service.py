@@ -43,7 +43,7 @@ class DictDataService:
         """
         if is_page:
             dict_data_list_result = await self.dict_data_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 dict_type=query_object.dict_type,
                 dict_label=query_object.dict_label,
@@ -57,8 +57,8 @@ class DictDataService:
                 dict_label=query_object.dict_label,
                 status=query_object.status,
             )
-            if hasattr(dict_data_list_result, 'rows'):
-                dict_data_list_result = dict_data_list_result.rows
+            if hasattr(dict_data_list_result, 'items'):
+                dict_data_list_result = dict_data_list_result.items
 
         return dict_data_list_result
 
@@ -159,13 +159,13 @@ class DictDataService:
             )
 
         db_dict_data = DictDataDO(**page_object.model_dump())
-        await self.dict_data_repo.add(db_dict_data)
+        add_result = await self.dict_data_repo.add(db_dict_data)
         dict_data_list = await self.query_dict_data_list_services(page_object.dict_type)
         await redis.set(
             f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}',
             json.dumps(CamelCaseUtil.transform_result(dict_data_list), ensure_ascii=False, default=str),
         )
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'dictCode': add_result.dict_code})
 
     @transactional()
     async def edit_dict_data_services(

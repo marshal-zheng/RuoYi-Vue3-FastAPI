@@ -27,8 +27,8 @@ class DictTypeItemReadModel(CamelModelBase):
 class DictTypePageReadModel(CamelModelBase):
     """Read model for paged dictionary-type list."""
 
-    rows: list[DictTypeItemReadModel] = Field(default_factory=list, description='Current page rows')
-    page_num: int | None = Field(default=None, description='Current page number')
+    items: list[DictTypeItemReadModel] = Field(default_factory=list, description='Current page items')
+    page: int | None = Field(default=None, description='Current page number')
     page_size: int | None = Field(default=None, description='Page size')
     total: int = Field(default=0, description='Total records')
     has_next: bool | None = Field(default=None, description='Whether next page exists')
@@ -60,8 +60,8 @@ class DictDataItemReadModel(CamelModelBase):
 class DictDataPageReadModel(CamelModelBase):
     """Read model for paged dictionary-data list."""
 
-    rows: list[DictDataItemReadModel] = Field(default_factory=list, description='Current page rows')
-    page_num: int | None = Field(default=None, description='Current page number')
+    items: list[DictDataItemReadModel] = Field(default_factory=list, description='Current page items')
+    page: int | None = Field(default=None, description='Current page number')
     page_size: int | None = Field(default=None, description='Page size')
     total: int = Field(default=0, description='Total records')
     has_next: bool | None = Field(default=None, description='Whether next page exists')

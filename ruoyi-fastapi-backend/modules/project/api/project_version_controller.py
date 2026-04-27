@@ -20,6 +20,7 @@ from module_admin.entity.vo.user_vo import CurrentUserModel
 from modules.project.application.services.project_version_service import ProjectVersionService
 from modules.project.application.services.project_topology_service import ProjectTopologyService
 from modules.identity.ports import get_current_user
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
@@ -30,6 +31,11 @@ projectVersionController = APIRouter(
     prefix='/project/version',
     dependencies=[Depends(get_current_user)]
 )
+
+
+async def _load_project_version_detail(version_id: int, project_version_service: ProjectVersionService):
+    detail_version_result = await project_version_service.project_version_detail_services(version_id)
+    return detail_version_result or {}
 
 
 @projectVersionController.get(
@@ -50,7 +56,7 @@ async def get_project_version_list(
     )
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=version_query_result)
+    return ResponseUtil.ok_resource(version_query_result)
 
 
 @projectVersionController.post(
@@ -74,7 +80,15 @@ async def add_project_version(
     add_version_result = await project_version_service.add_project_version_services(add_version)
     logger.info(add_version_result.message)
 
-    return ResponseUtil.success(message=add_version_result.message)
+    version_id = require_int_value(
+        add_version_result.result,
+        'versionId',
+        'version_id',
+        contract_name='project-version.create',
+    )
+    resource = await _load_project_version_detail(version_id, project_version_service)
+    location = ResponseUtil.build_absolute_location(request, f'/project/version/{version_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @projectVersionController.put(
@@ -96,7 +110,8 @@ async def edit_project_version(
     edit_version_result = await project_version_service.edit_project_version_services(edit_version)
     logger.info(edit_version_result.message)
 
-    return ResponseUtil.success(message=edit_version_result.message)
+    resource = await _load_project_version_detail(edit_version.version_id, project_version_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @projectVersionController.delete(
@@ -119,7 +134,7 @@ async def delete_project_version(
     delete_version_result = await project_version_service.delete_project_version_services(delete_version)
     logger.info(delete_version_result.message)
 
-    return ResponseUtil.success(message=delete_version_result.message)
+    return ResponseUtil.no_content()
 
 
 @projectVersionController.get(
@@ -138,7 +153,7 @@ async def query_detail_project_version(
     detail_version_result = await project_version_service.project_version_detail_services(version_id)
     logger.info(f'获取version_id为{version_id}的信息成功')
 
-    return ResponseUtil.success(data=detail_version_result)
+    return ResponseUtil.ok_resource(detail_version_result)
 
 
 @projectVersionController.post(
@@ -160,7 +175,15 @@ async def clone_project_version(
     clone_version_result = await project_version_service.clone_project_version_services(clone_version)
     logger.info(clone_version_result.message)
 
-    return ResponseUtil.success(message=clone_version_result.message)
+    version_id = require_int_value(
+        clone_version_result.result,
+        'versionId',
+        'version_id',
+        contract_name='project-version.clone',
+    )
+    resource = await _load_project_version_detail(version_id, project_version_service)
+    location = ResponseUtil.build_absolute_location(request, f'/project/version/{version_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @projectVersionController.put(
@@ -187,7 +210,8 @@ async def lock_project_version(
     lock_version_result = await project_version_service.lock_project_version_services(lock_version)
     logger.info(lock_version_result.message)
 
-    return ResponseUtil.success(message=lock_version_result.message)
+    resource = await _load_project_version_detail(lock_version.version_id, project_version_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @projectVersionController.put(
@@ -208,7 +232,15 @@ async def unlock_project_versions_by_project(
         project_id, current_user.user.user_name
     )
     logger.info(unlock_result.message)
-    return ResponseUtil.success(message=unlock_result.message)
+    return ResponseUtil.ok_resource(
+        unlock_result.result
+        or {
+            'projectId': project_id,
+            'status': 'unlocked',
+            'unlockedCount': None,
+            'unlockedVersionIds': [],
+        }
+    )
 
 
 @projectVersionController.post(

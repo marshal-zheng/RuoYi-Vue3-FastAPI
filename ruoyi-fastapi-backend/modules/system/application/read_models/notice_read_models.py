@@ -28,8 +28,8 @@ class NoticeItemReadModel(CamelModelBase):
 class NoticePageReadModel(CamelModelBase):
     """Read model for paged notice list."""
 
-    rows: list[NoticeItemReadModel] = Field(default_factory=list, description='Current page rows')
-    page_num: int | None = Field(default=None, description='Current page number')
+    items: list[NoticeItemReadModel] = Field(default_factory=list, description='Current page items')
+    page: int | None = Field(default=None, description='Current page number')
     page_size: int | None = Field(default=None, description='Page size')
     total: int = Field(default=0, description='Total records')
     has_next: bool | None = Field(default=None, description='Whether next page exists')

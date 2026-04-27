@@ -54,7 +54,7 @@ class EventHistoryFilters:
     event_type: str | None = None
     begin_time: datetime | None = None
     end_time: datetime | None = None
-    page_num: int = 1
+    page: int = 1
     page_size: int = 20
 
 
@@ -181,9 +181,9 @@ class EventHistoryRepository:
             base_stmt = base_stmt.where(and_(*conditions))
             count_stmt = count_stmt.where(and_(*conditions))
 
-        page_num = max(int(filters.page_num), 1)
+        page = max(int(filters.page), 1)
         page_size = max(min(int(filters.page_size), 200), 1)
-        offset = (page_num - 1) * page_size
+        offset = (page - 1) * page_size
 
         stmt = (
             base_stmt.order_by(EventHistoryDO.occurred_at.desc(), EventHistoryDO.id.desc())

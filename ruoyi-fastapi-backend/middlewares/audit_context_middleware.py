@@ -47,9 +47,10 @@ class AuditContextMiddleware(BaseHTTPMiddleware):
 
         client_ip = request.headers.get('X-Forwarded-For') or (request.client.host if request.client else '')
 
-        trace_id = TraceCtx.get_id()
-        if not trace_id:
-            trace_id = TraceCtx.set_id()
+        request_id = TraceCtx.get_request_id()
+        if not request_id:
+            request_id = TraceCtx.set_request_id()
+        trace_id = TraceCtx.get_trace_id() or request_id
 
         return {
             'user_id': user_id,
@@ -58,7 +59,7 @@ class AuditContextMiddleware(BaseHTTPMiddleware):
             'method': request.method,
             'path': request.url.path,
             'user_agent': request.headers.get('User-Agent', ''),
-            'request_id': trace_id,
+            'request_id': request_id,
             'trace_id': trace_id,
         }
 

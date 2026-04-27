@@ -21,12 +21,18 @@ from modules.scheduler.application.job_log_service import JobLogService
 from modules.scheduler.application.job_service import JobService
 from modules.identity.application.services.login_service import LoginService
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 
 
 jobController = APIRouter(prefix='/monitor', dependencies=[Depends(LoginService.get_current_user)])
+
+
+async def _load_job_detail(job_id: int, job_service: JobService):
+    job_detail_result = await job_service.job_detail_services(job_id)
+    return job_detail_result or {}
 
 
 @jobController.get(
@@ -42,7 +48,7 @@ async def get_system_job_list(
     notice_page_query_result = await job_service.get_job_list_services(job_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=notice_page_query_result)
+    return ResponseUtil.ok_resource(notice_page_query_result)
 
 
 @jobController.post('/job', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:add'))])
@@ -62,7 +68,10 @@ async def add_system_job(
     add_job_result = await job_service.add_job_services(add_job)
     logger.info(add_job_result.message)
 
-    return ResponseUtil.success(message=add_job_result.message)
+    job_id = require_int_value(add_job_result.result, 'jobId', 'job_id', contract_name='monitor.job.create')
+    resource = await _load_job_detail(job_id, job_service)
+    location = ResponseUtil.build_absolute_location(request, f'/monitor/job/{job_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @jobController.put('/job', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:edit'))])
@@ -80,7 +89,8 @@ async def edit_system_job(
     edit_job_result = await job_service.edit_job_services(edit_job)
     logger.info(edit_job_result.message)
 
-    return ResponseUtil.success(message=edit_job_result.message)
+    resource = await _load_job_detail(edit_job.job_id, job_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @jobController.put('/job/changeStatus', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:changeStatus'))])
@@ -102,7 +112,8 @@ async def change_system_job_status(
     edit_job_result = await job_service.edit_job_services(edit_job)
     logger.info(edit_job_result.message)
 
-    return ResponseUtil.success(message=edit_job_result.message)
+    resource = await _load_job_detail(change_job.job_id, job_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @jobController.put('/job/run', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:changeStatus'))])
@@ -116,7 +127,15 @@ async def execute_system_job(
     execute_job_result = await job_service.execute_job_once_services(execute_job)
     logger.info(execute_job_result.message)
 
-    return ResponseUtil.success(message=execute_job_result.message)
+    location = ResponseUtil.build_absolute_location(request, f'/monitor/jobLog/list?jobId={execute_job.job_id}')
+    return ResponseUtil.accepted_job(
+        {
+            'jobId': execute_job.job_id,
+            'jobGroup': execute_job.job_group,
+            'status': 'accepted',
+        },
+        location=location,
+    )
 
 
 @jobController.delete('/job/{job_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:remove'))])
@@ -131,7 +150,7 @@ async def delete_system_job(
     delete_job_result = await job_service.delete_job_services(delete_job)
     logger.info(delete_job_result.message)
 
-    return ResponseUtil.success(message=delete_job_result.message)
+    return ResponseUtil.no_content()
 
 
 @jobController.get(
@@ -146,7 +165,7 @@ async def query_detail_system_job(
     job_detail_result = await job_service.job_detail_services(job_id)
     logger.info(f'获取job_id为{job_id}的信息成功')
 
-    return ResponseUtil.success(data=job_detail_result)
+    return ResponseUtil.ok_resource(job_detail_result)
 
 
 @jobController.post('/job/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:export'))])
@@ -179,7 +198,7 @@ async def get_system_job_log_list(
     job_log_page_query_result = await job_log_service.get_job_log_list_services(job_log_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=job_log_page_query_result)
+    return ResponseUtil.ok_resource(job_log_page_query_result)
 
 
 @jobController.delete('/jobLog/clean', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:remove'))])
@@ -192,7 +211,7 @@ async def clear_system_job_log(
     clear_job_log_result = await job_log_service.clear_job_log_services()
     logger.info(clear_job_log_result.message)
 
-    return ResponseUtil.success(message=clear_job_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @jobController.delete('/jobLog/{job_log_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:remove'))])
@@ -207,7 +226,7 @@ async def delete_system_job_log(
     delete_job_log_result = await job_log_service.delete_job_log_services(delete_job_log)
     logger.info(delete_job_log_result.message)
 
-    return ResponseUtil.success(message=delete_job_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @jobController.post('/jobLog/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:export'))])

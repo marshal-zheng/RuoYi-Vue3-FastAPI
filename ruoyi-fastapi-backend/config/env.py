@@ -333,6 +333,8 @@ class ErrorHandlingSettings(BaseSettings):
 
     # 是否在响应中包含开发者消息（开发环境=true，生产环境=false）
     include_developer_message: bool = False
+    # RFC 9457 Problem type 绝对 URL 前缀
+    problem_type_base_url: str = 'http://localhost/problems'
     # 错误日志级别
     error_log_level: str = "ERROR"
     # 默认语言

@@ -30,7 +30,7 @@ class LoggerInitializer:
         trace_id = LoggerInitializer._resolve_trace_id() or ''
         extra = log_record.get('extra', {})
         extra.setdefault('trace_id', trace_id)
-        extra.setdefault('request_id', TraceCtx.get_id() or trace_id)
+        extra.setdefault('request_id', TraceCtx.get_request_id() or trace_id)
         log_record['extra'] = extra
 
     @staticmethod
@@ -47,7 +47,7 @@ class LoggerInitializer:
                     return trace_id
         except Exception:
             pass
-        return TraceCtx.get_id() or ''
+        return TraceCtx.get_trace_id() or TraceCtx.get_request_id() or ''
 
     def init_log(self):
         """

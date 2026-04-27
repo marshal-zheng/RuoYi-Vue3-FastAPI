@@ -15,13 +15,24 @@ from config.enums import BusinessType
 from config.env import AppConfig
 from config.error_codes import ErrorCode, ErrorType
 from container.wiring import get_app_container
-from exceptions.exception import LoginException, ServiceException, ServiceWarning, AppException
+from exceptions.exception import AppException, LoginException, ServiceException, ServiceWarning, SystemException
 from module_admin.entity.vo.log_vo import LogininforModel, OperLogModel
 from modules.identity.application.services.login_service import LoginService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
 DEFAULT_ERROR_MSG = '接口异常'
+
+
+def _problem_snapshot(request: Request, exc: AppException) -> JSONResponse:
+    return ResponseUtil.problem_details(
+        request=request,
+        http_status=exc.http_status,
+        title=exc.user_message,
+        detail=exc.user_message,
+        type_slug=exc.error_code_name,
+        error_code=exc.error_code,
+    )
 
 
 def _is_test_env() -> bool:
@@ -148,31 +159,35 @@ class Log:
             def _resolve_msg(msg: Optional[str], default: str = DEFAULT_ERROR_MSG) -> str:
                 return msg if msg else default
 
+            captured_exception: AppException | None = None
             try:
                 # 调用原始函数
                 result = await func(*args, **kwargs)
-            except AppException:
-                # 新异常体系：直接向上抛出，由全局异常处理器处理（RFC 7807）
-                raise
+            except AppException as exc:
+                captured_exception = exc
+                if exc.http_status >= 500:
+                    logger.error(exc.developer_message)
+                else:
+                    logger.warning(exc.developer_message)
+                result = _problem_snapshot(request, exc)
             except (LoginException, ServiceWarning) as e:
                 resolved_msg = _resolve_msg(e.message, default='操作警告')
                 logger.warning(resolved_msg)
-                result = ResponseUtil.failure(data=e.data, msg=resolved_msg)
+                captured_exception = e
+                result = _problem_snapshot(request, e)
             except ServiceException as e:
                 resolved_msg = _resolve_msg(e.message)
                 logger.error(resolved_msg)
-                result = ResponseUtil.error(data=e.data, msg=resolved_msg, code=getattr(e, 'code', None))
+                captured_exception = e
+                result = _problem_snapshot(request, e)
             except Exception as e:
                 logger.exception(e)
-                result = ResponseUtil.problem_details(
-                    request=request,
-                    error_code=ErrorCode.SYSTEM_ERROR,
+                captured_exception = SystemException(
                     user_message='系统繁忙，请稍后重试',
                     developer_message=f'Unhandled exception in log wrapper: {type(e).__name__}: {e}',
-                    http_status=500,
-                    error_type=ErrorType.SYSTEM,
-                    error_code_name='SYSTEM_ERROR',
+                    error_code=ErrorCode.SYSTEM_ERROR,
                 )
+                result = _problem_snapshot(request, captured_exception)
             # 获取请求耗时
             cost_time = float(time.time() - start_time) * 100
             # 判断请求是否来自api文档
@@ -193,19 +208,23 @@ class Log:
                 if request_from_swagger or request_from_redoc:
                     result_dict = {}
                 else:
-                    if result.status_code == 200:
-                        result_dict = {'code': result.status_code, 'message': '获取成功'}
-                    else:
-                        result_dict = {'code': result.status_code, 'message': '获取失败'}
+                    result_dict = {}
             json_result = json.dumps(result_dict, ensure_ascii=False)
             # 根据响应结果获取响应状态及异常信息
-            status = 1
+            response_status = int(getattr(result, 'status_code', 500) or 500)
+            status = 0 if 200 <= response_status < 300 else 1
             error_msg = ''
-            if result_dict.get('code') == 200:
-                status = 0
-            else:
-                error_msg = result_dict.get('msg')
+            if status != 0:
+                error_msg = (
+                    result_dict.get('detail')
+                    or result_dict.get('title')
+                    or result_dict.get('message')
+                    or result_dict.get('msg')
+                    or DEFAULT_ERROR_MSG
+                )
             if _is_test_env():
+                if captured_exception is not None:
+                    raise captured_exception
                 return result
             # 根据日志类型向对应的日志表插入数据
             if self.log_type == 'login':
@@ -218,7 +237,12 @@ class Log:
                     login_log['loginTime'] = oper_time
                     login_log['userName'] = user_name
                     login_log['status'] = str(status)
-                    login_log['msg'] = result_dict.get('msg')
+                    login_log['msg'] = (
+                        result_dict.get('detail')
+                        or result_dict.get('title')
+                        or result_dict.get('message')
+                        or result_dict.get('msg')
+                    )
 
                     if query_db:
                         login_log_service = _resolve_request_service(request, 'login_log_service', query_db)
@@ -272,6 +296,8 @@ class Log:
                 )
                 await operation_log_service.add_operation_log_services(operation_log)
 
+            if captured_exception is not None:
+                raise captured_exception
             return result
 
         return wrapper

@@ -45,7 +45,7 @@ class DictTypeService:
         """
         if is_page:
             dict_type_list_result = await self.dict_type_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 dict_name=query_object.dict_name,
                 dict_type=query_object.dict_type,
@@ -63,8 +63,8 @@ class DictTypeService:
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            if hasattr(dict_type_list_result, 'rows'):
-                dict_type_list_result = dict_type_list_result.rows
+            if hasattr(dict_type_list_result, 'items'):
+                dict_type_list_result = dict_type_list_result.items
 
         return dict_type_list_result
 
@@ -109,9 +109,9 @@ class DictTypeService:
             )
 
         db_dict_type = DictTypeDO(**page_object.model_dump())
-        await self.dict_type_repo.add(db_dict_type)
+        add_result = await self.dict_type_repo.add(db_dict_type)
         await redis.set(f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}', '')
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'dictId': add_result.dict_id})
 
     @transactional()
     async def edit_dict_type_services(

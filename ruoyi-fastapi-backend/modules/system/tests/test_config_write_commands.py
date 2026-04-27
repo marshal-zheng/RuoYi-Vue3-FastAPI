@@ -60,7 +60,7 @@ async def test_add_config_command_handler_success() -> None:
 
     assert result.success is True
     assert result.status == 'created'
-    assert result.data == {'message': '新增成功'}
+    assert result.data == {}
     assert result.metadata['operator'] == 'admin'
     assert config_service.add_called_with == (redis_client, config)
 
@@ -82,7 +82,7 @@ async def test_edit_config_command_handler_success() -> None:
 
     assert result.success is True
     assert result.status == 'updated'
-    assert result.data == {'message': '更新成功'}
+    assert result.data == {}
     assert config_service.edit_called_with == (redis_client, config)
 
 
@@ -103,7 +103,7 @@ async def test_delete_config_command_handler_success() -> None:
 
     assert result.success is True
     assert result.status == 'deleted'
-    assert result.data == {'message': '删除成功'}
+    assert result.data == {}
     assert config_service.delete_called_with == (redis_client, delete_config)
 
 
@@ -121,7 +121,13 @@ async def test_delete_config_command_handler_success() -> None:
         (
             EditConfigCommandHandler,
             lambda: EditConfigCommand(
-                config=ConfigModel(configId=1, configName='测试参数', configKey='test.key', configValue='2', configType='N'),
+                config=ConfigModel(
+                    configId=1,
+                    configName='测试参数',
+                    configKey='test.key',
+                    configValue='2',
+                    configType='N',
+                ),
                 redis_client=None,
             ),
         ),
@@ -155,7 +161,13 @@ async def test_system_mediator_dispatches_config_write_commands() -> None:
     )
     edit_result = await mediator.send(
         EditConfigCommand(
-            config=ConfigModel(configId=1, configName='测试参数', configKey='test.key', configValue='2', configType='N'),
+            config=ConfigModel(
+                configId=1,
+                configName='测试参数',
+                configKey='test.key',
+                configValue='2',
+                configType='N',
+            ),
             redis_client=redis_client,
         )
     )

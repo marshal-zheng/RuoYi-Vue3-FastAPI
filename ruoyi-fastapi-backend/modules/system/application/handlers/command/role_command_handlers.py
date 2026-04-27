@@ -15,6 +15,7 @@ from modules.system.application.commands.role_commands import (
     EditRoleCommand,
 )
 from modules.system.application.contracts import CommandResult, ICommandHandler
+from modules.system.application.handlers.command.result_data import command_result_data
 from modules.system.application.event_factory import build_system_event
 
 if TYPE_CHECKING:
@@ -52,7 +53,7 @@ class AddRoleCommandHandler(ICommandHandler[AddRoleCommand, dict[str, str]]):
         return CommandResult(
             success=create_result.is_success,
             status='created' if create_result.is_success else 'failed',
-            data={'message': create_result.message},
+            data=command_result_data(create_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -85,7 +86,7 @@ class EditRoleCommandHandler(ICommandHandler[EditRoleCommand, dict[str, str]]):
         return CommandResult(
             success=update_result.is_success,
             status='updated' if update_result.is_success else 'failed',
-            data={'message': update_result.message},
+            data=command_result_data(update_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -120,7 +121,7 @@ class AssignRoleDataScopeCommandHandler(ICommandHandler[AssignRoleDataScopeComma
         return CommandResult(
             success=grant_result.is_success,
             status='granted' if grant_result.is_success else 'failed',
-            data={'message': grant_result.message},
+            data=command_result_data(grant_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -150,7 +151,7 @@ class DeleteRoleCommandHandler(ICommandHandler[DeleteRoleCommand, dict[str, str]
         return CommandResult(
             success=delete_result.is_success,
             status='deleted' if delete_result.is_success else 'failed',
-            data={'message': delete_result.message},
+            data=command_result_data(delete_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -180,7 +181,7 @@ class ChangeRoleStatusCommandHandler(ICommandHandler[ChangeRoleStatusCommand, di
         return CommandResult(
             success=update_result.is_success,
             status='updated' if update_result.is_success else 'failed',
-            data={'message': update_result.message},
+            data=command_result_data(update_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -213,7 +214,7 @@ class AddRoleUserCommandHandler(ICommandHandler[AddRoleUserCommand, dict[str, st
         return CommandResult(
             success=grant_result.is_success,
             status='granted' if grant_result.is_success else 'failed',
-            data={'message': grant_result.message},
+            data=command_result_data(grant_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -241,7 +242,7 @@ class CancelRoleUserCommandHandler(ICommandHandler[CancelRoleUserCommand, dict[s
         return CommandResult(
             success=cancel_result.is_success,
             status='deleted' if cancel_result.is_success else 'failed',
-            data={'message': cancel_result.message},
+            data=command_result_data(cancel_result),
             events=(event,),
             metadata=_build_metadata(request),
         )

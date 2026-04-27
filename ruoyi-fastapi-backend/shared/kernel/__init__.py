@@ -1,10 +1,10 @@
 """Shared kernel exports."""
 
-from shared.kernel.response_models import ApiResponse, ErrorResponse, PageResponse, SuccessResponse
+from shared.kernel.response_models import ErrorResponse, PageResponse, ResourceResponse, SuccessResponse
 
 __all__ = [
-    'ApiResponse',
     'ErrorResponse',
     'PageResponse',
+    'ResourceResponse',
     'SuccessResponse',
 ]

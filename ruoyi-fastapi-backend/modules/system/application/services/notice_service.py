@@ -30,7 +30,7 @@ class NoticeService:
         """
         if is_page:
             notice_list_result = await self.notice_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 notice_title=query_object.notice_title,
                 create_by=query_object.create_by,
@@ -48,7 +48,7 @@ class NoticeService:
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            notice_list_result = notice_list_result.rows if hasattr(notice_list_result, 'rows') else notice_list_result
+            notice_list_result = notice_list_result.items if hasattr(notice_list_result, 'items') else notice_list_result
 
         return notice_list_result
 
@@ -84,8 +84,8 @@ class NoticeService:
             )
 
         db_notice = NoticeDO(**page_object.model_dump())
-        await self.notice_repo.add(db_notice)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        add_result = await self.notice_repo.add(db_notice)
+        return CrudResponseModel(is_success=True, message='新增成功', result={'noticeId': add_result.notice_id})
 
     @transactional()
     async def edit_notice_services(self, page_object: NoticeModel):

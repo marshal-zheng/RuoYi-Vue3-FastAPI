@@ -15,12 +15,24 @@ from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_generator.entity.vo.gen_vo import DeleteGenTableModel, EditGenTableModel, GenTablePageQueryModel
 from module_generator.service.gen_service import GenTableColumnService, GenTableService
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import extract_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 
 
 genController = APIRouter(prefix='/tool/gen', dependencies=[Depends(LoginService.get_current_user)])
+
+
+async def _load_gen_table_detail(
+    table_id: int,
+    gen_table_service: GenTableService,
+    gen_table_column_service: GenTableColumnService,
+):
+    gen_table = await gen_table_service.get_gen_table_by_id_services(table_id)
+    gen_tables = await gen_table_service.get_gen_table_all_services()
+    gen_columns = await gen_table_column_service.get_gen_table_column_list_by_table_id_services(table_id)
+    return dict(info=gen_table, columns=gen_columns, tables=gen_tables)
 
 
 @genController.get(
@@ -36,7 +48,7 @@ async def get_gen_table_list(
     gen_page_query_result = await gen_table_service.get_gen_table_list_services(gen_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=gen_page_query_result)
+    return ResponseUtil.ok_resource(gen_page_query_result)
 
 
 @genController.get(
@@ -52,7 +64,7 @@ async def get_gen_db_table_list(
     gen_page_query_result = await gen_table_service.get_gen_db_table_list_services(gen_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=gen_page_query_result)
+    return ResponseUtil.ok_resource(gen_page_query_result)
 
 
 @genController.post('/importTable', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:import'))])
@@ -69,7 +81,9 @@ async def import_gen_table(
     add_gen_table_result = await gen_table_service.import_gen_table_services(add_gen_table_list, current_user)
     logger.info(add_gen_table_result.message)
 
-    return ResponseUtil.success(message=add_gen_table_result.message)
+    return ResponseUtil.ok_resource(
+        add_gen_table_result.result or {'tableNames': table_names, 'importedCount': len(table_names)}
+    )
 
 
 @genController.put('', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:edit'))])
@@ -80,6 +94,7 @@ async def edit_gen_table(
     edit_gen_table: EditGenTableModel,
     query_db: AsyncSession = Depends(get_db),
     gen_table_service: GenTableService = Depends(service_provider('gen_table_service')),
+    gen_table_column_service: GenTableColumnService = Depends(service_provider('gen_table_column_service')),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
 ):
     edit_gen_table.update_by = current_user.user.user_name
@@ -88,7 +103,12 @@ async def edit_gen_table(
     edit_gen_result = await gen_table_service.edit_gen_table_services(edit_gen_table)
     logger.info(edit_gen_result.message)
 
-    return ResponseUtil.success(message=edit_gen_result.message)
+    detail = await _load_gen_table_detail(
+        edit_gen_table.table_id,
+        gen_table_service,
+        gen_table_column_service,
+    )
+    return ResponseUtil.ok_resource(detail)
 
 
 @genController.delete('/{table_ids}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:remove'))])
@@ -103,7 +123,7 @@ async def delete_gen_table(
     delete_gen_table_result = await gen_table_service.delete_gen_table_services(delete_gen_table)
     logger.info(delete_gen_table_result.message)
 
-    return ResponseUtil.success(message=delete_gen_table_result.message)
+    return ResponseUtil.no_content()
 
 
 @genController.post('/createTable', dependencies=[Depends(CheckRoleInterfaceAuth('admin'))])
@@ -118,7 +138,7 @@ async def create_table(
     create_table_result = await gen_table_service.create_table_services(sql, current_user)
     logger.info(create_table_result.message)
 
-    return ResponseUtil.success(message=create_table_result.message)
+    return ResponseUtil.ok_resource(create_table_result.result or {'tableNames': [], 'createdCount': 0})
 
 
 @genController.get('/batchGenCode', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:code'))])
@@ -155,7 +175,7 @@ async def gen_code_local(
     gen_code_local_result = await gen_table_service.generate_code_services(table_name)
     logger.info(gen_code_local_result.message)
 
-    return ResponseUtil.success(message=gen_code_local_result.message)
+    return ResponseUtil.ok_resource(gen_code_local_result.result or {'tableName': table_name, 'status': 'generated'})
 
 
 @genController.get('/{table_id}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:query'))])
@@ -166,13 +186,14 @@ async def query_detail_gen_table(
     gen_table_service: GenTableService = Depends(service_provider('gen_table_service')),
     gen_table_column_service: GenTableColumnService = Depends(service_provider('gen_table_column_service')),
 ):
-    gen_table = await gen_table_service.get_gen_table_by_id_services(table_id)
-    gen_tables = await gen_table_service.get_gen_table_all_services()
-    gen_columns = await gen_table_column_service.get_gen_table_column_list_by_table_id_services(table_id)
-    gen_table_detail_result = dict(info=gen_table, rows=gen_columns, tables=gen_tables)
+    gen_table_detail_result = await _load_gen_table_detail(
+        table_id,
+        gen_table_service,
+        gen_table_column_service,
+    )
     logger.info(f'获取table_id为{table_id}的信息成功')
 
-    return ResponseUtil.success(data=gen_table_detail_result)
+    return ResponseUtil.ok_resource(gen_table_detail_result)
 
 
 @genController.get('/preview/{table_id}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:preview'))])
@@ -185,7 +206,7 @@ async def preview_code(
     preview_code_result = await gen_table_service.preview_code_services(table_id)
     logger.info('获取预览代码成功')
 
-    return ResponseUtil.success(data=preview_code_result)
+    return ResponseUtil.ok_resource(preview_code_result)
 
 
 @genController.get('/synchDb/{table_name}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:edit'))])
@@ -195,8 +216,18 @@ async def sync_db(
     table_name: str,
     query_db: AsyncSession = Depends(get_db),
     gen_table_service: GenTableService = Depends(service_provider('gen_table_service')),
+    gen_table_column_service: GenTableColumnService = Depends(service_provider('gen_table_column_service')),
 ):
     sync_db_result = await gen_table_service.sync_db_services(table_name)
     logger.info(sync_db_result.message)
 
-    return ResponseUtil.success(data=sync_db_result.message)
+    table_id = extract_int_value(sync_db_result.result, 'tableId', 'table_id')
+    if table_id is None:
+        return ResponseUtil.ok_resource({'tableName': table_name, 'status': 'synced'})
+
+    detail = await _load_gen_table_detail(
+        table_id,
+        gen_table_service,
+        gen_table_column_service,
+    )
+    return ResponseUtil.ok_resource(detail)

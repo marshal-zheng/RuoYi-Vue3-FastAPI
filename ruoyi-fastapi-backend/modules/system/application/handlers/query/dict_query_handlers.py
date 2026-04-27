@@ -57,21 +57,21 @@ class GetDictTypeListQueryHandler(IQueryHandler[GetDictTypeListQuery, DictTypePa
         list_result = await self._dict_type_service.get_dict_type_list_services(request.query, is_page=request.is_page)
 
         if request.is_page:
-            rows = [_to_dict_type_item(row) for row in list_result.rows]
+            items = [_to_dict_type_item(row) for row in list_result.items]
             return DictTypePageReadModel(
-                rows=rows,
-                page_num=list_result.page_num,
+                items=items,
+                page=list_result.page,
                 page_size=list_result.page_size,
                 total=list_result.total,
                 has_next=list_result.has_next,
             )
 
-        rows = [_to_dict_type_item(row) for row in list_result]
+        items = [_to_dict_type_item(row) for row in list_result]
         return DictTypePageReadModel(
-            rows=rows,
-            page_num=1,
-            page_size=len(rows),
-            total=len(rows),
+            items=items,
+            page=1,
+            page_size=len(items),
+            total=len(items),
             has_next=False,
         )
 
@@ -139,21 +139,21 @@ class GetDictDataListQueryHandler(IQueryHandler[GetDictDataListQuery, DictDataPa
         list_result = await self._dict_data_service.get_dict_data_list_services(request.query, is_page=request.is_page)
 
         if request.is_page:
-            rows = [_to_dict_data_item(row) for row in list_result.rows]
+            items = [_to_dict_data_item(row) for row in list_result.items]
             return DictDataPageReadModel(
-                rows=rows,
-                page_num=list_result.page_num,
+                items=items,
+                page=list_result.page,
                 page_size=list_result.page_size,
                 total=list_result.total,
                 has_next=list_result.has_next,
             )
 
-        rows = [_to_dict_data_item(row) for row in list_result]
+        items = [_to_dict_data_item(row) for row in list_result]
         return DictDataPageReadModel(
-            rows=rows,
-            page_num=1,
-            page_size=len(rows),
-            total=len(rows),
+            items=items,
+            page=1,
+            page_size=len(items),
+            total=len(items),
             has_next=False,
         )
 

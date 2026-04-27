@@ -60,7 +60,7 @@ class PostPageQueryModel(PostQueryModel):
     岗位管理分页查询模型
     """
 
-    page_num: int = Field(default=1, description='当前页码')
+    page: int = Field(default=1, description='当前页码')
     page_size: int = Field(default=10, description='每页记录数')
 
 

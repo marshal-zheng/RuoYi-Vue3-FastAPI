@@ -38,7 +38,7 @@ class OperationLogService:
         """
         if is_page:
             operation_log_list_result = await self.oper_log_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 title=query_object.title,
                 oper_name=query_object.oper_name,
@@ -62,8 +62,8 @@ class OperationLogService:
                 order_by_column=query_object.order_by_column,
                 is_asc=query_object.is_asc,
             )
-            if hasattr(operation_log_list_result, 'rows'):
-                operation_log_list_result = operation_log_list_result.rows
+            if hasattr(operation_log_list_result, 'items'):
+                operation_log_list_result = operation_log_list_result.items
 
         return operation_log_list_result
 
@@ -178,7 +178,7 @@ class LoginLogService:
         """
         if is_page:
             operation_log_list_result = await self.login_log_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 ipaddr=query_object.ipaddr,
                 user_name=query_object.user_name,
@@ -200,8 +200,8 @@ class LoginLogService:
                 order_by_column=query_object.order_by_column,
                 is_asc=query_object.is_asc,
             )
-            if hasattr(operation_log_list_result, 'rows'):
-                operation_log_list_result = operation_log_list_result.rows
+            if hasattr(operation_log_list_result, 'items'):
+                operation_log_list_result = operation_log_list_result.items
 
         return operation_log_list_result
 

@@ -200,9 +200,9 @@ class MenuService:
             )
 
         db_menu = MenuDO(**page_object.model_dump())
-        await self.menu_repo.add(db_menu)
+        add_result = await self.menu_repo.add(db_menu)
         await self._invalidate_menu_cache()
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'menuId': add_result.menu_id})
 
     @transactional()
     async def edit_menu_services(self, page_object: MenuModel):

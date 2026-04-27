@@ -36,7 +36,7 @@ class JobService:
         """
         if is_page:
             job_list_result = await self.job_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 job_name=query_object.job_name,
                 job_group=query_object.job_group,
@@ -50,7 +50,7 @@ class JobService:
                 job_group=query_object.job_group,
                 status=query_object.status,
             )
-            job_list_result = job_list_result.rows if hasattr(job_list_result, 'rows') else job_list_result
+            job_list_result = job_list_result.items if hasattr(job_list_result, 'items') else job_list_result
 
         return job_list_result
 
@@ -134,7 +134,7 @@ class JobService:
         job_info = await self.job_detail_services(add_job.job_id)
         if job_info.status == JobStatusEnum.NORMAL.value:
             SchedulerUtil.add_scheduler_job(job_info=job_info)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'jobId': add_job.job_id})
 
     @transactional()
     async def edit_job_services(self, page_object: EditJobModel):
@@ -206,7 +206,7 @@ class JobService:
         if edit_job.get('status') == JobStatusEnum.NORMAL.value:
             job_info = await self.job_detail_services(edit_job.get('job_id'))
             SchedulerUtil.add_scheduler_job(job_info=job_info)
-        return CrudResponseModel(is_success=True, message='更新成功')
+        return CrudResponseModel(is_success=True, message='更新成功', result={'jobId': page_object.job_id})
 
     async def execute_job_once_services(self, page_object: JobModel):
         """

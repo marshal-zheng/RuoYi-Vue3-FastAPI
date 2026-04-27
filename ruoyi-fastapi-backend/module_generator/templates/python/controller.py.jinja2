@@ -18,7 +18,6 @@ from {{ packageName }}.service.{{ businessName }}_service import {{ BusinessName
 from {{ packageName }}.entity.vo.{{ businessName }}_vo import Delete{{ BusinessName }}Model, {{ BusinessName }}Model, {{ BusinessName }}PageQueryModel
 from utils.common_util import bytes2file_response
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 
 
@@ -26,7 +25,7 @@ from utils.response_util import ResponseUtil
 
 
 @{{ businessName }}Controller.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
+    '/list', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
 )
 async def get_{{ moduleName }}_{{ businessName }}_list(
     request: Request,
@@ -38,12 +37,17 @@ async def get_{{ moduleName }}_{{ businessName }}_list(
     {{ businessName }}_page_query_result = await {{ BusinessName }}Service.get_{{ businessName }}_list_services(query_db, {{ businessName }}_page_query, is_page=True)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content={{ businessName }}_page_query_result)
+    return ResponseUtil.ok_page(
+        items={{ businessName }}_page_query_result.items,
+        total={{ businessName }}_page_query_result.total,
+        page={{ businessName }}_page_query_result.page,
+        page_size={{ businessName }}_page_query_result.page_size,
+    )
     {% elif table.tree %}
     {{ businessName }}_query_result = await {{ BusinessName }}Service.get_{{ businessName }}_list_services(query_db, {{ businessName }}_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(data={{ businessName }}_query_result)
+    return ResponseUtil.ok_collection(items={{ businessName }}_query_result)
     {% endif %}
 
 
@@ -68,9 +72,17 @@ async def add_{{ moduleName }}_{{ businessName }}(
     {% endif %}
     {% endfor %}
     add_{{ businessName }}_result = await {{ BusinessName }}Service.add_{{ businessName }}_services(query_db, add_{{ businessName }})
-    logger.info(add_{{ businessName }}_result.message)
+    logger.info('新增成功')
 
-    return ResponseUtil.success(msg=add_{{ businessName }}_result.message)
+    return ResponseUtil.created_resource(
+        add_{{ businessName }}_result,
+        location=str(
+            request.url_for(
+                'query_detail_{{ moduleName }}_{{ businessName }}',
+                {{ pk_field }}=getattr(add_{{ businessName }}_result, '{{ pk_field }}'),
+            )
+        ),
+    )
 
 
 @{{ businessName }}Controller.put('', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:edit'))])
@@ -85,19 +97,19 @@ async def edit_{{ moduleName }}_{{ businessName }}(
     edit_{{ businessName }}.update_by = current_user.user.user_name
     edit_{{ businessName }}.update_time = datetime.now()
     edit_{{ businessName }}_result = await {{ BusinessName }}Service.edit_{{ businessName }}_services(query_db, edit_{{ businessName }})
-    logger.info(edit_{{ businessName }}_result.message)
+    logger.info('更新成功')
 
-    return ResponseUtil.success(msg=edit_{{ businessName }}_result.message)
+    return ResponseUtil.ok_resource(edit_{{ businessName }}_result)
 
 
 @{{ businessName }}Controller.delete('/{% raw %}{{% endraw %}{{ pk_field }}s{% raw %}}{% endraw %}', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:remove'))])
 @Log(title='{{ functionName }}', business_type=BusinessType.DELETE)
 async def delete_{{ moduleName }}_{{ businessName }}(request: Request, {{ pk_field }}s: str, query_db: AsyncSession = Depends(get_db)):
     delete_{{ businessName }} = Delete{{ BusinessName }}Model({{ pkField }}s={{ pk_field }}s)
-    delete_{{ businessName }}_result = await {{ BusinessName }}Service.delete_{{ businessName }}_services(query_db, delete_{{ businessName }})
-    logger.info(delete_{{ businessName }}_result.message)
+    await {{ BusinessName }}Service.delete_{{ businessName }}_services(query_db, delete_{{ businessName }})
+    logger.info('删除成功')
 
-    return ResponseUtil.success(msg=delete_{{ businessName }}_result.message)
+    return ResponseUtil.no_content()
 
 
 @{{ businessName }}Controller.get(
@@ -107,7 +119,7 @@ async def query_detail_{{ moduleName }}_{{ businessName }}(request: Request, {{ 
     {{ businessName }}_detail_result = await {{ BusinessName }}Service.{{ businessName }}_detail_services(query_db, {{ pk_field }})
     logger.info(f'获取{{ pk_field }}为{% raw %}{{% endraw %}{{ pk_field }}{% raw %}}{% endraw %}的信息成功')
 
-    return ResponseUtil.success(data={{ businessName }}_detail_result)
+    return ResponseUtil.ok_resource({{ businessName }}_detail_result)
 
 
 @{{ businessName }}Controller.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:export'))])

@@ -39,7 +39,7 @@ class ConfigService:
         """
         if is_page:
             config_list_result = await self.config_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 config_name=query_object.config_name,
                 config_key=query_object.config_key,
@@ -57,7 +57,7 @@ class ConfigService:
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            config_list_result = config_list_result.rows if hasattr(config_list_result, 'rows') else config_list_result
+            config_list_result = config_list_result.items if hasattr(config_list_result, 'items') else config_list_result
 
         return config_list_result
 
@@ -74,7 +74,7 @@ class ConfigService:
         if keys:
             await redis.delete(*keys)
         config_all_result = await self.config_repo.paginate_with_filters(page=1, page_size=10000)
-        config_all = config_all_result.rows if hasattr(config_all_result, 'rows') else config_all_result
+        config_all = config_all_result.items if hasattr(config_all_result, 'items') else config_all_result
         for config_obj in config_all:
             await redis.set(
                 f'{RedisInitKeyConfig.SYS_CONFIG.key}:{config_obj.get("configKey")}',
@@ -123,9 +123,9 @@ class ConfigService:
             )
 
         db_config = ConfigDO(**page_object.model_dump())
-        await self.config_repo.add(db_config)
+        add_result = await self.config_repo.add(db_config)
         await redis.set(f'{RedisInitKeyConfig.SYS_CONFIG.key}:{page_object.config_key}', page_object.config_value)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'configId': add_result.config_id})
 
     @transactional()
     async def edit_config_services(self, redis: IRedisClient, page_object: ConfigModel):

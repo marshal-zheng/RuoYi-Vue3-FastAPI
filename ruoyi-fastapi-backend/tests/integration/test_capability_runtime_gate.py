@@ -39,7 +39,7 @@ class _FakeProjectService:
         return {'projectId': project_id, 'projectName': 'demo'}
 
     async def get_project_list(self, project_page_query, is_page: bool = True):
-        return {'rows': [], 'total': 0, 'pageNum': 1, 'pageSize': 10}
+        return {'items': [], 'total': 0, 'page': 1, 'pageSize': 10}
 
 
 def _build_admin_user() -> CurrentUserModel:
@@ -112,7 +112,7 @@ def test_get_routers_contract_stays_unchanged_when_module_menus_are_absent():
         response = client.get('/getRouters')
 
     assert response.status_code == 200
-    assert response.json()['data'] is None
+    assert response.json() == {'items': []}
 
 
 def test_platform_api_returns_forbidden_when_gate_disabled():

@@ -22,7 +22,8 @@ export function add{{ BusinessName }}(data) {
   return request({
     url: '/{{ moduleName }}/{{ businessName }}',
     method: 'post',
-    data: data
+    data: data,
+    feedback: { mode: 'auto', key: '{{ moduleName }}.{{ businessName }}.create' }
   })
 }
 
@@ -31,7 +32,8 @@ export function update{{ BusinessName }}(data) {
   return request({
     url: '/{{ moduleName }}/{{ businessName }}',
     method: 'put',
-    data: data
+    data: data,
+    feedback: { mode: 'auto', key: '{{ moduleName }}.{{ businessName }}.update' }
   })
 }
 
@@ -39,6 +41,7 @@ export function update{{ BusinessName }}(data) {
 export function del{{ BusinessName }}({{ pkColumn.python_field }}) {
   return request({
     url: '/{{ moduleName }}/{{ businessName }}/' + {{ pkColumn.python_field }},
-    method: 'delete'
+    method: 'delete',
+    feedback: { mode: 'auto', key: '{{ moduleName }}.{{ businessName }}.delete' }
   })
 }

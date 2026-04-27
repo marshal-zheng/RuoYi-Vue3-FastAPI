@@ -36,7 +36,7 @@ class AuditLogService:
         audit_repo = self._audit_repo(query_db)
         if is_page:
             audit_log_list_result = await audit_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 table_name=query_object.table_name,
                 action=query_object.action,
@@ -60,8 +60,8 @@ class AuditLogService:
                 order_by_column=query_object.order_by_column,
                 is_asc=query_object.is_asc,
             )
-            if hasattr(audit_log_list_result, 'rows'):
-                audit_log_list_result = audit_log_list_result.rows
+            if hasattr(audit_log_list_result, 'items'):
+                audit_log_list_result = audit_log_list_result.items
 
         return audit_log_list_result
 

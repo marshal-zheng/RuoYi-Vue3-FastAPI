@@ -373,18 +373,18 @@ class ProtocolService:
         """
         if is_page:
             protocol_list_result = await self.protocol_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 protocol_name=query_object.protocol_name,
                 protocol_type=query_object.protocol_type,
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            rows = CamelCaseUtil.transform_result(protocol_list_result.rows)
-            for row in rows:
+            items = CamelCaseUtil.transform_result(protocol_list_result.items)
+            for row in items:
                 if isinstance(row, dict) and 'protocolConfig' in row:
                     row['protocolConfig'] = self.__normalize_protocol_config_for_frontend(row.get('protocolConfig'))
-            return PageResponseModel(**{**protocol_list_result.model_dump(), 'rows': rows})
+            return PageResponseModel(**{**protocol_list_result.model_dump(), 'items': items})
         else:
             protocol_list_result = await self.protocol_repo.find_all_active()
             return CamelCaseUtil.transform_result(protocol_list_result)
@@ -413,8 +413,8 @@ class ProtocolService:
             page_object.update_time = now
 
         db_protocol = ProtocolDO(**page_object.model_dump())
-        await self.protocol_repo.add(db_protocol)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        add_result = await self.protocol_repo.add(db_protocol)
+        return CrudResponseModel(is_success=True, message='新增成功', result={'protocolId': add_result.protocol_id})
 
     @transactional()
     async def edit_protocol_services(
@@ -439,7 +439,7 @@ class ProtocolService:
                 if hasattr(protocol, key) and value is not None:
                     setattr(protocol, key, value)
             await self.protocol_repo.update(protocol)
-        return CrudResponseModel(is_success=True, message='更新成功')
+        return CrudResponseModel(is_success=True, message='更新成功', result={'protocolId': protocol.protocol_id})
 
     @transactional()
     async def delete_protocol_services(
@@ -1212,10 +1212,16 @@ class ProtocolService:
 
         # 保存协议
         db_protocol = ProtocolDO(**protocol_model.model_dump())
-        await self.protocol_repo.add(db_protocol)
+        created_protocol = await self.protocol_repo.add(db_protocol)
 
         return CrudResponseModel(
-            is_success=True, message='导入成功', result={'protocolName': protocol_name, 'protocolType': normalized_type}
+            is_success=True,
+            message='导入成功',
+            result={
+                'protocolId': created_protocol.protocol_id,
+                'protocolName': protocol_name,
+                'protocolType': normalized_type,
+            },
         )
 
     async def import_protocol_batch_services(self, files: List[UploadFile], operator: str) -> ImportResult:

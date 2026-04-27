@@ -8,6 +8,11 @@ from typing import Type, TypeVar
 BaseModelVar = TypeVar('BaseModelVar', bound=BaseModel)
 
 
+def _resolve_public_param_name(field_name: str, model_field: FieldInfo) -> str:
+    """Expose model field aliases without accepting legacy pagination names."""
+    return model_field.alias or field_name
+
+
 def as_query(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
     """
     pydantic模型查询参数装饰器，将pydantic模型用于接收查询参数
@@ -16,7 +21,7 @@ def as_query(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
 
     for field_name, model_field in cls.model_fields.items():
         model_field: FieldInfo  # type: ignore
-        param_name = model_field.alias or field_name
+        param_name = _resolve_public_param_name(field_name, model_field)
 
         if not model_field.is_required():
             new_parameters.append(
@@ -55,7 +60,7 @@ def as_form(cls: Type[BaseModelVar]) -> Type[BaseModelVar]:
 
     for field_name, model_field in cls.model_fields.items():
         model_field: FieldInfo  # type: ignore
-        param_name = model_field.alias or field_name
+        param_name = _resolve_public_param_name(field_name, model_field)
 
         if not model_field.is_required():
             new_parameters.append(

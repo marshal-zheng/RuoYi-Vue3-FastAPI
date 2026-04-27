@@ -112,9 +112,9 @@ class OperLogRepository(BaseRepository[OperLogDO]):
         
         Returns:
             {
-                'rows': [...],
-                'next_cursor': int | None,
-                'has_more': bool
+                'items': [...],
+                'nextCursor': int | None,
+                'pageSize': int
             }
         """
         conditions = []
@@ -146,21 +146,20 @@ class OperLogRepository(BaseRepository[OperLogDO]):
         ).order_by(desc(OperLogDO.oper_id)).limit(page_size + 1)
         
         result = await self.db.execute(query)
-        rows = result.scalars().all()
-        
+        items = result.scalars().all()
+
         # 判断是否有下一页
-        has_more = len(rows) > page_size
+        has_more = len(items) > page_size
         if has_more:
-            rows = rows[:page_size]
-        
+            items = items[:page_size]
+
         # 计算下一个游标
-        next_cursor = rows[-1].oper_id if rows else None
-        
+        next_cursor = items[-1].oper_id if items else None
+
         return {
-            'rows': CamelCaseUtil.transform_result(rows),
-            'next_cursor': next_cursor,
-            'has_more': has_more,
-            'page_size': page_size
+            'items': CamelCaseUtil.transform_result(items),
+            'nextCursor': next_cursor,
+            'pageSize': page_size,
         }
 
 
@@ -255,9 +254,9 @@ class LoginLogRepository(BaseRepository[LogininforDO]):
         
         Returns:
             {
-                'rows': [...],
-                'next_cursor': int | None,
-                'has_more': bool
+                'items': [...],
+                'nextCursor': int | None,
+                'pageSize': int
             }
         """
         conditions = []
@@ -287,19 +286,18 @@ class LoginLogRepository(BaseRepository[LogininforDO]):
         ).order_by(desc(LogininforDO.info_id)).limit(page_size + 1)
         
         result = await self.db.execute(query)
-        rows = result.scalars().all()
-        
+        items = result.scalars().all()
+
         # 判断是否有下一页
-        has_more = len(rows) > page_size
+        has_more = len(items) > page_size
         if has_more:
-            rows = rows[:page_size]
-        
+            items = items[:page_size]
+
         # 计算下一个游标
-        next_cursor = rows[-1].info_id if rows else None
-        
+        next_cursor = items[-1].info_id if items else None
+
         return {
-            'rows': CamelCaseUtil.transform_result(rows),
-            'next_cursor': next_cursor,
-            'has_more': has_more,
-            'page_size': page_size
+            'items': CamelCaseUtil.transform_result(items),
+            'nextCursor': next_cursor,
+            'pageSize': page_size,
         }

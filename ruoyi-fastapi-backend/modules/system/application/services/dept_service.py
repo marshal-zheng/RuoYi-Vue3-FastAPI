@@ -177,9 +177,9 @@ class DeptService:
             )
         page_object.ancestors = f'{parent_info.ancestors},{page_object.parent_id}'
         db_dept = DeptDO(**page_object.model_dump())
-        await self.dept_repo.add(db_dept)
+        add_result = await self.dept_repo.add(db_dept)
         await self._invalidate_dept_cache()
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'deptId': add_result.dept_id})
 
     @transactional()
     async def edit_dept_services(self, page_object: DeptModel):

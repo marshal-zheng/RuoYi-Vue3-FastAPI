@@ -27,7 +27,7 @@ class ProjectReadSideProjectionHandler:
         async with self._container.create_task_session() as task_session:
             project_service: IProjectService = self._container.resolve_service('project_service', task_session)
             project_result = await project_service.get_project_list_services(
-                ProjectPageQueryModel(pageNum=1, pageSize=1),
+                ProjectPageQueryModel(page=1, pageSize=1),
                 is_page=True,
             )
             project_total = int(getattr(project_result, 'total', 0) or 0)

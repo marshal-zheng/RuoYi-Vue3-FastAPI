@@ -41,7 +41,7 @@ async def get_system_operation_log_list(
     )
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=operation_log_page_query_result)
+    return ResponseUtil.ok_resource(operation_log_page_query_result)
 
 
 @logController.delete('/operlog/clean', dependencies=[Depends(CheckUserInterfaceAuth('monitor:operlog:remove'))])
@@ -54,7 +54,7 @@ async def clear_system_operation_log(
     clear_operation_log_result = await operation_log_service.clear_operation_log_services()
     logger.info(clear_operation_log_result.message)
 
-    return ResponseUtil.success(message=clear_operation_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @logController.delete('/operlog/{oper_ids}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:operlog:remove'))])
@@ -69,7 +69,7 @@ async def delete_system_operation_log(
     delete_operation_log_result = await operation_log_service.delete_operation_log_services(delete_operation_log)
     logger.info(delete_operation_log_result.message)
 
-    return ResponseUtil.success(message=delete_operation_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @logController.post('/operlog/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:operlog:export'))])
@@ -110,7 +110,7 @@ async def get_system_login_log_list(
     )
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=login_log_page_query_result)
+    return ResponseUtil.ok_resource(login_log_page_query_result)
 
 
 @logController.delete('/logininfor/clean', dependencies=[Depends(CheckUserInterfaceAuth('monitor:logininfor:remove'))])
@@ -123,7 +123,7 @@ async def clear_system_login_log(
     clear_login_log_result = await login_log_service.clear_login_log_services()
     logger.info(clear_login_log_result.message)
 
-    return ResponseUtil.success(message=clear_login_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @logController.delete(
@@ -140,7 +140,7 @@ async def delete_system_login_log(
     delete_login_log_result = await login_log_service.delete_login_log_services(delete_login_log)
     logger.info(delete_login_log_result.message)
 
-    return ResponseUtil.success(message=delete_login_log_result.message)
+    return ResponseUtil.no_content()
 
 
 @logController.get(
@@ -157,7 +157,7 @@ async def unlock_system_user(
     unlock_user_result = await login_log_service.unlock_user_services(request, unlock_user)
     logger.info(unlock_user_result.message)
 
-    return ResponseUtil.success(message=unlock_user_result.message)
+    return ResponseUtil.no_content()
 
 
 @logController.post('/logininfor/export', dependencies=[Depends(CheckUserInterfaceAuth('monitor:logininfor:export'))])

@@ -18,7 +18,6 @@ from module_admin.entity.vo.project_version_vo import (
     LockProjectVersionModel,
 )
 from utils.common_util import CamelCaseUtil
-from utils.page_util import PageResponseModel
 from utils.transaction_manager import transactional
 from ports import IProjectTopologyRepository, IProjectVersionRepository
 
@@ -46,17 +45,14 @@ class ProjectVersionService:
         :return: 版本列表信息对象
         """
         if is_page:
-            version_list_result = await self.version_repo.paginate_with_filters(
-                page=query_object.page_num,
+            return await self.version_repo.paginate_with_filters(
+                page=query_object.page,
                 page_size=query_object.page_size,
                 project_id=query_object.project_id,
                 version_name=query_object.version_name,
                 version_number=query_object.version_number,
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
-            )
-            return PageResponseModel(
-                **{**version_list_result.model_dump(), 'rows': CamelCaseUtil.transform_result(version_list_result.rows)}
             )
         else:
             version_list_result = await self.version_repo.find_by_project(query_object.project_id)
@@ -78,8 +74,8 @@ class ProjectVersionService:
             )
 
         db_version = ProjectVersionDO(**page_object.model_dump())
-        await self.version_repo.add(db_version)
-        return CrudResponseModel(is_success=True, message='新增成功')
+        add_result = await self.version_repo.add(db_version)
+        return CrudResponseModel(is_success=True, message='新增成功', result={'versionId': add_result.version_id})
 
     @transactional()
     async def edit_project_version_services(self, page_object: ProjectVersionModel):
@@ -218,7 +214,7 @@ class ProjectVersionService:
                 update_by=clone_object.create_by,
             )
 
-        return CrudResponseModel(is_success=True, message='克隆成功')
+        return CrudResponseModel(is_success=True, message='克隆成功', result={'versionId': new_version_do.version_id})
 
     @transactional()
     async def lock_project_version_services(self, lock_object: LockProjectVersionModel):
@@ -242,7 +238,14 @@ class ProjectVersionService:
         )
 
         message = '固化成功' if lock_object.is_locked == LockStatusEnum.LOCKED.value else '解除固化成功'
-        return CrudResponseModel(is_success=True, message=message)
+        return CrudResponseModel(
+            is_success=True,
+            message=message,
+            result={
+                'versionId': lock_object.version_id,
+                'isLocked': lock_object.is_locked,
+            },
+        )
 
     @transactional()
     async def unlock_project_versions_by_project_services(self, project_id: int, operator: Optional[str] = None):
@@ -261,5 +264,14 @@ class ProjectVersionService:
                 error_code=ErrorCode.INVALID_INPUT, user_message='当前工程不存在需要解除固化的版本'
             )
 
+        unlocked_version_ids = [version.version_id for version in locked_versions]
         await self.version_repo.unlock_by_project(project_id, operator)
-        return CrudResponseModel(is_success=True, message='批量解除固化成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='批量解除固化成功',
+            result={
+                'projectId': project_id,
+                'unlockedVersionIds': unlocked_version_ids,
+                'unlockedCount': len(unlocked_version_ids),
+            },
+        )

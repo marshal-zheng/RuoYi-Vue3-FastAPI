@@ -57,7 +57,7 @@ class GenTableService:
         :return: 代码生成业务列表信息对象
         """
         return await self.table_repo.paginate_with_filters(
-            page=query_object.page_num,
+            page=query_object.page,
             page_size=query_object.page_size,
             table_name=query_object.table_name,
             table_comment=query_object.table_comment,
@@ -75,7 +75,7 @@ class GenTableService:
         :return: 数据库列表信息对象
         """
         return await self.table_repo.get_db_table_list(
-            page=query_object.page_num,
+            page=query_object.page,
             page_size=query_object.page_size,
             table_name=query_object.table_name,
             table_comment=query_object.table_comment,
@@ -104,7 +104,14 @@ class GenTableService:
         :return: 导入结果
         """
         await self._import_tables_internal(gen_table_list, current_user)
-        return CrudResponseModel(is_success=True, message='导入成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='导入成功',
+            result={
+                'tableNames': [table.table_name for table in gen_table_list if table.table_name],
+                'importedCount': len(gen_table_list),
+            },
+        )
 
     @transactional()
     async def edit_gen_table_services(self, page_object: EditGenTableModel):
@@ -130,7 +137,7 @@ class GenTableService:
             gen_table_column.update_time = datetime.now()
             await self.column_repo.update(gen_table_column.model_dump(by_alias=True))
 
-        return CrudResponseModel(is_success=True, message='更新成功')
+        return CrudResponseModel(is_success=True, message='更新成功', result={'tableId': page_object.table_id})
 
     @transactional()
     async def delete_gen_table_services(self, page_object: DeleteGenTableModel):
@@ -196,7 +203,11 @@ class GenTableService:
         gen_table_list = await self.get_gen_db_table_list_by_name_services(table_names)
         await self._import_tables_internal(gen_table_list, current_user)
 
-        return CrudResponseModel(is_success=True, message='创建表结构成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='创建表结构成功',
+            result={'tableNames': table_names, 'createdCount': len(table_names)},
+        )
 
     async def _import_tables_internal(self, gen_table_list: List[GenTableModel], current_user: CurrentUserModel):
         """
@@ -290,7 +301,11 @@ class GenTableService:
             with open(gen_path, 'w', encoding='utf-8') as f:
                 f.write(render_content)
 
-        return CrudResponseModel(is_success=True, message='生成代码成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='生成代码成功',
+            result={'tableName': table_name, 'status': 'generated'},
+        )
 
     async def batch_gen_code_services(self, table_names: List[str]):
         """
@@ -393,7 +408,14 @@ class GenTableService:
         for column in del_columns:
             await self.column_repo.delete_by_column_id(column.column_id)
 
-        return CrudResponseModel(is_success=True, message='同步成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='同步成功',
+            result={
+                'tableId': table.table_id,
+                'tableName': table_name,
+            },
+        )
 
     async def set_sub_table(self, gen_table: GenTableModel):
         """

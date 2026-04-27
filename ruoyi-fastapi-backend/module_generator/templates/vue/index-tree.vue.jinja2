@@ -358,7 +358,7 @@ export default {
       {% endif %}
       {% endfor %}
       list{{ BusinessName }}(this.queryParams).then(response => {
-        this.{{ businessName }}List = this.handleTree(response.data, "{{ treeCode }}", "{{ treeParentCode }}");
+        this.{{ businessName }}List = this.handleTree(response, "{{ treeCode }}", "{{ treeParentCode }}");
         this.loading = false;
       });
     },
@@ -378,7 +378,7 @@ export default {
       list{{ BusinessName }}().then(response => {
         this.{{ businessName }}Options = [];
         const data = { {{ treeCode }}: 0, {{ treeName }}: '顶级节点', children: [] };
-        data.children = this.handleTree(response.data, "{{ treeCode }}", "{{ treeParentCode }}");
+        data.children = this.handleTree(response, "{{ treeCode }}", "{{ treeParentCode }}");
         this.{{ businessName }}Options.push(data);
       });
     },
@@ -443,7 +443,7 @@ export default {
         this.form.{{ treeParentCode }} = row.{{ treeParentCode }};
       }
       get{{ BusinessName }}(row.{{ pkColumn.python_field }}).then(response => {
-        this.form = response.data;
+        this.form = response;
         {% for column in columns %}
         {% if column.html_type == "checkbox" %}
         this.form.{{ column.python_field }} = this.form.{{ column.python_field }}.split(",");
@@ -463,14 +463,12 @@ export default {
           {% endif %}
           {% endfor %}
           if (this.form.{{ pkColumn.python_field }} != null) {
-            update{{ BusinessName }}(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+            update{{ BusinessName }}(this.form).then(() => {
               this.open = false;
               this.getList();
             });
           } else {
-            add{{ BusinessName }}(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
+            add{{ BusinessName }}(this.form).then(() => {
               this.open = false;
               this.getList();
             });
@@ -484,7 +482,6 @@ export default {
         return del{{ BusinessName }}(row.{{ pkColumn.python_field }});
       }).then(() => {
         this.getList();
-        this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
     /** 是否渲染字段 */

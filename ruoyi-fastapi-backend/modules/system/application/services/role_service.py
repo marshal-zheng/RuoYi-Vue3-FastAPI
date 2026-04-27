@@ -82,8 +82,8 @@ class RoleService:
         cache_key = cache.build_key(
             'role:list',
             {
-                'page': query_object.page_num if is_page else 1,
-                'page_size': query_object.page_size if is_page else 10000,
+                'page': query_object.page if is_page else 1,
+                'pageSize': query_object.page_size if is_page else 10000,
                 'role_id': query_object.role_id,
                 'role_name': query_object.role_name,
                 'role_key': query_object.role_key,
@@ -102,7 +102,7 @@ class RoleService:
 
         if is_page:
             role_list_result = await self.role_repo.paginate_with_filters(
-                page=query_object.page_num,
+                page=query_object.page,
                 page_size=query_object.page_size,
                 role_id=query_object.role_id,
                 role_name=query_object.role_name,
@@ -124,7 +124,7 @@ class RoleService:
                 end_time=query_object.end_time,
                 data_scope_sql=data_scope_sql,
             )
-            role_list_result = role_list_result.rows if hasattr(role_list_result, 'rows') else role_list_result
+            role_list_result = role_list_result.items if hasattr(role_list_result, 'items') else role_list_result
 
         if is_page:
             await cache.set(cache_key, role_list_result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
@@ -163,7 +163,7 @@ class RoleService:
                     role_id=int(role_id),
                     data_scope_sql=data_scope_sql,
                 )
-                roles = roles.rows if hasattr(roles, 'rows') else roles
+                roles = roles.items if hasattr(roles, 'items') else roles
                 if roles:
                     continue
                 raise PermissionException(
@@ -227,7 +227,7 @@ class RoleService:
                 db_role_menu = RoleMenuDO(role_id=role_id, menu_id=menu)
                 await self.role_menu_repo.add(db_role_menu)
         await self._invalidate_role_cache()
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(is_success=True, message='新增成功', result={'roleId': role_id})
 
     @transactional()
     async def edit_role_services(self, page_object: AddRoleModel):
@@ -417,7 +417,7 @@ class RoleService:
         if is_page:
             query_user_list = await self.user_repo.paginate_allocated_by_role(
                 role_id=page_object.role_id,
-                page=page_object.page_num,
+                page=page_object.page,
                 page_size=page_object.page_size,
                 user_name=page_object.user_name,
                 phonenumber=page_object.phonenumber,
@@ -435,7 +435,7 @@ class RoleService:
         allocated_list = PageResponseModel(
             **{
                 **query_user_list.model_dump(by_alias=True),
-                'rows': [UserInfoModel(**row) for row in query_user_list.rows],
+                'items': [UserInfoModel(**row) for row in query_user_list.items],
             }
         )
 
@@ -458,7 +458,7 @@ class RoleService:
         if is_page:
             query_user_list = await self.user_repo.paginate_unallocated_by_role(
                 role_id=page_object.role_id,
-                page=page_object.page_num,
+                page=page_object.page,
                 page_size=page_object.page_size,
                 user_name=page_object.user_name,
                 phonenumber=page_object.phonenumber,
@@ -476,7 +476,7 @@ class RoleService:
         unallocated_list = PageResponseModel(
             **{
                 **query_user_list.model_dump(by_alias=True),
-                'rows': [UserInfoModel(**row) for row in query_user_list.rows],
+                'items': [UserInfoModel(**row) for row in query_user_list.items],
             }
         )
 

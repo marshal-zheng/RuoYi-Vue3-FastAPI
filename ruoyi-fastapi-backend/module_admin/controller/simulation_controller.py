@@ -140,7 +140,7 @@ async def get_fill_strategies(request: Request):
             'icon': definition['icon'],
             'params': definition['params']
         })
-    return ResponseUtil.success(data=strategies)
+    return ResponseUtil.ok_resource(strategies)
 
 
 @simulationController.post(
@@ -172,7 +172,7 @@ async def create_simulation_session(
     )
     logger.info(f'创建仿真会话成功: {result}')
     
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @simulationController.post(
@@ -199,8 +199,16 @@ async def start_simulation_session(
     """
     result = await simulation_service.start_session(session_id)
     logger.info(f'启动仿真会话成功: {session_id}')
-    
-    return ResponseUtil.success(data=result.model_dump())
+
+    location = ResponseUtil.build_absolute_location(request, f'/simulation/sessions/{session_id}/status')
+    return ResponseUtil.accepted_job(
+        {
+            'sessionId': session_id,
+            'action': 'start',
+            'status': 'accepted',
+        },
+        location=location,
+    )
 
 
 @simulationController.post(
@@ -227,8 +235,16 @@ async def stop_simulation_session(
     """
     result = await simulation_service.stop_session(session_id)
     logger.info(f'停止仿真会话成功: {session_id}')
-    
-    return ResponseUtil.success(data=result.model_dump())
+
+    location = ResponseUtil.build_absolute_location(request, f'/simulation/sessions/{session_id}/status')
+    return ResponseUtil.accepted_job(
+        {
+            'sessionId': session_id,
+            'action': 'stop',
+            'status': 'accepted',
+        },
+        location=location,
+    )
 
 
 @simulationController.get(
@@ -253,7 +269,7 @@ async def get_simulation_status(
         状态信息
     """
     status = await simulation_service.get_shared_session_status(session_id)
-    return ResponseUtil.success(data=status)
+    return ResponseUtil.ok_resource(status)
 
 
 @simulationController.get(
@@ -280,7 +296,7 @@ async def get_simulation_messages(
         报文列表
     """
     messages = await simulation_service.read_messages_with_fallback(session_id, limit)
-    return ResponseUtil.success(data=messages)
+    return ResponseUtil.ok_resource(messages)
 
 
 @simulationController.get(
@@ -311,7 +327,7 @@ async def get_simulation_bandwidth(
         port_id=port_id,
         limit=400,
     )
-    return ResponseUtil.success(data=bandwidth_data)
+    return ResponseUtil.ok_resource(bandwidth_data)
 
 
 @simulationController.get(
@@ -336,7 +352,7 @@ async def get_simulation_alarms(
         告警列表
     """
     alarms = await simulation_service.read_alarms_with_fallback(session_id, 200)
-    return ResponseUtil.success(data=alarms)
+    return ResponseUtil.ok_resource(alarms)
 
 
 @simulationController.post(
@@ -367,7 +383,7 @@ async def export_simulation_data(
     result = await simulation_service.export_simulation_data(export_request)
     logger.info(f'导出仿真数据成功: {session_id}')
     
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 # ==================== 新增：仿真控制增强 ====================
@@ -388,7 +404,7 @@ async def pause_simulation_session(
     """暂停仿真会话"""
     result = await simulation_service.pause_session(session_id)
     logger.info(f'暂停仿真会话: {session_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.post(
@@ -407,7 +423,7 @@ async def resume_simulation_session(
     """继续仿真会话"""
     result = await simulation_service.resume_session(session_id)
     logger.info(f'继续仿真会话: {session_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.post(
@@ -427,7 +443,7 @@ async def set_simulation_speed(
     speed = simulation_service.resolve_speed_input(body)
     result = await simulation_service.set_speed(session_id, speed)
     logger.info(f'设置仿真速度: {session_id} -> {speed}x')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.post(
@@ -445,7 +461,7 @@ async def step_simulation(
     """单步执行"""
     result = await simulation_service.step_once(session_id)
     logger.info(f'单步执行: {session_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.post(
@@ -464,7 +480,7 @@ async def set_simulation_duration(
     """设置仿真时长（秒），不传则无限制"""
     normalized_duration = simulation_service.resolve_duration_input(duration=duration, payload=None)
     result = await simulation_service.set_duration(session_id, normalized_duration)
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 # ==================== 新增：故障注入 ====================
@@ -504,7 +520,7 @@ async def inject_fault(
         f"注入故障: {injection['session_id']} -> "
         f"{injection['fault_type']}@{injection['target_id']}"
     )
-    return ResponseUtil.success(data=injection['result'])
+    return ResponseUtil.ok_resource(injection['result'])
 
 
 @simulationController.delete(
@@ -524,7 +540,7 @@ async def clear_fault(
     """清除故障"""
     result = simulation_service.clear_fault(session_id, fault_id)
     logger.info(f'清除故障: {session_id} -> {fault_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.delete(
@@ -543,7 +559,7 @@ async def clear_all_faults(
     """清除指定会话的所有故障"""
     result = simulation_service.clear_all_faults(session_id)
     logger.info(f'清除全部故障: {session_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.get(
@@ -560,7 +576,7 @@ async def list_faults(
 ):
     """获取故障列表"""
     faults = simulation_service.list_faults(session_id)
-    return ResponseUtil.success(data=faults)
+    return ResponseUtil.ok_resource(faults)
 
 
 # ==================== 新增：统一故障接口（无 session 路径） ====================
@@ -589,7 +605,7 @@ async def upsert_fault(
         f"注入故障: {injection['session_id']} -> "
         f"{injection['fault_type']}@{injection['target_id']}"
     )
-    return ResponseUtil.success(data=injection['result'])
+    return ResponseUtil.ok_resource(injection['result'])
 
 
 @simulationController.get(
@@ -606,7 +622,7 @@ async def query_faults(
     """查询会话故障"""
     normalized_session_id = simulation_service.require_session_id(session_id)
     faults = simulation_service.list_faults(normalized_session_id)
-    return ResponseUtil.success(data=faults)
+    return ResponseUtil.ok_resource(faults)
 
 
 @simulationController.delete(
@@ -625,7 +641,7 @@ async def delete_fault(
     normalized_session_id = simulation_service.require_session_id(session_id)
     result = simulation_service.clear_fault(normalized_session_id, fault_id)
     logger.info(f'清除故障: {normalized_session_id} -> {fault_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 # ==================== 新增：事件触发 ====================
@@ -663,7 +679,7 @@ async def add_event(
     """
     result = simulation_service.add_event(session_id, event)
     logger.info(f'添加事件: {session_id}')
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @simulationController.put(
@@ -691,7 +707,7 @@ async def update_event(
     """
     result = simulation_service.update_event(session_id, event_id, updates)
     logger.info(f'更新事件: {session_id} -> {event_id}')
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @simulationController.post(
@@ -727,7 +743,7 @@ async def trigger_event(
     """
     result = simulation_service.trigger_event(session_id, event_id)
     logger.info(f'触发事件: {session_id} -> {event_id}')
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @simulationController.post(
@@ -746,7 +762,7 @@ async def reset_event(
     """重置事件状态为待触发"""
     result = simulation_service.reset_event(session_id, event_id)
     logger.info(f'重置事件: {session_id} -> {event_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.delete(
@@ -766,7 +782,7 @@ async def remove_event(
     """删除事件"""
     result = simulation_service.remove_event(session_id, event_id)
     logger.info(f'删除事件: {session_id} -> {event_id}')
-    return ResponseUtil.success(data=result.model_dump())
+    return ResponseUtil.ok_resource(result.model_dump())
 
 
 @simulationController.get(
@@ -783,7 +799,7 @@ async def list_events(
 ):
     """获取事件列表"""
     events = simulation_service.list_events(session_id)
-    return ResponseUtil.success(data=events)
+    return ResponseUtil.ok_resource(events)
 
 
 # ==================== 新增：拓扑验证 ====================
@@ -802,7 +818,7 @@ async def validate_topology(
 ):
     """验证拓扑配置完整性"""
     result = simulation_service.validate_topology(topology_data)
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @simulationController.websocket('/sessions/{session_id}/ws')

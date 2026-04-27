@@ -40,7 +40,7 @@ class _DictTypeServiceStub:
         self.list_called_with = (query, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'dictId': 1,
                         'dictName': '状态',
@@ -48,7 +48,7 @@ class _DictTypeServiceStub:
                         'status': '0',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -82,7 +82,7 @@ class _DictDataServiceStub:
         self.list_called_with = (query, is_page)
         if is_page:
             return PageResponseModel(
-                rows=[
+                items=[
                     {
                         'dictCode': 1,
                         'dictLabel': '正常',
@@ -91,7 +91,7 @@ class _DictDataServiceStub:
                         'status': '0',
                     }
                 ],
-                page_num=1,
+                page=1,
                 page_size=10,
                 total=1,
                 has_next=False,
@@ -143,7 +143,7 @@ async def test_dict_query_handlers_success() -> None:
 
     type_page_result = await type_list_handler.handle(
         GetDictTypeListQuery(
-            query=DictTypePageQueryModel(pageNum=1, pageSize=10),
+            query=DictTypePageQueryModel(page=1, pageSize=10),
             is_page=True,
             operator='admin',
         )
@@ -155,7 +155,7 @@ async def test_dict_query_handlers_success() -> None:
     )
     data_page_result = await data_list_handler.handle(
         GetDictDataListQuery(
-            query=DictDataPageQueryModel(pageNum=1, pageSize=10),
+            query=DictDataPageQueryModel(page=1, pageSize=10),
             is_page=True,
             operator='admin',
         )
@@ -168,8 +168,8 @@ async def test_dict_query_handlers_success() -> None:
     assert isinstance(data_by_type_result[0], DictDataItemReadModel)
     assert isinstance(data_page_result, DictDataPageReadModel)
     assert isinstance(data_detail_result, DictDataDetailReadModel)
-    assert type_page_result.rows[0].dict_type == 'sys_status'
-    assert data_page_result.rows[0].dict_type == 'sys_status'
+    assert type_page_result.items[0].dict_type == 'sys_status'
+    assert data_page_result.items[0].dict_type == 'sys_status'
 
 
 @pytest.mark.asyncio
@@ -192,13 +192,13 @@ async def test_system_mediator_dispatches_dict_read_queries() -> None:
     mediator = provide_system_mediator(dict_type_service=dict_type_service, dict_data_service=dict_data_service)
 
     type_page_result = await mediator.query(
-        GetDictTypeListQuery(query=DictTypePageQueryModel(pageNum=1, pageSize=10), is_page=True)
+        GetDictTypeListQuery(query=DictTypePageQueryModel(page=1, pageSize=10), is_page=True)
     )
     type_options_result = await mediator.query(GetDictTypeOptionsQuery())
     type_detail_result = await mediator.query(GetDictTypeDetailQuery(dict_id=1))
     data_by_type_result = await mediator.query(GetDictDataByTypeQuery(dict_type='sys_status', redis_client=object()))
     data_page_result = await mediator.query(
-        GetDictDataListQuery(query=DictDataPageQueryModel(pageNum=1, pageSize=10), is_page=True)
+        GetDictDataListQuery(query=DictDataPageQueryModel(page=1, pageSize=10), is_page=True)
     )
     data_detail_result = await mediator.query(GetDictDataDetailQuery(dict_code=1))
 
@@ -208,5 +208,5 @@ async def test_system_mediator_dispatches_dict_read_queries() -> None:
     assert isinstance(data_by_type_result[0], DictDataItemReadModel)
     assert isinstance(data_page_result, DictDataPageReadModel)
     assert isinstance(data_detail_result, DictDataDetailReadModel)
-    assert type_page_result.rows[0].dict_type == 'sys_status'
-    assert data_page_result.rows[0].dict_type == 'sys_status'
+    assert type_page_result.items[0].dict_type == 'sys_status'
+    assert data_page_result.items[0].dict_type == 'sys_status'

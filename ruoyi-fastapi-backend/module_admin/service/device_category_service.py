@@ -30,7 +30,7 @@ class DeviceCategoryService:
         获取设备分类列表
         """
         categories, total = await self.category_repo.paginate_with_filters(
-            page=query.page_num,
+            page=query.page,
             page_size=query.page_size,
             name=query.name,
             status=query.status,
@@ -40,7 +40,9 @@ class DeviceCategoryService:
 
         category_list = [DeviceCategoryModel.model_validate(cat) for cat in categories]
         return {
-            'rows': [cat.model_dump() for cat in category_list],
+            'items': [cat.model_dump() for cat in category_list],
+            'page': query.page,
+            'pageSize': query.page_size,
             'total': total,
         }
 
@@ -76,9 +78,13 @@ class DeviceCategoryService:
         )
 
         # 保存到数据库
-        await self.category_repo.add(category_do)
+        add_result = await self.category_repo.add(category_do)
 
-        return CrudResponseModel(is_success=True, message='新增成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='新增成功',
+            result={'deviceCategoryId': add_result.device_category_id},
+        )
 
     @transactional()
     async def edit_device_category_services(self, category_data: DeviceCategoryModel, current_user: str):
@@ -105,7 +111,11 @@ class DeviceCategoryService:
 
         await self.category_repo.update(existing)
 
-        return CrudResponseModel(is_success=True, message='修改成功')
+        return CrudResponseModel(
+            is_success=True,
+            message='修改成功',
+            result={'deviceCategoryId': existing.device_category_id},
+        )
 
     @transactional()
     async def delete_device_category_services(self, category_ids: str):

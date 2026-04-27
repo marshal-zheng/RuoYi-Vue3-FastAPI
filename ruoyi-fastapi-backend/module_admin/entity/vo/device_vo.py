@@ -19,7 +19,7 @@ class DeviceQueryModel(CamelModelBase):
     bus_type: Optional[str] = Field(None, description="总线类型")
     begin_time: Optional[str] = Field(None, description="开始时间")
     end_time: Optional[str] = Field(None, description="结束时间")
-    page_num: int = Field(1, description="页码")
+    page: int = Field(1, description="页码")
     page_size: int = Field(10, description="每页数量")
 
 

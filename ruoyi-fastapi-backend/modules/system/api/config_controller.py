@@ -25,12 +25,22 @@ from modules.system.application.queries import (
     GetConfigValueByKeyQuery,
 )
 from utils.common_util import bytes2file_response
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 configController = APIRouter(prefix='/system/config', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_config_detail(request: Request, *, config_id: int, mediator: Mediator):
+    detail_query = GetConfigDetailQuery(
+        config_id=config_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
 
 
 @configController.get(
@@ -50,7 +60,7 @@ async def get_system_config_list(
     config_page_query_result = await mediator.query(config_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=config_page_query_result)
+    return ResponseUtil.ok_resource(config_page_query_result)
 
 
 @configController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:config:add'))])
@@ -79,7 +89,10 @@ async def add_system_config(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    config_id = require_int_value(add_result.data, 'configId', 'config_id', contract_name='system.config.create')
+    resource = await _load_config_detail(request, config_id=int(config_id), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/config/{config_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @configController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:config:edit'))])
@@ -106,7 +119,8 @@ async def edit_system_config(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_config_detail(request, config_id=edit_config.config_id, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @configController.delete('/refreshCache', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
@@ -127,7 +141,7 @@ async def refresh_system_config(
     refresh_result = await mediator.send(refresh_command)
     message = refresh_result.data.get('message') if refresh_result.data else '刷新成功'
     logger.info(message)
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.ok_resource({'status': 'refreshed'})
 
 
 @configController.delete('', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
@@ -151,7 +165,7 @@ async def delete_system_config_empty(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @configController.delete('/{config_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:config:remove'))])
@@ -176,7 +190,7 @@ async def delete_system_config(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @configController.get(
@@ -195,7 +209,7 @@ async def query_detail_system_config(
     config_detail_result = await mediator.query(detail_query)
     logger.info(f'获取config_id为{config_id}的信息成功')
 
-    return ResponseUtil.success(data=config_detail_result)
+    return ResponseUtil.ok_resource(config_detail_result)
 
 
 @configController.get('/configKey/{config_key}')
@@ -213,7 +227,7 @@ async def query_system_config(
     config_query_result = await mediator.query(config_key_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(message=config_query_result.config_value)
+    return ResponseUtil.ok_resource(config_query_result)
 
 
 @configController.post('/export', dependencies=[Depends(CheckUserInterfaceAuth('system:config:export'))])
@@ -230,7 +244,7 @@ async def export_system_config_list(
         request_id=request.headers.get('x-request-id'),
     )
     config_query_result = await mediator.query(config_query)
-    config_rows = [row.model_dump(by_alias=True) for row in config_query_result.rows]
+    config_rows = [row.model_dump(by_alias=True) for row in config_query_result.items]
     config_export_result = await ConfigService.export_config_list_services(config_rows)
     logger.info('导出成功')
 

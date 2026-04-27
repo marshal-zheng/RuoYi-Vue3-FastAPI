@@ -10,6 +10,7 @@ from module_admin.entity.vo.device_vo import DeviceQueryModel, DeviceModel, Clon
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_admin.service.device_service import DeviceService
 from modules.identity.application.services.login_service import LoginService
+from utils.http_contract_responses import import_summary_to_batch_contract, require_int_value
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 from utils.common_util import bytes2file_response
@@ -18,6 +19,11 @@ import re
 
 
 deviceController = APIRouter(prefix='/device', dependencies=[Depends(LoginService.get_current_user)])
+
+
+async def _load_device_detail(device_id: int, device_service: DeviceService):
+    result = await device_service.device_detail_services(device_id)
+    return result or {}
 
 
 @deviceController.get(
@@ -45,11 +51,11 @@ async def get_device_list(
             begin_time = begin_time or parts[0]
             end_time = end_time or parts[1]
     try:
-        page_num = int(qp.get('page_num') or qp.get('pageNum') or 1)
+        page = int(qp.get('page') or 1)
     except Exception:
-        page_num = 1
+        page = 1
     try:
-        page_size = int(qp.get('page_size') or qp.get('pageSize') or 10)
+        page_size = int(qp.get('pageSize') or qp.get('page_size') or 10)
     except Exception:
         page_size = 10
 
@@ -58,12 +64,12 @@ async def get_device_list(
         bus_type=bus_type,
         begin_time=begin_time,
         end_time=end_time,
-        page_num=page_num,
+        page=page,
         page_size=page_size
     )
     result = await device_service.get_device_list_services(query, current_user.user.user_name)
     logger.info('获取设备列表成功')
-    return ResponseUtil.success(rows=result['rows'], dict_content={'total': result['total']})
+    return ResponseUtil.ok_page(items=result['items'], total=result['total'], page=page, page_size=page_size)
 
 
 @deviceController.get(
@@ -84,7 +90,7 @@ async def check_device_name_unique(
     
     result = await device_service.check_device_name_unique_services(device_name, device_id)
     logger.info(f'检查设备名称唯一性: {device_name}')
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @deviceController.get(
@@ -101,7 +107,7 @@ async def get_device_detail(
     """
     result = await device_service.device_detail_services(device_id)
     logger.info(f'获取设备详情成功: {device_id}')
-    return ResponseUtil.success(data=result)
+    return ResponseUtil.ok_resource(result)
 
 
 @deviceController.post(
@@ -121,7 +127,10 @@ async def add_device(
     """
     result = await device_service.add_device_services(device_data, current_user.user.user_name)
     logger.info('新增设备成功')
-    return ResponseUtil.success(message=result.message, data=result.result)
+    device_id = require_int_value(result.result, 'deviceId', 'device_id', contract_name='device.create')
+    resource = await _load_device_detail(device_id, device_service)
+    location = ResponseUtil.build_absolute_location(request, f'/device/{device_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @deviceController.put(
@@ -141,7 +150,8 @@ async def update_device(
     """
     result = await device_service.edit_device_services(device_data, current_user.user.user_name)
     logger.info('修改设备成功')
-    return ResponseUtil.success(message=result.message)
+    resource = await _load_device_detail(device_data.device_id, device_service)
+    return ResponseUtil.ok_resource(resource)
 
 
 @deviceController.post(
@@ -163,7 +173,10 @@ async def clone_device(
     clone_data.create_time = datetime.now()
     result = await device_service.clone_device_services(clone_data, current_user.user.user_name)
     logger.info('克隆设备成功')
-    return ResponseUtil.success(message=result.message, data=result.result)
+    device_id = require_int_value(result.result, 'deviceId', 'device_id', contract_name='device.clone')
+    resource = await _load_device_detail(device_id, device_service)
+    location = ResponseUtil.build_absolute_location(request, f'/device/{device_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @deviceController.delete(
@@ -182,7 +195,7 @@ async def delete_device(
     """
     result = await device_service.delete_device_services(device_ids)
     logger.info(f'删除设备成功: {device_ids}')
-    return ResponseUtil.success(message=result.message)
+    return ResponseUtil.no_content()
 
 
 @deviceController.post(
@@ -231,14 +244,24 @@ async def import_device_batch(
         import_result = await device_service.import_devices_multi_services(
             contents, current_user.user.user_name
         )
-        return ResponseUtil.success(message='批量导入完成', data=import_result)
+        results, summary = import_summary_to_batch_contract(
+            import_result.get('details'),
+            item_id_keys=('deviceId', 'fileName'),
+            data_keys=('deviceId', 'deviceName', 'fileName'),
+        )
+        return ResponseUtil.batch_result(results=results, summary=summary)
 
     if file:
         file_bytes = await file.read()
         import_result = await device_service.import_devices_from_zip_services(
             file_bytes, current_user.user.user_name
         )
-        return ResponseUtil.success(message='批量导入完成', data=import_result)
+        results, summary = import_summary_to_batch_contract(
+            import_result.get('details'),
+            item_id_keys=('deviceId', 'fileName'),
+            data_keys=('deviceId', 'deviceName', 'fileName'),
+        )
+        return ResponseUtil.batch_result(results=results, summary=summary)
 
     from exceptions.exception import ValidationException
     raise ValidationException(

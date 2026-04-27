@@ -14,12 +14,22 @@ from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import AddNoticeCommand, DeleteNoticeCommand, EditNoticeCommand
 from modules.system.application.mediator import Mediator
 from modules.system.application.queries import GetNoticeDetailQuery, GetNoticeListQuery
+from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
 noticeController = APIRouter(prefix='/system/notice', dependencies=[Depends(get_current_user)])  # noqa: N816
+
+
+async def _load_notice_detail(request: Request, *, notice_id: int, mediator: Mediator):
+    detail_query = GetNoticeDetailQuery(
+        notice_id=notice_id,
+        trace_id=request.headers.get('x-trace-id'),
+        request_id=request.headers.get('x-request-id'),
+    )
+    return await mediator.query(detail_query)
 
 
 @noticeController.get(
@@ -39,7 +49,7 @@ async def get_system_notice_list(
     notice_page_query_result = await mediator.query(list_query)
     logger.info('获取成功')
 
-    return ResponseUtil.success(model_content=notice_page_query_result)
+    return ResponseUtil.ok_resource(notice_page_query_result)
 
 
 @noticeController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:notice:add'))])
@@ -69,7 +79,10 @@ async def add_system_notice(
     message = add_result.data.get('message') if add_result.data else '新增成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    notice_id = require_int_value(add_result.data, 'noticeId', 'notice_id', contract_name='system.notice.create')
+    resource = await _load_notice_detail(request, notice_id=int(notice_id), mediator=mediator)
+    location = ResponseUtil.build_absolute_location(request, f'/system/notice/{notice_id}')
+    return ResponseUtil.created_resource(resource, location=location)
 
 
 @noticeController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:notice:edit'))])
@@ -97,7 +110,8 @@ async def edit_system_notice(
     message = edit_result.data.get('message') if edit_result.data else '更新成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    resource = await _load_notice_detail(request, notice_id=edit_notice.notice_id, mediator=mediator)
+    return ResponseUtil.ok_resource(resource)
 
 
 @noticeController.delete('/{notice_ids}', dependencies=[Depends(CheckUserInterfaceAuth('system:notice:remove'))])
@@ -122,7 +136,7 @@ async def delete_system_notice(
     message = delete_result.data.get('message') if delete_result.data else '删除成功'
     logger.info(message)
 
-    return ResponseUtil.success(message=message)
+    return ResponseUtil.no_content()
 
 
 @noticeController.get(
@@ -141,4 +155,4 @@ async def query_detail_system_post(
     notice_detail_result = await mediator.query(detail_query)
     logger.info(f'获取notice_id为{notice_id}的信息成功')
 
-    return ResponseUtil.success(data=notice_detail_result)
+    return ResponseUtil.ok_resource(notice_detail_result)

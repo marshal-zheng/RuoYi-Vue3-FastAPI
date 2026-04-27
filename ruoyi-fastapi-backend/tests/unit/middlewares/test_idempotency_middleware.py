@@ -58,7 +58,7 @@ async def test_same_key_same_payload_replays_cached_response():
     transport = ASGITransport(app=app)
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
-        headers = {'X-Idempotency-Key': 'idem-key-1'}
+        headers = {'Idempotency-Key': 'idem-key-1'}
         first = await client.post('/api/write', json={'a': 1, 'b': 2}, headers=headers)
         second = await client.post('/api/write', json={'b': 2, 'a': 1}, headers=headers)
 
@@ -74,13 +74,14 @@ async def test_same_key_different_payload_returns_conflict():
     transport = ASGITransport(app=app)
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
-        headers = {'X-Idempotency-Key': 'idem-key-2'}
+        headers = {'Idempotency-Key': 'idem-key-2'}
         first = await client.post('/api/write', json={'a': 1}, headers=headers)
         second = await client.post('/api/write', json={'a': 2}, headers=headers)
 
     assert first.status_code == 200
     assert second.status_code == 409
     assert second.headers.get('content-type', '').startswith('application/problem+json')
+    assert second.json()['detail'].startswith('相同 Idempotency-Key 对应的请求体不一致')
     assert app.state.write_calls == 1
 
 
@@ -104,7 +105,7 @@ async def test_concurrent_retry_same_key_executes_once():
     transport = ASGITransport(app=app)
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
-        headers = {'X-Idempotency-Key': 'idem-key-3'}
+        headers = {'Idempotency-Key': 'idem-key-3'}
         task1 = asyncio.create_task(client.post('/api/slow-write', json={'a': 1}, headers=headers))
         await asyncio.sleep(0.02)
         task2 = asyncio.create_task(client.post('/api/slow-write', json={'a': 1}, headers=headers))
@@ -124,8 +125,8 @@ async def test_same_key_different_user_should_not_replay():
     token_b = 'token-user-1002'
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
-        headers_a = {'X-Idempotency-Key': 'idem-key-user', 'Authorization': f'Bearer {token_a}'}
-        headers_b = {'X-Idempotency-Key': 'idem-key-user', 'Authorization': f'Bearer {token_b}'}
+        headers_a = {'Idempotency-Key': 'idem-key-user', 'Authorization': f'Bearer {token_a}'}
+        headers_b = {'Idempotency-Key': 'idem-key-user', 'Authorization': f'Bearer {token_b}'}
         first = await client.post('/api/write', json={'a': 1}, headers=headers_a)
         second = await client.post('/api/write', json={'a': 1}, headers=headers_b)
 
@@ -140,7 +141,7 @@ async def test_large_request_body_skips_idempotency_cache():
     transport = ASGITransport(app=app)
 
     async with AsyncClient(transport=transport, base_url='http://testserver') as client:
-        headers = {'X-Idempotency-Key': 'idem-key-large'}
+        headers = {'Idempotency-Key': 'idem-key-large'}
         payload = {'text': 'x' * 200}
         first = await client.post('/api/write', json=payload, headers=headers)
         second = await client.post('/api/write', json=payload, headers=headers)

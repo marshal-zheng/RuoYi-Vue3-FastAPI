@@ -96,8 +96,8 @@ class TestRoleServiceDataScope:
 
         async def _paginate_with_filters(**kwargs):
             if kwargs.get('role_id') == 1:
-                return SimpleNamespace(rows=[{'role_id': 1}])
-            return SimpleNamespace(rows=[])
+                return SimpleNamespace(items=[{'role_id': 1}])
+            return SimpleNamespace(items=[])
 
         role_repo.paginate_with_filters.side_effect = _paginate_with_filters
         service = build_service(role_repo=role_repo)

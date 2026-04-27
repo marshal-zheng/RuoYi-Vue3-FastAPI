@@ -16,6 +16,7 @@ from modules.system.application.commands.dict_commands import (
     RefreshDictCacheCommand,
 )
 from modules.system.application.contracts import CommandResult, ICommandHandler
+from modules.system.application.handlers.command.result_data import command_result_data
 from modules.system.application.event_factory import build_system_event
 
 if TYPE_CHECKING:
@@ -67,7 +68,7 @@ class AddDictTypeCommandHandler(ICommandHandler[AddDictTypeCommand, dict[str, st
         return CommandResult(
             success=create_result.is_success,
             status='created' if create_result.is_success else 'failed',
-            data={'message': create_result.message},
+            data=command_result_data(create_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -100,7 +101,7 @@ class EditDictTypeCommandHandler(ICommandHandler[EditDictTypeCommand, dict[str, 
         return CommandResult(
             success=update_result.is_success,
             status='updated' if update_result.is_success else 'failed',
-            data={'message': update_result.message},
+            data=command_result_data(update_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -125,7 +126,7 @@ class DeleteDictTypeCommandHandler(ICommandHandler[DeleteDictTypeCommand, dict[s
         return CommandResult(
             success=delete_result.is_success,
             status='deleted' if delete_result.is_success else 'failed',
-            data={'message': delete_result.message},
+            data=command_result_data(delete_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -150,7 +151,7 @@ class RefreshDictCacheCommandHandler(ICommandHandler[RefreshDictCacheCommand, di
         return CommandResult(
             success=refresh_result.is_success,
             status='refreshed' if refresh_result.is_success else 'failed',
-            data={'message': refresh_result.message},
+            data=command_result_data(refresh_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -184,7 +185,7 @@ class AddDictDataCommandHandler(ICommandHandler[AddDictDataCommand, dict[str, st
         return CommandResult(
             success=create_result.is_success,
             status='created' if create_result.is_success else 'failed',
-            data={'message': create_result.message},
+            data=command_result_data(create_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -218,7 +219,7 @@ class EditDictDataCommandHandler(ICommandHandler[EditDictDataCommand, dict[str, 
         return CommandResult(
             success=update_result.is_success,
             status='updated' if update_result.is_success else 'failed',
-            data={'message': update_result.message},
+            data=command_result_data(update_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
@@ -243,7 +244,7 @@ class DeleteDictDataCommandHandler(ICommandHandler[DeleteDictDataCommand, dict[s
         return CommandResult(
             success=delete_result.is_success,
             status='deleted' if delete_result.is_success else 'failed',
-            data={'message': delete_result.message},
+            data=command_result_data(delete_result),
             events=(event,),
             metadata=_build_metadata(request),
         )
