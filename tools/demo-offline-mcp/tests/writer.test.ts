@@ -23,8 +23,50 @@ function createScenarioPackage(): CompiledDemoScenarioPackage {
       fingerprint: 'writer-demo-v1',
       seed: 'writer-demo',
     },
-    auth: { accounts: [], roles: [], permissions: [] },
-    system: { menus: [], dictTypes: [], dicts: [], departments: [], posts: [], users: [] },
+    auth: {
+      accounts: [
+        {
+          username: 'admin',
+          password: 'admin123',
+          userId: 1,
+          roleIds: [1],
+          roles: ['admin'],
+          permissions: ['*:*:*'],
+          user: { userName: 'admin' },
+        },
+      ],
+      roles: [{ roleId: 1, roleKey: 'admin', roleName: '管理员', menuIds: [1], permissions: ['*:*:*'] }],
+      permissions: [{ id: 'all', code: '*:*:*', label: '全部权限' }],
+    },
+    system: {
+      menus: [
+        {
+          menuId: 1,
+          parentId: 0,
+          name: 'Demo',
+          path: '/demo',
+          orderNum: 1,
+          visible: '0',
+          status: '0',
+          roles: ['admin'],
+        },
+      ],
+      dictTypes: [{ dictId: 1, dictName: '演示字典', dictType: 'demo_type', status: '0' }],
+      dicts: [{ id: 1, dictType: 'demo_type', dictLabel: '演示', dictValue: 'demo', dictSort: 1, status: '0' }],
+      departments: [{ deptId: 100, parentId: 0, deptName: '演示部门', orderNum: 1, status: '0' }],
+      posts: [{ postId: 1, postCode: 'demo', postName: '演示岗位', postSort: 1, status: '0' }],
+      users: [
+        {
+          userId: 1,
+          deptId: 100,
+          userName: 'admin',
+          nickName: '管理员',
+          status: '0',
+          roleIds: [1],
+          postIds: [1],
+        },
+      ],
+    },
     project: { projects: [], versions: [], topologies: [] },
     simulation: {
       sessions: [],
@@ -76,6 +118,23 @@ async function writePassedCandidateCheckRun(paths: Awaited<ReturnType<typeof cre
 }
 
 describe('ScenarioWriter', () => {
+  it('rejects candidates that omit copied auth or system slices', async () => {
+    const paths = await createTempRepoFixture();
+    const scenarioPackage = {
+      ...createScenarioPackage(),
+      auth: { accounts: [], roles: [], permissions: [] },
+    };
+
+    await expect(
+      writeCandidateScenario(paths, {
+        scenarioPackage,
+        plan: createPlan(),
+      })
+    ).rejects.toMatchObject({
+      issue: expect.objectContaining({ code: 'copied_auth_accounts_missing' }),
+    });
+  });
+
   it('writes candidates only under generated/candidates and updates candidate registry', async () => {
     const paths = await createTempRepoFixture();
     const result = await writeCandidateScenario(paths, {

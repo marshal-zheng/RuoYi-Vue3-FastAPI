@@ -143,6 +143,157 @@ function exportNameFromText(source: string): string | undefined {
   return source.match(/export\s+const\s+([A-Za-z_$][\w$]*)\s*:/)?.[1];
 }
 
+function copiedSlicesFromPlan(plan: Pick<GenerationPlan, 'copiedSlices'> | undefined): string[] {
+  return Array.isArray(plan?.copiedSlices) ? plan.copiedSlices : [];
+}
+
+function assertArrayHasItems(value: unknown[], path: string, code: string, fixHint: string): void {
+  if (value.length > 0) return;
+
+  throw new ToolError(
+    createIssue({
+      path,
+      code,
+      severity: 'error',
+      actual: value.length,
+      expected: 'Non-empty copied default slice data',
+      fixHint,
+      autoRepairable: false,
+    })
+  );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function assertScenarioPackageCopiedSlices(input: WriteCandidateInput): void {
+  const copiedSlices = copiedSlicesFromPlan(input.plan);
+
+  if (copiedSlices.includes('auth')) {
+    assertArrayHasItems(
+      input.scenarioPackage.auth.accounts,
+      'scenarioPackage.auth.accounts',
+      'copied_auth_accounts_missing',
+      'Use demo_offline_compile_scenario output directly so auth is copied from the default scenario.'
+    );
+    assertArrayHasItems(
+      input.scenarioPackage.auth.roles,
+      'scenarioPackage.auth.roles',
+      'copied_auth_roles_missing',
+      'Use demo_offline_compile_scenario output directly so auth roles are copied from the default scenario.'
+    );
+    assertArrayHasItems(
+      input.scenarioPackage.auth.permissions,
+      'scenarioPackage.auth.permissions',
+      'copied_auth_permissions_missing',
+      'Use demo_offline_compile_scenario output directly so auth permissions are copied from the default scenario.'
+    );
+
+    const adminAccount = input.scenarioPackage.auth.accounts.find(
+      (account) => isRecord(account) && account.username === 'admin' && account.password === 'admin123'
+    );
+    if (!adminAccount) {
+      throw new ToolError(
+        createIssue({
+          path: 'scenarioPackage.auth.accounts',
+          code: 'copied_auth_admin_missing',
+          severity: 'error',
+          actual: input.scenarioPackage.auth.accounts.map((account) =>
+            isRecord(account) ? account.username : undefined
+          ),
+          expected: 'Default admin account admin/admin123',
+          fixHint: 'Use demo_offline_compile_scenario output directly so the default demo admin account is preserved.',
+          autoRepairable: false,
+        })
+      );
+    }
+  }
+
+  if (copiedSlices.includes('system')) {
+    const requiredSystemArrays = [
+      ['menus', input.scenarioPackage.system.menus],
+      ['dictTypes', input.scenarioPackage.system.dictTypes],
+      ['dicts', input.scenarioPackage.system.dicts],
+      ['departments', input.scenarioPackage.system.departments],
+      ['posts', input.scenarioPackage.system.posts],
+      ['users', input.scenarioPackage.system.users],
+    ] as const;
+
+    for (const [key, value] of requiredSystemArrays) {
+      assertArrayHasItems(
+        value,
+        `scenarioPackage.system.${key}`,
+        `copied_system_${key}_missing`,
+        'Use demo_offline_compile_scenario output directly so system data is copied from the default scenario.'
+      );
+    }
+  }
+}
+
+function hasNonEmptyJsonArray(source: string, propertyName: string): boolean {
+  const match = source.match(new RegExp(`"${propertyName}"\\s*:\\s*\\[([\\s\\S]*?)\\]`));
+  return Boolean(match?.[1]?.trim());
+}
+
+function assertCandidateSourceCopiedSlices(source: string, plan: Pick<GenerationPlan, 'copiedSlices'> | undefined): void {
+  const copiedSlices = copiedSlicesFromPlan(plan);
+
+  if (copiedSlices.includes('auth')) {
+    if (
+      !hasNonEmptyJsonArray(source, 'accounts') ||
+      !hasNonEmptyJsonArray(source, 'roles') ||
+      !hasNonEmptyJsonArray(source, 'permissions')
+    ) {
+      throw new ToolError(
+        createIssue({
+          path: 'candidate.auth',
+          code: 'candidate_copied_auth_missing',
+          severity: 'error',
+          actual: 'empty auth slice',
+          expected: 'Copied default auth accounts, roles, and permissions',
+          fixHint: 'Rewrite the candidate from demo_offline_compile_scenario output and rerun checks before promoting.',
+          autoRepairable: false,
+        })
+      );
+    }
+
+    if (!/"username"\s*:\s*"admin"[\s\S]*?"password"\s*:\s*"admin123"/.test(source)) {
+      throw new ToolError(
+        createIssue({
+          path: 'candidate.auth.accounts',
+          code: 'candidate_copied_admin_missing',
+          severity: 'error',
+          actual: 'admin account missing',
+          expected: 'Default admin account admin/admin123',
+          fixHint: 'Rewrite the candidate from demo_offline_compile_scenario output and rerun checks before promoting.',
+          autoRepairable: false,
+        })
+      );
+    }
+  }
+
+  if (copiedSlices.includes('system')) {
+    const missingSystemKey = ['menus', 'dictTypes', 'dicts', 'departments', 'posts', 'users'].find(
+      (key) => !hasNonEmptyJsonArray(source, key)
+    );
+
+    if (missingSystemKey) {
+      throw new ToolError(
+        createIssue({
+          path: `candidate.system.${missingSystemKey}`,
+          code: 'candidate_copied_system_missing',
+          severity: 'error',
+          actual: 'empty system slice',
+          expected: 'Copied default system slice data',
+          fixHint: 'Rewrite the candidate from demo_offline_compile_scenario output and rerun checks before promoting.',
+          autoRepairable: false,
+        })
+      );
+    }
+  }
+}
+
 async function listScenarioSourceFiles(directory: string, candidate: boolean): Promise<string[]> {
   const entries = await fs
     .readdir(directory, { withFileTypes: true })
@@ -397,6 +548,8 @@ export async function writeCandidateScenario(
   paths: ProjectPaths,
   input: WriteCandidateInput
 ): Promise<ToolEnvelope<WriteCandidateResult>> {
+  assertScenarioPackageCopiedSlices(input);
+
   const candidateId = input.scenarioPackage.scenario.id;
   const exportName = toExportName(candidateId, 'CandidateScenario');
   const candidatePath = await paths.resolveCandidateWritePath(`${candidateId}.candidate.ts`);
@@ -509,6 +662,10 @@ export async function promoteCandidateScenario(
 
   const candidateSource = await fs.readFile(candidatePath, 'utf8');
   const candidateScenarioId = scenarioIdFromText(candidateSource);
+  const candidateMetadataPath = path.join(paths.candidateRoot, `${input.candidateId}.candidate.json`);
+  const candidateMetadata = JSON.parse((await fs.readFile(candidateMetadataPath, 'utf8').catch(() => '{}')) || '{}') as {
+    plan?: GenerationPlan;
+  };
 
   if (candidateScenarioId !== input.scenarioId) {
     throw new ToolError(
@@ -523,6 +680,7 @@ export async function promoteCandidateScenario(
       })
     );
   }
+  assertCandidateSourceCopiedSlices(candidateSource, candidateMetadata.plan);
 
   const candidateExportName = exportNameFromText(candidateSource) ?? toExportName(input.scenarioId, 'CandidateScenario');
   const officialExportName = toExportName(input.scenarioId);

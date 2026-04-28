@@ -1,5 +1,7 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { issueFromUnknown } from './errors.js';
 import { ProjectPaths } from './project-paths.js';
@@ -23,8 +25,36 @@ export interface ToolAuditEvent {
 }
 
 export const AUDIT_LOG_RELATIVE_PATH = '.audit/demo-offline-mcp.jsonl';
+const AUDIT_SCHEMA_VERSION = 2;
+const PROCESS_STARTED_AT = new Date().toISOString();
+const RUNTIME_MODULE_PATH = fileURLToPath(import.meta.url);
 
 type ObjectLike = Record<string, unknown>;
+type RuntimeFileFingerprint = {
+  path: string;
+  repoPath?: string;
+  mtimeMs: number;
+  size: number;
+  sha256: string;
+};
+
+type RuntimeFingerprint = {
+  auditSchemaVersion: number;
+  pid: number;
+  ppid: number;
+  processStartedAt: string;
+  nodeVersion: string;
+  execPath: string;
+  argv: string[];
+  cwd: string;
+  entrypoint?: string;
+  entrypointMtimeMs?: number;
+  packageVersion?: string;
+  gitHead?: string;
+  loadedFiles: RuntimeFileFingerprint[];
+};
+
+let runtimeFingerprintByRepo = new Map<string, Promise<RuntimeFingerprint>>();
 
 function isAuditDisabled(): boolean {
   return ['off', 'false', '0'].includes((process.env.DEMO_OFFLINE_MCP_AUDIT ?? '').toLowerCase());
@@ -36,6 +66,93 @@ function isObjectLike(value: unknown): value is ObjectLike {
 
 function truncateText(value: string, maxLength = 160): string {
   return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
+}
+
+function normalizeSlashes(value: string): string {
+  return value.split(path.sep).join('/');
+}
+
+async function readJsonFile<T>(filePath: string): Promise<T | undefined> {
+  const source = await fs.readFile(filePath, 'utf8').catch(() => undefined);
+  if (!source) return undefined;
+
+  try {
+    return JSON.parse(source) as T;
+  } catch {
+    return undefined;
+  }
+}
+
+async function readGitHead(repoRoot: string): Promise<string | undefined> {
+  const headPath = path.join(repoRoot, '.git', 'HEAD');
+  const head = (await fs.readFile(headPath, 'utf8').catch(() => undefined))?.trim();
+  if (!head) return undefined;
+
+  const refMatch = head.match(/^ref:\s+(.+)$/);
+  if (!refMatch) return head;
+
+  const refPath = path.join(repoRoot, '.git', refMatch[1]);
+  const refHead = (await fs.readFile(refPath, 'utf8').catch(() => undefined))?.trim();
+  return refHead ? `${refMatch[1]}@${refHead}` : refMatch[1];
+}
+
+async function fingerprintFile(repoRoot: string, filePath: string): Promise<RuntimeFileFingerprint | undefined> {
+  const [stat, source] = await Promise.all([
+    fs.stat(filePath).catch(() => undefined),
+    fs.readFile(filePath).catch(() => undefined),
+  ]);
+
+  if (!stat || !source) return undefined;
+
+  return {
+    path: filePath,
+    repoPath: normalizeSlashes(path.relative(repoRoot, filePath)),
+    mtimeMs: stat.mtimeMs,
+    size: stat.size,
+    sha256: crypto.createHash('sha256').update(source).digest('hex').slice(0, 16),
+  };
+}
+
+async function resolveRuntimeFingerprint(paths: ProjectPaths): Promise<RuntimeFingerprint> {
+  const cached = runtimeFingerprintByRepo.get(paths.repoRoot);
+  if (cached) return cached;
+
+  const fingerprintPromise = (async () => {
+    const moduleExtension = path.extname(RUNTIME_MODULE_PATH) || '.js';
+    const moduleDir = path.dirname(RUNTIME_MODULE_PATH);
+    const loadedFilePaths = [
+      RUNTIME_MODULE_PATH,
+      path.join(moduleDir, `writer${moduleExtension}`),
+      path.join(moduleDir, 'tools', `promote-candidate${moduleExtension}`),
+    ];
+    const packageJson = await readJsonFile<{ version?: string }>(
+      path.join(paths.repoRoot, 'tools', 'demo-offline-mcp', 'package.json')
+    );
+    const entrypoint = process.argv[1] ? path.resolve(process.argv[1]) : undefined;
+    const entrypointStat = entrypoint ? await fs.stat(entrypoint).catch(() => undefined) : undefined;
+    const loadedFiles = (
+      await Promise.all(loadedFilePaths.map((filePath) => fingerprintFile(paths.repoRoot, filePath)))
+    ).filter((file): file is RuntimeFileFingerprint => Boolean(file));
+
+    return {
+      auditSchemaVersion: AUDIT_SCHEMA_VERSION,
+      pid: process.pid,
+      ppid: process.ppid,
+      processStartedAt: PROCESS_STARTED_AT,
+      nodeVersion: process.version,
+      execPath: process.execPath,
+      argv: process.argv.slice(0, 8),
+      cwd: process.cwd(),
+      entrypoint,
+      entrypointMtimeMs: entrypointStat?.mtimeMs,
+      packageVersion: packageJson?.version,
+      gitHead: await readGitHead(paths.repoRoot),
+      loadedFiles,
+    };
+  })();
+
+  runtimeFingerprintByRepo.set(paths.repoRoot, fingerprintPromise);
+  return fingerprintPromise;
 }
 
 function compactIssues(issues: ValidationIssue[] | undefined): Array<Record<string, unknown>> | undefined {
@@ -218,10 +335,12 @@ export async function resolveAuditLogPath(paths: ProjectPaths): Promise<string> 
 
 export async function appendAuditEvent(paths: ProjectPaths, event: ToolAuditEvent): Promise<string> {
   const logPath = await resolveAuditLogPath(paths);
+  const runtime = await resolveRuntimeFingerprint(paths);
   const record = {
     timestamp: new Date().toISOString(),
     tool: event.tool,
     phase: event.phase,
+    runtime,
     repoRoot: paths.repoRoot,
     frontendRoot: paths.frontendRoot,
     generatedRoot: paths.generatedRoot,
@@ -246,7 +365,9 @@ export async function appendAuditEventSafely(
   try {
     const logPath = await appendAuditEvent(paths, event);
     console.error(
-      `[${event.tool}] ${event.phase} repo=${paths.repoRoot} audit=${path.relative(paths.repoRoot, logPath)}`
+      `[${event.tool}] ${event.phase} pid=${process.pid} started=${PROCESS_STARTED_AT} repo=${
+        paths.repoRoot
+      } audit=${path.relative(paths.repoRoot, logPath)}`
     );
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

@@ -34,11 +34,16 @@ ruoyi-fastapi-frontend/src/demo/scenarios/generated/candidates/.audit/demo-offli
 ```
 
 Each record includes the tool name, phase (`started`, `succeeded`, or `failed`), resolved `repoRoot`,
-`generatedRoot`, `candidateRoot`, compact input identifiers, and compact output or error evidence. Large draft and
-scenario payloads are summarized rather than logged in full. If Cherry Studio reports that a candidate was written,
-this file should show a matching `demo_offline_write_candidate` `succeeded` record with the same `candidateId` and
-paths. If there is no matching record in this repository, the client likely did not call this MCP instance or used a
-different `--repo-root`.
+`generatedRoot`, `candidateRoot`, runtime fingerprint, compact input identifiers, and compact output or error evidence.
+Large draft and scenario payloads are summarized rather than logged in full. The `runtime` object records `pid`,
+`processStartedAt`, `entrypoint`, Node version, current git head, and hashes/mtimes for the loaded MCP files. Use those
+fields to identify stale stdio processes after rebuilding `dist`.
+
+If a promote call used the current implementation, `demo_offline_promote_candidate` `succeeded` records should include
+`output.data.activated` and `output.data.activePath` unless `activate: false` was explicitly passed. If a client reports
+that a candidate was written, this file should show a matching `demo_offline_write_candidate` `succeeded` record with
+the same `candidateId` and paths. If there is no matching record in this repository, the client likely did not call this
+MCP instance or used a different `--repo-root`.
 
 ## MCP Client Config
 

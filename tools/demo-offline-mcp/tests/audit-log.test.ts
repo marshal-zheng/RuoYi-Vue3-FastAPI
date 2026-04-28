@@ -39,13 +39,27 @@ describe('Tool audit log', () => {
         tool: 'demo_offline_test_tool',
         phase: 'started',
         repoRoot: paths.repoRoot,
+        runtime: {
+          auditSchemaVersion: 2,
+          pid: process.pid,
+          nodeVersion: process.version,
+        },
         input: {
           scenarioId: 'audit-demo',
         },
       });
+      expect(records[0].runtime.processStartedAt).toEqual(expect.any(String));
+      expect(records[0].runtime.loadedFiles.length).toBeGreaterThan(0);
+      expect(records[0].runtime.loadedFiles[0]).toMatchObject({
+        path: expect.stringContaining('audit-log'),
+        sha256: expect.any(String),
+      });
       expect(records[1]).toMatchObject({
         tool: 'demo_offline_test_tool',
         phase: 'succeeded',
+        runtime: {
+          pid: process.pid,
+        },
         output: {
           ok: true,
           data: {
