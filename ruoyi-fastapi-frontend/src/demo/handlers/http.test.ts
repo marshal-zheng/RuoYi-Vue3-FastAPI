@@ -14,6 +14,7 @@ const runtimeConfig: RuntimeConfig = {
   mockMode: 'pure',
   apiPrefix: '/api',
   scenarioId: 'default',
+  allowCandidateScenarios: false,
   debug: true,
   source: 'runtime-mode',
 };

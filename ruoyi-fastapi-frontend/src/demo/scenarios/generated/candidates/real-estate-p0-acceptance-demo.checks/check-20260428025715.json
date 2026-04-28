@@ -1,0 +1,12 @@
+{
+  "runId": "check-20260428025715",
+  "candidateId": "real-estate-p0-acceptance-demo",
+  "scenarioId": "real-estate-p0-acceptance-demo",
+  "passed": true,
+  "profiles": [
+    "candidate-focused-tests",
+    "frontend-type-check",
+    "candidate-demo-offline-build"
+  ],
+  "createdAt": "2026-04-28T02:57:52.537Z"
+}

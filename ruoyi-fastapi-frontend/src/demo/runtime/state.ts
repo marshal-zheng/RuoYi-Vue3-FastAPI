@@ -40,7 +40,9 @@ export async function initializeDemoRuntimeState(
 ): Promise<DemoRuntimeSnapshot> {
   const db = getDemoOfflineDb();
   const scenarioRepository = new ScenarioRepository(db);
-  const scenarioPackage = getDemoScenarioPackage(config.scenarioId);
+  const scenarioPackage = getDemoScenarioPackage(config.scenarioId, {
+    allowCandidateScenarios: config.allowCandidateScenarios,
+  });
   const result = await scenarioRepository.ensureScenario(scenarioPackage);
   const scenario = createScenarioSnapshot(result.activeScenario);
 
@@ -79,7 +81,9 @@ export async function resetDemoRuntimeScenario(
   });
   const db = getDemoOfflineDb();
   const scenarioRepository = new ScenarioRepository(db);
-  const scenarioPackage = getDemoScenarioPackage(config.scenarioId);
+  const scenarioPackage = getDemoScenarioPackage(config.scenarioId, {
+    allowCandidateScenarios: config.allowCandidateScenarios,
+  });
   const result = await scenarioRepository.resetScenario(scenarioPackage);
   const scenario = createScenarioSnapshot(result.activeScenario);
 

@@ -1,3 +1,5 @@
+import { activeGeneratedScenarioId } from '@/demo/scenarios/generated/active';
+
 export type RuntimeMode = 'real' | 'fallback' | 'demo-offline';
 export type LegacyMockMode = 'off' | 'fallback' | 'pure';
 export type RuntimeModeSource = 'runtime-mode' | 'legacy-mock';
@@ -7,6 +9,7 @@ export interface RuntimeModeEnv {
   VITE_ENABLE_MOCK?: string;
   VITE_APP_BASE_API?: string;
   VITE_DEMO_SCENARIO_ID?: string;
+  VITE_DEMO_ALLOW_CANDIDATE_SCENARIOS?: string;
   VITE_DEMO_RUNTIME_DEBUG?: string;
 }
 
@@ -15,12 +18,14 @@ export interface RuntimeConfig {
   mockMode: LegacyMockMode;
   apiPrefix: string;
   scenarioId: string;
+  allowCandidateScenarios: boolean;
   debug: boolean;
   source: RuntimeModeSource;
 }
 
 const DEFAULT_API_PREFIX = '/api';
 const DEFAULT_SCENARIO_ID = 'default';
+const AUTO_SCENARIO_ID = 'auto';
 
 const LEGACY_MOCK_MODE_MAP: Record<LegacyMockMode, RuntimeMode> = {
   off: 'real',
@@ -52,6 +57,16 @@ function normalizeBoolean(value?: string, defaultValue = false): boolean {
   if (normalized === undefined) return defaultValue;
 
   return ['1', 'true', 'yes', 'on'].includes(normalized);
+}
+
+function resolveScenarioId(value?: string): string {
+  const normalized = normalizeEnvValue(value);
+
+  if (!normalized || normalized === AUTO_SCENARIO_ID) {
+    return activeGeneratedScenarioId || DEFAULT_SCENARIO_ID;
+  }
+
+  return normalized;
 }
 
 export function normalizeLegacyMockMode(value?: string): LegacyMockMode {
@@ -95,7 +110,8 @@ export function resolveRuntimeConfig(
     mode,
     mockMode: runtimeModeToMockMode(mode),
     apiPrefix: normalizeApiPrefix(env.VITE_APP_BASE_API),
-    scenarioId: normalizeEnvValue(env.VITE_DEMO_SCENARIO_ID) ?? DEFAULT_SCENARIO_ID,
+    scenarioId: resolveScenarioId(env.VITE_DEMO_SCENARIO_ID),
+    allowCandidateScenarios: normalizeBoolean(env.VITE_DEMO_ALLOW_CANDIDATE_SCENARIOS),
     debug: normalizeBoolean(env.VITE_DEMO_RUNTIME_DEBUG),
     source,
   };

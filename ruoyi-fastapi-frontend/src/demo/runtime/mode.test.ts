@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { activeGeneratedScenarioId } from '@/demo/scenarios/generated/active';
 
 import {
   mockModeToRuntimeMode,
@@ -34,12 +35,34 @@ describe('runtime mode resolver', () => {
         VITE_APP_RUNTIME_MODE: "'fallback'",
         VITE_APP_BASE_API: 'dev-api/',
         VITE_DEMO_SCENARIO_ID: '"customer-a"',
+        VITE_DEMO_ALLOW_CANDIDATE_SCENARIOS: 'true',
       })
     ).toMatchObject({
       mode: 'fallback',
       apiPrefix: '/dev-api',
       scenarioId: 'customer-a',
+      allowCandidateScenarios: true,
     });
+  });
+
+  it('uses the active generated scenario when scenario id is auto or absent', () => {
+    const expectedScenarioId = activeGeneratedScenarioId || 'default';
+
+    expect(resolveRuntimeConfig({ VITE_APP_RUNTIME_MODE: 'demo-offline' }).scenarioId).toBe(
+      expectedScenarioId
+    );
+    expect(
+      resolveRuntimeConfig({
+        VITE_APP_RUNTIME_MODE: 'demo-offline',
+        VITE_DEMO_SCENARIO_ID: 'auto',
+      }).scenarioId
+    ).toBe(expectedScenarioId);
+    expect(
+      resolveRuntimeConfig({
+        VITE_APP_RUNTIME_MODE: 'demo-offline',
+        VITE_DEMO_SCENARIO_ID: 'default',
+      }).scenarioId
+    ).toBe('default');
   });
 
   it('rejects invalid explicit runtime modes', () => {
@@ -54,5 +77,23 @@ describe('runtime mode resolver', () => {
     expect(mockModeToRuntimeMode('off')).toBe('real');
     expect(mockModeToRuntimeMode('fallback')).toBe('fallback');
     expect(mockModeToRuntimeMode('pure')).toBe('demo-offline');
+  });
+
+  it('keeps real and fallback runtime semantics independent from candidate scenario loading', () => {
+    expect(
+      resolveRuntimeConfig({
+        VITE_APP_RUNTIME_MODE: 'real',
+        VITE_DEMO_ALLOW_CANDIDATE_SCENARIOS: 'true',
+      })
+    ).toMatchObject({
+      mode: 'real',
+      mockMode: 'off',
+      allowCandidateScenarios: true,
+    });
+    expect(resolveRuntimeConfig({ VITE_APP_RUNTIME_MODE: 'fallback' })).toMatchObject({
+      mode: 'fallback',
+      mockMode: 'fallback',
+      allowCandidateScenarios: false,
+    });
   });
 });
