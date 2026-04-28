@@ -212,6 +212,51 @@ describe('http contract client', () => {
     });
   });
 
+  it('presents skipped relogin auth problems through the unified error channel', async () => {
+    const { clientConfig } = await loadModule();
+    const onError = clientConfig.transforms[1].onError;
+
+    await expect(
+      onError({
+        config: {
+          method: 'post',
+          skipRelogin: true,
+          feedback: { mode: 'auto' },
+        },
+        response: {
+          status: 401,
+          data: {
+            type: 'about:blank',
+            title: '用户名或密码错误',
+            status: 401,
+            detail: '用户名或密码错误',
+            instance: '',
+            errorCode: 401,
+          },
+          headers: {},
+        },
+      })
+    ).rejects.toMatchObject({
+      status: 401,
+      problem: expect.objectContaining({
+        status: 401,
+        detail: '用户名或密码错误',
+      }),
+    });
+
+    expect(presentProblemFeedback).toHaveBeenCalledWith(
+      expect.objectContaining({
+        problem: expect.objectContaining({
+          status: 401,
+          detail: '用户名或密码错误',
+        }),
+        feedback: expect.objectContaining({
+          mode: 'auto',
+        }),
+      })
+    );
+  });
+
   it('normalizes problem details and forwards rate-limit headers to the problem presenter', async () => {
     const { clientConfig } = await loadModule();
     const onError = clientConfig.transforms[1].onError;

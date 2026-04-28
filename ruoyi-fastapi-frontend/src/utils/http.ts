@@ -463,8 +463,15 @@ const afterResponseTransform: HttpTransformHook = {
     const problem = normalizeProblemDetails(axiosError.response?.data, status);
 
     if (status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002) {
-      if (!skipRelogin) {
+      const shouldPromptRelogin = !skipRelogin && !isLoginRoute();
+      if (shouldPromptRelogin) {
         triggerRelogin(problem.detail || problem.title || '未认证，请先登录');
+      } else if (!readConfigFlag(config, 'silentError')) {
+        presentProblemFeedback({
+          problem,
+          meta,
+          feedback: resolveFeedback(config),
+        });
       }
       throw createRequestError(problem, meta);
     }

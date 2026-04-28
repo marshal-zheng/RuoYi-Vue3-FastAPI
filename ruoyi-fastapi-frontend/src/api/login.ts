@@ -18,7 +18,9 @@ export function login(username: string, password: string, code: string, uuid: st
     },
     method: 'post',
     data,
-    feedback: { mode: 'silent' },
+    skipRelogin: true,
+    silentSuccess: true,
+    feedback: { mode: 'auto' },
   });
 }
 
