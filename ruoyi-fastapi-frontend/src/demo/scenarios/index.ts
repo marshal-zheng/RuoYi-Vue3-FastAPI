@@ -33,5 +33,6 @@ export function getDemoScenarioPackage(
 
 export { defaultDemoScenario };
 export { candidateScenarioRegistry } from './generated/candidates';
-export { activeGeneratedScenarioId, generatedScenarioRegistry, realEstateProjectDemoScenario } from './generated';
+export { generatedScenarioRegistry, realEstateProjectDemoScenario } from './generated';
+export { activeGeneratedScenarioId } from './generated/active';
 export * from './schema';
