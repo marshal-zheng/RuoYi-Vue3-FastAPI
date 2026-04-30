@@ -23,6 +23,7 @@ export const industryDataDraftSchema = z.object({
         name: z.string().min(1),
         region: z.string().optional(),
         stage: z.string().min(1),
+        departmentName: z.string().min(1).optional(),
         ownerRole: z.string().min(1),
         ownerName: z.string().optional(),
         riskLevel: riskLevelSchema,

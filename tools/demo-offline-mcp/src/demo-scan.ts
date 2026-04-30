@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 import { ProjectPaths } from './project-paths.js';
-import type { DemoOfflineContext, ToolEnvelope } from './types.js';
+import type { DemoOfflineContext, DemoOfflineContextDomcModule, ToolEnvelope } from './types.js';
 import { okEnvelope } from './types.js';
 
 export interface ScanContextOptions {
@@ -113,6 +113,46 @@ async function scanHandlers(paths: ProjectPaths): Promise<DemoOfflineContext['ha
   );
 }
 
+function extractStringArray(source: string, constName: string): string[] {
+  const match = source.match(new RegExp(`const\\s+${constName}\\s*=\\s*\\[([\\s\\S]*?)\\]\\s*as\\s+const`));
+  if (!match) return [];
+  return [...(match[1] ?? '').matchAll(/['"`]([^'"`]+)['"`]/g)]
+    .map((item) => item[1] ?? '')
+    .filter(Boolean);
+}
+
+async function scanDomcModules(paths: ProjectPaths): Promise<DemoOfflineContextDomcModule[]> {
+  const modulesRoot = path.join(paths.demoRoot, 'domc', 'modules');
+  const moduleFiles = (await listFiles(modulesRoot)).filter((filePath) => filePath.endsWith('.domc.ts'));
+
+  return Promise.all(
+    moduleFiles.map(async (filePath) => {
+      const source = await readText(filePath);
+      const moduleId = source.match(/\bmoduleId\s*:\s*['"`]([^'"`]+)['"`]/)?.[1] ?? path.basename(filePath, '.domc.ts');
+      const capability =
+        (source.match(/\bcapability\s*:\s*['"`](generatable|copyOnly|unsupported)['"`]/)?.[1] as
+          | DemoOfflineContextDomcModule['capability']
+          | undefined) ?? 'unsupported';
+      const lifecycle =
+        (source.match(/\blifecycle\s*:\s*['"`](active|deprecated|experimental)['"`]/)?.[1] as
+          | DemoOfflineContextDomcModule['lifecycle']
+          | undefined) ?? 'experimental';
+      const adapterId = source.match(/\badapterId\s*:\s*['"`]([^'"`]+)['"`]/)?.[1];
+      const sourcePaths = extractStringArray(source, 'sourcePaths');
+      const evidence = [normalizeSlashes(paths.relativeToRepo(filePath))];
+
+      return {
+        moduleId,
+        capability,
+        lifecycle,
+        sourcePaths,
+        ...(adapterId ? { adapterId } : {}),
+        evidence,
+      };
+    })
+  );
+}
+
 export async function scanDemoOfflineContext(
   paths: ProjectPaths,
   options: ScanContextOptions = {}
@@ -145,32 +185,40 @@ export async function scanDemoOfflineContext(
 
   const scripts = await readPackageScripts(paths.frontendRoot);
   const handlers = await scanHandlers(paths);
+  const domcModules = await scanDomcModules(paths);
   const httpHandlers = await readText(httpHandlersPath);
   const scenarioIndex = await readText(scenarioIndexPath);
   const repository = await readText(repositoryPath);
   const schema = await readText(schemaPath);
+  const safeSlices = domcModules
+    .filter((moduleContract) => moduleContract.capability === 'generatable' && moduleContract.lifecycle === 'active')
+    .map((moduleContract) => moduleContract.moduleId);
+  const copiedSlices = domcModules
+    .filter((moduleContract) => moduleContract.capability === 'copyOnly' && moduleContract.lifecycle === 'active')
+    .map((moduleContract) => moduleContract.moduleId);
 
   const context: DemoOfflineContext = {
     repoRoot: paths.repoRoot,
     frontendRoot: paths.frontendRoot,
     generatedRoot: paths.generatedRoot,
     schemaVersion: 1,
-    safeSlices: ['project', 'simulation'],
-    copiedSlices: ['auth', 'system'],
+    safeSlices,
+    copiedSlices,
+    domcModules,
     handlers,
     scenarios,
     scripts,
     risks: [
       {
-        code: 'p0_scope_limited_to_demo_root',
+        code: 'domc_scan_limited_to_demo_root',
         message:
-          'P0 scanning is limited to ruoyi-fastapi-frontend/src/demo/** and demo-related frontend scripts.',
-        source: 'docs/specs/demo-offline-data-mcp/requirements.md',
+          'Source-generated scanning uses DOMC module declarations under ruoyi-fastapi-frontend/src/demo/domc/** and demo-related frontend scripts.',
+        source: 'docs/specs/demo-offline-domc-registry-and-generator-adapters/requirements.md',
       },
       {
         code: 'unsupported_slices_not_generated',
         message:
-          'Slices without demo-offline schema and handler evidence are unsafe to generate in P0.',
+          'Modules without active DOMC generatable capability and compatible adapter evidence are unsafe to generate.',
         source: normalizeSlashes(paths.relativeToRepo(schemaPath)),
       },
       ...(httpHandlers.includes('DEMO_API_NOT_IMPLEMENTED')

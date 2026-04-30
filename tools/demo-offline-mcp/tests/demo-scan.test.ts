@@ -17,6 +17,17 @@ describe('scanDemoOfflineContext', () => {
       schemaVersion: 1,
       safeSlices: ['project', 'simulation'],
       copiedSlices: ['auth', 'system'],
+      domcModules: expect.arrayContaining([
+        expect.objectContaining({
+          moduleId: 'project',
+          capability: 'generatable',
+          adapterId: 'project-simulation',
+        }),
+        expect.objectContaining({
+          moduleId: 'auth',
+          capability: 'copyOnly',
+        }),
+      ]),
       scripts: {
         devMock: expect.stringContaining('demo-offline'),
         buildDemoOffline: 'vite build --mode demo-offline',

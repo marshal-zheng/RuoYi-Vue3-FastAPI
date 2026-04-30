@@ -15,11 +15,13 @@ import type {
 } from './types.js';
 import { errorEnvelope, okEnvelope } from './types.js';
 import type { ProjectPaths } from './project-paths.js';
+import { computeScenarioFingerprint } from './hash.js';
 
 export interface CompileScenarioInput {
   plan: GenerationPlan;
   draft: IndustryDataDraft;
-  paths: ProjectPaths;
+  paths?: ProjectPaths;
+  defaultScenarioPackage?: CompiledDemoScenarioPackage;
 }
 
 const BASE_TIME = Date.UTC(2026, 3, 28, 9, 0, 0);
@@ -146,6 +148,18 @@ async function loadDefaultDemoScenario(paths: ProjectPaths): Promise<CompiledDem
   return JSON.parse(JSON.stringify(loaded)) as CompiledDemoScenarioPackage;
 }
 
+async function resolveDefaultDemoScenario(input: CompileScenarioInput): Promise<CompiledDemoScenarioPackage> {
+  if (input.defaultScenarioPackage) {
+    return JSON.parse(JSON.stringify(input.defaultScenarioPackage)) as CompiledDemoScenarioPackage;
+  }
+
+  if (!input.paths) {
+    throw new Error('compileScenarioPackage requires paths or defaultScenarioPackage.');
+  }
+
+  return loadDefaultDemoScenario(input.paths);
+}
+
 function createProjectRecords(plan: GenerationPlan, draft: IndustryDataDraft) {
   const projects: Array<Record<string, unknown>> = [];
   const versions: Array<Record<string, unknown>> = [];
@@ -162,6 +176,8 @@ function createProjectRecords(plan: GenerationPlan, draft: IndustryDataDraft) {
         }));
     const primaryVersionId = 8001 + projectIndex * 10;
     const updatedAt = isoAt(projectIndex * 13);
+    const departmentName = project.departmentName ?? `${project.ownerRole}工作组`;
+    const creator = `${departmentName}-${project.ownerRole}`;
 
     projects.push({
       projectId,
@@ -173,7 +189,8 @@ function createProjectRecords(plan: GenerationPlan, draft: IndustryDataDraft) {
       createTime: isoAt(projectIndex * 13 - 240),
       updateTime: updatedAt,
       owner: `${project.ownerRole}-${project.ownerName ?? `${project.ownerRole}负责人${projectIndex + 1}`}`,
-      createBy: `${plan.industry}演示团队`,
+      department: departmentName,
+      createBy: creator,
       updateBy: project.ownerRole,
       remark: project.remark,
       industry: draft.industry.id,
@@ -368,10 +385,7 @@ export async function compileScenarioPackage(
   }
 
   const draft = parsed.data as IndustryDataDraft;
-  const defaultScenario = await loadDefaultDemoScenario(input.paths);
-  const fingerprint = `${safeId(input.plan.scenarioId)}-${hashText(
-    JSON.stringify({ plan: input.plan, draft })
-  )}`;
+  const defaultScenario = await resolveDefaultDemoScenario(input);
   const project = createProjectRecords(input.plan, draft);
   const simulation = createSimulationRecords(input.plan, draft);
   const scenarioPackage: CompiledDemoScenarioPackage = {
@@ -380,7 +394,7 @@ export async function compileScenarioPackage(
       id: input.plan.scenarioId,
       name: input.plan.scenarioName,
       version: draft.scenario.version ?? '1.0.0',
-      fingerprint,
+      fingerprint: '',
       seed: draft.scenario.seed ?? input.plan.scenarioId,
     },
     auth: defaultScenario.auth,
@@ -388,6 +402,7 @@ export async function compileScenarioPackage(
     project,
     simulation,
   };
+  scenarioPackage.scenario.fingerprint = computeScenarioFingerprint(scenarioPackage);
   const packageIssues = validateCompiledScenarioPackage(scenarioPackage);
 
   if (packageIssues.length) {

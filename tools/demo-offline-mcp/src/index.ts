@@ -5,10 +5,15 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { assertNoProviderApiKeyRequirement, parseServerConfig, type ServerConfig } from './config.js';
 import { registerCreateGenerationPlanTool } from './tools/create-generation-plan.js';
 import { registerCompileScenarioTool } from './tools/compile-scenario.js';
+import { registerActivateRuntimePackageTool } from './tools/activate-runtime-package.js';
+import { registerDryRunRuntimePackageTool } from './tools/dry-run-runtime-package.js';
+import { registerGenerateDemoTool } from './tools/generate-demo.js';
+import { registerGenerateRuntimeDemoTool } from './tools/generate-runtime-demo.js';
 import { registerPromoteCandidateTool } from './tools/promote-candidate.js';
 import { registerRunChecksTool } from './tools/run-checks.js';
 import { registerScanContextTool } from './tools/scan-context.js';
 import { registerValidateDraftTool } from './tools/validate-draft.js';
+import { registerValidateRuntimePackageTool } from './tools/validate-runtime-package.js';
 import { registerWriteCandidateTool } from './tools/write-candidate.js';
 
 export const SERVER_NAME = 'demo-offline-data-mcp';
@@ -23,12 +28,17 @@ export function createDemoOfflineMcpServer(config: ServerConfig = {}): McpServer
   });
 
   registerScanContextTool(server, { repoRoot: config.repoRoot });
+  registerGenerateDemoTool(server, { repoRoot: config.repoRoot });
+  registerGenerateRuntimeDemoTool(server, { repoRoot: config.repoRoot });
   registerCreateGenerationPlanTool(server, { repoRoot: config.repoRoot });
   registerValidateDraftTool(server, { repoRoot: config.repoRoot });
   registerCompileScenarioTool(server, { repoRoot: config.repoRoot });
   registerWriteCandidateTool(server, { repoRoot: config.repoRoot });
   registerRunChecksTool(server, { repoRoot: config.repoRoot });
   registerPromoteCandidateTool(server, { repoRoot: config.repoRoot });
+  registerValidateRuntimePackageTool(server);
+  registerDryRunRuntimePackageTool(server);
+  registerActivateRuntimePackageTool(server);
 
   return server;
 }

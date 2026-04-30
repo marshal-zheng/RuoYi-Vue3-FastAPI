@@ -26,7 +26,7 @@ export function registerCreateGenerationPlanTool(
         industry: z.string().optional(),
         scenarioId: z.string().optional(),
         scenarioName: z.string().optional(),
-        scope: z.array(z.enum(['project', 'simulation'])).optional(),
+        scope: z.array(z.string().min(1)).optional(),
         targetCounts: z
           .object({
             projects: z.number().int().positive().optional(),

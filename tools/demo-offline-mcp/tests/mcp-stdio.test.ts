@@ -39,12 +39,17 @@ describe('Demo Offline MCP stdio server', () => {
     const toolNames = tools.tools.map((tool) => tool.name).sort();
 
     expect(toolNames).toEqual([
+      'demo_offline_activate_runtime_package',
       'demo_offline_compile_scenario',
       'demo_offline_create_generation_plan',
+      'demo_offline_dry_run_runtime_package',
+      'demo_offline_generate_demo',
+      'demo_offline_generate_runtime_demo',
       'demo_offline_promote_candidate',
       'demo_offline_run_checks',
       'demo_offline_scan_context',
       'demo_offline_validate_draft',
+      'demo_offline_validate_runtime_package',
       'demo_offline_write_candidate',
     ]);
     expect(tools.tools.find((tool) => tool.name === 'demo_offline_scan_context')).toMatchObject({

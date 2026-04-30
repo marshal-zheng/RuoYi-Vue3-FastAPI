@@ -73,8 +73,11 @@ describe('createGenerationPlan', () => {
     expect(plan.data?.trace).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          slice: 'p0-unsupported-business-modules',
-          status: 'unsupported',
+          slice: 'unregistered-business-modules',
+          status: 'blocked',
+          blocker: expect.objectContaining({
+            code: 'domc_all_modules_request_blocked',
+          }),
         }),
       ])
     );

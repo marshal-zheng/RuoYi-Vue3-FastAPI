@@ -2,6 +2,7 @@ import type {
   DemoCopiedSlice,
   DemoGeneratableSlice,
   DemoOfflineContext,
+  DemoOfflineBlockerIssue,
   GenerationPlan,
   ToolEnvelope,
 } from './types.js';
@@ -16,8 +17,6 @@ export interface CreateGenerationPlanInput {
   targetCounts?: Partial<GenerationPlan['targetCounts']>;
 }
 
-const DEFAULT_SCOPE: DemoGeneratableSlice[] = ['project', 'simulation'];
-const COPIED_SLICES: DemoCopiedSlice[] = ['auth', 'system'];
 const DEFAULT_TARGET_COUNTS = {
   projects: 6,
   versionsPerProject: 1,
@@ -64,15 +63,32 @@ function industryToId(industry: string): string {
   return INDUSTRY_ID_MAP[industry] ?? slugify(industry);
 }
 
-function normalizeScope(scope: DemoGeneratableSlice[] | undefined): DemoGeneratableSlice[] {
-  const requested = scope?.length ? [...new Set(scope)] : DEFAULT_SCOPE;
-  const normalized = requested.includes('simulation')
-    ? (['project', ...requested] as DemoGeneratableSlice[])
-    : requested;
+function activeGeneratableModules(context: DemoOfflineContext): DemoGeneratableSlice[] {
+  const fromDomc = context.domcModules
+    .filter((moduleContract) => moduleContract.capability === 'generatable' && moduleContract.lifecycle === 'active')
+    .map((moduleContract) => moduleContract.moduleId);
+  return fromDomc.length ? fromDomc : context.safeSlices;
+}
 
-  return [...new Set(normalized)].filter((slice): slice is DemoGeneratableSlice =>
-    DEFAULT_SCOPE.includes(slice as DemoGeneratableSlice)
-  );
+function activeCopyOnlyModules(context: DemoOfflineContext): DemoCopiedSlice[] {
+  const fromDomc = context.domcModules
+    .filter((moduleContract) => moduleContract.capability === 'copyOnly' && moduleContract.lifecycle === 'active')
+    .map((moduleContract) => moduleContract.moduleId);
+  return fromDomc.length ? fromDomc : context.copiedSlices;
+}
+
+function normalizeScope(
+  scope: DemoGeneratableSlice[] | undefined,
+  context: DemoOfflineContext
+): DemoGeneratableSlice[] {
+  const available = activeGeneratableModules(context);
+  const requested = scope?.length ? [...new Set(scope)] : available;
+  const withDependencies =
+    requested.includes('simulation') && available.includes('project')
+      ? ['project', ...requested]
+      : requested;
+
+  return [...new Set(withDependencies)].filter((slice) => available.includes(slice));
 }
 
 function normalizeCount(value: number | undefined, fallback: number): number {
@@ -85,9 +101,37 @@ function wantsAllModules(brief: string): boolean {
 }
 
 function evidenceForSlice(context: DemoOfflineContext, slice: string): string[] {
+  const domcModule = context.domcModules.find((moduleContract) => moduleContract.moduleId === slice);
   const handler = context.handlers.find((item) => item.name === slice);
   const schemaEvidence = 'ruoyi-fastapi-frontend/src/demo/scenarios/schema.ts';
-  return [schemaEvidence, ...(handler ? [handler.source] : [])];
+  return [
+    ...(domcModule?.evidence ?? []),
+    schemaEvidence,
+    ...(handler ? [handler.source] : []),
+  ];
+}
+
+function createPlanBlocker(input: {
+  moduleId: string;
+  code: string;
+  actual?: unknown;
+  expected: string;
+  fixHint: string;
+  missingArtifacts: string[];
+  nextActions: string[];
+}): DemoOfflineBlockerIssue {
+  return {
+    path: `domc.modules[${input.moduleId}]`,
+    code: input.code,
+    severity: 'error',
+    actual: input.actual,
+    expected: input.expected,
+    fixHint: input.fixHint,
+    autoRepairable: false,
+    gate: 'module-blocker',
+    missingArtifacts: input.missingArtifacts,
+    nextActions: input.nextActions,
+  };
 }
 
 export function createGenerationPlan(
@@ -97,7 +141,10 @@ export function createGenerationPlan(
   const brief = input.brief.trim();
   const industry = inferIndustry({ ...input, brief });
   const industryId = industryToId(industry);
-  const scope = normalizeScope(input.scope);
+  const scope = normalizeScope(input.scope, context);
+  const copiedSlices = activeCopyOnlyModules(context);
+  const availableGeneratable = activeGeneratableModules(context);
+  const requestedUnsupported = (input.scope ?? []).filter((slice) => !availableGeneratable.includes(slice));
   const targetCounts = {
     projects: normalizeCount(input.targetCounts?.projects, DEFAULT_TARGET_COUNTS.projects),
     versionsPerProject: normalizeCount(
@@ -117,24 +164,96 @@ export function createGenerationPlan(
       status: 'generate' as const,
       evidence: evidenceForSlice(context, slice),
     })),
-    ...COPIED_SLICES.map((slice) => ({
+    ...copiedSlices.map((slice) => ({
       slice,
       status: 'copy' as const,
       evidence: [
+        ...evidenceForSlice(context, slice),
         'ruoyi-fastapi-frontend/src/demo/scenarios/default.ts',
-        'docs/specs/demo-offline-data-mcp/requirements.md',
       ],
     })),
   ];
+  const moduleTrace: NonNullable<GenerationPlan['moduleTrace']> = [
+    ...scope.map((moduleId) => ({
+      moduleId,
+      capability: 'generatable' as const,
+      status: 'generate' as const,
+      sourcePaths: context.domcModules.find((moduleContract) => moduleContract.moduleId === moduleId)?.sourcePaths ?? [],
+      adapterId: context.domcModules.find((moduleContract) => moduleContract.moduleId === moduleId)?.adapterId,
+      evidence: evidenceForSlice(context, moduleId),
+    })),
+    ...copiedSlices.map((moduleId) => ({
+      moduleId,
+      capability: 'copyOnly' as const,
+      status: 'copy' as const,
+      sourcePaths: context.domcModules.find((moduleContract) => moduleContract.moduleId === moduleId)?.sourcePaths ?? [],
+      evidence: evidenceForSlice(context, moduleId),
+    })),
+  ];
+
+  requestedUnsupported.forEach((moduleId) => {
+    const domcModule = context.domcModules.find((moduleContract) => moduleContract.moduleId === moduleId);
+    const blocker = createPlanBlocker({
+      moduleId,
+      code: domcModule ? 'domc_module_not_generatable' : 'domc_module_missing',
+      actual: domcModule ?? moduleId,
+      expected: 'Active DOMC generatable module with compatible adapter evidence',
+      fixHint: 'Complete module DOMC and adapter DoD before adding it to generation scope.',
+      missingArtifacts: [
+        `ruoyi-fastapi-frontend/src/demo/domc/modules/${moduleId}.domc.ts`,
+        `tools/demo-offline-mcp/src/adapters/${moduleId}/adapter.ts`,
+      ],
+      nextActions: ['Add DOMC registry coverage.', 'Implement and register a compatible MCP adapter.'],
+    });
+    trace.push({
+      slice: moduleId,
+      status: 'blocked',
+      evidence: domcModule?.evidence ?? ['ruoyi-fastapi-frontend/src/demo/domc/**'],
+      blocker,
+    });
+    moduleTrace.push({
+      moduleId,
+      capability: domcModule?.capability ?? 'unsupported',
+      status: 'blocked',
+      sourcePaths: domcModule?.sourcePaths ?? [],
+      adapterId: domcModule?.adapterId,
+      evidence: domcModule?.evidence ?? ['ruoyi-fastapi-frontend/src/demo/domc/**'],
+      blocker,
+    });
+  });
 
   if (wantsAllModules(brief)) {
-    trace.push({
-      slice: 'p0-unsupported-business-modules',
-      status: 'unsupported',
-      evidence: [
-        'P0 scan scope excludes src/views/**, src/api/**, and backend business code.',
-        'Only project + simulation have safe generated evidence in src/demo/**.',
+    const blocker = createPlanBlocker({
+      moduleId: 'unregistered-business-modules',
+      code: 'domc_all_modules_request_blocked',
+      actual: 'all modules requested',
+      expected: 'Only active DOMC generatable modules and copyOnly modules may be planned',
+      fixHint: 'Add DOMC, IndexedDB mapping, handler coverage, UI journey, invariants, and adapter for every additional business module.',
+      missingArtifacts: [
+        'DOMC for unregistered business modules',
+        'IndexedDB mapping',
+        'MSW handler coverage',
+        'UI journey',
+        'generator adapter',
       ],
+      nextActions: ['Implement the module Definition of Done before full-site generation.'],
+    });
+    trace.push({
+      slice: 'unregistered-business-modules',
+      status: 'blocked',
+      evidence: [
+        'docs/specs/demo-offline-domc-registry-and-generator-adapters/requirements.md',
+        'ruoyi-fastapi-frontend/src/demo/domc/**',
+      ],
+      blocker,
+    });
+    moduleTrace.push({
+      moduleId: 'unregistered-business-modules',
+      capability: 'unsupported',
+      status: 'blocked',
+      sourcePaths: [],
+      evidence: ['docs/specs/demo-offline-domc-registry-and-generator-adapters/requirements.md'],
+      blocker,
     });
   }
 
@@ -144,9 +263,10 @@ export function createGenerationPlan(
     industry,
     brief,
     scope,
-    copiedSlices: [...COPIED_SLICES],
+    copiedSlices,
     targetCounts,
     trace,
+    moduleTrace,
   };
 
   return okEnvelope('Created a reviewable demo-offline generation plan.', plan, {
