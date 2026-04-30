@@ -33,7 +33,7 @@ export function getDemoScenarioPackage(
 
 export { defaultDemoScenario };
 export { candidateScenarioRegistry } from './generated/candidates';
-export { generatedScenarioRegistry, realEstateProjectDemoScenario } from './generated';
+export { generatedScenarioRegistry, realEstateProjectDemoScenario, defenseSoftwareDeliveryQmDemoScenario, smartMarketOperationsDemoScenario } from './generated';
 export { activeGeneratedScenarioId } from './generated/active';
 export * from './contract';
 export * from './fingerprint';
