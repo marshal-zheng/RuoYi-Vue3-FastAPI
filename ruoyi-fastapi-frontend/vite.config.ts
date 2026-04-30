@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import createVitePlugins from './vite/plugins'
+import createDemoOfflineContractPlugin from './vite/plugins/demo-offline-contract'
 
 const baseUrl = 'http://127.0.0.1:8088'
 
@@ -96,10 +97,10 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     !!developmentRepoRoot &&
     fs.existsSync(developmentRepoRoot)
   const effectiveZxuiRepoRoot = explicitRepoRoot || (fallbackToDevelopmentZxui ? developmentRepoRoot : '')
-  
+
   // 测试环境配置
   const isTest = mode === 'test' || process.env.NODE_ENV === 'test'
-  
+
   // 是否启用 ZXUI 本地直连模式
   // 1. 开发环境使用当前 mode 的显式配置
   // 2. demo-offline 构建时，如果本机开发环境已接入 ZXUI 本地仓库，则复用同一套源码，避免与 node_modules 产物不一致
@@ -128,7 +129,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       '请在 .env.development 或 .env.local 中设置 VITE_ZXIO_REPO_ROOT 为 ZXUI monorepo 绝对路径。'
     )
   }
-  
+
   // ZXUI 本地直连别名
   const zxuiLocalAlias = useZxuiLocal ? createZxuiLocalAlias(effectiveZxuiRepoRoot) : []
 
@@ -139,7 +140,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     // 设置别名
     { find: '@', replacement: path.resolve(__dirname, './src') },
   ]
-  
+
   return {
     // 部署生产环境和开发环境下的URL。
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上
@@ -147,6 +148,9 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     base: isDemoOfflineBuild ? './' : '/',
     plugins: isTest ? [] : [
       tailwindcss(),
+      createDemoOfflineContractPlugin({
+        enabled: isDemoOfflineBuild,
+      }),
       ...createVitePlugins(env, command === 'build')
     ],
     resolve: {

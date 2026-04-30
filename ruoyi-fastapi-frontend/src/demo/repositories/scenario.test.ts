@@ -51,6 +51,30 @@ describe('ScenarioRepository', () => {
     await expect(db.projects.count()).resolves.toBe(2);
   });
 
+  it('updates runtime import context when scenario identity is unchanged', async () => {
+    await scenarioRepository.ensureScenario(defaultDemoScenario);
+
+    const result = await scenarioRepository.ensureScenario(defaultDemoScenario, {
+      source: 'runtime-active-v2',
+      contractFingerprint: 'contract-ok',
+      validationSummary: {
+        schemaValid: true,
+        contractValid: true,
+        invariantValid: true,
+        issueCount: 0,
+      },
+    });
+
+    expect(result.imported).toBe(false);
+    expect(result.activeScenario).toMatchObject({
+      source: 'runtime-active-v2',
+      contractFingerprint: 'contract-ok',
+      validationSummary: {
+        issueCount: 0,
+      },
+    });
+  });
+
   it('resets current data when explicitly requested', async () => {
     await scenarioRepository.ensureScenario(defaultDemoScenario);
 
@@ -120,6 +144,7 @@ describe('ScenarioRepository', () => {
       activeScenario: {
         scenarioId: 'customer-a',
         fingerprint: 'customer-a-v1',
+        source: 'bundle-default-v2',
       },
     });
     await expect(db.projects.toArray()).resolves.toEqual([

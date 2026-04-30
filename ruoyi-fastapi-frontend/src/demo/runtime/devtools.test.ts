@@ -38,6 +38,7 @@ const snapshot: DemoRuntimeSnapshot = {
     version: '1.0.0',
     schemaVersion: 1,
     fingerprint: 'default:runtime-boundary',
+    source: 'bundle-default-v2',
     loadedAt: '2026-04-11T00:00:00.000Z',
   },
 };

@@ -1,8 +1,13 @@
 import type { RuntimeConfig } from './mode';
 import type { DemoRuntimeLogger } from './logger';
 import { getDemoOfflineDb } from '@/demo/db';
-import { getDemoScenarioPackage, type DemoScenarioPackage } from '@/demo/scenarios';
-import { ScenarioRepository, type DemoActiveScenarioMeta } from '@/demo/repositories';
+import { defaultDemoScenario, type DemoScenarioPackage } from '@/demo/scenarios';
+import {
+  ScenarioRepository,
+  type DemoActiveScenarioMeta,
+  type DemoScenarioImportResult,
+} from '@/demo/repositories';
+import { loadRuntimeScenarioPackage } from './scenario-package-loader';
 
 export interface DemoScenarioSnapshot {
   id: string;
@@ -10,6 +15,10 @@ export interface DemoScenarioSnapshot {
   version: string;
   schemaVersion: 1;
   fingerprint: string;
+  source: DemoActiveScenarioMeta['source'];
+  contractFingerprint?: string;
+  fallbackReason?: DemoActiveScenarioMeta['fallbackReason'];
+  validationSummary?: DemoActiveScenarioMeta['validationSummary'];
   loadedAt: string;
 }
 
@@ -30,6 +39,10 @@ function createScenarioSnapshot(activeScenario: DemoActiveScenarioMeta): DemoSce
     version: activeScenario.scenarioVersion,
     schemaVersion: activeScenario.schemaVersion,
     fingerprint: activeScenario.fingerprint,
+    source: activeScenario.source ?? 'bundle-default-v2',
+    contractFingerprint: activeScenario.contractFingerprint,
+    fallbackReason: activeScenario.fallbackReason,
+    validationSummary: activeScenario.validationSummary,
     loadedAt: activeScenario.importedAt,
   };
 }
@@ -40,24 +53,38 @@ export async function initializeDemoRuntimeState(
 ): Promise<DemoRuntimeSnapshot> {
   const db = getDemoOfflineDb();
   const scenarioRepository = new ScenarioRepository(db);
-  const scenarioPackage = getDemoScenarioPackage(config.scenarioId, {
-    allowCandidateScenarios: config.allowCandidateScenarios,
+  const selection = await loadRuntimeScenarioPackage<DemoScenarioImportResult>(config, logger, {
+    importScenario: (candidate) =>
+      scenarioRepository.ensureScenario(candidate.package, {
+        source: candidate.source,
+        contractFingerprint: candidate.meta?.contractFingerprint,
+        fallbackReason: candidate.fallbackReason,
+        validationSummary: candidate.meta?.validationSummary,
+      }),
   });
-  const result = await scenarioRepository.ensureScenario(scenarioPackage);
+  const result = selection.importResult;
+
+  if (!result) {
+    throw new Error('Runtime scenario loader did not import a scenario.');
+  }
+
   const scenario = createScenarioSnapshot(result.activeScenario);
 
   logger.info('初始化离线演示运行态边界。', {
     apiPrefix: config.apiPrefix,
     scenarioId: scenario.id,
+    source: scenario.source,
     persistence: 'indexeddb',
     dbName: db.name,
   });
   logger.info(
-    result.imported ? '默认场景已导入 IndexedDB。' : '默认场景已匹配，保留本地演示数据。',
+    result.imported ? '运行态场景已导入 IndexedDB。' : '运行态场景已匹配，保留本地演示数据。',
     {
       scenarioId: scenario.id,
       schemaVersion: scenario.schemaVersion,
       fingerprint: scenario.fingerprint,
+      source: scenario.source,
+      fallbackReason: scenario.fallbackReason,
     }
   );
 
@@ -77,14 +104,13 @@ export async function resetDemoRuntimeScenario(
   logger: DemoRuntimeLogger
 ): Promise<DemoRuntimeSnapshot> {
   logger.info('收到显式重置场景请求。', {
-    scenarioId: config.scenarioId,
+    scenarioId: defaultDemoScenario.scenario.id,
   });
   const db = getDemoOfflineDb();
   const scenarioRepository = new ScenarioRepository(db);
-  const scenarioPackage = getDemoScenarioPackage(config.scenarioId, {
-    allowCandidateScenarios: config.allowCandidateScenarios,
+  const result = await scenarioRepository.resetScenario(defaultDemoScenario, {
+    source: 'bundle-default-v2',
   });
-  const result = await scenarioRepository.resetScenario(scenarioPackage);
   const scenario = createScenarioSnapshot(result.activeScenario);
 
   logger.info('场景已重置并重新导入 IndexedDB。', {

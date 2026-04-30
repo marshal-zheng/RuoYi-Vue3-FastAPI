@@ -6,17 +6,31 @@ import {
   validateDemoScenarioPackage,
   type DemoScenarioDescriptor,
   type DemoScenarioPackage,
+  type RuntimeScenarioLoadIssue,
+  type RuntimeScenarioSource,
+  type RuntimeValidationSummary,
 } from '@/demo/scenarios';
 
 const ACTIVE_SCENARIO_META_KEY = 'activeScenario';
 
 export interface DemoActiveScenarioMeta extends DemoScenarioDescriptor {
   importedAt: string;
+  source: RuntimeScenarioSource;
+  contractFingerprint?: string;
+  fallbackReason?: RuntimeScenarioLoadIssue;
+  validationSummary?: RuntimeValidationSummary;
 }
 
 export interface DemoScenarioImportResult {
   imported: boolean;
   activeScenario: DemoActiveScenarioMeta;
+}
+
+export interface DemoScenarioImportContext {
+  source?: RuntimeScenarioSource;
+  contractFingerprint?: string;
+  fallbackReason?: RuntimeScenarioLoadIssue;
+  validationSummary?: RuntimeValidationSummary;
 }
 
 function metaRecord(value: DemoActiveScenarioMeta): DemoMetaRecord<DemoActiveScenarioMeta> {
@@ -36,6 +50,35 @@ function sameScenario(left: DemoActiveScenarioMeta | undefined, right: DemoScena
   );
 }
 
+function createActiveScenarioMeta(
+  descriptor: DemoScenarioDescriptor,
+  importedAt: string,
+  context: DemoScenarioImportContext = {}
+): DemoActiveScenarioMeta {
+  return {
+    ...descriptor,
+    importedAt,
+    source: context.source ?? 'bundle-default-v2',
+    contractFingerprint: context.contractFingerprint,
+    fallbackReason: context.fallbackReason,
+    validationSummary: context.validationSummary,
+  };
+}
+
+function mergeActiveScenarioContext(
+  activeScenario: DemoActiveScenarioMeta,
+  context: DemoScenarioImportContext
+): DemoActiveScenarioMeta {
+  return {
+    ...activeScenario,
+    source: context.source ?? activeScenario.source ?? 'bundle-default-v2',
+    contractFingerprint: context.contractFingerprint ?? activeScenario.contractFingerprint,
+    fallbackReason:
+      context.fallbackReason === undefined ? activeScenario.fallbackReason : context.fallbackReason,
+    validationSummary: context.validationSummary ?? activeScenario.validationSummary,
+  };
+}
+
 function maxNumericValue<T extends object>(records: T[], key: keyof T): number {
   return records.reduce((max, record) => {
     const value = record[key];
@@ -51,27 +94,39 @@ export class ScenarioRepository {
     return record?.value as DemoActiveScenarioMeta | undefined;
   }
 
-  async ensureScenario(scenarioPackage: DemoScenarioPackage): Promise<DemoScenarioImportResult> {
+  async ensureScenario(
+    scenarioPackage: DemoScenarioPackage,
+    context: DemoScenarioImportContext = {}
+  ): Promise<DemoScenarioImportResult> {
     const validScenarioPackage = validateDemoScenarioPackage(scenarioPackage);
     const descriptor = describeDemoScenarioPackage(validScenarioPackage);
     const activeScenario = await this.getActiveScenario();
 
     if (activeScenario && sameScenario(activeScenario, descriptor)) {
+      const nextActiveScenario = mergeActiveScenarioContext(activeScenario, context);
+      await this.db.meta.put(metaRecord(nextActiveScenario));
+
       return {
         imported: false,
-        activeScenario,
+        activeScenario: nextActiveScenario,
       };
     }
 
-    return this.importScenario(validScenarioPackage);
+    return this.importScenario(validScenarioPackage, context);
   }
 
-  resetScenario(scenarioPackage: DemoScenarioPackage): Promise<DemoScenarioImportResult> {
-    return this.importScenario(validateDemoScenarioPackage(scenarioPackage));
+  resetScenario(
+    scenarioPackage: DemoScenarioPackage,
+    context: DemoScenarioImportContext = {}
+  ): Promise<DemoScenarioImportResult> {
+    return this.importScenario(validateDemoScenarioPackage(scenarioPackage), context);
   }
 
-  switchScenario(scenarioPackage: DemoScenarioPackage): Promise<DemoScenarioImportResult> {
-    return this.importScenario(validateDemoScenarioPackage(scenarioPackage));
+  switchScenario(
+    scenarioPackage: DemoScenarioPackage,
+    context: DemoScenarioImportContext = {}
+  ): Promise<DemoScenarioImportResult> {
+    return this.importScenario(validateDemoScenarioPackage(scenarioPackage), context);
   }
 
   async exportCurrentScenario(): Promise<DemoScenarioPackage> {
@@ -120,14 +175,12 @@ export class ScenarioRepository {
   }
 
   private async importScenario(
-    scenarioPackage: DemoScenarioPackage
+    scenarioPackage: DemoScenarioPackage,
+    context: DemoScenarioImportContext = {}
   ): Promise<DemoScenarioImportResult> {
     const descriptor = describeDemoScenarioPackage(scenarioPackage);
     const importedAt = new Date().toISOString();
-    const activeScenario: DemoActiveScenarioMeta = {
-      ...descriptor,
-      importedAt,
-    };
+    const activeScenario = createActiveScenarioMeta(descriptor, importedAt, context);
 
     await this.db.transaction('rw', this.scenarioTables(), async () => {
       await this.clearScenarioData();
