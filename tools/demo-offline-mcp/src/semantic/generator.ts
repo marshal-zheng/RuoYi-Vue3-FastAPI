@@ -24,6 +24,8 @@ export interface GenerateBusinessBlueprintInput {
 interface DomainProfile {
   keywords: string[];
   domainObjects: string[];
+  /** 若提供，则对应下标的 storyBeat 使用该标题（用于云服务等长项目名，避免「××处置专项」模板感） */
+  fixedStoryTitles?: string[];
   departments: Array<{ label: string; responsibility: string }>;
   personas: Array<{ role: string; actions: string[] }>;
   processStages: Array<{ label: string; action: string }>;
@@ -109,6 +111,73 @@ const COMPUTER_RECYCLING_PROFILE: DomainProfile = {
   ],
 };
 
+const CLOUD_SERVICE_MSP_PROFILE: DomainProfile = {
+  keywords: [
+    '云主机迁移',
+    'Kubernetes',
+    'GitOps',
+    '对象存储',
+    '同城双活',
+    '灾备切换',
+    '可观测性',
+    'SLA',
+    '割接窗口',
+  ],
+  domainObjects: [
+    '云主机迁移批次',
+    'K8s生产集群',
+    'OSS存储桶组',
+    '数据库主备集群',
+    '灾备演练编排',
+    '统一可观测接入层',
+    'APM探针池',
+  ],
+  fixedStoryTitles: [
+    '华东锦澜优选连锁零售核心交易系统云主机跨可用区迁移与夜间割接',
+    '华南精工智造Kubernetes容器云平台建设与GitOps流水线交付',
+    '西南启课在线教育OSS对象存储集群扩容与冷热分层治理',
+    '华北恒信城商行核心数据库同城双活与高可用改造',
+    '华中政务云两地三中心年度灾备切换与演练复盘',
+    '京津冀星云SaaS统一日志与APM可观测性平台建设',
+  ],
+  departments: [
+    { label: '云交付架构部', responsibility: '迁移与建设方案、割接编排、架构评审与变更治理' },
+    { label: '云平台运维中心', responsibility: '7×24 值班、容量与告警、故障应急与WarRoom' },
+    { label: '客户成功与运营组', responsibility: '客户需求确认、验收协同、服务保障与续费运营' },
+  ],
+  personas: [
+    { role: '高级交付经理', actions: ['锁定割接窗口', '组织跨方评审', '签发上线 checklist'] },
+    { role: '云平台架构师', actions: ['输出容量模型', '设计高可用拓扑', '评估变更风险'] },
+    { role: '运维值班长', actions: ['受理告警', '拉起应急处置', '同步客户与内部进展'] },
+    { role: '客户技术接口人', actions: ['确认业务窗口', '配合演练签字', '提交验收材料'] },
+  ],
+  processStages: [
+    { label: '割接窗口准备', action: '完成灰度验证、回滚脚本与双人复核' },
+    { label: '实施交付', action: '开通云资源、部署集群并同步GitOps流水线' },
+    { label: '容量扩容实施', action: '完成对象存储扩容与冷热分层策略落地' },
+    { label: 'UAT联调', action: '核心业务读写压测与双活切换桌面推演' },
+    { label: '演练复盘', action: '核对RTO/RPO并输出改进项与责任闭环表' },
+    { label: '运维移交', action: '转入标准运维、监控告警阈值与值守模型' },
+    { label: '需求冻结', action: '锁定范围与SLA基线并完成双方签字' },
+  ],
+  riskTypes: [
+    { label: '迁移块复制滞后', severity: 'high', signals: ['复制落后计划', '割接时段逼近', '回滚预案待激活'] },
+    { label: 'Pod调度资源不足', severity: 'high', signals: ['Pending堆积', '节点资源紧张', '镜像拉取失败'] },
+    { label: '存储容量触顶', severity: 'medium', signals: ['桶使用率>90%', '生命周期未命中', '冷数据未下沉'] },
+    { label: '数据库复制延迟', severity: 'high', signals: ['主备延迟抬高', 'redo堆积', '只读入口抖动'] },
+    { label: '演练步骤未收敛', severity: 'medium', signals: ['DNS切换延迟', '脚本执行超时', '人工核对未完成'] },
+    { label: '日志采集链路缺口', severity: 'medium', signals: ['Agent批量离线', '索引写满', 'trace采样丢失'] },
+  ],
+  metricDefinitions: [
+    { name: '割接准时率', unit: '%', samples: ['92%', '96%', '98%'], trend: 'up' },
+    { name: '集群就绪Pod占比', unit: '%', samples: ['94%', '97%', '99%'], trend: 'up' },
+    { name: '对象存储可用容量', unit: 'TB', samples: ['128TB', '168TB', '205TB'], trend: 'up' },
+    { name: 'RPO达成率', unit: '%', samples: ['99.90%', '99.95%', '99.99%'], trend: 'up' },
+    { name: '演练步骤通过率', unit: '%', samples: ['88%', '94%', '97%'], trend: 'up' },
+    { name: '日志完整率', unit: '%', samples: ['96.0%', '98.2%', '99.2%'], trend: 'up' },
+  ],
+};
+
 const GENERIC_PROFILE: DomainProfile = {
   keywords: ['任务管理', '流程协同', '风险处置', '指标看板', '交付闭环'],
   domainObjects: ['业务任务', '客户请求', '资源池', '审批单', '执行批次', '风险记录', '交付报告'],
@@ -163,6 +232,12 @@ function makeId(kind: string, label: string, index: number): string {
 
 function selectProfile(topic: string, topicKey: string, businessDescription = ''): DomainProfile {
   const source = `${topic}\n${topicKey}\n${businessDescription}`;
+  if (
+    topicKey === 'cloud-service-msp' ||
+    /云服务|云主机|MSP|Kubernetes|k8s|容器平台|对象存储|OSS|数据库高可用|灾备演练|日志监控|可观测|两地三中心|GitOps|容器云/.test(source)
+  ) {
+    return CLOUD_SERVICE_MSP_PROFILE;
+  }
   if (/无人机|巡检|航线|飞手|热成像/.test(source)) return DRONE_PROFILE;
   if (/二手.*电脑|电脑.*回收|回收.*电脑|数据清除|环保流转/.test(source)) return COMPUTER_RECYCLING_PROFILE;
   return GENERIC_PROFILE;
@@ -185,16 +260,23 @@ function describeDomainObject(label: string, topic: string): string {
 
 function createDomainObjects(profile: DomainProfile, input: GenerateBusinessBlueprintInput): SemanticDomainObject[] {
   const descriptionTokens = extractDescriptionTokens(input.topic, input.businessDescription);
-  const labels = unique([
-    ...descriptionTokens.filter((token) => !profile.domainObjects.includes(token)).slice(0, 2),
-    ...rotate(profile.domainObjects, `${input.seed}:domainObjects`),
-  ]).slice(0, Math.max(5, profile.domainObjects.length));
+  const prependTokens =
+    profile.fixedStoryTitles?.length ?? 0
+      ? []
+      : descriptionTokens.filter((token) => !profile.domainObjects.includes(token)).slice(0, 2);
+  const baseObjects = profile.fixedStoryTitles?.length
+    ? profile.domainObjects
+    : rotate(profile.domainObjects, `${input.seed}:domainObjects`);
+  const labels = unique([...prependTokens, ...baseObjects]).slice(0, Math.max(5, profile.domainObjects.length));
 
   return labels.map((label, index) => ({
     id: makeId('domain-object', label, index),
     label,
     description: describeDomainObject(label, input.topic),
-    attributes: rotate([...profile.keywords, ...descriptionTokens], `${input.seed}:domainObject:${label}`).slice(0, 3),
+    attributes: rotate(
+      profile.fixedStoryTitles?.length ?? 0 ? [...profile.keywords] : [...profile.keywords, ...descriptionTokens],
+      `${input.seed}:domainObject:${label}`
+    ).slice(0, 3),
   }));
 }
 
@@ -226,7 +308,10 @@ function createPersonas(
 }
 
 function createProcessStages(profile: DomainProfile, input: GenerateBusinessBlueprintInput): SemanticProcessStage[] {
-  return rotate(profile.processStages, `${input.seed}:stages`)
+  const stages = profile.fixedStoryTitles?.length
+    ? profile.processStages
+    : rotate(profile.processStages, `${input.seed}:stages`);
+  return stages
     .slice(0, Math.max(5, profile.processStages.length))
     .map((stage, index) => ({
       id: makeId('process-stage', stage.label, index),
@@ -239,7 +324,10 @@ function createProcessStages(profile: DomainProfile, input: GenerateBusinessBlue
 }
 
 function createRiskTypes(profile: DomainProfile, input: GenerateBusinessBlueprintInput): SemanticRiskType[] {
-  return rotate(profile.riskTypes, `${input.seed}:riskTypes`)
+  const risks = profile.fixedStoryTitles?.length
+    ? profile.riskTypes
+    : rotate(profile.riskTypes, `${input.seed}:riskTypes`);
+  return risks
     .slice(0, Math.max(4, profile.riskTypes.length))
     .map((risk, index) => ({
       id: makeId('risk-type', risk.label, index),
@@ -254,7 +342,10 @@ function createMetricDefinitions(
   profile: DomainProfile,
   input: GenerateBusinessBlueprintInput
 ): SemanticMetricDefinition[] {
-  return rotate(profile.metricDefinitions, `${input.seed}:metrics`)
+  const metrics = profile.fixedStoryTitles?.length
+    ? profile.metricDefinitions
+    : rotate(profile.metricDefinitions, `${input.seed}:metrics`);
+  return metrics
     .slice(0, Math.max(4, profile.metricDefinitions.length))
     .map((metric, index) => ({
       id: makeId('metric-definition', metric.name, index),
@@ -268,6 +359,7 @@ function createMetricDefinitions(
 
 function createStoryBeats(input: {
   blueprintInput: GenerateBusinessBlueprintInput;
+  profile: DomainProfile;
   domainObjects: SemanticDomainObject[];
   departments: SemanticDepartment[];
   personas: SemanticPersona[];
@@ -279,17 +371,34 @@ function createStoryBeats(input: {
   const storyBeats: SemanticStoryBeat[] = [];
 
   for (let index = 0; index < count; index += 1) {
-    const domainObject = input.domainObjects[index % input.domainObjects.length];
-    const stage = input.processStages[index % input.processStages.length];
+    const domainObject =
+      input.profile.fixedStoryTitles?.length && index < input.domainObjects.length
+        ? input.domainObjects[index]
+        : input.domainObjects[index % input.domainObjects.length];
+    const stage =
+      input.profile.fixedStoryTitles?.length && index < input.processStages.length
+        ? input.processStages[index]
+        : input.processStages[index % input.processStages.length];
     const persona = input.personas[index % input.personas.length];
     const department = input.departments[index % input.departments.length];
-    const riskType = input.riskTypes[index % input.riskTypes.length];
-    const metricA = input.metricDefinitions[index % input.metricDefinitions.length];
+    const riskType =
+      input.profile.fixedStoryTitles?.length && index < input.riskTypes.length
+        ? input.riskTypes[index]
+        : input.riskTypes[index % input.riskTypes.length];
+    const metricA =
+      input.profile.fixedStoryTitles?.length && index < input.metricDefinitions.length
+        ? input.metricDefinitions[index]
+        : input.metricDefinitions[index % input.metricDefinitions.length];
     const metricB = input.metricDefinitions[(index + 1) % input.metricDefinitions.length];
+
+    const fixedTitle = input.profile.fixedStoryTitles?.[index];
+    const title =
+      fixedTitle ??
+      `${domainObject.label}${stage.label}处置`;
 
     storyBeats.push({
       id: makeId('story-beat', `${domainObject.label}-${stage.label}-${index}`, index),
-      title: `${domainObject.label}${stage.label}处置`,
+      title,
       summary: `${persona.role}${persona.name}在${department.label}牵头${stage.action}，重点跟踪${domainObject.label}的${riskType.label}并用${metricA.name}验证处置效果。`,
       domainObjectId: domainObject.id,
       departmentId: department.id,
@@ -315,6 +424,7 @@ export function generateDeterministicBusinessBlueprint(input: GenerateBusinessBl
   const metricDefinitions = createMetricDefinitions(profile, input);
   const storyBeats = createStoryBeats({
     blueprintInput: input,
+    profile,
     domainObjects,
     departments,
     personas,

@@ -24,7 +24,7 @@ export interface BlueprintDraftCompileResult {
   bindings: SemanticAnchorBinding[];
 }
 
-const REGIONS = ['华东现场', '华南现场', '西南片区', '华北调度区', '华中联动区', '西北保障区'];
+const REGIONS = ['华东区域', '华南区域', '西南区域', '华北区域', '华中区域', '京津冀区域'];
 
 function findById<T extends { id: string }>(values: T[], id: string, fallbackIndex: number): T {
   return values.find((value) => value.id === id) ?? values[fallbackIndex % values.length];
@@ -229,7 +229,7 @@ export function compileBlueprintToIndustryDraft(
 
     return {
       key,
-      name: `${storyBeat.title}专项`,
+      name: storyBeat.title.endsWith('处置') ? `${storyBeat.title}专项` : storyBeat.title,
       region: REGIONS[index % REGIONS.length],
       stage: stage.label,
       departmentName: department.label,
