@@ -87,7 +87,6 @@ async function readPackageScripts(frontendRoot: string): Promise<DemoOfflineCont
   const scripts = packageJson.scripts ?? {};
 
   return {
-    devMock: scripts['dev:mock'] ?? DEFAULT_SCRIPT_VALUE,
     buildDemoOffline: scripts['build:demo-offline'] ?? DEFAULT_SCRIPT_VALUE,
     previewDemoOffline: scripts['preview:demo-offline'] ?? DEFAULT_SCRIPT_VALUE,
     typeCheck: scripts['type-check'] ?? DEFAULT_SCRIPT_VALUE,
@@ -290,7 +289,6 @@ export function formatDemoOfflineContext(context: DemoOfflineContext): string {
     handlers || '- none',
     '',
     '## Scripts',
-    `- dev:mock: ${context.scripts.devMock}`,
     `- build:demo-offline: ${context.scripts.buildDemoOffline}`,
     `- preview:demo-offline: ${context.scripts.previewDemoOffline}`,
     `- type-check: ${context.scripts.typeCheck}`,

@@ -15,7 +15,7 @@
 - R1.AC2: WHEN MCP 工具被实现时 THEN MCP 源码必须位于仓库级开发工具目录，而不得放入 `ruoyi-fastapi-frontend/src/**` 或 `ruoyi-fastapi-backend/**` 业务运行时目录。
 - R1.AC3: IF MCP server 需要读取项目上下文 THEN 它必须以当前仓库路径为边界解析 `ruoyi-fastapi-frontend/src/demo/**`、前端脚本和相关测试文件。
 - R1.AC4: WHEN 正常生产构建或后端服务启动时 THEN MCP server 不得被生产构建、客户离线包或 FastAPI 后端运行时加载。
-- R1.AC5: IF 开发者未配置 MCP 客户端 THEN 现有 `yarn dev`、`yarn dev:mock`、`yarn build:prod`、`yarn build:demo-offline` 行为必须保持可用。
+- R1.AC5: IF 开发者未配置 MCP 客户端 THEN 现有 `yarn dev`、`yarn dev:fallback`、`yarn build:prod`、`yarn build:demo-offline` 行为必须保持可用。
 
 ### R2: 不在项目内集成 AI provider 与 API key
 **用户故事:** 作为项目负责人，我希望模型调用和 API key 管理由外部 Chat Agent 负责，以便项目内不新增 DeepSeek、Kimi、OpenAI 等 provider 配置并避免密钥泄漏。
@@ -111,7 +111,7 @@
 
 - 本期不实现内置 DeepSeek、Kimi、OpenAI、Gemini provider。
 - 本期不在前端浏览器页面内存储或调用 AI API key。
-- 本期不实现 dev:demo-offline 可视化 Workbench 页面。
+- 本期不实现 dev:demo-offline 可视化 Workbench 页面，也不提供会返回 bundle default 的 demo-offline dev server 入口。
 - 本期不自动生成或修改 MSW handler、Vue 路由、真实业务 API 或后端代码。
 - 本期不把仓库或前端改造成 monorepo。
 - 本期默认不生成 `auth` 与 `system` 数据，仅沿用默认场景中的账号、角色、菜单、字典、组织和用户。

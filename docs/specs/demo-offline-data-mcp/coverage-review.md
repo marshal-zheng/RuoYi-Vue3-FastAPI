@@ -98,7 +98,7 @@
 
 - Task 1 — covered — tools package skeleton, stdio server, scripts, envelope, no provider key; `npm test/build` passed.
 - Task 2 — covered — ProjectPaths/security/error model with tests.
-- Task 3 — covered — generated/candidate registries, runtime candidate option, `dev:demo-offline`, frontend registry tests.
+- Task 3 — covered — generated/candidate registries, runtime candidate option, preview-based demo-offline validation, frontend registry tests.
 - Task 4 — covered — scan tool/context/risks with tests.
 - Task 5 — covered — generation plan tool with trace, default scope, unsupported full-module handling, tests.
 - Task 6 — covered — draft schema/validator/repair report with tests.

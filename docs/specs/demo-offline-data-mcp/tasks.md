@@ -21,7 +21,7 @@
   - 新增 `ruoyi-fastapi-frontend/src/demo/scenarios/generated/candidates/index.ts`，为候选场景验证保留独立注册入口。
   - 调整 `src/demo/scenarios/index.ts`，只做一次性合并默认场景与正式 generated registry，避免后续 MCP 反复修改主入口。
   - 增加候选场景验证模式的受控加载方式，确保 candidate 未 promote 前不影响默认正式 scenario。
-  - 可添加 `dev:demo-offline` 作为 `dev:mock` 的语义化别名，并确认 `yarn dev`、`yarn dev:mock`、`yarn build:prod`、`yarn build:demo-offline` 行为不变。
+  - 不新增 `dev:demo-offline` 或等价 dev server 入口，并确认 `yarn dev`、`yarn dev:fallback`、`yarn build:prod`、`yarn build:demo-offline` 行为不变。
   _需求追溯: R1.AC5, R7.AC3, R7.AC5, R7.AC7, R9.AC2, R9.AC4_
 
 - [x] 4. 实现 demo-offline 扫描能力与 `demo_offline_scan_context`

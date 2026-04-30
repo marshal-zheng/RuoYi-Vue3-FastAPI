@@ -243,10 +243,9 @@ export interface DemoServiceResponse<T> {
 | --- | --- |
 | `yarn dev` | 沿用 `.env.development`，默认 `fallback` |
 | `yarn dev:fallback` | 显式进入 `fallback` |
-| `yarn dev:mock` | 保留旧纯 Mock 调试入口，可映射到 `demo-offline` |
 | `yarn build:prod` | `real`，不启动 MSW |
 | `yarn build:demo-offline` | 生成客户演示专用静态 `dist-demo-offline`，启动 demo runtime |
-| `yarn preview:demo-offline` | 本地验证 `dist-demo-offline` 静态产物 |
+| `yarn preview:demo-offline` | 本地验证 `dist-demo-offline` 静态产物，并查看 MCP 生成后激活的数据 |
 
 ### HTTP API 覆盖
 

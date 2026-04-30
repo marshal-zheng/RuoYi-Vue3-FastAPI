@@ -26,13 +26,15 @@ VITE_ENABLE_MOCK=off|fallback|pure
 
 ```bash
 yarn dev                 # .env.development 默认 fallback
-yarn dev:mock            # demo-offline 开发预览
+yarn dev:fallback        # 显式 fallback 开发预览
 yarn build:prod          # real 生产构建
 yarn build:demo-offline  # demo-offline 静态演示构建，输出 dist-demo-offline/
-yarn preview:demo-offline # 预览 dist-demo-offline/
+yarn preview:demo-offline # 预览 dist-demo-offline/，用于查看 MCP 生成并激活后的数据
 ```
 
 `demo-offline` 静态产物输出到 `dist-demo-offline/`，生产构建继续使用 `dist/`。演示产物必须通过 HTTP(S) 服务器访问，不能直接用 `file://` 打开。MSW service worker 需要浏览器 origin 和 scope，Vite 静态资源、动态导入以及 WebSocket 拦截也都按 HTTP(S) 运行环境设计。本地验收请使用 `yarn preview:demo-offline` 或等价静态服务器。
+
+`demo-offline` 不再提供 dev server 入口。MCP 生成的数据只写入 `dist-demo-offline/demo-scenarios/**`，请使用 `build:demo-offline -> MCP 生成并激活 -> preview:demo-offline` 验证，避免开发服务器返回 bundle default 数据造成误判。
 
 ### 目录结构
 

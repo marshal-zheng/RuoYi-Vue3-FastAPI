@@ -29,8 +29,8 @@ describe('scanDemoOfflineContext', () => {
         }),
       ]),
       scripts: {
-        devMock: expect.stringContaining('demo-offline'),
         buildDemoOffline: 'vite build --mode demo-offline',
+        previewDemoOffline: 'vite preview --mode demo-offline --host 127.0.0.1 --port 4173',
         typeCheck: 'vue-tsc --noEmit',
         testRun: 'vitest run',
       },

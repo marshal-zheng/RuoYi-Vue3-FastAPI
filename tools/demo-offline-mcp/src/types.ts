@@ -75,7 +75,6 @@ export interface DemoOfflineContext {
     path: string;
   }>;
   scripts: {
-    devMock: string;
     buildDemoOffline: string;
     previewDemoOffline: string;
     typeCheck: string;

@@ -126,9 +126,10 @@ The MCP is optional. If no MCP client is configured, the existing frontend comma
 ```bash
 cd ruoyi-fastapi-frontend
 yarn dev
-yarn dev:mock
+yarn dev:fallback
 yarn build:prod
 yarn build:demo-offline
+yarn preview:demo-offline
 ```
 
 ## Future Extensions

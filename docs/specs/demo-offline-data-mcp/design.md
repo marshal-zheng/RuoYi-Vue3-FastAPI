@@ -118,7 +118,7 @@ interface ToolEnvelope<T> {
 - 读取 `src/demo/scenarios/default.ts`，识别可复制的 `auth/system` 默认数据来源。
 - 读取 `src/demo/scenarios/index.ts` 与 `generated/**`，区分默认、正式 generated、候选 generated 场景。
 - 读取 `src/demo/handlers/http.ts` 及 handlers 入口，识别 P0 已覆盖 `auth/system/system-admin/project/simulation`，保留 catch-all 风险。
-- 读取 `package.json` 中 `dev:mock`、`build:demo-offline`、`preview:demo-offline`、`type-check`、`test:run` 等脚本。
+- 读取 `package.json` 中 `build:demo-offline`、`preview:demo-offline`、`type-check`、`test:run` 等脚本。
 
 输出 `DemoOfflineContext`：
 
@@ -138,7 +138,6 @@ interface DemoOfflineContext {
     path: string;
   }>;
   scripts: {
-    devMock: string;
     buildDemoOffline: string;
     previewDemoOffline: string;
     typeCheck: string;
@@ -426,7 +425,7 @@ type CheckProfile =
 - 新增 `ruoyi-fastapi-frontend/src/demo/scenarios/generated/candidates/index.ts`：候选场景注册表，仅用于验证模式。
 - 新增 `ruoyi-fastapi-frontend/src/demo/scenarios/generated/candidates/*.candidate.ts`：候选场景。
 - 新增 `ruoyi-fastapi-frontend/src/demo/scenarios/generated/*.ts`：promote 后的正式场景。
-- 可选新增 `dev:demo-offline` 脚本作为 `dev:mock` 的语义化别名，但不得改变现有 `dev`、`dev:mock`、`build:prod`、`build:demo-offline` 行为。
+- 不提供 `dev:demo-offline` 或等价 dev server 入口；MCP 生成数据必须通过 `build:demo-offline` 后的 `dist-demo-offline` 与 `preview:demo-offline` 验证，避免开发服务器返回 bundle default 数据造成误判。
 
 `IndustryDataDraft`、`GenerationPlan`、`ValidationIssue`、`CheckResult` 只属于 MCP 工具层，不进入客户离线包运行时合同。客户离线包只消费 promote 后的 `DemoScenarioPackage`。
 
