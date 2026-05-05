@@ -30,13 +30,40 @@ specs/
    - Track progress with checkboxes
    - Update status as work progresses
 
-## Demo Offline Semantic Data Platform
+## Current Demo/Mock Mainline
 
-`demo-offline` semantic data platform specs use
+[`contract-first-single-dataset-mock-platform`](./contract-first-single-dataset-mock-platform/)
+is the current demo/mock mainline. It defines the active path as FastAPI OpenAPI artifact,
+generated API types, one typed mock dataset, MSW handlers, Dexie store, invariant tests,
+and `build:demo-offline` validation.
+
+[`mock-contract-coverage-and-schema-gates`](./mock-contract-coverage-and-schema-gates/)
+is the current P0 governance upgrade for that mock mainline. It adds explicit endpoint
+coverage registry metadata, stable OpenAPI coverage matrix checks, core runtime schema
+validation, and local/CI drift gates without replacing the MSW + Dexie runtime.
+
+[`demo-offline-e2e-validation`](./demo-offline-e2e-validation/) is the current P1
+demo-offline delivery acceptance spec. It depends on the two P0 mock specs above and adds
+build-after static preview validation with Playwright Chromium for login, menus, project
+writes, versions, topology, simulation readonly data, network isolation, and dataset reset.
+
+[`mock-scenario-overlays-and-page-state-harness`](./mock-scenario-overlays-and-page-state-harness/)
+is the current P1 mock/page-state acceptance spec. It keeps the default demo-offline
+success chain unchanged while adding a test-only overlay registry, runtime activation API,
+Vitest/API harness, and a separate `e2e:demo-offline:page-state` suite for empty,
+error, timeout, unsupported, and readonly page states.
+
+Retired historical mock-generation tracks and the old demo runtime have been removed from
+the current frontend runtime. Older specs remain historical context only, not current
+mainline acceptance.
+
+## Demo Offline Semantic Data Platform (legacy/paused)
+
+Legacy/paused `demo-offline` semantic data platform specs use
 [`demo-offline-semantic-data-platform`](./demo-offline-semantic-data-platform/) as the
 architecture-governance baseline. Spec 0 is documentation-and-governance-only: it fixes
 shared terminology, sequencing, compatibility boundaries, quality gates, and cross-spec
-rules; it does not implement MCP v2, runtime loader changes, DOMC registry, Scenario Graph,
+rules; it does not implement legacy/paused MCP v2, runtime loader changes, DOMC registry, Scenario Graph,
 Generator Recipes, Vue pages, MSW handlers, service/repository changes, IndexedDB schema,
 backend APIs, or production-mode behavior.
 
@@ -55,19 +82,20 @@ After Spec 0, the recommended next action is to create the
 manifest/slices implementation before Spec A has been specified and approved.
 
 The existing [`demo-offline-runtime-scenario-package`](./demo-offline-runtime-scenario-package/)
-spec remains the historical P0 build-after runtime JSON package baseline for v1
+spec remains the legacy/paused historical P0 build-after runtime JSON package baseline for v1
 `active.json`, `previous.json`, contract fingerprinting, IndexedDB import dry-run, and
-active/previous/default fallback behavior. The current
+active/previous/default fallback behavior. The legacy/paused
 [`demo-offline-runtime-package-v2-manifest-slices`](./demo-offline-runtime-package-v2-manifest-slices/)
-spec records the approved compatibility exception: new demo-offline offline-static builds and
-MCP tools are v2-only, with no v1 fallback and no v1 migration promise.
+spec records its approved compatibility exception: demo-offline offline-static builds and
+legacy/paused MCP tools were v2-only, with no v1 fallback and no v1 migration promise.
 
 Follow-up semantic specs must reference `demo-offline-semantic-data-platform` and declare
 `parentSpec`, `platformLayer`, `upstreamDependencies`, `nonGoals`, and the new or strengthened
 `qualityGates` in their introduction or Clarifications. If a follow-up spec changes an
 approved Spec 0 boundary, it must first revise Spec 0 or record an explicit compatibility
-exception. Follow-up tasks must label their category, such as documentation governance,
-MCP generation, runtime loader, contract/schema, validator, repository/importer, or test matrix.
+exception. Follow-up tasks in that legacy/paused track must label their category, such as
+documentation governance, legacy/paused MCP generation, runtime loader, contract/schema, validator,
+repository/importer, or test matrix.
 
 ## Best Practices
 
