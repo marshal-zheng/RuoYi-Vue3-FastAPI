@@ -1,0 +1,365 @@
+[
+  {
+    "method": "POST",
+    "openapiPath": "/project",
+    "mswPath": "/api/project",
+    "handlerTag": "project:create",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/project",
+    "mswPath": "/api/project",
+    "handlerTag": "project:update",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/{project_id}",
+    "mswPath": "/api/project/:projectId",
+    "handlerTag": "project:get",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/project/{project_ids}",
+    "mswPath": "/api/project/:projectIds",
+    "handlerTag": "project:delete",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/export",
+    "owner": "project",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/export/{project_id}",
+    "mswPath": "/api/project/export/:projectId",
+    "handlerTag": "project:export",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "binary-response",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "File download response is intentionally excluded from JSON schema validation."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/export/batch",
+    "mswPath": "/api/project/export/batch",
+    "handlerTag": "project:export-batch",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "binary-response",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "Batch file download response is intentionally excluded from JSON schema validation."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/import",
+    "owner": "project",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/import/batch",
+    "owner": "project",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/list",
+    "mswPath": "/api/project/list",
+    "handlerTag": "project:list",
+    "owner": "project",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie"
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/topology/{project_id}",
+    "mswPath": "/api/project/topology/:projectId",
+    "handlerTag": "project:topology:get",
+    "owner": "topology",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/topology/save",
+    "mswPath": "/api/project/topology/save",
+    "handlerTag": "project:topology:save",
+    "owner": "topology",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/version",
+    "mswPath": "/api/project/version",
+    "handlerTag": "project:version:create",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/project/version",
+    "mswPath": "/api/project/version",
+    "handlerTag": "project:version:update",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/version/{version_id}",
+    "mswPath": "/api/project/version/:versionId",
+    "handlerTag": "project:version:get",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/project/version/{version_ids}",
+    "mswPath": "/api/project/version/:versionIds",
+    "handlerTag": "project:version:delete",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/version/clone",
+    "mswPath": "/api/project/version/clone",
+    "handlerTag": "project:version:clone",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/project/version/export",
+    "mswPath": "/api/project/version/export",
+    "handlerTag": "project:version:export-word",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "binary-response",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "Word document export is a binary response and is not JSON schema validated."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/version/export-excel/{version_id}",
+    "mswPath": "/api/project/version/export-excel/:versionId",
+    "handlerTag": "project:version:export-excel",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "binary-response",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "Excel appendix export is a binary response and is not JSON schema validated."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/version/export-xml/{version_id}",
+    "mswPath": "/api/project/version/export-xml/:versionId",
+    "handlerTag": "project:version:export-xml",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "binary-response",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "XML export is a file response and is not JSON schema validated."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/project/version/list",
+    "mswPath": "/api/project/version/list",
+    "handlerTag": "project:version:list",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie"
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/project/version/lock",
+    "mswPath": "/api/project/version/lock",
+    "handlerTag": "project:version:lock",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/project/version/unlock/project/{project_id}",
+    "mswPath": "/api/project/version/unlock/project/:projectId",
+    "handlerTag": "project:version:unlock-project",
+    "owner": "project-version",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/project.test.ts"
+    ],
+    "persistence": "dexie",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  }
+]

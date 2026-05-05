@@ -1,0 +1,1362 @@
+[
+  {
+    "method": "GET",
+    "openapiPath": "/getRouters",
+    "mswPath": "/api/getRouters",
+    "handlerTag": "system:getRouters",
+    "owner": "system",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/auth-system.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/config",
+    "owner": "system-config",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/config",
+    "mswPath": "/api/system/config",
+    "handlerTag": "system:configCreate",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/config",
+    "mswPath": "/api/system/config",
+    "handlerTag": "system:configUpdate",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/config/{config_id}",
+    "mswPath": "/api/system/config/:configId",
+    "handlerTag": "system:configDetail",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/config/{config_ids}",
+    "mswPath": "/api/system/config/:configIds",
+    "handlerTag": "system:configDelete",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/config/configKey/{config_key}",
+    "mswPath": "/api/system/config/configKey/:configKey",
+    "handlerTag": "system:configKey",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/config/export",
+    "owner": "system-config",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/config/list",
+    "mswPath": "/api/system/config/list",
+    "handlerTag": "system:configList",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/config/refreshCache",
+    "mswPath": "/api/system/config/refreshCache",
+    "handlerTag": "system:configRefreshCache",
+    "owner": "system-config",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dept",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/dept",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dept/{dept_id}",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/dept/{dept_ids}",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dept/export",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dept/list",
+    "mswPath": "/api/system/dept/list",
+    "handlerTag": "system:departments",
+    "owner": "system-dept",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/auth-system.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "Mock returns a PageResponse adapter while the current OpenAPI artifact declares a bare department array."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dept/list/exclude/{dept_id}",
+    "owner": "system-dept",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dept/treeselect",
+    "mswPath": "/api/system/dept/treeselect",
+    "handlerTag": "system:deptTree",
+    "owner": "system-dept",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/auth-system.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dict/data",
+    "mswPath": "/api/system/dict/data",
+    "handlerTag": "system:dictDataCreate",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/dict/data",
+    "mswPath": "/api/system/dict/data",
+    "handlerTag": "system:dictDataUpdate",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/data/{dict_code}",
+    "mswPath": "/api/system/dict/data/:dictCode",
+    "handlerTag": "system:dictDataDetail",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/dict/data/{dict_codes}",
+    "mswPath": "/api/system/dict/data/:dictCodes",
+    "handlerTag": "system:dictDataDelete",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dict/data/export",
+    "owner": "system-dict",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/data/list",
+    "mswPath": "/api/system/dict/data/list",
+    "handlerTag": "system:dictDataList",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/data/type/{dict_type}",
+    "mswPath": "/api/system/dict/data/type/:dictType",
+    "handlerTag": "system:dict:type",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/auth-system.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dict/type",
+    "mswPath": "/api/system/dict/type",
+    "handlerTag": "system:dictTypeCreate",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/dict/type",
+    "mswPath": "/api/system/dict/type",
+    "handlerTag": "system:dictTypeUpdate",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/type/{dict_id}",
+    "mswPath": "/api/system/dict/type/:dictId",
+    "handlerTag": "system:dictTypeDetail",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/dict/type/{dict_ids}",
+    "mswPath": "/api/system/dict/type/:dictIds",
+    "handlerTag": "system:dictTypeDelete",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/dict/type/export",
+    "owner": "system-dict",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/type/list",
+    "mswPath": "/api/system/dict/type/list",
+    "handlerTag": "system:dictTypeList",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dict/type/optionselect",
+    "mswPath": "/api/system/dict/type/optionselect",
+    "handlerTag": "system:dictTypeOptions",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/dict/type/refreshCache",
+    "mswPath": "/api/system/dict/type/refreshCache",
+    "handlerTag": "system:dictTypeRefreshCache",
+    "owner": "system-dict",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/menu",
+    "mswPath": "/api/system/menu",
+    "handlerTag": "system:menuCreate",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/menu",
+    "mswPath": "/api/system/menu",
+    "handlerTag": "system:menuUpdate",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/menu/",
+    "owner": "system-menu",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/menu/{menu_id}",
+    "mswPath": "/api/system/menu/:menuId",
+    "handlerTag": "system:menuDetail",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/menu/{menu_ids}",
+    "mswPath": "/api/system/menu/:menuId",
+    "handlerTag": "system:menuDelete",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/menu/list",
+    "mswPath": "/api/system/menu/list",
+    "handlerTag": "system:menus",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/menu/roleMenuTreeselect/{role_id}",
+    "mswPath": "/api/system/menu/roleMenuTreeselect/:roleId",
+    "handlerTag": "system:roleMenuTree",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/menu/treeselect",
+    "mswPath": "/api/system/menu/treeselect",
+    "handlerTag": "system:menuTree",
+    "owner": "system-menu",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/notice",
+    "owner": "system-notice",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/notice",
+    "owner": "system-notice",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/notice/{notice_id}",
+    "owner": "system-notice",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/notice/{notice_ids}",
+    "owner": "system-notice",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/notice/list",
+    "owner": "system-notice",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/post",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/post",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/post/{post_id}",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/post/{post_ids}",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/post/export",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/post/list",
+    "owner": "system-post",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/protocol",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/protocol/{protocol_id}",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/protocol/{protocol_ids}",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol/deleteBatch",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol/export",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol/import",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol/importBatch",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/protocol/importPreview",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/protocol/importTemplate",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/protocol/list",
+    "owner": "protocol",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/role",
+    "mswPath": "/api/system/role",
+    "handlerTag": "system:roleCreate",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role",
+    "mswPath": "/api/system/role",
+    "handlerTag": "system:roleUpdate",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/role/{role_id}",
+    "mswPath": "/api/system/role/:roleId",
+    "handlerTag": "system:roleDetail",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/role/{role_ids}",
+    "mswPath": "/api/system/role/:roleIds",
+    "handlerTag": "system:roleDelete",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/role/authUser/allocatedList",
+    "mswPath": "/api/system/role/authUser/allocatedList",
+    "handlerTag": "system:roleAllocatedUsers",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role/authUser/cancel",
+    "mswPath": "/api/system/role/authUser/cancel",
+    "handlerTag": "system:roleAuthCancel",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role/authUser/cancelAll",
+    "mswPath": "/api/system/role/authUser/cancelAll",
+    "handlerTag": "system:roleAuthCancelAll",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role/authUser/selectAll",
+    "mswPath": "/api/system/role/authUser/selectAll",
+    "handlerTag": "system:roleAuthSelectAll",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/role/authUser/unallocatedList",
+    "mswPath": "/api/system/role/authUser/unallocatedList",
+    "handlerTag": "system:roleUnallocatedUsers",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role/changeStatus",
+    "mswPath": "/api/system/role/changeStatus",
+    "handlerTag": "system:roleChangeStatus",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/role/dataScope",
+    "mswPath": "/api/system/role/dataScope",
+    "handlerTag": "system:roleDataScope",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "none",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/role/deptTree/{role_id}",
+    "mswPath": "/api/system/role/deptTree/:roleId",
+    "handlerTag": "system:roleDeptTree",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/role/export",
+    "owner": "system-role",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/role/list",
+    "mswPath": "/api/system/role/list",
+    "handlerTag": "system:roles",
+    "owner": "system-role",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/user",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/{user_id}",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/user/{user_ids}",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user/authRole",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/authRole/{user_id}",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user/changeStatus",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/deptTree",
+    "mswPath": "/api/system/user/deptTree",
+    "handlerTag": "user:deptTree",
+    "owner": "system-user",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/user/export",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/user/importData",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/user/importTemplate",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/list",
+    "mswPath": "/api/system/user/list",
+    "handlerTag": "user:list",
+    "owner": "system-user",
+    "status": "mock-handled",
+    "critical": false,
+    "schemaStatus": "openapi-validated",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/src/mocks/handlers/auth-system.test.ts"
+    ],
+    "persistence": "readonly"
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/user/profile",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user/profile",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "POST",
+    "openapiPath": "/system/user/profile/avatar",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user/profile/updatePwd",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/user/resetPwd",
+    "owner": "system-user",
+    "status": "missing",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [],
+    "persistence": "none",
+    "reason": "No explicit MSW handler metadata exists in the current contract registry baseline.",
+    "impact": "Non-critical API remains backend-only or will receive deterministic 501 if called in strict demo-offline fallback.",
+    "migrationTarget": "Classify as mock-handled, unsupported-501, real-only, or legacy-local-contract when the module joins demo-offline scope."
+  }
+]

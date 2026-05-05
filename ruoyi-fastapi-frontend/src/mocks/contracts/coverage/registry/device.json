@@ -1,0 +1,18 @@
+[
+  {
+    "method": "GET",
+    "openapiPath": "/device/list",
+    "mswPath": "/api/device/list",
+    "handlerTag": "device:list",
+    "owner": "device",
+    "status": "mock-handled",
+    "critical": true,
+    "schemaStatus": "schema-unavailable",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/specs/demo-offline-core.spec.ts"
+    ],
+    "persistence": "readonly",
+    "reason": "OpenAPI response schema is empty, but topology and simulation pages consume device inventory in the demo-offline main flow."
+  }
+]
