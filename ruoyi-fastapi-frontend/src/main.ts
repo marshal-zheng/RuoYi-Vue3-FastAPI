@@ -38,7 +38,7 @@ import elementIcons from '@/components/ui/SvgIcon/svgicon';
 import './permission'; // permission control
 
 import { useDict } from '@/utils/dict';
-import { resolveRuntimeConfig, type RuntimeConfig } from '@/demo/runtime/mode';
+import { resolveRuntimeConfig, type RuntimeConfig } from '@/mocks/runtime/mode';
 import {
   parseTime,
   resetForm,
@@ -49,6 +49,7 @@ import {
 } from '@/utils/ruoyi';
 import { startDevMenuHotSync } from '@/plugins/dev-menu-hot-sync';
 import { assertFeedbackRegistry } from '@/utils/feedback/registry';
+import { setupAppRuntimeMocks } from '@/mocks/runtime/app-entry';
 
 // 分页组件
 import Pagination from '@/components/ui/Pagination';
@@ -111,34 +112,19 @@ setupVXETable(app);
 
 startDevMenuHotSync();
 
-function clearDemoRuntimeDevtools() {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  delete (window as Window & { __DEMO_RUNTIME__?: unknown }).__DEMO_RUNTIME__;
-}
-
 async function setupRuntimeMocks(runtimeConfig: RuntimeConfig) {
-  clearDemoRuntimeDevtools();
+  await setupAppRuntimeMocks(runtimeConfig);
 
   if (runtimeConfig.mode === 'fallback') {
-    const { setupBrowserMocks } = await import('./mocks');
-    await setupBrowserMocks({
-      strategy: 'fallback',
-      scenario: 'default',
-    });
     // eslint-disable-next-line no-console
     console.info('[Runtime] fallback 模式已启动：真实接口优先，404/网络异常回退到 Mock。');
     return;
   }
 
   if (runtimeConfig.mode === 'demo-offline') {
-    const { setupDemoOfflineRuntime } = await import('@/demo/runtime/bootstrap');
-    await setupDemoOfflineRuntime(runtimeConfig);
     // eslint-disable-next-line no-console
     console.info(
-      `[Runtime] demo-offline 模式已启动：纯前端演示数据，场景 ${runtimeConfig.scenarioId}。`
+      '[Runtime] demo-offline 模式已启动：单套 typed mock dataset + MSW + IndexedDB store。'
     );
   }
 }

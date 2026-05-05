@@ -1,10 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, defineStore, setActivePinia } from 'pinia';
 
-import {
-  createApiContractHandlers,
-  createStatusHandler,
-} from '../../../tests/mocks/api-contract-handlers';
+import { createStatusHandler } from '@/mocks/handlers/error-common';
+import { setupMainlineMockHandlers } from '../../../tests/mocks/mainline';
 import { mockServer } from '../../../tests/mocks/server';
 
 const loginMock = vi.fn();
@@ -18,11 +16,12 @@ vi.mock('@/api/login', () => ({
 }));
 
 describe('user store login flow', () => {
+  setupMainlineMockHandlers();
+
   beforeEach(async () => {
     vi.stubGlobal('defineStore', defineStore);
     setActivePinia(createPinia());
     vi.clearAllMocks();
-    mockServer.use(...createApiContractHandlers());
     const auth = await import('@/utils/auth');
     auth.clearSecurityTokens();
   });
@@ -32,7 +31,12 @@ describe('user store login flow', () => {
 
     const useUserStore = (await import('@/store/modules/user')).default;
     const store = useUserStore();
-    await store.login({ username: 'admin', password: 'admin123', code: '1234', uuid: 'uuid-1' });
+    await store.login({
+      username: 'admin',
+      password: 'admin123',
+      code: '1234',
+      uuid: 'uuid-1',
+    });
 
     expect(store.token).toBe('jwt-token-1');
   });
@@ -43,7 +47,7 @@ describe('user store login flow', () => {
     const restored = await store.restoreSession();
 
     expect(restored).toBe(true);
-    expect(store.token).toBe('jwt-token-restored');
+    expect(store.token).toContain('mock-session-admin-');
   });
 
   it('clears local session when refresh endpoint rejects the session', async () => {

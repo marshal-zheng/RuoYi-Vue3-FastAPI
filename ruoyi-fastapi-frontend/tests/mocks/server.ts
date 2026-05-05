@@ -1,10 +1,9 @@
 import { setupServer } from 'msw/node';
 
-import { createScenarioHandlers } from '@/mocks/scenarios';
+import { createMockHandlers } from '@/mocks/handlers';
 
-export const mockServer = setupServer(...createScenarioHandlers('pure', 'pure'));
+export const mockServer = setupServer(...createMockHandlers({ strategy: 'pure' }));
 
 export function resetMockServerHandlers() {
   mockServer.resetHandlers();
 }
-

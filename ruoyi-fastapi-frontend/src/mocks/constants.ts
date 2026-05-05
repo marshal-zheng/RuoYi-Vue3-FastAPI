@@ -12,5 +12,8 @@ export const API_PREFIX = normalizeApiPrefix(
 
 export function createApiPath(path: string): string {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-  return `${API_PREFIX}${normalizedPath}`;
+  if (/^https?:\/\//i.test(API_PREFIX)) {
+    return `${API_PREFIX}${normalizedPath}`;
+  }
+  return `*${API_PREFIX}${normalizedPath}`;
 }

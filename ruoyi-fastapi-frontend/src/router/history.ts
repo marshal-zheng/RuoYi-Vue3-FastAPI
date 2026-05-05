@@ -1,6 +1,6 @@
 import { createWebHashHistory, createWebHistory, type RouterHistory } from 'vue-router';
 
-import { resolveRuntimeConfig } from '@/demo/runtime/mode';
+import { resolveRuntimeConfig } from '@/mocks/runtime/mode';
 
 function resolveRouterBase(): string | undefined {
   const base = import.meta.env.BASE_URL;

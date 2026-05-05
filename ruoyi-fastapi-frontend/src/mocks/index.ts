@@ -1,19 +1,19 @@
-import { resolveRuntimeConfig } from '@/demo/runtime/mode';
 import { startBrowserMock } from './browser';
-import type { MockMode, MockScenario, MockStrategy, StartMockOptions } from './types';
+import { isMockRuntimeMode, resolveRuntimeConfig, strategyForRuntimeMode } from './runtime/mode';
+import type { MockNetworkStrategy, MockScenario, MockStrategy, StartMockOptions } from './types';
 
-function resolveModeFromEnv(): MockMode {
-  return resolveRuntimeConfig().mockMode;
+function resolveStrategyFromEnv(): MockStrategy | undefined {
+  const runtimeMode = resolveRuntimeConfig().mode;
+  return isMockRuntimeMode(runtimeMode) ? strategyForRuntimeMode(runtimeMode) : undefined;
 }
 
-function resolveScenario(strategy: MockStrategy, scenario?: MockScenario): MockScenario {
+function resolveScenario(strategy: MockNetworkStrategy, scenario?: MockScenario): MockScenario {
   if (scenario) return scenario;
   return strategy === 'pure' ? 'pure' : 'default';
 }
 
 export async function setupBrowserMocks(options: StartMockOptions = {}) {
-  const mode = resolveModeFromEnv();
-  const strategy = options.strategy ?? (mode === 'off' ? undefined : (mode as MockStrategy));
+  const strategy = options.strategy ?? resolveStrategyFromEnv();
 
   if (!strategy) {
     return undefined;
@@ -28,5 +28,5 @@ export async function setupBrowserMocks(options: StartMockOptions = {}) {
   });
 }
 
-export { resolveModeFromEnv };
-export type { MockMode, MockScenario, MockStrategy, StartMockOptions };
+export { resolveStrategyFromEnv };
+export type { MockNetworkStrategy, MockScenario, MockStrategy, StartMockOptions };

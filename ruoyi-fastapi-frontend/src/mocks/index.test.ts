@@ -5,7 +5,8 @@ import type { MockRuntimeHandler } from './types';
 const resolveRuntimeConfigMock = vi.fn();
 const startBrowserMockMock = vi.fn();
 
-vi.mock('@/demo/runtime/mode', () => ({
+vi.mock('./runtime/mode', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('./runtime/mode')>()),
   resolveRuntimeConfig: (...args: unknown[]) => resolveRuntimeConfigMock(...args),
 }));
 
@@ -17,7 +18,7 @@ describe('setupBrowserMocks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     resolveRuntimeConfigMock.mockReturnValue({
-      mockMode: 'fallback',
+      mode: 'fallback',
     });
     startBrowserMockMock.mockResolvedValue(undefined);
   });
@@ -43,7 +44,7 @@ describe('setupBrowserMocks', () => {
 
   it('does not start the worker when mock mode is off and no strategy is provided', async () => {
     resolveRuntimeConfigMock.mockReturnValue({
-      mockMode: 'off',
+      mode: 'real',
     });
 
     const { setupBrowserMocks } = await import('./index');

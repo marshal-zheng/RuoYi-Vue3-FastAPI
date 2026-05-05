@@ -1,28 +1,25 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as configApi from '@/api/system/config';
-import {
-  createApiContractHandlers,
-  createStatusHandler,
-} from '../../mocks/api-contract-handlers';
+import { createStatusHandler } from '@/mocks/handlers/error-common';
+import { expectRequestTimeout } from '../../helpers/error-assertions';
+import { setupMainlineMockHandlers } from '../../mocks/mainline';
 import { mockServer } from '../../mocks/server';
 
 describe('Config API contract', () => {
-  beforeEach(() => {
-    mockServer.use(...createApiContractHandlers());
-  });
+  setupMainlineMockHandlers();
 
   it('loads paged configs with query params through the HTTP contract', async () => {
     const result = await configApi.listConfig({
       configName: '系统名称',
       configKey: 'sys.index.skinName',
-      page: 2,
+      page: 1,
       pageSize: 20,
     });
 
     expect(result).toMatchObject({
       total: 1,
-      page: 2,
+      page: 1,
       pageSize: 20,
       items: [
         expect.objectContaining({
@@ -31,7 +28,12 @@ describe('Config API contract', () => {
         }),
       ],
     });
-    expect(result.pager).toMatchObject({ mode: 'offset', page: 2, size: 20, total: 1 });
+    expect(result.pager).toMatchObject({
+      mode: 'offset',
+      page: 1,
+      size: 20,
+      total: 1,
+    });
   });
 
   it('loads config detail and key-value lookups via MSW', async () => {
@@ -58,7 +60,7 @@ describe('Config API contract', () => {
         configType: 'N',
       })
     ).resolves.toMatchObject({
-      configId: 1,
+      configId: 1000,
       configKey: 'test.config.key',
       configValue: 'test-value',
     });
@@ -80,9 +82,15 @@ describe('Config API contract', () => {
 
   it('surfaces config API failures from the request error mapping', async () => {
     mockServer.use(createStatusHandler('get', '/system/config/list', 503));
-    await expect(configApi.listConfig({})).rejects.toMatchObject({ status: 503 });
+    await expect(configApi.listConfig({})).rejects.toMatchObject({
+      status: 503,
+    });
 
     mockServer.use(createStatusHandler('get', '/system/config/list', 429));
-    await expect(configApi.listConfig({})).rejects.toMatchObject({ status: 429 });
+    await expect(configApi.listConfig({})).rejects.toMatchObject({
+      status: 429,
+    });
+
+    await expectRequestTimeout('get', '/system/config/list');
   });
 });

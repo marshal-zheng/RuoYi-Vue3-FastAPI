@@ -1,32 +1,38 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as roleApi from '@/api/system/role';
-import {
-  createApiContractHandlers,
-  createStatusHandler,
-} from '../../mocks/api-contract-handlers';
+import { createStatusHandler } from '@/mocks/handlers/error-common';
+import { expectRequestTimeout } from '../../helpers/error-assertions';
+import { setupMainlineMockHandlers } from '../../mocks/mainline';
 import { mockServer } from '../../mocks/server';
 
 describe('Role API contract', () => {
-  beforeEach(() => {
-    mockServer.use(...createApiContractHandlers());
-  });
+  setupMainlineMockHandlers();
 
   it('loads role list and detail through the HTTP contract', async () => {
-    const result = await roleApi.listRole({ page: 2, pageSize: 20, roleName: 'admin' });
+    const result = await roleApi.listRole({
+      page: 1,
+      pageSize: 20,
+      roleKey: 'admin',
+    });
 
     expect(result).toMatchObject({
       total: 1,
-      page: 2,
+      page: 1,
       pageSize: 20,
       items: [
         expect.objectContaining({
-          roleName: 'admin',
+          roleName: '超级管理员',
           roleKey: 'admin',
         }),
       ],
     });
-    expect(result.pager).toMatchObject({ mode: 'offset', page: 2, size: 20, total: 1 });
+    expect(result.pager).toMatchObject({
+      mode: 'offset',
+      page: 1,
+      size: 20,
+      total: 1,
+    });
 
     await expect(roleApi.getRole(1)).resolves.toMatchObject({
       roleId: 1,
@@ -48,7 +54,7 @@ describe('Role API contract', () => {
         menuIds: [1, 2, 3],
       })
     ).resolves.toMatchObject({
-      roleId: 1,
+      roleId: 1000,
       roleKey: 'test',
       menuIds: [1, 2, 3],
     });
@@ -109,5 +115,7 @@ describe('Role API contract', () => {
 
     mockServer.use(createStatusHandler('get', '/system/role/list', 429));
     await expect(roleApi.listRole({})).rejects.toMatchObject({ status: 429 });
+
+    await expectRequestTimeout('get', '/system/role/list');
   });
 });

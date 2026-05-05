@@ -4,7 +4,6 @@ import fs from 'fs'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import createVitePlugins from './vite/plugins'
-import createDemoOfflineContractPlugin from './vite/plugins/demo-offline-contract'
 
 const baseUrl = 'http://127.0.0.1:8088'
 
@@ -148,9 +147,6 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     base: isDemoOfflineBuild ? './' : '/',
     plugins: isTest ? [] : [
       tailwindcss(),
-      createDemoOfflineContractPlugin({
-        enabled: isDemoOfflineBuild,
-      }),
       ...createVitePlugins(env, command === 'build')
     ],
     resolve: {

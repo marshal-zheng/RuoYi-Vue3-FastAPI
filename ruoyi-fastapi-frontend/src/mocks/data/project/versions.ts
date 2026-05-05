@@ -1,0 +1,47 @@
+import type { MockProjectVersion } from '../types';
+import { MOCK_PROJECT_IDS, MOCK_VERSION_IDS, formatMockDateTime, offsetMockTime } from '../_shared';
+
+export const mockProjectVersions = [
+  {
+    versionId: MOCK_VERSION_IDS.commandCenterBaseline,
+    projectId: MOCK_PROJECT_IDS.commandCenter,
+    versionName: 'V1.0 基线版',
+    versionNumber: 'V1.0',
+    description: '联合指挥中心基线拓扑与链路配置',
+    locked: true,
+    isLocked: '1',
+    lockedBy: 'mock',
+    lockedTime: formatMockDateTime(offsetMockTime(-8)),
+    status: 'released',
+    createTime: formatMockDateTime(offsetMockTime(-16)),
+    updateTime: formatMockDateTime(offsetMockTime(-8)),
+  },
+  {
+    versionId: MOCK_VERSION_IDS.commandCenterReview,
+    projectId: MOCK_PROJECT_IDS.commandCenter,
+    versionName: 'V1.1 评审版',
+    versionNumber: 'V1.1',
+    description: '评审阶段拓扑调整与遥测节点接入',
+    locked: false,
+    isLocked: '0',
+    lockedBy: '',
+    lockedTime: '',
+    status: 'draft',
+    createTime: formatMockDateTime(offsetMockTime(-5)),
+    updateTime: formatMockDateTime(offsetMockTime(-1)),
+  },
+  {
+    versionId: MOCK_VERSION_IDS.trainingRangeBaseline,
+    projectId: MOCK_PROJECT_IDS.trainingRange,
+    versionName: 'V0.9 联调版',
+    versionNumber: 'V0.9',
+    description: '训练靶场联调验证版本',
+    locked: false,
+    isLocked: '0',
+    lockedBy: '',
+    lockedTime: '',
+    status: 'draft',
+    createTime: formatMockDateTime(offsetMockTime(-8)),
+    updateTime: formatMockDateTime(offsetMockTime(-2)),
+  },
+] satisfies MockProjectVersion[];

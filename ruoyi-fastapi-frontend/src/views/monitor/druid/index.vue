@@ -10,8 +10,9 @@
 <script setup>
 import { ref } from 'vue';
 import request from '@/utils/request';
+import { resolveRuntimeConfig } from '@/mocks/runtime/mode';
 
-const mockMode = import.meta.env.VITE_ENABLE_MOCK || 'off';
+const mockMode = resolveRuntimeConfig().mode;
 const result = ref('');
 
 async function testMock() {

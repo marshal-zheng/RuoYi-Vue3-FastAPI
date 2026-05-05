@@ -1,4 +1,5 @@
-import { fakerZH_CN as faker } from '@faker-js/faker';
+import { MOCK_REFERENCE_TIME, MOCK_SEED, MOCK_TOKEN_ISSUED_AT } from '../data/_shared';
+import { mockFaker as faker, resetMockFaker } from './_shared';
 
 export interface MockUser {
   userId: number;
@@ -67,11 +68,12 @@ function randomPhone(): string {
 }
 
 function randomDateTime(): string {
-  return formatDateTime(faker.date.recent({ days: 30 }));
+  return formatDateTime(faker.date.recent({ days: 30, refDate: MOCK_REFERENCE_TIME }));
 }
 
 export function resetUserSeed() {
   userSeed = 1;
+  resetMockFaker(MOCK_SEED);
 }
 
 export function createUser(overrides: Partial<MockUser> = {}): MockUser {
@@ -121,9 +123,9 @@ export function createUserList(
 }
 
 export function buildAccountCollections(configs: MockAccountConfig[]): AccountCollections {
-  const now = Date.now();
   const credentials: AccountCollections['credentials'] = {};
   const accountsByToken: AccountCollections['accountsByToken'] = {};
+  resetUserSeed();
 
   configs.forEach((config, index) => {
     const baseUser = createUser({
@@ -145,7 +147,7 @@ export function buildAccountCollections(configs: MockAccountConfig[]): AccountCo
       permissions: config.permissions ?? [],
     };
 
-    const token = `mock-token-${config.username}-${now}-${index}`;
+    const token = `mock-token-${config.username}-${MOCK_TOKEN_ISSUED_AT}-${index}`;
 
     credentials[config.username] = {
       password: config.password,

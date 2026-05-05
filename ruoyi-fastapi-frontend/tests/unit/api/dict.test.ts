@@ -1,17 +1,14 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import * as dictDataApi from '@/api/system/dict/data';
 import * as dictTypeApi from '@/api/system/dict/type';
-import {
-  createApiContractHandlers,
-  createStatusHandler,
-} from '../../mocks/api-contract-handlers';
+import { createStatusHandler } from '@/mocks/handlers/error-common';
+import { expectRequestTimeout } from '../../helpers/error-assertions';
+import { setupMainlineMockHandlers } from '../../mocks/mainline';
 import { mockServer } from '../../mocks/server';
 
 describe('Dict Data API contract', () => {
-  beforeEach(() => {
-    mockServer.use(...createApiContractHandlers());
-  });
+  setupMainlineMockHandlers();
 
   it('loads paged dict data and typed dict options through MSW', async () => {
     const result = await dictDataApi.listData({
@@ -30,12 +27,19 @@ describe('Dict Data API contract', () => {
         }),
       ],
     });
-    expect(result.pager).toMatchObject({ mode: 'offset', page: 1, size: 10, total: 1 });
+    expect(result.pager).toMatchObject({
+      mode: 'offset',
+      page: 1,
+      size: 10,
+      total: 1,
+    });
 
-    await expect(dictDataApi.getDicts('sys_user_sex')).resolves.toEqual([
-      expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '0' }),
-      expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '1' }),
-    ]);
+    await expect(dictDataApi.getDicts('sys_user_sex')).resolves.toMatchObject({
+      data: expect.arrayContaining([
+        expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '0' }),
+        expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '1' }),
+      ]),
+    });
   });
 
   it('loads and mutates dict data through the real request path', async () => {
@@ -53,7 +57,7 @@ describe('Dict Data API contract', () => {
         status: '0',
       })
     ).resolves.toMatchObject({
-      dictCode: 1,
+      dictCode: 1000,
       dictValue: '2',
     });
 
@@ -73,40 +77,47 @@ describe('Dict Data API contract', () => {
 
   it('surfaces dict data failures from the request error mapping', async () => {
     mockServer.use(createStatusHandler('get', '/system/dict/data/list', 503));
-    await expect(dictDataApi.listData({})).rejects.toMatchObject({ status: 503 });
+    await expect(dictDataApi.listData({})).rejects.toMatchObject({
+      status: 503,
+    });
+
+    mockServer.use(createStatusHandler('get', '/system/dict/data/list', 429));
+    await expect(dictDataApi.listData({})).rejects.toMatchObject({
+      status: 429,
+    });
+
+    await expectRequestTimeout('get', '/system/dict/data/list');
   });
 });
 
 describe('Dict Type API contract', () => {
-  beforeEach(() => {
-    mockServer.use(...createApiContractHandlers());
-  });
+  setupMainlineMockHandlers();
 
   it('loads paged dict types and option select data through MSW', async () => {
     const result = await dictTypeApi.listType({
       dictName: '用户性别',
       dictType: 'sys_user_sex',
       status: '0',
-      page: 2,
+      page: 1,
       pageSize: 20,
     });
 
     expect(result).toMatchObject({
       total: 1,
-      page: 2,
+      page: 1,
       pageSize: 20,
-      items: [
-        expect.objectContaining({
-          dictName: '用户性别',
-          dictType: 'sys_user_sex',
-        }),
-      ],
+      items: [expect.objectContaining({ dictType: 'sys_user_sex' })],
     });
-    expect(result.pager).toMatchObject({ mode: 'offset', page: 2, size: 20, total: 1 });
+    expect(result.pager).toMatchObject({
+      mode: 'offset',
+      page: 1,
+      size: 20,
+      total: 1,
+    });
 
-    await expect(dictTypeApi.optionselect()).resolves.toEqual([
-      expect.objectContaining({ dictType: 'sys_user_sex' }),
-    ]);
+    await expect(dictTypeApi.optionselect()).resolves.toEqual(
+      expect.arrayContaining([expect.objectContaining({ dictType: 'sys_user_sex' })])
+    );
   });
 
   it('loads and mutates dict types through the real request path', async () => {
@@ -122,7 +133,7 @@ describe('Dict Type API contract', () => {
         status: '0',
       })
     ).resolves.toMatchObject({
-      dictId: 1,
+      dictId: 1000,
       dictType: 'test_dict',
     });
 
@@ -143,6 +154,15 @@ describe('Dict Type API contract', () => {
 
   it('surfaces dict type failures from the request error mapping', async () => {
     mockServer.use(createStatusHandler('get', '/system/dict/type/list', 429));
-    await expect(dictTypeApi.listType({})).rejects.toMatchObject({ status: 429 });
+    await expect(dictTypeApi.listType({})).rejects.toMatchObject({
+      status: 429,
+    });
+
+    mockServer.use(createStatusHandler('get', '/system/dict/type/list', 503));
+    await expect(dictTypeApi.listType({})).rejects.toMatchObject({
+      status: 503,
+    });
+
+    await expectRequestTimeout('get', '/system/dict/type/list');
   });
 });

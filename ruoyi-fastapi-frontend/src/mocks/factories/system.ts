@@ -1,4 +1,5 @@
-import { fakerZH_CN as faker } from '@faker-js/faker';
+import { MOCK_REFERENCE_TIME, MOCK_SEED } from '../data/_shared';
+import { mockFaker as faker, resetMockFaker } from './_shared';
 
 export interface DeptNode {
   id: number;
@@ -48,6 +49,7 @@ function createDeptNode(level = 0, maxLevel = 2): DeptNode {
 
 export function createDeptTree(rootCount = 1, maxLevel = 2): DeptNode[] {
   deptSeed = 100;
+  resetMockFaker(MOCK_SEED + 10);
   return Array.from({ length: rootCount }, () => createDeptNode(0, maxLevel));
 }
 
@@ -75,6 +77,7 @@ function formatDateTime(date: Date) {
 }
 
 export function createDictData(dictType: string) {
+  resetMockFaker(MOCK_SEED + 20);
   const dicts = BASE_DICTS[dictType] ?? [];
   return dicts.map((item, idx) => ({
     dictCode: idx + 1,
@@ -86,7 +89,7 @@ export function createDictData(dictType: string) {
     isDefault: idx === 0 ? 'Y' : 'N',
     status: '0',
     createBy: 'mock',
-    createTime: formatDateTime(faker.date.recent({ days: 30 })),
+    createTime: formatDateTime(faker.date.recent({ days: 30, refDate: MOCK_REFERENCE_TIME })),
     remark: item.remark ?? '',
   }));
 }
