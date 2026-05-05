@@ -87,6 +87,14 @@ protocol-update-check:
   script:
     - python ruoyi-fastapi-backend/scripts/check_protocol_updates.py
 
+openapi-artifact-drift-check:
+  stage: test
+  image: python:3.11
+  script:
+    - pip install -r ruoyi-fastapi-backend/requirements.txt
+    - cd ruoyi-fastapi-backend
+    - python scripts/export_openapi.py --output ../shared/openapi.json --check
+
 cqrs-controller-cutover-check:
   stage: security
   image: python:3.11
@@ -119,13 +127,27 @@ frontend-quality-gates:
     - corepack enable
     - cd ruoyi-fastapi-frontend
     - yarn install --immutable
+    - yarn api:generate
+    - git diff --exit-code -- src/api/_generated ../shared/openapi.json
+    - |
+      openapi_drift="$(git status --porcelain -- src/api/_generated ../shared/openapi.json)"
+      if [ -n "$openapi_drift" ]; then
+        echo "$openapi_drift"
+        exit 1
+      fi
     - yarn lint:check
     - yarn type-check
     - yarn type-check:strict
     - bash scripts/check-mock-standards.sh
+    - cd ..
+    - bash scripts/check-mock-mainline.sh
+    - cd ruoyi-fastapi-frontend
+    - yarn test:run src/mocks/runtime src/mocks/contracts src/mocks/handlers/api-contract-schema.test.ts
+    - yarn mock:contracts
     - yarn test:run
     - yarn build:prod
     - yarn build:demo-offline
+    - bash ../scripts/check-mock-mainline.sh --require-dist
 
 sensitive-db-check:
   stage: security
@@ -155,7 +177,7 @@ migration-drift-check:
     DB_WORKFLOW_MODE: migration
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
     - if: '$CI_COMMIT_BRANCH =~ /^release\/.+$/'
   script:
     - echo "Running formal migration drift gate for MR/default/release pipelines"

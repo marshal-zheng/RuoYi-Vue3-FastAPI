@@ -107,8 +107,8 @@ export default [
       '.vscode/**',
       '.idea/**',
       'public/**',
-      'html/**'
-    ]
+      'html/**',
+    ],
   },
   
   // JavaScript/TypeScript 文件配置

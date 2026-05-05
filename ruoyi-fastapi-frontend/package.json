@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:fallback": "cross-env VITE_APP_RUNTIME_MODE=fallback VITE_ENABLE_MOCK=fallback vite",
+    "dev:fallback": "cross-env VITE_APP_RUNTIME_MODE=fallback vite",
     "build:prod": "vite build",
     "build:demo-offline": "vite build --mode demo-offline",
     "build:stage": "vite build --mode staging",
@@ -26,8 +26,17 @@
     "test:browser:run": "vitest run --browser",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest --watch",
+    "e2e:demo-offline": "node scripts/run-demo-offline-e2e.mjs",
+    "e2e:demo-offline:reuse": "node scripts/run-demo-offline-e2e.mjs --skip-build --base-url=http://127.0.0.1:4173",
+    "e2e:demo-offline:page-state": "node scripts/run-demo-offline-e2e.mjs --config=playwright.demo-offline-page-state.config.ts --suite-name=page-state",
     "api:generate": "bash ../scripts/generate-api-types.sh",
-    "api:generate:local": "BACKEND_URL=http://localhost:8000 bash ../scripts/generate-api-types.sh"
+    "api:generate:local": "bash ../scripts/generate-api-types.sh --live --backend-url http://localhost:8000",
+    "mock:contracts": "node scripts/check-mock-contracts.mjs --strict",
+    "mock:contracts:report": "node scripts/check-mock-contracts.mjs --strict --format=markdown",
+    "mock:contracts:json": "node scripts/check-mock-contracts.mjs --strict --format=json",
+    "mock:overlays": "node scripts/check-mock-overlays.mjs --strict",
+    "mock:overlays:report": "node scripts/check-mock-overlays.mjs --strict --format=markdown",
+    "mock:overlays:json": "node scripts/check-mock-overlays.mjs --strict --format=json"
   },
   "repository": {
     "type": "git",
@@ -93,6 +102,8 @@
   "devDependencies": {
     "@eslint/js": "^9.34.0",
     "@faker-js/faker": "^10.1.0",
+    "@hey-api/openapi-ts": "0.97.0",
+    "@playwright/test": "^1.59.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@tailwindcss/vite": "^4.1.12",
     "@testing-library/jest-dom": "^6.8.0",
@@ -110,6 +121,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^3.2.4",
     "@vue/compiler-sfc": "3.3.9",
+    "ajv": "^8.20.0",
     "autoprefixer": "^10.4.21",
     "cross-env": "^10.1.0",
     "eslint": "^9.34.0",
