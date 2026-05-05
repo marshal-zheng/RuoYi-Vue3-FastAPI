@@ -14,8 +14,15 @@
 - `@testing-library/user-event` - 用户交互模拟
 - `@vitest/browser` - 浏览器模式支持
 - `@vitest/ui` - 测试 UI 界面
+- `@playwright/test` - demo-offline build 后黑盒 E2E，首期只启用 Chromium
 - `webdriverio` - E2E 测试驱动
 - `jsdom` 和 `happy-dom` - DOM 环境模拟
+
+首次运行 demo-offline E2E 前安装 Chromium：
+
+```bash
+yarn playwright install chromium
+```
 
 ### 运行测试
 
@@ -40,6 +47,16 @@ yarn test:coverage
 
 # 监听模式运行测试
 yarn test:watch
+
+# demo-offline 静态包 E2E：默认自包含 build + preview + Playwright
+yarn e2e:demo-offline
+
+# demo-offline 页面状态 E2E：只在显式运行时激活 overlay
+yarn e2e:demo-offline:page-state
+
+# 复用已有 dist-demo-offline 或已有 preview
+yarn e2e:demo-offline --skip-build
+yarn e2e:demo-offline:reuse
 ```
 
 ## 📁 目录结构
@@ -121,6 +138,25 @@ describe('Login Page E2E Tests', () => {
 })
 ```
 
+### demo-offline Playwright E2E
+
+`tests/e2e/demo-offline` 使用独立的 `playwright.demo-offline.config.ts`，只跑 Chromium、`workers: 1`，并保留失败 trace、screenshot、video 和 HTML report。默认入口是 `yarn e2e:demo-offline`，它必须通过 HTTP 静态 preview 访问 `dist-demo-offline`，不得使用 `yarn dev`、`file://`、Computer Use 或直接调用 mock store。
+
+该套件覆盖登录、菜单、工程新增/编辑持久写、版本克隆/固化、拓扑保存读回、simulation 只读数据、未覆盖 `/api/**` 501 探测和 `window.__MOCK_RUNTIME__.resetDataset()`。新增或修改 demo-offline 主链路页面、API wrapper、handler 或持久写能力时，需要同步评估是否更新 Playwright 场景、稳定定位点、network assertions 和 reset 覆盖。
+
+### Page-State Overlay Harness
+
+页面状态测试复用 `src/mocks/overlays/**` registry 和 handler factory。Vitest/API 层使用 `tests/mocks/overlays.ts`，通过真实 API function、`@/utils/request` 或 MSW request path 进入 overlay，不得 mock `@/utils/request` 或在测试文件内复制业务响应结构。每个测试后 MSW handler 与 overlay 状态都会随测试生命周期复位；overlay reset 不会隐式 reset Dexie dataset。
+
+Playwright 页面状态套件使用 `playwright.demo-offline-page-state.config.ts` 与 `tests/e2e/demo-offline/page-state/`，命令是：
+
+```bash
+yarn e2e:demo-offline:page-state
+yarn e2e:demo-offline:page-state --skip-build
+```
+
+它与默认 `yarn e2e:demo-offline` 的职责不同：默认套件验证成功主链路；page-state 套件验证项目列表空态/写入错误、版本空态、拓扑保存错误、simulation unsupported 控制状态，以及网络记录中的 `X-Mock-Overlay` 诊断。两者都必须运行在 `dist-demo-offline` HTTP preview 上，不使用 `yarn dev`、`file://` 或 Computer Use。失败 artifact 输出到 `tests/reports/demo-offline-page-state-e2e*`，网络摘要只保留 step、method、path、status、handler tag 和 overlay id。
+
 ## ⚙️ 配置说明
 
 ### vitest.config.ts
@@ -150,7 +186,7 @@ describe('Login Page E2E Tests', () => {
 - `afterEach`: `mockServer.resetHandlers()`
 - `afterAll`: `mockServer.close()`
 
-这意味着任何未被 handler 覆盖的 HTTP 请求都会让测试失败。API 合约测试应调用真实 API 函数，走 `@/utils/request` 与 HTTP transform，再用 `tests/mocks/api-contract-handlers.ts` 或测试内 `mockServer.use(...)` 提供响应。
+这意味着任何未被 handler 覆盖的 HTTP 请求都会让测试失败。API 合约测试应调用真实 API 函数，走 `@/utils/request` 与 HTTP transform，并优先通过 `tests/mocks/mainline.ts` 复用 `src/mocks/handlers/**` 主线 handler。错误路径统一使用 `@/mocks/handlers/error-common`，不得再维护测试私有 API 契约 handler。
 
 ## 📊 测试报告
 
@@ -212,7 +248,9 @@ vi.mock('@/api/user', () => ({
 }))
 ```
 
-HTTP 合约相关测试不要 mock 请求兼容层。纯 store/composable 单元测试可以 mock 上层 API 模块或浏览器存储；只要测试目标涉及请求契约、错误映射、分页解包、导出响应、限流/503 等 HTTP 行为，就必须使用 MSW。
+HTTP 合约相关测试不要 mock 请求兼容层。纯 store/composable 单元测试可以 mock 上层 API 模块或浏览器存储；只要测试目标涉及请求契约、错误映射、分页解包、导出响应、限流/503/timeout 等 HTTP 行为，就必须使用 MSW，并优先补齐 `src/mocks` 主线 handler。
+
+测试不得维护私有 HTTP contract handler。新增空态、403、429、5xx、timeout、unsupported 或只读状态时，先登记 overlay registry，再通过 `tests/mocks/overlays.ts` 或 Playwright runtime helper 激活。
 
 本地提交前建议运行：
 
@@ -221,6 +259,11 @@ yarn type-check
 yarn type-check:strict
 bash scripts/check-mock-standards.sh
 yarn test:run
+yarn mock:contracts
+yarn mock:overlays
+yarn build:demo-offline
+yarn e2e:demo-offline --skip-build
+yarn e2e:demo-offline:page-state --skip-build
 ```
 
 ## 🐛 常见问题

@@ -34,7 +34,7 @@ const initSnapline = async () => {
   await nextTick();
 
   if (!graph) {
-    if (import.meta.env?.DEV) {
+    if (import.meta.env.DEV) {
       console.warn(
         '[ZxFlow] Snapline requires graph context. Did you forget to wrap with <XFlow>?'
       );

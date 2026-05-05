@@ -1,0 +1,64 @@
+[
+  {
+    "id": "topology-save-500",
+    "name": "拓扑保存服务端错误",
+    "stateType": "problem",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/project/topology/save",
+      "mswPath": "/api/project/topology/save",
+      "handlerTag": "project:topology:save"
+    },
+    "pages": ["topology-editor"],
+    "owner": "topology",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/version-topology-page-state.spec.ts"
+    ],
+    "risk": "验证拓扑保存失败不会修改持久数据，且页面保留在编辑态。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "problem-response",
+      "reason": "错误态使用统一 problem response，不计入 schema-unavailable 的 2xx 响应。"
+    },
+    "response": {
+      "status": 500,
+      "reason": "拓扑保存服务暂不可用",
+      "errorCode": "MOCK_TOPOLOGY_SAVE_FAILED"
+    }
+  },
+  {
+    "id": "topology-load-latency",
+    "name": "拓扑加载慢响应",
+    "stateType": "latency",
+    "target": {
+      "method": "GET",
+      "openapiPath": "/project/topology/{project_id}",
+      "mswPath": "/api/project/topology/:projectId",
+      "handlerTag": "project:topology:get"
+    },
+    "pages": ["topology-editor", "simulation-page"],
+    "owner": "topology",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/version-topology-page-state.spec.ts"
+    ],
+    "risk": "验证慢加载状态可被同步等待，不依赖裸 sleep。",
+    "coreMatrix": false,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "schema-unavailable",
+      "reason": "基础拓扑响应当前为 schema-unavailable，本 overlay 保持成功响应结构。"
+    },
+    "response": {
+      "delayMs": 800
+    }
+  }
+]

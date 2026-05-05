@@ -13,6 +13,13 @@
       <div class="flex items-center gap-2">
         <span class="text-base font-semibold text-slate-100 tracking-wide">仿真控制台</span>
         <span
+          v-if="projectName"
+          data-testid="simulation-header-project"
+          class="max-w-56 truncate text-sm font-medium text-cyan-200"
+        >
+          {{ projectName }}
+        </span>
+        <span
           class="px-2 py-0.5 text-xs font-medium rounded bg-slate-800 text-slate-400 border border-slate-700"
         >
           v1.0
@@ -28,7 +35,14 @@
         <!-- 开始/暂停/继续 -->
         <template v-if="status === 'idle' || status === 'stopped'">
           <button
-            class="inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/35 hover:scale-[1.02]"
+            data-testid="simulation-start-button"
+            :disabled="readonly"
+            :class="[
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              readonly
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35 hover:scale-[1.02]',
+            ]"
             @click="$emit('start')"
           >
             <el-icon :size="14"><VideoPlay /></el-icon>
@@ -37,7 +51,14 @@
         </template>
         <template v-else-if="status === 'running'">
           <button
-            class="inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/35"
+            data-testid="simulation-pause-button"
+            :disabled="readonly"
+            :class="[
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              readonly
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35',
+            ]"
             @click="$emit('pause')"
           >
             <el-icon :size="14"><VideoPause /></el-icon>
@@ -46,7 +67,14 @@
         </template>
         <template v-else-if="status === 'paused'">
           <button
-            class="inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 transition-all duration-200 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/35 hover:scale-[1.02]"
+            data-testid="simulation-resume-button"
+            :disabled="readonly"
+            :class="[
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              readonly
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
+                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35 hover:scale-[1.02]',
+            ]"
             @click="$emit('resume')"
           >
             <el-icon :size="14"><VideoPlay /></el-icon>
@@ -56,10 +84,11 @@
 
         <!-- 停止 -->
         <button
-          :disabled="status === 'idle' || status === 'stopped'"
+          data-testid="simulation-stop-button"
+          :disabled="readonly || status === 'idle' || status === 'stopped'"
           :class="[
             'inline-flex items-center gap-2 h-8 px-3 rounded-md text-sm font-medium transition-all duration-200',
-            status === 'idle' || status === 'stopped'
+            readonly || status === 'idle' || status === 'stopped'
               ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
               : 'bg-slate-700 text-slate-200 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30',
           ]"
@@ -71,10 +100,11 @@
 
         <!-- 单步 -->
         <button
-          :disabled="status !== 'paused' || stepping"
+          data-testid="simulation-step-button"
+          :disabled="readonly || status !== 'paused' || stepping"
           :class="[
             'inline-flex items-center gap-2 h-8 px-3 rounded-md text-sm font-medium transition-all duration-200',
-            status !== 'paused' || stepping
+            readonly || status !== 'paused' || stepping
               ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
               : 'bg-slate-700 text-slate-200 hover:bg-slate-600 hover:text-white',
             stepping ? 'cursor-wait opacity-80' : '',
@@ -212,6 +242,10 @@ const props = defineProps({
     default: '',
   },
   stepping: {
+    type: Boolean,
+    default: false,
+  },
+  readonly: {
     type: Boolean,
     default: false,
   },

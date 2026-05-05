@@ -11,7 +11,7 @@ vi.mock('vue-router', () => ({
   createWebHistory: createWebHistoryMock,
 }));
 
-vi.mock('@/demo/runtime/mode', () => ({
+vi.mock('@/mocks/runtime/mode', () => ({
   resolveRuntimeConfig: resolveRuntimeConfigMock,
 }));
 

@@ -1,5 +1,19 @@
 <template>
-  <ZxDialog v-bind="dialog.dialogProps.value" v-on="dialog.dialogEvents.value">
+  <ZxDialog
+    v-bind="dialog.dialogProps.value"
+    v-on="dialogEvents"
+    :confirm="confirmCloneVersion"
+    data-testid="version-clone-dialog"
+  >
+    <el-alert
+      v-if="cloneError"
+      class="mb-4"
+      data-testid="version-clone-error"
+      type="error"
+      :title="cloneError"
+      show-icon
+      :closable="false"
+    />
     <el-form
       ref="formRef"
       :model="formData"
@@ -10,16 +24,26 @@
       <el-form-item label="版本号" prop="versionNumber">
         <el-input
           v-model="formData.versionNumber"
+          data-testid="version-clone-number"
+          aria-label="版本号"
           placeholder="请输入新版本号，如：v1.0.1"
           maxlength="50"
         />
       </el-form-item>
       <el-form-item label="版本名称" prop="versionName">
-        <el-input v-model="formData.versionName" placeholder="请输入新版本名称" maxlength="100" />
+        <el-input
+          v-model="formData.versionName"
+          data-testid="version-clone-name"
+          aria-label="版本名称"
+          placeholder="请输入新版本名称"
+          maxlength="100"
+        />
       </el-form-item>
       <el-form-item label="版本描述">
         <el-input
           v-model="formData.description"
+          data-testid="version-clone-desc"
+          aria-label="版本描述"
           type="textarea"
           :rows="4"
           placeholder="请输入版本描述"
@@ -32,11 +56,9 @@
 </template>
 
 <script setup name="VersionCloneDialog">
-import { ref, reactive, getCurrentInstance } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import { cloneProjectVersion } from '@/api/project/version';
 import { useDialog } from '@zxio/zxui';
-
-const { proxy } = getCurrentInstance();
 
 const formRef = ref(null);
 
@@ -53,7 +75,33 @@ const rules = {
   versionName: [{ required: true, message: '请输入版本名称', trigger: 'blur' }],
 };
 
+const cloneError = ref('');
 let onSuccessCallback = null;
+
+function resolveCloneError(error) {
+  return error?.problem?.detail || error?.detail || error?.message || '克隆版本失败';
+}
+
+async function confirmCloneVersion() {
+  cloneError.value = '';
+  try {
+    await cloneProjectVersion({
+      sourceVersionId: formData.sourceVersionId,
+      versionNumber: formData.versionNumber,
+      versionName: formData.versionName,
+      description: formData.description,
+    });
+  } catch (error) {
+    cloneError.value = resolveCloneError(error);
+    return false;
+  }
+
+  if (onSuccessCallback) {
+    onSuccessCallback();
+  }
+
+  return true;
+}
 
 const dialog = useDialog({
   title: '克隆版本',
@@ -63,23 +111,19 @@ const dialog = useDialog({
   formModel: formData,
   preValidate: true,
   autoResetForm: true,
-  async onConfirm() {
-    await cloneProjectVersion({
-      sourceVersionId: formData.sourceVersionId,
-      versionNumber: formData.versionNumber,
-      versionName: formData.versionName,
-      description: formData.description,
-    });
-
-    if (onSuccessCallback) {
-      onSuccessCallback();
-    }
-
-    return true;
+  onConfirmError(error) {
+    cloneError.value = resolveCloneError(error);
   },
 });
 
+const dialogEvents = computed(() => {
+  const events = { ...dialog.dialogEvents.value };
+  delete events.confirm;
+  return events;
+});
+
 const open = (sourceVersion, onSuccess) => {
+  cloneError.value = '';
   formData.sourceVersionId = sourceVersion.versionId;
   formData.sourceVersionName = sourceVersion.versionName;
   formData.versionNumber = '';

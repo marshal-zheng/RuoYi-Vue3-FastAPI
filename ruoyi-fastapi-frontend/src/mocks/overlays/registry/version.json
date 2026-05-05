@@ -1,0 +1,94 @@
+[
+  {
+    "id": "version-list-empty",
+    "name": "版本列表空态",
+    "stateType": "empty",
+    "target": {
+      "method": "GET",
+      "openapiPath": "/project/version/list",
+      "mswPath": "/api/project/version/list",
+      "handlerTag": "project:version:list"
+    },
+    "pages": ["project-detail", "version-list"],
+    "owner": "project-version",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/version-topology-page-state.spec.ts"
+    ],
+    "risk": "验证项目详情页在无版本时仍保持结构化分页响应与可观察空态。",
+    "coreMatrix": true,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "response": {
+      "projection": "empty-page"
+    }
+  },
+  {
+    "id": "version-clone-forbidden",
+    "name": "版本克隆权限不足",
+    "stateType": "forbidden",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/project/version/clone",
+      "mswPath": "/api/project/version/clone",
+      "handlerTag": "project:version:clone"
+    },
+    "pages": ["project-detail", "version-list"],
+    "owner": "project-version",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts",
+      "ruoyi-fastapi-frontend/tests/e2e/demo-offline/page-state/specs/version-topology-page-state.spec.ts"
+    ],
+    "risk": "验证 403 权限不足错误沿真实 API wrapper 返回，而不是修改用户权限状态。",
+    "coreMatrix": false,
+    "e2eEnabled": true,
+    "resetStrategy": "overlay-only",
+    "composition": {},
+    "contract": {
+      "exception": "problem-response",
+      "reason": "错误态使用统一 problem response，不计入 2xx OpenAPI schema 响应。"
+    },
+    "response": {
+      "status": 403,
+      "reason": "当前用户无权克隆项目版本",
+      "errorCode": "MOCK_FORBIDDEN"
+    }
+  },
+  {
+    "id": "version-clone-timeout",
+    "name": "版本克隆超时",
+    "stateType": "timeout",
+    "target": {
+      "method": "POST",
+      "openapiPath": "/project/version/clone",
+      "mswPath": "/api/project/version/clone",
+      "handlerTag": "project:version:clone"
+    },
+    "pages": ["project-detail", "version-list"],
+    "owner": "project-version",
+    "tests": [
+      "ruoyi-fastapi-frontend/src/mocks/overlays/handlers.test.ts",
+      "ruoyi-fastapi-frontend/tests/unit/api/project.test.ts"
+    ],
+    "risk": "验证 timeout overlay 可以被独立激活、诊断和复位。",
+    "coreMatrix": false,
+    "e2eEnabled": false,
+    "resetStrategy": "overlay-only",
+    "composition": {
+      "conflictsWith": ["version-clone-forbidden"]
+    },
+    "contract": {
+      "exception": "problem-response",
+      "reason": "超时错误态使用统一 problem response，不计入 2xx OpenAPI schema 响应。"
+    },
+    "response": {
+      "status": 504,
+      "delayMs": 250,
+      "reason": "版本克隆请求超时",
+      "errorCode": "MOCK_TIMEOUT"
+    }
+  }
+]

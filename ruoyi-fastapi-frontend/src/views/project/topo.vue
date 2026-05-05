@@ -1,20 +1,37 @@
 <template>
-  <ZxContentWrap class="home">
-    <XflowDAG
-      ref="dagRef"
-      :operators="operators"
-      :operators-loading="loading"
-      :layout="layoutMode"
-      :dnd-config="dndConfig"
-      :show-graph-control="false"
-      @node-dblclick="handleNodeDblclick"
-    >
-      <template #right>
-        <zx-button size="small" type="primary" :disabled="loading" @click="handleSaveTopo">
-          保存
-        </zx-button>
-      </template>
-    </XflowDAG>
+  <ZxContentWrap class="home" data-testid="topology-page">
+    <div class="topology-canvas-wrap" data-testid="topology-canvas">
+      <div
+        v-if="topologyLoading"
+        class="topology-loading-indicator"
+        data-testid="topology-loading-indicator"
+        role="status"
+        aria-live="polite"
+      >
+        拓扑加载中...
+      </div>
+      <XflowDAG
+        ref="dagRef"
+        :operators="operators"
+        :operators-loading="loading"
+        :layout="layoutMode"
+        :dnd-config="dndConfig"
+        :show-graph-control="false"
+        @node-dblclick="handleNodeDblclick"
+      >
+        <template #right>
+          <zx-button
+            size="small"
+            type="primary"
+            data-testid="topology-save-button"
+            :disabled="loading || topologyLoading"
+            @click="handleSaveTopo"
+          >
+            保存
+          </zx-button>
+        </template>
+      </XflowDAG>
+    </div>
 
     <!-- 节点编辑抽屉 -->
     <NodeEditDrawer ref="nodeEditDrawerRef" :node-data="currentNode" @submit="handleNodeUpdate" />
@@ -28,9 +45,10 @@ import XflowDAG from '@/components/business/Dag/index.vue';
 import { NodeEditDrawer } from './components';
 import { listDevice } from '@/api/device/device';
 import { saveProjectTopology, getProjectTopology } from '@/api/project/topology';
-import { isDemoOfflineMode, resolveRuntimeConfig } from '@/demo/runtime/mode';
+import { isDemoOfflineMode, resolveRuntimeConfig } from '@/mocks/runtime/mode';
 import { ElMessage } from 'element-plus';
 import { getPortColor } from '@/constants/portColor';
+import { resolveTopologyGraphJson } from './utils/topologyGraph';
 
 const version = ref('3.9.0');
 
@@ -58,6 +76,7 @@ function getVersionIdNumber() {
 // DAG 组件配置 - 设备列表（从后端获取）
 const operators = ref([]);
 const loading = ref(false);
+const topologyLoading = ref(false);
 const layoutMode = ref('horizontal'); // 'vertical' | 'horizontal'
 
 // DAG 组件引用
@@ -520,16 +539,20 @@ function restoreSavedTopology() {
 
     clearGraphContent(graph);
 
+    topologyLoading.value = true;
     getProjectTopology(currentProjectId, currentVersionId)
       .then((res) => {
         // http 客户端已解包 payload.data，res 直接是拓扑数据
-        const topoData = res?.topologyData;
-        const graphJson = topoData?.graph;
+        const topoData = res?.topologyData || res?.graph;
+        const graphJson = resolveTopologyGraphJson(topoData);
         if (graphJson) {
           graph.fromJSON(graphJson);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        topologyLoading.value = false;
+      });
   };
 
   tryRestore();
@@ -563,6 +586,27 @@ onMounted(() => {
       height: 100%;
     }
   }
+}
+
+.topology-canvas-wrap {
+  height: 100%;
+  position: relative;
+}
+
+.topology-loading-indicator {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+  border: 1px solid #a7c7ff;
+  border-radius: 4px;
+  background: #eef6ff;
+  color: #1d4f91;
+  font-size: 13px;
+  line-height: 20px;
+  padding: 6px 12px;
+  box-shadow: 0 4px 12px rgb(29 79 145 / 12%);
 }
 
 /* simulation-related styles removed from topo view */

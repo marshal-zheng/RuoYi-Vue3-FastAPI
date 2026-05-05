@@ -32,7 +32,7 @@ export function useGraphInstance(options = {}) {
       throw new Error('useGraphInstance must be used within XFlow component');
     }
 
-    if (warnIfMissing && import.meta.env?.DEV) {
+    if (warnIfMissing && import.meta.env.DEV) {
       console.warn(
         '[ZxFlow] Graph instance context not found. Dag features may not work as expected.'
       );

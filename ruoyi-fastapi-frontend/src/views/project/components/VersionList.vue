@@ -1,5 +1,5 @@
 <template>
-  <div class="version-list">
+  <div class="version-list" data-testid="version-list">
     <ZxGridList
       ref="versionGridListRef"
       :load-data="loadVersionData"
@@ -20,7 +20,9 @@
               type="danger"
               icon="Delete"
               :disabled="multiple"
-              @click="() => handleDeleteVersion(null, versionGridListRef?.refresh)"
+              @click="
+                () => handleDeleteVersion(null, versionGridListRef?.refresh)
+              "
               v-hasPermi="['project:version:remove']"
               >删除</ZxButton
             >
@@ -61,26 +63,51 @@
         >
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="版本号" prop="versionNumber" width="120" />
-          <el-table-column label="版本名称" prop="versionName" min-width="150" />
-          <el-table-column label="描述" prop="description" min-width="200" show-overflow-tooltip />
+          <el-table-column label="版本名称" prop="versionName" min-width="150">
+            <template #default="{ row }">
+              <span :data-testid="`version-row-${row.versionId}`">{{
+                row.versionName
+              }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="描述"
+            prop="description"
+            min-width="200"
+            show-overflow-tooltip
+          />
           <el-table-column label="创建人" prop="createBy" width="120" />
           <el-table-column label="创建时间" prop="createTime" width="180">
             <template #default="{ row }">
               {{ parseTime(row.createTime) }}
             </template>
           </el-table-column>
-          <el-table-column label="状态" prop="isLocked" align="center" width="100">
+          <el-table-column
+            label="状态"
+            prop="isLocked"
+            align="center"
+            width="100"
+          >
             <template #default="{ row }">
-              <el-tag v-if="row.isLocked === '1'" type="warning">
+              <el-tag
+                v-if="row.isLocked === '1'"
+                type="warning"
+                :data-testid="`version-lock-status-${row.versionId}`"
+              >
                 <el-icon class="mr-1"><Lock /></el-icon>
                 固化
               </el-tag>
-              <el-tag v-else type="info">未固化</el-tag>
+              <el-tag
+                v-else
+                type="info"
+                :data-testid="`version-lock-status-${row.versionId}`"
+                >未固化</el-tag
+              >
             </template>
           </el-table-column>
           <el-table-column
             label="操作"
-            width="220"
+            width="300"
             class-name="op-col"
             label-class-name="op-col__header"
           >
@@ -89,12 +116,35 @@
                 <ZxButton
                   link
                   type="primary"
+                  :data-testid="`version-simulation-${row.versionId}`"
                   @click="handleSimulateVersion(row)"
                   v-hasPermi="['simulation:use']"
                   >仿真</ZxButton
                 >
-                <ZxButton link type="primary" @click="handleEditVersionTopo(row)">图编辑</ZxButton>
+                <ZxButton
+                  link
+                  type="primary"
+                  :data-testid="`version-topology-${row.versionId}`"
+                  @click="handleEditVersionTopo(row)"
+                  >图编辑</ZxButton
+                >
+                <ZxButton
+                  link
+                  type="primary"
+                  :data-testid="`version-clone-${row.versionId}`"
+                  @click="handleCloneVersion(row)"
+                  >克隆</ZxButton
+                >
+                <ZxButton
+                  v-if="row.isLocked !== '1'"
+                  link
+                  type="primary"
+                  :data-testid="`version-lock-${row.versionId}`"
+                  @click="handleLockVersion(row, handleRefresh)"
+                  >固化</ZxButton
+                >
                 <ZxMoreAction
+                  :data-testid="`version-more-${row.versionId}`"
                   :list="getMoreActionList(row)"
                   @select="handleMoreActionSelect($event, row, handleRefresh)"
                 />
@@ -102,6 +152,13 @@
             </template>
           </el-table-column>
         </el-table>
+        <div
+          v-if="!grid.loading && grid.list.length === 0"
+          class="version-list__empty"
+          data-testid="version-list-empty"
+        >
+          暂无版本
+        </div>
       </template>
     </ZxGridList>
 
@@ -112,7 +169,11 @@
       width="600px"
       :close-on-click-modal="false"
     >
-      <el-form :model="editVersionForm" label-width="100px" label-position="left">
+      <el-form
+        :model="editVersionForm"
+        label-width="100px"
+        label-position="left"
+      >
         <el-form-item label="版本号" required>
           <el-input
             v-model="editVersionForm.versionNumber"
@@ -142,7 +203,9 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="editVersionDialog = false">取消</el-button>
-          <el-button type="primary" @click="handleSaveEditVersion">保存</el-button>
+          <el-button type="primary" @click="handleSaveEditVersion"
+            >保存</el-button
+          >
         </div>
       </template>
     </el-dialog>
@@ -162,21 +225,27 @@
 </template>
 
 <script setup name="VersionList">
-import { ref, reactive, watch, getCurrentInstance } from 'vue';
-import { ElMessage } from 'element-plus';
-import { View, Delete, Lock, CopyDocument, Download } from '@element-plus/icons-vue';
+import { ref, reactive, watch, getCurrentInstance } from "vue";
+import { ElMessage } from "element-plus";
+import {
+  View,
+  Delete,
+  Lock,
+  CopyDocument,
+  Download,
+} from "@element-plus/icons-vue";
 import {
   listProjectVersion,
   addProjectVersion,
   updateProjectVersion,
   delProjectVersion,
   lockProjectVersion,
-} from '@/api/project/version';
-import { parseTime } from '@/utils/ruoyi';
-import VersionDetailDialog from './VersionDetailDialog.vue';
-import VersionCloneDialog from './VersionCloneDialog.vue';
-import VersionPreviewDialog from './VersionPreviewDialog.vue';
-import VersionExportDialog from './VersionExportDialog.vue';
+} from "@/api/project/version";
+import { parseTime } from "@/utils/ruoyi";
+import VersionDetailDialog from "./VersionDetailDialog.vue";
+import VersionCloneDialog from "./VersionCloneDialog.vue";
+import VersionPreviewDialog from "./VersionPreviewDialog.vue";
+import VersionExportDialog from "./VersionExportDialog.vue";
 
 const { proxy } = getCurrentInstance();
 
@@ -200,9 +269,9 @@ const multiple = ref(true);
 const editVersionDialog = ref(false);
 const editVersionForm = reactive({
   versionId: null,
-  versionNumber: '',
-  versionName: '',
-  description: '',
+  versionNumber: "",
+  versionName: "",
+  description: "",
 });
 
 /** ZxGridList 版本数据加载函数 */
@@ -232,19 +301,19 @@ watch(
       versionGridListRef.value.refresh();
     }
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 /** 筛选变化处理 */
 function onFilterChange(key, value, { handleRefresh, updateState }) {
   updateState({ [key]: value });
-  updateState('pager.page', 1);
+  updateState("pager.page", 1);
   handleRefresh();
 }
 
 /** 搜索处理 */
 function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
+  updateState("pager.page", 1);
   handleRefresh();
 }
 
@@ -261,55 +330,55 @@ const getMoreActionList = (row) => {
 
   // 预览版本
   actions.push({
-    label: '预览',
-    eventTag: 'preview',
+    label: "预览",
+    eventTag: "preview",
     icon: View,
-    type: 'primary',
+    type: "primary",
   });
 
   // 导出文件
   actions.push({
-    label: '导出文件',
-    eventTag: 'export',
+    label: "导出文件",
+    eventTag: "export",
     icon: Download,
-    type: 'primary',
+    type: "primary",
   });
 
   // 固化版本/解除固化
-  if (row.isLocked === '1') {
+  if (row.isLocked === "1") {
     actions.push({
-      label: '解除固化',
-      eventTag: 'unlock',
+      label: "解除固化",
+      eventTag: "unlock",
       icon: Lock,
-      type: 'warning',
+      type: "warning",
     });
   } else {
     actions.push({
-      label: '固化版本',
-      eventTag: 'lock',
+      label: "固化版本",
+      eventTag: "lock",
       icon: Lock,
-      type: 'primary',
+      type: "primary",
     });
   }
 
   // 克隆版本
   actions.push({
-    label: '克隆版本',
-    eventTag: 'clone',
+    label: "克隆版本",
+    eventTag: "clone",
     icon: CopyDocument,
-    type: 'primary',
+    type: "primary",
   });
 
   // 删除版本（固化版本不能删除）
-  if (row.isLocked !== '1') {
+  if (row.isLocked !== "1") {
     actions.push(
       { isDivider: true },
       {
-        label: '删除',
-        eventTag: 'delete',
+        label: "删除",
+        eventTag: "delete",
         icon: Delete,
         danger: true,
-      }
+      },
     );
   }
 
@@ -319,25 +388,25 @@ const getMoreActionList = (row) => {
 // 处理更多操作选择
 const handleMoreActionSelect = async (item, row, handleRefresh) => {
   switch (item.eventTag) {
-    case 'preview':
+    case "preview":
       handlePreviewVersion(row);
       break;
-    case 'export':
+    case "export":
       handleExportVersion(row);
       break;
-    case 'exportExcel':
+    case "exportExcel":
       handleExportVersionExcel(row);
       break;
-    case 'lock':
+    case "lock":
       handleLockVersion(row, handleRefresh);
       break;
-    case 'unlock':
+    case "unlock":
       handleUnlockVersion(row, handleRefresh);
       break;
-    case 'clone':
+    case "clone":
       handleCloneVersion(row);
       break;
-    case 'delete':
+    case "delete":
       handleDeleteVersion(row, handleRefresh);
       break;
     default:
@@ -347,8 +416,8 @@ const handleMoreActionSelect = async (item, row, handleRefresh) => {
 
 /** 删除版本 */
 function handleDeleteVersion(row, handleRefresh) {
-  const versionIds = row?.versionId || ids.value.join(',');
-  let confirmMessage = '';
+  const versionIds = row?.versionId || ids.value.join(",");
+  let confirmMessage = "";
 
   if (row?.versionId) {
     confirmMessage = `是否确认删除版本"${row.versionName}"？`;
@@ -367,7 +436,7 @@ function handleDeleteVersion(row, handleRefresh) {
           versionGridListRef.value.refresh();
         }
       } catch (error) {
-        console.error('删除版本失败:', error);
+        console.error("删除版本失败:", error);
       }
     })
     .catch(() => {});
@@ -377,9 +446,9 @@ function handleDeleteVersion(row, handleRefresh) {
 function handleAddVersion() {
   // 重置表单
   editVersionForm.versionId = null;
-  editVersionForm.versionNumber = '';
-  editVersionForm.versionName = '';
-  editVersionForm.description = '';
+  editVersionForm.versionNumber = "";
+  editVersionForm.versionName = "";
+  editVersionForm.description = "";
 
   editVersionDialog.value = true;
 }
@@ -387,7 +456,7 @@ function handleAddVersion() {
 /** 仿真版本（跳转到仿真页面） */
 function handleSimulateVersion(row) {
   if (!props.projectId) {
-    ElMessage.error('缺少工程ID，无法打开仿真页面');
+    ElMessage.error("缺少工程ID，无法打开仿真页面");
     return;
   }
   proxy.$router.push({
@@ -401,7 +470,7 @@ function handleSimulateVersion(row) {
 /** 编辑版本拓扑（跳转到拓扑图进行编辑） */
 function handleEditVersionTopo(row) {
   if (!props.projectId) {
-    ElMessage.error('缺少工程ID，无法打开拓扑图');
+    ElMessage.error("缺少工程ID，无法打开拓扑图");
     return;
   }
   proxy.$router.push({
@@ -416,7 +485,7 @@ function handleEditVersionTopo(row) {
 async function handleSaveEditVersion() {
   // 验证表单
   if (!editVersionForm.versionNumber || !editVersionForm.versionName) {
-    ElMessage.error('版本号和版本名称不能为空');
+    ElMessage.error("版本号和版本名称不能为空");
     return;
   }
 
@@ -450,7 +519,7 @@ function handleLockVersion(row, handleRefresh) {
       try {
         await lockProjectVersion({
           versionId: row.versionId,
-          isLocked: '1',
+          isLocked: "1",
         });
         if (handleRefresh) {
           handleRefresh();
@@ -458,7 +527,7 @@ function handleLockVersion(row, handleRefresh) {
           versionGridListRef.value.refresh();
         }
       } catch (error) {
-        console.error('固化版本失败:', error);
+        console.error("固化版本失败:", error);
       }
     })
     .catch(() => {});
@@ -472,7 +541,7 @@ function handleUnlockVersion(row, handleRefresh) {
       try {
         await lockProjectVersion({
           versionId: row.versionId,
-          isLocked: '0',
+          isLocked: "0",
         });
         if (handleRefresh) {
           handleRefresh();
@@ -480,7 +549,7 @@ function handleUnlockVersion(row, handleRefresh) {
           versionGridListRef.value.refresh();
         }
       } catch (error) {
-        console.error('解除固化失败:', error);
+        console.error("解除固化失败:", error);
       }
     })
     .catch(() => {});
@@ -508,12 +577,19 @@ function handleExportVersion(row) {
 
 /** 导出版本（直接选择 Excel） */
 function handleExportVersionExcel(row) {
-  exportDialogRef.value?.open(row, 'excel');
+  exportDialogRef.value?.open(row, "excel");
 }
 </script>
 
 <style scoped lang="less">
 .version-list {
   padding: 0;
+}
+
+.version-list__empty {
+  padding: 24px 0;
+  color: #86909c;
+  font-size: 14px;
+  text-align: center;
 }
 </style>

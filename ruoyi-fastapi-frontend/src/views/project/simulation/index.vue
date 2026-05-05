@@ -1,5 +1,6 @@
 <template>
   <div
+    data-testid="simulation-page"
     class="simulation-dark simulation-shell flex h-full bg-slate-950"
     :class="{ 'fault-injection-mode': isFaultInjectionMode }"
   >
@@ -40,12 +41,13 @@
     <!-- 左侧主区域：header + main + footer -->
     <div class="flex flex-col flex-1 min-w-0 h-full">
       <!-- 顶部控制栏 -->
-      <header class="shrink-0 z-50">
+      <header class="shrink-0 z-50" data-testid="simulation-header">
         <SimulationHeader
           :status="simulationState.status"
           :elapsed-time="simulationState.elapsedTime"
           :speed="simulationState.speed"
           :project-name="projectName"
+          :readonly="isReadonlySession"
           @start="handleStart"
           @pause="handlePause"
           @resume="handleResume"
@@ -59,10 +61,20 @@
         />
       </header>
 
+      <div
+        v-if="isReadonlySession"
+        class="simulation-readonly-banner"
+        data-testid="simulation-readonly-banner"
+        role="status"
+      >
+        只读演示模式，仿真控制操作已禁用
+      </div>
+
       <!-- 主内容区域 -->
       <main class="flex flex-1 min-h-0 p-3 relative">
         <!-- 拓扑画布 -->
         <section
+          data-testid="simulation-canvas"
           class="sim-canvas pro-card flex-1 relative"
           :class="{ 'fault-target-canvas': isFaultInjectionMode }"
         >
@@ -138,7 +150,7 @@
       </main>
 
       <!-- 底部：协议分析器 -->
-      <footer class="shrink-0 h-64 mx-3 mb-3 pro-card">
+      <footer class="shrink-0 h-64 mx-3 mb-3 pro-card" data-testid="simulation-message-list">
         <ProtocolAnalyzer
           ref="protocolAnalyzerRef"
           :messages="filteredMessages"
@@ -260,6 +272,15 @@ import './styles/simulation-dialog-theme.less';
 import { listDevice } from '@/api/device/device';
 import { getProject } from '@/api/project/project';
 import { getProjectTopology } from '@/api/project/topology';
+import {
+  createSimulationSession,
+  getEvents,
+  getSimulationAlarms,
+  getSimulationBandwidth,
+  getSimulationMessages,
+  getSimulationStatus,
+} from '@/api/simulation/simulation';
+import { resolveTopologyGraphJson } from '../utils/topologyGraph';
 
 defineOptions({ name: 'SimulationConsole' });
 
@@ -274,6 +295,7 @@ const appStore = useAppStore();
 
 // 项目信息
 const projectName = ref('');
+const isReadonlySession = ref(false);
 
 // DAG 组件
 const dagRef = ref(null);
@@ -321,6 +343,10 @@ const {
   setMessageFilter,
   setAlarmFilter,
   clearData,
+  updateBandwidthData,
+  updateMessageData,
+  updateAlarmData,
+  updateStatistics,
   faultEventData,
   getNewFaultEvents,
 } = useSimulationData(sessionId);
@@ -693,8 +719,8 @@ function restoreSavedTopology() {
     getProjectTopology(projectId.value, versionId.value, { silentError: true })
       .then((res) => {
         // http 客户端已解包 payload.data，res 直接是拓扑数据
-        const topoData = res?.topologyData;
-        const graphJson = topoData?.graph;
+        const topoData = res?.topologyData || res?.graph;
+        const graphJson = resolveTopologyGraphJson(topoData);
         if (graphJson) {
           graph.fromJSON(graphJson);
           normalizeGraphPorts(graph);
@@ -709,6 +735,54 @@ function restoreSavedTopology() {
   };
 
   tryRestore();
+}
+
+async function loadReadonlySimulationSnapshot() {
+  isReadonlySession.value = false;
+  try {
+    const session = await createSimulationSession({
+      projectId: projectId.value,
+      versionId: versionId.value,
+      readonly: true,
+    });
+    isReadonlySession.value = session?.readonly === true;
+    const readonlySessionId = session?.sessionId;
+    if (!readonlySessionId) {
+      return;
+    }
+    sessionId.value = readonlySessionId;
+    if (session?.status) {
+      syncStatus(session);
+      updateStatistics(session);
+    }
+
+    const [status, messages, bandwidth, alarms, events] = await Promise.all([
+      getSimulationStatus(readonlySessionId),
+      getSimulationMessages(readonlySessionId, 100),
+      getSimulationBandwidth(readonlySessionId),
+      getSimulationAlarms(readonlySessionId),
+      getEvents(readonlySessionId),
+    ]);
+
+    if (status) {
+      syncStatus(status);
+      updateStatistics(status);
+    }
+    if (Array.isArray(messages)) {
+      updateMessageData(messages);
+    }
+    if (Array.isArray(bandwidth)) {
+      updateBandwidthData(bandwidth);
+    }
+    if (Array.isArray(alarms)) {
+      updateAlarmData(alarms);
+    }
+    if (Array.isArray(events)) {
+      eventList.value = events;
+    }
+  } catch (err) {
+    console.warn('[仿真] 无法加载只读演示数据', err);
+  }
 }
 
 // 设置边的鼠标事件（hover 提示）
@@ -727,6 +801,11 @@ function setupEdgeHoverEvents(graph) {
 
 // 仿真控制处理
 async function handleStart() {
+  if (isReadonlySession.value) {
+    ElMessage.info('只读演示模式下不可启动仿真');
+    return;
+  }
+
   const graph = getGraphInstance();
   if (!graph) {
     ElMessage.error('图实例不存在');
@@ -756,21 +835,46 @@ async function handleStart() {
     injection_params: strategyConfig.params,
   };
 
-  await start(startOptions);
-  startAnimation();
+  try {
+    await start(startOptions);
+    startAnimation();
+  } catch (err) {
+    const message = err?.problem?.detail || err?.detail || err?.message || '启动失败';
+    ElMessage.error(message);
+  }
 }
 
-function handlePause() {
-  pause();
-  stopAnimation();
+async function handlePause() {
+  if (isReadonlySession.value) {
+    ElMessage.info('只读演示模式下不可暂停仿真');
+    return;
+  }
+
+  try {
+    await pause();
+    stopAnimation();
+  } catch (err) {
+    const message = err?.problem?.detail || err?.detail || err?.message || '暂停失败';
+    ElMessage.error(message);
+  }
 }
 
 function handleResume() {
+  if (isReadonlySession.value) {
+    ElMessage.info('只读演示模式下不可继续仿真');
+    return;
+  }
+
   resume();
   startAnimation();
 }
 
 async function handleStop() {
+  if (isReadonlySession.value) {
+    ElMessage.info('只读演示模式下不可停止仿真');
+    return;
+  }
+
   await stop();
   stopAnimation();
   simulationSummary.value = buildSimulationSummary();
@@ -782,6 +886,11 @@ async function handleStop() {
 
 const handleStep = throttle(
   () => {
+    if (isReadonlySession.value) {
+      ElMessage.info('只读演示模式下不可单步执行');
+      return;
+    }
+
     if (stepLock) return;
     stepLock = true;
     step()
@@ -1072,6 +1181,7 @@ onMounted(async () => {
   appStore.closeSideBar({ withoutAnimation: true });
   await Promise.all([loadProjectInfo(), loadDeviceList()]);
   restoreSavedTopology();
+  await loadReadonlySimulationSnapshot();
 });
 
 onUnmounted(() => {
@@ -1148,6 +1258,16 @@ watch(isRunning, (running) => {
   background:
     radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
     radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%), #0b1220;
+}
+
+.simulation-readonly-banner {
+  border-bottom: 1px solid rgba(251, 191, 36, 0.35);
+  background: rgba(120, 53, 15, 0.45);
+  color: #fde68a;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 32px;
+  padding: 0 20px;
 }
 
 .floating-panel {
