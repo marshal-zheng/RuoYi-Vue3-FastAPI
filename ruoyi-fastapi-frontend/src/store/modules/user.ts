@@ -83,6 +83,7 @@ const useUserStore = defineStore('user', {
           url: '/auth/refresh',
           method: 'post',
           isToken: false,
+          skipRelogin: true,
           silentSuccess: true,
           silentError: true,
         })

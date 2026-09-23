@@ -28,7 +28,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@shared/*": ["src/api/_shared/*"]
+      "@shared/*": ["src/api/_shared/*"],
+      "@zxio/components/*": ["node_modules/@zxio/zxui/es/components/*"]
     },
 
     /* Vue specific */

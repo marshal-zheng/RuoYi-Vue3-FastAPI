@@ -1,9 +1,17 @@
 <template>
   <!-- 授权用户 -->
-  <el-dialog title="选择用户" v-model="visible" width="800px" top="5vh" append-to-body>
+  <ZxDialog
+    dialog-size="lg"
+    :draggable="false"
+    :show-full-screen="false"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+    title="选择用户"
+    v-model="visible"
+  >
     <el-form :model="queryParams" ref="queryRef" :inline="true">
       <el-form-item label="用户名称" prop="userName">
-        <el-input
+        <zx-input
           v-model="queryParams.userName"
           placeholder="请输入用户名称"
           clearable
@@ -12,7 +20,7 @@
         />
       </el-form-item>
       <el-form-item label="手机号码" prop="phonenumber">
-        <el-input
+        <zx-input
           v-model="queryParams.phonenumber"
           placeholder="请输入手机号码"
           clearable
@@ -63,7 +71,7 @@
         <el-button @click="visible = false">取 消</el-button>
       </div>
     </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup name="SelectUser">

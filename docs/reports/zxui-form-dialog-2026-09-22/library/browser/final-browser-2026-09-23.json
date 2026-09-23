@@ -1,0 +1,3967 @@
+{
+  "date": "2026-09-23",
+  "candidate": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a",
+  "records": [
+    {
+      "path": "source",
+      "test": "external-popover",
+      "type": "plain",
+      "observed": [
+        {
+          "text": "External plain popoverThe plain input opens its external popover."
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "external-popover",
+      "type": "tooltip",
+      "observed": [
+        {
+          "text": "External tooltip popoverThe input with a tooltip opens its external popover."
+        },
+        {
+          "text": "Internal input tooltip"
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "external-popover",
+      "type": "plain",
+      "observed": [
+        {
+          "text": "External plain popoverThe plain input opens its external popover."
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "external-popover",
+      "type": "tooltip",
+      "observed": [
+        {
+          "text": "External tooltip popoverThe input with a tooltip opens its external popover."
+        },
+        {
+          "text": "Internal input tooltip"
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26.53125,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26.53125,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28.1171875,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28.1171875,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28.0234375,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28.0234375,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "default",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26.0703125,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26.0703125,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-matrix-settled-recheck",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "validation-empty",
+      "feedback": "",
+      "errors": [
+        "Name is required"
+      ]
+    },
+    {
+      "path": "source",
+      "test": "expose-select",
+      "observed": {
+        "end": 10,
+        "focused": true,
+        "start": 0
+      }
+    },
+    {
+      "path": "source",
+      "test": "expose-inspect",
+      "feedback": "{\"input\":\"INPUT\",\"textarea\":\"TEXTAREA\",\"textareaStyle\":[{},{\"minHeight\":\"31px\"},{}]}"
+    },
+    {
+      "path": "source",
+      "test": "expose-clear",
+      "empty": true
+    },
+    {
+      "path": "packed",
+      "test": "validation-empty",
+      "feedback": "",
+      "errors": [
+        "Name is required"
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "expose-select",
+      "observed": {
+        "end": 10,
+        "focused": true,
+        "start": 0
+      }
+    },
+    {
+      "path": "packed",
+      "test": "expose-inspect",
+      "feedback": "{\"input\":\"INPUT\",\"textarea\":\"TEXTAREA\",\"textareaStyle\":[{},{\"minHeight\":\"31px\"},{}]}"
+    },
+    {
+      "path": "packed",
+      "test": "expose-clear",
+      "empty": true
+    },
+    {
+      "path": "source",
+      "test": "native-search",
+      "feedback": "needle",
+      "dom": {
+        "numberStepper": false,
+        "numberType": "number",
+        "searchType": "search",
+        "slots": "https://@✓.example",
+        "tooltipSlots": "Email@.comVerified"
+      }
+    },
+    {
+      "path": "source",
+      "test": "submit-payload",
+      "feedback": "{\"name\":\"Ada\",\"email\":\"\",\"username\":\"\",\"password\":\"\",\"status\":\"active\",\"agreed\":true,\"nativeNumber\":\"7\",\"nativeSearch\":\"needle\",\"quantity\":3,\"note\":\"\"}",
+      "state": "visible=false; modelValue=false"
+    },
+    {
+      "path": "source",
+      "test": "reset",
+      "observed": {
+        "errors": [],
+        "name": ""
+      }
+    },
+    {
+      "path": "packed",
+      "test": "native-search",
+      "feedback": "needle",
+      "dom": {
+        "numberStepper": false,
+        "numberType": "number",
+        "searchType": "search",
+        "slots": "https://@✓.example",
+        "tooltipSlots": "Email@.comVerified"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "submit-payload",
+      "feedback": "{\"name\":\"Ada\",\"email\":\"\",\"username\":\"\",\"password\":\"\",\"status\":\"active\",\"agreed\":true,\"nativeNumber\":\"7\",\"nativeSearch\":\"needle\",\"quantity\":3,\"note\":\"\"}",
+      "state": "visible=false; modelValue=false"
+    },
+    {
+      "path": "packed",
+      "test": "reset",
+      "observed": {
+        "errors": [],
+        "name": ""
+      }
+    },
+    {
+      "path": "source",
+      "test": "form-size",
+      "size": "small",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 12,
+          "width": 12
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "form-size",
+      "size": "large",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 13.953125,
+          "width": 13.953125
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "nested-open",
+      "observed": [
+        {
+          "scope": "scope:play:root.public-form",
+          "title": "Public form contract",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+          "width": 880
+        },
+        {
+          "scope": "scope:play:root.public-form.public-form-nested",
+          "title": "Nested scope",
+          "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+          "width": 640
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "form-size",
+      "size": "small",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 12.03125,
+          "width": 12.03125
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "form-size",
+      "size": "large",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 13.671875,
+          "width": 13.671875
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-open",
+      "observed": [
+        {
+          "scope": "scope:packed-form:root.public-form",
+          "title": "Public form contract",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+          "width": 880
+        },
+        {
+          "scope": "scope:packed-form:root.public-form.public-form-nested",
+          "title": "Nested scope",
+          "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+          "width": 640
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "nested-popup-dark",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "source",
+      "test": "nested-popup-light",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      },
+      "result": "attempt-did-not-demonstrate-light; superseded by nested-mode-switch-confirmed"
+    },
+    {
+      "path": "source",
+      "test": "parent-popup-mode-switch",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:play:root.public-form",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-popup-dark",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-popup-light",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      },
+      "result": "attempt-did-not-demonstrate-light; superseded by nested-mode-switch-confirmed"
+    },
+    {
+      "path": "packed",
+      "test": "parent-popup-mode-switch",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:packed-form:root.public-form",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "source",
+      "test": "nested-light-settled",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      },
+      "result": "attempt-did-not-demonstrate-light; superseded by nested-mode-switch-confirmed"
+    },
+    {
+      "path": "source",
+      "test": "reopen-after-mode-switch",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": []
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-light-settled",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.11688 0.131308 0.16014)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      },
+      "result": "attempt-did-not-demonstrate-light; superseded by nested-mode-switch-confirmed"
+    },
+    {
+      "path": "packed",
+      "test": "reopen-after-mode-switch",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": []
+      }
+    },
+    {
+      "path": "source",
+      "test": "nested-mode-switch-confirmed",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.987525 0.989235 0.992655)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-mode-switch-confirmed",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.987525 0.989235 0.992655)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "text": "OneTwo",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "source",
+      "test": "real-autofill",
+      "observed": [
+        {
+          "autofill": false,
+          "background": "rgba(0, 0, 0, 0)",
+          "name": "username",
+          "shadow": "none",
+          "textFill": "",
+          "type": "text"
+        },
+        {
+          "autofill": false,
+          "background": "rgba(0, 0, 0, 0)",
+          "name": "password",
+          "shadow": "none",
+          "textFill": "",
+          "type": "password"
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "console",
+      "logs": [
+        {
+          "level": "warn",
+          "message": "Object",
+          "timestamp": "2026-09-23T01:48:25.454Z",
+          "url": "chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js"
+        },
+        {
+          "level": "warn",
+          "message": "Object",
+          "timestamp": "2026-09-23T01:49:39.233Z",
+          "url": "chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js"
+        },
+        {
+          "level": "warn",
+          "message": "Object",
+          "timestamp": "2026-09-23T01:50:27.427Z",
+          "url": "chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js"
+        },
+        {
+          "level": "warn",
+          "message": "Object",
+          "timestamp": "2026-09-23T01:50:27.749Z",
+          "url": "chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js"
+        },
+        {
+          "level": "warn",
+          "message": "Object",
+          "timestamp": "2026-09-23T01:50:28.086Z",
+          "url": "chrome-extension://fmkadmapgofadopljbjfkapdkoienihi/build/installHook.js"
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "real-autofill",
+      "observed": [
+        {
+          "autofill": false,
+          "background": "rgba(0, 0, 0, 0)",
+          "name": "username",
+          "shadow": "none",
+          "textFill": "",
+          "type": "text"
+        },
+        {
+          "autofill": false,
+          "background": "rgba(0, 0, 0, 0)",
+          "name": "password",
+          "shadow": "none",
+          "textFill": "",
+          "type": "password"
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "console",
+      "logs": []
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "fields": {
+          "disabled": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "large": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "plain": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "raw": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "small": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "tooltip": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          }
+        },
+        "radio": null
+      },
+      "valid": false
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "fields": {
+          "disabled": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "large": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "plain": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "raw": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "small": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "tooltip": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          }
+        },
+        "radio": null
+      },
+      "valid": false
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "fields": {
+          "disabled": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "large": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "plain": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "raw": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "small": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          },
+          "tooltip": {
+            "background": null,
+            "color": null,
+            "minWidth": null
+          }
+        },
+        "radio": null
+      },
+      "valid": false
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "packed",
+      "test": "density-matrix-settled-recheck",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:packed-form:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "nested-input-tooltip",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.13254 0.147214 0.17652)",
+            "scope": "scope:play:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.984745 0.986383 0.989659)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.987525 0.989235 0.992655)",
+            "scope": "scope:play:root.public-form.public-form-nested",
+            "text": "Nested tooltip",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "packed",
+      "test": "nested-input-tooltip",
+      "observed": {
+        "dialogs": [
+          {
+            "background": "color(srgb 0.95953 0.968324 0.947901)",
+            "scope": "scope:packed-form:root.public-form",
+            "title": "Public form contract",
+            "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+          },
+          {
+            "background": "color(srgb 0.95953 0.968324 0.947901)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "title": "Nested scope",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ],
+        "popups": [
+          {
+            "background": "color(srgb 0.962296 0.971152 0.950591)",
+            "scope": "scope:packed-form:root.public-form.public-form-nested",
+            "text": "Nested tooltip",
+            "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+          }
+        ]
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.95 0.96 0.98)",
+            "color": "color(srgb 0.35 0.38 0.43)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.991 0.9928 0.9964)",
+            "color": "color(srgb 0.12 0.14 0.18)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 20,
+            "inputHeight": 18,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 40,
+            "inputHeight": 38,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 24,
+            "inputHeight": 22,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 32,
+            "inputHeight": 30,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "default",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.055 0.065 0.085)",
+            "color": "color(srgb 0.67 0.71 0.78)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 44,
+            "inputHeight": 42,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 28,
+            "inputHeight": 26,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.096 0.1101 0.1383)",
+            "color": "color(srgb 0.93 0.95 0.98)",
+            "height": 36,
+            "inputHeight": 34,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "default",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.925 0.94 0.905)",
+            "color": "color(srgb 0.3272 0.3396 0.3104)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.965754 0.974686 0.953954)",
+            "color": "color(srgb 0.1166 0.127 0.1019)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "compact",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 18,
+            "inputHeight": 16,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "default",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 38,
+            "inputHeight": 36,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 22,
+            "inputHeight": 20,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 30,
+            "inputHeight": 28,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "density-after-explicit-css-entry",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "comfortable",
+      "observed": {
+        "dialogWidth": 880,
+        "fields": {
+          "disabled": {
+            "background": "color(srgb 0.11 0.14 0.1)",
+            "color": "color(srgb 0.718 0.758 0.7049)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "large": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 42,
+            "inputHeight": 40,
+            "minWidth": "auto"
+          },
+          "plain": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "raw": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          },
+          "small": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 26,
+            "inputHeight": 24,
+            "minWidth": "auto"
+          },
+          "tooltip": {
+            "background": "color(srgb 0.1756 0.2138 0.1615)",
+            "color": "color(srgb 0.9234 0.9617 0.9109)",
+            "height": 34,
+            "inputHeight": 32,
+            "minWidth": "auto"
+          }
+        },
+        "radio": {
+          "height": 14,
+          "width": 14
+        },
+        "scope": "scope:play:root.public-form",
+        "theme": "defense-green",
+        "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+      }
+    },
+    {
+      "path": "source",
+      "test": "input-boundary-layout",
+      "observed": [
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "block",
+          "minWidth": "auto",
+          "parentWidth": 838,
+          "tag": "DIV",
+          "width": 838
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "input-boundary-layout",
+      "observed": [
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "block",
+          "minWidth": "auto",
+          "parentWidth": 838,
+          "tag": "DIV",
+          "width": 838
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 409,
+          "tag": "DIV",
+          "width": 409
+        },
+        {
+          "display": "flex",
+          "minWidth": "auto",
+          "parentWidth": 598,
+          "tag": "DIV",
+          "width": 598
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "input-stable-boundary-layout",
+      "observed": [
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 838,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 838,
+          "tag": "SPAN",
+          "width": 838
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        }
+      ]
+    },
+    {
+      "path": "packed",
+      "test": "input-stable-boundary-layout",
+      "observed": [
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 838,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 838,
+          "tag": "SPAN",
+          "width": 838
+        },
+        {
+          "childWidth": 409,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 409,
+          "tag": "SPAN",
+          "width": 409
+        },
+        {
+          "childWidth": 598,
+          "display": "flex",
+          "minWidth": "0px",
+          "parentWidth": 598,
+          "tag": "SPAN",
+          "width": 598
+        }
+      ]
+    },
+    {
+      "path": "source",
+      "test": "real-autofill-same-origin",
+      "mode": "light",
+      "observed": {
+        "entries": [
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.991 0.9928 0.9964) 0px 0px 0px 1000px inset",
+            "kind": "ElInput",
+            "textFill": "color(srgb 0.12 0.14 0.18)",
+            "themeSurface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+            "themeText": "color(srgb 0.12 0.14 0.18 / 1)"
+          },
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.991 0.9928 0.9964) 0px 0px 0px 1000px inset",
+            "kind": "ZxInput tooltip",
+            "textFill": "color(srgb 0.12 0.14 0.18)",
+            "themeSurface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+            "themeText": "color(srgb 0.12 0.14 0.18 / 1)"
+          }
+        ],
+        "styles": [
+          "/__zxui-public-source/assets/index-DVaV5NC4.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/60bd4e9f6426d3e33415435c943a37795a642fb8ea2c238fddfa514a98c314a2.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/92ba90d98fcce0e0c67d5a3171a2ad41c185448389dc252f08a8000b68a8f1ab.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/8b3ff350c6a710d364473d4fe7bbb6c8a03b706df560c055de1759dec8629cec.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/4ceee8d6c492950dbd531ac4f70868325ebd5f2269d2ef976276bd99da8f1349.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/a32c4691f17aa684efc3a1ec5451be39de855e48e6089c22cfc37f90fcb0038b.css"
+        ],
+        "url": "http://localhost/__zxui-public-source/index.html",
+        "viewport": [
+          1280,
+          720
+        ]
+      },
+      "evidence": "../../browser/resumed/public-source-fixed-autofill-light.json",
+      "observer": "parent /root IAB, verified from persisted DOM evidence"
+    },
+    {
+      "path": "source",
+      "test": "real-autofill-same-origin",
+      "mode": "dark",
+      "observed": {
+        "entries": [
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+            "kind": "ElInput",
+            "textFill": "color(srgb 0.93 0.95 0.98)",
+            "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+            "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+          },
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+            "kind": "ZxInput tooltip",
+            "textFill": "color(srgb 0.93 0.95 0.98)",
+            "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+            "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+          }
+        ],
+        "styles": [
+          "/__zxui-public-source/assets/index-DVaV5NC4.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/60bd4e9f6426d3e33415435c943a37795a642fb8ea2c238fddfa514a98c314a2.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/92ba90d98fcce0e0c67d5a3171a2ad41c185448389dc252f08a8000b68a8f1ab.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/4ceee8d6c492950dbd531ac4f70868325ebd5f2269d2ef976276bd99da8f1349.css",
+          "http://localhost/__zxui-public-source/zx-play-theme-assets/a32c4691f17aa684efc3a1ec5451be39de855e48e6089c22cfc37f90fcb0038b.css"
+        ],
+        "url": "http://localhost/__zxui-public-source/index.html",
+        "viewport": [
+          1280,
+          720
+        ]
+      },
+      "evidence": "../../browser/resumed/public-source-fixed-autofill-dark.json",
+      "observer": "parent /root IAB, verified from persisted DOM evidence"
+    },
+    {
+      "path": "packed",
+      "test": "real-autofill-same-origin",
+      "mode": "light",
+      "observed": {
+        "entries": [
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.991 0.9928 0.9964) 0px 0px 0px 1000px inset",
+            "kind": "ElInput",
+            "textFill": "color(srgb 0.12 0.14 0.18)",
+            "themeSurface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+            "themeText": "color(srgb 0.12 0.14 0.18 / 1)"
+          },
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.991 0.9928 0.9964) 0px 0px 0px 1000px inset",
+            "kind": "ZxInput tooltip",
+            "textFill": "color(srgb 0.12 0.14 0.18)",
+            "themeSurface": "color(srgb 0.991 0.9928 0.9964 / 1)",
+            "themeText": "color(srgb 0.12 0.14 0.18 / 1)"
+          }
+        ],
+        "styles": [
+          "/__zxui-public-packed/assets/index-ookQ4ZhG.css",
+          "http://localhost/__zxui-public-packed/theme-assets/98e4970da3725dc3b11f8ba51f6e7e9463726860323f8067064840810a2b30d6.css",
+          "http://localhost/__zxui-public-packed/theme-assets/92ba90d98fcce0e0c67d5a3171a2ad41c185448389dc252f08a8000b68a8f1ab.css",
+          "http://localhost/__zxui-public-packed/theme-assets/8b3ff350c6a710d364473d4fe7bbb6c8a03b706df560c055de1759dec8629cec.css",
+          "http://localhost/__zxui-public-packed/theme-assets/d5f43d14644ede7d31ec658c0d01dd0f6a166adf210cb3a16cb9bd22db106198.css",
+          "http://localhost/__zxui-public-packed/theme-assets/a32c4691f17aa684efc3a1ec5451be39de855e48e6089c22cfc37f90fcb0038b.css"
+        ],
+        "url": "http://localhost/__zxui-public-packed/index.html",
+        "viewport": [
+          1280,
+          720
+        ]
+      },
+      "evidence": "../../browser/resumed/public-packed-autofill-light.json",
+      "observer": "parent /root IAB, verified from persisted DOM evidence"
+    },
+    {
+      "path": "packed",
+      "test": "real-autofill-same-origin",
+      "mode": "dark",
+      "observed": {
+        "entries": [
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+            "kind": "ElInput",
+            "textFill": "color(srgb 0.93 0.95 0.98)",
+            "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+            "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+          },
+          {
+            "autofill": true,
+            "background": "rgb(232, 240, 254)",
+            "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+            "kind": "ZxInput tooltip",
+            "textFill": "color(srgb 0.93 0.95 0.98)",
+            "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+            "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+          }
+        ],
+        "styles": [
+          "/__zxui-public-packed/assets/index-ookQ4ZhG.css",
+          "http://localhost/__zxui-public-packed/theme-assets/98e4970da3725dc3b11f8ba51f6e7e9463726860323f8067064840810a2b30d6.css",
+          "http://localhost/__zxui-public-packed/theme-assets/92ba90d98fcce0e0c67d5a3171a2ad41c185448389dc252f08a8000b68a8f1ab.css",
+          "http://localhost/__zxui-public-packed/theme-assets/8b3ff350c6a710d364473d4fe7bbb6c8a03b706df560c055de1759dec8629cec.css",
+          "http://localhost/__zxui-public-packed/theme-assets/d5f43d14644ede7d31ec658c0d01dd0f6a166adf210cb3a16cb9bd22db106198.css",
+          "http://localhost/__zxui-public-packed/theme-assets/a32c4691f17aa684efc3a1ec5451be39de855e48e6089c22cfc37f90fcb0038b.css",
+          "http://localhost/__zxui-public-packed/theme-assets/bb561f1046277dc29ae4f542e53fde78e219513908d5097b1307855c1f5fc8d8.css",
+          "http://localhost/__zxui-public-packed/theme-assets/4ceee8d6c492950dbd531ac4f70868325ebd5f2269d2ef976276bd99da8f1349.css"
+        ],
+        "url": "http://localhost/__zxui-public-packed/index.html",
+        "viewport": [
+          1280,
+          720
+        ]
+      },
+      "evidence": "../../browser/resumed/public-packed-autofill-dark.json",
+      "observer": "parent /root IAB, verified from persisted DOM evidence"
+    }
+  ],
+  "notes": [
+    "24 density-matrix observations include actual transient CSS transition heights; exact settled rechecks are retained separately for the four fractional observations.",
+    "Three initial packed settled-rechecks occurred after Escape had closed the parent dialog; empty measurements are retained as invalid attempts, superseded by later same-key rechecks.",
+    "The first nested-popup-light/nested-light-settled attempts remained dark; nested-mode-switch-confirmed records and matching screenshots prove final light child over dark parent after an unobstructed toggle.",
+    "Source console contains extension-origin Object warnings (Vue devtools hook) with no application error text; packed warn/error log is empty.",
+    "No input values were read for autofill checks. Both real pseudo-state observations were false at independent ports. Same-origin existing-IAB autofill check is delegated to parent.",
+    "Same-origin real autofill uncovered source-production style.ts side-effect tree shaking; play now uses public @zxio/zxui/style.css. Source rebuilt and real autofill rerun passed; packaged candidate 085dfd40 unchanged. UA computed background remains blue but is correctly covered by semantic 1000px inset box shadow; -webkit-text-fill-color matches semantic text."
+  ],
+  "summary": {
+    "matrixCombinations": 24,
+    "externalPopoverCases": 4,
+    "sourcePackedInteractions": "passed",
+    "formSizeInheritance": "passed",
+    "nestedScopeAndPopups": "passed",
+    "realAutofill": "passed: true native pseudo-state for raw ElInput and ZxInput password, light/dark, source/packed; theme inset paint and text fill match",
+    "sourceExplicitCssEntryRecheck": 12
+  }
+}

@@ -1,0 +1,126 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "工程管理"
+  - text: /
+  - link "工程列表"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "工程详情":
+  - /url: /project/project-detail/index/1
+  - generic: 工程详情
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- table:
+  - rowgroup:
+    - row "项目ID1 项目名称ZXUI 本地布局验收 项目编码PRJ202609230001":
+      - cell "项目ID1":
+        - text: 项目ID
+        - generic: "1"
+      - cell "项目名称ZXUI 本地布局验收":
+        - text: 项目名称
+        - generic: ZXUI 本地布局验收
+      - cell "项目编码PRJ202609230001":
+        - text: 项目编码
+        - generic: PRJ202609230001
+    - row "项目描述用于非仿真表单验收的本地测试工程":
+      - cell "项目描述用于非仿真表单验收的本地测试工程":
+        - text: 项目描述
+        - generic: 用于非仿真表单验收的本地测试工程
+- tablist:
+  - tab "项目版本" [selected]
+- tabpanel "项目版本":
+  - button "删除" [disabled]:
+    - generic: 删除
+  - textbox "搜索版本名称"
+  - button "Search":
+  - table:
+    - rowgroup:
+      - row "选择所有行 版本号 版本名称 描述 创建人 创建时间 状态 操作":
+        - columnheader "选择所有行":
+          - generic "选择所有行":
+            - checkbox "选择所有行"
+        - columnheader "版本号":
+          - generic: 版本号
+        - columnheader "版本名称":
+          - generic: 版本名称
+        - columnheader "描述":
+          - generic: 描述
+        - columnheader "创建人":
+          - generic: 创建人
+        - columnheader "创建时间":
+          - generic: 创建时间
+        - columnheader "状态":
+          - generic: 状态
+        - columnheader "操作":
+          - generic: 操作
+  - table:
+    - rowgroup:
+      - row "选择当前行 v1.0.0 初始版本 项目初始版本 admin 2026-09-23 02:40:03 未固化 仿真 图编辑 克隆 固化 More actions":
+        - cell "选择当前行":
+          - generic "选择当前行":
+            - checkbox "选择当前行"
+        - cell "v1.0.0":
+          - generic: v1.0.0
+        - cell "初始版本":
+          - generic: 初始版本
+        - cell "项目初始版本":
+          - generic: 项目初始版本
+        - cell "admin":
+          - generic: admin
+        - cell "2026-09-23 02:40:03":
+          - generic: 2026-09-23 02:40:03
+        - cell "未固化":
+          - generic: 未固化
+        - cell "仿真 图编辑 克隆 固化 More actions":
+          - button "仿真":
+            - generic: 仿真
+          - button "图编辑":
+            - generic: 图编辑
+          - button "克隆":
+            - generic: 克隆
+          - button "固化":
+            - generic: 固化
+          - button "More actions":
+  - generic: 共 1 条
+  - combobox
+  - generic: 10条/页
+  - button "上一页" [disabled]:
+  - list:
+    - listitem "第 1 页": "1"
+  - button "下一页" [disabled]:
+  - generic: 前往
+  - spinbutton "页": "1"
+  - generic: 页
+- dialog "克隆版本":
+  - generic "克隆版本":
+    - banner:
+      - generic "克隆版本"
+      - button "全屏":
+      - button "关闭此对话框":
+    - generic: "* 版本号"
+    - textbox "版本号" [active]:
+      - /placeholder: 请输入新版本号，如：v1.0.1
+    - generic: 请输入版本号
+    - generic: "* 版本名称"
+    - textbox "版本名称":
+      - /placeholder: 请输入新版本名称
+      - text: 初始版本_副本
+    - generic: 版本描述
+    - textbox "版本描述":
+      - /placeholder: 请输入版本描述
+      - text: 项目初始版本
+    - generic: 6 / 500
+    - contentinfo:
+      - button "取消":
+        - generic: 取消
+      - button "克隆":
+        - generic: 克隆

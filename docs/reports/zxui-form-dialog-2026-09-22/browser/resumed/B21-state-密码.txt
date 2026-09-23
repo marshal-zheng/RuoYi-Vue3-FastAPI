@@ -1,0 +1,133 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统工具"
+  - text: /
+  - link "表单构建"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "表单构建":
+  - /url: /tool/build
+  - generic: 表单构建
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- img "logo"
+- text: Form Generator
+- text: 输入型组件
+- text: 单行文本
+- text: 多行文本
+- text: 密码
+- text: 计数器
+- text: 选择型组件
+- text: 下拉选择
+- text: 级联选择
+- text: 单选框组
+- text: 多选框组
+- text: 开关
+- text: 滑块
+- text: 时间选择
+- text: 时间范围
+- text: 日期选择
+- text: 日期范围
+- text: 评分
+- text: 颜色选择
+- text: 上传
+- text: 布局型组件
+- text: 行容器
+- text: 按钮
+- button "导出vue文件":
+  - generic: 导出vue文件
+- button "复制代码":
+  - generic: 复制代码
+- button "清空":
+  - generic: 清空
+- generic: "* 浏览器生成字段"
+- generic: https://
+- textbox "* 浏览器生成字段":
+  - /placeholder: 请输入浏览器生成字段
+  - text: adminadmina
+- generic: 11 / 11
+- generic: .test
+- generic: "* 多行文本"
+- textbox "* 多行文本":
+  - /placeholder: 请输入多行文本
+- generic: "* 密码"
+- textbox "* 密码":
+  - /placeholder: 请输入密码
+- generic "复制":
+- generic "删除":
+- tablist:
+  - tab "组件属性" [selected]
+  - tab "表单属性"
+- tabpanel "组件属性"
+- link "查看组件文档":
+  - /url: https://element-plus.org/zh-CN/component/input
+- generic: 组件类型
+- combobox "组件类型"
+- generic: 密码
+- generic: 字段名
+- textbox "字段名":
+  - /placeholder: 请输入字段名（v-model）
+  - text: field102
+- generic: 标题
+- textbox "标题":
+  - /placeholder: 请输入标题
+  - text: 密码
+- generic: 占位提示
+- textbox "占位提示":
+  - /placeholder: 请输入占位提示
+  - text: 请输入密码
+- generic: 表单栅格
+- slider "表单栅格"
+- generic: 标签宽度
+- spinbutton "标签宽度"
+- generic: 组件宽度
+- textbox "组件宽度":
+  - /placeholder: 请输入组件宽度
+  - text: 100%
+- generic: 默认值
+- textbox "默认值":
+  - /placeholder: 请输入默认值
+  - text: admin123admin123admin123
+- generic: 前缀
+- textbox "前缀":
+  - /placeholder: 请输入前缀
+- generic: 后缀
+- textbox "后缀":
+  - /placeholder: 请输入后缀
+- generic: 前图标
+- textbox "前图标":
+  - /placeholder: 请输入前图标名称
+- button "选择":
+  - generic: 选择
+- generic: 后图标
+- textbox "后图标":
+  - /placeholder: 请输入后图标名称
+- button "选择":
+  - generic: 选择
+- generic: 最多输入
+- textbox "最多输入":
+  - /placeholder: 请输入字符长度
+- generic: 个字符
+- generic: 输入统计
+- switch "输入统计"
+- generic: 能否清空
+- switch "能否清空" [checked]
+- generic: 是否只读
+- switch "是否只读"
+- generic: 是否禁用
+- switch "是否禁用"
+- generic: 是否必填
+- switch "是否必填" [checked]
+- separator:
+  - generic: 正则校验
+- button "添加规则":
+  - generic: 添加规则

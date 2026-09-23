@@ -3,18 +3,19 @@ import { createApp } from 'vue';
 import Cookies from 'js-cookie';
 import { setupVXETable } from '@/plugins/vxe-table';
 
-import ZXUI from '@zxio/zxui';
-import '@zxio/theme-default/theme.css';
-import '@zxio/zxui/style';
-
 // Iconify 图标库
 import '@iconify/iconify';
 import { Icon } from '@iconify/vue';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
-import 'element-plus/theme-chalk/dark/css-vars.css';
 import locale from 'element-plus/es/locale/lang/zh-cn';
+
+// ZXUI component aliases must follow Element Plus declarations of equal specificity.
+import ZXUI from '@zxio/zxui';
+import '@zxio/zxui/style';
+import { bindZxThemeHost } from '@/theme/zx-theme-host';
+import themeDeployment from 'virtual:zxui-theme-deployment';
 
 import '@/assets/styles/theme.module.css'; // 统一主题源文件
 import '@/assets/styles/index.css'; // global css
@@ -36,6 +37,7 @@ import SvgIcon from '@/components/ui/SvgIcon';
 import elementIcons from '@/components/ui/SvgIcon/svgicon';
 
 import './permission'; // permission control
+import './utils/auth-feedback-boundary';
 
 import { useDict } from '@/utils/dict';
 import { resolveRuntimeConfig, type RuntimeConfig } from '@/mocks/runtime/mode';
@@ -107,6 +109,7 @@ app.use(ZXUI, {
   namespace: 'zx',
   // zIndex: 3000
 });
+bindZxThemeHost(app, themeDeployment);
 
 setupVXETable(app);
 

@@ -1,0 +1,58 @@
+[
+  {
+    "background": "color(srgb 0.16 0.42 0.96)",
+    "className": "login-left flex-1 relative p-8 hidden lg:flex",
+    "color": "color(srgb 1 1 1)",
+    "role": "brand",
+    "shadow": "color(srgb 0.16 0.42 0.96 / 0.52) 0px 4px 12px 0px, color(srgb 0.16 0.42 0.96 / 0.45) 0px 0px 10px 0px, color(srgb 0.16 0.42 0.96 / 0) 0px 0px 0px 0px inset",
+    "textFill": "color(srgb 1 1 1)"
+  },
+  {
+    "background": "color(srgb 0.03 0.105 0.215)",
+    "className": "flex-1 p-6 lg:p-10 relative flex items-center",
+    "color": "color(srgb 0.9165 0.9512 1)",
+    "role": "canvas",
+    "shadow": "color(srgb 0 0 0 / 0) 0px 0px 0px 0px, color(srgb 0.16 0.42 0.96 / 0) 0px 0px 0px 0px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  },
+  {
+    "background": "color(srgb 0.0788976 0.161143 0.279045)",
+    "className": "p-8",
+    "color": "color(srgb 0.9165 0.9512 1)",
+    "role": "card",
+    "shadow": "color(srgb 0 0 0 / 0.55) 0px 4px 12px 0px, color(srgb 0.24 0.62 1 / 0.26) 0px 0px 48px 0px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  },
+  {
+    "background": "color(srgb 0.07551 0.15297 0.267234)",
+    "className": "el-input__wrapper",
+    "color": "color(srgb 0.9165 0.9512 1)",
+    "role": null,
+    "shadow": "color(srgb 0.9332 0.3657 0.3869) 0px 0px 0px 1px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  },
+  {
+    "background": "rgba(70, 90, 126, 0)",
+    "className": "el-input__inner",
+    "color": "rgb(255, 255, 255)",
+    "role": null,
+    "shadow": "color(srgb 0.07551 0.15297 0.267234) 0px 0px 0px 1000px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  },
+  {
+    "background": "color(srgb 0.07551 0.15297 0.267234)",
+    "className": "el-input__wrapper",
+    "color": "color(srgb 0.9165 0.9512 1)",
+    "role": null,
+    "shadow": "color(srgb 0.9332 0.3657 0.3869) 0px 0px 0px 1px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  },
+  {
+    "background": "rgba(70, 90, 126, 0)",
+    "className": "el-input__inner",
+    "color": "rgb(255, 255, 255)",
+    "role": null,
+    "shadow": "color(srgb 0.07551 0.15297 0.267234) 0px 0px 0px 1000px inset",
+    "textFill": "color(srgb 0.9165 0.9512 1)"
+  }
+]

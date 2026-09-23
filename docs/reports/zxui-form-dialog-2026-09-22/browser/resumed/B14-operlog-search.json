@@ -1,0 +1,66 @@
+{
+  "active": "系统模块",
+  "dialogs": [],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "系统模块",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "开始日期",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "结束日期",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "搜索操作人员",
+      "type": "text"
+    }
+  ],
+  "grids": [],
+  "radios": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

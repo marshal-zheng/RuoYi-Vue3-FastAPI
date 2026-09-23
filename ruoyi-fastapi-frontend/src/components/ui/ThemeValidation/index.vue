@@ -57,14 +57,14 @@
               <h4>表单组件</h4>
               <el-form :model="form" label-width="80px">
                 <el-form-item label="用户名">
-                  <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+                  <zx-input v-model="form.username" placeholder="请输入用户名"></zx-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                  <el-input
+                  <zx-input
                     v-model="form.password"
                     type="password"
                     placeholder="请输入密码"
-                  ></el-input>
+                  ></zx-input>
                 </el-form-item>
                 <el-form-item label="角色">
                   <el-select v-model="form.role" placeholder="请选择角色">
@@ -139,10 +139,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import { setZxThemePreference, zxIsDark as isDark } from '@/theme/zx-theme-config';
 import { ElMessage, ElNotification } from 'element-plus';
 
-const isDark = ref(false);
 const form = ref({
   username: '',
   password: '',
@@ -168,12 +168,7 @@ const tableData = ref([
 ]);
 
 const toggleTheme = () => {
-  isDark.value = !isDark.value;
-  if (isDark.value) {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
+  setZxThemePreference({ mode: isDark.value ? 'light' : 'dark' });
 };
 
 const showMessage = (type: 'success' | 'warning' | 'error') => {
@@ -190,11 +185,6 @@ const showNotification = () => {
     type: 'success',
   });
 };
-
-onMounted(() => {
-  // 检查当前主题
-  isDark.value = document.documentElement.classList.contains('dark');
-});
 </script>
 
 <style scoped>

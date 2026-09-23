@@ -1,7 +1,9 @@
 import { trigger } from './config';
+import { generatorTags, normalizeGeneratorFields } from './identity';
 
 // 表单配置接口
 interface FormConf {
+  columns?: 1 | 2 | 3;
   formRef: string;
   formModel: string;
   formRules: string;
@@ -20,6 +22,7 @@ interface FormElement {
   vModel: string;
   label: string;
   span: number;
+  full?: boolean;
   labelWidth?: number;
   required?: boolean;
   layout: string;
@@ -104,15 +107,12 @@ interface AttrBuilderResult {
 
 let confGlobal: FormConf;
 let someSpanIsNot24: boolean;
+let dialogLayout = false;
 
 export function dialogWrapper(str: string): string {
-  return `<el-dialog v-model="dialogVisible"  @open="onOpen" @close="onClose" title="Dialog Titile">
+  return `<ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     ${str}
-    <template #footer>
-      <el-button @click="close">取消</el-button>
-	  <el-button type="primary" @click="handelConfirm">确定</el-button>
-    </template>
-  </el-dialog>`;
+  </ZxDialog>`;
 }
 
 export function vueTemplate(str: string): string {
@@ -136,20 +136,19 @@ export function cssStyle(cssStr: string): string {
 }
 
 function buildFormTemplate(conf: FormConf, child: string, type: string): string {
-  let labelPosition = '';
-  if (conf.labelPosition !== 'right') {
-    labelPosition = `label-position="${conf.labelPosition}"`;
-  }
-  const disabled = conf.disabled ? `:disabled="${conf.disabled}"` : '';
-  let str = `<el-form ref="${conf.formRef}" :model="${conf.formModel}" :rules="${conf.formRules}" size="${conf.size}" ${disabled} label-width="${conf.labelWidth}px" ${labelPosition}>
-      ${child}
-      ${buildFromBtns(conf, type)}
+  const disabled = conf.disabled ? ':disabled="true"' : '';
+  if (type === 'dialog') {
+    return `<el-form ref="${conf.formRef}" :model="${conf.formModel}" :rules="${conf.formRules}" v-bind="formProps" ${disabled}>
+      <FormGrid v-bind="layoutProps">${child}</FormGrid>
     </el-form>`;
-  if (someSpanIsNot24) {
-    str = `<el-row :gutter="${conf.gutter}">
-        ${str}
-      </el-row>`;
   }
+  const labelPosition =
+    conf.labelPosition === 'right' ? '' : `label-position="${conf.labelPosition}"`;
+  let str = `<el-form ref="${conf.formRef}" :model="${conf.formModel}" :rules="${conf.formRules}" size="${conf.size}" ${disabled} label-width="${conf.labelWidth}px" ${labelPosition}>
+    ${child}
+    ${buildFromBtns(conf, type)}
+  </el-form>`;
+  if (someSpanIsNot24) str = `<el-row :gutter="${conf.gutter}">${str}</el-row>`;
   return str;
 }
 
@@ -171,6 +170,7 @@ function buildFromBtns(conf: FormConf, type: string): string {
 
 // span不为24的用el-col包裹
 function colWrapper(element: FormElement, str: string): string {
+  if (dialogLayout) return str;
   if (someSpanIsNot24 || element.span !== 24) {
     return `<el-col :span="${element.span}">
       ${str}
@@ -184,18 +184,26 @@ type LayoutFunction = (element: FormElement) => string;
 const layouts: Record<string, LayoutFunction> = {
   colFormItem(element: FormElement): string {
     let labelWidth = '';
-    if (element.labelWidth && element.labelWidth !== confGlobal.labelWidth) {
+    if (!dialogLayout && element.labelWidth && element.labelWidth !== confGlobal.labelWidth) {
       labelWidth = `label-width="${element.labelWidth}px"`;
     }
     const required = !trigger[element.tag] && element.required ? 'required' : '';
-    const tagDom = tags[element.tag] ? tags[element.tag](element) : null;
-    let str = `<el-form-item ${labelWidth} label="${element.label}" prop="${element.vModel}" ${required}>
+    const renderTag = tags[element.tag];
+    if (!renderTag) throw new Error(`不支持导出的组件: ${element.tag}`);
+    const tagDom = renderTag(element);
+    const full = dialogLayout && (element.full ?? element.span === 24) ? 'data-form-full' : '';
+    let str = `<el-form-item ${full} ${labelWidth} label="${element.label}" prop="${element.vModel}" ${required}>
         ${tagDom}
       </el-form-item>`;
     str = colWrapper(element, str);
     return str;
   },
   rowFormItem(element: FormElement): string {
+    if (dialogLayout) {
+      const children =
+        element.children?.map((field) => layouts[field.layout](field)).join('\n') ?? '';
+      return `<div data-form-full><FormGrid v-bind="layoutProps">${children}</FormGrid></div>`;
+    }
     const type = element.type === 'default' ? '' : `type="${element.type}"`;
     const justify = element.type === 'default' ? '' : `justify="${element.justify}"`;
     const align = element.type === 'default' ? '' : `align="${element.align}"`;
@@ -222,7 +230,7 @@ const tags: Record<string, TagFunction> = {
     if (child) child = `\n${child}\n`; // 换行
     return `<${el.tag} ${type} ${icon} ${size} ${disabled}>${child}</${el.tag}>`;
   },
-  'el-input': (el: FormElement): string => {
+  [generatorTags.input]: (el: FormElement): string => {
     const { disabled, vModel, clearable, placeholder, width } = attrBuilder(el);
     const maxlength = el.maxlength ? `:maxlength="${el.maxlength}"` : '';
     const showWordLimit = el['show-word-limit'] ? 'show-word-limit' : '';
@@ -245,11 +253,11 @@ const tags: Record<string, TagFunction> = {
     const controlsPosition = el['controls-position']
       ? `controls-position=${el['controls-position']}`
       : '';
-    const min = el.min ? `:min='${el.min}'` : '';
-    const max = el.max ? `:max='${el.max}'` : '';
-    const step = el.step ? `:step='${el.step}'` : '';
+    const min = el.min != null ? `:min='${el.min}'` : '';
+    const max = el.max != null ? `:max='${el.max}'` : '';
+    const step = el.step != null ? `:step='${el.step}'` : '';
     const stepStrictly = el['step-strictly'] ? 'step-strictly' : '';
-    const precision = el.precision ? `:precision='${el.precision}'` : '';
+    const precision = el.precision != null ? `:precision='${el.precision}'` : '';
 
     return `<${el.tag} ${vModel} ${placeholder} ${step} ${stepStrictly} ${precision} ${controlsPosition} ${min} ${max} ${disabled}></${el.tag}>`;
   },
@@ -411,10 +419,10 @@ function buildElButtonChild(conf: FormElement): string {
 function buildElInputChild(conf: FormElement): string {
   const children: string[] = [];
   if (conf.prepend) {
-    children.push(`<template slot="prepend">${conf.prepend}</template>`);
+    children.push(`<template #prepend>${conf.prepend}</template>`);
   }
   if (conf.append) {
-    children.push(`<template slot="append">${conf.append}</template>`);
+    children.push(`<template #append>${conf.append}</template>`);
   }
   return children.join('\n');
 }
@@ -462,14 +470,16 @@ function buildElUploadChild(conf: FormElement): string {
     );
   if (conf.showTip)
     list.push(
-      `<div slot="tip" class="el-upload__tip">只能上传不超过 ${conf.fileSize}${conf.sizeUnit} 的${conf.accept}文件</div>`
+      `<template #tip><div class="el-upload__tip">只能上传不超过 ${conf.fileSize}${conf.sizeUnit} 的${conf.accept}文件</div></template>`
     );
   return list.join('\n');
 }
 
 export function makeUpHtml(conf: FormConf, type: string): string {
   const htmlList: string[] = [];
+  conf = { ...conf, fields: normalizeGeneratorFields(conf.fields) };
   confGlobal = conf;
+  dialogLayout = type === 'dialog';
   someSpanIsNot24 = conf.fields.some((item) => item.span !== 24);
   conf.fields.forEach((el) => {
     htmlList.push(layouts[el.layout](el));

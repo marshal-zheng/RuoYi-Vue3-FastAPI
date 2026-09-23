@@ -1,5 +1,6 @@
 import { titleCase } from '@/utils/index';
 import { trigger } from './config';
+import { normalizeGeneratorFields, resolveGeneratorColumns } from './identity';
 
 // 文件大小单位映射接口
 interface Units {
@@ -31,6 +32,8 @@ interface PropsConfig {
 
 // 表单元素接口
 interface FormElement {
+  span?: number;
+  full?: boolean;
   vModel?: string;
   tag: string;
   label?: string;
@@ -55,6 +58,7 @@ interface FormElement {
 
 // 表单配置接口
 interface FormConfig {
+  columns?: 1 | 2 | 3;
   fields: FormElement[];
   formRef: string;
   formModel: string;
@@ -76,6 +80,7 @@ const units: Units = {
  */
 export function makeUpJs(conf: FormConfig, type: string): string {
   conf = JSON.parse(JSON.stringify(conf));
+  conf.fields = normalizeGeneratorFields(conf.fields);
   const dataList: string[] = [];
   const ruleList: string[] = [];
   const optionsList: string[] = [];
@@ -159,7 +164,7 @@ function buildData(conf: FormElement, dataList: string[]): void {
   if (conf.vModel === undefined) return;
   let defaultValue: string;
   if (typeof conf.defaultValue === 'string' && !conf.multiple) {
-    defaultValue = `'${conf.defaultValue}'`;
+    defaultValue = JSON.stringify(conf.defaultValue);
   } else {
     defaultValue = `${JSON.stringify(conf.defaultValue)}`;
   }
@@ -317,84 +322,75 @@ function buildexport(
   props: string,
   methods: string
 ): string {
-  let str = `
-    const { proxy } = getCurrentInstance()
-    const ${conf.formRef} = ref()
-    const data = reactive({
-      ${conf.formModel}: {
-        ${data}
-      },
-      ${conf.formRules}: {
-        ${rules}
+  const names = new Set(['ElForm', 'ElFormItem', 'ElButton']);
+  const zxNames = new Set<string>();
+  const visit = (fields: FormElement[]) =>
+    fields.forEach((field) => {
+      const name = field.tag
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
+      if (field.tag.startsWith('zx-')) zxNames.add(name);
+      else if (field.tag.startsWith('el-')) names.add(name);
+      if (field.tag === 'el-select') names.add('ElOption');
+      if (field.tag === 'el-radio-group') {
+        names.add('ElRadio');
+        names.add('ElRadioButton');
       }
-    })
-
-    const {${conf.formModel}, ${conf.formRules}} = toRefs(data)
-
+      if (field.tag === 'el-checkbox-group') {
+        names.add('ElCheckbox');
+        names.add('ElCheckboxButton');
+      }
+      if (field.tag === 'el-upload') names.add('ElMessage');
+      if (field.children) visit(field.children);
+    });
+  visit(conf.fields);
+  if (type === 'dialog') zxNames.add('ZxDialog');
+  else {
+    names.add('ElRow');
+    names.add('ElCol');
+  }
+  let str = `
+    import { ref, reactive, computed, watch } from 'vue'
+    import { ${[...names].join(', ')} } from 'element-plus'
+    ${zxNames.size ? `import { ${[...zxNames].join(', ')} } from '@zxio/zxui'` : ''}
+    ${type === 'dialog' ? "import { FormGrid, useFormDialog } from '@/components/ui/FormDialog'" : ''}
+    const ${conf.formRef} = ref()
+    const ${conf.formRules} = reactive({ ${rules} })
     ${selectOptions}
-
     ${uploadVar}
-
     ${props}
-
     ${methods}
   `;
-
   if (type === 'dialog') {
     str += `
-      // 弹窗设置
-      const dialogVisible = defineModel()
-      // 弹窗确认回调
+      const dialogVisible = defineModel({ default: false })
       const emit = defineEmits(['confirm'])
-      /**
-       * 弹窗打开后执行
-       */
-      function onOpen(){
-
-      }
-      /**
-       * 弹窗关闭时执行，重置表单
-       */
-      function onClose(){
-        ${conf.formRef}.value.resetFields()
-      }
-      /**
-       * 弹窗取消
-       */
-      function close(){
-        dialogVisible.value = false
-      }
-      /**
-       * 弹窗表单提交
-       */
-      function handelConfirm(){
-        ${conf.formRef}.value.validate((valid) => {
-          if (!valid) return
-          // TODO 提交表单
-
-          close()
-          // 回调父级组件
-          emit('confirm')
-        })
-      }
+      const { state, dialogProps, dialogEvents, formProps, layoutProps, open, close } = useFormDialog({
+        columns: ${resolveGeneratorColumns(conf)},
+        title: '表单',
+        formRef: ${conf.formRef},
+        defaultData: () => ({ ${data} }),
+        onConfirm: async (value) => {
+          // TODO 提交表单；返回 false 可保留弹框。
+          emit('confirm', value)
+        },
+      })
+      const ${conf.formModel} = computed(() => state.data)
+      watch(dialogVisible, (visible) => {
+        if (visible !== state.visible) visible ? open() : close()
+      }, { immediate: true })
+      watch(() => state.visible, (visible) => { dialogVisible.value = visible })
     `;
   } else {
     str += `
-    /**
-     * 表单提交
-     */
-    function submitForm() {
-      ${conf.formRef}.value.validate((valid) => {
+      const ${conf.formModel} = reactive({ ${data} })
+      async function submitForm() {
+        const valid = await ${conf.formRef}.value.validate().catch(() => false)
         if (!valid) return
-        // TODO 提交表单
-      })
-    }
-    /**
-     * 表单重置
-     */
-    function resetForm() {
-      ${conf.formRef}.value.resetFields()
-    }
+        // TODO 提交表单。
+      }
+      function resetForm() { ${conf.formRef}.value.resetFields() }
     `;
   }
   return str;

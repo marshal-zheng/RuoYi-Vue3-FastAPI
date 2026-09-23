@@ -4,7 +4,7 @@
     :load-data="loadDeptData"
     :show-pagination="false"
     :load-on-mounted="true"
-    class="zx-grid-list--page"
+    fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
       <div class="zx-grid-form-bar">
@@ -15,7 +15,7 @@
           <ZxButton type="info" @click="toggleExpandAll">展开/折叠</ZxButton>
         </div>
         <div class="zx-grid-form-bar__filters">
-          <el-input
+          <zx-input
             v-model="query.deptName"
             placeholder="请输入部门名称"
             clearable
@@ -123,7 +123,7 @@ async function loadDeptData(params: any) {
   };
   try {
     const response = await listDept(query);
-    const tree = proxy.handleTree(response, 'deptId');
+    const tree = proxy.handleTree(response.items, 'deptId');
     return { data: tree || [], total: 0 };
   } catch (e) {
     return { data: [], total: 0 };

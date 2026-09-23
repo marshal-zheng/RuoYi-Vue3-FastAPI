@@ -1,0 +1,133 @@
+{
+  "date": "2026-09-23",
+  "libraryRepo": "/Users/hqz/Downloads/element-plus",
+  "sourceFixture": "docs/examples/dialog/public-form-contract.vue",
+  "candidateVersion": "3.0.0-next.0",
+  "sourceTypecheck": {
+    "command": "pnpm exec vue-tsc -p scripts/contracts/fixtures/form-dialog/tsconfig.source.json --noEmit",
+    "exitCode": 0,
+    "preserveSymlinks": true,
+    "moduleResolution": "Bundler",
+    "resolutionFix": "tsconfig.base paths for public @vueuse/shared -> packages/utils/node_modules/@vueuse/shared",
+    "popoverFollowupExitCode": 0,
+    "finalLog": "source-typecheck-final.log"
+  },
+  "libraryBuild": {
+    "command": "pnpm build",
+    "exitCode": 0
+  },
+  "packedCheck": {
+    "command": "ZXUI_PACKED_KEEP=1 ZXUI_PACKED_REUSE_BUILDS=1 node scripts/contracts/check-zxui-packed-install.mjs",
+    "exitCode": 0,
+    "receipt": "packed-receipt.json",
+    "thirdPartyDependencies": "exact versions installed into isolated app, no link/workspace fallback",
+    "vueElementPlusSingletons": true
+  },
+  "themeCompilerCheck": {
+    "command": "pnpm theme-compiler:check",
+    "exitCode": 0,
+    "variants": 1458,
+    "generatedBytesMatch": true,
+    "readonlyInventoryPassed": true
+  },
+  "focusedTests": [
+    {
+      "files": [
+        "packages/theme-compiler/__tests__/element-plus-adapter.test.ts",
+        "packages/components/hooks/use-dialog/__tests__/use-dialog.test.ts",
+        "packages/components/config-provider/__tests__/theme-runtime.test.tsx",
+        "packages/zxui/theme-runtime/__tests__/portal-registry.test.ts"
+      ],
+      "passed": 32
+    },
+    {
+      "files": [
+        "scripts/theme-consumer/structural-policy.test.ts",
+        "packages/theme-chalk/scripts/split-structural-style.test.ts"
+      ],
+      "passed": 34
+    },
+    {
+      "files": [
+        "packages/components/hooks/use-dialog/__tests__/use-dialog.test.ts"
+      ],
+      "passed": 5,
+      "reason": "rerun after portable Ref<boolean> declaration fix"
+    },
+    {
+      "files": [
+        "packages/zxui/theme-host/__tests__/default-browser-host.test.ts",
+        "packages/components/theme-provider/__tests__/required-portal-binding.test.tsx"
+      ],
+      "passed": 10,
+      "proof": "Host-owned target opens actual ZxDialog; loading mask renders without global registration; parent light and nested dark/comfortable dialogs have separate nearest scope elements."
+    },
+    {
+      "files": [
+        "packages/components/input/__tests__/input.test.tsx",
+        "packages/components/input-number/__tests__/input-number.test.tsx"
+      ],
+      "passed": 22,
+      "proof": "Native EP control and both ZxInput tooltip branches open external ElPopover; stable boundary updates class/style and native attrs; single click/model owner."
+    }
+  ],
+  "structuralCheck": {
+    "command": "pnpm theme-consumer:check:structural",
+    "exitCode": 0,
+    "hash": "be2faae06d9b191c1fe447d22f4c1143a3222c8b518aa578f91f07fe363de92e"
+  },
+  "browser": {
+    "status": "final-candidate-public-fixture-passed",
+    "sourceURL": "https://localhost:3101/FormDialogContract",
+    "packedURL": "http://localhost:3105/",
+    "sourceSession": 56215,
+    "packedSession": 52011,
+    "httpChecks": "Source and packed HTTP HTML delivery only; browser render/interaction must be accepted separately.",
+    "required": [
+      "light/dark x compact/default/comfortable",
+      "plain/tooltip/native number/native search slot DOM and exposed operations",
+      "real autofill paint",
+      "dialog/select/tooltip nearest scope and nested scope isolation",
+      "same fixture source and packed interactions"
+    ],
+    "supersededInitialRound": [
+      "Old packed dialog could not open because Host did not provide default portal target to Vue. Fixed and mount regression proved before/after.",
+      "Source play lacked EP base CSS. Added public EP CSS import before ZXUI structure and dynamic theme assets.",
+      "Named ZxDialog lacked local loading directive registration. Added vLoading import; loading mask DOM regression passes."
+    ],
+    "observedEvidence": "browser/final-browser-2026-09-23.json",
+    "summary": "browser/README.md",
+    "historicalEvidence": "browser/observed-evidence-2026-09-22.json",
+    "matrixCombinations": 24,
+    "externalPopoverCases": 4,
+    "actualUIVerified": true,
+    "realAutofill": "Passed on existing localhost IAB origin: actual pseudo-state true for raw ElInput and ZxInput, source/packed, light/dark; semantic inset paint and text fill match",
+    "sameOriginHosting": "browser/autofill-same-origin-hosting.json",
+    "realAutofillEvidence": [
+      "../browser/resumed/public-source-fixed-autofill-light.json",
+      "../browser/resumed/public-source-fixed-autofill-dark.json",
+      "../browser/resumed/public-packed-autofill-light.json",
+      "../browser/resumed/public-packed-autofill-dark.json"
+    ],
+    "sourceExplicitCssEntryRecheck": 12
+  },
+  "candidateSha256": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a",
+  "notes": [
+    "No registry publish and no commit.",
+    "The earlier Dktzlx packed run linked peer dependencies; ySdCYc supersedes its isolation evidence. Candidate ZXUI tarball bytes are identical.",
+    "Compiler final check ran serially after all ZXUI writes; earlier concurrent-readonly failure is superseded.",
+    "Historical checkpoint: Browser pending is intentional and is not a static-check success claim.",
+    "Historical checkpoint: 6qv3zy is the prior candidate after Host portal and loading fixes. The 2026-09-23 external input popover trigger correction requires a new candidate before final acceptance.",
+    "Compiler readonly/1458 gate precedes Host-only and fixture delivery fixes; compiler source/generated assets did not change afterward, so that gate was not redundantly rerun.",
+    "rApuws supersedes 6qv3zy after the browser-discovered external Popover input-reference repair; pnpm build and isolated install/type/build/deployment passed. Browser acceptance of new hash tracked separately.",
+    "Historical checkpoint: 2026-09-23 final 085dfd40 browser round supersedes earlier pending core interaction claims. Genuine autofill remains separately pending.",
+    "Real autofill subsequently passed in both source and packed same-origin fixtures. Source production bootstrap was changed from public JS style entry to public CSS entry to retain structural rules under tree shaking; final package hash unchanged."
+  ],
+  "status": "static-and-final-browser-public-fixture-passed",
+  "playDeliveryLint": {
+    "date": "2026-09-23",
+    "command": "pnpm exec eslint --no-ignore play/theme-deployment-plugin.ts play/theme-runtime-bootstrap.ts docs/examples/dialog/public-form-contract.vue",
+    "exitCode": 0,
+    "productionPackageChanged": false
+  }
+}

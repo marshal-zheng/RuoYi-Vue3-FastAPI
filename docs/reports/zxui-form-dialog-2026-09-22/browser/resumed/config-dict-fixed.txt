@@ -1,0 +1,262 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统管理"
+  - text: /
+  - link "参数设置"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "参数设置":
+  - /url: /system/config
+  - generic: 参数设置
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- button "新增":
+  - generic: 新增
+- button "修改" [disabled]:
+  - generic: 修改
+- button "删除" [disabled]:
+  - generic: 删除
+- button "导出":
+  - generic: 导出
+- button "刷新缓存":
+  - generic: 刷新缓存
+- textbox "请输入参数键名"
+- combobox
+- generic: 系统内置
+- combobox "开始日期"
+- generic: "-"
+- combobox "结束日期"
+- textbox "搜索参数名称"
+- button "Search":
+- table:
+  - rowgroup:
+    - row "选择所有行 参数主键 参数名称 参数键名 参数键值 系统内置 备注 创建时间 操作":
+      - columnheader "选择所有行":
+        - generic "选择所有行":
+          - checkbox "选择所有行"
+      - columnheader "参数主键":
+        - generic: 参数主键
+      - columnheader "参数名称":
+        - generic: 参数名称
+      - columnheader "参数键名":
+        - generic: 参数键名
+      - columnheader "参数键值":
+        - generic: 参数键值
+      - columnheader "系统内置":
+        - generic: 系统内置
+      - columnheader "备注":
+        - generic: 备注
+      - columnheader "创建时间":
+        - generic: 创建时间
+      - columnheader "操作":
+        - generic: 操作
+- table:
+  - rowgroup:
+    - row "选择当前行 1 主框架页-默认皮肤样式名称 sys.index.skinName skin-blue 是 蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "1":
+        - generic: "1"
+      - cell "主框架页-默认皮肤样式名称":
+        - generic: 主框架页-默认皮肤样式名称
+      - cell "sys.index.skinName":
+        - generic: sys.index.skinName
+      - cell "skin-blue":
+        - generic: skin-blue
+      - cell "是":
+        - generic: 是
+      - cell "蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow":
+        - generic: 蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 2 用户管理-账号初始密码 sys.user.initPassword 123456 是 初始化密码 123456 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "2":
+        - generic: "2"
+      - cell "用户管理-账号初始密码":
+        - generic: 用户管理-账号初始密码
+      - cell "sys.user.initPassword":
+        - generic: sys.user.initPassword
+      - cell "123456":
+        - generic: "123456"
+      - cell "是":
+        - generic: 是
+      - cell "初始化密码 123456":
+        - generic: 初始化密码 123456
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 3 主框架页-侧边栏主题 sys.index.sideTheme theme-dark 是 深色主题theme-dark，浅色主题theme-light 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "3":
+        - generic: "3"
+      - cell "主框架页-侧边栏主题":
+        - generic: 主框架页-侧边栏主题
+      - cell "sys.index.sideTheme":
+        - generic: sys.index.sideTheme
+      - cell "theme-dark":
+        - generic: theme-dark
+      - cell "是":
+        - generic: 是
+      - cell "深色主题theme-dark，浅色主题theme-light":
+        - generic: 深色主题theme-dark，浅色主题theme-light
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 4 账号自助-验证码开关 sys.account.captchaEnabled false 是 是否开启验证码功能（true开启，false关闭） 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "4":
+        - generic: "4"
+      - cell "账号自助-验证码开关":
+        - generic: 账号自助-验证码开关
+      - cell "sys.account.captchaEnabled":
+        - generic: sys.account.captchaEnabled
+      - cell "false":
+        - generic: "false"
+      - cell "是":
+        - generic: 是
+      - cell "是否开启验证码功能（true开启，false关闭）":
+        - generic: 是否开启验证码功能（true开启，false关闭）
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 5 账号自助-是否开启用户注册功能 sys.account.registerUser false 是 是否开启注册用户功能（true开启，false关闭） 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "5":
+        - generic: "5"
+      - cell "账号自助-是否开启用户注册功能":
+        - generic: 账号自助-是否开启用户注册功能
+      - cell "sys.account.registerUser":
+        - generic: sys.account.registerUser
+      - cell "false":
+        - generic: "false"
+      - cell "是":
+        - generic: 是
+      - cell "是否开启注册用户功能（true开启，false关闭）":
+        - generic: 是否开启注册用户功能（true开启，false关闭）
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 6 用户登录-黑名单列表 sys.login.blackIPList 是 设置登录IP黑名单限制，多个匹配项以;分隔，支持匹配（*通配、网段） 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "6":
+        - generic: "6"
+      - cell "用户登录-黑名单列表":
+        - generic: 用户登录-黑名单列表
+      - cell "sys.login.blackIPList":
+        - generic: sys.login.blackIPList
+      - cell
+      - cell "是":
+        - generic: 是
+      - cell "设置登录IP黑名单限制，多个匹配项以;分隔，支持匹配（*通配、网段）":
+        - generic: 设置登录IP黑名单限制，多个匹配项以;分隔，支持匹配（*通配、网段）
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+    - row "选择当前行 7 平台能力运行时开关 capability.platform.enabled true 是 platform 模块运行时启停开关（true开启，false关闭） 2026-09-20 06:41:48 修改 删除":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "7":
+        - generic: "7"
+      - cell "平台能力运行时开关":
+        - generic: 平台能力运行时开关
+      - cell "capability.platform.enabled":
+        - generic: capability.platform.enabled
+      - cell "true":
+        - generic: "true"
+      - cell "是":
+        - generic: 是
+      - cell "platform 模块运行时启停开关（true开启，false关闭）":
+        - generic: platform 模块运行时启停开关（true开启，false关闭）
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 删除":
+        - button "修改":
+          - generic: 修改
+        - button "删除":
+          - generic: 删除
+- generic: 共 7 条
+- combobox
+- generic: 10条/页
+- button "上一页" [disabled]:
+- list:
+  - listitem "第 1 页": "1"
+- button "下一页" [disabled]:
+- generic: 前往
+- spinbutton "页": "1"
+- generic: 页
+- dialog "添加参数配置":
+  - generic "添加参数配置" [active]:
+    - banner:
+      - generic "添加参数配置"
+      - button "全屏":
+      - button "关闭此对话框":
+    - generic: "* 参数名称"
+    - textbox "* 参数名称":
+      - /placeholder: 请输入参数名称
+    - generic: "* 参数键名"
+    - textbox "* 参数键名":
+      - /placeholder: 请输入参数键名
+    - generic: "* 参数键值"
+    - textbox "* 参数键值":
+      - /placeholder: 请输入参数键值
+    - generic: 系统内置
+    - radiogroup "系统内置":
+      - radio "是" [checked]
+      - generic: 是
+      - radio "否"
+      - generic: 否
+    - generic: 备注
+    - textbox "备注":
+      - /placeholder: 请输入内容
+    - contentinfo:
+      - button "取消":
+        - generic: 取消
+      - button "确定":
+        - generic: 确定

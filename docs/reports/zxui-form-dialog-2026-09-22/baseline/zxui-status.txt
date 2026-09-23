@@ -1,0 +1,169 @@
+ M dev-docs/GridCom/DashboardGrid/index.vue
+ M docs/.vitepress/build/theme-deployment.ts
+ M docs/.vitepress/config/vite.ts
+ M docs/.vitepress/i18n/component/navbar.json
+ M docs/.vitepress/i18n/component/theme-lab.json
+ M docs/.vitepress/i18n/pages/guide.json
+ M docs/.vitepress/theme-packages.ts
+ M docs/.vitepress/vitepress/components/common/vp-theme-preset.vue
+ M docs/en-US/component/dashboard.md
+ M docs/en-US/component/floating-panel.md
+ M docs/en-US/component/grid-list.md
+ M docs/en-US/guide/component-inventory.md
+RM docs/en-US/guide/grid-list-auto-height.md -> docs/en-US/guide/fill-layout.md
+ M docs/en-US/guide/http-client.md
+ M docs/en-US/guide/installation.md
+ M docs/examples/dashboard/host-composition.vue
+ M docs/examples/floating-panel/basic.vue
+ M docs/learned/INDEX.md
+ M docs/learned/add-built-in-theme-package.md
+ M docs/package.json
+ M docs/raw/dashboard-widget-plugin-architecture-context.md
+ M docs/specs/THEME-theme-consumer-protocol/evidence/axis-matrix.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-browser-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-resources.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-no-js-default.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-no-js-seeded.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/baseline-ssr-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/browser-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/browser.png
+ M docs/specs/THEME-theme-consumer-protocol/evidence/compatibility.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-browser-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-browser.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-codec-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-compatibility.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-compiler-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-cost.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-docs-page.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-fixture-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-fixture-types.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-hosted-packed.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-packed.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-protocol-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-root-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-tokens-build.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-tools-types.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-unit.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance-web-types.log
+ M docs/specs/THEME-theme-consumer-protocol/evidence/conformance.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/cost.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/coverage.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/docs-page.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/hosted-packed.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/packed-receipt.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/resources.json
+ M docs/specs/THEME-theme-consumer-protocol/evidence/ssr-receipt.json
+ M docs/specs/dashboard-chrome-ux-overhaul/design.md
+ M docs/specs/dashboard-chrome-ux-overhaul/requirements.md
+ M docs/specs/dashboard-core-grid-panel-runtime/coverage-review.md
+ M docs/specs/dashboard-core-grid-panel-runtime/design.md
+ M docs/specs/dashboard-core-grid-panel-runtime/requirements.md
+ M docs/specs/dashboard-core-grid-panel-runtime/tasks.md
+ M docs/specs/dashboard-foundation-schema/design.md
+ M docs/specs/dashboard-foundation-schema/requirements.md
+ M docs/specs/dashboard-foundation-schema/tasks.md
+ M docs/zh-CN/component/dashboard.md
+ M docs/zh-CN/component/floating-panel.md
+ M docs/zh-CN/component/grid-list.md
+ M docs/zh-CN/guide/component-inventory.md
+ M docs/zh-CN/guide/design.md
+RM docs/zh-CN/guide/grid-list-auto-height.md -> docs/zh-CN/guide/fill-layout.md
+ M docs/zh-CN/guide/http-client.md
+ M docs/zh-CN/guide/installation.md
+ M docs/zh-CN/guide/theme-tools.md
+ M internal/contracts/ui-package-contracts.ts
+ M package.json
+ M packages/components/content-wrap/src/content-wrap.vue
+ M packages/components/content-wrap/src/props.ts
+ M packages/components/floating-panel/__tests__/floating-panel.test.tsx
+ M packages/components/floating-panel/__tests__/floating-panel.theme.test.ts
+ M packages/components/floating-panel/src/floating-panel.vue
+ M packages/components/floating-panel/src/instance.ts
+ M packages/components/floating-panel/src/props.ts
+ M packages/components/grid-list/__tests__/grid-list.test.tsx
+ M packages/components/grid-list/src/grid-list.vue
+ M packages/components/grid-list/src/props.ts
+ D packages/components/grid-list/src/use-grid-layout.ts
+ M packages/components/grid-list/src/use-grid-request.ts
+ M packages/components/hooks/use-floating-panel/index.ts
+ M packages/components/tabs/src/props.ts
+ M packages/components/tabs/src/tabs.vue
+ M packages/dashboard/README.md
+ M packages/dashboard/__tests__/dashboard-chrome-variant.test.tsx
+ M packages/dashboard/__tests__/dashboard-designer.test.tsx
+ M packages/dashboard/__tests__/dashboard-edit-feedback.test.tsx
+ M packages/dashboard/__tests__/dashboard-grid.test.tsx
+ M packages/dashboard/__tests__/dashboard-header-mode.test.tsx
+ M packages/dashboard/__tests__/dashboard-panel-state.test.tsx
+ M packages/dashboard/__tests__/dashboard-renderer.test.tsx
+ M packages/dashboard/__tests__/package-boundary.test.ts
+ M packages/dashboard/__tests__/widget-resolver.test.tsx
+ M packages/dashboard/package.json
+ M packages/dashboard/src/runtime/components/dashboard-grid.vue
+ M packages/dashboard/src/runtime/grid/vue-grid-layout-adapter.ts
+ M packages/dashboard/src/runtime/types.ts
+ M packages/dashboard/style/css.ts
+ M packages/dashboard/style/dashboard.css
+ M packages/dashboard/style/dashboard.css.map
+ M packages/dashboard/style/dashboard.scss
+ M packages/dashboard/style/index.ts
+ M packages/dashboard/style/variants/card.scss
+ M packages/dashboard/style/variants/silent.scss
+ M packages/theme-air-gray/generated/element-plus/aliases.css
+ M packages/theme-air-gray/generated/theme.manifest.json
+ M packages/theme-army-pine/generated/element-plus/aliases.css
+ M packages/theme-army-pine/generated/theme.manifest.json
+ M packages/theme-chalk/scripts/component-style-manifest.ts
+ M packages/theme-chalk/src/structural.css
+ M packages/theme-compiler/__tests__/bootstrap.test.ts
+ M packages/theme-compiler/__tests__/element-plus-adapter.test.ts
+ M packages/theme-compiler/src/adapters/element-plus/index.ts
+ M packages/theme-compiler/src/adapters/element-plus/mapping.ts
+ M packages/theme-compiler/src/adapters/element-plus/model.ts
+ M packages/theme-compiler/src/bootstrap.ts
+ M packages/theme-compiler/src/core/diagnostics.ts
+ M packages/theme-default/generated/element-plus/aliases.css
+ M packages/theme-default/generated/theme.manifest.json
+ M packages/theme-defense-green/generated/element-plus/aliases.css
+ M packages/theme-defense-green/generated/theme.manifest.json
+ M packages/theme-factory-blue/generated/element-plus/aliases.css
+ M packages/theme-factory-blue/generated/theme.manifest.json
+ M packages/theme-industrial-blue/generated/element-plus/aliases.css
+ M packages/theme-industrial-blue/generated/theme.manifest.json
+ M packages/theme-pap-olive/generated/element-plus/aliases.css
+ M packages/theme-pap-olive/generated/theme.manifest.json
+ M packages/theme-rocket-moss/generated/element-plus/aliases.css
+ M packages/theme-rocket-moss/generated/theme.manifest.json
+ M packages/theme-tech-blue/generated/element-plus/aliases.css
+ M packages/theme-tech-blue/generated/theme.manifest.json
+ M packages/zxui/style/index.css
+ M packages/zxui/theme-host/browser-core.ts
+ M packages/zxui/theme-runtime/__tests__/portal-registry.test.ts
+ M packages/zxui/theme-runtime/portal-registry.ts
+ M packages/zxui/theme-runtime/runtime-core.ts
+ M packages/zxui/theme-runtime/selection-resolver.ts
+ M play/package.json
+ M play/src/theme-runtime-dogfood/DogfoodAppSurface.vue
+ M play/vite.config.mts
+ M scripts/theme-consumer-protocol/build-fixtures.mts
+ M scripts/theme-delivery/theme-canvas.test.ts
+ M scripts/theme-delivery/theme-deployment-dev-server.test.ts
+ M scripts/theme-runtime/browser-baseline-schema.ts
+ M vitest.config.mts
+?? .worktrees/
+?? docs/examples/floating-panel/anchored.vue
+?? docs/examples/floating-panel/controlled.vue
+?? docs/examples/floating-panel/workbench.vue
+?? docs/learned/fill-height-layout-contract.md
+?? docs/plans/2026-09-10-pla-service-themes.md
+?? packages/components/floating-panel/__tests__/floating-panel.interaction.test.tsx
+?? packages/components/floating-panel/src/locale.ts
+?? packages/components/grid-list/src/use-fill-diagnostics.ts
+?? packages/dashboard/__tests__/editor-clipboard.test.ts
+?? packages/dashboard/__tests__/mock-vue-grid-layout.ts
+?? packages/dashboard/__tests__/vue-grid-layout-adapter.test.ts
+?? packages/dashboard/src/runtime/grid/editor-clipboard.ts
+?? packages/zxui/theme-runtime/bootstrap-transition.ts
+?? packages/zxui/theme-runtime/consumer-adoption.ts
+?? packages/zxui/theme-runtime/runtime-foundation.ts
+?? packages/zxui/theme-runtime/scope-record.ts

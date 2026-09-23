@@ -7,7 +7,7 @@
 
     <!-- 搜索区域 -->
     <div class="search-section">
-      <el-input
+      <zx-input
         v-model="searchKeyword"
         :placeholder="searchPlaceholder"
         :prefix-icon="Search"

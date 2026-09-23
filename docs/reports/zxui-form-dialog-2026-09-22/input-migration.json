@@ -1,0 +1,927 @@
+{
+  "scope": "non-simulation Vue templates (including tool/build); generator output checked separately",
+  "rawInputMigrated": 184,
+  "untouchedInputNumber": 46,
+  "files": 68,
+  "entries": [
+    {
+      "file": "src/components/business/Dag/components/DagDnd.vue",
+      "line": 10,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixView.vue",
+      "line": 5,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixView.vue",
+      "line": 145,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixView.vue",
+      "line": 151,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixViewSimple.vue",
+      "line": 5,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixViewSimple.vue",
+      "line": 145,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagMatrixViewSimple.vue",
+      "line": 151,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Dag/components/DagSearchInput.vue",
+      "line": 2,
+      "type": "text",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/components/business/Device/CategoryFormDialog.vue",
+      "line": 13,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/CategoryFormDialog.vue",
+      "line": 22,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/DeviceClazzDialog.vue",
+      "line": 7,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/DeviceClazzDialog.vue",
+      "line": 10,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/DeviceCloneDialog.vue",
+      "line": 12,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/DeviceNameDialog.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/DeviceNameDialog.vue",
+      "line": 12,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/ExportDialog.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 17,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 27,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 31,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 35,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 39,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/NodeEditDrawer.vue",
+      "line": 43,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/ParamsConfigTab.vue",
+      "line": 55,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Device/PortEditDialog.vue",
+      "line": 12,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Monitor/OperlogGrid.vue",
+      "line": 19,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/ProtocolFormDrawer.vue",
+      "line": 21,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/ProtocolFormDrawer.vue",
+      "line": 41,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/templates/CANProtocolTemplate.vue",
+      "line": 69,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/templates/EthernetProtocolTemplate.vue",
+      "line": 79,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/templates/Protocol1553BTemplate.vue",
+      "line": 69,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/Protocol/templates/RS422ProtocolTemplate.vue",
+      "line": 69,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/business/VxeDictAutocomplete/index.vue",
+      "line": 13,
+      "type": ":type=\"inputType\"",
+      "slots": []
+    },
+    {
+      "file": "src/components/ui/IconSelect/index.vue",
+      "line": 3,
+      "type": "text",
+      "slots": [
+        "#suffix"
+      ]
+    },
+    {
+      "file": "src/components/ui/ThemeValidation/index.vue",
+      "line": 60,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/components/ui/ThemeValidation/index.vue",
+      "line": 63,
+      "type": "type=\"password\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/login.vue",
+      "line": 34,
+      "type": "type=\"text\"",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/login.vue",
+      "line": 55,
+      "type": ":type=\"showPassword ? 'text' : 'password'\"",
+      "slots": [
+        "#prefix",
+        "#suffix"
+      ]
+    },
+    {
+      "file": "src/views/login.vue",
+      "line": 87,
+      "type": "text",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/monitor/audit/index.vue",
+      "line": 46,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/audit/index.vue",
+      "line": 53,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "line": 126,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "line": 131,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/cache/list.vue",
+      "line": 136,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "line": 189,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "line": 237,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "line": 241,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "line": 245,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/job/index.vue",
+      "line": 249,
+      "type": "text",
+      "slots": [
+        "#append"
+      ]
+    },
+    {
+      "file": "src/views/monitor/job/log.vue",
+      "line": 11,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/logininfor/index.vue",
+      "line": 45,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/logininfor/index.vue",
+      "line": 52,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/online/index.vue",
+      "line": 13,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/monitor/online/index.vue",
+      "line": 20,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ExportDialog.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProjectEditDialog.vue",
+      "line": 7,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProjectEditDialog.vue",
+      "line": 10,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProjectFormDialog.vue",
+      "line": 7,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProjectFormDialog.vue",
+      "line": 15,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProtocolConfigDrawer.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProtocolConfigDrawer.vue",
+      "line": 40,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/ProtocolConfigDrawer.vue",
+      "line": 50,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionCloneDialog.vue",
+      "line": 26,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionCloneDialog.vue",
+      "line": 35,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionCloneDialog.vue",
+      "line": 44,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "line": 160,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "line": 168,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/project/components/VersionList.vue",
+      "line": 175,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 6,
+      "type": "type=\"text\"",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 19,
+      "type": "type=\"password\"",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 33,
+      "type": "type=\"password\"",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 47,
+      "type": "text",
+      "slots": [
+        "#prefix"
+      ]
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "line": 9,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "line": 12,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/config/components/ConfigDlg.vue",
+      "line": 22,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/config/components/ConfigList.vue",
+      "line": 48,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "line": 19,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "line": 27,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "line": 31,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dept/components/DeptDlg.vue",
+      "line": 35,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dept/components/DeptList.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/components/DictDlg.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/components/DictDlg.vue",
+      "line": 9,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/components/DictDlg.vue",
+      "line": 19,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/components/DictList.vue",
+      "line": 48,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "line": 158,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "line": 161,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "line": 164,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "line": 167,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/dict/data.vue",
+      "line": 190,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 33,
+      "type": "text",
+      "slots": [
+        "#prepend"
+      ]
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 53,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 92,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 107,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 122,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuDrawer.vue",
+      "line": 137,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/menu/components/MenuList.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/notice/components/NoticeDlg.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/notice/components/NoticeList.vue",
+      "line": 31,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/post/components/PostDlg.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/post/components/PostDlg.vue",
+      "line": 9,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/post/components/PostDlg.vue",
+      "line": 22,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/post/components/PostList.vue",
+      "line": 40,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/project/components/ProjectDlg.vue",
+      "line": 6,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/authUser.vue",
+      "line": 35,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/authUser.vue",
+      "line": 42,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/components/RoleDataScopeDrawer.vue",
+      "line": 11,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/components/RoleDataScopeDrawer.vue",
+      "line": 14,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/components/RoleFormDrawer.vue",
+      "line": 17,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/components/RoleFormDrawer.vue",
+      "line": 31,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/components/RoleFormDrawer.vue",
+      "line": 70,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/index.vue",
+      "line": 42,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/selectUser.vue",
+      "line": 14,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/role/selectUser.vue",
+      "line": 23,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 22,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 26,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 31,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 35,
+      "type": "type=\"password\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/components/UserFormDialog.vue",
+      "line": 89,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "line": 43,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "line": 79,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/index.vue",
+      "line": 86,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/resetPwd.vue",
+      "line": 4,
+      "type": "type=\"password\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/resetPwd.vue",
+      "line": 12,
+      "type": "type=\"password\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/resetPwd.vue",
+      "line": 20,
+      "type": "type=\"password\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/userInfo.vue",
+      "line": 4,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/userInfo.vue",
+      "line": 7,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/system/user/profile/userInfo.vue",
+      "line": 10,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/basicInfoForm.vue",
+      "line": 6,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/basicInfoForm.vue",
+      "line": 11,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/basicInfoForm.vue",
+      "line": 16,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/basicInfoForm.vue",
+      "line": 21,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/basicInfoForm.vue",
+      "line": 26,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/createTable.vue",
+      "line": 6,
+      "type": "type=\"textarea\"",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/editTable.vue",
+      "line": 18,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/editTable.vue",
+      "line": 45,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/genInfoForm.vue",
+      "line": 33,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/genInfoForm.vue",
+      "line": 45,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/genInfoForm.vue",
+      "line": 57,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/genInfoForm.vue",
+      "line": 69,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/genInfoForm.vue",
+      "line": 113,
+      "type": "text",
+      "slots": [
+        "#append"
+      ]
+    },
+    {
+      "file": "src/views/tool/gen/importTable.vue",
+      "line": 14,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/importTable.vue",
+      "line": 21,
+      "type": "text",
+      "slots": []
+    },
+    {
+      "file": "src/views/tool/gen/index.vue",
+      "line": 49,
+      "type": "text",
+      "slots": []
+    }
+  ],
+  "generatorUiBatch": {
+    "nodes": 39,
+    "files": 4,
+    "paths": [
+      "src/views/tool/build/RightPanel.vue",
+      "src/views/tool/build/CodeTypeDialog.vue",
+      "src/views/tool/build/TreeNodeDialog.vue",
+      "src/views/tool/build/IconsDialog.vue"
+    ],
+    "sourceReport": "input-generator/implementation.md",
+    "legacyAppendSlotsConverted": 2,
+    "nativeNumberWithModelNumber": 1
+  },
+  "rootBatch": {
+    "nodes": 145,
+    "files": 64,
+    "entriesBelow": true
+  },
+  "finalGate": {
+    "filesChecked": 496,
+    "rawInputViolations": 0,
+    "rawDialogViolations": 0,
+    "report": "verification/zxui-final-ui-standards.json"
+  }
+}

@@ -1,12 +1,12 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadAuditData"
       :query-transform="queryTransform"
       :show-pagination="true"
       :load-on-mounted="true"
-      class="zx-grid-list--page"
+      fill
     >
       <template #form="{ query, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
@@ -43,14 +43,14 @@
               style="width: 160px"
               @change="(v) => onFilterChange('action', v, { handleRefresh, updateState })"
             />
-            <el-input
+            <zx-input
               v-model="query.operatorName"
               placeholder="请输入操作人"
               clearable
               style="width: 200px"
               @keyup.enter="() => onSearch({ handleRefresh })"
             />
-            <el-input
+            <zx-input
               v-model="query.requestId"
               placeholder="请输入请求ID"
               clearable

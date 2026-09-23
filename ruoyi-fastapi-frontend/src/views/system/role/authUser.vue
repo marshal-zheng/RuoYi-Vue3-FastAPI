@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <template #header-right>
       <ZxButton type="warning" plain icon="Close" @click="handleClose">关闭</ZxButton>
     </template>
@@ -10,7 +10,7 @@
       :show-pagination="true"
       :load-on-mounted="true"
       :clear-selection-on-load="true"
-      class="zx-grid-list--page"
+      fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
@@ -32,14 +32,14 @@
             >
           </div>
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.userName"
               placeholder="请输入用户名称"
               clearable
               style="width: 240px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-input
+            <zx-input
               v-model="query.phonenumber"
               placeholder="请输入手机号码"
               clearable

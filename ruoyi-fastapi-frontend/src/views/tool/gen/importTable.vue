@@ -11,14 +11,14 @@
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.tableName"
               placeholder="请输入表名称"
               clearable
               style="width: 200px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-input
+            <zx-input
               v-model="query.tableComment"
               placeholder="请输入表描述"
               clearable
@@ -74,9 +74,9 @@ const { proxy } = getCurrentInstance();
 const emit = defineEmits(['ok']);
 
 const { dialogProps, dialogEvents, open, close } = useDialog({
+  dialogSize: 'lg',
   title: '导入表',
-  width: '800px',
-  height: '600px',
+
   defaultData: () => ({}),
   onConfirm: handleImportTable,
 });
@@ -115,19 +115,14 @@ function handleSelectionChange(selection) {
 
 /** 搜索 */
 function onSearch({ handleRefresh, updateState }) {
-  updateState({ page: 1 });
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
 /** 重置 */
 function onReset({ handleRefresh, updateState }) {
-  updateState({
-    page: 1,
-    query: {
-      tableName: undefined,
-      tableComment: undefined,
-    },
-  });
+  updateState('pager.page', 1);
+  updateState('query', {});
   handleRefresh();
 }
 

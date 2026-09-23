@@ -1,0 +1,55 @@
+{
+  "active": null,
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 353,
+      "title": "添加端口",
+      "width": 640
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 73,
+      "placeholder": "请输入端口描述",
+      "type": "textarea"
+    }
+  ],
+  "grids": [
+    {
+      "columns": "592px",
+      "gap": "normal 20px",
+      "width": 592
+    }
+  ],
+  "radios": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    778,
+    993
+  ]
+}

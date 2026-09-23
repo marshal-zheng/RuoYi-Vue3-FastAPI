@@ -1,20 +1,23 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    title="导出项目"
-    width="30%"
-    append-to-body
-    :before-close="handleClose"
+  <ZxDialog
+    v-bind="exportDialog.dialogProps.value"
+    v-on="exportDialog.dialogEvents.value"
+    :draggable="false"
+    :show-full-screen="false"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+    @close="handleClose"
   >
-    <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="文件类型" prop="fileType">
-        <FileTypeSelector v-model="form.fileType" placeholder="请选择文件类型" clearable />
-      </el-form-item>
+    <el-form ref="formRef" :model="form" :rules="rules" v-bind="exportDialog.formProps"
+      ><FormGrid v-bind="exportDialog.layoutProps">
+        <el-form-item label="文件类型" prop="fileType">
+          <FileTypeSelector v-model="form.fileType" placeholder="请选择文件类型" clearable />
+        </el-form-item>
 
-      <el-form-item label="文件名称" prop="fileName">
-        <el-input v-model="form.fileName" placeholder="请输入文件名称" clearable />
-      </el-form-item>
-    </el-form>
+        <el-form-item label="文件名称" prop="fileName">
+          <zx-input v-model="form.fileName" placeholder="请输入文件名称" clearable />
+        </el-form-item> </FormGrid
+    ></el-form>
 
     <template #footer>
       <div class="dialog-footer">
@@ -25,10 +28,12 @@
         </el-button>
       </div>
     </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup name="ExportDialog">
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+
 import { Download } from '@element-plus/icons-vue';
 import { FileTypeSelector } from './selector';
 
@@ -51,10 +56,20 @@ const emit = defineEmits(['update:modelValue', 'export']);
 const formRef = ref();
 const loading = ref(false);
 
-const form = reactive({
-  fileType: 'xlsx',
-  fileName: '',
+const exportDialog = useFormDialog({
+  columns: 1,
+  formRef,
+  title: '导出项目',
+  closeOnClickModal: true,
+  destroyOnClose: false,
+  preValidate: false,
+  autoResetForm: false,
+  defaultData: () => ({
+    fileType: 'xlsx',
+    fileName: props.projectData.projectName ? `${props.projectData.projectName}_导出` : '项目导出',
+  }),
 });
+const form = toRef(exportDialog.state, 'data');
 
 const rules = {
   fileType: [{ required: true, message: '请选择文件类型', trigger: 'change' }],
@@ -65,10 +80,8 @@ const rules = {
 };
 
 // Computed
-const visible = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-});
+const visible = toRef(exportDialog.state, 'visible');
+watch(visible, (value) => emit('update:modelValue', value));
 
 // Watch
 watch(
@@ -76,18 +89,13 @@ watch(
   (newVal) => {
     if (newVal) {
       // 弹框打开时，初始化表单数据
-      initForm();
+      exportDialog.open();
+    } else {
+      exportDialog.close();
     }
-  }
+  },
+  { immediate: true }
 );
-
-// Methods
-const initForm = () => {
-  form.fileType = 'xlsx';
-  form.fileName = props.projectData.projectName
-    ? `${props.projectData.projectName}_导出`
-    : '项目导出';
-};
 
 const handleClose = () => {
   visible.value = false;
@@ -111,8 +119,8 @@ const handleExport = async () => {
     const exportParams = {
       projectId: props.projectData.projectId,
       projectName: props.projectData.projectName,
-      fileType: form.fileType,
-      fileName: form.fileName,
+      fileType: form.value.fileType,
+      fileName: form.value.fileName,
     };
 
     // 触发导出事件
@@ -125,7 +133,7 @@ const handleExport = async () => {
     handleClose();
 
     // 显示成功消息
-    ElMessage.success(`${form.fileName}.${form.fileType} 导出成功！`);
+    ElMessage.success(`${form.value.fileName}.${form.value.fileType} 导出成功！`);
   } catch (error) {
     console.error('导出失败:', error);
     ElMessage.error('导出失败，请重试');
@@ -148,43 +156,5 @@ const getFileTypeIcon = (type) => {
 <style scoped>
 .dialog-footer {
   text-align: right;
-}
-
-:deep(.el-radio) {
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-  margin-right: 0;
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-  transition: all 0.3s;
-}
-
-:deep(.el-radio:hover) {
-  border-color: #409eff;
-  background-color: #f0f9ff;
-}
-
-:deep(.el-radio.is-checked) {
-  border-color: #409eff;
-  background-color: #ecf5ff;
-}
-
-:deep(.el-radio__input) {
-  margin-right: 8px;
-}
-
-:deep(.el-radio__label) {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #606266;
-}
-
-:deep(.el-checkbox) {
-  margin-right: 20px;
-  margin-bottom: 8px;
 }
 </style>

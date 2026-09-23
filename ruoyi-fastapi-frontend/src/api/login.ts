@@ -49,6 +49,7 @@ export function getInfo() {
   return request({
     url: '/getInfo',
     method: 'get',
+    skipRelogin: true,
   });
 }
 
@@ -63,6 +64,8 @@ export function logout(options: LogoutRequestOptions = {}) {
     url: '/auth/logout',
     method: 'post',
     feedback: { mode: 'silent' },
+    skipRelogin: true,
+    silentError: true,
     ...options,
   });
 }

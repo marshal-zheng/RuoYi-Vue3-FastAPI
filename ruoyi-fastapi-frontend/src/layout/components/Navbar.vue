@@ -16,7 +16,8 @@
       <top-nav v-if="settingsStore.topNav" id="topmenu-container" class="topmenu-container ml-2" />
     </div>
 
-    <div class="flex items-center mr-4">
+    <div class="flex items-center mr-4 gap-3">
+      <ZxThemePresetSwitch />
       <el-dropdown
         @command="handleCommand"
         class="avatar-container flex ml-4 cursor-pointer"
@@ -61,6 +62,7 @@ import Hamburger from '@/components/ui/Hamburger';
 import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/settings';
+import ZxThemePresetSwitch from '@/theme/ZxThemePresetSwitch.vue';
 
 const appStore = useAppStore();
 const userStore = useUserStore();
@@ -92,7 +94,7 @@ function logout() {
   })
     .then(() => {
       userStore.logOut().then(() => {
-        location.href = '/index';
+        location.href = '/login';
       });
     })
     .catch(() => {});

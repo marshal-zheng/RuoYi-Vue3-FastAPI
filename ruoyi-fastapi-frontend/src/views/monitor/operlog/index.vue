@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <template #header-right>
       <ZxButton
         type="danger"

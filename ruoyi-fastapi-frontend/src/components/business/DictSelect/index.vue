@@ -37,7 +37,7 @@ const loadOptions = async (keyword) => {
   if (!props.dictType) return [];
   try {
     const response = await getDicts(props.dictType);
-    const raw = Array.isArray(response) ? response : [];
+    const raw = response.items;
     let mapped = raw.map((option) => ({
       label: option.dictLabel,
       value: option.dictValue,

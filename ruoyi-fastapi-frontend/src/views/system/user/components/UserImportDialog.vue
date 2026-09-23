@@ -64,9 +64,9 @@ const uploadUrl = computed(
 );
 
 const { dialogProps, dialogEvents, open, close } = useDialog({
+  dialogSize: 'md',
   title: '用户导入',
-  width: '45%',
-  height: '60%',
+
   showFooter: true,
   defaultData: () => ({}),
 });

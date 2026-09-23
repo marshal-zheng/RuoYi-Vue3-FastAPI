@@ -1,0 +1,249 @@
+{
+  "active": null,
+  "dialogs": [
+    {
+      "background": "color(srgb 0.13254 0.147214 0.17652)",
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "height": 672,
+      "scope": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "width": 678.53125
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "name",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "email",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "email",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "search"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 13,
+      "name": "el-id-4289-12",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 13,
+      "name": "el-id-4289-12",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 13,
+      "name": "el-id-4289-12",
+      "shadow": "none",
+      "textFill": "rgb(84, 84, 84)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 13,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "checkbox"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 13,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(84, 84, 84)",
+      "type": "checkbox"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 37,
+      "name": "",
+      "shadow": "color(srgb 0.93 0.95 0.98 / 0.18) 0px 0px 0px 1px inset",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "textarea"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(84, 84, 84)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 21.5,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.93 0.95 0.98)",
+      "type": "text"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Name / four slots"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Raw ElInput / autofill"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Tooltip path / autofill"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Native number"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Native search with explicit append"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Separate numeric stepper"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Small FormItem overrides inherited Form size"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Explicit large input overrides FormItem"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Status"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Checkbox and disabled state"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Textarea"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Disabled input"
+    },
+    {
+      "color": "color(srgb 0.67 0.71 0.78)",
+      "text": "Secondary popup follows dialog scope"
+    }
+  ],
+  "popups": [
+    {
+      "background": "color(srgb 0.11688 0.131308 0.16014)",
+      "scope": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "text": "OneTwo"
+    }
+  ],
+  "scopes": [
+    {
+      "scope": "scope:play:root",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:play:root.public-form",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:play:root.public-form",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+    }
+  ],
+  "status": [
+    "visible=true; modelValue=true",
+    "{\"input\":\"INPUT\",\"textarea\":\"TEXTAREA\",\"textareaStyle\":[{},{\"minHeight\":\"22px\"},{}]}",
+    "{\"input\":\"INPUT\",\"textarea\":\"TEXTAREA\",\"textareaStyle\":[{},{\"minHeight\":\"22px\"},{}]}"
+  ],
+  "viewport": [
+    1280,
+    720
+  ]
+}

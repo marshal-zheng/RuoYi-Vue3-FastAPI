@@ -2,6 +2,7 @@
   <div
     class="sidebar-logo-container relative w-full flex items-center justify-center overflow-hidden"
     :class="[{ collapse: collapse }, variantClass]"
+    :data-zx-surface="surfaceRole"
   >
     <transition name="sidebarLogoFade">
       <router-link
@@ -52,6 +53,10 @@ const variantClass = computed(() => {
   return props.variant === 'login' ? 'login-variant' : '';
 });
 
+// The sidebar strip is the app's brand block; on the login page the logo sits
+// on the page itself and must not carry a surface of its own.
+const surfaceRole = computed(() => (props.variant === 'login' ? undefined : 'brand'));
+
 const logoSizeClass = computed(() => {
   return props.variant === 'login' ? 'w-12 h-12' : 'w-8 h-8';
 });
@@ -67,8 +72,6 @@ const logo = showLogoImage ? logoImg : null;
 </script>
 
 <style scoped>
-@import '@/assets/styles/theme.module.css';
-
 /* Vue 过渡动画 - 必须用 CSS */
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
@@ -79,11 +82,11 @@ const logo = showLogoImage ? logoImg : null;
   opacity: 0;
 }
 
-/* CSS 变量 - 必须用 CSS */
+/* The brand surface paints background, border and depth. The role is shaped
+   for badges, so the radius is squared off for this full-bleed strip. */
 .sidebar-logo-container {
   height: var(--logo-height, 50px);
-  background: var(--left-menu-header-bg);
-  box-shadow: var(--left-menu-header-shadow);
+  border-radius: 0;
 }
 
 .sidebar-logo-container.login-variant {
@@ -94,28 +97,19 @@ const logo = showLogoImage ? logoImg : null;
 
 .sidebar-title {
   font-size: var(--logo-title-font-size, 16px);
-  color: var(--logo-title-text-color, #f0f4ff);
+  color: inherit;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC',
     'Microsoft YaHei', sans-serif;
   transition: all 0.3s ease;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-logo-container.login-variant .sidebar-title {
-  color: #1f2937;
-  text-shadow: none;
+  color: var(--zx-semantic-text-primary);
 }
 
 .sidebar-title:hover {
-  color: var(--logo-title-text-hover-color, #ffffff);
   transform: scale(1.02);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.sidebar-logo-container.login-variant .sidebar-title:hover {
-  color: #111827;
-  text-shadow: none;
 }
 
 /* collapse 状态下的特殊样式 */

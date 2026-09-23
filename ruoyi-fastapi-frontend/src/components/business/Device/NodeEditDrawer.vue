@@ -14,7 +14,7 @@
       label-position="left"
     >
       <el-form-item label="节点名称" prop="name">
-        <el-input
+        <zx-input
           v-model="formData.name"
           placeholder="请输入节点名称"
           clearable
@@ -24,23 +24,23 @@
       </el-form-item>
 
       <el-form-item label="设备类型">
-        <el-input v-model="formData.deviceType" disabled />
+        <zx-input v-model="formData.deviceType" disabled />
       </el-form-item>
 
       <el-form-item label="设备型号">
-        <el-input v-model="formData.model" disabled />
+        <zx-input v-model="formData.model" disabled />
       </el-form-item>
 
       <el-form-item label="制造商">
-        <el-input v-model="formData.manufacturer" disabled />
+        <zx-input v-model="formData.manufacturer" disabled />
       </el-form-item>
 
       <el-form-item label="版本">
-        <el-input v-model="formData.version" disabled />
+        <zx-input v-model="formData.version" disabled />
       </el-form-item>
 
       <el-form-item label="备注">
-        <el-input v-model="formData.remark" disabled type="textarea" :rows="3" />
+        <zx-input v-model="formData.remark" disabled type="textarea" :rows="3" />
       </el-form-item>
     </el-form>
 

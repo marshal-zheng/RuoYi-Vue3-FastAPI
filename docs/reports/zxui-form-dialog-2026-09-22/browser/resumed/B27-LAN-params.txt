@@ -1,0 +1,62 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "设备详情":
+  - /url: /device/detail/index
+  - generic: 设备详情
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- heading "设备端口配置" [level=3]
+- generic: 已配置 1 个端口
+- button "添加端口":
+  - generic: 添加端口
+- button "保存":
+  - generic: 保存
+- dialog "端口配置 - LAN":
+  - banner:
+    - button "关闭抽屉":
+    - generic: 端口配置 - LAN
+    - button "全屏":
+      - text: 全屏
+  - separator "调整抽屉尺寸"
+  - tablist:
+    - tab "参数配置" [selected]
+    - tab "报文配置"
+  - tabpanel "参数配置":
+    - table:
+      - rowgroup:
+        - row "端口名称 LAN 总线类型 LAN":
+          - cell "端口名称"
+          - cell "LAN"
+          - cell "总线类型"
+          - cell "LAN"
+        - row "端口位置 右侧":
+          - cell "端口位置"
+          - cell "右侧"
+    - generic: "*IP 地址"
+    - textbox "*IP 地址" [active]:
+      - /placeholder: 请输入 IP 地址，如：192.168.1.100
+      - text: 192.0.2.10
+    - generic: "*端口号"
+    - button "减少数值":
+    - button "增加数值":
+    - spinbutton "*端口号": "8080"
+    - generic: "*协议类型"
+    - radiogroup "*协议类型":
+      - radio "TCP" [checked]
+      - generic: TCP
+      - radio "UDP"
+      - generic: UDP
+  - button "取消":
+    - generic: 取消
+  - button "确定":
+    - generic: 确定

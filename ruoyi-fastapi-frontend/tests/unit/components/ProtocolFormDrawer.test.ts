@@ -22,7 +22,7 @@ describe('ProtocolFormDrawer', () => {
           ZxDrawer: renderSlotStub,
           ElForm: { inheritAttrs: false, template: '<form><slot /></form>' },
           ElFormItem: renderSlotStub,
-          ElInput: { inheritAttrs: false, template: '<input />' },
+          ZxInput: { inheritAttrs: false, template: '<input />' },
           ElTag: true,
           ElButton: true,
           ProtocolTypeSelector: { inheritAttrs: false, template: '<select />' },

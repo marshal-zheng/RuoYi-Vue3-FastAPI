@@ -1,5 +1,5 @@
 <template>
-  <div :class="classObj" class="app-wrapper" :style="{ '--current-color': theme }">
+  <div :class="classObj" class="app-wrapper">
     <div
       v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
@@ -9,16 +9,13 @@
     <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
       <div :class="{ 'fixed-header': true }" :style="fixedHeaderStyle">
         <!-- Header 区域：在未启用 tagsView 时显示 Logo + Navbar；启用时只显示 Navbar -->
-        <div
-          class="flex items-center justify-between affordable-thunder"
-          style="background: var(--top-header-bg); box-shadow: var(--top-header-shadow)"
-        >
+        <div class="app-header flex items-center justify-between" data-zx-surface="header">
           <div v-if="!needTagsView && showLogo" class="flex items-center h-[50px] px-4 gap-2">
             <img :src="headerLogo" class="w-8 h-8 shrink-0" />
             <!-- 收起侧边栏时隐藏标题文字，效果与 Sidebar 中 Logo 收起一致 -->
             <span
               v-if="!isCollapse"
-              class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none text-[var(--logo-title-text-color,#f0f4ff)]"
+              class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
             >
               {{ headerTitle }}
             </span>
@@ -44,7 +41,6 @@ import defaultSettings from '@/settings';
 import headerLogo from '@/assets/logo/logo.png';
 
 const settingsStore = useSettingsStore();
-const theme = computed(() => settingsStore.theme);
 const sidebar = computed(() => useAppStore().sidebar);
 const device = computed(() => useAppStore().device);
 const needTagsView = computed(() => settingsStore.tagsView);
@@ -122,6 +118,38 @@ function setLayout() {
 <style lang="less" scoped>
 @import '@/assets/styles/mixin.less';
 @import '@/assets/styles/variables.module.less';
+
+// Keep the tint local so Vite HMR does not compile this block against a stale mixin import.
+@on-surface-tint: ~"color-mix(in oklab, currentColor calc(var(--zx-semantic-fill-current-tint) * 1%), transparent)";
+
+// The header surface paints background, border, shadow and on-text colour.
+// Its children still read the legacy --top-header-* names, so they are rebound
+// here, at the scope boundary, instead of on the document root.
+.app-header {
+  --top-header-text-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
+  --top-header-icon-hover-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-hover-bg: @on-surface-tint;
+
+  --top-header-hamburger-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-hamburger-hover-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-hamburger-hover-bg: @on-surface-tint;
+  --top-header-menu-hover-bg: @on-surface-tint;
+  --top-header-menu-active-bg: var(--zx-semantic-fill-selected);
+
+  --top-header-breadcrumb-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-breadcrumb-hover-color: var(--zx-semantic-accent-base);
+  --top-header-breadcrumb-separator-color: var(--zx-semantic-surface-header-on-text-secondary);
+
+  --top-header-avatar-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
+  --top-header-avatar-icon-hover-color: var(--zx-semantic-accent-base);
+  --top-header-avatar-text-color: var(--zx-semantic-surface-header-on-text);
+  --top-header-avatar-text-hover-color: var(--zx-semantic-accent-base);
+  --top-header-avatar-bg-hover: @on-surface-tint;
+
+  --logo-title-text-color: var(--zx-semantic-surface-header-on-text);
+  --logo-title-text-hover-color: var(--zx-semantic-surface-header-on-text);
+}
 
 .app-wrapper {
   .clearfix();

@@ -1,0 +1,8 @@
+{
+  "file": "module_generator/repository/gen_repository.py",
+  "baseline": "git HEAD; only current spec change is cache flag/comment",
+  "baselineIssues": 134,
+  "currentIssues": 134,
+  "introduced": [],
+  "removed": []
+}

@@ -1,11 +1,6 @@
 <template>
   <div class="m-operlog-grid">
-    <ZxGridList
-      ref="gridListRef"
-      :load-data="loadOperlogData"
-      :initial-state="initialState"
-      class="zx-grid-list--page"
-    >
+    <ZxGridList ref="gridListRef" :load-data="loadOperlogData" :initial-state="initialState" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
@@ -16,7 +11,7 @@
               :refresh="handleRefresh"
               :updateState="updateState"
             >
-              <el-input
+              <zx-input
                 v-model="query.title"
                 placeholder="系统模块"
                 clearable

@@ -1,0 +1,81 @@
+{
+  "active": "请输入版本描述",
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 374,
+      "title": "克隆版本",
+      "width": 640
+    }
+  ],
+  "errors": [
+    "请输入版本号"
+  ],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "搜索版本名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": null,
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入新版本号，如：v1.0.1",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入新版本名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 94,
+      "placeholder": "请输入版本描述",
+      "type": "textarea"
+    }
+  ],
+  "grids": [
+    {
+      "columns": "592px",
+      "gap": "normal 20px",
+      "width": 592
+    }
+  ],
+  "radios": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    778,
+    993
+  ]
+}

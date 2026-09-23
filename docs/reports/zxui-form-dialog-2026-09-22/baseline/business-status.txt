@@ -1,0 +1,86 @@
+ D ".cursor/skills/init-ai-workspace/AI\345\274\200\345\217\221\350\247\204\350\214\203V1.pdf"
+ D .cursor/skills/init-ai-workspace/README.md
+ D ".cursor/skills/init-ai-workspace/README_\345\211\257\346\234\254.pdf"
+ D .cursor/skills/init-ai-workspace/SKILL.md
+ D .cursor/skills/init-ai-workspace/assets/commands/faq.md
+ D .cursor/skills/init-ai-workspace/assets/commands/learn.md
+ D .cursor/skills/init-ai-workspace/assets/commands/skill-stubs.md
+ D .cursor/skills/init-ai-workspace/assets/commands/task-alignment-review.md
+ D .cursor/skills/init-ai-workspace/assets/commands/update-codemaps.md
+ D .cursor/skills/init-ai-workspace/reference/agents-template.md
+ D .cursor/skills/init-ai-workspace/scripts/init.js
+ D .cursor/skills/init-ai-workspace/scripts/install-skills.js
+ M AGENTS.md
+ M ruoyi-fastapi-frontend/.gitignore
+ M ruoyi-fastapi-frontend/index.html
+ M ruoyi-fastapi-frontend/package.json
+ M ruoyi-fastapi-frontend/src/App.tsx
+ M ruoyi-fastapi-frontend/src/api/login.ts
+ M ruoyi-fastapi-frontend/src/assets/styles/components.less
+ M ruoyi-fastapi-frontend/src/assets/styles/index.css
+ M ruoyi-fastapi-frontend/src/assets/styles/mixin.less
+ M ruoyi-fastapi-frontend/src/assets/styles/sidebar.css
+ M ruoyi-fastapi-frontend/src/assets/styles/theme.module.css
+ M ruoyi-fastapi-frontend/src/components/business/Monitor/OperlogGrid.vue
+ M ruoyi-fastapi-frontend/src/components/ui/ContentDetailWrap/index.vue
+ M ruoyi-fastapi-frontend/src/components/ui/TopNav/index.vue
+ M ruoyi-fastapi-frontend/src/layout/components/AppMain.vue
+ M ruoyi-fastapi-frontend/src/layout/components/Navbar.vue
+ M ruoyi-fastapi-frontend/src/layout/components/Settings/index.vue
+ M ruoyi-fastapi-frontend/src/layout/components/Sidebar/Logo.vue
+ M ruoyi-fastapi-frontend/src/layout/components/Sidebar/index.vue
+ M ruoyi-fastapi-frontend/src/layout/components/TagsView/ScrollPane.vue
+ M ruoyi-fastapi-frontend/src/layout/components/TagsView/index.vue
+ M ruoyi-fastapi-frontend/src/layout/index.vue
+ M ruoyi-fastapi-frontend/src/main.ts
+ M ruoyi-fastapi-frontend/src/shims-vue.d.ts
+ M ruoyi-fastapi-frontend/src/store/modules/settings.ts
+ M ruoyi-fastapi-frontend/src/store/modules/user.ts
+ M ruoyi-fastapi-frontend/src/utils/http.test.ts
+ M ruoyi-fastapi-frontend/src/utils/http.ts
+ M ruoyi-fastapi-frontend/src/utils/request.ts
+ M ruoyi-fastapi-frontend/src/views/device/category/index.vue
+ M ruoyi-fastapi-frontend/src/views/device/index.vue
+ M ruoyi-fastapi-frontend/src/views/login.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/audit/index.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/job/index.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/logininfor/index.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/online/index.vue
+ M ruoyi-fastapi-frontend/src/views/monitor/operlog/index.vue
+ M ruoyi-fastapi-frontend/src/views/project/components/VersionList.vue
+ M ruoyi-fastapi-frontend/src/views/project/detail.vue
+ M ruoyi-fastapi-frontend/src/views/project/index.vue
+ M ruoyi-fastapi-frontend/src/views/project/operlog/index.vue
+ M ruoyi-fastapi-frontend/src/views/protocol/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/config/components/ConfigList.vue
+ M ruoyi-fastapi-frontend/src/views/system/config/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/dept/components/DeptList.vue
+ M ruoyi-fastapi-frontend/src/views/system/dept/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/dict/components/DictList.vue
+ M ruoyi-fastapi-frontend/src/views/system/dict/data.vue
+ M ruoyi-fastapi-frontend/src/views/system/menu/components/MenuList.vue
+ M ruoyi-fastapi-frontend/src/views/system/menu/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/notice/components/NoticeList.vue
+ M ruoyi-fastapi-frontend/src/views/system/notice/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/post/components/PostList.vue
+ M ruoyi-fastapi-frontend/src/views/system/project/components/ProjectList.vue
+ M ruoyi-fastapi-frontend/src/views/system/project/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/role/authUser.vue
+ M ruoyi-fastapi-frontend/src/views/system/role/index.vue
+ M ruoyi-fastapi-frontend/src/views/system/user/authRole.vue
+ M ruoyi-fastapi-frontend/src/views/system/user/index.vue
+ M ruoyi-fastapi-frontend/src/views/tool/gen/index.vue
+ M ruoyi-fastapi-frontend/tsconfig.json
+ M ruoyi-fastapi-frontend/vite.config.ts
+ M ruoyi-fastapi-frontend/yarn.lock
+?? .cursor/handoffs/
+?? docs/plans/2026-09-22-zxui-business-theme-adoption.md
+?? docs/reports/2026-09-22-zxui-theme-adoption-audit.md
+?? docs/reports/zxui-form-dialog-2026-09-22/
+?? docs/reports/zxui-theme-audit-2026-09-22/
+?? docs/specs/zxui-form-dialog-convergence/
+?? ruoyi-fastapi-frontend/src/theme/
+?? ruoyi-fastapi-frontend/src/utils/auth-feedback-boundary.test.ts
+?? ruoyi-fastapi-frontend/src/utils/auth-feedback-boundary.ts
+?? ruoyi-fastapi-frontend/vendor/
+?? ruoyi-fastapi-frontend/vite/zxui-theme-packages.ts

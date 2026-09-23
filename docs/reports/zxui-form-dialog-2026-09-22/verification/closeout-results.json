@@ -1,0 +1,51 @@
+{
+  "date": "2026-09-23",
+  "scope": "用户最终范围：系统管理、登录/资料页、ZXUI通用输入/表单/主题及本地候选包；停止设备、仿真、工程、监控、生成器后续工作。已有改动保留。",
+  "candidateVersion": "3.0.0-next.0",
+  "candidateSha256": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a",
+  "checks": [
+    {
+      "command": "vue-tsc --noEmit",
+      "exitCode": 0,
+      "log": "closeout-types.log"
+    },
+    {
+      "command": "yarn ui:standards",
+      "exitCode": 0,
+      "scannedFiles": 496,
+      "violations": 0,
+      "testsPassed": 14,
+      "log": "closeout-standards.log"
+    },
+    {
+      "command": "vitest run src/utils/dict.test.ts src/api/system/dict/data.test.ts tests/unit/components/UserFormDialog.test.ts tests/unit/components/MenuCollection.test.ts tests/unit/stores/settings.test.ts",
+      "exitCode": 0,
+      "filesPassed": 5,
+      "testsPassed": 42,
+      "log": "closeout-tests.log"
+    },
+    {
+      "command": "eslint src/api/monitor/cache.ts src/views/monitor/cache/list.vue src/views/system/user/profile/index.vue src/views/tool/build/IconsDialog.vue src/components/ui/ContentDetailWrap/index.vue src/views/tool/gen/index.vue src/views/tool/gen/importTable.vue src/views/tool/gen/editTable.vue tests/fixtures/ui-convergence/App.vue",
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 4,
+      "log": "closeout-lint.log"
+    },
+    {
+      "command": "yarn build:prod",
+      "exitCode": 0,
+      "log": "closeout-build.log"
+    }
+  ],
+  "historicalFullSuite": {
+    "testFilesPassed": 73,
+    "testFilesFailed": 1,
+    "testsPassed": 694,
+    "testsFailed": 1,
+    "failure": "unchanged src/mocks/store/datasource.test.ts expects 4 menu entries but seed has 6",
+    "lintErrors": 860,
+    "lintWarnings": 1232,
+    "claim": "Recorded historical failures, not a full repository green claim."
+  },
+  "historicalEvidenceLimitation": "Original before screenshot viewport was not retained consistently; current DOM/screenshots and before/after matching-theme colors are available, but not a strict identical-viewport before/after pair."
+}

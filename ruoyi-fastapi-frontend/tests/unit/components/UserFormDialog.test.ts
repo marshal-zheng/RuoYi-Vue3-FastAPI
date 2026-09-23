@@ -37,7 +37,7 @@ describe('UserFormDialog', () => {
           ElFormItem: renderSlotStub,
           ElRow: renderSlotStub,
           ElCol: renderSlotStub,
-          ElInput: { inheritAttrs: false, template: '<input />' },
+          ZxInput: { inheritAttrs: false, template: '<input />' },
           ElTreeSelect: { inheritAttrs: false, template: '<select />' },
           ElSelect: renderSlotStub,
           ElOption: true,

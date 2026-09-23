@@ -4,9 +4,10 @@
     :data="compactData"
     headerType="normal"
     :showDivider="false"
+    fill
   >
-    <div class="project-info-page" data-testid="project-detail-page">
-      <ZxTabs v-model="activeTab" :items="tabItems" :lazy="true" />
+    <div class="project-info-page" data-testid="project-detail-page" data-zx-fill>
+      <ZxTabs v-model="activeTab" :items="tabItems" :lazy="true" fill />
     </div>
   </ContentDetailWrap>
 </template>
@@ -99,11 +100,3 @@ const compactData = computed(() => [
   },
 ]);
 </script>
-
-<style lang="less" scoped>
-.project-info-page {
-  :deep(.zx-tabs) {
-    height: 100%;
-  }
-}
-</style>

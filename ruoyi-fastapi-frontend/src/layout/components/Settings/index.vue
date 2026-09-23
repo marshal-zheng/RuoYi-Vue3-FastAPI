@@ -17,7 +17,7 @@
               data-icon="check"
               width="1em"
               height="1em"
-              :fill="theme"
+              style="fill: var(--zx-semantic-accent-base)"
               aria-hidden="true"
               focusable="false"
               class
@@ -42,7 +42,7 @@
               data-icon="check"
               width="1em"
               height="1em"
-              :fill="theme"
+              style="fill: var(--zx-semantic-accent-base)"
               aria-hidden="true"
               focusable="false"
               class
@@ -56,12 +56,11 @@
       </div>
     </div>
     <div class="drawer-item">
-      <span>主题颜色</span>
+      <span>ZXUI 主题包</span>
       <span class="comp-style">
-        <el-color-picker v-model="theme" :predefine="predefineColors" @change="themeChange" />
+        <ZxThemePresetSwitch />
       </span>
     </div>
-
     <div class="drawer-item">
       <span>暗黑模式</span>
       <span class="comp-style">
@@ -126,33 +125,20 @@
 </template>
 
 <script setup>
-import variables from '@/assets/styles/theme.module.css';
 import { ElLoading, ElMessage } from 'element-plus';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
-import { handleThemeStyle } from '@/utils/theme';
+import ZxThemePresetSwitch from '@/theme/ZxThemePresetSwitch.vue';
 
 const { proxy } = getCurrentInstance();
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 const showSettings = ref(false);
-const theme = ref(settingsStore.theme);
 const sideTheme = ref(settingsStore.sideTheme);
 const storeSettings = computed(() => settingsStore);
-const predefineColors = ref([
-  '#0052D9',
-  '#409EFF',
-  '#ff4500',
-  '#ff8c00',
-  '#ffd700',
-  '#90ee90',
-  '#00ced1',
-  '#1e90ff',
-  '#c71585',
-]);
 
 /** 是否需要topnav */
 function topNavChange(val) {
@@ -162,10 +148,6 @@ function topNavChange(val) {
   }
 }
 
-function themeChange(val) {
-  settingsStore.theme = val;
-  handleThemeStyle(val);
-}
 function handleTheme(val) {
   settingsStore.sideTheme = val;
   sideTheme.value = val;

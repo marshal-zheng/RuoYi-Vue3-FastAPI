@@ -1,0 +1,170 @@
+{
+  "active": "请输入图标名称",
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 213,
+      "title": "选择图标",
+      "width": 1120
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入浏览器生成字段",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入字段名（v-model）",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入标题",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入占位提示",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入组件宽度",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入默认值",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入前缀",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入后缀",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入前图标名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入后图标名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入字符长度",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入正则",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入错误提示",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 22,
+      "placeholder": "请输入图标名称",
+      "type": "text"
+    }
+  ],
+  "grids": [],
+  "radios": [
+    {
+      "checked": false,
+      "value": "large"
+    },
+    {
+      "checked": true,
+      "value": "default"
+    },
+    {
+      "checked": false,
+      "value": "small"
+    },
+    {
+      "checked": false,
+      "value": "left"
+    },
+    {
+      "checked": true,
+      "value": "right"
+    },
+    {
+      "checked": false,
+      "value": "top"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

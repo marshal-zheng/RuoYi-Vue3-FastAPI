@@ -1,23 +1,18 @@
-import { defineComponent, onMounted, nextTick } from 'vue';
+import { defineComponent } from 'vue';
 import { RouterView } from 'vue-router';
 import { ElConfigProvider } from 'element-plus';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
-import useSettingsStore from '@/store/modules/settings';
-import { handleThemeStyle } from '@/utils/theme';
+import { ZxConfigProvider } from '@zxio/zxui';
+import { zxThemeConfig } from '@/theme/zx-theme-config';
 
 export default defineComponent({
   name: 'App',
   setup() {
-    onMounted(() => {
-      nextTick(() => {
-        // 初始化主题样式
-        handleThemeStyle(useSettingsStore().theme);
-      });
-    });
-
     return () => (
       <ElConfigProvider locale={zhCn}>
-        <RouterView />
+        <ZxConfigProvider theme={zxThemeConfig.value}>
+          <RouterView />
+        </ZxConfigProvider>
       </ElConfigProvider>
     );
   },

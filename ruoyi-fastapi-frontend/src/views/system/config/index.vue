@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ConfigList />
   </ZxContentWrap>
 </template>

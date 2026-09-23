@@ -1,10 +1,7 @@
 import defaultSettings from '@/settings';
 import { defineStore } from 'pinia';
-import { useDark, useToggle } from '@vueuse/core';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
-
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
+import { setZxThemePreference, zxIsDark } from '@/theme/zx-theme-config';
 
 const {
   sideTheme,
@@ -36,7 +33,6 @@ interface SettingsState {
   sidebarLogo: boolean;
   dynamicTitle: boolean;
   topNavBorder: boolean;
-  isDark: boolean;
 }
 
 const useSettingsStore = defineStore('settings', {
@@ -57,8 +53,10 @@ const useSettingsStore = defineStore('settings', {
         storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle,
       topNavBorder:
         storageSetting.topNavBorder === undefined ? topNavBorder : storageSetting.topNavBorder,
-      isDark: isDark.value,
     };
+  },
+  getters: {
+    isDark: () => zxIsDark.value,
   },
   actions: {
     // 修改布局设置
@@ -75,8 +73,7 @@ const useSettingsStore = defineStore('settings', {
     },
     // 切换暗黑模式
     toggleTheme() {
-      this.isDark = !this.isDark;
-      toggleDark();
+      setZxThemePreference({ mode: this.isDark ? 'light' : 'dark' });
     },
   },
 });

@@ -1,3 +1,8 @@
+// Hover/press tint that works on any ZX surface: the surface's own text colour
+// mixed into transparency by the amount the active theme prescribes. Matches
+// how ZXUI itself tints on-surface fills.
+@on-surface-tint: ~"color-mix(in oklab, currentColor calc(var(--zx-semantic-fill-current-tint) * 1%), transparent)";
+
 .clearfix() {
   &:after {
     content: "";

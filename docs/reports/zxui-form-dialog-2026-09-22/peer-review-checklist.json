@@ -1,0 +1,2733 @@
+[
+  {
+    "id": "R1.AC1",
+    "type": "R",
+    "item": "当检查范围内的弹框调用时，不存在调用点硬编码像素或百分比宽度，包括 useDialog 选项和模板直接传值；其他 UI 元素宽度不受此规则约束。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts}; scripts/ui-standards-core.mjs; ZXUI dialog/src/props.ts",
+    "gap": "",
+    "evidenceIds": [
+      "E01"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R1.AC2",
+    "type": "R",
+    "item": "当使用业务表单弹框抽象时，1/2/3 列分别推导 md/lg/xl，当前 ZXUI 预设为 640/880/1120px；窄视口仍遵循组件库的视口约束。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts}; scripts/ui-standards-core.mjs; ZXUI dialog/src/props.ts；当前范围收尾：E01, E17, E22。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E17",
+      "E22"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "N01真实UserFormDialog在640×700与390×630实际视口分别607.986/357.986宽，单列；1920恢复后880宽双列。旧narrow640文件不计窄屏证据。"
+  },
+  {
+    "id": "R1.AC3",
+    "type": "R",
+    "item": "若表单需要覆盖推导结果，显式传合法 dialogSize 并注释理由；非表单弹框直接选预设，不强套 FormGrid。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts}; scripts/ui-standards-core.mjs; ZXUI dialog/src/props.ts",
+    "gap": "",
+    "evidenceIds": [
+      "E01"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R1.AC4",
+    "type": "R",
+    "item": "若表单弹框未声明可解析的尺寸，开发态有可见告警；业务 useFormDialog 显式提供 columns，不静默接受缺失尺寸。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts}; scripts/ui-standards-core.mjs; ZXUI dialog/src/props.ts",
+    "gap": "",
+    "evidenceIds": [
+      "E01"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R2.AC1",
+    "type": "R",
+    "item": "范围内弹框表单的 label-width 由一份业务布局策略生成 el-form 绑定，调用点不另写数值；纯布局 FormGrid 不代理表单 props。页内表单与搜索栏不强制改造。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R2.AC2",
+    "type": "R",
+    "item": "FormGrid 只管响应式列数、横向 gap 与整行意图，横向间距来自同一布局策略；字段纵向节奏继续消费 ZXUI/EP density，不叠加另一套 row-gap 或控件尺寸。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R2.AC3",
+    "type": "R",
+    "item": "调用点只声明字段意图（如 full 占整行），不手写表单字段 span 几何值。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R2.AC4",
+    "type": "R",
+    "item": "业务继续将真实 el-form ref 交给 useDialog，不新增 FormInstance 转发、内部 ref 取出或 any 断言；校验、分步校验、重置、错误滚动/焦点和关闭重开行为保持。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs；当前范围收尾：E01, E02, E22, E24。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02",
+      "E22",
+      "E24"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "原生FormInstance运行回归、UserForm必填与焦点、N01取消恢复opener、18次主题开关；分步通用契约已验证，系统页面无分步配置。"
+  },
+  {
+    "id": "R2.AC5",
+    "type": "R",
+    "item": "columns 只有一个输入源，dialogSize 与 FormGrid 绑定从其派生；窄容器自动降列且 full 字段保持整行。策略控制初始标签宽度/横向间距与降列规则，长标签处理统一，不形成逐字段尺寸例外。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs; 真实同一useFormDialog columns:3 / FormGrid宿主1100→650→320，列数3→2→1，整行宽度等于宿主、长标签换行且scrollWidth无溢出。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02",
+      "E17"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R3.AC1",
+    "type": "R",
+    "item": "范围内可执行 Vue 模板的精确 el-dialog 标签归零；生成器输出模板单列检查，文档和注释不作为页面实例。",
+    "status": "covered",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix",
+    "gap": "",
+    "evidenceIds": [
+      "E03",
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R3.AC2",
+    "type": "R",
+    "item": "迁移当次清单中所有范围内 el-dialog，包括会生成该标签的业务模板；不使用历史 19/17 数字替代清单验收。",
+    "status": "covered",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix",
+    "gap": "",
+    "evidenceIds": [
+      "E03",
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R3.AC3",
+    "type": "R",
+    "item": "迁移后关闭、ESC、遮罩点击、挂载、校验、loading 和脏数据守卫与原行为等价。",
+    "status": "partial",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix；当前范围收尾：E22, E24。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E03",
+      "E07",
+      "E22",
+      "E24"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "当前系统入口的挂载/校验/关闭重开有实测；UserForm无自定义dirty guard，useDialog默认禁遮罩关闭，已有guard/选项与真实loading契约测试；公开样板记录Escape关闭。没有为每页面凭空增加dirty功能。"
+  },
+  {
+    "id": "R4.AC1",
+    "type": "R",
+    "item": "范围内弹框不再用百分比或 vh 的 height 固定实际高度；FormDialog 不接受直接 height。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/index.ts sanitizer; scripts/ui-standards-core.mjs; ZXUI dialog structural max-height",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E04"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R4.AC2",
+    "type": "R",
+    "item": "确需限高时使用经过验证的最大高度约束并保持正文可滚动；不得向 useDialog 传入当前未支持的 maxHeight 选项并误认为生效，具体接口见 design.md。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/index.ts sanitizer; scripts/ui-standards-core.mjs; ZXUI dialog structural max-height；当前范围收尾：E01, E04, E22。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E04",
+      "E22"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "N01实际body 524/604及454/604可滚动，底部备注聚焦触发scrollTop80且footer留在视口；门禁拦截尺寸旁路。"
+  },
+  {
+    "id": "R5.AC1",
+    "type": "R",
+    "item": "在 ZXUI 主题下，form/form-item/radio/checkbox 的标签、必填、错误、禁用、选中及焦点状态正确消费主题。直接 alias 或已验证的全局变量继承均有效；只对实际缺失的映射/结构样式补库能力，不要求为每种组件强造专用 token。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 本人查看新候选packed明暗截图及24组computed：label/required/selected/disabled/check/radio清晰，required校验与focus实录；对应adapter继承和结构样式已读。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R5.AC2",
+    "type": "R",
+    "item": "通用输入主题处理浏览器 autofill 的背景与文字，使其随主题明暗变化；覆盖原生 el-input 和包装后的 zx-input，不能只在登录页打补丁。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 最终同源public-source-fixed-autofill-{light,dark}与public-packed-autofill-{light,dark}：raw ElInput与tooltip ZxInput均实际:-webkit-autofill=true，inset shadow与textFill匹配明暗themeSurface/themeText。source修复只在play公开style.css入口，不改变085候选。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05",
+      "E20"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R5.AC3",
+    "type": "R",
+    "item": "让 EP adapter/结构样式消费已有 density 度量，默认 size 下三档产生可测量的控件高度或纵向间距差异；保留核心 density 轴。保留 EP 原有有效 size 解析链（组件、已有 fallback、FormItem/Form、Provider、默认），density 只调整最终有效 size 下的主题度量，不改写 size 或其继承关系；度量表与代码统一，不让业务自行换算。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; library/browser/observed-evidence-2026-09-22.json 24组旧候选度量（明确历史）; 新085dfd source/packed × default/defense-green × 明暗 × 三density共24组；default28/32/36、defense26/30/34，small/large与Form继承符合统一表。4条过渡小数已有同key settled复核，不能采用关窗后null无效尝试。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R5.AC4",
+    "type": "R",
+    "item": "useDialog 开发态检测传入 formRef 但没有显式 dialogSize/width 的调用并告警；width 是组件库合法通用接口，但业务受 R1 约束。生产态不刷告警，不修改全部 ZxDialog 的默认档位。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R6.AC1",
+    "type": "R",
+    "item": "验证通过后，删除 src/main.ts 对 element-plus/theme-chalk/dark/css-vars.css 的引入，保留 Element Plus 必需的基础结构样式。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R6.AC2",
+    "type": "R",
+    "item": "先清理范围内与 ZXUI 对抗的业务主色写入及反向 alias，再删除 clearBusinessPrimaryOverrides() 及调用；领域语义色、图像和用户正文颜色不机械重写。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R6.AC3",
+    "type": "R",
+    "item": "上述删除依赖 R5 真实状态与明暗验证通过，并记录删除前后的计算样式与截图；不能仅因标签正常或专用 token 数量变化就判通过。全局主题改动可能影响排除模块，但不因此扩展仿真实施/验收范围，也不声称仿真已验证。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch; 最终R5状态/明暗及通用autofill已证；旧添加用户工厂蓝深色截图+计算色与终态相互对照，删除前后背景/标签色不变；未将仿真纳入。R9.AC3额外同视口配对限制另列。",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05",
+      "E21"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R7.AC1",
+    "type": "R",
+    "item": "新增 scripts/check-ui-standards.mjs，支持 --strict、--format=summary|json|markdown，违规时 exit 1，并输出范围与文件位置。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R7.AC2",
+    "type": "R",
+    "item": "不产出 baseline/allowlist；规则对约定范围一次性成立，仿真模块按明确范围排除，不能以“尚未迁完”新增文件豁免。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R7.AC3",
+    "type": "R",
+    "item": "迁移完成后接入 package.json、.github/workflows/ci.yml 与 .gitlab-ci.yml。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R7.AC4",
+    "type": "R",
+    "item": "覆盖 R1–R4 可静态检测项，复用 Vue/TS 解析器，检查明确的本地写法与统一入口；复杂动态配置须收敛入口并受类型/运行时约束，不实现通用跨文件数据流分析，也不静默跳过未知写法。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R7.AC5",
+    "type": "R",
+    "item": "生成器预览、配置、默认数据和导出共享组件身份约定；生成后的 SFC 与源码使用同一检查核心。范围内新增对 --el-* 或 --zx-* 核心主题值的竞争写入应被窄门禁拦截，不将全部业务色值视为违规。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R8.AC1",
+    "type": "R",
+    "item": "ZXUI 文档区分主题覆盖与行为封装，说明实际 props/events/slots/expose、density/size、scope/浮层及输入职责；提供可独立消费的公开表单示例和旧输入语义迁移说明，不把 RuoYi 布局 CSS 或私有路径复制为标准接入方案。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R8.AC2",
+    "type": "R",
+    "item": "业务 AGENTS.md 写明范围内表单弹框的统一写法与仿真排除范围，并指向本 spec；不把业务 label-width/gutter 数值规定为所有 ZXUI 消费者的标准。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R9.AC1",
+    "type": "R",
+    "item": "使用用户已授权的浏览器自动化在真实业务页面验证，记录浏览器和环境；AdsPower 可用，本次已获授权的内置浏览器证据也有效。docs/单测不能代替真实业务验收；不验证仿真。",
+    "status": "covered",
+    "evidence": "src/utils/dict.ts:39; src/utils/dict.test.ts; api/system/dict/data.ts:31; UserFormDialog.vue:195; browser evidence pending; 主线程已授权IAB真实localhost业务操作，九主题18轮及resumed真实路由DOM/截图已持久化；不是docs替代。",
+    "gap": "",
+    "evidenceIds": [
+      "E09",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R9.AC2",
+    "type": "R",
+    "item": "先沿状态选项未渲染的证据排查字典与响应适配，明确根因及归属并修复；恢复选项后再验证主题可见性，不把“0 个 radio”写成已确认字典为空。",
+    "status": "covered",
+    "evidence": "dict.ts消费HttpCollection.items；2测试通过；browser/user-default-dark.json与user-industrial-blue-dark.json实有0/1两个radio、原字符串提交值保持；截图已人工查看。",
+    "gap": "",
+    "evidenceIds": [
+      "E09",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R9.AC3",
+    "type": "R",
+    "item": "留存同页面、同主题、同视口的改前/改后截图及关键 DOM/计算样式，明确哪些仅完成基线、哪些已终验。",
+    "status": "partial",
+    "evidence": "visual-baseline-comparison.md；browser/matrix-industrial-blue-dark.json/png；completion-report.md。",
+    "gap": "历史证据限制：旧图1124×1000、新图1280×720，旧DOM未保存viewport；同页面同主题颜色/DOM可比，但严格同视口改前改后无法证明。用户要求不重建旧环境；非阻断披露，保持partial，非待补任务。",
+    "evidenceIds": [
+      "E09",
+      "E05",
+      "E21",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "historical-limitation",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "一项历史视口证据限制，经R9.AC3、T1.3及T1父项三行追溯；不表示三个独立缺陷。"
+  },
+  {
+    "id": "R10.AC1",
+    "type": "R",
+    "item": "范围内 Vue 模板的精确 el-input 标签及对应生成器输出全部迁为 zx-input；不匹配 el-input-number，不以旧前缀数量作为完成依据。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R10.AC2",
+    "type": "R",
+    "item": "R11 完成并源码直连验证通过后，迁移清单中的 prefix/suffix/prepend/append 消费者全部迁移，不留插槽例外或白名单。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment；当前范围收尾：E10, E11, E05, E23。",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E05",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R10.AC3",
+    "type": "R",
+    "item": "所有 textarea、number、search 及动态 type 调用逐项确认模型值类型、属性、事件和渲染语义；若现有包装行为不兼容，先修正 ZXUI 契约，不能为追求标签归零静默改变业务行为。",
+    "status": "partial",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment；当前范围收尾：E11, E05, E23。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E05",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "当前B01–B13的密码显隐、readonly、textarea与正常text已结合实际字段/事件核对；number/search通用语义以同SFC源码/安装包及聚焦回归证明。设备VXE动态类型和生成器互斥分支已取消后续验收。"
+  },
+  {
+    "id": "R10.AC4",
+    "type": "R",
+    "item": "迁移完成后启用 no-raw-el-input 门禁，对约定范围一次性成立，无存量豁免。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R10.AC5",
+    "type": "R",
+    "item": "迁移后的真实业务页面逐页验证，包括 slots、输入/清空/焦点、实例方法和 flex 布局；不能只凭编译通过验收。",
+    "status": "partial",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment；当前范围收尾：E23, E22, E05。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E17",
+      "E23",
+      "E22",
+      "E05"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "当前B01–B13逐路由证据见E23；只覆盖记录内操作，未创建账号/改密码/穷举全部权限。其他模块不再待办。"
+  },
+  {
+    "id": "R10.AC6",
+    "type": "R",
+    "item": "不迁移 el-select 或 el-input-number；发现其他输入组件问题单独记录，不扩大本次批量替换范围。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC1",
+    "type": "R",
+    "item": "在 tooltip 与非 tooltip 两个分支均转发 prefix/suffix/prepend/append 到底层 ElInput，保留插槽内容与参数。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC2",
+    "type": "R",
+    "item": "最终 ZxInput 的 type=search 保留原生输入语义，不再隐式注入搜索按钮；消费者 append 正常透传。旧增强搜索按显式组件/插槽组合迁移，不能继续依靠 type 同时选择 UI 行为。此条替代旧版“保留内建 append 并定优先级”的目标。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC3",
+    "type": "R",
+    "item": "ZxInput 公开 expose 对齐实际 ElInput 能力：focus/blur/select/clear/input/textarea/textareaStyle，保持参数、返回值和响应性；不额外暴露任意底层组件状态包。数值组件按自己的契约暴露能力。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC4",
+    "type": "R",
+    "item": "清除 input-core.vue 的 ::icon 错误和职责拆分后的无效搜索分支；仍存在的搜索按钮图标绑定有效，不将移除的旧分支遗留在任一 tooltip 路径。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC5",
+    "type": "R",
+    "item": "增加聚焦回归锁定 slots、tooltip 两种路径、expose、原生 number/search 语义及拆出的数值/搜索消费行为；复用同一代表样板验证源码与包产物，不为每个业务点复制测试。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review; 最终source/packed四slot、原生number/search、expose-select/inspect/clear、payload string7和数值quantity3、reset及外部Popover四场景；22聚焦测试补IME/model事件一次。",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC6",
+    "type": "R",
+    "item": "文档分别列 ZxInput、数值输入及增强搜索的实际能力和迁移对应关系；不继续笼统宣称一个组件完整继承两类底层组件。文档收窄不能替代在用能力修复，主版本影响按 R13 交付。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC7",
+    "type": "R",
+    "item": "在真实业务中验证两层 wrapper 与 width: 100% 对搜索栏、flex 行、前后缀及 textarea 的影响，必要的通用修复在 ZXUI 完成。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review；当前范围收尾：E11, E23, E22。",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E23",
+      "E22"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "系统搜索栏、资料/密码、参数textarea、菜单图标Popover与N01实际flex/宽度均有证据；22项输入回归和4个公开Popover复验已锁定通用根边界。"
+  },
+  {
+    "id": "R11.AC8",
+    "type": "R",
+    "item": "ZxInput 固定消费 ElInput，type 专用于原生输入类型，不再把 number 转成 ElInputNumber；v-model 单一所有者，attrs/事件准确到达输入控件，name/id/aria、禁用、键盘、焦点与输入法组合输入行为保持，不增加 native/legacy 等永久兼容开关。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R11.AC9",
+    "type": "R",
+    "item": "将已有数值步进能力承接为小型 ZxInputNumber 并公开导出，迁移已知库内旧消费者；增强搜索按实际需求复用 ZxSearch 或显式 append 组合，核对 trim、清空触发与事件载荷，不机械替换。业务现有 el-input-number 仍不批量迁移。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R12.AC1",
+    "type": "R",
+    "item": "业务仅有一份主题登记，由其派生选择器、Host 注册与部署包列表；偏好状态经一个入口进入 Host/Provider，DOM 属性为投影而非另一套可写状态，不在页面拼 variant 字符串或写主题值。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R12.AC2",
+    "type": "R",
+    "item": "构建端复用 emitThemeDeployment 和主题包公开 exports，浏览器复用 createThemeDeploymentResolver 与既有 Host/Provider；最终运行时不遍历 generated/、不维护私有路径转换、不自行补写缺失库类型。源码 alias 限于显式开发工具边界。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R12.AC3",
+    "type": "R",
+    "item": "声明的主题包及 CSS/manifest 属于同一部署输出，安装后缺资产不能静默少一个主题；修正公开导出/类型和依赖声明，新增一个主题只需一处登记加正常依赖，不复制多份 ID 数组。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R12.AC4",
+    "type": "R",
+    "item": "弹框及内部二级浮层跟随发起它们的最近 scope，验证嵌套 scope、打开期间换肤、关闭重开；global body mirrored 只用于已确认的兼容边界，不能代替嵌套归属或跨 scope 污染验证。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue; source/packed nested-open、nested-popup-dark、nested-mode-switch-confirmed、parent-popup-mode-switch、reopen-after-mode-switch及nested-input-tooltip明确最近scope/variant；旧遮挡切换失败尝试保留且由真实成功重验替代。",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E08",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R12.AC5",
+    "type": "R",
+    "item": "在既有库示例/消费 fixture 中提供一个不加载 RuoYi 修补 CSS 的表单弹框样板，与真实业务共用公开契约；若两边表现不同，记录归属并在正确层修复，不在业务增加另一套主题映射。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue; 公开同样板source/packed均实际打开，Host portal和外部Popover缺陷在库源修复；该样板不导入RuoYi补丁CSS。",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R13.AC1",
+    "type": "R",
+    "item": "输入职责调整明确为下一主版本或其本地预发布候选，记录旧→新用法及行为差异；不得以现有 2.x 兼容补丁发布。已知库内消费者和示例迁移完成，外部消费者不能假定已升级。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R13.AC2",
+    "type": "R",
+    "item": "用真实本地 tarball、公开 imports 和部署资产完成一次隔离安装验证，禁 source alias/workspace fallback；复用既有 packed 工具，只扩展本次相关样板，不先发布 npm，也不把正式发布/外部升级作为 Cursor 的前置。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R13.AC3",
+    "type": "R",
+    "item": "同一代表样板通过源码和打包两种模式：类型、构建、slots/expose、明暗、density、嵌套弹框/浮层以及 autofill。记录实际 Vue/EP/ZXUI 解析版本、包哈希与产物路径；不通过本地类型补丁或重复运行时掩盖 peer/导出缺口。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json; 最终同源public-source-fixed-autofill-{light,dark}与public-packed-autofill-{light,dark}：raw ElInput与tooltip ZxInput均实际:-webkit-autofill=true，inset shadow与textFill匹配明暗themeSurface/themeText。source修复只在play公开style.css入口，不改变085候选。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05",
+      "E20"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "R13.AC4",
+    "type": "R",
+    "item": "完成声明需包含业务真实页面、库通用能力和可安装产物三类证据；明确未完成项及外部升级要求。本 spec 完成不等于已发布 npm，也不等于仿真已验证。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json；当前范围收尾：E13, E18, E23, E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05",
+      "E18",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D1",
+    "type": "D",
+    "item": "职责分层与范围：库负责通用行为/主题，业务负责数据/薄布局；仿真及专用组件排除，无baseline/allowlist。",
+    "status": "covered",
+    "evidence": "两仓增量diff对照baseline；UI_SCOPE；迁移库存。",
+    "gap": "",
+    "evidenceIds": [
+      "E03",
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D2",
+    "type": "D",
+    "item": "FormDialog目录只有策略、useFormDialog、纯布局FormGrid，不新增FormField/FormModalHandle/表单实例代理。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}",
+    "gap": "",
+    "evidenceIds": [
+      "E01"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D3",
+    "type": "D",
+    "item": "useFormDialog不复制visible/model/dirty/loading/提交；原生ElForm ref与命令接口保持。",
+    "status": "covered",
+    "evidence": "index.ts直接返回useDialog；页面传真实ref；无内部ElForm代理。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D4",
+    "type": "D",
+    "item": "唯一必填columns生成dialogSize/formProps/layoutProps；业务100px标签/20pxgap，目标1/2/3列映射md/lg/xl。",
+    "status": "covered",
+    "evidence": "policy.ts；index.ts；门禁三者owner反例已修复复核。",
+    "gap": "",
+    "evidenceIds": [
+      "E01"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D5",
+    "type": "D",
+    "item": "FormGrid只响应式网格/横gap/data-form-full，无row-gap；长标签与窄容器降列规则统一，实际样板验证。",
+    "status": "covered",
+    "evidence": "FormGrid.vue源码通过；浏览器窄容器与长标签待证据。; 真实FormGrid窄容器、长标签、full整行测量见browser-fixture-coverage.md；不将容器测试冒称完整页面移动视口。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02",
+      "E17"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D6",
+    "type": "D",
+    "item": "FormDialog类型排除width/height，入口诊断并剔除非法动态值；合法尺寸例外有理由。",
+    "status": "covered",
+    "evidence": "index.ts FormDialogOptions/sanitize/checkColumns/updateOptions。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D7",
+    "type": "D",
+    "item": "普通弹框按内容高度与库max-height，必要dialogStyle.maxHeight，不支持顶层maxHeight或style.height绕过。",
+    "status": "covered",
+    "evidence": "门禁496/0、库结构max-height与N01真实UserForm长内容滚动，见E22。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E04",
+      "E22"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D8",
+    "type": "D",
+    "item": "主题缺口在库源/生成层修复；全局alias继承有效；业务不重写库变量，清掉通用autofill重复。",
+    "status": "covered",
+    "evidence": "compiler源/生成产物；main.ts与业务样式增量；ui gate。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E06"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D9",
+    "type": "D",
+    "item": "EP有效size链保留；density仅度量，small/default/large统一表，Form/FormItem/Provider边界且不双缩放。",
+    "status": "covered",
+    "evidence": "density.ts与docs度量表一致；实际测量待证据。; library/browser/observed-evidence-2026-09-22.json 24组旧候选度量（明确历史）; 最终24组度量和source/packed Form small/large实录；组件small/large覆盖继承、默认控件跟Form尺寸。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D10",
+    "type": "D",
+    "item": "最近Provider拥有dialog及二级浮层；打开中切换/重开/嵌套scope均验证；body mirrored仅兼容。",
+    "status": "covered",
+    "evidence": "use-theme-provider/use-dialog-portal；ZxSelect/Tooltip appendTo；公开fixture；浏览器待证据。; source/packed嵌套dialog/Select/tooltip为最近Provider归属，打开中切明暗、父子异色和重开均有对应observed。",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D11",
+    "type": "D",
+    "item": "useDialog开发formRef缺size/width告警，生产不刷且通用small不变。",
+    "status": "covered",
+    "evidence": "hooks/use-dialog/index.ts及聚焦测试。",
+    "gap": "",
+    "evidenceIds": [
+      "E04"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D12",
+    "type": "D",
+    "item": "ZxInput固定ElInput，原生type，四slots双tooltip路径，expose七能力；attrs目标/vmodel单所有者/IME一次。",
+    "status": "covered",
+    "evidence": "input实现/13测试；business_theme_deployment交叉复核，审阅者本人的实现范围不算独立。",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D13",
+    "type": "D",
+    "item": "ZxInputNumber小组件承接数值步进；旧搜索显式组合保持trim/clear/载荷；不改ZxSearch或业务ElInputNumber。",
+    "status": "covered",
+    "evidence": "input-number实现/4测试；docs/examples/input/types.vue；迁移清单。",
+    "gap": "",
+    "evidenceIds": [
+      "E11"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D14",
+    "type": "D",
+    "item": "破坏API按下一主版本候选交付，旧search事件和外部升级边界说明。",
+    "status": "covered",
+    "evidence": "3.0.0-next.0；中英input/input-number迁移文档。",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E13"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D15",
+    "type": "D",
+    "item": "主题catalog单源派生UI/Host/build；登记缺依赖/manifest报错，正常依赖明确。",
+    "status": "covered",
+    "evidence": "src/theme/zx-theme-packages.ts；vite/zxui-theme-packages.ts；package.json。",
+    "gap": "",
+    "evidenceIds": [
+      "E12"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D16",
+    "type": "D",
+    "item": "构建使用公开emitThemeDeployment，浏览器公开resolver，部署独占目录及base路径正确；无runtime generated猜测/类型补丁。",
+    "status": "covered",
+    "evidence": "public deployment入口；business-theme-deployment.json base / 和 /admin/；type/build通过。",
+    "gap": "",
+    "evidenceIds": [
+      "E12"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D17",
+    "type": "D",
+    "item": "偏好一个入口进入Host/Provider，document属性只投影；不新增density UI或第二主题系统。",
+    "status": "covered",
+    "evidence": "zx-theme-config.ts；App.tsx；zx-theme-host.ts；偏好3测试通过。",
+    "gap": "",
+    "evidenceIds": [
+      "E12"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D18",
+    "type": "D",
+    "item": "页面壳/生成器消费公开surface/token，不添业务翻译层；experimental surface身份锁定。",
+    "status": "covered",
+    "evidence": "主代理授权的theme-surface-contract.md；从9个公开manifest export实读同一contractVersion=4.0.0与contractContentHash并记录opt-in/升级重验。",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E12"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D19",
+    "type": "D",
+    "item": "所有非仿真可执行孤立候选仍受门禁；NodeEditDrawer/Dag/协议模板共享消费者不整块排除。",
+    "status": "covered",
+    "evidence": "UI_SCOPE三项排除；input-migration/原库存。",
+    "gap": "",
+    "evidenceIds": [
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D20",
+    "type": "D",
+    "item": "生成器有限身份集中、旧设计可读取编辑预览导出；新dialog输出完整imports/同组合/full意图。",
+    "status": "covered",
+    "evidence": "generator/identity.ts与html/js/render；5 tests；交叉复核未见实现问题。",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "D21",
+    "type": "D",
+    "item": "同代表生成SFC执行生成→解析→预览/打开，源码及产物共用checker。",
+    "status": "covered",
+    "evidence": "5 tests包含compile/独立render，完整生成SFC实际mount/open待证据。; 本人复跑完整生成SFC真实public组件mount/open/validate/reset/confirm测试通过，复用checkVueSource。",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E10",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "D22",
+    "type": "D",
+    "item": "薄静态入口三种format/strict/exit1/范围位置，无baseline；仅明确本地Vue/TS形状，未知配置不静默跳过。",
+    "status": "covered",
+    "evidence": "checker/core与成组tests；本review owner错绑反例现已拦截。",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D23",
+    "type": "D",
+    "item": "数据沿statusOptions→字典/缓存/HTTP定位，不伪造字典，不预设dept同因，无数据库迁移。",
+    "status": "covered",
+    "evidence": "dict.ts items消费；真实response合同及2聚焦tests；UserFormDialog response.data。",
+    "gap": "",
+    "evidenceIds": [
+      "E09",
+      "E14"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D24",
+    "type": "D",
+    "item": "安全：已授权本地浏览器、截图不含token、测试提交清理；隔离tarball不registry发布或其他业务lockfile。",
+    "status": "partial",
+    "evidence": "tarball隔离realpaths已证；真实业务测试数据清理/截图安全待浏览器记录。；当前范围收尾：E13, E25。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E13",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "当前系统/登录资料验证未新建用户、改凭据或提交破坏操作；临时公开站点移出public，视口恢复。此前工程/设备和sys_post本地测试数据明确保留，用户取消后未继续清理，不能把原全范围清理记为完成。"
+  },
+  {
+    "id": "D25",
+    "type": "D",
+    "item": "顺序：库input/主题公开能力先满足，业务input最后批次；任务16在14前；不等正式发布或外部业务升级。",
+    "status": "covered",
+    "evidence": "input最后批次记录、公开source/packed收据先于最终closeout，085dfd安装1648文件一致；本地候选无需正式npm发布，见E10/E13/E18/E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E13",
+      "E18",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D26",
+    "type": "D",
+    "item": "三类证据分离；同代表公开样板source+packed，无RuoYiCSS，无alias/fallback，真实版本/hash/路径/单peer。",
+    "status": "covered",
+    "evidence": "真实隔离receipt类型/build通过且单peer；source及packed runtime待证据。; 最终同源public-source-fixed-autofill-{light,dark}与public-packed-autofill-{light,dark}：raw ElInput与tooltip ZxInput均实际:-webkit-autofill=true，inset shadow与textFill匹配明暗themeSurface/themeText。source修复只在play公开style.css入口，不改变085候选。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05",
+      "E20"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D27",
+    "type": "D",
+    "item": "复用既有packed-install/hosted-packed、相关生成漂移检查，不用旧widget通过抵扣表单。",
+    "status": "covered",
+    "evidence": "packed-install已复用新表单；compiler最终gate进行中；浏览器仍pending。; 现有packed-install工具已复用并运行本轮form fixture；static-verification记录1458变体漂移/结构检查；未使用widget证据抵扣。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E04"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "D28",
+    "type": "D",
+    "item": "真实交互包含键盘开关/焦点返回、IME、校验失败、重开、长内容、真实autofill；执行相关lint/type/test/ui门禁。",
+    "status": "covered",
+    "evidence": "最终系统/公开组件真实交互、N01窄视口键盘/滚动/焦点、IME测试和closeout检查；见E11/E20/E22/E23/E24/E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E02",
+      "E05",
+      "E15",
+      "E11",
+      "E20",
+      "E22",
+      "E23",
+      "E24",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "N01 Tab焦点/取消返回opener、公开样板Escape关闭/重开、输入IME回归、系统required、N01滚动、真实autofill与最终相关检查组合证据；不宣称整个业务shell移动端全覆盖。"
+  },
+  {
+    "id": "T1",
+    "type": "T",
+    "item": "修复状态选项数据链路并补齐样板基线",
+    "status": "partial",
+    "evidence": "visual-baseline-comparison.md；browser/matrix-industrial-blue-dark.json/png；completion-report.md。",
+    "gap": "历史证据限制：旧图1124×1000、新图1280×720，旧DOM未保存viewport；同页面同主题颜色/DOM可比，但严格同视口改前改后无法证明。用户要求不重建旧环境；非阻断披露，保持partial，非待补任务。",
+    "evidenceIds": [
+      "E09",
+      "E03",
+      "E21",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "historical-limitation",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "一项历史视口证据限制，经R9.AC3、T1.3及T1父项三行追溯；不表示三个独立缺陷。"
+  },
+  {
+    "id": "T1.1",
+    "type": "T",
+    "item": "复用现有添加用户证据：440×600、标签跟主题、radio input 为 0；沿 statusOptions、字典请求/缓存及响应适配确认具体根因并修复，记录业务/库归属。",
+    "status": "covered",
+    "evidence": "src/utils/dict.ts:39; src/utils/dict.test.ts; api/system/dict/data.ts:31; UserFormDialog.vue:195; browser evidence pending; useDict items响应契约已定位修复并测试；UserForm状态0/1两个radio在真实九主题DOM恢复。440×600旧基线来自spec记录，前后图片义务单列T1.3/R9.AC3仍待验。",
+    "gap": "",
+    "evidenceIds": [
+      "E09",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T1.2",
+    "type": "T",
+    "item": "不硬编码字典兜底；deptList.filter 只作为相邻契约线索，不预设同因。恢复选项后检查原提交值与主题可见性。",
+    "status": "covered",
+    "evidence": "同R9.AC2；无硬编码字典兜底，deptTree由各自items合同修复；真实用户表单radio恢复。",
+    "gap": "",
+    "evidenceIds": [
+      "E09",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T1.3",
+    "type": "T",
+    "item": "重扫库存和非仿真消费者，保存同页面/主题/视口的截图及 DOM，记录浏览器和真实依赖版本；未触达候选不算验收。",
+    "status": "partial",
+    "evidence": "visual-baseline-comparison.md；browser/matrix-industrial-blue-dark.json/png；completion-report.md。",
+    "gap": "历史证据限制：旧图1124×1000、新图1280×720，旧DOM未保存viewport；同页面同主题颜色/DOM可比，但严格同视口改前改后无法证明。用户要求不重建旧环境；非阻断披露，保持partial，非待补任务。",
+    "evidenceIds": [
+      "E09",
+      "E03",
+      "E21",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "historical-limitation",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "一项历史视口证据限制，经R9.AC3、T1.3及T1父项三行追溯；不表示三个独立缺陷。"
+  },
+  {
+    "id": "T2",
+    "type": "T",
+    "item": "建立业务薄布局策略与纯布局 FormGrid（依赖 1）",
+    "status": "covered",
+    "evidence": "见下列 T2.* 子任务证据；当前范围收尾：E01, E02, E22, E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02",
+      "E22",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T2.1",
+    "type": "T",
+    "item": "一份布局策略管理 columns→dialogSize、label-width、横向 gap 与窄容器降列。useFormDialog 从唯一 columns 输入返回 dialogProps/events 与 formProps/layoutProps，不复制模型、提交或 dirty 状态。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T2.2",
+    "type": "T",
+    "item": "保留原生 el-form ref 与 el-form-item。FormGrid 只处理 CSS Grid 和 data-form-full，不包装 ElForm、不新增 FormField、不代理 FormInstance，也不新增 FormModalHandle。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T2.3",
+    "type": "T",
+    "item": "不增加 grid row-gap，纵向节奏由库主题/density 控制；长标签与降列规则在一个策略处维护。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T2.4",
+    "type": "T",
+    "item": "类型排除 width/height；统一入口对非法动态值诊断并剔除。保留合法预设例外及原 useDialog 回调语义。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T2.5",
+    "type": "T",
+    "item": "通过既有类型检查与实际校验/重置/分步/错误滚动/重开验证；不为纯布局数值新增一批单测。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs；当前范围收尾：E02, E22, E24, E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E02",
+      "E22",
+      "E24",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T3",
+    "type": "T",
+    "item": "迁移 UserFormDialog 样板（依赖 1、2）",
+    "status": "covered",
+    "evidence": "见下列 T3.* 子任务证据；当前范围收尾：E09, E05, E21, E22, E23。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E09",
+      "E05",
+      "E21",
+      "E22",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T3.1",
+    "type": "T",
+    "item": "columns: 2 驱动同一尺寸/表单/布局绑定，原生 ElFormItem 声明字段与整行意图，删除 height: '60%'。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E09",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T3.2",
+    "type": "T",
+    "item": "核对正常视口 lg、窄容器降列、长标签、间距、错误滚动、状态选项、重开与提交；修正已有 placeholder 一致性。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs；当前范围收尾：E09, E05, E22, E23。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E09",
+      "E05",
+      "E22",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T3.3",
+    "type": "T",
+    "item": "默认限高直接沿用库，需要时使用 dialogStyle.maxHeight，不传无效顶层 maxHeight。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E09",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T3.4",
+    "type": "T",
+    "item": "留存可对比证据，布局样板通过才复制到其他页面；不抢做最终输入框批量替换。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/{index.ts,policy.ts,FormGrid.vue}; UserFormDialog.vue; scripts/ui-standards-core.mjs；当前范围收尾：E21, E05, E10。",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E09",
+      "E05",
+      "E21",
+      "E10"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "同页面同主题DOM/计算色对照与基线patch可比较；严格同视口缺证仅保留于R9.AC3/T1.3，不将这条未要求同视口的任务永久判缺证。"
+  },
+  {
+    "id": "T4",
+    "type": "T",
+    "item": "迁移范围内其他表单弹框（依赖 3）",
+    "status": "partial",
+    "evidence": "见下列 T4.* 子任务证据；当前范围收尾：E23, E24, E25。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E01",
+      "E03",
+      "E23",
+      "E24",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T4.1",
+    "type": "T",
+    "item": "以当前清单迁移项目、部门、通知、设备/端口、克隆、导入等普通表单；不包含仿真专用弹框。",
+    "status": "covered",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T4.2",
+    "type": "T",
+    "item": "使用同一业务策略、原生表单与 FormGrid，去掉字段手写 label-width/gutter/span 和固定高度；不改内部表格/编辑器布局。",
+    "status": "covered",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix",
+    "gap": "",
+    "evidenceIds": [
+      "E01",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T4.3",
+    "type": "T",
+    "item": "逐页核对条件字段、校验、loading、脏数据守卫、关闭重开和提交值，保留范围内未完成项，不加 allowlist。",
+    "status": "partial",
+    "evidence": "scripts/check-ui-standards.mjs: 496 files/0 violations; current migration inventory; two ExportDialog initial-open fix；当前范围收尾：E23, E24。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E01",
+      "E03",
+      "E17",
+      "E23",
+      "E24"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T5",
+    "type": "T",
+    "item": "统一范围内非表单弹框尺寸（依赖 3）",
+    "status": "partial",
+    "evidence": "见下列 T5.* 子任务证据",
+    "gap": "原范围尚未逐项验证的部分随用户指令停止；不判通过。",
+    "evidenceIds": [
+      "E03",
+      "E04"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T5.1",
+    "type": "T",
+    "item": "版本预览/详情、DagMatrix、操作日志、生成代码预览等按内容选预设，去掉硬编码宽度及百分比/vh 固定 height。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/index.ts sanitizer; scripts/ui-standards-core.mjs; ZXUI dialog structural max-height",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E03",
+      "E04"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T5.2",
+    "type": "T",
+    "item": "依赖库默认限高，必要时用 dialogStyle.maxHeight；不强套 FormGrid。",
+    "status": "covered",
+    "evidence": "src/components/ui/FormDialog/index.ts sanitizer; scripts/ui-standards-core.mjs; ZXUI dialog structural max-height",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E03",
+      "E04"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T5.3",
+    "type": "T",
+    "item": "核对长内容、窄视口、关闭、全屏和挂载等既有行为，不扩展仿真验收。",
+    "status": "partial",
+    "evidence": "src/components/ui/FormDialog/index.ts sanitizer; scripts/ui-standards-core.mjs; ZXUI dialog structural max-height",
+    "gap": "原范围尚未逐项验证的部分随用户指令停止；不判通过。",
+    "evidenceIds": [
+      "E03",
+      "E04"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T6",
+    "type": "T",
+    "item": "原生 dialog 与生成器表单源头收口（依赖 4、5）",
+    "status": "partial",
+    "evidence": "见下列 T6.* 子任务证据；当前范围收尾：E03, E07, E23, E24。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E03",
+      "E10",
+      "E02",
+      "E07",
+      "E23",
+      "E24"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T6.1",
+    "type": "T",
+    "item": "初始 18 个/16 文件仅为非仿真目录候选；按当次确认清单迁移 ZxDialog，并验证 ESC、遮罩、校验、loading、挂载及脏数据守卫。",
+    "status": "partial",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml；当前范围收尾：E03, E07, E23, E24。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E03",
+      "E10",
+      "E02",
+      "E07",
+      "E23",
+      "E24"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T6.2",
+    "type": "T",
+    "item": "生成器 dialog 输出改用相同表单组合，完整输出 imports/注册/策略绑定；不把生成字符串当真实页面实例。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E03",
+      "E10",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T6.3",
+    "type": "T",
+    "item": "整理现有 html/config/drawingDefalut/render 的有限组件身份对应，为后续 input 迁移准备一个统一来源，不再并行维护预览与导出的不同 tag。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E03",
+      "E10",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T6.4",
+    "type": "T",
+    "item": "旧设计配置继续可读取、编辑、预览、导出；代表生成 SFC 解析与页面打开通过，源头不能重新生成旧布局。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml; 旧身份读取/预览与导出聚焦测试、完整代表生成SFC真实mount/打开/校验/重置/提交均通过；实际生成器页面总体交互仍由T13.5逐页验收。",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E03",
+      "E10",
+      "E02"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T7",
+    "type": "T",
+    "item": "**[ZXUI]** 修实证主题缺口及通用 autofill",
+    "status": "covered",
+    "evidence": "见下列 T7.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T7.1",
+    "type": "T",
+    "item": "复用公开 API 建立一个不加载 RuoYi 补丁的表单弹框代表样板，同时用于后续源码与打包消费检查。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T7.2",
+    "type": "T",
+    "item": "核对全局 alias、局部 scope 与标签/必填/错误/禁用/选中/焦点；已有继承不重复造 token，业务覆盖在业务清理，通用缺口在库源文件修复并生成。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 最终公开样板明暗/选中/禁用/required/error/focus及局部scope截图、DOM与computed；仅实际通用缺口修库。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T7.3",
+    "type": "T",
+    "item": "通用 autofill 验证背景/文字明暗，覆盖 ElInput 与最终 ZxInput；不得只用登录页覆盖当库能力。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 最终同源public-source-fixed-autofill-{light,dark}与public-packed-autofill-{light,dark}：raw ElInput与tooltip ZxInput均实际:-webkit-autofill=true，inset shadow与textFill匹配明暗themeSurface/themeText。source修复只在play公开style.css入口，不改变085候选。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05",
+      "E20"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T7.4",
+    "type": "T",
+    "item": "真实业务源码直连对照库样板，保存九主题明暗的代表表单证据；不复制整套全排列测试。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 业务18个九主题明暗用户表单记录，与最终公开source/packed的代表default/defense三density和状态截图相互独立留证。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T8",
+    "type": "T",
+    "item": "**[ZXUI]** EP density、scope 与尺寸告警（衔接 7）",
+    "status": "covered",
+    "evidence": "见下列 T8.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T8.1",
+    "type": "T",
+    "item": "保留核心 density 轴，补 EP 度量消费；默认 size 测量三档差异，保留 EP 原有有效 size 解析链（组件、既有 fallback、FormItem/Form、Provider、默认），验证表单级尺寸继承；density 只作用于最终有效 size 下的主题度量，不改写继承链或两次缩放。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; library/browser/observed-evidence-2026-09-22.json 24组旧候选度量（明确历史）; 最终24组度量与Form继承记录齐全，原size解析源码和聚焦测试仍成立。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T8.2",
+    "type": "T",
+    "item": "复用已有 scope/Portal 能力验证嵌套弹框和内部二级浮层、打开中换肤、关闭重开；不能用 body mirrored 替代局部 scope 归属。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog; 最终同样板scope/Portal全部真实交互记录，非body mirrored推断。",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T8.3",
+    "type": "T",
+    "item": "useDialog 开发态对 formRef 无显式 dialogSize/width 告警，业务 wrapper 推导后不误报，不修改所有 ZxDialog 的 small 默认值。",
+    "status": "covered",
+    "evidence": "ZXUI theme-compiler/src/adapters/element-plus/{density.ts,mapping.ts,index.ts}; theme-chalk/src/structural.css:6062; hooks/use-dialog",
+    "gap": "",
+    "evidenceIds": [
+      "E04",
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T9",
+    "type": "T",
+    "item": "清理业务重复主题来源（依赖 4–8、15 与覆盖证据）",
+    "status": "covered",
+    "evidence": "见下列 T9.* 子任务证据；当前范围收尾：E06, E05, E20, E21。",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05",
+      "E20",
+      "E21"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T9.1",
+    "type": "T",
+    "item": "清理 theme.module.css/tailwind.css 等反向 alias 与主色竞争写入，保留领域色和用户正文色；现有页面壳直接消费公开 surface/token，不增加业务映射层。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T9.2",
+    "type": "T",
+    "item": "状态/明暗覆盖通过后删除 EP dark/css-vars.css、clearBusinessPrimaryOverrides 及调用，确保旧写入不会重新覆盖。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch；当前范围收尾：E06, E05, E20, E21。",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05",
+      "E20",
+      "E21"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T9.3",
+    "type": "T",
+    "item": "保留 EP 必需基础样式和正确加载顺序；库 autofill 已成立时移除重复的业务处理。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T9.4",
+    "type": "T",
+    "item": "对比实际非仿真页面的删除前后颜色，记录影响边界，不声称仿真通过。",
+    "status": "covered",
+    "evidence": "src/main.ts; src/assets/styles/{tailwind.css,theme.module.css}; src/theme/zx-theme-config.ts; docs/reports/.../baseline/business.patch; 工厂蓝深色添加用户基线及终态DOM比较证明dialog背景和11字段label色相同；颜色对照完成且不声明仿真。旧图viewport未存且图片像素不同，所以R9.AC3同视口配对仍partial。",
+    "gap": "",
+    "evidenceIds": [
+      "E06",
+      "E05",
+      "E21"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10",
+    "type": "T",
+    "item": "接入薄而严格的门禁（依赖 3–6、9、15）",
+    "status": "covered",
+    "evidence": "见下列 T10.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10.1",
+    "type": "T",
+    "item": "新增 check-ui-standards.mjs 薄入口，复用 Vue/TS 解析器和一个模板检查核心；源码与生成后 SFC 共用。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10.2",
+    "type": "T",
+    "item": "只检查明确的模板/局部对象/统一入口。复杂间接配置改为受类型和运行时校验的入口，不做通用全程序分析，不静默跳过未知形状。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10.3",
+    "type": "T",
+    "item": "覆盖 dialog 尺寸/高度绕过、表单策略、竞争主题写入和私有主题路径；不要误报页内布局、el-input-number、领域色或文档注释。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10.4",
+    "type": "T",
+    "item": "无 baseline/allowlist，少量成组正反例防误报/漏报；存量通过再接入 package.json、GitHub/GitLab CI。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T10.5",
+    "type": "T",
+    "item": "no-raw-el-input 待任务 13 完成启用；不因规则尚未启用标记输入迁移完成。",
+    "status": "covered",
+    "evidence": "scripts/{check-ui-standards,ui-standards-core}.mjs; tests/ui-standards.test.ts; package.json; .github/workflows/ci.yml; .gitlab-ci.yml",
+    "gap": "",
+    "evidenceIds": [
+      "E07"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T11",
+    "type": "T",
+    "item": "完善公开示例和迁移说明（依赖 9、10、12、15）",
+    "status": "covered",
+    "evidence": "见下列 T11.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T11.1",
+    "type": "T",
+    "item": "**[ZXUI]** 写明原生输入、数值步进、增强搜索的职责和旧→新迁移差异，明确下一主版本候选边界与外部升级要求。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T11.2",
+    "type": "T",
+    "item": "**[ZXUI]** docs 示例使用公开 Host/Provider/部署资产，说明 density/size 与 scope/Portal，不能要求其他业务复制 RuoYi 私有路径、类型补丁或 CSS。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T11.3",
+    "type": "T",
+    "item": "业务 AGENTS.md 写薄表单组合、主题唯一入口和仿真排除范围，指向 spec；业务标签宽度/gap 不成为全库规定。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T11.4",
+    "type": "T",
+    "item": "生成器示例与手写页面采用同一组合，库/业务契约说明与最终 Cursor 迁移目标一致。",
+    "status": "covered",
+    "evidence": "ZXUI docs/{zh-CN,en-US}/component/input*.md; docs/zh-CN/{component/dialog,guide/theme-tools}.md; business AGENTS.md:90",
+    "gap": "",
+    "evidenceIds": [
+      "E08",
+      "E10"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12",
+    "type": "T",
+    "item": "**[ZXUI]** 拆清输入职责并完成公开契约（可与表单/主题任务并行）",
+    "status": "covered",
+    "evidence": "见下列 T12.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.1",
+    "type": "T",
+    "item": "先记录下一主版本目标和旧行为对应表，不在现有 2.x 补丁中偷改。ZxInput 固定 ElInput，type 只表示原生输入类型，不新增永久 native/legacy 路由开关。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.2",
+    "type": "T",
+    "item": "tooltip 两种路径透传四类 slots 与参数；expose 对齐 ElInput 的已承诺方法/属性，保持响应性，不暴露任意内部状态包。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.3",
+    "type": "T",
+    "item": "移除 number 路由和隐式 search append 分支，一并清除 ::icon。数值步进能力承接为小型 ZxInputNumber，补齐必要公开入口、类型、样式和库内已知调用迁移；不批量迁业务 el-input-number。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.4",
+    "type": "T",
+    "item": "旧增强搜索按需求复用 ZxSearch 或显式 append 按钮组合；核对 trim、清空触发、string 与对象载荷，保持已知消费者的业务行为，不重构所有搜索栏。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.5",
+    "type": "T",
+    "item": "统一 v-model 所有者与属性/事件目标；聚焦验证输入法组合输入、输入/清空事件只触发一次、name/id/aria、禁用、焦点和 flex。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T12.6",
+    "type": "T",
+    "item": "更新库内已知消费者与 docs 示例；聚焦回归覆盖真实契约，不按184个业务点复制测试。复用任务 7 的公开样板，源码直连验证业务兼容后放行。",
+    "status": "covered",
+    "evidence": "ZXUI packages/components/{input,input-number}; public root/leaf/type/style exports; input tests 13 + numeric 4; business_theme_deployment peer cross-review; 库内已知消费者/docs迁移已核，22项真实聚焦与同一公开样板source/packed slots/expose/native/数值/payload回归齐；业务源码直连真实用户/克隆输入和外部Popover支持成立。逐页全部消费者义务仍属T13.4/T13.5，不以该项代替。",
+    "gap": "",
+    "evidenceIds": [
+      "E11",
+      "E08"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T13",
+    "type": "T",
+    "item": "Cursor 最后批量迁移 el-input（依赖 1–12、15）",
+    "status": "partial",
+    "evidence": "见下列 T13.* 子任务证据；当前范围收尾：E10, E11, E23, E25。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T13.1",
+    "type": "T",
+    "item": "重新核对候选184个/68文件，静态textarea28个、17个input的18个slots为重叠分类，不按旧257前缀数替换。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T13.2",
+    "type": "T",
+    "item": "精确替换 el-input 为最终 ZxInput，number/search/动态type按已通过的原生语义方案逐项确认；不替换 el-input-number 或 el-select。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T13.3",
+    "type": "T",
+    "item": "同步生成器统一组件身份及配置/预览/输出，转换2处legacy append和生成器旧slot语法；已有设计配置读取与重新导出仍正常。",
+    "status": "covered",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment",
+    "gap": "已有实现与历史证据保留；本条不计入当前适用验收通过数。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "withdrawn-by-user",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "用户取消该项后续工作/验收；不以缺少这些证据阻塞当前范围，也不把取消当通过。"
+  },
+  {
+    "id": "T13.4",
+    "type": "T",
+    "item": "核对 slots、实例方法、空值与事件、布局及动态类型，范围内一次迁完，不给复杂调用加白名单。",
+    "status": "partial",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment；当前范围收尾：E11, E22, E23。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E22",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T13.5",
+    "type": "T",
+    "item": "启用 no-raw-el-input，共用模板检查器核验生成输出，逐页真实验证。前置是库本地候选通过，不是正式发布或所有外部消费者升级。",
+    "status": "partial",
+    "evidence": "input-migration.json; input-generator/implementation.md; gate 496/0; generator-form-contract.test.ts; input/generator cross review by business_theme_deployment；当前范围收尾：E07, E23, E25。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E10",
+      "E11",
+      "E03",
+      "E17",
+      "E07",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T14",
+    "type": "T",
+    "item": "三类证据终验与状态回写（依赖 16）",
+    "status": "partial",
+    "evidence": "见下列 T14.* 子任务证据；当前范围收尾：E13, E23, E25。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E15",
+      "E05",
+      "E13",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T14.1",
+    "type": "T",
+    "item": "汇总库公开能力、真实业务页面、本地可安装产物证据，分别说明证明范围，不能拿导航旧矩阵或widget协议通过抵扣表单验收。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json；当前范围收尾：E13, E18, E23, E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E15",
+      "E05",
+      "E13",
+      "E18",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T14.2",
+    "type": "T",
+    "item": "逐页核对数据、尺寸、降列、滚动、校验、焦点、重开、输入及明暗；代表表单覆盖九主题明暗与代表主题三档density，异常再扩展，不做全排列。",
+    "status": "partial",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json；当前范围收尾：E05, E20, E22, E23。",
+    "gap": "原始范围仍有已被用户取消的未验分支/清理义务；仅当前系统/通用能力部分完成。设备、工程、监控、生成器不再待办，不将整条原始义务冒称全覆盖。",
+    "evidenceIds": [
+      "E15",
+      "E05",
+      "E13",
+      "E17",
+      "E20",
+      "E22",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T14.3",
+    "type": "T",
+    "item": "运行业务相关 lint/type-check/test:run/ui:standards 及 ZXUI 相关聚焦回归、既有生成/漂移检查；记录实际结果，不用新增测试数量代替质量。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json; 原文要求运行并记录实际结果，已完成相关lint/type/test/ui标准、ZXUI聚焦/生成漂移检查；全量lint860error/1232warning与单个存量Vitest失败如实披露，不宣称全仓全绿。新增generator repository Ruff前后均134同项问题、新增0，聚焦回归修前失败/修后通过。",
+    "gap": "",
+    "evidenceIds": [
+      "E15",
+      "E05",
+      "E13"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T14.4",
+    "type": "T",
+    "item": "核对全部验收项后更新状态；未触达候选、外部升级要求及包交付限制明确记录。完成不代表已发布 npm，不代表仿真已验收。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json；当前范围收尾：E23, E25。",
+    "gap": "",
+    "evidenceIds": [
+      "E15",
+      "E05",
+      "E13",
+      "E23",
+      "E25"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "最终范围与未完成原范围、npm/生产/外部升级边界已经completion-report和tasks明确回写；不把被取消路线改记通过。"
+  },
+  {
+    "id": "T15",
+    "type": "T",
+    "item": "统一公开主题接入与资产交付（9、10、11、13 的前置）",
+    "status": "covered",
+    "evidence": "见下列 T15.* 子任务证据；当前范围收尾：E12, E05, E20, E23。",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05",
+      "E20",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T15.1",
+    "type": "T",
+    "item": "将现有主题选择器、Host和Vite包列表改为从一个登记源派生；登记依赖显式存在，缺包/manifest不可静默略过。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T15.2",
+    "type": "T",
+    "item": "构建端复用 emitThemeDeployment，浏览器用 createThemeDeploymentResolver；manifest/CSS共同交付，核对base路径，构建工具不进浏览器。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T15.3",
+    "type": "T",
+    "item": "移除业务运行时 generated glob、export→私有路径转换和 portalContainerScope 类型补丁；公开类型缺口在ZXUI补齐，开发alias只在工具边界保留。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T15.4",
+    "type": "T",
+    "item": "将偏好更新收敛为一个入口交Host/Provider，document属性为投影，去掉页面拼variant与重复状态写入；不新增另一套主题框架或必须的density设置UI。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T15.5",
+    "type": "T",
+    "item": "实际业务验证登记的九主题、登录/主框架/表单及二级浮层；公开样板无需RuoYi修补CSS，发现差异按归属修复。",
+    "status": "covered",
+    "evidence": "src/theme/{zx-theme-packages,zx-theme-config,zx-theme-host}.ts; src/App.tsx; vite/zxui-theme-packages.ts; ZXUI docs/examples/dialog/public-form-contract.vue；当前范围收尾：E12, E05, E20, E23。",
+    "gap": "",
+    "evidenceIds": [
+      "E12",
+      "E05",
+      "E20",
+      "E23"
+    ],
+    "preCloseoutStatus": "partial",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T16",
+    "type": "T",
+    "item": "验证本地候选包可供其他业务安装（依赖 13）",
+    "status": "covered",
+    "evidence": "见下列 T16.* 子任务证据",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T16.1",
+    "type": "T",
+    "item": "用本轮源码生成真实本地tarball和主题部署资产，记录包版本、哈希、实际解析路径及Vue/EP/ZXUI版本；先核对peer契约，不靠声明合并或重复运行时掩盖问题。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T16.2",
+    "type": "T",
+    "item": "复用已有packed-install/hosted-packed工具的安装/构建/浏览器能力，在隔离临时目录运行任务7/12的同一代表表单，禁止source alias/workspace fallback。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json; rApuws真隔离public安装，复制相同public-form-contract.vue，无alias/fallback；新hash source/packed外部Popover均打开，其他维度T16.3仍待终验。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T16.3",
+    "type": "T",
+    "item": "核对公开imports/类型/样式及slots/expose/native类型、代表主题明暗、三档density、嵌套scope/二级浮层和真实autofill；无需在包fixture重复全部业务页面。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json; 最终同源public-source-fixed-autofill-{light,dark}与public-packed-autofill-{light,dark}：raw ElInput与tooltip ZxInput均实际:-webkit-autofill=true，inset shadow与textFill匹配明暗themeSurface/themeText。source修复只在play公开style.css入口，不改变085候选。",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05",
+      "E20"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  },
+  {
+    "id": "T16.4",
+    "type": "T",
+    "item": "没有正式npm发布、外部仓改动或外部全部升级前置；输出本地主版本候选消费证据及外部升级说明，交任务14终验。",
+    "status": "covered",
+    "evidence": "ZXUI packages/zxui/package.json 3.0.0-next.0; library/packed-receipt.json (rApuws); /private/tmp/zxui-popover-packed-check.log; business-theme-deployment.json",
+    "gap": "",
+    "evidenceIds": [
+      "E13",
+      "E05"
+    ],
+    "preCloseoutStatus": "covered",
+    "currentDisposition": "covered",
+    "currentScope": "系统管理B01–B13、登录/个人资料、ZXUI通用能力及本地候选交付；设备/工程/监控/生成器停止后续验收，仿真原本排除。",
+    "currentScopeNote": "按当前用户保留范围判断；证据边界见对应Evidence项，取消模块的旧记录不替代当前真实页面。"
+  }
+]

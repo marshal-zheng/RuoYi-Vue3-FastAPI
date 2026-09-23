@@ -1,0 +1,58 @@
+{
+  "active": null,
+  "dialogs": [],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入用户名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入手机号码",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "搜索用户名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": null,
+      "type": "number"
+    }
+  ],
+  "grids": [],
+  "radios": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

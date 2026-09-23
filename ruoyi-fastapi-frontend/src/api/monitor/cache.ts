@@ -1,4 +1,12 @@
 import request from '@/utils/request';
+import type { HttpCollection } from '@/types/http-contract';
+
+interface CacheInfo {
+  cacheName: string;
+  cacheKey: string;
+  cacheValue: string;
+  remark?: string;
+}
 
 // 查询缓存详细
 export function getCache() {
@@ -10,7 +18,7 @@ export function getCache() {
 
 // 查询缓存名称列表
 export function listCacheName() {
-  return request({
+  return request<HttpCollection<CacheInfo>>({
     url: '/monitor/cache/getNames',
     method: 'get',
   });
@@ -18,7 +26,7 @@ export function listCacheName() {
 
 // 查询缓存键名列表
 export function listCacheKey(cacheName: string) {
-  return request({
+  return request<HttpCollection<string>>({
     url: '/monitor/cache/getKeys/' + cacheName,
     method: 'get',
   });
@@ -26,7 +34,7 @@ export function listCacheKey(cacheName: string) {
 
 // 查询缓存内容
 export function getCacheValue(cacheName: string, cacheKey: string) {
-  return request({
+  return request<CacheInfo>({
     url: '/monitor/cache/getValue/' + cacheName + '/' + cacheKey,
     method: 'get',
   });

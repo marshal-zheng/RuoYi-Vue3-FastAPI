@@ -214,23 +214,26 @@ defineExpose({
   transform: translateY(-50%);
   width: 24px;
   height: 24px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 4px;
+  background-color: var(--zx-semantic-surface-panel-fill);
+  background-image: var(--zx-semantic-surface-panel-highlight);
+  border: 1px solid var(--zx-semantic-border-subtle);
+  border-radius: var(--zx-semantic-radius-control);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  color: #6b7280;
+  box-shadow: var(--zx-semantic-elevation-raised-shadow), var(--zx-semantic-surface-panel-inner);
+  color: var(--zx-semantic-surface-panel-on-text-secondary);
 }
 
 .scroll-button:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-  color: #374151;
+  background-image:
+    linear-gradient(var(--zx-semantic-fill-hover), var(--zx-semantic-fill-hover)),
+    var(--zx-semantic-surface-panel-highlight);
+  border-color: var(--zx-semantic-border-strong);
+  color: var(--zx-semantic-surface-panel-on-text);
 }
 
 .scroll-button:active {

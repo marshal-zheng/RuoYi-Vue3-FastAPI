@@ -1,8 +1,22 @@
 import request from '@/utils/request';
+import type { HttpCollection } from '@/types/http-contract';
+
+export interface MenuItem {
+  menuId: number;
+  parentId: number;
+  menuName: string;
+  [key: string]: unknown;
+}
+
+export interface MenuTreeNode {
+  id: number;
+  label: string;
+  children?: MenuTreeNode[];
+}
 
 // 查询菜单列表
 export function listMenu(query?: Record<string, any>) {
-  return request({
+  return request<HttpCollection<MenuItem>>({
     url: '/system/menu/list',
     method: 'get',
     params: query,
@@ -20,7 +34,7 @@ export function getMenu(menuId: number | string) {
 
 // 查询菜单下拉树结构
 export function treeselect() {
-  return request({
+  return request<HttpCollection<MenuTreeNode>>({
     url: '/system/menu/treeselect',
     method: 'get',
   });

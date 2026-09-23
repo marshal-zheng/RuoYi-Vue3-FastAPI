@@ -130,8 +130,9 @@ async function downloadTemplate() {
 }
 
 const { dialogProps, dialogEvents, open, close } = useDialog({
+  dialogSize: 'md',
   title: () => '导入协议数据',
-  width: '600px',
+
   okText: '确定导入',
   preValidate: false,
   autoScrollToError: false,

@@ -1,0 +1,9 @@
+- heading "vfadmin后台管理系统" [level=3]
+- textbox "账号"
+- textbox "密码"
+- textbox "确认密码"
+- button "注 册":
+  - generic: 注 册
+- link "使用已有账户登录":
+  - /url: /login
+- generic: Copyright © 2024 insistence.tech All Rights Reserved.

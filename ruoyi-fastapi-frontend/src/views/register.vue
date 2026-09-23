@@ -3,7 +3,7 @@
     <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
       <h3 class="title">vfadmin后台管理系统</h3>
       <el-form-item prop="username">
-        <el-input
+        <zx-input
           v-model="registerForm.username"
           type="text"
           size="large"
@@ -13,10 +13,10 @@
           <template #prefix
             ><svg-icon icon-class="user" class="el-input__icon input-icon"
           /></template>
-        </el-input>
+        </zx-input>
       </el-form-item>
       <el-form-item prop="password">
-        <el-input
+        <zx-input
           v-model="registerForm.password"
           type="password"
           size="large"
@@ -27,10 +27,10 @@
           <template #prefix
             ><svg-icon icon-class="password" class="el-input__icon input-icon"
           /></template>
-        </el-input>
+        </zx-input>
       </el-form-item>
       <el-form-item prop="confirmPassword">
-        <el-input
+        <zx-input
           v-model="registerForm.confirmPassword"
           type="password"
           size="large"
@@ -41,10 +41,10 @@
           <template #prefix
             ><svg-icon icon-class="password" class="el-input__icon input-icon"
           /></template>
-        </el-input>
+        </zx-input>
       </el-form-item>
       <el-form-item prop="code" v-if="captchaEnabled">
-        <el-input
+        <zx-input
           size="large"
           v-model="registerForm.code"
           auto-complete="off"
@@ -55,7 +55,7 @@
           <template #prefix
             ><svg-icon icon-class="validCode" class="el-input__icon input-icon"
           /></template>
-        </el-input>
+        </zx-input>
         <div class="register-code">
           <img :src="codeUrl" @click="getCode" class="register-code-img" />
         </div>

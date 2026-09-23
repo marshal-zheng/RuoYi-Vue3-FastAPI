@@ -123,22 +123,17 @@
             <el-row :gutter="32">
               <el-col :offset="1" :span="22">
                 <el-form-item label="缓存名称:" prop="cacheName">
-                  <el-input v-model="cacheForm.cacheName" :readOnly="true" />
+                  <zx-input v-model="cacheForm.cacheName" readonly />
                 </el-form-item>
               </el-col>
               <el-col :offset="1" :span="22">
                 <el-form-item label="缓存键名:" prop="cacheKey">
-                  <el-input v-model="cacheForm.cacheKey" :readOnly="true" />
+                  <zx-input v-model="cacheForm.cacheKey" readonly />
                 </el-form-item>
               </el-col>
               <el-col :offset="1" :span="22">
                 <el-form-item label="缓存内容:" prop="cacheValue">
-                  <el-input
-                    v-model="cacheForm.cacheValue"
-                    type="textarea"
-                    :rows="8"
-                    :readOnly="true"
-                  />
+                  <zx-input v-model="cacheForm.cacheValue" type="textarea" :rows="8" readonly />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -173,7 +168,7 @@ const tableHeight = ref(window.innerHeight - 200);
 function getCacheNames() {
   loading.value = true;
   listCacheName().then((response) => {
-    cacheNames.value = response;
+    cacheNames.value = response.items;
     loading.value = false;
   });
 }
@@ -198,7 +193,7 @@ function getCacheKeys(row) {
   }
   subLoading.value = true;
   listCacheKey(cacheName).then((response) => {
-    cacheKeys.value = response;
+    cacheKeys.value = response.items;
     subLoading.value = false;
     nowCacheName.value = cacheName;
   });

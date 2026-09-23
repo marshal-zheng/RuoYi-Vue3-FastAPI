@@ -1,0 +1,63 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "工程管理"
+  - text: /
+  - link "工程列表"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "工程列表":
+  - /url: /project/project
+  - generic: 工程列表
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- button "新增":
+  - generic: 新增
+- button "删除" [disabled]:
+  - generic: 删除
+- button "批量导出" [disabled]:
+  - generic: 批量导出
+- button "导入工程":
+  - generic: 导入工程
+- combobox "开始日期"
+- generic: "-"
+- combobox "结束日期"
+- textbox "搜索工程名称"
+- button "Search":
+- checkbox
+- heading "ZXUI 本地布局验收" [level=3]:
+  - link "ZXUI 本地布局验收":
+    - /url: /project/project-detail/index/1
+- paragraph:
+  - generic: "编号: 1"
+- button "编辑工程 ZXUI 本地布局验收":
+- button "More actions":
+- generic: 用于非仿真表单验收的本地测试工程
+- generic: 创建人
+- generic: admin
+- generic: 创建时间
+- generic: 2026-09-23
+- button "详情":
+  - generic: 详情
+- button "删除":
+  - generic: 删除
+- generic: 共 1 条
+- combobox
+- generic: 10条/页
+- button "上一页" [disabled]:
+- list:
+  - listitem "第 1 页": "1"
+- button "下一页" [disabled]:
+- generic: 前往
+- spinbutton "页": "1"
+- generic: 页
+- alert:
+  - paragraph: 修改工程成功

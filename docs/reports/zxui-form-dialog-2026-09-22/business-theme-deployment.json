@@ -1,0 +1,165 @@
+{
+  "packages": [
+    {
+      "name": "vue",
+      "version": "3.5.43",
+      "resolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/vue/package.json"
+    },
+    {
+      "name": "element-plus",
+      "version": "2.13.0",
+      "resolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/element-plus/package.json"
+    },
+    {
+      "name": "@zxio/zxui",
+      "version": "3.0.0-next.0",
+      "resolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/zxui/package.json"
+    },
+    {
+      "name": "@zxio/theme-compiler",
+      "version": "1.0.0",
+      "resolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@zxio/theme-compiler/package.json"
+    }
+  ],
+  "themes": [
+    {
+      "id": "air-gray",
+      "package": "@zxio/theme-air-gray",
+      "version": "1.0.0"
+    },
+    {
+      "id": "army-pine",
+      "package": "@zxio/theme-army-pine",
+      "version": "1.0.0"
+    },
+    {
+      "id": "default",
+      "package": "@zxio/theme-default",
+      "version": "2.0.0"
+    },
+    {
+      "id": "defense-green",
+      "package": "@zxio/theme-defense-green",
+      "version": "1.0.0"
+    },
+    {
+      "id": "factory-blue",
+      "package": "@zxio/theme-factory-blue",
+      "version": "1.0.0"
+    },
+    {
+      "id": "industrial-blue",
+      "package": "@zxio/theme-industrial-blue",
+      "version": "1.0.0"
+    },
+    {
+      "id": "pap-olive",
+      "package": "@zxio/theme-pap-olive",
+      "version": "1.0.0"
+    },
+    {
+      "id": "rocket-moss",
+      "package": "@zxio/theme-rocket-moss",
+      "version": "1.0.0"
+    },
+    {
+      "id": "tech-blue",
+      "package": "@zxio/theme-tech-blue",
+      "version": "1.0.0"
+    }
+  ],
+  "verifiedCssExports": 2934,
+  "resolverBases": [
+    "https://example.test/",
+    "https://example.test/admin/"
+  ],
+  "candidateTarballs": [
+    {
+      "file": "vendor/zxio-theme-air-gray-1.0.0.tgz",
+      "sha256": "ce45bd7e268ee39c354e548b9ada22674f210588febac675cb41513177ec217e"
+    },
+    {
+      "file": "vendor/zxio-theme-army-pine-1.0.0.tgz",
+      "sha256": "31f65a74cd48fddafe83016d41d29a28c188774c2bc18a4e34b378130d15360f"
+    },
+    {
+      "file": "vendor/zxio-theme-compiler-1.0.0.tgz",
+      "sha256": "a472a0057627d2a3c26f289005932439d642adab9a86f0f72d4422f37a4de7e0"
+    },
+    {
+      "file": "vendor/zxio-theme-default-2.0.0.tgz",
+      "sha256": "ec01a9481ac070158a9e4685d8260db83a00377ba5e0a108cb0006e1a7d1534f"
+    },
+    {
+      "file": "vendor/zxio-theme-defense-green-1.0.0.tgz",
+      "sha256": "0a3ad0fd9e4a3bd356c565cd55865ca5f40a155ae3e24dec1d11e4718b531a1b"
+    },
+    {
+      "file": "vendor/zxio-theme-factory-blue-1.0.0.tgz",
+      "sha256": "8576feca996079c1f0a5ef6ec00c7938ce17332b00069ac8083a8eaf574fa8ca"
+    },
+    {
+      "file": "vendor/zxio-theme-industrial-blue-1.0.0.tgz",
+      "sha256": "2f8269c7adb49a7804fc6943e0493b214e060dae36447ff8234de5b4d061f6f6"
+    },
+    {
+      "file": "vendor/zxio-theme-pap-olive-1.0.0.tgz",
+      "sha256": "a23a14ae7e3d185a1ac8b6957d5d3c4ff3e991149cf3c0a15bc7064f1f334f14"
+    },
+    {
+      "file": "vendor/zxio-theme-rocket-moss-1.0.0.tgz",
+      "sha256": "d4f8bb5c5de6f729bf2c776b85fb99f332f9dbc4fe9e4343f7a050647f257d16"
+    },
+    {
+      "file": "vendor/zxio-theme-tech-blue-1.0.0.tgz",
+      "sha256": "a96d67a5fff331afe9dde22bd7a288778496582d96b1510e07dcf2e5cf2dd904"
+    },
+    {
+      "file": "vendor/zxio-zxui-3.0.0-next.0.tgz",
+      "sha256": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a"
+    }
+  ],
+  "verification": {
+    "sourceBuild": "vite build --mode development: passed, 28.45s",
+    "uiStandards": "496 files, 0 violations including exact el-input and common dialog/form/layout owner; generator+gate 14 tests passed",
+    "themeTests": "4 files, 14 tests passed",
+    "lint": "owned files 0 errors; settings.ts 3 existing any warnings",
+    "browser": "C/F isolated component evidence: browser-fixture-coverage.md; production B routes and library public fixture have separate owners/reports. No production route pass inferred.",
+    "settingsRegression": "settings store + theme preference regression: 38 tests passed",
+    "devDelivery": {
+      "virtualModuleHttpStatus": 200,
+      "referencedCssExports": 2934,
+      "missingDevCssExports": 0,
+      "sampleCssHttpStatus": 200,
+      "sampleCssQuery": "?direct",
+      "sampleCssBytes": 18711,
+      "sampleSha256": "b486f1cc735212baa61b372979dd8b5e80a02a86b4a5b54a5aa8aaa3006b0e97",
+      "byteHashMatchesEmittedAsset": true,
+      "assetDirectory": "node_modules/.cache/zxui-theme-deployment",
+      "headersEvidence": "/tmp/zxui-dev-css-headers.txt",
+      "bodyEvidence": "/tmp/zxui-dev-css-body.css",
+      "virtualEvidence": "/tmp/zxui-dev-virtual-fixed.txt"
+    },
+    "historicalBuildEvidence": {
+      "candidateSha256": "1fab266c4e173d6b9c22fa21ca9f244b8a642384d0c31c1d770a57503c12e2a4",
+      "installedBuild": "final candidate vite build: passed, 25.93s",
+      "typeCheck": "final candidate vue-tsc --noEmit: passed",
+      "scope": "Previous candidate only; these results do not assert a fresh build/typecheck of 085dfd."
+    },
+    "installedCandidateFileComparison": {
+      "sha256": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a",
+      "filesCompared": 1648,
+      "mismatches": 0
+    },
+    "generatorRuntime": "2026-09-23: 3 focused files / 15 tests passed, including real generated SFC mount, required validation, reset, submit and close; tests/generator-form-runtime.test.ts",
+    "isolatedFixtureChecks": {
+      "uiStandards": "2026-09-23: 496 files, 0 violations",
+      "focusedTests": "3 files, 15 tests passed",
+      "fixtureAndRuntimeLint": "0 errors, 0 warnings",
+      "prepareCommand": "node tests/fixtures/ui-convergence/prepare.mjs: passed"
+    }
+  },
+  "finalCandidateSource": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-zxui-CPDqIK/zxio-zxui-3.0.0-next.0.tgz",
+  "isolatedCandidateReceipt": "docs/reports/zxui-form-dialog-2026-09-22/library/packed-receipt.json",
+  "updatedAt": "2026-09-23"
+}

@@ -1,23 +1,23 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadOnlineData"
       :show-pagination="true"
       :load-on-mounted="true"
-      class="zx-grid-list--page"
+      fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.ipaddr"
               placeholder="请输入登录地址"
               clearable
               style="width: 200px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-input
+            <zx-input
               v-model="query.userName"
               placeholder="请输入用户名称"
               clearable

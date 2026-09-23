@@ -1,11 +1,6 @@
 <template>
-  <ZxContentWrap>
-    <ZxGridList
-      ref="gridListRef"
-      :load-data="loadPostData"
-      :load-on-mounted="true"
-      class="zx-grid-list--page"
-    >
+  <ZxContentWrap fill>
+    <ZxGridList ref="gridListRef" :load-data="loadPostData" :load-on-mounted="true" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
@@ -37,7 +32,7 @@
             >
           </div>
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.postCode"
               placeholder="请输入岗位编码"
               clearable

@@ -5,7 +5,7 @@
     :query-transform="queryTransform"
     :show-pagination="true"
     :load-on-mounted="true"
-    class="zx-grid-list--page"
+    fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
       <div class="zx-grid-form-bar">
@@ -98,7 +98,15 @@
   <ProjectDlg ref="projectDlgRef" @success="gridListRef?.refresh()" />
 
   <!-- 工程详情对话框 -->
-  <el-dialog title="工程详情" v-model="detailOpen" width="600px" append-to-body>
+  <ZxDialog
+    dialog-size="md"
+    :draggable="false"
+    :show-full-screen="false"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+    title="工程详情"
+    v-model="detailOpen"
+  >
     <el-descriptions :column="1" border>
       <el-descriptions-item label="工程编号">{{ detailData.projectId }}</el-descriptions-item>
       <el-descriptions-item label="工程描述">{{ detailData.projectDesc }}</el-descriptions-item>
@@ -116,7 +124,7 @@
         <el-button @click="detailOpen = false">关 闭</el-button>
       </div>
     </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup lang="ts" name="ProjectList">

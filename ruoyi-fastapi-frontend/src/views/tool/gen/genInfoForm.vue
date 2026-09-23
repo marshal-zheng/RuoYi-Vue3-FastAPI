@@ -30,7 +30,7 @@
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-input v-model="info.packageName" />
+          <zx-input v-model="info.packageName" />
         </el-form-item>
       </el-col>
 
@@ -42,7 +42,7 @@
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-input v-model="info.moduleName" />
+          <zx-input v-model="info.moduleName" />
         </el-form-item>
       </el-col>
 
@@ -54,7 +54,7 @@
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-input v-model="info.businessName" />
+          <zx-input v-model="info.businessName" />
         </el-form-item>
       </el-col>
 
@@ -66,7 +66,7 @@
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-input v-model="info.functionName" />
+          <zx-input v-model="info.functionName" />
         </el-form-item>
       </el-col>
 
@@ -110,7 +110,7 @@
               <el-icon><question-filled /></el-icon>
             </el-tooltip>
           </template>
-          <el-input v-model="info.genPath">
+          <zx-input v-model="info.genPath">
             <template #append>
               <el-dropdown>
                 <el-button type="primary">
@@ -126,7 +126,7 @@
                 </template>
               </el-dropdown>
             </template>
-          </el-input>
+          </zx-input>
         </el-form-item>
       </el-col>
     </el-row>
@@ -286,7 +286,7 @@ function setSubTableColumns(value) {
 /** 查询菜单下拉树结构 */
 function getMenuTreeselect() {
   listMenu().then((response) => {
-    menuOptions.value = proxy.handleTree(response, 'menuId');
+    menuOptions.value = proxy.handleTree(response.items, 'menuId');
   });
 }
 

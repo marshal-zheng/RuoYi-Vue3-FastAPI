@@ -15,7 +15,7 @@
     >
       <!-- 端口信息展示 -->
       <el-form-item label="端口名称">
-        <el-input v-model="drawer.state.data.interfaceName" disabled />
+        <zx-input v-model="drawer.state.data.interfaceName" disabled />
       </el-form-item>
 
       <el-form-item label="总线类型">
@@ -37,7 +37,7 @@
 
       <!-- 数据速率 -->
       <el-form-item label="数据速率" prop="dataRate">
-        <el-input
+        <zx-input
           v-model="drawer.state.data.dataRate"
           placeholder="例如：9600bps, 1Mbps"
           clearable
@@ -47,7 +47,7 @@
 
       <!-- 协议描述 -->
       <el-form-item label="协议描述">
-        <el-input
+        <zx-input
           v-model="drawer.state.data.description"
           type="textarea"
           placeholder="请输入协议描述"

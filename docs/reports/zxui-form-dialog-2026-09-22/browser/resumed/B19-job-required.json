@@ -1,0 +1,176 @@
+{
+  "active": null,
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 512,
+      "title": "添加任务",
+      "width": 880
+    }
+  ],
+  "errors": [
+    "任务名称不能为空",
+    "调用目标字符串不能为空",
+    "cron执行表达式不能为空"
+  ],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "搜索任务名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入任务名称",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 24,
+      "placeholder": null,
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入调用目标字符串",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入位置参数",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入关键字参数",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入cron执行表达式",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.3091 0.336 0.3791)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.3091 0.336 0.3791)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.3091 0.336 0.3791)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.3091 0.336 0.3791)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.3091 0.336 0.3791)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    }
+  ],
+  "grids": [
+    {
+      "columns": "406px 406px",
+      "gap": "normal 20px",
+      "width": 832
+    }
+  ],
+  "radios": [
+    {
+      "checked": true,
+      "value": "1"
+    },
+    {
+      "checked": false,
+      "value": "2"
+    },
+    {
+      "checked": false,
+      "value": "3"
+    },
+    {
+      "checked": false,
+      "value": "0"
+    },
+    {
+      "checked": true,
+      "value": "1"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

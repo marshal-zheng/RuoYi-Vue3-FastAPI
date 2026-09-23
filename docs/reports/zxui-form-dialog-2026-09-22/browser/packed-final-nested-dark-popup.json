@@ -1,0 +1,287 @@
+{
+  "active": null,
+  "dialogs": [
+    {
+      "background": "color(srgb 0.984745 0.986383 0.989659)",
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "height": 672,
+      "scope": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "width": 880
+    },
+    {
+      "background": "color(srgb 0.13254 0.147214 0.17652)",
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "height": 253,
+      "scope": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "width": 640
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "name",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "email",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "email",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "search"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 40,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 14,
+      "name": "el-id-6302-12",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 14,
+      "name": "el-id-6302-12",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 14,
+      "name": "el-id-6302-12",
+      "shadow": "none",
+      "textFill": "rgb(84, 84, 84)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 0,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(0, 0, 0)",
+      "type": "checkbox"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 0,
+      "name": "",
+      "shadow": "none",
+      "textFill": "rgb(84, 84, 84)",
+      "type": "checkbox"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 52,
+      "name": "",
+      "shadow": "color(srgb 0.12 0.14 0.18 / 0.12) 0px 0px 0px 1px inset",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "textarea"
+    },
+    {
+      "autofill": false,
+      "disabled": true,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.35 0.38 0.43)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.12 0.14 0.18)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.93 0.95 0.98)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 36,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.93 0.95 0.98)",
+      "type": "text"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Name / four slots"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Raw ElInput / autofill"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Tooltip path / autofill"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Native number"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Native search with explicit append"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Separate numeric stepper"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Small FormItem overrides inherited Form size"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Explicit large input overrides FormItem"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Status"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Checkbox and disabled state"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Textarea"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Disabled input"
+    },
+    {
+      "color": "color(srgb 0.12 0.14 0.18)",
+      "text": "Secondary popup follows dialog scope"
+    }
+  ],
+  "popups": [
+    {
+      "background": "color(srgb 0.11688 0.131308 0.16014)",
+      "scope": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "text": "OneTwo"
+    }
+  ],
+  "scopes": [
+    {
+      "scope": "scope:packed-form:root",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:packed-form:root.public-form",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:packed-form:root.public-form",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:packed-form:root.public-form.public-form-nested",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:packed-form:root.public-form.public-form-nested",
+      "tag": "DIV",
+      "theme": "default",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+    }
+  ],
+  "status": [
+    "visible=true; modelValue=true",
+    "",
+    "nestedVisible=true",
+    ""
+  ],
+  "viewport": [
+    1280,
+    720
+  ]
+}

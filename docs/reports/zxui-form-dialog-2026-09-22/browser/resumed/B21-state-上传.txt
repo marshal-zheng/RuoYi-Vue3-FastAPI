@@ -1,0 +1,181 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统工具"
+  - text: /
+  - link "表单构建"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "表单构建":
+  - /url: /tool/build
+  - generic: 表单构建
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- img "logo"
+- text: Form Generator
+- text: 输入型组件
+- text: 单行文本
+- text: 多行文本
+- text: 密码
+- text: 计数器
+- text: 选择型组件
+- text: 下拉选择
+- text: 级联选择
+- text: 单选框组
+- text: 多选框组
+- text: 开关
+- text: 滑块
+- text: 时间选择
+- text: 时间范围
+- text: 日期选择
+- text: 日期范围
+- text: 评分
+- text: 颜色选择
+- text: 上传
+- text: 布局型组件
+- text: 行容器
+- text: 按钮
+- button "导出vue文件":
+  - generic: 导出vue文件
+- button "复制代码":
+  - generic: 复制代码
+- button "清空":
+  - generic: 清空
+- generic: "* 浏览器生成字段"
+- generic: https://
+- textbox "* 浏览器生成字段":
+  - /placeholder: 请输入浏览器生成字段
+  - text: adminadmina
+- generic: 11 / 11
+- generic: .test
+- generic: "* 多行文本"
+- textbox "* 多行文本":
+  - /placeholder: 请输入多行文本
+- generic: "* 密码"
+- textbox "* 密码":
+  - /placeholder: 请输入密码
+- generic: "* 计数器"
+- button "减少数值":
+- button "增加数值":
+- spinbutton "* 计数器"
+- generic: "* 下拉选择"
+- combobox "* 下拉选择"
+- generic: 请选择下拉选择
+- generic: "* 单选框组"
+- radiogroup "* 单选框组":
+  - radio "选项一"
+  - generic: 选项一
+  - radio "选项二"
+  - generic: 选项二
+- generic: "* 多选框组"
+- group "* 多选框组":
+  - checkbox "选项一"
+  - generic: 选项一
+  - checkbox "选项二"
+  - generic: 选项二
+- generic: "* 开关"
+- switch "* 开关"
+- generic: "* 滑块"
+- slider "* 滑块"
+- generic: "* 时间选择"
+- combobox "* 时间选择"
+- generic: "* 时间范围"
+- combobox "* 时间范围"
+- generic: 至
+- combobox "结束时间"
+- generic: "* 日期选择"
+- combobox "* 日期选择"
+- generic: "* 日期范围"
+- combobox "* 日期范围"
+- generic: 至
+- combobox "结束日期"
+- generic: "* 评分"
+- slider "* 评分":
+- generic: "* 颜色选择"
+- button "* 颜色选择":
+- group "* 上传":
+  - generic: "* 上传"
+  - button "点击上传":
+    - button "点击上传":
+      - generic: 点击上传
+  - list
+- generic "复制":
+- generic "删除":
+- tablist:
+  - tab "组件属性" [selected]
+  - tab "表单属性"
+- tabpanel "组件属性"
+- link "查看组件文档":
+  - /url: https://element-plus.org/zh-CN/component/upload
+- generic: 组件类型
+- combobox "组件类型"
+- generic: 上传
+- generic: 字段名
+- textbox "字段名":
+  - /placeholder: 请输入字段名（v-model）
+  - text: field115
+- generic: 标题
+- textbox "标题":
+  - /placeholder: 请输入标题
+  - text: 上传
+- generic: 表单栅格
+- slider "表单栅格"
+- generic: 标签宽度
+- spinbutton "标签宽度"
+- generic: 组件宽度
+- textbox "组件宽度":
+  - /placeholder: 请输入组件宽度
+  - text: 100%
+- generic: 默认值
+- textbox "默认值":
+  - /placeholder: 请输入默认值
+- generic: 文件字段名
+- textbox "文件字段名":
+  - /placeholder: 请输入上传文件字段名
+  - text: file
+- generic: 文件类型
+- combobox "文件类型"
+- generic: 请选择文件类型
+- group "文件大小":
+  - generic: 文件大小
+  - textbox "请输入文件大小": "2"
+  - combobox
+  - generic: MB
+- generic: 上传地址
+- textbox "上传地址":
+  - /placeholder: 请输入上传地址
+  - text: https://jsonplaceholder.typicode.com/posts/
+- generic: 列表类型
+- radiogroup "列表类型":
+  - radio "text" [checked]
+  - generic: text
+  - radio "picture"
+  - generic: picture
+  - radio "picture-card"
+  - generic: picture-card
+- generic: 按钮文字
+- textbox "按钮文字":
+  - /placeholder: 请输入按钮文字
+  - text: 点击上传
+- generic: 显示提示
+- switch "显示提示"
+- generic: 多选文件
+- switch "多选文件"
+- generic: 自动上传
+- switch "自动上传" [checked]
+- generic: 是否禁用
+- switch "是否禁用"
+- generic: 是否必填
+- switch "是否必填" [checked]
+- separator:
+  - generic: 正则校验
+- button "添加规则":
+  - generic: 添加规则

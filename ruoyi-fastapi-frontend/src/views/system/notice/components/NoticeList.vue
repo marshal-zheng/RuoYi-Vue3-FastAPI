@@ -4,7 +4,7 @@
     :load-data="loadNoticeData"
     :show-pagination="true"
     :load-on-mounted="true"
-    class="zx-grid-list--page"
+    fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
       <div class="zx-grid-form-bar">
@@ -28,7 +28,7 @@
           >
         </div>
         <div class="zx-grid-form-bar__filters">
-          <el-input
+          <zx-input
             v-model="query.createBy"
             placeholder="请输入操作人员"
             clearable

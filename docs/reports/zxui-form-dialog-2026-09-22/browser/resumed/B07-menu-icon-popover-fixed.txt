@@ -1,0 +1,183 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统管理"
+  - text: /
+  - link "菜单管理"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "菜单管理":
+  - /url: /system/menu
+  - generic: 菜单管理
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- button "新增":
+  - generic: 新增
+- button "展开/折叠":
+  - generic: 展开/折叠
+- textbox "请输入菜单名称"
+- combobox
+- generic: 菜单状态
+- textbox "搜索菜单名称"
+- button "Search":
+- table:
+  - rowgroup:
+    - row "菜单名称 图标 排序 权限标识 组件路径 状态 创建时间 操作":
+      - columnheader "菜单名称":
+        - generic: 菜单名称
+      - columnheader "图标":
+        - generic: 图标
+      - columnheader "排序":
+        - generic: 排序
+      - columnheader "权限标识":
+        - generic: 权限标识
+      - columnheader "组件路径":
+        - generic: 组件路径
+      - columnheader "状态":
+        - generic: 状态
+      - columnheader "创建时间":
+        - generic: 创建时间
+      - columnheader "操作":
+        - generic: 操作
+- table:
+  - rowgroup:
+    - row "展开当前行 系统管理 1 正常 2026-09-20 06:41:48 修改 新增 More actions":
+      - cell "展开当前行 系统管理":
+        - button "展开当前行":
+        - text: 系统管理
+      - cell
+      - cell "1":
+        - generic: "1"
+      - cell
+      - cell
+      - cell "正常":
+        - generic: 正常
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 新增 More actions":
+        - button "修改":
+          - generic: 修改
+        - button "新增":
+          - generic: 新增
+        - button "More actions":
+    - row "展开当前行 系统监控 2 正常 2026-09-20 06:41:48 修改 新增 More actions":
+      - cell "展开当前行 系统监控":
+        - button "展开当前行":
+        - text: 系统监控
+      - cell
+      - cell "2":
+        - generic: "2"
+      - cell
+      - cell
+      - cell "正常":
+        - generic: 正常
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 新增 More actions":
+        - button "修改":
+          - generic: 修改
+        - button "新增":
+          - generic: 新增
+        - button "More actions":
+    - row "展开当前行 系统工具 3 正常 2026-09-20 06:41:48 修改 新增 More actions":
+      - cell "展开当前行 系统工具":
+        - button "展开当前行":
+        - text: 系统工具
+      - cell
+      - cell "3":
+        - generic: "3"
+      - cell
+      - cell
+      - cell "正常":
+        - generic: 正常
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 新增 More actions":
+        - button "修改":
+          - generic: 修改
+        - button "新增":
+          - generic: 新增
+        - button "More actions":
+    - row "展开当前行 工程管理 4 正常 2026-09-20 06:41:48 修改 新增 More actions":
+      - cell "展开当前行 工程管理":
+        - button "展开当前行":
+        - text: 工程管理
+      - cell
+      - cell "4":
+        - generic: "4"
+      - cell
+      - cell
+      - cell "正常":
+        - generic: 正常
+      - cell "2026-09-20 06:41:48":
+        - generic: 2026-09-20 06:41:48
+      - cell "修改 新增 More actions":
+        - button "修改":
+          - generic: 修改
+        - button "新增":
+          - generic: 新增
+        - button "More actions":
+- dialog "添加菜单":
+  - banner:
+    - button "关闭抽屉":
+    - generic: 添加菜单
+    - button "全屏":
+      - text: 全屏
+  - separator "调整抽屉尺寸"
+  - generic: 上级菜单
+  - combobox "上级菜单"
+  - generic: 主类目
+  - generic: 菜单类型
+  - radiogroup "菜单类型":
+    - radio "目录" [checked]
+    - generic: 目录
+    - radio "菜单"
+    - generic: 菜单
+    - radio "按钮"
+    - generic: 按钮
+  - generic: 菜单图标
+  - textbox "菜单图标":
+    - /placeholder: 点击选择图标
+  - tooltip "user":
+    - textbox "请输入图标名称" [active]: user
+  - generic: "*菜单名称"
+  - textbox "*菜单名称":
+    - /placeholder: 请输入菜单名称
+  - generic: "*显示排序"
+  - button "减少数值":
+  - button "增加数值":
+  - spinbutton "*显示排序": "0"
+  - text: 是否外链
+  - radiogroup "是否外链":
+    - radio "是"
+    - generic: 是
+    - radio "否" [checked]
+    - generic: 否
+  - text: "*"
+  - text: 路由地址
+  - textbox "* 路由地址":
+    - /placeholder: 请输入路由地址
+  - text: 显示状态
+  - radiogroup "显示状态":
+    - radio "显示" [checked]
+    - generic: 显示
+    - radio "隐藏"
+    - generic: 隐藏
+  - text: 菜单状态
+  - radiogroup "菜单状态":
+    - radio "正常" [checked]
+    - generic: 正常
+    - radio "停用"
+    - generic: 停用
+  - button "取消":
+    - generic: 取消
+  - button "确定":
+    - generic: 确定

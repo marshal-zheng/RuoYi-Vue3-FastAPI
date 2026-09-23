@@ -1,11 +1,6 @@
 <template>
-  <ZxContentWrap>
-    <ZxGridList
-      ref="gridListRef"
-      :load-data="loadDictData"
-      :initial-state="initialState"
-      class="zx-grid-list--page"
-    >
+  <ZxContentWrap fill>
+    <ZxGridList ref="gridListRef" :load-data="loadDictData" :initial-state="initialState" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">
@@ -149,54 +144,64 @@
   </ZxContentWrap>
 
   <!-- 添加或修改参数配置对话框 -->
-  <el-dialog :title="title" v-model="open" width="500px" append-to-body>
-    <el-form ref="dataRef" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="字典类型">
-        <el-input v-model="form.dictType" :disabled="true" />
-      </el-form-item>
-      <el-form-item label="数据标签" prop="dictLabel">
-        <el-input v-model="form.dictLabel" placeholder="请输入数据标签" />
-      </el-form-item>
-      <el-form-item label="数据键值" prop="dictValue">
-        <el-input v-model="form.dictValue" placeholder="请输入数据键值" />
-      </el-form-item>
-      <el-form-item label="样式属性" prop="cssClass">
-        <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
-      </el-form-item>
-      <el-form-item label="显示排序" prop="dictSort">
-        <el-input-number v-model="form.dictSort" controls-position="right" :min="0" />
-      </el-form-item>
-      <el-form-item label="回显样式" prop="listClass">
-        <el-select v-model="form.listClass">
-          <el-option
-            v-for="item in listClassOptions"
-            :key="item.value"
-            :label="item.label + '(' + item.value + ')'"
-            :value="item.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-radio-group v-model="form.status">
-          <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{
-            dict.label
-          }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
-      </el-form-item>
-    </el-form>
+  <ZxDialog
+    v-bind="dataDialog.dialogProps.value"
+    v-on="dataDialog.dialogEvents.value"
+    :draggable="false"
+    :show-full-screen="false"
+    :destroy-on-close="false"
+    :close-on-click-modal="true"
+  >
+    <el-form ref="dataRef" :model="form" :rules="rules" v-bind="dataDialog.formProps"
+      ><FormGrid v-bind="dataDialog.layoutProps">
+        <el-form-item label="字典类型">
+          <zx-input v-model="form.dictType" :disabled="true" />
+        </el-form-item>
+        <el-form-item label="数据标签" prop="dictLabel">
+          <zx-input v-model="form.dictLabel" placeholder="请输入数据标签" />
+        </el-form-item>
+        <el-form-item label="数据键值" prop="dictValue">
+          <zx-input v-model="form.dictValue" placeholder="请输入数据键值" />
+        </el-form-item>
+        <el-form-item label="样式属性" prop="cssClass">
+          <zx-input v-model="form.cssClass" placeholder="请输入样式属性" />
+        </el-form-item>
+        <el-form-item label="显示排序" prop="dictSort">
+          <el-input-number v-model="form.dictSort" controls-position="right" :min="0" />
+        </el-form-item>
+        <el-form-item label="回显样式" prop="listClass">
+          <el-select v-model="form.listClass">
+            <el-option
+              v-for="item in listClassOptions"
+              :key="item.value"
+              :label="item.label + '(' + item.value + ')'"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="form.status">
+            <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{
+              dict.label
+            }}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <zx-input v-model="form.remark" type="textarea" placeholder="请输入内容"></zx-input>
+        </el-form-item> </FormGrid
+    ></el-form>
     <template #footer>
       <div class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </template>
-  </el-dialog>
+  </ZxDialog>
 </template>
 
 <script setup name="Data">
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
+
 import useDictStore from '@/store/modules/dict';
 import { optionselect as getDictOptionselect, getType } from '@/api/system/dict/type';
 import { listData, getData, delData, addData, updateData } from '@/api/system/dict/data';
@@ -206,7 +211,7 @@ const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const gridListRef = ref();
 const initialState = ref({ query: {} });
-const open = ref(false);
+
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
@@ -225,7 +230,6 @@ const listClassOptions = ref([
 ]);
 
 const data = reactive({
-  form: {},
   rules: {
     dictLabel: [{ required: true, message: '数据标签不能为空', trigger: 'blur' }],
     dictValue: [{ required: true, message: '数据键值不能为空', trigger: 'blur' }],
@@ -233,7 +237,20 @@ const data = reactive({
   },
 });
 
-const { form, rules } = toRefs(data);
+const { rules } = toRefs(data);
+const dataRef = ref();
+const dataDialog = useFormDialog({
+  columns: 1,
+  formRef: dataRef,
+  title: computed(() => title.value),
+  closeOnClickModal: true,
+  destroyOnClose: false,
+  preValidate: false,
+  autoResetForm: false,
+  defaultData: () => ({}),
+});
+const form = toRef(dataDialog.state, 'data');
+const open = toRef(dataDialog.state, 'visible');
 
 /** GridList 数据加载 */
 async function loadDictData(params) {

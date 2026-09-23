@@ -33,3 +33,9 @@ package-lock.json
 *.timestamp-*
 .kiro/
 .env.development
+
+# Local ZXUI compiled theme package links (created by Vite on startup)
+src/theme/compiled-zxui/
+
+# Owned public theme deployment, emitted by the Vite build plugin
+public/zx-theme-assets/

@@ -1,22 +1,24 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents" @close="onDialogClose">
-    <el-form ref="formRef" :model="form" :rules="rules" label-width="100px">
-      <el-form-item label="设备名称" prop="deviceName">
-        <el-input v-model="form.deviceName" placeholder="请输入设备名称" />
-      </el-form-item>
-      <el-form-item label="设备分类" prop="categoryName">
-        <CategorySelector v-model="form.categoryName" placeholder="请选择设备分类" />
-      </el-form-item>
-      <el-form-item label="设备描述" prop="remark">
-        <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入设备描述" />
-      </el-form-item>
+    <el-form ref="formRef" :model="form" :rules="rules" v-bind="formProps">
+      <FormGrid v-bind="layoutProps">
+        <el-form-item label="设备名称" prop="deviceName">
+          <zx-input v-model="form.deviceName" placeholder="请输入设备名称" />
+        </el-form-item>
+        <el-form-item label="设备分类" prop="categoryName">
+          <CategorySelector v-model="form.categoryName" placeholder="请选择设备分类" />
+        </el-form-item>
+        <el-form-item label="设备描述" prop="remark">
+          <zx-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入设备描述" />
+        </el-form-item>
+      </FormGrid>
     </el-form>
   </ZxDialog>
 </template>
 
 <script setup name="DeviceNameDialog">
 import { ref, watch, toRef } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { CategorySelector } from './selector';
 
 const props = defineProps({
@@ -43,7 +45,8 @@ const rules = {
   categoryName: [{ required: true, message: '请选择设备分类', trigger: 'change' }],
 };
 
-const { dialogProps, dialogEvents, open, close, state } = useDialog({
+const { formProps, layoutProps, dialogProps, dialogEvents, open, close, state } = useFormDialog({
+  columns: 1,
   title: props.isCreate ? '新增设备' : '编辑设备信息',
   okText: '下一步',
   formRef,

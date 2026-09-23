@@ -1,0 +1,207 @@
+{
+  "active": null,
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 482,
+      "scope": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "width": 880
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": true,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "color(srgb 0.916006 0.945752 0.993362) 0px 0px 0px 1000px inset",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": true,
+      "disabled": false,
+      "height": 32,
+      "name": "",
+      "shadow": "color(srgb 0.916006 0.945752 0.993362) 0px 0px 0px 1000px inset",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "password"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 14,
+      "name": "el-id-7014-74",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 14,
+      "name": "el-id-7014-74",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 24,
+      "name": "",
+      "shadow": "none",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "height": 52,
+      "name": "",
+      "shadow": "color(srgb 0.24 0.62 1 / 0.28) 0px 0px 0px 1px inset, color(srgb 0.24 0.62 1 / 0.18) 0px 0px 16px 0px inset",
+      "textFill": "color(srgb 0.1008 0.1236 0.1604)",
+      "type": "textarea"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "用户昵称"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "归属部门"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "手机号码"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "邮箱"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "用户名称"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "用户密码"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "用户性别"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "状态"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "岗位"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "角色"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "备注"
+    }
+  ],
+  "popups": [
+    {
+      "background": "color(srgb 0.901726 0.940559 0.993694)",
+      "scope": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "text": "集团总公司"
+    }
+  ],
+  "scopes": [
+    {
+      "scope": null,
+      "tag": "HTML",
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": null,
+      "tag": "BODY",
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:vfadmin:root",
+      "tag": "DIV",
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    },
+    {
+      "scope": "scope:vfadmin:root",
+      "tag": "DIV",
+      "theme": "industrial-blue",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+    }
+  ],
+  "status": [],
+  "viewport": [
+    1280,
+    720
+  ]
+}

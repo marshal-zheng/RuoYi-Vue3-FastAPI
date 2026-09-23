@@ -4,6 +4,16 @@ const createHttpClient = vi.fn();
 const createGridListPlugin = vi.fn((config: any) => config);
 const presentSuccessFeedback = vi.fn();
 const presentProblemFeedback = vi.fn();
+const elMessageClose = vi.fn();
+const ElMessage = Object.assign(
+  vi.fn(() => ({ close: elMessageClose })),
+  {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    closeAll: vi.fn(),
+  }
+);
 
 vi.mock('@zxio/http', () => ({
   createHttpClient,
@@ -11,11 +21,7 @@ vi.mock('@zxio/http', () => ({
 }));
 
 vi.mock('element-plus', () => ({
-  ElMessage: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-  },
+  ElMessage,
   ElMessageBox: {
     alert: vi.fn(),
   },
@@ -60,10 +66,29 @@ vi.mock('@/utils/feedback/presenter', () => ({
   })),
 }));
 
+const expiredAuthError = {
+  config: {
+    method: 'get',
+  },
+  response: {
+    status: 401,
+    data: {
+      type: 'about:blank',
+      title: '登录状态已过期',
+      status: 401,
+      detail: '登录状态已过期，请重新登录',
+      instance: '',
+      errorCode: 20002,
+    },
+    headers: {},
+  },
+};
+
 describe('http contract client', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
+    window.history.pushState({}, '', '/index');
     createHttpClient.mockImplementation((config: any) => ({
       __config: config,
       request: vi.fn(),
@@ -210,6 +235,73 @@ describe('http contract client', () => {
       size: 50,
       nextCursor: 'cursor-2',
     });
+  });
+
+  it('does not show expired-session feedback when already on the login page', async () => {
+    window.history.pushState({}, '', '/login?redirect=/index');
+    const { clientConfig } = await loadModule();
+    const onError = clientConfig.transforms[1].onError;
+
+    await expect(onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+      problem: expect.objectContaining({
+        detail: '登录状态已过期，请重新登录',
+      }),
+    });
+
+    expect(ElMessage).not.toHaveBeenCalled();
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+  });
+
+  it('prompts relogin when a protected page receives an expired session', async () => {
+    const { clientConfig } = await loadModule();
+    const onError = clientConfig.transforms[1].onError;
+
+    await expect(onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+    });
+
+    expect(ElMessage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'warning',
+      })
+    );
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+  });
+
+  it('does not prompt relogin for silent session restore failures', async () => {
+    const { clientConfig } = await loadModule();
+    const onError = clientConfig.transforms[1].onError;
+
+    await expect(
+      onError({
+        ...expiredAuthError,
+        config: {
+          method: 'post',
+          silentError: true,
+        },
+      })
+    ).rejects.toMatchObject({
+      status: 401,
+    });
+
+    expect(ElMessage).not.toHaveBeenCalled();
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+  });
+
+  it('closes an in-flight relogin prompt when entering the login route', async () => {
+    const { clientConfig } = await loadModule();
+    const onError = clientConfig.transforms[1].onError;
+
+    await expect(onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+    });
+    expect(ElMessage).toHaveBeenCalled();
+
+    const { dismissReloginPrompt } = await import('@/utils/http');
+    dismissReloginPrompt();
+
+    expect(elMessageClose).toHaveBeenCalled();
   });
 
   it('presents skipped relogin auth problems through the unified error channel', async () => {

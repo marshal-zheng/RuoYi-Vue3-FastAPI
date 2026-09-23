@@ -7,12 +7,7 @@
     :class="{ 'has-bottom-border': settingsStore.topNavBorder }"
   >
     <template v-for="(item, index) in topMenus">
-      <el-menu-item
-        :style="{ '--theme': theme }"
-        :index="item.path"
-        :key="index"
-        v-if="index < visibleNumber"
-      >
+      <el-menu-item :index="item.path" :key="index" v-if="index < visibleNumber">
         <ZxIcon
           v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
           :icon="resolveMenuIcon(item.meta.icon)"
@@ -23,7 +18,7 @@
     </template>
 
     <!-- 顶部菜单超出数量折叠 -->
-    <el-sub-menu :style="{ '--theme': theme }" index="more" v-if="topMenus.length > visibleNumber">
+    <el-sub-menu index="more" v-if="topMenus.length > visibleNumber">
       <template #title>更多菜单</template>
       <template v-for="(item, index) in topMenus">
         <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
@@ -60,7 +55,6 @@ const route = useRoute();
 const router = useRouter();
 
 // 主题颜色
-const theme = computed(() => settingsStore.theme);
 // 所有的路由信息
 const routers = computed(() => permissionStore.topbarRouters);
 
@@ -208,7 +202,7 @@ onMounted(() => {
   float: none;
   height: var(--top-header-height) !important;
   line-height: var(--top-header-height) !important;
-  color: var(--top-header-breadcrumb-color) !important;
+  color: var(--zx-semantic-surface-header-on-text) !important;
   padding: 0 16px !important;
   margin: 0 !important;
   font-size: 15px;
@@ -219,55 +213,39 @@ onMounted(() => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Active State - Conditional Styles handled via class or just generic overrides */
-.topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
-.topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
-  color: #ffffff !important;
-  font-weight: 700 !important; /* Bold text for active state */
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle text shadow for legibility */
+/* 悬停和焦点保留 header 文字语义，不覆盖激活项的 selected 表面。 */
+.topmenu-container.el-menu--horizontal
+  > .el-menu-item:not(.is-disabled):not(.is-active):is(:focus, :hover),
+.topmenu-container.el-menu--horizontal
+  > .el-sub-menu:not(.is-disabled):not(.is-active)
+  .el-sub-menu__title:is(:focus, :hover) {
+  background-color: var(--zx-semantic-fill-hover) !important;
+  color: var(--zx-semantic-surface-header-on-text) !important;
 }
 
-/* When Border is ON (default behavior if we didn't have the toggle, but here we use the store value) */
-/* We need to use :deep or global styles if we can't access store in CSS, but we can use dynamic style binding or just rely on the fact that we are in a scoped style or similar.
-   However, this file has a non-scoped <style> block.
-   To implement the toggle, I will bind a class to the container in the template and use it here.
-*/
+/* 激活、悬停激活项和聚焦激活项共用主题的 selected 表面。 */
+.topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
+.topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
+  color: var(--zx-semantic-surface-selected-on-text) !important;
+  font-weight: 700 !important;
+  background-color: var(--zx-semantic-surface-selected-fill) !important;
+  background-image: var(--zx-semantic-surface-selected-highlight);
+  box-shadow: var(--zx-semantic-surface-selected-depth), var(--zx-semantic-surface-selected-inner);
+}
 
-/* Default (Border OFF): Stronger background, no border */
+/* 边框开关只控制底部指示线，激活项的主题材质保持一致。 */
 .topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active,
 .topmenu-container.el-menu--horizontal:not(.has-bottom-border)
   > .el-sub-menu.is-active
   .el-sub-menu__title {
-  background-color: rgba(255, 255, 255, 0.15) !important; /* Subtler background */
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15); /* Inner glow for depth */
   border-bottom-color: transparent !important;
 }
 
-/* Border ON: Subtle background, white border */
 .topmenu-container.el-menu--horizontal.has-bottom-border > .el-menu-item.is-active,
 .topmenu-container.el-menu--horizontal.has-bottom-border
   > .el-sub-menu.is-active
   .el-sub-menu__title {
-  background-color: rgba(0, 0, 0, 0.1) !important;
-  border-bottom-color: #ffffff !important;
-}
-
-/* Hover & Focus State */
-/* Ensure focus doesn't override the active look with something ugly */
-.topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
-.topmenu-container.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
-.topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title:hover {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  color: #ffffff !important;
-}
-
-/* Fix for active item focus state to match active state */
-.topmenu-container.el-menu--horizontal:not(.has-bottom-border) > .el-menu-item.is-active:focus,
-.topmenu-container.el-menu--horizontal:not(.has-bottom-border)
-  > .el-sub-menu.is-active
-  .el-sub-menu__title:focus {
-  background-color: rgba(255, 255, 255, 0.15) !important;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15);
+  border-bottom-color: var(--zx-semantic-accent-base) !important;
 }
 
 /* 图标右间距 */

@@ -19,6 +19,8 @@ const props = defineProps({
   message: propTypes.string.def(''),
   // 是否固定头部
   fixedHeader: propTypes.bool.def(true),
+  // 满高模式：作为页面锚点吃掉内容区高度，头部固定，内容区把剩余高度传给内部的 fill 组件
+  fill: propTypes.bool.def(false),
   // 是否显示头部底部边框
   showHeaderBorder: propTypes.bool.def(true),
   // 是否显示分隔线 (divider)
@@ -52,8 +54,12 @@ const hasData = computed(() => props.data && props.data.length > 0);
 </script>
 
 <template>
-  <div class="content-detail-wrap">
-    <ElCard class="content-detail-wrap__body" shadow="never">
+  <div
+    class="content-detail-wrap"
+    :class="{ 'is-fill': fill }"
+    :data-zx-fill="fill ? 'anchor' : undefined"
+  >
+    <ElCard class="content-detail-wrap__body" shadow="never" :data-zx-fill="fill ? '' : undefined">
       <ElSkeleton :loading="loading" :animated="skeletonAnimated" :rows="skeletonRows">
         <template #default>
           <!-- 固定头部 -->
@@ -136,7 +142,7 @@ const hasData = computed(() => props.data && props.data.length > 0);
                   fixedHeader && (hasHeaderSlot || hasData),
               },
             ]"
-            :style="{ minHeight }"
+            :style="{ minHeight: fill ? undefined : minHeight }"
           >
             <slot name="body">
               <slot></slot>
@@ -152,7 +158,10 @@ const hasData = computed(() => props.data && props.data.length > 0);
 .content-detail-wrap {
   position: relative;
   width: 100%;
-  height: 100%;
+
+  &:not(.is-fill) {
+    height: 100%;
+  }
 
   &__body {
     position: relative;
@@ -244,5 +253,23 @@ const hasData = computed(() => props.data && props.data.length > 0);
 :deep(.content-detail-wrap-tooltip) {
   max-width: 400px;
   word-break: break-all;
+}
+
+/* Fill: the wrapper is the page anchor; the card and its body pass the height
+   down, the sticky header keeps its own, the content grows. */
+.content-detail-wrap.is-fill :deep(.el-card__body) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+}
+.content-detail-wrap.is-fill :deep(.content-detail-wrap__header) {
+  flex: 0 0 auto;
+}
+.content-detail-wrap.is-fill :deep(.content-detail-wrap__content) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
 }
 </style>

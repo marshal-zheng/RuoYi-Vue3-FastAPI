@@ -35,7 +35,7 @@ describe('Dict Data API contract', () => {
     });
 
     await expect(dictDataApi.getDicts('sys_user_sex')).resolves.toMatchObject({
-      data: expect.arrayContaining([
+      items: expect.arrayContaining([
         expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '0' }),
         expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '1' }),
       ]),

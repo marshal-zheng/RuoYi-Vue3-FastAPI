@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Close, FullScreen, Minus, Download } from '@element-plus/icons-vue';
 import { useDialog } from '@zxio/zxui';
@@ -88,14 +88,6 @@ const props = defineProps({
     type: Function,
     default: null,
   },
-  width: {
-    type: String,
-    default: '1200px',
-  },
-  height: {
-    type: String,
-    default: '80%',
-  },
 });
 
 // Emits
@@ -111,15 +103,15 @@ const emit = defineEmits([
 
 // 响应式数据
 const matrixViewRef = ref(null);
-const isFullscreen = ref(false);
+const isFullscreen = computed(() => state.isFullscreen);
 const saving = ref(false);
 
 // 使用 useDialog hook
-const { dialogProps, dialogEvents, open, close } = useDialog({
+const { state, dialogProps, dialogEvents, open, close, toggleFullscreen } = useDialog({
+  dialogSize: 'xl',
+  noContentPadding: true,
   title: () => props.title,
-  width: () => props.width,
-  height: () => props.height,
-  fullscreen: () => isFullscreen.value,
+
   closeOnClickModal: false,
   defaultData: () => ({}),
   onClose: handleClose,
@@ -139,7 +131,7 @@ watch(
 
 // 监听对话框关闭，同步 modelValue
 watch(
-  () => dialogProps.modelValue,
+  () => state.visible,
   (val) => {
     if (!val) {
       emit('update:modelValue', false);
@@ -148,9 +140,6 @@ watch(
 );
 
 // 方法
-const toggleFullscreen = () => {
-  isFullscreen.value = !isFullscreen.value;
-};
 
 const handleNodeAdd = (nodeData) => {
   emit('node-add', nodeData);
@@ -231,7 +220,7 @@ defineExpose({
   .dialog-title {
     font-size: 16px;
     font-weight: 600;
-    color: #303133;
+    color: var(--el-text-color-primary);
   }
 
   .header-actions {
@@ -252,15 +241,6 @@ defineExpose({
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-}
-
-// 对话框内容区域样式优化
-:deep(.zx-dialog__body) {
-  padding: 0 !important;
-
-  .dag-matrix-view {
-    height: 100%;
   }
 }
 </style>

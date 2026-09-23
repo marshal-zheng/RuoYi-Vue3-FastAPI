@@ -1,24 +1,26 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="dialog-form-container">
-      <el-form ref="formRef" :model="state.data" :rules="formRules" label-width="100px">
-        <el-form-item label="分类名称" prop="name">
-          <el-input v-model="state.data.name" placeholder="请输入分类名称" />
-        </el-form-item>
-        <el-form-item label="分类描述" prop="descr">
-          <el-input
-            v-model="state.data.descr"
-            type="textarea"
-            placeholder="请输入分类描述"
-            :rows="3"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-radio-group v-model="state.data.status">
-            <el-radio label="0">正常</el-radio>
-            <el-radio label="1">停用</el-radio>
-          </el-radio-group>
-        </el-form-item>
+      <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
+        <FormGrid v-bind="layoutProps">
+          <el-form-item label="分类名称" prop="name">
+            <zx-input v-model="state.data.name" placeholder="请输入分类名称" />
+          </el-form-item>
+          <el-form-item label="分类描述" prop="descr">
+            <zx-input
+              v-model="state.data.descr"
+              type="textarea"
+              placeholder="请输入分类描述"
+              :rows="3"
+            ></zx-input>
+          </el-form-item>
+          <el-form-item label="状态" prop="status">
+            <el-radio-group v-model="state.data.status">
+              <el-radio label="0">正常</el-radio>
+              <el-radio label="1">停用</el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </FormGrid>
       </el-form>
     </div>
   </ZxDialog>
@@ -26,7 +28,7 @@
 
 <script setup name="DeviceClazzDialog">
 import { ref, computed } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getDeviceCategory, addDeviceCategory, updateDeviceCategory } from '@/api/device/category';
 
 // 定义组件的 emits
@@ -46,48 +48,49 @@ const formRules = computed(() => ({
 }));
 
 // 使用 useDialog hook
-const { state, dialogProps, dialogEvents, open, close, setLoading } = useDialog({
-  // 动态标题
-  title: (data) => {
-    return data.categoryId ? '修改设备分类' : '添加设备分类';
-  },
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setLoading } =
+  useFormDialog({
+    columns: 1,
+    // 动态标题
+    title: (data) => {
+      return data.categoryId ? '修改设备分类' : '添加设备分类';
+    },
 
-  // 对话框配置
-  width: '600px',
+    // 对话框配置
 
-  // 表单配置
-  formRef: formRef,
-  preValidate: true,
-  autoScrollToError: true,
+    // 表单配置
+    formRef: formRef,
+    preValidate: true,
+    autoScrollToError: true,
 
-  // 默认数据
-  defaultData: () => ({
-    categoryId: null,
-    name: '',
-    descr: '',
-    status: '0',
-  }),
+    // 默认数据
+    defaultData: () => ({
+      categoryId: null,
+      name: '',
+      descr: '',
+      status: '0',
+    }),
 
-  // 数据转换
-  dataTransform: (raw) => ({
-    categoryId: raw.categoryId || raw.deviceClazzId || null,
-    name: raw.name || '',
-    descr: raw.descr || '',
-    status: raw.status || '0',
-  }),
+    // 数据转换
+    dataTransform: (raw) => ({
+      categoryId: raw.categoryId || raw.deviceClazzId || null,
+      name: raw.name || '',
+      descr: raw.descr || '',
+      status: raw.status || '0',
+    }),
 
-  // 确认回调
-  onConfirm: async (data) => {
-    if (data.categoryId) {
-      const response = await updateDeviceCategory(data);
+    // 确认回调
+    onConfirm: async (data) => {
+      if (data.categoryId) {
+        const response = await updateDeviceCategory(data);
+        emit('success');
+        return response;
+      }
+      const response = await addDeviceCategory(data);
       emit('success');
       return response;
-    }
-    const response = await addDeviceCategory(data);
-    emit('success');
-    return response;
-  },
-});
+    },
+  });
 
 /** 获取设备分类详情 */
 async function getDeviceCategoryInfo(categoryId) {

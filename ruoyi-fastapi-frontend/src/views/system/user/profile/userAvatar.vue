@@ -1,11 +1,15 @@
 <template>
   <div class="user-info-head" @click="editCropper()">
     <img :src="options.img" title="点击上传头像" class="img-circle img-lg" />
-    <el-dialog
+    <ZxDialog
+      dialog-size="lg"
+      :draggable="false"
+      :show-full-screen="false"
+      :destroy-on-close="false"
+      :close-on-click-modal="true"
+      :footer="false"
       :title="title"
       v-model="open"
-      width="800px"
-      append-to-body
       @opened="modalOpened"
       @close="closeDialog"
     >
@@ -61,7 +65,7 @@
           <el-button type="primary" @click="uploadImg()">提 交</el-button>
         </el-col>
       </el-row>
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 

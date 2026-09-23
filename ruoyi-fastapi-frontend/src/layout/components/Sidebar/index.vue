@@ -1,5 +1,9 @@
 <template>
-  <div :class="{ 'has-logo': showLogo, 'no-logo-spacing': !showLogo }" class="sidebar-container">
+  <div
+    :class="{ 'has-logo': showLogo, 'no-logo-spacing': !showLogo }"
+    class="sidebar-container"
+    data-zx-surface="panel"
+  >
     <Logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
@@ -27,7 +31,6 @@
 <script setup>
 import Logo from './Logo';
 import SidebarItem from './SidebarItem';
-import variables from '@/assets/styles/variables.module.less';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
@@ -38,8 +41,6 @@ const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
-const sideTheme = computed(() => settingsStore.sideTheme);
-const theme = computed(() => settingsStore.theme);
 const isCollapse = computed(() => !appStore.sidebar.opened);
 
 // 展示侧边栏 Logo 的策略：
@@ -48,22 +49,6 @@ const isCollapse = computed(() => !appStore.sidebar.opened);
 const showLogo = computed(
   () => settingsStore.sidebarLogo && (settingsStore.tagsView || isCollapse.value)
 );
-
-// 获取菜单背景色
-const getMenuBackground = computed(() => {
-  if (settingsStore.isDark) {
-    return 'var(--sidebar-bg)';
-  }
-  return sideTheme.value === 'theme-dark' ? variables.menuBg : variables.menuLightBg;
-});
-
-// 获取菜单文字颜色
-const getMenuTextColor = computed(() => {
-  if (settingsStore.isDark) {
-    return 'var(--sidebar-text)';
-  }
-  return sideTheme.value === 'theme-dark' ? variables.menuText : variables.menuLightText;
-});
 
 const activeMenu = computed(() => {
   const { meta, path } = route;
@@ -75,8 +60,28 @@ const activeMenu = computed(() => {
 </script>
 
 <style lang="less" scoped>
+@import '@/assets/styles/mixin.less';
+
 .sidebar-container {
-  background-color: var(--left-menu-bg-color);
+  // The panel surface paints background, border and depth. The menu sits
+  // transparently on top of it, so only the interaction states are defined
+  // here — rebound at this boundary rather than on the document root.
+  --left-menu-bg-color: transparent;
+  --left-menu-bg-light-color: transparent;
+  --left-menu-submenu-bg-color: transparent;
+  --left-menu-text-color: var(--zx-semantic-surface-panel-on-text);
+  --left-menu-submenu-text-color: var(--zx-semantic-surface-panel-on-text);
+  --left-menu-text-active-color: var(--zx-semantic-accent-base);
+  --left-menu-hover-bg-color: @on-surface-tint;
+  --left-menu-submenu-hover-bg-color: @on-surface-tint;
+  --left-menu-bg-active-color: var(--zx-semantic-fill-selected);
+  --left-menu-collapse-bg-active-color: var(--zx-semantic-fill-selected);
+  --left-menu-border-color: var(--zx-semantic-border-subtle);
+  --left-menu-indent-color: var(--zx-semantic-border-subtle);
+  --left-menu-active-shadow: none;
+  --left-menu-box-shadow:
+    var(--zx-semantic-surface-panel-depth), var(--zx-semantic-surface-panel-inner);
+
   transition: width var(--transition-time-02);
   box-shadow: var(--left-menu-box-shadow);
 

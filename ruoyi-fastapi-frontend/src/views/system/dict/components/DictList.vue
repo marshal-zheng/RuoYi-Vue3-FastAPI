@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <template #header-right>
       <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:dict:add']"
         >新增</ZxButton
@@ -36,16 +36,11 @@
       >
     </template>
 
-    <ZxGridList
-      ref="gridListRef"
-      :load-data="loadDictData"
-      :query-transform="queryTransform"
-      class="zx-grid-list--page"
-    >
+    <ZxGridList ref="gridListRef" :load-data="loadDictData" :query-transform="queryTransform" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.dictType"
               placeholder="字典类型"
               clearable

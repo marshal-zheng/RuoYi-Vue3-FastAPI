@@ -10,7 +10,7 @@
     style="width: 100%"
     @change="handleChange"
   />
-  <el-input
+  <zx-input
     v-else
     v-model="cellValue"
     :type="inputType"
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ElInput } from 'element-plus';
+import { ZxInput } from '@zxio/zxui';
 import DictAutocomplete from '@/components/business/DictAutocomplete/index.vue';
 
 const props = defineProps({

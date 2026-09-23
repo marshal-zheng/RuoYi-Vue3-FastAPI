@@ -1,10 +1,11 @@
 <template>
-  <ZxContentWrap data-testid="project-list-page">
+  <ZxContentWrap data-testid="project-list-page" fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProjectData"
       :query-transform="queryTransform"
-      class="project-grid zx-grid-list--page"
+      class="project-grid"
+      fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
@@ -282,7 +283,7 @@ import {
   View,
 } from "@element-plus/icons-vue";
 import { default as ProjectFormDialog } from "./components/ProjectFormDialog.vue";
-import { confirmInputDanger } from "@zxio/zxui";
+import { confirmInputDanger } from '@/theme/confirm-input';
 import { ElMessage } from "element-plus";
 import { downloadFromResponse, validateFile } from "@/utils/io-toolkit";
 

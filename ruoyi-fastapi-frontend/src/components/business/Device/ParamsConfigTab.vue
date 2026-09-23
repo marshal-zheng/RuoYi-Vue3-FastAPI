@@ -52,7 +52,7 @@
       <!-- LAN 参数 -->
       <template v-if="portInfo.interfaceType === 'LAN'">
         <el-form-item label="IP 地址" prop="ipAddress">
-          <el-input
+          <zx-input
             v-model="paramsForm.ipAddress"
             placeholder="请输入 IP 地址，如：192.168.1.100"
           />

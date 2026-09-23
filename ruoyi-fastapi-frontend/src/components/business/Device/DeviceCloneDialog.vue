@@ -4,28 +4,24 @@
       ref="formRef"
       :model="formData"
       :rules="rules"
-      label-width="100px"
+      v-bind="dialog.formProps"
       label-position="left"
     >
-      <el-form-item label="设备名称" prop="deviceName">
-        <el-input v-model="formData.deviceName" placeholder="请输入新设备名称" maxlength="100" />
-      </el-form-item>
+      <FormGrid v-bind="dialog.layoutProps">
+        <el-form-item label="设备名称" prop="deviceName">
+          <zx-input v-model="formData.deviceName" placeholder="请输入新设备名称" maxlength="100" />
+        </el-form-item>
+      </FormGrid>
     </el-form>
   </ZxDialog>
 </template>
 
 <script setup name="DeviceCloneDialog">
-import { ref, reactive } from 'vue';
+import { ref, toRef } from 'vue';
 import { cloneDevice, checkDeviceNameUnique } from '@/api/device/device';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
 const formRef = ref(null);
-
-const formData = reactive({
-  sourceDeviceId: null,
-  sourceDeviceName: '',
-  deviceName: '',
-});
 
 const validateDeviceName = async (rule, value, callback) => {
   if (!value) {
@@ -51,18 +47,23 @@ const rules = {
 
 let onSuccessCallback = null;
 
-const dialog = useDialog({
+const dialog = useFormDialog({
+  columns: 1,
   title: '克隆设备',
-  width: '600px',
+
   okText: '克隆',
   formRef,
-  formModel: formData,
+  defaultData: () => ({
+    sourceDeviceId: null,
+    sourceDeviceName: '',
+    deviceName: '',
+  }),
   preValidate: true,
   autoResetForm: true,
   async onConfirm() {
     await cloneDevice({
-      sourceDeviceId: formData.sourceDeviceId,
-      deviceName: formData.deviceName,
+      sourceDeviceId: formData.value.sourceDeviceId,
+      deviceName: formData.value.deviceName,
     });
 
     if (onSuccessCallback) {
@@ -73,12 +74,15 @@ const dialog = useDialog({
   },
 });
 
+const formData = toRef(dialog.state, 'data');
+
 const open = (sourceDevice, onSuccess) => {
-  formData.sourceDeviceId = sourceDevice.deviceId;
-  formData.sourceDeviceName = sourceDevice.deviceName;
-  formData.deviceName = `${sourceDevice.deviceName}_副本`;
   onSuccessCallback = onSuccess;
-  dialog.open();
+  dialog.open({
+    sourceDeviceId: sourceDevice.deviceId,
+    sourceDeviceName: sourceDevice.deviceName,
+    deviceName: `${sourceDevice.deviceName}_副本`,
+  });
 };
 
 const close = () => {

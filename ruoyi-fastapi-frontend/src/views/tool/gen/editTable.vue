@@ -15,7 +15,7 @@
           />
           <el-table-column label="字段描述" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.columnComment"></el-input>
+              <zx-input v-model="scope.row.columnComment"></zx-input>
             </template>
           </el-table-column>
           <el-table-column
@@ -42,7 +42,7 @@
           </el-table-column>
           <el-table-column label="Python属性" min-width="10%">
             <template #default="scope">
-              <el-input v-model="scope.row.pythonField"></el-input>
+              <zx-input v-model="scope.row.pythonField"></zx-input>
             </template>
           </el-table-column>
 
@@ -218,7 +218,7 @@ function close() {
     });
     /** 查询字典下拉列表 */
     getDictOptionselect().then((response) => {
-      dictOptions.value = response;
+      dictOptions.value = response.items;
     });
   }
 })();

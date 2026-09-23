@@ -1,12 +1,14 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
-    <el-form label-width="80px" label-position="left">
-      <el-form-item label="版本名称">
-        <span class="text-gray-700">{{ state.data.versionName }}</span>
-      </el-form-item>
-      <el-form-item label="导出格式" required>
-        <FileTypeSelector v-model="state.data.format" style="width: 100%" />
-      </el-form-item>
+    <el-form ref="formRef" v-bind="formProps" label-position="left">
+      <FormGrid v-bind="layoutProps">
+        <el-form-item label="版本名称">
+          <span class="text-gray-700">{{ state.data.versionName }}</span>
+        </el-form-item>
+        <el-form-item label="导出格式" required>
+          <FileTypeSelector v-model="state.data.format" style="width: 100%" />
+        </el-form-item>
+      </FormGrid>
     </el-form>
     <div v-if="exporting" class="export-loading">
       <el-icon class="is-loading"><Loading /></el-icon>
@@ -16,10 +18,12 @@
 </template>
 
 <script setup name="VersionExportDialog">
+const formRef = ref();
+
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { Loading } from '@element-plus/icons-vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import {
   exportProjectVersion,
   exportProjectVersionExcel,
@@ -30,9 +34,11 @@ import { FileTypeSelector } from './selector';
 
 const exporting = ref(false);
 
-const { state, dialogProps, dialogEvents, open, close } = useDialog({
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close } = useFormDialog({
+  columns: 1,
+  formRef: formRef,
   title: '导出版本',
-  width: '500px',
+
   okText: '确定导出',
   defaultData: () => ({
     versionId: null,

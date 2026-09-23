@@ -5,28 +5,30 @@
         ref="formRef"
         :model="state.data"
         :rules="formRules"
-        label-width="100px"
+        v-bind="dialogController.formProps"
         label-position="right"
       >
-        <el-form-item label="分类名称" prop="name">
-          <el-input
-            v-model="state.data.name"
-            placeholder="请输入分类名称"
-            maxlength="50"
-            show-word-limit
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input
-            v-model="state.data.remark"
-            type="textarea"
-            placeholder="请输入备注"
-            :rows="3"
-            maxlength="500"
-            show-word-limit
-          />
-        </el-form-item>
+        <FormGrid v-bind="dialogController.layoutProps">
+          <el-form-item label="分类名称" prop="name">
+            <zx-input
+              v-model="state.data.name"
+              placeholder="请输入分类名称"
+              maxlength="50"
+              show-word-limit
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <zx-input
+              v-model="state.data.remark"
+              type="textarea"
+              placeholder="请输入备注"
+              :rows="3"
+              maxlength="500"
+              show-word-limit
+            />
+          </el-form-item>
+        </FormGrid>
       </el-form>
     </div>
   </ZxDialog>
@@ -34,7 +36,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { addDeviceCategory, updateDeviceCategory, getDeviceCategory } from '@/api/device/category';
 
 const emit = defineEmits<{ success: [data?: any] }>();
@@ -57,9 +59,10 @@ const formRules = {
 
 let state = {} as { data: CategoryForm };
 
-const dialogController = useDialog<CategoryForm>({
+const dialogController = useFormDialog<CategoryForm>({
+  columns: 1,
   title: (data: CategoryForm) => (data?.device_category_id ? '修改设备分类' : '添加设备分类'),
-  width: '600px',
+
   okText: computed(() => (state.data.device_category_id ? '保存' : '创建')),
   formRef,
   preValidate: true,

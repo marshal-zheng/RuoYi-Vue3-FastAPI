@@ -1,0 +1,686 @@
+[
+  {
+    "label": "密码",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入前缀",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入后缀",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入前图标名称",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入后图标名称",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字符长度",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "计数器",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "精度",
+        "type": "number"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      }
+    ]
+  },
+  {
+    "label": "下拉选择",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "单选框组",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      }
+    ]
+  },
+  {
+    "label": "多选框组",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "至少应选",
+        "type": "number"
+      },
+      {
+        "placeholder": "最多可选",
+        "type": "number"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项名",
+        "type": "text"
+      },
+      {
+        "placeholder": "选项值",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      }
+    ]
+  },
+  {
+    "label": "开关",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入开启提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入关闭提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入开启值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入关闭值",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "滑块",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "最小值",
+        "type": "number"
+      },
+      {
+        "placeholder": "最大值",
+        "type": "number"
+      },
+      {
+        "placeholder": "步数",
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "label": "时间选择",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入时间格式",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "时间范围",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入分隔符",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入时间格式",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "日期选择",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入时间格式",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "日期范围",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入占位提示",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入分隔符",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入时间格式",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "评分",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "最大值",
+        "type": "number"
+      }
+    ]
+  },
+  {
+    "label": "颜色选择",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      }
+    ]
+  },
+  {
+    "label": "上传",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入组件宽度",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入上传文件字段名",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入文件大小",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入上传地址",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "请输入按钮文字",
+        "type": "text"
+      }
+    ]
+  },
+  {
+    "label": "行容器",
+    "fields": [
+      {
+        "placeholder": "栅格间隔",
+        "type": "number"
+      },
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      },
+      {
+        "placeholder": "",
+        "type": "radio"
+      }
+    ]
+  },
+  {
+    "label": "按钮",
+    "fields": [
+      {
+        "placeholder": "",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入字段名（v-model）",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标题",
+        "type": "text"
+      },
+      {
+        "placeholder": "请输入标签宽度",
+        "type": "number"
+      },
+      {
+        "placeholder": "请输入默认值",
+        "type": "text"
+      }
+    ]
+  }
+]

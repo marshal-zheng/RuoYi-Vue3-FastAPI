@@ -1,11 +1,12 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadProtocolData"
       :query-transform="queryTransform"
       :clear-selection-on-load="true"
-      class="protocol-grid zx-grid-list--page"
+      class="protocol-grid"
+      fill
     >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">

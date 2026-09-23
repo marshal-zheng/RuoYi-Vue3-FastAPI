@@ -1,11 +1,12 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadTableData"
+      :query-transform="serializeDateRange"
       :show-pagination="true"
       :load-on-mounted="true"
-      class="zx-grid-list--page"
+      fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
@@ -46,7 +47,7 @@
             >
           </div>
           <div class="zx-grid-form-bar__filters">
-            <el-input
+            <zx-input
               v-model="query.tableComment"
               placeholder="请输入表描述"
               clearable
@@ -86,7 +87,7 @@
           <el-table-column type="selection" width="55" />
           <el-table-column label="序号" type="index" width="50">
             <template #default="scope">
-              <span>{{ (grid.page - 1) * grid.size + scope.$index + 1 }}</span>
+              <span>{{ (grid.pager.page - 1) * grid.pager.size + scope.$index + 1 }}</span>
             </template>
           </el-table-column>
           <el-table-column label="表名称" prop="tableName" :show-overflow-tooltip="true" />
@@ -188,6 +189,7 @@ import { listTable, previewTable, delTable, genCode, synchDb } from '@/api/tool/
 import { useDialog } from '@zxio/zxui';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
+import { serializeDateRange } from '@/utils/ruoyi';
 import importTable from './importTable';
 import createTable from './createTable';
 
@@ -208,9 +210,9 @@ const {
   dialogEvents: previewDialogEvents,
   open: openPreview,
 } = useDialog({
+  dialogSize: 'xl',
   title: '代码预览',
-  width: '80%',
-  height: '80vh',
+
   footer: false,
   noContentPadding: true,
   defaultData: () => ({
@@ -229,34 +231,17 @@ onActivated(() => {
 
 /** 加载表数据 */
 async function loadTableData(params) {
-  const { dateRange, ...restQuery } = params.query || {};
-  const queryData = {
-    page: params.page,
-    pageSize: params.size,
-    tableName: restQuery?.tableName,
-    tableComment: restQuery?.tableComment,
-  };
-
-  // 处理日期范围
-  if (Array.isArray(dateRange) && dateRange.length === 2) {
-    queryData.beginTime = dateRange[0];
-    queryData.endTime = dateRange[1];
-  }
-
-  try {
-    const response = await listTable(queryData);
-    return response;
-  } catch (e) {
-    return { items: [], total: 0, page: params.page, pageSize: params.size };
-  }
+  return listTable(params);
 }
 
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }) {
+function onSearch({ handleRefresh, updateState }) {
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
@@ -328,7 +313,7 @@ function handleSelectionChange(selection) {
 /** 修改按钮操作 */
 function handleEditTable(row) {
   const tableId = row?.tableId || ids.value[0];
-  const currentPage = gridListRef.value?.getState()?.page || 1;
+  const currentPage = gridListRef.value?.getStateSnapshot()?.pager?.page || 1;
   router.push({
     path: '/tool/gen-edit/index/' + tableId,
     query: { page: currentPage },

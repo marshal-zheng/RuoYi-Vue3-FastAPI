@@ -4,7 +4,7 @@
     :load-data="loadMenuData"
     :show-pagination="false"
     :load-on-mounted="true"
-    class="zx-grid-list--page"
+    fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
       <div class="zx-grid-form-bar">
@@ -15,7 +15,7 @@
           <ZxButton type="info" @click="toggleExpandAll">展开/折叠</ZxButton>
         </div>
         <div class="zx-grid-form-bar__filters">
-          <el-input
+          <zx-input
             v-model="query.menuName"
             placeholder="请输入菜单名称"
             clearable
@@ -156,7 +156,7 @@ async function loadMenuData(params: any) {
   };
   try {
     const response = await listMenu(query);
-    const tree = (proxy as any).handleTree(response, 'menuId');
+    const tree = (proxy as any).handleTree(response.items, 'menuId');
     return { data: tree || [], total: 0 };
   } catch (e) {
     return { data: [], total: 0 };

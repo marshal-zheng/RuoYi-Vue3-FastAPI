@@ -30,7 +30,7 @@
           @show="onIconPopoverShow"
         >
           <template #reference>
-            <el-input v-model="drawer.state.data.icon" placeholder="点击选择图标" readonly>
+            <zx-input v-model="drawer.state.data.icon" placeholder="点击选择图标" readonly>
               <template #prepend>
                 <svg-icon
                   v-if="drawer.state.data.icon"
@@ -39,7 +39,7 @@
                 />
                 <el-icon v-else><Search /></el-icon>
               </template>
-            </el-input>
+            </zx-input>
           </template>
           <IconSelect
             ref="iconSelectRef"
@@ -50,7 +50,7 @@
       </el-form-item>
 
       <el-form-item label="菜单名称" prop="menuName">
-        <el-input v-model="drawer.state.data.menuName" placeholder="请输入菜单名称" />
+        <zx-input v-model="drawer.state.data.menuName" placeholder="请输入菜单名称" />
       </el-form-item>
 
       <el-form-item label="显示排序" prop="orderNum">
@@ -89,7 +89,7 @@
             路由地址
           </span>
         </template>
-        <el-input v-model="drawer.state.data.path" placeholder="请输入路由地址" />
+        <zx-input v-model="drawer.state.data.path" placeholder="请输入路由地址" />
       </el-form-item>
 
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="component">
@@ -104,7 +104,7 @@
             组件路径
           </span>
         </template>
-        <el-input v-model="drawer.state.data.component" placeholder="请输入组件路径" />
+        <zx-input v-model="drawer.state.data.component" placeholder="请输入组件路径" />
       </el-form-item>
 
       <el-form-item v-if="drawer.state.data.menuType !== 'M'" prop="perms">
@@ -119,7 +119,7 @@
             权限字符
           </span>
         </template>
-        <el-input v-model="drawer.state.data.perms" placeholder="请输入权限标识" maxlength="100" />
+        <zx-input v-model="drawer.state.data.perms" placeholder="请输入权限标识" maxlength="100" />
       </el-form-item>
 
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="query">
@@ -134,7 +134,7 @@
             路由参数
           </span>
         </template>
-        <el-input v-model="drawer.state.data.query" placeholder="请输入路由参数" maxlength="255" />
+        <zx-input v-model="drawer.state.data.query" placeholder="请输入路由参数" maxlength="255" />
       </el-form-item>
 
       <el-form-item v-if="drawer.state.data.menuType === 'C'" prop="isCache">
@@ -192,7 +192,7 @@
 
 <script setup lang="ts" name="MenuDrawer">
 import { ref } from 'vue';
-import { addMenu, updateMenu, treeselect } from '@/api/system/menu';
+import { addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
 import { useDrawer } from '@zxio/zxui';
 import { QuestionFilled, Search } from '@element-plus/icons-vue';
 import { IconSelect } from '@/components/ui';
@@ -225,12 +225,6 @@ interface MenuForm {
 }
 
 const emit = defineEmits(['success']);
-
-interface MenuTreeNode {
-  id: number;
-  label: string;
-  children?: MenuTreeNode[];
-}
 
 const menuOptions = ref<MenuTreeNode[]>([]);
 const formRef = ref();
@@ -280,7 +274,7 @@ async function openDrawer(data?: MenuForm) {
 
   // 加载菜单树数据
   const response = await treeselect();
-  const menus = response;
+  const menus = response.items;
   // 添加主类目根节点，允许选择顶级菜单
   menuOptions.value = [{ id: 0, label: '主类目', children: menus }];
 }

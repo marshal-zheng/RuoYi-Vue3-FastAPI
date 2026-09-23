@@ -118,7 +118,8 @@ class GenTableRepository:
             .distinct()
         )
         
-        return await PageUtil.paginate(self.db, query, page, page_size, is_page)
+        # Imports/deletions must be reflected immediately in the metadata list.
+        return await PageUtil.paginate(self.db, query, page, page_size, is_page, use_count_cache=False)
     
     async def get_db_table_list(
         self,

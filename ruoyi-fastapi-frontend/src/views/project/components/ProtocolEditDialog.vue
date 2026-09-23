@@ -41,9 +41,9 @@ const currentPortInfo = ref(null);
 
 // 使用 useDialog
 const dialog = useDialog({
+  dialogSize: 'xl',
   title: () => `配置协议 - ${currentPortInfo.value?.interfaceName || ''}`,
-  width: '80%',
-  hegiht: '90%',
+
   okText: '保存',
   cancelText: '取消',
   async onConfirm() {

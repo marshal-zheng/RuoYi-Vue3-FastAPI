@@ -1,0 +1,268 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统监控"
+  - text: /
+  - link "缓存列表"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "缓存列表":
+  - /url: /monitor/cacheList
+  - generic: 缓存列表
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- text: 缓存列表
+- button:
+- table:
+  - rowgroup:
+    - row "序号 缓存名称 备注 操作":
+      - columnheader "序号":
+        - generic: 序号
+      - columnheader "缓存名称":
+        - generic: 缓存名称
+      - columnheader "备注":
+        - generic: 备注
+      - columnheader "操作":
+        - generic: 操作
+- table:
+  - rowgroup:
+    - row "1 access_token 登录令牌信息":
+      - cell "1":
+        - generic: "1"
+      - cell "access_token":
+        - generic: access_token
+      - cell "登录令牌信息":
+        - generic: 登录令牌信息
+      - cell:
+        - button:
+    - row "2 sys_dict 数据字典":
+      - cell "2":
+        - generic: "2"
+      - cell "sys_dict":
+        - generic: sys_dict
+      - cell "数据字典":
+        - generic: 数据字典
+      - cell:
+        - button:
+    - row "3 sys_config 配置信息":
+      - cell "3":
+        - generic: "3"
+      - cell "sys_config":
+        - generic: sys_config
+      - cell "配置信息":
+        - generic: 配置信息
+      - cell:
+        - button:
+    - row "4 captcha_codes 图片验证码":
+      - cell "4":
+        - generic: "4"
+      - cell "captcha_codes":
+        - generic: captcha_codes
+      - cell "图片验证码":
+        - generic: 图片验证码
+      - cell:
+        - button:
+    - row "5 account_lock 用户锁定":
+      - cell "5":
+        - generic: "5"
+      - cell "account_lock":
+        - generic: account_lock
+      - cell "用户锁定":
+        - generic: 用户锁定
+      - cell:
+        - button:
+    - row "6 password_error_count 密码错误次数":
+      - cell "6":
+        - generic: "6"
+      - cell "password_error_count":
+        - generic: password_error_count
+      - cell "密码错误次数":
+        - generic: 密码错误次数
+      - cell:
+        - button:
+    - row "7 sms_code 短信验证码":
+      - cell "7":
+        - generic: "7"
+      - cell "sms_code":
+        - generic: sms_code
+      - cell "短信验证码":
+        - generic: 短信验证码
+      - cell:
+        - button:
+- text: 键名列表
+- button:
+- table:
+  - rowgroup:
+    - row "序号 缓存键名 操作":
+      - columnheader "序号":
+        - generic: 序号
+      - columnheader "缓存键名":
+        - generic: 缓存键名
+      - columnheader "操作":
+        - generic: 操作
+- table:
+  - rowgroup [active]:
+    - row "1 sys_protocol_speed_can":
+      - cell "1":
+        - generic: "1"
+      - cell "sys_protocol_speed_can":
+        - generic: sys_protocol_speed_can
+      - cell:
+        - button:
+    - row "2 sys_protocol_method_ethernet":
+      - cell "2":
+        - generic: "2"
+      - cell "sys_protocol_method_ethernet":
+        - generic: sys_protocol_method_ethernet
+      - cell:
+        - button:
+    - row "3 sys_protocol_speed_rs422":
+      - cell "3":
+        - generic: "3"
+      - cell "sys_protocol_speed_rs422":
+        - generic: sys_protocol_speed_rs422
+      - cell:
+        - button:
+    - row "4 sys_common_status":
+      - cell "4":
+        - generic: "4"
+      - cell "sys_common_status":
+        - generic: sys_common_status
+      - cell:
+        - button:
+    - row "5 sys_normal_disable":
+      - cell "5":
+        - generic: "5"
+      - cell "sys_normal_disable":
+        - generic: sys_normal_disable
+      - cell:
+        - button:
+    - row "6 sys_protocol_frequency":
+      - cell "6":
+        - generic: "6"
+      - cell "sys_protocol_frequency":
+        - generic: sys_protocol_frequency
+      - cell:
+        - button:
+    - row "7 sys_job_status":
+      - cell "7":
+        - generic: "7"
+      - cell "sys_job_status":
+        - generic: sys_job_status
+      - cell:
+        - button:
+    - row "8 sys_notice_status":
+      - cell "8":
+        - generic: "8"
+      - cell "sys_notice_status":
+        - generic: sys_notice_status
+      - cell:
+        - button:
+    - row "9 sys_protocol_method_can":
+      - cell "9":
+        - generic: "9"
+      - cell "sys_protocol_method_can":
+        - generic: sys_protocol_method_can
+      - cell:
+        - button:
+    - row "10 sys_notice_type":
+      - cell "10":
+        - generic: "10"
+      - cell "sys_notice_type":
+        - generic: sys_notice_type
+      - cell:
+        - button:
+    - row "11 sys_job_executor":
+      - cell "11":
+        - generic: "11"
+      - cell "sys_job_executor":
+        - generic: sys_job_executor
+      - cell:
+        - button:
+    - row "12 sys_protocol_type":
+      - cell "12":
+        - generic: "12"
+      - cell "sys_protocol_type":
+        - generic: sys_protocol_type
+      - cell:
+        - button:
+    - row "13 sys_protocol_error_handling":
+      - cell "13":
+        - generic: "13"
+      - cell "sys_protocol_error_handling":
+        - generic: sys_protocol_error_handling
+      - cell:
+        - button:
+    - row "14 sys_show_hide":
+      - cell "14":
+        - generic: "14"
+      - cell "sys_show_hide":
+        - generic: sys_show_hide
+      - cell:
+        - button:
+    - row "15 sys_protocol_speed_ethernet":
+      - cell "15":
+        - generic: "15"
+      - cell "sys_protocol_speed_ethernet":
+        - generic: sys_protocol_speed_ethernet
+      - cell:
+        - button:
+    - row "16 sys_protocol_speed_1553b":
+      - cell "16":
+        - generic: "16"
+      - cell "sys_protocol_speed_1553b":
+        - generic: sys_protocol_speed_1553b
+      - cell:
+        - button:
+    - row "17 sys_job_group":
+      - cell "17":
+        - generic: "17"
+      - cell "sys_job_group":
+        - generic: sys_job_group
+      - cell:
+        - button:
+    - row "18 sys_oper_type":
+      - cell "18":
+        - generic: "18"
+      - cell "sys_oper_type":
+        - generic: sys_oper_type
+      - cell:
+        - button:
+    - row "19 sys_yes_no":
+      - cell "19":
+        - generic: "19"
+      - cell "sys_yes_no":
+        - generic: sys_yes_no
+      - cell:
+        - button:
+    - row "20 sys_user_sex":
+      - cell "20":
+        - generic: "20"
+      - cell "sys_user_sex":
+        - generic: sys_user_sex
+      - cell:
+        - button:
+    - row "21 sys_protocol_data_type":
+      - cell "21":
+        - generic: "21"
+      - cell "sys_protocol_data_type":
+        - generic: sys_protocol_data_type
+      - cell:
+        - button:
+- text: 缓存内容
+- button "清理全部":
+  - generic: 清理全部
+- generic: "缓存名称:"
+- textbox "缓存名称:": sys_dict
+- generic: "缓存键名:"
+- textbox "缓存键名:": sys_yes_no
+- generic: "缓存内容:"
+- textbox "缓存内容:": "[{\"dictValue\": \"Y\", \"dictCode\": 15, \"cssClass\": \"\", \"isDefault\": \"Y\", \"remark\": \"系统默认是\", \"updateTime\": \"2026-09-20 06:41:48\", \"updateBy\": \"db_workflow\", \"dictType\": \"sys_yes_no\", \"dictSort\": 1, \"dictLabel\": \"是\", \"listClass\": \"primary\", \"status\": \"0\", \"createTime\": \"2026-09-20 06:41:48\", \"createBy\": \"db_workflow\"}, {\"dictValue\": \"N\", \"dictCode\": 16, \"cssClass\": \"\", \"isDefault\": \"N\", \"remark\": \"系统默认否\", \"updateTime\": \"2026-09-20 06:41:48\", \"updateBy\": \"db_workflow\", \"dictType\": \"sys_yes_no\", \"dictSort\": 2, \"dictLabel\": \"否\", \"listClass\": \"danger\", \"status\": \"0\", \"createTime\": \"2026-09-20 06:41:48\", \"createBy\": \"db_workflow\"}]"

@@ -2,7 +2,7 @@ import { ref, toRefs } from 'vue';
 import useDictStore from '@/store/modules/dict';
 import { getDicts } from '@/api/system/dict/data';
 
-interface DictItem {
+export interface DictItem {
   label: string;
   value: string;
   elTagType?: string;
@@ -17,30 +17,28 @@ interface DictDataItem {
 }
 
 // Track pending dictionary requests to prevent duplicates
-const pendingDictRequests = new Map<string, Promise<any>>();
+const pendingDictRequests = new Map<string, Promise<DictItem[]>>();
 
 /**
  * 获取字典数据
  */
 export function useDict(...args: string[]) {
-  console.log(3333);
   const res = ref<Record<string, DictItem[]>>({});
   return (() => {
-    args.forEach((dictType: string, index: number) => {
+    args.forEach((dictType: string) => {
       res.value[dictType] = [];
       const dicts = useDictStore().getDict(dictType);
       if (dicts) {
         res.value[dictType] = dicts;
       } else {
         // Check if there's already a pending request for this dict type
-        console.log('dictType', dictType);
         let dictPromise = pendingDictRequests.get(dictType);
 
         if (!dictPromise) {
           // Create new request and cache the promise
           dictPromise = getDicts(dictType)
-            .then((resp: any) => {
-              const dictData = resp.map((p: DictDataItem) => ({
+            .then((resp) => {
+              const dictData = resp.items.map((p: DictDataItem) => ({
                 label: p.dictLabel,
                 value: p.dictValue,
                 elTagType: p.listClass,

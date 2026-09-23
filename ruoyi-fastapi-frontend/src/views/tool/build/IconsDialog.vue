@@ -1,14 +1,31 @@
 <template>
   <div class="icon-dialog">
-    <el-dialog v-model="value" width="980px" :close-on-click-modal="false" :modal-append-to-body="false" @open="onOpen"
-      @close="onClose">
-      <template #header="{ close, titleId, titleClass }">
-        选择图标
-        <el-input v-model="key" size="small" :style="{ width: '260px' }" placeholder="请输入图标名称" prefix-icon="Search"
-          clearable />
+    <ZxDialog
+      v-model="value"
+      title="选择图标"
+      dialog-size="xl"
+      :footer="false"
+      :close-on-click-modal="false"
+      @open="onOpen"
+      @close="onClose"
+    >
+      <template #headerLeft>
+        <zx-input
+          v-model="key"
+          size="small"
+          :style="{ width: '260px' }"
+          placeholder="请输入图标名称"
+          prefix-icon="Search"
+          clearable
+        />
       </template>
       <ul class="icon-ul">
-        <li v-for="icon in iconList" :key="icon" :class="active === icon ? 'active-item' : ''" @click="onSelect(icon)">
+        <li
+          v-for="icon in iconList"
+          :key="icon"
+          :class="active === icon ? 'active-item' : ''"
+          @click="onSelect(icon)"
+        >
           <div>
             <el-icon :size="30">
               <component :is="icon" />
@@ -17,39 +34,40 @@
           </div>
         </li>
       </ul>
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 <script setup>
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import { watch } from 'vue'
+import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import { watch, ref } from "vue";
+import { ZxDialog } from "@zxio/zxui";
 
-const iconList = ref([])
-const originList = []
-const key = ref('')
-const active = ref('')
-const emit = defineEmits(['select'])
-const value = defineModel()
+const iconList = ref([]);
+const originList = [];
+const key = ref("");
+const active = ref("");
+const emit = defineEmits(["select"]);
+const value = defineModel();
 for (const [key] of Object.entries(ElementPlusIconsVue)) {
-  iconList.value.push(key)
-  originList.push(key)
+  iconList.value.push(key);
+  originList.push(key);
 }
 
-function onOpen() { }
-function onClose() { }
+function onOpen() {}
+function onClose() {}
 function onSelect(icon) {
-  active.value = icon
-  emit('select', icon)
-  value.value = false
+  active.value = icon;
+  emit("select", icon);
+  value.value = false;
 }
 
 watch(key, (val) => {
   if (val) {
-    iconList.value = originList.filter(name => name.indexOf(val) > -1)
+    iconList.value = originList.filter((name) => name.indexOf(val) > -1);
   } else {
-    iconList.value = originList
+    iconList.value = originList;
   }
-})
+});
 </script>
 <style scoped>
 .icon-ul {
@@ -74,38 +92,17 @@ watch(key, (val) => {
 }
 
 .icon-ul li:hover {
-  background: #f2f2f2;
+  background: var(--zx-semantic-surface-sunken);
 }
 
 .icon-ul li.active-item {
-  background: #e1f3fb;
-  color: #7a6df0;
+  background: var(--zx-semantic-surface-elevated);
+  color: var(--zx-semantic-text-primary);
 }
 
 .icon-ul li i {
   font-size: 30px;
   line-height: 50px;
   margin-bottom: 10px;
-}
-
-.icon-dialog :deep(.el-dialog) {
-  border-radius: 8px;
-  margin-bottom: 0;
-  margin-top: 4vh !important;
-  display: flex;
-  flex-direction: column;
-  max-height: 92vh;
-  overflow: hidden;
-  box-sizing: border-box;
-}
-
-.icon-dialog :deep(.el-dialog .el-dialog__header) {
-  padding-top: 14px;
-}
-
-.icon-dialog :deep(.el-dialog .el-dialog__body) {
-  margin: 0 20px 20px 20px;
-  padding: 0;
-  overflow: auto;
 }
 </style>

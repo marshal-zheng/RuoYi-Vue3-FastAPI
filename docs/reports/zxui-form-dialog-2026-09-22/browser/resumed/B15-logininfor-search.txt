@@ -1,0 +1,278 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统管理"
+  - text: /
+  - link "日志管理"
+  - text: /
+  - link "登录日志"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "登录日志":
+  - /url: /system/log/logininfor
+  - generic: 登录日志
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- button "删除" [disabled]:
+  - generic: 删除
+- button "清空":
+  - generic: 清空
+- button "解锁" [disabled]:
+  - generic: 解锁
+- button "导出":
+  - generic: 导出
+- textbox "请输入登录地址": 127.0.0.1
+- textbox "请输入用户名称" [active]: admin
+- combobox
+- generic: 登录状态
+- combobox "开始日期"
+- generic: "-"
+- combobox "结束日期"
+- table:
+  - rowgroup:
+    - row "选择所有行 访问编号 用户名称 按 用户名称 排序 地址 登录地点 操作系统 浏览器 登录状态 描述 访问时间 按 访问时间 排序":
+      - columnheader "选择所有行":
+        - generic "选择所有行":
+          - checkbox "选择所有行"
+      - columnheader "访问编号":
+        - generic: 访问编号
+      - columnheader "用户名称 按 用户名称 排序":
+        - text: 用户名称
+        - button "按 用户名称 排序"
+      - columnheader "地址":
+        - generic: 地址
+      - columnheader "登录地点":
+        - generic: 登录地点
+      - columnheader "操作系统":
+        - generic: 操作系统
+      - columnheader "浏览器":
+        - generic: 浏览器
+      - columnheader "登录状态":
+        - generic: 登录状态
+      - columnheader "描述":
+        - generic: 描述
+      - columnheader "访问时间 按 访问时间 排序":
+        - text: 访问时间
+        - button "按 访问时间 排序"
+- table:
+  - rowgroup:
+    - row "选择当前行 25 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-23 02:38:37":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "25":
+        - generic: "25"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-23 02:38:37":
+        - generic: 2026-09-23 02:38:37
+    - row "选择当前行 24 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:30:02":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "24":
+        - generic: "24"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:30:02":
+        - generic: 2026-09-22 15:30:02
+    - row "选择当前行 23 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:16:07":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "23":
+        - generic: "23"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:16:07":
+        - generic: 2026-09-22 15:16:07
+    - row "选择当前行 22 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:06:30":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "22":
+        - generic: "22"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:06:30":
+        - generic: 2026-09-22 15:06:30
+    - row "选择当前行 21 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:06:23":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "21":
+        - generic: "21"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:06:23":
+        - generic: 2026-09-22 15:06:23
+    - row "选择当前行 20 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:01:14":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "20":
+        - generic: "20"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:01:14":
+        - generic: 2026-09-22 15:01:14
+    - row "选择当前行 19 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 15:00:52":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "19":
+        - generic: "19"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 15:00:52":
+        - generic: 2026-09-22 15:00:52
+    - row "选择当前行 18 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 14:58:22":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "18":
+        - generic: "18"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 14:58:22":
+        - generic: 2026-09-22 14:58:22
+    - row "选择当前行 17 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 14:55:54":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "17":
+        - generic: "17"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 14:55:54":
+        - generic: 2026-09-22 14:55:54
+    - row "选择当前行 16 admin 未知 Mac OS X 10 Chrome 153 成功 2026-09-22 14:34:31":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "16":
+        - generic: "16"
+      - cell "admin":
+        - generic: admin
+      - cell
+      - cell "未知":
+        - generic: 未知
+      - cell "Mac OS X 10":
+        - generic: Mac OS X 10
+      - cell "Chrome 153":
+        - generic: Chrome 153
+      - cell "成功":
+        - generic: 成功
+      - cell
+      - cell "2026-09-22 14:34:31":
+        - generic: 2026-09-22 14:34:31
+- generic: 共 23 条
+- combobox [disabled]
+- generic: 10条/页
+- button "上一页" [disabled]:
+- list:
+  - listitem "第 1 页": "1"
+  - listitem "第 2 页": "2"
+  - listitem "第 3 页": "3"
+- button "下一页" [disabled]:
+- generic: 前往
+- spinbutton "页" [disabled]: "1"
+- generic: 页

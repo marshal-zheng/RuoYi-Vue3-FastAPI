@@ -110,7 +110,7 @@ export function createSystemHandlers(
           const dicts = await dataSource.system.listDictData(dictType);
           return HttpResponse.json(
             resultSuccess({
-              data: dicts.map(projectDictData),
+              items: dicts.map(projectDictData),
             })
           );
         },

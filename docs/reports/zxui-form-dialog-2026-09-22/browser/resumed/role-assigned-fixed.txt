@@ -1,0 +1,81 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+  - text: /
+  - link "系统管理"
+  - text: /
+  - link "角色管理"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "分配用户":
+  - /url: /system/role-auth/user/2
+  - generic: 分配用户
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- button "关闭":
+  - generic: 关闭
+- button "添加用户":
+  - generic: 添加用户
+- button "批量取消授权" [disabled]:
+  - generic: 批量取消授权
+- textbox "请输入用户名称"
+- textbox "请输入手机号码"
+- textbox "搜索用户名称"
+- button "Search":
+- table:
+  - rowgroup:
+    - row "选择所有行 用户名称 用户昵称 邮箱 手机 状态 创建时间 操作":
+      - columnheader "选择所有行":
+        - generic "选择所有行":
+          - checkbox "选择所有行"
+      - columnheader "用户名称":
+        - generic: 用户名称
+      - columnheader "用户昵称":
+        - generic: 用户昵称
+      - columnheader "邮箱":
+        - generic: 邮箱
+      - columnheader "手机":
+        - generic: 手机
+      - columnheader "状态":
+        - generic: 状态
+      - columnheader "创建时间":
+        - generic: 创建时间
+      - columnheader "操作":
+        - generic: 操作
+- table:
+  - rowgroup:
+    - row "选择当前行 niangao 年糕 niangao@qq.com 15666666666 正常 取消授权":
+      - cell "选择当前行":
+        - generic "选择当前行":
+          - checkbox "选择当前行"
+      - cell "niangao":
+        - generic: niangao
+      - cell "年糕":
+        - generic: 年糕
+      - cell "niangao@qq.com":
+        - generic: niangao@qq.com
+      - cell "15666666666":
+        - generic: "15666666666"
+      - cell "正常":
+        - generic: 正常
+      - cell
+      - cell "取消授权":
+        - button "取消授权":
+          - generic: 取消授权
+- generic: 共 1 条
+- combobox
+- generic: 10条/页
+- button "上一页" [disabled]:
+- list:
+  - listitem "第 1 页": "1"
+- button "下一页" [disabled]:
+- generic: 前往
+- spinbutton "页": "1"
+- generic: 页

@@ -2,7 +2,7 @@
   <div class="dag-matrix-view-simple">
     <!-- 搜索区域 -->
     <div class="search-bar">
-      <el-input
+      <zx-input
         v-model="searchText"
         placeholder="搜索节点..."
         :prefix-icon="Search"
@@ -124,44 +124,49 @@
     </div>
 
     <!-- 编辑对话框 -->
-    <el-dialog
-      v-model="editDialog.visible"
-      :title="editDialog.isAdd ? '添加节点' : '编辑节点'"
-      width="600px"
+    <ZxDialog
+      v-bind="nodeDialog.dialogProps.value"
+      v-on="nodeDialog.dialogEvents.value"
+      :draggable="false"
+      :show-full-screen="false"
+      :destroy-on-close="false"
+      :close-on-click-modal="true"
     >
-      <el-form :model="editDialog.nodeData" label-width="100px">
-        <el-form-item label="节点类型">
-          <el-select v-model="editDialog.nodeData.type" style="width: 100%">
-            <el-option label="根节点" value="root-node" />
-            <el-option label="子节点" value="sub-node" />
-            <el-option label="叶子节点" value="leaf-node" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="节点名称">
-          <el-input
-            v-model="editDialog.nodeData.properties.content.label"
-            placeholder="请输入节点名称"
-          />
-        </el-form-item>
-        <el-form-item label="描述">
-          <el-input
-            v-model="editDialog.nodeData.properties.content.description"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入节点描述"
-          />
-        </el-form-item>
-      </el-form>
+      <el-form ref="nodeFormRef" :model="editDialog.nodeData" v-bind="nodeDialog.formProps"
+        ><FormGrid v-bind="nodeDialog.layoutProps">
+          <el-form-item label="节点类型">
+            <el-select v-model="editDialog.nodeData.type" style="width: 100%">
+              <el-option label="根节点" value="root-node" />
+              <el-option label="子节点" value="sub-node" />
+              <el-option label="叶子节点" value="leaf-node" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="节点名称">
+            <zx-input
+              v-model="editDialog.nodeData.properties.content.label"
+              placeholder="请输入节点名称"
+            />
+          </el-form-item>
+          <el-form-item label="描述">
+            <zx-input
+              v-model="editDialog.nodeData.properties.content.description"
+              type="textarea"
+              :rows="3"
+              placeholder="请输入节点描述"
+            />
+          </el-form-item> </FormGrid
+      ></el-form>
       <template #footer>
-        <el-button @click="editDialog.visible = false">取消</el-button>
+        <el-button @click="nodeDialog.close()">取消</el-button>
         <el-button type="primary" @click="handleEditSubmit">确定</el-button>
       </template>
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, toRef } from 'vue';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Search, Folder, Document, Connection, Plus, Edit, Delete } from '@element-plus/icons-vue';
 import { transformGraphToMatrix } from '../utils/matrixDataTransform.js';
@@ -200,11 +205,18 @@ const emit = defineEmits(['node-add', 'node-update', 'node-delete', 'row-click']
 // 响应式数据
 const flatData = ref([]);
 const searchText = ref('');
-const editDialog = ref({
-  visible: false,
-  isAdd: false,
-  nodeData: {},
+const nodeFormRef = ref();
+const nodeDialog = useFormDialog({
+  columns: 1,
+  formRef: nodeFormRef,
+  title: (data) => (data.isAdd ? '添加节点' : '编辑节点'),
+  closeOnClickModal: true,
+  destroyOnClose: false,
+  preValidate: false,
+  autoResetForm: false,
+  defaultData: () => ({ isAdd: false, nodeData: {} }),
 });
+const editDialog = toRef(nodeDialog.state, 'data');
 
 // 计算属性
 const totalNodes = computed(() => flatData.value.length);
@@ -368,20 +380,18 @@ const handleAddChild = (parentRow) => {
     },
   };
 
-  editDialog.value = {
-    visible: true,
+  nodeDialog.open({
     isAdd: true,
     nodeData: { ...newNode },
     parentNode: parentRow,
-  };
+  });
 };
 
 const handleEdit = (row) => {
-  editDialog.value = {
-    visible: true,
+  nodeDialog.open({
     isAdd: false,
     nodeData: { ...row },
-  };
+  });
 };
 
 const handleDelete = async (row) => {
@@ -408,7 +418,7 @@ const handleEditSubmit = () => {
     ElMessage.success('更新成功');
   }
 
-  editDialog.value.visible = false;
+  nodeDialog.close();
 };
 
 // 监听数据变化

@@ -1,10 +1,10 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <ZxGridList
       ref="gridListRef"
       :load-data="loadCategoryData"
       :query-transform="queryTransform"
-      class="zx-grid-list--page"
+      fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">

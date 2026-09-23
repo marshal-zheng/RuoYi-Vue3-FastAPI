@@ -14,7 +14,7 @@
       class="role-form"
     >
       <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="drawer.state.data.roleName" placeholder="请输入角色名称" />
+        <zx-input v-model="drawer.state.data.roleName" placeholder="请输入角色名称" />
       </el-form-item>
       <el-form-item prop="roleKey">
         <template #label>
@@ -28,7 +28,7 @@
             权限字符
           </span>
         </template>
-        <el-input v-model="drawer.state.data.roleKey" placeholder="请输入权限字符" />
+        <zx-input v-model="drawer.state.data.roleKey" placeholder="请输入权限字符" />
       </el-form-item>
       <el-form-item label="角色顺序" prop="roleSort">
         <el-input-number
@@ -67,7 +67,7 @@
         />
       </el-form-item>
       <el-form-item label="备注">
-        <el-input
+        <zx-input
           v-model="drawer.state.data.remark"
           type="textarea"
           :rows="3"

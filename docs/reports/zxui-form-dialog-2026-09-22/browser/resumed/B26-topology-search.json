@@ -1,0 +1,51 @@
+{
+  "active": "搜索设备...",
+  "dialogs": [],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 20,
+      "placeholder": "搜索设备...",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 13,
+      "placeholder": null,
+      "type": "radio"
+    }
+  ],
+  "grids": [],
+  "radios": [
+    {
+      "checked": true,
+      "value": "horizontal"
+    },
+    {
+      "checked": false,
+      "value": "vertical"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    778,
+    993
+  ]
+}

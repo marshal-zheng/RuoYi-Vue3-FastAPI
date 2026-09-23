@@ -66,7 +66,7 @@
     <!-- 附注区域 -->
     <div class="notes-section mt-4">
       <div class="notes-label font-medium mb-2">附注</div>
-      <el-input
+      <zx-input
         v-model="localConfig.notes"
         type="textarea"
         :rows="3"

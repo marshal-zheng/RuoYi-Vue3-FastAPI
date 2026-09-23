@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
 import useSettingsStore from '@/store/modules/settings'
+import { setZxThemePreference } from '@/theme/zx-theme-config'
 
 // Mock dependencies
 vi.mock('@/settings', () => ({
@@ -21,8 +22,7 @@ vi.mock('@/utils/dynamicTitle', () => ({
 }))
 
 vi.mock('@vueuse/core', () => ({
-  useDark: vi.fn(() => ({ value: false })),
-  useToggle: vi.fn((ref) => vi.fn(() => { ref.value = !ref.value }))
+  usePreferredDark: vi.fn(() => ({ value: false }))
 }))
 
 describe('Settings Store', () => {
@@ -30,6 +30,7 @@ describe('Settings Store', () => {
     setActivePinia(createPinia())
     vi.clearAllMocks()
     localStorage.clear()
+    setZxThemePreference({ themeId: 'default', mode: 'light', density: 'default' })
   })
 
   afterEach(() => {

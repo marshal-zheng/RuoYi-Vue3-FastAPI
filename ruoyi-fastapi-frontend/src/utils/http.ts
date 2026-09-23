@@ -37,8 +37,6 @@ import type { FeedbackOptions, ResolvedFeedbackOptions } from '@/utils/feedback/
 // 重新登录状态
 export let isRelogin = { show: false };
 
-type ReloginMode = 'auto' | 'link';
-
 type HttpConfigRecord = AxiosRequestConfig & {
   feedback?: FeedbackOptions;
   silentSuccess?: boolean;
@@ -54,9 +52,10 @@ type RequestError = Error & {
 
 const META_KEY = '__httpMeta';
 
-// 401 重新登录交互方式：auto = 提示后自动跳转；link = 提示并提供跳转链接
-const RELOGIN_MODE: ReloginMode = 'link';
-const RELOGIN_DELAY = 1200;
+// 401 反馈契约：
+// 1. 登录/注册页本身就是恢复入口，不弹「去登录」，进入时清掉残留提示
+// 2. silentError / skipRelogin 表示预期内的鉴权失败（会话探测、退出、登录表单），不走重新登录提示
+// 3. 只有业务页上用户可感知的 401 才提示，并留在当前页
 
 const readCurrentSpaPath = (): string => {
   if (typeof window === 'undefined') {
@@ -97,6 +96,16 @@ const shouldSkipRelogin = (config: unknown): boolean => {
   return readConfigFlag(config, 'skipRelogin');
 };
 
+type ReloginMessageHandle = { close: () => void };
+
+let reloginMessage: ReloginMessageHandle | null = null;
+
+export const dismissReloginPrompt = (): void => {
+  reloginMessage?.close();
+  reloginMessage = null;
+  isRelogin.show = false;
+};
+
 const triggerRelogin = (message: string): void => {
   if (isRelogin.show || isLoginRoute()) {
     return;
@@ -106,50 +115,39 @@ const triggerRelogin = (message: string): void => {
   const loginUrl = buildLoginRedirectUrl();
 
   const doRedirect = (): void => {
+    dismissReloginPrompt();
     useUserStore()
       .logOut({ silentSuccess: true, silentError: true })
       .then(() => {
         location.href = loginUrl;
-      })
-      .finally(() => {
-        isRelogin.show = false;
       });
   };
 
-  if (RELOGIN_MODE === 'link') {
-    const content = h('span', null, [
-      message || '未认证，请先登录',
-      h(
-        'a',
-        {
-          href: loginUrl,
-          style: 'margin-left: 8px; color: var(--el-color-primary); text-decoration: underline;',
-          onClick: (event: MouseEvent) => {
-            event.preventDefault();
-            doRedirect();
-          },
+  const content = h('span', null, [
+    message || '未认证，请先登录',
+    h(
+      'a',
+      {
+        href: loginUrl,
+        style: 'margin-left: 8px; color: var(--el-color-primary); text-decoration: underline;',
+        onClick: (event: MouseEvent) => {
+          event.preventDefault();
+          doRedirect();
         },
-        '去登录'
-      ),
-    ]);
-    ElMessage({
-      message: content,
-      type: 'warning',
-      duration: 5000,
-      showClose: true,
-      onClose: () => {
-        isRelogin.show = false;
       },
-    });
-    return;
-  }
-
-  ElMessage({
-    message: `${message || '未认证，请先登录'}，即将跳转登录`,
+      '去登录'
+    ),
+  ]);
+  reloginMessage = ElMessage({
+    message: content,
     type: 'warning',
-    duration: RELOGIN_DELAY,
+    duration: 5000,
+    showClose: true,
+    onClose: () => {
+      isRelogin.show = false;
+      reloginMessage = null;
+    },
   });
-  window.setTimeout(doRedirect, RELOGIN_DELAY);
 };
 
 const notifier: HttpNotifier = {
@@ -463,10 +461,12 @@ const afterResponseTransform: HttpTransformHook = {
     const problem = normalizeProblemDetails(axiosError.response?.data, status);
 
     if (status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002) {
-      const shouldPromptRelogin = !skipRelogin && !isLoginRoute();
+      const onLoginPage = isLoginRoute();
+      const silentError = readConfigFlag(config, 'silentError');
+      const shouldPromptRelogin = !skipRelogin && !silentError && !onLoginPage;
       if (shouldPromptRelogin) {
         triggerRelogin(problem.detail || problem.title || '未认证，请先登录');
-      } else if (!readConfigFlag(config, 'silentError')) {
+      } else if (skipRelogin && !silentError) {
         presentProblemFeedback({
           problem,
           meta,

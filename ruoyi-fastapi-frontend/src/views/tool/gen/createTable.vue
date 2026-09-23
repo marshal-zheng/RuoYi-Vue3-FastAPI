@@ -3,7 +3,7 @@
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="create-table-content">
       <div class="mb-3">创建表语句(支持多个建表语句)：</div>
-      <el-input type="textarea" :rows="10" placeholder="请输入建表语句" v-model="state.data.sql" />
+      <zx-input type="textarea" :rows="10" placeholder="请输入建表语句" v-model="state.data.sql" />
     </div>
   </ZxDialog>
 </template>
@@ -16,8 +16,9 @@ import { useDialog } from '@zxio/zxui';
 const emit = defineEmits(['ok']);
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
+  dialogSize: 'md',
   title: '创建表',
-  width: '800px',
+
   defaultData: () => ({ sql: '' }),
   onConfirm: handleImportTable,
 });

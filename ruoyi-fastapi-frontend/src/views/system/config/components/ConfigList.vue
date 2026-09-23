@@ -5,7 +5,7 @@
     :query-transform="queryTransform"
     :show-pagination="true"
     :load-on-mounted="true"
-    class="zx-grid-list--page"
+    fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
       <div class="zx-grid-form-bar">
@@ -45,7 +45,7 @@
           >
         </div>
         <div class="zx-grid-form-bar__filters">
-          <el-input
+          <zx-input
             v-model="query.configKey"
             placeholder="请输入参数键名"
             clearable

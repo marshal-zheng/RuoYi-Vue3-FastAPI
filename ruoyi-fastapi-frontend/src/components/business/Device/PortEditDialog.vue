@@ -1,27 +1,29 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents" @close="onDialogClose">
-    <el-form ref="portFormRef" :model="state.data" :rules="portFormRules" label-width="100px">
-      <el-form-item label="总线类型" prop="interfaceType">
-        <InterfaceTypeSelector v-model="state.data.interfaceType" @change="handleBusTypeChange" />
-      </el-form-item>
-      <el-form-item label="端口位置" prop="position">
-        <PositionSelector v-model="state.data.position" multiple @change="handlePositionChange" />
-      </el-form-item>
-      <el-form-item label="端口描述" prop="description">
-        <el-input
-          v-model="state.data.description"
-          type="textarea"
-          :rows="3"
-          placeholder="请输入端口描述"
-        />
-      </el-form-item>
+    <el-form ref="portFormRef" :model="state.data" :rules="portFormRules" v-bind="formProps">
+      <FormGrid v-bind="layoutProps">
+        <el-form-item label="总线类型" prop="interfaceType">
+          <InterfaceTypeSelector v-model="state.data.interfaceType" @change="handleBusTypeChange" />
+        </el-form-item>
+        <el-form-item label="端口位置" prop="position">
+          <PositionSelector v-model="state.data.position" multiple @change="handlePositionChange" />
+        </el-form-item>
+        <el-form-item label="端口描述" prop="description">
+          <zx-input
+            v-model="state.data.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入端口描述"
+          />
+        </el-form-item>
+      </FormGrid>
     </el-form>
   </ZxDialog>
 </template>
 
 <script setup name="PortEditDialog">
 import { ref, watch } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { InterfaceTypeSelector, PositionSelector } from './selector';
 
 const props = defineProps({
@@ -73,9 +75,10 @@ function handleBusTypeChange(busType) {
 
 function handlePositionChange() {}
 
-const { dialogProps, dialogEvents, open, close, state } = useDialog({
+const { formProps, layoutProps, dialogProps, dialogEvents, open, close, state } = useFormDialog({
+  columns: 1,
   title: () => props.title,
-  width: '500px',
+
   okText: '确定',
   formRef: portFormRef,
   preValidate: true,

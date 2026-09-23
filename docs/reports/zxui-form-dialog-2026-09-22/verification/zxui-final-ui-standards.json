@@ -1,0 +1,15 @@
+{
+  "scope": {
+    "include": "src/**/*.{vue,ts,tsx,js,jsx,css,less,scss}",
+    "excludedModules": [
+      "src/views/project/simulation/**",
+      "src/views/project/components/SimulationResultDialog.vue",
+      "src/views/project/components/SimulationStatusPanel.vue"
+    ],
+    "explanation": "仿真目录及已确认仿真专用组件不在规格范围；所有非仿真共享消费者均检查。测试/声明文件不作为页面实例，公开类型补丁仍检查。"
+  },
+  "checkedFiles": 496,
+  "checkRawInput": true,
+  "violations": [],
+  "passed": true
+}

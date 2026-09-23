@@ -1,6 +1,6 @@
 <template>
   <div class="icon-body">
-    <el-input
+    <zx-input
       v-model="iconName"
       class="icon-search"
       clearable
@@ -9,7 +9,7 @@
       @input="filterIcons"
     >
       <template #suffix><i class="el-icon-search el-input__icon" /></template>
-    </el-input>
+    </zx-input>
     <div class="icon-list">
       <div class="list-container">
         <div

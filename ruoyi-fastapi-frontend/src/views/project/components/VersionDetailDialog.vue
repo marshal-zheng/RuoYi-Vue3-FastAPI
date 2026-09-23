@@ -51,8 +51,9 @@ const descriptionItems = computed(() => {
 });
 
 const dialog = useDialog({
+  dialogSize: 'md',
   title: '查看版本详情',
-  width: '600px',
+
   descriptions: descriptionItems,
   footer: false,
 });

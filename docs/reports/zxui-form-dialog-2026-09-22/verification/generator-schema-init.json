@@ -1,0 +1,43 @@
+{
+  "time": "2026-09-23T02:08:42.340377+00:00",
+  "scope": "local dev only",
+  "host": "127.0.0.1",
+  "port": 3306,
+  "database": "ruoyi-fastapi",
+  "model": "module_generator/entity/do/gen_do.py",
+  "method": "Base.metadata.create_all(tables=[GenTableDO.__table__, GenTableColumnDO.__table__], checkfirst=True)",
+  "missingBefore": [
+    "gen_table",
+    "gen_table_column"
+  ],
+  "created": [
+    "gen_table",
+    "gen_table_column"
+  ],
+  "existingTableCountBefore": 35,
+  "tableCountAfter": 37,
+  "existingTablesPreserved": true,
+  "rowCounts": {
+    "gen_table": 0,
+    "gen_table_column": 0
+  },
+  "eligibleImportTables": 34,
+  "ddl": [
+    "CREATE TABLE gen_table (\n\ttable_id INTEGER NOT NULL COMMENT '编号' AUTO_INCREMENT, \n\ttable_name VARCHAR(200) COMMENT '表名称', \n\ttable_comment VARCHAR(500) COMMENT '表描述', \n\tsub_table_name VARCHAR(64) COMMENT '关联子表的表名', \n\tsub_table_fk_name VARCHAR(64) COMMENT '子表关联的外键名', \n\tclass_name VARCHAR(100) COMMENT '实体类名称', \n\ttpl_category VARCHAR(200) COMMENT '使用的模板（crud单表操作 tree树表操作）', \n\ttpl_web_type VARCHAR(30) COMMENT '前端模板类型（element-ui模版 element-plus模版）', \n\tpackage_name VARCHAR(100) COMMENT '生成包路径', \n\tmodule_name VARCHAR(30) COMMENT '生成模块名', \n\tbusiness_name VARCHAR(30) COMMENT '生成业务名', \n\tfunction_name VARCHAR(100) COMMENT '生成功能名', \n\tfunction_author VARCHAR(100) COMMENT '生成功能作者', \n\tgen_type VARCHAR(1) COMMENT '生成代码方式（0zip压缩包 1自定义路径）', \n\tgen_path VARCHAR(200) COMMENT '生成路径（不填默认项目路径）', \n\toptions VARCHAR(1000) COMMENT '其它生成选项', \n\tcreate_by VARCHAR(64) COMMENT '创建者', \n\tcreate_time DATETIME COMMENT '创建时间', \n\tupdate_by VARCHAR(64) COMMENT '更新者', \n\tupdate_time DATETIME COMMENT '更新时间', \n\tremark VARCHAR(500) COMMENT '备注', \n\tPRIMARY KEY (table_id)\n)",
+    "CREATE TABLE gen_table_column (\n\tcolumn_id INTEGER NOT NULL COMMENT '编号' AUTO_INCREMENT, \n\ttable_id INTEGER COMMENT '归属表编号', \n\tcolumn_name VARCHAR(200) COMMENT '列名称', \n\tcolumn_comment VARCHAR(500) COMMENT '列描述', \n\tcolumn_type VARCHAR(100) COMMENT '列类型', \n\tpython_type VARCHAR(500) COMMENT 'PYTHON类型', \n\tpython_field VARCHAR(200) COMMENT 'PYTHON字段名', \n\tis_pk VARCHAR(1) COMMENT '是否主键（1是）', \n\tis_increment VARCHAR(1) COMMENT '是否自增（1是）', \n\tis_required VARCHAR(1) COMMENT '是否必填（1是）', \n\tis_unique VARCHAR(1) COMMENT '是否唯一（1是）', \n\tis_insert VARCHAR(1) COMMENT '是否为插入字段（1是）', \n\tis_edit VARCHAR(1) COMMENT '是否编辑字段（1是）', \n\tis_list VARCHAR(1) COMMENT '是否列表字段（1是）', \n\tis_query VARCHAR(1) COMMENT '是否查询字段（1是）', \n\tquery_type VARCHAR(200) COMMENT '查询方式（等于、不等于、大于、小于、范围）', \n\thtml_type VARCHAR(200) COMMENT '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）', \n\tdict_type VARCHAR(200) COMMENT '字典类型', \n\tsort INTEGER COMMENT '排序', \n\tcreate_by VARCHAR(64) COMMENT '创建者', \n\tcreate_time DATETIME COMMENT '创建时间', \n\tupdate_by VARCHAR(64) COMMENT '更新者', \n\tupdate_time DATETIME COMMENT '更新时间', \n\tPRIMARY KEY (column_id), \n\tFOREIGN KEY(table_id) REFERENCES gen_table (table_id)\n)"
+  ],
+  "authChanged": false,
+  "repositoryReadVerification": {
+    "itemCount": 10,
+    "total": 34,
+    "page": 1,
+    "pageSize": 10,
+    "firstItemType": "dict",
+    "firstItemKeys": [
+      "tableName",
+      "tableComment",
+      "createTime",
+      "updateTime"
+    ]
+  }
+}

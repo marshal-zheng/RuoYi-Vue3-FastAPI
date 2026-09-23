@@ -36,7 +36,6 @@ interface RequestClient {
 
 let downloadLoadingInstance: LoadingInstance;
 
-// 重新导出 isRelogin
 export { isRelogin };
 
 /**

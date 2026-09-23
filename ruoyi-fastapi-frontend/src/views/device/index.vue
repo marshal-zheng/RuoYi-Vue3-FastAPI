@@ -1,6 +1,6 @@
 <template>
-  <ZxContentWrap>
-    <ZxGridList ref="gridListRef" :load-data="loadDeviceData" class="zx-grid-list--page">
+  <ZxContentWrap fill>
+    <ZxGridList ref="gridListRef" :load-data="loadDeviceData" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
         <div class="zx-grid-form-bar">
           <div class="zx-grid-form-bar__left">

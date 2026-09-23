@@ -8,7 +8,7 @@
       label-width="68px"
     >
       <el-form-item label="任务名称" prop="jobName">
-        <el-input
+        <zx-input
           v-model="queryParams.jobName"
           placeholder="请输入任务名称"
           clearable
@@ -164,54 +164,53 @@
     />
 
     <!-- 调度日志详细 -->
-    <el-dialog title="调度日志详细" v-model="open" width="700px" append-to-body>
-      <el-form :model="form" label-width="100px">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="日志序号：">{{ form.jobLogId }}</el-form-item>
-            <el-form-item label="任务名称：">{{ form.jobName }}</el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="任务分组：">{{ jobGroupFormat(form) }}</el-form-item>
-            <el-form-item label="执行时间：">{{ parseTime(form.createTime) }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="任务执行器：">{{ jobExecutorFormat(form) }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="任务触发器：">{{ form.jobTrigger }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="调用方法：">{{ form.invokeTarget }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="位置参数：">{{ form.jobArgs }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="关键字参数：">{{ form.jobKwargs }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="日志信息：">{{ form.jobMessage }}</el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="执行状态：">
-              <div v-if="form.status == 0">正常</div>
-              <div v-else-if="form.status == 1">失败</div>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="异常信息：" v-if="form.status == 1">{{
-              form.exceptionInfo
-            }}</el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+    <ZxDialog
+      dialog-size="lg"
+      :draggable="false"
+      :show-full-screen="false"
+      :destroy-on-close="false"
+      :close-on-click-modal="true"
+      title="调度日志详细"
+      v-model="open"
+    >
+      <el-descriptions :column="1" border>
+        <el-descriptions-item label="日志序号：">{{ form.jobLogId }}</el-descriptions-item>
+        <el-descriptions-item label="任务名称：">{{ form.jobName }}</el-descriptions-item>
+
+        <el-descriptions-item label="任务分组：">{{ jobGroupFormat(form) }}</el-descriptions-item>
+        <el-descriptions-item label="执行时间：">{{
+          parseTime(form.createTime)
+        }}</el-descriptions-item>
+
+        <el-descriptions-item label="任务执行器：">{{
+          jobExecutorFormat(form)
+        }}</el-descriptions-item>
+
+        <el-descriptions-item label="任务触发器：">{{ form.jobTrigger }}</el-descriptions-item>
+
+        <el-descriptions-item label="调用方法：">{{ form.invokeTarget }}</el-descriptions-item>
+
+        <el-descriptions-item label="位置参数：">{{ form.jobArgs }}</el-descriptions-item>
+
+        <el-descriptions-item label="关键字参数：">{{ form.jobKwargs }}</el-descriptions-item>
+
+        <el-descriptions-item label="日志信息：">{{ form.jobMessage }}</el-descriptions-item>
+
+        <el-descriptions-item label="执行状态：">
+          <div v-if="form.status == 0">正常</div>
+          <div v-else-if="form.status == 1">失败</div>
+        </el-descriptions-item>
+
+        <el-descriptions-item label="异常信息：" v-if="form.status == 1">{{
+          form.exceptionInfo
+        }}</el-descriptions-item>
+      </el-descriptions>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="open = false">关 闭</el-button>
         </div>
       </template>
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 

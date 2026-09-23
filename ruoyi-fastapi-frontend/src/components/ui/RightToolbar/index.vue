@@ -38,14 +38,23 @@
         </el-dropdown>
       </el-tooltip>
     </el-row>
-    <el-dialog :title="title" v-model="open" append-to-body>
+    <ZxDialog
+      dialog-size="md"
+      :draggable="false"
+      :show-full-screen="false"
+      :destroy-on-close="false"
+      :close-on-click-modal="true"
+      :footer="false"
+      :title="title"
+      v-model="open"
+    >
       <el-transfer
         :titles="['显示', '隐藏']"
         v-model="value"
         :data="columns"
         @change="dataChange"
       ></el-transfer>
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 

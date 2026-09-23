@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap title="用户管理" contentPadding="0px 20px 20px 0">
+  <ZxContentWrap title="用户管理" contentPadding="0px 20px 20px 0" fill>
     <template #header-right>
       <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:user:add']"
         >新增用户</ZxButton
@@ -31,7 +31,7 @@
         >导出</ZxButton
       >
     </template>
-    <div class="h-full">
+    <div data-zx-fill>
       <zx-split-box
         :direction="appStore.device === 'mobile' ? 'vertical' : 'horizontal'"
         size="220px"
@@ -40,7 +40,7 @@
         <template #first>
           <div class="h-full flex flex-col p-3 space-y-3">
             <div>
-              <el-input
+              <zx-input
                 v-model="deptName"
                 placeholder="请输入部门名称"
                 clearable
@@ -66,25 +66,20 @@
 
         <!-- 用户数据 -->
         <template #second>
-          <div class="h-full">
-            <ZxGridList
-              ref="gridListRef"
-              :load-data="loadUserData"
-              class="zx-grid-list--page"
-              :pageViewportOffset="10"
-            >
+          <div data-zx-fill>
+            <ZxGridList ref="gridListRef" :load-data="loadUserData" fill>
               <template #form="{ query, loading, refresh: handleRefresh, updateState }">
                 <div class="zx-grid-form-bar">
                   <div class="zx-grid-form-bar__left"></div>
                   <div class="zx-grid-form-bar__filters">
-                    <el-input
+                    <zx-input
                       v-model="query.userName"
                       placeholder="请输入用户名称"
                       clearable
                       style="width: 240px"
                       @change="(v) => onFilterChange('userName', v, { handleRefresh, updateState })"
                     />
-                    <el-input
+                    <zx-input
                       v-model="query.phonenumber"
                       placeholder="请输入手机号码"
                       clearable
@@ -313,8 +308,7 @@ async function loadUserData(params) {
 /** 查询部门下拉树结构 */
 function getDeptTree() {
   deptTreeSelect().then((response) => {
-    // 全局 http 工具已自动解包 response.data，直接使用 response
-    const data = response ?? [];
+    const data = response.items;
     deptOptions.value = data;
     enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(data)));
   });

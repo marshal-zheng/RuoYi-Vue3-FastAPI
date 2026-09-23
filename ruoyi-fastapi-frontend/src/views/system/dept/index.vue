@@ -1,5 +1,5 @@
 <template>
-  <ZxContentWrap>
+  <ZxContentWrap fill>
     <DeptList />
   </ZxContentWrap>
 </template>

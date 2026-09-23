@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main">
+  <section class="app-main" data-zx-surface="canvas" data-zx-fill-root>
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform">
         <!-- <keep-alive :include="tagsViewStore.cachedViews"> -->
@@ -80,11 +80,15 @@ function addIframe() {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
+  background-color: var(--zx-semantic-fill-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #c0c0c0;
+  background-color: var(--zx-semantic-fill-scrollbar-thumb);
   border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--zx-semantic-fill-scrollbar-thumb-hover);
 }
 </style>

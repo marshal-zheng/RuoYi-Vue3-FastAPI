@@ -435,7 +435,7 @@ class RoleService:
         allocated_list = PageResponseModel(
             **{
                 **query_user_list.model_dump(by_alias=True),
-                'items': [UserInfoModel(**row) for row in query_user_list.items],
+                'items': [UserInfoModel(**row[0], dept=row[1]) for row in query_user_list.items],
             }
         )
 
@@ -476,7 +476,7 @@ class RoleService:
         unallocated_list = PageResponseModel(
             **{
                 **query_user_list.model_dump(by_alias=True),
-                'items': [UserInfoModel(**row) for row in query_user_list.items],
+                'items': [UserInfoModel(**row[0], dept=row[1]) for row in query_user_list.items],
             }
         )
 

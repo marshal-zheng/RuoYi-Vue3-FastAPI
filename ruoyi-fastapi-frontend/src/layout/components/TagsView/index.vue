@@ -1,8 +1,8 @@
 <template>
   <div
     id="tags-view-container"
-    class="flex items-center h-10 w-full relative border-b border-gray-200"
-    style="background-color: #f3f5f9"
+    class="flex items-center h-10 w-full relative"
+    data-zx-surface="panel"
   >
     <!-- 标签滚动区域 -->
     <div class="flex-1 overflow-hidden">
@@ -15,9 +15,9 @@
             'tags-view-item',
             'relative inline-flex items-center h-full px-4',
             'text-[13px] font-medium cursor-pointer no-underline whitespace-nowrap',
-            'text-gray-600 bg-transparent',
+            'bg-transparent',
             'transition-colors duration-200',
-            isActive(tag) ? 'is-active' : 'hover:text-blue-600 hover:bg-blue-50/50',
+            isActive(tag) ? 'is-active' : '',
             isAffix(tag) ? 'tags-view-item--affix' : '',
           ]"
           :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
@@ -38,10 +38,10 @@
     </div>
 
     <!-- 右侧操作区域 -->
-    <div class="flex items-center h-full border-l border-gray-200">
+    <div class="tags-view-tools flex items-center h-full">
       <!-- 刷新当前页面按钮 -->
       <div
-        class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer text-gray-500 hover:text-blue-600 hover:bg-blue-50/50 transition-colors duration-200"
+        class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer transition-colors duration-200"
         @click="refreshSelectedTag($route)"
         title="刷新当前页面 (Ctrl+R)"
       >
@@ -51,7 +51,7 @@
       <!-- 更多操作下拉菜单 -->
       <el-dropdown trigger="click" @command="handleCommand">
         <div
-          class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer text-gray-500 hover:text-blue-600 hover:bg-blue-50/50 transition-colors duration-200"
+          class="tags-view-tool relative flex items-center justify-center w-10 h-full cursor-pointer transition-colors duration-200"
           title="更多操作"
         >
           <zx-icon icon="MoreFilled" :size="14" />
@@ -87,7 +87,6 @@ import { RefreshRight, CircleClose, Back, Right } from '@element-plus/icons-vue'
 import ScrollPane from './ScrollPane';
 import { getNormalPath } from '@/utils/ruoyi';
 import useTagsViewStore from '@/store/modules/tagsView';
-import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
 
 const affixTags = ref([]);
@@ -99,7 +98,6 @@ const router = useRouter();
 
 const visitedViews = computed(() => useTagsViewStore().visitedViews);
 const routes = computed(() => usePermissionStore().routes);
-const theme = computed(() => useSettingsStore().theme);
 
 watch(route, () => {
   addTags();
@@ -314,7 +312,25 @@ function handleCommand(command) {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+@import '@/assets/styles/mixin.less';
+
+/* The panel surface paints the strip; only the edge it shares with the
+   content area is drawn here. */
+#tags-view-container {
+  border-bottom: 1px solid var(--zx-semantic-border-subtle);
+  border-radius: 0;
+}
+
+.tags-view-item {
+  color: var(--zx-semantic-surface-panel-on-text-secondary);
+}
+
+.tags-view-item:not(.is-active):hover {
+  color: var(--zx-semantic-surface-panel-on-text);
+  background: @on-surface-tint;
+}
+
 /* 底部指示器 */
 .tags-view-item::after {
   content: '';
@@ -323,7 +339,7 @@ function handleCommand(command) {
   right: 0;
   bottom: 0;
   height: 2px;
-  background: v-bind(theme);
+  background: var(--zx-semantic-accent-base);
   transform: scaleX(0);
   transform-origin: center;
   transition: transform 0.2s ease;
@@ -331,7 +347,8 @@ function handleCommand(command) {
 
 /* 关闭按钮基础样式 */
 .tags-view-item__close {
-  color: #9ca3af;
+  color: currentColor;
+  opacity: 0.65;
   display: none;
 }
 
@@ -341,14 +358,13 @@ function handleCommand(command) {
 }
 
 .tags-view-item__close:hover {
-  color: #6b7280 !important;
   opacity: 1 !important;
 }
 
 /* 激活状态 */
 .tags-view-item.is-active {
-  color: v-bind(theme) !important;
-  /* background-color: #ffffff !important; */
+  color: var(--zx-semantic-accent-base) !important;
+  background: var(--zx-semantic-fill-selected);
 }
 
 .tags-view-item.is-active::after {
@@ -358,11 +374,24 @@ function handleCommand(command) {
 /* 激活状态的关闭按钮 */
 .tags-view-item.is-active .tags-view-item__close {
   display: inline-flex !important;
-  color: v-bind(theme) !important;
 }
 
 .tags-view-item.is-active .tags-view-item__close:hover {
   opacity: 0.7 !important;
+}
+
+/* 右侧工具区 */
+.tags-view-tools {
+  border-left: 1px solid var(--zx-semantic-border-subtle);
+}
+
+.tags-view-tool {
+  color: var(--zx-semantic-surface-panel-on-text-secondary);
+}
+
+.tags-view-tool:hover {
+  color: var(--zx-semantic-surface-panel-on-text);
+  background: @on-surface-tint;
 }
 
 /* 工具按钮左边框 */
@@ -373,7 +402,7 @@ function handleCommand(command) {
   left: 0;
   width: 100%;
   height: calc(100% - 1px);
-  border-left: 1px solid #e5e7eb;
+  border-left: 1px solid var(--zx-semantic-border-subtle);
 }
 
 /* 响应式设计 */

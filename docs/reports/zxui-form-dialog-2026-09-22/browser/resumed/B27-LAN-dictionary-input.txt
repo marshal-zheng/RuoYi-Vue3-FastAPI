@@ -1,0 +1,177 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "设备详情":
+  - /url: /device/detail/index
+  - generic: 设备详情
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- heading "设备端口配置" [level=3]
+- generic: 已配置 1 个端口
+- button "添加端口":
+  - generic: 添加端口
+- button "保存":
+  - generic: 保存
+- listbox:
+  - region:
+    - listbox:
+      - option "单次"
+      - option "10ms"
+      - option "20ms"
+      - option "50ms"
+      - option "100ms"
+      - option "160ms"
+      - option "200ms"
+      - option "500ms"
+      - option "1000ms"
+- dialog "端口配置 - LAN":
+  - banner:
+    - button "关闭抽屉":
+    - generic: 端口配置 - LAN
+    - button "全屏":
+      - text: 全屏
+  - separator "调整抽屉尺寸"
+  - tablist:
+    - tab "参数配置"
+    - tab "报文配置" [selected]
+  - text: "* * *"
+  - tabpanel "报文配置":
+    - generic: 选择协议模板：
+    - combobox
+    - generic: 请选择已有协议模板
+    - generic: 协议格式配置
+    - generic: LAN
+    - button "导入配置":
+      - generic: 导入配置
+    - button "添加字段":
+      - generic: 添加字段
+    - button "删除选中":
+      - generic: 删除选中
+    - button "校验诊断":
+      - generic: 校验诊断
+    - table:
+      - rowgroup:
+        - row " ":
+          - columnheader
+          - columnheader
+          - columnheader "":
+            - generic: 
+          - columnheader
+          - columnheader "":
+            - generic: 
+    - table:
+      - rowgroup:
+        - row "以太网 发送方":
+          - cell "以太网":
+            - generic: 以太网
+          - cell "发送方":
+            - generic: 发送方
+          - cell
+        - row "接收方":
+          - cell "接收方":
+            - generic: 接收方
+          - cell
+        - row "传输频率 传输速率/bps":
+          - cell "传输频率":
+            - generic: 传输频率
+          - cell:
+            - combobox [expanded]:
+              - textbox "请输入或选择" [active]: "50"
+          - cell "传输速率/bps":
+            - generic: 传输速率/bps
+          - cell
+        - row "传输方式 端口号":
+          - cell "传输方式":
+            - generic: 传输方式
+          - cell
+          - cell "端口号":
+            - generic: 端口号
+          - cell
+        - row "帧长度/Byte 错误处理":
+          - cell "帧长度/Byte":
+            - generic: 帧长度/Byte
+          - cell
+          - cell "错误处理":
+            - generic: 错误处理
+          - cell
+    - table:
+      - rowgroup:
+        - row "序号 * 信息名称 字节数 字节序号 值域及含义 量纲 数据类型 比例尺 备注":
+          - columnheader "序号":
+            - generic: 序号
+          - columnheader "* 信息名称":
+            - generic: "*"
+            - generic: 
+            - generic: 信息名称
+          - columnheader "字节数":
+            - generic: 
+            - generic: 字节数
+          - columnheader "字节序号":
+            - generic: 字节序号
+          - columnheader "值域及含义":
+            - generic: 
+            - generic: 值域及含义
+          - columnheader "量纲":
+            - generic: 
+            - generic: 量纲
+          - columnheader "数据类型":
+            - generic: 
+            - generic: 数据类型
+          - columnheader "比例尺":
+            - generic: 
+            - generic: 比例尺
+          - columnheader "备注":
+            - generic: 
+            - generic: 备注
+    - table:
+      - rowgroup:
+        - row "1 4 1":
+          - cell "1":
+            - generic: "1"
+          - cell "4":
+            - generic: "4"
+          - cell
+          - cell
+          - cell
+          - cell
+          - cell "1":
+            - generic: "1"
+          - cell
+    - table:
+      - rowgroup:
+        - row "":
+          - columnheader "":
+            - generic: 
+    - table:
+      - rowgroup:
+        - row "":
+          - cell "":
+            - generic: 
+          - cell
+    - table:
+      - rowgroup:
+        - row "操作":
+          - columnheader "操作":
+            - generic: 操作
+    - table:
+      - rowgroup:
+        - row "删除":
+          - cell
+          - cell "删除":
+            - button "删除":
+              - generic: 删除
+    - generic: 附注
+    - textbox "请输入附注信息": LAN 备注校验
+  - button "取消":
+    - generic: 取消
+  - button "确定":
+    - generic: 确定

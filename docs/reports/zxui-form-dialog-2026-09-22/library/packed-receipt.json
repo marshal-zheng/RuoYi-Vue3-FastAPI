@@ -1,0 +1,129 @@
+{
+  "fixture": "docs/examples/dialog/public-form-contract.vue",
+  "packages": [
+    {
+      "name": "@zxio/zxui",
+      "version": "3.0.0-next.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+zxui@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxui-_twjrvwb5g2iecuzakeolycfqve/node_modules/@zxio/zxui/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-zxui-CPDqIK/zxio-zxui-3.0.0-next.0.tgz",
+      "sha256": "085dfd40069635098fa97a8e29dd5764a9d5d4bd558492b5caf1df3e5453317a"
+    },
+    {
+      "name": "@zxio/theme-default",
+      "version": "2.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+theme-default@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000g_5s5xa46wjci7cdcq5jb753a3y4/node_modules/@zxio/theme-default/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-theme-default-7jHyvk/zxio-theme-default-2.0.0.tgz",
+      "sha256": "ec01a9481ac070158a9e4685d8260db83a00377ba5e0a108cb0006e1a7d1534f"
+    },
+    {
+      "name": "@zxio/theme-defense-green",
+      "version": "1.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+theme-defense-green@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv37_v2vah57f2v5h7uquoj7smyxmaa/node_modules/@zxio/theme-defense-green/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-theme-defense-green-rrMsHl/zxio-theme-defense-green-1.0.0.tgz",
+      "sha256": "0a3ad0fd9e4a3bd356c565cd55865ca5f40a155ae3e24dec1d11e4718b531a1b"
+    },
+    {
+      "name": "@zxio/theme-compiler",
+      "version": "1.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+theme-compiler@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000_e5orv4cp4cxrvlzjl4gp6npvva/node_modules/@zxio/theme-compiler/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-theme-compiler-RFUG20/zxio-theme-compiler-1.0.0.tgz",
+      "sha256": "a472a0057627d2a3c26f289005932439d642adab9a86f0f72d4422f37a4de7e0"
+    },
+    {
+      "name": "@zxio/constants",
+      "version": "1.1.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+constants@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+_sbxjhjbhd2wikvlgsnqxlqipuu/node_modules/@zxio/constants/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-constants-6Rdh6X/zxio-constants-1.1.0.tgz",
+      "sha256": "b942013ce54c19f1279c1251216854e364d77c08196b0c1df5c0febcc855fa68"
+    },
+    {
+      "name": "@zxio/hooks",
+      "version": "1.0.5",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+hooks@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxui_loslhltl76dtrhe75waxtokrim/node_modules/@zxio/hooks/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-hooks-qMQ3gZ/zxio-hooks-1.0.5.tgz",
+      "sha256": "ee93625a3dec45d0af74860648207d62301c13f2e1fc00ee0499cf973fbcec5a"
+    },
+    {
+      "name": "@zxio/keybindings",
+      "version": "2.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+keybindings@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+_xkidbennejk6j4yqtlwkni34wq/node_modules/@zxio/keybindings/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-keybindings-rEzC6N/zxio-keybindings-2.0.0.tgz",
+      "sha256": "4f68042b088f12a7760b5ca658d6b320a32e73a23a1f45a673c168bad8b29e44"
+    },
+    {
+      "name": "@zxio/shared",
+      "version": "1.0.5",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+shared@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxu_scklpdqfcv5bbnfrszwe34khxq/node_modules/@zxio/shared/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-shared-sSLRv5/zxio-shared-1.0.5.tgz",
+      "sha256": "37e0ca083689ad2f313d39a9a3d25f3b4969f7f53477487c38a6b652698475a4"
+    },
+    {
+      "name": "@zxio/theme-consumer",
+      "version": "1.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+theme-consumer@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000_niuxttp3e7h32x2zqo6uz3niqi/node_modules/@zxio/theme-consumer/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-theme-consumer-P42j8L/zxio-theme-consumer-1.0.0.tgz",
+      "sha256": "17b9cfe7e8a3f0f02e76ee461618b3499bfd20bd87f0217a71a2e8dc3508dce8"
+    },
+    {
+      "name": "@zxio/theme-css-codec",
+      "version": "1.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+theme-css-codec@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv374000_qjwy6wu6whr6xfadidqj7sh5mu/node_modules/@zxio/theme-css-codec/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-theme-css-codec-9ytAso/zxio-theme-css-codec-1.0.0.tgz",
+      "sha256": "88822f29eecfc1187696e84b5ce6c102fd2f3b26c2c92ed612c824594316f050"
+    },
+    {
+      "name": "@zxio/tokens",
+      "version": "2.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+tokens@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxu_lfpxalj24y4rawlrsyuiud6kvy/node_modules/@zxio/tokens/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-tokens-YSuUS9/zxio-tokens-2.0.0.tgz",
+      "sha256": "b7a626e030b9d6cb1ea7f0e5262e432a5938f696a22920e9dbe6ff0e02eb4ae8"
+    },
+    {
+      "name": "@zxio/types",
+      "version": "1.0.2",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+types@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxui_faa5yhtcganpusifvemmsjmpwm/node_modules/@zxio/types/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-types-2e0uDI/zxio-types-1.0.2.tgz",
+      "sha256": "82ecd5aa325c3d772087f0e6c281ebd0ea2f5bb60363dbb31f60e5b90bc8fc54"
+    },
+    {
+      "name": "@zxio/utils",
+      "version": "1.0.5",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+utils@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+zxui_gndldaqugdkbuo2yudgysujsvq/node_modules/@zxio/utils/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-utils-Gn0CXQ/zxio-utils-1.0.5.tgz",
+      "sha256": "66ba56fe05226e61533d93b1eab4ac8e3b72bb66ae0531a11431d2e2c5ecf24c"
+    },
+    {
+      "name": "@zxio/mcp-core",
+      "version": "1.0.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/@zxio+mcp-core@file+..+..+..+..+..+..+..+..+var+folders+80+8sfxkvmx2l755p0cgcrkv3740000gn+T+z_7fkjyegz5vjfw75yowo6msccta/node_modules/@zxio/mcp-core/package.json",
+      "tarball": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/tarballs/-zxio-mcp-core-aIBGGk/zxio-mcp-core-1.0.0.tgz",
+      "sha256": "e99fc6feed296ac93ba55a6474bacbb5a36d845640954e71cf4a0eff945471d4"
+    }
+  ],
+  "peers": [
+    {
+      "name": "vue",
+      "version": "3.5.40",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/vue@3.5.40_typescript@5.5.4/node_modules/vue/package.json",
+      "resolutions": [
+        "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/vue@3.5.40_typescript@5.5.4/node_modules/vue/package.json"
+      ]
+    },
+    {
+      "name": "element-plus",
+      "version": "2.13.0",
+      "resolved": "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/element-plus@2.13.0_vue@3.5.40_typescript@5.5.4_/node_modules/element-plus/package.json",
+      "resolutions": [
+        "/private/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app/node_modules/.pnpm/element-plus@2.13.0_vue@3.5.40_typescript@5.5.4_/node_modules/element-plus/package.json"
+      ]
+    }
+  ],
+  "appDir": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/zxui-packed-install-rApuws/app",
+  "checks": [
+    "isolated-public-imports",
+    "vue-tsc",
+    "vite-build",
+    "public-theme-deployment"
+  ],
+  "browser": "pending"
+}

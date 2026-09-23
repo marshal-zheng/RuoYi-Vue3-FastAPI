@@ -1,0 +1,37 @@
+{
+  "entries": [
+    {
+      "autofill": true,
+      "background": "rgb(232, 240, 254)",
+      "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+      "kind": "ElInput",
+      "textFill": "color(srgb 0.93 0.95 0.98)",
+      "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+      "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+    },
+    {
+      "autofill": true,
+      "background": "rgb(232, 240, 254)",
+      "boxShadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+      "kind": "ZxInput tooltip",
+      "textFill": "color(srgb 0.93 0.95 0.98)",
+      "themeSurface": "color(srgb 0.096 0.11009999999999999 0.13829999999999998 / 1)",
+      "themeText": "color(srgb 0.93 0.95 0.98 / 1)"
+    }
+  ],
+  "styles": [
+    "/__zxui-public-packed/assets/index-ookQ4ZhG.css",
+    "http://localhost/__zxui-public-packed/theme-assets/98e4970da3725dc3b11f8ba51f6e7e9463726860323f8067064840810a2b30d6.css",
+    "http://localhost/__zxui-public-packed/theme-assets/92ba90d98fcce0e0c67d5a3171a2ad41c185448389dc252f08a8000b68a8f1ab.css",
+    "http://localhost/__zxui-public-packed/theme-assets/8b3ff350c6a710d364473d4fe7bbb6c8a03b706df560c055de1759dec8629cec.css",
+    "http://localhost/__zxui-public-packed/theme-assets/d5f43d14644ede7d31ec658c0d01dd0f6a166adf210cb3a16cb9bd22db106198.css",
+    "http://localhost/__zxui-public-packed/theme-assets/a32c4691f17aa684efc3a1ec5451be39de855e48e6089c22cfc37f90fcb0038b.css",
+    "http://localhost/__zxui-public-packed/theme-assets/bb561f1046277dc29ae4f542e53fde78e219513908d5097b1307855c1f5fc8d8.css",
+    "http://localhost/__zxui-public-packed/theme-assets/4ceee8d6c492950dbd531ac4f70868325ebd5f2269d2ef976276bd99da8f1349.css"
+  ],
+  "url": "http://localhost/__zxui-public-packed/index.html",
+  "viewport": [
+    1280,
+    720
+  ]
+}

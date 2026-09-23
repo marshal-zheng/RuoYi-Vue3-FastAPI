@@ -16,6 +16,9 @@ export default defineConfig({
     
     // 测试环境配置
     environment: 'jsdom',
+
+    // Transform EP's ESM imports so Node's async-validator CJS default is resolved correctly.
+    server: { deps: { inline: ['element-plus'] } },
     
     // 测试文件匹配模式
     include: [

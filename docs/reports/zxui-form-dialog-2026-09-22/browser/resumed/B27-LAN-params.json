@@ -1,0 +1,66 @@
+{
+  "active": "请输入 IP 地址，如：192.168.1.100",
+  "dialogs": [
+    {
+      "background": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 993,
+      "title": "端口配置 - LAN",
+      "width": 583.5
+    }
+  ],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入 IP 地址，如：192.168.1.100",
+      "type": "text"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 30,
+      "placeholder": "请输入端口号",
+      "type": "number"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 14,
+      "placeholder": null,
+      "type": "radio"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 14,
+      "placeholder": null,
+      "type": "radio"
+    }
+  ],
+  "grids": [],
+  "radios": [
+    {
+      "checked": true,
+      "value": "TCP"
+    },
+    {
+      "checked": false,
+      "value": "UDP"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    778,
+    993
+  ]
+}

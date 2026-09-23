@@ -1,0 +1,573 @@
+{
+  "status": "historical-observed-evidence-awaiting-new-input-candidate",
+  "observedDate": "2026-09-22",
+  "recoveredDate": "2026-09-23",
+  "evidenceOrigin": "Recovered from actual cua_repl return values preserved in this task conversation. The CUA JS variable fixtureRecords was lost at the paused-turn runtime reset; these fields reproduce displayed measurements only.",
+  "candidate": {
+    "version": "3.0.0-next.0",
+    "sha256": "bd267ebe777e25c0ed7b9451a78fb7d689a541f7124b08ed0b9dd1c121178df0",
+    "receipt": "../packed-receipt.json"
+  },
+  "matrix": [
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 28,
+        "rawElInput": 28,
+        "tooltip": 28,
+        "disabled": 28,
+        "inheritedSmall": 20,
+        "explicitLarge": 36
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "light",
+      "density": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 32,
+        "rawElInput": 32,
+        "tooltip": 32,
+        "disabled": 32,
+        "inheritedSmall": 24,
+        "explicitLarge": 40
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "light",
+      "density": "comfortable",
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 36,
+        "rawElInput": 36,
+        "tooltip": 36,
+        "disabled": 36,
+        "inheritedSmall": 28,
+        "explicitLarge": 44
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 28,
+        "rawElInput": 28,
+        "tooltip": 28,
+        "disabled": 28,
+        "inheritedSmall": 20,
+        "explicitLarge": 36
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "dark",
+      "density": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 32,
+        "rawElInput": 32,
+        "tooltip": 32,
+        "disabled": 32,
+        "inheritedSmall": 24,
+        "explicitLarge": 40
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "default",
+      "mode": "dark",
+      "density": "comfortable",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 36,
+        "rawElInput": 36,
+        "tooltip": 36,
+        "disabled": 36,
+        "inheritedSmall": 28,
+        "explicitLarge": 44
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 26,
+        "rawElInput": 26,
+        "tooltip": 26,
+        "disabled": 26,
+        "inheritedSmall": 18,
+        "explicitLarge": 34
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 30,
+        "rawElInput": 30,
+        "tooltip": 30,
+        "disabled": 30,
+        "inheritedSmall": 22,
+        "explicitLarge": 38
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "comfortable",
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 34,
+        "rawElInput": 34,
+        "tooltip": 34,
+        "disabled": 34,
+        "inheritedSmall": 26,
+        "explicitLarge": 42
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "compact",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 26,
+        "rawElInput": 26,
+        "tooltip": 26,
+        "disabled": 26,
+        "inheritedSmall": 18,
+        "explicitLarge": 34
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 30,
+        "rawElInput": 30,
+        "tooltip": 30,
+        "disabled": 30,
+        "inheritedSmall": 22,
+        "explicitLarge": 38
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "source",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "comfortable",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 34,
+        "rawElInput": 34,
+        "tooltip": 34,
+        "disabled": 34,
+        "inheritedSmall": 26,
+        "explicitLarge": 42
+      },
+      "dialogWidthPx": 880,
+      "slotText": "https://@✓.example",
+      "radioInnerSizePx": [
+        14,
+        14
+      ]
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "light",
+      "density": "compact",
+      "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 28,
+        "rawElInput": 28,
+        "tooltip": 28,
+        "disabled": 28,
+        "inheritedSmall": 20,
+        "explicitLarge": 36
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "light",
+      "density": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 32,
+        "rawElInput": 32,
+        "tooltip": 32,
+        "disabled": 32,
+        "inheritedSmall": 24,
+        "explicitLarge": 40
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "light",
+      "density": "comfortable",
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 36,
+        "rawElInput": 36,
+        "tooltip": 36,
+        "disabled": 36,
+        "inheritedSmall": 28,
+        "explicitLarge": 44
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "dark",
+      "density": "compact",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 28,
+        "rawElInput": 28,
+        "tooltip": 28,
+        "disabled": 28,
+        "inheritedSmall": 20,
+        "explicitLarge": 36
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "dark",
+      "density": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 32,
+        "rawElInput": 32,
+        "tooltip": 32,
+        "disabled": 32,
+        "inheritedSmall": 24,
+        "explicitLarge": 40
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "default",
+      "mode": "dark",
+      "density": "comfortable",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 36,
+        "rawElInput": 36,
+        "tooltip": 36,
+        "disabled": 36,
+        "inheritedSmall": 28,
+        "explicitLarge": 44
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "compact",
+      "variant": "mode-light__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 26,
+        "rawElInput": 26,
+        "tooltip": 26,
+        "disabled": 26,
+        "inheritedSmall": 18,
+        "explicitLarge": 34
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "default",
+      "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 30,
+        "rawElInput": 30,
+        "tooltip": 30,
+        "disabled": 30,
+        "inheritedSmall": 22,
+        "explicitLarge": 38
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "light",
+      "density": "comfortable",
+      "variant": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 34,
+        "rawElInput": 34,
+        "tooltip": 34,
+        "disabled": 34,
+        "inheritedSmall": 26,
+        "explicitLarge": 42
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "compact",
+      "variant": "mode-dark__density-compact__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 26,
+        "rawElInput": 26,
+        "tooltip": 26,
+        "disabled": 26,
+        "inheritedSmall": 18,
+        "explicitLarge": 34
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "default",
+      "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 30,
+        "rawElInput": 30,
+        "tooltip": 30,
+        "disabled": 30,
+        "inheritedSmall": 22,
+        "explicitLarge": 38
+      }
+    },
+    {
+      "channel": "packed",
+      "theme": "defense-green",
+      "mode": "dark",
+      "density": "comfortable",
+      "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "measuredHeightPx": {
+        "plain": 34,
+        "rawElInput": 34,
+        "tooltip": 34,
+        "disabled": 34,
+        "inheritedSmall": 26,
+        "explicitLarge": 42
+      }
+    }
+  ],
+  "interactionObservations": [
+    {
+      "channel": "source",
+      "operation": "open nested",
+      "dialogs": 2,
+      "scopes": [
+        {
+          "scopeId": "scope:play:root.public-form",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+        },
+        {
+          "scopeId": "scope:play:root.public-form.public-form-nested",
+          "variant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default"
+        }
+      ]
+    },
+    {
+      "channel": "source",
+      "operation": "empty required validation",
+      "visibleError": "Name is required"
+    },
+    {
+      "channel": "source",
+      "operation": "inspect exposes",
+      "visibleFeedback": {
+        "input": "INPUT",
+        "textarea": "TEXTAREA",
+        "textareaStyle": [
+          {},
+          {
+            "minHeight": "31px"
+          },
+          {}
+        ]
+      }
+    },
+    {
+      "channel": "source",
+      "operation": "clear via exposed method",
+      "visibleNameFieldValue": ""
+    },
+    {
+      "channel": "source",
+      "operation": "submit public form",
+      "visibleFeedback": {
+        "name": "Final sample",
+        "email": "",
+        "status": "active",
+        "agreed": true,
+        "nativeNumber": "7",
+        "nativeSearch": "needle",
+        "quantity": 3,
+        "note": ""
+      },
+      "result": "dialog closed"
+    },
+    {
+      "channel": "packed",
+      "operation": "empty required validation",
+      "visibleError": "Name is required"
+    },
+    {
+      "channel": "packed",
+      "operation": "reset via FormInstance",
+      "visibleNameFieldValue": "",
+      "visibleRawFieldValue": "",
+      "visibleTooltipFieldValue": ""
+    },
+    {
+      "channel": "packed",
+      "operation": "inspect exposes",
+      "visibleFeedback": {
+        "input": "INPUT",
+        "textarea": "TEXTAREA",
+        "textareaStyle": [
+          {},
+          {
+            "minHeight": "31px"
+          },
+          {}
+        ]
+      }
+    },
+    {
+      "channel": "packed",
+      "operation": "submit public form",
+      "visibleFeedback": {
+        "name": "Final sample",
+        "email": "",
+        "status": "active",
+        "agreed": true,
+        "nativeNumber": "7",
+        "nativeSearch": "needle",
+        "quantity": 3,
+        "note": ""
+      },
+      "result": "dialog closed"
+    },
+    {
+      "channel": "source",
+      "operation": "select popup light",
+      "renderedPopup": {
+        "classes": "el-popper is-pure is-light el-tooltip el-select__popper zx-combobox__popper",
+        "scopeId": "scope:play:root.public-form",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "text": "OneTwo"
+      }
+    }
+  ],
+  "autofill": {
+    "status": "not-verified",
+    "evidence": "Both agent source and packed pages on localhost had native username/current-password fields; matches(:-webkit-autofill)=false and nonempty=false. Focusing username and pressing ArrowDown showed no native autofill suggestion. Parent also reported its source page did not trigger real autofill.",
+    "constraints": "No profile inspection, credentials saved, forced pseudo-class, CSS simulation, or fill-as-autofill claim.",
+    "requiredFollowup": "Obtain a real browser autofill state on raw ElInput and ZxInput in light and dark; otherwise keep R5.AC2/R13.AC3 runtime acceptance open."
+  },
+  "screenshots": [
+    "source-default-light.png",
+    "source-default-light-popup.png",
+    "source-default-dark-popup.png",
+    "source-nested-dark.png"
+  ],
+  "limitations": [
+    "These measurements precede the parent agent's external ElPopover/root-fragment correction. They establish prior density and theme behavior, not final candidate acceptance.",
+    "Username/password autocomplete representatives were added after the 24-case matrix; source and packed fixture build/type checks passed afterward.",
+    "Some exposed focus/select reads ran into an invalid descendant selector; successful final readback of selection bounds was not printed before runtime reset. Recheck on the final candidate instead of inventing bounds.",
+    "The final nested-popup AX click returned a CUA read-only-input focus error; this is not application failure evidence, and nested popup final readback remains to be repeated.",
+    "A final console warning/error scan was not completed before interruption."
+  ]
+}

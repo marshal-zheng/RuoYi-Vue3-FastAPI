@@ -40,7 +40,7 @@ const loadDictData = async () => {
   if (!props.dictType) return;
   try {
     const response = await getDicts(props.dictType);
-    const raw = Array.isArray(response) ? response : [];
+    const raw = response.items;
     const dedupMap = {};
     raw.forEach((option) => {
       const baseLabel = option.dictLabel ?? option.dictValue ?? '';

@@ -10,7 +10,9 @@ import pytest
 from config.constant import CommonConstant
 from exceptions.exception import PermissionException
 from module_admin.entity.vo.role_vo import RoleModel
+from module_admin.entity.vo.user_vo import UserRolePageQueryModel
 from modules.system.application.services.role_service import RoleService
+from utils.page_util import PageResponseModel
 
 
 class FakeCache:
@@ -42,6 +44,37 @@ def build_service(role_repo=None):
         role_dept_repo=AsyncMock(),
         user_repo=AsyncMock(),
         query_db=AsyncMock(),
+    )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('allocation', ['allocated', 'unallocated'])
+async def test_role_user_list_preserves_joined_department_and_page_contract(allocation):
+    service = build_service()
+    repository = getattr(service.user_repo, f'paginate_{allocation}_by_role')
+    repository.return_value = PageResponseModel(
+        items=[
+            [{'userId': 2, 'userName': 'joined'}, {'deptId': 7, 'deptName': '研发'}],
+            [{'userId': 3, 'userName': 'without-department'}, None],
+        ],
+        page=2,
+        page_size=10,
+        total=12,
+    )
+
+    result = await getattr(service, f'get_role_user_{allocation}_list_services')(
+        UserRolePageQueryModel(role_id=5, page=2, page_size=10), 'True', is_page=True
+    )
+
+    assert result.page == 2
+    assert result.page_size == 10
+    assert result.total == 12
+    assert result.items[0].user_id == 2
+    assert result.items[0].dept.dept_name == '研发'
+    assert result.items[1].user_id == 3
+    assert result.items[1].dept is None
+    repository.assert_awaited_once_with(
+        role_id=5, page=2, page_size=10, user_name=None, phonenumber=None, data_scope_sql='True'
     )
 
 

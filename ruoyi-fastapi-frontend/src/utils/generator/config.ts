@@ -1,5 +1,8 @@
+import { generatorTags } from './identity';
+
 // 表单配置接口
 export interface FormConfig {
+  columns?: 1 | 2 | 3;
   formRef: string;
   formModel: string;
   size: 'large' | 'default' | 'small';
@@ -48,6 +51,7 @@ export interface ComponentStyle {
 
 // 基础组件配置接口
 export interface BaseComponent {
+  full?: boolean;
   label: string;
   tag: string;
   tagIcon: string;
@@ -241,7 +245,7 @@ export const formConf: FormConfig = {
 export const inputComponents: InputComponent[] = [
   {
     label: '单行文本',
-    tag: 'el-input',
+    tag: generatorTags.input,
     tagIcon: 'input',
     type: 'text',
     placeholder: '请输入',
@@ -265,7 +269,7 @@ export const inputComponents: InputComponent[] = [
   },
   {
     label: '多行文本',
-    tag: 'el-input',
+    tag: generatorTags.input,
     tagIcon: 'textarea',
     type: 'textarea',
     placeholder: '请输入',
@@ -288,7 +292,7 @@ export const inputComponents: InputComponent[] = [
   },
   {
     label: '密码',
-    tag: 'el-input',
+    tag: generatorTags.input,
     tagIcon: 'password',
     type: 'password',
     placeholder: '请输入',
@@ -673,7 +677,7 @@ export const layoutComponents: LayoutComponent[] = [
 
 // 组件rule的触发方式，无触发方式的组件不生成rule
 export const trigger: Record<string, string> = {
-  'el-input': 'blur',
+  [generatorTags.input]: 'blur',
   'el-input-number': 'blur',
   'el-select': 'change',
   'el-radio-group': 'change',

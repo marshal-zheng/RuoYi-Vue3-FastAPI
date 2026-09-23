@@ -1,0 +1,18 @@
+{
+  "active": null,
+  "autofill": [],
+  "dialogs": [],
+  "errors": [],
+  "grid": [],
+  "labels": [],
+  "radio": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

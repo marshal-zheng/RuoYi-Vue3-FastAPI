@@ -1,0 +1,94 @@
+{
+  "active": null,
+  "autofill": [
+    {
+      "fill": "color(srgb 0.93 0.95 0.98)",
+      "shadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+      "type": "text"
+    },
+    {
+      "fill": "color(srgb 0.93 0.95 0.98)",
+      "shadow": "color(srgb 0.096 0.1101 0.1383) 0px 0px 0px 1000px inset",
+      "type": "password"
+    }
+  ],
+  "dialogs": [
+    {
+      "bg": "color(srgb 0.13254 0.147214 0.17652)",
+      "height": 482.0000305175781,
+      "width": 880
+    }
+  ],
+  "errors": [],
+  "grid": [
+    {
+      "columns": "406px 406px",
+      "gap": "normal 20px"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "用户昵称"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "归属部门"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "手机号码"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "邮箱"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "用户名称"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "用户密码"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "用户性别"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "状态"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "岗位"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "角色"
+    },
+    {
+      "color": "color(srgb 0.93 0.95 0.98)",
+      "text": "备注"
+    }
+  ],
+  "radio": [
+    {
+      "checked": true,
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "value": "1"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "default",
+    "zxVariant": "mode-dark__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

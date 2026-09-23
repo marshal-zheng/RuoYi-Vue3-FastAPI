@@ -50,6 +50,9 @@ jobs:
             exit 1
           fi
 
+      - name: UI standards and generated form contracts
+        run: yarn ui:standards
+
       - name: Type check
         run: npm run type-check
 

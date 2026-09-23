@@ -18,7 +18,7 @@
       class="protocol-form"
     >
       <el-form-item label="协议名称" prop="protocolName">
-        <el-input
+        <zx-input
           v-model="drawer.state.data.protocolName"
           placeholder="请输入协议名称"
           maxlength="50"
@@ -38,7 +38,7 @@
       </el-form-item>
 
       <el-form-item label="协议描述" prop="description">
-        <el-input
+        <zx-input
           v-model="drawer.state.data.description"
           type="textarea"
           placeholder="请输入备注信息"

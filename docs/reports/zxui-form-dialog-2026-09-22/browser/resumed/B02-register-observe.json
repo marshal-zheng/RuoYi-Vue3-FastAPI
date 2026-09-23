@@ -1,0 +1,42 @@
+{
+  "active": null,
+  "dialogs": [],
+  "errors": [],
+  "fields": [
+    {
+      "autofill": true,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 38,
+      "placeholder": "账号",
+      "type": "text"
+    },
+    {
+      "autofill": true,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 38,
+      "placeholder": "密码",
+      "type": "password"
+    },
+    {
+      "autofill": false,
+      "disabled": false,
+      "fill": "color(srgb 0.1008 0.1236 0.1604)",
+      "height": 38,
+      "placeholder": "确认密码",
+      "type": "password"
+    }
+  ],
+  "grids": [],
+  "radios": [],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    778,
+    993
+  ]
+}

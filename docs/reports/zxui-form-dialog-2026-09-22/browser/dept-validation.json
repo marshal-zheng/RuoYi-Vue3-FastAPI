@@ -1,0 +1,70 @@
+{
+  "active": null,
+  "autofill": [],
+  "dialogs": [
+    {
+      "bg": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 362,
+      "width": 880
+    }
+  ],
+  "errors": [
+    "上级部门不能为空",
+    "部门名称不能为空"
+  ],
+  "grid": [
+    {
+      "columns": "406px 406px",
+      "gap": "normal 20px"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "上级部门"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "部门名称"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "显示排序"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "负责人"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "联系电话"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "邮箱"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "部门状态"
+    }
+  ],
+  "radio": [
+    {
+      "checked": true,
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "value": "1"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

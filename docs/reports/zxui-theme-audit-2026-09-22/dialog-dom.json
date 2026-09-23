@@ -1,0 +1,62 @@
+{
+  "dialogs": [
+    {
+      "background": "color(srgb 0.0873666 0.181576 0.308571)",
+      "height": 600,
+      "width": 440
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "用户昵称"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "归属部门"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "手机号码"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "邮箱"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "用户名称"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "用户密码"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "用户性别"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "状态"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "岗位"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "角色"
+    },
+    {
+      "color": "color(srgb 0.9165 0.9512 1)",
+      "text": "备注"
+    }
+  ],
+  "statusGroups": [
+    {
+      "label": "el-id-4496-84",
+      "radioCount": 0,
+      "text": ""
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+- menubar:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+  - menuitem:
+- navigation "面包屑":
+  - link "首页"
+- button "ZXUI 主题：工厂蓝":
+  - generic: 工厂蓝
+- button "切换到深色模式":
+- button "超级管理员":
+  - generic: 超级管理员
+- link "设备详情":
+  - /url: /device/detail/index
+  - generic: 设备详情
+- generic "刷新当前页面 (Ctrl+R)":
+- button "更多操作":
+- heading "设备端口配置" [level=3]
+- generic: 已配置 1 个端口
+- button "添加端口":
+  - generic: 添加端口
+- button "保存":
+  - generic: 保存
+- dialog "端口配置 - RS422":
+  - banner:
+    - button "关闭抽屉":
+    - generic: 端口配置 - RS422
+    - button "全屏":
+      - text: 全屏
+  - separator "调整抽屉尺寸"
+  - tablist:
+    - tab "参数配置"
+    - tab "报文配置" [selected]
+  - text: "* * * *"
+  - tabpanel "报文配置":
+    - generic: 选择协议模板：
+    - combobox
+    - generic: 请选择已有协议模板
+    - generic: 协议格式配置
+    - generic: RS422
+    - button "导入配置":
+      - generic: 导入配置
+    - button "添加字段":
+      - generic: 添加字段
+    - button "删除选中":
+      - generic: 删除选中
+    - table:
+      - rowgroup:
+        - row " ":
+          - columnheader
+          - columnheader
+          - columnheader "":
+            - generic: 
+          - columnheader
+          - columnheader "":
+            - generic: 
+    - table:
+      - rowgroup:
+        - row "RS422 发送方":
+          - cell "RS422":
+            - generic: RS422
+          - cell "发送方":
+            - generic: 发送方
+          - cell
+        - row "接收方":
+          - cell "接收方":
+            - generic: 接收方
+          - cell
+        - row "传输频率 传输速率/bps":
+          - cell "传输频率":
+            - generic: 传输频率
+          - cell
+          - cell "传输速率/bps":
+            - generic: 传输速率/bps
+          - cell
+        - row "传输方式 发送时长/ms":
+          - cell "传输方式":
+            - generic: 传输方式
+          - cell
+          - cell "发送时长/ms":
+            - generic: 发送时长/ms
+          - cell:
+            - spinbutton [active]: "25"
+        - row "帧长度/Byte 错误处理":
+          - cell "帧长度/Byte":
+            - generic: 帧长度/Byte
+          - cell
+          - cell "错误处理":
+            - generic: 错误处理
+          - cell
+    - table:
+      - rowgroup:
+        - row "序号 * 信息名称 字节数 字节序号 值域及含义 量纲 数据类型 比例尺 备注":
+          - columnheader "序号":
+            - generic: 序号
+          - columnheader "* 信息名称":
+            - generic: "*"
+            - generic: 
+            - generic: 信息名称
+          - columnheader "字节数":
+            - generic: 
+            - generic: 字节数
+          - columnheader "字节序号":
+            - generic: 字节序号
+          - columnheader "值域及含义":
+            - generic: 
+            - generic: 值域及含义
+          - columnheader "量纲":
+            - generic: 
+            - generic: 量纲
+          - columnheader "数据类型":
+            - generic: 
+            - generic: 数据类型
+          - columnheader "比例尺":
+            - generic: 
+            - generic: 比例尺
+          - columnheader "备注":
+            - generic: 
+            - generic: 备注
+    - table:
+      - rowgroup
+    - table:
+      - rowgroup:
+        - row "":
+          - columnheader "":
+            - generic: 
+    - table:
+      - rowgroup
+    - table:
+      - rowgroup:
+        - row "操作":
+          - columnheader "操作":
+            - generic: 操作
+    - table:
+      - rowgroup
+    - generic: 附注
+    - textbox "请输入附注信息": RS422 原生多行输入验收
+  - button "取消":
+    - generic: 取消
+  - button "确定":
+    - generic: 确定

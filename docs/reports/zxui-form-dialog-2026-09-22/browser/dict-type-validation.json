@@ -1,0 +1,58 @@
+{
+  "active": "请输入字典名称",
+  "autofill": [],
+  "dialogs": [
+    {
+      "bg": "color(srgb 0.890301 0.936405 0.993959)",
+      "height": 382,
+      "width": 640
+    }
+  ],
+  "errors": [
+    "字典名称不能为空",
+    "字典类型不能为空"
+  ],
+  "grid": [
+    {
+      "columns": "592px",
+      "gap": "normal 20px"
+    }
+  ],
+  "labels": [
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "字典名称"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "字典类型"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "状态"
+    },
+    {
+      "color": "color(srgb 0.1008 0.1236 0.1604)",
+      "text": "备注"
+    }
+  ],
+  "radio": [
+    {
+      "checked": true,
+      "value": "0"
+    },
+    {
+      "checked": false,
+      "value": "1"
+    }
+  ],
+  "theme": {
+    "vxeUiTheme": "light",
+    "zxTheme": "industrial-blue",
+    "zxVariant": "mode-light__density-default__contrast-normal__motion-full__radius-default"
+  },
+  "viewport": [
+    1280,
+    720
+  ]
+}

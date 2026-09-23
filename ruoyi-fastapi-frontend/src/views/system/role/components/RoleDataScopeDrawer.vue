@@ -8,10 +8,10 @@
   >
     <el-form :model="drawer.state.data" label-position="top" class="role-form">
       <el-form-item label="角色名称">
-        <el-input v-model="drawer.state.data.roleName" disabled />
+        <zx-input v-model="drawer.state.data.roleName" disabled />
       </el-form-item>
       <el-form-item label="权限字符">
-        <el-input v-model="drawer.state.data.roleKey" disabled />
+        <zx-input v-model="drawer.state.data.roleKey" disabled />
       </el-form-item>
       <el-form-item label="权限范围">
         <el-select

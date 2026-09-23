@@ -1,20 +1,3 @@
-// 处理主题样式
-export function handleThemeStyle(theme: string): void {
-  document.documentElement.style.setProperty('--el-color-primary', theme);
-  for (let i = 1; i <= 9; i++) {
-    document.documentElement.style.setProperty(
-      `--el-color-primary-light-${i}`,
-      `${getLightColor(theme, i / 10)}`
-    );
-  }
-  for (let i = 1; i <= 9; i++) {
-    document.documentElement.style.setProperty(
-      `--el-color-primary-dark-${i}`,
-      `${getDarkColor(theme, i / 10)}`
-    );
-  }
-}
-
 // hex颜色转rgb颜色
 export function hexToRgb(str: string): number[] {
   str = str.replace('#', '');

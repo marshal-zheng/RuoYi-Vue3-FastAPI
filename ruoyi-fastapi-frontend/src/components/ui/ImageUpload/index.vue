@@ -31,9 +31,18 @@
       的文件
     </div>
 
-    <el-dialog v-model="dialogVisible" title="预览" width="800px" append-to-body>
+    <ZxDialog
+      dialog-size="lg"
+      :draggable="false"
+      :show-full-screen="false"
+      :destroy-on-close="false"
+      :close-on-click-modal="true"
+      :footer="false"
+      v-model="dialogVisible"
+      title="预览"
+    >
       <img :src="dialogImageUrl" style="display: block; max-width: 100%; margin: 0 auto" />
-    </el-dialog>
+    </ZxDialog>
   </div>
 </template>
 

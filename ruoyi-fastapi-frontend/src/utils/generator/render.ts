@@ -1,5 +1,7 @@
 import { defineComponent, h, resolveComponent, VNode } from 'vue';
 import { makeMap } from '@/utils/index';
+import { ZxInput } from '@zxio/zxui/input';
+import { generatorTags, resolveGeneratorTag } from './identity';
 import type { PropType } from 'vue';
 
 // 选项接口
@@ -73,20 +75,9 @@ const isAttr = makeMap(
     'prefix-icon'
 );
 
-const isNotProps = makeMap('layout,prepend,regList,tag,document,changeTag,defaultValue');
-
-/**
- * 使用 v-model 的辅助函数
- * @param props - 组件属性
- * @param emit - 事件发射器
- * @returns v-model 配置对象
- */
-function useVModel(props: any, emit: any): Record<string, any> {
-  return {
-    modelValue: props.defaultValue,
-    'onUpdate:modelValue': (val: any) => emit('update:modelValue', val),
-  };
-}
+const isNotProps = makeMap(
+  'layout,prepend,append,regList,tag,document,changeTag,defaultValue,vModel,span,full,labelWidth'
+);
 
 // 子组件配置
 const componentChild: ComponentChildConfig = {
@@ -175,6 +166,10 @@ const componentChild: ComponentChildConfig = {
 
 // 插槽配置
 const componentSlot: ComponentSlotConfig = {
+  [generatorTags.input]: {
+    prepend: (h, conf) => () => h('span', conf.prepend),
+    append: (h, conf) => () => h('span', conf.append),
+  },
   'el-upload': {
     tip: (h, conf, key) => {
       if (conf.showTip) {
@@ -194,6 +189,8 @@ const componentSlot: ComponentSlotConfig = {
 
 export default defineComponent({
   name: 'FormElementRender',
+  inheritAttrs: false,
+  emits: ['update:modelValue'],
   // 使用 render 函数
   render() {
     const dataObject: DataObject = {
@@ -203,6 +200,7 @@ export default defineComponent({
       style: {},
     };
     const confClone: FormElementConfig = JSON.parse(JSON.stringify(this.conf));
+    confClone.tag = resolveGeneratorTag(confClone.tag);
     const children: VNode[] = [];
     const slot: Record<string, () => VNode | VNode[]> = {};
 
@@ -250,11 +248,13 @@ export default defineComponent({
     }
 
     return h(
-      resolveComponent(this.conf.tag),
+      confClone.tag === generatorTags.input ? ZxInput : resolveComponent(confClone.tag),
       {
-        modelValue: this.$attrs.modelValue,
+        ...this.$attrs,
         ...dataObject.props,
         ...dataObject.attrs,
+        modelValue: this.$attrs.modelValue,
+        'onUpdate:modelValue': (value: unknown) => this.$emit('update:modelValue', value),
         style: {
           ...dataObject.style,
         },

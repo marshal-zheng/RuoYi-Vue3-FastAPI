@@ -11,6 +11,15 @@ frontend-message-governance-check:
     - yarn install --immutable
     - node ../scripts/check_message_governance_frontend.mjs
 
+frontend-ui-standards-check:
+  stage: test
+  image: node:20
+  script:
+    - corepack enable
+    - cd ruoyi-fastapi-frontend
+    - yarn install --immutable
+    - yarn ui:standards
+
 backend-message-governance-check:
   stage: security
   image: python:3.11

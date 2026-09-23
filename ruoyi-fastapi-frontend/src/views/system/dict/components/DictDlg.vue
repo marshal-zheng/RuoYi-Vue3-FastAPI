@@ -1,37 +1,38 @@
 <template>
   <zx-dialog v-bind="dialogProps" :form-ref="formRef" v-on="dialogEvents">
-    <el-form ref="formRef" :model="state.data" :rules="rules" label-width="80px">
-      <el-form-item label="字典名称" prop="dictName">
-        <el-input v-model="state.data.dictName" placeholder="请输入字典名称" />
-      </el-form-item>
-      <el-form-item label="字典类型" prop="dictType">
-        <el-input v-model="state.data.dictType" placeholder="请输入字典类型" />
-      </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-radio-group v-model="state.data.status">
-          <el-radio v-for="dict in sysNormalDisable" :key="dict.value" :value="dict.value">
-            {{ dict.label }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="备注" prop="remark">
-        <el-input v-model="state.data.remark" type="textarea" placeholder="请输入内容" />
-      </el-form-item>
+    <el-form ref="formRef" :model="state.data" :rules="rules" v-bind="formProps">
+      <FormGrid v-bind="layoutProps">
+        <el-form-item label="字典名称" prop="dictName">
+          <zx-input v-model="state.data.dictName" placeholder="请输入字典名称" />
+        </el-form-item>
+        <el-form-item label="字典类型" prop="dictType">
+          <zx-input v-model="state.data.dictType" placeholder="请输入字典类型" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-radio-group v-model="state.data.status">
+            <el-radio v-for="dict in sysNormalDisable" :key="dict.value" :value="dict.value">
+              {{ dict.label }}
+            </el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <zx-input v-model="state.data.remark" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+      </FormGrid>
     </el-form>
   </zx-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, getCurrentInstance } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { addType, updateType } from '@/api/system/dict/type';
 import { useDict } from '@/utils/dict';
 
 const { proxy } = getCurrentInstance() as any;
 
-// 延迟加载字典数据
-let sysNormalDisable = ref<any[]>([]);
-let dictLoaded = false;
+// 保留异步字典返回的 ref，避免复制请求完成前的空数组。
+const { sys_normal_disable: sysNormalDisable } = useDict('sys_normal_disable');
 
 interface DictForm {
   dictId?: number;
@@ -48,9 +49,11 @@ const rules = {
   dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
 };
 
-const { state, dialogProps, dialogEvents, open } = useDialog<DictForm>({
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open } = useFormDialog<DictForm>({
+  columns: 1,
+  formRef: formRef,
   title: (data: DictForm) => (data.dictId ? '修改字典类型' : '添加字典类型'),
-  width: '500px',
+
   defaultData: () => ({
     dictId: undefined,
     dictName: '',
@@ -58,15 +61,6 @@ const { state, dialogProps, dialogEvents, open } = useDialog<DictForm>({
     status: '0',
     remark: '',
   }),
-  onOpen: () => {
-    // 只在第一次打开时加载字典
-    if (!dictLoaded) {
-      const dict = useDict('sys_normal_disable');
-      // useDict 返回的键名是原始的 dictType，不是驼峰命名
-      sysNormalDisable.value = dict.sys_normal_disable?.value || [];
-      dictLoaded = true;
-    }
-  },
   onConfirm: async (data: DictForm) => {
     if (data.dictId) {
       await updateType(data);

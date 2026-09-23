@@ -1,5 +1,5 @@
 <template>
-  <el-input
+  <zx-input
     v-model="keyword"
     class="dag-search-input"
     :class="className"
@@ -10,7 +10,7 @@
     <template #prefix>
       <el-icon><Search /></el-icon>
     </template>
-  </el-input>
+  </zx-input>
 </template>
 
 <script setup>
