@@ -189,11 +189,6 @@ const cases = [
     component: lazy(() => import('@/views/project/components/ProtocolConfigDrawer.vue')),
   },
   {
-    id: 'F10',
-    title: 'ThemeValidation',
-    component: lazy(() => import('@/components/ui/ThemeValidation/index.vue')),
-  },
-  {
     id: 'F11',
     title: 'ImageUpload preview',
     component: lazy(() => import('@/components/ui/ImageUpload/index.vue')),

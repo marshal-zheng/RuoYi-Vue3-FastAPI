@@ -45,7 +45,6 @@ export { default as SizeSelect } from './SizeSelect/index.vue';
 export { default as RuoYiDoc } from './RuoYi/Doc/index.vue';
 export { default as RuoYiGit } from './RuoYi/Git/index.vue';
 export { default as ThemeDemo } from './ThemeDemo/index.vue';
-export { default as ThemeValidation } from './ThemeValidation/index.vue';
 
 // VXE Table Validation (composable + component)
 export * from './VxeTableValidation';

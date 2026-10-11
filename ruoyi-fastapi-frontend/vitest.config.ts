@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [vue() as any],
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src')
+      '@': resolve(__dirname, './src'),
+      'virtual:zxui-theme-deployment': resolve(__dirname, './tests/fixtures/zxui-theme-deployment.ts')
     }
   },
   test: {

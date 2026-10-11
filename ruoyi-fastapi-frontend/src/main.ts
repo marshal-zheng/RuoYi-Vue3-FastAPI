@@ -17,7 +17,6 @@ import '@zxio/zxui/style';
 import { bindZxThemeHost } from '@/theme/zx-theme-host';
 import themeDeployment from 'virtual:zxui-theme-deployment';
 
-import '@/assets/styles/theme.module.css'; // 统一主题源文件
 import '@/assets/styles/index.css'; // global css
 import '@/assets/styles/components.less'; // global less (zxui overrides)
 import '@/assets/styles/tailwind.css'; // tailwind css

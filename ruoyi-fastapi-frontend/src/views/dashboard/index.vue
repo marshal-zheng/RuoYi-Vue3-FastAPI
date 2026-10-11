@@ -17,7 +17,6 @@ import {
   ListItemMeta,
   Avatar,
 } from 'ant-design-vue';
-import 'ant-design-vue/dist/reset.css';
 
 import ThemeDemo from '@/components/ui/ThemeDemo/index.vue';
 

@@ -4210,6 +4210,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zxio/chart@file:./vendor/zxio-chart-2.0.0.tgz::locator=vfadmin%40workspace%3A.":
+  version: 2.0.0
+  resolution: "@zxio/chart@file:./vendor/zxio-chart-2.0.0.tgz#./vendor/zxio-chart-2.0.0.tgz::hash=a3974e&locator=vfadmin%40workspace%3A."
+  dependencies:
+    "@zxio/shared": "npm:^1.0.5"
+  peerDependencies:
+    echarts: ^5.0.0 || ^6.0.0
+    vue: ^3.4.0
+    vue-echarts: ^7.0.0 || ^8.0.0
+  checksum: 10c0/28adac6e1f3f4218b98c88abe0142872b87db671df2e1bed6276b2d608da19315a1ff2ead1227a8cb8e92f718e05a6ae3d45f767ad4d819d4b51ff628c80fd10
+  languageName: node
+  linkType: hard
+
 "@zxio/constants@npm:^1.1.0":
   version: 1.1.0
   resolution: "@zxio/constants@npm:1.1.0"
@@ -4289,15 +4302,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0.business-theme-preview.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0.tgz#./vendor/zxio-theme-compiler-1.0.0.tgz::hash=c07912&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0.business-theme-preview.tgz#./vendor/zxio-theme-compiler-1.0.0.business-theme-preview.tgz::hash=8f6303&locator=vfadmin%40workspace%3A."
   dependencies:
     "@zxio/theme-css-codec": "npm:1.0.0"
     "@zxio/tokens": "npm:2.0.0"
     postcss: "npm:8.5.26"
     postcss-selector-parser: "npm:7.1.1"
-  checksum: 10c0/d8ff305e2dd4222d30a6289336078bfa01333cf4493b4eed619bfd77451137a09f6f7ba58cad3f0b2bdc36fc95f559b02374cb1fa8ac9252edba5cc42e61a34c
+  peerDependencies:
+    vite: ^5.0.0 || ^6.0.0 || ^7.0.0
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 10c0/77efafc31d59df65daf5a69305debfb1369e4bde284141a5de04bc3dcec1fbbfd9c073425af726d48e7ca55975d57c14d7131dbbc70ca1aeefd3f1a0292336bf
   languageName: node
   linkType: hard
 
@@ -13655,10 +13673,11 @@ __metadata:
     "@vueuse/core": "npm:10.11.0"
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
+    "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz"
     "@zxio/http": "file:./vendor/@zxio-http-1.0.0.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0.tgz"
-    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0.tgz"
+    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0.business-theme-preview.tgz"
     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0.tgz"
     "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0.tgz"
     "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0.tgz"
@@ -13711,6 +13730,7 @@ __metadata:
     vitest: "npm:^3.2.4"
     vue: "npm:3.5.43"
     vue-cropper: "npm:1.1.1"
+    vue-echarts: "npm:^7.0.3"
     vue-eslint-parser: "npm:^10.2.0"
     vue-router: "npm:4.4.0"
     vue-tsc: "npm:^3.0.6"
@@ -13901,6 +13921,38 @@ __metadata:
     vue-demi-fix: bin/vue-demi-fix.js
     vue-demi-switch: bin/vue-demi-switch.js
   checksum: 10c0/a9ed8712fa36d01bc13c39757f95f30cebf42d557b99e94bff86d8660c81f2911b41220f7affc023d1ffcc19e13999e4a83019991e264787cca2c616e83aea48
+  languageName: node
+  linkType: hard
+
+"vue-demi@npm:>=0.14.5, vue-demi@npm:>=0.14.8, vue-demi@npm:latest":
+  version: 0.14.10
+  resolution: "vue-demi@npm:0.14.10"
+  peerDependencies:
+    "@vue/composition-api": ^1.0.0-rc.1
+    vue: ^3.0.0-0 || ^2.6.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  bin:
+    vue-demi-fix: bin/vue-demi-fix.js
+    vue-demi-switch: bin/vue-demi-switch.js
+  checksum: 10c0/a9ed8712fa36d01bc13c39757f95f30cebf42d557b99e94bff86d8660c81f2911b41220f7affc023d1ffcc19e13999e4a83019991e264787cca2c616e83aea48
+  languageName: node
+  linkType: hard
+
+"vue-echarts@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "vue-echarts@npm:7.0.3"
+  dependencies:
+    vue-demi: "npm:^0.13.11"
+  peerDependencies:
+    "@vue/runtime-core": ^3.0.0
+    echarts: ^5.5.1
+    vue: ^2.7.0 || ^3.1.1
+  peerDependenciesMeta:
+    "@vue/runtime-core":
+      optional: true
+  checksum: 10c0/9c52c930d2ad2d786cf01b7d13fdc3cff8b6d086335bd25b59cfa13350bb6856e7eb03e28de3c8832d780645cf808808e087f762dc500e0069086e9b623d9f0c
   languageName: node
   linkType: hard
 

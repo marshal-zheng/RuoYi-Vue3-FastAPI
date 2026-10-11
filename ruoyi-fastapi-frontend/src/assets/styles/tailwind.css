@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./theme.module.css";
 
 /* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
 @theme {
@@ -149,30 +150,6 @@
     @apply text-sm text-danger-600 mt-1;
   }
 
-  /* 暗色模式下的组件样式 */
-  .dark .card {
-    @apply bg-gray-800 border-gray-700;
-  }
-
-  .dark .card-header {
-    @apply border-gray-700;
-  }
-
-  .dark .card-footer {
-    @apply border-gray-700;
-  }
-
-  .dark .form-input {
-    @apply bg-gray-800 border-gray-600 text-gray-100 focus:border-primary-500;
-  }
-
-  .dark .form-label {
-    @apply text-gray-300;
-  }
-
-  .dark .btn-secondary {
-    @apply bg-gray-700 text-gray-100 hover:bg-gray-600;
-  }
 }
 
 /* 自定义补充：Tailwind v4 默认未生成的 slate 深色阶 */

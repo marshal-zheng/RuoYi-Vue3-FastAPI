@@ -89,7 +89,12 @@
             <span style="vertical-align: middle">命令统计</span></template
           >
           <div class="el-table el-table--enable-row-hover el-table--medium">
-            <div ref="commandstats" style="height: 420px" />
+            <ZxChart
+              v-if="chartProjection"
+              :options="commandOptions"
+              :theme-projection="chartProjection"
+              height="420px"
+            />
           </div>
         </el-card>
       </el-col>
@@ -101,7 +106,12 @@
             <span style="vertical-align: middle">内存信息</span></template
           >
           <div class="el-table el-table--enable-row-hover el-table--medium">
-            <div ref="usedmemory" style="height: 420px" />
+            <ZxChart
+              v-if="chartProjection"
+              :options="memoryOptions"
+              :theme-projection="chartProjection"
+              height="420px"
+            />
           </div>
         </el-card>
       </el-col>
@@ -111,11 +121,21 @@
 
 <script setup name="Cache">
 import { getCache } from '@/api/monitor/cache';
-import * as echarts from 'echarts';
+import { computed, getCurrentInstance, ref } from 'vue';
+import { ZxChart } from '@zxio/chart';
+import '@zxio/chart/style';
+import { useZxChartThemeProjection } from '@zxio/zxui';
+import themeDeployment from 'virtual:zxui-theme-deployment';
 
 const cache = ref([]);
-const commandstats = ref(null);
-const usedmemory = ref(null);
+const commandOptions = ref({});
+const memoryOptions = ref({});
+const projection = useZxChartThemeProjection({
+  resolveManifest: (themeId) =>
+    themeDeployment.registrations.find(({ manifest }) => manifest.identity.themeId === themeId)
+      ?.manifest,
+});
+const chartProjection = computed(() => (projection.value.ok ? projection.value.value : undefined));
 const { proxy } = getCurrentInstance();
 
 function getList() {
@@ -124,8 +144,7 @@ function getList() {
     proxy.$modal.closeLoading();
     cache.value = response;
 
-    const commandstatsIntance = echarts.init(commandstats.value, 'macarons');
-    commandstatsIntance.setOption({
+    commandOptions.value = {
       tooltip: {
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)',
@@ -142,9 +161,8 @@ function getList() {
           animationDuration: 1000,
         },
       ],
-    });
-    const usedmemoryInstance = echarts.init(usedmemory.value, 'macarons');
-    usedmemoryInstance.setOption({
+    };
+    memoryOptions.value = {
       tooltip: {
         formatter: '{b} <br/>{a} : ' + cache.value.info.used_memory_human,
       },
@@ -165,11 +183,7 @@ function getList() {
           ],
         },
       ],
-    });
-    window.addEventListener('resize', () => {
-      commandstatsIntance.resize();
-      usedmemoryInstance.resize();
-    });
+    };
   });
 }
 

@@ -1,4 +1,5 @@
-@import "tailwindcss";
+/* The global Tailwind stylesheet is emitted once by tailwind.css. */
+@reference "tailwindcss";
 
 /* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
 @theme {
@@ -207,57 +208,7 @@
   /* Dark mode comes from the ZXUI variant on the theme scope, which also sets
      `color-scheme`; Tailwind's gray palette is not re-mapped per mode. */
 
-  /* Dark theme overrides */
-  [data-theme='dark'] {
-    
-    /* Component-specific dark theme overrides */
-     --navbar-hover: rgba(255, 255, 255, 0.1);
-     --splitpanes-default-bg: #141414;
-     
-     /* TagsView dark theme overrides */
-     --tags-close-hover: rgba(255, 255, 255, 0.1);
 
-     /* Top Header dark theme - 暗色顶部导航栏 */
-     --top-header-bg: linear-gradient(90deg, #16213e 0%, rgba(26, 26, 46, 0.8) 15%, rgba(26, 26, 46, 0.6) 35%, rgba(29, 30, 31, 0.8) 60%, rgba(29, 30, 31, 0.9) 80%, rgba(29, 30, 31, 0.95) 100%);
-     --top-header-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-     --top-header-text-color: #cfd3dc;
-     --top-header-icon-color: #a3a6ad;
-     --top-header-hover-bg: rgba(255, 255, 255, 0.05);
-     
-     /* Hamburger dark theme - 左侧展开收起按钮 */
-     --top-header-hamburger-color: #8daeff;
-     --top-header-hamburger-hover-color: #409eff;
-     --top-header-hamburger-hover-bg: rgba(64, 158, 255, 0.1);
-     --top-header-menu-hover-bg: rgba(64, 158, 255, 0.16);
-     --top-header-menu-active-bg: rgba(64, 158, 255, 0.26);
-     --top-header-breadcrumb-color: rgba(207, 211, 220, 0.9);
-     --top-header-breadcrumb-hover-color: #e5eaf3;
-     --top-header-breadcrumb-separator-color: rgba(163, 166, 173, 0.6);
-     
-     /* Avatar wrapper dark theme - 右侧用户头像区域 */
-     --top-header-avatar-icon-color: #8daeff;
-     --top-header-avatar-icon-hover-color: #409eff;
-     --top-header-avatar-text-color: #e5eaf3;
-     --top-header-avatar-text-font-weight: 500;
-     --top-header-avatar-text-hover-color: #409eff;
-     --top-header-avatar-bg-hover: rgba(64, 158, 255, 0.1);
-
-     /* Sidebar Menu dark theme - 暗色侧边栏样式 */
-     --left-menu-bg-color: #1d1e1f;
-     --left-menu-bg-light-color: #252627;
-     --left-menu-bg-active-color: rgba(64, 158, 255, 0.15);
-     --left-menu-hover-bg-color: rgba(64, 158, 255, 0.08);
-     --left-menu-text-color: #cfd3dc;
-     --left-menu-text-active-color: #409eff;
-     --left-menu-collapse-bg-active-color: rgba(64, 158, 255, 0.15);
-     --left-menu-border-color: #363637;
-     --left-menu-active-shadow: 0 4px 12px rgba(64, 158, 255, 0.15);
-     --left-menu-indent-color: rgba(99, 102, 105, 0.3);
-     --left-menu-header-bg: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 52%, #16213e 100%);
-     --left-menu-header-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-     --left-menu-box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-     --left-menu-submenu-hover-bg-color: rgba(64, 158, 255, 0.08);
-   }
  }
 
 /* Export variables for JavaScript usage */

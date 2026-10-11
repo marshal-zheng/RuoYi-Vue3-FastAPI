@@ -41,14 +41,13 @@ describe('theme preference ownership', () => {
     );
   });
 
-  it('projects the committed variant and class without changing the requested preference', () => {
+  it('projects the committed variant without changing the requested preference', () => {
     projectZxThemeScope({
       themeId: 'tech-blue',
       variantKey: 'library-resolved-variant',
       selection: { mode: 'dark' },
     });
     expect(document.documentElement.dataset.zxVariant).toBe('library-resolved-variant');
-    expect(document.documentElement.classList.contains('dark')).toBe(true);
     expect(zxThemePreference.value.mode).toBe('light');
   });
 

@@ -160,3 +160,14 @@ export function zxuiThemeDeploymentPlugin(options: {
     },
   };
 }
+
+/** Select the library-owned source plugin from the same checkout as its components. */
+export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot: string) {
+  const compilerRequire = createRequire(
+    path.resolve(workspaceRoot || frontendRoot, 'package.json')
+  );
+  const { zxuiSourcePlugin } = compilerRequire(
+    '@zxio/theme-compiler/vite'
+  ) as typeof import('@zxio/theme-compiler/vite');
+  return zxuiSourcePlugin({ workspaceRoot, featurePackages: ['@zxio/chart'] });
+}

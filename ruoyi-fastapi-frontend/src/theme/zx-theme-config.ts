@@ -83,7 +83,6 @@ export function projectZxThemeScope(resolved: {
 }): void {
   document.documentElement.dataset.zxTheme = resolved.themeId;
   document.documentElement.dataset.zxVariant = resolved.variantKey;
-  document.documentElement.classList.toggle('dark', resolved.selection.mode === 'dark');
 }
 
 export const zxThemeConfig = computed(() => ({
