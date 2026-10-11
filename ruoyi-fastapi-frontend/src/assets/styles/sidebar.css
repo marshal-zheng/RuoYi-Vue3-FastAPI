@@ -49,8 +49,9 @@
     height: 100%;
   }
 
+  /* The logo strip is the band height plus its 1px bottom edge. */
   .sidebar-container.has-logo .el-scrollbar {
-    height: calc(100% - 50px);
+    height: calc(100% - var(--logo-height, 50px) - 1px);
   }
 
   .sidebar-container .is-horizontal {

@@ -126,6 +126,9 @@ function setLayout() {
 // Its children still read the legacy --top-header-* names, so they are rebound
 // here, at the scope boundary, instead of on the document root.
 .app-header {
+  // A top band only separates itself from the content below it.
+  border-width: 0 0 1px;
+
   --top-header-text-color: var(--zx-semantic-surface-header-on-text);
   --top-header-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
   --top-header-icon-hover-color: var(--zx-semantic-surface-header-on-text);
@@ -168,9 +171,9 @@ function setLayout() {
   overflow: hidden;
 }
 
+// The mobile sidebar is a drawer, so it shares the dialog/drawer backdrop.
 .drawer-bg {
-  background: #000;
-  opacity: 0.3;
+  background: var(--zx-semantic-overlay-modal);
   width: 100%;
   top: 0;
   height: 100%;

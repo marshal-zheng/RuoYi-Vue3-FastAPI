@@ -147,9 +147,9 @@ export function download(
   filename: string,
   config?: AxiosRequestConfig
 ): Promise<void> {
+  // The mask colour comes from the theme (--el-mask-color).
   downloadLoadingInstance = ElLoading.service({
     text: '正在下载数据，请稍候',
-    background: 'rgba(0, 0, 0, 0.7)',
   });
 
   return http

@@ -134,14 +134,10 @@ function handleRegister() {
       register(registerForm.value)
         .then((res) => {
           const username = registerForm.value.username;
-          ElMessageBox.alert(
-            "<font color='red'>恭喜你，您的账号 " + username + ' 注册成功！</font>',
-            '系统提示',
-            {
-              dangerouslyUseHTMLString: true,
-              type: 'success',
-            }
-          )
+          // The success type carries the emphasis; the username stays plain text.
+          ElMessageBox.alert('恭喜你，您的账号 ' + username + ' 注册成功！', '系统提示', {
+            type: 'success',
+          })
             .then(() => {
               router.push('/login');
             })

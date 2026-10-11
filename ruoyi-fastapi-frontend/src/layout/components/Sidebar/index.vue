@@ -84,6 +84,9 @@ const activeMenu = computed(() => {
 
   transition: width var(--transition-time-02);
   box-shadow: var(--left-menu-box-shadow);
+  // Like the app-shell aside, the rail only separates itself from the content,
+  // so the logo strip starts flush with the top header band.
+  border-width: 0 1px 0 0;
 
   .scrollbar-wrapper {
     background-color: var(--left-menu-bg-color);

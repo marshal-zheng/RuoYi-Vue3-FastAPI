@@ -204,28 +204,8 @@
     --app-card-border: 1px solid var(--el-border-color-light);
   }
 
-  /* 暗黑主题覆盖（class 或 data-attr 任选其一或同时支持） */
-  html.dark,
-  [data-theme="dark"] {
-    --color-surface:   #141414;
-    --color-surface-2: #1d1e1f;
-    --color-overlay:   #1d1e1f;
-
-    /* 灰阶反转/加强 */
-    --color-gray-900: #ffffff;
-    --color-gray-800: #d0d0d0;
-    --color-gray-700: #909399;
-    --color-gray-600: #a8abb2;
-    --color-gray-500: #434343;
-    --color-gray-400: #434343;
-    --color-gray-300: #434343;
-    --color-gray-200: #2d2d2d;
-    --color-gray-100: #262626;
-    --color-gray-50:  #1a1a1a;
-
-    /* 暗黑模式下的色彩方案 */
-    color-scheme: dark;
-  }
+  /* Dark mode comes from the ZXUI variant on the theme scope, which also sets
+     `color-scheme`; Tailwind's gray palette is not re-mapped per mode. */
 
   /* Dark theme overrides */
   [data-theme='dark'] {

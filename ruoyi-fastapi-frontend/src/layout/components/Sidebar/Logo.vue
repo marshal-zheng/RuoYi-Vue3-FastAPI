@@ -49,13 +49,12 @@ const props = defineProps({
   },
 });
 
-const variantClass = computed(() => {
-  return props.variant === 'login' ? 'login-variant' : '';
-});
+const variantClass = computed(() => `${props.variant}-variant`);
 
-// The sidebar strip is the app's brand block; on the login page the logo sits
-// on the page itself and must not carry a surface of its own.
-const surfaceRole = computed(() => (props.variant === 'login' ? undefined : 'brand'));
+// The sidebar strip continues the top header band, as in the ZXUI app shell;
+// `brand` is a badge role and would flood the whole strip with the accent.
+// On the login page the logo sits on the page itself and carries no surface.
+const surfaceRole = computed(() => (props.variant === 'login' ? undefined : 'header'));
 
 const logoSizeClass = computed(() => {
   return props.variant === 'login' ? 'w-12 h-12' : 'w-8 h-8';
@@ -82,11 +81,16 @@ const logo = showLogoImage ? logoImg : null;
   opacity: 0;
 }
 
-/* The brand surface paints background, border and depth. The role is shaped
-   for badges, so the radius is squared off for this full-bleed strip. */
 .sidebar-logo-container {
   height: var(--logo-height, 50px);
-  border-radius: 0;
+}
+
+/* The header surface paints background, edge and on-text colour. Like the
+   header band it keeps only the bottom edge below a full-height band, so
+   both bands end on the same line. */
+.sidebar-logo-container.sidebar-variant {
+  box-sizing: content-box;
+  border-width: 0 0 1px;
 }
 
 .sidebar-logo-container.login-variant {

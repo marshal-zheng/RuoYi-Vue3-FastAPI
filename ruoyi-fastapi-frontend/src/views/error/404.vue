@@ -198,7 +198,7 @@ let message = computed(() => {
 .wscn-http404 .bullshit__info {
   font-size: 13px;
   line-height: 21px;
-  color: grey;
+  color: var(--zx-semantic-text-secondary);
   opacity: 0;
   margin-bottom: 30px;
   animation-name: slideUp;

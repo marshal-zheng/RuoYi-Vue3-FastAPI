@@ -274,3 +274,10 @@ function getList() {
 
 getList();
 </script>
+
+<style scoped>
+/* Usage above the 80% threshold reads as a danger status. */
+.text-danger {
+  color: var(--zx-semantic-status-danger-on-surface);
+}
+</style>
