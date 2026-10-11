@@ -6,7 +6,7 @@ import * as ElementIcons from '@element-plus/icons-vue';
 import ZXUI from '@zxio/zxui';
 import 'element-plus/dist/index.css';
 import '@zxio/zxui/style';
-import '@/assets/styles/theme.module.css';
+import '@/assets/styles/tailwind.css';
 import { bindZxThemeHost } from '@/theme/zx-theme-host';
 import { http } from '@/utils/http';
 import { setupVXETable } from '@/plugins/vxe-table';

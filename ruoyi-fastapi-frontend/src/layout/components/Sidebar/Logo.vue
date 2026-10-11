@@ -100,12 +100,17 @@ const logo = showLogoImage ? logoImg : null;
 }
 
 .sidebar-title {
-  font-size: var(--logo-title-font-size, 16px);
+  margin: 0;
+  padding: 0;
   color: inherit;
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'PingFang SC',
     'Microsoft YaHei', sans-serif;
   transition: all 0.3s ease;
+}
+
+.sidebar-logo-container.sidebar-variant .sidebar-title {
+  font-size: var(--logo-title-font-size, 16px);
 }
 
 .sidebar-logo-container.login-variant .sidebar-title {

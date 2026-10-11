@@ -6,7 +6,7 @@
 @import './element-ui.css';
 @import './sidebar.css';
 
-@import './theme.module.css';
+/* tailwind.css owns theme.module.css and establishes the utility layer order. */
 
 
 /* Note: mixins.css, transition.css, and variables.module.css are deprecated and consolidated into theme.module.css */
