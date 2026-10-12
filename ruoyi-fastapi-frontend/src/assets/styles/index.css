@@ -5,6 +5,7 @@
 /* 2. Import component-specific styles */
 @import './element-ui.css';
 @import './sidebar.css';
+@import './overlay.css';
 
 /* tailwind.css owns theme.module.css and establishes the utility layer order. */
 
@@ -74,25 +75,26 @@ div:focus {
 }
 /* Aside styles */
 aside {
-  background: #eef1f6;
+  background: var(--zx-semantic-surface-header-fill);
   padding: 8px 24px;
   margin-bottom: 20px;
   border-radius: 2px;
   display: block;
   line-height: 32px;
   font-size: 16px;
-  color: #2c3e50;
+  color: var(--zx-semantic-surface-header-on-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 aside a {
-  color: #337ab7;
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
   cursor: pointer;
 }
 
 aside a:hover {
-  color: rgb(32, 160, 255);
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
+  text-decoration: underline;
 }
 
 /* Main container global styles */
@@ -131,12 +133,13 @@ aside a:hover {
 /* Link type styles */
 .link-type,
 .link-type:focus {
-  color: #337ab7;
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
   cursor: pointer;
 }
 
 .link-type:hover {
-  color: rgb(32, 160, 255);
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
+  text-decoration: underline;
 }
 
 /* Filter container styles */
@@ -193,7 +196,3 @@ aside a:hover {
  * .status-error -> bg-red-100 text-red-800 border border-red-200 rounded-full px-2 py-1 text-xs font-medium
  * .status-info -> bg-blue-100 text-blue-800 border border-blue-200 rounded-full px-2 py-1 text-xs font-medium
  */
-
-
- @import './overlay.css'
- 

@@ -70,7 +70,6 @@
             <div
               v-loading="graphLoading"
               element-loading-text="正在加载指标体系数据..."
-              element-loading-background="rgba(255, 255, 255, 0.8)"
               class="dag-graph__loading"
               :class="{ 'is-loading': graphLoading }"
             ></div>
@@ -341,7 +340,7 @@ const props = defineProps({
    */
   theme: {
     type: String,
-    default: 'light',
+    default: '',
   },
 });
 
@@ -350,7 +349,7 @@ const backgroundConfig = computed(() => {
   if (props.theme === 'dark') {
     return { color: '#0a0e14' };
   }
-  return { color: '#ffffff' };
+  return { color: undefined };
 });
 
 const gridConfig = computed(() => {
@@ -366,7 +365,7 @@ const gridConfig = computed(() => {
     size: 14,
     type: 'mesh',
     dotSize: 2,
-    color: 'rgba(148, 163, 184, 0.15)',
+    color: undefined,
   };
 });
 
@@ -893,7 +892,7 @@ defineExpose({
     flex-direction: column;
     width: 240px;
     height: 100%;
-    background: linear-gradient(180deg, #fafbfc 0%, #f6f8fa 100%);
+    background: var(--zx-semantic-surface-panel-fill);
 
     &__header {
       display: none; // 隐藏原有的头部，因为DagDnd组件现在有自己的头部
@@ -909,7 +908,7 @@ defineExpose({
     min-height: 0;
     height: 100%;
     outline: none;
-    background: #fff;
+    background: var(--zx-semantic-surface-elevated);
 
     .dag-toolbar {
       display: flex;
@@ -917,8 +916,8 @@ defineExpose({
       justify-content: space-between;
       height: 42px;
       padding: 0 16px;
-      background-color: #f6f8fa;
-      border-bottom: 1px solid #eaebed;
+      background-color: var(--zx-semantic-surface-panel-fill);
+      border-bottom: 1px solid var(--zx-semantic-border-subtle);
 
       &__left,
       &__right {
@@ -980,29 +979,29 @@ defineExpose({
 
 /* 节点选中状态样式 */
 .x6-node-selected .zx-dag-node {
-  border-color: #1890ff;
+  border-color: var(--zx-semantic-accent-base);
   border-radius: 2px;
-  box-shadow: 0 0 0 4px #d4e8fe;
+  box-shadow: 0 0 0 4px var(--zx-semantic-fill-selected);
 
   &.success {
-    border-color: #52c41a;
-    box-shadow: 0 0 0 4px #ccecc0;
+    border-color: var(--zx-semantic-status-success);
+    box-shadow: 0 0 0 4px var(--el-color-success-light-8);
   }
 
   &.failed {
-    border-color: #ff4d4f;
-    box-shadow: 0 0 0 4px #fedcdc;
+    border-color: var(--zx-semantic-status-danger);
+    box-shadow: 0 0 0 4px var(--el-color-danger-light-8);
   }
 }
 
 /* 边的交互样式 */
 .x6-edge:hover path:nth-child(2) {
-  stroke: #1890ff;
+  stroke: var(--zx-semantic-accent-base);
   stroke-width: 1px;
 }
 
 .x6-edge-selected path:nth-child(2) {
-  stroke: #1890ff;
+  stroke: var(--zx-semantic-accent-base);
   stroke-width: 1.5px !important;
 }
 
@@ -1017,8 +1016,8 @@ defineExpose({
     top: -8px;
     right: -8px;
     font-size: 12px;
-    background: #ff4d4f;
-    color: white;
+    background: var(--zx-semantic-status-danger);
+    color: var(--zx-semantic-status-danger-on-fill);
     border-radius: 50%;
     width: 16px;
     height: 16px;
@@ -1031,24 +1030,24 @@ defineExpose({
 
 /* 小地图样式 */
 .dag-minimap {
-  border: 1px solid #e0e0e0 !important;
+  border: 1px solid var(--zx-semantic-border-default) !important;
   border-radius: 6px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
-  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
+  background: var(--zx-semantic-surface-overlay-fill) !important;
   backdrop-filter: blur(4px) !important;
 
   &:hover {
-    border-color: #1890ff !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: var(--zx-semantic-accent-base) !important;
+    box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
   }
 }
 
 /* 小地图视窗边框增强 */
 :deep(.xflow-minimap) {
   .x6-widget-minimap-viewport {
-    stroke: #1890ff !important;
+    stroke: var(--zx-semantic-accent-base) !important;
     stroke-width: 2px !important;
-    fill: rgba(24, 144, 255, 0.08) !important;
+    fill: var(--zx-semantic-fill-selected) !important;
     shape-rendering: crispEdges;
   }
 }
@@ -1062,14 +1061,14 @@ defineExpose({
 
     &.available {
       opacity: 1;
-      fill: #1890ff !important;
-      stroke: #1890ff !important;
+      fill: var(--zx-semantic-accent-base) !important;
+      stroke: var(--zx-semantic-accent-base) !important;
     }
 
     &.adsorbed {
       opacity: 1;
-      fill: #52c41a !important;
-      stroke: #52c41a !important;
+      fill: var(--zx-semantic-status-success) !important;
+      stroke: var(--zx-semantic-status-success) !important;
     }
   }
 
@@ -1093,7 +1092,7 @@ defineExpose({
 
 :deep(.x6-widget-snapline-horizontal),
 :deep(.x6-widget-snapline-vertical) {
-  stroke: #ff4d4f !important;
+  stroke: var(--zx-semantic-status-danger) !important;
   stroke-width: 2 !important;
   stroke-dasharray: 8, 4 !important;
   opacity: 0.9 !important;
@@ -1133,8 +1132,8 @@ defineExpose({
     position: fixed;
     top: 20px;
     right: 20px;
-    background: rgba(255, 77, 79, 0.9);
-    color: white;
+    background: var(--zx-semantic-status-danger);
+    color: var(--zx-semantic-status-danger-on-fill);
     padding: 4px 12px;
     border-radius: 4px;
     font-size: 12px;
@@ -1151,7 +1150,7 @@ defineExpose({
   width: 100vw !important;
   height: 100vh !important;
   z-index: 9999 !important;
-  background: #fff !important;
+  background: var(--zx-semantic-surface-elevated) !important;
   margin: 0 !important;
   padding: 0 !important;
 

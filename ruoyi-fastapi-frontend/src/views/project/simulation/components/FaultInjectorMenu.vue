@@ -1,12 +1,12 @@
 <template>
   <div
     v-if="visible"
-    class="fixed z-50 min-w-40 bg-slate-800 border border-slate-600/50 rounded-lg shadow-xl overflow-hidden backdrop-blur-sm"
+    class="fixed z-50 min-w-40 bg-zx-surface-card-fill border border-zx-border-default/50 rounded-lg shadow-zx-surface-overlay-depth overflow-hidden backdrop-blur-sm"
     :style="{ left: position.x + 'px', top: position.y + 'px' }"
     @click.stop
   >
     <div
-      class="px-4 py-2.5 text-xs font-semibold text-slate-400 bg-slate-900/50 border-b border-slate-700/50"
+      class="px-4 py-2.5 text-xs font-semibold text-zx-text-secondary bg-zx-surface-canvas-fill/50 border-b border-zx-border-default/50"
     >
       故障注入
     </div>
@@ -14,10 +14,10 @@
       <div
         v-for="item in menuItems"
         :key="item.type"
-        class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-300 cursor-pointer transition-colors hover:bg-primary-500/20 hover:text-primary-400"
+        class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-zx-text-secondary cursor-pointer transition-colors hover:bg-zx-accent/20 hover:text-zx-accent-on-surface"
         @click="handleClick(item)"
       >
-        <el-icon class="text-slate-500"><component :is="item.icon" /></el-icon>
+        <el-icon class="text-zx-text-secondary"><component :is="item.icon" /></el-icon>
         <span>{{ item.label }}</span>
       </div>
     </div>

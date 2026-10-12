@@ -104,10 +104,10 @@
                 <template #default="scope">
                   <div class="flex items-center gap-1 text-xs">
                     <span class="font-medium text-blue-600">{{ scope.row.senderNodeId }}</span>
-                    <el-icon class="text-gray-400"><Right /></el-icon>
+                    <el-icon class="text-zx-text-secondary"><Right /></el-icon>
                     <span class="font-medium text-green-600">{{ scope.row.receiverNodeId }}</span>
                   </div>
-                  <div class="flex items-center gap-1 text-xs text-gray-400 mt-0.5">
+                  <div class="flex items-center gap-1 text-xs text-zx-text-secondary mt-0.5">
                     <span>{{ scope.row.senderPortId }}</span>
                     <el-icon :size="10"><Right /></el-icon>
                     <span>{{ scope.row.receiverPortId }}</span>
@@ -129,15 +129,15 @@
                 <template #default="scope">
                   <div class="text-xs space-y-0.5">
                     <div class="flex items-center gap-1">
-                      <span class="text-gray-500 w-10">发送:</span>
+                      <span class="text-zx-text-secondary w-10">发送:</span>
                       <span class="font-mono">{{ formatTime(scope.row.sendTimestamp) }}</span>
                     </div>
                     <div class="flex items-center gap-1">
-                      <span class="text-gray-500 w-10">接收:</span>
+                      <span class="text-zx-text-secondary w-10">接收:</span>
                       <span class="font-mono">{{ formatTime(scope.row.receiveTimestamp) }}</span>
                     </div>
                     <div class="flex items-center gap-1">
-                      <span class="text-gray-500 w-10">时延:</span>
+                      <span class="text-zx-text-secondary w-10">时延:</span>
                       <span class="font-mono font-semibold" :class="getLatencyClass(scope.row)">
                         {{ calculateLatency(scope.row) }}
                       </span>
@@ -163,24 +163,24 @@
                     trigger="hover"
                   >
                     <template #reference>
-                      <div class="payload-preview text-xs font-mono text-gray-600 cursor-pointer">
+                      <div class="payload-preview text-xs font-mono text-zx-text-disabled cursor-pointer">
                         {{ formatPayloadPreview(scope.row.payloadHex) }}
                       </div>
                     </template>
                     <div class="payload-detail">
-                      <div class="text-xs text-gray-500 mb-2">完整报文内容 (HEX)</div>
-                      <div class="font-mono text-xs bg-gray-100 p-2 rounded break-all">
+                      <div class="text-xs text-zx-text-secondary mb-2">完整报文内容 (HEX)</div>
+                      <div class="font-mono text-xs bg-zx-surface-card-fill p-2 rounded break-all">
                         {{ formatPayloadHex(scope.row.payloadHex) }}
                       </div>
                       <div v-if="scope.row.fillStrategy" class="mt-2 text-xs">
-                        <span class="text-gray-500">填充策略：</span>
+                        <span class="text-zx-text-secondary">填充策略：</span>
                         <el-tag size="small" type="info">
                           {{ getStrategyLabel(scope.row.fillStrategy) }}
                         </el-tag>
                       </div>
                     </div>
                   </el-popover>
-                  <span v-else class="text-xs text-gray-400">-</span>
+                  <span v-else class="text-xs text-zx-text-secondary">-</span>
                 </template>
               </el-table-column>
 
@@ -211,14 +211,14 @@
                         <el-icon><Connection /></el-icon>
                         <span>跨网段</span>
                       </div>
-                      <div class="text-gray-400">
+                      <div class="text-zx-text-secondary">
                         {{ scope.row.sourceSegment }} → {{ scope.row.targetSegment }}
                       </div>
-                      <div v-if="scope.row.routingHops" class="text-gray-500">
+                      <div v-if="scope.row.routingHops" class="text-zx-text-secondary">
                         {{ scope.row.routingHops }} 跳
                       </div>
                     </div>
-                    <div v-else class="text-gray-400 flex items-center gap-1">
+                    <div v-else class="text-zx-text-secondary flex items-center gap-1">
                       <el-icon><Link /></el-icon>
                       <span>同网段</span>
                     </div>
@@ -729,7 +729,7 @@ defineExpose({
 }
 
 .payload-preview {
-  background: var(--sim-fill-light, rgba(30, 41, 59, 0.8));
+  background: var(--sim-fill-light, var(--zx-semantic-surface-panel-fill));
   padding: 2px 6px;
   border-radius: 4px;
   max-width: 160px;
@@ -737,10 +737,10 @@ defineExpose({
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: background 0.2s;
-  color: var(--sim-text-regular, #e2e8f0);
+  color: var(--sim-text-regular, var(--zx-semantic-text-primary));
 }
 
 .payload-preview:hover {
-  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.1));
+  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 10%, transparent));
 }
 </style>

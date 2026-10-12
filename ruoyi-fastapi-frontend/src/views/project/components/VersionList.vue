@@ -3,8 +3,8 @@
     <ZxGridList ref="versionGridListRef" :load-data="loadVersionData" class="version-grid" fill>
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <!-- <ZxButton
               type="primary"
               icon="Plus"
@@ -20,9 +20,9 @@
               v-hasPermi="['project:version:remove']"
               >删除</ZxButton
             >
-          </div>
+          </template>
 
-          <div class="zx-grid-form-bar__filters">
+          <template #filters>
             <!-- <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD"
@@ -33,9 +33,9 @@
               style="width: 240px"
               @change="v => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             /> -->
-          </div>
+          </template>
 
-          <div class="zx-grid-form-bar__right">
+          <template #search>
             <ZxSearch
               v-model="query.versionName"
               placeholder="搜索版本名称"
@@ -44,8 +44,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <!-- 表格内容 -->
@@ -576,7 +576,7 @@ function handleExportVersionExcel(row) {
 
 .version-list__empty {
   padding: 24px 0;
-  color: #86909c;
+  color: var(--zx-semantic-text-secondary);
   font-size: 14px;
   text-align: center;
 }

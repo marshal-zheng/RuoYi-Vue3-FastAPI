@@ -1,132 +1,48 @@
 @import "tailwindcss";
+@import "@zxio/theme-tailwind/v4.css";
+@import "./simulation-palette.css";
 @import "./theme.module.css";
 
-/* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
-@theme {
-  /* 主色 */
-  --color-primary-50:  #e6f0ff;
-  --color-primary-100: #b3ccff;
-  --color-primary-200: #99b5ff;
-  --color-primary-300: #6690ff;
-  --color-primary-400: #4d7dff;
-  --color-primary-500: #0052d9;
-  --color-primary-600: #0045bf;
-  --color-primary-700: #003ba8;
-  --color-primary-800: #002e85;
-  --color-primary-900: #00215f;
-
-  /* 功能色 - Success */
-  --color-success-50:  #f0f9ff;
-  --color-success-100: #e0f2fe;
-  --color-success-200: #bae6fd;
-  --color-success-300: #7dd3fc;
-  --color-success-400: #38bdf8;
-  --color-success-500: #67c23a;
-  --color-success-600: #0284c7;
-  --color-success-700: #0369a1;
-  --color-success-800: #075985;
-  --color-success-900: #0c4a6e;
-
-  /* 功能色 - Warning */
-  --color-warning-50:  #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-200: #fde68a;
-  --color-warning-300: #fcd34d;
-  --color-warning-400: #fbbf24;
-  --color-warning-500: #e6a23c;
-  --color-warning-600: #d97706;
-  --color-warning-700: #b45309;
-  --color-warning-800: #92400e;
-  --color-warning-900: #78350f;
-
-  /* 功能色 - Danger */
-  --color-danger-50:  #fef2f2;
-  --color-danger-100: #fee2e2;
-  --color-danger-200: #fecaca;
-  --color-danger-300: #fca5a5;
-  --color-danger-400: #f87171;
-  --color-danger-500: #f56c6c;
-  --color-danger-600: #dc2626;
-  --color-danger-700: #b91c1c;
-  --color-danger-800: #991b1b;
-  --color-danger-900: #7f1d1d;
-
-  /* 功能色 - Info */
-  --color-info-50:  #f8fafc;
-  --color-info-100: #f1f5f9;
-  --color-info-200: #e2e8f0;
-  --color-info-300: #cbd5e1;
-  --color-info-400: #94a3b8;
-  --color-info-500: #909399;
-  --color-info-600: #475569;
-  --color-info-700: #334155;
-  --color-info-800: #1e293b;
-  --color-info-900: #0f172a;
-
-  /* 中性色 */
-  --color-gray-50:  #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-
-  /* Tailwind 默认 slate 色阶（用于 bg-slate-950 / border-slate-800 等类） */
-  --color-slate-50:  #f8fafc;
-  --color-slate-100: #f1f5f9;
-  --color-slate-200: #e2e8f0;
-  --color-slate-300: #cbd5e1;
-  --color-slate-400: #94a3b8;
-  --color-slate-500: #64748b;
-  --color-slate-600: #475569;
-  --color-slate-700: #334155;
-  --color-slate-800: #1e293b;
-  --color-slate-900: #0f172a;
-  --color-slate-950: #020617;
-}
-
-/* Element Plus 变量映射：与 Tailwind 同源 */
-
-/* 暗色模式 */
-
-/* 3) 语义组件类 - Tailwind v4 CSS-first 方案 */
+/* Shared recipes consume the public ZXUI contract at the element scope. */
 @layer components {
   /* 按钮组件 */
-  .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
+  .btn,
+  .btn-base,
+  .btn-primary,
+  .btn-secondary,
+  .btn-success,
+  .btn-warning,
+  .btn-danger {
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary {
-    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500;
+    @apply bg-zx-accent text-zx-accent-on-fill hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover focus:ring-zx-action-focus-ring;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
+    @apply bg-zx-surface-field-fill text-zx-surface-field-on-text hover:bg-zx-fill-hover focus:ring-zx-action-focus-ring;
   }
 
   .btn-success {
-    @apply bg-success-500 text-white hover:bg-success-600 focus:ring-success-500;
+    @apply bg-zx-success text-zx-status-success-on-fill hover:bg-zx-status-success-tint-3 hover:text-zx-status-success-on-fill-hover focus:ring-zx-action-focus-ring;
   }
 
   .btn-warning {
-    @apply bg-warning-500 text-white hover:bg-warning-600 focus:ring-warning-500;
+    @apply bg-zx-warning text-zx-status-warning-on-fill hover:bg-zx-status-warning-tint-3 hover:text-zx-status-warning-on-fill-hover focus:ring-zx-action-focus-ring;
   }
 
   .btn-danger {
-    @apply bg-danger-500 text-white hover:bg-danger-600 focus:ring-danger-500;
+    @apply bg-zx-danger text-zx-status-danger-on-fill hover:bg-zx-status-danger-tint-3 hover:text-zx-status-danger-on-fill-hover focus:ring-zx-action-focus-ring;
   }
 
   /* 卡片组件 */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+    @apply bg-zx-surface-card-fill text-zx-surface-card-on-text rounded-zx-surface shadow-zx-surface-card-depth border border-zx-border-default;
   }
 
   .card-header {
-    @apply px-6 py-4 border-b border-gray-200;
+    @apply px-6 py-4 border-b border-zx-border-subtle;
   }
 
   .card-body {
@@ -134,118 +50,20 @@
   }
 
   .card-footer {
-    @apply px-6 py-4 border-t border-gray-200;
+    @apply px-6 py-4 border-t border-zx-border-subtle;
   }
 
   /* 表单组件 */
   .form-input {
-    @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-500 focus:border-primary-500;
+    @apply block w-full px-3 py-2 border border-zx-border-control rounded-zx-control bg-zx-surface-field-fill text-zx-surface-field-on-text focus:outline-none focus:ring-zx-action-focus-ring focus:border-zx-action-focus-ring;
   }
 
   .form-label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
+    @apply block text-sm font-medium text-zx-text-primary mb-1;
   }
 
   .form-error {
-    @apply text-sm text-danger-600 mt-1;
+    @apply text-sm text-zx-status-danger-on-surface mt-1;
   }
 
-}
-
-/* 自定义补充：Tailwind v4 默认未生成的 slate 深色阶 */
-@layer utilities {
-  .bg-slate-900 { background-color: #0f172a; }
-  .bg-slate-950 { background-color: #020617; }
-  .bg-slate-800 { background-color: #1e293b; }
-  .bg-slate-800\/50 { background-color: rgba(30, 41, 59, 0.5); }
-  .bg-slate-700\/50 { background-color: rgba(51, 65, 85, 0.5); }
-  .bg-slate-600\/20 { background-color: rgba(71, 85, 105, 0.2); }
-  .bg-slate-700 { background-color: #334155; }
-  .border-slate-800 { border-color: #1e293b; }
-  .border-slate-700 { border-color: #334155; }
-  .border-slate-700\/50 { border-color: rgba(51, 65, 85, 0.5); }
-  .border-slate-600 { border-color: #475569; }
-  .border-slate-600\/50 { border-color: rgba(71, 85, 105, 0.5); }
-  .from-slate-900 {
-    --tw-gradient-from: #0f172a;
-    --tw-gradient-to: color-mix(in srgb, #0f172a 0%, transparent);
-    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
-  }
-  .to-slate-800 { --tw-gradient-to: #1e293b; }
-
-  /* 深色主题文字颜色 */
-  .text-slate-100 { color: #f1f5f9; }
-  .text-slate-200 { color: #e2e8f0; }
-  .text-slate-300 { color: #cbd5e1; }
-  .text-slate-400 { color: #94a3b8; }
-  .text-slate-500 { color: #64748b; }
-
-  /* 深色主题 hover 状态 */
-  .hover\:bg-slate-700:hover { background-color: #334155; }
-  .hover\:bg-slate-800:hover { background-color: #1e293b; }
-
-  /* SVG stroke 颜色 */
-  .stroke-gray-200 { stroke: #e5e7eb; }
-  .stroke-slate-700 { stroke: #334155; }
-  .stroke-success-500 { stroke: var(--color-success-500); }
-  .stroke-warning-500 { stroke: var(--color-warning-500); }
-  .stroke-danger-500 { stroke: var(--color-danger-500); }
-
-  /* 深色主题透明度背景 */
-  .bg-primary-500\/10 { background-color: rgba(0, 82, 217, 0.1); }
-  .bg-primary-500\/20 { background-color: rgba(0, 82, 217, 0.2); }
-  .bg-danger-500\/10 { background-color: rgba(245, 108, 108, 0.1); }
-
-  /* hover 状态透明度 */
-  .hover\:bg-primary-500\/20:hover { background-color: rgba(0, 82, 217, 0.2); }
-  
-  /* 补充颜色类 */
-  .text-amber-400 { color: #fbbf24; }
-  .text-amber-500 { color: #f59e0b; }
-  .bg-amber-500 { background-color: #f59e0b; }
-  .bg-amber-400 { background-color: #fbbf24; }
-  .bg-orange-500 { background-color: #f97316; }
-  .bg-orange-400 { background-color: #fb923c; }
-  .from-amber-500 { --tw-gradient-from: #f59e0b; }
-  .from-amber-400 { --tw-gradient-from: #fbbf24; }
-  .to-orange-500 { --tw-gradient-to: #f97316; }
-  .to-orange-400 { --tw-gradient-to: #fb923c; }
-  .shadow-amber-500\/20 { box-shadow: 0 1px 3px 0 rgba(245, 158, 11, 0.2); }
-  .shadow-amber-500\/25 { box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.25); }
-  .shadow-amber-500\/35 { box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.35); }
-  .hover\:shadow-amber-500\/20:hover { box-shadow: 0 1px 3px 0 rgba(245, 158, 11, 0.2); }
-  
-  .text-emerald-400 { color: #34d399; }
-  .text-emerald-500 { color: #10b981; }
-  .bg-emerald-400 { background-color: #34d399; }
-  .bg-emerald-500 { background-color: #10b981; }
-  .stroke-emerald-500 { stroke: #10b981; }
-  .hover\:shadow-emerald-500\/20:hover { box-shadow: 0 1px 3px 0 rgba(16, 185, 129, 0.2); }
-  
-  .text-red-500 { color: #ef4444; }
-  .bg-red-500 { background-color: #ef4444; }
-  .stroke-red-500 { stroke: #ef4444; }
-  .stroke-amber-500 { stroke: #f59e0b; }
-  
-  .shadow-primary-500\/20 { box-shadow: 0 1px 3px 0 rgba(0, 82, 217, 0.2); }
-  .hover\:shadow-primary-500\/20:hover { box-shadow: 0 1px 3px 0 rgba(0, 82, 217, 0.2); }
-  
-  .hover\:scale-\[1\.02\]:hover { transform: scale(1.02); }
-  
-  .tabular-nums { font-variant-numeric: tabular-nums; }
-  
-  .tracking-wide { letter-spacing: 0.025em; }
-  .tracking-wider { letter-spacing: 0.05em; }
-  
-  .line-clamp-2 {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-  
-  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2); }
-  .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1); }
-  
-  .drop-shadow-\[0_0_4px_currentColor\] { filter: drop-shadow(0 0 4px currentColor); }
 }

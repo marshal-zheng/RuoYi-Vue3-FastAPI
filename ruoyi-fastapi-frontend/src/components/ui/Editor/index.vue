@@ -173,6 +173,118 @@ function handleUploadError(error) {
 </script>
 
 <style>
+/* Theme only editor chrome and default content presentation, never saved inline colors. */
+.editor .ql-toolbar.ql-snow,
+.editor .ql-container.ql-snow {
+  border-color: var(--zx-semantic-border-default);
+  color: var(--zx-semantic-text-primary);
+  background: var(--zx-semantic-surface-field-fill);
+}
+.editor .ql-toolbar.ql-snow {
+  background: var(--zx-semantic-surface-panel-fill);
+  padding-block: var(--zx-semantic-spacing-control-y);
+}
+/* Density changes editing chrome, not the document's typography or spacing. */
+.editor .ql-toolbar.ql-snow button,
+.editor .ql-toolbar.ql-snow .ql-picker {
+  height: calc(var(--zx-semantic-spacing-control-y) * 2 + 12px);
+}
+.editor .ql-toolbar.ql-snow button {
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) - 3px));
+}
+.editor .ql-toolbar.ql-snow .ql-picker-label {
+  display: flex;
+  align-items: center;
+}
+.editor .ql-snow .ql-picker-options {
+  padding-block: var(--zx-semantic-spacing-control-y);
+}
+.editor .ql-snow .ql-picker:not(.ql-color-picker) .ql-picker-item {
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) - 3px));
+}
+.editor .ql-snow .ql-tooltip {
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) - 3px));
+}
+.editor .ql-snow .ql-tooltip input[type='text'] {
+  height: calc(var(--zx-semantic-spacing-control-y) * 2 + 12px);
+}
+.editor .ql-snow .ql-picker {
+  color: var(--zx-semantic-text-primary);
+}
+.editor .ql-snow .ql-stroke:not(.ql-color-label) {
+  stroke: var(--zx-semantic-text-primary);
+}
+.editor .ql-snow .ql-fill:not(.ql-color-label) {
+  fill: var(--zx-semantic-text-primary);
+}
+.editor .ql-snow .ql-picker-options,
+.editor .ql-snow .ql-tooltip {
+  color: var(--zx-semantic-surface-overlay-on-text);
+  background: var(--zx-semantic-surface-overlay-fill);
+  border-color: var(--zx-semantic-border-default);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
+}
+.editor .ql-snow .ql-tooltip input[type='text'] {
+  color: var(--zx-semantic-text-primary);
+  background: var(--zx-semantic-surface-field-fill);
+  border-color: var(--zx-semantic-border-control);
+}
+.editor
+  .ql-snow
+  :is(
+    button:hover,
+    button:focus,
+    button.ql-active,
+    .ql-picker-label:hover,
+    .ql-picker-label.ql-active,
+    .ql-picker-item:hover,
+    .ql-picker-item.ql-selected
+  ),
+.editor .ql-snow .ql-tooltip a {
+  color: var(--zx-semantic-accent-on-surface);
+}
+.editor
+  .ql-snow
+  :is(
+    button:hover,
+    button:focus,
+    button.ql-active,
+    .ql-picker-label:hover,
+    .ql-picker-label.ql-active
+  )
+  .ql-stroke:not(.ql-color-label) {
+  stroke: var(--zx-semantic-accent-on-surface);
+}
+.editor
+  .ql-snow
+  :is(
+    button:hover,
+    button:focus,
+    button.ql-active,
+    .ql-picker-label:hover,
+    .ql-picker-label.ql-active
+  )
+  .ql-fill:not(.ql-color-label) {
+  fill: var(--zx-semantic-accent-on-surface);
+}
+/* Preserve color swatches while adapting toolbar interaction surfaces. */
+.editor .ql-snow :is(button:hover, button:focus, button.ql-active, .ql-picker-label:hover),
+.editor .ql-snow .ql-picker:not(.ql-color-picker) .ql-picker-item:hover {
+  background-color: var(--zx-semantic-fill-hover);
+}
+.editor .ql-snow button.ql-active,
+.editor .ql-snow .ql-picker-label.ql-active,
+.editor .ql-snow .ql-picker:not(.ql-color-picker) .ql-picker-item.ql-selected {
+  background-color: var(--zx-semantic-fill-selected);
+}
+.editor .ql-editor.ql-blank::before {
+  color: var(--zx-semantic-text-secondary);
+}
+.editor .ql-snow .ql-picker.ql-expanded .ql-picker-label,
+.editor .ql-snow .ql-picker.ql-expanded .ql-picker-options {
+  border-color: var(--zx-semantic-border-default);
+}
+
 .editor-img-uploader {
   display: none;
 }

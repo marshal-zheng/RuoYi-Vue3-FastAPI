@@ -193,7 +193,7 @@
 }
 
 .el-menu--vertical>.el-menu--popup::-webkit-scrollbar-track-piece {
-  background: #d3dce6;
+  background: var(--zx-semantic-fill-scrollbar-track);
 }
 
 .el-menu--vertical>.el-menu--popup::-webkit-scrollbar {
@@ -201,7 +201,7 @@
 }
 
 .el-menu--vertical>.el-menu--popup::-webkit-scrollbar-thumb {
-  background: #99a9bf;
+  background: var(--zx-semantic-fill-scrollbar-thumb);
   border-radius: 20px;
 }
 

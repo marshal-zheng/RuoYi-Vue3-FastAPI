@@ -7,14 +7,14 @@
     fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <div class="zx-grid-form-bar">
-        <div class="zx-grid-form-bar__left">
+      <ZxListToolbar aria-label="列表操作与筛选">
+        <template #actions>
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:menu:add']"
             >新增</ZxButton
           >
           <ZxButton type="info" @click="toggleExpandAll">展开/折叠</ZxButton>
-        </div>
-        <div class="zx-grid-form-bar__filters">
+        </template>
+        <template #filters>
           <zx-input
             v-model="query.menuName"
             placeholder="请输入菜单名称"
@@ -36,8 +36,8 @@
               :value="dict.value"
             />
           </el-select>
-        </div>
-        <div class="zx-grid-form-bar__right">
+        </template>
+        <template #search>
           <ZxSearch
             v-model="query.menuName"
             placeholder="搜索菜单名称"
@@ -46,8 +46,8 @@
             @search="() => onSearch({ handleRefresh, updateState })"
             @clear="() => onSearch({ handleRefresh, updateState })"
           />
-        </div>
-      </div>
+        </template>
+      </ZxListToolbar>
     </template>
 
     <template #table="{ grid }">

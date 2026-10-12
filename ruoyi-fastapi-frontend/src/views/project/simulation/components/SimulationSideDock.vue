@@ -7,11 +7,11 @@
     <div class="flex flex-col items-center gap-5 w-full">
       <button
         type="button"
-        class="collapse-btn relative w-[60px] h-10 flex items-center justify-center cursor-pointer transition-all duration-300 ease-out overflow-hidden text-cyan-400/80 hover:text-cyan-300"
+        class="collapse-btn relative w-[60px] h-10 flex items-center justify-center cursor-pointer transition-all duration-300 ease-out overflow-hidden text-zx-accent-on-surface/80 hover:text-zx-accent-on-surface"
         @click="$emit('toggle-all')"
       >
         <div
-          class="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/8 to-transparent"
+          class="absolute inset-0 bg-gradient-to-r from-transparent via-zx-accent/8 to-transparent"
         ></div>
         <div class="absolute inset-0 collapse-glow opacity-0 transition-opacity duration-300"></div>
         <div class="absolute inset-0 collapse-shine opacity-0"></div>
@@ -43,7 +43,7 @@
         >
           <!-- 背景渐变层 -->
           <div
-            class="absolute inset-0 bg-gradient-to-b from-slate-800/95 to-slate-900/98 group-hover:from-slate-700/98 group-hover:to-slate-800"
+            class="absolute inset-0 bg-gradient-to-b from-zx-surface-card-fill/95 to-zx-surface-card-fill/98 group-hover:from-zx-surface-panel-fill/98 group-hover:to-zx-surface-card-fill"
             :class="{ 'disabled-overlay': isItemDisabled(item.key) }"
           ></div>
 
@@ -56,7 +56,7 @@
           <!-- 激活状态背景 -->
           <div
             v-if="activeKeys.includes(item.key)"
-            class="absolute inset-0 bg-gradient-to-b from-cyan-400/20 to-cyan-400/5"
+            class="absolute inset-0 bg-gradient-to-b from-zx-accent/20 to-zx-accent/5"
           ></div>
 
           <!-- 内容 -->
@@ -83,15 +83,15 @@
           <!-- 禁用锁定图标 -->
           <div
             v-if="isItemDisabled(item.key)"
-            class="absolute top-1 right-1 w-4 h-4 rounded-full bg-slate-600/70 flex items-center justify-center z-20 border border-cyan-300/30"
+            class="absolute top-1 right-1 w-4 h-4 rounded-full bg-zx-surface-field-fill/70 flex items-center justify-center z-20 border border-zx-action-focus-ring/30"
           >
-            <zx-icon name="Lock" class="text-[10px] text-cyan-200/80" />
+            <zx-icon name="Lock" class="text-[10px] text-zx-accent-on-surface/80" />
           </div>
 
           <!-- 徽章 -->
           <span
             v-if="badges[item.key] && !isItemDisabled(item.key)"
-            class="absolute -top-[1.5px] -right-[1.2px] min-w-[20px] h-5 px-1.5 rounded-full bg-gradient-to-br from-red-500 to-red-600 text-white text-[11px] font-extrabold inline-flex items-center justify-center z-20 border-2 border-slate-900/90 shadow-[0_3px_10px_rgba(239,68,68,0.5),0_0_16px_rgba(239,68,68,0.35)]"
+            class="absolute -top-[1.5px] -right-[1.2px] min-w-[20px] h-5 px-1.5 rounded-full bg-gradient-to-br from-red-500 to-red-600 text-white text-[11px] font-extrabold inline-flex items-center justify-center z-20 border-2 border-zx-border-default/90 shadow-[0_3px_10px_rgba(239,68,68,0.5),0_0_16px_rgba(239,68,68,0.35)]"
           >
             {{ badges[item.key] }}
           </span>
@@ -99,7 +99,7 @@
           <!-- 激活指示条 - 增强版 -->
           <span
             v-if="activeKeys.includes(item.key)"
-            class="absolute -left-px top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-md bg-gradient-to-b from-cyan-300 via-cyan-400 to-cyan-500 indicator-glow-enhanced"
+            class="absolute -left-px top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-md bg-gradient-to-b from-zx-accent via-zx-accent to-zx-accent indicator-glow-enhanced"
           >
           </span>
         </button>
@@ -147,12 +147,12 @@ function getDisabledReason(key) {
 
 function getButtonClass(key) {
   if (isItemDisabled(key)) {
-    return 'dock-btn--disabled border-cyan-300/25 text-slate-200 cursor-not-allowed';
+    return 'dock-btn--disabled border-zx-action-focus-ring/25 text-zx-text-primary cursor-not-allowed';
   }
   if (props.activeKeys.includes(key)) {
-    return 'dock-btn--active border-cyan-400/50 text-cyan-400 shadow-cyan cursor-pointer';
+    return 'dock-btn--active border-zx-action-focus-ring/50 text-zx-accent-on-surface shadow-cyan cursor-pointer';
   }
-  return 'border-cyan-400/20 text-slate-400 shadow-default hover:border-cyan-400/40 hover:text-slate-200 hover:-translate-y-1 hover:scale-105 cursor-pointer';
+  return 'border-zx-action-focus-ring/20 text-zx-text-secondary shadow-default hover:border-zx-action-focus-ring/40 hover:text-zx-text-primary hover:-translate-y-1 hover:scale-105 cursor-pointer';
 }
 </script>
 
@@ -162,7 +162,7 @@ function getButtonClass(key) {
   width: 32px;
   height: 2px;
   border-radius: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.4) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent) 50%, transparent 100%);
   flex-shrink: 0;
 }
 
@@ -170,7 +170,7 @@ function getButtonClass(key) {
 .collapse-btn {
   &:hover {
     transform: scale(1.05);
-    text-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--zx-semantic-accent-base) 80%, transparent);
 
     .collapse-glow {
       opacity: 1;
@@ -186,7 +186,7 @@ function getButtonClass(key) {
     }
 
     .collapse-icon {
-      filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.8));
+      filter: drop-shadow(0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 80%, transparent));
       transform: rotate(180deg);
     }
   }
@@ -197,16 +197,16 @@ function getButtonClass(key) {
 }
 
 .collapse-glow {
-  background: radial-gradient(ellipse at center, rgba(34, 211, 238, 0.18) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent) 0%, transparent 70%);
 }
 
 .collapse-shine {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(34, 211, 238, 0.2) 30%,
-    rgba(34, 211, 238, 0.35) 50%,
-    rgba(34, 211, 238, 0.2) 70%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent) 30%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 35%, transparent) 50%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent) 70%,
     transparent 100%
   );
   transition: opacity 0.3s ease-out;
@@ -223,91 +223,72 @@ function getButtonClass(key) {
 
 .collapse-text {
   transition: letter-spacing 0.3s ease-out;
-  text-shadow: 0 0 8px rgba(34, 211, 238, 0.4);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent);
 }
 
 .collapse-icon {
-  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.5));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent));
   transition: all 0.3s ease-out;
 }
 
 /* 功能按钮默认阴影 */
 .shadow-default {
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.35),
-    0 2px 4px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: var(--zx-semantic-surface-card-depth);
 }
 
 .dock-btn.shadow-default:hover {
-  box-shadow:
-    0 8px 24px rgba(34, 211, 238, 0.18),
-    0 4px 12px rgba(0, 0, 0, 0.3),
-    0 0 32px rgba(34, 211, 238, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  box-shadow: var(--zx-semantic-surface-card-depth);
 }
 
 /* 激活状态阴影 */
 .shadow-cyan {
-  box-shadow:
-    0 6px 24px rgba(34, 211, 238, 0.3),
-    0 2px 8px rgba(0, 0, 0, 0.25),
-    0 0 40px rgba(34, 211, 238, 0.15),
-    inset 0 1px 0 rgba(34, 211, 238, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: var(--zx-semantic-surface-card-depth);
 }
 
 .dock-btn--active:hover {
-  box-shadow:
-    0 8px 32px rgba(34, 211, 238, 0.4),
-    0 4px 12px rgba(0, 0, 0, 0.2),
-    0 0 48px rgba(34, 211, 238, 0.2),
-    inset 0 1px 0 rgba(34, 211, 238, 0.25),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: var(--zx-semantic-surface-card-depth);
 }
 
 /* 径向渐变背景 */
 .bg-radial-cyan-top {
   background: radial-gradient(
     ellipse 80% 50% at 50% 0%,
-    rgba(34, 211, 238, 0.12) 0%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent) 0%,
     transparent 60%
   );
 }
 
 /* 图标发光 */
 .icon-glow {
-  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.6));
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent));
 }
 
 /* 文字发光 */
 .text-glow {
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent);
 }
 
 /* 指示条发光 */
 .indicator-glow {
   box-shadow:
-    0 0 8px rgba(34, 211, 238, 0.8),
-    0 0 16px rgba(34, 211, 238, 0.4);
+    0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 80%, transparent),
+    0 0 16px color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent);
 }
 
 /* 指示条增强发光 */
 .indicator-glow-enhanced {
   box-shadow:
-    0 0 12px rgba(34, 211, 238, 0.9),
-    0 0 24px rgba(34, 211, 238, 0.6),
-    0 0 36px rgba(34, 211, 238, 0.3),
-    inset 0 0 4px rgba(255, 255, 255, 0.5);
+    0 0 12px color-mix(in srgb, var(--zx-semantic-accent-base) 90%, transparent),
+    0 0 24px color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent),
+    0 0 36px color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent),
+    inset 0 0 4px var(--zx-semantic-border-subtle);
 }
 
 /* 禁用状态 */
 .dock-btn--disabled {
   box-shadow:
-    0 0 0 1px rgba(148, 163, 184, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 0 0 1px color-mix(in srgb, var(--zx-semantic-border-default) 25%, transparent),
+    inset 0 1px 0 var(--zx-semantic-border-subtle);
   transform: none !important;
   border-color: rgba(94, 234, 212, 0.35) !important;
 }
@@ -318,22 +299,22 @@ function getButtonClass(key) {
 
 .disabled-overlay {
   opacity: 0.78 !important;
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.92) 100%);
-  box-shadow: inset 0 0 24px rgba(148, 163, 184, 0.08);
+  background: linear-gradient(180deg, var(--zx-semantic-surface-panel-fill) 0%, var(--zx-semantic-surface-card-fill) 100%);
+  box-shadow: inset 0 0 24px color-mix(in srgb, var(--zx-semantic-border-default) 8%, transparent);
 }
 
 .disabled-content {
   opacity: 1 !important;
-  color: #d7e3ff !important;
-  text-shadow: 0 0 8px rgba(148, 163, 184, 0.4);
+  color: var(--zx-semantic-text-disabled);
+  text-shadow: 0 0 8px color-mix(in srgb, var(--zx-semantic-border-default) 40%, transparent);
 }
 
 .disabled-content zx-icon {
-  color: #c7d2fe !important;
+  color: var(--zx-semantic-text-disabled);
   filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.35));
 }
 
 .disabled-content span {
-  color: #e2e8f0 !important;
+  color: var(--zx-semantic-text-primary) !important;
 }
 </style>

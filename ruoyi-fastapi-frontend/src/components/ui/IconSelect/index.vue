@@ -100,7 +100,7 @@ defineExpose({
 }
 
 .icon-body .icon-list .list-container .icon-item-wrapper .icon-item:hover {
-  background: #ececec;
+  background: var(--zx-semantic-fill-hover);
   border-radius: 5px;
 }
 
@@ -119,7 +119,8 @@ defineExpose({
 }
 
 .icon-body .icon-list .list-container .icon-item-wrapper .icon-item.active {
-  background: #ececec;
+  background: var(--zx-semantic-surface-selected-fill);
+  color: var(--zx-semantic-surface-selected-on-text);
   border-radius: 5px;
 }
 </style>

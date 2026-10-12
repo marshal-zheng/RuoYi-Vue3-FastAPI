@@ -1,7 +1,7 @@
 <template>
   <div
     class="sidebar-logo-container relative w-full flex items-center justify-center overflow-hidden"
-    :class="[{ collapse: collapse }, variantClass]"
+    :class="[{ 'is-collapsed': collapse }, variantClass]"
     :data-zx-surface="surfaceRole"
   >
     <transition name="sidebarLogoFade">
@@ -10,15 +10,21 @@
         key="collapse"
         class="h-full w-full flex items-center justify-center"
         to="/"
+        :aria-label="title"
+        :title="title"
       >
         <img v-if="logo" :src="logo" class="w-8 h-8 shrink-0" />
-        <h1 v-else class="sidebar-title m-0 p-0">{{ title }}</h1>
+        <span v-else class="sidebar-title m-0 p-0 font-semibold whitespace-nowrap" aria-hidden="true">
+          {{ compactTitle }}
+        </span>
       </router-link>
       <router-link
         v-else
         key="expand"
         class="h-full w-full flex items-center justify-center"
         to="/"
+        :aria-label="title"
+        :title="title"
       >
         <img v-if="logo" :src="logo" :class="logoSizeClass" class="shrink-0 mr-3" />
         <h1
@@ -65,6 +71,7 @@ const titleSizeClass = computed(() => {
 });
 
 const title = import.meta.env.VITE_APP_TITLE;
+const compactTitle = Array.from(title || '').slice(0, 2).join('');
 // 是否启用 logo 图片，如果为 false 则只显示文字标题
 const showLogoImage = defaultSettings.showLogoImage ?? true;
 const logo = showLogoImage ? logoImg : null;
@@ -122,7 +129,7 @@ const logo = showLogoImage ? logoImg : null;
 }
 
 /* collapse 状态下的特殊样式 */
-.sidebar-logo-container.collapse .sidebar-logo {
+.sidebar-logo-container.is-collapsed .sidebar-logo {
   margin-right: 0;
 }
 </style>

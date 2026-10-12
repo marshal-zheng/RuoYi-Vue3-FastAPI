@@ -14,12 +14,12 @@
           :class="event.status === 'triggered' ? 'triggered' : ''"
         >
           <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-slate-100">{{ event.name }}</span>
+            <span class="font-semibold text-zx-text-primary">{{ event.name }}</span>
             <el-tag :type="getStatusType(event.status)" size="small">
               {{ getStatusText(event.status) }}
             </el-tag>
           </div>
-          <div class="text-xs text-slate-400 mb-3 space-y-1">
+          <div class="text-xs text-zx-text-secondary mb-3 space-y-1">
             <div>条件: {{ getConditionText(event.condition) }}</div>
             <div>动作: {{ getActionText(event.action) }}</div>
           </div>
@@ -37,7 +37,7 @@
 
         <div
           v-if="!hasEvents"
-          class="flex flex-col items-center justify-center py-12 text-slate-500"
+          class="flex flex-col items-center justify-center py-12 text-zx-text-secondary"
         >
           <el-icon class="text-5xl mb-3"><Lightning /></el-icon>
           <span class="text-sm">暂无事件配置</span>

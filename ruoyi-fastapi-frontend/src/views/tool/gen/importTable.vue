@@ -9,8 +9,8 @@
       class="import-table-grid"
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__filters">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #filters>
             <zx-input
               v-model="query.tableName"
               placeholder="请输入表名称"
@@ -25,8 +25,8 @@
               style="width: 200px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxButton
               type="primary"
               icon="Search"
@@ -38,8 +38,8 @@
             <ZxButton icon="Refresh" @click="() => onReset({ handleRefresh, updateState })">
               重置
             </ZxButton>
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

@@ -1,0 +1,16 @@
+{
+  "equal": true,
+  "registrations": 9,
+  "entries": 2934,
+  "before": {
+    "bytes": 6744285,
+    "gzip": 1022164,
+    "brotli": 429584
+  },
+  "after": {
+    "bytes": 1478253,
+    "gzip": 444744,
+    "brotli": 287217
+  },
+  "sourceEntry": "/Users/hqz/Downloads/element-plus/packages/theme-compiler/src/vite/index.ts"
+}

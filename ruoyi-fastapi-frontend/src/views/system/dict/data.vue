@@ -2,8 +2,8 @@
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadDictData" :initial-state="initialState" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:dict:add']"
               >新增</ZxButton
             >
@@ -31,8 +31,8 @@
               >导出</ZxButton
             >
             <ZxButton type="warning" icon="Close" @click="handleClose">关闭</ZxButton>
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <el-select
               v-model="query.dictType"
               placeholder="字典名称"
@@ -60,8 +60,8 @@
                 :value="dict.value"
               />
             </el-select>
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.dictLabel"
               placeholder="搜索字典标签"
@@ -70,8 +70,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

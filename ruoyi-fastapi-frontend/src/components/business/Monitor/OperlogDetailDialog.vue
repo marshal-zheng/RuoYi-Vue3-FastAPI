@@ -3,36 +3,40 @@
     <div class="py-4">
       <el-descriptions :column="1" border>
         <el-descriptions-item label="操作模块：">
-          <div class="text-gray-800">
+          <div class="text-zx-text-primary">
             {{ state.data.title }}
-            <span class="mx-1 text-gray-400">/</span>
+            <span class="mx-1 text-zx-text-secondary">/</span>
             {{ typeFormat(state.data) }}
           </div>
         </el-descriptions-item>
         <el-descriptions-item label="登录信息：">
-          <div class="text-gray-700">
+          <div class="text-zx-text-primary">
             {{ state.data.operName }}
-            <span class="mx-1 text-gray-400">/</span>
+            <span class="mx-1 text-zx-text-secondary">/</span>
             {{ state.data.operIp }}
-            <span class="mx-1 text-gray-400">/</span>
+            <span class="mx-1 text-zx-text-secondary">/</span>
             {{ state.data.operLocation }}
           </div>
         </el-descriptions-item>
 
         <el-descriptions-item label="请求地址：">
-          <div class="text-gray-700 break-all">{{ state.data.operUrl }}</div>
+          <div class="text-zx-text-primary break-all">
+            {{ state.data.operUrl }}
+          </div>
         </el-descriptions-item>
         <el-descriptions-item label="请求方式：">
-          <div class="text-gray-700">{{ state.data.requestMethod }}</div>
+          <div class="text-zx-text-primary">{{ state.data.requestMethod }}</div>
         </el-descriptions-item>
 
         <el-descriptions-item label="操作方法：">
-          <div class="text-gray-700 break-all">{{ state.data.method }}</div>
+          <div class="text-zx-text-primary break-all">
+            {{ state.data.method }}
+          </div>
         </el-descriptions-item>
 
         <el-descriptions-item label="请求参数：">
           <div
-            class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
+            class="rounded bg-zx-surface-canvas-fill p-3 text-zx-surface-canvas-on-text text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
           >
             {{ state.data.operParam }}
           </div>
@@ -40,7 +44,7 @@
 
         <el-descriptions-item label="返回参数：">
           <div
-            class="rounded bg-gray-50 dark:bg-gray-800/40 p-3 text-gray-700 text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
+            class="rounded bg-zx-surface-canvas-fill p-3 text-zx-surface-canvas-on-text text-sm whitespace-pre-wrap break-words max-h-48 overflow-auto"
           >
             {{ state.data.jsonResult }}
           </div>
@@ -49,27 +53,29 @@
         <el-descriptions-item label="操作状态：">
           <span
             v-if="state.data.status === 0"
-            class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-green-50 text-green-600 ring-1 ring-inset ring-green-200"
+            class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-zx-status-success-tint-9 text-zx-status-success-on-surface"
             >正常</span
           >
           <span
             v-else-if="state.data.status === 1"
-            class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-red-50 text-red-600 ring-1 ring-inset ring-red-200"
+            class="inline-flex items-center rounded px-2 py-0.5 text-xs font-medium bg-zx-status-danger-tint-9 text-zx-status-danger-on-surface"
             >失败</span
           >
         </el-descriptions-item>
 
         <el-descriptions-item label="消耗时间：">
-          <div class="text-gray-700">{{ state.data.costTime }}毫秒</div>
+          <div class="text-zx-text-primary">{{ state.data.costTime }}毫秒</div>
         </el-descriptions-item>
 
         <el-descriptions-item label="操作时间：">
-          <div class="text-gray-700">{{ parseTime(state.data.operTime) }}</div>
+          <div class="text-zx-text-primary">
+            {{ parseTime(state.data.operTime) }}
+          </div>
         </el-descriptions-item>
 
         <el-descriptions-item label="异常信息：" v-if="state.data.status === 1">
           <div
-            class="rounded bg-red-50 dark:bg-red-900/30 p-3 text-red-700 dark:text-red-200 text-sm whitespace-pre-wrap break-words"
+            class="rounded bg-zx-status-danger-tint-9 p-3 text-zx-status-danger-on-surface text-sm whitespace-pre-wrap break-words"
           >
             {{ state.data.errorMsg }}
           </div>

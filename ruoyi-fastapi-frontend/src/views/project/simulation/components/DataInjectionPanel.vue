@@ -4,7 +4,6 @@
     v-if="visible"
     :showCollapseBtn="false"
     class="injection-floating simbus-floating-panel"
-    theme="dark"
     title="数据注入策略"
     :position="position"
     :size="{ width: '340px', maxHeight: '520px' }"
@@ -14,7 +13,7 @@
     <template #header>
       <div class="header">
         <div class="flex items-center gap-2">
-          <el-icon class="text-cyan-400"><Setting /></el-icon>
+          <el-icon class="text-zx-accent-on-surface"><Setting /></el-icon>
           <div>
             <div class="title">数据注入策略</div>
             <div class="sub">配置仿真数据填充方式</div>
@@ -238,7 +237,7 @@ const strategies = [
     label: '固定值',
     description: '使用预设固定值',
     icon: 'Lock',
-    iconClass: 'text-gray-500',
+    iconClass: 'text-zx-text-secondary',
     params: ['fixedValue'],
   },
   {
@@ -289,8 +288,8 @@ defineExpose({
 <style lang="less" scoped>
 /* 浮动面板样式 - 使用CSS变量 */
 .injection-floating {
-  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.3));
-  box-shadow: var(--sim-shadow-glow-accent, 0 8px 32px rgba(34, 211, 238, 0.15));
+  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
+  box-shadow: var(--sim-shadow-glow-accent, 0 8px 32px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
 }
 
 .header {
@@ -304,7 +303,7 @@ defineExpose({
 
 .sub {
   font-size: 11px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   margin-top: 2px;
 }
 
@@ -315,7 +314,7 @@ defineExpose({
 .section-label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   margin-bottom: 8px;
 }
 
@@ -324,45 +323,45 @@ defineExpose({
 
   .option-label {
     font-size: 13px;
-    color: var(--sim-text-regular, #e2e8f0);
+    color: var(--sim-text-regular, var(--zx-semantic-text-primary));
   }
 
   .option-desc {
     font-size: 11px;
-    color: var(--sim-text-disabled, #64748b);
+    color: var(--sim-text-disabled, var(--zx-semantic-text-disabled));
   }
 }
 
 /* Select 输入框暗黑样式 - 使用CSS变量 */
 .strategy-select {
   :deep(.el-input__wrapper) {
-    background-color: var(--sim-fill-light, rgba(15, 23, 42, 0.8)) !important;
-    border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5)) !important;
+    background-color: var(--sim-fill-light, var(--zx-semantic-surface-card-fill)) !important;
+    border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent)) !important;
     box-shadow: none !important;
   }
 
   :deep(.el-input__wrapper:hover) {
-    border-color: var(--sim-border-accent, rgba(34, 211, 238, 0.4)) !important;
+    border-color: var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)) !important;
   }
 
   :deep(.el-input__wrapper.is-focus) {
-    border-color: var(--sim-border-focus, rgba(34, 211, 238, 0.6)) !important;
+    border-color: var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)) !important;
   }
 
   :deep(.el-input__inner) {
-    color: var(--sim-text-regular, #e2e8f0) !important;
+    color: var(--sim-text-regular, var(--zx-semantic-text-primary)) !important;
   }
 
   :deep(.el-select__caret) {
-    color: var(--sim-text-tertiary, #94a3b8) !important;
+    color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary)) !important;
   }
 }
 
 .params-section {
   margin-bottom: 16px;
   padding: 12px;
-  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.6));
-  border: 1px solid var(--sim-border-light, rgba(45, 212, 191, 0.08));
+  background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
+  border: 1px solid var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
   border-radius: var(--sim-radius-lg, 10px);
 
   .compact-item {
@@ -371,7 +370,7 @@ defineExpose({
     :deep(.el-form-item__label) {
       font-size: 12px;
       padding-bottom: 4px;
-      color: var(--sim-text-tertiary, #94a3b8);
+      color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
     }
   }
 }
@@ -384,24 +383,24 @@ defineExpose({
 .apply-btn {
   background: linear-gradient(
     135deg,
-    var(--sim-accent-bg, rgba(34, 211, 238, 0.2)),
-    rgba(45, 212, 191, 0.2)
+    var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent)),
+    color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent)
   ) !important;
-  border: 1px solid var(--sim-border-focus, rgba(34, 211, 238, 0.5)) !important;
+  border: 1px solid var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
   transition: all var(--sim-transition-normal, 0.3s ease);
 }
 
 .apply-btn:hover {
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(45, 212, 191, 0.3)) !important;
-  border-color: var(--sim-accent-light, rgba(34, 211, 238, 0.7)) !important;
-  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px rgba(34, 211, 238, 0.25));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent), color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent)) !important;
+  border-color: var(--sim-accent-light, color-mix(in srgb, var(--zx-semantic-accent-base) 70%, transparent)) !important;
+  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent));
   transform: translateY(-1px);
 }
 
 .tips {
   line-height: 1.4;
-  color: var(--sim-text-disabled, #64748b);
+  color: var(--sim-text-disabled, var(--zx-semantic-text-disabled));
 }
 </style>

@@ -2,8 +2,8 @@
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadPostData" :load-on-mounted="true" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:post:add']"
               >新增</ZxButton
             >
@@ -30,8 +30,8 @@
               v-hasPermi="['system:post:export']"
               >导出</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <zx-input
               v-model="query.postCode"
               placeholder="请输入岗位编码"
@@ -53,8 +53,8 @@
                 :value="dict.value"
               />
             </el-select>
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.postName"
               placeholder="搜索岗位名称"
@@ -63,8 +63,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
       <template #table="{ grid }">
         <el-table

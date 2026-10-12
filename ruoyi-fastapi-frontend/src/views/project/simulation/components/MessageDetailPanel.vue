@@ -271,10 +271,10 @@ function getValueClass(value) {
 .info-card {
   background: linear-gradient(
     135deg,
-    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%,
-    var(--sim-fill-lighter, rgba(15, 23, 42, 0.6)) 100%
+    var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 0%,
+    var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill)) 100%
   );
-  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
@@ -295,7 +295,7 @@ function getValueClass(value) {
 .info-label {
   display: block;
   font-size: 10px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   margin-bottom: 2px;
 }
 
@@ -318,14 +318,14 @@ function getValueClass(value) {
 .meta-row {
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px dashed var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  border-top: 1px dashed var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   justify-content: center;
   gap: 12px;
 }
 
 .meta-text {
   font-size: 11px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 
 .section {
@@ -338,7 +338,7 @@ function getValueClass(value) {
   gap: 4px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--sim-text-secondary, #cbd5e1);
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
   margin-bottom: 8px;
 }
 
@@ -351,18 +351,18 @@ function getValueClass(value) {
 .field-card {
   background: linear-gradient(
     135deg,
-    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 0%,
-    var(--sim-bg-elevated, #1e293b) 100%
+    var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 0%,
+    var(--sim-bg-elevated, var(--zx-semantic-surface-panel-fill)) 100%
   );
-  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 6px;
   padding: 8px 10px;
-  color: var(--sim-text-primary, #f1f5f9);
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 }
 
 .field-name {
   font-size: 10px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   margin-bottom: 2px;
 }
 
@@ -376,7 +376,7 @@ function getValueClass(value) {
   font-size: 16px;
   font-weight: 700;
   font-family: 'Monaco', 'Consolas', monospace;
-  color: var(--sim-text-primary, #f1f5f9);
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 
   &.value-high {
     color: var(--sim-warning, #fbbf24);
@@ -389,19 +389,19 @@ function getValueClass(value) {
 
 .field-unit {
   font-size: 11px;
-  color: var(--sim-text-secondary, #cbd5e1);
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
 }
 
 .field-hex {
   font-size: 10px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   font-family: 'Monaco', 'Consolas', monospace;
   margin-top: 2px;
 }
 
 .payload-box {
-  background: var(--sim-bg-elevated, #1e293b);
-  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  background: var(--sim-bg-elevated, var(--zx-semantic-surface-panel-fill));
+  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 6px;
   padding: 10px;
 

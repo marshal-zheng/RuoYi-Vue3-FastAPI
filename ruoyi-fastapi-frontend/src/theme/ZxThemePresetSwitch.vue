@@ -6,6 +6,7 @@
         class="zx-theme-preset-switch"
         data-testid="zx-theme-preset-switch"
         :aria-label="`ZXUI 主题：${current.label}`"
+        :aria-busy="zxThemePreferencePending"
       >
         <span class="zx-theme-preset-switch__swatch" :style="{ background: current.swatch }" />
         <span class="zx-theme-preset-switch__label">{{ current.label }}</span>
@@ -22,6 +23,15 @@
               <span class="zx-theme-preset-switch__swatch" :style="{ background: choice.swatch }" />
               <span>{{ choice.label }}</span>
             </span>
+          </el-dropdown-item>
+          <el-dropdown-item
+            v-for="(choice, index) in densityChoices"
+            :key="choice.value"
+            :command="{ density: choice.value }"
+            :divided="index === 0"
+            :disabled="zxThemePreference.density === choice.value"
+          >
+            界面密度：{{ choice.label }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -43,14 +53,26 @@
 import { computed } from 'vue';
 
 import useSettingsStore from '@/store/modules/settings';
-import { setZxThemePreference, zxThemeChoice, zxThemeId } from '@/theme/zx-theme-config';
+import {
+  setZxThemePreference,
+  zxThemeChoice,
+  zxThemeId,
+  zxThemePreference,
+  zxThemePreferencePending,
+  type ZxThemeDensity,
+} from '@/theme/zx-theme-config';
 import { ZX_THEME_PACKAGE_CHOICES } from '@/theme/zx-theme-packages';
 
 const settingsStore = useSettingsStore();
 const current = computed(() => zxThemeChoice(zxThemeId.value));
+const densityChoices: { label: string; value: ZxThemeDensity }[] = [
+  { label: '紧凑', value: 'compact' },
+  { label: '默认', value: 'default' },
+  { label: '宽松', value: 'comfortable' },
+];
 
-function onSelect(themeId: string) {
-  setZxThemePreference({ themeId });
+function onSelect(command: string | { density: ZxThemeDensity }) {
+  setZxThemePreference(typeof command === 'string' ? { themeId: command } : command);
 }
 
 function onToggleMode() {
@@ -117,5 +139,14 @@ function onToggleMode() {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+@media (max-width: 640px) {
+  .zx-theme-preset-switch__label {
+    display: none;
+  }
+  .zx-theme-preset-switch {
+    width: 32px;
+    padding: 0;
+  }
 }
 </style>

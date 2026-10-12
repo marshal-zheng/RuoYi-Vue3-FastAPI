@@ -7,8 +7,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="primary"
               icon="Plus"
@@ -24,8 +24,8 @@
               v-hasPermi="['device:category:remove']"
               >删除</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD"
@@ -36,8 +36,8 @@
               style="width: 308px; margin-left: 8px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.name"
               placeholder="搜索分类名称"
@@ -46,8 +46,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

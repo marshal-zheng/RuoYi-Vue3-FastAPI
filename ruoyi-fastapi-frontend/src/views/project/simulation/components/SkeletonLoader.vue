@@ -88,9 +88,9 @@ defineProps({
 .skeleton-bar {
   background: linear-gradient(
     90deg,
-    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 25%,
-    var(--sim-bg-hover, #334155) 37%,
-    var(--sim-fill-light, rgba(30, 41, 59, 0.8)) 63%
+    var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 25%,
+    var(--sim-bg-hover, var(--zx-semantic-border-default)) 37%,
+    var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 63%
   );
   background-size: 400px 100%;
   animation: skeleton-loading 1.4s ease infinite;
@@ -163,7 +163,7 @@ defineProps({
     gap: 12px;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+    border-bottom: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   }
 
   &__row {

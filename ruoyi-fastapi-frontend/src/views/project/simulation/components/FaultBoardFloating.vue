@@ -2,7 +2,6 @@
   <zx-floating-panel
     v-if="visible"
     class="fault-floating simbus-floating-panel"
-    theme="dark"
     :position="position"
     :size="size"
     :showCollapseBtn="false"
@@ -40,7 +39,7 @@
 
     <section class="mb-3">
       <div class="flex items-center justify-between mb-2">
-        <div class="text-xs text-slate-400">快捷模板</div>
+        <div class="text-xs text-zx-text-secondary">快捷模板</div>
         <div v-if="selectedEdge" class="selected-edge-hint">
           <el-icon class="mr-1"><Link /></el-icon>
           <span>{{ getSelectedEdgeInfo() }}</span>
@@ -59,17 +58,17 @@
         >
           <div
             class="text-xs font-semibold"
-            :class="edgeAvailable ? 'text-slate-200' : 'text-slate-500'"
+            :class="edgeAvailable ? 'text-zx-text-primary' : 'text-zx-text-secondary'"
           >
             {{ tpl.label }}
           </div>
-          <div class="text-[11px] text-slate-500">{{ tpl.tip }}</div>
+          <div class="text-[11px] text-zx-text-secondary">{{ tpl.tip }}</div>
         </button>
       </div>
     </section>
 
     <section class="fault-list">
-      <div class="text-xs text-slate-400 mb-2">故障列表</div>
+      <div class="text-xs text-zx-text-secondary mb-2">故障列表</div>
       <div v-if="!faults.length" class="empty">
         <div class="empty-content">
           <div class="empty-icon">📋</div>
@@ -88,16 +87,16 @@
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2">
               <span class="tag">{{ faultLabel(fault.faultType) }}</span>
-              <span class="text-[11px] text-slate-400 truncate">
+              <span class="text-[11px] text-zx-text-secondary truncate">
                 {{ fault.targetType === 'edge' ? '链路' : fault.targetType }}：{{
                   faultTargetLabel(fault)
                 }}
               </span>
             </div>
-            <div class="text-[11px] text-slate-500 mt-0.5 truncate">
+            <div class="text-[11px] text-zx-text-secondary mt-0.5 truncate">
               {{ briefParams(fault.params) }}
             </div>
-            <div class="text-[10px] text-slate-500 mt-0.5">
+            <div class="text-[10px] text-zx-text-secondary mt-0.5">
               {{ statusText(fault.status) }}
             </div>
           </div>
@@ -292,7 +291,7 @@ function getSelectedEdgeInfo() {
 }
 .sub {
   font-size: 12px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 .actions {
   display: flex;
@@ -303,14 +302,14 @@ function getSelectedEdgeInfo() {
   text-align: left;
   padding: 10px 12px;
   border-radius: var(--sim-radius-lg, 10px);
-  border: 1px solid var(--sim-border-light, rgba(45, 212, 191, 0.08));
-  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.6));
+  border: 1px solid var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
+  background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
   transition: all 0.2s ease;
   cursor: pointer;
 }
 .tpl-btn:hover:not(.tpl-btn-disabled) {
-  border-color: var(--sim-border-accent, rgba(45, 212, 191, 0.4));
-  box-shadow: var(--sim-shadow-glow, 0 8px 16px rgba(34, 211, 238, 0.12));
+  border-color: var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent));
+  box-shadow: var(--sim-shadow-glow, 0 8px 16px color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
   transform: translateY(-1px);
 }
 .tpl-btn-disabled {
@@ -321,7 +320,7 @@ function getSelectedEdgeInfo() {
 .edge-hint {
   margin-bottom: 6px;
   font-size: 11px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 .fault-list {
   /* 自适应高度，保证在小屏和面板缩放时也能滚动 */
@@ -336,19 +335,19 @@ function getSelectedEdgeInfo() {
   width: 6px;
 }
 .fault-list::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.35);
+  background: color-mix(in srgb, var(--zx-semantic-border-default) 35%, transparent);
   border-radius: 999px;
 }
 .fault-item {
   padding: 10px 12px;
-  border: 1px solid var(--sim-border-base, rgba(148, 163, 184, 0.18));
+  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 18%, transparent));
   border-radius: var(--sim-radius-lg, 10px);
-  background: var(--sim-fill-lighter, rgba(15, 23, 42, 0.55));
+  background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
   margin-bottom: 8px;
 }
 .fault-item.is-active {
-  border-color: var(--sim-border-focus, rgba(34, 211, 238, 0.5));
-  box-shadow: var(--sim-shadow-glow, 0 6px 20px rgba(34, 211, 238, 0.15));
+  border-color: var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent));
+  box-shadow: var(--sim-shadow-glow, 0 6px 20px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
 }
 .fault-item.is-pending {
   border-color: var(--sim-warning-border, rgba(250, 204, 21, 0.4));
@@ -361,7 +360,7 @@ function getSelectedEdgeInfo() {
   align-items: center;
   padding: 2px 6px;
   border-radius: 6px;
-  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.12));
+  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
   color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 700;
@@ -371,7 +370,7 @@ function getSelectedEdgeInfo() {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border: 1px dashed color-mix(in srgb, var(--zx-semantic-border-default) 20%, transparent);
   border-radius: 10px;
   padding: 20px;
 }
@@ -385,23 +384,23 @@ function getSelectedEdgeInfo() {
 }
 .empty-text {
   font-size: 13px;
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
   font-weight: 500;
   margin-bottom: 4px;
 }
 .empty-hint {
   font-size: 11px;
-  color: var(--sim-text-disabled, #64748b);
+  color: var(--sim-text-disabled, var(--zx-semantic-text-disabled));
 }
 
 /* 刷新按钮样式 - 使用CSS变量 */
 .refresh-btn {
   background: linear-gradient(
     135deg,
-    var(--sim-accent-bg, rgba(34, 211, 238, 0.15)),
-    rgba(45, 212, 191, 0.15)
+    var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)),
+    color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)
   ) !important;
-  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.4)) !important;
+  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
   transition: all var(--sim-transition-normal, 0.3s ease);
@@ -409,11 +408,11 @@ function getSelectedEdgeInfo() {
 .refresh-btn:hover {
   background: linear-gradient(
     135deg,
-    rgba(34, 211, 238, 0.25),
-    rgba(45, 212, 191, 0.25)
+    color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent),
+    color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent)
   ) !important;
-  border-color: var(--sim-accent-light, rgba(34, 211, 238, 0.6)) !important;
-  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px rgba(34, 211, 238, 0.2));
+  border-color: var(--sim-accent-light, color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)) !important;
+  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent));
   transform: translateY(-1px);
 }
 .refresh-btn .el-icon {
@@ -448,8 +447,8 @@ function getSelectedEdgeInfo() {
   align-items: center;
   padding: 2px 8px;
   border-radius: 6px;
-  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.15));
-  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.3));
+  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
+  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
   color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 600;
@@ -459,10 +458,10 @@ function getSelectedEdgeInfo() {
 @keyframes pulse-glow {
   0%,
   100% {
-    box-shadow: 0 0 8px rgba(34, 211, 238, 0.2);
+    box-shadow: 0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent);
   }
   50% {
-    box-shadow: 0 0 12px rgba(34, 211, 238, 0.4);
+    box-shadow: 0 0 12px color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent);
   }
 }
 </style>

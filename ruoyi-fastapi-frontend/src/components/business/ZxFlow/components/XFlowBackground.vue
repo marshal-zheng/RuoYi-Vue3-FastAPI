@@ -3,14 +3,15 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue';
+import { watch } from 'vue';
+import { useGraphTheme } from '../composables/useGraphTheme';
 import { useGraphInstance } from '../composables/useGraphInstance';
 
 // Props 定义
 const props = defineProps({
   color: {
     type: String,
-    default: '#ffffff',
+    default: undefined,
   },
   image: {
     type: String,
@@ -35,13 +36,14 @@ const props = defineProps({
 });
 
 const graph = useGraphInstance();
+const palette = useGraphTheme();
 
 // 更新背景
 const updateBackground = () => {
-  if (!graph || !graph.value) return;
+  if (!graph?.value || (!props.color && !palette.value)) return;
 
   const backgroundOptions = {
-    color: props.color,
+    color: props.color ?? palette.value?.background,
     opacity: props.opacity,
   };
 
@@ -55,15 +57,18 @@ const updateBackground = () => {
   graph.value.drawBackground(backgroundOptions);
 };
 
-onMounted(() => {
-  updateBackground();
-});
-
-// 监听属性变化
 watch(
-  () => [props.color, props.image, props.position, props.size, props.repeat, props.opacity],
-  () => {
-    updateBackground();
-  }
+  () => [
+    graph?.value,
+    palette.value,
+    props.color,
+    props.image,
+    props.position,
+    props.size,
+    props.repeat,
+    props.opacity,
+  ],
+  updateBackground,
+  { immediate: true, flush: 'post' }
 );
 </script>

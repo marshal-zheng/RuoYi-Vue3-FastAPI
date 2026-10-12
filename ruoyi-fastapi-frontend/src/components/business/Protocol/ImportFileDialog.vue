@@ -220,7 +220,7 @@ defineExpose({ open, close });
     p {
       margin: 5px 0;
       line-height: 1.6;
-      color: #606266;
+      color: var(--zx-semantic-text-secondary);
     }
   }
 }

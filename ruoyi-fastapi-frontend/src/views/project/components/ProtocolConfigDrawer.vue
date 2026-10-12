@@ -61,7 +61,7 @@
     <!-- 协议格式配置 -->
     <div v-if="drawer.state.data.protocolType" class="protocol-template-section">
       <el-divider content-position="left">
-        <span class="template-title text-[16px] font-semibold text-[#303133]">协议格式配置</span>
+        <span class="template-title text-[16px] font-semibold">协议格式配置</span>
       </el-divider>
       <component
         :is="currentTemplateComponent"
@@ -209,7 +209,7 @@ defineExpose({
   .template-title {
     font-size: 16px;
     font-weight: 600;
-    color: #303133;
+    color: var(--zx-semantic-text-primary);
   }
 }
 </style>

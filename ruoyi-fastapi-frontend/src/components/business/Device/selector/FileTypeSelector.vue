@@ -107,18 +107,18 @@ function handleChange(value) {
 
 .file-type-icon {
   margin-right: 8px;
-  color: #409eff;
+  color: var(--zx-semantic-accent-on-surface);
 }
 
 .file-type-text {
   flex: 1;
   font-size: 14px;
-  color: #606266;
+  color: var(--zx-semantic-text-primary);
 }
 
 .file-type-ext {
   font-size: 12px;
-  color: #909399;
+  color: var(--zx-semantic-text-secondary);
   margin-left: 8px;
 }
 
@@ -127,11 +127,11 @@ function handleChange(value) {
 }
 
 :deep(.el-select-dropdown__item:hover) {
-  background-color: #f5f7fa;
+  background-color: var(--zx-semantic-fill-accent-hover);
 }
 
 :deep(.el-select-dropdown__item.selected) {
-  background-color: #ecf5ff;
-  color: #409eff;
+  background-color: var(--zx-semantic-fill-selected);
+  color: var(--zx-semantic-accent-on-surface);
 }
 </style>

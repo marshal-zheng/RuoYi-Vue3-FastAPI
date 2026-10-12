@@ -23,8 +23,8 @@ defineProps({
   position: absolute;
   z-index: 10;
   padding: 8px;
-  background: rgb(255 255 255 / 90%);
+  background: var(--zx-semantic-surface-overlay-fill);
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
 }
 </style>

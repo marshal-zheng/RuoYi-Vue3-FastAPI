@@ -1,10 +1,10 @@
 import { defineConfig, loadEnv } from 'vite'
-import type { UserConfig, ConfigEnv, Alias } from 'vite'
+import type { UserConfig, ConfigEnv } from 'vite'
 import fs from 'fs'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 import createVitePlugins from './vite/plugins'
-import { ZXUI_THEME_PACKAGE_NAMES, zxuiThemeDeploymentPlugin } from './vite/zxui-theme-packages'
+import { zxuiSourceIntegrationPlugin, zxuiThemeDeploymentPlugin } from './vite/zxui-theme-packages'
 
 const baseUrl = 'http://127.0.0.1:8088'
 
@@ -16,95 +16,6 @@ function normalizeApiPrefix(value?: string): string {
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-}
-
-// ZXUI 本地直连时需要排除预构建的包
-const zxuiExcludeDeps = [
-  '@zxio/zxui',
-  '@zxio/components',
-  '@zxio/constants',
-  '@zxio/hooks',
-  '@zxio/keybindings',
-  '@zxio/shared',
-  '@zxio/theme-chalk',
-  '@zxio/theme-consumer',
-  '@zxio/theme-css-codec',
-  ...ZXUI_THEME_PACKAGE_NAMES,
-  '@zxio/tokens',
-  '@zxio/types',
-  '@zxio/utils',
-]
-
-// 生成 ZXUI 本地直连别名配置（与 ZXUI 官方 host contract 对齐）
-function createZxuiLocalAlias(repoRoot: string): Alias[] {
-  const packagesRoot = path.resolve(repoRoot, 'packages')
-
-  return [
-    {
-      find: /^@zxio\/zxui\/style$/,
-      replacement: path.resolve(packagesRoot, 'zxui/style.ts'),
-    },
-    {
-      find: /^@zxio\/zxui\/style\.css$/,
-      replacement: path.resolve(packagesRoot, 'zxui/style/index.css'),
-    },
-    {
-      find: /^@zxio\/zxui$/,
-      replacement: path.resolve(packagesRoot, 'zxui/index.ts'),
-    },
-    {
-      find: /^@zxio\/zxui\/(.*)$/,
-      replacement: `${path.resolve(packagesRoot, 'zxui')}/$1`,
-    },
-    {
-      find: /^@zxio\/theme-chalk\/src\/(.*)$/,
-      replacement: `${path.resolve(packagesRoot, 'theme-chalk/src')}/$1`,
-    },
-    {
-      find: /^@zxio\/theme-chalk\/(.+\.css)$/,
-      replacement: `${path.resolve(packagesRoot, 'theme-chalk/dist')}/$1`,
-    },
-    {
-      find: /^@zxio\/tokens\/tokens\.css$/,
-      replacement: path.resolve(packagesRoot, 'tokens/tokens.css'),
-    },
-    {
-      find: /^@zxio\/tokens\/kernel$/,
-      replacement: path.resolve(packagesRoot, 'tokens/src/kernel/index.ts'),
-    },
-    {
-      find: /^@zxio\/tokens\/extensions$/,
-      replacement: path.resolve(packagesRoot, 'tokens/src/extensions/index.ts'),
-    },
-    {
-      find: /^@zxio\/tokens\/semantic-contract$/,
-      replacement: path.resolve(packagesRoot, 'tokens/src/semantic-contract/index.ts'),
-    },
-    {
-      find: /^@zxio\/theme-consumer\/vue$/,
-      replacement: path.resolve(packagesRoot, 'theme-consumer/src/vue/index.ts'),
-    },
-    {
-      find: /^@zxio\/theme-consumer$/,
-      replacement: path.resolve(packagesRoot, 'theme-consumer/src/index.ts'),
-    },
-    {
-      find: /^@zxio\/theme-css-codec$/,
-      replacement: path.resolve(packagesRoot, 'theme-css-codec/src/index.ts'),
-    },
-    {
-      find: /^@zxio\/theme-compiler\/extensions$/,
-      replacement: path.resolve(packagesRoot, 'theme-compiler/src/extensions/index.ts'),
-    },
-    {
-      find: /^@zxio\/(components|constants|hooks|shared|tokens|types|utils)$/,
-      replacement: `${packagesRoot}/$1`,
-    },
-    {
-      find: /^@zxio\/(components|constants|hooks|shared|tokens|types|utils)\/(.*)$/,
-      replacement: `${packagesRoot}/$1/$2`,
-    },
-  ]
 }
 
 // https://vitejs.dev/config/
@@ -157,38 +68,14 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     )
   }
 
-  // 源码 alias 只保留在开发工具边界；主题资产使用公开部署协议。
-  const zxuiLocalAlias = useZxuiLocal ? createZxuiLocalAlias(effectiveZxuiRepoRoot) : []
-
-  // 基础别名配置
-  const zxuiNpmAlias: Alias[] = useZxuiLocal
-    ? []
-    : [
-        {
-          find: /^@zxio\/components$/,
-          replacement: path.resolve(__dirname, 'node_modules/@zxio/zxui/es/components'),
-        },
-        {
-          find: /^@zxio\/components\/(.*)$/,
-          replacement: `${path.resolve(__dirname, 'node_modules/@zxio/zxui/es/components')}/$1`,
-        },
-      ]
-
-  const baseAlias: Alias[] = [
-    // 设置路径
-    { find: '~', replacement: path.resolve(__dirname, './') },
-    // 设置别名
-    { find: '@', replacement: path.resolve(__dirname, './src') },
-    ...zxuiNpmAlias,
-  ]
-
   return {
     // 部署生产环境和开发环境下的URL。
     // 默认情况下，vite 会假设你的应用是被部署在一个域名的根路径上
     // 例如 https://www.example.com/。如果应用被部署在一个子路径上，你就需要用这个选项指定这个子路径。例如，如果你的应用被部署在 https://www.example.com/admin/，则设置 baseUrl 为 /admin/。
     base: isDemoOfflineBuild ? './' : '/',
     plugins: isTest ? [] : [
-      zxuiThemeDeploymentPlugin({ frontendRoot: __dirname, serve: command === 'serve', localRepoRoot: useZxuiLocal ? effectiveZxuiRepoRoot : undefined }),
+      ...(useZxuiLocal ? [zxuiSourceIntegrationPlugin(__dirname, effectiveZxuiRepoRoot)] : []),
+      zxuiThemeDeploymentPlugin({ frontendRoot: __dirname, localRepoRoot: useZxuiLocal ? effectiveZxuiRepoRoot : undefined }),
       tailwindcss(),
       ...createVitePlugins(env, command === 'build')
     ],
@@ -196,7 +83,10 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
       dedupe: ['vue', 'element-plus', '@vue/runtime-core', '@vue/runtime-dom', '@vue/reactivity', '@vue/shared'],
       // https://cn.vitejs.dev/config/#resolve-alias
       // 本地直连模式时，ZXUI 别名放在前面优先匹配
-      alias: [...(useZxuiLocal ? zxuiLocalAlias : []), ...baseAlias],
+      alias: [
+        { find: '~', replacement: path.resolve(__dirname, './') },
+        { find: '@', replacement: path.resolve(__dirname, './src') },
+      ],
       // https://cn.vitejs.dev/config/#resolve-extensions
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
     },
@@ -222,10 +112,7 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
     optimizeDeps: {
       entries: ['index.html'],
       include: ['@iconify/iconify'],
-      // 本地直连模式时排除 ZXUI 相关包的预构建
-      exclude: [
-        ...(useZxuiLocal ? zxuiExcludeDeps : []),
-      ]
+      // ZXUI source dependency handling is owned by its public Vite plugin.
     },
     //fix:error:stdin>:7356:1: warning: "@charset" must be the first rule in the file
     css: {

@@ -71,14 +71,16 @@ const activeMenu = computed(() => {
   --left-menu-submenu-bg-color: transparent;
   --left-menu-text-color: var(--zx-semantic-surface-panel-on-text);
   --left-menu-submenu-text-color: var(--zx-semantic-surface-panel-on-text);
-  --left-menu-text-active-color: var(--zx-semantic-accent-base);
+  --left-menu-text-active-color: var(--zx-semantic-surface-selected-on-text);
+  --left-menu-active-indicator-color: var(--zx-semantic-accent-base);
   --left-menu-hover-bg-color: @on-surface-tint;
   --left-menu-submenu-hover-bg-color: @on-surface-tint;
-  --left-menu-bg-active-color: var(--zx-semantic-fill-selected);
-  --left-menu-collapse-bg-active-color: var(--zx-semantic-fill-selected);
+  --left-menu-bg-active-color: var(--zx-semantic-surface-selected-fill);
+  --left-menu-collapse-bg-active-color: var(--zx-semantic-surface-selected-fill);
   --left-menu-border-color: var(--zx-semantic-border-subtle);
   --left-menu-indent-color: var(--zx-semantic-border-subtle);
-  --left-menu-active-shadow: none;
+  --left-menu-active-shadow:
+    var(--zx-semantic-surface-selected-depth), var(--zx-semantic-surface-selected-inner);
   --left-menu-box-shadow:
     var(--zx-semantic-surface-panel-depth), var(--zx-semantic-surface-panel-inner);
 
@@ -104,7 +106,7 @@ const activeMenu = computed(() => {
       background-color: transparent !important;
 
       &:hover {
-        color: var(--left-menu-text-active-color) !important;
+        color: var(--left-menu-text-color) !important;
         background-color: transparent !important;
       }
     }
@@ -116,7 +118,7 @@ const activeMenu = computed(() => {
         background-color: transparent !important;
 
         &:hover {
-          color: var(--left-menu-text-active-color) !important;
+          color: var(--left-menu-text-color) !important;
         }
       }
     }
@@ -128,7 +130,7 @@ const activeMenu = computed(() => {
       background-color: transparent !important;
 
       &:hover {
-        color: var(--left-menu-text-active-color) !important;
+        color: var(--left-menu-text-color) !important;
         background-color: transparent !important;
 
         &::after {
@@ -137,8 +139,8 @@ const activeMenu = computed(() => {
           inset: 0;
           left: var(--left-menu-active-bar-width);
           background: var(--left-menu-hover-bg-color);
-          border-top-right-radius: 8px;
-          border-bottom-right-radius: 8px;
+          border-top-right-radius: var(--left-menu-item-radius);
+          border-bottom-right-radius: var(--left-menu-item-radius);
           z-index: -1;
         }
       }
@@ -173,10 +175,11 @@ const activeMenu = computed(() => {
         top: 0;
         bottom: 0;
         width: var(--left-menu-active-bar-width);
-        background-color: var(--left-menu-text-active-color);
+        background-color: var(--left-menu-active-indicator-color);
       }
 
       &:hover {
+        color: var(--left-menu-text-active-color) !important;
         background-color: transparent !important;
 
         &::after {
@@ -208,7 +211,7 @@ const activeMenu = computed(() => {
 
         &:hover {
           background-color: transparent !important;
-          color: var(--left-menu-text-active-color) !important;
+          color: var(--left-menu-text-color) !important;
         }
       }
 
@@ -238,8 +241,8 @@ const activeMenu = computed(() => {
             inset: 0;
             left: calc(16px + 2px);
             background: var(--left-menu-hover-bg-color);
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
+            border-top-right-radius: var(--left-menu-item-radius);
+            border-bottom-right-radius: var(--left-menu-item-radius);
             z-index: -1;
           }
         }
@@ -250,7 +253,7 @@ const activeMenu = computed(() => {
         color: var(--left-menu-text-active-color) !important;
 
         &::before {
-          background-color: var(--left-menu-text-active-color);
+          background-color: var(--left-menu-active-indicator-color);
           width: 3px;
         }
 
@@ -270,6 +273,7 @@ const activeMenu = computed(() => {
         }
 
         &:hover {
+          color: var(--left-menu-text-active-color) !important;
           background-color: transparent !important;
         }
       }
@@ -283,6 +287,7 @@ const activeMenu = computed(() => {
     & > .is-active,
     & > .is-active > .el-sub-menu__title {
       position: relative;
+      color: var(--left-menu-text-active-color) !important;
       background-color: var(--left-menu-collapse-bg-active-color) !important;
 
       // 折叠状态下的左侧高亮竖条
@@ -293,7 +298,7 @@ const activeMenu = computed(() => {
         top: 0;
         bottom: 0;
         width: var(--left-menu-active-bar-width);
-        background-color: var(--left-menu-text-active-color);
+        background-color: var(--left-menu-active-indicator-color);
       }
     }
   }

@@ -1,6 +1,12 @@
 <template>
-  <div class="register">
-    <el-form ref="registerRef" :model="registerForm" :rules="registerRules" class="register-form">
+  <div class="register" data-zx-surface="canvas">
+    <el-form
+      ref="registerRef"
+      :model="registerForm"
+      :rules="registerRules"
+      class="register-form"
+      data-zx-surface="card"
+    >
       <h3 class="title">vfadmin后台管理系统</h3>
       <el-form-item prop="username">
         <zx-input
@@ -172,19 +178,17 @@ getCode();
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url('../assets/images/login-background.jpg');
-  background-size: cover;
+  min-height: 100vh;
 }
 
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
-  color: #707070;
+  color: var(--zx-semantic-surface-card-on-text);
 }
 
 .register-form {
   border-radius: 6px;
-  background: #ffffff;
   width: 400px;
   padding: 25px 25px 5px 25px;
 }
@@ -206,7 +210,7 @@ getCode();
 .register-tip {
   font-size: 13px;
   text-align: center;
-  color: #bfbfbf;
+  color: var(--zx-semantic-surface-card-on-text-secondary);
 }
 
 .register-code {
@@ -227,7 +231,7 @@ getCode();
   bottom: 0;
   width: 100%;
   text-align: center;
-  color: #fff;
+  color: var(--zx-semantic-surface-canvas-on-text-secondary);
   font-family: Arial;
   font-size: 12px;
   letter-spacing: 1px;

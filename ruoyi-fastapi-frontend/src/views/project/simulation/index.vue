@@ -1,7 +1,7 @@
 <template>
   <div
     data-testid="simulation-page"
-    class="simulation-dark simulation-shell flex h-full bg-slate-950"
+    class="simulation-shell flex h-full bg-zx-surface-canvas-fill"
     :class="{ 'fault-injection-mode': isFaultInjectionMode }"
   >
     <!-- 故障注入模式提示条 -->
@@ -92,7 +92,6 @@
             :layout="layoutMode"
             :dnd-config="dndConfig"
             :show-graph-control="false"
-            theme="dark"
             @node-click="handleNodeClick"
             @node-dblclick="handleNodeDblclick"
             @edge-click="handleEdgeClick"
@@ -142,7 +141,7 @@
           :visible="dockState.timing"
           :messages="filteredMessages"
           :bandwidth-data="bandwidthData"
-          :position="{ top: '420px', left: '14px' }"
+          :position="{ top: 'min(420px, max(14px, calc(100vh - 620px)))', left: '14px' }"
           :size="{ width: '520px', maxHeight: '430px' }"
           :collapsed-size="{ width: '46px', height: '46px' }"
           :default-collapsed="false"
@@ -263,10 +262,7 @@ import useAppStore from '@/store/modules/app';
 
 // 样式导入 - 注意：simulation-theme.css 已内部导入 variables.css
 import './styles/simulation-theme.css';
-import './styles/global-popper-dark.css'; // 全局 Popper 深色样式（Teleport到body的元素）
 import './styles/fault-injection-mode.less';
-import './styles/aviation-dark-theme.less';
-import './styles/simulation-dialog-theme.less';
 
 // API 导入
 import { listDevice } from '@/api/device/device';
@@ -1204,21 +1200,18 @@ watch(isRunning, (running) => {
 <style scoped>
 @import './styles/animation.css';
 
-/* 拓扑画布网格背景 - 深色主题优化 */
+/* 拓扑画布网格跟随 Host，设备/协议图形保留领域配色。 */
 .sim-canvas {
-  background-color: #0a0f1a;
+  background-color: var(--zx-semantic-surface-canvas-fill);
   background-image:
-    linear-gradient(rgba(77, 125, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(77, 125, 255, 0.03) 1px, transparent 1px),
-    radial-gradient(circle at 50% 50%, rgba(77, 125, 255, 0.02) 0%, transparent 50%);
+    linear-gradient(var(--zx-semantic-border-subtle) 1px, transparent 1px),
+    linear-gradient(90deg, var(--zx-semantic-border-subtle) 1px, transparent 1px);
   background-size:
     20px 20px,
-    20px 20px,
-    100% 100%;
+    20px 20px;
   background-position:
     0 0,
-    0 0,
-    center center;
+    0 0;
 }
 
 .sim-canvas :deep(.xflow-dag),
@@ -1255,9 +1248,7 @@ watch(isRunning, (running) => {
 }
 
 .simulation-shell {
-  background:
-    radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.07), transparent 30%),
-    radial-gradient(circle at 80% 0%, rgba(52, 211, 153, 0.05), transparent 25%), #0b1220;
+  background: var(--zx-semantic-surface-canvas-fill);
 }
 
 .simulation-readonly-banner {
@@ -1291,7 +1282,7 @@ watch(isRunning, (running) => {
 .panel-title .title-text {
   font-size: 13px;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--zx-semantic-surface-panel-on-text);
   letter-spacing: 0.02em;
 }
 
@@ -1340,23 +1331,23 @@ watch(isRunning, (running) => {
 }
 
 .view-toggle .toggle-item {
-  color: #94a3b8;
+  color: var(--zx-semantic-text-secondary);
   cursor: pointer;
   transition: color 0.15s ease;
   user-select: none;
 }
 
 .view-toggle .toggle-item:hover {
-  color: #64748b;
+  color: var(--zx-semantic-text-disabled);
 }
 
 .view-toggle .toggle-item.active {
-  color: #2563eb;
+  color: var(--zx-semantic-accent-on-surface);
   font-weight: 500;
 }
 
 .view-toggle .toggle-divider {
-  color: #cbd5e1;
+  color: var(--zx-semantic-text-secondary);
   font-weight: 300;
 }
 
@@ -1370,18 +1361,10 @@ watch(isRunning, (running) => {
   flex-direction: column;
   align-items: center;
   padding: 12px 10px;
-  background: linear-gradient(
-    180deg,
-    rgba(12, 22, 40, 0.98) 0%,
-    rgba(8, 14, 26, 1) 30%,
-    rgba(6, 10, 18, 1) 70%,
-    rgba(10, 18, 32, 0.98) 100%
-  );
-  border-left: 1px solid rgba(34, 211, 238, 0.12);
-  box-shadow:
-    -6px 0 32px rgba(0, 0, 0, 0.5),
-    -2px 0 8px rgba(0, 0, 0, 0.3),
-    inset 1px 0 0 rgba(34, 211, 238, 0.06);
+  background: var(--zx-semantic-surface-panel-fill);
+  color: var(--zx-semantic-surface-panel-on-text);
+  border-left: 1px solid var(--zx-semantic-border-default);
+  box-shadow: var(--zx-semantic-surface-panel-depth);
 }
 
 /* 侧边栏顶部光晕 */
@@ -1394,7 +1377,7 @@ watch(isRunning, (running) => {
   height: 120px;
   background: radial-gradient(
     ellipse 100% 100% at 50% -20%,
-    rgba(34, 211, 238, 0.08) 0%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent) 0%,
     transparent 70%
   );
   pointer-events: none;
@@ -1410,7 +1393,7 @@ watch(isRunning, (running) => {
   height: 80px;
   background: radial-gradient(
     ellipse 100% 100% at 50% 120%,
-    rgba(34, 211, 238, 0.05) 0%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 5%, transparent) 0%,
     transparent 70%
   );
   pointer-events: none;

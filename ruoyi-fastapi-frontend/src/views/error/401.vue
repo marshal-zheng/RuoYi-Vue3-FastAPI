@@ -43,8 +43,8 @@ function back() {
 }
 
 .errPage-container .pan-back-btn {
-  background: #008489;
-  color: #fff;
+  background: var(--zx-semantic-accent-base);
+  color: var(--zx-semantic-accent-on-fill);
   border: none !important;
 }
 
@@ -62,7 +62,7 @@ function back() {
 .errPage-container .text-jumbo {
   font-size: 60px;
   font-weight: 700;
-  color: #484848;
+  color: var(--zx-semantic-text-primary);
 }
 
 .errPage-container .list-unstyled {
@@ -74,7 +74,7 @@ function back() {
 }
 
 .errPage-container .list-unstyled a {
-  color: #008489;
+  color: var(--zx-semantic-accent-on-surface);
   text-decoration: none;
 }
 

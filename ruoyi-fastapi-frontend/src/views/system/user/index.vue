@@ -69,9 +69,8 @@
           <div data-zx-fill>
             <ZxGridList ref="gridListRef" :load-data="loadUserData" fill>
               <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-                <div class="zx-grid-form-bar">
-                  <div class="zx-grid-form-bar__left"></div>
-                  <div class="zx-grid-form-bar__filters">
+                <ZxListToolbar aria-label="列表操作与筛选">
+                  <template #filters>
                     <zx-input
                       v-model="query.userName"
                       placeholder="请输入用户名称"
@@ -114,8 +113,8 @@
                         (v) => onFilterChange('dateRange', v, { handleRefresh, updateState })
                       "
                     />
-                  </div>
-                  <div class="zx-grid-form-bar__right">
+                  </template>
+                  <template #search>
                     <ZxSearch
                       v-model="query.userName"
                       placeholder="搜索用户名称"
@@ -129,8 +128,8 @@
                       @queryTable="handleRefresh"
                       :columns="columns"
                     /> -->
-                  </div>
-                </div>
+                  </template>
+                </ZxListToolbar>
               </template>
 
               <template #table="{ grid }">

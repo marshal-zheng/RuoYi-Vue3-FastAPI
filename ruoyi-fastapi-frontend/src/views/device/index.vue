@@ -2,8 +2,8 @@
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadDeviceData" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['device:list:add']"
               >新加</ZxButton
             >
@@ -38,8 +38,8 @@
               v-hasPermi="['device:list:remove']"
               >删除</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <el-select
               v-model="query.busType"
               placeholder="请选择总线类型"
@@ -63,8 +63,8 @@
               style="width: 240px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.deviceName"
               placeholder="搜索设备名称"
@@ -73,8 +73,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

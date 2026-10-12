@@ -335,7 +335,7 @@ onMounted(() => {
   left: 12px;
   top: 6px;
   line-height: 30px;
-  color: #00afff;
+  color: var(--zx-semantic-accent-on-surface);
   font-weight: 600;
   font-size: 17px;
   white-space: nowrap;
@@ -405,12 +405,12 @@ onMounted(() => {
 }
 
 .container .left-board .left-scrollbar .el-scrollbar__wrap .components-list .components-draggable .components-item .components-body:hover {
-  border: 1px dashed #787be8;
-  color: #787be8;
+  border: 1px dashed var(--zx-semantic-accent-on-surface);
+  color: var(--zx-semantic-accent-on-surface);
 }
 
 .container .left-board .left-scrollbar .el-scrollbar__wrap .components-list .components-draggable .components-item .components-body:hover .svg-icon {
-  color: #787be8;
+  color: var(--zx-semantic-accent-on-surface);
 }
 
 .center-board {
@@ -434,7 +434,7 @@ onMounted(() => {
 }
 
 .center-board .action-bar .delete-btn {
-  color: #F56C6C;
+  color: var(--zx-semantic-status-danger-on-surface);
 }
 
 .center-board .center-scrollbar {
@@ -483,7 +483,7 @@ onMounted(() => {
   right: 0;
   top: 0;
   height: 3px;
-  background: rgb(89, 89, 223);
+  background: var(--zx-semantic-accent-base);
   z-index: 2;
 }
 
@@ -504,7 +504,7 @@ onMounted(() => {
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-board .active-from-item > .component-name {
-  color: #787be8;
+  color: var(--zx-semantic-accent-on-surface);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-board .active-from-item .el-input__wrapper {
@@ -521,7 +521,7 @@ onMounted(() => {
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item.unfocus-bordered:not(.activeFromItem) > div:first-child {
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--zx-semantic-border-default);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item .el-form-item {
@@ -532,7 +532,7 @@ onMounted(() => {
   position: relative;
   cursor: move;
   box-sizing: border-box;
-  border: 1px dashed #ccc;
+  border: 1px dashed var(--zx-semantic-border-default);
   border-radius: 3px;
   padding: 0 2px;
   margin-bottom: 15px;
@@ -558,7 +558,7 @@ onMounted(() => {
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item.active-from-item {
-  border: 1px dashed #787be8;
+  border: 1px dashed var(--zx-semantic-accent-on-surface);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item .component-name {
@@ -566,7 +566,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   font-size: 12px;
-  color: #bbb;
+  color: var(--zx-semantic-text-secondary);
   display: inline-block;
   padding: 0 6px;
 }
@@ -605,29 +605,29 @@ onMounted(() => {
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item > .drawing-item-copy,
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item > .drawing-item-copy {
   right: 56px;
-  border-color: #787be8;
-  color: #787be8;
-  background: #fff;
+  border-color: var(--zx-semantic-accent-on-surface);
+  color: var(--zx-semantic-accent-on-surface);
+  background: var(--zx-semantic-surface-elevated);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item > .drawing-item-copy:hover,
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item > .drawing-item-copy:hover {
-  background: #787be8;
-  color: #fff;
+  background: var(--zx-semantic-accent-base);
+  color: var(--zx-semantic-accent-on-fill);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item > .drawing-item-delete,
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item > .drawing-item-delete {
   right: 24px;
-  border-color: #F56C6C;
-  color: #F56C6C;
-  background: #fff;
+  border-color: var(--zx-semantic-status-danger-on-surface);
+  color: var(--zx-semantic-status-danger-on-surface);
+  background: var(--zx-semantic-surface-elevated);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-item > .drawing-item-delete:hover,
 .center-board .center-scrollbar .center-board-row > .el-form .drawing-row-item > .drawing-item-delete:hover {
-  background: #F56C6C;
-  color: #fff;
+  background: var(--zx-semantic-status-danger);
+  color: var(--zx-semantic-status-danger-on-fill);
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form .empty-info {
@@ -637,7 +637,7 @@ onMounted(() => {
   right: 0;
   text-align: center;
   font-size: 18px;
-  color: #ccb1ea;
+  color: var(--zx-semantic-text-secondary);
   letter-spacing: 4px;
 }
 </style>

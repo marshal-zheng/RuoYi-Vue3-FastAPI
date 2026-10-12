@@ -1,28 +1,28 @@
 <template>
   <div
-    class="flex flex-col h-full min-h-0 bg-gradient-to-b from-[#000000] to-[#050505] rounded-lg overflow-hidden alarm-panel-content"
+    class="flex flex-col h-full min-h-0 bg-zx-surface-panel-fill text-zx-surface-panel-on-text rounded-lg overflow-hidden alarm-panel-content"
   >
     <!-- 统计卡片区域 -->
-    <div class="stat-cards-area p-3 border-b border-white/10">
+    <div class="stat-cards-area p-3 border-b border-zx-border-default/10">
       <div class="grid grid-cols-4 gap-2">
         <div
           v-for="card in statCards"
           :key="card.key"
-          class="stat-card flex items-center gap-1.5 p-2 bg-black/90 rounded-md border transition-all duration-300"
+          class="stat-card flex items-center gap-1.5 p-2 bg-zx-surface-canvas-fill/90 rounded-md border transition-all duration-300"
           :class="card.borderClass"
         >
           <div
-            class="w-6 h-6 rounded flex items-center justify-center flex-shrink-0 text-white/90"
+            class="w-6 h-6 rounded flex items-center justify-center flex-shrink-0 text-zx-text-primary"
             :class="card.iconClass"
           >
             <ZxIcon :icon="card.icon" :size="14" />
           </div>
           <div class="flex flex-col min-w-0">
-            <span class="text-[11px] text-white/80 font-semibold tracking-wide">{{
+            <span class="text-[11px] text-zx-text-primary font-semibold tracking-wide">{{
               card.label
             }}</span>
             <span
-              class="text-[13px] font-semibold font-mono text-white/80"
+              class="text-[13px] font-semibold font-mono text-zx-text-primary"
               :class="card.valueClass"
             >
               {{ card.value }}
@@ -35,12 +35,12 @@
     <!-- 告警列表区域 -->
     <div class="alarm-list-area flex-1 flex flex-col min-h-0 px-3 pb-3 overflow-hidden">
       <div class="alarm-list-header flex justify-between items-center py-2">
-        <span class="text-[11px] text-white/70 uppercase tracking-wider">告警列表</span>
+        <span class="text-[11px] text-zx-text-secondary uppercase tracking-wider">告警列表</span>
         <el-button
           v-if="filteredAlarms.length > 0"
           link
           size="small"
-          class="!text-[11px] !text-white/40 hover:!text-white/80"
+          class="!text-[11px] !text-zx-text-secondary hover:!text-zx-text-primary"
           @click="handleClearAll"
         >
           清空
@@ -57,7 +57,7 @@
         >
           <template #default="{ item: alarm }">
             <div
-              class="alarm-item flex gap-2 px-2.5 py-1 mb-1.5 bg-black/80 rounded-md border cursor-pointer transition-all duration-200"
+              class="alarm-item flex gap-2 px-2.5 py-1 mb-1.5 bg-zx-surface-canvas-fill/80 rounded-md border cursor-pointer transition-all duration-200"
               :class="[
                 alarm.severity === 'critical' ? 'critical' : '',
                 alarm.severity === 'error' ? 'error' : '',
@@ -66,7 +66,7 @@
                   ? 'bg-red-500/10 border-red-500/30'
                   : !alarm.read
                     ? 'bg-blue-500/[0.08] border-blue-500/20'
-                    : 'border-white/10',
+                    : 'border-zx-border-default/10',
               ]"
               @click="handleAlarmClick(alarm)"
             >
@@ -76,24 +76,24 @@
                   'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]': alarm.severity === 'critical',
                   'bg-orange-500 shadow-[0_0_6px_rgba(249,115,22,0.4)]': alarm.severity === 'error',
                   'bg-amber-500': alarm.severity === 'warning',
-                  'bg-slate-500': alarm.severity === 'info',
+                  'bg-zx-surface-field-fill': alarm.severity === 'info',
                 }"
               ></div>
               <div class="flex-1 min-w-0">
                 <div class="flex justify-between items-center mb-1">
                   <div class="flex items-center gap-1.5">
-                    <span class="alarm-text text-[11px] font-semibold text-white/90">{{
+                    <span class="alarm-text text-[11px] font-semibold text-zx-text-primary">{{
                       getAlarmTypeLabel(alarm.alarmType)
                     }}</span>
                     <span class="reason-pill" :style="getReasonStyle(alarm.alarmType)">
                       {{ getReasonLabel(alarm.alarmType) }}
                     </span>
                   </div>
-                  <span class="alarm-time text-[10px] text-white/50 font-mono">{{
+                  <span class="alarm-time text-[10px] text-zx-text-secondary font-mono">{{
                     formatTime(alarm.timestamp)
                   }}</span>
                 </div>
-                <div class="alarm-text text-[11px] text-white/80 leading-relaxed line-clamp-2">
+                <div class="alarm-text text-[11px] text-zx-text-primary leading-relaxed line-clamp-2">
                   {{ alarm.message }}
                 </div>
               </div>
@@ -113,8 +113,8 @@
               />
             </svg>
           </div>
-          <div class="text-sm font-semibold text-white/80 mb-1">暂无告警</div>
-          <div class="text-[11px] text-white/40 mb-4">系统运行正常</div>
+          <div class="text-sm font-semibold text-zx-text-primary mb-1">暂无告警</div>
+          <div class="text-[11px] text-zx-text-secondary mb-4">系统运行正常</div>
           <div
             class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full"
           >
@@ -168,37 +168,37 @@ const reasonMap = {
 
 const toneMap = {
   red: {
-    border: 'border-white/5',
+    border: 'border-zx-border-default/5',
     borderActive: 'border-red-500/30 bg-red-500/[0.08]',
     icon: 'bg-gradient-to-br from-red-500/50 to-red-600/50',
     iconActive: 'bg-gradient-to-br from-red-500 to-red-600 shadow-[0_0_8px_rgba(239,68,68,0.4)]',
-    value: 'text-white/70',
+    value: 'text-zx-text-secondary',
     valueActive: 'text-red-500 animate-pulse',
   },
   orange: {
-    border: 'border-white/5',
+    border: 'border-zx-border-default/5',
     borderActive: 'border-orange-500/30 bg-orange-500/[0.08]',
     icon: 'bg-gradient-to-br from-orange-400/80 to-orange-600/80',
     iconActive:
       'bg-gradient-to-br from-orange-500 to-orange-600 shadow-[0_0_6px_rgba(249,115,22,0.4)]',
-    value: 'text-white/70',
+    value: 'text-zx-text-secondary',
     valueActive: 'text-orange-500',
   },
   amber: {
-    border: 'border-white/5',
+    border: 'border-zx-border-default/5',
     borderActive: 'border-amber-500/30 bg-amber-500/[0.08]',
     icon: 'bg-gradient-to-br from-amber-400/80 to-amber-600/80',
     iconActive: 'bg-gradient-to-br from-amber-400 to-amber-600',
-    value: 'text-white/70',
+    value: 'text-zx-text-secondary',
     valueActive: 'text-amber-500',
   },
   violet: {
-    border: 'border-white/5',
-    borderActive: 'border-white/5',
+    border: 'border-zx-border-default/5',
+    borderActive: 'border-zx-border-default/5',
     icon: 'bg-gradient-to-br from-violet-500 to-violet-600',
     iconActive: 'bg-gradient-to-br from-violet-500 to-violet-600',
-    value: 'text-white/70',
-    valueActive: 'text-white/70',
+    value: 'text-zx-text-secondary',
+    valueActive: 'text-zx-text-secondary',
   },
 };
 
@@ -278,7 +278,7 @@ function getReasonLabel(alarmType) {
 
 function getReasonStyle(alarmType) {
   const key = (alarmType || '').toLowerCase();
-  const reason = reasonMap[key] || { color: '#cbd5e1', bg: 'rgba(148,163,184,0.12)' };
+  const reason = reasonMap[key] || { color: 'var(--zx-semantic-text-secondary)', bg: 'var(--zx-semantic-fill-hover)' };
   return {
     color: reason.color,
     backgroundColor: reason.bg,
@@ -322,7 +322,7 @@ function getReasonStyle(alarmType) {
 
 .alarm-virtual-scroller {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: var(--zx-semantic-border-subtle) transparent;
 }
 
 .alarm-virtual-scroller::-webkit-scrollbar {
@@ -334,7 +334,7 @@ function getReasonStyle(alarmType) {
 }
 
 .alarm-virtual-scroller::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.25);
+  background-color: var(--zx-semantic-border-subtle);
   border-radius: 6px;
 }
 </style>

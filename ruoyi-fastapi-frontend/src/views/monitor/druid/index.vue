@@ -3,7 +3,11 @@
     <h2 class="mb-4">MSW Mock 测试 (模式: {{ mockMode }})</h2>
     <el-button type="primary" @click="testMock">测试 Mock 接口</el-button>
     <el-button type="success" @click="testReal">测试真实接口 (用户列表)</el-button>
-    <pre v-if="result" class="mt-4 p-4 bg-gray-100 rounded">{{ result }}</pre>
+    <pre
+      v-if="result"
+      class="mt-4 p-4 bg-zx-surface-card-fill text-zx-surface-card-on-text rounded"
+      >{{ result }}</pre
+    >
   </div>
 </template>
 

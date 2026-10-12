@@ -1,5 +1,5 @@
-/** App-owned Vite data module; library contracts remain in the ZXUI package. */
+/** Vite module supplied by the public ZXUI theme deployment plugin. */
 declare module 'virtual:zxui-theme-deployment' {
-  const data: import('./zx-theme-host').ZxThemeDeploymentData;
+  const data: import('@zxio/theme-compiler/deployment').ThemeDeploymentOutput;
   export default data;
 }

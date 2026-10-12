@@ -363,8 +363,10 @@ function handleCommand(command) {
 
 /* 激活状态 */
 .tags-view-item.is-active {
-  color: var(--zx-semantic-accent-base) !important;
-  background: var(--zx-semantic-fill-selected);
+  color: var(--zx-semantic-surface-selected-on-text) !important;
+  background-color: var(--zx-semantic-surface-selected-fill);
+  background-image: var(--zx-semantic-surface-selected-highlight);
+  box-shadow: var(--zx-semantic-surface-selected-depth), var(--zx-semantic-surface-selected-inner);
 }
 
 .tags-view-item.is-active::after {

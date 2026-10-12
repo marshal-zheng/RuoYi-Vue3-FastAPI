@@ -16,10 +16,14 @@
     />
     <div class="upload-tip text-center mt-4">
       <el-checkbox v-model="updateSupport" class="mr-2" />
-      <span class="text-sm text-gray-500">是否更新已经存在的用户数据</span>
+      <span class="text-sm text-zx-surface-blocking-on-text-secondary"
+        >是否更新已经存在的用户数据</span
+      >
     </div>
     <div class="upload-tip text-center mt-2">
-      <span class="text-sm text-gray-400">仅允许导入xls、xlsx格式文件。</span>
+      <span class="text-sm text-zx-surface-blocking-on-text-secondary"
+        >仅允许导入xls、xlsx格式文件。</span
+      >
       <el-link
         type="primary"
         :underline="false"

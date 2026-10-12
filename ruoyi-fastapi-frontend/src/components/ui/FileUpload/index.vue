@@ -22,10 +22,10 @@
     <div class="el-upload__tip" v-if="showTip && !disabled">
       请上传
       <template v-if="fileSize">
-        大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b>
+        大小不超过 <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileSize }}MB</b>
       </template>
       <template v-if="fileType">
-        格式为 <b style="color: #f56c6c">{{ fileType.join('/') }}</b>
+        格式为 <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileType.join('/') }}</b>
       </template>
       的文件
     </div>
@@ -213,7 +213,7 @@ function listToString(list, separator) {
   margin-bottom: 5px;
 }
 .upload-file-list .el-upload-list__item {
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--zx-semantic-border-subtle);
   line-height: 2;
   margin-bottom: 10px;
   position: relative;

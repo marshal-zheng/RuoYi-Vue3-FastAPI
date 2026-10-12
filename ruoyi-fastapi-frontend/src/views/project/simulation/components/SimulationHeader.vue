@@ -1,26 +1,27 @@
 <template>
   <div
-    class="flex items-center justify-between h-14 px-5 bg-slate-900 border-b border-slate-700/50"
+    class="flex items-center justify-between h-14 px-5 bg-zx-surface-canvas-fill border-b border-zx-border-default/50"
   >
     <!-- 左侧：返回和标题 -->
     <div class="flex items-center gap-3">
       <button
-        class="flex items-center justify-center w-8 h-8 rounded-md bg-slate-800 border border-slate-600/50 text-slate-400 hover:text-primary-400 hover:border-primary-500/50 hover:bg-slate-700 transition-all duration-200"
+        aria-label="返回工程"
+        class="flex items-center justify-center w-8 h-8 rounded-md bg-zx-surface-card-fill border border-zx-border-default/50 text-zx-text-secondary hover:text-zx-accent-on-surface hover:border-zx-action-focus-ring/50 hover:bg-zx-surface-field-fill transition-all duration-200"
         @click="$emit('back')"
       >
         <el-icon :size="16"><ArrowLeft /></el-icon>
       </button>
       <div class="flex items-center gap-2">
-        <span class="text-base font-semibold text-slate-100 tracking-wide">仿真控制台</span>
+        <span class="text-base font-semibold text-zx-text-primary tracking-wide">仿真控制台</span>
         <span
           v-if="projectName"
           data-testid="simulation-header-project"
-          class="max-w-56 truncate text-sm font-medium text-cyan-200"
+          class="max-w-56 truncate text-sm font-medium text-zx-accent-on-surface"
         >
           {{ projectName }}
         </span>
         <span
-          class="px-2 py-0.5 text-xs font-medium rounded bg-slate-800 text-slate-400 border border-slate-700"
+          class="px-2 py-0.5 text-xs font-medium rounded bg-zx-surface-card-fill text-zx-text-secondary border border-zx-border-default"
         >
           v1.0
         </span>
@@ -30,7 +31,7 @@
     <!-- 中间：控制按钮组 -->
     <div class="flex items-center gap-6">
       <div
-        class="flex items-center gap-2 p-1 rounded-lg bg-slate-800/50 border border-slate-700/50"
+        class="flex items-center gap-2 p-1 rounded-lg bg-zx-surface-card-fill/50 border border-zx-border-default/50"
       >
         <!-- 开始/暂停/继续 -->
         <template v-if="status === 'idle' || status === 'stopped'">
@@ -38,10 +39,10 @@
             data-testid="simulation-start-button"
             :disabled="readonly"
             :class="[
-              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-zx-surface-card-depth',
               readonly
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35 hover:scale-[1.02]',
+                ? 'bg-zx-surface-card-fill text-zx-text-secondary cursor-not-allowed shadow-none'
+                : 'bg-zx-accent text-zx-accent-on-fill hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover shadow-zx-surface-card-depth hover:scale-[1.02]',
             ]"
             @click="$emit('start')"
           >
@@ -54,10 +55,10 @@
             data-testid="simulation-pause-button"
             :disabled="readonly"
             :class="[
-              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-zx-surface-card-depth',
               readonly
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35',
+                ? 'bg-zx-surface-card-fill text-zx-text-secondary cursor-not-allowed shadow-none'
+                : 'bg-zx-accent text-zx-accent-on-fill hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover shadow-zx-surface-card-depth',
             ]"
             @click="$emit('pause')"
           >
@@ -70,10 +71,10 @@
             data-testid="simulation-resume-button"
             :disabled="readonly"
             :class="[
-              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-lg shadow-amber-500/25',
+              'inline-flex items-center gap-2 h-8 px-4 rounded-md text-sm font-semibold transition-all duration-200 shadow-zx-surface-card-depth',
               readonly
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed shadow-none'
-                : 'bg-gradient-to-r from-amber-500 to-orange-500 text-white hover:from-amber-400 hover:to-orange-400 hover:shadow-amber-500/35 hover:scale-[1.02]',
+                ? 'bg-zx-surface-card-fill text-zx-text-secondary cursor-not-allowed shadow-none'
+                : 'bg-zx-accent text-zx-accent-on-fill hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover shadow-zx-surface-card-depth hover:scale-[1.02]',
             ]"
             @click="$emit('resume')"
           >
@@ -89,8 +90,8 @@
           :class="[
             'inline-flex items-center gap-2 h-8 px-3 rounded-md text-sm font-medium transition-all duration-200',
             readonly || status === 'idle' || status === 'stopped'
-              ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-              : 'bg-slate-700 text-slate-200 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30',
+              ? 'bg-zx-surface-card-fill text-zx-text-secondary cursor-not-allowed'
+              : 'bg-zx-surface-field-fill text-zx-text-primary hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30',
           ]"
           @click="$emit('stop')"
         >
@@ -105,8 +106,8 @@
           :class="[
             'inline-flex items-center gap-2 h-8 px-3 rounded-md text-sm font-medium transition-all duration-200',
             readonly || status !== 'paused' || stepping
-              ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-              : 'bg-slate-700 text-slate-200 hover:bg-slate-600 hover:text-white',
+              ? 'bg-zx-surface-card-fill text-zx-text-secondary cursor-not-allowed'
+              : 'bg-zx-surface-field-fill text-zx-text-primary hover:bg-zx-surface-field-fill hover:text-zx-text-primary',
             stepping ? 'cursor-wait opacity-80' : '',
           ]"
           @click="$emit('step')"
@@ -118,17 +119,17 @@
       </div>
 
       <!-- 速度调节 -->
-      <!-- <div class="flex items-center gap-3 pl-4 border-l border-slate-700/50">
-        <span class="text-xs font-medium text-slate-400 tracking-wider">速度</span>
-        <div class="flex items-center gap-1 p-0.5 rounded-md bg-slate-800/50 border border-slate-700/50">
+      <!-- <div class="flex items-center gap-3 pl-4 border-l border-zx-border-default/50">
+        <span class="text-xs font-medium text-zx-text-secondary tracking-wider">速度</span>
+        <div class="flex items-center gap-1 p-0.5 rounded-md bg-zx-surface-card-fill/50 border border-zx-border-default/50">
           <button
             v-for="speed in speedOptions"
             :key="speed"
             :class="[
               'px-2.5 py-1 text-xs font-semibold rounded transition-all duration-200',
               localSpeed === speed
-                ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md shadow-amber-500/20'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700'
+                ? 'bg-zx-accent text-zx-accent-on-fill shadow-zx-surface-card-depth'
+                : 'text-zx-text-secondary hover:text-zx-text-primary hover:bg-zx-surface-field-fill'
             ]"
             @click="handleSpeedClick(speed)"
           >
@@ -143,13 +144,13 @@
       <!-- 状态指示 -->
       <div
         :class="[
-          'flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border shadow-sm',
+          'flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-semibold border shadow-zx-surface-card-depth',
           statusStyles[status],
         ]"
       >
         <span
           :class="[
-            'w-2 h-2 rounded-full shadow-sm',
+            'w-2 h-2 rounded-full shadow-zx-surface-card-depth',
             statusDotStyles[status],
             status === 'running' && 'status-dot-running',
           ]"
@@ -159,19 +160,20 @@
 
       <!-- 仿真时间 -->
       <div
-        class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-slate-800/80 border border-slate-700/50 shadow-sm"
+        class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-zx-surface-card-fill/80 border border-zx-border-default/50 shadow-zx-surface-card-depth"
       >
-        <el-icon class="text-amber-400" :size="14"><Timer /></el-icon>
-        <span class="text-sm font-mono font-bold text-slate-100 tracking-wider tabular-nums">
+        <el-icon class="text-zx-text-secondary" :size="14"><Timer /></el-icon>
+        <span class="text-sm font-mono font-bold text-zx-text-primary tracking-wider tabular-nums">
           {{ formattedTime }}
         </span>
       </div>
 
       <!-- 工具按钮 -->
-      <div class="flex items-center gap-1.5 pl-3 border-l border-slate-700/50">
+      <div class="flex items-center gap-1.5 pl-3 border-l border-zx-border-default/50">
         <el-tooltip content="健康自检" placement="bottom" :show-after="300">
           <button
-            class="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-primary-400 hover:bg-slate-800 transition-all duration-200 hover:shadow-sm hover:shadow-primary-500/20"
+            class="flex items-center justify-center w-8 h-8 rounded-md text-zx-text-secondary hover:text-zx-accent-on-surface hover:bg-zx-surface-card-fill transition-all duration-200 hover:shadow-zx-surface-card-depth"
+            aria-label="健康自检"
             @click="$emit('health-check')"
           >
             <el-icon :size="16"><Cpu /></el-icon>
@@ -187,9 +189,10 @@
             :class="[
               'flex items-center justify-center w-8 h-8 rounded-md transition-all duration-200',
               isSimulationActive
-                ? 'text-slate-400 hover:text-amber-400 hover:bg-slate-800 hover:shadow-sm hover:shadow-amber-500/20'
-                : 'text-slate-600 cursor-not-allowed',
+                ? 'text-zx-text-secondary hover:text-amber-400 hover:bg-zx-surface-card-fill hover:shadow-zx-surface-card-depth shadow-zx-surface-card-depth'
+                : 'text-zx-text-disabled cursor-not-allowed',
             ]"
+            aria-label="事件触发"
             @click="isSimulationActive && $emit('show-events')"
           >
             <el-icon :size="16"><Lightning /></el-icon>
@@ -197,7 +200,8 @@
         </el-tooltip>
         <el-tooltip content="生成报告" placement="bottom" :show-after="300">
           <button
-            class="flex items-center justify-center w-8 h-8 rounded-md text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-all duration-200 hover:shadow-sm hover:shadow-emerald-500/20"
+            class="flex items-center justify-center w-8 h-8 rounded-md text-zx-text-secondary hover:text-zx-accent-on-surface hover:bg-zx-surface-card-fill transition-all duration-200 hover:shadow-zx-surface-card-depth"
+            aria-label="生成报告"
             @click="$emit('show-report')"
           >
             <el-icon :size="16"><Document /></el-icon>
@@ -269,17 +273,17 @@ const speedOptions = [0.5, 1, 2, 4];
 
 // 状态样式映射 - 使用克制的配色
 const statusStyles = {
-  idle: 'bg-slate-800/50 border-slate-600/50 text-slate-400',
+  idle: 'bg-zx-surface-card-fill/50 border-zx-border-default/50 text-zx-text-secondary',
   running: 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400',
   paused: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
-  stopped: 'bg-slate-800/50 border-slate-600/50 text-slate-400',
+  stopped: 'bg-zx-surface-card-fill/50 border-zx-border-default/50 text-zx-text-secondary',
 };
 
 const statusDotStyles = {
-  idle: 'bg-slate-500',
+  idle: 'bg-zx-surface-field-fill',
   running: 'bg-emerald-400',
   paused: 'bg-amber-400',
-  stopped: 'bg-slate-500',
+  stopped: 'bg-zx-surface-field-fill',
 };
 
 const statusText = computed(() => {

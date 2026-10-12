@@ -7,7 +7,6 @@
       :size="size"
       :collapsed-size="collapsedSize"
       :default-collapsed="defaultCollapsed"
-      theme="dark"
       class="timing-latency-panel simbus-floating-panel"
     >
       <template #header>
@@ -25,7 +24,7 @@
         </div>
       </template>
 
-      <div class="timing-panel-content">
+      <div class="timing-panel-content" :style="chartStyle">
         <!-- 时序视图模式 -->
         <div v-if="viewMode === 'timing'" class="timing-view">
           <!-- 时序图表区域 -->
@@ -67,11 +66,11 @@
           </div>
 
           <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-          <Teleport to="body">
+          <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
             <div
               v-if="timingTooltip.visible"
               class="chart-tooltip-fixed timing"
-              :style="{ left: timingTooltip.tooltipX + 'px', top: timingTooltip.tooltipY + 'px' }"
+              :style="{ ...chartStyle, left: timingTooltip.tooltipX + 'px', top: timingTooltip.tooltipY + 'px' }"
             >
               <div class="tooltip-header">
                 <span class="tooltip-index">#{{ timingTooltip.index + 1 }}</span>
@@ -179,11 +178,12 @@
           </div>
 
           <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-          <Teleport to="body">
+          <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
             <div
               v-if="bandwidthTooltip.visible && bandwidthTooltip.groups.length > 0"
               class="chart-tooltip-fixed bandwidth"
               :style="{
+                ...chartStyle,
                 left: bandwidthTooltip.tooltipX + 'px',
                 top: bandwidthTooltip.tooltipY + 'px',
               }"
@@ -232,6 +232,24 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { useRequiredThemePortalBinding } from '@zxio/zxui';
+import { useChartTheme } from '@/theme/useChartTheme';
+
+const { theme: chartTheme } = useChartTheme();
+const portal = useRequiredThemePortalBinding();
+const chartPortalTarget = computed(() =>
+  portal.ok ? portal.value.binding.value?.target : undefined
+);
+const chartStyle = computed(() =>
+  chartTheme.value
+    ? {
+        '--simulation-chart-surface': chartTheme.value.backgroundColor,
+        '--simulation-chart-text': chartTheme.value.textStyle.color,
+        '--simulation-chart-muted': chartTheme.value.legend.inactiveColor,
+        '--simulation-chart-grid': chartTheme.value.valueAxis.splitLine.lineStyle.color,
+      }
+    : {}
+);
 
 const props = defineProps({
   messages: {
@@ -665,7 +683,7 @@ function handleTimingMouseMove(event) {
     const normalized = (scaledLatency - axisMin) / axisRange;
     const pointY = height - padding.bottom - normalized * chartHeight;
 
-    // 计算tooltip位置（使用视口绝对坐标，因为tooltip通过Teleport放到body）
+    // 计算tooltip位置（使用视口绝对坐标，因为 tooltip 通过主题 Portal 挂载）
     const tooltipWidth = 180;
     const tooltipHeight = 100;
     const viewportWidth = window.innerWidth;
@@ -1009,7 +1027,7 @@ function handleBandwidthMouseMove(event) {
     return `${h}:${m}:${s}`;
   };
 
-  // 计算tooltip位置（使用视口绝对坐标，因为tooltip通过Teleport放到body）
+  // 计算tooltip位置（使用视口绝对坐标，因为 tooltip 通过主题 Portal 挂载）
   const tooltipWidth = 160;
   const tooltipHeight = 30 + tooltipGroups.length * 26;
   const viewportWidth = window.innerWidth;
@@ -1203,20 +1221,11 @@ onUnmounted(() => {
 
 .timing-panel-content {
   padding: 12px;
-  background: linear-gradient(180deg, #0a0f1a 0%, #0d1320 100%);
+  background: var(--simulation-chart-surface, var(--zx-semantic-surface-canvas-fill));
   border-radius: 8px;
 }
 
-:deep(.el-segmented) {
-  --el-segmented-bg-color: rgba(255, 255, 255, 0.05);
-  --el-segmented-item-hover-bg-color: rgba(255, 255, 255, 0.1);
-  --el-segmented-item-selected-bg-color: #10b981;
-}
 
-:deep(.el-radio-group) {
-  --el-radio-button-checked-bg-color: #10b981;
-  --el-radio-button-checked-border-color: #10b981;
-}
 
 // 时序视图
 .timing-view {
@@ -1225,7 +1234,7 @@ onUnmounted(() => {
     height: 200px;
     border-radius: 6px;
     overflow: hidden;
-    background: #0a0f18;
+    background: var(--simulation-chart-surface, var(--zx-semantic-surface-canvas-fill));
     border: 1px solid rgba(251, 191, 36, 0.15);
     cursor: crosshair;
   }
@@ -1302,7 +1311,7 @@ onUnmounted(() => {
     height: 160px;
     border-radius: 6px;
     overflow: hidden;
-    background: #0a0f18;
+    background: var(--simulation-chart-surface, var(--zx-semantic-surface-canvas-fill));
     border: 1px solid rgba(0, 255, 136, 0.15);
   }
 
@@ -1324,8 +1333,8 @@ onUnmounted(() => {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      linear-gradient(to right, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 }
@@ -1342,7 +1351,7 @@ onUnmounted(() => {
 
   span {
     font-size: 9px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     font-family: monospace;
   }
 }
@@ -1360,7 +1369,7 @@ onUnmounted(() => {
     align-items: center;
     gap: 4px;
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
   }
 
   .legend-dot {
@@ -1411,9 +1420,9 @@ onUnmounted(() => {
   align-items: center;
   gap: 6px;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--simulation-chart-grid, var(--zx-semantic-border-subtle));
 
   .stat-icon {
     width: 24px;
@@ -1440,7 +1449,7 @@ onUnmounted(() => {
       content: '';
       width: 8px;
       height: 8px;
-      background: rgba(255, 255, 255, 0.8);
+      background: var(--zx-semantic-surface-card-fill);
       border-radius: 2px;
     }
   }
@@ -1452,20 +1461,20 @@ onUnmounted(() => {
 
     .stat-label {
       font-size: 9px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     }
 
     .stat-value {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--simulation-chart-text, var(--zx-semantic-text-primary));
       font-family: monospace;
 
       &.highlight-warning {
-        color: #fbbf24;
+        color: var(--zx-semantic-status-warning-on-surface);
       }
       &.highlight-success {
-        color: #10b981;
+        color: var(--zx-semantic-status-success-on-surface);
       }
     }
   }
@@ -1474,9 +1483,9 @@ onUnmounted(() => {
 // 分组统计表格
 .grouped-stats-table {
   margin-top: 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--simulation-chart-grid, var(--zx-semantic-border-subtle));
   overflow: hidden;
 
   .stats-header,
@@ -1493,17 +1502,17 @@ onUnmounted(() => {
   }
 
   .stats-header {
-    background: rgba(255, 255, 255, 0.03);
-    color: rgba(255, 255, 255, 0.5);
+    background: var(--zx-semantic-surface-card-fill);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     font-weight: 500;
   }
 
   .stats-row {
-    color: rgba(255, 255, 255, 0.8);
-    border-top: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--simulation-chart-text, var(--zx-semantic-text-primary));
+    border-top: 1px solid var(--simulation-chart-grid, var(--zx-semantic-border-subtle));
 
     &:hover {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--zx-semantic-surface-card-fill);
     }
 
     .group-name {
@@ -1520,18 +1529,18 @@ onUnmounted(() => {
     }
 
     .stat-current {
-      color: #00ff88;
+      color: var(--zx-semantic-status-success-on-surface);
     }
 
     .stat-peak {
-      color: #fbbf24;
+      color: var(--zx-semantic-status-warning-on-surface);
     }
   }
 
   .stats-empty {
     padding: 20px;
     text-align: center;
-    color: rgba(255, 255, 255, 0.3);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     font-size: 12px;
   }
 }

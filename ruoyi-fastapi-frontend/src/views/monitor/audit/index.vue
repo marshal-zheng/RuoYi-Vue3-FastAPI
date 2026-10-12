@@ -9,8 +9,8 @@
       fill
     >
       <template #form="{ query, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="danger"
               icon="Delete"
@@ -26,8 +26,8 @@
               v-hasPermi="['monitor:audit:remove']"
               >清空</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <TableNameSelector
               v-model="query.tableName"
               clearable
@@ -68,8 +68,8 @@
               style="width: 308px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid, refresh: handleRefresh, updateState }">

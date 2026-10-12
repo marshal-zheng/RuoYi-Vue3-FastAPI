@@ -6,8 +6,7 @@
     :size="size"
     :collapsed-size="collapsedSize"
     :default-collapsed="defaultCollapsed"
-    class="floating-panel shadow-lg"
-    theme="dark"
+    class="floating-panel"
   >
     <AlarmPanel
       :alarms="alarms"
@@ -48,6 +47,6 @@ defineEmits(['alarm-click', 'filter-change']);
 
 <style scoped>
 .floating-panel {
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid color-mix(in srgb, var(--zx-semantic-border-default) 15%, transparent);
 }
 </style>

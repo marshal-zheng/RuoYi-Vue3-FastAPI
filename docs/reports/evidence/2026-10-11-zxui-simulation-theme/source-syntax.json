@@ -1,0 +1,109 @@
+{
+  "kind": "SFC parse and template compilation only; no lint, build, typecheck or automated tests",
+  "results": [
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/components/SimulationResultDialog.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/components/SimulationStatusPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmPanelFloating.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthChartPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthDashboard.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/DataInjectionPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/DeviceDetailPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/EdgeTooltip.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/EventFormDialog.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/EventTriggerPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardFloating.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultInjectorMenu.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/HealthCheckDialog.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/MessageDetailPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/MessageListPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/ProtocolAnalyzer.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SimulationAlarmPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SimulationBandwidthPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SimulationHeader.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SimulationMonitorPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SimulationSideDock.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/SkeletonLoader.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/components/TimingLatencyPanel.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/simulation/index.vue",
+      "errors": []
+    },
+    {
+      "file": "/Users/hqz/Downloads/element-plus/packages/components/floating-panel/src/floating-panel.vue",
+      "errors": []
+    }
+  ]
+}

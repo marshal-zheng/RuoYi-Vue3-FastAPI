@@ -114,6 +114,9 @@
 import { ref, watch, nextTick, onUnmounted } from 'vue';
 import { useDialog } from '@zxio/zxui';
 import * as echarts from 'echarts';
+import { useChartTheme } from '@/theme/useChartTheme';
+
+const { theme: chartTheme } = useChartTheme();
 
 defineEmits(['reopen']);
 
@@ -154,13 +157,13 @@ function initCharts() {
 
 // 带宽趋势图
 function initBandwidthChart() {
-  if (!bandwidthChartRef.value) return;
+  if (!bandwidthChartRef.value || !chartTheme.value) return;
 
   if (bandwidthChart) {
     bandwidthChart.dispose();
   }
 
-  bandwidthChart = echarts.init(bandwidthChartRef.value);
+  bandwidthChart = echarts.init(bandwidthChartRef.value, chartTheme.value);
 
   // 使用真实的带宽数据
   const rawBandwidthData = simulationResult.value?.bandwidthData || [];
@@ -204,9 +207,9 @@ function initBandwidthChart() {
   const option = {
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(15, 23, 42, 0.9)',
-      borderColor: '#334155',
-      textStyle: { color: '#e2e8f0' },
+      backgroundColor: chartTheme.value.backgroundColor,
+      borderColor: chartTheme.value.valueAxis.splitLine.lineStyle.color,
+      textStyle: { color: chartTheme.value.textStyle.color },
       formatter: (params) => {
         const data = params[0];
         return `${data.axisValue}<br/><span style="color:#3b82f6">●</span> 带宽: ${data.value.toFixed(2)} ${unit}`;
@@ -223,19 +226,19 @@ function initBandwidthChart() {
       type: 'category',
       boundaryGap: false,
       data: timeData,
-      axisLine: { lineStyle: { color: '#64748b' } },
-      axisLabel: { color: '#94a3b8' },
+      axisLine: { lineStyle: { color: chartTheme.value.valueAxis.axisLine.lineStyle.color } },
+      axisLabel: { color: chartTheme.value.legend.inactiveColor },
     },
     yAxis: {
       type: 'value',
       name: unit,
-      nameTextStyle: { color: '#94a3b8' },
-      axisLine: { lineStyle: { color: '#64748b' } },
+      nameTextStyle: { color: chartTheme.value.legend.inactiveColor },
+      axisLine: { lineStyle: { color: chartTheme.value.valueAxis.axisLine.lineStyle.color } },
       axisLabel: {
-        color: '#94a3b8',
+        color: chartTheme.value.legend.inactiveColor,
         formatter: (value) => value.toFixed(2),
       },
-      splitLine: { lineStyle: { color: '#334155', type: 'dashed' } },
+      splitLine: { lineStyle: { color: chartTheme.value.valueAxis.splitLine.lineStyle.color, type: 'dashed' } },
     },
     series: [
       {
@@ -260,13 +263,13 @@ function initBandwidthChart() {
 
 // 协议分布饼图
 function initProtocolChart() {
-  if (!protocolChartRef.value) return;
+  if (!protocolChartRef.value || !chartTheme.value) return;
 
   if (protocolChart) {
     protocolChart.dispose();
   }
 
-  protocolChart = echarts.init(protocolChartRef.value);
+  protocolChart = echarts.init(protocolChartRef.value, chartTheme.value);
 
   // 从真实报文数据统计协议分布
   const messageData = simulationResult.value?.messageData || [];
@@ -302,16 +305,16 @@ function initProtocolChart() {
   const option = {
     tooltip: {
       trigger: 'item',
-      backgroundColor: 'rgba(15, 23, 42, 0.9)',
-      borderColor: '#334155',
-      textStyle: { color: '#e2e8f0' },
+      backgroundColor: chartTheme.value.backgroundColor,
+      borderColor: chartTheme.value.valueAxis.splitLine.lineStyle.color,
+      textStyle: { color: chartTheme.value.textStyle.color },
       formatter: '{b}: {c} 条报文 ({d}%)',
     },
     legend: {
       orient: 'vertical',
       right: '5%',
       top: 'center',
-      textStyle: { color: '#64748b' },
+      textStyle: { color: chartTheme.value.textStyle.color },
     },
     series: [
       {
@@ -322,7 +325,7 @@ function initProtocolChart() {
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 8,
-          borderColor: '#fff',
+          borderColor: chartTheme.value.backgroundColor,
           borderWidth: 2,
         },
         label: {
@@ -345,6 +348,29 @@ function initProtocolChart() {
 
   protocolChart.setOption(option);
 }
+
+// Update existing instances without resetting data or legend selection on theme changes.
+watch(chartTheme, (theme) => {
+  if (!theme) return;
+  if (simulationTab.value === 'charts' && (!bandwidthChart || !protocolChart)) {
+    nextTick(initCharts);
+    return;
+  }
+  bandwidthChart?.setOption({
+    backgroundColor: theme.backgroundColor,
+    textStyle: theme.textStyle,
+    tooltip: theme.tooltip,
+    xAxis: theme.categoryAxis,
+    yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
+  });
+  protocolChart?.setOption({
+    backgroundColor: theme.backgroundColor,
+    textStyle: theme.textStyle,
+    tooltip: theme.tooltip,
+    legend: theme.legend,
+    series: [{ itemStyle: { borderColor: theme.backgroundColor } }],
+  });
+}, { flush: 'post' });
 
 function open(payload) {
   simulationResult.value = payload || null;
@@ -417,8 +443,8 @@ defineExpose({
 }
 
 .simulation-file__viewer {
-  background: #0f172a;
-  color: #e2e8f0;
+  background: var(--zx-semantic-surface-card-fill);
+  color: var(--zx-semantic-text-primary);
   padding: 12px;
   border-radius: 4px;
   max-height: 280px;
@@ -433,7 +459,7 @@ defineExpose({
 }
 
 .simulation-timeline__desc {
-  color: #606266;
+  color: var(--zx-semantic-surface-blocking-on-text-secondary);
   margin: 0;
   font-size: 12px;
 }
@@ -447,24 +473,24 @@ defineExpose({
 }
 
 .chart-section {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 12px;
   padding: 16px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--zx-semantic-border-default);
 }
 
 .chart-title {
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: var(--zx-semantic-surface-card-on-text);
   margin-bottom: 12px;
   padding-left: 8px;
-  border-left: 3px solid #3b82f6;
+  border-left: 3px solid var(--zx-semantic-accent-base);
 }
 
 .chart-box {
   height: 260px;
-  background: #fff;
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 8px;
 }
 </style>

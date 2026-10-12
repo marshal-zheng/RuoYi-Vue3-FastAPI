@@ -141,13 +141,13 @@ function setLayout() {
   --top-header-menu-active-bg: var(--zx-semantic-fill-selected);
 
   --top-header-breadcrumb-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-breadcrumb-hover-color: var(--zx-semantic-accent-base);
+  --top-header-breadcrumb-hover-color: var(--zx-semantic-surface-header-on-text);
   --top-header-breadcrumb-separator-color: var(--zx-semantic-surface-header-on-text-secondary);
 
   --top-header-avatar-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
-  --top-header-avatar-icon-hover-color: var(--zx-semantic-accent-base);
+  --top-header-avatar-icon-hover-color: var(--zx-semantic-surface-header-on-text);
   --top-header-avatar-text-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-avatar-text-hover-color: var(--zx-semantic-accent-base);
+  --top-header-avatar-text-hover-color: var(--zx-semantic-surface-header-on-text);
   --top-header-avatar-bg-hover: @on-surface-tint;
 
   --logo-title-text-color: var(--zx-semantic-surface-header-on-text);

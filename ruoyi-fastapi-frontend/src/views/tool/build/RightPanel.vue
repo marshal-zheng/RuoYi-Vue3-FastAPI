@@ -824,9 +824,9 @@ function tagChange(tagIcon) {
     width: 16px;
     height: 16px;
     line-height: 16px;
-    background: rgba(0, 0, 0, .2);
+    background: var(--zx-semantic-fill-subtle);
     border-radius: 50%;
-    color: #fff;
+    color: var(--zx-semantic-text-primary);
     z-index: 1;
     cursor: pointer;
     font-size: 12px;
@@ -835,12 +835,12 @@ function tagChange(tagIcon) {
 
 .select-item {
   display: flex;
-  border: 1px dashed #fff;
+  border: 1px dashed transparent;
   box-sizing: border-box;
 
   & .close-btn {
     cursor: pointer;
-    color: #f56c6c;
+    color: var(--zx-semantic-status-danger-on-surface);
   }
 
   & .el-input+.el-input {
@@ -853,14 +853,14 @@ function tagChange(tagIcon) {
 }
 
 .select-item.sortable-chosen {
-  border: 1px dashed var(--el-color-primary, #0052d9);
+  border: 1px dashed var(--zx-semantic-accent-base);
 }
 
 .select-line-icon {
   line-height: 32px;
   font-size: 22px;
   padding: 0 4px;
-  color: #777;
+  color: var(--zx-semantic-text-secondary);
 }
 
 .option-drag {
@@ -887,12 +887,12 @@ function tagChange(tagIcon) {
   top: 0;
   left: 0;
   cursor: pointer;
-  background: var(--el-color-primary, #0052d9);
+  background: var(--zx-semantic-accent-base);
   z-index: 1;
   border-radius: 0 0 6px 0;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  color: var(--zx-semantic-accent-on-fill);
   font-size: 18px;
 }
 
@@ -901,7 +901,7 @@ function tagChange(tagIcon) {
 }
 
 .node-icon {
-  color: #bebfc3;
+  color: var(--zx-semantic-text-secondary);
 }
 
 .custom-tree-node {

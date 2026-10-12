@@ -10,8 +10,8 @@
     >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="primary"
               icon="Plus"
@@ -41,9 +41,9 @@
               v-hasPermi="['protocol:remove']"
               >批量删除</ZxButton
             >
-          </div>
+          </template>
 
-          <div class="zx-grid-form-bar__filters">
+          <template #filters>
             <ProtocolTypeSelector
               v-model="query.protocolType"
               placeholder="请选择协议类型"
@@ -61,9 +61,9 @@
               style="width: 240px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
+          </template>
 
-          <div class="zx-grid-form-bar__right">
+          <template #search>
             <ZxSearch
               v-model="query.protocolName"
               placeholder="搜索协议名称"
@@ -72,8 +72,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <!-- 表格内容 -->
@@ -353,10 +353,11 @@ async function doImportFiles(fileList) {
 
 <style scoped>
 .link-type {
-  color: #409eff;
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
   cursor: pointer;
 }
 .link-type:hover {
-  color: #66b1ff;
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
+  text-decoration: underline;
 }
 </style>

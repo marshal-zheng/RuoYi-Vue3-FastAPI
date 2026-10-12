@@ -5,8 +5,7 @@
     :size="size"
     :collapsed-size="collapsedSize"
     :default-collapsed="defaultCollapsed"
-    class="floating-panel shadow-lg"
-    theme="dark"
+    class="floating-panel"
   >
     <template #header>
       <div class="panel-header">
@@ -96,14 +95,14 @@ function updateTrend(val) {
 
 .panel-title .title-text {
   font-weight: 600;
-  color: #e2e8f0;
+  color: var(--zx-semantic-text-primary);
 }
 
 .panel-actions .view-toggle {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #94a3b8;
+  color: var(--zx-semantic-text-secondary);
   font-size: 12px;
 }
 
@@ -122,6 +121,6 @@ function updateTrend(val) {
 }
 
 .floating-panel {
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid color-mix(in srgb, var(--zx-semantic-border-default) 15%, transparent);
 }
 </style>

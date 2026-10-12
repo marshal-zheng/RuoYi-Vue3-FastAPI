@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full text-slate-300">
+  <div class="flex flex-col h-full text-zx-text-secondary">
     <!-- 工具栏 -->
     <div class="pro-card-header flex items-center gap-2 px-3 py-2 flex-nowrap overflow-x-auto">
       <ProtocolTypeSelector
@@ -72,7 +72,7 @@
       >
         <div class="advanced-search__panel">
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs text-slate-400">报文/字段多条件检索</span>
+            <span class="text-xs text-zx-text-secondary">报文/字段多条件检索</span>
             <el-select
               v-model="conditionLogic"
               size="small"
@@ -150,7 +150,7 @@
                   class="!w-24 sim-input-dark"
                   @input="handleAdvancedChange"
                 />
-                <span class="text-xs text-slate-400">~</span>
+                <span class="text-xs text-zx-text-secondary">~</span>
                 <el-input
                   v-model.number="cond.max"
                   size="small"
@@ -158,7 +158,7 @@
                   class="!w-24 sim-input-dark"
                   @input="handleAdvancedChange"
                 />
-                <span class="text-xs text-slate-500">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
+                <span class="text-xs text-zx-text-secondary">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
               </template>
 
               <template v-else>
@@ -174,7 +174,7 @@
               <el-button
                 circle
                 size="small"
-                class="sim-btn-dark !border-slate-700"
+                class="sim-btn-dark !border-zx-border-default"
                 @click="removeCondition(cond.id)"
               >
                 <el-icon><Close /></el-icon>
@@ -182,7 +182,7 @@
             </div>
           </div>
           <div class="mt-3 flex items-center justify-between">
-            <div class="flex items-center gap-2 text-xs text-slate-500">
+            <div class="flex items-center gap-2 text-xs text-zx-text-secondary">
               <el-button text size="small" type="primary" @click="addCondition">
                 新增条件
               </el-button>
@@ -200,7 +200,7 @@
           :type="activeConditionCount ? 'primary' : 'default'"
         >
           多条件检索
-          <span v-if="activeConditionCount" class="ml-1 text-primary-300">
+          <span v-if="activeConditionCount" class="ml-1 text-zx-accent-on-surface">
             ({{ activeConditionCount }})
           </span>
         </el-button>
@@ -233,7 +233,7 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <span class="text-xs text-slate-500 flex-shrink-0 ml-auto"
+      <span class="text-xs text-zx-text-secondary flex-shrink-0 ml-auto"
         >共 {{ filteredMessages.length }} 条</span
       >
     </div>
@@ -264,7 +264,7 @@
         :row-class="getRowClass"
         @row-click="handleRowClick"
       />
-      <div v-else class="flex flex-col items-center justify-center h-full text-slate-500">
+      <div v-else class="flex flex-col items-center justify-center h-full text-zx-text-secondary">
         <el-icon class="text-5xl mb-3"><Document /></el-icon>
         <span class="text-sm">暂无报文数据</span>
       </div>
@@ -273,10 +273,10 @@
     <!-- 报文详情 -->
     <div
       v-if="selectedMessage"
-      class="border-t border-slate-700/50 max-h-28 overflow-y-auto bg-slate-900/50"
+      class="border-t border-zx-border-default/50 max-h-28 overflow-y-auto bg-zx-surface-canvas-fill/50"
     >
       <div
-        class="pro-card-header flex justify-between items-center text-xs font-semibold text-slate-300"
+        class="pro-card-header flex justify-between items-center text-xs font-semibold text-zx-text-secondary"
       >
         <span>报文详情</span>
         <el-button :icon="Close" circle size="small" @click="selectedMessage = null" />
@@ -286,15 +286,15 @@
           <span
             v-for="(byte, index) in parseHex(selectedMessage.payloadHex)"
             :key="index"
-            class="px-1 py-0.5 bg-slate-800 rounded text-xs font-mono text-slate-300"
+            class="px-1 py-0.5 bg-zx-surface-card-fill rounded text-xs font-mono text-zx-text-secondary"
           >
             {{ byte }}
           </span>
         </div>
         <div v-if="selectedMessage.fieldValues" class="flex flex-wrap gap-4">
           <div v-for="(value, key) in selectedMessage.fieldValues" :key="key" class="text-xs">
-            <span class="text-slate-500 mr-1">{{ key }}:</span>
-            <span class="text-primary-400 font-medium">{{ value }}</span>
+            <span class="text-zx-text-secondary mr-1">{{ key }}:</span>
+            <span class="text-zx-accent-on-surface font-medium">{{ value }}</span>
           </div>
         </div>
       </div>
@@ -832,77 +832,53 @@ onBeforeUnmount(() => {
 
 <style scoped>
 :deep(.el-table-v2__header) {
-  background-color: var(--sim-fill-light, rgba(30, 41, 59, 0.85));
-  color: var(--sim-text-tertiary, #94a3b8);
+  background-color: var(--sim-fill-light, var(--zx-semantic-surface-panel-fill));
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 
 :deep(.el-table-v2__row) {
   font-size: 12px;
   font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Courier New', monospace;
   cursor: pointer;
-  color: var(--sim-text-secondary, #cbd5e1);
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
   background-color: transparent;
   transition: background 0.15s ease;
 }
 
 :deep(.el-table-v2__row:hover) {
-  background-color: var(--sim-bg-hover, rgba(51, 65, 85, 0.35));
+  background-color: var(--sim-bg-hover, color-mix(in srgb, var(--zx-semantic-border-default) 35%, transparent));
 }
 
 :deep(.protocol-analyzer__row--selected) {
-  background-color: var(--sim-accent-bg, rgba(34, 211, 238, 0.12));
+  background-color: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
   border-left: 2px solid var(--sim-accent, #22d3ee);
 }
 
 :deep(.protocol-analyzer__row--error) {
   background-color: var(--sim-danger-bg, rgba(239, 68, 68, 0.12));
-  color: #fca5a5;
+  color: var(--zx-semantic-status-danger-on-surface);
   border-left: 2px solid var(--sim-danger, #ef4444);
 }
 
-/* 表单控件已通过全局 simulation-dark 类统一样式 */
-:deep(.el-checkbox__input) {
-  border-color: var(--sim-text-primary, #f1f5f9) !important;
-}
-
-:deep(.el-checkbox__inner) {
-  border-color: var(--sim-border-hover, rgba(71, 85, 105, 0.8)) !important;
-  background-color: transparent !important;
-}
-
-:deep(.el-checkbox__input.is-checked .el-checkbox__inner),
-:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
-  background-color: var(--sim-accent, #22d3ee) !important;
-  border-color: var(--sim-accent, #22d3ee) !important;
-}
-
-:deep(.el-checkbox__input.is-checked .el-checkbox__inner::after),
-:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner::after) {
-  border-color: var(--sim-bg-main, #0b1220) !important;
-}
-
-:deep(.el-checkbox__label) {
-  color: var(--sim-text-regular, #e2e8f0) !important;
-  font-size: 13px;
-}
+/* Native control appearance is owned by the Host Element Plus adapter. */
 
 .pro-card-header {
-  color: var(--sim-text-regular, #e2e8f0);
+  color: var(--sim-text-regular, var(--zx-semantic-text-primary));
 }
 
 :deep(.sim-input-dark .el-input__inner),
 :deep(.sim-select-dark .el-select__placeholder),
 :deep(.sim-select-dark .el-select__selected-item) {
-  color: var(--sim-text-regular, #e2e8f0);
+  color: var(--sim-text-regular, var(--zx-semantic-text-primary));
 }
 
 :deep(.sim-input-dark input::placeholder) {
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 
 .highlight-token {
-  background: var(--sim-accent-bg, rgba(34, 211, 238, 0.18));
-  color: var(--sim-text-primary, #f1f5f9);
+  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent));
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
   padding: 0 2px;
   border-radius: 2px;
 }

@@ -1,102 +1,9 @@
 /* Compiled inside tailwind.css, after its single Tailwind import. */
 
-/* 1) Tailwind v4 主题变量：自动生成同名颜色类 */
-@theme {
-  /* 主色（对齐 RuoYi-Vue3 企业级主题） */
-  --color-primary-50:  #e6f0ff;
-  --color-primary-100: #b3ccff;
-  --color-primary-200: #99b5ff;
-  --color-primary-300: #6690ff;
-  --color-primary-400: #4d7dff;
-  --color-primary-500: #0052d9;
-  --color-primary-600: #0045bf;
-  --color-primary-700: #003ba8;
-  --color-primary-800: #002e85;
-  --color-primary-900: #00215f;
-
-  /* 功能色 - Success */
-  --color-success-50:  #f0f9ff;
-  --color-success-100: #e0f2fe;
-  --color-success-200: #bae6fd;
-  --color-success-300: #7dd3fc;
-  --color-success-400: #38bdf8;
-  --color-success-500: #67c23a;
-  --color-success-600: #0284c7;
-  --color-success-700: #0369a1;
-  --color-success-800: #075985;
-  --color-success-900: #0c4a6e;
-
-  /* 功能色 - Warning */
-  --color-warning-50:  #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-200: #fde68a;
-  --color-warning-300: #fcd34d;
-  --color-warning-400: #fbbf24;
-  --color-warning-500: #e6a23c;
-  --color-warning-600: #d97706;
-  --color-warning-700: #b45309;
-  --color-warning-800: #92400e;
-  --color-warning-900: #78350f;
-
-  /* 功能色 - Danger */
-  --color-danger-50:  #fef2f2;
-  --color-danger-100: #fee2e2;
-  --color-danger-200: #fecaca;
-  --color-danger-300: #fca5a5;
-  --color-danger-400: #f87171;
-  --color-danger-500: #f56c6c;
-  --color-danger-600: #dc2626;
-  --color-danger-700: #b91c1c;
-  --color-danger-800: #991b1b;
-  --color-danger-900: #7f1d1d;
-
-  /* 功能色 - Info */
-  --color-info-50:  #f8fafc;
-  --color-info-100: #f1f5f9;
-  --color-info-200: #e2e8f0;
-  --color-info-300: #a8abb2;
-  --color-info-400: #888b97;
-  --color-info-500: #909399;
-  --color-info-600: #606266;
-  --color-info-700: #464c5b;
-  --color-info-800: #2d3748;
-  --color-info-900: #1a202c;
-
-  /* 灰阶（对齐 EP 的文本/边框语义） */
-  --color-gray-50:  #fafafa;
-  --color-gray-100: #f5f5f5;
-  --color-gray-200: #ebeef5;
-  --color-gray-300: #dcdfe6;
-  --color-gray-400: #c0c4cc;
-  --color-gray-500: #909399;
-  --color-gray-600: #606266;
-  --color-gray-700: #464c5b;
-  --color-gray-800: #303133;
-  --color-gray-900: #1d1e1f;
-
-  /* 表面/背景 */
-  --color-surface:   #ffffff;
-  --color-surface-2: #f8f9fa;
-  --color-overlay:   #ffffff;
-}
-
-/* 2) 默认/暗黑主题赋值 + 一次性映射到 Element Plus */
+/* Application layout and legacy aliases. Values resolve at each Host scope. */
 @layer theme {
-  :root {
-    /* Element Plus 变量映射：与 Tailwind 同源 */
-
-    /* 背景颜色（对齐参考主题） */
-
-    /* 文字颜色（对齐参考主题） */
-
-    /* 边框颜色（对齐参考主题） */
-
-    /* 填充颜色（对齐参考主题） */
-
-    /* 可选：圆角/阴影（强制直角） */
-
-    /* 过渡动画 */
-
+  :root,
+  [data-zx-theme][data-zx-variant] {
     /* Layout and component variables */
     --sidebar-width: 200px;
     --base-sidebar-width: 200px;
@@ -106,7 +13,7 @@
     /* Component-specific variables that extend Element Plus */
     --navbar-bg: var(--el-bg-color);
     --navbar-text: var(--el-text-color-primary);
-    --navbar-hover: rgba(0, 0, 0, 0.1);
+    --navbar-hover: var(--zx-semantic-fill-hover);
     --sidebar-bg: var(--el-bg-color);
     --sidebar-text: var(--el-text-color-regular);
     --sidebar-active-bg: var(--el-color-primary-light-9);
@@ -119,7 +26,7 @@
     --splitpanes-border: var(--el-border-color);
     --splitpanes-splitter-bg: var(--el-border-color-light);
     --splitpanes-splitter-hover-bg: var(--el-border-color);
-    --splitpanes-default-bg: #141414;
+    --splitpanes-default-bg: var(--zx-semantic-surface-panel-fill);
     
     /* TagsView variables */
     --tags-bg: var(--el-bg-color);
@@ -127,161 +34,73 @@
     --tags-item-text: var(--el-text-color-regular);
     --tags-item-border: var(--el-border-color-light);
     --tags-item-hover: var(--el-fill-color-light);
-    --tags-close-hover: rgba(0, 0, 0, 0.1);
+    --tags-close-hover: var(--zx-semantic-fill-hover);
 
     /* Logo variables - Logo 相关样式 */
     --logo-height: 50px;
-    --logo-title-text-color: #f0f4ff;
-    --logo-title-text-hover-color: #ffffff;
     --logo-title-font-size: 13px;
     --logo-title-font-weight: 600;
 
-    /* Top Header/Navbar variables - 顶部导航栏样式 */
+    /* Navigation geometry; colours come from the ZXUI surface roles. */
     --top-header-height: 50px;
-    --top-header-bg: linear-gradient(90deg, hsl(223, 95%, 56%) 0%, hsl(223, 95%, 82%) 100%);
-    --top-header-shadow: 0 2px 8px rgba(17, 40, 84, 0.12);
-    --top-header-text-color: #1d2129;
-    --top-header-icon-color: #5a5e66;
-    --top-header-icon-hover-color: var(--el-color-primary);
-    --top-header-hover-bg: rgba(0, 0, 0, 0.025);
-    
-    /* Hamburger - 左侧展开收起按钮（深蓝背景上） */
-    --top-header-hamburger-color: rgba(255, 255, 255, 0.95);
-    --top-header-hamburger-hover-color: #ffffff;
-    --top-header-hamburger-hover-bg: rgba(255, 255, 255, 0.1);
-    --top-header-menu-hover-bg: rgba(255, 255, 255, 0.18);
-    --top-header-menu-active-bg: rgba(255, 255, 255, 0.28);
-    --top-header-breadcrumb-color: rgba(255, 255, 255, 0.95);
-    --top-header-breadcrumb-hover-color: #ffffff;
-    --top-header-breadcrumb-separator-color: rgba(255, 255, 255, 0.6);
-    
-    /* Avatar wrapper - 右侧用户头像区域（浅蓝背景上） */
-    --top-header-avatar-icon-color: #2b6df8;
-    --top-header-avatar-icon-hover-color: #0045bf;
-    --top-header-avatar-text-color: #1d2129;
-    --top-header-avatar-text-font-weight: 500;
-    --top-header-avatar-text-hover-color: #2b6df8;
-    --top-header-avatar-bg-hover: rgba(43, 109, 248, 0.08);
-
-    /* Sidebar Menu variables - 优化的侧边栏样式 */
-    --left-menu-max-width: 200px;
     --left-menu-min-width: 64px;
-    --left-menu-bg-color: linear-gradient(
-      to bottom,
-      #f6f8fc 0%,
-      #eef1f6 35%,
-      #e4e8ef 100%
-    );
-    
-    --left-menu-bg-light-color: #eef2fa;
-    --left-menu-bg-active-color: rgba(100, 149, 255, 0.20);
-    --left-menu-hover-bg-color: rgba(100, 149, 255, 0.20);
-    --left-menu-text-color: #1f2a37;
-    --left-menu-text-active-color: #1e5eff;
-    --left-menu-collapse-bg-active-color: rgba(100, 149, 255, 0.20);
-    --left-menu-border-color: #d9e2f4;
     --left-menu-active-bar-width: 4px;
-    --left-menu-active-shadow: 0 6px 16px rgba(16, 59, 156, 0.12);
-    --left-menu-indent-color: rgba(79, 117, 191, 0.28);
-    --left-menu-header-bg: linear-gradient(135deg, #0f1f3a 0%, #1f4db8 52%, #2b6df8 100%);
-    --left-menu-header-shadow: none;
-    --left-menu-box-shadow: 0 12px 30px rgba(17, 40, 84, 0.08);
     --left-menu-item-radius: 10px;
-    --left-menu-submenu-bg-color: transparent;
-    --left-menu-submenu-text-color: #1f2a37;
-    --left-menu-submenu-hover-bg-color: rgba(43, 109, 248, 0.04);
 
     --app-footer-height: 0px;
     --app-content-padding: 20px;
-    --app-content-bg-color: #f5f7fa;
+    --app-content-bg-color: var(--zx-semantic-surface-page);
     --transition-time-02: 0.2s;
-    --app-table-header-bg: #f7f8fa;
-    --app-table-header-color: #1d2129;
+    --app-table-header-bg: var(--zx-semantic-surface-header-fill);
+    --app-table-header-color: var(--zx-semantic-surface-header-on-text);
     
     /* content card */
-    --app-card-radius: 0;
-    --app-card-shadow: 0 10px 24px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
+    --app-card-radius: var(--zx-semantic-radius-surface);
+    --app-card-shadow: var(--zx-semantic-surface-card-depth);
     --app-card-border: 1px solid var(--el-border-color-light);
   }
 
   /* Dark mode comes from the ZXUI variant on the theme scope, which also sets
      `color-scheme`; Tailwind's gray palette is not re-mapped per mode. */
 
-
  }
-
-/* Export variables for JavaScript usage */
-:export {
-  /* Layout variables */
-  sideBarWidth: var(--sidebar-width);
-  
-  /* Theme colors */
-  blue: var(--blue-600);
-  lightBlue: var(--slate-600);
-  red: var(--red-600);
-  pink: var(--pink-600);
-  green: var(--green-600);
-  tiffany: var(--cyan-600);
-  yellow: var(--yellow-600);
-  panGreen: var(--green-600);
-  colorPrimary: var(--blue-600);
-  colorSuccess: var(--green-600);
-  colorWarning: var(--yellow-600);
-  colorDanger: var(--red-600);
-  colorInfo: var(--gray-600);
-  
-  /* Menu variables */
-  menuText: var(--el-text-color-regular);
-  menuActiveText: var(--el-color-primary);
-  menuBg: var(--el-bg-color);
-  menuHover: var(--el-bg-color-overlay);
-  menuLightBg: var(--el-bg-color);
-  menuLightHover: var(--el-bg-color-overlay);
-  menuLightText: var(--el-text-color-primary);
-  menuLightActiveText: var(--el-color-primary);
-}
 
 /* 3) 语义组件类 - Tailwind v4 CSS-first 方案 */
 @layer components {
   /* 主题卡片组件 */
   .theme-card {
-    @apply bg-[--el-bg-color] border border-[--el-border-color-light] rounded-[4px] shadow-[var(--el-box-shadow-light)] transition;
-  }
-  
-  /* Element Plus 兼容组件类 */
-  .el-card {
-    @apply bg-[--el-bg-color] border border-[--el-border-color-light] rounded-[4px] shadow-[var(--el-box-shadow-light)];
+    @apply bg-zx-surface-card-fill text-zx-surface-card-on-text border border-zx-border-default rounded-zx-surface shadow-zx-surface-card-depth transition;
   }
   
   /* 主题按钮组件 */
   .theme-button {
-    @apply rounded-[4px] font-medium transition border;
+    @apply rounded-zx-control font-medium transition border;
   }
   
   /* Element Plus 按钮变体 */
   .el-button-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white border-primary-500 hover:border-primary-600;
+    @apply bg-zx-accent text-zx-accent-on-fill border-transparent hover:bg-zx-accent-tint-3 hover:text-zx-accent-on-fill-hover;
   }
   
   .el-button-success {
-    @apply bg-success-500 hover:bg-success-600 text-white border-success-500 hover:border-success-600;
+    @apply bg-zx-success text-zx-status-success-on-fill border-transparent hover:bg-zx-status-success-tint-3 hover:text-zx-status-success-on-fill-hover;
   }
   
   .el-button-warning {
-    @apply bg-warning-500 hover:bg-warning-600 text-white border-warning-500 hover:border-warning-600;
+    @apply bg-zx-warning text-zx-status-warning-on-fill border-transparent hover:bg-zx-status-warning-tint-3 hover:text-zx-status-warning-on-fill-hover;
   }
   
   .el-button-danger {
-    @apply bg-danger-500 hover:bg-danger-600 text-white border-danger-500 hover:border-danger-600;
+    @apply bg-zx-danger text-zx-status-danger-on-fill border-transparent hover:bg-zx-status-danger-tint-3 hover:text-zx-status-danger-on-fill-hover;
   }
   
   .el-button-info {
-    @apply bg-info-500 hover:bg-info-600 text-white border-info-500 hover:border-info-600;
+    @apply bg-zx-info text-zx-status-info-on-fill border-transparent hover:bg-zx-status-info-tint-3 hover:text-zx-status-info-on-fill-hover;
   }
   
   /* 主题输入框组件 */
   .theme-input {
-    @apply px-3 py-2 border border-[--el-border-color] rounded-[4px] bg-[--el-bg-color] text-[--el-text-color-primary] transition;
+    @apply px-3 py-2 border border-zx-border-control rounded-zx-control bg-zx-surface-field-fill text-zx-surface-field-on-text transition;
   }
 
   /* Triangle utilities - CSS border-based shapes */
@@ -336,52 +155,28 @@
 
   /* Triangle color variants using theme colors */
   .triangle-primary {
-    color: var(--color-primary);
+    color: var(--zx-semantic-accent-on-surface);
   }
 
   .triangle-success {
-    color: var(--color-success);
+    color: var(--zx-semantic-status-success-on-surface);
   }
 
   .triangle-warning {
-    color: var(--color-warning);
+    color: var(--zx-semantic-status-warning-on-surface);
   }
 
   .triangle-danger {
-    color: var(--color-danger);
+    color: var(--zx-semantic-status-danger-on-surface);
   }
 
   .triangle-info {
-    color: var(--color-info);
+    color: var(--zx-semantic-status-info-on-surface);
   }
 
-  /* Modern button components using Tailwind utilities */
-  .btn-base {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
-  }
-
-  .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500;
-  }
-
-  .btn-secondary {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-500;
-  }
-
-  .btn-success {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
-  }
-
-  .btn-warning {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500;
-  }
-
-  .btn-danger {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-transparent transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
-  }
-
+  /* Shared button base/variants are defined once in tailwind.css. */
   .btn-outline {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-current transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent text-current hover:bg-current hover:text-white;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md border border-current transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed bg-transparent text-current hover:bg-zx-fill-hover;
   }
 
   /* Button size variants */
@@ -399,11 +194,11 @@
 
   /* Animated color buttons with border effects */
   .color-btn {
-    @apply relative inline-block px-9 py-3.5 text-white text-sm rounded-lg border-none outline-none transition-all duration-[600ms] overflow-hidden;
+    @apply relative inline-block px-9 py-3.5 bg-zx-accent text-zx-accent-on-fill text-sm rounded-lg border-none outline-none transition-all duration-[600ms] overflow-hidden;
   }
 
   .color-btn:hover {
-    @apply bg-white;
+    @apply bg-zx-accent-tint-3 text-zx-accent-on-fill-hover;
   }
 
   .color-btn::before,
@@ -427,7 +222,7 @@
 
   /* Custom scrollbar styles - Tailwind doesn't provide scrollbar utilities */
   .custom-scrollbar::-webkit-scrollbar-track-piece {
-    background: #d3dce6;
+    background: var(--zx-semantic-fill-scrollbar-track);
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -435,7 +230,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #99a9bf;
+    background: var(--zx-semantic-fill-scrollbar-thumb);
     border-radius: 20px;
   }
 }

@@ -5,9 +5,18 @@
       v-if="!portList || portList.length === 0"
       class="flex flex-col items-center justify-center px-5 py-16 text-center"
     >
-      <el-icon class="text-5xl text-gray-300 mb-4"><Box /></el-icon>
-      <div class="text-base font-medium text-gray-500 mb-2">暂无端口数据</div>
-      <div class="text-sm text-gray-400">请先添加设备端口</div>
+      <el-icon
+        class="text-5xl text-[var(--sim-text-disabled,var(--zx-semantic-text-disabled))] mb-4"
+        ><Box
+      /></el-icon>
+      <div
+        class="text-base font-medium text-[var(--sim-text-secondary,var(--zx-semantic-text-secondary))] mb-2"
+      >
+        暂无端口数据
+      </div>
+      <div class="text-sm text-[var(--sim-text-tertiary,var(--zx-semantic-text-secondary))]">
+        请先添加设备端口
+      </div>
     </div>
 
     <!-- 按总线类型分组展示协议 -->
@@ -442,80 +451,76 @@ defineExpose({
 </script>
 
 <style lang="less" scoped>
-@import (reference) '../simulation/styles/variables.css';
+// Simulation scopes keep their own variables; other consumers inherit ZXUI.
 
 .node-group-card {
-  background: var(--sim-bg-panel, #0f172a);
-  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  background: var(--sim-bg-panel, var(--zx-semantic-surface-card-fill));
+  border: 1px solid var(--sim-border-base, var(--zx-semantic-border-default));
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: var(--sim-shadow-md, 0 8px 16px rgba(0, 0, 0, 0.4));
+  box-shadow: var(--sim-shadow-md, var(--zx-semantic-surface-card-depth));
 }
 
 .node-group-header {
-  background: linear-gradient(
-    135deg,
-    var(--sim-accent-bg, rgba(34, 211, 238, 0.1)),
-    rgba(45, 212, 191, 0.12)
-  );
-  border-bottom: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.25));
-  color: var(--sim-text-primary, #f1f5f9);
+  background: var(--sim-accent-bg, var(--zx-semantic-surface-header-fill));
+  border-bottom: 1px solid var(--sim-border-accent, var(--zx-semantic-border-default));
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 }
 
 .node-group-title {
-  color: var(--sim-text-primary, #f1f5f9);
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 }
 
 .node-group-arrow {
-  color: var(--sim-text-secondary, #cbd5e1);
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
 }
 
 .node-group-chip {
-  background: var(--sim-bg-main, #0b1220);
-  border: 1px solid var(--sim-border-light, rgba(51, 65, 85, 0.3));
-  color: var(--sim-text-secondary, #cbd5e1);
+  background: var(--sim-bg-main, var(--zx-semantic-surface-canvas-fill));
+  border: 1px solid var(--sim-border-light, var(--zx-semantic-border-subtle));
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
 }
 
 .node-group-count {
-  background: rgba(34, 211, 238, 0.08);
-  border: 1px solid var(--sim-border-accent, rgba(34, 211, 238, 0.25));
-  color: var(--sim-accent, #22d3ee);
+  background: var(--sim-accent-bg, var(--zx-semantic-fill-selected));
+  border: 1px solid var(--sim-border-accent, var(--zx-semantic-border-default));
+  color: var(--sim-accent, var(--zx-semantic-accent-base));
 }
 
 .node-protocol-list {
-  background: var(--sim-bg-main, #0b1220);
+  background: var(--sim-bg-main, var(--zx-semantic-surface-canvas-fill));
 }
 
 .node-empty-tip {
-  color: var(--sim-text-tertiary, #94a3b8);
+  color: var(--sim-text-tertiary, var(--zx-semantic-text-secondary));
 }
 
 .node-protocol-card {
-  background: var(--sim-fill-light, rgba(15, 23, 42, 0.8));
-  border: 1px solid var(--sim-border-base, rgba(51, 65, 85, 0.5));
+  background: var(--sim-fill-light, var(--zx-semantic-surface-card-fill));
+  border: 1px solid var(--sim-border-base, var(--zx-semantic-border-default));
   border-radius: 10px;
-  color: var(--sim-text-primary, #f1f5f9);
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 
   &:hover {
-    border-color: var(--sim-border-hover, rgba(71, 85, 105, 0.8));
-    box-shadow: var(--sim-shadow-glow-accent, 0 0 20px rgba(34, 211, 238, 0.3));
+    border-color: var(--sim-border-hover, var(--zx-semantic-border-strong));
+    box-shadow: var(--sim-shadow-glow-accent, var(--zx-semantic-surface-card-depth));
   }
 }
 
 .node-protocol-icon {
-  background: rgba(34, 211, 238, 0.15);
-  color: var(--sim-accent, #22d3ee);
+  background: var(--sim-accent-bg, var(--zx-semantic-fill-selected));
+  color: var(--sim-accent, var(--zx-semantic-accent-base));
 }
 
 .node-protocol-title {
-  color: var(--sim-text-primary, #f1f5f9);
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 }
 
 .node-protocol-arrow {
-  color: var(--sim-text-secondary, #cbd5e1);
+  color: var(--sim-text-secondary, var(--zx-semantic-text-secondary));
 
   .group:hover & {
-    color: var(--sim-accent, #22d3ee);
+    color: var(--sim-accent, var(--zx-semantic-accent-base));
   }
 }
 </style>

@@ -8,8 +8,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="primary"
               icon="Plus"
@@ -48,8 +48,8 @@
               style="display: none"
               @change="handleImportFileChange"
             />
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD"
@@ -63,8 +63,8 @@
                   onFilterChange('dateRange', v, { handleRefresh, updateState })
               "
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.projectName"
               placeholder="搜索工程名称"
@@ -73,8 +73,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">
@@ -89,17 +89,11 @@
               :data-testid="`project-card-${project.projectId}`"
               shadow="hover"
               :body-style="{ padding: '0' }"
-              :class="{
-                'border-[#0052d9] shadow-[0_0_0_2px_rgba(0,82,217,0.1)]':
-                  ids.includes(project.projectId),
-                'hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)]': !ids.includes(
-                  project.projectId,
-                ),
-              }"
+              :class="{ 'project-card--selected': ids.includes(project.projectId) }"
             >
               <div
                 v-if="ids.includes(project.projectId)"
-                class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0052d9] to-[#3370ff]"
+                class="project-card__selection-bar absolute top-0 left-0 right-0 h-0.5"
               />
               <template #header>
                 <div class="flex items-start justify-between gap-3">
@@ -112,21 +106,21 @@
                     />
                     <div class="flex-1 min-w-0">
                       <h3
-                        class="text-base font-semibold text-[#1d2129] truncate mb-1 leading-tight"
+                        class="project-card__title text-base font-semibold truncate mb-1 leading-tight"
                       >
                         <router-link
                           :to="
                             '/project/project-detail/index/' + project.projectId
                           "
                           :data-testid="`project-detail-link-${project.projectId}`"
-                          class="hover:text-[#0052d9] transition-colors no-underline"
+                          class="project-card__link transition-colors no-underline"
                           @click.stop
                         >
                           {{ project.projectName }}
                         </router-link>
                       </h3>
-                      <p class="text-xs text-[#86909c] flex items-center gap-1">
-                        <ZxIcon icon="Tickets" :size="14" color="#86909c" />
+                      <p class="project-card__muted text-xs flex items-center gap-1">
+                        <ZxIcon icon="Tickets" :size="14" />
                         <span>编号: {{ project.projectId }}</span>
                       </p>
                     </div>
@@ -137,7 +131,7 @@
                       icon="View"
                       :size="16"
                       tooltip="查看详情"
-                      class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                      class="project-card__action p-1.5 cursor-pointer rounded transition-colors stroke-[2]"
                       @click.stop="handleDetail(project)"
                     />
                     <span
@@ -153,7 +147,7 @@
                         icon="Edit"
                         :size="16"
                         tooltip="编辑工程"
-                        class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                        class="project-card__action p-1.5 cursor-pointer rounded transition-colors stroke-[2]"
                       />
                     </span>
                     <ZxIcon
@@ -161,7 +155,7 @@
                       icon="Download"
                       :size="16"
                       tooltip="导出工程"
-                      class="p-1.5 cursor-pointer rounded hover:bg-gray-100 text-[#86909c] hover:text-[#0052d9] transition-colors stroke-[2]"
+                      class="project-card__action p-1.5 cursor-pointer rounded transition-colors stroke-[2]"
                       @click.stop="handleExport(project)"
                     />
                   </div>
@@ -176,7 +170,7 @@
               <div class="px-5 py-4">
                 <div class="mb-4">
                   <div
-                    class="text-[#4e5969] text-[13px] leading-relaxed line-clamp-2 min-h-[40px]"
+                    class="project-card__muted text-[13px] leading-relaxed line-clamp-2 min-h-[40px]"
                   >
                     {{ project.projectDesc || "暂无工程描述信息" }}
                   </div>
@@ -185,23 +179,23 @@
                 <div class="space-y-2.5 mb-4">
                   <div class="flex items-center text-xs">
                     <div
-                      class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0"
+                      class="project-card__muted flex items-center gap-1.5 w-[72px] flex-shrink-0"
                     >
-                      <ZxIcon icon="User" :size="14" color="#86909c" />
+                      <ZxIcon icon="User" :size="14" />
                       <span>创建人</span>
                     </div>
-                    <span class="text-[#1d2129] font-medium">{{
+                    <span class="project-card__title font-medium">{{
                       project.createBy || "-"
                     }}</span>
                   </div>
                   <div class="flex items-center text-xs">
                     <div
-                      class="flex items-center gap-1.5 text-[#86909c] w-[72px] flex-shrink-0"
+                      class="project-card__muted flex items-center gap-1.5 w-[72px] flex-shrink-0"
                     >
-                      <ZxIcon icon="Clock" :size="14" color="#86909c" />
+                      <ZxIcon icon="Clock" :size="14" />
                       <span>创建时间</span>
                     </div>
-                    <span class="text-[#4e5969]">{{
+                    <span class="project-card__muted">{{
                       parseTime(project.createTime, "{y}-{m}-{d}") || "-"
                     }}</span>
                   </div>
@@ -236,14 +230,14 @@
             class="text-center py-16 px-4"
           >
             <div
-              class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#f7f8fa] mb-4"
+              class="project-empty__icon inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
             >
-              <ZxIcon icon="InfoFilled" :size="40" color="#c9cdd4" />
+              <ZxIcon icon="InfoFilled" :size="40" />
             </div>
-            <h3 class="text-base font-semibold text-[#1d2129] mb-2">
+            <h3 class="project-empty__title text-base font-semibold mb-2">
               暂无工程
             </h3>
-            <p class="text-sm text-[#86909c] mb-6 max-w-md mx-auto">
+            <p class="project-empty__muted text-sm mb-6 max-w-md mx-auto">
               还没有创建任何工程，点击下方按钮开始创建您的第一个工程
             </p>
             <ZxButton
@@ -556,7 +550,7 @@ async function handleImportFileChange(event) {
 }
 
 .project-grid__scroll::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.18);
+  background-color: var(--zx-semantic-border-subtle);
   border-radius: 999px;
 }
 
@@ -564,22 +558,50 @@ async function handleImportFileChange(event) {
   border-radius: 8px;
 }
 .project-card {
-  background-image:
-    linear-gradient(
-      8deg,
-      hsla(0, 0%, 100%, 0.6) 30%,
-      rgba(0, 82, 217, 0.16) 100%
-    ),
-    linear-gradient(209deg, #cdd8ff 0%, #eef2ff 28%, #ffffff 100%);
-  background-size: 180% 180%;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--zx-semantic-surface-card-fill);
+  background-image: var(--zx-semantic-surface-card-highlight);
+  color: var(--zx-semantic-surface-card-on-text);
+}
+.project-card--selected {
+  border-color: var(--zx-semantic-accent-base);
+  box-shadow:
+    0 0 0 1px var(--zx-semantic-accent-base),
+    var(--zx-semantic-surface-card-depth);
+}
+.project-card__selection-bar {
+  background-color: var(--zx-semantic-accent-base);
+}
+.project-card__title {
+  color: var(--zx-semantic-surface-card-on-text);
+}
+.project-card__muted {
+  color: var(--zx-semantic-surface-card-on-text-secondary);
+}
+.project-card__link:hover,
+.project-card__action:hover {
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
+}
+.project-card__action {
+  color: var(--zx-semantic-surface-card-on-text-secondary);
+}
+.project-card__action:hover {
+  background-color: var(--zx-semantic-fill-hover);
+}
+.project-empty__icon {
+  background-color: var(--zx-semantic-fill-subtle);
+  color: var(--zx-semantic-text-secondary);
+}
+.project-empty__title {
+  color: var(--zx-semantic-surface-canvas-on-text);
+}
+.project-empty__muted {
+  color: var(--zx-semantic-surface-canvas-on-text-secondary);
 }
 .project-grid {
   grid-template-columns: repeat(4, 1fr);
 }
 .project-card :deep(.el-card__header) {
-  border-bottom: 1px solid #f0f1f5;
+  border-bottom: 1px solid var(--zx-semantic-border-subtle);
   background: transparent;
 }
 .project-card :deep(.el-card__footer) {

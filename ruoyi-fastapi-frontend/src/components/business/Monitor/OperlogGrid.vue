@@ -1,9 +1,9 @@
 <template>
-  <div class="m-operlog-grid">
+  <div class="m-operlog-grid" data-zx-fill>
     <ZxGridList ref="gridListRef" :load-data="loadOperlogData" :initial-state="initialState" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__filters">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #filters>
             <slot
               name="filters"
               :query="query"
@@ -42,8 +42,8 @@
                 @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
               />
             </slot>
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.operName"
               placeholder="搜索操作人员"
@@ -52,8 +52,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid, refresh: handleRefresh, updateState }">

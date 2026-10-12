@@ -1,30 +1,21 @@
-/**
- * 仿真平台深色主题定制
- * 此文件现在只包含 variables.css 未覆盖的特定样式
- * 主要的CSS变量和通用组件样式已移至 variables.css
- */
-
-/* 导入统一的CSS变量定义 */
 @import './variables.css';
 
-/* ========================================
-   仿真平台组件增强样式
-   ======================================== */
-
-/* 渐变边框效果 */
-.simulation-dark .gradient-border {
-  position: relative;
+.simulation-shell {
+  color: var(--zx-semantic-surface-canvas-on-text);
 }
 
-.simulation-dark .gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.3), rgba(0, 82, 217, 0.1));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+.simulation-shell .pro-card {
+  background: var(--zx-semantic-surface-card-fill);
+  color: var(--zx-semantic-surface-card-on-text);
+  border: 1px solid var(--zx-semantic-border-default);
+  border-radius: var(--zx-semantic-radius-surface);
+  box-shadow: var(--zx-semantic-surface-card-depth);
+  overflow: hidden;
+}
+
+.simulation-shell .pro-card-header {
+  padding: 12px 16px;
+  background: var(--zx-semantic-surface-panel-fill);
+  color: var(--zx-semantic-surface-panel-on-text);
+  border-bottom: 1px solid var(--zx-semantic-border-subtle);
 }

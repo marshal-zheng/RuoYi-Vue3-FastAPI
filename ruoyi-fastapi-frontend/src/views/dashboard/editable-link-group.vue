@@ -56,10 +56,10 @@ const links = [
     display: inline-block;
     width: 25%;
     margin-bottom: 13px;
-    color: rgba(0, 0, 0, 0.65);
+    color: var(--zx-semantic-text-primary);
     font-size: 14px;
     &:hover {
-      color: #1890ff;
+      color: var(--zx-semantic-accent-on-surface);
     }
   }
 }

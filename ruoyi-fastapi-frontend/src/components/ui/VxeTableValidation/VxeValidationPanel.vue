@@ -245,16 +245,16 @@ const contentStyle = computed(() => ({
   }
 
   &.issue-error {
-    background: rgba(245, 108, 108, 0.05);
+    background: var(--el-color-danger-light-9);
     &:hover {
-      background: rgba(245, 108, 108, 0.1);
+      background: var(--el-color-danger-light-8);
     }
   }
 
   &.issue-warning {
-    background: rgba(230, 162, 60, 0.05);
+    background: var(--el-color-warning-light-9);
     &:hover {
-      background: rgba(230, 162, 60, 0.1);
+      background: var(--el-color-warning-light-8);
     }
   }
 }

@@ -3,7 +3,7 @@
     <el-form ref="formRef" v-bind="formProps" label-position="left">
       <FormGrid v-bind="layoutProps">
         <el-form-item label="版本名称">
-          <span class="text-gray-700">{{ state.data.versionName }}</span>
+          <span class="text-zx-surface-blocking-on-text">{{ state.data.versionName }}</span>
         </el-form-item>
         <el-form-item label="导出格式" required>
           <FileTypeSelector v-model="state.data.format" style="width: 100%" />

@@ -74,7 +74,7 @@ const badgeType = computed(() => {
   font-weight: 600;
   margin: 0 0 8px;
   font-size: 14px;
-  color: #1f2937;
+  color: var(--zx-semantic-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -83,7 +83,7 @@ const badgeType = computed(() => {
 .simulation-status-panel__desc {
   margin: 0 0 12px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--zx-semantic-text-secondary);
   line-height: 1.6;
   white-space: nowrap;
   overflow: hidden;

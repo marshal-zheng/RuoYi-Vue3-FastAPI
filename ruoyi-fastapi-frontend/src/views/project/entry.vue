@@ -1,6 +1,6 @@
 <template>
   <div class="project-entry">
-    <div v-if="!errorTitle" class="project-entry__loading">
+    <div v-if="!errorTitle" class="project-entry__loading" data-zx-surface="card">
       <el-icon class="project-entry__icon is-loading"><Loading /></el-icon>
       <div class="project-entry__text">
         <h3>{{ loadingTitle }}</h3>
@@ -181,24 +181,22 @@ onMounted(() => {
   gap: 16px;
   padding: 24px 28px;
   border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
 }
 
 .project-entry__icon {
   font-size: 28px;
-  color: #0052d9;
+  color: var(--zx-semantic-accent-base);
 }
 
 .project-entry__text h3 {
   margin: 0 0 6px;
   font-size: 18px;
   font-weight: 600;
-  color: #1d2129;
+  color: var(--zx-semantic-surface-card-on-text);
 }
 
 .project-entry__text p {
   margin: 0;
-  color: #4e5969;
+  color: var(--zx-semantic-surface-card-on-text-secondary);
 }
 </style>

@@ -3,7 +3,8 @@
 </template>
 
 <script setup>
-import { onMounted, watch, nextTick } from 'vue';
+import { watch, nextTick } from 'vue';
+import { useGraphTheme } from '../composables/useGraphTheme';
 import { useGraphInstance } from '../composables/useGraphInstance';
 
 // Props 定义
@@ -27,7 +28,7 @@ const props = defineProps({
   // 网格颜色
   color: {
     type: String,
-    default: '#ddd',
+    default: undefined,
     description: '网格颜色',
   },
   args: {
@@ -41,6 +42,7 @@ const props = defineProps({
 });
 
 const graph = useGraphInstance();
+const palette = useGraphTheme();
 
 // 更新网格
 const updateGrid = async () => {
@@ -48,6 +50,7 @@ const updateGrid = async () => {
 
   // 等待DOM更新
   await nextTick();
+  if (!graph.value || (!props.color && !palette.value)) return;
 
   try {
     // 先清除，再根据最新类型重绘，保证切换立即生效
@@ -63,7 +66,7 @@ const updateGrid = async () => {
         // dot 类型网格：size 作为顶级参数，点大小和颜色在 args 中
         gridOptions.size = props.size;
         gridOptions.args = {
-          color: props.color,
+          color: props.color ?? palette.value?.grid,
           thickness: props.dotSize,
           ...props.args,
         };
@@ -71,19 +74,18 @@ const updateGrid = async () => {
         // mesh 类型网格：size 在 args 中
         gridOptions.args = {
           size: props.size,
-          color: props.color,
+          color: props.color ?? palette.value?.grid,
           ...props.args,
         };
       } else {
         // 其他类型：保持原有逻辑
         gridOptions.args = {
           size: props.size,
-          color: props.color,
+          color: props.color ?? palette.value?.grid,
           ...props.args,
         };
       }
 
-      console.log('XFlowGrid: Drawing grid with options:', gridOptions);
       graph.value.drawGrid(gridOptions);
       // 显示网格
       graph.value.showGrid();
@@ -96,19 +98,20 @@ const updateGrid = async () => {
   }
 };
 
-onMounted(async () => {
-  // 等待一小段时间确保Graph完全初始化
-  await nextTick();
-  setTimeout(() => {
-    updateGrid();
-  }, 100);
-});
-
-// 监听属性变化
+// Graph readiness and committed theme changes share one repaint path.
 watch(
-  () => [props.size, props.type, props.dotSize, props.color, props.args, props.visible],
-  () => {
-    updateGrid();
-  }
+  () => [
+    graph?.value,
+    palette.value,
+    props.size,
+    props.type,
+    props.dotSize,
+    props.color,
+    props.visible,
+  ],
+  updateGrid,
+  { immediate: true, flush: 'post' }
 );
+// Observe nested grid options without traversing the X6 graph instance.
+watch(() => props.args, updateGrid, { deep: true, flush: 'post' });
 </script>

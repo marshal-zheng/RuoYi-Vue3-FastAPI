@@ -3,16 +3,8 @@ import { defineStore } from 'pinia';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 import { setZxThemePreference, zxIsDark } from '@/theme/zx-theme-config';
 
-const {
-  sideTheme,
-  showSettings,
-  topNav,
-  topNavBorder,
-  tagsView,
-  fixedHeader,
-  sidebarLogo,
-  dynamicTitle,
-} = defaultSettings;
+const { showSettings, topNav, topNavBorder, tagsView, fixedHeader, sidebarLogo, dynamicTitle } =
+  defaultSettings;
 
 function getStorageSetting(): Record<string, any> {
   try {
@@ -24,8 +16,6 @@ function getStorageSetting(): Record<string, any> {
 
 interface SettingsState {
   title: string;
-  theme: string;
-  sideTheme: string;
   showSettings: boolean;
   topNav: boolean;
   tagsView: boolean;
@@ -40,8 +30,6 @@ const useSettingsStore = defineStore('settings', {
     const storageSetting = getStorageSetting();
     return {
       title: '',
-      theme: storageSetting.theme || '#0052D9',
-      sideTheme: storageSetting.sideTheme || sideTheme,
       showSettings: showSettings,
       topNav: storageSetting.topNav === undefined ? topNav : storageSetting.topNav,
       tagsView: storageSetting.tagsView === undefined ? tagsView : storageSetting.tagsView,

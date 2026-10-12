@@ -1,4 +1,5 @@
-import { computed, readonly, ref } from 'vue';
+import { computed } from 'vue';
+import { createThemePreferenceController } from '@zxio/zxui/theme-host';
 import { usePreferredDark } from '@vueuse/core';
 
 import {
@@ -43,39 +44,30 @@ function readPreference(): ZxThemePreference {
   }
 }
 
-const preference = ref<ZxThemePreference>(readPreference());
-export const zxThemePreference = readonly(preference);
+// The business owns its catalog, storage key and legacy migration; ZXUI owns switching.
+export const zxThemePreferences = createThemePreferenceController<ZxThemePreference>({
+  initial: readPreference(),
+  validate(next) {
+    if (!isZxThemeId(next.themeId) || !validModes.has(next.mode) || !validDensities.has(next.density)) {
+      throw new Error(`Invalid ZXUI theme preference: ${JSON.stringify(next)}`);
+    }
+  },
+  persist(next) {
+    localStorage.setItem(PREFERENCE_STORAGE_KEY, JSON.stringify(next));
+  },
+});
+const preference = zxThemePreferences.preference;
+export const zxThemePreference = preference;
+export const zxThemePreferencePending = zxThemePreferences.pending;
 export const zxThemeId = computed(() => preference.value.themeId);
 export const zxIsDark = computed(() =>
   preference.value.mode === 'system' ? preferredDark.value : preference.value.mode === 'dark'
 );
+export const setZxThemePreference = zxThemePreferences.set;
+/** Compatibility port for existing consumers; production binds directly to the Host. */
+export const bindZxThemePreferenceUpdater = zxThemePreferences.bind;
 
-/** The only preference write path; Provider resolves concrete variants and commits CSS. */
-export function setZxThemePreference(update: Partial<ZxThemePreference>): void {
-  const next = { ...preference.value, ...update };
-  if (
-    !isZxThemeId(next.themeId) ||
-    !validModes.has(next.mode) ||
-    !validDensities.has(next.density)
-  ) {
-    throw new Error(`Invalid ZXUI theme preference: ${JSON.stringify(update)}`);
-  }
-  if (
-    Object.keys(update).every(
-      (key) =>
-        next[key as keyof ZxThemePreference] === preference.value[key as keyof ZxThemePreference]
-    )
-  )
-    return;
-  preference.value = next;
-  try {
-    localStorage.setItem(PREFERENCE_STORAGE_KEY, JSON.stringify(next));
-  } catch {
-    /* A readable active theme does not require storage. */
-  }
-}
-
-/** DOM attributes are a projection of the Host's committed scope, never an input. */
+/** @deprecated Production uses the Host-owned body portal scope; retained for legacy callers. */
 export function projectZxThemeScope(resolved: {
   readonly themeId: string;
   readonly variantKey: string;

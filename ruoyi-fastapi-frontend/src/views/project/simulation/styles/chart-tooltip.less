@@ -1,5 +1,5 @@
 // 图表 Tooltip 全局样式
-// 用于 Teleport 到 body 的 fixed 定位 tooltip
+// 通过公共主题 Portal 挂载，继承触发图表的 Host scope。
 
 .chart-tooltip-fixed {
   position: fixed;
@@ -7,16 +7,17 @@
   min-width: 140px;
   max-width: 240px;
   padding: 0;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--simulation-chart-surface, var(--zx-semantic-surface-overlay-fill));
+  color: var(--simulation-chart-text, var(--zx-semantic-surface-overlay-on-text));
   border-radius: 6px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
   pointer-events: none;
   backdrop-filter: blur(8px);
 
   // 时序/延迟 - 琥珀色主题
   &.timing {
     border: 1px solid rgba(251, 191, 36, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(251, 191, 36, 0.1);
+    box-shadow: var(--zx-semantic-surface-overlay-depth);
 
     .tooltip-header {
       background: rgba(251, 191, 36, 0.1);
@@ -27,19 +28,19 @@
   // 带宽监控 - 绿色主题
   &.bandwidth {
     border: 1px solid rgba(0, 255, 136, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(0, 255, 136, 0.1);
+    box-shadow: var(--zx-semantic-surface-overlay-depth);
 
     .tooltip-header {
       background: rgba(0, 255, 136, 0.1);
       border-bottom-color: rgba(0, 255, 136, 0.15);
 
       .tooltip-index {
-        color: #00ff88;
+        color: var(--zx-semantic-status-success-on-surface);
       }
     }
 
     .tooltip-main-value .main-value {
-      color: #00ff88;
+      color: var(--zx-semantic-status-success-on-surface);
       text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
     }
   }
@@ -47,7 +48,7 @@
   // 协议分析 - 蓝色主题
   &.protocol {
     border: 1px solid rgba(59, 130, 246, 0.3);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(59, 130, 246, 0.1);
+    box-shadow: var(--zx-semantic-surface-overlay-depth);
 
     .tooltip-header {
       background: rgba(59, 130, 246, 0.1);
@@ -60,14 +61,14 @@
     align-items: center;
     justify-content: space-between;
     padding: 8px 10px;
-    background: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--zx-semantic-surface-panel-fill);
+    border-bottom: 1px solid var(--zx-semantic-border-subtle);
     border-radius: 5px 5px 0 0;
 
     .tooltip-index {
       font-size: 11px;
       font-weight: 600;
-      color: #fbbf24;
+      color: var(--zx-semantic-status-warning-on-surface);
       font-family: 'JetBrains Mono', monospace;
     }
 
@@ -76,20 +77,20 @@
       padding: 2px 6px;
       background: rgba(251, 191, 36, 0.2);
       border-radius: 3px;
-      color: #fbbf24;
+      color: var(--zx-semantic-status-warning-on-surface);
       font-weight: 500;
     }
 
     .tooltip-time {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--zx-semantic-text-secondary);
       font-family: 'JetBrains Mono', monospace;
     }
 
     .tooltip-title {
       font-size: 11px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--zx-semantic-text-primary);
     }
   }
 
@@ -107,7 +108,7 @@
     &.main {
       padding-bottom: 6px;
       margin-bottom: 4px;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+      border-bottom: 1px dashed var(--zx-semantic-border-subtle);
 
       .tooltip-value {
         font-size: 13px;
@@ -115,10 +116,10 @@
       }
 
       &.bandwidth .tooltip-value {
-        color: #00ff88;
+        color: var(--zx-semantic-status-success-on-surface);
       }
       &.latency .tooltip-value {
-        color: #fbbf24;
+        color: var(--zx-semantic-status-warning-on-surface);
       }
     }
 
@@ -151,13 +152,13 @@
     }
 
     .tooltip-label {
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--zx-semantic-text-secondary);
       width: 32px;
       flex-shrink: 0;
     }
 
     .tooltip-value {
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--zx-semantic-text-primary);
       font-family: 'JetBrains Mono', monospace;
       flex: 1;
       text-align: left;
@@ -169,13 +170,13 @@
         text-align: right;
       }
       &.highlight-green {
-        color: #00ff88;
+        color: var(--zx-semantic-status-success-on-surface);
       }
       &.highlight-amber {
-        color: #fbbf24;
+        color: var(--zx-semantic-status-warning-on-surface);
       }
       &.highlight-red {
-        color: #ef4444;
+        color: var(--zx-semantic-status-danger-on-surface);
       }
     }
   }
@@ -189,7 +190,7 @@
       font-size: 18px;
       font-weight: 700;
       font-family: 'JetBrains Mono', monospace;
-      color: #00ff88;
+      color: var(--zx-semantic-status-success-on-surface);
       text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
 
       .unit {

@@ -10,7 +10,7 @@ import { useGraphInstance } from '../composables/useGraphInstance';
 
 // 简单节点视图类
 class SimpleNodeView extends NodeView {
-  static nodeBackground = '#8f8f8f';
+  static nodeBackground = 'var(--zx-semantic-text-secondary)';
 
   renderMarkup() {
     const tag = this.cell.shape === 'circle' ? 'circle' : 'rect';
@@ -59,7 +59,7 @@ const props = defineProps({
   },
   simpleNodeBackground: {
     type: String,
-    default: '#8f8f8f',
+    default: 'var(--zx-semantic-text-secondary)',
   },
   scalable: {
     type: Boolean,
@@ -168,8 +168,8 @@ watch(
 <style scoped>
 .xflow-minimap {
   display: inline-block;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--zx-semantic-surface-elevated);
+  border: 1px solid var(--zx-semantic-border-default);
   border-radius: 4px;
   box-sizing: border-box;
 }

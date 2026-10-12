@@ -134,8 +134,8 @@ const changeZoom = (type, key) => {
   gap: 6px;
   padding: 8px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--zx-semantic-surface-overlay-fill);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
 
   &__dropdown {
     min-width: 72px;

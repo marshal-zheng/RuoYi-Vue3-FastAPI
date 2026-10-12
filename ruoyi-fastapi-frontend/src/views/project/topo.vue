@@ -599,14 +599,14 @@ onMounted(() => {
   left: 50%;
   z-index: 10;
   transform: translateX(-50%);
-  border: 1px solid #a7c7ff;
+  border: var(--zx-semantic-surface-overlay-edge);
   border-radius: 4px;
-  background: #eef6ff;
-  color: #1d4f91;
+  background: var(--zx-semantic-surface-overlay-fill);
+  color: var(--zx-semantic-surface-overlay-on-text);
   font-size: 13px;
   line-height: 20px;
   padding: 6px 12px;
-  box-shadow: 0 4px 12px rgb(29 79 145 / 12%);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
 }
 
 /* simulation-related styles removed from topo view */

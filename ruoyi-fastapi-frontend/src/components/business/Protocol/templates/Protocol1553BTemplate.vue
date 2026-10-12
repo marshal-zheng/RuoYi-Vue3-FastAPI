@@ -569,10 +569,6 @@ defineExpose({
 }
 
 .fields-table {
-  :deep(.vxe-body--row.row--hover) {
-    background-color: #f5f7fa;
-  }
-
   :deep(.vxe-cell) {
     padding: 4px 8px;
   }

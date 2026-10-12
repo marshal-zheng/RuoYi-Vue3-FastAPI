@@ -19,10 +19,10 @@
   padding: 8px 12px !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
-  background: #303133 !important;
+  background: var(--zx-semantic-surface-overlay-fill) !important;
   border-radius: 4px !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
-  color: #fff !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
+  color: var(--zx-semantic-surface-overlay-on-text) !important;
   word-break: break-word !important;
   
   // 清除可能的错误样式
@@ -32,50 +32,50 @@
   }
 }
 
-// 校验错误 tooltip（白底红字）
+// 校验错误 tooltip（主题浮层与危险文字）
 .vxe-table--tooltip-wrapper.vxe-table--valid-error {
-  background: #fff !important;
-  border: 1px solid #f56c6c !important;
+  background: var(--zx-semantic-surface-overlay-fill) !important;
+  border: 1px solid var(--zx-semantic-status-danger-on-surface) !important;
   border-left-width: 3px !important;
-  color: #f56c6c !important;
+  color: var(--zx-semantic-status-danger-on-surface) !important;
   max-width: 300px !important;
   padding: 8px 12px !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
   word-break: break-word !important;
 }
 
 // ==================== 校验提示样式 ====================
 
-// normal 主题（白底红字 - 推荐）
+// normal：主题浮层与危险文字
 .vxe-cell--valid-error-theme-normal {
   padding: 6px 10px !important;
   max-width: 280px !important;
-  background: #fff !important;
-  border: 1px solid #f56c6c !important;
+  background: var(--zx-semantic-surface-overlay-fill) !important;
+  border: 1px solid var(--zx-semantic-status-danger-on-surface) !important;
   border-left-width: 3px !important;
   border-radius: 4px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
   
   .vxe-cell--valid-error-msg {
-    color: #f56c6c !important;
+    color: var(--zx-semantic-status-danger-on-surface) !important;
     font-size: 12px !important;
     line-height: 1.4 !important;
     background: transparent !important;
   }
 }
 
-// beautify 主题（红底白字）
+// beautify：危险状态底色
 .vxe-cell--valid-error-theme-beautify {
   padding: 6px 10px !important;
   max-width: 280px !important;
-  background: #f56c6c !important;
+  background: var(--el-color-danger-light-9) !important;
   border-radius: 4px !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
   
   .vxe-cell--valid-error-msg {
-    color: #fff !important;
+    color: var(--zx-semantic-surface-overlay-on-text) !important;
     font-size: 12px !important;
     line-height: 1.4 !important;
     background: transparent !important;
@@ -84,11 +84,12 @@
 
 // ==================== 自定义校验框架样式 ====================
 
-:root {
-  --vxe-validation-error-color: #f56c6c;
-  --vxe-validation-error-bg: rgba(245, 108, 108, 0.08);
-  --vxe-validation-warning-color: #e6a23c;
-  --vxe-validation-warning-bg: rgba(230, 162, 60, 0.08);
+:root,
+[data-zx-theme] {
+  --vxe-validation-error-color: var(--zx-semantic-status-danger-on-surface);
+  --vxe-validation-error-bg: var(--el-color-danger-light-9);
+  --vxe-validation-warning-color: var(--zx-semantic-status-warning-on-surface);
+  --vxe-validation-warning-bg: var(--el-color-warning-light-9);
 }
 
 // 行高亮
@@ -105,7 +106,7 @@
 // 单元格高亮
 .vxe-table {
   .vxe-body--column.vxe-cell--validation-error {
-    background-color: rgba(245, 108, 108, 0.1) !important;
+    background-color: var(--el-color-danger-light-9) !important;
 
     .vxe-cell {
       color: var(--vxe-validation-error-color) !important;
@@ -113,7 +114,7 @@
   }
 
   .vxe-body--column.vxe-cell--validation-warning {
-    background-color: rgba(230, 162, 60, 0.1) !important;
+    background-color: var(--el-color-warning-light-9) !important;
 
     .vxe-cell {
       color: var(--vxe-validation-warning-color) !important;
@@ -122,7 +123,7 @@
   
   // 内置校验错误单元格
   .vxe-body--column.col--valid-error {
-    background-color: rgba(245, 108, 108, 0.06) !important;
+    background-color: var(--el-color-danger-light-9) !important;
   }
 }
 
@@ -147,11 +148,11 @@
   padding: 8px 12px !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
-  background: #fff !important;
-  border: 1px solid #f56c6c !important;
+  background: var(--zx-semantic-surface-overlay-fill) !important;
+  border: 1px solid var(--zx-semantic-status-danger-on-surface) !important;
   border-left-width: 3px !important;
-  color: #f56c6c !important;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15) !important;
+  color: var(--zx-semantic-status-danger-on-surface) !important;
+  box-shadow: var(--zx-semantic-surface-overlay-depth) !important;
   word-break: break-word !important;
 }
 

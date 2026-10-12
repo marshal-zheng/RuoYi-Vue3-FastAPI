@@ -1,0 +1,846 @@
+{
+  "capturedAt": "2026-10-11T22:51:15.272Z",
+  "route": "http://127.0.0.1/project/simulation/index/1?versionId=1",
+  "themeSamples": [
+    {
+      "label": "tech-blue-light",
+      "viewport": {
+        "width": 1600,
+        "height": 1000
+      },
+      "scope": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.93 0.955 1)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.1057 0.123 0.1546)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1506,
+            "height": 876
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 374.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2000;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 580,
+            "width": 520,
+            "height": 376.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 420px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2002;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3147 0.3352 0.3723)",
+          "border": "color(srgb 0.3147 0.3352 0.3723)",
+          "rect": {
+            "x": 126,
+            "y": 261,
+            "width": 444,
+            "height": 178
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3147 0.3352 0.3723)",
+          "border": "color(srgb 0.3147 0.3352 0.3723)",
+          "rect": {
+            "x": 126,
+            "y": 667,
+            "width": 444,
+            "height": 198
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": [
+        {
+          "class": "chart-tooltip-fixed bandwidth",
+          "text": "-280s#3200.00 Mbps",
+          "background": "rgb(249, 253, 255)",
+          "color": "rgb(27, 31, 39)",
+          "border": "rgba(0, 255, 136, 0.3)",
+          "rect": {
+            "x": 387.8203125,
+            "y": 384,
+            "width": 140,
+            "height": 74.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "--simulation-chart-surface: rgba(249,253,255,1); --simulation-chart-text: rgba(27,31,39,1); --simulation-chart-muted: rgba(80,85,95,1); --simulation-chart-grid: rgba(64,168,245,0.16); left: 387.826px; top: 384px;"
+        }
+      ]
+    },
+    {
+      "label": "tech-blue-dark",
+      "viewport": {
+        "width": 1600,
+        "height": 1000
+      },
+      "scope": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.03 0.1 0.28)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.9217 0.9491 1)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1506,
+            "height": 876
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 374.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2000;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 88,
+            "y": 580,
+            "width": 520,
+            "height": 376.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 420px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2002;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.6999 0.7452 0.8354)",
+          "border": "color(srgb 0.6999 0.7452 0.8354)",
+          "rect": {
+            "x": 126,
+            "y": 261,
+            "width": 444,
+            "height": 178
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.6999 0.7452 0.8354)",
+          "border": "color(srgb 0.6999 0.7452 0.8354)",
+          "rect": {
+            "x": 126,
+            "y": 667,
+            "width": 444,
+            "height": 198
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": [
+        {
+          "class": "chart-tooltip-fixed bandwidth",
+          "text": "-280s#3200.00 Mbps",
+          "background": "rgb(14, 40, 101)",
+          "color": "rgb(235, 242, 255)",
+          "border": "rgba(0, 255, 136, 0.3)",
+          "rect": {
+            "x": 387.8203125,
+            "y": 384,
+            "width": 140,
+            "height": 74.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "--simulation-chart-surface: rgba(14,40,101,1); --simulation-chart-text: rgba(235,242,255,1); --simulation-chart-muted: rgba(178,190,213,1); --simulation-chart-grid: rgba(64,168,245,0.3); left: 387.826px; top: 384px;"
+        }
+      ]
+    },
+    {
+      "label": "army-pine-light-1280x900",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "scope": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.93 0.94 0.925)",
+          "color": "color(srgb 0.1179 0.125 0.1143)",
+          "border": "color(srgb 0.1179 0.125 0.1143)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1186,
+            "height": 776
+          },
+          "scope": "army-pine",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.963769 0.969662 0.960859)",
+          "color": "color(srgb 0.1179 0.125 0.1143)",
+          "border": "color(srgb 0.828841 0.833909 0.826339 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 366.5
+          },
+          "scope": "army-pine",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2003;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.963769 0.969662 0.960859)",
+          "color": "color(srgb 0.1179 0.125 0.1143)",
+          "border": "color(srgb 0.828841 0.833909 0.826339 / 0.972)",
+          "rect": {
+            "x": 646,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "army-pine",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.963769 0.969662 0.960859)",
+          "color": "color(srgb 0.1179 0.125 0.1143)",
+          "border": "color(srgb 0.828841 0.833909 0.826339 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 440,
+            "width": 520,
+            "height": 368.5
+          },
+          "scope": "army-pine",
+          "chartStyle": "top: min(420px, max(14px, -620px + 100vh)); left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2004;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3288 0.3371 0.3246)",
+          "border": "color(srgb 0.3288 0.3371 0.3246)",
+          "rect": {
+            "x": 123,
+            "y": 255,
+            "width": 450,
+            "height": 178
+          },
+          "scope": "army-pine",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3288 0.3371 0.3246)",
+          "border": "color(srgb 0.3288 0.3371 0.3246)",
+          "rect": {
+            "x": 123,
+            "y": 521,
+            "width": 450,
+            "height": 198
+          },
+          "scope": "army-pine",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": []
+    },
+    {
+      "label": "air-gray-dark-comfortable-final",
+      "viewport": {
+        "width": 1600,
+        "height": 1000
+      },
+      "scope": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.09 0.12 0.17)",
+          "color": "color(srgb 0.9185 0.9504 1)",
+          "border": "color(srgb 0.9185 0.9504 1)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1506,
+            "height": 876
+          },
+          "scope": "air-gray",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.183604 0.22873 0.301538)",
+          "color": "color(srgb 0.9185 0.9504 1)",
+          "border": "color(srgb 0.379539 0.413835 0.469169 / 0.916)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 382.5
+          },
+          "scope": "air-gray",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2000;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.183604 0.22873 0.301538)",
+          "color": "color(srgb 0.9185 0.9504 1)",
+          "border": "color(srgb 0.379539 0.413835 0.469169 / 0.916)",
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "air-gray",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.183604 0.22873 0.301538)",
+          "color": "color(srgb 0.9185 0.9504 1)",
+          "border": "color(srgb 0.379539 0.413835 0.469169 / 0.916)",
+          "rect": {
+            "x": 88,
+            "y": 540,
+            "width": 520,
+            "height": 384.5
+          },
+          "scope": "air-gray",
+          "chartStyle": "top: min(420px, max(14px, -620px + 100vh)); left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2002;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.7053 0.7466 0.8146)",
+          "border": "color(srgb 0.7053 0.7466 0.8146)",
+          "rect": {
+            "x": 129,
+            "y": 267,
+            "width": 438,
+            "height": 178
+          },
+          "scope": "air-gray",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.7053 0.7466 0.8146)",
+          "border": "color(srgb 0.7053 0.7466 0.8146)",
+          "rect": {
+            "x": 129,
+            "y": 633,
+            "width": 438,
+            "height": 198
+          },
+          "scope": "air-gray",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": []
+    },
+    {
+      "label": "tech-blue-light-final",
+      "viewport": {
+        "width": 1600,
+        "height": 1000
+      },
+      "scope": "mode-light__density-comfortable__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.93 0.955 1)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.1057 0.123 0.1546)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1506,
+            "height": 876
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 390.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2000;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.970951 0.985564 0.992935)",
+          "color": "color(srgb 0.1057 0.123 0.1546)",
+          "border": "color(srgb 0.835018 0.847585 0.853924 / 0.972)",
+          "rect": {
+            "x": 88,
+            "y": 540,
+            "width": 520,
+            "height": 392.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: min(420px, max(14px, -620px + 100vh)); left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2002;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3147 0.3352 0.3723)",
+          "border": "color(srgb 0.3147 0.3352 0.3723)",
+          "rect": {
+            "x": 132,
+            "y": 273,
+            "width": 432,
+            "height": 178
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.3147 0.3352 0.3723)",
+          "border": "color(srgb 0.3147 0.3352 0.3723)",
+          "rect": {
+            "x": 132,
+            "y": 639,
+            "width": 432,
+            "height": 198
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": [
+        {
+          "class": "chart-tooltip-fixed bandwidth",
+          "text": "-259s#3410.00 Mbps",
+          "background": "rgb(249, 253, 255)",
+          "color": "rgb(27, 31, 39)",
+          "border": "rgba(0, 255, 136, 0.3)",
+          "rect": {
+            "x": 404.2265625,
+            "y": 396,
+            "width": 140,
+            "height": 74.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "--simulation-chart-surface: rgba(249,253,255,1); --simulation-chart-text: rgba(27,31,39,1); --simulation-chart-muted: rgba(80,85,95,1); --simulation-chart-grid: rgba(64,168,245,0.16); left: 404.234px; top: 396px;"
+        }
+      ]
+    },
+    {
+      "label": "tech-blue-dark-final",
+      "viewport": {
+        "width": 1600,
+        "height": 1000
+      },
+      "scope": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+      "shell": [
+        {
+          "class": "simulation-shell flex h-full bg-zx-surface-canvas-fill",
+          "text": "仿真控制台ZXUI 本地布局验收 v1.0 开始仿真停止单步就绪00:00:00.000带",
+          "background": "color(srgb 0.03 0.1 0.28)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.9217 0.9491 1)",
+          "rect": {
+            "x": 74,
+            "y": 104,
+            "width": 1506,
+            "height": 876
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "panels": [
+        {
+          "class": "bandwidth-chart-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "带宽监控 待机 汇总按端口实时带宽0.00 Mbps等待数据1.00.5000平均0.00",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 390.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2000;"
+        },
+        {
+          "class": "alarm-panel-floating floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "告警严重0错误0警告0总计0告警列表暂无告警系统运行正常监控中",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: 14px; right: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 420px; z-index: 2001;"
+        },
+        {
+          "class": "timing-latency-panel simbus-floating-panel zx-floating-panel is-draggable is-focus-visible",
+          "text": "时序/延迟分析待机时序带宽分组10 ms5.0 ms0时延 平均时延-最大时延-最小时延-",
+          "background": "color(srgb 0.09401 0.196348 0.429856)",
+          "color": "color(srgb 0.9217 0.9491 1)",
+          "border": "color(srgb 0.311448 0.389224 0.566691 / 0.904)",
+          "rect": {
+            "x": 88,
+            "y": 540,
+            "width": 520,
+            "height": 392.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "top: min(420px, max(14px, -620px + 100vh)); left: 14px; transition-duration: 300ms; transition-property: width, height, max-height, border-radius; transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1); width: 520px; max-height: 430px; z-index: 2002;"
+        }
+      ],
+      "canvas": [
+        {
+          "class": "chart-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.6999 0.7452 0.8354)",
+          "border": "color(srgb 0.6999 0.7452 0.8354)",
+          "rect": {
+            "x": 132,
+            "y": 273,
+            "width": 432,
+            "height": 178
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        },
+        {
+          "class": "timing-canvas",
+          "text": "",
+          "background": "rgba(0, 0, 0, 0)",
+          "color": "color(srgb 0.6999 0.7452 0.8354)",
+          "border": "color(srgb 0.6999 0.7452 0.8354)",
+          "rect": {
+            "x": 132,
+            "y": 639,
+            "width": 432,
+            "height": 198
+          },
+          "scope": "tech-blue",
+          "chartStyle": null
+        }
+      ],
+      "tooltips": [
+        {
+          "class": "chart-tooltip-fixed bandwidth",
+          "text": "-259s#3410.00 Mbps",
+          "background": "rgb(14, 40, 101)",
+          "color": "rgb(235, 242, 255)",
+          "border": "rgba(0, 255, 136, 0.3)",
+          "rect": {
+            "x": 404.2265625,
+            "y": 396,
+            "width": 140,
+            "height": 74.5
+          },
+          "scope": "tech-blue",
+          "chartStyle": "--simulation-chart-surface: rgba(14,40,101,1); --simulation-chart-text: rgba(235,242,255,1); --simulation-chart-muted: rgba(178,190,213,1); --simulation-chart-grid: rgba(64,168,245,0.3); left: 404.234px; top: 396px;"
+        }
+      ]
+    }
+  ],
+  "interactions": [
+    {
+      "name": "theme switch preserves panel geometry",
+      "before": [
+        {
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 374.5,
+            "top": 174,
+            "right": 608,
+            "bottom": 548.5,
+            "left": 88
+          },
+          "id": ""
+        },
+        {
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420,
+            "top": 174,
+            "right": 1486,
+            "bottom": 594,
+            "left": 966
+          },
+          "id": ""
+        },
+        {
+          "rect": {
+            "x": 88,
+            "y": 580,
+            "width": 520,
+            "height": 376.5,
+            "top": 580,
+            "right": 608,
+            "bottom": 956.5,
+            "left": 88
+          },
+          "id": ""
+        }
+      ],
+      "after": [
+        {
+          "rect": {
+            "x": 88,
+            "y": 174,
+            "width": 520,
+            "height": 374.5,
+            "top": 174,
+            "right": 608,
+            "bottom": 548.5,
+            "left": 88
+          },
+          "id": ""
+        },
+        {
+          "rect": {
+            "x": 966,
+            "y": 174,
+            "width": 520,
+            "height": 420,
+            "top": 174,
+            "right": 1486,
+            "bottom": 594,
+            "left": 966
+          },
+          "id": ""
+        },
+        {
+          "rect": {
+            "x": 88,
+            "y": 580,
+            "width": 520,
+            "height": 376.5,
+            "top": 580,
+            "right": 608,
+            "bottom": 956.5,
+            "left": 88
+          },
+          "id": ""
+        }
+      ],
+      "equal": true
+    },
+    {
+      "name": "Dock collapse and expand",
+      "passed": true
+    },
+    {
+      "name": "report generation without session",
+      "result": "当前无仿真会话，无法生成报告"
+    },
+    {
+      "name": "health check army-pine light",
+      "result": "2 pass, 0 warning, 2 error: no device and no connection"
+    },
+    {
+      "name": "bandwidth summary / port and timing / grouped bandwidth switches",
+      "passed": true
+    },
+    {
+      "name": "final pointer drag and keyboard ArrowRight",
+      "before": {
+        "x": 88,
+        "y": 174,
+        "width": 520,
+        "height": 390.5
+      },
+      "afterDrag": {
+        "x": 138,
+        "y": 204,
+        "width": 520,
+        "height": 390.5
+      },
+      "afterKeyboard": {
+        "x": 146,
+        "y": 204,
+        "width": 520,
+        "height": 390.5
+      }
+    },
+    {
+      "name": "injection panel remains open while brand changes to air-gray",
+      "scope": "air-gray",
+      "dropdown": [
+        "随机值在值域范围内随机生成",
+        "序列递增计数器模式，数值递增",
+        "固定值使用预设固定值",
+        "循环模式循环使用预设数据",
+        "正弦波模拟周期性变化"
+      ],
+      "saved": false
+    }
+  ],
+  "pageErrors": [],
+  "finalTheme": "air-gray",
+  "finalVariant": "mode-dark__density-comfortable__contrast-normal__motion-full__radius-default",
+  "limitations": [
+    "Empty project: no live simulation, live samples, fault execution, device drawer, or generated report coverage",
+    "Export-only ECharts components source-reviewed only",
+    "Active panels expose no resize/collapse controls",
+    "Earlier non-final images precede final grid-color change"
+  ]
+}

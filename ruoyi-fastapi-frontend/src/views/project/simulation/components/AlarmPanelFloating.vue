@@ -5,8 +5,7 @@
     :size="size"
     :collapsed-size="collapsedSize"
     :default-collapsed="defaultCollapsed"
-    class="alarm-panel-floating floating-panel shadow-lg"
-    theme="dark"
+    class="alarm-panel-floating floating-panel"
   >
     <template #header>
       <div class="panel-header">
@@ -71,7 +70,7 @@ defineEmits(['alarm-click', 'filter-change']);
 
 <style scoped lang="less">
 .floating-panel {
-  border: 1px solid rgba(148, 163, 184, 0.15);
+  border: 1px solid color-mix(in srgb, var(--zx-semantic-border-default) 15%, transparent);
 }
 
 .panel-header {
@@ -79,7 +78,7 @@ defineEmits(['alarm-click', 'filter-change']);
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  color: #e2e8f0;
+  color: var(--zx-semantic-text-primary);
 }
 
 .panel-title {
@@ -93,7 +92,7 @@ defineEmits(['alarm-click', 'filter-change']);
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #94a3b8;
+  color: var(--zx-semantic-text-secondary);
   font-size: 12px;
 }
 

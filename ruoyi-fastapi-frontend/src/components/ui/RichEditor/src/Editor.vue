@@ -150,6 +150,59 @@ defineExpose({
 <style src="@wangeditor/editor/dist/css/style.css"></style>
 
 <style scoped>
+/* The application owns this third-party editor adapter. Content's explicit
+   inline colors keep their precedence; only the editor's default UI is themed. */
+.rich-editor-container {
+  --w-e-textarea-bg-color: var(--zx-semantic-surface-card-fill);
+  --w-e-textarea-color: var(--zx-semantic-surface-card-on-text);
+  --w-e-textarea-border-color: var(--zx-semantic-border-default);
+  --w-e-textarea-slight-border-color: var(--zx-semantic-border-subtle);
+  --w-e-textarea-slight-color: var(--zx-semantic-text-secondary);
+  --w-e-textarea-slight-bg-color: var(--zx-semantic-fill-subtle);
+  --w-e-textarea-selected-border-color: var(--zx-semantic-accent-base);
+  --w-e-textarea-handler-bg-color: var(--zx-semantic-accent-base);
+  --w-e-toolbar-bg-color: var(--zx-semantic-surface-header-fill);
+  --w-e-toolbar-color: var(--zx-semantic-surface-header-on-text);
+  --w-e-toolbar-active-color: var(--zx-semantic-surface-selected-on-text);
+  --w-e-toolbar-active-bg-color: var(--zx-semantic-surface-selected-fill);
+  --w-e-toolbar-disabled-color: var(--zx-semantic-text-disabled);
+  --w-e-toolbar-border-color: var(--zx-semantic-border-default);
+  --w-e-modal-button-bg-color: var(--zx-semantic-surface-field-fill);
+  --w-e-modal-button-border-color: var(--zx-semantic-border-control);
+}
+
+/* Toolbar geometry follows density; stored document layout is independent. */
+:deep(.w-e-bar-divider) {
+  height: calc(var(--zx-semantic-spacing-control-y) * 3 + 16px);
+}
+:deep(.w-e-bar-item) {
+  height: auto;
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) / 2));
+}
+:deep(.w-e-bar-item button),
+:deep(.w-e-modal button) {
+  height: calc(var(--zx-semantic-spacing-control-y) * 2 + 16px);
+}
+:deep(.w-e-select-list),
+:deep(.w-e-drop-panel) {
+  top: 100%;
+  margin-top: 0;
+}
+:deep(.w-e-select-list ul li) {
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) - 1px));
+}
+:deep(.w-e-drop-panel) {
+  padding-block: calc(var(--zx-semantic-spacing-control-y) + 2px);
+}
+:deep(.w-e-modal) {
+  padding-top: calc(var(--zx-semantic-spacing-control-y) * 2 + 4px);
+}
+:deep(.w-e-modal input[type='text']),
+:deep(.w-e-modal input[type='number']),
+:deep(.w-e-modal textarea) {
+  padding-block: max(2px, calc(var(--zx-semantic-spacing-control-y) - 3.5px));
+}
+
 /* 基础编辑器样式 */
 :deep(.w-e-text-container) {
   font-family:
@@ -161,19 +214,19 @@ defineExpose({
     sans-serif;
   font-size: 14px;
   line-height: 1.8;
-  color: #333;
+  color: var(--zx-semantic-surface-card-on-text);
 }
 
 :deep(.w-e-text-container [data-slate-editor]) {
   padding: 16px 20px;
-  caret-color: #1a1a1a;
+  caret-color: var(--zx-semantic-surface-card-on-text);
 }
 
 :deep(.w-e-text-container [data-slate-editor] h1) {
   font-size: 26px;
   margin: 24px 0 16px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--zx-semantic-surface-card-on-text);
   line-height: 1.4;
 }
 
@@ -181,7 +234,7 @@ defineExpose({
   font-size: 22px;
   margin: 20px 0 14px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--zx-semantic-surface-card-on-text);
   line-height: 1.4;
 }
 
@@ -189,7 +242,7 @@ defineExpose({
   font-size: 18px;
   margin: 18px 0 12px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--zx-semantic-surface-card-on-text);
   line-height: 1.4;
 }
 
@@ -197,7 +250,7 @@ defineExpose({
   font-size: 16px;
   margin: 16px 0 10px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--zx-semantic-surface-card-on-text);
   line-height: 1.4;
 }
 
@@ -205,7 +258,7 @@ defineExpose({
   font-size: 14px;
   margin: 14px 0 8px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: var(--zx-semantic-surface-card-on-text);
   line-height: 1.4;
 }
 
@@ -231,11 +284,11 @@ defineExpose({
 }
 
 :deep(.w-e-text-container [data-slate-editor] blockquote) {
-  border-left: 4px solid #d0d7de;
+  border-left: 4px solid var(--zx-semantic-border-default);
   padding: 12px 16px;
   margin: 16px 0;
-  background: #f6f8fa;
-  color: #57606a;
+  background: var(--zx-semantic-fill-subtle);
+  color: var(--zx-semantic-text-secondary);
 }
 
 :deep(.w-e-text-container [data-slate-editor] table) {
@@ -246,27 +299,27 @@ defineExpose({
 
 :deep(.w-e-text-container [data-slate-editor] th),
 :deep(.w-e-text-container [data-slate-editor] td) {
-  border: 1px solid #d0d7de;
+  border: 1px solid var(--zx-semantic-border-default);
   padding: 10px 12px;
   text-align: left;
 }
 
 :deep(.w-e-text-container [data-slate-editor] th) {
-  background: #f6f8fa;
+  background: var(--zx-semantic-fill-subtle);
   font-weight: 600;
 }
 
 :deep(.w-e-text-container [data-slate-editor] code) {
-  background: #f6f8fa;
+  background: var(--zx-semantic-fill-subtle);
   padding: 2px 6px;
   border-radius: 4px;
   font-family: 'Consolas', 'Monaco', monospace;
   font-size: 13px;
-  color: #d63384;
+  color: var(--zx-semantic-text-primary);
 }
 
 :deep(.w-e-text-container [data-slate-editor] pre) {
-  background: #f6f8fa;
+  background: var(--zx-semantic-fill-subtle);
   padding: 16px;
   border-radius: 6px;
   overflow-x: auto;
@@ -280,7 +333,7 @@ defineExpose({
 }
 
 :deep(.w-e-text-container [data-slate-editor] a) {
-  color: #0969da;
+  color: var(--zx-semantic-accent-on-surface, var(--zx-semantic-text-primary));
   text-decoration: none;
 }
 
@@ -296,7 +349,7 @@ defineExpose({
 
 :deep(.w-e-text-container [data-slate-editor] hr) {
   border: none;
-  border-top: 1px solid #d0d7de;
+  border-top: 1px solid var(--zx-semantic-border-default);
   margin: 24px 0;
 }
 
@@ -309,7 +362,7 @@ defineExpose({
   min-height: 100% !important; /* Ensure it fills the parent */
   height: auto !important;
   overflow: visible !important;
-  background: #fff;
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 2px;
   /* Add word-break to prevent overflow */
   word-break: break-word;

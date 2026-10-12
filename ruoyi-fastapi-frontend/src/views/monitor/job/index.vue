@@ -8,8 +8,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['monitor:job:add']"
               >新增</ZxButton
             >
@@ -43,8 +43,8 @@
               v-hasPermi="['monitor:job:query']"
               >日志</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <el-select
               v-model="query.jobGroup"
               placeholder="请选择任务组名"
@@ -73,8 +73,8 @@
                 :value="dict.value"
               />
             </el-select>
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.jobName"
               placeholder="搜索任务名称"
@@ -83,8 +83,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

@@ -1,12 +1,15 @@
+import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 import { createBoundConfirmInputFactory } from '@zxio/zxui';
 import {
+  bindThemePreferenceController,
   createDefaultBrowserThemeHost,
   createThemeDeploymentResolver,
 } from '@zxio/zxui/theme-host';
-import { watch, type App } from 'vue';
+import type { App } from 'vue';
+import { ElMessage } from 'element-plus';
 
 import { setBoundConfirmInputFactoryProvider } from './confirm-input';
-import { projectZxThemeScope, zxThemePreference } from './zx-theme-config';
+import { zxThemePreferences, zxThemePreference } from './zx-theme-config';
 import {
   ZX_DEFAULT_THEME_ID,
   ZX_THEME_MANIFEST_LIMIT,
@@ -22,19 +25,7 @@ function diagnosticMessage(
   return diagnostics.map((item) => `${item.code}:${JSON.stringify(item.details ?? {})}`).join(', ');
 }
 
-export interface ZxThemeDeploymentData {
-  readonly deployment: unknown;
-  readonly registrations: readonly {
-    readonly manifest: {
-      readonly identity: {
-        readonly themeId: string;
-        readonly packageName: string;
-      };
-    };
-  }[];
-}
-
-export function bindZxThemeHost(app: App, themeDeployment: ZxThemeDeploymentData): void {
+export function bindZxThemeHost(app: App, themeDeployment: ThemeDeploymentOutput): void {
   for (const choice of ZX_THEME_PACKAGE_CHOICES) {
     if (
       !themeDeployment.registrations.some(
@@ -75,12 +66,17 @@ export function bindZxThemeHost(app: App, themeDeployment: ZxThemeDeploymentData
   if (!bound.ok) {
     throw new Error(`Failed to bind ZXUI theme host: ${diagnosticMessage(bound.diagnostics)}`);
   }
-  const stopProjection = watch(
-    bound.value.rootScope,
-    (scope) => {
-      if (scope?.state === 'ready') projectZxThemeScope(scope.resolved);
-    },
-    { immediate: true }
+  const stopPreferences = bindThemePreferenceController(
+    zxThemePreferences,
+    host.value.runtime,
+    bound.value,
+    (issue) => {
+      if (issue === 'storage-unavailable') {
+        ElMessage.warning('界面设置已生效，但无法保存到本地。');
+      } else {
+        ElMessage.error('界面设置切换失败，已恢复上次设置，请重试。');
+      }
+    }
   );
   setBoundConfirmInputFactoryProvider(() => {
     const factory = createBoundConfirmInputFactory(host.value.runtime, bound.value);
@@ -92,7 +88,7 @@ export function bindZxThemeHost(app: App, themeDeployment: ZxThemeDeploymentData
     return factory.value;
   });
   app.onUnmount(() => {
-    stopProjection();
+    stopPreferences();
     void host.value.dispose();
   });
 }

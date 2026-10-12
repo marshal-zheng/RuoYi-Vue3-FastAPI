@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-11",
+  "repositories": {
+    "/Users/hqz/Downloads/element-plus": "f02280658569b14cad7107aced7afb46ed841456",
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI": "b05caa8f23e6afa9efb4b6984ed4818628fc0694"
+  },
+  "workingCopyNote": "Business repository already had uncommitted changes. Hashes describe inspected working-copy files, not a clean-commit baseline.",
+  "sha256": {
+    "/Users/hqz/Downloads/element-plus/packages/theme-compiler/src/vite/index.ts": "c6858370d3bfbcfad4739965ef86c1cfc9d61e033cd9d4a74e2d4b7217ff3118",
+    "/Users/hqz/Downloads/element-plus/docs/.vitepress/build/compact-theme-data.ts": "15f8d81a97a5f795973a523e8fc7d170c8a9045b759253aa1877ad1da28fe7ea",
+    "/Users/hqz/Downloads/element-plus/packages/tokens/src/kernel/derivation.ts": "d6f0103f03d904647043eac4506fbd7f2ec76754c82324208f6cfc06b3c9cf93",
+    "/Users/hqz/Downloads/element-plus/packages/tokens/src/contracts/theme-contract-v4.ts": "04e2486de6f863629140fe8ecb058260c7de19e632790a0a48ee6563d8bfa9eb",
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/theme/zx-theme-config.ts": "818b2a2085e70d31b85ac6fd8d0455ff93ed5080b92a017ce8491e16ae7a0ffe",
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/assets/styles/tailwind.css": "bed5b75152593a3090069a0afcd73b421fe25a31be3f9b24981ff3070c413f41",
+    "/Users/hqz/Downloads/element-plus/packages/theme-air-gray/generated/theme.manifest.json": "9a823fb1aa1a54979ecfad3f20c2daca4f0094dcca9361f5712a49996c85f936",
+    "/Users/hqz/Downloads/element-plus/packages/theme-army-pine/generated/theme.manifest.json": "c257e6902fb35d09dddd6463b84d20f9cb99206406ccb8ae03baf545f74c90fd",
+    "/Users/hqz/Downloads/element-plus/packages/theme-default/generated/theme.manifest.json": "c5ca027f9ec6b8ab3f5c45ec1d9a514fa81f41608a36917de2acab555c3c44d2",
+    "/Users/hqz/Downloads/element-plus/packages/theme-defense-green/generated/theme.manifest.json": "4436275f81a4b67676fea137d929646f5f83ad34e2c3eaf1c33705c969a4eedb",
+    "/Users/hqz/Downloads/element-plus/packages/theme-factory-blue/generated/theme.manifest.json": "3e620eb431b97186cae088d60c918cb3d5f9e2e387082de4feda7fdf83d61508",
+    "/Users/hqz/Downloads/element-plus/packages/theme-industrial-blue/generated/theme.manifest.json": "52ef6ae7695e5a2ee87c1b1a11c40c4302ce2a2f0cedba0669f6389592e491bf",
+    "/Users/hqz/Downloads/element-plus/packages/theme-pap-olive/generated/theme.manifest.json": "bbd68124378a4650ad999cadedfe10c5bdf4e96c79bb1564d7569b0cf8a63373",
+    "/Users/hqz/Downloads/element-plus/packages/theme-rocket-moss/generated/theme.manifest.json": "c97ca9811bafd7942cfb5d89d3ec0af8231e48ee05e93491be589cf7dd3087bd",
+    "/Users/hqz/Downloads/element-plus/packages/theme-tech-blue/generated/theme.manifest.json": "d15e3f7494956a10763019cc3d597e2cba9ab38f167b9627a54e91877546cab4"
+  }
+}

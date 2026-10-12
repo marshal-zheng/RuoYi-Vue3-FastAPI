@@ -3,7 +3,9 @@
     <!-- 协议选择区域 -->
     <div v-if="currentTemplateComponent" class="protocol-selector-section">
       <div class="flex items-center gap-3">
-        <span class="text-sm font-medium text-gray-700">选择协议模板：</span>
+        <span class="text-sm font-medium text-zx-text-primary"
+          >选择协议模板：</span
+        >
         <ProtocolTemplateSelector
           v-model="selectedProtocolId"
           :protocol-type="portInfo?.interfaceType?.toLowerCase()"
@@ -41,7 +43,8 @@
     <el-empty
       v-else
       description="请先选择协议类型"
-      class="bg-white rounded-lg border border-dashed border-gray-300 mt-4"
+      class="rounded-lg border-dashed mt-4"
+      data-zx-surface="card"
     />
 
     <!-- 导入文件对话框 -->

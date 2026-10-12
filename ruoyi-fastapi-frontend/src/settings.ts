@@ -2,7 +2,6 @@
 
 interface SettingsConfig {
   title: string;
-  sideTheme: string;
   showSettings: boolean;
   topNav: boolean;
   topNavBorder: boolean;
@@ -20,10 +19,6 @@ const settings: SettingsConfig = {
    * 网页标题
    */
   title: import.meta.env.VITE_APP_TITLE,
-  /**
-   * 侧边栏主题 深色主题theme-dark，浅色主题theme-light
-   */
-  sideTheme: 'theme-light',
   /**
    * 是否系统布局配置
    */

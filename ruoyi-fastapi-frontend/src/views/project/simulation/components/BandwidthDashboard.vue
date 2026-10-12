@@ -5,13 +5,13 @@
       <div
         v-for="item in groupedBandwidth"
         :key="item.protocol"
-        class="flex-1 min-w-24 max-w-36 text-center cursor-pointer transition-all duration-300 hover:scale-105 p-3 rounded-lg border border-transparent hover:border-slate-700/50 hover:bg-slate-800/30"
+        class="flex-1 min-w-24 max-w-36 text-center cursor-pointer transition-all duration-300 hover:scale-105 p-3 rounded-lg border border-transparent hover:border-zx-border-default/50 hover:bg-zx-surface-card-fill/30"
         @click="$emit('port-click', item)"
       >
         <!-- 仪表环 -->
         <div class="relative w-20 h-20 mx-auto">
           <svg viewBox="0 0 100 100" class="-rotate-90">
-            <circle cx="50" cy="50" r="45" fill="none" stroke-width="6" class="stroke-slate-800" />
+            <circle cx="50" cy="50" r="45" fill="none" stroke-width="6" class="stroke-zx-border-default" />
             <circle
               cx="50"
               cy="50"
@@ -25,28 +25,28 @@
             />
           </svg>
           <div class="absolute inset-0 flex flex-col items-center justify-center">
-            <span class="text-lg font-bold text-slate-100 tabular-nums"
+            <span class="text-lg font-bold text-zx-text-primary tabular-nums"
               >{{ Math.round(item.loadPercent) }}%</span
             >
-            <span class="text-[10px] text-slate-500 uppercase tracking-wider font-medium mt-0.5">{{
+            <span class="text-[10px] text-zx-text-secondary uppercase tracking-wider font-medium mt-0.5">{{
               item.protocol
             }}</span>
           </div>
         </div>
         <!-- 信息 -->
         <div class="mt-3 space-y-1">
-          <div class="text-xs font-medium text-slate-300">
+          <div class="text-xs font-medium text-zx-text-secondary">
             {{ formatBandwidth(item.bandwidthMbps) }}
           </div>
-          <div class="text-[10px] text-slate-500">{{ item.messageCount }} 报文</div>
+          <div class="text-[10px] text-zx-text-secondary">{{ item.messageCount }} 报文</div>
         </div>
       </div>
 
       <!-- 空状态 -->
-      <div v-if="groupedBandwidth.length === 0" class="w-full text-center py-10 text-slate-500">
-        <el-icon class="text-4xl mb-3 text-slate-600"><DataLine /></el-icon>
+      <div v-if="groupedBandwidth.length === 0" class="w-full text-center py-10 text-zx-text-secondary">
+        <el-icon class="text-4xl mb-3 text-zx-text-disabled"><DataLine /></el-icon>
         <div class="text-sm font-medium">暂无带宽数据</div>
-        <div class="text-xs text-slate-600 mt-1">等待仿真开始</div>
+        <div class="text-xs text-zx-text-disabled mt-1">等待仿真开始</div>
       </div>
     </div>
 
@@ -54,11 +54,11 @@
     <div v-else class="w-full h-48 relative">
       <div
         v-if="bandwidthData.length === 0"
-        class="absolute inset-0 flex flex-col items-center justify-center text-slate-500"
+        class="absolute inset-0 flex flex-col items-center justify-center text-zx-text-secondary"
       >
-        <el-icon class="text-4xl mb-3 text-slate-600"><DataLine /></el-icon>
+        <el-icon class="text-4xl mb-3 text-zx-text-disabled"><DataLine /></el-icon>
         <div class="text-sm font-medium">暂无带宽数据</div>
-        <div class="text-xs text-slate-600 mt-1">等待仿真开始</div>
+        <div class="text-xs text-zx-text-disabled mt-1">等待仿真开始</div>
       </div>
       <div ref="chartRef" class="w-full h-full"></div>
     </div>
@@ -69,6 +69,9 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import { DataLine } from '@element-plus/icons-vue';
 import * as echarts from 'echarts';
+import { useChartTheme } from '@/theme/useChartTheme';
+
+const { theme: chartTheme } = useChartTheme();
 
 const props = defineProps({
   bandwidthData: {
@@ -141,9 +144,9 @@ function formatBandwidth(mbps) {
 }
 
 function initChart() {
-  if (!chartRef.value) return;
-
-  chartInstance = echarts.init(chartRef.value, 'dark');
+  if (!chartRef.value || !chartTheme.value) return;
+  chartInstance?.dispose();
+  chartInstance = echarts.init(chartRef.value, chartTheme.value);
 
   const option = {
     backgroundColor: 'transparent',
@@ -155,14 +158,14 @@ function initChart() {
     },
     tooltip: {
       trigger: 'axis',
-      backgroundColor: 'rgba(15, 23, 42, 0.95)',
-      borderColor: 'rgba(51, 65, 85, 0.7)',
+      backgroundColor: chartTheme.value.backgroundColor,
+      borderColor: chartTheme.value.tooltip.borderColor,
       borderWidth: 1,
-      textStyle: { color: '#e2e8f0', fontSize: 12 },
+      textStyle: { color: chartTheme.value.textStyle.color, fontSize: 12 },
       axisPointer: {
         type: 'cross',
         label: {
-          backgroundColor: 'rgba(30, 41, 59, 0.9)',
+          backgroundColor: chartTheme.value.backgroundColor,
         },
       },
       formatter: (params) => {
@@ -180,7 +183,7 @@ function initChart() {
     legend: {
       data: [],
       top: 0,
-      textStyle: { color: '#94a3b8', fontSize: 11 },
+      textStyle: { color: chartTheme.value.legend.inactiveColor, fontSize: 11 },
       itemWidth: 12,
       itemHeight: 8,
       itemGap: 15,
@@ -189,10 +192,10 @@ function initChart() {
       type: 'time',
       boundaryGap: false,
       axisLine: {
-        lineStyle: { color: '#334155', width: 1 },
+        lineStyle: { color: chartTheme.value.valueAxis.axisLine.lineStyle.color, width: 1 },
       },
       axisLabel: {
-        color: '#94a3b8',
+        color: chartTheme.value.legend.inactiveColor,
         fontSize: 10,
         rotate: 0,
         formatter: (value) => {
@@ -205,7 +208,7 @@ function initChart() {
       },
       splitLine: {
         show: true,
-        lineStyle: { color: 'rgba(51, 65, 85, 0.3)', type: 'dashed' },
+        lineStyle: { color: chartTheme.value.valueAxis.splitLine.lineStyle.color, type: 'dashed' },
       },
       axisPointer: {
         label: {
@@ -219,20 +222,20 @@ function initChart() {
     yAxis: {
       type: 'value',
       name: '负载率 (%)',
-      nameTextStyle: { color: '#94a3b8', fontSize: 11 },
+      nameTextStyle: { color: chartTheme.value.legend.inactiveColor, fontSize: 11 },
       min: 0,
       max: 100,
       axisLine: {
-        lineStyle: { color: '#334155', width: 1 },
+        lineStyle: { color: chartTheme.value.valueAxis.axisLine.lineStyle.color, width: 1 },
       },
       axisLabel: {
-        color: '#94a3b8',
+        color: chartTheme.value.legend.inactiveColor,
         fontSize: 10,
         formatter: '{value}%',
       },
       splitLine: {
         show: true,
-        lineStyle: { color: 'rgba(51, 65, 85, 0.3)', type: 'dashed' },
+        lineStyle: { color: chartTheme.value.valueAxis.splitLine.lineStyle.color, type: 'dashed' },
       },
     },
     series: [],
@@ -242,7 +245,7 @@ function initChart() {
 }
 
 function updateChart() {
-  if (!chartInstance) return;
+  if (!chartInstance || !chartTheme.value) return;
 
   if (!props.bandwidthData || props.bandwidthData.length === 0) {
     chartInstance.setOption({
@@ -312,7 +315,7 @@ function updateChart() {
         },
         itemStyle: {
           color,
-          borderColor: '#0f172a',
+          borderColor: chartTheme.value.backgroundColor,
           borderWidth: 1,
         },
         areaStyle: {
@@ -374,6 +377,25 @@ function updateChart() {
   }
 }
 
+// Apply only presentation, preserving the current series data and legend selection.
+watch(chartTheme, (theme) => {
+  if (!theme || !showTrend.value) return;
+  if (!chartInstance) {
+    nextTick(() => { initChart(); updateChart(); });
+    return;
+  }
+  chartInstance.setOption({
+    textStyle: theme.textStyle,
+    tooltip: { ...theme.tooltip, axisPointer: { label: { backgroundColor: theme.backgroundColor } } },
+    legend: { textStyle: theme.legend.textStyle, inactiveColor: theme.legend.inactiveColor },
+    xAxis: theme.valueAxis,
+    yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
+    series: (chartInstance.getOption().series || []).map(() => ({
+      itemStyle: { borderColor: theme.backgroundColor },
+    })),
+  });
+}, { flush: 'post' });
+
 watch(() => props.bandwidthData, updateChart, { deep: true, immediate: true });
 
 watch(showTrend, (show) => {
@@ -428,11 +450,11 @@ onUnmounted(() => {
 <style scoped>
 /* 自定义 Switch 样式 */
 :deep(.custom-switch .el-switch__label) {
-  color: #94a3b8 !important;
+  color: var(--zx-semantic-text-secondary) !important;
   font-size: 11px;
 }
 
 :deep(.custom-switch .el-switch__label.is-active) {
-  color: #cbd5e1 !important;
+  color: var(--zx-semantic-text-secondary) !important;
 }
 </style>

@@ -8,8 +8,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="danger"
               icon="Delete"
@@ -40,8 +40,8 @@
               v-hasPermi="['monitor:logininfor:export']"
               >导出</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <zx-input
               v-model="query.ipaddr"
               placeholder="请输入登录地址"
@@ -81,8 +81,8 @@
               style="width: 308px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid, refresh: handleRefresh, updateState }">

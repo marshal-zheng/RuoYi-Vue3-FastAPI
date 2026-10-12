@@ -6,7 +6,7 @@
   >
     <template #header>
       <div class="flex items-center gap-2.5 font-semibold text-base">
-        <el-icon :size="20" class="text-cyan-400"><Lightning /></el-icon>
+        <el-icon :size="20" class="text-zx-accent-on-surface"><Lightning /></el-icon>
         <span>{{ dialog.state.data?.eventId ? '编辑事件' : '添加事件' }}</span>
       </div>
     </template>
@@ -31,7 +31,7 @@
 
       <el-form-item v-if="formData.conditionType === 'time'" label="触发时间">
         <el-input-number v-model="formData.conditionValue.time" :min="0" style="width: 120px" />
-        <span class="ml-2 text-slate-400">秒</span>
+        <span class="ml-2 text-zx-text-secondary">秒</span>
       </el-form-item>
 
       <el-form-item v-if="formData.conditionType === 'message_count'" label="报文数量">
@@ -45,7 +45,7 @@
           :max="100"
           style="width: 120px"
         />
-        <span class="ml-2 text-slate-400">%</span>
+        <span class="ml-2 text-zx-text-secondary">%</span>
       </el-form-item>
 
       <el-divider>触发动作</el-divider>
@@ -325,25 +325,25 @@ defineExpose({
 
 :deep(.el-form) {
   .el-form-item__label {
-    color: var(--sim-text-primary, #f1f5f9);
+    color: var(--sim-text-primary, var(--zx-semantic-text-primary));
   }
 
   .el-input__inner,
   .el-input-number__decrease,
   .el-input-number__increase {
-    background: var(--sim-fill-light, rgba(15, 23, 42, 0.8));
-    border-color: var(--sim-border-base, rgba(148, 163, 184, 0.12));
-    color: var(--sim-text-primary, #f1f5f9);
+    background: var(--sim-fill-light, var(--zx-semantic-surface-card-fill));
+    border-color: var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent));
+    color: var(--sim-text-primary, var(--zx-semantic-text-primary));
   }
 
   .el-select .el-input__wrapper {
-    background: var(--sim-fill-light, rgba(15, 23, 42, 0.8));
-    border-color: var(--sim-border-base, rgba(148, 163, 184, 0.12));
+    background: var(--sim-fill-light, var(--zx-semantic-surface-card-fill));
+    border-color: var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent));
   }
 }
 
 :deep(.el-divider__text) {
-  background: var(--sim-bg-main, #0b1220);
-  color: var(--sim-text-primary, #f1f5f9);
+  background: var(--sim-bg-main, var(--zx-semantic-surface-canvas-fill));
+  color: var(--sim-text-primary, var(--zx-semantic-text-primary));
 }
 </style>

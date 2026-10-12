@@ -13,8 +13,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton
               type="primary"
               icon="Plus"
@@ -30,8 +30,8 @@
               v-hasPermi="['system:role:remove']"
               >批量取消授权</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <zx-input
               v-model="query.userName"
               placeholder="请输入用户名称"
@@ -46,8 +46,8 @@
               style="width: 240px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.userName"
               placeholder="搜索用户名称"
@@ -56,8 +56,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
 
       <template #table="{ grid }">

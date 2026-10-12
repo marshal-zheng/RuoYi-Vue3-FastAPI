@@ -7,7 +7,6 @@
       :size="size"
       :collapsed-size="collapsedSize"
       :default-collapsed="defaultCollapsed"
-      theme="dark"
       class="bandwidth-chart-panel simbus-floating-panel"
     >
       <template #header>
@@ -36,7 +35,7 @@
         </div>
       </template>
 
-      <div class="bandwidth-chart-panel monitor-panel">
+      <div class="bandwidth-chart-panel monitor-panel" :style="chartStyle">
         <!-- 实时图表区域 -->
         <div
           class="chart-wrapper"
@@ -90,11 +89,11 @@
         </div>
 
         <!-- Tooltip 浮层 (fixed定位，避免被截断) -->
-        <Teleport to="body">
+        <Teleport v-if="chartPortalTarget" :to="chartPortalTarget">
           <div
             v-if="chartTooltip.visible"
             class="chart-tooltip-fixed bandwidth"
-            :style="{ left: chartTooltip.tooltipX + 'px', top: chartTooltip.tooltipY + 'px' }"
+            :style="{ ...chartStyle, left: chartTooltip.tooltipX + 'px', top: chartTooltip.tooltipY + 'px' }"
           >
             <div class="tooltip-header">
               <span class="tooltip-time">{{ chartTooltip.time }}</span>
@@ -147,6 +146,24 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { useRequiredThemePortalBinding } from '@zxio/zxui';
+import { useChartTheme } from '@/theme/useChartTheme';
+
+const { theme: chartTheme } = useChartTheme();
+const portal = useRequiredThemePortalBinding();
+const chartPortalTarget = computed(() =>
+  portal.ok ? portal.value.binding.value?.target : undefined
+);
+const chartStyle = computed(() =>
+  chartTheme.value
+    ? {
+        '--simulation-chart-surface': chartTheme.value.backgroundColor,
+        '--simulation-chart-text': chartTheme.value.textStyle.color,
+        '--simulation-chart-muted': chartTheme.value.legend.inactiveColor,
+        '--simulation-chart-grid': chartTheme.value.valueAxis.splitLine.lineStyle.color,
+      }
+    : {}
+);
 
 const props = defineProps({
   bandwidthData: {
@@ -559,7 +576,7 @@ function handleChartMouseMove(event) {
     const pointX = padding.left + index * pointWidth;
     const pointY = height - padding.bottom - (value / maxY) * chartHeight;
 
-    // 计算tooltip位置（使用视口绝对坐标，因为tooltip通过Teleport放到body）
+    // 计算tooltip位置（使用视口绝对坐标，因为 tooltip 通过主题 Portal 挂载）
     const tooltipWidth = 140;
     const tooltipHeight = 70;
     const viewportWidth = window.innerWidth;
@@ -767,23 +784,18 @@ defineExpose({
 
 .monitor-panel {
   padding: 12px;
-  background: linear-gradient(180deg, #0a0f1a 0%, #0d1320 100%);
+  background: var(--simulation-chart-surface, var(--zx-semantic-surface-canvas-fill));
   border-radius: 8px;
 }
 
-:deep(.el-segmented) {
-  --el-segmented-bg-color: rgba(255, 255, 255, 0.05);
-  --el-segmented-item-hover-bg-color: rgba(255, 255, 255, 0.1);
-  --el-segmented-item-selected-bg-color: #10b981;
-}
 
 .chart-wrapper {
   position: relative;
   height: 180px;
   border-radius: 6px;
   overflow: hidden;
-  background: #0a0f18;
-  border: 1px solid rgba(0, 255, 136, 0.15);
+  background: var(--simulation-chart-surface, var(--zx-semantic-surface-canvas-fill));
+  border: 1px solid var(--simulation-chart-grid, var(--zx-semantic-border-subtle));
   cursor: crosshair;
 }
 
@@ -796,8 +808,8 @@ defineExpose({
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, rgba(0, 255, 136, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(0, 255, 136, 0.05) 1px, transparent 1px);
+      linear-gradient(to right, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px);
     background-size: 20px 20px;
   }
 
@@ -888,7 +900,7 @@ defineExpose({
 
   .label {
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     margin-bottom: 2px;
   }
 
@@ -900,13 +912,13 @@ defineExpose({
     text-shadow: 0 0 20px currentColor;
 
     &.normal {
-      color: #00ff88;
+      color: var(--zx-semantic-status-success-on-surface);
     }
     &.warning {
-      color: #fbbf24;
+      color: var(--zx-semantic-status-warning-on-surface);
     }
     &.critical {
-      color: #ef4444;
+      color: var(--zx-semantic-status-danger-on-surface);
       animation: pulse-critical 1s ease-in-out infinite;
     }
 
@@ -951,14 +963,14 @@ defineExpose({
       background: #fbbf24;
     }
     &.waiting {
-      background: #64748b;
+      background: var(--zx-semantic-text-disabled);
       animation: pulse-dot 2s ease-in-out infinite;
     }
   }
 
   .status-text {
     font-size: 10px;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
   }
 }
 
@@ -974,7 +986,7 @@ defineExpose({
 
   span {
     font-size: 9px;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     font-family: monospace;
   }
 }
@@ -991,9 +1003,9 @@ defineExpose({
   align-items: center;
   gap: 6px;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--zx-semantic-surface-card-fill);
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--simulation-chart-grid, var(--zx-semantic-border-subtle));
 
   .stat-icon {
     width: 24px;
@@ -1020,7 +1032,7 @@ defineExpose({
       content: '';
       width: 8px;
       height: 8px;
-      background: rgba(255, 255, 255, 0.8);
+      background: var(--zx-semantic-surface-card-fill);
       border-radius: 2px;
     }
   }
@@ -1032,17 +1044,17 @@ defineExpose({
 
     .stat-label {
       font-size: 9px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--simulation-chart-muted, var(--zx-semantic-text-secondary));
     }
 
     .stat-value {
       font-size: 12px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--simulation-chart-text, var(--zx-semantic-text-primary));
       font-family: monospace;
 
       &.highlight {
-        color: #fbbf24;
+        color: var(--zx-semantic-status-warning-on-surface);
       }
     }
   }

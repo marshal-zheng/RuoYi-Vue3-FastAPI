@@ -83,42 +83,18 @@ const getIconComponent = (iconName) => {
 </script>
 
 <style scoped>
-/* 深色主题支持 */
-@media (prefers-color-scheme: dark) {
-  .xflow-context-menu {
-    color: #e4e7ed;
-    background: #2d2d2d;
-    border-color: #4c4d4f;
-  }
-
-  .menu-item:hover:not(.menu-item--disabled, .menu-item--divider) {
-    background-color: #3a3a3a;
-  }
-
-  .menu-item--disabled {
-    color: #6c6e72;
-  }
-
-  .menu-item--divider {
-    background-color: #4c4d4f;
-  }
-
-  .menu-item__shortcut {
-    color: #909399;
-  }
-}
-
 .xflow-context-menu {
+  color: var(--zx-semantic-surface-overlay-on-text);
   position: fixed;
   z-index: 9999;
   max-width: 240px;
   min-width: 160px;
   padding: 4px 0;
   font-size: 14px;
-  background: white;
-  border: 1px solid #e4e7ed;
+  background: var(--zx-semantic-surface-overlay-fill);
+  border: 1px solid var(--zx-semantic-border-default);
   border-radius: 6px;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  box-shadow: var(--zx-semantic-surface-overlay-depth);
   user-select: none;
 }
 
@@ -132,21 +108,21 @@ const getIconComponent = (iconName) => {
 }
 
 .menu-item:hover:not(.menu-item--disabled, .menu-item--divider) {
-  background-color: #f5f7fa;
+  background-color: var(--zx-semantic-fill-accent-hover);
 }
 
 .menu-item--disabled {
-  color: #c0c4cc;
+  color: var(--zx-semantic-text-disabled);
   cursor: not-allowed;
 }
 
 .menu-item--danger {
-  color: #f56c6c;
+  color: var(--zx-semantic-status-danger-on-surface);
 }
 
 .menu-item--danger:hover:not(.menu-item--disabled) {
-  color: #f56c6c;
-  background-color: #fef0f0;
+  color: var(--zx-semantic-status-danger-on-surface);
+  background-color: var(--el-color-danger-light-9);
 }
 
 .menu-item--divider {
@@ -154,11 +130,11 @@ const getIconComponent = (iconName) => {
   padding: 0;
   margin: 4px 8px;
   cursor: default;
-  background-color: #e4e7ed;
+  background-color: var(--zx-semantic-border-default);
 }
 
 .menu-item--divider:hover {
-  background-color: #e4e7ed;
+  background-color: var(--zx-semantic-border-default);
 }
 
 .menu-item__icon {
@@ -174,7 +150,7 @@ const getIconComponent = (iconName) => {
 .menu-item__shortcut {
   font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', monospace;
   font-size: 12px;
-  color: #909399;
+  color: var(--zx-semantic-text-secondary);
   flex-shrink: 0;
 }
 </style>

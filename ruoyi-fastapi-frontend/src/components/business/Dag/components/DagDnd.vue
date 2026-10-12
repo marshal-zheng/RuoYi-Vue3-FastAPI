@@ -512,9 +512,9 @@ const handleMouseDown = (event, item) => {
   width: 100%;
   max-width: 320px;
   height: 100%;
-  background: rgb(247, 248, 250);
-  border: 1px solid #eee;
-  // border-right: 1px solid #e2e8f0;
+  background: var(--zx-semantic-surface-panel-fill);
+  border: 1px solid var(--zx-semantic-border-subtle);
+  // border-right: 1px solid var(--zx-semantic-border-subtle);
   display: flex;
   flex-direction: column;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -526,36 +526,36 @@ const handleMouseDown = (event, item) => {
     justify-content: center;
     height: 42px;
     padding: 0 16px;
-    background: #f6f8fa;
-    border-bottom: 1px solid #eaebed;
+    background: var(--zx-semantic-surface-panel-fill);
+    border-bottom: 1px solid var(--zx-semantic-border-subtle);
 
     .header-title {
       margin: 0;
       font-size: 14px;
       font-weight: 600;
-      color: #1f2937;
+      color: var(--zx-semantic-text-primary);
       letter-spacing: -0.01em;
     }
   }
 
   .search-section {
     padding: 10px;
-    background: rgb(247, 248, 250);
-    border-bottom: 1px solid #e2e8f0;
+    background: var(--zx-semantic-surface-panel-fill);
+    border-bottom: 1px solid var(--zx-semantic-border-subtle);
 
     :deep(.el-input) {
       .el-input__wrapper {
         // border-radius: 8px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--zx-semantic-surface-field-inner);
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         padding: 8px 12px;
 
         &:hover {
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          box-shadow: var(--zx-semantic-surface-overlay-depth);
         }
 
         &.is-focus {
-          box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+          box-shadow: 0 0 0 2px var(--zx-semantic-fill-selected);
         }
       }
 
@@ -571,8 +571,8 @@ const handleMouseDown = (event, item) => {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 12px;
-    // background: #ffffff;
-    // border: 1px solid #e2e8f0;
+    // background: var(--zx-semantic-surface-elevated);
+    // border: 1px solid var(--zx-semantic-border-subtle);
     border-radius: 8px;
     // margin: 12px;
     box-sizing: border-box;
@@ -587,11 +587,11 @@ const handleMouseDown = (event, item) => {
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #d1d5db;
+      background: var(--zx-semantic-border-default);
       border-radius: 3px;
 
       &:hover {
-        background: #9ca3af;
+        background: var(--zx-semantic-text-disabled);
       }
     }
   }
@@ -608,7 +608,7 @@ const handleMouseDown = (event, item) => {
       display: flex;
       align-items: center;
       padding: 8px 12px;
-      background: rgba(59, 130, 246, 0.05);
+      background: var(--zx-semantic-fill-accent-hover);
       border-radius: 4px;
       cursor: pointer;
       user-select: none;
@@ -616,12 +616,12 @@ const handleMouseDown = (event, item) => {
       margin-bottom: 8px;
 
       &:hover {
-        background: rgba(59, 130, 246, 0.1);
+        background: var(--zx-semantic-fill-selected);
       }
 
       .category-icon {
         font-size: 14px;
-        color: #6b7280;
+        color: var(--zx-semantic-text-secondary);
         transition: transform 0.2s;
         margin-right: 6px;
 
@@ -634,13 +634,13 @@ const handleMouseDown = (event, item) => {
         flex: 1;
         font-size: 13px;
         font-weight: 600;
-        color: #374151;
+        color: var(--zx-semantic-text-primary);
       }
 
       .category-count {
         font-size: 12px;
-        color: #9ca3af;
-        background: rgba(156, 163, 175, 0.15);
+        color: var(--zx-semantic-text-disabled);
+        background: var(--zx-semantic-fill-subtle);
         padding: 2px 8px;
         border-radius: 10px;
         min-width: 20px;
@@ -657,7 +657,7 @@ const handleMouseDown = (event, item) => {
     display: flex;
     align-items: center;
     padding: 6px 12px;
-    background: #ffffff;
+    background: var(--zx-semantic-surface-elevated);
     border-radius: 4px;
     cursor: grab;
     user-select: none;
@@ -671,14 +671,14 @@ const handleMouseDown = (event, item) => {
     }
 
     &:hover {
-      background: #f0f9ff;
-      box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12);
+      background: var(--zx-semantic-fill-accent-hover);
+      box-shadow: 0 2px 8px var(--zx-semantic-fill-selected);
       transform: translateX(2px);
     }
 
     &:active {
       transform: translateX(0);
-      box-shadow: 0 1px 4px rgba(59, 130, 246, 0.08);
+      box-shadow: 0 1px 4px var(--zx-semantic-fill-accent-hover);
     }
 
     .operator-icon {
@@ -688,8 +688,12 @@ const handleMouseDown = (event, item) => {
       width: 32px;
       height: 32px;
       border-radius: 6px;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(99, 102, 241, 0.15));
-      color: #3b82f6;
+      background: linear-gradient(
+        135deg,
+        var(--zx-semantic-fill-selected),
+        var(--zx-semantic-fill-selected)
+      );
+      color: var(--zx-semantic-accent-on-surface);
       font-size: 16px;
       flex-shrink: 0;
     }
@@ -702,7 +706,7 @@ const handleMouseDown = (event, item) => {
       .operator-title {
         font-size: 14px;
         font-weight: 500;
-        color: #111827;
+        color: var(--zx-semantic-text-primary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -711,7 +715,7 @@ const handleMouseDown = (event, item) => {
 
       .operator-category {
         font-size: 12px;
-        color: #9ca3af;
+        color: var(--zx-semantic-text-disabled);
         margin-top: 2px;
         white-space: nowrap;
         overflow: hidden;
@@ -724,7 +728,7 @@ const handleMouseDown = (event, item) => {
       text-align: left;
       font-size: 14px;
       font-weight: 500;
-      color: #111827;
+      color: var(--zx-semantic-text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -743,7 +747,7 @@ const handleMouseDown = (event, item) => {
 
     .loading-icon {
       font-size: 32px;
-      color: #3b82f6;
+      color: var(--zx-semantic-accent-on-surface);
       margin-bottom: 12px;
 
       &.is-loading {
@@ -754,7 +758,7 @@ const handleMouseDown = (event, item) => {
     .loading-text {
       font-size: 14px;
       font-weight: 500;
-      color: #6b7280;
+      color: var(--zx-semantic-text-secondary);
     }
   }
 
@@ -768,20 +772,20 @@ const handleMouseDown = (event, item) => {
 
     .empty-icon {
       font-size: 32px;
-      color: #d1d5db;
+      color: var(--zx-semantic-border-default);
       margin-bottom: 12px;
     }
 
     .empty-text {
       font-size: 14px;
       font-weight: 500;
-      color: #6b7280;
+      color: var(--zx-semantic-text-secondary);
       margin-bottom: 4px;
     }
 
     .empty-desc {
       font-size: 12px;
-      color: #9ca3af;
+      color: var(--zx-semantic-text-disabled);
     }
   }
 }

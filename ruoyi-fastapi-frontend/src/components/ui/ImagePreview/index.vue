@@ -70,8 +70,8 @@ const realHeight = computed(() =>
 <style scoped>
 .el-image {
   border-radius: 5px;
-  background-color: #ebeef5;
-  box-shadow: 0 0 5px 1px #ccc;
+  background-color: var(--zx-semantic-surface-field-fill);
+  box-shadow: var(--zx-semantic-surface-field-inner);
 }
 
 .el-image :deep(.el-image__inner) {
@@ -89,7 +89,7 @@ const realHeight = computed(() =>
   align-items: center;
   width: 100%;
   height: 100%;
-  color: #909399;
+  color: var(--zx-semantic-surface-field-on-text-secondary);
   font-size: 30px;
 }
 </style>

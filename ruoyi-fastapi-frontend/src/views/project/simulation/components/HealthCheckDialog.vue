@@ -6,14 +6,14 @@
   >
     <template #header>
       <div class="flex items-center gap-2.5 font-semibold text-base">
-        <el-icon :size="20" class="text-cyan-400"><Monitor /></el-icon>
+        <el-icon :size="20" class="text-zx-accent-on-surface"><Monitor /></el-icon>
         <span>健康自检报告</span>
       </div>
     </template>
 
     <template #footer>
       <div class="flex items-center justify-between w-full">
-        <span class="text-xs text-slate-400">检查时间: {{ formatTime(report?.timestamp) }}</span>
+        <span class="text-xs text-zx-text-secondary">检查时间: {{ formatTime(report?.timestamp) }}</span>
         <div class="flex gap-2">
           <el-button @click="handleRecheck">
             <el-icon><Refresh /></el-icon>
@@ -33,21 +33,21 @@
           </el-icon>
         </div>
         <div class="flex-1">
-          <div class="text-base font-semibold text-slate-100 mb-1">{{ summaryTitle }}</div>
-          <div class="text-sm text-slate-400">{{ summaryDesc }}</div>
+          <div class="text-base font-semibold text-zx-text-primary mb-1">{{ summaryTitle }}</div>
+          <div class="text-sm text-zx-text-secondary">{{ summaryDesc }}</div>
         </div>
         <div class="flex gap-6">
           <div class="flex flex-col items-center min-w-[50px]">
             <span class="text-2xl font-bold text-green-400">{{ report?.passedChecks || 0 }}</span>
-            <span class="text-xs text-slate-400">通过</span>
+            <span class="text-xs text-zx-text-secondary">通过</span>
           </div>
           <div class="flex flex-col items-center min-w-[50px]">
             <span class="text-2xl font-bold text-amber-400">{{ report?.warningChecks || 0 }}</span>
-            <span class="text-xs text-slate-400">警告</span>
+            <span class="text-xs text-zx-text-secondary">警告</span>
           </div>
           <div class="flex flex-col items-center min-w-[50px]">
             <span class="text-2xl font-bold text-red-400">{{ report?.errorChecks || 0 }}</span>
-            <span class="text-xs text-slate-400">错误</span>
+            <span class="text-xs text-zx-text-secondary">错误</span>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@
           >
             <template #title>
               <div class="flex items-center justify-between w-full pr-3">
-                <span class="font-medium text-slate-200">{{ category }}</span>
+                <span class="font-medium text-zx-text-primary">{{ category }}</span>
                 <div class="flex gap-1.5">
                   <el-tag v-if="getCategoryStats(items).error > 0" type="danger" size="small">
                     {{ getCategoryStats(items).error }} 错误
@@ -95,8 +95,8 @@
                   </el-icon>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <div class="font-medium text-slate-100 mb-1">{{ item.name }}</div>
-                  <div class="text-sm text-slate-300 break-words">{{ item.message }}</div>
+                  <div class="font-medium text-zx-text-primary mb-1">{{ item.name }}</div>
+                  <div class="text-sm text-zx-text-secondary break-words">{{ item.message }}</div>
                   <div
                     v-if="item.suggestion"
                     class="suggestion-box flex items-start gap-1 mt-2 p-2 text-xs rounded"
@@ -143,7 +143,7 @@ const dialog = useDialog({
 
 // 汇总背景样式
 const summaryBgClass = computed(() => {
-  if (!report.value) return 'bg-gray-50';
+  if (!report.value) return 'bg-zx-surface-canvas-fill';
   if (report.value.healthy) return 'bg-gradient-to-r from-green-50 to-emerald-50';
   if (report.value.canSimulate) return 'bg-gradient-to-r from-amber-50 to-yellow-50';
   return 'bg-gradient-to-r from-red-50 to-rose-50';
@@ -151,7 +151,7 @@ const summaryBgClass = computed(() => {
 
 // 汇总图标样式
 const summaryIconClass = computed(() => {
-  if (!report.value) return 'text-gray-400';
+  if (!report.value) return 'text-zx-text-secondary';
   if (report.value.healthy) return 'text-green-500';
   if (report.value.canSimulate) return 'text-amber-500';
   return 'text-red-500';
@@ -218,13 +218,13 @@ function getStatusIcon(status) {
 function getItemBgClass(status) {
   switch (status) {
     case 'success':
-      return 'bg-slate-800/50';
+      return 'bg-zx-surface-card-fill/50';
     case 'warning':
       return 'bg-amber-500/10 border-l-[3px] border-amber-400';
     case 'error':
       return 'bg-red-500/10 border-l-[3px] border-red-400';
     default:
-      return 'bg-slate-800/50';
+      return 'bg-zx-surface-card-fill/50';
   }
 }
 
@@ -238,7 +238,7 @@ function getItemIconClass(status) {
     case 'error':
       return 'text-red-500';
     default:
-      return 'text-gray-400';
+      return 'text-zx-text-secondary';
   }
 }
 
@@ -306,19 +306,19 @@ defineExpose({
 }
 
 .check-item {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--zx-semantic-surface-card-fill);
   border: 1px solid @sim-dialog-border;
   transition: all 0.3s ease;
 
   &:hover {
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--zx-semantic-surface-card-fill);
     border-color: @sim-dialog-border-hover;
   }
 }
 
 .suggestion-box {
-  background: rgba(34, 211, 238, 0.12) !important;
+  background: color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent) !important;
   color: @sim-dialog-info !important;
-  border: 1px solid rgba(34, 211, 238, 0.25);
+  border: 1px solid color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent);
 }
 </style>

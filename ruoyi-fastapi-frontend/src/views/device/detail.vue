@@ -23,7 +23,7 @@
           @node:click="onNodeClick"
           @node-dblclick="onNodeDblClick"
         >
-          <XFlowGrid :size="14" type="mesh" :dot-size="2" color="#e6e6e6" />
+          <XFlowGrid :size="14" type="mesh" :dot-size="2" />
         </XFlowGraph>
       </XFlow>
     </div>
@@ -123,7 +123,7 @@ const connectionEdgeOptions = {
   zIndex: -1,
   attrs: {
     line: {
-      stroke: '#C2C8D5',
+      stroke: 'var(--zx-semantic-border-strong)',
       strokeWidth: 2,
       targetMarker: { name: 'block', width: 8, height: 6 },
     },
@@ -373,12 +373,13 @@ function updateGraphData() {
     };
   });
 
+  // SVG paint attributes resolve CSS variables at the themed DOM scope; no theme-change rebuild.
   const BASE_PORT_LABEL_ATTRS = {
     text: '',
     fontSize: 9,
     fontFamily: 'Arial, sans-serif',
     fontWeight: 500,
-    fill: '#4b5563',
+    fill: 'var(--zx-semantic-surface-field-on-text)',
     textAnchor: 'middle',
     textVerticalAnchor: 'middle',
     'dominant-baseline': 'middle',
@@ -402,7 +403,7 @@ function updateGraphData() {
         x: -width / 2,
         y: -6,
         magnet: true,
-        fill: '#fff',
+        fill: 'var(--zx-semantic-surface-field-fill)',
         strokeWidth: 1,
         cursor: 'pointer',
         pointerEvents: 'all',
@@ -448,11 +449,11 @@ function updateGraphData() {
         portBody: {
           stroke: color,
           strokeWidth: isSelected ? 2 : 1,
-          fill: isSelected ? '#e8f3ff' : '#fff',
+          fill: isSelected ? 'var(--zx-semantic-surface-selected-fill)' : 'var(--zx-semantic-surface-field-fill)',
         },
         portLabel: {
           text,
-          fill: isSelected ? '#1f4b99' : '#4b5563',
+          fill: isSelected ? 'var(--zx-semantic-surface-selected-on-text)' : 'var(--zx-semantic-surface-field-on-text)',
           fontWeight: isSelected ? 600 : 500,
         },
       },
@@ -648,8 +649,8 @@ function updatePortHighlight() {
       const isSelected =
         normalizedSelectedKey && normalizePortKey(port?.id) === normalizedSelectedKey;
       node.setPortProp(port.id, ['attrs', 'portBody', 'strokeWidth'], isSelected ? 2 : 1);
-      node.setPortProp(port.id, ['attrs', 'portBody', 'fill'], isSelected ? '#e8f3ff' : '#fff');
-      node.setPortProp(port.id, ['attrs', 'portLabel', 'fill'], isSelected ? '#1f4b99' : '#4b5563');
+      node.setPortProp(port.id, ['attrs', 'portBody', 'fill'], isSelected ? 'var(--zx-semantic-surface-selected-fill)' : 'var(--zx-semantic-surface-field-fill)');
+      node.setPortProp(port.id, ['attrs', 'portLabel', 'fill'], isSelected ? 'var(--zx-semantic-surface-selected-on-text)' : 'var(--zx-semantic-surface-field-on-text)');
       node.setPortProp(port.id, ['attrs', 'portLabel', 'fontWeight'], isSelected ? 600 : 500);
     });
     node.setData({ ...node.getData(), selectedPortId: selectedPortId.value });

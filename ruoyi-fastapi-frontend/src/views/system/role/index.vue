@@ -9,8 +9,8 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-        <div class="zx-grid-form-bar">
-          <div class="zx-grid-form-bar__left">
+        <ZxListToolbar aria-label="列表操作与筛选">
+          <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:role:add']"
               >新增</ZxButton
             >
@@ -37,8 +37,8 @@
               v-hasPermi="['system:role:export']"
               >导出</ZxButton
             >
-          </div>
-          <div class="zx-grid-form-bar__filters">
+          </template>
+          <template #filters>
             <zx-input
               v-model="query.roleKey"
               placeholder="请输入权限字符"
@@ -70,8 +70,8 @@
               style="width: 240px"
               @change="(v) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
             />
-          </div>
-          <div class="zx-grid-form-bar__right">
+          </template>
+          <template #search>
             <ZxSearch
               v-model="query.roleName"
               placeholder="搜索角色名称"
@@ -80,8 +80,8 @@
               @search="() => onSearch({ handleRefresh, updateState })"
               @clear="() => onSearch({ handleRefresh, updateState })"
             />
-          </div>
-        </div>
+          </template>
+        </ZxListToolbar>
       </template>
       <template #table="{ grid }">
         <el-table

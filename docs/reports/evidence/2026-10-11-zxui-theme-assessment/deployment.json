@@ -1,0 +1,15 @@
+{
+  "kind": "development-virtual-module-static-measurement",
+  "note": "Not a production bundle or a browser timing measurement",
+  "themes": 9,
+  "entries": 2934,
+  "moduleBytes": 6744285,
+  "moduleGzipBytes": 1022164,
+  "moduleBrotliBytes": 429584,
+  "docsCodecSameInput": {
+    "moduleBytes": 1478253,
+    "moduleGzipBytes": 444744,
+    "moduleBrotliBytes": 287217,
+    "decodedDataIdentical": true
+  }
+}

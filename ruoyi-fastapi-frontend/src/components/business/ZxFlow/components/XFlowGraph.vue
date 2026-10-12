@@ -324,7 +324,7 @@ const initGraph = async () => {
           padding: 3,
           attrs: {
             strokeWidth: 3,
-            stroke: '#1890ff',
+            stroke: 'var(--zx-semantic-accent-base)',
           },
         },
         ...props.defaultHighlightOptions,
@@ -335,7 +335,7 @@ const initGraph = async () => {
           padding: 3,
           attrs: {
             strokeWidth: 3,
-            stroke: '#52c41a',
+            stroke: 'var(--zx-semantic-status-success)',
           },
         },
         ...props.embedHighlightOptions,
@@ -870,7 +870,7 @@ watch(() => [props.centerView, props.fitView], handleViewOperations);
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #fafafa;
+  background: var(--zx-semantic-surface-page);
 }
 
 .xflow-graph-container {

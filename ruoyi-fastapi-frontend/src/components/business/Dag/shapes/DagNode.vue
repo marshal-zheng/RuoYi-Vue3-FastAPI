@@ -226,9 +226,11 @@ const toggleCollapse = () => {
 // 模型图标配置
 const modelIconColor = computed(() => {
   if (!isLeafNode.value) {
-    return '#d9d9d9'; // 非叶子节点置灰
+    return 'var(--zx-semantic-text-disabled)'; // 非叶子节点置灰
   }
-  return hasModel.value ? 'var(--el-color-primary)' : 'var(--el-color-danger)';
+  return hasModel.value
+    ? 'var(--zx-semantic-accent-on-surface)'
+    : 'var(--zx-semantic-status-danger-on-surface)';
 });
 
 const modelPopoverTitle = computed(() => {
@@ -330,10 +332,10 @@ if (props.node) {
   height: 100%;
   position: relative;
   // min-height: 40px;
-  border: 1px solid #d9dfe7;
+  border: 1px solid var(--zx-semantic-border-default);
   border-radius: 6px;
-  background: #ffffff;
-  box-shadow: 0 1px 3px rgba(15, 34, 58, 0.08);
+  background: var(--zx-semantic-surface-elevated);
+  box-shadow: var(--zx-semantic-surface-card-depth);
   cursor: pointer;
   box-sizing: border-box;
   overflow: visible;
@@ -342,9 +344,9 @@ if (props.node) {
     position: absolute;
     width: 20px;
     height: 20px;
-    border: 1px solid rgba(64, 158, 255, 0.6);
-    background: #409eff;
-    color: #fff;
+    border: 1px solid var(--zx-semantic-accent-base);
+    background: var(--zx-semantic-accent-base);
+    color: var(--zx-semantic-accent-on-fill);
     font-size: 16px;
     font-size: 16px;
     font-weight: 600;
@@ -354,7 +356,7 @@ if (props.node) {
     cursor: pointer;
     padding: 0;
     z-index: 2;
-    box-shadow: 0 4px 10px rgba(64, 158, 255, 0.15);
+    box-shadow: 0 4px 10px var(--zx-semantic-fill-selected);
     transition:
       transform 0.15s ease,
       background 0.15s ease;
@@ -362,7 +364,7 @@ if (props.node) {
   }
 
   &__collapse:hover {
-    background: #66b1ff;
+    border-color: var(--zx-semantic-accent-on-surface);
   }
 
   &__collapse.horizontal {
@@ -380,9 +382,10 @@ if (props.node) {
   }
 
   &__collapse.is-collapsed {
-    background: #67c23a;
-    border-color: rgba(103, 194, 58, 0.28);
-    box-shadow: 0 2px 6px rgba(103, 194, 58, 0.25);
+    color: var(--zx-semantic-status-success-on-fill);
+    background: var(--zx-semantic-status-success);
+    border-color: var(--el-color-success-light-7);
+    box-shadow: 0 2px 6px var(--el-color-success-light-8);
   }
 
   &__collapse.horizontal.is-collapsed {
@@ -399,11 +402,11 @@ if (props.node) {
     justify-content: center;
     min-width: 44px;
     padding: 0 8px;
-    background: #f5f7fa;
-    color: #1f2d3d;
+    background: var(--zx-semantic-fill-subtle);
+    color: var(--zx-semantic-text-primary);
     font-size: 13px;
     font-weight: 600;
-    border-right: 1px solid #e3e8ee;
+    border-right: 1px solid var(--zx-semantic-border-subtle);
     white-space: nowrap;
   }
 
@@ -413,17 +416,17 @@ if (props.node) {
     justify-content: center;
     width: 28px;
     padding: 0 4px;
-    border-left: 1px solid #e3e8ee;
+    border-left: 1px solid var(--zx-semantic-border-subtle);
     background: transparent;
-    color: #909399;
+    color: var(--zx-semantic-text-secondary);
   }
 
   &.leaf-node &__indicator {
-    color: #409eff;
+    color: var(--zx-semantic-accent-base);
   }
 
   &.non-leaf-node &__indicator {
-    color: #909399;
+    color: var(--zx-semantic-text-secondary);
   }
 
   &__label {
@@ -432,7 +435,7 @@ if (props.node) {
     align-items: center;
     justify-content: center;
     padding: 6px 12px;
-    color: #303133;
+    color: var(--zx-semantic-text-primary);
     font-size: 14px;
     font-weight: 500;
     overflow: hidden;
@@ -471,8 +474,8 @@ if (props.node) {
     flex-direction: column;
     width: 100%;
     min-height: 160px;
-    border-color: #d6e4ff;
-    background: linear-gradient(180deg, #f7f9ff 0%, #ffffff 85%);
+    border-color: var(--zx-semantic-border-default);
+    background: var(--zx-semantic-surface-elevated);
   }
 
   &.vertical &__weight {
@@ -480,7 +483,7 @@ if (props.node) {
     width: 100%;
     height: 36px;
     border-right: none;
-    border-bottom: 1px solid #dae1f0;
+    border-bottom: 1px solid var(--zx-semantic-border-subtle);
     font-size: 14px;
     order: 1;
   }
@@ -489,7 +492,7 @@ if (props.node) {
     width: 100%;
     padding: 16px 12px;
     min-height: 120px;
-    color: #1f2d3d;
+    color: var(--zx-semantic-text-primary);
     font-size: 16px;
     font-weight: 600;
     order: 2;
@@ -504,19 +507,19 @@ if (props.node) {
     width: 100%;
     height: 36px;
     border-left: none;
-    border-top: 1px solid #dae1f0;
+    border-top: 1px solid var(--zx-semantic-border-subtle);
     border-radius: 0 0 6px 6px;
     order: 3;
   }
 
   &.vertical.leaf-node.has-model &__indicator {
-    background: rgba(255, 153, 0, 0.14);
-    color: #fa8c16;
+    background: var(--el-color-warning-light-9);
+    color: var(--zx-semantic-status-warning-on-surface);
   }
 
   &.vertical.leaf-node.no-model &__indicator {
-    background: rgba(255, 77, 79, 0.12);
-    color: #f56c6c;
+    background: var(--el-color-danger-light-9);
+    color: var(--zx-semantic-status-danger-on-surface);
   }
 
   &.horizontal &__label-text {
@@ -543,37 +546,37 @@ if (props.node) {
 
     .label {
       width: 60px;
-      color: #909399;
+      color: var(--zx-semantic-text-secondary);
       font-size: 12px;
       flex-shrink: 0;
     }
 
     .value {
       flex: 1;
-      color: #606266;
+      color: var(--zx-semantic-text-secondary);
       font-size: 12px;
       word-break: break-all;
 
       &.code {
         font-family: monospace;
-        background: #f5f7fa;
+        background: var(--zx-semantic-fill-subtle);
         padding: 2px 4px;
         border-radius: 2px;
         font-size: 11px;
       }
 
       &.status-active {
-        color: #67c23a;
+        color: var(--zx-semantic-status-success);
         font-weight: 500;
       }
 
       &.status-inactive {
-        color: #e6a23c;
+        color: var(--zx-semantic-status-warning-on-surface);
         font-weight: 500;
       }
 
       &.status-unknown {
-        color: #f56c6c;
+        color: var(--zx-semantic-status-danger-on-surface);
         font-weight: 500;
       }
     }

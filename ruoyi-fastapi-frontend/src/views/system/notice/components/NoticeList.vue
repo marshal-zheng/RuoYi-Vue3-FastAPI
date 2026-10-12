@@ -7,8 +7,8 @@
     fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
-      <div class="zx-grid-form-bar">
-        <div class="zx-grid-form-bar__left">
+      <ZxListToolbar aria-label="列表操作与筛选">
+        <template #actions>
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:notice:add']"
             >新增</ZxButton
           >
@@ -26,8 +26,8 @@
             v-hasPermi="['system:notice:remove']"
             >删除</ZxButton
           >
-        </div>
-        <div class="zx-grid-form-bar__filters">
+        </template>
+        <template #filters>
           <zx-input
             v-model="query.createBy"
             placeholder="请输入操作人员"
@@ -49,8 +49,8 @@
               :value="dict.value"
             />
           </el-select>
-        </div>
-        <div class="zx-grid-form-bar__right">
+        </template>
+        <template #search>
           <ZxSearch
             v-model="query.noticeTitle"
             placeholder="搜索公告标题"
@@ -59,8 +59,8 @@
             @search="() => onSearch({ handleRefresh, updateState })"
             @clear="() => onSearch({ handleRefresh, updateState })"
           />
-        </div>
-      </div>
+        </template>
+      </ZxListToolbar>
     </template>
 
     <template #table="{ grid }">

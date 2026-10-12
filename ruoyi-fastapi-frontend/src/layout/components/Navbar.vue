@@ -1,6 +1,6 @@
 <template>
   <div class="navbar flex justify-between h-[50px] overflow-hidden relative">
-    <div class="flex items-center">
+    <div class="navbar-navigation flex items-center">
       <hamburger
         id="hamburger-container"
         :is-active="appStore.sidebar.opened"
@@ -16,7 +16,7 @@
       <top-nav v-if="settingsStore.topNav" id="topmenu-container" class="topmenu-container ml-2" />
     </div>
 
-    <div class="flex items-center mr-4 gap-3">
+    <div class="navbar-actions flex items-center mr-4 gap-3">
       <ZxThemePresetSwitch />
       <el-dropdown
         @command="handleCommand"
@@ -24,6 +24,7 @@
         trigger="hover"
       >
         <div
+          :aria-label="`用户菜单：${userStore.nickName}`"
           class="avatar-wrapper flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300 font-medium"
           style="color: var(--top-header-avatar-text-color)"
         >
@@ -33,7 +34,7 @@
             class="transition-colors duration-300"
             style="color: var(--top-header-avatar-icon-color)"
           />
-          <span class="text-sm">{{ userStore.nickName }}</span>
+          <span class="avatar-name text-sm">{{ userStore.nickName }}</span>
           <ZxIcon icon="ArrowDown" :size="14" class="ml-0" />
         </div>
         <template #dropdown>
@@ -107,7 +108,50 @@ function setLayout() {
 </script>
 
 <style scoped>
-/* Minimal custom styles - most styling is done via Tailwind classes */
+.navbar-navigation {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.navbar-actions,
+.hamburger-container {
+  flex-shrink: 0;
+}
+.breadcrumb-container {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.avatar-name {
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .navbar-actions {
+    gap: 8px;
+    margin-right: 8px;
+  }
+  .avatar-container {
+    margin-left: 0;
+  }
+  .avatar-wrapper {
+    padding-inline: 6px;
+  }
+  .avatar-name {
+    display: none;
+  }
+  .breadcrumb-container :deep(.el-breadcrumb__item:not(:last-child)) {
+    display: none;
+  }
+  .breadcrumb-container :deep(.el-breadcrumb__inner) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 
 .hamburger-container:hover {
   background: var(--top-header-hamburger-hover-bg);

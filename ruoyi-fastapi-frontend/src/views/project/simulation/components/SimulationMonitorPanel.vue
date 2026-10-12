@@ -20,44 +20,44 @@
       <div v-if="alarmStats.total > 0" class="flex gap-2 mb-3">
         <div
           class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
-          :class="{ 'bg-white shadow-sm': alarmStats.critical > 0 }"
+          :class="{ 'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.critical > 0 }"
         >
           <div class="text-lg text-red-700">
             <el-icon><CircleCloseFilled /></el-icon>
           </div>
           <div class="flex-1">
-            <div class="text-base font-semibold text-gray-800 leading-none">
+            <div class="text-base font-semibold text-zx-text-primary leading-none">
               {{ alarmStats.critical || 0 }}
             </div>
-            <div class="text-[10px] text-gray-500 mt-0.5">严重</div>
+            <div class="text-[10px] text-zx-text-secondary mt-0.5">严重</div>
           </div>
         </div>
         <div
           class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
-          :class="{ 'bg-white shadow-sm': alarmStats.error > 0 }"
+          :class="{ 'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.error > 0 }"
         >
           <div class="text-lg text-red-500">
             <el-icon><WarningFilled /></el-icon>
           </div>
           <div class="flex-1">
-            <div class="text-base font-semibold text-gray-800 leading-none">
+            <div class="text-base font-semibold text-zx-text-primary leading-none">
               {{ alarmStats.error || 0 }}
             </div>
-            <div class="text-[10px] text-gray-500 mt-0.5">错误</div>
+            <div class="text-[10px] text-zx-text-secondary mt-0.5">错误</div>
           </div>
         </div>
         <div
           class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
-          :class="{ 'bg-white shadow-sm': alarmStats.warning > 0 }"
+          :class="{ 'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.warning > 0 }"
         >
           <div class="text-lg text-yellow-500">
             <el-icon><Warning /></el-icon>
           </div>
           <div class="flex-1">
-            <div class="text-base font-semibold text-gray-800 leading-none">
+            <div class="text-base font-semibold text-zx-text-primary leading-none">
               {{ alarmStats.warning || 0 }}
             </div>
-            <div class="text-[10px] text-gray-500 mt-0.5">警告</div>
+            <div class="text-[10px] text-zx-text-secondary mt-0.5">警告</div>
           </div>
         </div>
       </div>
@@ -72,7 +72,7 @@
             'border-l-red-700': alarm.severity === 'critical',
             'border-l-red-500': alarm.severity === 'error',
             'border-l-yellow-500': alarm.severity === 'warning',
-            'border-l-gray-400': alarm.severity === 'info',
+            'border-l-zx-status-info-on-surface': alarm.severity === 'info',
           }"
         >
           <div class="text-base pt-0.5">
@@ -85,11 +85,11 @@
               <el-tag :type="getSeverityTagType(alarm.severity)" size="small" effect="dark">
                 {{ getSeverityLabel(alarm.severity) }}
               </el-tag>
-              <span class="ml-auto text-[11px] text-gray-500 whitespace-nowrap">
+              <span class="ml-auto text-[11px] text-zx-text-secondary whitespace-nowrap">
                 {{ formatTime(alarm.timestamp) }}
               </span>
             </div>
-            <div class="text-xs text-gray-800 leading-snug break-words">{{ alarm.message }}</div>
+            <div class="text-xs text-zx-text-primary leading-snug break-words">{{ alarm.message }}</div>
           </div>
         </div>
       </div>

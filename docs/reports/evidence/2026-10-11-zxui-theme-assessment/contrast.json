@@ -1,0 +1,908 @@
+{
+  "date": "2026-10-11",
+  "source": "existing generated variant CSS; no regeneration",
+  "selection": {
+    "mode": [
+      "light",
+      "dark"
+    ],
+    "density": "default",
+    "contrast": "normal",
+    "motion": "full",
+    "radius": "default"
+  },
+  "method": "Resolve CSS var aliases to sRGB. Compare foreground to opaque base fill using relative luminance. Composite alpha foreground over base fill. Ratios displayed to two decimal places.",
+  "excluded": "Translucent selected fills, gradients/highlights, runtime seeds, actual DOM cascade and other variants",
+  "summary": {
+    "combinations": 18,
+    "surfacePairs": 288,
+    "surfaceMinimumApprox": 4.65,
+    "signalOnBodyPairs": 90,
+    "signalOnBodyMinimumApprox": 8.56,
+    "translucentSurfacePairsExcluded": 36
+  },
+  "results": [
+    {
+      "theme": "theme-air-gray",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.39,
+          "secondary": 6.51
+        },
+        "panel": {
+          "text": 16.17,
+          "secondary": 7.31
+        },
+        "card": {
+          "text": 15.61,
+          "secondary": 7.06
+        },
+        "field": {
+          "text": 15.65,
+          "secondary": 7.08
+        },
+        "header": {
+          "text": 14.08,
+          "secondary": 6.37
+        },
+        "overlay": {
+          "text": 15.53,
+          "secondary": 7.02
+        },
+        "blocking": {
+          "text": 15.44,
+          "secondary": 6.98
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 8.15,
+          "secondary": 8.15
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 13.45,
+        "status-success-on-surface": 11.82,
+        "status-warning-on-surface": 10.67,
+        "status-danger-on-surface": 12.76,
+        "status-info-on-surface": 11.76
+      }
+    },
+    {
+      "theme": "theme-air-gray",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 14.79,
+          "secondary": 8.9
+        },
+        "panel": {
+          "text": 12.6,
+          "secondary": 7.58
+        },
+        "card": {
+          "text": 11.18,
+          "secondary": 6.72
+        },
+        "field": {
+          "text": 11.6,
+          "secondary": 6.98
+        },
+        "header": {
+          "text": 11.24,
+          "secondary": 6.76
+        },
+        "overlay": {
+          "text": 10.77,
+          "secondary": 6.48
+        },
+        "blocking": {
+          "text": 10.17,
+          "secondary": 6.12
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 7.14,
+          "secondary": 7.14
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.74,
+        "status-success-on-surface": 10.3,
+        "status-warning-on-surface": 10.46,
+        "status-danger-on-surface": 9.06,
+        "status-info-on-surface": 10.08
+      }
+    },
+    {
+      "theme": "theme-army-pine",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.27,
+          "secondary": 6.45
+        },
+        "panel": {
+          "text": 16.02,
+          "secondary": 7.24
+        },
+        "card": {
+          "text": 15.47,
+          "secondary": 6.99
+        },
+        "field": {
+          "text": 15.52,
+          "secondary": 7.01
+        },
+        "header": {
+          "text": 14.11,
+          "secondary": 6.37
+        },
+        "overlay": {
+          "text": 15.4,
+          "secondary": 6.96
+        },
+        "blocking": {
+          "text": 15.3,
+          "secondary": 6.91
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 6.35,
+          "secondary": 6.35
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 12.43,
+        "status-success-on-surface": 10.47,
+        "status-warning-on-surface": 9.37,
+        "status-danger-on-surface": 11.88,
+        "status-info-on-surface": 10.63
+      }
+    },
+    {
+      "theme": "theme-army-pine",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 14.66,
+          "secondary": 8.82
+        },
+        "panel": {
+          "text": 12.56,
+          "secondary": 7.56
+        },
+        "card": {
+          "text": 11.13,
+          "secondary": 6.69
+        },
+        "field": {
+          "text": 11.55,
+          "secondary": 6.95
+        },
+        "header": {
+          "text": 11.02,
+          "secondary": 6.63
+        },
+        "overlay": {
+          "text": 10.71,
+          "secondary": 6.44
+        },
+        "blocking": {
+          "text": 10.1,
+          "secondary": 6.08
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 7.17,
+          "secondary": 7.17
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.73,
+        "status-success-on-surface": 10.11,
+        "status-warning-on-surface": 10.38,
+        "status-danger-on-surface": 9.4,
+        "status-info-on-surface": 10.07
+      }
+    },
+    {
+      "theme": "theme-default",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.27,
+          "secondary": 5.72
+        },
+        "panel": {
+          "text": 15.61,
+          "secondary": 6.26
+        },
+        "card": {
+          "text": 15.32,
+          "secondary": 6.14
+        },
+        "field": {
+          "text": 15.37,
+          "secondary": 6.16
+        },
+        "header": {
+          "text": 13.44,
+          "secondary": 5.39
+        },
+        "overlay": {
+          "text": 15.25,
+          "secondary": 6.11
+        },
+        "blocking": {
+          "text": 15.15,
+          "secondary": 6.07
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 6.36,
+          "secondary": 6.36
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.95,
+        "status-success-on-surface": 8.62,
+        "status-warning-on-surface": 8.56,
+        "status-danger-on-surface": 11.56,
+        "status-info-on-surface": 9.61
+      }
+    },
+    {
+      "theme": "theme-default",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 16.9,
+          "secondary": 9.18
+        },
+        "panel": {
+          "text": 15.99,
+          "secondary": 8.68
+        },
+        "card": {
+          "text": 14.75,
+          "secondary": 8.01
+        },
+        "field": {
+          "text": 15.2,
+          "secondary": 8.26
+        },
+        "header": {
+          "text": 12.64,
+          "secondary": 6.86
+        },
+        "overlay": {
+          "text": 14.29,
+          "secondary": 7.76
+        },
+        "blocking": {
+          "text": 13.6,
+          "secondary": 7.38
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 6.36,
+          "secondary": 6.36
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 11.81,
+        "status-success-on-surface": 12.99,
+        "status-warning-on-surface": 13.11,
+        "status-danger-on-surface": 12.14,
+        "status-info-on-surface": 12.25
+      }
+    },
+    {
+      "theme": "theme-defense-green",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.17,
+          "secondary": 6.4
+        },
+        "panel": {
+          "text": 15.91,
+          "secondary": 7.18
+        },
+        "card": {
+          "text": 15.36,
+          "secondary": 6.93
+        },
+        "field": {
+          "text": 15.4,
+          "secondary": 6.95
+        },
+        "header": {
+          "text": 14.13,
+          "secondary": 6.38
+        },
+        "overlay": {
+          "text": 15.29,
+          "secondary": 6.9
+        },
+        "blocking": {
+          "text": 15.19,
+          "secondary": 6.86
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 5.14,
+          "secondary": 5.14
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 11.6,
+        "status-success-on-surface": 10.38,
+        "status-warning-on-surface": 9.29,
+        "status-danger-on-surface": 11.81,
+        "status-info-on-surface": 10.55
+      }
+    },
+    {
+      "theme": "theme-defense-green",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 14.33,
+          "secondary": 8.63
+        },
+        "panel": {
+          "text": 12.18,
+          "secondary": 7.34
+        },
+        "card": {
+          "text": 10.77,
+          "secondary": 6.49
+        },
+        "field": {
+          "text": 11.19,
+          "secondary": 6.74
+        },
+        "header": {
+          "text": 10.54,
+          "secondary": 6.35
+        },
+        "overlay": {
+          "text": 10.36,
+          "secondary": 6.24
+        },
+        "blocking": {
+          "text": 9.76,
+          "secondary": 5.88
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 7.84,
+          "secondary": 7.84
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.61,
+        "status-success-on-surface": 9.81,
+        "status-warning-on-surface": 10.07,
+        "status-danger-on-surface": 9.12,
+        "status-info-on-surface": 9.76
+      }
+    },
+    {
+      "theme": "theme-factory-blue",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.3,
+          "secondary": 6.47
+        },
+        "panel": {
+          "text": 16.07,
+          "secondary": 7.26
+        },
+        "card": {
+          "text": 15.47,
+          "secondary": 6.99
+        },
+        "field": {
+          "text": 15.56,
+          "secondary": 7.03
+        },
+        "header": {
+          "text": 13.96,
+          "secondary": 6.31
+        },
+        "overlay": {
+          "text": 15.35,
+          "secondary": 6.94
+        },
+        "blocking": {
+          "text": 15.18,
+          "secondary": 6.86
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 8.21,
+          "secondary": 8.21
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 13.51,
+        "status-success-on-surface": 11.73,
+        "status-warning-on-surface": 10.63,
+        "status-danger-on-surface": 12.73,
+        "status-info-on-surface": 11.67
+      }
+    },
+    {
+      "theme": "theme-factory-blue",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 14.64,
+          "secondary": 8.81
+        },
+        "panel": {
+          "text": 13.13,
+          "secondary": 7.9
+        },
+        "card": {
+          "text": 12.0,
+          "secondary": 7.22
+        },
+        "field": {
+          "text": 12.33,
+          "secondary": 7.42
+        },
+        "header": {
+          "text": 11.95,
+          "secondary": 7.19
+        },
+        "overlay": {
+          "text": 11.67,
+          "secondary": 7.02
+        },
+        "blocking": {
+          "text": 11.17,
+          "secondary": 6.72
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 4.66,
+          "secondary": 4.66
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.08,
+        "status-success-on-surface": 10.73,
+        "status-warning-on-surface": 10.9,
+        "status-danger-on-surface": 9.44,
+        "status-info-on-surface": 10.51
+      }
+    },
+    {
+      "theme": "theme-industrial-blue",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 13.3,
+          "secondary": 6.01
+        },
+        "panel": {
+          "text": 14.99,
+          "secondary": 6.78
+        },
+        "card": {
+          "text": 14.41,
+          "secondary": 6.52
+        },
+        "field": {
+          "text": 14.5,
+          "secondary": 6.56
+        },
+        "header": {
+          "text": 13.66,
+          "secondary": 6.18
+        },
+        "overlay": {
+          "text": 14.28,
+          "secondary": 6.46
+        },
+        "blocking": {
+          "text": 14.11,
+          "secondary": 6.38
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 4.65,
+          "secondary": 4.65
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 10.75,
+        "status-success-on-surface": 10.38,
+        "status-warning-on-surface": 9.3,
+        "status-danger-on-surface": 11.87,
+        "status-info-on-surface": 10.44
+      }
+    },
+    {
+      "theme": "theme-industrial-blue",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 15.33,
+          "secondary": 9.23
+        },
+        "panel": {
+          "text": 13.94,
+          "secondary": 8.39
+        },
+        "card": {
+          "text": 12.99,
+          "secondary": 7.82
+        },
+        "field": {
+          "text": 13.33,
+          "secondary": 8.02
+        },
+        "header": {
+          "text": 11.94,
+          "secondary": 7.18
+        },
+        "overlay": {
+          "text": 12.64,
+          "secondary": 7.61
+        },
+        "blocking": {
+          "text": 12.12,
+          "secondary": 7.3
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 4.65,
+          "secondary": 4.65
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.46,
+        "status-success-on-surface": 9.72,
+        "status-warning-on-surface": 10.52,
+        "status-danger-on-surface": 10.06,
+        "status-info-on-surface": 9.65
+      }
+    },
+    {
+      "theme": "theme-pap-olive",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.17,
+          "secondary": 6.41
+        },
+        "panel": {
+          "text": 15.93,
+          "secondary": 7.2
+        },
+        "card": {
+          "text": 15.33,
+          "secondary": 6.93
+        },
+        "field": {
+          "text": 15.42,
+          "secondary": 6.97
+        },
+        "header": {
+          "text": 13.86,
+          "secondary": 6.27
+        },
+        "overlay": {
+          "text": 15.2,
+          "secondary": 6.87
+        },
+        "blocking": {
+          "text": 15.03,
+          "secondary": 6.79
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 8.42,
+          "secondary": 8.42
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 13.35,
+        "status-success-on-surface": 10.42,
+        "status-warning-on-surface": 9.28,
+        "status-danger-on-surface": 11.75,
+        "status-info-on-surface": 10.58
+      }
+    },
+    {
+      "theme": "theme-pap-olive",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 14.67,
+          "secondary": 8.83
+        },
+        "panel": {
+          "text": 12.93,
+          "secondary": 7.78
+        },
+        "card": {
+          "text": 11.53,
+          "secondary": 6.94
+        },
+        "field": {
+          "text": 11.82,
+          "secondary": 7.11
+        },
+        "header": {
+          "text": 11.48,
+          "secondary": 6.91
+        },
+        "overlay": {
+          "text": 11.24,
+          "secondary": 6.77
+        },
+        "blocking": {
+          "text": 10.82,
+          "secondary": 6.51
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 6.39,
+          "secondary": 6.39
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.74,
+        "status-success-on-surface": 10.41,
+        "status-warning-on-surface": 10.7,
+        "status-danger-on-surface": 9.69,
+        "status-info-on-surface": 10.36
+      }
+    },
+    {
+      "theme": "theme-rocket-moss",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.05,
+          "secondary": 6.35
+        },
+        "panel": {
+          "text": 15.8,
+          "secondary": 7.14
+        },
+        "card": {
+          "text": 15.21,
+          "secondary": 6.87
+        },
+        "field": {
+          "text": 15.3,
+          "secondary": 6.91
+        },
+        "header": {
+          "text": 13.69,
+          "secondary": 6.18
+        },
+        "overlay": {
+          "text": 15.08,
+          "secondary": 6.82
+        },
+        "blocking": {
+          "text": 14.92,
+          "secondary": 6.74
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 9.46,
+          "secondary": 9.46
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 13.7,
+        "status-success-on-surface": 10.35,
+        "status-warning-on-surface": 9.19,
+        "status-danger-on-surface": 11.62,
+        "status-info-on-surface": 10.5
+      }
+    },
+    {
+      "theme": "theme-rocket-moss",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 15.21,
+          "secondary": 9.16
+        },
+        "panel": {
+          "text": 13.13,
+          "secondary": 7.9
+        },
+        "card": {
+          "text": 11.87,
+          "secondary": 7.15
+        },
+        "field": {
+          "text": 12.15,
+          "secondary": 7.31
+        },
+        "header": {
+          "text": 11.87,
+          "secondary": 7.14
+        },
+        "overlay": {
+          "text": 11.6,
+          "secondary": 6.98
+        },
+        "blocking": {
+          "text": 11.19,
+          "secondary": 6.73
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 6.03,
+          "secondary": 6.03
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.75,
+        "status-success-on-surface": 10.57,
+        "status-warning-on-surface": 10.84,
+        "status-danger-on-surface": 9.81,
+        "status-info-on-surface": 10.52
+      }
+    },
+    {
+      "theme": "theme-tech-blue",
+      "mode": "light",
+      "surfaces": {
+        "canvas": {
+          "text": 14.84,
+          "secondary": 6.71
+        },
+        "panel": {
+          "text": 16.39,
+          "secondary": 7.41
+        },
+        "card": {
+          "text": 16.03,
+          "secondary": 7.25
+        },
+        "field": {
+          "text": 16.08,
+          "secondary": 7.27
+        },
+        "header": {
+          "text": 15.13,
+          "secondary": 6.84
+        },
+        "overlay": {
+          "text": 15.96,
+          "secondary": 7.21
+        },
+        "blocking": {
+          "text": 15.86,
+          "secondary": 7.17
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 5.19,
+          "secondary": 5.19
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 12.33,
+        "status-success-on-surface": 10.69,
+        "status-warning-on-surface": 10.04,
+        "status-danger-on-surface": 12.05,
+        "status-info-on-surface": 10.85
+      }
+    },
+    {
+      "theme": "theme-tech-blue",
+      "mode": "dark",
+      "surfaces": {
+        "canvas": {
+          "text": 15.0,
+          "secondary": 9.02
+        },
+        "panel": {
+          "text": 13.16,
+          "secondary": 7.91
+        },
+        "card": {
+          "text": 11.93,
+          "secondary": 7.18
+        },
+        "field": {
+          "text": 12.37,
+          "secondary": 7.44
+        },
+        "header": {
+          "text": 11.03,
+          "secondary": 6.63
+        },
+        "overlay": {
+          "text": 11.5,
+          "secondary": 6.92
+        },
+        "blocking": {
+          "text": 10.86,
+          "secondary": 6.53
+        },
+        "selected": {
+          "text": null,
+          "secondary": null
+        },
+        "brand": {
+          "text": 5.12,
+          "secondary": 5.12
+        }
+      },
+      "signalsOnBody": {
+        "accent-on-surface": 9.16,
+        "status-success-on-surface": 10.77,
+        "status-warning-on-surface": 10.85,
+        "status-danger-on-surface": 9.87,
+        "status-info-on-surface": 10.77
+      }
+    }
+  ]
+}
