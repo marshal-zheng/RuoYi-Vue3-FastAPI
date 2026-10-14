@@ -7,20 +7,25 @@ const notificationWarning = vi.fn();
 const notificationError = vi.fn();
 const resolveFeedbackRegistryEntry = vi.fn();
 
-vi.mock('element-plus', () => ({
-  ElMessage: {
-    success: messageSuccess,
-    error: messageError,
-  },
-  ElNotification: {
-    info: notificationInfo,
-    warning: notificationWarning,
-    error: notificationError,
+vi.mock('@/utils/feedback/notification', () => ({
+  showNotification: async ({ type, ...options }: { type: string }) => {
+    if (type === 'info') notificationInfo(options);
+    else if (type === 'warning') notificationWarning(options);
+    else notificationError(options);
+    return { ok: true, value: { close() {} } };
   },
 }));
 
 vi.mock('@/utils/feedback/registry', () => ({
   resolveFeedbackRegistryEntry,
+}));
+
+vi.mock('@/utils/feedback/message', () => ({
+  showMessage: async ({ type, message }: { type: string; message: unknown }) => {
+    if (type === 'success') messageSuccess(message);
+    else messageError(message);
+    return { ok: true, value: { close() {} } };
+  },
 }));
 
 describe('feedback presenter', () => {

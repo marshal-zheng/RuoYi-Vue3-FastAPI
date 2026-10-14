@@ -1,0 +1,2 @@
+src/utils/http.test.ts(31,74): error TS2554: Expected 0 arguments, but got 1.
+vite/zxui-theme-packages.ts(54,77): error TS2322: Type '"@zxio/theme-tailwind"' is not assignable to type '"@zxio/chart"'.

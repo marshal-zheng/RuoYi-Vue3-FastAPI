@@ -1,0 +1,9 @@
+.zx-confirm-input__dlg.el-dialog
+Same body before/after: True
+Before:  background: var(--zx-semantic-surface-elevated); border: var(--zx-semantic-stroke-default); border-radius: var(--zx-semantic-radius-control); 
+After:  background: var(--zx-semantic-surface-elevated); border: var(--zx-semantic-stroke-default); border-radius: var(--zx-semantic-radius-control); 
+
+.zx-confirm-input__confirm-btn.el-button.is-disabled, .zx-confirm-input__confirm-btn.el-button.is-disabled:hover, .zx-confirm-input__confirm-btn.el-button:disabled, .zx-confirm-input__confirm-btn.el-button:disabled:hover
+Same body before/after: True
+Before:  background-color: var(--zx-semantic-fill-active); border-color: var(--zx-semantic-border-default); color: var(--zx-semantic-text-secondary); opacity: 1; 
+After:  background-color: var(--zx-semantic-fill-active); border-color: var(--zx-semantic-border-default); color: var(--zx-semantic-text-secondary); opacity: 1; 

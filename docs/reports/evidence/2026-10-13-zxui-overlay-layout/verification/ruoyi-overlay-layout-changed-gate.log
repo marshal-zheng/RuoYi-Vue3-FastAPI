@@ -1,0 +1,23 @@
+
+==> ESLint
+  [FAIL] Lint failed on changed files (run: cd ruoyi-fastapi-frontend && yarn lint)
+
+==> Type Check
+  [WARN] Type check skipped
+
+==> Color Token Policy
+  [OK] No new hex color violations
+
+==> HTTP Layer Policy
+  [OK] No runtime axios violations
+
+==> Vue Component Policy
+  [OK] No Options API regressions
+
+==> Console Usage Policy
+  [OK] No new console usage violations
+
+==> Unit Tests
+  [WARN] Tests skipped (use --with-tests to enable)
+
+[FAIL] 1 check(s) failed

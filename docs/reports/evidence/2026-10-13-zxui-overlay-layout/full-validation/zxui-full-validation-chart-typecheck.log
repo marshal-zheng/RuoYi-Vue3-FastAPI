@@ -1,0 +1,5 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/chart@2.0.0 typecheck /Users/hqz/Downloads/element-plus/packages/chart
+> vue-tsc -p tsconfig.check.json
+

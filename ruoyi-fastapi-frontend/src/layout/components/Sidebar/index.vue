@@ -35,6 +35,7 @@ import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
 
+const props = defineProps({ headerVisible: { type: Boolean, default: true } });
 const route = useRoute();
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();
@@ -43,11 +44,9 @@ const permissionStore = usePermissionStore();
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
 const isCollapse = computed(() => !appStore.sidebar.opened);
 
-// 展示侧边栏 Logo 的策略：
-// - 默认：开启 tagsView 时，始终在 Sidebar 顶部展示 Logo（兼容原 RuoYi 行为）
-// - 关闭 tagsView 时：仅在侧边栏收起时展示缩略 Logo，展开时由 Header 区域的 Logo 承担品牌展示，避免重复
+// Brand placement follows header visibility, independently of multi-page tabs.
 const showLogo = computed(
-  () => settingsStore.sidebarLogo && (settingsStore.tagsView || isCollapse.value)
+  () => settingsStore.sidebarLogo && (!props.headerVisible || isCollapse.value)
 );
 
 const activeMenu = computed(() => {

@@ -1,0 +1,142 @@
+[
+  {
+    "file": "src/assets/styles/sidebar.css",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 1,
+    "afterWarnings": 1
+  },
+  {
+    "file": "src/components/ui/ContentDetailWrap/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 2,
+    "afterWarnings": 2
+  },
+  {
+    "file": "src/components/business/ZxFlow/components/XFlowGraph.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 22,
+    "afterWarnings": 22
+  },
+  {
+    "file": "src/layout/index.vue",
+    "beforeErrors": 1,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/AppMain.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 1,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/Navbar.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/Settings/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/Sidebar/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/InnerLink/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 1,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/layout/components/Copyright/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/settings.ts",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/store/modules/settings.ts",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 3,
+    "afterWarnings": 3
+  },
+  {
+    "file": "src/views/tool/build/index.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 4,
+    "afterWarnings": 4
+  },
+  {
+    "file": "src/views/tool/build/RightPanel.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 2,
+    "afterWarnings": 2
+  },
+  {
+    "file": "src/views/tool/gen/editTable.vue",
+    "beforeErrors": 3,
+    "afterErrors": 3,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/views/project/topo.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 1,
+    "afterWarnings": 1
+  },
+  {
+    "file": "src/views/device/detail.vue",
+    "beforeErrors": 4,
+    "afterErrors": 4,
+    "beforeWarnings": 4,
+    "afterWarnings": 4
+  },
+  {
+    "file": "src/views/monitor/cache/list.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 1,
+    "afterWarnings": 1
+  },
+  {
+    "file": "src/views/project/entry.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  },
+  {
+    "file": "src/views/demo/offline-module.vue",
+    "beforeErrors": 0,
+    "afterErrors": 0,
+    "beforeWarnings": 0,
+    "afterWarnings": 0
+  }
+]

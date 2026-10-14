@@ -1,14 +1,41 @@
-import defaultSettings from '@/settings';
+import defaultSettings, { LAYOUT_SETTINGS_VERSION } from '@/settings';
 import { defineStore } from 'pinia';
 import { useDynamicTitle } from '@/utils/dynamicTitle';
 import { setZxThemePreference, zxIsDark } from '@/theme/zx-theme-config';
 
-const { showSettings, topNav, topNavBorder, tagsView, fixedHeader, sidebarLogo, dynamicTitle } =
-  defaultSettings;
+const {
+  showSettings,
+  topNav,
+  topNavBorder,
+  tagsView,
+  headerVisible,
+  breadcrumbVisible,
+  sidebarLogo,
+  dynamicTitle,
+} = defaultSettings;
 
 function getStorageSetting(): Record<string, any> {
   try {
-    return JSON.parse(localStorage.getItem('layout-setting') || '{}');
+    const raw = localStorage.getItem('layout-setting');
+    if (!raw) return {};
+    const saved = JSON.parse(raw);
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {};
+    if (typeof saved.layoutVersion === 'number' && saved.layoutVersion >= LAYOUT_SETTINGS_VERSION) {
+      return saved;
+    }
+
+    const migrated = {
+      ...saved,
+      tagsView,
+      layoutVersion: LAYOUT_SETTINGS_VERSION,
+    };
+    try {
+      localStorage.setItem('layout-setting', JSON.stringify(migrated));
+    } catch {
+      // Keep all in-memory preferences when browser storage cannot be written.
+      return migrated;
+    }
+    return migrated;
   } catch {
     return {};
   }
@@ -19,7 +46,8 @@ interface SettingsState {
   showSettings: boolean;
   topNav: boolean;
   tagsView: boolean;
-  fixedHeader: boolean;
+  headerVisible: boolean;
+  breadcrumbVisible: boolean;
   sidebarLogo: boolean;
   dynamicTitle: boolean;
   topNavBorder: boolean;
@@ -32,9 +60,15 @@ const useSettingsStore = defineStore('settings', {
       title: '',
       showSettings: showSettings,
       topNav: storageSetting.topNav === undefined ? topNav : storageSetting.topNav,
-      tagsView: storageSetting.tagsView === undefined ? tagsView : storageSetting.tagsView,
-      fixedHeader:
-        storageSetting.fixedHeader === undefined ? fixedHeader : storageSetting.fixedHeader,
+      tagsView: typeof storageSetting.tagsView === 'boolean' ? storageSetting.tagsView : tagsView,
+      headerVisible:
+        typeof storageSetting.headerVisible === 'boolean'
+          ? storageSetting.headerVisible
+          : headerVisible,
+      breadcrumbVisible:
+        typeof storageSetting.breadcrumbVisible === 'boolean'
+          ? storageSetting.breadcrumbVisible
+          : breadcrumbVisible,
       sidebarLogo:
         storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
       dynamicTitle:
@@ -61,7 +95,7 @@ const useSettingsStore = defineStore('settings', {
     },
     // 切换暗黑模式
     toggleTheme() {
-      setZxThemePreference({ mode: this.isDark ? 'light' : 'dark' });
+      return setZxThemePreference({ mode: this.isDark ? 'light' : 'dark' });
     },
   },
 });

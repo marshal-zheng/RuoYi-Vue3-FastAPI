@@ -57,7 +57,7 @@ export function useFormDialog<T extends Record<string, any> = Record<string, any
     }
     return size;
   });
-  const dialog = useDialog<T>({ ...sanitize(options), dialogSize });
+  const dialog = useDialog<T>({ showFullScreen: false, ...sanitize(options), dialogSize });
   return {
     ...dialog,
     formProps: { labelWidth: formLayoutPolicy.labelWidth },

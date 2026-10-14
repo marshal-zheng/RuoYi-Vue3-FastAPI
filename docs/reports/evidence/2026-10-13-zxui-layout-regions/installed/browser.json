@@ -1,0 +1,3323 @@
+{
+  "matrix": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 1624,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 1624,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 1624,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 1624,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 1624,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 1624,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 1624,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 1624,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 900,
+        "scrollHeight": 900,
+        "clientHeight": 900,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 836,
+        "scrollHeight": 836,
+        "clientHeight": 836,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 860,
+        "scrollHeight": 860,
+        "clientHeight": 860,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 820,
+        "scrollHeight": 820,
+        "clientHeight": 820,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 900,
+        "left": 220,
+        "width": 1220,
+        "height": 796,
+        "scrollHeight": 796,
+        "clientHeight": 796,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 880,
+        "left": 240,
+        "width": 1180,
+        "height": 756,
+        "scrollHeight": 756,
+        "clientHeight": 756,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 1624,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 1624,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 1624,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 1624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 1624,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 1624,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 1624,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 1624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 768,
+        "scrollHeight": 768,
+        "clientHeight": 768,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 704,
+        "scrollHeight": 704,
+        "clientHeight": 704,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 40,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 728,
+        "scrollHeight": 728,
+        "clientHeight": 728,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 60,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 688,
+        "scrollHeight": 688,
+        "clientHeight": 688,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 104,
+        "bottom": 768,
+        "left": 220,
+        "width": 804,
+        "height": 664,
+        "scrollHeight": 664,
+        "clientHeight": 664,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 124,
+        "bottom": 748,
+        "left": 240,
+        "width": 764,
+        "height": 624,
+        "scrollHeight": 624,
+        "clientHeight": 624,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "list",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 1624,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 1624,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 1624,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 1624,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 1624,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 1624,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 1624,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "detail",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 1624,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "mixed",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": false,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 0,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 800,
+        "scrollHeight": 800,
+        "clientHeight": 800,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 20,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 760,
+        "scrollHeight": 760,
+        "clientHeight": 760,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": false,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 64,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 736,
+        "scrollHeight": 736,
+        "clientHeight": 736,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 84,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 696,
+        "scrollHeight": 696,
+        "clientHeight": 696,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": false,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 36,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 764,
+        "scrollHeight": 764,
+        "clientHeight": 764,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 56,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 724,
+        "scrollHeight": 724,
+        "clientHeight": 724,
+        "scrollTop": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 800
+      },
+      "kind": "editor",
+      "config": {
+        "headerVisible": true,
+        "tagsView": true,
+        "breadcrumbVisible": true,
+        "footerVisible": false
+      },
+      "main": {
+        "top": 100,
+        "bottom": 800,
+        "left": 0,
+        "width": 390,
+        "height": 700,
+        "scrollHeight": 700,
+        "clientHeight": 700,
+        "scrollTop": 0
+      },
+      "body": {
+        "top": 120,
+        "bottom": 780,
+        "left": 20,
+        "width": 350,
+        "height": 660,
+        "scrollHeight": 660,
+        "clientHeight": 660,
+        "scrollTop": 0
+      }
+    }
+  ],
+  "special": [
+    {
+      "kind": "nested",
+      "geometry": {
+        "viewport": 800,
+        "header": {
+          "top": 0,
+          "bottom": 64,
+          "left": 0,
+          "width": 1280,
+          "height": 64,
+          "scrollHeight": 64,
+          "clientHeight": 64,
+          "scrollTop": 0
+        },
+        "tags": {
+          "top": 64,
+          "bottom": 104,
+          "left": 54,
+          "width": 1226,
+          "height": 40,
+          "scrollHeight": 40,
+          "clientHeight": 40,
+          "scrollTop": 0
+        },
+        "main": {
+          "top": 104,
+          "bottom": 800,
+          "left": 54,
+          "width": 1226,
+          "height": 696,
+          "scrollHeight": 696,
+          "clientHeight": 696,
+          "scrollTop": 0
+        },
+        "body": {
+          "top": 124,
+          "bottom": 780,
+          "left": 74,
+          "width": 1186,
+          "height": 656,
+          "scrollHeight": 656,
+          "clientHeight": 656,
+          "scrollTop": 0
+        },
+        "breadcrumb": true,
+        "documentHeight": 800,
+        "list": null,
+        "listScroll": null,
+        "detail": null,
+        "mixed": null,
+        "graph": null,
+        "graphSvg": null,
+        "nested": {
+          "top": 184,
+          "bottom": 780,
+          "left": 74,
+          "width": 1186,
+          "height": 596,
+          "scrollHeight": 596,
+          "clientHeight": 596,
+          "scrollTop": 0
+        },
+        "nestedCanvas": {
+          "top": 214,
+          "bottom": 780,
+          "left": 74,
+          "width": 1186,
+          "height": 566,
+          "scrollHeight": 566,
+          "clientHeight": 566,
+          "scrollTop": 0
+        },
+        "iframe": null,
+        "recovery": false
+      }
+    },
+    {
+      "kind": "form-builder",
+      "geometry": {
+        "height": 756,
+        "tabs": 39,
+        "field": 714
+      }
+    },
+    {
+      "kind": "mobile-drawer",
+      "geometry": {
+        "position": "fixed",
+        "top": 0,
+        "height": 800
+      }
+    }
+  ],
+  "resources": {
+    "before": {
+      "observers": 512,
+      "observerCallbacks": 555,
+      "ownedObservers": 0,
+      "ownedReads": 0,
+      "ownedRaf": 0,
+      "ownedListeners": 0,
+      "activeObservers": 6,
+      "activeTargets": 6,
+      "detachedTargets": 6
+    },
+    "after": {
+      "observers": 612,
+      "observerCallbacks": 615,
+      "ownedObservers": 0,
+      "ownedReads": 0,
+      "ownedRaf": 0,
+      "ownedListeners": 0,
+      "activeObservers": 6,
+      "activeTargets": 6,
+      "detachedTargets": 16
+    },
+    "nativeTableControl": {
+      "before": {
+        "observers": 612,
+        "observerCallbacks": 615,
+        "ownedObservers": 0,
+        "ownedReads": 0,
+        "ownedRaf": 0,
+        "ownedListeners": 0,
+        "activeObservers": 6,
+        "activeTargets": 6,
+        "detachedTargets": 16
+      },
+      "after": {
+        "observers": 642,
+        "observerCallbacks": 645,
+        "ownedObservers": 0,
+        "ownedReads": 0,
+        "ownedRaf": 0,
+        "ownedListeners": 0,
+        "activeObservers": 6,
+        "activeTargets": 6,
+        "detachedTargets": 26
+      },
+      "detachedTargetsPerFiveMounts": 10
+    }
+  },
+  "performance": {
+    "idleLayoutCount": 0,
+    "toggles": 40,
+    "layoutCount": 40,
+    "layoutDurationMs": 6.256,
+    "toggleTwoFramesMedianMs": 15.899999998509884,
+    "toggleTwoFramesP95Ms": 16.699999999254942
+  }
+}

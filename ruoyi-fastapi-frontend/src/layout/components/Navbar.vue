@@ -9,7 +9,7 @@
         @toggleClick="toggleSideBar"
       />
       <breadcrumb
-        v-if="!settingsStore.topNav"
+        v-if="breadcrumbVisible && !settingsStore.topNav"
         id="breadcrumb-container"
         class="breadcrumb-container"
       />
@@ -64,6 +64,8 @@ import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/settings';
 import ZxThemePresetSwitch from '@/theme/ZxThemePresetSwitch.vue';
+
+defineProps({ breadcrumbVisible: { type: Boolean, default: true } });
 
 const appStore = useAppStore();
 const userStore = useUserStore();

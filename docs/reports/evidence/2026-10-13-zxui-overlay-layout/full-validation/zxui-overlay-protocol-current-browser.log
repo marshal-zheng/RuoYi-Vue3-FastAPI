@@ -1,0 +1,30 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ scripts/theme-consumer-protocol/compatibility.test.ts (7 tests) 75ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  16:18:20
+   Duration  1.65s (transform 739ms, setup 42ms, collect 1.27s, tests 75ms, environment 80ms, prepare 28ms)
+
+Forced re-optimization of dependencies
+Optimizing dependencies:
+  vue, element-plus, echarts, dayjs
+scenario second-theme
+scenario mode
+scenario density
+scenario contrast
+scenario motion
+scenario radius
+scenario seeds
+scenario override
+scenario inactive
+scenario reactivated
+scenario nested-inactive
+instances 1
+instances 10
+instances 100
+dispose resources

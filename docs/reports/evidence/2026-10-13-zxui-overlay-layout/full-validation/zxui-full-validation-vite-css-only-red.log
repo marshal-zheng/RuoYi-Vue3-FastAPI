@@ -1,0 +1,28 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ❯ packages/theme-compiler/__tests__/vite.test.ts (6 tests | 1 failed | 5 skipped) 10350ms
+   × validates and recovers CSS-only edits without closing stable source watchers 10349ms
+     → expected "error" to be called at least once
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/theme-compiler/__tests__/vite.test.ts > validates and recovers CSS-only edits without closing stable source watchers
+AssertionError: expected "error" to be called at least once
+ ❯ vi.waitFor.timeout packages/theme-compiler/__tests__/vite.test.ts:226:38
+    224| 
+    225|   writeFileSync(cssPath, 'invalid CSS bytes')
+    226|   await vi.waitFor(() => expect(log).toHaveBeenCalled(), { timeout: 10…
+       |                                      ^
+    227|   expect(send).not.toHaveBeenCalled()
+    228|   expect(await data(server)).toEqual(original)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 skipped (6)
+   Start at  17:10:47
+   Duration  10.66s (transform 107ms, setup 36ms, collect 164ms, tests 10.35s, environment 0ms, prepare 21ms)
+

@@ -1,0 +1,6 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ typecheck:vitest /Users/hqz/Downloads/element-plus
+> vue-tsc -p tsconfig.vitest.json --composite false --noEmit
+

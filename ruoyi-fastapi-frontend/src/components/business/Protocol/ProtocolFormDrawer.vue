@@ -6,7 +6,6 @@
     size="70%"
     placement="right"
     :loading="drawerLoading"
-    :noContentPadding="false"
     loadingType="skeleton"
     class="protocol-drawer"
   >
@@ -113,6 +112,7 @@ const senderEditable = computed(() => props.senderEditable !== false);
 const receiverEditable = computed(() => props.receiverEditable !== false);
 
 const drawer = useDrawer({
+  divider: true,
   width: '600px', // Consistent width with other drawers
   placement: 'right',
   okText: '保存',

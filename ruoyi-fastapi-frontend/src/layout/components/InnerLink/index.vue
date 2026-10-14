@@ -1,11 +1,11 @@
 <template>
-  <div :style="'height:' + height">
+  <div class="inner-link" data-zx-fill="anchor">
     <iframe :id="iframeId" style="width: 100%; height: 100%" :src="src" frameborder="no"></iframe>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   src: {
     type: String,
     default: '/',
@@ -14,6 +14,10 @@ const props = defineProps({
     type: String,
   },
 });
-
-const height = ref(document.documentElement.clientHeight - 94.5 + 'px');
 </script>
+
+<style scoped>
+.inner-link iframe {
+  display: block;
+}
+</style>

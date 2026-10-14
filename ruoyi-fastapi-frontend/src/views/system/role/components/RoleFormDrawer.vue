@@ -5,6 +5,7 @@
     :title="isEdit ? '修改角色' : '添加角色'"
     placement="right"
     :loading="drawerLoading"
+    :ok-disabled="drawerLoading || menuLoadFailed || drawer.state.disabled"
   >
     <el-form
       ref="formRef"
@@ -62,7 +63,7 @@
           ref="menuRef"
           node-key="id"
           :check-strictly="!drawer.state.data.menuCheckStrictly"
-          empty-text="加载中，请稍候"
+          :empty-text="menuEmptyText"
           :props="{ label: 'label', children: 'children' }"
         />
       </el-form-item>
@@ -96,6 +97,12 @@ const menuOptions = ref([]);
 const menuExpand = ref(false);
 const menuNodeAll = ref(false);
 const drawerLoading = ref(false);
+const menuLoadFailed = ref(false);
+const menuEmptyText = computed(() => {
+  if (drawerLoading.value) return '加载中，请稍候';
+  if (menuLoadFailed.value) return '菜单加载失败，请关闭后重试';
+  return '暂无菜单数据';
+});
 
 const formRules = {
   roleName: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
@@ -121,7 +128,10 @@ const drawer = useDrawer({
     remark: '',
   }),
   async onConfirm() {
-    const submitData = { ...drawer.state.data, menuIds: getMenuAllCheckedKeys() };
+    const submitData = {
+      ...drawer.state.data,
+      menuIds: getMenuAllCheckedKeys(),
+    };
     if (submitData.roleId) {
       await updateRole(submitData);
     } else {
@@ -166,11 +176,13 @@ function resetMenuTree() {
 /** 打开抽屉 */
 async function openDrawer(roleId) {
   resetMenuTree();
+  menuOptions.value = [];
+  menuLoadFailed.value = false;
+  drawerLoading.value = true;
   drawer.open();
 
-  if (roleId) {
-    drawerLoading.value = true;
-    try {
+  try {
+    if (roleId) {
       const [roleRes, menuRes] = await Promise.all([getRole(roleId), roleMenuTreeselect(roleId)]);
       // 后端返回的数据已经是正确的树形结构，直接使用
       menuOptions.value = menuRes.menus || [];
@@ -190,13 +202,14 @@ async function openDrawer(roleId) {
           nextTick(() => menuRef.value?.setChecked(v, true, false));
         });
       });
-    } finally {
-      drawerLoading.value = false;
+    } else {
+      const menuRes = await menuTreeselect();
+      menuOptions.value = menuRes.items;
     }
-  } else {
-    const menuRes = await menuTreeselect();
-    // 注意：treeselect 接口直接返回树形数组，不是包装在 data 中
-    menuOptions.value = menuRes || [];
+  } catch {
+    menuLoadFailed.value = true;
+  } finally {
+    drawerLoading.value = false;
   }
 }
 
@@ -204,10 +217,6 @@ defineExpose({ open: openDrawer, close: drawer.close });
 </script>
 
 <style scoped lang="less">
-.role-form {
-  padding: 0 4px;
-}
-
 .tree-toolbar {
   display: flex;
   gap: 16px;

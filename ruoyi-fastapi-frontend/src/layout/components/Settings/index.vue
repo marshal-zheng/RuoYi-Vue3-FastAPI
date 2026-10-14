@@ -45,9 +45,16 @@
     </div>
 
     <div class="drawer-item">
-      <span>固定 Header</span>
+      <span>显示 Header</span>
       <span class="comp-style">
-        <el-switch v-model="settingsStore.fixedHeader" class="drawer-switch" />
+        <el-switch v-model="settingsStore.headerVisible" class="drawer-switch" />
+      </span>
+    </div>
+
+    <div class="drawer-item">
+      <span>显示面包屑</span>
+      <span class="comp-style">
+        <el-switch v-model="settingsStore.breadcrumbVisible" class="drawer-switch" />
       </span>
     </div>
 
@@ -77,6 +84,7 @@ import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
 import ZxThemePresetSwitch from '@/theme/ZxThemePresetSwitch.vue';
+import { LAYOUT_SETTINGS_VERSION } from '@/settings';
 
 const { proxy } = getCurrentInstance();
 const appStore = useAppStore();
@@ -96,9 +104,11 @@ function topNavChange(val) {
 function saveSetting() {
   proxy.$modal.loading('正在保存到本地，请稍候...');
   let layoutSetting = {
+    layoutVersion: LAYOUT_SETTINGS_VERSION,
     topNav: storeSettings.value.topNav,
     tagsView: storeSettings.value.tagsView,
-    fixedHeader: storeSettings.value.fixedHeader,
+    headerVisible: storeSettings.value.headerVisible,
+    breadcrumbVisible: storeSettings.value.breadcrumbVisible,
     sidebarLogo: storeSettings.value.sidebarLogo,
     dynamicTitle: storeSettings.value.dynamicTitle,
     topNavBorder: storeSettings.value.topNavBorder,

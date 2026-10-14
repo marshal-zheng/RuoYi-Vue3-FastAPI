@@ -1,0 +1,124 @@
+{
+  "repository": "/Users/hqz/Downloads/element-plus",
+  "scope": "root documented scope; six independent repositories excluded by AGENTS.md; Chart README change separately checked",
+  "source_frozen": true,
+  "gates": [
+    {
+      "command": "pnpm build:theme",
+      "exit_code": 0,
+      "log": "/tmp/zxui-full-validation-theme-build.log"
+    },
+    {
+      "command": "pnpm build",
+      "exit_code": 0,
+      "log": "/tmp/zxui-full-validation-build.log"
+    },
+    {
+      "command": "pnpm lint",
+      "exit_code": 0,
+      "errors": 0,
+      "warnings": 0,
+      "log": "/tmp/zxui-full-validation-lint-final.log"
+    },
+    {
+      "command": "pnpm typecheck",
+      "exit_code": 0,
+      "suites": [
+        "web",
+        "play",
+        "node",
+        "vite-config",
+        "vitest"
+      ],
+      "log": "/tmp/zxui-full-validation-typecheck-final.log"
+    },
+    {
+      "command": "pnpm ui-contracts:check",
+      "exit_code": 0,
+      "stages": 4,
+      "log": "/tmp/zxui-full-validation-contracts-final.log"
+    },
+    {
+      "command": "VITEST_MAX_FORKS=4 VITEST_MIN_FORKS=1 VITEST_MAX_THREADS=4 VITEST_MIN_THREADS=1 ZXUI_VALIDATION_EVIDENCE_DIR=/tmp/zxui-full-validation-authority-final pnpm test:run",
+      "exit_code": 0,
+      "session_id": 50478,
+      "log": "/tmp/zxui-full-validation-test-run-final.log",
+      "vitest": {
+        "files_passed": 338,
+        "files_skipped": 1,
+        "tests_passed": 2474,
+        "tests_skipped": 2,
+        "duration_seconds": 286.49
+      },
+      "node_contracts": {
+        "passed": 39,
+        "failed": 0
+      },
+      "mcp": {
+        "files_passed": 9,
+        "tests_passed": 84
+      },
+      "authority": {
+        "personas": 3,
+        "stages": 21,
+        "valid": true,
+        "scope": "local-working-source-validation",
+        "root_clean": false,
+        "source_closure_fingerprint": "sha256:af8f91170b95455938317d36a4a778f7f65188add70ab41c4e6e847cce4d621b"
+      }
+    }
+  ],
+  "supplemental": {
+    "composition_performance": {
+      "exit_code": 0,
+      "tests": 1,
+      "samples": 20,
+      "log": "/tmp/zxui-full-validation-composition-performance.log",
+      "report": "/tmp/zxui-full-validation-composition-performance.json"
+    },
+    "composition_stage_timing": {
+      "exit_code": 0,
+      "tests": 2,
+      "samples": 20,
+      "log": "/tmp/zxui-full-validation-composition-stage-timing.log",
+      "report": "/tmp/zxui-full-validation-composition-stage-timing.json"
+    },
+    "timeline_browser": {
+      "exit_code": 0,
+      "render_cases": 24,
+      "measured_edges": 48,
+      "log": "/tmp/zxui-full-validation-timeline-browser.log",
+      "report": "/tmp/zxui-full-validation-timeline-browser.json",
+      "scope": "structural CSS real Chromium render schema; not a business Timeline screen"
+    },
+    "compiler_vite_recovery": {
+      "exit_code": 0,
+      "tests": 9,
+      "log": "/tmp/zxui-full-validation-vite-recovery-green.log",
+      "negative_control_logs": [
+        "/tmp/zxui-full-validation-vite-css-only-red.log",
+        "/tmp/zxui-full-validation-vite-transaction-red.log",
+        "/tmp/zxui-full-validation-vite-expanded-recovery-red.log"
+      ]
+    },
+    "chart": {
+      "exit_code": 0,
+      "files": 4,
+      "tests": 27,
+      "typecheck_exit_code": 0,
+      "scope": "independent README change only",
+      "logs": [
+        "/tmp/zxui-full-validation-chart.log",
+        "/tmp/zxui-full-validation-chart-typecheck.log"
+      ]
+    },
+    "root_owned_consumer_fixture": {
+      "exit_code": 0,
+      "log": "/tmp/zxui-full-validation-consumer-fixture.log"
+    }
+  },
+  "additional_release_gate_boundary": "An optional release-gate trial initially exposed the obsolete root-owned consumer fixture. That fixture was fixed and its production build passed. The broader six independent repository build-smoke sequence was not completed and is outside root default scope; no claim of all six package full gates.",
+  "change_manifest": "/tmp/zxui-full-validation-change-manifest.json",
+  "baseline_snapshots": "/tmp/zxui-full-validation-baseline-20261013",
+  "remaining_failures": []
+}

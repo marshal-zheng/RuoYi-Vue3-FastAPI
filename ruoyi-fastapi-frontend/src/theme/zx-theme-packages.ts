@@ -19,37 +19,37 @@ export const ZX_THEME_PACKAGE_CHOICES: readonly ZxThemePackageChoice[] = [
   {
     id: 'defense-green',
     packageName: '@zxio/theme-defense-green',
-    label: '军工绿',
+    label: '苔绿',
     swatch: 'linear-gradient(135deg, #35452d 0%, #5d7250 52%, #889b79 100%)',
   },
   {
     id: 'army-pine',
     packageName: '@zxio/theme-army-pine',
-    label: '陆军松枝绿',
+    label: '森绿',
     swatch: 'linear-gradient(135deg, #1a211f 0%, #476656 52%, #7f9e8a 100%)',
   },
   {
     id: 'air-gray',
     packageName: '@zxio/theme-air-gray',
-    label: '空军深蓝灰',
+    label: '雾蓝',
     swatch: 'linear-gradient(135deg, #171e2b 0%, #38546b 55%, #7a9bb3 100%)',
   },
   {
     id: 'pap-olive',
     packageName: '@zxio/theme-pap-olive',
-    label: '武警深橄榄绿',
+    label: '琥珀',
     swatch: 'linear-gradient(135deg, #1c2117 0%, #455233 52%, #c28f29 100%)',
   },
   {
     id: 'rocket-moss',
     packageName: '@zxio/theme-rocket-moss',
-    label: '火箭军苔藓绿',
+    label: '墨青',
     swatch: 'linear-gradient(135deg, #141e19 0%, #2e4c38 52%, #c79e47 100%)',
   },
   {
     id: 'factory-blue',
     packageName: '@zxio/theme-factory-blue',
-    label: '海军蓝',
+    label: '钢蓝',
     swatch: 'linear-gradient(135deg, #16202e 0%, #3b78b3 55%, #8fb8e8 100%)',
   },
   {

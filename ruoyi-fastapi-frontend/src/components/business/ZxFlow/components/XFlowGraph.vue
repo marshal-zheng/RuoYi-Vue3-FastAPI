@@ -16,7 +16,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
-import { Graph, Options, Shape } from '@antv/x6';
+import { Graph, Options, Shape, SizeSensor } from '@antv/x6';
 import { Keyboard } from '@antv/x6-plugin-keyboard';
 import { Scroller } from '@antv/x6-plugin-scroller';
 import { useGraphInstance } from '../composables/useGraphInstance';
@@ -216,6 +216,7 @@ const emit = defineEmits(['ready', 'node-click', 'node-dblclick']);
 
 // 缓存事件处理器，便于在重新初始化或销毁时解绑
 let nodeClickHandler = null;
+let resizeTarget = null;
 
 // 键盘管理器
 const {
@@ -249,6 +250,7 @@ const initGraph = async () => {
 
   if (!containerRef.value) return;
 
+  resizeTarget = containerRef.value.parentElement;
   const g = new Graph({
     container: containerRef.value,
     autoResize: true,
@@ -494,6 +496,9 @@ const destroyGraph = () => {
     }
   } catch (e) {}
 
+  // X6 binds autoResize to the parent but clears the graph container on dispose.
+  if (resizeTarget) SizeSensor.clear(resizeTarget);
+  resizeTarget = null;
   graph.value.dispose();
   graph.value = null;
   nodeClickHandler = null;

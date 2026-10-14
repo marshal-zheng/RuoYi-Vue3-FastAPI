@@ -1,0 +1,725 @@
+{
+  "scope": "structural CSS with the component render schema and measured edge variables",
+  "cases": [
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 0,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 0,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 0.35,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.009375000000005684,
+          "trackLength": 154,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.009374999999977263,
+          "trackLength": 154,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 0.35,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.009375000000005684,
+          "trackLength": 154,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.009374999999977263,
+          "trackLength": 154,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 1,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 12,
+      "progress": 1,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 154,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 0,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 0,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 100% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 0.35,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 182,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 182,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 0.35,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 182,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 182,
+          "clipPath": "inset(0px 65% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 1,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "horizontal",
+      "gap": 40,
+      "progress": 1,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 182,
+          "clipPath": "inset(0px 0% 0px 0px)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 0,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 0,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 0.35,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.0031250000000113687,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.0031250000000113687,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 0.35,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.0031250000000113687,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.0031250000000113687,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 1,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 12,
+      "progress": 1,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 88,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 0,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 0,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 100%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 0.35,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 0.35,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": -0.012499999999988631,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 65%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 1,
+      "split": false,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    },
+    {
+      "direction": "vertical",
+      "gap": 40,
+      "progress": 1,
+      "split": true,
+      "measured": [
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(0, 0, 255)",
+          "after": "none",
+          "beforeNext": "none"
+        },
+        {
+          "startError": 0,
+          "endError": 0,
+          "cursorError": 0,
+          "trackLength": 102,
+          "clipPath": "inset(0px 0px 0%)",
+          "fill": "rgb(255, 0, 0)",
+          "remainder": "rgb(150, 150, 150)",
+          "after": "none",
+          "beforeNext": "none"
+        }
+      ]
+    }
+  ]
+}

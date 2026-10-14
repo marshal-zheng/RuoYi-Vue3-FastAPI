@@ -22,10 +22,12 @@
     <div class="el-upload__tip" v-if="showTip && !disabled">
       请上传
       <template v-if="fileSize">
-        大小不超过 <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileSize }}MB</b>
+        大小不超过
+        <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileSize }}MB</b>
       </template>
       <template v-if="fileType">
-        格式为 <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileType.join('/') }}</b>
+        格式为
+        <b style="color: var(--zx-semantic-status-danger-on-surface)">{{ fileType.join('/') }}</b>
       </template>
       的文件
     </div>

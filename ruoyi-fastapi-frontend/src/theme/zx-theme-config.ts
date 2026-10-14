@@ -48,7 +48,11 @@ function readPreference(): ZxThemePreference {
 export const zxThemePreferences = createThemePreferenceController<ZxThemePreference>({
   initial: readPreference(),
   validate(next) {
-    if (!isZxThemeId(next.themeId) || !validModes.has(next.mode) || !validDensities.has(next.density)) {
+    if (
+      !isZxThemeId(next.themeId) ||
+      !validModes.has(next.mode) ||
+      !validDensities.has(next.density)
+    ) {
       throw new Error(`Invalid ZXUI theme preference: ${JSON.stringify(next)}`);
     }
   },

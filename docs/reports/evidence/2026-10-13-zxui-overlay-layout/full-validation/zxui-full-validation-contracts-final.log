@@ -1,0 +1,35 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check /Users/hqz/Downloads/element-plus
+> pnpm ui-contracts:check:packages && pnpm ui-contracts:check:build-externals && pnpm ui-contracts:check:migration-plan && pnpm ui-contracts:check:docs-sync
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:packages /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-package-contracts.mjs
+
+• UI package contract 校验通过
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:build-externals /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-build-externals.mjs
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+• UI build external 校验通过
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:migration-plan /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-migration-plan.mjs
+
+• UI migration plan / target-state 校验通过
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:docs-sync /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-docs-sync.mjs
+
+• UI docs/play/README 同步校验通过

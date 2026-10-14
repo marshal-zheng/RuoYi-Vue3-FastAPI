@@ -1,0 +1,18 @@
+➤ YN0000: · Yarn 4.9.2
+➤ YN0000: ┌ Resolution step
+➤ YN0085: │ + @zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz#./vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz::hash=e28d18&locator=vfadmin%40workspace%3A.
+➤ YN0085: │ - @zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz#./vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz::hash=3cc3d3&locator=vfadmin%40workspace%3A.
+➤ YN0000: └ Completed in 0s 425ms
+➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ @vitest/browser is listed by your project with version 3.2.4 (p22627), which doesn't satisfy what @vitest/coverage-v8 and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0060: │ vitest is listed by your project with version 3.2.4 (pd98b6), which doesn't satisfy what @vitest/coverage-v8 and other dependencies request (but they have non-overlapping ranges!).
+➤ YN0002: │ vfadmin@workspace:. doesn't provide @testing-library/dom (pf0dee), requested by @testing-library/user-event.
+➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0013: │ A package was added to the project (+ 18.35 MiB).
+➤ YN0000: └ Completed in 0s 739ms
+➤ YN0000: ┌ Link step
+➤ YN0000: └ Completed in 0s 639ms
+➤ YN0000: · Done with warnings in 1s 889ms

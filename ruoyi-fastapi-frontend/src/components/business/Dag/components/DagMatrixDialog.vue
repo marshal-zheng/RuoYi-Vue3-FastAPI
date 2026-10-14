@@ -109,7 +109,7 @@ const saving = ref(false);
 // 使用 useDialog hook
 const { state, dialogProps, dialogEvents, open, close, toggleFullscreen } = useDialog({
   dialogSize: 'xl',
-  noContentPadding: true,
+  bodyPadding: 0,
   title: () => props.title,
 
   closeOnClickModal: false,

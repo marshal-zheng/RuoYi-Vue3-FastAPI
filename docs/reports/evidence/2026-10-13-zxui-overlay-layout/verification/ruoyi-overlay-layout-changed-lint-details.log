@@ -1,0 +1,138 @@
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/Dag/components/DagDnd.vue
+  172:7   warning  'idSeed' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  177:45  warning  'stats' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/Dag/config/portConfig.js
+  142:9  warning  'ports' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/Dag/index.vue
+  170:3   warning  'XFlowMinimap' is defined but never used                      @typescript-eslint/no-unused-vars
+  171:3   warning  'XFlowContextMenu' is defined but never used                  @typescript-eslint/no-unused-vars
+  392:7   warning  'matrixViewRef' is assigned a value but never used            @typescript-eslint/no-unused-vars
+  470:3   warning  'layout' is assigned a value but never used                   @typescript-eslint/no-unused-vars
+  529:7   warning  'matrixDialogTitle' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  536:7   warning  'onToolbarLayoutChange' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  605:7   warning  'onSave' is assigned a value but never used                   @typescript-eslint/no-unused-vars
+  621:7   warning  'showMatrixDialog' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  636:7   warning  'onMatrixGraphDataUpdate' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  646:7   warning  'onMatrixNodeAdd' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  650:7   warning  'onMatrixNodeUpdate' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  654:7   warning  'onMatrixNodeDelete' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  658:7   warning  'onMatrixRowClick' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  662:7   warning  'onMatrixSave' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  668:7   warning  'onMatrixDialogClose' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  778:13  warning  'sourceNode' is assigned a value but never used               @typescript-eslint/no-unused-vars
+  779:13  warning  'targetNode' is assigned a value but never used               @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/Device/PortConfigDrawer.vue
+  77:20  warning  '_e' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/ZxFlow/components/XFlowGraph.vue
+  224:3   warning  'setInteractionMode' is assigned a value but never used         @typescript-eslint/no-unused-vars
+  227:3   warning  'INTERACTION_MODES' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  434:12  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  452:14  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  452:17  warning  Empty block statement                                           no-empty
+  465:29  warning  'node' is defined but never used                                @typescript-eslint/no-unused-vars
+  466:27  warning  'node' is defined but never used                                @typescript-eslint/no-unused-vars
+  475:25  warning  'cell' is defined but never used                                @typescript-eslint/no-unused-vars
+  475:31  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  476:28  warning  'cell' is defined but never used                                @typescript-eslint/no-unused-vars
+  476:34  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  480:58  warning  'ev' is defined but never used                                  @typescript-eslint/no-unused-vars
+  481:12  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  481:15  warning  Empty block statement                                           no-empty
+  497:12  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  497:15  warning  Empty block statement                                           no-empty
+  538:14  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  538:17  warning  Empty block statement                                           no-empty
+  549:14  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  678:11  warning  'resizeParentToFitChildren' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  698:16  warning  'e' is defined but never used                                   @typescript-eslint/no-unused-vars
+  698:19  warning  Empty block statement                                           no-empty
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/ui/ContentDetailWrap/index.vue
+  11:11  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts
+   9:45  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+  11:56  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+  27:44  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+  28:20  warning  '_columns' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  28:70  warning  '_size' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  36:5   warning  Unexpected console statement                   no-console
+  47:56  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+  47:78  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/plugins/ModalFeedbackProvider.ts
+  30:26  error  Delete `,`  prettier/prettier
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/store/modules/settings.ts
+  17:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  85:47  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  88:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/utils/feedback/presenter.ts
+  127:21  error  Replace `·type:·'success',·message:·resolveMessage(entry.success,·context,·'操作成功')` with `⏎····type:·'success',⏎····message:·resolveMessage(entry.success,·context,·'操作成功'),⏎·`  prettier/prettier
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/utils/http.test.ts
+    4:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   96:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  154:35  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  209:45  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  223:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/device/detail.vue
+  159:10  warning  'getDefaultMessageConfig' is defined but never used                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+  239:10  warning  'goBack' is defined but never used                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-unused-vars
+  453:27  error    Replace `·?·'var(--zx-semantic-surface-selected-fill)'` with `⏎············?·'var(--zx-semantic-surface-selected-fill)'⏎···········`                                                                                                                                                                                                                                    prettier/prettier
+  457:27  error    Replace `·?·'var(--zx-semantic-surface-selected-on-text)'` with `⏎············?·'var(--zx-semantic-surface-selected-on-text)'⏎···········`                                                                                                                                                                                                                              prettier/prettier
+  653:24  error    Replace `port.id,·['attrs',·'portBody',·'fill'],·isSelected·?·'var(--zx-semantic-surface-selected-fill)'·:·'var(--zx-semantic-surface-field-fill)'` with `⏎········port.id,⏎········['attrs',·'portBody',·'fill'],⏎········isSelected⏎··········?·'var(--zx-semantic-surface-selected-fill)'⏎··········:·'var(--zx-semantic-surface-field-fill)'⏎······`                prettier/prettier
+  654:24  error    Replace `port.id,·['attrs',·'portLabel',·'fill'],·isSelected·?·'var(--zx-semantic-surface-selected-on-text)'·:·'var(--zx-semantic-surface-field-on-text)'` with `⏎········port.id,⏎········['attrs',·'portLabel',·'fill'],⏎········isSelected⏎··········?·'var(--zx-semantic-surface-selected-on-text)'⏎··········:·'var(--zx-semantic-surface-field-on-text)'⏎······`  prettier/prettier
+  667:10  warning  'handlePositionChange' is defined but never used                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+  667:31  warning  'position' is defined but never used                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/login.vue
+  192:7  warning  'register' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/monitor/cache/list.vue
+  157:9  warning  'proxy' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/components/NodeEditDrawer.vue
+  344:7  warning  'getBusTypeTagType' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/project/topo.vue
+  519:11  warning  Empty block statement  no-empty
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue
+  88:7  warning  'props' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/system/user/index.vue
+  266:7   warning  'loading' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  267:7   warning  'showSearch' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  333:10  warning  'handleQuery' is defined but never used          @typescript-eslint/no-unused-vars
+  337:10  warning  'resetQuery' is defined but never used           @typescript-eslint/no-unused-vars
+  385:10  warning  'handleCommand' is defined but never used        @typescript-eslint/no-unused-vars
+  413:39  warning  Unnecessary escape character: \ .                no-useless-escape
+  472:32  warning  'row' is defined but never used                  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/tool/build/RightPanel.vue
+  591:17  warning  'node' is defined but never used   @typescript-eslint/no-unused-vars
+  643:41  warning  'store' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/tool/build/index.vue
+  152:21  warning  'a' is defined but never used        @typescript-eslint/no-unused-vars
+  267:19  warning  'data' is defined but never used     @typescript-eslint/no-unused-vars
+  297:11  warning  'trigger' is defined but never used  @typescript-eslint/no-unused-vars
+  303:25  warning  'e' is defined but never used        @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/tool/gen/editTable.vue
+  130:24  error  Replace `·style="float:·right;·color:·var(--zx-semantic-text-secondary);·font-size:·13px">{{` with `⏎····················style="float:·right;·color:·var(--zx-semantic-text-secondary);·font-size:·13px"`  prettier/prettier
+  131:21  error  Replace `dict.dictType` with `>{{·dict.dictType·}}</span`                                                                                                                                                  prettier/prettier
+  132:19  error  Delete `}}</span`                                                                                                                                                                                          prettier/prettier
+
+✖ 92 problems (9 errors, 83 warnings)
+  9 errors and 0 warnings potentially fixable with the `--fix` option.
+

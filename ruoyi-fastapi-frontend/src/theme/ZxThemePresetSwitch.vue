@@ -1,6 +1,11 @@
 <template>
   <div class="zx-theme-controls">
-    <el-dropdown trigger="click" placement="bottom-end" @command="onSelect">
+    <el-dropdown
+      trigger="click"
+      placement="bottom-end"
+      popper-class="zx-theme-preset-popper"
+      @command="onSelect"
+    >
       <button
         type="button"
         class="zx-theme-preset-switch"
@@ -10,6 +15,7 @@
       >
         <span class="zx-theme-preset-switch__swatch" :style="{ background: current.swatch }" />
         <span class="zx-theme-preset-switch__label">{{ current.label }}</span>
+        <ZxIcon class="zx-theme-preset-switch__caret" icon="CaretBottom" :size="12" />
       </button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -19,9 +25,10 @@
             :command="choice.id"
             :data-zx-theme-preset="choice.id"
           >
-            <span class="zx-theme-preset-switch__item">
-              <span class="zx-theme-preset-switch__swatch" :style="{ background: choice.swatch }" />
-              <span>{{ choice.label }}</span>
+            <span class="zx-theme-preset-menu__item">
+              <span class="zx-theme-preset-menu__swatch" :style="{ background: choice.swatch }" />
+              <span class="zx-theme-preset-menu__label">{{ choice.label }}</span>
+              <span v-if="choice.id === zxThemeId" class="zx-theme-preset-menu__state">启用中</span>
             </span>
           </el-dropdown-item>
           <el-dropdown-item
@@ -29,9 +36,16 @@
             :key="choice.value"
             :command="{ density: choice.value }"
             :divided="index === 0"
-            :disabled="zxThemePreference.density === choice.value"
           >
-            界面密度：{{ choice.label }}
+            <span class="zx-theme-preset-menu__item">
+              <span class="zx-theme-preset-menu__label">界面密度：{{ choice.label }}</span>
+              <span
+                v-if="zxThemePreference.density === choice.value"
+                class="zx-theme-preset-menu__state"
+              >
+                启用中
+              </span>
+            </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
@@ -98,7 +112,7 @@ function onToggleMode() {
   height: 32px;
   border: 1px solid
     color-mix(in oklab, currentColor calc(var(--zx-semantic-border-current-tint) * 1%), transparent);
-  border-radius: 6px;
+  border-radius: var(--zx-semantic-radius-control);
   background: transparent;
   color: inherit;
   cursor: pointer;
@@ -114,7 +128,7 @@ function onToggleMode() {
 }
 
 .zx-theme-preset-switch {
-  padding: 0 10px 0 8px;
+  padding: 0 8px 0 6px;
 }
 
 .zx-theme-mode-switch {
@@ -122,31 +136,96 @@ function onToggleMode() {
   padding: 0;
 }
 
-.zx-theme-preset-switch__swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 999px;
+.zx-theme-preset-switch__swatch,
+.zx-theme-preset-menu__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--zx-semantic-radius-control);
   flex: none;
 }
 
 .zx-theme-preset-switch__label {
   font-size: 13px;
-  line-height: 1;
+  font-weight: 600;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
-.zx-theme-preset-switch__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+.zx-theme-preset-switch__caret {
+  color: var(--zx-semantic-text-secondary);
 }
+
 @media (max-width: 640px) {
-  .zx-theme-preset-switch__label {
+  .zx-theme-preset-switch__label,
+  .zx-theme-preset-switch__caret {
     display: none;
   }
   .zx-theme-preset-switch {
     width: 32px;
     padding: 0;
   }
+}
+</style>
+
+<style>
+/* Geometry follows the docs theme dropdown. Fill, edge and depth stay on the
+   Element Plus overlay tokens, so this only shapes the menu. */
+.zx-theme-preset-popper.el-dropdown__popper {
+  padding: 6px;
+  border-radius: var(--zx-semantic-radius-surface);
+}
+
+.zx-theme-preset-popper .el-dropdown-menu {
+  max-height: min(32rem, calc(100vh - 6rem));
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.zx-theme-preset-popper .el-dropdown-menu__item {
+  padding: 0;
+  border-radius: var(--zx-semantic-radius-control);
+  line-height: 1.2;
+}
+
+.zx-theme-preset-popper .el-dropdown-menu__item:not(.is-disabled):hover,
+.zx-theme-preset-popper .el-dropdown-menu__item:not(.is-disabled):focus {
+  background-color: var(--zx-semantic-fill-hover);
+  color: var(--zx-semantic-text-primary);
+}
+
+.zx-theme-preset-popper .zx-theme-preset-menu__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 196px;
+  padding: 10px 12px;
+}
+
+.zx-theme-preset-popper .zx-theme-preset-menu__swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--zx-semantic-radius-control);
+  flex: none;
+}
+
+.zx-theme-preset-popper .zx-theme-preset-menu__label {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--zx-semantic-text-primary);
+}
+
+.zx-theme-preset-popper .zx-theme-preset-menu__state {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--zx-semantic-accent-base);
+  white-space: nowrap;
+}
+
+.zx-theme-preset-popper .el-popper__arrow {
+  display: none;
 }
 </style>

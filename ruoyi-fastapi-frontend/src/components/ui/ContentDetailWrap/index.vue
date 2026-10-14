@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ElCard, ElDescriptions, ElDescriptionsItem, ElSkeleton, ElTooltip } from 'element-plus';
+import { ZxPageLayout } from '@zxio/zxui';
 import { propTypes } from '@/utils/propTypes';
 import { computed, useSlots, type VNode } from 'vue';
 
@@ -62,92 +63,101 @@ const hasData = computed(() => props.data && props.data.length > 0);
     <ElCard class="content-detail-wrap__body" shadow="never" :data-zx-fill="fill ? '' : undefined">
       <ElSkeleton :loading="loading" :animated="skeletonAnimated" :rows="skeletonRows">
         <template #default>
-          <!-- 固定头部 -->
-          <div
-            v-if="hasHeaderSlot || hasData"
-            :class="[
-              'content-detail-wrap__header',
-              {
-                'content-detail-wrap__header--fixed': fixedHeader,
-                'content-detail-wrap__header--no-border': !showHeaderBorder,
-                'content-detail-wrap__header--no-divider': !showDivider,
-                'content-detail-wrap__header--compact': headerType === 'compact',
-                'content-detail-wrap__header--normal': headerType === 'normal',
-              },
-            ]"
-            :style="{ padding: headerPadding }"
-          >
-            <!-- 自定义 header slot -->
-            <slot v-if="hasHeaderSlot" name="header"></slot>
+          <ZxPageLayout :fill="fill" :scroll="fill ? 'none' : 'body'" :sticky-header="fixedHeader">
+            <template v-if="hasHeaderSlot || hasData" #header>
+              <!-- 固定头部 -->
+              <div
+                v-if="hasHeaderSlot || hasData"
+                :class="[
+                  'content-detail-wrap__header',
+                  {
+                    'content-detail-wrap__header--fixed': fixedHeader,
+                    'content-detail-wrap__header--no-border': !showHeaderBorder,
+                    'content-detail-wrap__header--no-divider': !showDivider,
+                    'content-detail-wrap__header--compact': headerType === 'compact',
+                    'content-detail-wrap__header--normal': headerType === 'normal',
+                  },
+                ]"
+                :style="{ padding: headerPadding }"
+              >
+                <!-- 自定义 header slot -->
+                <slot v-if="hasHeaderSlot" name="header"></slot>
 
-            <!-- 紧凑型布局 -->
-            <div
-              v-else-if="headerType === 'compact' && hasData"
-              class="content-detail-wrap__header-compact"
-            >
-              <div class="content-detail-wrap__header-compact-grid">
+                <!-- 紧凑型布局 -->
                 <div
-                  v-for="(item, index) in data"
-                  :key="index"
-                  class="content-detail-wrap__header-compact-item"
+                  v-else-if="headerType === 'compact' && hasData"
+                  class="content-detail-wrap__header-compact"
                 >
-                  <span class="content-detail-wrap__header-compact-label">{{ item.label }}:</span>
-                  <span class="content-detail-wrap__header-compact-value">
+                  <div class="content-detail-wrap__header-compact-grid">
+                    <div
+                      v-for="(item, index) in data"
+                      :key="index"
+                      class="content-detail-wrap__header-compact-item"
+                    >
+                      <span class="content-detail-wrap__header-compact-label"
+                        >{{ item.label }}:</span
+                      >
+                      <span class="content-detail-wrap__header-compact-value">
+                        <component
+                          :is="item.render ? item.render(item) : item.value"
+                          v-if="item.render"
+                        />
+                        <ElTooltip
+                          v-else
+                          :content="String(item.value ?? '')"
+                          placement="top"
+                          effect="light"
+                          :show-after="300"
+                          :disabled="!item.value || String(item.value).length < 20"
+                          popper-class="content-detail-wrap-tooltip"
+                        >
+                          <span class="content-detail-wrap__header-compact-value-text">
+                            {{ item.value }}
+                          </span>
+                        </ElTooltip>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 正常型布局 (使用 Descriptions) -->
+                <ElDescriptions
+                  v-else-if="headerType === 'normal' && hasData"
+                  :column="column"
+                  :border="border"
+                >
+                  <ElDescriptionsItem
+                    v-for="(item, index) in data"
+                    :key="index"
+                    :label="item.label"
+                    :span="item.span || 1"
+                  >
                     <component
                       :is="item.render ? item.render(item) : item.value"
                       v-if="item.render"
                     />
-                    <ElTooltip
-                      v-else
-                      :content="String(item.value ?? '')"
-                      placement="top"
-                      effect="light"
-                      :show-after="300"
-                      :disabled="!item.value || String(item.value).length < 20"
-                      popper-class="content-detail-wrap-tooltip"
-                    >
-                      <span class="content-detail-wrap__header-compact-value-text">
-                        {{ item.value }}
-                      </span>
-                    </ElTooltip>
-                  </span>
-                </div>
+                    <template v-else>{{ item.value }}</template>
+                  </ElDescriptionsItem>
+                </ElDescriptions>
               </div>
-            </div>
-
-            <!-- 正常型布局 (使用 Descriptions) -->
-            <ElDescriptions
-              v-else-if="headerType === 'normal' && hasData"
-              :column="column"
-              :border="border"
+            </template>
+            <!-- 内容区域 -->
+            <div
+              :class="[
+                'content-detail-wrap__content',
+                {
+                  'content-detail-wrap__content--with-header':
+                    fixedHeader && (hasHeaderSlot || hasData),
+                },
+              ]"
+              :data-zx-fill="fill ? '' : undefined"
+              :style="{ minHeight: fill ? undefined : minHeight }"
             >
-              <ElDescriptionsItem
-                v-for="(item, index) in data"
-                :key="index"
-                :label="item.label"
-                :span="item.span || 1"
-              >
-                <component :is="item.render ? item.render(item) : item.value" v-if="item.render" />
-                <template v-else>{{ item.value }}</template>
-              </ElDescriptionsItem>
-            </ElDescriptions>
-          </div>
-
-          <!-- 内容区域 -->
-          <div
-            :class="[
-              'content-detail-wrap__content',
-              {
-                'content-detail-wrap__content--with-header':
-                  fixedHeader && (hasHeaderSlot || hasData),
-              },
-            ]"
-            :style="{ minHeight: fill ? undefined : minHeight }"
-          >
-            <slot name="body">
-              <slot></slot>
-            </slot>
-          </div>
+              <slot name="body">
+                <slot></slot>
+              </slot>
+            </div>
+          </ZxPageLayout>
         </template>
       </ElSkeleton>
     </ElCard>
@@ -158,10 +168,6 @@ const hasData = computed(() => props.data && props.data.length > 0);
 .content-detail-wrap {
   position: relative;
   width: 100%;
-
-  &:not(.is-fill) {
-    height: 100%;
-  }
 
   &__body {
     position: relative;
@@ -174,8 +180,6 @@ const hasData = computed(() => props.data && props.data.length > 0);
     padding: 0 20px 20px 20px;
 
     &--fixed {
-      position: sticky;
-      top: 0;
       padding: 0 20px 20px 20px;
       margin-bottom: 20px;
       border-bottom: 1px solid var(--el-border-color);
@@ -263,13 +267,7 @@ const hasData = computed(() => props.data && props.data.length > 0);
   flex-direction: column;
   min-height: 0;
 }
-.content-detail-wrap.is-fill :deep(.content-detail-wrap__header) {
-  flex: 0 0 auto;
-}
-.content-detail-wrap.is-fill :deep(.content-detail-wrap__content) {
-  display: flex;
-  flex: 1 1 0;
-  flex-direction: column;
-  min-height: 0;
+.content-detail-wrap:not(.is-fill) :deep(.el-card__body) {
+  overflow: visible;
 }
 </style>

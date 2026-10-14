@@ -1,0 +1,6 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ typecheck:node /Users/hqz/Downloads/element-plus
+> tsc -p tsconfig.node.json --noEmit
+

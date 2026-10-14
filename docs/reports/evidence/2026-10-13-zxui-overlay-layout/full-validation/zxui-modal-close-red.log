@@ -1,0 +1,35 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ❯ packages/components/_shared/__tests__/modal-close.test.tsx (4 tests | 1 failed) 166ms
+   × owned modal dirty confirmation > fails closed without a Host and never opens native body feedback 8ms
+     → expected false to be true // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/components/_shared/__tests__/modal-close.test.tsx > owned modal dirty confirmation > fails closed without a Host and never opens native body feedback
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/components/_shared/__tests__/modal-close.test.tsx:46:27
+     44|     const { close, visible } = await closeFixture()
+     45|     await close.requestClose()
+     46|     expect(visible.value).toBe(true)
+       |                           ^
+     47|     expect(nativeConfirm).not.toHaveBeenCalled()
+     48|     expect(document.querySelector('.el-message-box')).toBeNull()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  16:20:05
+   Duration  1.34s (transform 555ms, setup 44ms, collect 862ms, tests 166ms, environment 90ms, prepare 28ms)
+

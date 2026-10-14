@@ -1,0 +1,7 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ theme:check:action-palette /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/theme/check-action-palette.ts
+
+Action palette passed: 1458 emitted variants, 58320 serialized CSS pairs, 5914 future seed samples, 4080 custom-theme pairs; emitted minimum 4.550000.

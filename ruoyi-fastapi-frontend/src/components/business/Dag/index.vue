@@ -193,7 +193,7 @@ const connectionEdgeOptions = {
   zIndex: -1,
   attrs: {
     line: {
-      stroke: '#C2C8D5',
+      stroke: 'var(--zx-semantic-border-default)',
       strokeWidth: 5,
       targetMarker: null,
     },

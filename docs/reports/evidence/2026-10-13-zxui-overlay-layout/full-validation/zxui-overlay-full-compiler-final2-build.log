@@ -1,0 +1,63 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/theme-compiler@1.0.0 build /Users/hqz/Downloads/element-plus/packages/theme-compiler
+> pnpm -C ../theme-css-codec build && node --import tsx scripts/build.ts
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/theme-css-codec@1.0.0 build /Users/hqz/Downloads/element-plus/packages/theme-css-codec
+> node --import tsx scripts/build.ts
+
+vite v6.4.1 building for production...
+"build.lib.formats" will be ignored because "build.rollupOptions.output" is already an array format.
+transforming...
+✓ 1 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/esm/index.js  7.73 kB │ gzip: 2.29 kB
+dist/cjs/index.cjs  8.13 kB │ gzip: 2.37 kB
+✓ built in 45ms
+vite v6.4.1 building for production...
+"build.lib.formats" will be ignored because "build.rollupOptions.output" is already an array format.
+transforming...
+✓ 42 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/esm/_chunks/type-serializers-BFNR53_V.js      3.59 kB │ gzip:  1.26 kB
+dist/esm/extensions/index.js                       5.09 kB │ gzip:  1.76 kB
+dist/esm/deployment/index.js                       5.26 kB │ gzip:  1.87 kB
+dist/esm/_chunks/result-EoBVJ09m.js                6.03 kB │ gzip:  1.94 kB
+dist/esm/_chunks/contract-integrity-BH-ES2v_.js    7.45 kB │ gzip:  1.85 kB
+dist/esm/_chunks/css-variable-kfqYQNVB.js          9.02 kB │ gzip:  2.75 kB
+dist/esm/vite/index.js                            14.96 kB │ gzip:  4.23 kB
+dist/esm/_chunks/emitter-BG3z3ndz.js              16.87 kB │ gzip:  5.10 kB
+dist/esm/_chunks/value-mapping-Ct8KTgwq.js        19.31 kB │ gzip:  4.05 kB
+dist/esm/adapters/tailwind/index.js               21.75 kB │ gzip:  5.08 kB
+dist/esm/adapters/element-plus/index.js           23.83 kB │ gzip:  5.17 kB
+dist/esm/adapters/dtcg/index.js                   33.60 kB │ gzip:  7.05 kB
+dist/esm/_chunks/validator-BPCgqvdo.js            51.48 kB │ gzip: 10.64 kB
+dist/esm/index.js                                 73.56 kB │ gzip: 16.25 kB
+dist/esm/_chunks/mapping-CRld2Y2A.js             101.99 kB │ gzip: 11.87 kB
+dist/cjs/_chunks/type-serializers-Ds-QSIPJ.cjs      3.62 kB │ gzip:  1.25 kB
+dist/cjs/extensions/index.cjs                       5.35 kB │ gzip:  1.80 kB
+dist/cjs/deployment/index.cjs                       5.49 kB │ gzip:  1.93 kB
+dist/cjs/_chunks/result-DvBpkU6J.cjs                6.28 kB │ gzip:  1.97 kB
+dist/cjs/_chunks/contract-integrity-CZ8ZTENh.cjs    7.52 kB │ gzip:  1.85 kB
+dist/cjs/_chunks/css-variable-jgb85LVR.cjs          9.31 kB │ gzip:  2.74 kB
+dist/cjs/vite/index.cjs                            15.49 kB │ gzip:  4.28 kB
+dist/cjs/_chunks/emitter-Nw_AcvQM.cjs              17.29 kB │ gzip:  5.08 kB
+dist/cjs/_chunks/value-mapping-CEBPmCPq.cjs        19.74 kB │ gzip:  4.05 kB
+dist/cjs/adapters/tailwind/index.cjs               22.23 kB │ gzip:  5.07 kB
+dist/cjs/adapters/element-plus/index.cjs           24.52 kB │ gzip:  5.21 kB
+dist/cjs/adapters/dtcg/index.cjs                   34.67 kB │ gzip:  7.10 kB
+dist/cjs/_chunks/validator-CvzDoVzq.cjs            52.11 kB │ gzip: 10.53 kB
+dist/cjs/index.cjs                                 75.59 kB │ gzip: 16.19 kB
+dist/cjs/_chunks/mapping-Cx9sE4d6.cjs             102.23 kB │ gzip: 11.88 kB
+✓ built in 234ms
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4
+Analysis will use the bundled TypeScript version 5.5.4

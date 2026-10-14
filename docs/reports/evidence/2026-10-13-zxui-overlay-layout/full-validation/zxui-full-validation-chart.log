@@ -1,0 +1,18 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/chart@2.0.0 test /Users/hqz/Downloads/element-plus/packages/chart
+> vitest --config vitest.config.mts run __tests__
+
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus/packages/chart
+
+ ✓ __tests__/package-contract.test.ts (2 tests) 2ms
+ ✓ __tests__/declaration-normalization.test.ts (2 tests) 1ms
+ ✓ __tests__/theme-projection.test.ts (16 tests) 21ms
+ ✓ __tests__/chart.test.tsx (7 tests) 42ms
+
+ Test Files  4 passed (4)
+      Tests  27 passed (27)
+   Start at  16:29:49
+   Duration  843ms (transform 237ms, setup 0ms, collect 835ms, tests 66ms, environment 151ms, prepare 152ms)
+

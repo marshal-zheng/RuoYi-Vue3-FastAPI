@@ -1,0 +1,6 @@
+{
+  "package": "ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-overlay-layout.20261013.tgz",
+  "sha256": "e16b07fde09db8ba426e86d0f73623790d7496678da23835799f0a617bec1ce0",
+  "review": "Hard-cut delta reviewed independently; no remaining P0/P1/P2.",
+  "globalGates": "Known unrelated type, format, package-contract and ConfirmInput theme assertions remain."
+}

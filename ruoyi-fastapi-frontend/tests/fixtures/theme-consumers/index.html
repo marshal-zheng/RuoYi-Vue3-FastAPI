@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>ZXUI theme consumer verification</title></head>
+  <body>
+    <div id="app"></div>
+    <script type="module">
+      import { createApp } from 'vue';
+      import ElementPlus from 'element-plus';
+      import ZXUI from '@zxio/zxui';
+      import 'element-plus/dist/index.css';
+      import '@zxio/zxui/style';
+      import { setupVXETable } from '@/plugins/vxe-table';
+      import { bindZxThemeHost } from '@/theme/zx-theme-host';
+      import deployment from 'virtual:zxui-theme-deployment';
+      import App from './App.vue';
+      const app = createApp(App).use(ElementPlus).use(ZXUI);
+      setupVXETable(app);
+      bindZxThemeHost(app, deployment);
+      app.mount('#app');
+    </script>
+  </body>
+</html>

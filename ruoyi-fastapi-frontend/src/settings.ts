@@ -1,12 +1,16 @@
 /// <reference types="vite/client" />
 
+// Version 1 applies the hidden Tags-Views default to legacy saved layouts once.
+export const LAYOUT_SETTINGS_VERSION = 1;
+
 interface SettingsConfig {
   title: string;
   showSettings: boolean;
   topNav: boolean;
   topNavBorder: boolean;
   tagsView: boolean;
-  fixedHeader: boolean;
+  headerVisible: boolean;
+  breadcrumbVisible: boolean;
   sidebarLogo: boolean;
   showLogoImage: boolean;
   dynamicTitle: boolean;
@@ -37,12 +41,15 @@ const settings: SettingsConfig = {
   /**
    * 是否显示 tagsView
    */
-  tagsView: true,
+  tagsView: false,
 
   /**
-   * 是否固定头部
+   * 是否显示应用头部
    */
-  fixedHeader: true,
+  headerVisible: true,
+
+  /** 是否显示面包屑 */
+  breadcrumbVisible: true,
 
   /**
    * 是否显示logo

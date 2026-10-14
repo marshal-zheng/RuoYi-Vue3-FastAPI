@@ -1,33 +1,55 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
+  <div :class="[classObj, { sidebarHidden: sidebar.hide }]" class="app-wrapper">
     <div
       v-if="device === 'mobile' && sidebar.opened"
       class="drawer-bg"
       @click="handleClickOutside"
     />
-    <Sidebar v-if="!sidebar.hide" class="sidebar-container" :style="sidebarInlineStyle" />
-    <div :class="{ hasTagsView: needTagsView, sidebarHide: sidebar.hide }" class="main-container">
-      <div :class="{ 'fixed-header': true }" :style="fixedHeaderStyle">
-        <!-- Header 区域：在未启用 tagsView 时显示 Logo + Navbar；启用时只显示 Navbar -->
-        <div class="app-header flex items-center justify-between" data-zx-surface="header">
-          <div v-if="!needTagsView && showLogo" class="flex items-center h-[50px] px-4 gap-2">
-            <img :src="headerLogo" class="w-8 h-8 shrink-0" />
-            <!-- 收起侧边栏时隐藏标题文字，效果与 Sidebar 中 Logo 收起一致 -->
-            <span
-              v-if="!isCollapse"
-              class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
-            >
-              {{ headerTitle }}
-            </span>
-          </div>
-          <Navbar v-if="showNavbar" class="flex-1" @setLayout="setLayout" />
-        </div>
-        <!-- TagsView 显示在 Header 下方 -->
-        <TagsView v-if="showTagsView" />
+    <div
+      v-if="visibility.headerVisible"
+      class="app-header flex items-center justify-between"
+      data-zx-surface="header"
+    >
+      <div v-if="showLogo" class="flex items-center h-[50px] px-4 gap-2">
+        <img :src="headerLogo" class="w-8 h-8 shrink-0" alt="" />
+        <span
+          v-if="!isCollapse"
+          class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
+          >{{ headerTitle }}</span
+        >
       </div>
-      <app-main />
-      <settings ref="settingRef" />
+      <Navbar
+        class="flex-1"
+        :breadcrumb-visible="visibility.breadcrumbVisible"
+        @setLayout="setLayout"
+      />
     </div>
+    <Sidebar
+      v-if="!sidebar.hide"
+      :header-visible="visibility.headerVisible"
+      class="sidebar-container"
+    />
+    <div :class="{ sidebarHide: sidebar.hide }" class="main-container">
+      <TagsView v-if="visibility.tagsView" class="app-tabs" />
+      <AppMain />
+    </div>
+    <div v-if="!visibility.headerVisible" class="layout-recovery">
+      <ZxButton
+        v-if="!sidebar.hide"
+        icon="Menu"
+        circle
+        aria-label="展开或收起导航"
+        @click="appStore.toggleSideBar()"
+      />
+      <ZxButton
+        v-if="settingsStore.showSettings"
+        icon="Setting"
+        circle
+        aria-label="打开布局设置"
+        @click="setLayout"
+      />
+    </div>
+    <Settings ref="settingRef" />
   </div>
 </template>
 
@@ -39,43 +61,18 @@ import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import defaultSettings from '@/settings';
 import headerLogo from '@/assets/logo/logo.png';
+import { ZxButton } from '@zxio/zxui';
+import { resolveLayoutVisibility } from './policy';
+const route = useRoute();
 
 const settingsStore = useSettingsStore();
-const sidebar = computed(() => useAppStore().sidebar);
+const appStore = useAppStore();
+const sidebar = computed(() => appStore.sidebar);
 const device = computed(() => useAppStore().device);
-const needTagsView = computed(() => settingsStore.tagsView);
-
-// 定义显示控制变量
+const visibility = computed(() => resolveLayoutVisibility(settingsStore, route.meta));
 const showLogo = computed(() => settingsStore.sidebarLogo);
-const showNavbar = computed(() => true); // Navbar 始终显示
-const showTagsView = computed(() => needTagsView.value);
-
-// 与 Sidebar 折叠状态保持一致，用于控制 Header 中标题的显隐
 const isCollapse = computed(() => !sidebar.value.opened);
-
-// Header 中展示的系统标题
 const headerTitle = computed(() => defaultSettings.title || import.meta.env.VITE_APP_TITLE);
-const headerHeight = 50;
-
-const fixedHeaderStyle = computed(() => {
-  if (!needTagsView.value) {
-    return {
-      width: '100%',
-      left: '0',
-    };
-  }
-  return {};
-});
-
-const sidebarInlineStyle = computed(() => {
-  if (!needTagsView.value) {
-    return {
-      top: `${headerHeight}px`,
-      height: `calc(100% - ${headerHeight}px)`,
-    };
-  }
-  return {};
-});
 
 const classObj = computed(() => ({
   hideSidebar: !sidebar.value.opened,
@@ -120,7 +117,7 @@ function setLayout() {
 @import '@/assets/styles/variables.module.less';
 
 // Keep the tint local so Vite HMR does not compile this block against a stale mixin import.
-@on-surface-tint: ~"color-mix(in oklab, currentColor calc(var(--zx-semantic-fill-current-tint) * 1%), transparent)";
+@on-surface-tint: ~'color-mix(in oklab, currentColor calc(var(--zx-semantic-fill-current-tint) * 1%), transparent)';
 
 // The header surface paints background, border, shadow and on-text colour.
 // Its children still read the legacy --top-header-* names, so they are rebound
@@ -155,50 +152,71 @@ function setLayout() {
 }
 
 .app-wrapper {
-  .clearfix();
+  --app-sidebar-size: var(--base-sidebar-width);
+  display: grid;
+  grid-template-columns: var(--app-sidebar-size) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
   position: relative;
-  height: 100%;
-  width: 100%;
-
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
-  }
-}
-
-.main-container:has(.fixed-header) {
   height: 100vh;
+  height: 100dvh;
+  width: 100%;
   overflow: hidden;
 }
-
-// The mobile sidebar is a drawer, so it shares the dialog/drawer backdrop.
-.drawer-bg {
-  background: var(--zx-semantic-overlay-modal);
-  width: 100%;
-  top: 0;
-  height: 100%;
-  position: absolute;
-  z-index: 999;
+.app-wrapper.hideSidebar {
+  --app-sidebar-size: 54px;
 }
-
-.fixed-header {
+.app-wrapper.sidebarHidden,
+.app-wrapper.mobile {
+  --app-sidebar-size: 0px;
+}
+.app-header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  min-width: 0;
+  z-index: 9;
+}
+.app-wrapper > .sidebar-container {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  top: auto;
+  bottom: auto;
+  min-height: 0;
+  height: auto;
+  transition: none;
+}
+.app-wrapper > .main-container {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+  margin-left: 0;
+  overflow: hidden;
+  transition: none;
+}
+.app-tabs {
+  flex: 0 0 auto;
+}
+.app-wrapper.mobile > .sidebar-container {
   position: fixed;
   top: 0;
-  right: 0;
+  bottom: 0;
+  height: 100%;
+}
+.drawer-bg {
+  background: var(--zx-semantic-overlay-modal);
+  position: absolute;
+  inset: 0;
+  z-index: 999;
+}
+.layout-recovery {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
   z-index: 9;
-  width: calc(100% - @base-sidebar-width);
-  transition: width 0.28s;
-}
-
-.hideSidebar .fixed-header {
-  width: calc(100% - 54px);
-}
-
-.sidebarHide .fixed-header {
-  width: 100%;
-}
-
-.mobile .fixed-header {
-  width: 100%;
 }
 </style>

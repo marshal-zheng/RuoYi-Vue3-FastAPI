@@ -1,0 +1,7 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:packages /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-package-contracts.mjs "--packages" "@zxio/zxui"
+
+• UI package contract 校验通过

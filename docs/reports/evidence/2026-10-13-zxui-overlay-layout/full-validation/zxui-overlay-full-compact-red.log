@@ -1,0 +1,30 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+{"schema":"zx.theme-delivery.compact-data/1","originalBytes":6592911,"encodedBytes":2080605,"savedBytes":4512306}
+ ❯ scripts/theme-delivery/compact-theme-data.test.ts (3 tests | 1 failed) 1141ms
+   ✓ restores exact public manifest/map JSON without eval and deterministically interns repeated strings 561ms
+   × shares manifest/deployment data with exact JSON values and a fixed gzip budget 579ms
+     → expected 510126 to be less than 500000
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/theme-delivery/compact-theme-data.test.ts > shares manifest/deployment data with exact JSON values and a fixed gzip budget
+AssertionError: expected 510126 to be less than 500000
+ ❯ scripts/theme-delivery/compact-theme-data.test.ts:86:20
+     84|     separate += gzipSync(await minify(item)).length
+     85|   expect(together).toBeLessThan(separate * 0.85)
+     86|   expect(together).toBeLessThan(500_000)
+       |                    ^
+     87|   process.stdout.write(
+     88|     `${JSON.stringify({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  16:08:51
+   Duration  2.79s (transform 531ms, setup 43ms, collect 1.18s, tests 1.14s, environment 121ms, prepare 34ms)
+

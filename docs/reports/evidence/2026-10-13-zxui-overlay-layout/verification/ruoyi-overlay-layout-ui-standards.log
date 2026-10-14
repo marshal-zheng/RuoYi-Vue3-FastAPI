@@ -1,0 +1,28 @@
+Scope: src/**/*.{vue,ts,tsx,js,jsx,css,less,scss}; excludes only simulation modules (src/views/project/simulation/**, src/views/project/components/SimulationResultDialog.vue, src/views/project/components/SimulationStatusPanel.vue).
+UI standards: 505 files, 0 violations.
+
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > accepts generated and handwritten thin forms with aliases and local destructuring 7ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > matches exact executable inputs/dialogs, excluding comments and input-number 1ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > reports missing presets, dynamic spreads, local constant widths and style bypasses 4ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects independent layout columns and field geometry only inside modal forms 6ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > requires form/layout props to originate in the same controller 1ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > requires dialog/form/layout props to originate in the same local controller 3ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects missing columns, invalid size and raw useDialog form ownership 0ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > diagnoses competing theme declarations/writes, not ordinary domain colors 3ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects private theme loading while allowing public deployment imports 0ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > reads legacy identities without mutating saved fields or numeric semantics 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > generates a complete SFC accepted by the same source gate 29ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > keeps page generation supported and escapes string defaults 5ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > normalizes nested saved rows into full-width semantic layout 4ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > previews a legacy input using the same component and forwards slots/model once 12ms
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  14:47:33
+   Duration  2.85s (transform 1.23s, setup 643ms, collect 2.19s, tests 79ms, environment 670ms, prepare 74ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

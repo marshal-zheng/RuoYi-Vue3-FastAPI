@@ -1,0 +1,19 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ scripts/theme-consumer/structural-policy.test.ts (34 tests) 106ms
+ ✓ scripts/theme-consumer/admission/validation.test.ts (35 tests) 12555ms
+   ✓ surface role alias admission > admits exact owned aliases separately from structural geometry 2423ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"path":"docs/examples/card/custom.vue"} 2257ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"sourceName":"--zx-semantic-text-secondary"} 2229ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"replacement":"--zx-semantic-text-secondary"} 2197ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"repository":"chart"} 2215ms
+   ✓ token write ownership > rechecks exact source recipes and rejects changed values or selectors 1229ms
+
+ Test Files  2 passed (2)
+      Tests  69 passed (69)
+   Start at  16:42:53
+   Duration  13.23s (transform 262ms, setup 80ms, collect 621ms, tests 12.66s, environment 160ms, prepare 56ms)
+

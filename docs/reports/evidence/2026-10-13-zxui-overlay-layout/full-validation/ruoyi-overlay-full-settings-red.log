@@ -1,0 +1,33 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > supports auth sessions and system read repositories 47ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > persists project, version, and topology changes across data source instances 17ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > exposes simulation data as read-only repository queries 15ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > restores layout options without restoring retired colour settings 2ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > rejects retired colour settings while retaining layout changes 1ms
+ × tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference 2ms
+   → expected undefined to be an instance of Promise
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference
+AssertionError: expected undefined to be an instance of Promise
+ ❯ tests/unit/stores/settings.test.ts:51:21
+     49|     const store = useSettingsStore();
+     50|     const pending = store.toggleTheme();
+     51|     expect(pending).toBeInstanceOf(Promise);
+       |                     ^
+     52|     await pending;
+     53|     expect(zxThemePreference.value.mode).toBe('dark');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 5 passed (6)
+   Start at  15:57:31
+   Duration  2.14s (transform 409ms, setup 1.19s, collect 662ms, tests 88ms, environment 789ms, prepare 137ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

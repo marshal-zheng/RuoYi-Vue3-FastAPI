@@ -1,0 +1,16 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+{"schema":"zx.theme-delivery.compact-data/1","originalBytes":6592911,"encodedBytes":2043043,"savedBytes":4549868}
+{"sharedGzipBytes":499009,"separateGzipBytes":635105}
+ ✓ scripts/theme-delivery/compact-theme-data.test.ts (4 tests) 1160ms
+   ✓ restores exact public manifest/map JSON without eval and deterministically interns repeated strings 572ms
+   ✓ shares manifest/deployment data with exact JSON values and a fixed gzip budget 585ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:09:50
+   Duration  2.65s (transform 510ms, setup 42ms, collect 1.15s, tests 1.16s, environment 80ms, prepare 31ms)
+

@@ -1,0 +1,62 @@
+[
+  {
+    "name": "@zxio/theme-air-gray",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "655059f8a798cd1999d42c97066495e02128121adad51be3f32472a7a468bd99"
+  },
+  {
+    "name": "@zxio/theme-army-pine",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "57a5a094e53a77695d1a36f7976312bfac299a0f465d2d4d213558cdf3526cc6"
+  },
+  {
+    "name": "@zxio/theme-default",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz",
+    "sha256": "e4d268115807675239ef7b68c528b80e7cd87f86d213d47049b85098b9c9537c"
+  },
+  {
+    "name": "@zxio/theme-defense-green",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "1164c4a3cb518fdece0926911554778fee018ed145fa413bbc751e17c4d28474"
+  },
+  {
+    "name": "@zxio/theme-factory-blue",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "6b53cb3570ea6bd5861fc1960a1c145f5827cb0349e9e195cfd67891262d2f26"
+  },
+  {
+    "name": "@zxio/theme-industrial-blue",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-industrial-blue-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "8db7c4458b7187af0c3e0f11582a04cd27a60e596b23473b2fe25da15b4673a5"
+  },
+  {
+    "name": "@zxio/theme-pap-olive",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-pap-olive-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "6dee17ae6f37cfcbb906fa55a782d4fe1d6a68fa7a5c64b2714ec7bc4fd13107"
+  },
+  {
+    "name": "@zxio/theme-rocket-moss",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-rocket-moss-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "e96100ed1831a7e3303c6cc6583b7fb19408f5d1ac610355c2a98eed26b0e472"
+  },
+  {
+    "name": "@zxio/theme-tailwind",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "0a6394d6dd714854479c6485181a09468771df2732ea4cd8a156d1543b363b28"
+  },
+  {
+    "name": "@zxio/theme-tech-blue",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz",
+    "sha256": "622faf84e90c5d18ca337514cae15585e26e47d8004778ce8c2d7a9f21540f9e"
+  },
+  {
+    "name": "@zxio/zxui",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-overlay-validation.final.20261013.tgz",
+    "sha256": "07005ff2f4d315d2abd1d645f86e95ec15b4b88b10740d3a078fd0e66019e4ba"
+  },
+  {
+    "name": "@zxio/theme-compiler",
+    "file": "ruoyi-fastapi-frontend/vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz",
+    "sha256": "2b34b4937ee428dd1b20a041cda5a29c50cacf2ff30710cbc401ed6bd8c87553"
+  }
+]

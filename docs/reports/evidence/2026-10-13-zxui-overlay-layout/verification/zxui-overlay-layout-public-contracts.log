@@ -1,0 +1,14 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ ui-contracts:check:packages /Users/hqz/Downloads/element-plus
+> node --import tsx scripts/contracts/check-ui-package-contracts.mjs
+
+✗ [@zxio/drive] packages/drive/src/DriveApp.vue 导入了未声明允许的工作区依赖 @zxio/zxui
+✗ [@zxio/drive] packages/drive/src/theme/contracts.ts 导入了未声明允许的工作区依赖 @zxio/zxui/theme-runtime
+✗ [@zxio/drive] packages/drive/src/theme/contracts.ts 导入了未声明允许的工作区依赖 @zxio/zxui/theme-host
+✗ [@zxio/drive] packages/drive/src/theme/feedback.ts 导入了未声明允许的工作区依赖 @zxio/zxui
+✗ [@zxio/drive] packages/drive/src/theme/portal.ts 导入了未声明允许的工作区依赖 @zxio/zxui
+✗ [@zxio/chart] packages/chart/package.json 缺少 dependencies.@zxio/tokens
+✗ [@zxio/chart] packages/chart/package.json 缺少 dependencies.@zxio/types
+ ELIFECYCLE  Command failed with exit code 1.

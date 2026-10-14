@@ -252,7 +252,7 @@ const handleMouseDown = (event, item) => {
             x: -12,
             y: -6,
             magnet: true,
-            fill: '#fff',
+            fill: 'var(--zx-semantic-surface-field-fill)',
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
@@ -263,7 +263,7 @@ const handleMouseDown = (event, item) => {
             fontSize: 7,
             fontFamily: 'Arial, sans-serif',
             fontWeight: 500,
-            fill: '#4b5563',
+            fill: 'var(--zx-semantic-surface-field-on-text)',
             textAnchor: 'middle',
             textVerticalAnchor: 'middle',
             x: 0,
@@ -285,7 +285,7 @@ const handleMouseDown = (event, item) => {
             x: -12,
             y: -6,
             magnet: true,
-            fill: '#fff',
+            fill: 'var(--zx-semantic-surface-field-fill)',
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
@@ -296,7 +296,7 @@ const handleMouseDown = (event, item) => {
             fontSize: 7,
             fontFamily: 'Arial, sans-serif',
             fontWeight: 500,
-            fill: '#4b5563',
+            fill: 'var(--zx-semantic-surface-field-on-text)',
             textAnchor: 'middle',
             textVerticalAnchor: 'middle',
             x: 0,
@@ -318,7 +318,7 @@ const handleMouseDown = (event, item) => {
             x: -16,
             y: -6,
             magnet: true,
-            fill: '#fff',
+            fill: 'var(--zx-semantic-surface-field-fill)',
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
@@ -329,7 +329,7 @@ const handleMouseDown = (event, item) => {
             fontSize: 7,
             fontFamily: 'Arial, sans-serif',
             fontWeight: 500,
-            fill: '#4b5563',
+            fill: 'var(--zx-semantic-surface-field-on-text)',
             textAnchor: 'middle',
             textVerticalAnchor: 'middle',
             x: 0,
@@ -351,7 +351,7 @@ const handleMouseDown = (event, item) => {
             x: -16,
             y: -6,
             magnet: true,
-            fill: '#fff',
+            fill: 'var(--zx-semantic-surface-field-fill)',
             strokeWidth: 1,
             cursor: 'crosshair',
             rx: 0,
@@ -362,7 +362,7 @@ const handleMouseDown = (event, item) => {
             fontSize: 7,
             fontFamily: 'Arial, sans-serif',
             fontWeight: 500,
-            fill: '#4b5563',
+            fill: 'var(--zx-semantic-surface-field-on-text)',
             textAnchor: 'middle',
             textVerticalAnchor: 'middle',
             x: 0,
@@ -376,7 +376,7 @@ const handleMouseDown = (event, item) => {
     // 使用设备的端口信息创建 X6 端口项
     const portItems = item.ports.map((port) => {
       // 从端口数据中读取颜色（由业务层预先计算好）
-      const portColor = port.color || '#6b7280'; // 默认灰色
+      const portColor = port.color || 'var(--zx-semantic-border-default)';
 
       // 文本截断
       const isTopBottom = port.group === 'top' || port.group === 'bottom';

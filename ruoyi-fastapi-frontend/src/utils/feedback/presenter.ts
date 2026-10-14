@@ -1,5 +1,3 @@
-import { ElMessage, ElNotification } from 'element-plus';
-
 import {
   isBatchResult,
   type BatchResult,
@@ -8,6 +6,8 @@ import {
 } from '@/types/http-contract';
 
 import { resolveFeedbackRegistryEntry } from './registry';
+import { showMessage } from './message';
+import { showNotification } from './notification';
 import type {
   FeedbackOptions,
   ProblemFeedbackContext,
@@ -89,7 +89,8 @@ export const presentSuccessFeedback = ({
   const entry = feedback.key ? resolveFeedbackRegistryEntry(feedback.key) : { success: '操作成功' };
 
   if (status === 202) {
-    ElNotification.info({
+    void showNotification({
+      type: 'info',
       title: '已受理',
       message: resolveMessage(entry.accepted, context, DEFAULT_ACCEPTED_MESSAGE),
       duration: 4000,
@@ -104,7 +105,8 @@ export const presentSuccessFeedback = ({
     const total = toNumber(batchResult.summary.total) ?? batchResult.results.length;
     const summaryMessage = `共 ${total} 项，成功 ${succeeded} 项，失败 ${failed} 项`;
     if (failed > 0 && succeeded > 0) {
-      ElNotification.warning({
+      void showNotification({
+        type: 'warning',
         title: '部分完成',
         message: summaryMessage,
         duration: 5000,
@@ -112,7 +114,8 @@ export const presentSuccessFeedback = ({
       return;
     }
     if (failed > 0) {
-      ElNotification.error({
+      void showNotification({
+        type: 'error',
         title: '操作未完成',
         message: summaryMessage,
         duration: 5000,
@@ -121,7 +124,10 @@ export const presentSuccessFeedback = ({
     }
   }
 
-  ElMessage.success(resolveMessage(entry.success, context, '操作成功'));
+  void showMessage({
+    type: 'success',
+    message: resolveMessage(entry.success, context, '操作成功'),
+  });
 };
 
 export const presentProblemFeedback = ({
@@ -140,7 +146,8 @@ export const presentProblemFeedback = ({
 
   const message = appendTracking(problem, meta);
   if (problem.status === 429) {
-    ElNotification.warning({
+    void showNotification({
+      type: 'warning',
       title: problem.title || '请求过于频繁',
       message,
       duration: 6000,
@@ -150,7 +157,8 @@ export const presentProblemFeedback = ({
 
   if (problem.status === 422) {
     const errorLines = (problem.errors || []).map((item) => `${item.field}: ${item.message}`);
-    ElNotification.error({
+    void showNotification({
+      type: 'error',
       title: problem.title || '参数验证失败',
       message: errorLines.length ? errorLines.join('\n') : message,
       duration: 6000,
@@ -159,7 +167,8 @@ export const presentProblemFeedback = ({
   }
 
   if (problem.status >= 500 || [403, 404, 409].includes(problem.status)) {
-    ElNotification.error({
+    void showNotification({
+      type: 'error',
       title: problem.title || '请求失败',
       message,
       duration: 6000,
@@ -167,5 +176,5 @@ export const presentProblemFeedback = ({
     return;
   }
 
-  ElMessage.error(problem.detail || problem.title || '请求失败');
+  void showMessage({ type: 'error', message: problem.detail || problem.title || '请求失败' });
 };

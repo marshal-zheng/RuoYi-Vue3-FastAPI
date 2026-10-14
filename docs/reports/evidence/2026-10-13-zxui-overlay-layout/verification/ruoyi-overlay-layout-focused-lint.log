@@ -1,0 +1,19 @@
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/check-drawer-divider.mjs
+  114:27  warning  'edge' is defined but never used  @typescript-eslint/no-unused-vars
+  435:3   warning  Unexpected console statement      no-console
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/check-overlay-business.mjs
+  125:3  warning  Unexpected console statement  no-console
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/check-overlay-layout.mjs
+  471:3  warning  Unexpected console statement  no-console
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/components/business/Dag/components/DagMatrixDialog.vue
+  53:10  warning  'Close' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue
+  88:7  warning  'props' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 6 problems (0 errors, 6 warnings)
+

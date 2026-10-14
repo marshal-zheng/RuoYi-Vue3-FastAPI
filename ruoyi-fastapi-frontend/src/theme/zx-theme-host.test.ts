@@ -1,28 +1,34 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, nextTick, shallowRef } from 'vue';
 import { ZX_THEME_PACKAGE_CHOICES } from './zx-theme-packages';
+import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 
 const api = vi.hoisted(() => ({
   createHost: vi.fn(),
   createResolver: vi.fn(),
   createConfirm: vi.fn(),
+  bindPreferences: vi.fn(),
 }));
-vi.mock('@zxio/zxui/theme-host', () => ({
+vi.mock('@zxio/zxui/theme-host', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@zxio/zxui/theme-host')>()),
   createDefaultBrowserThemeHost: api.createHost,
   createThemeDeploymentResolver: api.createResolver,
+  bindThemePreferenceController: api.bindPreferences,
 }));
 vi.mock('@zxio/zxui', () => ({
   createBoundConfirmInputFactory: api.createConfirm,
 }));
 
 import { bindZxThemeHost } from './zx-theme-host';
+import { zxThemePreferences } from './zx-theme-config';
 
+// The resolver and Host are mocked here; this fixture only exercises app wiring.
 const deployment = {
   deployment: { schema: 'zx.theme-deployment/1' },
   registrations: ZX_THEME_PACKAGE_CHOICES.map(({ id, packageName }) => ({
     manifest: { identity: { themeId: id, packageName } },
   })),
-};
+} as unknown as ThemeDeploymentOutput;
 
 beforeEach(() => {
   vi.stubEnv('BASE_URL', '/admin/');
@@ -30,14 +36,19 @@ beforeEach(() => {
 });
 
 describe('public theme deployment host', () => {
-  it('uses the application base and projects only a committed Host scope', async () => {
+  it('binds the Host-owned preference lifecycle without projecting DOM from business code', async () => {
+    const release = vi.fn();
+    const dispose = vi.fn();
+    api.bindPreferences.mockReturnValue(release);
+    document.documentElement.removeAttribute('data-zx-theme');
+    document.documentElement.removeAttribute('data-zx-variant');
     const rootScope = shallowRef<unknown>(null);
     api.createHost.mockReturnValue({
       ok: true,
       value: {
         runtime: {},
         bind: () => ({ ok: true, value: { rootScope } }),
-        dispose: vi.fn(),
+        dispose,
       },
     });
     const app = createApp({ template: '<div />' });
@@ -56,8 +67,18 @@ describe('public theme deployment host', () => {
       },
     };
     await nextTick();
-    expect(document.documentElement.dataset.zxTheme).toBe('tech-blue');
-    expect(document.documentElement.dataset.zxVariant).toBe('host-variant');
+    expect(api.bindPreferences).toHaveBeenCalledWith(
+      zxThemePreferences,
+      api.createHost.mock.results[0].value.value.runtime,
+      expect.objectContaining({ rootScope }),
+      expect.any(Function)
+    );
+    expect(document.documentElement.dataset.zxTheme).toBeUndefined();
+    expect(document.documentElement.dataset.zxVariant).toBeUndefined();
+    app.mount(document.createElement('div'));
+    app.unmount();
+    expect(release).toHaveBeenCalledOnce();
+    expect(dispose).toHaveBeenCalledOnce();
   });
 
   it('rejects incomplete registrations instead of silently falling back', () => {

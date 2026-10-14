@@ -5,7 +5,7 @@
         <basic-info-form ref="basicInfo" :info="info" />
       </el-tab-pane>
       <el-tab-pane label="字段信息" name="columnInfo">
-        <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
+        <el-table ref="dragTable" :data="columns" row-key="columnId">
           <el-table-column label="序号" type="index" min-width="5%" />
           <el-table-column
             label="字段列名"
@@ -127,9 +127,10 @@
                   :value="dict.dictType"
                 >
                   <span style="float: left">{{ dict.dictName }}</span>
-                  <span style="float: right; color: var(--zx-semantic-text-secondary); font-size: 13px">{{
-                    dict.dictType
-                  }}</span>
+                  <span
+                    style="float: right; color: var(--zx-semantic-text-secondary); font-size: 13px"
+                    >{{ dict.dictType }}</span
+                  >
                 </el-option>
               </el-select>
             </template>
@@ -160,7 +161,6 @@ const route = useRoute();
 const { proxy } = getCurrentInstance();
 
 const activeName = ref('columnInfo');
-const tableHeight = ref(document.documentElement.scrollHeight - 245 + 'px');
 const tables = ref([]);
 const columns = ref([]);
 const dictOptions = ref([]);

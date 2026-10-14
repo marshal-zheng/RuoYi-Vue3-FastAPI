@@ -1,0 +1,21 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ scripts/theme-consumer/structural-policy.test.ts (34 tests) 134ms
+ ✓ packages/components/_shared/__tests__/modal-close.test.tsx (4 tests) 177ms
+ ✓ packages/components/drawer/__tests__/drawer.test.tsx (17 tests) 1601ms
+ ✓ packages/components/dialog/__tests__/dialog.integration.test.tsx (42 tests) 3105ms
+ ✓ scripts/theme-consumer/admission/validation.test.ts (12 tests) 8561ms
+   ✓ surface role alias admission > admits exact owned aliases separately from structural geometry 2678ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"path":"docs/examples/card/custom.vue"} 1492ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"sourceName":"--zx-semantic-text-secondary"} 1454ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"replacement":"--zx-semantic-text-secondary"} 1460ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"repository":"chart"} 1474ms
+
+ Test Files  5 passed (5)
+      Tests  109 passed (109)
+   Start at  16:24:34
+   Duration  9.55s (transform 2.17s, setup 335ms, collect 5.22s, tests 13.58s, environment 684ms, prepare 194ms)
+

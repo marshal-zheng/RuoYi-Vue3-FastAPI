@@ -22,12 +22,12 @@ export const DAG_PORT_CONFIG = {
   /**
    * 端口边框颜色
    */
-  strokeColor: '#31d0c6',
+  strokeColor: 'var(--zx-semantic-accent-base)',
 
   /**
    * 端口填充颜色
    */
-  fillColor: '#fff',
+  fillColor: 'var(--zx-semantic-surface-field-fill)',
 
   /**
    * 默认透明度（隐藏状态）

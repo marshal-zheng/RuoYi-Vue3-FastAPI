@@ -1,0 +1,18 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/theme-compiler/__tests__/vite.test.ts (9 tests) 5877ms
+   ✓ serves exact hashed dev CSS and builds isolated assets without writing public/ 555ms
+   ✓ refreshes atomic source replacements, retains valid assets on failure and recovers 1218ms
+   ✓ validates and recovers CSS-only edits without closing stable source watchers 1470ms
+   ✓ recovers a missing intermediate asset directory while retaining its stable ancestor 778ms
+   ✓ keeps active metadata and hashed assets together when sources drift after candidate emission 536ms
+   ✓ adopts a valid narrower manifest after its retired variant assets are removed 1162ms
+
+ Test Files  1 passed (1)
+      Tests  9 passed (9)
+   Start at  17:28:44
+   Duration  6.21s (transform 110ms, setup 37ms, collect 161ms, tests 5.88s, environment 0ms, prepare 21ms)
+

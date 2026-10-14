@@ -1,0 +1,17 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > supports auth sessions and system read repositories 68ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > persists project, version, and topology changes across data source instances 46ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > exposes simulation data as read-only repository queries 89ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > restores layout options without restoring retired colour settings 3ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > rejects retired colour settings while retaining layout changes 1ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference 1ms
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  15:58:07
+   Duration  2.99s (transform 626ms, setup 1.80s, collect 927ms, tests 211ms, environment 1.12s, prepare 123ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

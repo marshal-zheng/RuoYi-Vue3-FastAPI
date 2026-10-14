@@ -1,0 +1,223 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+stderr | packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > inherits regional values, merges logical edges, and restores inherited values
+[Vue warn]: Directive "loading" has already been registered in target app.
+
+stderr | packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props
+[Vue warn]: Directive "loading" has already been registered in target app.
+
+stderr | packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > uses non-flow sentinels inside the content wrapper
+[Vue warn]: Directive "loading" has already been registered in target app.
+
+stderr | packages/components/_shared/__tests__/overlay-layout.test.tsx > dialog shared overlay layout > inherits regional values, merges logical edges, and restores inherited values
+[Vue warn]: Invalid prop: type check failed for prop "bodyPadding". Expected String with value "[object Object]", got Object  
+  at <ZxDialog modelValue=true title="Layout" bodyPadding= { inlineStart: 0 }  ... > 
+  at <ZxConfigProvider zxDialog= { bodyPadding: { blockEnd: '3rem' } } > 
+  at <ZxConfigProvider overlayLayout= {
+  paddingInline: '2rem',
+  bodyPadding: 'calc(1rem + 2px)',
+  footerPadding: 0
+} > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/_shared/__tests__/overlay-layout.test.tsx > dialog shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props
+[Vue warn]: Invalid prop: type check failed for prop "bodyPadding". Expected String with value "0", got Number with value 0. 
+  at <ZxDialog modelValue=true title="Layout" bodyPadding=0  ... > 
+  at <ZxConfigProvider zxDialog= {} > 
+  at <ZxConfigProvider overlayLayout= { bodyScroll: 'none' } > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx (8 tests | 8 failed) 474ms
+   × drawer shared overlay layout > inherits regional values, merges logical edges, and restores inherited values 109ms
+     → expected '' to be '2rem' // Object.is equality
+   × drawer shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props 72ms
+     → expected false to be true // Object.is equality
+   × drawer shared overlay layout > uses non-flow sentinels inside the content wrapper 71ms
+     → expected null not to be null
+   × dialog shared overlay layout > inherits regional values, merges logical edges, and restores inherited values 75ms
+     → expected '' to be '2rem' // Object.is equality
+   × dialog shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props 74ms
+     → expected false to be true // Object.is equality
+   × dialog shared overlay layout > uses non-flow sentinels inside the content wrapper 70ms
+     → expected null not to be null
+   × preserves Provider shorthand when a nested Provider overrides only one logical edge 1ms
+     → expected { Object (inlineEnd, blockStart) } to deeply equal { …(2) }
+   × passes reactive layout options through both Hooks including restoration to undefined 2ms
+     → expected { ref: RefImpl{ …(5) }, …(46) } to match object { …(3) }
+(52 matching properties omitted from actual)
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > inherits regional values, merges logical edges, and restores inherited values
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > dialog shared overlay layout > inherits regional values, merges logical edges, and restores inherited values
+AssertionError: expected '' to be '2rem' // Object.is equality
+
+- Expected
++ Received
+
+- 2rem
+
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx:54:69
+     52|       await nextTick()
+     53|       const style = f.panel().style
+     54|       expect(style.getPropertyValue('--zx-overlay-padding-inline')).to…
+       |                                                                     ^
+     55|       expect(style.getPropertyValue('--zx-overlay-body-padding')).toBe…
+     56|       expect(style.getPropertyValue('--zx-overlay-body-block-end')).to…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > dialog shared overlay layout > keeps zero padding separate from delegated scrolling and consumes new props
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx:71:78
+     69|       f.local.value = { bodyPadding: 0, paddingInline: 0 }
+     70|       await nextTick()
+     71|       expect(f.panel().classList.contains('zx-overlay-layout--scroll-n…
+       |                                                                              ^
+     72|       expect(f.panel().style.getPropertyValue('--zx-overlay-body-paddi…
+     73|       expect(f.panel().hasAttribute('bodyscroll')).toBe(false)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > drawer shared overlay layout > uses non-flow sentinels inside the content wrapper
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > dialog shared overlay layout > uses non-flow sentinels inside the content wrapper
+AssertionError: expected null not to be null
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx:85:27
+     83|       const f = await fixture()
+     84|       const content = f.panel().querySelector('[data-zx-overlay-conten…
+     85|       expect(content).not.toBeNull()
+       |                           ^
+     86|       expect(content.querySelectorAll('[data-zx-overlay-sentinel]')).t…
+     87|     })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > preserves Provider shorthand when a nested Provider overrides only one logical edge
+AssertionError: expected { Object (inlineEnd, blockStart) } to deeply equal { …(2) }
+
+- Expected
++ Received
+
+  Object {
+-   "all": "var(--application-insets)",
++   "blockStart": undefined,
+    "inlineEnd": 0,
+  }
+
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx:96:44
+     94|     { overlayLayout: { bodyPadding: { inlineEnd: 0, blockStart: undefi…
+     95|   ) as any
+     96|   expect(merged.overlayLayout.bodyPadding).toEqual({ all: 'var(--appli…
+       |                                            ^
+     97|   expect(merged.overlayLayout.bodyScroll).toBe('none')
+     98| })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  packages/components/_shared/__tests__/overlay-layout.test.tsx > passes reactive layout options through both Hooks including restoration to undefined
+AssertionError: expected { ref: RefImpl{ …(5) }, …(46) } to match object { …(3) }
+(52 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  Object {
+-   "bodyPadding": Object {
+-     "inlineStart": 0,
++   "appendTo": undefined,
++   "autoResetForm": true,
++   "autoScrollToError": true,
++   "cancelText": "",
++   "class": "",
++   "closeOnPressEscape": undefined,
++   "confirm": [Function handleConfirm],
++   "confirmOnDirty": false,
++   "currentStep": undefined,
++   "destroyOnClose": undefined,
++   "divider": undefined,
++   "enableSteps": undefined,
++   "footer": true,
++   "formModel": Object {},
++   "formRef": undefined,
++   "fullscreenShortcut": undefined,
++   "handleBeforeCancel": null,
++   "locale": undefined,
++   "mobileFallback": "full",
++   "mode": "modal",
++   "modelValue": false,
++   "noContentPadding": false,
++   "noTitle": false,
++   "okDisabled": false,
++   "okLoading": false,
++   "okText": "",
++   "placement": "right",
++   "preValidate": true,
++   "pushTarget": undefined,
++   "ref": RefImpl {
++     "__v_isRef": true,
++     "__v_isShallow": true,
++     "_rawValue": undefined,
++     "_value": undefined,
++     "dep": Dep {
++       "__v_skip": true,
++       "activeLink": undefined,
++       "computed": undefined,
++       "key": undefined,
++       "map": undefined,
++       "sc": 0,
++       "subs": undefined,
++       "subsHead": undefined,
++       "version": 0,
+      },
+-   "bodyScroll": "none",
+-   "paddingInline": "2rem",
++   },
++   "resizable": true,
++   "saveContinueText": "",
++   "scrollErrorOffset": 24,
++   "selectable": undefined,
++   "showBack": false,
++   "showCancel": true,
++   "showClose": true,
++   "showContinue": false,
++   "showFullScreen": true,
++   "size": "md",
++   "stepFields": undefined,
++   "subtitle": "",
++   "title": "",
++   "titleTag": undefined,
++   "titleTagColor": undefined,
++   "totalSteps": undefined,
++   "validateStep": undefined,
+  }
+
+ ❯ packages/components/_shared/__tests__/overlay-layout.test.tsx:106:21
+    104|     const controller = hook({ bodyPadding: padding, bodyScroll: scroll…
+    105|     const props = () => 'drawerProps' in controller ? controller.drawe…
+    106|     expect(props()).toMatchObject({ bodyPadding: { inlineStart: 0 }, b…
+       |                     ^
+    107|     controller.updateOptions({ bodyPadding: undefined, bodyScroll: und…
+    108|     await nextTick()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  13:19:31
+   Duration  2.64s (transform 1.06s, setup 51ms, collect 1.71s, tests 474ms, environment 162ms, prepare 46ms)
+

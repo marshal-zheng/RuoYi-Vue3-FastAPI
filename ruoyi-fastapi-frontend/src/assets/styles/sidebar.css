@@ -2,9 +2,7 @@
 
 #app {
   .main-container {
-    min-height: 100%;
-    transition: margin-left 0.28s;
-    margin-left: var(--base-sidebar-width);
+    min-height: 0;
     position: relative;
   }
 
@@ -13,19 +11,14 @@
   }
 
   .sidebar-container {
-    transition: width 0.28s;
     width: var(--base-sidebar-width) !important;
-    height: 100%;
-    position: fixed;
+    min-height: 0;
     font-size: 0px;
-    top: 0;
-    bottom: 0;
-    left: 0;
     z-index: 1001;
     overflow: hidden;
     box-shadow: var(--left-menu-box-shadow);
 
-    /* 当侧边栏不展示 Logo（此时 tagsView 通常为 false，Logo 在 Header 中）时，
+    /* 当侧边栏不展示 Logo（Logo 在 Header 中）时，
        给菜单与顶部 Header 留出一点间距，避免菜单项紧贴 Header 底部 */
     &.no-logo-spacing {
       padding-top: 8px;
@@ -107,10 +100,6 @@
   /* Hidden sidebar styles */
   .hideSidebar .sidebar-container {
     width: 54px !important;
-  }
-
-  .hideSidebar .main-container {
-    margin-left: 54px;
   }
 
   .hideSidebar .sub-menu-title-noDropdown {

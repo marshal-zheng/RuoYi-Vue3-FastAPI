@@ -3,9 +3,7 @@
     <!-- 协议选择区域 -->
     <div v-if="currentTemplateComponent" class="protocol-selector-section">
       <div class="flex items-center gap-3">
-        <span class="text-sm font-medium text-zx-text-primary"
-          >选择协议模板：</span
-        >
+        <span class="text-sm font-medium text-zx-text-primary">选择协议模板：</span>
         <ProtocolTemplateSelector
           v-model="selectedProtocolId"
           :protocol-type="portInfo?.interfaceType?.toLowerCase()"

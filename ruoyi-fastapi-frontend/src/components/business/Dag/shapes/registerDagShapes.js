@@ -115,7 +115,7 @@ export const registerDagShapes = () => {
       inherit: 'edge',
       attrs: {
         line: {
-          stroke: '#C2C8D5',
+          stroke: 'var(--zx-semantic-border-default)',
           strokeWidth: 5,
           targetMarker: null,
         },

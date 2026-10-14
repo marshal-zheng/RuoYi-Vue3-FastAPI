@@ -1,0 +1,32 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ❯ packages/theme-compiler/__tests__/vite.test.ts (9 tests | 1 failed | 8 skipped) 638ms
+   × keeps active metadata and hashed assets together when sources drift after candidate emission 638ms
+     → expected 'sha256:60cf4e30ee9b66a0e82618dd956784…' to be 'sha256:716241129d92c8230d9dba405c7687…' // Object.is equality
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  packages/theme-compiler/__tests__/vite.test.ts > keeps active metadata and hashed assets together when sources drift after candidate emission
+AssertionError: expected 'sha256:60cf4e30ee9b66a0e82618dd956784…' to be 'sha256:716241129d92c8230d9dba405c7687…' // Object.is equality
+
+Expected: "sha256:716241129d92c8230d9dba405c76873be6215bd9c86c32ee76c3f278ebb7aeed"
+Received: "sha256:60cf4e30ee9b66a0e82618dd956784027c687d71dd7af250125b7ca4e4fde555"
+
+ ❯ packages/theme-compiler/__tests__/vite.test.ts:352:64
+    350|     const response = await fetch(`${base}${entry.assetPath}`)
+    351|     expect(response.status).toBe(200)
+    352|     expect(hash(new Uint8Array(await response.arrayBuffer()))).toBe(
+       |                                                                ^
+    353|       entry.sha256
+    354|     )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 8 skipped (9)
+   Start at  17:23:39
+   Duration  950ms (transform 109ms, setup 36ms, collect 161ms, tests 638ms, environment 0ms, prepare 21ms)
+

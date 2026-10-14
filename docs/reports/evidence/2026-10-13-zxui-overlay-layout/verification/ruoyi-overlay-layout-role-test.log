@@ -1,0 +1,19 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > uses collection items as the menu tree when adding a role 31ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows loading only while the menu request is pending 9ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows an empty state after loading an empty menu collection 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows a failure state and allows reopening to retry 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > preserves the role-specific menu response when editing a role 6ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  14:47:36
+   Duration  2.30s (transform 1.06s, setup 225ms, collect 1.66s, tests 65ms, environment 151ms, prepare 42ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

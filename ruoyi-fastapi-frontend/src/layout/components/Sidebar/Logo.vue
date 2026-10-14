@@ -14,7 +14,11 @@
         :title="title"
       >
         <img v-if="logo" :src="logo" class="w-8 h-8 shrink-0" />
-        <span v-else class="sidebar-title m-0 p-0 font-semibold whitespace-nowrap" aria-hidden="true">
+        <span
+          v-else
+          class="sidebar-title m-0 p-0 font-semibold whitespace-nowrap"
+          aria-hidden="true"
+        >
           {{ compactTitle }}
         </span>
       </router-link>
@@ -71,7 +75,9 @@ const titleSizeClass = computed(() => {
 });
 
 const title = import.meta.env.VITE_APP_TITLE;
-const compactTitle = Array.from(title || '').slice(0, 2).join('');
+const compactTitle = Array.from(title || '')
+  .slice(0, 2)
+  .join('');
 // 是否启用 logo 图片，如果为 false 则只显示文字标题
 const showLogoImage = defaultSettings.showLogoImage ?? true;
 const logo = showLogoImage ? logoImg : null;

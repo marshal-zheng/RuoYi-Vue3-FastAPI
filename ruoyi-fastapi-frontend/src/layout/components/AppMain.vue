@@ -1,5 +1,5 @@
 <template>
-  <section class="app-main" data-zx-surface="canvas" data-zx-fill-root>
+  <ZxPageLayout class="app-main" data-zx-surface="canvas" fill>
     <router-view v-slot="{ Component, route }">
       <transition name="fade-transform">
         <!-- <keep-alive :include="tagsViewStore.cachedViews"> -->
@@ -8,17 +8,19 @@
       </transition>
     </router-view>
     <iframe-toggle />
-    <copyright />
-  </section>
+    <template v-if="settingsStore.footerVisible" #footer><copyright /></template>
+  </ZxPageLayout>
 </template>
 
 <script setup>
+import { ZxPageLayout } from '@zxio/zxui';
+import useSettingsStore from '@/store/modules/settings';
 import copyright from './Copyright/index';
 import iframeToggle from './IframeToggle/index';
 import useTagsViewStore from '@/store/modules/tagsView';
 
 const route = useRoute();
-const tagsViewStore = useTagsViewStore();
+const settingsStore = useSettingsStore();
 
 onMounted(() => {
   addIframe();
@@ -37,39 +39,8 @@ function addIframe() {
 
 <style lang="less" scoped>
 .app-main {
-  /* 50= navbar  50  */
-  min-height: calc(100vh - 50px);
-  width: 100%;
   position: relative;
-  overflow: hidden;
-}
-
-.fixed-header + .app-main {
-  overflow-y: auto;
-  scrollbar-gutter: auto;
-  height: calc(100vh - 50px);
-  min-height: 0px;
-}
-
-.app-main:has(.copyright) {
-  padding-bottom: 36px;
-}
-
-.fixed-header + .app-main {
-  margin-top: 50px;
-}
-
-.hasTagsView {
-  .app-main {
-    /* 84 = navbar + tags-view = 50 + 34 */
-    min-height: calc(100vh - 84px);
-  }
-
-  .fixed-header + .app-main {
-    margin-top: 84px;
-    height: calc(100vh - 84px);
-    min-height: 0px;
-  }
+  min-width: 0;
 }
 </style>
 

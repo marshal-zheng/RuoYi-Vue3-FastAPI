@@ -1,0 +1,12 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ scripts/theme-compiler/check-readonly.test.ts (4 tests) 56ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  16:59:47
+   Duration  335ms (transform 36ms, setup 40ms, collect 20ms, tests 56ms, environment 76ms, prepare 23ms)
+

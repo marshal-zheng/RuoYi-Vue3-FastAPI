@@ -1,0 +1,21 @@
+{
+  "browser": "147.0.7727.15",
+  "migrated": {
+    "tagsView": false,
+    "headerVisible": false,
+    "breadcrumbVisible": false,
+    "sidebarLogo": false,
+    "fixedHeader": true,
+    "layoutVersion": 1
+  },
+  "hiddenHeight": 900,
+  "enabledHeight": 860,
+  "tagsHeight": 40,
+  "cases": [
+    "legacy migration",
+    "preserved preferences",
+    "explicit enable/save/reload",
+    "fresh defaults",
+    "height allocation"
+  ]
+}
