@@ -1,8 +1,21 @@
+export interface GenTableDetail {
+  info: GenTableModel;
+  columns: GenTableColumnModel[];
+  tables: GenTableModel[];
+}
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type {
+  EditGenTableModel,
+  GenTableColumnModel,
+  GenTableModel,
+  GetGenDbTableListToolGenDbListGetData,
+  GetGenTableListToolGenListGetData,
+} from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询生成表数据
-export function listTable(query?: Record<string, any>) {
-  return request({
+export function listTable(query?: NonNullable<GetGenTableListToolGenListGetData['query']>) {
+  return request<HttpOffsetPage<GenTableModel>>({
     url: '/tool/gen/list',
     method: 'get',
     params: query,
@@ -10,8 +23,8 @@ export function listTable(query?: Record<string, any>) {
 }
 
 // 查询db数据库列表
-export function listDbTable(query?: Record<string, any>) {
-  return request({
+export function listDbTable(query?: NonNullable<GetGenDbTableListToolGenDbListGetData['query']>) {
+  return request<HttpOffsetPage<GenTableModel>>({
     url: '/tool/gen/db/list',
     method: 'get',
     params: query,
@@ -20,15 +33,15 @@ export function listDbTable(query?: Record<string, any>) {
 
 // 查询表详细信息
 export function getGenTable(tableId: number | string) {
-  return request({
+  return request<GenTableDetail>({
     url: '/tool/gen/' + tableId,
     method: 'get',
   });
 }
 
 // 修改代码生成信息
-export function updateGenTable(data: Record<string, any>) {
-  return request({
+export function updateGenTable(data: EditGenTableModel) {
+  return request<GenTableDetail>({
     url: '/tool/gen',
     method: 'put',
     data: data,
@@ -37,8 +50,8 @@ export function updateGenTable(data: Record<string, any>) {
 }
 
 // 导入表
-export function importTable(data: Record<string, any>) {
-  return request({
+export function importTable(data: { tables: string }) {
+  return request<{ tableNames: string[]; importedCount: number }>({
     url: '/tool/gen/importTable',
     method: 'post',
     params: data,
@@ -47,8 +60,8 @@ export function importTable(data: Record<string, any>) {
 }
 
 // 创建表
-export function createTable(data: Record<string, any>) {
-  return request({
+export function createTable(data: { sql: string }) {
+  return request<{ tableNames: string[]; createdCount: number }>({
     url: '/tool/gen/createTable',
     method: 'post',
     params: data,
@@ -58,7 +71,7 @@ export function createTable(data: Record<string, any>) {
 
 // 预览生成代码
 export function previewTable(tableId: number | string) {
-  return request({
+  return request<Record<string, string>>({
     url: '/tool/gen/preview/' + tableId,
     method: 'get',
   });
@@ -66,7 +79,7 @@ export function previewTable(tableId: number | string) {
 
 // 删除表数据
 export function delTable(tableId: number | string) {
-  return request({
+  return request<null>({
     url: '/tool/gen/' + tableId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'tool.gen.delete' },
@@ -75,7 +88,7 @@ export function delTable(tableId: number | string) {
 
 // 生成代码（自定义路径）
 export function genCode(tableName: string) {
-  return request({
+  return request<{ tableName: string; status: 'generated' }>({
     url: '/tool/gen/genCode/' + tableName,
     method: 'get',
     feedback: { mode: 'silent' },
@@ -84,7 +97,7 @@ export function genCode(tableName: string) {
 
 // 同步数据库
 export function synchDb(tableName: string) {
-  return request({
+  return request<GenTableDetail | { tableName: string; status: 'synced' }>({
     url: '/tool/gen/synchDb/' + tableName,
     method: 'get',
     feedback: { mode: 'auto', key: 'tool.gen.sync-db' },

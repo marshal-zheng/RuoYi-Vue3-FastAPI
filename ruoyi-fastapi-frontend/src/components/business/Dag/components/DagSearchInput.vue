@@ -17,7 +17,7 @@
 import { onBeforeUnmount, ref, watch } from 'vue';
 import { Search } from '@element-plus/icons-vue';
 
-const props = defineProps({
+defineProps({
   placeholder: {
     type: String,
     default: '',

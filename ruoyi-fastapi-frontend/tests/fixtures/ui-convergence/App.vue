@@ -159,29 +159,9 @@ const cases = [
     component: lazy(() => import('@/components/business/Dag/components/DagSearchInput.vue')),
   },
   {
-    id: 'F04',
-    title: 'DeviceClazzDialog',
-    component: lazy(() => import('@/components/business/Device/DeviceClazzDialog.vue')),
-  },
-  {
-    id: 'F05',
-    title: 'Device ExportDialog',
-    component: lazy(() => import('@/components/business/Device/ExportDialog.vue')),
-  },
-  {
     id: 'F06',
     title: 'Device NodeEditDrawer',
     component: lazy(() => import('@/components/business/Device/NodeEditDrawer.vue')),
-  },
-  {
-    id: 'F07',
-    title: 'Project ExportDialog',
-    component: lazy(() => import('@/views/project/components/ExportDialog.vue')),
-  },
-  {
-    id: 'F08',
-    title: 'ProjectEditDialog',
-    component: lazy(() => import('@/views/project/components/ProjectEditDialog.vue')),
   },
   {
     id: 'F09',
@@ -274,12 +254,6 @@ const fixtureProps = computed(() => {
       return { graphData, readonly: false };
     case 'F03':
       return { placeholder: 'Fixture 节点搜索' };
-    case 'F05':
-    case 'F07':
-      return {
-        modelValue: visible.value,
-        projectData: { projectId: 1, projectName: 'Fixture project' },
-      };
     case 'F06':
       return {
         modelValue: visible.value,
@@ -313,7 +287,7 @@ const fixtureProps = computed(() => {
 const fixtureEvents = computed(() =>
   caseId.value === 'F03'
     ? { search: (value: unknown) => record('search', value) }
-    : ['F05', 'F06', 'F07', 'G01'].includes(caseId.value)
+    : ['F06', 'G01'].includes(caseId.value)
       ? {
           'update:modelValue': (value: boolean) => {
             visible.value = value;
@@ -330,7 +304,7 @@ watch(caseId, () => {
 });
 async function openFixture() {
   await nextTick();
-  if (['F05', 'F06', 'F07', 'G01'].includes(caseId.value)) visible.value = true;
+  if (['F06', 'G01'].includes(caseId.value)) visible.value = true;
   else if (caseId.value === 'N03')
     fixtureRef.value?.openEdit?.({
       versionId: 1,

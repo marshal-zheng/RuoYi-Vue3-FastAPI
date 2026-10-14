@@ -1,0 +1,31 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > supports custom keys and identifiers which resemble object prototype properties 0ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback 2ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > preserves immediate return values without a trailing callback 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > reads legacy identities without mutating saved fields or numeric semantics 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > generates a complete SFC accepted by the same source gate 28ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > keeps page generation supported and escapes string defaults 5ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > normalizes nested saved rows into full-width semantic layout 4ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > previews a legacy input using the same component and forwards slots/model once 12ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values
+async-validator: [ 'name is required' ]
+
+ ✓ tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values 430ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > resolves known keys from the registry 1ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=true 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects invalid registry entries during startup validation 0ms
+
+ Test Files  5 passed (5)
+      Tests  14 passed (14)
+   Start at  22:46:20
+   Duration  2.88s (transform 1.08s, setup 990ms, collect 4.20s, tests 491ms, environment 736ms, prepare 128ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

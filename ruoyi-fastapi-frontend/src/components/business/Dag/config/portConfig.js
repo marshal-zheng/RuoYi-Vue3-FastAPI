@@ -139,8 +139,6 @@ export const PORT_GROUPS = {
  * @returns {Array} 端口配置数组
  */
 export const generateNodePorts = (nodeType) => {
-  const ports = [];
-
   // 为所有节点类型生成标准端口，但根据类型控制可见性
   const portConfigs = [
     {

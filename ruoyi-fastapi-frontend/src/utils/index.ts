@@ -6,7 +6,7 @@ import { parseTime } from './ruoyi';
  * @param {string} cFormat
  * @returns {string | null}
  */
-export function formatDate(cellValue: any): string {
+export function formatDate(cellValue: string | number | Date | null | undefined): string {
   if (cellValue == null || cellValue == '') {
     return '';
   }
@@ -91,8 +91,8 @@ export function byteLength(str: string): number {
  * @param {Array} actual
  * @returns {Array}
  */
-export function cleanArray(actual: any[]): any[] {
-  const newArray: any[] = [];
+export function cleanArray<T>(actual: T[]): T[] {
+  const newArray: T[] = [];
   for (let i = 0; i < actual.length; i++) {
     if (actual[i]) {
       newArray.push(actual[i]);
@@ -105,12 +105,12 @@ export function cleanArray(actual: any[]): any[] {
  * @param {Object} json
  * @returns {Array}
  */
-export function param(json?: Record<string, any>): string {
+export function param(json?: Record<string, unknown>): string {
   if (!json) return '';
   return cleanArray(
     Object.keys(json).map((key) => {
       if (json[key] === undefined) return '';
-      return encodeURIComponent(key) + '=' + encodeURIComponent(json[key]);
+      return encodeURIComponent(key) + '=' + encodeURIComponent(String(json[key]));
     })
   ).join('&');
 }
@@ -150,30 +150,6 @@ export function html2Text(val: string): string {
 }
 
 /**
- * Merges two objects, giving the last one precedence
- * @param {Object} target
- * @param {(Object|Array)} source
- * @returns {Object}
- */
-export function objectMerge(target: any, source: any): any {
-  if (typeof target !== 'object') {
-    target = {};
-  }
-  if (Array.isArray(source)) {
-    return source.slice();
-  }
-  Object.keys(source).forEach((property) => {
-    const sourceProperty = source[property];
-    if (typeof sourceProperty === 'object') {
-      target[property] = objectMerge(target[property], sourceProperty);
-    } else {
-      target[property] = sourceProperty;
-    }
-  });
-  return target;
-}
-
-/**
  * @param {HTMLElement} element
  * @param {string} className
  */
@@ -210,72 +186,46 @@ export function getTime(type: string): number {
  * @param {boolean} immediate
  * @return {*}
  */
-export function debounce(func: Function, wait: number, immediate?: boolean): Function {
-  let timeout: NodeJS.Timeout | null, args: any[], context: any, timestamp: number, result: any;
-
-  const later = function () {
-    // 据上一次触发时间间隔
-    const last = +new Date() - timestamp;
-
-    // 上次被包装函数被调用时间间隔 last 小于设定时间间隔 wait
-    if (last < wait && last > 0) {
-      timeout = setTimeout(later, wait - last);
+export function debounce<Args extends unknown[], Result, Receiver>(
+  func: (this: Receiver, ...args: Args) => Result,
+  wait: number,
+  immediate?: boolean
+): (this: Receiver, ...args: Args) => Result | undefined {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  let pending: { receiver: Receiver; args: Args } | undefined;
+  let timestamp: number;
+  let result: Result | undefined;
+  const later = () => {
+    const elapsed = Date.now() - timestamp;
+    if (elapsed < wait && elapsed > 0) {
+      timeout = setTimeout(later, wait - elapsed);
     } else {
       timeout = null;
-      // 如果设定为immediate===true，因为开始边界已经调用过了此处无需调用
-      if (!immediate) {
-        result = func.apply(context, args);
-        if (!timeout) {
-          context = null;
-          args = [];
-        }
+      if (!immediate && pending) {
+        const call = pending;
+        pending = undefined;
+        result = func.apply(call.receiver, call.args);
       }
     }
   };
-
-  return function (this: any, ...args: any[]) {
-    context = this;
-    timestamp = +new Date();
+  return function (this: Receiver, ...args: Args) {
+    pending = { receiver: this, args };
+    timestamp = Date.now();
     const callNow = immediate && !timeout;
-    // 如果延时不存在，重新设定延时
     if (!timeout) timeout = setTimeout(later, wait);
     if (callNow) {
-      result = func.apply(context, args);
-      context = null;
-      args = [];
+      result = func.apply(this, args);
+      pending = undefined;
     }
-
     return result;
   };
-}
-
-/**
- * This is just a simple version of deep copy
- * Has a lot of edge cases bug
- * If you want to use a perfect deep copy, use lodash's _.cloneDeep
- * @param {Object} source
- * @returns {Object}
- */
-export function deepClone(source: any): any {
-  if (!source && typeof source !== 'object') {
-    throw new Error('error arguments deepClone');
-  }
-  const targetObj: any = source.constructor === Array ? [] : {};
-  Object.keys(source).forEach((keys) => {
-    if (source[keys] && typeof source[keys] === 'object') {
-      targetObj[keys] = deepClone(source[keys]);
-    } else {
-      targetObj[keys] = source[keys];
-    }
-  });
-  return targetObj;
 }
 
 /**
  * @param {Array} arr
  * @returns {Array}
  */
-export function uniqueArr(arr: any[]): any[] {
+export function uniqueArr<T>(arr: T[]): T[] {
   return Array.from(new Set(arr));
 }
 
@@ -320,7 +270,7 @@ export function removeClass(ele: HTMLElement, cls: string): void {
 }
 
 export function makeMap(str: string, expectsLowerCase?: boolean): (val: string) => boolean {
-  const map: any = Object.create(null);
+  const map: Record<string, boolean> = Object.create(null);
   const list = str.split(',');
   for (let i = 0; i < list.length; i++) {
     map[list[i]] = true;

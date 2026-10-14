@@ -6,10 +6,13 @@ import ParentView from '@/components/ui/ParentView/index.vue';
 import InnerLink from '@/layout/components/InnerLink/index.vue';
 import { defineStore } from 'pinia';
 import { isHttp } from '@/utils/validate';
-import type { RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw, RouteRecordSingleView } from 'vue-router';
+import type { BackendRoute } from '@/api/menu';
+
+type AppRoute = RouteRecordRaw & { hidden?: boolean; permissions?: string[]; roles?: string[] };
 
 // 匹配views里面所有的.vue文件
-const modules = import.meta.glob('./../../views/**/*.vue');
+const modules = import.meta.glob<{ default: import('vue').Component }>('./../../views/**/*.vue');
 const NOT_FOUND_ROUTE_PATH = '/:pathMatch(.*)*';
 let reloadPromise: Promise<void> | null = null;
 let registeredRouteRemovers: Array<() => void> = [];
@@ -30,6 +33,9 @@ interface PermissionState {
   sidebarRouters: RouteRecordRaw[];
   firstMenuPath: string;
   registeredRouteNames: string[];
+  routeRemovalErrors: unknown[];
+  routeReloadError: unknown;
+  lastRouteReloadReason: string;
 }
 
 const usePermissionStore = defineStore('permission', {
@@ -41,6 +47,9 @@ const usePermissionStore = defineStore('permission', {
     sidebarRouters: [],
     firstMenuPath: '/index',
     registeredRouteNames: [],
+    routeRemovalErrors: [],
+    routeReloadError: null,
+    lastRouteReloadReason: '',
   }),
   actions: {
     setRoutes(routes: RouteRecordRaw[]) {
@@ -85,7 +94,7 @@ const usePermissionStore = defineStore('permission', {
         try {
           removeRoute();
         } catch (error) {
-          console.warn('[dev-menu-hot-sync] dynamic route remover failed:', error);
+          this.routeRemovalErrors.push(error);
         }
       });
       registeredRouteRemovers = [];
@@ -97,16 +106,13 @@ const usePermissionStore = defineStore('permission', {
       this.setRegisteredRouteNames([]);
     },
     async fetchRouteBundle(): Promise<RouteBundle> {
-      const rawRoutes = normalizeBackendRoutes(await getRouters());
-      const sdata = JSON.parse(JSON.stringify(rawRoutes));
-      const rdata = JSON.parse(JSON.stringify(rawRoutes));
-      const defaultData = JSON.parse(JSON.stringify(rawRoutes));
-      const sidebarRoutes = filterAsyncRouter(sdata);
-      const rewriteRoutes = filterAsyncRouter(rdata, false, true);
-      const defaultRoutes = filterAsyncRouter(defaultData);
+      const rawRoutes = (await getRouters()).items;
+      const sidebarRoutes = filterAsyncRouter(rawRoutes);
+      const rewriteRoutes = filterAsyncRouter(rawRoutes, true);
+      const defaultRoutes = filterAsyncRouter(rawRoutes);
       const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
       const landingCandidates = getConstantRouteRecords()
-        .filter((route) => !(route as any).hidden)
+        .filter((route) => !route.hidden)
         .concat(sidebarRoutes);
       return {
         sidebarRoutes,
@@ -144,9 +150,10 @@ const usePermissionStore = defineStore('permission', {
           if (!hasAccessibleMatch(currentPath)) {
             await router.replace(this.firstMenuPath || '/index');
           }
-          console.info('[dev-menu-hot-sync] dynamic routes reloaded:', reason);
+          this.lastRouteReloadReason = reason;
+          this.routeReloadError = null;
         } catch (error) {
-          console.error('[dev-menu-hot-sync] dynamic routes reload failed:', error);
+          this.routeReloadError = error;
         }
       })().finally(() => {
         reloadPromise = null;
@@ -156,21 +163,8 @@ const usePermissionStore = defineStore('permission', {
   },
 });
 
-function getConstantRouteRecords(): RouteRecordRaw[] {
-  return constantRoutes as unknown as RouteRecordRaw[];
-}
-
-function normalizeBackendRoutes(raw: any): any[] {
-  if (Array.isArray(raw)) {
-    return raw;
-  }
-  if (raw && Array.isArray(raw.items)) {
-    return raw.items;
-  }
-  if (raw && Array.isArray(raw.data)) {
-    return raw.data;
-  }
-  return [];
+function getConstantRouteRecords(): AppRoute[] {
+  return constantRoutes;
 }
 
 function collectRouteNames(routes: RouteRecordRaw[]): string[] {
@@ -195,76 +189,50 @@ function hasAccessibleMatch(path: string): boolean {
   return resolved.matched.some((record) => record.path !== NOT_FOUND_ROUTE_PATH);
 }
 
-// 遍历后台传来的路由字符串，转换为组件对象
-function filterAsyncRouter(
-  asyncRouterMap: any[],
-  lastRouter: any = false,
-  type: boolean = false
-): any[] {
-  return asyncRouterMap.filter((route) => {
-    if (type && route.children) {
-      route.children = filterChildren(route.children);
-    }
-    if (route.component) {
-      // Layout ParentView 组件特殊处理
-      if (route.component === 'Layout') {
-        route.component = Layout;
-      } else if (route.component === 'ParentView') {
-        route.component = ParentView;
-      } else if (route.component === 'InnerLink') {
-        route.component = InnerLink;
-      } else {
-        route.component = loadView(route.component);
-      }
-    }
-    if (route.children != null && route.children && route.children.length) {
-      route.children = filterAsyncRouter(route.children, route, type);
-    } else {
-      delete route['children'];
-      delete route['redirect'];
-    }
-    return true;
+// Convert the HTTP menu tree into Vue Router records without mutating the fetched snapshot.
+function filterAsyncRouter(routes: BackendRoute[], flatten: boolean = false): AppRoute[] {
+  return routes.map((route) => {
+    const { children, component, redirect, ...fields } = route;
+    const mappedChildren = children?.length
+      ? filterAsyncRouter(flatten ? filterChildren(children) : children, flatten)
+      : undefined;
+    const resolvedComponent =
+      component === 'Layout'
+        ? Layout
+        : component === 'ParentView'
+          ? ParentView
+          : component === 'InnerLink'
+            ? InnerLink
+            : component
+              ? loadView(component)
+              : undefined;
+    if (mappedChildren)
+      return { ...fields, component: resolvedComponent, children: mappedChildren, redirect };
+    if (!resolvedComponent) throw new TypeError(`Route ${route.path} has no resolvable component`);
+    return { ...fields, component: resolvedComponent };
   });
 }
 
-function filterChildren(childrenMap: any[], lastRouter: any = false): any[] {
-  var children: any[] = [];
-  childrenMap.forEach((el, index) => {
-    if (el.children && el.children.length) {
-      if (el.component === 'ParentView' && !lastRouter) {
-        el.children.forEach((c: any) => {
-          c.path = el.path + '/' + c.path;
-          if (c.children && c.children.length) {
-            children = children.concat(filterChildren(c.children, c));
-            return;
-          }
-          children.push(c);
-        });
-        return;
-      }
+function filterChildren(childrenMap: BackendRoute[], parentPath: string = ''): BackendRoute[] {
+  return childrenMap.flatMap((child) => {
+    const path = parentPath ? `${parentPath}/${child.path}` : child.path;
+    if (child.children?.length && (child.component === 'ParentView' || parentPath)) {
+      return filterChildren(child.children, path);
     }
-    if (lastRouter) {
-      el.path = lastRouter.path + '/' + el.path;
-      if (el.children && el.children.length) {
-        children = children.concat(filterChildren(el.children, el));
-        return;
-      }
-    }
-    children = children.concat(el);
+    return [{ ...child, path }];
   });
-  return children;
 }
 
 // 动态路由遍历，验证是否具备权限
-export function filterDynamicRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
-  const res: RouteRecordRaw[] = [];
+export function filterDynamicRoutes(routes: AppRoute[]): AppRoute[] {
+  const res: AppRoute[] = [];
   routes.forEach((route) => {
-    if ((route as any).permissions) {
-      if (auth.hasPermiOr((route as any).permissions)) {
+    if (route.permissions) {
+      if (auth.hasPermiOr(route.permissions)) {
         res.push(route);
       }
-    } else if ((route as any).roles) {
-      if (auth.hasRoleOr((route as any).roles)) {
+    } else if (route.roles) {
+      if (auth.hasRoleOr(route.roles)) {
         res.push(route);
       }
     }
@@ -272,18 +240,19 @@ export function filterDynamicRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] 
   return res;
 }
 
-export const loadView = (view: string) => {
+export const loadView = (view: string): RouteRecordSingleView['component'] => {
   let res;
   for (const path in modules) {
     const dir = path.split('views/')[1].split('.vue')[0];
     if (dir === view) {
-      res = () => modules[path]();
+      res = () => modules[path]().then((module) => module.default);
     }
   }
+  if (!res) throw new TypeError(`No page component exists for ${view}`);
   return res;
 };
 
-function findFirstMenuPath(routes: any[], parentPath: string = ''): string {
+function findFirstMenuPath(routes: AppRoute[], parentPath: string = ''): string {
   for (const route of routes) {
     if (route.hidden) {
       continue;
@@ -315,7 +284,7 @@ function resolveRoutePath(parentPath: string, routePath: string = ''): string {
   return `${parentPath.replace(/\/$/, '')}/${routePath}`;
 }
 
-function isFunctionalRoute(route: any): boolean {
+function isFunctionalRoute(route: AppRoute): boolean {
   if (!route.component) {
     return false;
   }

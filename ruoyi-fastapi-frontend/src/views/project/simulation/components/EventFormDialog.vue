@@ -180,7 +180,7 @@ import {
   NodeSelector,
 } from './selector';
 
-const props = defineProps({
+defineProps({
   nodes: {
     type: Array,
     default: () => [],
@@ -332,13 +332,19 @@ defineExpose({
   .el-input-number__decrease,
   .el-input-number__increase {
     background: var(--sim-fill-light, var(--zx-semantic-surface-card-fill));
-    border-color: var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent));
+    border-color: var(
+      --sim-border-base,
+      color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent)
+    );
     color: var(--sim-text-primary, var(--zx-semantic-text-primary));
   }
 
   .el-select .el-input__wrapper {
     background: var(--sim-fill-light, var(--zx-semantic-surface-card-fill));
-    border-color: var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent));
+    border-color: var(
+      --sim-border-base,
+      color-mix(in srgb, var(--zx-semantic-border-default) 12%, transparent)
+    );
   }
 }
 

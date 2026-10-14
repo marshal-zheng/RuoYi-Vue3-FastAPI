@@ -1,9 +1,22 @@
+export type DeviceRecord = Omit<DeviceModel, 'deviceId'> & { deviceId: number };
+export type DeviceQuery = Partial<Pick<DeviceModel, 'deviceName' | 'busType'>> & {
+  beginTime?: string;
+  endTime?: string;
+  page?: number;
+  pageSize?: number;
+};
+import type { HttpOffsetPage, BatchResult } from '@/types/http-contract';
+import type {
+  BatchDeviceIdsModel,
+  CloneDeviceModel,
+  DeviceModel,
+} from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import type { AxiosRequestConfig } from 'axios';
 
 // 查询设备列表
-export function listDevice(query?: Record<string, any>, options: AxiosRequestConfig = {}) {
-  return request({
+export function listDevice(query?: DeviceQuery, options: AxiosRequestConfig = {}) {
+  return request<HttpOffsetPage<DeviceRecord>>({
     url: '/device/list',
     method: 'get',
     params: query,
@@ -13,15 +26,15 @@ export function listDevice(query?: Record<string, any>, options: AxiosRequestCon
 
 // 查询设备详细（包含接口配置）
 export function getDevice(deviceId: number | string) {
-  return request({
+  return request<DeviceRecord>({
     url: '/device/' + deviceId,
     method: 'get',
   });
 }
 
 // 新增设备（包含接口）
-export function addDevice(data: Record<string, any>) {
-  return request({
+export function addDevice(data: DeviceModel) {
+  return request<DeviceRecord>({
     url: '/device',
     method: 'post',
     data: data,
@@ -30,8 +43,8 @@ export function addDevice(data: Record<string, any>) {
 }
 
 // 修改设备（包含接口）
-export function updateDevice(data: Record<string, any>) {
-  return request({
+export function updateDevice(data: DeviceModel) {
+  return request<DeviceRecord>({
     url: '/device',
     method: 'put',
     data: data,
@@ -41,7 +54,7 @@ export function updateDevice(data: Record<string, any>) {
 
 // 删除设备
 export function delDevice(deviceId: number | string) {
-  return request({
+  return request<null>({
     url: '/device/' + deviceId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'device.device.delete' },
@@ -49,8 +62,8 @@ export function delDevice(deviceId: number | string) {
 }
 
 // 导出设备数据
-export function exportDevice(query?: Record<string, any>) {
-  return request({
+export function exportDevice(query?: DeviceQuery) {
+  return request<Blob>({
     url: '/device/export',
     method: 'post',
     params: query,
@@ -60,8 +73,8 @@ export function exportDevice(query?: Record<string, any>) {
 }
 
 // 批量导出设备
-export function exportDeviceBatch(data: Record<string, any>) {
-  return request({
+export function exportDeviceBatch(data: BatchDeviceIdsModel) {
+  return request<Blob>({
     url: '/device/export/batch',
     method: 'post',
     data,
@@ -72,7 +85,7 @@ export function exportDeviceBatch(data: Record<string, any>) {
 
 // 批量导入设备
 export function importDeviceBatch(formData: FormData) {
-  return request({
+  return request<BatchResult>({
     url: '/device/import/batch',
     method: 'post',
     data: formData,
@@ -83,7 +96,7 @@ export function importDeviceBatch(formData: FormData) {
 
 // 检查设备名称是否唯一
 export function checkDeviceNameUnique(deviceName: string, deviceId?: number | string) {
-  return request({
+  return request<boolean>({
     url: '/device/checkNameUnique',
     method: 'get',
     params: {
@@ -94,8 +107,8 @@ export function checkDeviceNameUnique(deviceName: string, deviceId?: number | st
 }
 
 // 克隆设备
-export function cloneDevice(data: Record<string, any>) {
-  return request({
+export function cloneDevice(data: CloneDeviceModel) {
+  return request<DeviceRecord>({
     url: '/device/clone',
     method: 'post',
     data: data,

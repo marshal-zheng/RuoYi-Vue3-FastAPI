@@ -1,8 +1,11 @@
+export type JobRecord = Omit<JobModel, 'jobId'> & { jobId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type { EditJobModel, JobModel, JobPageQueryModel } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询定时任务调度列表
-export function listJob(query?: Record<string, any>) {
-  return request({
+export function listJob(query?: JobPageQueryModel) {
+  return request<HttpOffsetPage<JobRecord>>({
     url: '/monitor/job/list',
     method: 'get',
     params: query,
@@ -11,15 +14,15 @@ export function listJob(query?: Record<string, any>) {
 
 // 查询定时任务调度详细
 export function getJob(jobId: number | string) {
-  return request({
+  return request<JobRecord>({
     url: '/monitor/job/' + jobId,
     method: 'get',
   });
 }
 
 // 新增定时任务调度
-export function addJob(data: Record<string, any>) {
-  return request({
+export function addJob(data: JobModel) {
+  return request<JobRecord>({
     url: '/monitor/job',
     method: 'post',
     data: data,
@@ -28,8 +31,8 @@ export function addJob(data: Record<string, any>) {
 }
 
 // 修改定时任务调度
-export function updateJob(data: Record<string, any>) {
-  return request({
+export function updateJob(data: EditJobModel) {
+  return request<JobRecord>({
     url: '/monitor/job',
     method: 'put',
     data: data,
@@ -39,7 +42,7 @@ export function updateJob(data: Record<string, any>) {
 
 // 删除定时任务调度
 export function delJob(jobId: number | string) {
-  return request({
+  return request<null>({
     url: '/monitor/job/' + jobId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'monitor.job.delete' },
@@ -52,7 +55,7 @@ export function changeJobStatus(jobId: number | string, status: string) {
     jobId,
     status,
   };
-  return request({
+  return request<JobRecord>({
     url: '/monitor/job/changeStatus',
     method: 'put',
     data: data,
@@ -66,7 +69,7 @@ export function runJob(jobId: number | string, jobGroup: string) {
     jobId,
     jobGroup,
   };
-  return request({
+  return request<{ jobId: number; jobGroup: string; status: 'accepted' }>({
     url: '/monitor/job/run',
     method: 'put',
     data: data,

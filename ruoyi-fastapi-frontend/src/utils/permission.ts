@@ -5,8 +5,12 @@ import useUserStore from '@/store/modules/user';
  * @param {Array} value 校验值
  * @returns {Boolean}
  */
-export function checkPermi(value: string[]): boolean {
-  if (value && value instanceof Array && value.length > 0) {
+export function checkPermi(value: unknown): boolean {
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((item): item is string => typeof item === 'string')
+  ) {
     const permissions = useUserStore().permissions;
     const permissionDatas = value;
     const all_permission = '*:*:*';
@@ -20,7 +24,6 @@ export function checkPermi(value: string[]): boolean {
     }
     return true;
   } else {
-    console.error(`need roles! Like checkPermi="['system:user:add','system:user:edit']"`);
     return false;
   }
 }
@@ -30,8 +33,12 @@ export function checkPermi(value: string[]): boolean {
  * @param {Array} value 校验值
  * @returns {Boolean}
  */
-export function checkRole(value: string[]): boolean {
-  if (value && value instanceof Array && value.length > 0) {
+export function checkRole(value: unknown): boolean {
+  if (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((item): item is string => typeof item === 'string')
+  ) {
     const roles = useUserStore().roles;
     const permissionRoles = value;
     const super_admin = 'admin';
@@ -45,7 +52,6 @@ export function checkRole(value: string[]): boolean {
     }
     return true;
   } else {
-    console.error(`need roles! Like checkRole="['admin','editor']"`);
     return false;
   }
 }

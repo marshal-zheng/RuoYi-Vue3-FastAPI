@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useDialog } from '@zxio/zxui';
 import MessageConfigTab from '@/components/business/Device/MessageConfigTab.vue';

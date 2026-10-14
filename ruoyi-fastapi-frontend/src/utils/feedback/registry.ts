@@ -55,7 +55,10 @@ const feedbackRegistry: Record<string, FeedbackRegistryEntry> = {
   'monitor.job.create': { success: '新增任务成功' },
   'monitor.job.update': { success: '修改任务成功' },
   'monitor.job.delete': { success: '删除任务成功' },
-  'monitor.job.run': { success: '执行任务成功', accepted: '任务已受理，可稍后查看执行结果' },
+  'monitor.job.run': {
+    success: '执行任务成功',
+    accepted: '任务已受理，可稍后查看执行结果',
+  },
   'monitor.job.change-status': { success: '修改任务状态成功' },
   'monitor.job-log.clear': { success: '清空任务日志成功' },
   'monitor.operlog.delete': { success: '删除操作日志成功' },
@@ -111,42 +114,13 @@ const feedbackRegistry: Record<string, FeedbackRegistryEntry> = {
   'tool.gen.sync-db': { success: '同步表结构成功' },
 };
 
-const warnedMissingKeys = new Set<string>();
-
-interface RegistryRuntimeOptions {
-  isDev: boolean;
-  warn: (message: string) => void;
-  warnedKeys?: Set<string>;
-}
-
 export const getFeedbackRegistry = (): Record<string, FeedbackRegistryEntry> => feedbackRegistry;
 
-export const resolveFeedbackRegistryEntryWithRuntime = (
-  key: string,
-  { isDev, warn, warnedKeys = warnedMissingKeys }: RegistryRuntimeOptions
-): FeedbackRegistryEntry => {
-  const entry = feedbackRegistry[key];
-  if (entry) {
-    return entry;
-  }
-
-  if (isDev) {
-    throw new Error(`[feedback] missing registry key: ${key}`);
-  }
-
-  if (!warnedKeys.has(key)) {
-    warnedKeys.add(key);
-    warn(`[feedback] missing registry key: ${key}`);
-  }
-
-  return { success: '操作成功' };
-};
-
+/** An explicit key must exist in every deployment; unnamed generic feedback remains supported. */
 export const resolveFeedbackRegistryEntry = (key: string): FeedbackRegistryEntry => {
-  return resolveFeedbackRegistryEntryWithRuntime(key, {
-    isDev: import.meta.env.DEV,
-    warn: (message) => console.warn(message),
-  });
+  const entry = feedbackRegistry[key];
+  if (!entry) throw new Error(`[feedback] missing registry key: ${key}`);
+  return entry;
 };
 
 export const assertFeedbackRegistry = (

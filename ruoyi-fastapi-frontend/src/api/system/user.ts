@@ -1,20 +1,32 @@
+import type { HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+import type {
+  AddUserModel,
+  CrudUserRoleModel,
+  EditUserModel,
+  UserDetailModel,
+  UserInfoModel,
+  UserPageQueryModel,
+  UserProfileModel,
+  UserRoleResponseModel,
+} from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import { parseStrEmpty } from '@/utils/ruoyi';
 import { clampBcryptPassword } from '@/utils/password';
 
-function sanitizePasswordField(payload: Record<string, any>, fields: string[] = []) {
+function sanitizePasswordField<
+  T extends { password?: string | null; oldPassword?: string | null; newPassword?: string | null },
+>(payload: T, fields: ('password' | 'oldPassword' | 'newPassword')[] = []): T {
   const target = { ...payload };
   fields.forEach((field) => {
-    if (target[field]) {
-      target[field] = clampBcryptPassword(target[field]);
-    }
+    const password = target[field];
+    if (password) target[field] = clampBcryptPassword(password);
   });
   return target;
 }
 
 // 查询用户列表
-export function listUser(query?: Record<string, any>) {
-  return request({
+export function listUser(query?: UserPageQueryModel) {
+  return request<HttpOffsetPage<UserInfoModel>>({
     url: '/system/user/list',
     method: 'get',
     params: query,
@@ -23,16 +35,16 @@ export function listUser(query?: Record<string, any>) {
 
 // 查询用户详细
 export function getUser(userId: number | string) {
-  return request({
+  return request<UserDetailModel>({
     url: '/system/user/' + parseStrEmpty(userId),
     method: 'get',
   });
 }
 
 // 新增用户
-export function addUser(data: Record<string, any>) {
+export function addUser(data: AddUserModel) {
   const payload = sanitizePasswordField(data, ['password']);
-  return request({
+  return request<UserInfoModel>({
     url: '/system/user',
     method: 'post',
     data: payload,
@@ -41,9 +53,9 @@ export function addUser(data: Record<string, any>) {
 }
 
 // 修改用户
-export function updateUser(data: Record<string, any>) {
+export function updateUser(data: EditUserModel) {
   const payload = sanitizePasswordField(data, ['password']);
-  return request({
+  return request<UserInfoModel>({
     url: '/system/user',
     method: 'put',
     data: payload,
@@ -53,7 +65,7 @@ export function updateUser(data: Record<string, any>) {
 
 // 删除用户
 export function delUser(userId: number | string) {
-  return request({
+  return request<null>({
     url: '/system/user/' + userId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.user.delete' },
@@ -69,7 +81,7 @@ export function resetUserPwd(userId: number | string, password: string) {
     },
     ['password']
   );
-  return request({
+  return request<null>({
     url: '/system/user/resetPwd',
     method: 'put',
     data: data,
@@ -83,7 +95,7 @@ export function changeUserStatus(userId: number | string, status: string) {
     userId,
     status,
   };
-  return request({
+  return request<UserInfoModel>({
     url: '/system/user/changeStatus',
     method: 'put',
     data: data,
@@ -93,15 +105,15 @@ export function changeUserStatus(userId: number | string, status: string) {
 
 // 查询用户个人信息
 export function getUserProfile() {
-  return request({
+  return request<UserProfileModel>({
     url: '/system/user/profile',
     method: 'get',
   });
 }
 
 // 修改用户个人信息
-export function updateUserProfile(data: Record<string, any>) {
-  return request({
+export function updateUserProfile(data: UserInfoModel) {
+  return request<UserProfileModel>({
     url: '/system/user/profile',
     method: 'put',
     data: data,
@@ -118,7 +130,7 @@ export function updateUserPwd(oldPassword: string, newPassword: string) {
     },
     ['oldPassword', 'newPassword']
   );
-  return request({
+  return request<null>({
     url: '/system/user/profile/updatePwd',
     method: 'put',
     data: data,
@@ -128,7 +140,7 @@ export function updateUserPwd(oldPassword: string, newPassword: string) {
 
 // 用户头像上传
 export function uploadAvatar(data: FormData) {
-  return request({
+  return request<{ imgUrl: string }>({
     url: '/system/user/profile/avatar',
     method: 'post',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -139,15 +151,15 @@ export function uploadAvatar(data: FormData) {
 
 // 查询授权角色
 export function getAuthRole(userId: number | string) {
-  return request({
+  return request<UserRoleResponseModel>({
     url: '/system/user/authRole/' + userId,
     method: 'get',
   });
 }
 
 // 保存授权角色
-export function updateAuthRole(data: Record<string, any>) {
-  return request({
+export function updateAuthRole(data: CrudUserRoleModel) {
+  return request<null>({
     url: '/system/user/authRole',
     method: 'put',
     params: data,
@@ -157,32 +169,8 @@ export function updateAuthRole(data: Record<string, any>) {
 
 // 查询部门下拉树结构
 export function deptTreeSelect() {
-  return request({
+  return request<HttpCollection<import('@/api/system/menu').MenuTreeNode>>({
     url: '/system/user/deptTree',
     method: 'get',
   });
-}
-
-export function login(data: Record<string, any>) {
-  return request({
-    url: '/login',
-    method: 'post',
-    data,
-    feedback: { mode: 'silent' },
-  });
-}
-
-export function logout() {
-  return request({
-    url: '/logout',
-    method: 'post',
-    feedback: { mode: 'silent' },
-  });
-}
-
-export const getUserInfo = getUserProfile;
-export const updateProfile = updateUserProfile;
-
-export function changePassword(data: { old_password?: string; new_password?: string }) {
-  return updateUserPwd(data.old_password || '', data.new_password || '');
 }

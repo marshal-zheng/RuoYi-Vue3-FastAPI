@@ -27,7 +27,7 @@ const styles: StylesMap = {
  */
 function addCss(cssList: string[], el: FormElement): void {
   const css = styles[el.tag];
-  css && cssList.indexOf(css) === -1 && cssList.push(css);
+  if (css && !cssList.includes(css)) cssList.push(css);
   if (el.children) {
     el.children.forEach((el2) => addCss(cssList, el2));
   }

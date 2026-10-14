@@ -1,0 +1,82 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > rejects an Axios response without a binary body 1ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > preserves valid binary response contents and filename 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > supports custom keys and identifiers which resemble object prototype properties 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format date object 1ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format timestamp (milliseconds) 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format timestamp (seconds) 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format date string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should handle custom pattern 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should return null for empty input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should return null for null input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should handle ISO date string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format with weekday 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should pad single digits 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should add default date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should add custom property date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should handle empty date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should handle non-array date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return label for string value 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return label for number value 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return value when not found 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return labels for comma-separated values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return labels for array values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should handle custom separator 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return empty string for empty array 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should include original value when not found 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should replace single placeholder 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should replace multiple placeholders 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle missing arguments 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle no placeholders 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle number arguments 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for null 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for "null" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for "undefined" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return original string for valid input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return number as is 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for empty string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should merge simple objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should merge nested objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should handle null source properties 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should overwrite primitives 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should build tree structure 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle custom field names 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle empty data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle flat structure 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle deep nesting 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should encode simple params 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should handle nested objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip null values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip empty strings 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip undefined values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should encode special characters 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should normalize double slashes 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should remove trailing slash 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle empty string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle "undefined" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle normal path 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle multiple double slashes 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for blob data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return false for JSON data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for image data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for PDF data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for Excel data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle parseTime with invalid date 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle handleTree with circular references prevention 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle tansParams with array values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle mergeRecursive with arrays 0ms
+
+ Test Files  3 passed (3)
+      Tests  71 passed (71)
+   Start at  22:48:47
+   Duration  516ms (transform 138ms, setup 682ms, collect 46ms, tests 12ms, environment 483ms, prepare 81ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

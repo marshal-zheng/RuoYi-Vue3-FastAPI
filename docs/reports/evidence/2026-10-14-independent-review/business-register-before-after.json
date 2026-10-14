@@ -1,0 +1,37 @@
+{
+  "before": {
+    "state": {
+      "captchaEnabled": {
+        "value": true
+      },
+      "codeUrl": {
+        "value": "data:image/gif;base64,GIF"
+      },
+      "registerForm": {
+        "value": {
+          "uuid": "uuid-1"
+        }
+      }
+    },
+    "error": null
+  },
+  "after": {
+    "state": {
+      "captchaEnabled": {
+        "value": true
+      },
+      "codeUrl": {
+        "value": ""
+      },
+      "registerForm": {
+        "value": {
+          "uuid": ""
+        }
+      }
+    },
+    "error": {
+      "name": "ReferenceError",
+      "message": "res is not defined"
+    }
+  }
+}

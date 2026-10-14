@@ -1,0 +1,590 @@
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/packages/components/_shared/__tests__/overlay-layout.test.tsx
++++ /Users/hqz/Downloads/element-plus/packages/components/_shared/__tests__/overlay-layout.test.tsx
+@@ -14,6 +14,13 @@
+ import { useDrawer } from '../../hooks/use-drawer'
+ import { useDialog } from '../../hooks/use-dialog'
+ 
++import type {
++  ZxConfigProviderContext,
++  ZxOverlayBodyScroll,
++  ZxOverlayLayoutConfig,
++  ZxOverlayPadding,
++} from '../../config-provider'
++
+ const cleanups: (() => Promise<void>)[] = []
+ afterEach(async () => {
+   for (const cleanup of cleanups.splice(0).reverse()) await cleanup()
+@@ -25,9 +32,9 @@
+       const owner = await createPortalTestOwner(
+         `runtime:overlay-${kind}-${Math.random()}`
+       )
+-      const common = ref<Record<string, unknown>>({})
+-      const near = ref<Record<string, unknown>>({})
+-      const local = ref<Record<string, unknown>>({})
++      const common = ref<ZxOverlayLayoutConfig>({})
++      const near = ref<ZxOverlayLayoutConfig>({})
++      const local = ref<ZxOverlayLayoutConfig & { divider?: boolean }>({})
+       const wrapper = mount(
+         () =>
+           h(Provider, { namespace, overlayLayout: common.value }, () =>
+@@ -173,27 +180,27 @@
+         bodyPadding: 'var(--application-insets)',
+         bodyScroll: 'none',
+       },
+-    } as any,
++    },
+     {
+       overlayLayout: { bodyPadding: { inlineEnd: 0, blockStart: undefined } },
+-    } as any
+-  ) as any
+-  expect(merged.overlayLayout.bodyPadding).toEqual({
++    }
++  )
++  expect(merged.overlayLayout?.bodyPadding).toEqual({
+     all: 'var(--application-insets)',
+     inlineEnd: 0,
+   })
+-  expect(merged.overlayLayout.bodyScroll).toBe('none')
++  expect(merged.overlayLayout?.bodyScroll).toBe('none')
+ })
+ 
+ it('passes reactive layout options through both Hooks including restoration to undefined', async () => {
+   for (const hook of [useDrawer, useDialog]) {
+-    const padding = ref<any>({ inlineStart: 0 })
+-    const scroll = ref<any>('none')
++    const padding = ref<ZxOverlayPadding | undefined>({ inlineStart: 0 })
++    const scroll = ref<ZxOverlayBodyScroll | undefined>('none')
+     const controller = hook({
+       bodyPadding: padding,
+       bodyScroll: scroll,
+       paddingInline: '2rem',
+-    } as any)
++    })
+     const props = () =>
+       'drawerProps' in controller
+         ? controller.drawerProps.value
+@@ -206,7 +213,7 @@
+     controller.updateOptions({
+       bodyPadding: undefined,
+       bodyScroll: undefined,
+-    } as any)
++    })
+     await nextTick()
+     expect(props().bodyPadding).toBeUndefined()
+     expect(props().bodyScroll).toBeUndefined()
+@@ -214,19 +221,22 @@
+ })
+ 
+ it('inherits empty padding values through nested Providers', () => {
+-  const parent = {
+-    overlayLayout: { bodyPadding: { all: '2rem', inlineEnd: 0 } },
+-  }
+-  const child = {
++  const inherited: ZxOverlayLayoutConfig = {
++    bodyPadding: { all: '2rem', inlineEnd: 0 },
++  }
++  const parent: Partial<ZxConfigProviderContext> = {
++    overlayLayout: inherited,
++  }
++  const child: Partial<ZxConfigProviderContext> = {
+     overlayLayout: {
+       bodyPadding: { all: ' ', inlineEnd: '', blockStart: undefined },
+     },
+   }
++  expect(mergeConfig(parent, child).overlayLayout?.bodyPadding).toEqual(
++    inherited.bodyPadding
++  )
+   expect(
+-    mergeConfig(parent as any, child as any).overlayLayout?.bodyPadding
+-  ).toEqual(parent.overlayLayout.bodyPadding)
+-  expect(
+-    mergeConfig(parent as any, { overlayLayout: { bodyPadding: '' } })
+-      .overlayLayout?.bodyPadding
+-  ).toEqual(parent.overlayLayout.bodyPadding)
+-})
++    mergeConfig(parent, { overlayLayout: { bodyPadding: '' } }).overlayLayout
++      ?.bodyPadding
++  ).toEqual(inherited.bodyPadding)
++})
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/ai-production-hardening/check-local-authority-observation.mjs
++++ /Users/hqz/Downloads/element-plus/scripts/ai-production-hardening/check-local-authority-observation.mjs
+@@ -1,4 +1,3 @@
+-/* eslint-disable no-console -- The local validation runner reports its bounded result. */
+ import { spawnSync } from 'node:child_process'
+ import { mkdirSync, writeFileSync } from 'node:fs'
+ import { resolve } from 'node:path'
+@@ -54,13 +53,13 @@
+   writeFileSync(resolve(evidence, 'source-closure.json'), source.stdout)
+   writeFileSync(resolve(evidence, 'authority-observation.json'), result.stdout)
+ }
+-console.log(
+-  JSON.stringify({
++process.stdout.write(
++  `${JSON.stringify({
+     scope: 'local-working-source-validation',
+     sourceClosureFingerprint: closure.fingerprint,
+     rootClean: closure.root.clean,
+     personas: observation.personas,
+     stages: observation.stages.length,
+     valid: observation.valid,
+-  })
++  })}\n`
+ )
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/check-hosted-packed.mts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/check-hosted-packed.mts
+@@ -16,6 +16,7 @@
+ import { createServer } from 'node:http'
+ import { build } from 'vite'
+ import { openGateBrowser } from './gate-browser.mts'
++import { captureConsumerFeedback } from './consumer-feedback.mts'
+ 
+ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+ const directory = resolve(root, 'node_modules/.consumer-hosted-packed')
+@@ -46,7 +47,7 @@
+   'theme-defense-green',
+   'zxui',
+ ]) {
+-  console.log('pack dependency', name)
++  process.stdout.write(`pack dependency ${name}\n`)
+   const source = resolve(root, 'packages', name)
+   // Theme artifacts are already generated and content checked; root build ran in the aggregate gate.
+   if (
+@@ -137,6 +138,10 @@
+ cpSync(
+   resolve(root, 'scripts/theme-consumer-protocol/app.ts'),
+   resolve(consumer, 'app.ts')
++)
++cpSync(
++  resolve(root, 'scripts/theme-consumer-protocol/consumer-failure-probe.ts'),
++  resolve(consumer, 'consumer-failure-probe.ts')
+ )
+ cpSync(
+   resolve(root, 'scripts/theme-consumer-protocol/server-fixture.ts'),
+@@ -266,6 +271,8 @@
+   )
+   for (const item of styles) assert.equal(item.root, item.popup)
+   await page.evaluate(() => (window as any).__CONSUMER__.unmount())
++  const feedback = await page.evaluate(captureConsumerFeedback)
++  warnings.push(...feedback.warnings, ...feedback.errors)
+   assert.equal(await page.locator('[data-zx-consumer]').count(), 0)
+   assert.deepEqual(warnings, [])
+   browserProof = { status: 'pass', styles, warnings, disposedTargets: 0 }
+@@ -292,4 +299,4 @@
+     2
+   )
+ )
+-console.log('Installed hosted public leaves and SSR passed.')
++process.stdout.write('Installed hosted public leaves and SSR passed.\n')
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/check-packed.mts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/check-packed.mts
+@@ -256,6 +256,10 @@
+     resolve(root, 'scripts/theme-consumer-protocol/packed-browser.ts'),
+     resolve(consumer, 'entry.ts')
+   )
++  cpSync(
++    resolve(root, 'scripts/theme-consumer-protocol/packed-standalone.ts'),
++    resolve(consumer, 'packed-standalone.ts')
++  )
+   const modules: string[] = []
+   await build({
+     root: consumer,
+@@ -342,8 +346,8 @@
+     resolve(output, 'packed-receipt.json'),
+     JSON.stringify(receipt, null, 2)
+   )
+-  console.log(
+-    'Packed ESM/CJS/types, module graph, and cross-copy portal/CSS tests passed.'
++  process.stdout.write(
++    'Packed ESM/CJS/types, module graph, and cross-copy portal/CSS tests passed.\n'
+   )
+   return receipt
+ }
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/run-browser.mts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/run-browser.mts
+@@ -13,6 +13,7 @@
+ import { buildFixtures, fixtureNames, fixtureRoot } from './build-fixtures.mts'
+ import { captureSsrFrame, inspectRetainedFrame } from './browser-frame.mts'
+ import { openGateBrowser } from './gate-browser.mts'
++import { captureConsumerFeedback } from './consumer-feedback.mts'
+ import { currentBaseline } from './baselines-registry.mts'
+ 
+ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
+@@ -381,13 +382,13 @@
+         },
+       },
+     })
+-    console.log('consumer browser build passed')
++    process.stdout.write('consumer browser build passed\n')
+     process.exitCode = 0
+   } else {
+     await server.listen()
+     const url = server.resolvedUrls!.local[0]!
+     if (process.argv.includes('--serve')) {
+-      console.log(`${url}scripts/theme-consumer-protocol/index.html`)
++      process.stdout.write(`${url}scripts/theme-consumer-protocol/index.html\n`)
+       await new Promise<void>((done) => {
+         process.once('SIGINT', done)
+         process.once('SIGTERM', done)
+@@ -503,7 +504,7 @@
+           ['nested-inactive', { nestedDisabled: true }],
+         ]
+         for (const [name, patch] of scenarios) {
+-          console.log('scenario', name)
++          process.stdout.write(`scenario ${name}\n`)
+           const before = await page.evaluate(sample, expectations)
+           const previous = await page
+             .locator('.provider-root')
+@@ -640,7 +641,7 @@
+         })
+         const resources: any = { instances: [], cycles: baseline ? 0 : 100 }
+         for (const instances of [1, 10, 100]) {
+-          console.log('instances', instances)
++          process.stdout.write(`instances ${instances}\n`)
+           await page.evaluate(
+             (instances) =>
+               Object.assign((window as any).__CONSUMER__.state, { instances }),
+@@ -672,7 +673,8 @@
+           Object.assign((window as any).__CONSUMER__.state, { instances: 1 })
+         )
+         for (let cycle = 0; cycle < (baseline ? 0 : 100); cycle++) {
+-          if (cycle % 10 === 0) console.log('resource cycle', cycle)
++          if (cycle % 10 === 0)
++            process.stdout.write(`resource cycle ${cycle}\n`)
+           await page.evaluate(() => {
+             ;(window as any).__CONSUMER__.state.show = false
+           })
+@@ -720,8 +722,11 @@
+           ),
+           fullPage: true,
+         })
+-        console.log('dispose resources')
++        process.stdout.write('dispose resources\n')
+         await page.evaluate(() => (window as any).__CONSUMER__.unmount())
++        const feedback = await page.evaluate(captureConsumerFeedback)
++        receipts.warnings.push(...feedback.warnings)
++        receipts.errors.push(...feedback.errors)
+         await page.waitForFunction(
+           () => !document.querySelector('[data-zx-consumer]')
+         )
+@@ -801,6 +806,9 @@
+             computed: await page.evaluate(sample, expectations),
+           })
+           await page.evaluate(() => (window as any).__CONSUMER__.unmount())
++          const feedback = await page.evaluate(captureConsumerFeedback)
++          receipts.warnings.push(...feedback.warnings)
++          receipts.errors.push(...feedback.errors)
+           assert.equal(await page.locator('[data-zx-consumer]').count(), 0)
+           assert.equal(
+             await page.locator('[data-zx-consumer-portal]').count(),
+@@ -888,6 +896,9 @@
+           await page.evaluate(async () => {
+             await (window as any).__CONSUMER__.host?.dispose()
+           })
++          const feedback = await page.evaluate(captureConsumerFeedback)
++          receipts.warnings.push(...feedback.warnings)
++          receipts.errors.push(...feedback.errors)
+           const afterDispose = await page.evaluate(inspectRetainedFrame)
+           for (const field of [
+             'nodes',
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/packed-browser.ts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/packed-browser.ts
+@@ -1,4 +1,3 @@
+-/* eslint-disable vue/one-component-per-file -- This harness creates independent owner/portal fixture components. */
+ import {
+   Teleport,
+   createApp,
+@@ -15,8 +14,7 @@
+ import { useThemePortalBinding } from '@zxio/theme-consumer/vue'
+ // A second installed tarball, CJS entry. No source module or alias participates.
+ import { useThemeCssAdapter } from './node_modules/consumer-copy-b/dist/cjs/vue/index.cjs'
+-import { Widget as Acme } from '@acme/widget/vue'
+-import { Widget as Panel } from '@example/panel/vue'
++import { PackedStandalone } from './packed-standalone'
+ import '@acme/widget/style.css'
+ import '@example/panel/style.css'
+ 
+@@ -24,12 +22,7 @@
+   if (!condition) throw new Error(message)
+ }
+ const run = async () => {
+-  const standalone = createApp(
+-    defineComponent({
+-      setup: () => () =>
+-        h('main', [h(Acme, { label: 'a' }), h(Panel, { label: 'b' })]),
+-    })
+-  )
++  const standalone = createApp(PackedStandalone)
+   standalone.mount('#app')
+   await nextTick()
+   check(
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/app.ts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/app.ts
+@@ -1,32 +1,8 @@
+-/* eslint-disable vue/one-component-per-file -- This harness creates independent owner/portal fixture components. */
+-import { defineComponent, h, reactive, ref, withDirectives } from 'vue'
+-import { useThemeCssAdapter } from '@zxio/theme-consumer/vue'
++import { defineComponent, h, reactive } from 'vue'
+ import { ZxThemeProvider } from '@zxio/zxui/theme-provider'
+ import { Widget as AcmeWidget } from '@acme/widget/vue'
+ import { Widget as ExamplePanel } from '@example/panel/vue'
+-
+-// Deliberately invalid public consumer used only by the executable conformance runner.
+-const FailureProbe = defineComponent({
+-  props: { failure: String },
+-  setup(props) {
+-    const root = ref<HTMLElement | null>(null)
+-    const binding = useThemeCssAdapter(root, {
+-      id: 'acme-widget-css',
+-      actualVersion: props.failure === 'version' ? '9.0.0' : '1.0.0',
+-    })
+-    return () =>
+-      withDirectives(
+-        h('div', {
+-          ref: root,
+-          'data-failure-probe': binding.state.value,
+-          'data-probe-diagnostics': JSON.stringify(binding.diagnostics.value),
+-          style:
+-            props.failure === 'inline' ? { '--acme-widget-bg': 'red' } : {},
+-        }),
+-        [[binding.directive]]
+-      )
+-  },
+-})
++import { FailureProbe } from './consumer-failure-probe'
+ 
+ export function createConsumerDemo(initial: Record<string, unknown> = {}) {
+   const state = reactive({
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/scripts/theme-consumer-protocol/client.ts
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/client.ts
+@@ -1,4 +1,3 @@
+-/* eslint-disable no-console -- The isolated browser fixture emits verification diagnostics. */
+ import { createApp, createSSRApp, nextTick } from 'vue'
+ import { createDefaultBrowserThemeHost } from '@zxio/zxui/theme-host'
+ import { createThemeAssetResolver, success } from '@zxio/zxui/theme-runtime'
+@@ -20,12 +19,10 @@
+ const warnings: string[] = []
+ app.config.warnHandler = (message) => {
+   warnings.push(message)
+-  console.warn(message)
+ }
+ const errors: string[] = []
+ app.config.errorHandler = (error) => {
+   errors.push(String(error))
+-  console.error(error)
+ }
+ const result = standalone
+   ? null
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/docs/.vitepress/theme/route-features.test.ts
++++ /Users/hqz/Downloads/element-plus/docs/.vitepress/theme/route-features.test.ts
+@@ -1,6 +1,6 @@
+-import { createApp } from 'vue'
+ import { beforeEach, describe, expect, it, vi } from 'vitest'
+ import { createDocsRouteFeatures } from './route-features'
++import { createRouteFeatureTestApp } from './fixtures/route-feature-app'
+ 
+ const { install } = vi.hoisted(() => ({ install: vi.fn() }))
+ vi.mock('./drive-features', () => ({ installDocsDriveFeatures: install }))
+@@ -9,7 +9,7 @@
+ 
+ describe('docs route feature preparation', () => {
+   it('keeps ordinary pages and similar path prefixes free of Drive setup', async () => {
+-    const prepare = createDocsRouteFeatures(createApp({}))
++    const prepare = createDocsRouteFeatures(createRouteFeatureTestApp())
+     for (const path of [
+       '/',
+       '/component/select',
+@@ -21,7 +21,7 @@
+   })
+ 
+   it('covers direct, localized, html and query/hash navigation once per app', async () => {
+-    const app = createApp({})
++    const app = createRouteFeatureTestApp()
+     const prepare = createDocsRouteFeatures(app)
+     for (const path of [
+       '/en-US/guide/theme-lab.html',
+@@ -42,7 +42,7 @@
+           finish = resolve
+         })
+     )
+-    const prepare = createDocsRouteFeatures(createApp({}))
++    const prepare = createDocsRouteFeatures(createRouteFeatureTestApp())
+     let completed = 0
+     const first = prepare('/component/drive').then(() => completed++)
+     const second = prepare('/guide/theme-lab').then(() => completed++)
+@@ -55,10 +55,12 @@
+ 
+   it('retries failed preparation and isolates separate SSR apps', async () => {
+     install.mockRejectedValueOnce(new Error('load failed'))
+-    const prepare = createDocsRouteFeatures(createApp({}))
++    const prepare = createDocsRouteFeatures(createRouteFeatureTestApp())
+     await expect(prepare('/component/drive')).rejects.toThrow('load failed')
+     await prepare('/component/drive')
+-    await createDocsRouteFeatures(createApp({}))('/guide/theme-lab')
++    await createDocsRouteFeatures(createRouteFeatureTestApp())(
++      '/guide/theme-lab'
++    )
+     expect(install).toHaveBeenCalledTimes(3)
+   })
+ 
+@@ -70,7 +72,7 @@
+           finish = resolve
+         })
+     )
+-    const prepare = createDocsRouteFeatures(createApp({}))
++    const prepare = createDocsRouteFeatures(createRouteFeatureTestApp())
+     const slow = prepare('/component/drive')
+     await vi.waitFor(() => expect(install).toHaveBeenCalledOnce())
+     await expect(prepare('/component/select')).resolves.toBeUndefined()
+--- /Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-14-independent-review/library-repair-before/internal/eslint-config/index.js
++++ /Users/hqz/Downloads/element-plus/internal/eslint-config/index.js
+@@ -121,7 +121,7 @@
+       parser: 'jsonc-eslint-parser',
+     },
+     {
+-      files: ['**/__tests__/**', '**/*.{test,spec}.{js,jsx,ts,tsx,mjs,mts}'],
++      files: ['**/__tests__/**'],
+       rules: {
+         'no-console': 'off',
+         'vue/one-component-per-file': 'off',
+--- /dev/null
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/consumer-failure-probe.ts
+@@ -0,0 +1,25 @@
++import { defineComponent, h, ref, withDirectives } from 'vue'
++import { useThemeCssAdapter } from '@zxio/theme-consumer/vue'
++
++// Deliberately invalid public consumer used only by the executable conformance runner.
++export const FailureProbe = defineComponent({
++  props: { failure: String },
++  setup(props) {
++    const root = ref<HTMLElement | null>(null)
++    const binding = useThemeCssAdapter(root, {
++      id: 'acme-widget-css',
++      actualVersion: props.failure === 'version' ? '9.0.0' : '1.0.0',
++    })
++    return () =>
++      withDirectives(
++        h('div', {
++          ref: root,
++          'data-failure-probe': binding.state.value,
++          'data-probe-diagnostics': JSON.stringify(binding.diagnostics.value),
++          style:
++            props.failure === 'inline' ? { '--acme-widget-bg': 'red' } : {},
++        }),
++        [[binding.directive]]
++      )
++  },
++})
+--- /dev/null
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/packed-standalone.ts
+@@ -0,0 +1,8 @@
++import { defineComponent, h } from 'vue'
++import { Widget as Acme } from '@acme/widget/vue'
++import { Widget as Panel } from '@example/panel/vue'
++
++export const PackedStandalone = defineComponent({
++  setup: () => () =>
++    h('main', [h(Acme, { label: 'a' }), h(Panel, { label: 'b' })]),
++})
+--- /dev/null
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/consumer-feedback.mts
+@@ -0,0 +1,24 @@
++/** Serialize handled Vue feedback for the browser gate, independent of console delivery. */
++export function captureConsumerFeedback() {
++  if (!('__CONSUMER__' in window)) throw new Error('consumer-feedback-missing')
++  const feedback = window.__CONSUMER__
++  if (
++    !feedback ||
++    typeof feedback !== 'object' ||
++    !('warnings' in feedback) ||
++    !('errors' in feedback) ||
++    !Array.isArray(feedback.warnings) ||
++    !Array.isArray(feedback.errors)
++  )
++    throw new Error('consumer-feedback-invalid')
++  const warnings = feedback.warnings.map((warning) => {
++    if (typeof warning !== 'string')
++      throw new Error('consumer-feedback-invalid')
++    return warning
++  })
++  const errors = feedback.errors.map((error) => {
++    if (typeof error !== 'string') throw new Error('consumer-feedback-invalid')
++    return error
++  })
++  return { warnings, errors }
++}
+--- /dev/null
++++ /Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts
+@@ -0,0 +1,66 @@
++import { createApp, defineComponent, h, resolveComponent } from 'vue'
++import { afterEach, expect, it } from 'vitest'
++import { captureConsumerFeedback } from '../consumer-feedback.mts'
++
++const dispose: (() => void)[] = []
++afterEach(() => {
++  for (const cleanup of dispose.splice(0).reverse()) cleanup()
++  Reflect.deleteProperty(window, '__CONSUMER__')
++})
++
++const FeedbackProbe = defineComponent({
++  setup() {
++    resolveComponent('MissingContractConsumer')
++    return () => {
++      throw new Error('consumer render failure')
++    }
++  },
++})
++
++it('reports handled Vue warnings and render failures without relying on browser console delivery', () => {
++  const feedback: { warnings: string[]; errors: string[] } = {
++    warnings: [],
++    errors: [],
++  }
++  const app = createApp(FeedbackProbe)
++  app.config.warnHandler = (message) => feedback.warnings.push(message)
++  app.config.errorHandler = (error) => feedback.errors.push(String(error))
++  Reflect.set(window, '__CONSUMER__', feedback)
++  const target = document.createElement('section')
++  document.body.appendChild(target)
++  app.mount(target)
++  dispose.push(() => {
++    app.unmount()
++    target.remove()
++  })
++  expect(feedback.warnings).toHaveLength(1)
++  expect(feedback.errors).toEqual(['Error: consumer render failure'])
++  expect(captureConsumerFeedback()).toEqual(feedback)
++})
++
++it('fails the verification boundary when fixture feedback has an invalid shape', () => {
++  Reflect.set(window, '__CONSUMER__', {
++    warnings: ['warning'],
++    errors: [new Error('invalid')],
++  })
++  expect(captureConsumerFeedback).toThrow('consumer-feedback-invalid')
++  Reflect.deleteProperty(window, '__CONSUMER__')
++  expect(captureConsumerFeedback).toThrow('consumer-feedback-missing')
++})
++
++it('retains empty feedback as a valid clean scenario', () => {
++  const feedback: { warnings: string[]; errors: string[] } = {
++    warnings: [],
++    errors: [],
++  }
++  const app = createApp({ render: () => h('div') })
++  Reflect.set(window, '__CONSUMER__', feedback)
++  const target = document.createElement('section')
++  document.body.appendChild(target)
++  app.mount(target)
++  dispose.push(() => {
++    app.unmount()
++    target.remove()
++  })
++  expect(captureConsumerFeedback()).toEqual(feedback)
++})
+--- /dev/null
++++ /Users/hqz/Downloads/element-plus/docs/.vitepress/theme/fixtures/route-feature-app.ts
+@@ -0,0 +1,4 @@
++import { createApp } from 'vue'
++
++/** A fresh real Vue app for each route preparation owner. */
++export const createRouteFeatureTestApp = () => createApp({})

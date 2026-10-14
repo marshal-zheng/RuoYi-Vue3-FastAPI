@@ -18,7 +18,7 @@ from modules.project.api.project_controller import projectController
 from modules.project.api.project_version_controller import projectVersionController
 from modules.scheduler.api.job_controller import jobController
 from modules.system.api.audit_controller import auditController
-from modules.system.api.cache_controller import cacheController
+from modules.system.api.cache_controller import cache_router
 from modules.system.api.common_controller import commonController
 from modules.system.api.config_controller import configController
 from modules.system.api.dept_controller import deptController
@@ -97,10 +97,14 @@ def _load_optional_router(module_path: str, router_name: str) -> Any | None:
         return None
 
 
-protocolController = _load_optional_router('module_admin.controller.protocol_controller', 'protocolController')
-simulationController = _load_optional_router('module_admin.controller.simulation_controller', 'simulationController')
-deviceCategoryController = _load_optional_router('module_admin.controller.device_category_controller', 'deviceCategoryController')
-deviceController = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
+protocol_router = _load_optional_router('module_admin.controller.protocol_controller', 'protocolController')
+simulation_router = _load_optional_router('module_admin.controller.simulation_controller', 'simulationController')
+device_category_router = _load_optional_router(
+    'module_admin.controller.device_category_controller', 'device_category_router'
+)
+device_router = _load_optional_router('module_admin.controller.device_controller', 'deviceController')
+
+
 def _should_register_dev_menu_router() -> bool:
     return is_dev_managed_data_hot_reconcile_enabled()
 
@@ -116,7 +120,7 @@ def _build_system_routers() -> tuple[RouterRegistration, ...]:
         RouterRegistration(router=logController, tags=('系统管理-日志管理',), capability_module_key='platform'),
         RouterRegistration(router=onlineController, tags=('系统监控-在线用户',), capability_module_key='platform'),
         RouterRegistration(router=serverController, tags=('系统监控-菜单管理',), capability_module_key='platform'),
-        RouterRegistration(router=cacheController, tags=('系统监控-缓存监控',), capability_module_key='platform'),
+        RouterRegistration(router=cache_router, tags=('系统监控-缓存监控',), capability_module_key='platform'),
         RouterRegistration(router=resilienceController, tags=('系统监控-弹性治理',), capability_module_key='platform'),
         RouterRegistration(router=auditController, tags=('系统监控-审计日志',), capability_module_key='platform'),
         RouterRegistration(router=eventController, tags=('系统监控-事件治理',), capability_module_key='platform'),
@@ -125,6 +129,7 @@ def _build_system_routers() -> tuple[RouterRegistration, ...]:
         routers.append(RouterRegistration(router=devMenuSyncController, tags=('系统管理-开发态菜单热同步',)))
     routers.append(RouterRegistration(router=commonController, tags=('通用模块',)))
     return tuple(routers)
+
 
 _module_registry: list[ModuleRegistration] = [
     ModuleRegistration(
@@ -148,35 +153,37 @@ _module_registry: list[ModuleRegistration] = [
         version='v1',
         routers=(
             RouterRegistration(router=projectController, tags=('工程管理',), capability_module_key='platform'),
-            RouterRegistration(router=projectVersionController, tags=('工程管理-版本管理',), capability_module_key='platform'),
+            RouterRegistration(
+                router=projectVersionController, tags=('工程管理-版本管理',), capability_module_key='platform'
+            ),
         ),
     ),
 ]
 
-if protocolController is not None:
+if protocol_router is not None:
     _module_registry.append(
         ModuleRegistration(
             name='protocol',
             version='v1',
-            routers=(RouterRegistration(router=protocolController, tags=('协议管理',)),),
+            routers=(RouterRegistration(router=protocol_router, tags=('协议管理',)),),
         )
     )
-if simulationController is not None:
+if simulation_router is not None:
     _module_registry.append(
         ModuleRegistration(
             name='simulation',
             version='v1',
-            routers=(RouterRegistration(router=simulationController, tags=('仿真管理',)),),
+            routers=(RouterRegistration(router=simulation_router, tags=('仿真管理',)),),
         )
     )
-if deviceCategoryController is not None and deviceController is not None:
+if device_category_router is not None and device_router is not None:
     _module_registry.append(
         ModuleRegistration(
             name='device',
             version='v1',
             routers=(
-                RouterRegistration(router=deviceCategoryController, tags=('设备中心-分类管理',)),
-                RouterRegistration(router=deviceController, tags=('设备中心-设备管理',)),
+                RouterRegistration(router=device_category_router, tags=('设备中心-分类管理',)),
+                RouterRegistration(router=device_router, tags=('设备中心-设备管理',)),
             ),
         )
     )
@@ -186,7 +193,9 @@ _module_registry.extend(
         ModuleRegistration(
             name='scheduler',
             version='v1',
-            routers=(RouterRegistration(router=jobController, tags=('系统监控-定时任务',), capability_module_key='platform'),),
+            routers=(
+                RouterRegistration(router=jobController, tags=('系统监控-定时任务',), capability_module_key='platform'),
+            ),
         ),
         ModuleRegistration(
             name='codegen',

@@ -1,0 +1,77 @@
+[
+  {
+    "path": "packages/components/_shared/__tests__/overlay-layout.test.tsx",
+    "beforeSha256": "0731624a9efda6d96629c7bdaf82dd0ac55436afc668825e42f969a307f05f4e",
+    "afterSha256": "cea52c5daa3d19612f86606edf19518a7b240fb51067bba52d27995e632aa565"
+  },
+  {
+    "path": "scripts/ai-production-hardening/check-local-authority-observation.mjs",
+    "beforeSha256": "615416d7b0623e8bb59d8816c984ac3eee896fb51edef6aef811bb1642204dde",
+    "afterSha256": "3581b4a9c4103421cf6c8adb2f910ae371420edd8846861f02db1f04fdb1d413"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/check-hosted-packed.mts",
+    "beforeSha256": "62a374719fb2c74f4f20bf96e0a398eccbe59128515a16d69f502c500241a6ac",
+    "afterSha256": "398b64ae1b10f0b79a866604767bc290e5cc609f4319e1437a3644874e9a73dc"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/check-packed.mts",
+    "beforeSha256": "45d583fb0b4c42009c049d569cf1a15c77b6e5d6ae83af388e9cf33f93bd159a",
+    "afterSha256": "c0e3270472aea7627afd49f609179c2590bdc767161494df0aa454e651931b11"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/run-browser.mts",
+    "beforeSha256": "979175d4efc199a5bfe3a8b7136c8414ff0f21b1c673ce31fa6df6a126ebb005",
+    "afterSha256": "d51b3eeafabc7517e15887eaa83107c21aa7be7070974401e6f66d5d3dca9619"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/packed-browser.ts",
+    "beforeSha256": "53cfa490752cd6df8a329d20c4ff76e338dec69a76671495220b121302cb3f3f",
+    "afterSha256": "6f8d1523985af8b662b577124e0278616dcc2ecad59e128d425b9d4d3c4f22db"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/app.ts",
+    "beforeSha256": "7095de874d0ac72003538fc6a3325beae3295e44f5423c455a0d7fb62f970faf",
+    "afterSha256": "bce270c41bbf69735444f012fe1be1ae3b8c4802d8e4ff1c757b359ca9db10eb"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/client.ts",
+    "beforeSha256": "e235f8839b71c368d71a096f4dc4cded2c78e1a7eb5aec105cf35027657468d2",
+    "afterSha256": "adc297e958fef09efe4fd7e432afe210c69315e6094b9afa62bd86bbeaf655ce"
+  },
+  {
+    "path": "docs/.vitepress/theme/route-features.test.ts",
+    "beforeSha256": "c19ad9737620efc9b8dd7415c05b1968c6d15f370f4c050221495d4b776b9480",
+    "afterSha256": "a54b2b2c9d7c85a4b1e8ed882c0fe909a39e02fa6df714ed0c389af0c7d8d1a1"
+  },
+  {
+    "path": "internal/eslint-config/index.js",
+    "beforeSha256": "9e6c9951f791ab211d83b5dde43c1310140645b465b3c17c558bddaea7d7108f",
+    "afterSha256": "9eb6b83c2ce59188b170fe9b40735ac1d222e74385dcbc5de8eb9c98e6f5a363"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/consumer-failure-probe.ts",
+    "beforeSha256": null,
+    "afterSha256": "20beb0a4fc50c5b6cdca2596d02bdde97df905bfd429de813db1725071c597b9"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/packed-standalone.ts",
+    "beforeSha256": null,
+    "afterSha256": "01134e3e6e483087112b0febe8600c5f67fa09d2d9867494bdfb44fc6eceea4c"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/consumer-feedback.mts",
+    "beforeSha256": null,
+    "afterSha256": "c61d17f07348259b52f62660f103af442a3f862856a9cd2740bc593744c2e938"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "7f9d26685f7a5e2541d5eef5fecb94c6e0d6a735172ce3965f23c30bd7c73d16"
+  },
+  {
+    "path": "docs/.vitepress/theme/fixtures/route-feature-app.ts",
+    "beforeSha256": null,
+    "afterSha256": "9c9c7f91f8e12f76e4e2fb68bb50eb38a821303393396338c893ed83dcfe8b96"
+  }
+]

@@ -1,0 +1,6 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ lint /Users/hqz/Downloads/element-plus
+> eslint . --ext .vue,.js,.ts,.jsx,.tsx,.md,.json --max-warnings 0 --cache
+

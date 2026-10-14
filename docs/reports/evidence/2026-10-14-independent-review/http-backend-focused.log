@@ -1,0 +1,32 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0 -- /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase(PosixPath('/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/.hypothesis/examples'))
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 20 items
+
+tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router0-/system/menu/list-row0] PASSED [  5%]
+tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router1-/system/dept/list-row1] PASSED [ 10%]
+tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router2-/system/dept/list/exclude/{dept_id}-row2] PASSED [ 15%]
+tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router3-/system/dict/type/optionselect-row3] PASSED [ 20%]
+tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router4-/device/category/options-row4] PASSED [ 25%]
+tests/unit/test_device_category_routes.py::test_options_route_returns_collection_and_never_calls_detail PASSED [ 30%]
+tests/unit/test_device_category_routes.py::test_name_check_route_receives_excluded_category_id PASSED [ 35%]
+tests/unit/test_device_category_routes.py::test_numeric_detail_route_keeps_its_resource_contract PASSED [ 40%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_ok_resource_strips_legacy_message_and_request_id PASSED [ 45%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_ok_collection_uses_items PASSED [ 50%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_ok_page_uses_page_contract PASSED [ 55%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_ok_cursor_uses_next_cursor PASSED [ 60%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_created_resource_sets_absolute_location PASSED [ 65%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_created_resource_requires_absolute_location PASSED [ 70%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_accepted_job_sets_absolute_location PASSED [ 75%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_batch_result_whitelists_item_error_fields PASSED [ 80%]
+tests/unit/test_response_util.py::TestSuccessResponses::test_no_content_returns_empty_body PASSED [ 85%]
+tests/unit/test_response_util.py::TestProblemDetailsResponses::test_problem_details_uses_rfc9457_shape PASSED [ 90%]
+tests/unit/test_response_util.py::TestProblemDetailsResponses::test_problem_details_falls_back_to_about_blank PASSED [ 95%]
+tests/unit/test_response_util.py::TestProblemDetailsResponses::test_validation_problem_preserves_validation_codes PASSED [100%]
+
+============================== 20 passed in 0.60s ==============================

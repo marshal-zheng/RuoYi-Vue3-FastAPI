@@ -1,0 +1,82 @@
+{
+  "date": "2026-10-14",
+  "commands": [
+    {
+      "command": [
+        "yarn",
+        "lint:check"
+      ],
+      "exitCode": 0,
+      "seconds": 9.6,
+      "log": "business-precommit-lint.log",
+      "repo": "business"
+    },
+    {
+      "command": [
+        "yarn",
+        "type-check"
+      ],
+      "exitCode": 0,
+      "seconds": 11.08,
+      "log": "business-precommit-type.log",
+      "repo": "business"
+    },
+    {
+      "command": [
+        "yarn",
+        "test:run"
+      ],
+      "exitCode": 0,
+      "seconds": 41.15,
+      "log": "business-precommit-tests.log",
+      "repo": "business"
+    },
+    {
+      "command": [
+        "pnpm",
+        "lint"
+      ],
+      "exitCode": 0,
+      "seconds": 1.95,
+      "log": "library-precommit-lint.log",
+      "repo": "library"
+    },
+    {
+      "command": [
+        "pnpm",
+        "typecheck"
+      ],
+      "exitCode": 0,
+      "seconds": 12.3,
+      "log": "library-precommit-type.log",
+      "repo": "library"
+    },
+    {
+      "command": [
+        "pnpm",
+        "test:run"
+      ],
+      "exitCode": 0,
+      "seconds": 287.75,
+      "log": "library-precommit-tests.log",
+      "repo": "library"
+    }
+  ],
+  "businessTests": 805,
+  "libraryMainTests": 2478,
+  "libraryNodeTests": 39,
+  "libraryMcpTests": 84,
+  "stagedLibraryFocusedTests": 236,
+  "stagedBusinessUIFocusedTests": 29,
+  "isolatedTypechecks": "passed using installed dependencies and existing build-generated version/theme fixture files",
+  "libraryHooks": "eslint/prettier and commitlint used; only two Markdown table layouts formatted",
+  "evidencePolicy": "Historical 27MB failed raw log and unrelated previous work remain unstaged; no env/credentials staged",
+  "libraryCommit": "4840dcdc816a9e25910bfb1874e0230dd4a5e328",
+  "businessUICommit": "2542af35a9aa3ab848bea2e72b69839f073ec744",
+  "businessContractCommitSubject": "fix(业务)!: 清零 lint 并修复类型与行为契约",
+  "pushPerformed": false,
+  "backendPrecommitFocusedTests": 11,
+  "backendPrecommitCommand": "./venv/bin/python -m pytest tests/unit/services/test_simulation_status_wire.py tests/unit/test_collection_openapi_contract.py --no-cov -n 0 -q",
+  "backendPrecommitLog": "backend-precommit-focused.log",
+  "backendPrecommitExitCode": 0
+}

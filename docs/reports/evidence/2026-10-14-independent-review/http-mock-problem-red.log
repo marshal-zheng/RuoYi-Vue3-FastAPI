@@ -1,0 +1,179 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > recognizes API requests by prefix 2ms
+ × src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > creates deterministic not implemented payloads 3ms
+   → expected { code: 501, …(2) } to deeply equal { type: 'about:blank', …(5) }
+ × src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > returns deterministic 501 responses with mock debug headers 9ms
+   → expected { code: 501, …(2) } to deeply equal { type: 'about:blank', …(5) }
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 75ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/role/99 11ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/menu/99 14ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/config/99 11ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/type/99 13ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/data/99 11ms
+   → expected 200 to be 204 // Object.is equality
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/cancel 8ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/cancelAll?roleId=2&userIds=99 11ms
+   → expected 200 to be 204 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/selectAll?roleId=2&userIds=99 12ms
+   → expected 200 to be 204 // Object.is equality
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 21ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 115ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 40ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 40ms
+ × src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 26ms
+   → expected 'application/json' to contain 'application/problem+json'
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns schema-compatible empty page projections with overlay headers 38ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns problem responses without writing through the data source 26ms
+ × src/mocks/overlays/handlers.test.ts > mock overlay handlers > supports 403, 429, timeout, latency, and explicit unsupported responses 1110ms
+   → expected 'application/json' to contain 'application/problem+json'
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > exposes only read methods through the read-only projection wrapper 10ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 12 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout
+AssertionError: expected 200 to be 204 // Object.is equality
+
+- Expected
++ Received
+
+- 204
++ 200
+
+ ❯ src/mocks/handlers/auth-system.test.ts:73:35
+     71|     });
+     72| 
+     73|     expect(logoutResponse.status).toBe(204);
+       |                                   ^
+     74|     expect(await logoutResponse.text()).toBe('');
+     75| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/12]⎯
+
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/role/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/menu/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/config/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/type/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/data/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/cancelAll?roleId=2&userIds=99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/selectAll?roleId=2&userIds=99
+AssertionError: expected 200 to be 204 // Object.is equality
+
+- Expected
++ Received
+
+- 204
++ 200
+
+ ❯ src/mocks/handlers/auth-system.test.ts:97:29
+     95|       body: method === 'PUT' ? JSON.stringify({ roleId: 2, userId: 99 …
+     96|     });
+     97|     expect(response.status).toBe(204);
+       |                             ^
+     98|     expect(await response.text()).toBe('');
+     99|     expect(response.headers.get('content-type')).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/12]⎯
+
+ FAIL  src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations
+AssertionError: expected 'application/json' to contain 'application/problem+json'
+
+Expected: "application/problem+json"
+Received: "application/json"
+
+ ❯ src/mocks/handlers/simulation.test.ts:98:52
+     96|     for (const response of [startResponse, faultResponse]) {
+     97|       expect(response.status).toBe(501);
+     98|       expect(response.headers.get('content-type')).toContain('applicat…
+       |                                                    ^
+     99|       const body = await response.json();
+    100|       expect(body).toMatchObject({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/12]⎯
+
+ FAIL  src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > creates deterministic not implemented payloads
+AssertionError: expected { code: 501, …(2) } to deeply equal { type: 'about:blank', …(5) }
+
+- Expected
++ Received
+
+  {
+-   "detail": "MOCK_API_NOT_IMPLEMENTED: POST /api/example?page=1 尚未在单套 mock 主线中实现",
+-   "errorCode": "MOCK_API_NOT_IMPLEMENTED",
+-   "instance": "/api/example?page=1",
+-   "status": 501,
+-   "title": "MOCK_API_NOT_IMPLEMENTED",
+-   "type": "about:blank",
++   "code": 501,
++   "data": null,
++   "msg": "MOCK_API_NOT_IMPLEMENTED: POST /api/example?page=1 尚未在单套 mock 主线中实现",
+  }
+
+ ❯ src/mocks/runtime/unhandled.test.ts:22:21
+     20|     );
+     21| 
+     22|     expect(payload).toEqual({
+       |                     ^
+     23|       type: 'about:blank',
+     24|       title: 'MOCK_API_NOT_IMPLEMENTED',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/12]⎯
+
+ FAIL  src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > returns deterministic 501 responses with mock debug headers
+AssertionError: expected { code: 501, …(2) } to deeply equal { type: 'about:blank', …(5) }
+
+- Expected
++ Received
+
+  {
+-   "detail": "MOCK_API_NOT_IMPLEMENTED: PATCH /api/uncovered/resource?source=test 尚未在单套 mock 主线中实现",
+-   "errorCode": "MOCK_API_NOT_IMPLEMENTED",
+-   "instance": "/api/uncovered/resource?source=test",
+-   "status": 501,
+-   "title": "MOCK_API_NOT_IMPLEMENTED",
+-   "type": "about:blank",
++   "code": 501,
++   "data": null,
++   "msg": "MOCK_API_NOT_IMPLEMENTED: PATCH /api/uncovered/resource?source=test 尚未在单套 mock 主线中实现",
+  }
+
+ ❯ src/mocks/runtime/unhandled.test.ts:39:5
+     37|     });
+     38| 
+     39|     await expect(response.json()).resolves.toEqual({
+       |     ^
+     40|       type: 'about:blank',
+     41|       title: 'MOCK_API_NOT_IMPLEMENTED',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/12]⎯
+
+ FAIL  src/mocks/overlays/handlers.test.ts > mock overlay handlers > supports 403, 429, timeout, latency, and explicit unsupported responses
+AssertionError: expected 'application/json' to contain 'application/problem+json'
+
+Expected: "application/problem+json"
+Received: "application/json"
+
+ ❯ src/mocks/overlays/handlers.test.ts:101:53
+     99|     expect(unsupported.headers.get('X-Mock-Handler')).toBe('simulation…
+    100|     expect(unsupported.headers.get('X-Mock-Overlay')).toBe('simulation…
+    101|     expect(unsupported.headers.get('content-type')).toContain('applica…
+       |                                                     ^
+    102|     expect(unsupportedBody).not.toHaveProperty('code');
+    103|     expect(unsupportedBody).not.toHaveProperty('msg');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/12]⎯
+
+
+ Test Files  4 failed (4)
+      Tests  12 failed | 9 passed (21)
+   Start at  02:17:25
+   Duration  1.68s (transform 126ms, setup 899ms, collect 32ms, tests 1.61s, environment 620ms, prepare 104ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

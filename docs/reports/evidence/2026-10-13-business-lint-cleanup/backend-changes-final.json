@@ -1,0 +1,52 @@
+[
+  {
+    "path": "common/http_contracts.py",
+    "before": "063196de9f615e1cf80d44d9150628b7e2cebbcd4164e8821f31f251f7d5e59c",
+    "after": "cdcf767d5f124a0b3189c0a01f33dc446ce712f8d4251d3448e095e6149da1cd"
+  },
+  {
+    "path": "modules/system/api/menu_controller.py",
+    "before": "be0f1278d9abce83298aa83d909f30e329f8669c676f3e750635c92f858feca3",
+    "after": "2c0540ed12887880d42530d2cb1b538551289bfe8857abb53a111385d7ee8344"
+  },
+  {
+    "path": "modules/system/api/dict_controller.py",
+    "before": "5edf590497f1d72e037c12d8407b4db9bd908c09b6751dce4389bfad6d80647a",
+    "after": "093f6219783a0f594d29183218f15316162f2e1f485f73dd63c382027aed000a"
+  },
+  {
+    "path": "modules/system/api/dept_controller.py",
+    "before": "2597d3e27552ec86e5172d78c585063f4217c14b35918427fb891961686e71f6",
+    "after": "f696d297ca14857e20d3e0386158daf1bb3851dfbbb66f8ada3ce058ed94d8cb"
+  },
+  {
+    "path": "module_admin/controller/device_category_controller.py",
+    "before": "008d6a85068459ee4c181d74b8178b50d1cb077694f0ae36d01048b1e8bf6e51",
+    "after": "fa5845c4595c1b8b35597951f01e8e25ae454b245b47453bb54b13670c197149"
+  },
+  {
+    "path": "modules/registry.py",
+    "before": "43bf96e5c886965fc6ee1ebcabc614fffc99d427215ef222c5755eb0eb67fe63",
+    "after": "cc1efb64ec0abe269749be85794208238969973c1b94c4c52c0e42ce0fb6f217"
+  },
+  {
+    "path": "tests/unit/services/test_device_category_service.py",
+    "before": "942ce3e417faeb9ee0b86d06e7ee8bec902a504d2d233bf89e325fae450f11d5",
+    "after": "b6199e5ed29ddd8c1754eb28e79c33ff8abe3da09a8f56f577d7a783765b577a"
+  },
+  {
+    "path": "tests/unit/test_collection_openapi_contract.py",
+    "before": null,
+    "after": "3136ddf09eb847ec812f94c49b61150fe5298ea85c0a47a79ef60fffbcbb4522"
+  },
+  {
+    "path": "tests/unit/test_device_category_routes.py",
+    "before": null,
+    "after": "d88764587af567aa2c89f2d5e04e7d4c72ba0bac6f7a66ca7e5da89a11f43472"
+  },
+  {
+    "path": "../shared/openapi.json",
+    "before": "e7092ec6006a688d8e5011da3be02d7c68df3755ba9c22f3687b06ecd5e725c8",
+    "after": "f72fe03bf0f0ae750538f17f2305acf38401a58840a3f72645614c972fcae365"
+  }
+]

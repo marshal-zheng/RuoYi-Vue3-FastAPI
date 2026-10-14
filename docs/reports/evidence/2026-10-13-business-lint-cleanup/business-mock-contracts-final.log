@@ -1,0 +1,24 @@
+Mock contract coverage summary
+OpenAPI: 3.1.0 RuoYi-FastAPI 1.6.2
+Fingerprint: c82c46a67f3a3c6ddda2e3d3971dacc69775748c927136112bad2612e2f74705
+Operations: 244
+Statuses: mock-handled=86, real-only=29, unsupported-501=13, legacy-local-contract=0, missing=116
+Critical: total=75, failures=0
+Schema: openapi-validated=20, schema-unavailable=61, binary-response=8
+Local contracts: 0
+
+Warnings:
+- [critical-audit-signal] POST /project/export ruoyi-fastapi-frontend/src/api/project/project.ts: POST /project/export is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] POST /project/export/batch ruoyi-fastapi-frontend/src/api/project/project.ts: POST /project/export/batch is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] POST /project/import ruoyi-fastapi-frontend/src/api/project/project.ts: POST /project/import is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] POST /project/import/batch ruoyi-fastapi-frontend/src/api/project/project.ts: POST /project/import/batch is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] POST /project/version/export ruoyi-fastapi-frontend/src/api/project/version.ts: POST /project/version/export is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] POST /system/dept ruoyi-fastapi-frontend/src/api/system/dept.ts: POST /system/dept is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] PUT /system/dept ruoyi-fastapi-frontend/src/api/system/dept.ts: PUT /system/dept is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] DELETE /system/menu/ ruoyi-fastapi-frontend/src/api/system/menu.ts: DELETE /system/menu/ is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] GET /system/role/authUser/allocatedList ruoyi-fastapi-frontend/src/api/system/role.ts: GET /system/role/authUser/allocatedList is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] PUT /system/role/authUser/cancel ruoyi-fastapi-frontend/src/api/system/role.ts: PUT /system/role/authUser/cancel is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] PUT /system/role/authUser/cancelAll ruoyi-fastapi-frontend/src/api/system/role.ts: PUT /system/role/authUser/cancelAll is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] PUT /system/role/authUser/selectAll ruoyi-fastapi-frontend/src/api/system/role.ts: PUT /system/role/authUser/selectAll is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] GET /system/role/authUser/unallocatedList ruoyi-fastapi-frontend/src/api/system/role.ts: GET /system/role/authUser/unallocatedList is referenced from a likely demo-offline wrapper but is not marked critical
+- [critical-audit-signal] PUT /system/role/dataScope ruoyi-fastapi-frontend/src/api/system/role.ts: PUT /system/role/dataScope is referenced from a likely demo-offline wrapper but is not marked critical

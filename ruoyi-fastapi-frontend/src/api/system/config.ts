@@ -1,8 +1,11 @@
+export type ConfigRecord = Omit<ConfigModel, 'configId'> & { configId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type { ConfigModel, ConfigPageQueryModel } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询参数列表
-export function listConfig(query?: Record<string, any>) {
-  return request({
+export function listConfig(query?: ConfigPageQueryModel) {
+  return request<HttpOffsetPage<ConfigRecord>>({
     url: '/system/config/list',
     method: 'get',
     params: query,
@@ -11,7 +14,7 @@ export function listConfig(query?: Record<string, any>) {
 
 // 查询参数详细
 export function getConfig(configId: number | string) {
-  return request({
+  return request<ConfigRecord>({
     url: '/system/config/' + configId,
     method: 'get',
   });
@@ -19,15 +22,15 @@ export function getConfig(configId: number | string) {
 
 // 根据参数键名查询参数值
 export function getConfigKey(configKey: string) {
-  return request({
+  return request<{ configKey: string; configValue: string }>({
     url: '/system/config/configKey/' + configKey,
     method: 'get',
   });
 }
 
 // 新增参数配置
-export function addConfig(data: Record<string, any>) {
-  return request({
+export function addConfig(data: ConfigModel) {
+  return request<ConfigRecord>({
     url: '/system/config',
     method: 'post',
     data: data,
@@ -36,8 +39,8 @@ export function addConfig(data: Record<string, any>) {
 }
 
 // 修改参数配置
-export function updateConfig(data: Record<string, any>) {
-  return request({
+export function updateConfig(data: ConfigModel) {
+  return request<ConfigRecord>({
     url: '/system/config',
     method: 'put',
     data: data,
@@ -47,7 +50,7 @@ export function updateConfig(data: Record<string, any>) {
 
 // 删除参数配置
 export function delConfig(configId: number | string) {
-  return request({
+  return request<null>({
     url: '/system/config/' + configId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.config.delete' },
@@ -56,7 +59,7 @@ export function delConfig(configId: number | string) {
 
 // 刷新参数缓存
 export function refreshCache() {
-  return request({
+  return request<{ status: 'refreshed' }>({
     url: '/system/config/refreshCache',
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.config.update' },

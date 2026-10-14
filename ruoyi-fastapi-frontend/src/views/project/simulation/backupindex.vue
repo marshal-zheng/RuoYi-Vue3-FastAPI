@@ -167,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 
@@ -231,41 +231,19 @@ const dndConfig = {
 };
 
 // 仿真控制
-const {
-  simulationState,
-  sessionId,
-  isRunning,
-  isPaused,
-  start,
-  pause,
-  resume,
-  stop,
-  step,
-  setSpeed,
-} = useSimulationControl(projectId, versionId);
+const { simulationState, sessionId, isRunning, start, pause, resume, stop, step, setSpeed } =
+  useSimulationControl(projectId, versionId);
 
 // 仿真数据
-const {
-  bandwidthData,
-  messageData,
-  alarmData,
-  filteredMessages,
-  messageFilter,
-  setMessageFilter,
-  clearData,
-} = useSimulationData(sessionId);
+const { bandwidthData, messageData, alarmData, filteredMessages, setMessageFilter } =
+  useSimulationData(sessionId);
 
 // 拓扑动画
-const {
-  startAnimation,
-  stopAnimation,
-  triggerTrafficAnimation,
-  triggerErrorAnimation,
-  setNodeActive,
-} = useTopologyAnimation(dagRef, () => simulationState.speed);
+const { startAnimation, stopAnimation, triggerTrafficAnimation, triggerErrorAnimation } =
+  useTopologyAnimation(dagRef, () => simulationState.speed);
 
 // 故障注入
-const { faults, injectFault, clearFault, clearAllFaults } = useFaultInjection(sessionId);
+const { injectFault, clearFault } = useFaultInjection(sessionId);
 
 // 事件触发
 const { eventList, createEvent, updateEvent, deleteEvent, triggerEvent } =
@@ -483,7 +461,7 @@ function handleAlarmClick(alarm) {
   }
 }
 
-function handleAlarmFilterChange(filter) {
+function handleAlarmFilterChange() {
   // 告警过滤逻辑
 }
 

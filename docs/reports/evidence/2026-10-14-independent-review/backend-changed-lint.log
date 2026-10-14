@@ -1,0 +1,13 @@
+RUF013 PEP 484 prohibits implicit `Optional`
+  --> tests/unit/controllers/test_simulation_controller.py:94:80
+   |
+93 |     class _FakeSimulationService:
+94 |         async def read_bandwidth_with_fallback(self, session_id: str, port_id: str = None, limit: int = 400):
+   |                                                                                ^^^
+95 |             calls["session_id"] = session_id
+96 |             calls["port_id"] = port_id
+   |
+help: Convert to `T | None`
+
+Found 5 errors (4 fixed, 1 remaining).
+No fixes available (1 hidden fix can be enabled with the `--unsafe-fixes` option).

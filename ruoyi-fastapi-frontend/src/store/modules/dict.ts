@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia';
+import type { DictItem } from '@/utils/dict';
 
 interface DictEntry {
   key: string;
-  value: any;
+  value: DictItem[];
 }
 
 interface DictState {
@@ -15,7 +16,7 @@ const useDictStore = defineStore('dict', {
   }),
   actions: {
     // 获取字典
-    getDict(_key: string | null): any {
+    getDict(_key: string | null): DictItem[] | null | undefined {
       if (_key == null || _key == '') {
         return null;
       }
@@ -25,12 +26,13 @@ const useDictStore = defineStore('dict', {
             return this.dict[i].value;
           }
         }
-      } catch (e) {
+      } catch {
         return null;
       }
+      return undefined;
     },
     // 设置字典
-    setDict(_key: string, value: any) {
+    setDict(_key: string, value: DictItem[]) {
       if (_key !== null && _key !== '') {
         this.dict.push({
           key: _key,
@@ -48,7 +50,7 @@ const useDictStore = defineStore('dict', {
             return true;
           }
         }
-      } catch (e) {
+      } catch {
         bln = false;
       }
       return bln;

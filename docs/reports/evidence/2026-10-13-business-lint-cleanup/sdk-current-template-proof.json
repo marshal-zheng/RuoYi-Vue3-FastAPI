@@ -1,0 +1,20 @@
+[
+  {
+    "file": "client/client.gen.ts",
+    "templateSha256": "d238daecd60e9894449acbc5f409b1ed9d1b47b6bd1a83611cb0d78f90002fac",
+    "sourceSha256": "d238daecd60e9894449acbc5f409b1ed9d1b47b6bd1a83611cb0d78f90002fac",
+    "equal": true
+  },
+  {
+    "file": "client/types.gen.ts",
+    "templateSha256": "17c9a1617cca798b45da13456b41852965f24ea54d62797940b5722aef56c335",
+    "sourceSha256": "17c9a1617cca798b45da13456b41852965f24ea54d62797940b5722aef56c335",
+    "equal": true
+  },
+  {
+    "file": "core/serverSentEvents.gen.ts",
+    "templateSha256": "bcfecf57493659cf2c483f6b01cfb3a8bb290aa5449581f1c435e0ed0d51e735",
+    "sourceSha256": "bcfecf57493659cf2c483f6b01cfb3a8bb290aa5449581f1c435e0ed0d51e735",
+    "equal": true
+  }
+]

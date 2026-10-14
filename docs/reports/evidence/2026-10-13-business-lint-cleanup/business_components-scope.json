@@ -1,0 +1,186 @@
+[
+  {
+    "file": "src/components/business/Dag/components/DagConnect.vue",
+    "warnings": 5
+  },
+  {
+    "file": "src/components/business/Dag/components/DagDnd.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/Dag/components/DagGraphHandler.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Dag/components/DagInitData.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Dag/components/DagMatrixDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Dag/components/DagMatrixView.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Dag/components/DagMatrixViewSimple.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Dag/components/DagSearchInput.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Dag/config/portConfig.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Dag/index.vue",
+    "warnings": 17
+  },
+  {
+    "file": "src/components/business/Dag/shapes/DagNode.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Dag/shapes/DevicePortNode.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/Dag/utils/graphConstraints.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Dag/utils/layout.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Device/CategoryFormDialog.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/Device/DeviceClazzDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Device/DeviceNameDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Device/ExportDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Device/PortConfigDrawer.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Device/ProtocolListDrawer.vue",
+    "warnings": 3
+  },
+  {
+    "file": "src/components/business/Device/selector/CategorySelector.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/DictAutocomplete/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/DictSelect/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/Protocol/selector/ProtocolTemplateSelector.vue",
+    "warnings": 11
+  },
+  {
+    "file": "src/components/business/Protocol/templates/CANProtocolTemplate.vue",
+    "warnings": 30
+  },
+  {
+    "file": "src/components/business/Protocol/templates/EthernetProtocolTemplate.vue",
+    "warnings": 31
+  },
+  {
+    "file": "src/components/business/Protocol/templates/Protocol1553BTemplate.vue",
+    "warnings": 24
+  },
+  {
+    "file": "src/components/business/Protocol/templates/RS422ProtocolTemplate.vue",
+    "warnings": 30
+  },
+  {
+    "file": "src/components/business/Protocol/templates/fieldUtils.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/Protocol/templates/vxeColumns.ts",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/VxeDictAutocomplete/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/ZxFlow/components/XFlowContextMenu.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/components/XFlowGraph.vue",
+    "warnings": 22
+  },
+  {
+    "file": "src/components/business/ZxFlow/components/XFlowState.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useClipboard.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useContextMenu.js",
+    "warnings": 14
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useDnd.js",
+    "warnings": 36
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useExport.js",
+    "warnings": 3
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useGraphInstance.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useHistory.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useKeyboard.js",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useLoaded.js",
+    "warnings": 3
+  },
+  {
+    "file": "src/components/business/ZxFlow/composables/useStandardInteractions.js",
+    "warnings": 3
+  },
+  {
+    "file": "src/components/business/ZxFlow/graph/keyboardManager.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/business/ZxFlow/shapes/index.js",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/business/ZxFlow/stores/graphStore.js",
+    "warnings": 4
+  }
+]

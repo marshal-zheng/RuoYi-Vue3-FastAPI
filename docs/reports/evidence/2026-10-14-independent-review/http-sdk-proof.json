@@ -1,0 +1,89 @@
+{
+  "filesCompared": [
+    "client.gen.ts",
+    "client/client.gen.ts",
+    "client/index.ts",
+    "client/types.gen.ts",
+    "client/utils.gen.ts",
+    "core/auth.gen.ts",
+    "core/bodySerializer.gen.ts",
+    "core/params.gen.ts",
+    "core/pathSerializer.gen.ts",
+    "core/queryKeySerializer.gen.ts",
+    "core/serverSentEvents.gen.ts",
+    "core/types.gen.ts",
+    "core/utils.gen.ts",
+    "index.ts",
+    "sdk.gen.ts",
+    "types.gen.ts"
+  ],
+  "allSourceGeneratedMatches": true,
+  "postprocessIdempotent": true,
+  "unreviewedInputRejected": true,
+  "noPartialWriteOnRejection": true,
+  "normalSourceWrites": 0,
+  "commands": [
+    {
+      "args": [
+        "./node_modules/.bin/openapi-ts",
+        "--input",
+        "../shared/openapi.json",
+        "--output",
+        "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f",
+        "--client",
+        "@hey-api/client-fetch"
+      ],
+      "exitCode": 0,
+      "stdout": "\u001b[90m@hey-api/openapi-ts v0.97.0\u001b[39m\n\n\u001b[90m[Job 1] \u001b[39m⏳ \u001b[36mGenerating from 1 input:\u001b[39m\n\u001b[90m[Job 1] \u001b[39m\u001b[36m  [1] \u001b[39m../shared/openapi.json\n\u001b[90m[Job 1] \u001b[39m\u001b[32m✅ Done!\u001b[39m Your output is in \u001b[96m/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f\u001b[39m \u001b[90m(4 files in 282ms)\u001b[39m\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node",
+        "scripts/postprocess-openapi.mjs",
+        "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f"
+      ],
+      "exitCode": 0,
+      "stdout": "Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "./node_modules/.bin/prettier",
+        "--write",
+        "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/**/*.ts",
+        "--single-quote",
+        "--trailing-comma",
+        "es5",
+        "--tab-width",
+        "2",
+        "--semi",
+        "--print-width",
+        "100"
+      ],
+      "exitCode": 0,
+      "stdout": "../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/client.gen.ts 22ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/client/client.gen.ts 27ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/client/index.ts 2ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/client/types.gen.ts 9ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/client/utils.gen.ts 23ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/auth.gen.ts 2ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/bodySerializer.gen.ts 4ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/params.gen.ts 5ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/pathSerializer.gen.ts 8ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/queryKeySerializer.gen.ts 4ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/serverSentEvents.gen.ts 8ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/types.gen.ts 3ms (unchanged)\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/core/utils.gen.ts 4ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/index.ts 9ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/sdk.gen.ts 77ms\n../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f/types.gen.ts 93ms\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node",
+        "scripts/postprocess-openapi.mjs",
+        "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f"
+      ],
+      "exitCode": 0,
+      "stdout": "Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "node",
+        "scripts/postprocess-openapi.mjs",
+        "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/independent-sdk-proof-6cp_i13f"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "file:///Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/postprocess-openapi.mjs:24\n      throw new Error(`Generated SDK structure changed: ${entry.path}; review its owner template`);\n            ^\n\nError: Generated SDK structure changed: core/serverSentEvents.gen.ts; review its owner template\n    at file:///Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/postprocess-openapi.mjs:24:13\n    at async Promise.all (index 2)\n    at async file:///Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/postprocess-openapi.mjs:17:20\n\nNode.js v22.22.1\n"
+    }
+  ]
+}

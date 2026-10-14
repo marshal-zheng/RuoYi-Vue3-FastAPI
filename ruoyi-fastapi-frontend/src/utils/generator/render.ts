@@ -1,19 +1,23 @@
-import { defineComponent, h, resolveComponent, VNode } from 'vue';
+import { isRecord } from '@/types/http-contract';
+import { defineComponent, h, resolveComponent } from 'vue';
 import { makeMap } from '@/utils/index';
 import { ZxInput } from '@zxio/zxui/input';
 import { generatorTags, resolveGeneratorTag } from './identity';
-import type { PropType } from 'vue';
+import type { PropType, CSSProperties, VNodeChild } from 'vue';
 
 // 选项接口
 interface Option {
   label: string;
-  value: any;
+  value: string | number | boolean;
   disabled?: boolean;
 }
 
 // 表单元素配置接口
 interface FormElementConfig {
   tag: string;
+  default?: string;
+  prepend?: string;
+  append?: string;
   options?: Option[];
   optionType?: string;
   border?: boolean;
@@ -23,26 +27,30 @@ interface FormElementConfig {
   sizeUnit?: string;
   accept?: string;
   buttonText?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // 数据对象接口
 interface DataObject {
-  attrs: Record<string, any>;
-  props: Record<string, any>;
-  on: Record<string, any>;
-  style: Record<string, any>;
+  attrs: Record<string, unknown>;
+  props: Record<string, unknown>;
+  on: Record<string, unknown>;
+  style: CSSProperties;
 }
 
 // 子组件渲染函数类型
-type ChildRenderFunction = (h: any, conf: FormElementConfig, key: string) => VNode | VNode[];
+type ChildRenderFunction = (
+  h: (typeof import('vue'))['h'],
+  conf: FormElementConfig,
+  key: string
+) => VNodeChild;
 
 // 插槽渲染函数类型
 type SlotRenderFunction = (
-  h: any,
+  h: (typeof import('vue'))['h'],
   conf: FormElementConfig,
   key: string
-) => (() => VNode) | undefined;
+) => (() => VNodeChild) | undefined;
 
 // 子组件配置接口
 interface ComponentChildConfig {
@@ -82,12 +90,12 @@ const isNotProps = makeMap(
 // 子组件配置
 const componentChild: ComponentChildConfig = {
   'el-button': {
-    default(h, conf, key) {
-      return conf[key];
+    default(...[, conf]) {
+      return conf.default;
     },
   },
   'el-select': {
-    options(h, conf, key) {
+    options(h, conf) {
       return conf.options!.map((item) =>
         h(resolveComponent('el-option'), {
           label: item.label,
@@ -97,7 +105,7 @@ const componentChild: ComponentChildConfig = {
     },
   },
   'el-radio-group': {
-    options(h, conf, key) {
+    options(h, conf) {
       return conf.optionType === 'button'
         ? conf.options!.map((item) =>
             h(
@@ -121,7 +129,7 @@ const componentChild: ComponentChildConfig = {
     },
   },
   'el-checkbox-group': {
-    options(h, conf, key) {
+    options(h, conf) {
       return conf.optionType === 'button'
         ? conf.options!.map((item) =>
             h(
@@ -145,8 +153,8 @@ const componentChild: ComponentChildConfig = {
     },
   },
   'el-upload': {
-    'list-type': (h, conf, key) => {
-      const option: Record<string, any> = {};
+    'list-type': (h, conf) => {
+      const option: Record<string, unknown> = {};
       // if (conf.showTip) {
       //   tip = h('div', {
       //     class: "el-upload__tip"
@@ -171,7 +179,7 @@ const componentSlot: ComponentSlotConfig = {
     append: (h, conf) => () => h('span', conf.append),
   },
   'el-upload': {
-    tip: (h, conf, key) => {
+    tip: (h, conf) => {
       if (conf.showTip) {
         return () =>
           h(
@@ -201,8 +209,8 @@ export default defineComponent({
     };
     const confClone: FormElementConfig = JSON.parse(JSON.stringify(this.conf));
     confClone.tag = resolveGeneratorTag(confClone.tag);
-    const children: VNode[] = [];
-    const slot: Record<string, () => VNode | VNode[]> = {};
+    const children: VNodeChild[] = [];
+    const slot: Record<string, () => VNodeChild> = {};
 
     const childObjs = componentChild[confClone.tag];
     if (childObjs) {
@@ -234,8 +242,17 @@ export default defineComponent({
 
     Object.keys(confClone).forEach((key) => {
       const val = confClone[key];
-      if (dataObject[key as keyof DataObject]) {
-        (dataObject[key as keyof DataObject] as any) = val;
+      if (key === 'attrs' || key === 'props' || key === 'on') {
+        if (isRecord(val)) dataObject[key] = val;
+      } else if (key === 'style') {
+        if (isRecord(val)) {
+          dataObject.style = Object.fromEntries(
+            Object.entries(val).filter(
+              (entry): entry is [string, string | number] =>
+                typeof entry[1] === 'string' || typeof entry[1] === 'number'
+            )
+          );
+        }
       } else if (isAttr(key)) {
         dataObject.attrs[key] = val;
       } else if (!isNotProps(key)) {

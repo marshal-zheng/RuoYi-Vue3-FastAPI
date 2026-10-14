@@ -238,7 +238,9 @@ function initBandwidthChart() {
         color: chartTheme.value.legend.inactiveColor,
         formatter: (value) => value.toFixed(2),
       },
-      splitLine: { lineStyle: { color: chartTheme.value.valueAxis.splitLine.lineStyle.color, type: 'dashed' } },
+      splitLine: {
+        lineStyle: { color: chartTheme.value.valueAxis.splitLine.lineStyle.color, type: 'dashed' },
+      },
     },
     series: [
       {
@@ -350,27 +352,31 @@ function initProtocolChart() {
 }
 
 // Update existing instances without resetting data or legend selection on theme changes.
-watch(chartTheme, (theme) => {
-  if (!theme) return;
-  if (simulationTab.value === 'charts' && (!bandwidthChart || !protocolChart)) {
-    nextTick(initCharts);
-    return;
-  }
-  bandwidthChart?.setOption({
-    backgroundColor: theme.backgroundColor,
-    textStyle: theme.textStyle,
-    tooltip: theme.tooltip,
-    xAxis: theme.categoryAxis,
-    yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
-  });
-  protocolChart?.setOption({
-    backgroundColor: theme.backgroundColor,
-    textStyle: theme.textStyle,
-    tooltip: theme.tooltip,
-    legend: theme.legend,
-    series: [{ itemStyle: { borderColor: theme.backgroundColor } }],
-  });
-}, { flush: 'post' });
+watch(
+  chartTheme,
+  (theme) => {
+    if (!theme) return;
+    if (simulationTab.value === 'charts' && (!bandwidthChart || !protocolChart)) {
+      nextTick(initCharts);
+      return;
+    }
+    bandwidthChart?.setOption({
+      backgroundColor: theme.backgroundColor,
+      textStyle: theme.textStyle,
+      tooltip: theme.tooltip,
+      xAxis: theme.categoryAxis,
+      yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
+    });
+    protocolChart?.setOption({
+      backgroundColor: theme.backgroundColor,
+      textStyle: theme.textStyle,
+      tooltip: theme.tooltip,
+      legend: theme.legend,
+      series: [{ itemStyle: { borderColor: theme.backgroundColor } }],
+    });
+  },
+  { flush: 'post' }
+);
 
 function open(payload) {
   simulationResult.value = payload || null;

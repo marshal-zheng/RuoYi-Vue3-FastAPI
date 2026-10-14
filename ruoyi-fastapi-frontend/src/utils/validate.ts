@@ -13,7 +13,7 @@ export function isPathMatch(pattern: string, path: string): boolean {
 /**
  * 判断value字符串是否为空
  */
-export function isEmpty(value: any): boolean {
+export function isEmpty(value: unknown): boolean {
   if (value == null || value == '' || value == undefined || value == 'undefined') {
     return true;
   }
@@ -80,21 +80,21 @@ export function validAlphabets(str: string): boolean {
  */
 export function validEmail(email: string): boolean {
   const reg =
-    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return reg.test(email);
 }
 
 /**
  * 判断是否为字符串
  */
-export function isString(str: any): str is string {
+export function isString(str: unknown): str is string {
   return typeof str === 'string' || str instanceof String;
 }
 
 /**
  * 判断是否为数组
  */
-export function isArray(arg: any): arg is any[] {
+export function isArray(arg: unknown): arg is unknown[] {
   if (typeof Array.isArray === 'undefined') {
     return Object.prototype.toString.call(arg) === '[object Array]';
   }

@@ -153,7 +153,7 @@ function handleBeforeUpload(file) {
 }
 
 // 上传成功处理
-function handleUploadSuccess(res, file) {
+function handleUploadSuccess(res) {
   // HTTP 2xx 已由拦截器判定，直接处理成功响应
   // 获取富文本实例
   let quill = toRaw(quillEditorRef.value).getQuill();
@@ -166,7 +166,7 @@ function handleUploadSuccess(res, file) {
 }
 
 // 上传失败处理
-function handleUploadError(error) {
+function handleUploadError() {
   // 错误已由拦截器统一处理
   ElMessage.error('图片插入失败');
 }

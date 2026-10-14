@@ -1,0 +1,220 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route 60ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route 29ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 82ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/role without pretending to save 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/menu without pretending to save 18ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/config without pretending to save 17ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/data without pretending to save 17ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/type without pretending to save 13ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/role/99 12ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/menu/99 10ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/99 14ms
+   → expected 204 to be 501 // Object.is equality
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project 55ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version 46ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/99 14ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/data/99 13ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancel 11ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancelAll?roleId=2&userIds=99 11ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/selectAll?roleId=2&userIds=99 12ms
+   → expected 204 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role 9ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/dataScope 9ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/changeStatus 10ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/menu 10ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/config 10ms
+   → expected 200 to be 501 // Object.is equality
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > persists project CRUD through the mock store 27ms
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete clone id alias and missing required names without writing a version 19ms
+   → expected 201 to be 422 // Object.is equality
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > clones to the requested version number and reads the persisted created resource 18ms
+   → expected { versionId: 2102, …(13) } to match object { Object (versionName, versionNumber, ...) }
+(11 matching properties omitted from actual)
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders 24ms
+   → expected { versionId: 2102, …(13) } to match object { versionName: '客户评审副本', …(2) }
+(11 matching properties omitted from actual)
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects edits and topology saves for locked or mismatched versions 35ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > reads and saves topology by project/version 25ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/data 11ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/type 12ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/refreshCache 12ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/refreshCache 12ms
+   → expected 200 to be 501 // Object.is equality
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 19ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 53ms
+ × src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 29ms
+   → expected undefined to deeply equal ArrayContaining{…}
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 16ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'bare array' responses without registering routes 11ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'legacy data wrapper' responses without registering routes 9ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 21 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections
+AssertionError: expected undefined to deeply equal ArrayContaining{…}
+
+- Expected: 
+ArrayContaining [
+  ObjectContaining {
+    "id": 100,
+    "label": "若依科技",
+  },
+]
+
++ Received: 
+undefined
+
+ ❯ src/api/menu-contract.test.ts:77:32
+     75| 
+     76|     const userDeptTree = await deptTreeSelect();
+     77|     expect(userDeptTree.items).toEqual(expect.arrayContaining([expect.…
+       |                                ^
+     78| 
+     79|     const menus = await listMenu();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/21]⎯
+
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/role/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/menu/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/data/99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancel
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancelAll?roleId=2&userIds=99
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/selectAll?roleId=2&userIds=99
+AssertionError: expected 204 to be 501 // Object.is equality
+
+- Expected
++ Received
+
+- 501
++ 204
+
+ ❯ src/mocks/handlers/auth-system.test.ts:147:29
+    145|       body: method === 'PUT' ? JSON.stringify({ roleId: 2, userId: 99 …
+    146|     });
+    147|     expect(response.status).toBe(501);
+       |                             ^
+    148|     expect(response.headers.get('content-type')).toContain('applicatio…
+    149|     await expect(response.json()).resolves.toMatchObject({ status: 501…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/21]⎯
+
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/dataScope
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/changeStatus
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/menu
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/config
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/data
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/type
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/refreshCache
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/refreshCache
+AssertionError: expected 200 to be 501 // Object.is equality
+
+- Expected
++ Received
+
+- 501
++ 200
+
+ ❯ src/mocks/handlers/auth-system.test.ts:147:29
+    145|       body: method === 'PUT' ? JSON.stringify({ roleId: 2, userId: 99 …
+    146|     });
+    147|     expect(response.status).toBe(501);
+       |                             ^
+    148|     expect(response.headers.get('content-type')).toContain('applicatio…
+    149|     await expect(response.json()).resolves.toMatchObject({ status: 501…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/21]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete clone id alias and missing required names without writing a version
+AssertionError: expected 201 to be 422 // Object.is equality
+
+- Expected
++ Received
+
+- 422
++ 201
+
+ ❯ src/mocks/handlers/project.test.ts:125:31
+    123|     ]) {
+    124|       const response = await fetch('/api/project/version/clone', { met…
+    125|       expect(response.status).toBe(422);
+       |                               ^
+    126|       expect(response.headers.get('location')).toBeNull();
+    127|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/21]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > clones to the requested version number and reads the persisted created resource
+AssertionError: expected { versionId: 2102, …(13) } to match object { Object (versionName, versionNumber, ...) }
+(11 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "isLocked": "0",
+    "versionName": "number contract",
+-   "versionNumber": "8.3.1",
++   "versionNumber": "V2102",
+  }
+
+ ❯ src/mocks/handlers/project.test.ts:139:18
+    137|     expect(response.status).toBe(201);
+    138|     const body = await response.json();
+    139|     expect(body).toMatchObject({ versionName: 'number contract', versi…
+       |                  ^
+    140|     const location = response.headers.get('location');
+    141|     if (!location) throw new Error('A successful clone must return its…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/21]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders
+AssertionError: expected { versionId: 2102, …(13) } to match object { versionName: '客户评审副本', …(2) }
+(11 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "isLocked": "1",
+    "versionName": "客户评审副本",
+-   "versionNumber": "7.2.0",
++   "versionNumber": "V2102",
+  }
+
+ ❯ src/mocks/handlers/project.test.ts:163:20
+    161|     }).then((response) => response.json());
+    162| 
+    163|     expect(locked).toMatchObject({
+       |                    ^
+    164|       versionName: '客户评审副本',
+    165|       versionNumber: '7.2.0',
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/21]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  21 failed | 18 passed (39)
+   Start at  02:29:36
+   Duration  2.03s (transform 1.05s, setup 823ms, collect 1.36s, tests 834ms, environment 544ms, prepare 86ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

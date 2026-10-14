@@ -7,6 +7,8 @@
  * - 节点呼吸灯效果
  */
 import { ref, onUnmounted, type Ref } from 'vue';
+import type { Graph } from '@antv/x6';
+import type { SimulationNodeData } from './topology-types';
 
 /**
  * 协议类型到颜色的映射
@@ -79,12 +81,7 @@ export function validateProtocolColors(protocolTypes: string[]): boolean {
 /**
  * DAG 图实例接口（简化版）
  */
-export interface DagGraph {
-  getCellById: (id: string) => any;
-  getEdges?: () => any[];
-  getNodes?: () => any[];
-  findViewByCell: (cell: any) => any;
-}
+export type DagGraph = Pick<Graph, 'getCellById' | 'getEdges' | 'getNodes' | 'findViewByCell'>;
 
 /**
  * DAG 组件引用接口
@@ -228,7 +225,7 @@ export function useTopologyAnimation(
       if (nodeView && nodeView.container) {
         nodeView.container.classList.remove('node-breathing', 'node-error');
         // 重置 SVG 元素样式
-        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path');
+        const svgEl = nodeView.container.querySelector<SVGElement>('rect, circle, ellipse, path');
         if (svgEl) {
           svgEl.style.stroke = '';
           svgEl.style.strokeWidth = '';
@@ -272,7 +269,7 @@ export function useTopologyAnimation(
     const edgeView = graph.findViewByCell(edge);
     if (edgeView) {
       const pathEl = edgeView.findOne('path');
-      if (pathEl) {
+      if (pathEl instanceof SVGElement) {
         pathEl.classList.add('edge-traffic-animation');
         pathEl.style.setProperty('--traffic-color', color);
       }
@@ -400,7 +397,7 @@ export function useTopologyAnimation(
       if (hasError) {
         nodeView.container.classList.add('node-error');
         // 同时给 SVG 元素添加红色边框效果
-        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path');
+        const svgEl = nodeView.container.querySelector<SVGElement>('rect, circle, ellipse, path');
         if (svgEl) {
           svgEl.style.stroke = '#ef4444';
           svgEl.style.strokeWidth = '3px';
@@ -408,7 +405,7 @@ export function useTopologyAnimation(
         }
       } else {
         nodeView.container.classList.remove('node-error');
-        const svgEl = nodeView.container.querySelector('rect, circle, ellipse, path');
+        const svgEl = nodeView.container.querySelector<SVGElement>('rect, circle, ellipse, path');
         if (svgEl) {
           svgEl.style.stroke = '';
           svgEl.style.strokeWidth = '';
@@ -423,10 +420,11 @@ export function useTopologyAnimation(
 
     if (hasError) {
       // 保存原始样式
-      const originalStyles: Record<string, any> = {};
+      const originalStyles: NonNullable<SimulationNodeData['_originalStyles']> = {};
+      const currentAttrs = node.getAttrs();
       shapeAttrs.forEach((shape) => {
-        const stroke = node.attr(`${shape}/stroke`);
-        const strokeWidth = node.attr(`${shape}/strokeWidth`);
+        const stroke = currentAttrs[shape]?.stroke;
+        const strokeWidth = currentAttrs[shape]?.strokeWidth;
         if (stroke !== undefined) {
           originalStyles[shape] = { stroke, strokeWidth };
         }
@@ -440,7 +438,7 @@ export function useTopologyAnimation(
       });
     } else {
       // 恢复原始样式
-      const data = node.getData() || {};
+      const data = node.getData<SimulationNodeData>() || {};
       const originalStyles = data._originalStyles || {};
 
       shapeAttrs.forEach((shape) => {

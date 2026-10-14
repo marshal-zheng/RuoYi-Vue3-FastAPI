@@ -1,0 +1,12 @@
+{
+  "url": "http://127.0.0.1/api/getRouters",
+  "status": 200,
+  "rawIsArray": false,
+  "rootKeys": [
+    "items"
+  ],
+  "rawArrayLength": null,
+  "itemsIsArray": true,
+  "itemsLength": 4,
+  "businessWrites": []
+}

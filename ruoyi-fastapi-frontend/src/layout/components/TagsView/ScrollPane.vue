@@ -24,9 +24,6 @@
 import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue';
 import useTagsViewStore from '@/store/modules/tagsView';
 
-const tagAndTagSpacing = ref(4);
-const { proxy } = getCurrentInstance();
-
 const scrollContainer = ref(null);
 const scrollWrapper = ref(null);
 const tagsContent = ref(null);
@@ -149,9 +146,6 @@ function moveToTarget(currentTag) {
     // 查找当前标签的DOM元素
     const currentTagDom = content.querySelector(`[data-path="${currentTag.path}"]`);
     if (!currentTagDom) return;
-
-    const tagRect = currentTagDom.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
 
     // 计算标签相对于容器的位置
     const tagLeft = currentTagDom.offsetLeft;

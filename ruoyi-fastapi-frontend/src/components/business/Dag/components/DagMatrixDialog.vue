@@ -50,7 +50,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { ElMessage } from 'element-plus';
-import { Close, FullScreen, Minus, Download } from '@element-plus/icons-vue';
+import { FullScreen, Minus, Download } from '@element-plus/icons-vue';
 import { useDialog } from '@zxio/zxui';
 import DagMatrixView from './DagMatrixView.vue';
 

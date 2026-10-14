@@ -1,3 +1,4 @@
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
@@ -17,7 +18,7 @@ async def test_add_device_category_does_not_call_db_commit():
         (),
         {
             'find_by_name': AsyncMock(return_value=None),
-            'add': AsyncMock(return_value=object()),
+            'add': AsyncMock(return_value=SimpleNamespace(device_category_id=9)),
         },
     )()
     fake_device_repo = type('FakeDeviceRepo', (), {'count_by_category_ids': AsyncMock(return_value=0)})()
@@ -31,6 +32,7 @@ async def test_add_device_category_does_not_call_db_commit():
     result = await service.add_device_category_services(payload, 'tester')
 
     assert result.is_success is True
+    assert result.result == {'deviceCategoryId': 9}
     fake_repo.add.assert_awaited_once()
     query_db.commit.assert_not_awaited()
 

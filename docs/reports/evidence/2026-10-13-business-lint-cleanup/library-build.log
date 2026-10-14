@@ -1,0 +1,238 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ build /Users/hqz/Downloads/element-plus
+> pnpm gen:version && pnpm run -C internal/build start
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ gen:version /Users/hqz/Downloads/element-plus
+> tsx scripts/gen-version.ts
+
+ℹ Version: 3.0.0-next.0
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/build@1.0.0 start /Users/hqz/Downloads/element-plus/internal/build
+> cross-env VITE_CJS_IGNORE_WARNING=true NODE_OPTIONS="--require esbuild-register" gulp -f gulpfile.ts
+
+[22:42:21] Using gulpfile ~/Downloads/element-plus/internal/build/gulpfile.ts
+[22:42:21] Starting 'default'...
+[22:42:21] Starting 'clean'...
+ℹ run: pnpm run clean:dist
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ clean:dist /Users/hqz/Downloads/element-plus
+> rimraf dist
+
+[22:42:21] Finished 'clean' after 414 ms
+[22:42:21] Starting 'createOutput'...
+[22:42:21] Finished 'createOutput' after 502 μs
+[22:42:21] Starting 'syncVersion'...
+ℹ Version: 3.0.0-next.0
+[22:42:21] Finished 'syncVersion' after 1.27 ms
+[22:42:21] Starting 'shellTask:buildModules'...
+[22:42:21] Starting 'shellTask:buildFullBundle'...
+[22:42:21] Starting 'shellTask:generateTypesDefinitions'...
+[22:42:21] Starting 'shellTask:buildHelper'...
+ℹ run: pnpm run start buildModules
+ℹ run: pnpm run start buildFullBundle
+ℹ run: pnpm run start generateTypesDefinitions
+ℹ run: pnpm run start buildHelper
+[22:42:21] Starting 'buildThemeChalk'...
+ℹ run: pnpm run -C packages/theme-chalk build
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/build@1.0.0 start /Users/hqz/Downloads/element-plus/internal/build
+> cross-env VITE_CJS_IGNORE_WARNING=true NODE_OPTIONS="--require esbuild-register" gulp -f gulpfile.ts "buildFullBundle"
+
+
+> @zxio/build@1.0.0 start /Users/hqz/Downloads/element-plus/internal/build
+> cross-env VITE_CJS_IGNORE_WARNING=true NODE_OPTIONS="--require esbuild-register" gulp -f gulpfile.ts "generateTypesDefinitions"
+
+
+> @zxio/build@1.0.0 start /Users/hqz/Downloads/element-plus/internal/build
+> cross-env VITE_CJS_IGNORE_WARNING=true NODE_OPTIONS="--require esbuild-register" gulp -f gulpfile.ts "buildHelper"
+
+
+> @zxio/theme-chalk@1.0.0 build /Users/hqz/Downloads/element-plus/packages/theme-chalk
+> node --import tsx scripts/build.ts
+
+
+> @zxio/build@1.0.0 start /Users/hqz/Downloads/element-plus/internal/build
+> cross-env VITE_CJS_IGNORE_WARNING=true NODE_OPTIONS="--require esbuild-register" gulp -f gulpfile.ts "buildModules"
+
+Theme structural style build passed.
+[22:42:22] Finished 'buildThemeChalk' after 454 ms
+[22:42:22] Starting 'copyFullStyle'...
+[22:42:22] Finished 'copyFullStyle' after 16 ms
+[22:42:22] Using gulpfile ~/Downloads/element-plus/internal/build/gulpfile.ts
+[22:42:22] Starting 'buildHelper'...
+[22:42:22] Using gulpfile ~/Downloads/element-plus/internal/build/gulpfile.ts
+[22:42:22] Starting 'buildFullBundle'...
+[22:42:22] Using gulpfile ~/Downloads/element-plus/internal/build/gulpfile.ts
+[22:42:22] Starting 'generateTypesDefinitions'...
+[22:42:22] Starting 'buildFullMinified'...
+[22:42:22] Using gulpfile ~/Downloads/element-plus/internal/build/gulpfile.ts
+[22:42:22] Starting 'buildModules'...
+[22:42:22] Starting 'buildModulesComponents'...
+ℹ run: npx vue-tsc -p tsconfig.zxui-build.json --declaration --emitDeclarationOnly --declarationDir dist/types
+[22:42:22] Finished 'buildHelper' after 18 ms
+[plugin replace] @rollup/plugin-replace: 'preventAssignment' currently defaults to false. It is recommended to set this option to `true`, as the next major version will default this option to `true`.
+[22:42:22] Finished 'shellTask:buildHelper' after 1.15 s
+npm warn Unknown env config "dir". This will stop working in the next major version of npm.
+npm warn Unknown env config "_zxio-registry". This will stop working in the next major version of npm.
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm.
+npm warn Unknown project config "always-auth". This will stop working in the next major version of npm.
+npm warn Unknown project config "always-auth" (//47.121.183.12:4873/:always-auth). This will stop working in the next major version of npm.
+No name was provided for external module "element-plus" in "output.globals" – guessing "elementPlus".
+[22:42:25] Finished 'buildFullMinified' after 2.92 s
+[22:42:25] Starting 'buildFull'...
+[plugin replace] @rollup/plugin-replace: 'preventAssignment' currently defaults to false. It is recommended to set this option to `true`, as the next major version will default this option to `true`.
+No name was provided for external module "element-plus" in "output.globals" – guessing "elementPlus".
+[22:42:27] Finished 'buildFull' after 1.96 s
+[22:42:27] Finished 'buildFullBundle' after 4.88 s
+[22:42:27] Finished 'shellTask:buildFullBundle' after 6.09 s
+Generated an empty chunk: "api-extractor/index.d".
+Generated an empty chunk: "style".
+Generated an empty chunk: "components/_shared/component-slots".
+Generated an empty chunk: "button/style".
+Generated an empty chunk: "button/style-css".
+Generated an empty chunk: "date-picker/style-css".
+Generated an empty chunk: "date-picker/style".
+Generated an empty chunk: "dialog/style".
+Generated an empty chunk: "dialog/style-css".
+Generated an empty chunk: "icon/style".
+Generated an empty chunk: "icon/style-css".
+Generated an empty chunk: "input-number/style".
+Generated an empty chunk: "input-number/style-css".
+Generated an empty chunk: "input/style".
+Generated an empty chunk: "input/style-css".
+Generated an empty chunk: "list-toolbar/style-css".
+Generated an empty chunk: "list-toolbar/style".
+Generated an empty chunk: "select/style-css".
+Generated an empty chunk: "select/style".
+Generated an empty chunk: "tag/style-css".
+Generated an empty chunk: "tag/style".
+Generated an empty chunk: "theme-runtime/layout-contract".
+Generated an empty chunk: "tooltip-or-popover/style".
+Generated an empty chunk: "tooltip-or-popover/style-css".
+Generated an empty chunk: "components/button-group/src/instance".
+Generated an empty chunk: "components/button/src/instance".
+Generated an empty chunk: "components/content-wrap/src/instance".
+Generated an empty chunk: "components/dialog/src/instance".
+Generated an empty chunk: "components/dialog/src/slots".
+Generated an empty chunk: "components/drawer/src/instance".
+Generated an empty chunk: "components/drawer/src/slots".
+Generated an empty chunk: "components/empty/src/instance".
+Generated an empty chunk: "components/flex-view/src/instance".
+Generated an empty chunk: "components/floating-panel/src/instance".
+Generated an empty chunk: "components/grid-list/src/instance".
+Generated an empty chunk: "components/grid-list/src/slots".
+Generated an empty chunk: "components/icon-select/src/instance".
+Generated an empty chunk: "components/icon/src/instance".
+Generated an empty chunk: "components/input-number/src/instance".
+Generated an empty chunk: "components/input/src/instance".
+Generated an empty chunk: "components/list-view/src/instance".
+Generated an empty chunk: "components/list/src/instance".
+Generated an empty chunk: "components/message/src/types".
+Generated an empty chunk: "components/more-action/src/instance".
+Generated an empty chunk: "components/more-action/src/toolbar-actions".
+Generated an empty chunk: "components/notification/src/types".
+Generated an empty chunk: "components/progress-linear/src/instance".
+Generated an empty chunk: "components/search/src/instance".
+Generated an empty chunk: "components/select/src/instance".
+Generated an empty chunk: "components/sparkline/src/instance".
+Generated an empty chunk: "components/split-box/src/instance".
+Generated an empty chunk: "components/tabs/src/instance".
+Generated an empty chunk: "components/tag/src/instance".
+Generated an empty chunk: "components/tags-input/src/instance".
+Generated an empty chunk: "components/theme-provider/src/types".
+Generated an empty chunk: "components/timeline/src/instance".
+Generated an empty chunk: "components/tooltip-or-popover/src/instance".
+Generated an empty chunk: "components/upload/src/instance".
+Generated an empty chunk: "api-extractor/index.d".
+Generated an empty chunk: "style".
+Generated an empty chunk: "components/_shared/component-slots".
+Generated an empty chunk: "button/style".
+Generated an empty chunk: "button/style-css".
+Generated an empty chunk: "date-picker/style-css".
+Generated an empty chunk: "date-picker/style".
+Generated an empty chunk: "dialog/style".
+Generated an empty chunk: "dialog/style-css".
+Generated an empty chunk: "icon/style".
+Generated an empty chunk: "icon/style-css".
+Generated an empty chunk: "input-number/style".
+Generated an empty chunk: "input-number/style-css".
+Generated an empty chunk: "input/style".
+Generated an empty chunk: "input/style-css".
+Generated an empty chunk: "list-toolbar/style-css".
+Generated an empty chunk: "list-toolbar/style".
+Generated an empty chunk: "select/style-css".
+Generated an empty chunk: "select/style".
+Generated an empty chunk: "tag/style-css".
+Generated an empty chunk: "tag/style".
+Generated an empty chunk: "theme-runtime/layout-contract".
+Generated an empty chunk: "tooltip-or-popover/style".
+Generated an empty chunk: "tooltip-or-popover/style-css".
+Generated an empty chunk: "components/button-group/src/instance".
+Generated an empty chunk: "components/button/src/instance".
+Generated an empty chunk: "components/content-wrap/src/instance".
+Generated an empty chunk: "components/dialog/src/instance".
+Generated an empty chunk: "components/dialog/src/slots".
+Generated an empty chunk: "components/drawer/src/instance".
+Generated an empty chunk: "components/drawer/src/slots".
+Generated an empty chunk: "components/empty/src/instance".
+Generated an empty chunk: "components/flex-view/src/instance".
+Generated an empty chunk: "components/floating-panel/src/instance".
+Generated an empty chunk: "components/grid-list/src/instance".
+Generated an empty chunk: "components/grid-list/src/slots".
+Generated an empty chunk: "components/icon-select/src/instance".
+Generated an empty chunk: "components/icon/src/instance".
+Generated an empty chunk: "components/input-number/src/instance".
+Generated an empty chunk: "components/input/src/instance".
+Generated an empty chunk: "components/list-view/src/instance".
+Generated an empty chunk: "components/list/src/instance".
+Generated an empty chunk: "components/message/src/types".
+Generated an empty chunk: "components/more-action/src/instance".
+Generated an empty chunk: "components/more-action/src/toolbar-actions".
+Generated an empty chunk: "components/notification/src/types".
+Generated an empty chunk: "components/progress-linear/src/instance".
+Generated an empty chunk: "components/search/src/instance".
+Generated an empty chunk: "components/select/src/instance".
+Generated an empty chunk: "components/sparkline/src/instance".
+Generated an empty chunk: "components/split-box/src/instance".
+Generated an empty chunk: "components/tabs/src/instance".
+Generated an empty chunk: "components/tag/src/instance".
+Generated an empty chunk: "components/tags-input/src/instance".
+Generated an empty chunk: "components/theme-provider/src/types".
+Generated an empty chunk: "components/timeline/src/instance".
+Generated an empty chunk: "components/tooltip-or-popover/src/instance".
+Generated an empty chunk: "components/upload/src/instance".
+[22:42:30] Finished 'buildModulesComponents' after 7.53 s
+[22:42:30] Starting 'buildModulesStyles'...
+[22:42:32] Finished 'generateTypesDefinitions' after 9.51 s
+[22:42:32] Finished 'shellTask:generateTypesDefinitions' after 11 s
+[22:42:33] Finished 'buildModulesStyles' after 3.66 s
+[22:42:33] Finished 'buildModules' after 11 s
+[22:42:33] Finished 'shellTask:buildModules' after 12 s
+[22:42:33] Starting 'copyTypesDefinitions'...
+[22:42:33] Starting 'copyFiles'...
+[22:42:33] Starting 'copyTypes:esm'...
+[22:42:33] Starting 'copyTypes:cjs'...
+[22:42:33] Finished 'copyFiles' after 14 ms
+[22:42:34] Finished 'copyTypes:cjs' after 275 ms
+[22:42:34] Finished 'copyTypes:esm' after 277 ms
+[22:42:34] Finished 'copyTypesDefinitions' after 277 ms
+[22:42:34] Starting 'normalizeDistDeclarations'...
+ℹ run: node scripts/release/normalize-dist-declarations.mjs dist/@zxio/zxui
+normalized 2 declaration file(s) under dist/@zxio/zxui
+[22:42:34] Finished 'normalizeDistDeclarations' after 574 ms
+[22:42:34] Finished 'default' after 14 s

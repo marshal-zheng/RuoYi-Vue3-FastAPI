@@ -1,0 +1,27 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+stderr | src/views/project/composables/topoExportUtils.test.ts > topology export consumes the real resource boundary > keeps a legitimate empty resource as an optional missing image
+拓扑数据为空，跳过图片生成
+
+·x·
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/views/project/composables/topoExportUtils.test.ts > topology export consumes the real resource boundary > does not create a renderer for malformed cells from dynamic topology data
+AssertionError: expected 'aW1hZ2U=' to be null
+
+- Expected: 
+null
+
++ Received: 
+"aW1hZ2U="
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  02:19:12
+   Duration  592ms (transform 123ms, setup 227ms, collect 11ms, tests 20ms, environment 159ms, prepare 26ms)
+

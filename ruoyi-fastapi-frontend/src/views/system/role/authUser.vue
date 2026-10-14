@@ -132,12 +132,6 @@ async function loadAuthUserData(params) {
   return response;
 }
 
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
 function onSearch({ handleRefresh, updateState }) {
   updateState('pager.page', 1);
   handleRefresh();

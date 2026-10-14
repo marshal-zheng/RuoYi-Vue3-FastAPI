@@ -1,0 +1,1025 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return true for undefined 1ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return true for null 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return true for empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return false for zero 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return false for false 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return false for non-empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return false for empty array 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isEmpty > should return false for empty object 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return false for undefined 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return false for null 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return false for empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return true for zero 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return true for false 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > isNotEmpty > should return true for non-empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > deepClone > should clone simple object 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > deepClone > should clone nested object 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > deepClone > should clone array 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > deepClone > should clone array of objects 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format 0 bytes 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format bytes 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format kilobytes 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format megabytes 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format gigabytes 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format with custom decimals 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > formatBytes > should format with default decimals 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > generateUUID > should generate UUID with correct format 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > generateUUID > should generate unique UUIDs 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > generateUUID > should generate UUID with correct length 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > capitalize > should capitalize first letter 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > capitalize > should not change already capitalized string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > capitalize > should handle single character 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > capitalize > should handle empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > capitalize > should only capitalize first letter 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > camelCase > should convert kebab-case to camelCase 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > camelCase > should convert snake_case to camelCase 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > camelCase > should handle multiple separators 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > camelCase > should not change already camelCase string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > camelCase > should handle empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > kebabCase > should convert camelCase to kebab-case 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > kebabCase > should convert PascalCase to kebab-case 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > kebabCase > should handle multiple capital letters 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > kebabCase > should not change already kebab-case string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > kebabCase > should handle empty string 0ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > debounce > should debounce function calls 151ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > debounce > should pass arguments to debounced function 151ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > throttle > should throttle function calls 151ms
+ ✓ tests/unit/utils/helpers.test.ts > Helpers Utils > throttle > should pass arguments to throttled function 0ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route 51ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route 24ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project 47ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version 40ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > persists project CRUD through the mock store 22ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete clone id alias and missing required names without writing a version 20ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > clones to the requested version number and reads the persisted created resource 23ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects a duplicate requested clone version number without adding a second copy 22ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders 39ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns schema-compatible empty page projections with overlay headers 39ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns problem responses without writing through the data source 22ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > supports 403, 429, timeout, latency, and explicit unsupported responses 1097ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > exposes only read methods through the read-only projection wrapper 7ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects edits and topology saves for locked or mismatched versions 31ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > reads and saves topology by project/version 25ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > fetches csrf token through MSW after login when the login response has no csrf token 1293ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > restores session silently via refresh endpoint 24ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > clears local session when refresh endpoint rejects the session 9ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > passes silent options when logging out 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 75ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/role without pretending to save 13ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/menu without pretending to save 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/config without pretending to save 14ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/data without pretending to save 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/type without pretending to save 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/role/99 9ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/menu/99 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/99 13ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/data/99 12ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancel 9ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancelAll?roleId=2&userIds=99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/selectAll?roleId=2&userIds=99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/dataScope 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/changeStatus 9ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/menu 11ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/config 11ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/data 11ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/type 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/refreshCache 13ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/refreshCache 20ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 20ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema metadata > requires every openapi-validated registry entry to have a runtime schema case 1ms
+stderr | tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values
+async-validator: [ 'name is required' ]
+
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > validates core openapi-validated JSON responses through MSW 211ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > keeps schema-unavailable critical responses explicit and tagged 99ms
+ ✓ tests/theme-css-entry.test.ts > emits layout defaults with resets below utilities in the application CSS pipeline 341ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > validates unsupported-501 and binary response classifications 31ms
+ ✓ tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values 459ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > runs control calls through the real HTTP request path 130ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > loads read models and export payloads through MSW 85ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > handles event trigger and WebSocket URL construction 23ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > maps 503, 429, and network failures from MSW 46ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API overlay contract > enters readonly and unsupported simulation states through API wrappers 34ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers auth and system handlers via the real request path 89ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads paged dict data and typed dict options through MSW 54ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads and mutates dict data through the real request path 41ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > surfaces dict data failures from the request error mapping 47ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads paged dict types and option select data through MSW 38ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers project, version, and topology handlers via frontend API functions 95ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads and mutates dict types through the real request path 38ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > surfaces dict type failures from the request error mapping 42ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > fetches paged projects through the HTTP contract 53ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers simulation read models and unsupported writes via frontend API functions 90ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > returns deterministic 501 for demo-offline API gaps 37ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > handles project CRUD payloads through MSW handlers 60ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > supports topology and export endpoints without mocking request internals 43ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > maps 503, 429, and network failures from the real request path 49ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project and version empty states through API wrappers 28ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project write, rate-limit, forbidden, timeout, and topology errors through API wrappers 35ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 114ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 39ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 39ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 30ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > enumerates OpenAPI operations and schema availability from fixtures 1ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > matches OpenAPI and MSW path params by position instead of param names 0ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > keeps the committed registry aligned with shared/openapi.json 97ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > keeps real-only, missing, unsupported, and binary classifications explicit 50ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > rejects registry properties that are not allowed by registry.schema.json 12ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > fails when registry handler tags do not match the runtime handler for the endpoint 10ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Initial State > should initialize with empty defaults 20ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Initial State > should initialize token from auth storage 13ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Login > should login successfully and use csrf token from login response 10ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Login > should request csrf token when login response does not include one 42ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Login > should handle login failure 9ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Session Restore > should restore session when refresh returns token 21ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Session Restore > should clear local security state when refresh fails 8ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Get Info > should fetch user info successfully 10ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Get Info > should fall back to default role when roles are empty 9ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Get Info > should handle getInfo failure 8ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Logout > should logout successfully 9ms
+ ✓ tests/unit/stores/user.test.ts > User Store > Logout > should clear state even if logout API fails 9ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads paged configs with query params through the HTTP contract 47ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads config detail and key-value lookups via MSW 36ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > handles config mutations through real request serialization 32ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > surfaces config API failures from the request error mapping 45ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > loads role list and detail through the HTTP contract 48ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > handles role mutations through real request serialization 31ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > covers role authorization and dept tree endpoints via MSW 29ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > surfaces role API failures from the request error mapping 46ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > passes through successful upstream responses 53ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > falls back to mock data when upstream returns 404 33ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > falls back to mock data when upstream is unreachable 20ms
+ ✓ src/api/login.test.ts > login API contract > serializes login payload as x-www-form-urlencoded data through MSW 30ms
+ ✓ src/api/login.test.ts > login API contract > clamps long login and register passwords before sending the request 18ms
+ ✓ src/api/login.test.ts > login API contract > covers auth metadata endpoints through the real request path 47ms
+ ✓ src/api/login.test.ts > login API contract > surfaces login API failures from the request error mapping 48ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > loads menu list, details, and role tree through MSW 63ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > handles menu mutations via HTTP contract responses 23ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > surfaces server-side menu failures through the request error mapping 47ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > seeds the independent mock dataset store with metadata 17ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > keeps persisted edits until an explicit reset restores the typed dataset 12ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > resets incompatible schema metadata to the current typed dataset 8ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > records compatible dataset upgrades without overwriting local demo edits 6ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 63ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 40ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 18ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'bare array' responses without registering routes 20ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'legacy data wrapper' responses without registering routes 15ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps accepted commands distinct from polled session status and preserves the Location header 31ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > publishes one typed items contract for every outer collection 17ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > sends the port_id filter accepted by the actual bandwidth controller 4ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > projects message, bandwidth and alarm items for reactive data consumers 5ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > loads pending events from the actual collection into event state 52ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps active faults instead of silently discarding a collection resource 3ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > preserves arrays embedded inside ordinary object resources 0ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > starts fallback runtime with fallback strategy handlers 13ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > starts demo-offline runtime with debug devtools 4ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > applies and clears Playwright bootstrap overlays before first page requests 8ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > activates and resets overlays through the runtime debug API 17ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > does not expose overlay APIs for fallback mode even when bootstrap exists 3ms
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should initialize with empty data
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should have all required methods
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should add message
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should limit message history size
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by protocol
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by time range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should get latest messages
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should add alarm
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by level
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by type
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should count alarms by level
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should clear acknowledged alarms
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should update statistics
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should calculate message rate
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should get protocol distribution
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should calculate message latency
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should detect message patterns
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should identify communication pairs
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export messages as CSV
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export alarms as JSON
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export statistics summary
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear all data
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only messages
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only alarms
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should handle rapid message additions
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should maintain chronological order
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle empty message list
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid protocol filter
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid time range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle duplicate message IDs
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should handle large message volumes efficiently
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should filter large datasets efficiently
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should initialize with empty data 2ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should have all required methods 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should add message 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should limit message history size 8ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by protocol 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by time range 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should get latest messages 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should add alarm 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by level 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by type 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should count alarms by level 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should clear acknowledged alarms 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should update statistics 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should calculate message rate 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should get protocol distribution 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should calculate message latency 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should detect message patterns 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should identify communication pairs 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export messages as CSV 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export alarms as JSON 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export statistics summary 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear all data 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only messages 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only alarms 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should handle rapid message additions 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should maintain chronological order 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle empty message list 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid protocol filter 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid time range 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle duplicate message IDs 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should handle large message volumes efficiently 36ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should filter large datasets efficiently 3ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > uses collection items as the menu tree when adding a role 33ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows loading only while the menu request is pending 11ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows an empty state after loading an empty menu collection 9ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows a failure state and allows reopening to retry 9ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > preserves the role-specific menu response when editing a role 7ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > supports auth sessions and system read repositories 18ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > persists project, version, and topology changes across data source instances 12ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > exposes simulation data as read-only repository queries 6ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > reads legacy identities without mutating saved fields or numeric semantics 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > generates a complete SFC accepted by the same source gate 31ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > keeps page generation supported and escapes string defaults 6ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > normalizes nested saved rows into full-width semantic layout 4ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > previews a legacy input using the same component and forwards slots/model once 13ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > renders correctly 13ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > applies active class when isActive is true 3ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > does not apply active class when isActive is false 2ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > emits toggleClick event when clicked 3ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > has correct default props 2ms
+ ✓ tests/unit/Hamburger.test.ts > Hamburger Component > has correct styling 18ms
+ ✓ src/mocks/invariants/no-legacy-import.test.ts > mock mainline static boundaries > removes the legacy src/demo runtime tree 1ms
+ ✓ src/mocks/invariants/no-legacy-import.test.ts > mock mainline static boundaries > does not import legacy scenario runtime from current frontend source 36ms
+ ✓ tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > register consumes the actual captcha response (enabled=true) 17ms
+ ✓ tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > register consumes the actual captcha response (enabled=false) 2ms
+ ✓ tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > readonly snapshot failure completes its fallback without a second exception 23ms
+ ✓ tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in and searches 6ms
+ ✓ tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in or searches 1ms
+ ✓ src/api/protocol/export.contract.test.ts > protocol export wire contract > submits the real Form parameter and decodes the XLSX response as binary 35ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Initial State > should initialize with empty data 2ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Initial State > should have all required methods 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should add bandwidth data point 1ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should update peak bandwidth 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should calculate average bandwidth 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should limit history size 13ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should handle zero bandwidth 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Add Data Point > should handle negative bandwidth gracefully 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Protocol-specific Bandwidth > should track bandwidth by protocol 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Protocol-specific Bandwidth > should calculate protocol utilization 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Bandwidth Utilization > should calculate utilization percentage 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Bandwidth Utilization > should handle 100% utilization 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Bandwidth Utilization > should handle over-utilization 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Bandwidth Utilization > should handle zero max bandwidth 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Time Window Analysis > should get bandwidth in time window 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Time Window Analysis > should calculate average in time window 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Time Window Analysis > should find peak in time window 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Statistics > should calculate standard deviation 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Statistics > should calculate variance 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Statistics > should detect bandwidth spikes 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Clear Data > should clear all data 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Clear Data > should reset statistics after clear 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Data Export > should export data as CSV 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Data Export > should export data as JSON 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Real-time Updates > should handle rapid updates 6ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Real-time Updates > should maintain chronological order 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Edge Cases > should handle empty history 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Edge Cases > should handle single data point 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Edge Cases > should handle very large bandwidth values 0ms
+ ✓ tests/unit/composables/useBandwidthData.test.ts > useBandwidthData > Edge Cases > should handle very small bandwidth values 0ms
+ ✓ src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > enables actual scrolling and emits the new preference without undefined callbacks 24ms
+ ✓ src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation 9ms
+ ✓ src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > a rapid on/off change does not start scrolling in the next tick 5ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > accepts generated and handwritten thin forms with aliases and local destructuring 8ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > matches exact executable inputs/dialogs, excluding comments and input-number 2ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > reports missing presets, dynamic spreads, local constant widths and style bypasses 3ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects independent layout columns and field geometry only inside modal forms 6ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > requires form/layout props to originate in the same controller 2ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > requires dialog/form/layout props to originate in the same local controller 3ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects missing columns, invalid size and raw useDialog form ownership 0ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > diagnoses competing theme declarations/writes, not ordinary domain colors 3ms
+ ✓ tests/ui-standards.test.ts > UI standards shared SFC checker > rejects private theme loading while allowing public deployment imports 0ms
+stderr | tests/unit/components/MenuCollection.test.ts > menu collection consumers > builds the list tree from collection items
+[Vue warn]: Failed to resolve component: ZxListToolbar
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <MenuList ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ tests/unit/components/MenuCollection.test.ts > menu collection consumers > builds the list tree from collection items 11ms
+ ✓ tests/unit/components/MenuCollection.test.ts > menu collection consumers > opens the drawer with array children from the tree collection 11ms
+ ✓ tests/unit/components/UserFormDialog.test.ts > UserFormDialog > should render the user form inside the dialog shell 24ms
+ ✓ tests/unit/components/ProjectFormDialog.test.ts > ProjectFormDialog > should render the project form inside the dialog shell 20ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > updates query.'configType' before refreshing a filter 15ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > updates query.'status' before refreshing a filter 3ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > maps the public grid query and pager to flat HTTP parameters 2ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > submits nested grid query fields to the tree endpoint 2ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 2ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > propagates a status-mapped SSE payload to callbacks and the generator 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > propagates standalone SSE resource data to the public callback 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps control-only SSE frames out of data callbacks while retaining their metadata 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps SSE validator failures unknown and normal completion void 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves native network errors in the unknown SSE error hook 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves non-2xx HTTP transport errors in the unknown SSE error hook 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should initialize with empty event list 2ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should load events when sessionId is provided 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should not load events when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Computed Properties > should calculate pending event count correctly 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Computed Properties > should calculate triggered event count correctly 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should create event successfully 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error when sessionId is empty 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error for invalid condition type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error for invalid action type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > updateEvent > should update event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > updateEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > deleteEvent > should delete event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > deleteEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > triggerEvent > should trigger event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > triggerEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > setEventEnabled > should enable event 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > setEventEnabled > should disable event 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > checkAndTriggerEvents > should trigger matching events 11ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > checkAndTriggerEvents > should not trigger non-matching events 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > reset > should reset event list 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > TIME condition > should match when elapsed time exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > TIME condition > should not match when elapsed time is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_COUNT condition > should match when message count exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_COUNT condition > should not match when message count is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should match when specific port bandwidth exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should match when any port bandwidth exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should not match when bandwidth is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should match when message contains pattern 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should match when protocol type matches 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should not match when protocol type differs 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should not match when no latest message 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for null condition 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for null state 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for unknown condition type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > Configuration Constants > should have all condition type configs 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > Configuration Constants > should have all action type configs 0ms
+ ✓ src/utils/http.test.ts > http contract client > configures multi-status success handling and items-based grid paging 7ms
+ ✓ src/utils/http.test.ts > http contract client > treats 201, 202 and 204 as successful contract responses 2ms
+ ✓ src/utils/http.test.ts > http contract client > attaches response headers and offset pager metadata for auto mutation feedback 2ms
+ ✓ src/utils/http.test.ts > http contract client > detects pure collection and cursor paging shapes without forcing query success toasts 1ms
+ ✓ src/utils/http.test.ts > http contract client > does not show expired-session feedback when already on the login page 2ms
+ ✓ src/utils/http.test.ts > http contract client > prompts relogin when a protected page receives an expired session 1ms
+ ✓ src/utils/http.test.ts > http contract client > does not prompt relogin for silent session restore failures 1ms
+ ✓ src/utils/http.test.ts > http contract client > closes an in-flight relogin prompt when entering the login route 1ms
+ ✓ src/utils/http.test.ts > http contract client > presents skipped relogin auth problems through the unified error channel 1ms
+ ✓ src/utils/http.test.ts > http contract client > normalizes problem details and forwards rate-limit headers to the problem presenter 1ms
+ ✓ src/utils/http.test.ts > http contract client > passes 422 validation problems through the unified error channel 1ms
+ ✓ src/views/monitor/cache/index.test.ts > cache monitor chart theme integration > preserves chart data while updating both projections without another request 19ms
+ ✓ src/mocks/scenarios/error.test.ts > mock error scenarios > routes error-429 through the scenario factory with debug headers 11ms
+ ✓ src/mocks/scenarios/error.test.ts > mock error scenarios > routes error-5xx through the scenario factory with problem details 2ms
+ ✓ src/components/business/Device/selector/CategorySelector.test.ts > category options public API consumer > consumes collection items without the obsolete business-type argument 13ms
+ ✓ src/views/project/composables/topoExportUtils.test.ts > topology export consumes the real resource boundary > keeps a legitimate empty resource as an optional missing image 2ms
+ ✓ src/views/project/composables/topoExportUtils.test.ts > topology export consumes the real resource boundary > does not create a renderer for malformed cells from dynamic topology data 1ms
+ ✓ src/views/project/composables/topoExportUtils.test.ts > topology export consumes the real resource boundary > preserves valid cells, produces image bytes and releases the renderer 15ms
+ ✓ tests/unit/components/ProtocolFormDrawer.test.ts > ProtocolFormDrawer > should render the protocol form inside the drawer shell 17ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > recognizes API requests by prefix 2ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > creates deterministic not implemented payloads 1ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > returns deterministic 501 responses with mock debug headers 9ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > generates routes and registers them into router 4ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > accepts collection-style router payloads from the new HTTP contract 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > falls back to first menu path when current route disappears after reload 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > keeps existing routes when reload request fails 0ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > removes unnamed dynamic routes via route remover callbacks 1ms
+ ✓ src/plugins/dev-menu-hot-sync.test.ts > dev-menu-hot-sync > polls signature on interval in explicit poll mode 10ms
+ ✓ src/plugins/dev-menu-hot-sync.test.ts > dev-menu-hot-sync > suspends signature fallback for 60s after auth failure 1ms
+ ✓ src/plugins/dev-menu-hot-sync.test.ts > dev-menu-hot-sync > does not start automatic sync in manual mode 1ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format 0 seconds correctly 1ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format 1 second correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format 1 minute correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format 1 hour correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format complex time correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should format 24 hours correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should handle negative values 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should handle NaN 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatSimulationTime - Unit Tests > should handle non-number input 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > parseSimulationTime - Unit Tests > should parse 00:00:00.000 correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > parseSimulationTime - Unit Tests > should parse 01:01:01.123 correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > parseSimulationTime - Unit Tests > should parse 24:00:00.000 correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > parseSimulationTime - Unit Tests > should return 0 for invalid format 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > parseSimulationTime - Unit Tests > should return 0 for non-string input 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > Property 1: Time Format Round Trip > should round-trip time values correctly (0-24 hours) 3ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > Property 1: Time Format Round Trip > should produce valid HH:MM:SS.mmm format 1ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > Property 1: Time Format Round Trip > should handle values up to 99 hours (max supported by HH format) 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > Property 1: Time Format Round Trip > should preserve millisecond precision 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > Property: Format Components Correctness > should correctly extract hours, minutes, seconds 1ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatDuration > should calculate duration correctly 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatDuration > should handle reversed timestamps 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatReadableDuration > should format milliseconds 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatReadableDuration > should format seconds 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatReadableDuration > should format minutes and seconds 0ms
+ ✓ tests/unit/simulation/timeFormatter.test.ts > timeFormatter > formatReadableDuration > should format hours and minutes 0ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > binds the Host-owned preference lifecycle without projecting DOM from business code 11ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > rejects incomplete registrations instead of silently falling back 0ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > surfaces deployment diagnostics 0ms
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should initialize with correct default values
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should have all required methods
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should start simulation successfully
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should handle start simulation error
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should reject start if already running
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should pause running simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should reject pause if not running
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should resume paused simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should reject resume if not paused
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should stop running simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should preserve elapsed time and speed when stopping
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should set simulation speed
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp speed range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp invalid speed values
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should handle supported speed presets
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should update current time
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should not allow negative time
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should format time correctly
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should handle complete lifecycle
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should maintain state consistency
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle API errors gracefully
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle timeout errors
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should recover from errors
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should initialize with correct default values 2ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should have all required methods 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should start simulation successfully 2ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should handle start simulation error 1ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should reject start if already running 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should pause running simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should reject pause if not running 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should resume paused simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should reject resume if not paused 1ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should stop running simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should preserve elapsed time and speed when stopping 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should set simulation speed 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp speed range 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp invalid speed values 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should handle supported speed presets 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should update current time 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should not allow negative time 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should format time correctly 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should handle complete lifecycle 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should maintain state consistency 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle API errors gracefully 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle timeout errors 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should recover from errors 0ms
+ ✓ tests/unit/simulation/websocket-state.test.ts > simulation WebSocket state > publishes valid deltas and exposes malformed frames as state without replacing prior data 7ms
+ ✓ tests/unit/simulation/websocket-state.test.ts > simulation WebSocket state > reports ticket acquisition errors through its reactive error state 1ms
+ ✓ tests/unit/plugins/devMenuHotSync.test.ts > dev menu hot sync plugin > does not start auto sync when feature is disabled 3ms
+ ✓ tests/unit/plugins/devMenuHotSync.test.ts > dev menu hot sync plugin > reloads dynamic routes when SSE menu_changed event arrives 2ms
+ ✓ tests/unit/plugins/devMenuHotSync.test.ts > dev menu hot sync plugin > silently disables hot sync when SSE probe returns 404 1ms
+ ✓ tests/unit/plugins/devMenuHotSync.test.ts > dev menu hot sync plugin > falls back to signature polling after repeated SSE failures 2ms
+ ✓ tests/unit/plugins/devMenuHotSync.test.ts > dev menu hot sync plugin > exposes manual refresh API for fallback troubleshooting 1ms
+ ✓ tests/mocks/contracts/openapi-schema-validator.test.ts > openapi-schema-validator > validates response bodies against dereferenced component schemas 5ms
+ ✓ tests/mocks/contracts/openapi-schema-validator.test.ts > openapi-schema-validator > returns field-level validation failures 2ms
+ ✓ tests/mocks/contracts/openapi-schema-validator.test.ts > openapi-schema-validator > skips empty, missing, and non-json response schemas with explicit reasons 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > State Initialization > should initialize with default state when no cookies 2ms
+ ✓ tests/unit/stores/app.test.ts > App Store > State Initialization > should initialize sidebar from cookie 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > State Initialization > should initialize size from cookie 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > State Initialization > should handle sidebar opened state from cookie 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBar > should toggle sidebar from opened to closed 1ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBar > should toggle sidebar from closed to opened 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBar > should toggle without animation 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBar > should not toggle when sidebar is hidden 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBar > should update cookie when toggling 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > closeSideBar > should close sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > closeSideBar > should close sidebar without animation 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > closeSideBar > should update cookie when closing 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > closeSideBar > should close already closed sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleDevice > should toggle to mobile device 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleDevice > should toggle to desktop device 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleDevice > should toggle to tablet device 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleDevice > should handle multiple device changes 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > setSize > should set size to large 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > setSize > should set size to default 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > setSize > should set size to small 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > setSize > should update cookie when setting size 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > setSize > should handle multiple size changes 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBarHide > should hide sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBarHide > should show sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > toggleSideBarHide > should toggle hide status multiple times 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Integration Scenarios > should handle mobile device with closed sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Integration Scenarios > should handle desktop device with opened sidebar 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Integration Scenarios > should handle size change with sidebar state 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Integration Scenarios > should handle hidden sidebar toggle attempt 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Edge Cases > should handle undefined cookie values 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Edge Cases > should handle invalid cookie values 0ms
+ ✓ tests/unit/stores/app.test.ts > App Store > Edge Cases > should handle empty string cookie values 0ms
+ ✓ src/utils/auth.test.ts > auth token store > stores access token for current tab and survives module reload 5ms
+ ✓ src/utils/auth.test.ts > auth token store > stores csrf token for current tab and survives module reload 1ms
+ ✓ src/utils/auth.test.ts > auth token store > clears all security tokens 1ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > getToken > should return undefined when no token exists 2ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > getToken > should return the in-memory token after setToken 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > getToken > should treat empty token as absent 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > setToken > should set token in session storage and memory 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > setToken > should remove session storage token for empty string token 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > setToken > should handle long token strings 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > setToken > should handle special characters in token 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > removeToken > should remove token from memory and session storage 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > removeToken > should not throw error when removing non-existent token 1ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > removeToken > should be callable multiple times 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > Token Workflow > should handle complete token lifecycle 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > Token Workflow > should handle token update 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > CSRF Token Workflow > should set and get csrf token from memory and session storage 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > CSRF Token Workflow > should read csrf token from cookie when memory is empty 0ms
+ ✓ tests/unit/utils/auth.test.ts > Auth Utils > CSRF Token Workflow > should clear csrf token with removeToken 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format date object 1ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format timestamp (milliseconds) 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format timestamp (seconds) 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format date string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should handle custom pattern 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should return null for empty input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should return null for null input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should handle ISO date string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should format with weekday 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseTime > should pad single digits 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should add default date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should add custom property date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should handle empty date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > addDateRange > should handle non-array date range 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return label for string value 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return label for number value 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return value when not found 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabel > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return labels for comma-separated values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return labels for array values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should handle custom separator 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should return empty string for empty array 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > selectDictLabels > should include original value when not found 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should replace single placeholder 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should replace multiple placeholders 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle missing arguments 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle no placeholders 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > sprintf > should handle number arguments 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for null 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for "null" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for "undefined" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return original string for valid input 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return number as is 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > parseStrEmpty > should return empty string for empty string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should merge simple objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should merge nested objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should handle null source properties 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > mergeRecursive > should overwrite primitives 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should build tree structure 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle custom field names 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle empty data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle flat structure 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > handleTree > should handle deep nesting 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should encode simple params 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should handle nested objects 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip null values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip empty strings 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should skip undefined values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > tansParams > should encode special characters 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should normalize double slashes 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should remove trailing slash 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle empty string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle undefined 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle "undefined" string 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle normal path 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > getNormalPath > should handle multiple double slashes 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for blob data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return false for JSON data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for image data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for PDF data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > blobValidate > should return true for Excel data 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle parseTime with invalid date 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle handleTree with circular references prevention 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle tansParams with array values 0ms
+ ✓ tests/unit/utils/ruoyi.test.ts > RuoYi Utils > Edge Cases > should handle mergeRecursive with arrays 0ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > returns mock response directly in pure strategy 4ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > passes through upstream success in fallback strategy 1ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > falls back on upstream 404 and network errors 2ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return true when user has required permission 2ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return true when user has super permission 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false when user lacks permission 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return true when user has any of multiple permissions 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false when user has none of multiple permissions 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false without logging for empty array 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false without logging for non-array input 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false without logging for null input 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should return false without logging for undefined input 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should handle empty permissions array 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should handle case-sensitive permission matching 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkPermi > should handle complex permission strings 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return true when user has required role 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return true when user is super admin 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return false when user lacks role 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return true when user has any of multiple roles 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return false when user has none of multiple roles 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return false without logging for empty array 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return false without logging for non-array input 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should return false without logging for null input 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should handle empty roles array 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should handle case-sensitive role matching 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > checkRole > should prioritize admin role 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Permission and Role Integration > should handle both permission and role checks 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Permission and Role Integration > should handle super admin with all permissions 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Permission and Role Integration > should handle user with no permissions or roles 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Edge Cases > should handle special characters in permissions 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Edge Cases > should handle special characters in roles 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Edge Cases > should handle very long permission strings 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Edge Cases > should handle multiple permission checks in sequence 0ms
+ ✓ tests/unit/utils/permission.test.ts > Permission Utils > Edge Cases > should handle multiple role checks in sequence 0ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > updates all consumers from items and preserves submitted string values 4ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > retries failures instead of caching an empty dictionary 3ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > preserves a concrete row for messages and custom validators without an index signature 2ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > retains a typed context and row in global validators 0ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > throws an inspectable validation error that retains the actual result 1ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > does not call a row-dependent message factory without a row when deriving VXE rules 0ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > rejects unsupported date input values at the validation boundary 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return orange for 1553B protocol 1ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return orange for MIL-STD-1553B protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return blue for CAN protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return green for RS422 protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return green for RS485 protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return white for LAN protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return white for Ethernet protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return default color for unknown protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return default color for null/undefined 1ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should handle case-insensitive matching 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should map all core protocols to predefined colors 3ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should map different protocol types to different colors 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should handle protocol variants consistently 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should return valid hex color format 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should match expected colors for each protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > validateProtocolColors > should return true for valid protocol list 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > validateProtocolColors > should return false if unknown protocol is included 0ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses JSON bodies 4ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses x-www-form-urlencoded bodies 1ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses FormData bodies 2ms
+ ✓ src/mocks/index.test.ts > setupBrowserMocks > forwards custom runtime handlers to the browser worker 5ms
+ ✓ src/mocks/index.test.ts > setupBrowserMocks > does not start the worker when mock mode is off and no strategy is provided 0ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > shares the committed preference between selector, Settings and Provider without reading DOM 3ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > projects the committed variant without changing the requested preference 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > rejects unsupported preferences instead of writing an unavailable theme 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > keeps the last committed density and stored choice when the scope rejects an update 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > persists only the latest density after a slower earlier request completes 0ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > keeps a successful density change when local storage rejects the write 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Interceptor > should add authorization token to headers 1ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Interceptor > should not add token if not present 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Interceptor > should add request timestamp 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should return data on successful response 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle 401 unauthorized 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle 403 forbidden 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle 404 not found 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle 500 server error 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle network errors 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Interceptor > should handle timeout errors 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Methods > should make GET request 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Methods > should make POST request 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Methods > should make PUT request 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Methods > should make DELETE request 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Configuration > should set custom headers 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Configuration > should set request timeout 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Configuration > should handle query parameters 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Data Transformation > should extract data from response wrapper 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Data Transformation > should handle empty response data 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Response Data Transformation > should handle array response data 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Error Messages > should extract error message from response 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Error Messages > should provide default error message 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Retry Logic > should retry failed requests 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Retry Logic > should limit retry attempts 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Cancellation > should cancel pending requests 0ms
+ ✓ tests/unit/utils/request.test.ts > request utility > Request Cancellation > should handle cancelled request error 0ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > defaults feedback options to silent mode 2ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > shows registry success message for auto success feedback 1ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > uses notification info for accepted responses 1ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > uses warning notification for partial batch success 0ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > maps 422 validation problems to the validation target 0ms
+ ✓ src/utils/feedback/presenter.test.ts > feedback presenter > shows rate limit details with tracking identifiers 0ms
+ ✓ src/api/system/dict/data.test.ts > dictionary requests shared by hooks and selectors > keeps hook options when a selector requests the same dictionary concurrently 3ms
+ ✓ src/api/system/dict/data.test.ts > dictionary requests shared by hooks and selectors > releases failed and completed requests so later loads can fetch fresh data 1ms
+ ✓ src/utils/auth-feedback-boundary.test.ts > auth feedback boundary > dismisses leftover relogin prompts on login and register routes 3ms
+ ✓ src/utils/auth-feedback-boundary.test.ts > auth feedback boundary > keeps in-page relogin prompts on protected routes 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return true for http URLs 1ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return true for https URLs 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return true for mailto links 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return true for tel links 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return false for relative paths 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isExternal > should return false for empty string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return true for valid username 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return true for username at minimum length 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return true for username at maximum length 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return false for username too short 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return false for username too long 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUsername > should return false for empty username 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return true for valid http URL 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return true for valid https URL 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return true for URL with port 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return true for URL with path 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return false for invalid URL 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validURL > should return false for relative path 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validLowerCase > should return true for lowercase string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validLowerCase > should return false for uppercase string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validLowerCase > should return false for mixed case string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validLowerCase > should return false for string with numbers 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validLowerCase > should return false for empty string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUpperCase > should return true for uppercase string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUpperCase > should return false for lowercase string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUpperCase > should return false for mixed case string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUpperCase > should return false for string with numbers 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validUpperCase > should return false for empty string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validAlphabets > should return true for alphabetic string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validAlphabets > should return true for mixed case alphabetic string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validAlphabets > should return false for string with numbers 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validAlphabets > should return false for string with special characters 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validAlphabets > should return false for empty string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return true for valid email 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return true for email with subdomain 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return true for email with plus sign 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return false for email without @ 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return false for email without domain 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return false for email without username 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > validEmail > should return false for empty string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return true for string literal 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return true for String object 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for number 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for boolean 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for null 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for undefined 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for object 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isString > should return false for array 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return true for array 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return true for array with elements 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return false for object 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return false for string 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return false for number 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return false for null 0ms
+ ✓ tests/unit/utils/validate.test.ts > Validate Utils > isArray > should return false for undefined 0ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > defaults to a visible header and breadcrumb with tags disabled 2ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > restores independent saved visibility choices 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > migrates enabled tags once, retains supported chrome preferences and drops retired keys 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > uses defaults for malformed persisted tags and null settings 0ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > loads committed overlay registry entries in a stable summary order 1ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > keeps committed registry documents valid against registry.schema.json 2ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects duplicate overlay ids 1ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects missing required fields with schema validation 0ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects additional registry properties with schema validation 0ms
+ ✓ tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects duplicate node identifiers before mutating state 2ms
+ ✓ tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects identity changes while retaining the existing edge 1ms
+ ✓ tests/unit/simulation/health-check-contract.test.ts > health check public X6 contract > uses real node/edge models and identifies parameter mismatches 3ms
+ ✓ tests/unit/simulation/health-check-contract.test.ts > health check public X6 contract > retains edge identifiers in loopback report details 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > activates, lists, and resets overlays without touching dataset state 2ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > fails fast on unknown overlays and keeps the previous state 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > rejects conflicting overlays as one atomic activation request 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > keeps overlay state isolated per runtime instance 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > rejects activation when the runtime mode does not allow overlays 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > keeps actual protocol message timestamps and nested protocol values 1ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > accepts nullable fault metadata emitted for an active indefinite fault 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'status' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'messages' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'bandwidth' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'alarms' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'animation' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'faults' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'pong' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > restores layout options without restoring retired colour settings 2ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > rejects retired colour settings while retaining layout changes 1ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference 0ms
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > normalizes scalar and dictionary editor values into the text config contract 1ms
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > reads the value from a real native input event 1ms
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > keeps field normalization within the declared row contract 1ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > throws when the theme host has not been bound 1ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > resolves with the confirmed payload 1ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > rejects when the user cancels 0ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > uses the actual server filename header: attachment; filename*=UTF-8''%E6%8A%A5%E5%91%8A.csv 1ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > uses the actual server filename header: attachment; filename=report.csv; filename*=UTF-8''%E6%8A%A5%E5%91%8A.csv 0ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > uses the actual server filename header: attachment; filename=report.csv; filename*=UTF-8''%broken 0ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > rejects an Axios response without a binary body 1ms
+ ✓ src/utils/io-toolkit/download.contract.test.ts > binary download boundary > preserves valid binary response contents and filename 0ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback 2ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > preserves immediate return values without a trailing callback 1ms
+ ✓ tests/unit/router/history.test.ts > router history selection > uses hash history in demo-offline mode 2ms
+ ✓ tests/unit/router/history.test.ts > router history selection > uses web history outside demo-offline mode 0ms
+ ✓ src/security/embedBridge.test.ts > embedBridge > sends grant by postMessage with strict targetOrigin 1ms
+ ✓ src/security/embedBridge.test.ts > embedBridge > accepts only whitelisted origin and message shape 1ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps menu, dict, and department keys unique 1ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps menu parent and role references valid 1ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps department parent references valid 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > defaults to real mode without legacy fallback variables 1ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > normalizes explicit runtime mode, API prefix, and debug flag 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > rejects unsupported runtime mode values 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > maps mock runtime modes to network strategies 0ms
+ ✓ src/mocks/invariants/dataset.test.ts > mock dataset invariants > uses the fixed dataset version and reference time 1ms
+ ✓ src/mocks/invariants/dataset.test.ts > mock dataset invariants > contains the first-batch domains 0ms
+ ✓ src/mocks/runtime/app-entry.test.ts > setupAppRuntimeMocks > does not start mocks in real mode and clears legacy devtools 1ms
+ ✓ src/mocks/runtime/app-entry.test.ts > setupAppRuntimeMocks > starts fallback and demo-offline through the unified mock runtime 1ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > resolves known keys from the registry 1ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=true 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects invalid registry entries during startup validation 0ms
+ ✓ src/theme/zx-theme-packages.test.ts > ZX_THEME_PACKAGE_CHOICES > lists the currently enabled ZXUI presets 1ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"width":"640px"} 1ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"height":480} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"dialogStyle":{"width":"40vw"}} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"dialogStyle":{"height":"60vh"}} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects missing columns before constructing a dialog 0ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > supports custom keys and identifiers which resemble object prototype properties 0ms
+ ✓ src/mocks/invariants/auth.test.ts > auth mock invariants > keeps account usernames and role keys unique 1ms
+ ✓ src/mocks/invariants/auth.test.ts > auth mock invariants > keeps account role and permission references valid 1ms
+ ✓ src/layout/policy.test.ts > application chrome policy > keeps header, tags and breadcrumb preferences independent 1ms
+ ✓ src/layout/policy.test.ts > application chrome policy > applies only explicit route overrides without changing user preferences 0ms
+ ✓ src/layout/policy.test.ts > application chrome policy > ignores malformed route overrides 0ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > preserves the new page payload without legacy remapping 1ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > emits page results with items/page/pageSize fields 0ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > returns problem-details-shaped errors 0ms
+ ✓ src/mocks/invariants/project.test.ts > project mock invariants > keeps project, version, and topology keys unique 1ms
+ ✓ src/mocks/invariants/project.test.ts > project mock invariants > keeps versions and topologies traceable to projects 0ms
+ ✓ tests/unit/config/devMenuSync.test.ts > dev menu sync env helpers > parses boolean values from env strings 1ms
+ ✓ tests/unit/config/devMenuSync.test.ts > dev menu sync env helpers > normalizes fallback polling interval with sane defaults 0ms
+ ✓ tests/unit/config/devMenuSync.test.ts > dev menu sync env helpers > defaults sync mode to sse while keeping manual and poll compatibility 0ms
+ ✓ src/mocks/invariants/simulation.test.ts > simulation mock invariants > keeps simulation records traceable to existing project versions 1ms
+ ✓ src/mocks/invariants/simulation.test.ts > simulation mock invariants > keeps frame, message, and event session references valid 0ms
+ ✓ src/utils/generator/html.contract.test.ts > generated rating contract > exports the configured maximum to the real ElRate prop 1ms
+ ✓ src/theme/zx-theme-deployment.test.ts > theme deployment registration > derives build packages from the selector catalog 1ms
+
+ Test Files  102 passed (102)
+      Tests  805 passed (805)
+   Start at  02:40:30
+   Duration  16.47s (transform 2.06s, setup 12.25s, collect 17.73s, tests 8.66s, environment 16.41s, prepare 3.17s)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

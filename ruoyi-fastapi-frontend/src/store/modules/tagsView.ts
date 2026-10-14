@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import type { RouteLocationNormalizedLoaded } from 'vue-router';
 
 interface TagView {
   name?: string;
@@ -87,7 +86,7 @@ const useTagsViewStore = defineStore('tags-view', {
           return;
         }
         const index = this.cachedViews.indexOf(view.name);
-        index > -1 && this.cachedViews.splice(index, 1);
+        if (index > -1) this.cachedViews.splice(index, 1);
         resolve([...this.cachedViews]);
       });
     },
@@ -126,17 +125,17 @@ const useTagsViewStore = defineStore('tags-view', {
         resolve([...this.cachedViews]);
       });
     },
-    delAllViews(view?: TagView) {
+    delAllViews() {
       return new Promise((resolve) => {
-        this.delAllVisitedViews(view);
-        this.delAllCachedViews(view);
+        this.delAllVisitedViews();
+        this.delAllCachedViews();
         resolve({
           visitedViews: [...this.visitedViews],
           cachedViews: [...this.cachedViews],
         });
       });
     },
-    delAllVisitedViews(view?: TagView) {
+    delAllVisitedViews() {
       return new Promise((resolve) => {
         const affixTags = this.visitedViews.filter((tag) => tag.meta?.affix);
         this.visitedViews = affixTags;
@@ -144,7 +143,7 @@ const useTagsViewStore = defineStore('tags-view', {
         resolve([...this.visitedViews]);
       });
     },
-    delAllCachedViews(view?: TagView) {
+    delAllCachedViews() {
       return new Promise((resolve) => {
         this.cachedViews = [];
         resolve([...this.cachedViews]);

@@ -93,7 +93,11 @@
           <div
             v-if="chartTooltip.visible"
             class="chart-tooltip-fixed bandwidth"
-            :style="{ ...chartStyle, left: chartTooltip.tooltipX + 'px', top: chartTooltip.tooltipY + 'px' }"
+            :style="{
+              ...chartStyle,
+              left: chartTooltip.tooltipX + 'px',
+              top: chartTooltip.tooltipY + 'px',
+            }"
           >
             <div class="tooltip-header">
               <span class="tooltip-time">{{ chartTooltip.time }}</span>
@@ -788,7 +792,6 @@ defineExpose({
   border-radius: 8px;
 }
 
-
 .chart-wrapper {
   position: relative;
   height: 180px;
@@ -808,8 +811,16 @@ defineExpose({
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px,
+        transparent 1px
+      );
     background-size: 20px 20px;
   }
 

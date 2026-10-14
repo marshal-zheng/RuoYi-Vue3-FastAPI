@@ -1,0 +1,22 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 124ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 50ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 49ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 46ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps accepted commands distinct from polled session status and preserves the Location header 31ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > publishes one typed items contract for every outer collection 15ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > sends the port_id filter accepted by the actual bandwidth controller 5ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > projects message, bandwidth and alarm items for reactive data consumers 5ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > loads pending events from the actual collection into event state 53ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps active faults instead of silently discarding a collection resource 3ms
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > preserves arrays embedded inside ordinary object resources 0ms
+
+ Test Files  2 passed (2)
+      Tests  11 passed (11)
+   Start at  23:38:46
+   Duration  2.53s (transform 1.30s, setup 648ms, collect 1.70s, tests 386ms, environment 381ms, prepare 56ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

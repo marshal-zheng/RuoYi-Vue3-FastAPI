@@ -1,8 +1,16 @@
+import type { NoticeModel } from '@/api/_generated/types.gen';
+// JSON represents the backend bytes field as UTF-8 text, rather than multipart File.
+export type NoticePayload = Omit<NoticeModel, 'noticeContent'> & { noticeContent?: string | null };
+export type NoticeRecord = Omit<NoticePayload, 'noticeId'> & { noticeId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询公告列表
-export function listNotice(query?: Record<string, any>) {
-  return request({
+export function listNotice(
+  query?: NonNullable<GetSystemNoticeListSystemNoticeListGetData['query']>
+) {
+  return request<HttpOffsetPage<NoticeRecord>>({
     url: '/system/notice/list',
     method: 'get',
     params: query,
@@ -11,7 +19,7 @@ export function listNotice(query?: Record<string, any>) {
 
 // 查询公告详细
 export function getNotice(noticeId: number | string) {
-  return request({
+  return request<NoticeRecord>({
     url: '/system/notice/' + noticeId,
     method: 'get',
     feedback: { mode: 'auto' },
@@ -19,8 +27,8 @@ export function getNotice(noticeId: number | string) {
 }
 
 // 新增公告
-export function addNotice(data: Record<string, any>) {
-  return request({
+export function addNotice(data: NoticePayload) {
+  return request<NoticeRecord>({
     url: '/system/notice',
     method: 'post',
     data: data,
@@ -29,8 +37,8 @@ export function addNotice(data: Record<string, any>) {
 }
 
 // 修改公告
-export function updateNotice(data: Record<string, any>) {
-  return request({
+export function updateNotice(data: NoticePayload) {
+  return request<NoticeRecord>({
     url: '/system/notice',
     method: 'put',
     data: data,
@@ -40,7 +48,7 @@ export function updateNotice(data: Record<string, any>) {
 
 // 删除公告
 export function delNotice(noticeId: number | string) {
-  return request({
+  return request<null>({
     url: '/system/notice/' + noticeId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.notice.delete' },

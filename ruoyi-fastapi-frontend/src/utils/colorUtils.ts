@@ -48,7 +48,10 @@ export function parseColor(color: Color): RGB {
     };
   } else if (typeof color === 'string' && cssColorRe.test(color)) {
     const { groups } = color.match(cssColorRe)!;
-    const { fn, values } = groups as { fn: keyof typeof mappers; values: string };
+    const { fn, values } = groups as {
+      fn: keyof typeof mappers;
+      values: string;
+    };
     const realValues = values.split(/,\s*|\s*\/\s*|\s+/).map((v, i) => {
       if (
         v.endsWith('%') ||
@@ -91,7 +94,7 @@ export function parseColor(color: Color): RGB {
   }
 
   throw new TypeError(
-    `Invalid color: ${color == null ? color : String(color) || (color as any).constructor.name}\nExpected #hex, #hexa, rgb(), rgba(), hsl(), hsla(), object or number`
+    `Invalid color: ${color == null ? color : String(color)}\nExpected #hex, #hexa, rgb(), rgba(), hsl(), hsla(), object or number`
   );
 }
 

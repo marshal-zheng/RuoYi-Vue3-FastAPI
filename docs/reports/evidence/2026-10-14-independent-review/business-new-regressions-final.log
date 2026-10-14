@@ -1,0 +1,13 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+·····Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+···········
+
+ Test Files  4 passed (4)
+      Tests  16 passed (16)
+   Start at  02:38:48
+   Duration  2.05s (transform 1.17s, setup 977ms, collect 2.93s, tests 101ms, environment 656ms, prepare 112ms)
+

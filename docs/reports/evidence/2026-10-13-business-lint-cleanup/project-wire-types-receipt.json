@@ -1,0 +1,5 @@
+{
+  "command": "./node_modules/.bin/vue-tsc --noEmit",
+  "exitCode": 0,
+  "diagnostics": 0
+}

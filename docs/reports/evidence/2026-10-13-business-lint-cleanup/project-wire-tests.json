@@ -1,0 +1,20 @@
+{
+  "exitCode": 0,
+  "fileCount": 13,
+  "files": [
+    "tests/unit/simulation/health-check-contract.test.ts",
+    "tests/unit/composables/useSimulationData.test.ts",
+    "tests/unit/api/project.test.ts",
+    "src/mocks/handlers/api-contract.test.ts",
+    "tests/unit/api/simulation.test.ts",
+    "tests/unit/composables/useEventTrigger.test.ts",
+    "tests/unit/composables/useSimulationControl.test.ts",
+    "tests/unit/simulation/topologyAnimation.test.ts",
+    "tests/unit/simulation/transport-contract.test.ts",
+    "tests/unit/simulation/websocket-state.test.ts",
+    "tests/unit/simulation/http-collection-contract.test.ts",
+    "src/mocks/handlers/simulation.test.ts",
+    "src/mocks/invariants/simulation.test.ts"
+  ],
+  "tests": 159
+}

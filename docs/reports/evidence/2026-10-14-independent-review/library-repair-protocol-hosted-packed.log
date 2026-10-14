@@ -1,0 +1,27 @@
+pack dependency constants
+pack dependency types
+pack dependency utils
+pack dependency shared
+pack dependency hooks
+pack dependency mcp-core
+pack dependency keybindings
+pack dependency tokens
+pack dependency theme-css-codec
+pack dependency theme-consumer
+pack dependency theme-default
+pack dependency theme-defense-green
+pack dependency zxui
+vite v5.4.21 building for production...
+transforming...
+✓ 1486 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/assets/client-zzFghtrm.css      1.29 kB │ gzip:   0.37 kB
+dist/client.js                   1,616.00 kB │ gzip: 340.61 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 1.63s
+Installed hosted public leaves and SSR passed.

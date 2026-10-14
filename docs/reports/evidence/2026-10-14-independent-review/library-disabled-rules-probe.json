@@ -1,0 +1,212 @@
+[
+  {
+    "filePath": "/Users/hqz/Downloads/element-plus/scripts/ai-production-hardening/check-local-authority-observation.mjs",
+    "messages": [
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 57,
+        "column": 1,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 57,
+        "endColumn": 12,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": {
+              "propertyName": "log"
+            },
+            "fix": {
+              "range": [
+                1961,
+                2236
+              ],
+              "text": ""
+            },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/* eslint-disable no-console -- The local validation runner reports its bounded result. */\nimport { spawnSync } from 'node:child_process'\nimport { mkdirSync, writeFileSync } from 'node:fs'\nimport { resolve } from 'node:path'\n\nconst workspace = resolve(import.meta.dirname, '../..')\nconst source = spawnSync(\n  process.execPath,\n  [resolve(workspace, 'scripts/ai-production-hardening/source-closure.mjs')],\n  { cwd: workspace, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }\n)\nconst closure = JSON.parse(source.stdout)\nconst bound = closure.repositories.filter(\n  (repository) => repository.role === 'bound'\n)\nif (\n  source.error ||\n  ![0, 2].includes(source.status) ||\n  closure.kind !== 'zx.ai.production.source-closure.v1' ||\n  !/^sha256:[a-f0-9]{64}$/.test(closure.fingerprint) ||\n  bound.some((repository) => !/^[a-f0-9]{40}$/.test(repository.commit ?? '')) ||\n  (source.status === 2 &&\n    !bound.some((repository) => repository.clean === false))\n) {\n  throw new Error('local-authority-source-closure-invalid')\n}\n\n// Local tests accept recorded working changes. The release runner still\n// requires its original clean commit set; this result is never release evidence.\nconst result = spawnSync(\n  process.execPath,\n  [\n    resolve(\n      workspace,\n      'scripts/ai-production-hardening/workbench-authority-observation.mjs'\n    ),\n    closure.fingerprint,\n  ],\n  {\n    cwd: workspace,\n    encoding: 'utf8',\n    timeout: 300_000,\n    maxBuffer: 64 * 1024 * 1024,\n  }\n)\nconst observation = JSON.parse(result.stdout)\nif (result.error || result.status !== 0 || observation.valid !== true) {\n  process.stderr.write(result.stderr)\n  throw new Error('local-authority-observation-failed')\n}\nconst evidence = process.env.ZXUI_VALIDATION_EVIDENCE_DIR\nif (evidence) {\n  mkdirSync(evidence, { recursive: true })\n  writeFileSync(resolve(evidence, 'source-closure.json'), source.stdout)\n  writeFileSync(resolve(evidence, 'authority-observation.json'), result.stdout)\n}\nconsole.log(\n  JSON.stringify({\n    scope: 'local-working-source-validation',\n    sourceClosureFingerprint: closure.fingerprint,\n    rootClean: closure.root.clean,\n    personas: observation.personas,\n    stages: observation.stages.length,\n    valid: observation.valid,\n  })\n)\n",
+    "usedDeprecatedRules": [
+      {
+        "ruleId": "no-return-await",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "unicorn/import-index",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "vue/component-tags-order",
+        "replacedBy": [
+          "block-order"
+        ]
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/app.ts",
+    "messages": [
+      {
+        "ruleId": "vue/one-component-per-file",
+        "severity": 1,
+        "message": "There is more than one component in this file.",
+        "line": 9,
+        "column": 38,
+        "nodeType": "ObjectExpression",
+        "messageId": "toManyComponents",
+        "endLine": 29,
+        "endColumn": 2
+      },
+      {
+        "ruleId": "vue/one-component-per-file",
+        "severity": 1,
+        "message": "There is more than one component in this file.",
+        "line": 50,
+        "column": 32,
+        "nodeType": "ObjectExpression",
+        "messageId": "toManyComponents",
+        "endLine": 194,
+        "endColumn": 4
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/* eslint-disable vue/one-component-per-file -- This harness creates independent owner/portal fixture components. */\nimport { defineComponent, h, reactive, ref, withDirectives } from 'vue'\nimport { useThemeCssAdapter } from '@zxio/theme-consumer/vue'\nimport { ZxThemeProvider } from '@zxio/zxui/theme-provider'\nimport { Widget as AcmeWidget } from '@acme/widget/vue'\nimport { Widget as ExamplePanel } from '@example/panel/vue'\n\n// Deliberately invalid public consumer used only by the executable conformance runner.\nconst FailureProbe = defineComponent({\n  props: { failure: String },\n  setup(props) {\n    const root = ref<HTMLElement | null>(null)\n    const binding = useThemeCssAdapter(root, {\n      id: 'acme-widget-css',\n      actualVersion: props.failure === 'version' ? '9.0.0' : '1.0.0',\n    })\n    return () =>\n      withDirectives(\n        h('div', {\n          ref: root,\n          'data-failure-probe': binding.state.value,\n          'data-probe-diagnostics': JSON.stringify(binding.diagnostics.value),\n          style:\n            props.failure === 'inline' ? { '--acme-widget-bg': 'red' } : {},\n        }),\n        [[binding.directive]]\n      )\n  },\n})\n\nexport function createConsumerDemo(initial: Record<string, unknown> = {}) {\n  const state = reactive({\n    themeId: 'default',\n    mode: 'light',\n    density: 'default',\n    contrast: 'normal',\n    motion: 'full',\n    radius: 'default',\n    requestOverride: undefined as Record<string, unknown> | undefined,\n    failureProbe: '',\n    customPortal: false,\n    disabled: false,\n    nestedDisabled: false,\n    show: true,\n    instances: 1,\n    seeds: undefined as unknown,\n    overrides: undefined as unknown,\n    ...initial,\n  })\n  const Root = defineComponent({\n    setup() {\n      return () =>\n        h('div', { class: 'consumer-demo' }, [\n          h('header', [\n            h('h1', '周边库主题消费协议'),\n            h('p', '业务只登记扩展。两个库通过最近 Provider 自动消费主题。'),\n            ...Object.entries({\n              themeId: ['default', 'defense-green'],\n              mode: ['light', 'dark'],\n              density: ['default', 'compact', 'comfortable'],\n              contrast: ['normal', 'high', 'forced-colors'],\n              motion: ['full', 'reduced', 'none'],\n              radius: ['default', 'sharp', 'rounded'],\n            }).map(([key, choices]) =>\n              h('label', [\n                `${key} `,\n                h(\n                  'select',\n                  {\n                    value: state[key as keyof typeof state],\n                    onChange: (event: Event) => {\n                      ;(state as Record<string, unknown>)[key] = (\n                        event.target as HTMLSelectElement\n                      ).value\n                    },\n                  },\n                  choices.map((value) => h('option', { value }, value))\n                ),\n              ])\n            ),\n          ]),\n          h('nav', [\n            h('label', [\n              h('input', {\n                type: 'checkbox',\n                checked: state.disabled,\n                onChange: (event: Event) => {\n                  state.disabled = (event.target as HTMLInputElement).checked\n                },\n              }),\n              '停用 Widget 模块',\n            ]),\n            h('label', [\n              h('input', {\n                type: 'checkbox',\n                checked: state.nestedDisabled,\n                onChange: (event: Event) => {\n                  state.nestedDisabled = (\n                    event.target as HTMLInputElement\n                  ).checked\n                },\n              }),\n              '嵌套 Widget inactive',\n            ]),\n            h('label', [\n              h('input', {\n                type: 'checkbox',\n                checked: Boolean(state.seeds),\n                onChange: (event: Event) => {\n                  state.seeds = (event.target as HTMLInputElement).checked\n                    ? { brand: [0.42, 0.15, 0.56] }\n                    : undefined\n                },\n              }),\n              '品牌 Seeds',\n            ]),\n            h('label', [\n              h('input', {\n                type: 'checkbox',\n                checked: Boolean(state.overrides),\n                onChange: (event: Event) => {\n                  state.overrides = (event.target as HTMLInputElement).checked\n                    ? {\n                        'acme-widget/gap': {\n                          kind: 'literal',\n                          value: { kind: 'value', value: 19, unit: 'px' },\n                        },\n                      }\n                    : undefined\n                },\n              }),\n              '库间距覆盖',\n            ]),\n          ]),\n          h(\n            ZxThemeProvider,\n            {\n              class: 'provider-root',\n              ...(state.customPortal\n                ? {\n                    portalTarget: () =>\n                      document.querySelector<HTMLElement>(\n                        '[data-zx-consumer-destination=\"aux\"]'\n                      )!,\n                  }\n                : {}),\n              themeId: state.themeId,\n              mode: state.mode,\n              density: state.density,\n              contrast: state.contrast,\n              motion: state.motion,\n              radius: state.radius,\n              ...state.requestOverride,\n              composition: {\n                ...(state.disabled ? { modules: ['example-panel'] } : {}),\n                ...(state.seeds ? { seeds: state.seeds } : {}),\n                ...(state.overrides ? { overrides: state.overrides } : {}),\n              },\n            } as never,\n            () =>\n              state.show\n                ? [\n                    state.failureProbe\n                      ? h(FailureProbe, {\n                          key: state.failureProbe,\n                          failure: state.failureProbe,\n                        })\n                      : null,\n                    ...Array.from({ length: state.instances }, (_, i) => [\n                      h(AcmeWidget, { key: `a-${i}`, label: `outer-a-${i}` }),\n                      h(ExamplePanel, { key: `b-${i}`, label: `outer-b-${i}` }),\n                    ]),\n                    h(\n                      ZxThemeProvider,\n                      {\n                        class: 'provider-root',\n                        scopeKey: 'nested',\n                        mode: 'dark',\n                        density: 'compact',\n                        composition: state.nestedDisabled\n                          ? { modules: ['example-panel'] }\n                          : undefined,\n                      },\n                      () => [\n                        h(AcmeWidget, { label: 'nested-a' }),\n                        h(ExamplePanel, { label: 'nested-b' }),\n                      ]\n                    ),\n                  ]\n                : []\n          ),\n        ])\n    },\n  })\n  return { Root, state }\n}\n",
+    "usedDeprecatedRules": [
+      {
+        "ruleId": "no-return-await",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "unicorn/import-index",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "vue/component-tags-order",
+        "replacedBy": [
+          "block-order"
+        ]
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/client.ts",
+    "messages": [
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 23,
+        "column": 3,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 23,
+        "endColumn": 15,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": {
+              "propertyName": "warn"
+            },
+            "fix": {
+              "range": [
+                951,
+                972
+              ],
+              "text": ""
+            },
+            "desc": "Remove the console.warn()."
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/* eslint-disable no-console -- The isolated browser fixture emits verification diagnostics. */\nimport { createApp, createSSRApp, nextTick } from 'vue'\nimport { createDefaultBrowserThemeHost } from '@zxio/zxui/theme-host'\nimport { createThemeAssetResolver, success } from '@zxio/zxui/theme-runtime'\nimport { Widget as StandaloneWidget } from '@acme/widget/vue'\nimport data from 'virtual:consumer-fixture'\nimport { createConsumerDemo } from './app'\nimport '@acme/widget/style.css'\nimport '@example/panel/style.css'\n\nconst browser = window as any\nconst initial = browser.__CONSUMER_SSR__\nconst demo = createConsumerDemo(initial?.initial)\nconst standalone = new URL(location.href).searchParams.has('standalone')\nconst app = standalone\n  ? createApp(StandaloneWidget, { label: 'standalone' })\n  : initial\n  ? createSSRApp(demo.Root)\n  : createApp(demo.Root)\nconst warnings: string[] = []\napp.config.warnHandler = (message) => {\n  warnings.push(message)\n  console.warn(message)\n}\nconst errors: string[] = []\napp.config.errorHandler = (error) => {\n  errors.push(String(error))\n  console.error(error)\n}\nconst result = standalone\n  ? null\n  : createDefaultBrowserThemeHost({\n      appKey: 'consumer-browser',\n      themes: data.themes.map((manifest: unknown) => ({ manifest })),\n      defaultThemeId: 'default',\n      extensions: data.bundles,\n      seedPolicy: { allow: ['brand'] },\n      systemPreference: {\n        currentMode: () => 'light',\n        subscribe: () => () => undefined,\n      },\n      assetResolver: createThemeAssetResolver({\n        exports: {\n          async resolve(input) {\n            const response = await fetch(\n              `/theme-asset?package=${encodeURIComponent(\n                input.packageName\n              )}&export=${encodeURIComponent(input.exportPath)}`\n            )\n            return success({ kind: 'css-text', text: await response.text() })\n          },\n        },\n      }),\n      ...(initial\n        ? {\n            hydration: {\n              snapshot: initial.output.snapshot,\n              stylesheetElements: [\n                ...document.querySelectorAll<HTMLElement>(\n                  '[data-zx-theme-artifact]'\n                ),\n              ],\n              stylesheetOwnership: 'transferred' as const,\n              manualCompletion: true,\n              consumers: initial.output.consumers,\n              ...(initial.initial.customPortal\n                ? { consumerPortalRoots: { aux: document.body } }\n                : {}),\n              composition: {\n                snapshot: initial.output.composition,\n                scopeElements: [\n                  ...document.querySelectorAll<HTMLElement>('.provider-root'),\n                ],\n                styleElements: [\n                  ...document.querySelectorAll<HTMLElement>(\n                    '[data-zx-composition-style]'\n                  ),\n                ],\n                ownership: 'transferred' as const,\n              },\n            },\n          }\n        : {}),\n    })\nconst api = (browser.__CONSUMER__ = {\n  state: demo.state,\n  warnings,\n  errors,\n  error: null as unknown,\n  host: result?.ok ? result.value : null,\n  complete: null as unknown,\n  async unmount() {\n    app.unmount()\n    if (result?.ok) await result.value.dispose()\n  },\n  async settle() {\n    await nextTick()\n    await nextTick()\n  },\n})\nif (result && !result.ok) api.error = result.diagnostics\nelse if (standalone) {\n  app.mount('#app')\n} else {\n  const bound = result!.value.bind(app)\n  if (!bound.ok) api.error = bound.diagnostics\n  else {\n    const nodes = [...document.querySelectorAll('[data-zx-consumer]')]\n    const styles = [...document.querySelectorAll('style')]\n    app.mount('#app')\n    await nextTick()\n    await nextTick()\n    if (initial) {\n      const complete = bound.value.completeHydration()\n      api.complete = complete\n      if (!complete.ok) api.error = complete.diagnostics\n      else {\n        browser.__CONSUMER_REUSED__ = {\n          nodes: nodes.every((node) => node.isConnected),\n          styles: styles.every((style) => style.isConnected),\n        }\n      }\n    }\n  }\n}\n",
+    "usedDeprecatedRules": [
+      {
+        "ruleId": "no-return-await",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "unicorn/import-index",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "vue/component-tags-order",
+        "replacedBy": [
+          "block-order"
+        ]
+      }
+    ]
+  },
+  {
+    "filePath": "/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/packed-browser.ts",
+    "messages": [
+      {
+        "ruleId": "vue/one-component-per-file",
+        "severity": 1,
+        "message": "There is more than one component in this file.",
+        "line": 28,
+        "column": 21,
+        "nodeType": "ObjectExpression",
+        "messageId": "toManyComponents",
+        "endLine": 31,
+        "endColumn": 6
+      },
+      {
+        "ruleId": "vue/one-component-per-file",
+        "severity": 1,
+        "message": "There is more than one component in this file.",
+        "line": 112,
+        "column": 36,
+        "nodeType": "ObjectExpression",
+        "messageId": "toManyComponents",
+        "endLine": 130,
+        "endColumn": 4
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 2,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/* eslint-disable vue/one-component-per-file -- This harness creates independent owner/portal fixture components. */\nimport {\n  Teleport,\n  createApp,\n  defineComponent,\n  h,\n  nextTick,\n  ref,\n  withDirectives,\n} from 'vue'\nimport {\n  themeConsumerDiscoveryKey,\n  themeConsumerScopeKey,\n} from '@zxio/theme-consumer'\nimport { useThemePortalBinding } from '@zxio/theme-consumer/vue'\n// A second installed tarball, CJS entry. No source module or alias participates.\nimport { useThemeCssAdapter } from './node_modules/consumer-copy-b/dist/cjs/vue/index.cjs'\nimport { Widget as Acme } from '@acme/widget/vue'\nimport { Widget as Panel } from '@example/panel/vue'\nimport '@acme/widget/style.css'\nimport '@example/panel/style.css'\n\nconst check = (condition: unknown, message: string) => {\n  if (!condition) throw new Error(message)\n}\nconst run = async () => {\n  const standalone = createApp(\n    defineComponent({\n      setup: () => () =>\n        h('main', [h(Acme, { label: 'a' }), h(Panel, { label: 'b' })]),\n    })\n  )\n  standalone.mount('#app')\n  await nextTick()\n  check(\n    document.querySelectorAll('[data-consumer-status=\"standalone\"]').length ===\n      2,\n    'both ordinary UIs are standalone'\n  )\n  const button = document.querySelector('button')!\n  button.click()\n  await nextTick()\n  check(\n    button.textContent?.includes('1'),\n    'core interaction remains functional'\n  )\n  standalone.unmount()\n  const events: string[] = [],\n    listeners = new Set<() => void>()\n  const active = ref(true)\n  let portal: ReturnType<typeof useThemePortalBinding>\n  const abi = { major: 1, minor: 0, capabilities: ['css-target', 'portal'] }\n  const port = {\n    abi,\n    snapshot: () => ({\n      phase: 'ready',\n      ownerToken: 'host-owner',\n      revision: 1,\n      diagnostics: [],\n    }),\n    subscribe(listener: () => void) {\n      listeners.add(listener)\n      return () => listeners.delete(listener)\n    },\n    preparePortal: () => ({ ok: true, value: null, diagnostics: [] }),\n    async acquirePortal() {\n      events.push('acquire-portal')\n      const target = document.body.appendChild(document.createElement('aside'))\n      return {\n        ok: true,\n        diagnostics: [],\n        value: {\n          snapshot: () => ({\n            state: 'ready',\n            target,\n            leaseId: 'cross-copy-portal',\n            diagnostics: [],\n          }),\n          subscribe: () => () => undefined,\n          release() {\n            check(\n              !target.querySelector('[data-bound]'),\n              'content must release before portal'\n            )\n            events.push('release-portal')\n            target.remove()\n          },\n        },\n      }\n    },\n    async bindCssTarget(element: HTMLElement, input: any) {\n      check(\n        input.portalLeaseId === 'cross-copy-portal',\n        'cross-copy structural association'\n      )\n      element.dataset.bound = 'yes'\n      events.push('bind-css')\n      return {\n        ok: true,\n        diagnostics: [],\n        value: {\n          snapshot: () => ({ state: 'ready', diagnostics: [] }),\n          subscribe: () => () => undefined,\n          release() {\n            delete element.dataset.bound\n            events.push('release-css')\n          },\n        },\n      }\n    },\n  }\n  const Consumer = defineComponent({\n    setup() {\n      portal = useThemePortalBinding({ active })\n      const root = ref<HTMLElement | null>(null)\n      const css = useThemeCssAdapter(\n        root,\n        { id: 'cross', actualVersion: '1.0.0' },\n        { portal }\n      )\n      return () =>\n        active.value && portal.target.value\n          ? h(Teleport, { to: portal.target.value }, [\n              withDirectives(h('div', { ref: root }, 'cross-copy'), [\n                [css.directive],\n              ]),\n            ])\n          : null\n    },\n  })\n  const app = createApp(Consumer)\n  app.provide(themeConsumerDiscoveryKey, {\n    schema: 'zx.theme-consumer.discovery/1',\n    abis: [abi],\n  })\n  app.provide(themeConsumerScopeKey, port)\n  app.mount('#app')\n  for (let i = 0; i < 5; i++) await nextTick()\n  check(document.querySelector('[data-bound]'), 'portal content mounted')\n  active.value = false\n  for (let i = 0; i < 5; i++) await nextTick()\n  check(\n    events.indexOf('release-css') < events.indexOf('release-portal'),\n    'release barrier'\n  )\n  app.unmount()\n  await nextTick()\n  check(\n    listeners.size === 0 && !document.querySelector('aside'),\n    'all resources released'\n  )\n  return {\n    status: 'pass',\n    copies: ['ESM A portal', 'CJS B CSS'],\n    events,\n    standalone: 2,\n    subscriptionsAfterDispose: listeners.size,\n  }\n}\nrun().then(\n  (result) => {\n    ;(window as any).__PACKED__ = result\n  },\n  (error) => {\n    ;(window as any).__PACKED__ = { status: 'fail', error: String(error) }\n    throw error\n  }\n)\n",
+    "usedDeprecatedRules": [
+      {
+        "ruleId": "no-return-await",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "unicorn/import-index",
+        "replacedBy": []
+      },
+      {
+        "ruleId": "vue/component-tags-order",
+        "replacedBy": [
+          "block-order"
+        ]
+      }
+    ]
+  }
+]

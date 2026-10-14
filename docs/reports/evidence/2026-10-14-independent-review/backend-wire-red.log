@@ -1,0 +1,308 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 11 items
+
+tests/unit/test_collection_openapi_contract.py .....FF                   [ 63%]
+tests/unit/services/test_simulation_status_wire.py FFF.                  [100%]
+
+=================================== FAILURES ===================================
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router5-/monitor/cache/getNames-row5] _
+
+router = <fastapi.routing.APIRouter object at 0x10e221bd0>
+path = '/monitor/cache/getNames'
+row = {'cacheName': 'user', 'remark': 'User cache'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+            (cacheController, '/monitor/cache/getNames', {'cacheName': 'user', 'remark': 'User cache'}),
+            (cacheController, '/monitor/cache/getKeys/{cache_name}', 'user:7'),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(List[CacheInfoModel])
+app        = <fastapi.applications.FastAPI object at 0x10f212350>
+path       = '/monitor/cache/getNames'
+payload    = {'items': [{'cacheName': 'user', 'remark': 'User cache'}]}
+route      = APIRoute(path='/monitor/cache/getNames', name='get_monitor_cache_name', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x10e221bd0>
+row        = {'cacheName': 'user', 'remark': 'User cache'}
+
+tests/unit/test_collection_openapi_contract.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(List[CacheInfoModel])
+object = {'items': [{'cacheName': 'user', 'remark': 'User cache'}]}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[CacheInfoModel]
+E         Input should be a valid list [type=list_type, input_value={'items': [{'cacheName': ...remark': 'User cache'}]}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': [{'cacheName': 'user', 'remark': 'User cache'}]}
+self       = TypeAdapter(List[CacheInfoModel])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router6-/monitor/cache/getKeys/{cache_name}-user:7] _
+
+router = <fastapi.routing.APIRouter object at 0x10e221bd0>
+path = '/monitor/cache/getKeys/{cache_name}', row = 'user:7'
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+            (cacheController, '/monitor/cache/getNames', {'cacheName': 'user', 'remark': 'User cache'}),
+            (cacheController, '/monitor/cache/getKeys/{cache_name}', 'user:7'),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(List[str])
+app        = <fastapi.applications.FastAPI object at 0x10f2134d0>
+path       = '/monitor/cache/getKeys/{cache_name}'
+payload    = {'items': ['user:7']}
+route      = APIRoute(path='/monitor/cache/getKeys/{cache_name}', name='get_monitor_cache_key', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x10e221bd0>
+row        = 'user:7'
+
+tests/unit/test_collection_openapi_contract.py:37: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(List[str]), object = {'items': ['user:7']}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[str]
+E         Input should be a valid list [type=list_type, input_value={'items': ['user:7']}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': ['user:7']}
+self       = TypeAdapter(List[str])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+______ test_cached_stopped_status_has_the_same_wire_keys_as_active_engine ______
+
+service = <module_admin.service.simulation_service.SimulationService object at 0x10eff12b0>
+
+    def test_cached_stopped_status_has_the_same_wire_keys_as_active_engine(service):
+        status = service.get_session_status_services('saved-session')
+>       assert_wire_status(status, 'saved-session', 'stopped')
+
+service    = <module_admin.service.simulation_service.SimulationService object at 0x10eff12b0>
+status     = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+
+tests/unit/services/test_simulation_status_wire.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+status = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+session_id = 'saved-session', expected_status = 'stopped'
+
+    def assert_wire_status(status, session_id, expected_status):
+>       assert status['sessionId'] == session_id
+               ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'sessionId'
+
+expected_status = 'stopped'
+session_id = 'saved-session'
+status     = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+
+tests/unit/services/test_simulation_status_wire.py:21: KeyError
+____________ test_shared_stopped_status_preserves_the_wire_contract ____________
+
+service = <module_admin.service.simulation_service.SimulationService object at 0x10f4a4e10>
+
+    async def test_shared_stopped_status_preserves_the_wire_contract(service):
+        status = await service.get_shared_session_status_services('saved-session')
+>       assert_wire_status(status, 'saved-session', 'stopped')
+
+service    = <module_admin.service.simulation_service.SimulationService object at 0x10f4a4e10>
+status     = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+
+tests/unit/services/test_simulation_status_wire.py:38: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+status = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+session_id = 'saved-session', expected_status = 'stopped'
+
+    def assert_wire_status(status, session_id, expected_status):
+>       assert status['sessionId'] == session_id
+               ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'sessionId'
+
+expected_status = 'stopped'
+session_id = 'saved-session'
+status     = {'alarm_count': 0, 'bandwidth_data_count': 0, 'elapsed_time': 0, 'engine_present': False, ...}
+
+tests/unit/services/test_simulation_status_wire.py:21: KeyError
+__________ test_missing_session_status_is_a_complete_not_found_frame ___________
+
+service = <module_admin.service.simulation_service.SimulationService object at 0x10f4a51d0>
+
+    def test_missing_session_status_is_a_complete_not_found_frame(service):
+        status = service.get_session_status_services('missing-session')
+>       assert_wire_status(status, 'missing-session', 'not_found')
+
+service    = <module_admin.service.simulation_service.SimulationService object at 0x10f4a51d0>
+status     = {'message': '仿真会话不存在', 'status': 'not_found'}
+
+tests/unit/services/test_simulation_status_wire.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+status = {'message': '仿真会话不存在', 'status': 'not_found'}
+session_id = 'missing-session', expected_status = 'not_found'
+
+    def assert_wire_status(status, session_id, expected_status):
+>       assert status['sessionId'] == session_id
+               ^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'sessionId'
+
+expected_status = 'not_found'
+session_id = 'missing-session'
+status     = {'message': '仿真会话不存在', 'status': 'not_found'}
+
+tests/unit/services/test_simulation_status_wire.py:21: KeyError
+=========================== short test summary info ============================
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router5-/monitor/cache/getNames-row5]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router6-/monitor/cache/getKeys/{cache_name}-user:7]
+FAILED tests/unit/services/test_simulation_status_wire.py::test_cached_stopped_status_has_the_same_wire_keys_as_active_engine
+FAILED tests/unit/services/test_simulation_status_wire.py::test_shared_stopped_status_preserves_the_wire_contract
+FAILED tests/unit/services/test_simulation_status_wire.py::test_missing_session_status_is_a_complete_not_found_frame
+========================= 5 failed, 6 passed in 0.54s ==========================

@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { ref, computed, getCurrentInstance } from 'vue';
+import { ref, computed } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getProject, addProject, updateProject } from '@/api/project/project';
 

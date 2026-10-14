@@ -24,12 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { addType, updateType } from '@/api/system/dict/type';
 import { useDict } from '@/utils/dict';
-
-const { proxy } = getCurrentInstance() as any;
 
 // 保留异步字典返回的 ref，避免复制请求完成前的空数组。
 const { sys_normal_disable: sysNormalDisable } = useDict('sys_normal_disable');
@@ -38,7 +36,7 @@ interface DictForm {
   dictId?: number;
   dictName: string;
   dictType: string;
-  status: string;
+  status: '0' | '1';
   remark: string;
 }
 

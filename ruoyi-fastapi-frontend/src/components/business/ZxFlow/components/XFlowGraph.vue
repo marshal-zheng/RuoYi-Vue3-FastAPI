@@ -219,13 +219,7 @@ let nodeClickHandler = null;
 let resizeTarget = null;
 
 // 键盘管理器
-const {
-  initKeyboardManager,
-  setInteractionMode,
-  setClipboardHandler,
-  setHistoryHandler,
-  INTERACTION_MODES,
-} = useKeyboardManager(graph);
+const { initKeyboardManager, setClipboardHandler, setHistoryHandler } = useKeyboardManager(graph);
 
 // 标准交互管理器
 const standardInteractions = props.enableStandardInteractions
@@ -429,9 +423,9 @@ const initGraph = async () => {
 
     // 将处理器同步给标准交互（右键菜单）
     if (standardInteractions && typeof standardInteractions.setupHandlers === 'function') {
-      standardInteractions.setupHandlers(clipboardApi, historyApi);
+      standardInteractions.setupHandlers(clipboardApi);
     }
-  } catch (e) {
+  } catch {
     // 忽略组合式初始化异常，保持基本交互可用
   }
   // 将边选择开关同步给 keyboardManager
@@ -449,7 +443,9 @@ const initGraph = async () => {
   if (nodeClickHandler) {
     try {
       g.off('node:click', nodeClickHandler);
-    } catch (e) {}
+    } catch {
+      // Graph 已释放时无需重复移除节点事件。
+    }
   }
   nodeClickHandler = ({ node, e }) => {
     if (!node) return;
@@ -461,24 +457,11 @@ const initGraph = async () => {
   };
   g.on('node:click', nodeClickHandler);
 
-  // 测试：添加更底层的事件监听
-  g.on('node:mousedown', ({ node }) => {});
-  g.on('node:mouseup', ({ node }) => {});
-
   // 同时监听 X6 原生的双击事件（如果存在）
   g.on('node:dblclick', ({ node, e }) => {
     if (!node) return;
     emit('node-dblclick', { node, event: e, type: 'node' });
   });
-
-  // 底层事件兜底日志：判断事件是否到达 Graph 层
-  g.on('cell:click', ({ cell, e }) => {});
-  g.on('cell:dblclick', ({ cell, e }) => {});
-
-  // 容器原生 dblclick 捕获（用于排查是否被上层遮挡）
-  try {
-    containerRef?.value?.addEventListener?.('dblclick', (ev) => {}, true);
-  } catch (e) {}
 
   // 向外通知已就绪，同时传递键盘管理器和标准交互
   emit('ready', g, keyboardMgr, standardInteractions);
@@ -494,7 +477,9 @@ const destroyGraph = () => {
     if (nodeClickHandler) {
       graph.value.off('node:click', nodeClickHandler);
     }
-  } catch (e) {}
+  } catch {
+    // Graph 释放期间事件可能已被清理，继续执行 dispose。
+  }
 
   // X6 binds autoResize to the parent but clears the graph container on dispose.
   if (resizeTarget) SizeSensor.clear(resizeTarget);
@@ -535,7 +520,9 @@ const applyInteractions = () => {
       if (parent && props.groupChildDraggable === false) {
         return false;
       }
-    } catch (e) {}
+    } catch {
+      // 读取父分组失败时，以下锁定检查继续决定是否允许移动。
+    }
 
     // 全局锁定或自定义锁定逻辑
     try {
@@ -546,7 +533,7 @@ const applyInteractions = () => {
       if (typeof props.isNodeLocked === 'function') {
         return props.isNodeLocked(cell, view) ? false : true;
       }
-    } catch (e) {
+    } catch {
       // 自定义回调异常时，出于安全默认禁止移动
       return false;
     }
@@ -674,29 +661,6 @@ onMounted(async () => {
   if (graph && graph.value) {
     const g = graph.value;
     const padding = () => Number(props.groupPadding || 0);
-
-    const resizeParentToFitChildren = (parent) => {
-      try {
-        const children = parent.getChildren ? parent.getChildren() || [] : [];
-        if (!children.length) return;
-        let minX = Infinity,
-          minY = Infinity,
-          maxX = -Infinity,
-          maxY = -Infinity;
-        children.forEach((child) => {
-          const b = child.getBBox();
-          minX = Math.min(minX, b.x);
-          minY = Math.min(minY, b.y);
-          maxX = Math.max(maxX, b.x + b.width);
-          maxY = Math.max(maxY, b.y + b.height);
-        });
-        const pad = padding();
-        const width = Math.max(0, maxX - minX) + pad * 2;
-        const height = Math.max(0, maxY - minY) + pad * 2;
-        parent.position(minX - pad, minY - pad);
-        parent.resize(width, height);
-      } catch (e) {}
-    };
 
     g.on('node:change:position', ({ node, previous, current }) => {
       // 仅处理子节点（非分组容器）

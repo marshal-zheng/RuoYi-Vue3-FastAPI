@@ -1,8 +1,8 @@
-import type { DeviceMockData } from "../types";
-import { mockDevices } from "./devices";
+import type { DeviceMockData } from '../types';
+import { mockDevices } from './devices';
 
 export const deviceMockData = {
   devices: mockDevices,
 } satisfies DeviceMockData;
 
-export * from "./devices";
+export * from './devices';

@@ -20,9 +20,12 @@ describe('mock runtime unhandled API helpers', () => {
     );
 
     expect(payload).toEqual({
-      code: 501,
-      msg: 'MOCK_API_NOT_IMPLEMENTED: POST /api/example?page=1 尚未在单套 mock 主线中实现',
-      data: null,
+      type: 'about:blank',
+      title: 'MOCK_API_NOT_IMPLEMENTED',
+      status: 501,
+      errorCode: 'MOCK_API_NOT_IMPLEMENTED',
+      detail: 'MOCK_API_NOT_IMPLEMENTED: POST /api/example?page=1 尚未在单套 mock 主线中实现',
+      instance: '/api/example?page=1',
     });
   });
 
@@ -34,11 +37,16 @@ describe('mock runtime unhandled API helpers', () => {
     });
 
     await expect(response.json()).resolves.toEqual({
-      code: 501,
-      msg: 'MOCK_API_NOT_IMPLEMENTED: PATCH /api/uncovered/resource?source=test 尚未在单套 mock 主线中实现',
-      data: null,
+      type: 'about:blank',
+      title: 'MOCK_API_NOT_IMPLEMENTED',
+      status: 501,
+      errorCode: 'MOCK_API_NOT_IMPLEMENTED',
+      detail:
+        'MOCK_API_NOT_IMPLEMENTED: PATCH /api/uncovered/resource?source=test 尚未在单套 mock 主线中实现',
+      instance: '/api/uncovered/resource?source=test',
     });
     expect(response.status).toBe(501);
+    expect(response.headers.get('content-type')).toContain('application/problem+json');
     expect(response.headers.get('x-mock-response')).toBe('true');
     expect(response.headers.get('x-mock-handler')).toBe('unhandled-api');
   });

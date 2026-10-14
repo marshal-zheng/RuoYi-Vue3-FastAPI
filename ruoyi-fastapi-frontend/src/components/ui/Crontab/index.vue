@@ -145,7 +145,7 @@ import CrontabMonth from './month.vue';
 import CrontabWeek from './week.vue';
 import CrontabYear from './year.vue';
 import CrontabResult from './result.vue';
-const { proxy } = getCurrentInstance();
+
 const emit = defineEmits(['hide', 'fill']);
 const props = defineProps({
   hideComponent: {
@@ -158,7 +158,6 @@ const props = defineProps({
   },
 });
 const tabTitles = ref(['秒', '分钟', '小时', '日', '月', '周', '年']);
-const tabActive = ref(0);
 const hideComponent = ref([]);
 const expression = ref('');
 const crontabValueObj = ref({
@@ -216,11 +215,9 @@ function resolveExp() {
   }
 }
 // tab切换值
-function tabCheck(index) {
-  tabActive.value = index;
-}
+
 // 由子组件触发，更改表达式组成的字段值
-function updateCrontabValue(name, value, from) {
+function updateCrontabValue(name, value) {
   crontabValueObj.value[name] = value;
 }
 // 表单选项的子组件校验数字格式（通过-props传递）

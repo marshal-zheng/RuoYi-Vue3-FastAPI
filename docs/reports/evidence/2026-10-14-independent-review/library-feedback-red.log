@@ -1,0 +1,63 @@
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ❯ scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts (3 tests | 2 failed) 9ms
+   × reports handled Vue warnings and render failures without relying on browser console delivery 8ms
+     → expected { warnings: [], errors: [] } to deeply equal { …(2) }
+   × fails the verification boundary when fixture feedback has an invalid shape 1ms
+     → expected [Function captureConsumerFeedback] to throw an error
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts > reports handled Vue warnings and render failures without relying on browser console delivery
+AssertionError: expected { warnings: [], errors: [] } to deeply equal { …(2) }
+
+- Expected
++ Received
+
+  Object {
+-   "errors": Array [
+-     "Error: consumer render failure",
+-   ],
+-   "warnings": Array [
+-     "Failed to resolve component: MissingContractConsumer
+- If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement.",
+-   ],
++   "errors": Array [],
++   "warnings": Array [],
+  }
+
+ ❯ scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts:35:37
+     33|   expect(feedback.warnings).toHaveLength(1)
+     34|   expect(feedback.errors).toEqual(['Error: consumer render failure'])
+     35|   expect(captureConsumerFeedback()).toEqual(feedback)
+       |                                     ^
+     36| })
+     37| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts > fails the verification boundary when fixture feedback has an invalid shape
+AssertionError: expected [Function captureConsumerFeedback] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts:40:35
+     38| it('fails the verification boundary when fixture feedback has an inval…
+     39|   Reflect.set(window, '__CONSUMER__', { warnings: ['warning'], errors:…
+     40|   expect(captureConsumerFeedback).toThrow('consumer-feedback-invalid')
+       |                                   ^
+     41|   Reflect.deleteProperty(window, '__CONSUMER__')
+     42|   expect(captureConsumerFeedback).toThrow('consumer-feedback-missing')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  02:16:11
+   Duration  343ms (transform 28ms, setup 43ms, collect 20ms, tests 9ms, environment 126ms, prepare 31ms)
+

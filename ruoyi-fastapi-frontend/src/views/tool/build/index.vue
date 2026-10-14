@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" data-zx-fill="anchor">
     <div class="left-board">
       <div class="logo-wrapper">
         <div class="logo">
@@ -107,7 +107,7 @@ import { makeUpHtml, vueTemplate, vueScript, cssStyle } from '@/utils/generator/
 import { makeUpJs } from '@/utils/generator/js'
 import { makeUpCss } from '@/utils/generator/css'
 import Download from '@/plugins/download'
-import { ElNotification } from 'element-plus'
+import { showNotification } from '@/utils/feedback/notification'
 import DraggableItem from './DraggableItem'
 import RightPanel from './RightPanel'
 import CodeTypeDialog from './CodeTypeDialog'
@@ -149,7 +149,7 @@ function empty() {
   )
 }
 
-function onEnd(obj, a) {
+function onEnd(obj) {
   if (obj.from !== obj.to) {
     activeData.value = tempActiveData
     activeId.value = idGlobal.value
@@ -247,7 +247,7 @@ function generate(data) {
   nextTick(() => {
     switch (operationType.value) {
       case 'copy':
-        execCopy(data)
+        execCopy()
         break
       case 'download':
         execDownload(data)
@@ -264,7 +264,7 @@ function execDownload(data) {
   Download.saveAs(blob, data.fileName)
 }
 
-function execCopy(data) {
+function execCopy() {
   document.getElementById('copyNode').click()
 }
 function AssembleFormData() {
@@ -294,14 +294,14 @@ watch(activeId, (val) => {
 
 onMounted(() => {
   const clipboard = new ClipboardJS('#copyNode', {
-    text: trigger => {
+    text: () => {
       const codeStr = generateCode()
-      ElNotification({ title: '成功', message: '代码已复制到剪切板，可粘贴。', type: 'success' })
+      void showNotification({ title: '成功', message: '代码已复制到剪切板，可粘贴。', type: 'success' })
       return codeStr
     }
   })
-  clipboard.on('error', e => {
-    ElNotification({ title: '错误', message: '代码复制失败', type: 'error' })
+  clipboard.on('error', () => {
+    void showNotification({ title: '错误', message: '代码复制失败', type: 'error' })
   })
 })
 </script>
@@ -311,21 +311,24 @@ onMounted(() => {
   position: relative;
   width: 100%;
   background-color: var(--el-bg-color-overlay);
-  height: calc(100vh - 50px - 40px);
+  height: 100%;
   overflow: hidden;
 }
 
 .container .left-board {
+  display: flex;
+  flex-direction: column;
   width: 260px;
   position: absolute;
   left: 0;
   top: 0;
-  height: calc(100vh - 50px - 40px);
+  height: 100%;
 }
 
 .container .left-board .logo-wrapper {
   position: relative;
-  height: 42px;
+  flex: 0 0 auto;
+  min-height: 42px;
   border-bottom: 1px solid var(--el-border-color-extra-light);
   box-sizing: border-box;
 }
@@ -414,7 +417,9 @@ onMounted(() => {
 }
 
 .center-board {
-  height: calc(100vh - 50px - 40px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   width: auto;
   margin: 0 350px 0 260px;
   box-sizing: border-box;
@@ -422,7 +427,8 @@ onMounted(() => {
 
 .center-board .action-bar {
   position: relative;
-  height: 42px;
+  flex: 0 0 auto;
+  min-height: 42px;
   padding: 0 15px;
   box-sizing: border-box;
   border: 1px solid var(--el-border-color-extra-light);
@@ -438,7 +444,8 @@ onMounted(() => {
 }
 
 .center-board .center-scrollbar {
-  height: calc(100vh - 50px - 40px - 42px);
+  flex: 1 1 0;
+  min-height: 0;
   overflow: hidden;
   border-left: 1px solid var(--el-border-color-extra-light);
   border-right: 1px solid var(--el-border-color-extra-light);
@@ -455,7 +462,7 @@ onMounted(() => {
 }
 
 .center-board .center-scrollbar .center-board-row > .el-form {
-  height: calc(100vh - 50px - 40px - 69px);
+  min-height: 100%;
   flex: 1;
 }
 
@@ -640,4 +647,8 @@ onMounted(() => {
   color: var(--zx-semantic-text-secondary);
   letter-spacing: 4px;
 }
+</style>
+
+<style scoped>
+.left-scrollbar { flex: 1 1 0; min-height: 0; }
 </style>

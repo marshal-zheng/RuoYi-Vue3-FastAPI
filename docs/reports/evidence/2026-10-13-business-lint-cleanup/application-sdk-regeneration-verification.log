@@ -1,0 +1,3 @@
+{"files":16,"errors":0,"warnings":0}
+{"typeErrors":0}
+{"ownerTemplatesMatchSource":[{"file":"client/client.gen.ts","identical":true},{"file":"client/types.gen.ts","identical":true},{"file":"core/serverSentEvents.gen.ts","identical":true}]}

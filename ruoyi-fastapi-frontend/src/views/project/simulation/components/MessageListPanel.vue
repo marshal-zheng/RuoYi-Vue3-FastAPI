@@ -163,7 +163,9 @@
                     trigger="hover"
                   >
                     <template #reference>
-                      <div class="payload-preview text-xs font-mono text-zx-text-disabled cursor-pointer">
+                      <div
+                        class="payload-preview text-xs font-mono text-zx-text-disabled cursor-pointer"
+                      >
                         {{ formatPayloadPreview(scope.row.payloadHex) }}
                       </div>
                     </template>
@@ -741,6 +743,9 @@ defineExpose({
 }
 
 .payload-preview:hover {
-  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 10%, transparent));
+  background: var(
+    --sim-accent-bg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 10%, transparent)
+  );
 }
 </style>

@@ -39,12 +39,12 @@ import { computed, ref } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { addDeviceCategory, updateDeviceCategory, getDeviceCategory } from '@/api/device/category';
 
-const emit = defineEmits<{ success: [data?: any] }>();
+const emit = defineEmits<{ success: [data: Awaited<ReturnType<typeof addDeviceCategory>>] }>();
 
 const formRef = ref();
 
 interface CategoryForm {
-  device_category_id: number | null;
+  deviceCategoryId: number | null;
   name: string;
   remark: string;
 }
@@ -61,26 +61,26 @@ let state = {} as { data: CategoryForm };
 
 const dialogController = useFormDialog<CategoryForm>({
   columns: 1,
-  title: (data: CategoryForm) => (data?.device_category_id ? '修改设备分类' : '添加设备分类'),
+  title: (data: CategoryForm) => (data?.deviceCategoryId ? '修改设备分类' : '添加设备分类'),
 
-  okText: computed(() => (state.data.device_category_id ? '保存' : '创建')),
+  okText: computed(() => (state.data.deviceCategoryId ? '保存' : '创建')),
   formRef,
   preValidate: true,
   autoScrollToError: true,
   autoResetForm: true,
   defaultData: () => ({
-    device_category_id: null,
+    deviceCategoryId: null,
     name: '',
     remark: '',
   }),
   onConfirm: async (data: CategoryForm) => {
     const submitData = {
-      device_category_id: data.device_category_id,
+      deviceCategoryId: data.deviceCategoryId,
       name: data.name,
       remark: data.remark,
     };
     let res;
-    if (submitData.device_category_id) {
+    if (submitData.deviceCategoryId) {
       res = await updateDeviceCategory(submitData);
     } else {
       res = await addDeviceCategory(submitData);
@@ -88,7 +88,6 @@ const dialogController = useFormDialog<CategoryForm>({
     emit('success', res);
     return res;
   },
-  onConfirmError: (_e: unknown) => {},
 });
 
 state = dialogController.state;
@@ -98,7 +97,7 @@ const openDialog = async (payload?: { id?: number }) => {
   if (payload?.id) {
     const detail = await getDeviceCategory(payload.id);
     open({
-      device_category_id: detail?.deviceCategoryId || detail?.device_category_id || payload.id,
+      deviceCategoryId: detail.deviceCategoryId,
       name: detail?.name || '',
       remark: detail?.remark || '',
     });

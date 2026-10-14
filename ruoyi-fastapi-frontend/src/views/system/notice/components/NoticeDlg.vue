@@ -42,17 +42,15 @@ import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { ref } from 'vue';
 import { useDict } from '@/utils/dict';
 
-const proxy = getCurrentInstance()?.proxy as any;
-
 // 延迟加载字典数据
 const { sys_notice_status, sys_notice_type } = useDict('sys_notice_status', 'sys_notice_type');
 
 interface NoticeForm {
   noticeId?: number;
   noticeTitle?: string;
-  noticeType?: string;
+  noticeType?: '1' | '2';
   noticeContent?: string;
-  status?: string;
+  status?: '0' | '1';
 }
 
 const emit = defineEmits(['success']);

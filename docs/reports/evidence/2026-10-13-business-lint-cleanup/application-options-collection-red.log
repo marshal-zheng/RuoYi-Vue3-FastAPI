@@ -1,0 +1,43 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 55ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 24ms
+ × src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 18ms
+   → expected undefined to deeply equal ArrayContaining{…}
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects retired router response shapes without registering routes: {"path":"/legacy","component":"Layout","name":"Legacy"} 12ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects retired router response shapes without registering routes: {"data":[{"path":"/legacy","component":"Layout","name":"Legacy"}]} 11ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms
+AssertionError: expected undefined to deeply equal ArrayContaining{…}
+
+- Expected: 
+ArrayContaining [
+  ObjectContaining {
+    "dictType": "sys_user_sex",
+  },
+]
+
++ Received: 
+undefined
+
+ ❯ src/api/menu-contract.test.ts:87:27
+     85|   it('returns dictionary options as a collection consumed by dictionar…
+     86|     const options = await optionselect();
+     87|     expect(options.items).toEqual(
+       |                           ^
+     88|       expect.arrayContaining([expect.objectContaining({ dictType: 'sys…
+     89|     );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  23:25:57
+   Duration  1.66s (transform 819ms, setup 203ms, collect 1.07s, tests 121ms, environment 121ms, prepare 22ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

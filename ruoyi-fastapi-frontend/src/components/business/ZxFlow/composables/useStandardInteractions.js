@@ -3,12 +3,12 @@
  * 集成企业级标准的图编辑器交互功能
  */
 
-import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useContextMenu } from './useContextMenu.js';
 import { useDeviceSupport } from './useDeviceSupport.js';
 
 export function useStandardInteractions(graph, options = {}) {
-  const { isMacOs, isCtrlKeyPressed } = useDeviceSupport();
+  const { isCtrlKeyPressed } = useDeviceSupport();
   const safeCleanSelection = (graphInstance) => {
     const g = graphInstance;
     if (!g) return;
@@ -111,7 +111,7 @@ export function useStandardInteractions(graph, options = {}) {
   const setupStandardEvents = (graphInstance = null) => {
     const g = graphInstance || getGraphInstance();
     if (!g || typeof g.on !== 'function') {
-      console.warn('Graph instance is not ready for event setup');
+      // Graph 的 ready 事件会再次触发注册；未就绪时不操作插件。
       return;
     }
 
@@ -279,13 +279,10 @@ export function useStandardInteractions(graph, options = {}) {
   };
 
   // 设置处理器给右键菜单
-  const setupHandlers = (clipboardActions, historyActions) => {
+  const setupHandlers = (clipboardActions) => {
     if (contextMenuComposable) {
       // 设置剪贴板处理器
       contextMenuComposable.setClipboardHandler(clipboardActions);
-
-      // 设置历史处理器
-      contextMenuComposable.setHistoryHandler(historyActions);
 
       // 设置选择处理器
       contextMenuComposable.setSelectionHandler({

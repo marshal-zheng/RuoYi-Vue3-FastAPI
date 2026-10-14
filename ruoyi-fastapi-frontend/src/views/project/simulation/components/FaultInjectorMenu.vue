@@ -50,7 +50,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { Link, Warning, CircleClose, Delete, Timer } from '@element-plus/icons-vue';
-import { FaultType, FAULT_TYPE_CONFIG } from '../composables/useFaultInjection';
+import { FAULT_TYPE_CONFIG } from '../composables/useFaultInjection';
 
 const emit = defineEmits(['inject', 'clear']);
 

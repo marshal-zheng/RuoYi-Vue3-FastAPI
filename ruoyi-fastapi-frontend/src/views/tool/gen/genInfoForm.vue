@@ -262,7 +262,7 @@ const rules = ref({
   functionName: [{ required: true, message: '请输入生成功能名', trigger: 'blur' }],
 });
 
-function subSelectChange(value) {
+function subSelectChange() {
   props.info.subTableFkName = '';
 }
 

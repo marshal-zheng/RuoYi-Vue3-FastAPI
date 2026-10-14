@@ -1,13 +1,10 @@
-import projectOverlays from "./registry/project.json";
-import simulationOverlays from "./registry/simulation.json";
-import topologyOverlays from "./registry/topology.json";
-import versionOverlays from "./registry/version.json";
-import type {
-  MockOverlayRegistryEntry,
-  MockOverlayRegistrySummary,
-} from "./types";
+import projectOverlays from './registry/project.json';
+import simulationOverlays from './registry/simulation.json';
+import topologyOverlays from './registry/topology.json';
+import versionOverlays from './registry/version.json';
+import type { MockOverlayRegistryEntry, MockOverlayRegistrySummary } from './types';
 
-export * from "./types";
+export * from './types';
 
 const registryDocuments = [
   projectOverlays,
@@ -38,20 +35,18 @@ function cloneEntry(entry: MockOverlayRegistryEntry): MockOverlayRegistryEntry {
 }
 
 export function sortMockOverlayEntries<
-  T extends Pick<MockOverlayRegistryEntry, "id" | "target" | "coreMatrix">,
+  T extends Pick<MockOverlayRegistryEntry, 'id' | 'target' | 'coreMatrix'>,
 >(entries: T[]): T[] {
   return [...entries].sort(
     (left, right) =>
       Number(right.coreMatrix) - Number(left.coreMatrix) ||
       left.target.openapiPath.localeCompare(right.target.openapiPath) ||
       left.target.method.localeCompare(right.target.method) ||
-      left.id.localeCompare(right.id),
+      left.id.localeCompare(right.id)
   );
 }
 
-export function validateMockOverlayRegistryEntries(
-  entries: MockOverlayRegistryEntry[],
-): void {
+export function validateMockOverlayRegistryEntries(entries: MockOverlayRegistryEntry[]): void {
   const seenIds = new Set<string>();
 
   entries.forEach((entry) => {
@@ -67,15 +62,13 @@ export function validateMockOverlayRegistryEntries(
 
     const selfCompatible = entry.composition.compatibleWith?.includes(entry.id);
     if (selfCompatible) {
-      throw new Error(
-        `Mock overlay ${entry.id} cannot be compatible with itself.`,
-      );
+      throw new Error(`Mock overlay ${entry.id} cannot be compatible with itself.`);
     }
   });
 }
 
 export function loadMockOverlayRegistry(
-  documents: MockOverlayRegistryEntry[][] = registryDocuments,
+  documents: MockOverlayRegistryEntry[][] = registryDocuments
 ): MockOverlayRegistryEntry[] {
   const entries = documents.flatMap((document) => document.map(cloneEntry));
   validateMockOverlayRegistryEntries(entries);
@@ -83,7 +76,7 @@ export function loadMockOverlayRegistry(
 }
 
 export function listMockOverlaySummaries(
-  entries: MockOverlayRegistryEntry[] = loadMockOverlayRegistry(),
+  entries: MockOverlayRegistryEntry[] = loadMockOverlayRegistry()
 ): MockOverlayRegistrySummary[] {
   return sortMockOverlayEntries(entries).map((entry) => ({
     id: entry.id,
@@ -103,9 +96,7 @@ export function listMockOverlaySummaries(
   }));
 }
 
-export function getMockOverlayEntry(
-  id: string,
-): MockOverlayRegistryEntry | undefined {
+export function getMockOverlayEntry(id: string): MockOverlayRegistryEntry | undefined {
   return loadMockOverlayRegistry().find((entry) => entry.id === id);
 }
 

@@ -1,0 +1,202 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > publishes one typed items contract for every outer collection 28ms
+ × tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > sends the port_id filter accepted by the actual bandwidth controller 3ms
+   → expected null to be 'port-1' // Object.is equality
+ × tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > projects message, bandwidth and alarm items for reactive data consumers 7ms
+   → expected { items: [ { …(4) } ], …(2) } to deeply equal [ { messageId: 'message-1', …(3) } ]
+ × tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > loads pending events from the actual collection into event state 3ms
+   → expected { items: [ { …(5) } ], …(2) } to deeply equal [ { eventId: 'event-1', …(4) } ]
+ × tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps active faults instead of silently discarding a collection resource 5ms
+   → expected [] to match object [ { faultId: 'fault-1', …(3) } ]
+ ✓ tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > preserves arrays embedded inside ordinary object resources 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > sends the port_id filter accepted by the actual bandwidth controller
+AssertionError: expected null to be 'port-1' // Object.is equality
+
+- Expected: 
+"port-1"
+
++ Received: 
+null
+
+ ❯ tests/unit/simulation/http-collection-contract.test.ts:75:43
+     73|     );
+     74|     await simulationApi.getSimulationBandwidth('session-1', 'port-1');
+     75|     expect(receivedQuery?.get('port_id')).toBe('port-1');
+       |                                           ^
+     76|     expect(receivedQuery?.has('portId')).toBe(false);
+     77|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > projects message, bandwidth and alarm items for reactive data consumers
+AssertionError: expected { items: [ { …(4) } ], …(2) } to deeply equal [ { messageId: 'message-1', …(3) } ]
+
+- Expected: 
+[
+  {
+    "fieldValues": {
+      "sequence": 1,
+    },
+    "messageId": "message-1",
+    "payloadHex": "AA",
+    "sendTimestamp": 1000,
+  },
+]
+
++ Received: 
+{
+  "items": [
+    {
+      "fieldValues": {
+        "sequence": 1,
+      },
+      "messageId": "message-1",
+      "payloadHex": "AA",
+      "sendTimestamp": 1000,
+    },
+  ],
+  "list": [
+    {
+      "fieldValues": {
+        "sequence": 1,
+      },
+      "messageId": "message-1",
+      "payloadHex": "AA",
+      "sendTimestamp": 1000,
+    },
+  ],
+  "pager": {
+    "page": 1,
+    "size": 10,
+    "total": 1,
+  },
+}
+
+ ❯ tests/unit/simulation/http-collection-contract.test.ts:86:22
+     84|       api.fetchAlarms('session-1'),
+     85|     ]);
+     86|     expect(messages).toEqual(controllerWire.get_simulation_messages.it…
+       |                      ^
+     87|     expect(bandwidth).toEqual(controllerWire.get_simulation_bandwidth.…
+     88|     expect(alarms).toEqual(controllerWire.get_simulation_alarms.items);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > loads pending events from the actual collection into event state
+AssertionError: expected { items: [ { …(5) } ], …(2) } to deeply equal [ { eventId: 'event-1', …(4) } ]
+
+- Expected: 
+[
+  {
+    "action": {
+      "params": {
+        "message": "ready",
+      },
+      "type": "log",
+    },
+    "condition": {
+      "type": "time",
+      "value": {
+        "time": 1,
+      },
+    },
+    "eventId": "event-1",
+    "name": "Wire event",
+    "status": "pending",
+  },
+]
+
++ Received: 
+{
+  "items": [
+    {
+      "action": {
+        "params": {
+          "message": "ready",
+        },
+        "type": "log",
+      },
+      "condition": {
+        "type": "time",
+        "value": {
+          "time": 1,
+        },
+      },
+      "eventId": "event-1",
+      "name": "Wire event",
+      "status": "pending",
+    },
+  ],
+  "list": [
+    {
+      "action": {
+        "params": {
+          "message": "ready",
+        },
+        "type": "log",
+      },
+      "condition": {
+        "type": "time",
+        "value": {
+          "time": 1,
+        },
+      },
+      "eventId": "event-1",
+      "name": "Wire event",
+      "status": "pending",
+    },
+  ],
+  "pager": {
+    "page": 1,
+    "size": 10,
+    "total": 1,
+  },
+}
+
+ ❯ tests/unit/simulation/http-collection-contract.test.ts:98:38
+     96|     try {
+     97|       await events.loadEvents();
+     98|       expect(events.eventList.value).toEqual(controllerWire.list_event…
+       |                                      ^
+     99|       expect(events.pendingEventCount.value).toBe(1);
+    100|       expect(events.lastError.value).toBeNull();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  tests/unit/simulation/http-collection-contract.test.ts > simulation HTTP controller/factory collection contract > keeps active faults instead of silently discarding a collection resource
+AssertionError: expected [] to match object [ { faultId: 'fault-1', …(3) } ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "faultId": "fault-1",
+-     "faultType": "disconnect",
+-     "status": "active",
+-     "targetId": "edge-1",
+-   },
+- ]
++ []
+
+ ❯ tests/unit/simulation/http-collection-contract.test.ts:108:5
+    106|   it('keeps active faults instead of silently discarding a collection …
+    107|     const faults = useFaultInjection(ref('session-1'));
+    108|     await expect(faults.fetchFaults()).resolves.toMatchObject([
+       |     ^
+    109|       { faultId: 'fault-1', faultType: 'disconnect', targetId: 'edge-1…
+    110|     ]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 2 passed (6)
+   Start at  23:31:35
+   Duration  1.57s (transform 802ms, setup 202ms, collect 1.04s, tests 48ms, environment 126ms, prepare 23ms)
+

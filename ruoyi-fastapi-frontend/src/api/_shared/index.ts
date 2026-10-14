@@ -29,6 +29,3 @@ export type {
   HttpPager,
   HttpListResult,
 } from '@/types/http-contract';
-
-// 导出 HTTP 客户端
-export { http } from './http-client';

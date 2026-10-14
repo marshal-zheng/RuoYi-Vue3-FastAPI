@@ -1,3 +1,6 @@
+export type DataRecord = Omit<DictDataModel, 'dictCode'> & { dictCode: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type { DictDataModel, DictDataPageQueryModel } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import type { HttpCollection } from '@/types/http-contract';
 
@@ -11,8 +14,8 @@ export interface DictData {
 }
 
 // 查询字典数据列表
-export function listData(query?: Record<string, any>) {
-  return request({
+export function listData(query?: DictDataPageQueryModel) {
+  return request<HttpOffsetPage<DataRecord>>({
     url: '/system/dict/data/list',
     method: 'get',
     params: query,
@@ -21,7 +24,7 @@ export function listData(query?: Record<string, any>) {
 
 // 查询字典数据详细
 export function getData(dictCode: number | string) {
-  return request({
+  return request<DataRecord>({
     url: '/system/dict/data/' + dictCode,
     method: 'get',
   });
@@ -47,8 +50,8 @@ export function getDicts(dictType: string) {
 }
 
 // 新增字典数据
-export function addData(data: Record<string, any>) {
-  return request({
+export function addData(data: DictDataModel) {
+  return request<DataRecord>({
     url: '/system/dict/data',
     method: 'post',
     data: data,
@@ -57,8 +60,8 @@ export function addData(data: Record<string, any>) {
 }
 
 // 修改字典数据
-export function updateData(data: Record<string, any>) {
-  return request({
+export function updateData(data: DictDataModel) {
+  return request<DataRecord>({
     url: '/system/dict/data',
     method: 'put',
     data: data,
@@ -68,7 +71,7 @@ export function updateData(data: Record<string, any>) {
 
 // 删除字典数据
 export function delData(dictCode: number | string) {
-  return request({
+  return request<null>({
     url: '/system/dict/data/' + dictCode,
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.dict-data.delete' },

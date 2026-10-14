@@ -1,4 +1,4 @@
-import { HttpResponse, type JsonBodyType } from 'msw';
+import { HttpResponse } from 'msw';
 
 import { createMockApiNotImplementedPayload } from '../runtime/unhandled';
 import type { MockStrategy } from '../types';
@@ -52,10 +52,10 @@ export function createOverlayProblemBody(entry: MockOverlayRegistryEntry) {
 
 function createOverlayUnsupportedBody(request: Request, entry: MockOverlayRegistryEntry) {
   const payload = createMockApiNotImplementedPayload(request);
-  const reason = entry.response?.reason ?? payload.msg;
+  const reason = entry.response?.reason ?? payload.detail;
   return {
     ...payload,
-    msg: `${payload.msg}：${reason}`,
+    detail: `${payload.detail}：${reason}`,
     reason,
     errorCode: entry.response?.errorCode ?? 'MOCK_API_NOT_IMPLEMENTED',
   };
@@ -66,11 +66,11 @@ export function createOverlayJsonResponse({
   strategy,
   body,
   status = 200,
+  contentType = 'application/json',
 }: MockOverlayResponseOptions) {
-  return HttpResponse.json(body as JsonBodyType, {
-    status,
-    headers: createOverlayHeaders(entry, strategy),
-  });
+  const headers = createOverlayHeaders(entry, strategy);
+  headers.set('Content-Type', contentType);
+  return new HttpResponse(JSON.stringify(body), { status, headers });
 }
 
 export function createOverlayProblemResponse(options: Omit<MockOverlayResponseOptions, 'body'>) {
@@ -81,6 +81,7 @@ export function createOverlayProblemResponse(options: Omit<MockOverlayResponseOp
         ? createOverlayUnsupportedBody(options.request, options.entry)
         : createOverlayProblemBody(options.entry),
     status: problemStatus(options.entry),
+    contentType: 'application/problem+json',
   });
 }
 

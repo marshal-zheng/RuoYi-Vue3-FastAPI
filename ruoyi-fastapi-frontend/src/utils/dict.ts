@@ -47,9 +47,9 @@ export function useDict(...args: string[]) {
               useDictStore().setDict(dictType, dictData);
               return dictData;
             })
-            .catch((error: any) => {
+            .catch(() => {
               // Silently handle errors to prevent "canceled" toasts
-              console.warn(`Failed to load dictionary: ${dictType}`, error);
+              // The HTTP feedback layer owns failures; retain an empty dictionary for rendering.
               return [];
             })
             .finally(() => {

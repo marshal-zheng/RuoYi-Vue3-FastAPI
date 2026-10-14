@@ -1,0 +1,29 @@
+[
+  {
+    "name": "business-lint-final",
+    "command": [
+      "yarn",
+      "lint:check"
+    ],
+    "exitCode": 0,
+    "seconds": 6.95
+  },
+  {
+    "name": "business-typecheck-final",
+    "command": [
+      "yarn",
+      "type-check"
+    ],
+    "exitCode": 0,
+    "seconds": 7.66
+  },
+  {
+    "name": "business-tests-final",
+    "command": [
+      "yarn",
+      "test:run"
+    ],
+    "exitCode": 1,
+    "seconds": 17.28
+  }
+]

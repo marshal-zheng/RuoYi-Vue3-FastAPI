@@ -55,7 +55,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['menu-click']);
+defineEmits(['menu-click']);
 
 // 兼容父组件传入的是 ref 或 普通对象
 const menu = computed(() => {

@@ -372,7 +372,7 @@ export class KeyboardManager {
    */
   destroy() {
     // 清理全局事件监听
-    this.globalKeyListeners.forEach(({ keydownHandler, keyupHandler }, key) => {
+    this.globalKeyListeners.forEach(({ keydownHandler, keyupHandler }) => {
       document.removeEventListener('keydown', keydownHandler);
       document.removeEventListener('keyup', keyupHandler);
     });

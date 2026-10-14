@@ -1,0 +1,39 @@
+[
+  {
+    "name": "backend-changed-lint",
+    "command": [
+      "./venv/bin/ruff",
+      "check",
+      "common/http_contracts.py",
+      "modules/system/api/menu_controller.py",
+      "modules/system/api/dept_controller.py",
+      "modules/system/api/dict_controller.py",
+      "module_admin/controller/device_category_controller.py",
+      "modules/registry.py",
+      "tests/unit/test_collection_openapi_contract.py",
+      "tests/unit/test_device_category_routes.py",
+      "tests/unit/services/test_device_category_service.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.04
+  },
+  {
+    "name": "backend-changed-format",
+    "command": [
+      "./venv/bin/ruff",
+      "format",
+      "--check",
+      "common/http_contracts.py",
+      "modules/system/api/menu_controller.py",
+      "modules/system/api/dept_controller.py",
+      "modules/system/api/dict_controller.py",
+      "module_admin/controller/device_category_controller.py",
+      "modules/registry.py",
+      "tests/unit/test_collection_openapi_contract.py",
+      "tests/unit/test_device_category_routes.py",
+      "tests/unit/services/test_device_category_service.py"
+    ],
+    "exitCode": 0,
+    "seconds": 0.01
+  }
+]

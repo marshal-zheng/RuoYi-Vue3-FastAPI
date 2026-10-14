@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-14",
+  "businessLint": {
+    "files": 599,
+    "errors": 0,
+    "warnings": 0
+  },
+  "businessTests": 805,
+  "libraryMainTests": 2478,
+  "libraryNodeTests": 39,
+  "libraryMcpTests": 84,
+  "libraryOptInTests": 3,
+  "backendRelatedTests": 70,
+  "offlineE2eTests": 9,
+  "browserBusinessCases": 8,
+  "sourceLayoutCases": 156,
+  "installedLayoutCases": 156,
+  "dividerCasesPerMode": 26,
+  "sourceChangesDuringGates": [],
+  "businessRulesUnchanged": true,
+  "libraryRulesRestored": true,
+  "reportReferencesValid": true,
+  "unresolvedAuditFindings": 0,
+  "backendWholeFileLegacyStyleDiagnostics": 228,
+  "fullBackendRuffClaimed": false
+}

@@ -1,0 +1,35 @@
+{
+  "backendControllerFactoryExit": 0,
+  "fixtureEqualsActualControllerBytes": true,
+  "collections": [
+    "get_simulation_messages",
+    "get_simulation_bandwidth",
+    "get_simulation_alarms",
+    "list_events",
+    "list_faults",
+    "query_faults",
+    "get_fill_strategies"
+  ],
+  "embeddedArraysPreserved": true,
+  "acceptedCommands": {
+    "start": {
+      "body": {
+        "sessionId": "session-1",
+        "action": "start",
+        "status": "accepted"
+      },
+      "status": 202,
+      "location": "http://127.0.0.1:8088/simulation/sessions/session-1/status"
+    },
+    "stop": {
+      "body": {
+        "sessionId": "session-1",
+        "action": "stop",
+        "status": "accepted"
+      },
+      "status": 202,
+      "location": "http://127.0.0.1:8088/simulation/sessions/session-1/status"
+    }
+  },
+  "noDatabaseWrites": true
+}

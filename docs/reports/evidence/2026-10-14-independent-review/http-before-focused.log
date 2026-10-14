@@ -1,0 +1,44 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 119ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 46ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 48ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 32ms
+ ✓ src/api/login.test.ts > login API contract > serializes login payload as x-www-form-urlencoded data through MSW 31ms
+ ✓ src/api/login.test.ts > login API contract > clamps long login and register passwords before sending the request 17ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 57ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 30ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers auth and system handlers via the real request path 89ms
+ ✓ src/api/login.test.ts > login API contract > covers auth metadata endpoints through the real request path 51ms
+ ✓ src/api/login.test.ts > login API contract > surfaces login API failures from the request error mapping 46ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 17ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'bare array' responses without registering routes 12ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'legacy data wrapper' responses without registering routes 10ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers project, version, and topology handlers via frontend API functions 90ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers simulation read models and unsupported writes via frontend API functions 78ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > returns deterministic 501 for demo-offline API gaps 34ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 70ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 28ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 3ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps SSE validator failures unknown and normal completion void 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves native network errors in the unknown SSE error hook 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves non-2xx HTTP transport errors in the unknown SSE error hook 0ms
+
+ Test Files  6 passed (6)
+      Tests  33 passed (33)
+   Start at  02:14:37
+   Duration  3.30s (transform 1.30s, setup 1.53s, collect 4.87s, tests 929ms, environment 1.48s, prepare 199ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

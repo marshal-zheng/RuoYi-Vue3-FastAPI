@@ -50,7 +50,7 @@ const loadOptions = async (keyword) => {
     }
     lastOptions.value = mapped;
     return mapped;
-  } catch (_error) {
+  } catch {
     lastOptions.value = [];
     return [];
   }

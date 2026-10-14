@@ -6,7 +6,7 @@ import { createApiPath } from '../constants';
 import type { MockRuntimeHandler, MockStrategy } from '../types';
 import type { MockDataSource } from '../store';
 import { resultSuccess } from '../utils/response';
-import { getSearchParams, readJsonBody } from '../utils/request';
+import { getSearchParams } from '../utils/request';
 import { withBackendFallback } from '../utils/with-backend-fallback';
 import { buildDeptTree, buildSystemRoutes, projectDictData } from './projections';
 import type { MockDictData } from '../data';
@@ -82,6 +82,22 @@ function roleUser(name: string, userId: number, roleId: number): UserInfoModel {
   };
 }
 
+function unsupportedSystemWrite(request: Request) {
+  const url = new URL(request.url);
+  const path = `${url.pathname}${url.search}`;
+  return HttpResponse.json(
+    {
+      type: 'about:blank',
+      title: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED',
+      status: 501,
+      detail: `MOCK_SYSTEM_WRITE_NOT_SUPPORTED: ${request.method} ${path} 当前系统数据源只读，尚未实现状态写入`,
+      instance: path,
+      errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED',
+    },
+    { status: 501, headers: { 'Content-Type': 'application/problem+json' } }
+  );
+}
+
 export function createSystemHandlers(
   strategy: MockStrategy,
   dataSource: MockDataSource
@@ -93,7 +109,7 @@ export function createSystemHandlers(
         async () => {
           await dataSource.init();
           const menus = await dataSource.system.listMenus();
-          return HttpResponse.json(resultSuccess(buildSystemRoutes(menus)));
+          return HttpResponse.json(resultSuccess({ items: buildSystemRoutes(menus) }));
         },
         {
           strategy,
@@ -123,7 +139,7 @@ export function createSystemHandlers(
         async () => {
           await dataSource.init();
           const departments = await dataSource.system.listDepartments();
-          return HttpResponse.json(resultSuccess(buildDeptTree(departments)));
+          return HttpResponse.json(resultSuccess({ items: buildDeptTree(departments) }));
         },
         {
           strategy,
@@ -201,60 +217,49 @@ export function createSystemHandlers(
       )
     ),
     http.post(createApiPath('/system/role'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () =>
-          HttpResponse.json(
-            resultSuccess({
-              roleId: 1000,
-              ...((await readJsonBody(request)) ?? {}),
-            })
-          ),
-        { strategy, tag: 'system:roleCreate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:roleCreate',
+      })
     ),
     http.put(createApiPath('/system/role/dataScope'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:roleDataScope' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:roleDataScope',
+      })
     ),
     http.put(createApiPath('/system/role/changeStatus'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:roleChangeStatus' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:roleChangeStatus',
+      })
     ),
     http.put(createApiPath('/system/role/authUser/cancel'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:roleAuthCancel' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:roleAuthCancel',
+      })
     ),
     http.put(createApiPath('/system/role/authUser/cancelAll'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:roleAuthCancelAll',
       })
     ),
     http.put(createApiPath('/system/role/authUser/selectAll'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:roleAuthSelectAll',
       })
     ),
     http.put(createApiPath('/system/role'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:roleUpdate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:roleUpdate',
+      })
     ),
     http.delete(createApiPath('/system/role/:roleIds'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:roleDelete',
       })
@@ -269,7 +274,7 @@ export function createSystemHandlers(
           const menus = (await dataSource.system.listMenus()).filter((menu) =>
             includesQuery(menu.menuName, menuName)
           );
-          return HttpResponse.json(resultSuccess(menus));
+          return HttpResponse.json(resultSuccess({ items: menus }));
         },
         { strategy, tag: 'system:menus' }
       )
@@ -281,11 +286,11 @@ export function createSystemHandlers(
           await dataSource.init();
           const menus = await dataSource.system.listMenus();
           return HttpResponse.json(
-            resultSuccess(
-              menus
+            resultSuccess({
+              items: menus
                 .filter((menu) => menu.parentId === 0)
-                .map((menu) => ({ id: menu.menuId, label: menu.menuName }))
-            )
+                .map((menu) => ({ id: menu.menuId, label: menu.menuName })),
+            })
           );
         },
         { strategy, tag: 'system:menuTree' }
@@ -328,27 +333,19 @@ export function createSystemHandlers(
       )
     ),
     http.post(createApiPath('/system/menu'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () =>
-          HttpResponse.json(
-            resultSuccess({
-              menuId: 1000,
-              ...((await readJsonBody(request)) ?? {}),
-            })
-          ),
-        { strategy, tag: 'system:menuCreate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:menuCreate',
+      })
     ),
     http.put(createApiPath('/system/menu'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:menuUpdate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:menuUpdate',
+      })
     ),
     http.delete(createApiPath('/system/menu/:menuId'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:menuDelete',
       })
@@ -359,14 +356,7 @@ export function createSystemHandlers(
         async () => {
           await dataSource.init();
           const departments = await dataSource.system.listDepartments();
-          return HttpResponse.json(
-            resultSuccess({
-              items: departments,
-              total: departments.length,
-              page: 1,
-              pageSize: departments.length,
-            })
-          );
+          return HttpResponse.json(resultSuccess({ items: departments }));
         },
         { strategy, tag: 'system:departments' }
       )
@@ -391,7 +381,12 @@ export function createSystemHandlers(
         request,
         () => {
           const config = mockConfigs.find((item) => item.configKey === String(params.configKey));
-          return HttpResponse.json(resultSuccess(config?.configValue ?? ''));
+          return HttpResponse.json(
+            resultSuccess({
+              configKey: String(params.configKey),
+              configValue: config?.configValue ?? '',
+            })
+          );
         },
         { strategy, tag: 'system:configKey' }
       )
@@ -408,33 +403,25 @@ export function createSystemHandlers(
       )
     ),
     http.post(createApiPath('/system/config'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () =>
-          HttpResponse.json(
-            resultSuccess({
-              configId: 1000,
-              ...((await readJsonBody(request)) ?? {}),
-            })
-          ),
-        { strategy, tag: 'system:configCreate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:configCreate',
+      })
     ),
     http.put(createApiPath('/system/config'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:configUpdate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:configUpdate',
+      })
     ),
     http.delete(createApiPath('/system/config/refreshCache'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:configRefreshCache',
       })
     ),
     http.delete(createApiPath('/system/config/:configIds'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:configDelete',
       })
@@ -468,27 +455,19 @@ export function createSystemHandlers(
       )
     ),
     http.post(createApiPath('/system/dict/data'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () =>
-          HttpResponse.json(
-            resultSuccess({
-              dictCode: 1000,
-              ...((await readJsonBody(request)) ?? {}),
-            })
-          ),
-        { strategy, tag: 'system:dictDataCreate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:dictDataCreate',
+      })
     ),
     http.put(createApiPath('/system/dict/data'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:dictDataUpdate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:dictDataUpdate',
+      })
     ),
     http.delete(createApiPath('/system/dict/data/:dictCodes'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:dictDataDelete',
       })
@@ -515,7 +494,7 @@ export function createSystemHandlers(
         async () => {
           await dataSource.init();
           return HttpResponse.json(
-            resultSuccess(dictTypesFromData(await dataSource.system.listDictData()))
+            resultSuccess({ items: dictTypesFromData(await dataSource.system.listDictData()) })
           );
         },
         { strategy, tag: 'system:dictTypeOptions' }
@@ -536,33 +515,25 @@ export function createSystemHandlers(
       )
     ),
     http.post(createApiPath('/system/dict/type'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () =>
-          HttpResponse.json(
-            resultSuccess({
-              dictId: 1000,
-              ...((await readJsonBody(request)) ?? {}),
-            })
-          ),
-        { strategy, tag: 'system:dictTypeCreate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:dictTypeCreate',
+      })
     ),
     http.put(createApiPath('/system/dict/type'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => HttpResponse.json(resultSuccess((await readJsonBody(request)) ?? {})),
-        { strategy, tag: 'system:dictTypeUpdate' }
-      )
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
+        strategy,
+        tag: 'system:dictTypeUpdate',
+      })
     ),
     http.delete(createApiPath('/system/dict/type/refreshCache'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:dictTypeRefreshCache',
       })
     ),
     http.delete(createApiPath('/system/dict/type/:dictIds'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess(null)), {
+      withBackendFallback(request, () => unsupportedSystemWrite(request), {
         strategy,
         tag: 'system:dictTypeDelete',
       })

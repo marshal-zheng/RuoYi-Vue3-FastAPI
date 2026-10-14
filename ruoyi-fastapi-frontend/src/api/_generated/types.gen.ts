@@ -615,6 +615,78 @@ export type CloneProjectVersionModel = {
 };
 
 /**
+ * CollectionResult[CacheInfoModel]
+ */
+export type CollectionResultCacheInfoModel = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<CacheInfoModel>;
+};
+
+/**
+ * CollectionResult[DeptModel]
+ */
+export type CollectionResultDeptModel = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<DeptModel>;
+};
+
+/**
+ * CollectionResult[DeviceCategoryOptionModel]
+ */
+export type CollectionResultDeviceCategoryOptionModel = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<DeviceCategoryOptionModel>;
+};
+
+/**
+ * CollectionResult[DictTypeModel]
+ */
+export type CollectionResultDictTypeModel = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<DictTypeModel>;
+};
+
+/**
+ * CollectionResult[MenuModel]
+ */
+export type CollectionResultMenuModel = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<MenuModel>;
+};
+
+/**
+ * CollectionResult[str]
+ */
+export type CollectionResultStr = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<string>;
+};
+
+/**
  * ConfigModel
  *
  * 参数配置表对应pydantic模型
@@ -1168,6 +1240,26 @@ export type DeviceCategoryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * DeviceCategoryOptionModel
+ *
+ * 设备分类选项模型（用于下拉选择）
+ */
+export type DeviceCategoryOptionModel = {
+  /**
+   * Devicecategoryid
+   *
+   * 设备分类ID
+   */
+  deviceCategoryId: number;
+  /**
+   * Name
+   *
+   * 分类名称
+   */
+  name: string;
 };
 
 /**
@@ -5928,7 +6020,7 @@ export type CheckDeviceCategoryNameUniqueDeviceCategoryCheckNameUniqueGetData = 
     /**
      * Category Id
      */
-    category_id?: number;
+    category_id?: number | null;
   };
   url: '/device/category/checkNameUnique';
 };
@@ -5975,8 +6067,11 @@ export type GetDeviceCategoryOptionsDeviceCategoryOptionsGetResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: CollectionResultDeviceCategoryOptionModel;
 };
+
+export type GetDeviceCategoryOptionsDeviceCategoryOptionsGetResponse =
+  GetDeviceCategoryOptionsDeviceCategoryOptionsGetResponses[keyof GetDeviceCategoryOptionsDeviceCategoryOptionsGetResponses];
 
 export type DeleteDeviceCategoryDeviceCategoryCategoryIdsDeleteData = {
   body?: never;
@@ -6719,11 +6814,9 @@ export type GetMonitorCacheKeyMonitorCacheGetKeysCacheNameGetError =
 
 export type GetMonitorCacheKeyMonitorCacheGetKeysCacheNameGetResponses = {
   /**
-   * Response Get Monitor Cache Key Monitor Cache Getkeys  Cache Name  Get
-   *
    * Successful Response
    */
-  200: Array<string>;
+  200: CollectionResultStr;
 };
 
 export type GetMonitorCacheKeyMonitorCacheGetKeysCacheNameGetResponse =
@@ -6738,11 +6831,9 @@ export type GetMonitorCacheNameMonitorCacheGetNamesGetData = {
 
 export type GetMonitorCacheNameMonitorCacheGetNamesGetResponses = {
   /**
-   * Response Get Monitor Cache Name Monitor Cache Getnames Get
-   *
    * Successful Response
    */
-  200: Array<CacheInfoModel>;
+  200: CollectionResultCacheInfoModel;
 };
 
 export type GetMonitorCacheNameMonitorCacheGetNamesGetResponse =
@@ -10158,11 +10249,9 @@ export type GetSystemDeptListSystemDeptListGetError =
 
 export type GetSystemDeptListSystemDeptListGetResponses = {
   /**
-   * Response Get System Dept List System Dept List Get
-   *
    * Successful Response
    */
-  200: Array<DeptModel>;
+  200: CollectionResultDeptModel;
 };
 
 export type GetSystemDeptListSystemDeptListGetResponse =
@@ -10192,11 +10281,9 @@ export type GetSystemDeptTreeForEditOptionSystemDeptListExcludeDeptIdGetError =
 
 export type GetSystemDeptTreeForEditOptionSystemDeptListExcludeDeptIdGetResponses = {
   /**
-   * Response Get System Dept Tree For Edit Option System Dept List Exclude  Dept Id  Get
-   *
    * Successful Response
    */
-  200: Array<DeptModel>;
+  200: CollectionResultDeptModel;
 };
 
 export type GetSystemDeptTreeForEditOptionSystemDeptListExcludeDeptIdGetResponse =
@@ -10762,11 +10849,9 @@ export type QuerySystemDictTypeOptionsSystemDictTypeOptionselectGetData = {
 
 export type QuerySystemDictTypeOptionsSystemDictTypeOptionselectGetResponses = {
   /**
-   * Response Query System Dict Type Options System Dict Type Optionselect Get
-   *
    * Successful Response
    */
-  200: Array<DictTypeModel>;
+  200: CollectionResultDictTypeModel;
 };
 
 export type QuerySystemDictTypeOptionsSystemDictTypeOptionselectGetResponse =
@@ -11061,11 +11146,9 @@ export type GetSystemMenuListSystemMenuListGetError =
 
 export type GetSystemMenuListSystemMenuListGetResponses = {
   /**
-   * Response Get System Menu List System Menu List Get
-   *
    * Successful Response
    */
-  200: Array<MenuModel>;
+  200: CollectionResultMenuModel;
 };
 
 export type GetSystemMenuListSystemMenuListGetResponse =

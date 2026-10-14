@@ -85,7 +85,7 @@ import { useDrawer } from '@zxio/zxui';
 import { addRole, getRole, updateRole } from '@/api/system/role';
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu';
 
-const props = defineProps({
+defineProps({
   statusOptions: { type: Array, default: () => [] },
 });
 

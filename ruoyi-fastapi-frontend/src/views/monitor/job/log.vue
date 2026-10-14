@@ -246,7 +246,7 @@ const data = reactive({
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const { queryParams, form } = toRefs(data);
 
 /** 查询调度日志列表 */
 function getList() {
@@ -258,11 +258,11 @@ function getList() {
   });
 }
 /** 任务组名字典翻译 */
-function jobGroupFormat(row, column) {
+function jobGroupFormat(row) {
   return proxy.selectDictLabel(sys_job_group.value, row.jobGroup);
 }
 /** 任务组名字典翻译 */
-function jobExecutorFormat(row, column) {
+function jobExecutorFormat(row) {
   return proxy.selectDictLabel(sys_job_executor.value, row.jobExecutor);
 }
 // 返回按钮
@@ -292,7 +292,7 @@ function handleView(row) {
   form.value = row;
 }
 /** 删除按钮操作 */
-function handleDelete(row) {
+function handleDelete() {
   proxy.$modal
     .confirm('是否确认删除调度日志编号为"' + ids.value + '"的数据项?')
     .then(function () {

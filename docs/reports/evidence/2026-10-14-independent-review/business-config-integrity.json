@@ -1,0 +1,18 @@
+{
+  "eslint.config.js": {
+    "before": "b45988c145484bd97c081abc57219aaf4ebf2703f2aaff1704d39e01e55c1c08",
+    "after": "b45988c145484bd97c081abc57219aaf4ebf2703f2aaff1704d39e01e55c1c08"
+  },
+  "tsconfig.json": {
+    "before": "42a7d32e8095b279cd41360badbafd9a5d59d43422499442556d14f87977c674",
+    "after": "42a7d32e8095b279cd41360badbafd9a5d59d43422499442556d14f87977c674"
+  },
+  "tsconfig.strict.json": {
+    "before": "1bd091a89f30013f868c734e105de1d7ae17753bbeecd7bfa2fd6b2ad6a4969a",
+    "after": "1bd091a89f30013f868c734e105de1d7ae17753bbeecd7bfa2fd6b2ad6a4969a"
+  },
+  "vitest.config.ts": {
+    "before": "898bbb24e6b5f497c046485e74a948333b69d37bd561876f42c37aa61a7f0fac",
+    "after": "898bbb24e6b5f497c046485e74a948333b69d37bd561876f42c37aa61a7f0fac"
+  }
+}

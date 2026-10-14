@@ -1,0 +1,35 @@
+
+==> ESLint
+
+Oops! Something went wrong! :(
+
+ESLint: 9.39.1
+
+No files matching the pattern "src/api/_shared/http-client.ts" were found.
+Please check for typing mistakes in the pattern.
+
+  [FAIL] Lint failed on changed files (run: cd ruoyi-fastapi-frontend && yarn lint)
+
+==> Type Check
+  [WARN] Type check skipped
+
+==> Color Token Policy
+  [FAIL] Hex colors detected in non-token files (use Tailwind classes or CSS variables)
+  Files:
+    - ruoyi-fastapi-frontend/src/views/project/simulation/composables/useFaultInjectionUI.ts
+
+==> HTTP Layer Policy
+  [OK] No runtime axios violations
+
+==> Vue Component Policy
+  [OK] No Options API regressions
+
+==> Console Usage Policy
+  [FAIL] console.log/warn/error added in business code
+  Files:
+    - ruoyi-fastapi-frontend/src/views/project/detail.vue
+
+==> Unit Tests
+  [WARN] Tests skipped (use --with-tests to enable)
+
+[FAIL] 3 check(s) failed

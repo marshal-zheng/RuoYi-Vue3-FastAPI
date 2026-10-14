@@ -1,0 +1,36 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads paged dict data and typed dict options through MSW 57ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads and mutates dict data through the real request path 37ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > loads menu list, details, and role tree through MSW 65ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > handles menu mutations via HTTP contract responses 23ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 57ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 30ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers auth and system handlers via the real request path 89ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > surfaces server-side menu failures through the request error mapping 46ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 19ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects retired router response shapes without registering routes: {"path":"/legacy","component":"Layout","name":"Legacy"} 10ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects retired router response shapes without registering routes: {"data":[{"path":"/legacy","component":"Layout","name":"Legacy"}]} 10ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > surfaces dict data failures from the request error mapping 45ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads paged dict types and option select data through MSW 34ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads and mutates dict types through the real request path 33ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > surfaces dict type failures from the request error mapping 40ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers project, version, and topology handlers via frontend API functions 91ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers simulation read models and unsupported writes via frontend API functions 78ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > returns deterministic 501 for demo-offline API gaps 33ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 67ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 28ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > generates routes and registers them into router 4ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > accepts collection-style router payloads from the new HTTP contract 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > falls back to first menu path when current route disappears after reload 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > keeps existing routes when reload request fails 0ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > removes unnamed dynamic routes via route remover callbacks 1ms
+
+ Test Files  6 passed (6)
+      Tests  25 passed (25)
+   Start at  23:26:15
+   Duration  2.64s (transform 939ms, setup 1.13s, collect 4.47s, tests 909ms, environment 848ms, prepare 151ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

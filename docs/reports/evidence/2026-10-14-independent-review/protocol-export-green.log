@@ -1,0 +1,12 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/protocol/export.contract.test.ts > protocol export wire contract > submits the real Form parameter and decodes the XLSX response as binary 37ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  02:28:33
+   Duration  3.77s (transform 1.89s, setup 488ms, collect 2.44s, tests 38ms, environment 355ms, prepare 55ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { getDicts } from '@/api/system/dict/data';
 
 const props = defineProps({
@@ -66,7 +66,7 @@ const loadDictData = async () => {
         _raw: item.option,
       };
     });
-  } catch (_error) {
+  } catch {
     allOptions.value = [];
   }
 };
@@ -98,7 +98,6 @@ const filterOptions = (queryString) => {
 };
 
 const handleSelect = (item) => {
-  console.log('itemsssss', item);
   inputValue.value = item.label;
   emitValue(item.value);
   emit('dict-change', item._raw ?? item);

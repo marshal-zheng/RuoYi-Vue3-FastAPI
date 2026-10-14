@@ -1,0 +1,83 @@
+[
+  {
+    "name": "business-lint-final",
+    "command": [
+      "yarn",
+      "lint:check"
+    ],
+    "exitCode": 0,
+    "seconds": 7.54
+  },
+  {
+    "name": "business-typecheck-final",
+    "command": [
+      "yarn",
+      "type-check"
+    ],
+    "exitCode": 0,
+    "seconds": 8.3
+  },
+  {
+    "name": "business-tests-final",
+    "command": [
+      "yarn",
+      "test:run"
+    ],
+    "exitCode": 0,
+    "seconds": 17.67
+  },
+  {
+    "name": "business-ui-standards-final",
+    "command": [
+      "yarn",
+      "ui:standards"
+    ],
+    "exitCode": 0,
+    "seconds": 3.55
+  },
+  {
+    "name": "business-mock-contracts-final",
+    "command": [
+      "yarn",
+      "mock:contracts"
+    ],
+    "exitCode": 0,
+    "seconds": 1.06
+  },
+  {
+    "name": "business-mock-overlays-final",
+    "command": [
+      "yarn",
+      "mock:overlays"
+    ],
+    "exitCode": 0,
+    "seconds": 0.8
+  },
+  {
+    "name": "business-build-final",
+    "command": [
+      "yarn",
+      "build:prod"
+    ],
+    "exitCode": 0,
+    "seconds": 26.03
+  },
+  {
+    "name": "business-offline-core-final",
+    "command": [
+      "yarn",
+      "e2e:demo-offline"
+    ],
+    "exitCode": 0,
+    "seconds": 41.42
+  },
+  {
+    "name": "business-offline-page-state-final",
+    "command": [
+      "yarn",
+      "e2e:demo-offline:page-state"
+    ],
+    "exitCode": 0,
+    "seconds": 46.62
+  }
+]

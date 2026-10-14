@@ -69,7 +69,6 @@ import { serializeDateRange } from '@/utils/ruoyi';
 
 const gridListRef = ref(null);
 const tables = ref([]);
-const { proxy } = getCurrentInstance();
 
 const emit = defineEmits(['ok']);
 

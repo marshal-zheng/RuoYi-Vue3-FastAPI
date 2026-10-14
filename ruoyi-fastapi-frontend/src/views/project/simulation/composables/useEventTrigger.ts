@@ -4,6 +4,12 @@
  * 管理仿真过程中的自定义事件触发功能
  */
 import { ref, computed, watch, type Ref, type ComputedRef } from 'vue';
+import type {
+  EventConditionValues,
+  EventActionParams,
+  SimulationMessage,
+  SimulationEventRequest,
+} from '@/api/simulation/types';
 import {
   createEvent as createEventApi,
   updateEvent as updateEventApi,
@@ -41,7 +47,7 @@ interface ConditionParam {
   name: string;
   label: string;
   type: 'number' | 'string' | 'select';
-  default?: any;
+  default?: string | number;
   min?: number;
   max?: number;
   options?: string[] | Array<{ value: string; label: string }>;
@@ -74,12 +80,12 @@ type EventActionType = ActionTypeValue | (string & {});
 
 interface EventCondition {
   type: EventConditionType;
-  value: Record<string, any>;
+  value: EventConditionValues;
 }
 
 interface EventAction {
   type: EventActionType;
-  params: Record<string, any>;
+  params: EventActionParams;
 }
 
 interface EventConfig {
@@ -103,7 +109,7 @@ interface SimulationState {
   elapsedTime?: number;
   messageCount?: number;
   bandwidthByPort?: Record<string, { loadPercent: number }>;
-  latestMessage?: any;
+  latestMessage?: Pick<SimulationMessage, 'payloadHex' | 'protocolType'>;
 }
 
 /**
@@ -305,19 +311,19 @@ export function matchCondition(
 
   switch (type) {
     case ConditionType.TIME:
-      return (state.elapsedTime || 0) >= value.time;
+      return (state.elapsedTime || 0) >= Number(value.time);
 
     case ConditionType.MESSAGE_COUNT:
-      return (state.messageCount || 0) >= value.count;
+      return (state.messageCount || 0) >= Number(value.count);
 
     case ConditionType.BANDWIDTH_THRESHOLD:
       if (value.portId) {
         const portBandwidth = state.bandwidthByPort?.[value.portId];
-        return !!portBandwidth && portBandwidth.loadPercent >= value.threshold;
+        return !!portBandwidth && portBandwidth.loadPercent >= Number(value.threshold);
       }
       // 检查任意端口
       return Object.values(state.bandwidthByPort || {}).some(
-        (b) => b.loadPercent >= value.threshold
+        (b) => b.loadPercent >= Number(value.threshold)
       );
 
     case ConditionType.MESSAGE_CONTENT:
@@ -347,6 +353,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
 
   // 加载中状态
   const loading: Ref<boolean> = ref(false);
+  const lastError = ref<string | null>(null);
 
   // 计算属性：待触发事件数量
   const pendingEventCount: ComputedRef<number> = computed(() => {
@@ -357,13 +364,6 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
   const triggeredEventCount: ComputedRef<number> = computed(() => {
     return eventList.value.filter((e) => e.status === 'triggered').length;
   });
-
-  function unwrapEventList(response: any): Event[] {
-    if (Array.isArray(response)) return response;
-    if (Array.isArray(response?.items)) return response.items;
-    if (Array.isArray(response?.data)) return response.data;
-    return [];
-  }
 
   /**
    * 加载事件列表
@@ -377,9 +377,9 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     loading.value = true;
     try {
       const response = await getEventsApi(sessionId.value);
-      eventList.value = unwrapEventList(response);
+      eventList.value = response.items;
     } catch (error) {
-      console.error('加载事件列表失败:', error);
+      lastError.value = error instanceof Error ? error.message : '加载事件列表失败';
     } finally {
       loading.value = false;
     }
@@ -415,7 +415,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
       actionParams: action.params,
     });
 
-    const eventResponse = response as Partial<Event> | undefined;
+    const eventResponse = response;
     const event: Event = {
       eventId: eventResponse?.eventId || `event-${Date.now()}`,
       name,
@@ -439,7 +439,10 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    * @param {string} eventId - 事件ID
    * @param {Object} config - 事件配置
    */
-  async function updateEvent(eventId: string, config: Partial<EventConfig>) {
+  async function updateEvent(
+    eventId: string,
+    config: Partial<EventConfig> & Pick<SimulationEventRequest, 'status'>
+  ) {
     if (!sessionId.value) {
       throw new Error('仿真会话不存在');
     }
@@ -504,7 +507,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     const event = eventList.value.find((e) => e.eventId === eventId);
     if (event) {
       event.status = enabled ? 'pending' : 'disabled';
-      await updateEvent(eventId, { status: event.status } as any);
+      await updateEvent(eventId, { status: event.status });
     }
   }
 
@@ -517,7 +520,9 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
 
     for (const event of pendingEvents) {
       if (matchCondition(event.condition, state)) {
-        triggerEvent(event.eventId).catch(console.error);
+        triggerEvent(event.eventId).catch((error: unknown) => {
+          lastError.value = error instanceof Error ? error.message : '触发事件失败';
+        });
       }
     }
   }
@@ -546,6 +551,7 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
     // 状态
     eventList,
     loading,
+    lastError,
     pendingEventCount,
     triggeredEventCount,
 

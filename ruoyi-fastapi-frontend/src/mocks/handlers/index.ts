@@ -1,38 +1,28 @@
-import type { MockDataSource } from "../store";
-import { getMockDataSource } from "../store";
-import type {
-  MockNetworkStrategy,
-  MockRuntimeHandler,
-  MockStrategy,
-} from "../types";
-import { createUnhandledApiHandler } from "../runtime/unhandled";
-import { createMockOverlayHandlers } from "../overlays/handlers";
-import type { MockOverlayActivationInput } from "../overlays";
+import type { MockDataSource } from '../store';
+import { getMockDataSource } from '../store';
+import type { MockNetworkStrategy, MockRuntimeHandler, MockStrategy } from '../types';
+import { createUnhandledApiHandler } from '../runtime/unhandled';
+import { createMockOverlayHandlers } from '../overlays/handlers';
+import type { MockOverlayActivationInput } from '../overlays';
 
-import { createSystemHandlers } from "./system";
-import { createUserHandlers } from "./user";
-import { createTestHandlers } from "./test";
-import { createMonitorHandlers } from "./monitor";
-import { createDeviceHandlers } from "./device";
-import { createProjectHandlers } from "./project";
-import { createSimulationHandlers } from "./simulation";
+import { createSystemHandlers } from './system';
+import { createUserHandlers } from './user';
+import { createTestHandlers } from './test';
+import { createMonitorHandlers } from './monitor';
+import { createDeviceHandlers } from './device';
+import { createProjectHandlers } from './project';
+import { createSimulationHandlers } from './simulation';
 
 export interface CreateMockHandlersOptions {
   strategy: MockNetworkStrategy;
   dataSource?: MockDataSource;
   apiPrefix?: string;
-  onMissingCapability?: "error" | "passthrough";
+  onMissingCapability?: 'error' | 'passthrough';
   overlays?: MockOverlayActivationInput;
 }
 
-export function createMockHandlers(
-  options: CreateMockHandlersOptions,
-): MockRuntimeHandler[] {
-  const {
-    strategy,
-    apiPrefix = "/api",
-    onMissingCapability = "passthrough",
-  } = options;
+export function createMockHandlers(options: CreateMockHandlersOptions): MockRuntimeHandler[] {
+  const { strategy, apiPrefix = '/api', onMissingCapability = 'passthrough' } = options;
   const dataSource = options.dataSource ?? getMockDataSource();
   void dataSource;
 
@@ -56,7 +46,7 @@ export function createMockHandlers(
     ...baseHandlers,
   ];
 
-  if (onMissingCapability === "error") {
+  if (onMissingCapability === 'error') {
     handlers.push(createUnhandledApiHandler(apiPrefix));
   }
 

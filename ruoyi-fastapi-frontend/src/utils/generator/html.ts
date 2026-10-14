@@ -1,3 +1,4 @@
+import type { GeneratorValue } from './types';
 import { trigger } from './config';
 import { generatorTags, normalizeGeneratorFields } from './identity';
 
@@ -52,7 +53,11 @@ interface FormElement {
   precision?: number;
   filterable?: boolean;
   multiple?: boolean;
-  options?: Array<{ label: string; value: any; disabled?: boolean }>;
+  options?: Array<{
+    label: string;
+    value: string | number | boolean;
+    disabled?: boolean;
+  }>;
   size?: string;
   optionType?: string;
   border?: boolean;
@@ -60,8 +65,8 @@ interface FormElement {
   'inactive-text'?: string;
   'active-color'?: string;
   'inactive-color'?: string;
-  'active-value'?: any;
-  'inactive-value'?: any;
+  'active-value'?: string | number | boolean;
+  'inactive-value'?: string | number | boolean;
   'show-stops'?: boolean;
   range?: boolean;
   'start-placeholder'?: string;
@@ -70,7 +75,7 @@ interface FormElement {
   'is-range'?: boolean;
   format?: string;
   'value-format'?: string;
-  'picker-options'?: any;
+  'picker-options'?: Record<string, GeneratorValue>;
   'allow-half'?: boolean;
   'show-text'?: boolean;
   'show-score'?: boolean;
@@ -91,7 +96,14 @@ interface FormElement {
   icon?: string;
   prepend?: string;
   append?: string;
-  props?: any;
+  props?: {
+    props: {
+      multiple?: boolean;
+      value?: string;
+      label?: string;
+      children?: string;
+    };
+  };
   'show-all-levels'?: boolean;
   separator?: string;
 }
@@ -368,7 +380,7 @@ const tags: Record<string, TagFunction> = {
     const showText = el['show-text'] ? 'show-text' : '';
     const showScore = el['show-score'] ? 'show-score' : '';
 
-    return `<${el.tag} ${vModel} ${allowHalf} ${showText} ${showScore} ${disabled}></${el.tag}>`;
+    return `<${el.tag} ${vModel} ${max} ${allowHalf} ${showText} ${showScore} ${disabled}></${el.tag}>`;
   },
   'el-color-picker': (el: FormElement): string => {
     const { disabled, vModel } = attrBuilder(el);
@@ -490,6 +502,5 @@ export function makeUpHtml(conf: FormConf, type: string): string {
   if (type === 'dialog') {
     temp = dialogWrapper(temp);
   }
-  confGlobal = null as any;
   return temp;
 }

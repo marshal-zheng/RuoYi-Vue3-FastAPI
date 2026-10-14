@@ -76,6 +76,14 @@ function topologyResponse(
   return (versionId ? { ...response, versionId } : response) satisfies MockTopologyResponse;
 }
 
+function createdResourceLocation(request: Request, id: number): string {
+  const location = new URL(request.url);
+  location.pathname = `${location.pathname.replace(/\/clone\/?$/, '').replace(/\/$/, '')}/${id}`;
+  location.search = '';
+  location.hash = '';
+  return location.href;
+}
+
 function fileResponse(filename: string, body: string, contentType = 'text/plain;charset=utf-8') {
   return new HttpResponse(body, {
     status: 200,
@@ -203,58 +211,6 @@ export function createProjectHandlers(
         { strategy, tag: 'project:topology:save' }
       )
     ),
-    http.get(createApiPath('/project/:projectId/topology'), ({ request, params }) =>
-      withBackendFallback(
-        request,
-        async () => {
-          await dataSource.init();
-          const projectId = Number(params.projectId);
-          const versions = await dataSource.version.list(projectId, {
-            page: 1,
-            pageSize: 1,
-          });
-          const versionId = versions.items[0]?.versionId;
-          const topology = versionId
-            ? await dataSource.topology.getByProjectVersion(projectId, versionId)
-            : undefined;
-          return HttpResponse.json(resultSuccess(topologyResponse(topology, projectId, versionId)));
-        },
-        { strategy, tag: 'project:topology:legacy-get' }
-      )
-    ),
-    http.put(createApiPath('/project/:projectId/topology'), ({ request, params }) =>
-      withBackendFallback(
-        request,
-        async () => {
-          try {
-            await dataSource.init();
-            const projectId = Number(params.projectId);
-            const body = await readBody<{
-              versionId?: number | string;
-              topologyData?: unknown;
-              graph?: unknown;
-            }>(request);
-            const versionId = toNumber(body.versionId);
-            if (!versionId) {
-              return HttpResponse.json(resultError('versionId 不能为空', { code: 400 }), {
-                status: 400,
-              });
-            }
-            const topology = await dataSource.topology.save(
-              projectId,
-              versionId,
-              body.topologyData ?? body.graph ?? { nodes: [], edges: [] }
-            );
-            return HttpResponse.json(
-              resultSuccess(topologyResponse(topology, projectId, versionId))
-            );
-          } catch (error) {
-            return repositoryErrorResponse(error);
-          }
-        },
-        { strategy, tag: 'project:topology:legacy-save' }
-      )
-    ),
     http.get(createApiPath('/project/version/list'), ({ request }) =>
       withBackendFallback(
         request,
@@ -282,19 +238,33 @@ export function createProjectHandlers(
         async () => {
           try {
             await dataSource.init();
-            const body = await readBody<{
-              sourceVersionId?: number | string;
-              versionId?: number | string;
-              versionName?: string;
-            }>(request);
-            const sourceVersionId = toNumber(body.sourceVersionId ?? body.versionId);
-            if (!sourceVersionId) {
-              return HttpResponse.json(resultError('sourceVersionId 不能为空', { code: 400 }), {
-                status: 400,
-              });
+            const body = await readBody<Record<string, unknown>>(request);
+            const sourceVersionId = toNumber(body.sourceVersionId);
+            if (
+              !sourceVersionId ||
+              !Number.isInteger(sourceVersionId) ||
+              typeof body.versionNumber !== 'string' ||
+              typeof body.versionName !== 'string'
+            ) {
+              return HttpResponse.json(
+                resultError('sourceVersionId、versionNumber 和 versionName 为必填字段', {
+                  code: 422,
+                }),
+                { status: 422, headers: { 'Content-Type': 'application/problem+json' } }
+              );
             }
-            const version = await dataSource.version.clone(sourceVersionId, body.versionName);
-            return HttpResponse.json(resultSuccess(versionResponse(version)));
+            const version = await dataSource.version.clone({
+              sourceVersionId,
+              versionNumber: body.versionNumber,
+              versionName: body.versionName,
+              ...(typeof body.description === 'string' ? { description: body.description } : {}),
+            });
+            return HttpResponse.json(resultSuccess(versionResponse(version)), {
+              status: 201,
+              headers: {
+                Location: createdResourceLocation(request, version.versionId),
+              },
+            });
           } catch (error) {
             return repositoryErrorResponse(error);
           }
@@ -403,7 +373,12 @@ export function createProjectHandlers(
             await dataSource.init();
             const body = await readBody<Partial<MockProjectVersion>>(request);
             const version = await dataSource.version.create(body);
-            return HttpResponse.json(resultSuccess(versionResponse(version)));
+            return HttpResponse.json(resultSuccess(versionResponse(version)), {
+              status: 201,
+              headers: {
+                Location: createdResourceLocation(request, version.versionId),
+              },
+            });
           } catch (error) {
             return repositoryErrorResponse(error);
           }
@@ -442,7 +417,7 @@ export function createProjectHandlers(
             await Promise.all(
               toIdList(params.versionIds).map((id) => dataSource.version.delete(id))
             );
-            return HttpResponse.json(resultSuccess(null));
+            return new HttpResponse(null, { status: 204 });
           } catch (error) {
             return repositoryErrorResponse(error);
           }
@@ -474,7 +449,12 @@ export function createProjectHandlers(
             const project = await dataSource.project.create(
               await readBody<Partial<MockProject>>(request)
             );
-            return HttpResponse.json(resultSuccess(projectResponse(project)));
+            return HttpResponse.json(resultSuccess(projectResponse(project)), {
+              status: 201,
+              headers: {
+                Location: createdResourceLocation(request, project.projectId),
+              },
+            });
           } catch (error) {
             return repositoryErrorResponse(error);
           }
@@ -513,7 +493,7 @@ export function createProjectHandlers(
             await Promise.all(
               toIdList(params.projectIds).map((id) => dataSource.project.delete(id))
             );
-            return HttpResponse.json(resultSuccess(null));
+            return new HttpResponse(null, { status: 204 });
           } catch (error) {
             return repositoryErrorResponse(error);
           }

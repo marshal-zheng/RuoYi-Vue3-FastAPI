@@ -2,7 +2,7 @@ import 'fake-indexeddb/auto';
 
 import { afterEach, describe, expect, it } from 'vitest';
 
-import { MOCK_PROJECT_IDS, MOCK_SIMULATION_IDS, MOCK_VERSION_IDS } from '../data';
+import { MOCK_PROJECT_IDS, MOCK_SIMULATION_IDS, MOCK_VERSION_IDS, systemMockData } from '../data';
 import { MOCK_DEMO_DB_NAME, MockDemoDb, replaceMockDemoDb } from './db';
 import { createMockDataSource, replaceMockDataSource } from './datasource';
 
@@ -35,7 +35,9 @@ describe('DexieMockDataSource', () => {
     await expect(dataSource.auth.findSessionByToken(session.token)).resolves.toMatchObject({
       username: 'admin',
     });
-    await expect(dataSource.system.listMenus()).resolves.toHaveLength(4);
+    const menus = await dataSource.system.listMenus();
+    expect(menus).toHaveLength(systemMockData.menus.length);
+    expect(menus).toEqual(expect.arrayContaining(systemMockData.menus));
     await expect(dataSource.system.listDictData('sys_user_sex')).resolves.toHaveLength(3);
 
     await dataSource.auth.deleteSession(session.token);

@@ -13,7 +13,9 @@
 
     <template #footer>
       <div class="flex items-center justify-between w-full">
-        <span class="text-xs text-zx-text-secondary">检查时间: {{ formatTime(report?.timestamp) }}</span>
+        <span class="text-xs text-zx-text-secondary"
+          >检查时间: {{ formatTime(report?.timestamp) }}</span
+        >
         <div class="flex gap-2">
           <el-button @click="handleRecheck">
             <el-icon><Refresh /></el-icon>
@@ -142,12 +144,6 @@ const dialog = useDialog({
 });
 
 // 汇总背景样式
-const summaryBgClass = computed(() => {
-  if (!report.value) return 'bg-zx-surface-canvas-fill';
-  if (report.value.healthy) return 'bg-gradient-to-r from-green-50 to-emerald-50';
-  if (report.value.canSimulate) return 'bg-gradient-to-r from-amber-50 to-yellow-50';
-  return 'bg-gradient-to-r from-red-50 to-rose-50';
-});
 
 // 汇总图标样式
 const summaryIconClass = computed(() => {

@@ -1,0 +1,354 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/simulation/health-check-contract.test.ts > health check public X6 contract > uses real node/edge models and identifies parameter mismatches 3ms
+ ✓ tests/unit/simulation/health-check-contract.test.ts > health check public X6 contract > retains edge identifiers in loopback report details 0ms
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should initialize with empty data
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should have all required methods
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should add message
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should limit message history size
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by protocol
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by time range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should get latest messages
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should add alarm
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by level
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by type
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should count alarms by level
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should clear acknowledged alarms
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should update statistics
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should calculate message rate
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should get protocol distribution
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should calculate message latency
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should detect message patterns
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should identify communication pairs
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export messages as CSV
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export alarms as JSON
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export statistics summary
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear all data
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only messages
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only alarms
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should handle rapid message additions
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should maintain chronological order
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle empty message list
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid protocol filter
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid time range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle duplicate message IDs
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should handle large message volumes efficiently
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should filter large datasets efficiently
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should initialize with empty data 2ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Initial State > should have all required methods 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should add message 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should limit message history size 7ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by protocol 1ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should filter messages by time range 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Message Management > should get latest messages 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should add alarm 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by level 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should filter alarms by type 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should count alarms by level 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Alarm Management > should clear acknowledged alarms 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should update statistics 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should calculate message rate 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Statistics Management > should get protocol distribution 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should calculate message latency 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should detect message patterns 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Analysis > should identify communication pairs 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export messages as CSV 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export alarms as JSON 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Data Export > should export statistics summary 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear all data 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only messages 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Clear Data > should clear only alarms 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should handle rapid message additions 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Real-time Updates > should maintain chronological order 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle empty message list 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid protocol filter 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle invalid time range 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Edge Cases > should handle duplicate message IDs 0ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should handle large message volumes efficiently 36ms
+ ✓ tests/unit/composables/useSimulationData.test.ts > useSimulationData > Performance > should filter large datasets efficiently 16ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > fetches paged projects through the HTTP contract 92ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers auth and system handlers via the real request path 180ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > runs control calls through the real HTTP request path 223ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > handles project CRUD payloads through MSW handlers 153ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > supports topology and export endpoints without mocking request internals 69ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers project, version, and topology handlers via frontend API functions 187ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > maps 503, 429, and network failures from the real request path 71ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project and version empty states through API wrappers 65ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project write, rate-limit, forbidden, timeout, and topology errors through API wrappers 79ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > loads read models and export payloads through MSW 220ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > handles event trigger and WebSocket URL construction 59ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > maps 503, 429, and network failures from MSW 60ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API overlay contract > enters readonly and unsupported simulation states through API wrappers 110ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers simulation read models and unsupported writes via frontend API functions 191ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > returns deterministic 501 for demo-offline API gaps 153ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should initialize with empty event list 2ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should load events when sessionId is provided 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Initialization > should not load events when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Computed Properties > should calculate pending event count correctly 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > Computed Properties > should calculate triggered event count correctly 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should create event successfully 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error when sessionId is empty 1ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error for invalid condition type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > createEvent > should throw error for invalid action type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > updateEvent > should update event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > updateEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > deleteEvent > should delete event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > deleteEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > triggerEvent > should trigger event successfully 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > triggerEvent > should throw error when sessionId is empty 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > setEventEnabled > should enable event 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > setEventEnabled > should disable event 5ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > checkAndTriggerEvents > should trigger matching events 11ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > checkAndTriggerEvents > should not trigger non-matching events 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > useEventTrigger > reset > should reset event list 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > TIME condition > should match when elapsed time exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > TIME condition > should not match when elapsed time is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_COUNT condition > should match when message count exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_COUNT condition > should not match when message count is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should match when specific port bandwidth exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should match when any port bandwidth exceeds threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > BANDWIDTH_THRESHOLD condition > should not match when bandwidth is below threshold 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should match when message contains pattern 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should match when protocol type matches 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should not match when protocol type differs 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > MESSAGE_CONTENT condition > should not match when no latest message 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for null condition 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for null state 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > matchCondition > Edge cases > should return false for unknown condition type 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > Configuration Constants > should have all condition type configs 0ms
+ ✓ tests/unit/composables/useEventTrigger.test.ts > Configuration Constants > should have all action type configs 0ms
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should initialize with correct default values
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should have all required methods
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should start simulation successfully
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should handle start simulation error
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should reject start if already running
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should pause running simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should reject pause if not running
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should resume paused simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should reject resume if not paused
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should stop running simulation
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should preserve elapsed time and speed when stopping
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should set simulation speed
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp speed range
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp invalid speed values
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should handle supported speed presets
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should update current time
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should not allow negative time
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should format time correctly
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should handle complete lifecycle
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should maintain state consistency
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle API errors gracefully
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle timeout errors
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+stderr | tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should recover from errors
+[Vue warn]: onUnmounted is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup(). If you are using async setup(), make sure to register lifecycle hooks before the first await statement.
+
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should initialize with correct default values 2ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Initial State > should have all required methods 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should start simulation successfully 2ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should handle start simulation error 1ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Start Simulation > should reject start if already running 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should pause running simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Pause Simulation > should reject pause if not running 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should resume paused simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Resume Simulation > should reject resume if not paused 1ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should stop running simulation 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Stop Simulation > should preserve elapsed time and speed when stopping 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should set simulation speed 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp speed range 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should clamp invalid speed values 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Speed Control > should handle supported speed presets 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should update current time 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should not allow negative time 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Time Management > should format time correctly 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should handle complete lifecycle 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > State Transitions > should maintain state consistency 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle API errors gracefully 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should handle timeout errors 0ms
+ ✓ tests/unit/composables/useSimulationControl.test.ts > useSimulationControl > Error Handling > should recover from errors 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return orange for 1553B protocol 1ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return orange for MIL-STD-1553B protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return blue for CAN protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return green for RS422 protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return green for RS485 protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return white for LAN protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return white for Ethernet protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return default color for unknown protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should return default color for null/undefined 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > getProtocolColor - Unit Tests > should handle case-insensitive matching 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should map all core protocols to predefined colors 5ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should map different protocol types to different colors 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should handle protocol variants consistently 1ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should return valid hex color format 1ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > Property 2: Protocol Color Mapping Completeness > should match expected colors for each protocol 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > validateProtocolColors > should return true for valid protocol list 0ms
+ ✓ tests/unit/simulation/topologyAnimation.test.ts > topologyAnimation > validateProtocolColors > should return false if unknown protocol is included 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > keeps actual protocol message timestamps and nested protocol values 1ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > accepts nullable fault metadata emitted for an active indefinite fault 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'status' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'messages' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'bandwidth' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'alarms' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'animation' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'faults' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > decodes the 'pong' variant 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/transport-contract.test.ts > simulation WebSocket transport contract > rejects invalid fields before publishing to reactive consumers 0ms
+ ✓ tests/unit/simulation/websocket-state.test.ts > simulation WebSocket state > publishes valid deltas and exposes malformed frames as state without replacing prior data 7ms
+ ✓ tests/unit/simulation/websocket-state.test.ts > simulation WebSocket state > reports ticket acquisition errors through its reactive error state 3ms
+
+ Test Files  10 passed (10)
+      Tests  146 passed (146)
+   Start at  22:43:57
+   Duration  8.98s (transform 4.24s, setup 3.81s, collect 20.01s, tests 2.07s, environment 2.73s, prepare 370ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

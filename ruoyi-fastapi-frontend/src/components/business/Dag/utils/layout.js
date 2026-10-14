@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus';
 import { getNodeSizeByDirection } from './nodeGeometry.js';
 
 // 简单的 dagre 风格布局实现，避免 @antv/layout 的兼容性问题
@@ -184,7 +185,7 @@ export async function dagreLayout(graph, direction = 'TB', ranksep = 150, nodese
       // 保持使用贝塞尔曲线连接器（DAG_CONNECTOR）
       // 不设置 router 和 connector，让边使用注册时的默认配置
     } catch (e) {
-      console.warn('Failed to update edge:', e);
+      ElMessage.error(e instanceof Error ? e.message : '连接布局更新失败');
     }
   });
 }

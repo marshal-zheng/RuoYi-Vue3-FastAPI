@@ -1,0 +1,52 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 94ms
+   → Target cannot be null or undefined.
+ × src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 17ms
+   → expected [] to deeply equal { items: [] }
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 29ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events
+AssertionError: Target cannot be null or undefined.
+ ❯ src/mocks/handlers/simulation.test.ts:44:28
+     42| 
+     43|     expect(status).toMatchObject({ sessionId, status: 'running', messa…
+     44|     expect(messages.items).toHaveLength(1);
+       |                            ^
+     45|     expect(bandwidth.items[0]).toMatchObject({ sessionId, bandwidthMbp…
+     46|     expect(alarms.items[0]).toMatchObject({ sessionId, severity: 'warn…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections
+AssertionError: expected [] to deeply equal { items: [] }
+
+- Expected: 
+{
+  "items": [],
+}
+
++ Received: 
+[]
+
+ ❯ src/mocks/handlers/simulation.test.ts:54:7
+     52|     for (const path of ['/simulation/faults', `/simulation/sessions/${…
+     53|       const response = await fetch(`/api${path}`);
+     54|       await expect(response.json()).resolves.toEqual({ items: [] });
+       |       ^
+     55|     }
+     56|     const strategies = await fetch('/api/simulation/strategies');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 1 passed (3)
+   Start at  23:27:19
+   Duration  568ms (transform 105ms, setup 207ms, collect 5ms, tests 141ms, environment 128ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

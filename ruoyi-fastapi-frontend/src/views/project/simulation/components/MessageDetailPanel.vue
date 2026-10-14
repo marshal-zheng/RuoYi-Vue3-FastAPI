@@ -274,7 +274,8 @@ function getValueClass(value) {
     var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 0%,
     var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill)) 100%
   );
-  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
+  border: 1px solid
+    var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
@@ -318,7 +319,8 @@ function getValueClass(value) {
 .meta-row {
   margin-top: 8px;
   padding-top: 8px;
-  border-top: 1px dashed var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
+  border-top: 1px dashed
+    var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   justify-content: center;
   gap: 12px;
 }
@@ -354,7 +356,8 @@ function getValueClass(value) {
     var(--sim-fill-light, var(--zx-semantic-surface-panel-fill)) 0%,
     var(--sim-bg-elevated, var(--zx-semantic-surface-panel-fill)) 100%
   );
-  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
+  border: 1px solid
+    var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 6px;
   padding: 8px 10px;
   color: var(--sim-text-primary, var(--zx-semantic-text-primary));
@@ -401,7 +404,8 @@ function getValueClass(value) {
 
 .payload-box {
   background: var(--sim-bg-elevated, var(--zx-semantic-surface-panel-fill));
-  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
+  border: 1px solid
+    var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   border-radius: 6px;
   padding: 10px;
 

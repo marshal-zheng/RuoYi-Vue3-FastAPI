@@ -5,7 +5,7 @@ export function useHistory(graphInstance = null) {
 
   try {
     graph = graphInstance || useGraphInstance();
-  } catch (error) {
+  } catch {
     graph = graphInstance;
   }
 

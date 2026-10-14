@@ -1,4 +1,11 @@
 import { http, HttpResponse } from 'msw';
+import type {
+  SimulationAlarm,
+  SimulationBandwidth,
+  SimulationEvent,
+  SimulationFillStrategy,
+  SimulationMessage,
+} from '@/api/simulation/types';
 
 import { createApiPath } from '../constants';
 import type { MockDataSource } from '../store';
@@ -12,13 +19,17 @@ function notSupported(request: Request, capability: 'simulation-control' | 'simu
   const path = `${url.pathname}${url.search}`;
   return HttpResponse.json(
     {
-      code: 501,
-      msg: `MOCK_SIMULATION_NOT_SUPPORTED: ${request.method} ${path} 首批只读 mock 不支持 ${capability}`,
-      data: null,
+      type: 'about:blank',
+      title: 'MOCK_SIMULATION_NOT_SUPPORTED',
+      status: 501,
+      detail: `MOCK_SIMULATION_NOT_SUPPORTED: ${request.method} ${path} 首批只读 mock 不支持 ${capability}`,
+      instance: path,
+      errorCode: 'MOCK_SIMULATION_NOT_SUPPORTED',
     },
     {
       status: 501,
       headers: {
+        'Content-Type': 'application/problem+json',
         'X-Mock-Response': 'true',
         'X-Mock-Handler': capability,
       },
@@ -26,24 +37,63 @@ function notSupported(request: Request, capability: 'simulation-control' | 'simu
   );
 }
 
-function listSimulationStrategies() {
+function listSimulationStrategies(): SimulationFillStrategy[] {
   return [
     {
-      value: 'preset',
-      label: '预置样本',
-      description: '按单套 typed dataset 回放离线演示数据',
-    },
-    {
-      value: 'repeat',
-      label: '循环填充',
-      description: '重复已有报文片段形成稳定展示窗口',
+      value: 'random',
+      label: '随机值',
+      description: '在指定值域范围内随机生成数据',
+      icon: 'Dice',
+      params: ['valueRange'],
     },
     {
       value: 'increment',
-      label: '递增填充',
-      description: '基于序号和固定参考时间生成可预测占位内容',
+      label: '序列递增',
+      description: '计数器模式，数值按步长递增，到达上限后循环',
+      icon: 'TrendCharts',
+      params: ['startValue', 'step', 'valueRange'],
+    },
+    {
+      value: 'fixed',
+      label: '固定值',
+      description: '使用预设的固定值填充',
+      icon: 'Lock',
+      params: ['fixedValue'],
+    },
+    {
+      value: 'cycle',
+      label: '循环模式',
+      description: '按顺序循环使用预设数据集中的值',
+      icon: 'Refresh',
+      params: ['presetValues'],
+    },
+    {
+      value: 'sine_wave',
+      label: '正弦波',
+      description: '模拟周期性数据变化，适合传感器数据仿真',
+      icon: 'DataLine',
+      params: ['amplitude', 'offset', 'frequency', 'phase'],
     },
   ];
+}
+
+function historyToEvents(
+  events: Awaited<ReturnType<MockDataSource['simulation']['listEvents']>>
+): SimulationEvent[] {
+  return events.map((event) => ({
+    eventId: event.eventId,
+    sessionId: event.sessionId,
+    name: event.eventType,
+    status: 'triggered',
+    triggerCount: 1,
+    lastTriggerTime: Date.parse(event.triggerTime),
+  }));
+}
+
+function historyToMessages(
+  messages: Awaited<ReturnType<MockDataSource['simulation']['listMessages']>>
+): SimulationMessage[] {
+  return messages.map((message) => ({ ...message, timestamp: Date.parse(message.timestamp) }));
 }
 
 async function readSessionStatus(dataSource: MockDataSource, sessionId: string) {
@@ -66,11 +116,11 @@ async function readSessionStatus(dataSource: MockDataSource, sessionId: string) 
 
 function framesToBandwidth(
   frames: Awaited<ReturnType<MockDataSource['simulation']['listFrames']>>
-) {
+): SimulationBandwidth[] {
   return frames.map((frame) => ({
     id: frame.id,
     sessionId: frame.sessionId,
-    timestamp: frame.timestamp,
+    timestamp: Date.parse(frame.timestamp),
     bandwidthMbps: frame.bandwidthMbps,
     bandwidth: frame.bandwidthMbps,
     latencyMs: frame.latencyMs,
@@ -78,13 +128,15 @@ function framesToBandwidth(
   }));
 }
 
-function framesToAlarms(frames: Awaited<ReturnType<MockDataSource['simulation']['listFrames']>>) {
+function framesToAlarms(
+  frames: Awaited<ReturnType<MockDataSource['simulation']['listFrames']>>
+): SimulationAlarm[] {
   return frames
     .filter((frame) => frame.alarmCount > 0)
     .map((frame) => ({
       alarmId: `alarm-${frame.id}`,
       sessionId: frame.sessionId,
-      timestamp: frame.timestamp,
+      timestamp: Date.parse(frame.timestamp),
       severity: 'warning',
       message: `检测到 ${frame.alarmCount} 条链路告警`,
     }));
@@ -109,7 +161,9 @@ export function createSimulationHandlers(
                 (!body.projectId || item.projectId === Number(body.projectId)) &&
                 (!body.versionId || item.versionId === Number(body.versionId))
             ) ?? sessions[0];
-          return HttpResponse.json(resultSuccess(session));
+          return HttpResponse.json(
+            resultSuccess(session ? { ...session, message: '只读仿真会话' } : null)
+          );
         },
         { strategy, tag: 'simulation:session:create-readonly' }
       )
@@ -134,7 +188,9 @@ export function createSimulationHandlers(
           await dataSource.init();
           const limit = Number(getSearchParams(request).get('limit') ?? 100);
           const messages = await dataSource.simulation.listMessages(String(params.sessionId));
-          return HttpResponse.json(resultSuccess(messages.slice(0, limit)));
+          return HttpResponse.json(
+            resultSuccess({ items: historyToMessages(messages.slice(0, limit)) })
+          );
         },
         { strategy, tag: 'simulation:messages' }
       )
@@ -145,7 +201,13 @@ export function createSimulationHandlers(
         async () => {
           await dataSource.init();
           const frames = await dataSource.simulation.listFrames(String(params.sessionId));
-          return HttpResponse.json(resultSuccess(framesToBandwidth(frames)));
+          const bandwidth = framesToBandwidth(frames);
+          const portId = getSearchParams(request).get('port_id');
+          return HttpResponse.json(
+            resultSuccess({
+              items: portId ? bandwidth.filter((point) => point.portId === portId) : bandwidth,
+            })
+          );
         },
         { strategy, tag: 'simulation:bandwidth' }
       )
@@ -156,19 +218,19 @@ export function createSimulationHandlers(
         async () => {
           await dataSource.init();
           const frames = await dataSource.simulation.listFrames(String(params.sessionId));
-          return HttpResponse.json(resultSuccess(framesToAlarms(frames)));
+          return HttpResponse.json(resultSuccess({ items: framesToAlarms(frames) }));
         },
         { strategy, tag: 'simulation:alarms' }
       )
     ),
     http.get(createApiPath('/simulation/faults'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess([])), {
+      withBackendFallback(request, () => HttpResponse.json(resultSuccess({ items: [] })), {
         strategy,
         tag: 'simulation:faults',
       })
     ),
     http.get(createApiPath('/simulation/sessions/:sessionId/faults'), ({ request }) =>
-      withBackendFallback(request, () => HttpResponse.json(resultSuccess([])), {
+      withBackendFallback(request, () => HttpResponse.json(resultSuccess({ items: [] })), {
         strategy,
         tag: 'simulation:session-faults',
       })
@@ -179,7 +241,7 @@ export function createSimulationHandlers(
         async () => {
           await dataSource.init();
           const events = await dataSource.simulation.listEvents(String(params.sessionId));
-          return HttpResponse.json(resultSuccess(events));
+          return HttpResponse.json(resultSuccess({ items: historyToEvents(events) }));
         },
         { strategy, tag: 'simulation:events' }
       )
@@ -207,7 +269,7 @@ export function createSimulationHandlers(
     http.get(createApiPath('/simulation/strategies'), ({ request }) =>
       withBackendFallback(
         request,
-        () => HttpResponse.json(resultSuccess(listSimulationStrategies())),
+        () => HttpResponse.json(resultSuccess({ items: listSimulationStrategies() })),
         {
           strategy,
           tag: 'simulation:strategies',

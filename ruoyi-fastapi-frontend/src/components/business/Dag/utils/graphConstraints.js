@@ -17,7 +17,7 @@ export function canReach(graph, startId, targetId) {
       successors.forEach((node) => {
         if (node && node.id && !visited.has(node.id)) queue.push(node.id);
       });
-    } catch (e) {
+    } catch {
       // 兜底：通过出边遍历
       const node = graph.getCellById?.(cur);
       const outgoing = node ? graph.getOutgoingEdges(node) || [] : [];

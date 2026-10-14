@@ -14,13 +14,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { listProtocol } from '@/api/protocol/protocol';
-
-interface Option {
-  label: string;
-  value: string | number;
-  disabled?: boolean;
-  _raw?: any;
-}
+import type { ProtocolRecord, ProtocolListQuery } from '@/api/protocol/protocol';
+import type { SelectOption } from '@zxio/zxui';
 
 const props = defineProps<{
   modelValue?: string | number | null;
@@ -29,24 +24,24 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: string | number | null];
   change: [value: string | number | null];
-  'entity-change': [entity: any];
-  entity: [entity: any];
+  'entity-change': [entity: ProtocolRecord | null];
+  entity: [entity: ProtocolRecord | null];
 }>();
 
-const lastOptions = ref<Option[]>([]);
-const selectedEntity = ref<any>(null);
+const lastOptions = ref<ProtocolRecord[]>([]);
+const selectedEntity = ref<SelectOption | SelectOption[] | null>(null);
 
 const selectedValue = computed({
   get: () => props.modelValue ?? '',
   set: (val) => emit('update:modelValue', val),
 });
 
-const loadOptions = async (_keyword?: string) => {
-  const queryParams: any = { page: 1, pageSize: 9999 };
+const loadOptions = async () => {
+  const queryParams: ProtocolListQuery = { page: 1, pageSize: 9999 };
   if (props.protocolType) {
     queryParams.protocolType = props.protocolType;
   }
-  const response: any = await listProtocol(queryParams);
+  const response = await listProtocol(queryParams);
   const list = response?.items || [];
   lastOptions.value = list;
   return list;
@@ -54,22 +49,18 @@ const loadOptions = async (_keyword?: string) => {
 
 const handleChange = (value: string | number | null) => {
   emit('change', value);
-  const entity = selectedEntity.value;
-  if (entity) {
-    emit('entity-change', entity?._raw ?? entity);
-    emit('entity', entity?._raw ?? entity);
-    return;
-  }
-  const found = lastOptions.value.find((opt: any) => opt?.protocolId === value);
+  const found = lastOptions.value.find((opt) => opt?.protocolId === value);
   if (found) {
     emit('entity-change', found);
     emit('entity', found);
   }
 };
 
-const handleSelect = (entity: any) => {
-  emit('entity-change', entity);
-  emit('entity', entity);
+const handleSelect = (entity: SelectOption | SelectOption[] | null) => {
+  const protocolId = entity && !Array.isArray(entity) ? entity.protocolId : null;
+  const selected = lastOptions.value.find((option) => option.protocolId === protocolId) ?? null;
+  emit('entity-change', selected);
+  emit('entity', selected);
 };
 
 defineExpose({
@@ -77,7 +68,7 @@ defineExpose({
     lastOptions.value = [];
   },
   getLabel: (value: string | number) => {
-    const item: any = lastOptions.value.find((d: any) => d?.protocolId === value);
+    const item = lastOptions.value.find((d) => d?.protocolId === value);
     return item ? (item?.protocolName ?? value) : value;
   },
 });

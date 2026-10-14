@@ -20,7 +20,9 @@
       <div v-if="alarmStats.total > 0" class="flex gap-2 mb-3">
         <div
           class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
-          :class="{ 'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.critical > 0 }"
+          :class="{
+            'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.critical > 0,
+          }"
         >
           <div class="text-lg text-red-700">
             <el-icon><CircleCloseFilled /></el-icon>
@@ -48,7 +50,9 @@
         </div>
         <div
           class="flex-1 flex items-center gap-2 p-2 rounded transition-all"
-          :class="{ 'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.warning > 0 }"
+          :class="{
+            'bg-zx-surface-card-fill shadow-zx-surface-card-depth': alarmStats.warning > 0,
+          }"
         >
           <div class="text-lg text-yellow-500">
             <el-icon><Warning /></el-icon>
@@ -89,7 +93,9 @@
                 {{ formatTime(alarm.timestamp) }}
               </span>
             </div>
-            <div class="text-xs text-zx-text-primary leading-snug break-words">{{ alarm.message }}</div>
+            <div class="text-xs text-zx-text-primary leading-snug break-words">
+              {{ alarm.message }}
+            </div>
           </div>
         </div>
       </div>

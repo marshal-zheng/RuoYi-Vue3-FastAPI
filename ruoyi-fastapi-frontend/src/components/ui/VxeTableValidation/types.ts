@@ -1,3 +1,7 @@
+import type { VxeTableDefines } from 'vxe-table';
+
+export type ValidationRow = Record<string, unknown>;
+
 /**
  * VXE-Table 通用校验框架 - 类型定义
  * 设计理念：类似 Element Plus / async-validator 的规则配置方式
@@ -10,11 +14,11 @@ export type ValidationLevel = 'error' | 'warning' | 'info';
 export type ValidationTrigger = 'change' | 'blur' | 'manual';
 
 /** 校验规则基础类型 */
-export interface ValidationRule {
+export interface ValidationRule<Row extends object = ValidationRow> {
   /** 是否必填 */
   required?: boolean;
   /** 错误消息 */
-  message?: string | ((value: any, row: any) => string);
+  message?: string | ((value: unknown, row: Row) => string);
   /** 校验级别，默认 error */
   level?: ValidationLevel;
   /** 触发时机 */
@@ -40,44 +44,50 @@ export interface ValidationRule {
   /** 正则表达式 */
   pattern?: RegExp | string;
   /** 枚举值，值必须在列表中 */
-  enum?: any[];
+  enum?: unknown[];
   /** 自定义校验器 */
-  validator?: ValidatorFunction;
+  validator?: ValidatorFunction<Row>;
   /** 异步校验器 */
-  asyncValidator?: AsyncValidatorFunction;
+  asyncValidator?: AsyncValidatorFunction<Row>;
   /** 转换函数，校验前先转换值 */
-  transform?: (value: any) => any;
+  transform?: (value: unknown) => unknown;
   /** 条件校验：只在条件满足时才校验 */
-  when?: (row: any, index: number) => boolean;
+  when?: (row: Row, index: number) => boolean;
 }
 
 /** 校验器函数 */
-export type ValidatorFunction = (
-  value: any,
-  row: any,
+export type ValidatorFunction<Row extends object = ValidationRow> = (
+  value: unknown,
+  row: Row,
   index: number,
   field: string
 ) => boolean | string | void;
 
 /** 异步校验器函数 */
-export type AsyncValidatorFunction = (
-  value: any,
-  row: any,
+export type AsyncValidatorFunction<Row extends object = ValidationRow> = (
+  value: unknown,
+  row: Row,
   index: number,
   field: string
 ) => Promise<boolean | string | void>;
 
 /** 字段校验规则配置 */
-export type FieldRules = Record<string, ValidationRule | ValidationRule[]>;
+export type FieldRules<Row extends object = ValidationRow> = Record<
+  string,
+  ValidationRule<Row> | ValidationRule<Row>[]
+>;
 
 /** 全局校验器（跨行/跨字段校验） */
-export interface GlobalValidator {
+export interface GlobalValidator<
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+> {
   /** 校验器名称 */
   name: string;
   /** 校验器函数 */
   validator: (
-    data: any[],
-    context?: ValidationContext
+    data: Row[],
+    context?: Partial<Context>
   ) => ValidationIssue | ValidationIssue[] | null;
   /** 校验级别 */
   level?: ValidationLevel;
@@ -86,7 +96,7 @@ export interface GlobalValidator {
 /** 校验上下文 */
 export interface ValidationContext {
   /** 额外数据，业务可自定义 */
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /** 校验问题项 */
@@ -102,7 +112,7 @@ export interface ValidationIssue {
   /** 错误消息 */
   message: string;
   /** 原始值 */
-  value?: any;
+  value?: unknown;
   /** 修复建议 */
   suggestion?: string;
   /** 规则名称（用于调试） */
@@ -128,28 +138,17 @@ export interface ValidationResult {
 }
 
 /** VXE-Table edit-rules 配置项 */
-export interface VxeEditRule {
-  required?: boolean;
-  min?: number;
-  max?: number;
-  type?: string;
-  pattern?: RegExp | string;
-  message?: string;
-  trigger?: string;
-  validator?: (params: {
-    cellValue: any;
-    row: any;
-    rowIndex: number;
-    column: any;
-  }) => void | Error | Promise<void | Error>;
-}
+export type VxeEditRule<Row extends object = ValidationRow> = VxeTableDefines.ValidatorRule<Row>;
 
 /** useVxeTableValidation 配置 */
-export interface UseVxeTableValidationOptions {
+export interface UseVxeTableValidationOptions<
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+> {
   /** 字段校验规则 */
-  rules?: FieldRules;
+  rules?: FieldRules<Row>;
   /** 全局校验器列表 */
-  globalValidators?: GlobalValidator[];
+  globalValidators?: GlobalValidator<Row, Context>[];
   /** 字段标签映射（用于显示友好名称） */
   fieldLabels?: Record<string, string>;
   /** 是否自动校验（编辑后自动触发） */
@@ -157,7 +156,7 @@ export interface UseVxeTableValidationOptions {
   /** 自动校验防抖延迟（毫秒） */
   autoValidateDelay?: number;
   /** 校验上下文 */
-  context?: ValidationContext;
+  context?: Partial<Context>;
   /** 校验完成回调 */
   onValidated?: (result: ValidationResult) => void;
 }
@@ -166,7 +165,7 @@ export interface UseVxeTableValidationOptions {
 export interface FieldColumnConfig {
   field: string;
   title?: string;
-  editRender?: any;
+  editRender?: VxeTableDefines.ColumnOptions['editRender'];
   // 扩展：支持直接在列配置中定义校验规则
   validationRules?: ValidationRule | ValidationRule[];
 }

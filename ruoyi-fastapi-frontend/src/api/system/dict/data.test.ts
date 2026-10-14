@@ -27,11 +27,13 @@ const payload = {
 
 function pendingResponse() {
   let finish!: () => void;
-  adapter.mockImplementation((config: AxiosRequestConfig) =>
-    new Promise<AxiosResponse>((resolve, reject) => {
-      config.signal?.addEventListener?.('abort', () => reject(new CanceledError()));
-      finish = () => resolve({ data: payload, status: 200, statusText: 'OK', headers: {}, config });
-    })
+  adapter.mockImplementation(
+    (config: AxiosRequestConfig) =>
+      new Promise<AxiosResponse>((resolve, reject) => {
+        config.signal?.addEventListener?.('abort', () => reject(new CanceledError()));
+        finish = () =>
+          resolve({ data: payload, status: 200, statusText: 'OK', headers: {}, config });
+      })
   );
   return () => finish();
 }

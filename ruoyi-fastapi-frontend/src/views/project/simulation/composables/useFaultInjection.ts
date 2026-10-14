@@ -4,6 +4,7 @@
  * 管理仿真过程中的故障注入功能
  */
 import { ref, computed, type Ref, type ComputedRef } from 'vue';
+import type { FaultParameters, FaultWire, SimulationFaultEvent } from '@/api/simulation/types';
 import {
   injectFault as injectFaultApi,
   clearFault as clearFaultApi,
@@ -44,7 +45,7 @@ interface FaultTypeConfig {
   params?: FaultParam[];
 }
 
-interface Fault {
+export interface Fault {
   faultId: string;
   sessionId?: string;
   faultType: string;
@@ -52,7 +53,7 @@ interface Fault {
   targetId: string;
   targetKey: string;
   targetName?: string;
-  params: Record<string, any>;
+  params: FaultParameters;
   status: string;
   startAt?: number;
   endAt?: number;
@@ -62,20 +63,16 @@ interface Fault {
   _action?: 'created' | 'updated';
 }
 
-interface FaultConfig {
+export interface FaultConfig {
   type: FaultTypeValue;
   targetId: string;
   targetType: 'edge' | 'node';
-  params?: Record<string, any>;
+  params?: FaultParameters;
   targetName?: string;
   targetLabel?: string;
 }
 
-interface FaultEvent {
-  action?: string;
-  fault?: any;
-  [key: string]: any;
-}
+type FaultEvent = SimulationFaultEvent;
 
 /**
  * 故障类型配置
@@ -99,7 +96,14 @@ export const FAULT_TYPE_CONFIG: Record<FaultTypeValue, FaultTypeConfig> = {
     description: '按设定概率随机丢弃报文',
     targetType: 'edge',
     params: [
-      { name: 'lossRate', label: '丢包率(%)', type: 'number', default: 10, min: 0, max: 100 },
+      {
+        name: 'lossRate',
+        label: '丢包率(%)',
+        type: 'number',
+        default: 10,
+        min: 0,
+        max: 100,
+      },
       {
         name: 'durationMs',
         label: '持续时长(ms)',
@@ -124,8 +128,22 @@ export const FAULT_TYPE_CONFIG: Record<FaultTypeValue, FaultTypeConfig> = {
     description: '为报文传输添加额外延迟',
     targetType: 'edge',
     params: [
-      { name: 'delayMs', label: '延迟(ms)', type: 'number', default: 100, min: 1, max: 10000 },
-      { name: 'jitterMs', label: '抖动(ms)', type: 'number', default: 10, min: 0, max: 5000 },
+      {
+        name: 'delayMs',
+        label: '延迟(ms)',
+        type: 'number',
+        default: 100,
+        min: 1,
+        max: 10000,
+      },
+      {
+        name: 'jitterMs',
+        label: '抖动(ms)',
+        type: 'number',
+        default: 10,
+        min: 0,
+        max: 5000,
+      },
       {
         name: 'durationMs',
         label: '持续时长(ms)',
@@ -174,7 +192,14 @@ export const FAULT_TYPE_CONFIG: Record<FaultTypeValue, FaultTypeConfig> = {
     description: '随机翻转payload位，模拟bit flip',
     targetType: 'edge',
     params: [
-      { name: 'bitFlipCount', label: '翻转位数', type: 'number', default: 2, min: 1, max: 32 },
+      {
+        name: 'bitFlipCount',
+        label: '翻转位数',
+        type: 'number',
+        default: 2,
+        min: 1,
+        max: 32,
+      },
       {
         name: 'durationMs',
         label: '持续时长(ms)',
@@ -191,7 +216,14 @@ export const FAULT_TYPE_CONFIG: Record<FaultTypeValue, FaultTypeConfig> = {
     description: '注入无效帧/随机噪声',
     targetType: 'edge',
     params: [
-      { name: 'length', label: '噪声字节数', type: 'number', default: 16, min: 1, max: 128 },
+      {
+        name: 'length',
+        label: '噪声字节数',
+        type: 'number',
+        default: 16,
+        min: 1,
+        max: 128,
+      },
       {
         name: 'durationMs',
         label: '持续时长(ms)',
@@ -207,7 +239,16 @@ export const FAULT_TYPE_CONFIG: Record<FaultTypeValue, FaultTypeConfig> = {
     icon: 'Warning',
     description: '协议错误帧/仲裁失败模拟',
     targetType: 'edge',
-    params: [{ name: 'count', label: '错误帧数量', type: 'number', default: 5, min: 1, max: 200 }],
+    params: [
+      {
+        name: 'count',
+        label: '错误帧数量',
+        type: 'number',
+        default: 5,
+        min: 1,
+        max: 200,
+      },
+    ],
   },
 };
 
@@ -239,29 +280,34 @@ export function useFaultInjection(sessionId: Ref<string | null>) {
     return faults.value.filter((f) => f.status === 'active').length;
   });
 
-  function normalizeFault(raw: any): Fault | null {
+  function normalizeFault(raw: FaultWire | null | undefined): Fault | null {
     if (!raw) return null;
+    const faultId = raw.faultId || raw.fault_id || raw.id;
+    const faultType = raw.faultType || raw.fault_type || raw.type;
+    const targetId = raw.targetId || raw.target_id;
+    if (!faultId || !faultType || !targetId) return null;
     const fault: Fault = {
-      faultId: raw.faultId || raw.fault_id || raw.id,
-      sessionId: raw.sessionId || raw.session_id,
-      faultType: raw.faultType || raw.fault_type || raw.type,
+      faultId,
+      sessionId: raw.sessionId || raw.session_id || undefined,
+      faultType,
       targetType: raw.targetType || raw.target_type || raw.targetType || 'edge',
-      targetId: raw.targetId || raw.target_id || raw.targetId,
-      targetKey: raw.targetId || raw.target_id || raw.targetId,
+      targetId,
+      targetKey: targetId,
       targetName:
         raw.targetName ||
         raw.target_name ||
         raw.target_label ||
         raw.targetAlias ||
         raw.params?.target_name ||
-        raw.params?.targetName,
+        raw.params?.targetName ||
+        undefined,
       params: raw.params || {},
       status: raw.status || 'active',
-      startAt: raw.startAt || raw.start_at,
-      endAt: raw.endAt || raw.end_at,
+      startAt: raw.startAt || raw.start_at || undefined,
+      endAt: raw.endAt || raw.end_at || undefined,
       priority: raw.priority ?? 0,
-      createTime: raw.createTime || raw.create_time,
-      updateTime: raw.updateTime || raw.update_time,
+      createTime: raw.createTime || raw.create_time || undefined,
+      updateTime: raw.updateTime || raw.update_time || undefined,
     };
     return fault;
   }
@@ -279,9 +325,8 @@ export function useFaultInjection(sessionId: Ref<string | null>) {
     if (!sessionId.value) return [];
     loading.value = true;
     try {
-      // http 客户端已解包 payload.data，res 直接是故障列表
       const res = await getFaultsApi(sessionId.value);
-      const list = Array.isArray(res) ? res : [];
+      const list = res.items;
       // 只保留待生效和生效中的故障，避免已清除/过期占位
       faults.value = list
         .map(normalizeFault)
@@ -338,7 +383,10 @@ export function useFaultInjection(sessionId: Ref<string | null>) {
       fault.targetName = fault.targetName || targetName || targetLabel;
       upsertFault(fault);
     }
-    return fault!;
+    if (!fault) {
+      throw new Error('故障响应缺少故障标识、类型或目标');
+    }
+    return fault;
   }
 
   /**

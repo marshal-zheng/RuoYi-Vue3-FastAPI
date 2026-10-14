@@ -1,0 +1,103 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+xx···xxxxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > register consumes the actual captcha response (enabled=true)
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > register consumes the actual captcha response (enabled=false)
+ReferenceError: res is not defined
+ ❯ eval tests/unit/business-lint-regressions.test.ts:22:19
+     20|   }
+     21|   const code = source.slice(declaration.start, declaration.end);
+     22|   const execute = new Function(...Object.keys(bindings), `${code}; ret…
+       |                   ^
+     23|   return execute(...Object.values(bindings));
+     24| }
+ ❯ Object.then tests/unit/business-lint-regressions.test.ts:36:84
+ ❯ getCode tests/unit/business-lint-regressions.test.ts:22:19
+ ❯ eval tests/unit/business-lint-regressions.test.ts:22:19
+ ❯ executeSetupFunction tests/unit/business-lint-regressions.test.ts:23:10
+ ❯ tests/unit/business-lint-regressions.test.ts:32:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > readonly snapshot failure completes its fallback without a second exception
+AssertionError: promise rejected "ReferenceError: err is not defined" instead of resolving
+ ❯ tests/unit/business-lint-regressions.test.ts:56:24
+     54|       }
+     55|     );
+     56|     await expect(result).resolves.toBeUndefined();
+       |                        ^
+     57|     expect(warning).toHaveBeenCalledExactlyOnceWith('无法加载只读演示数据');
+     58|   });
+
+Caused by: ReferenceError: err is not defined
+ ❯ loadReadonlySimulationSnapshot tests/unit/business-lint-regressions.test.ts:22:19
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in and searches
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in or searches
+AssertionError: expected [] to deeply equal [ 'match' ]
+
+- Expected
++ Received
+
+- [
+-   "match",
+- ]
++ []
+
+ ❯ tests/unit/business-lint-regressions.test.ts:80:77
+     78|       ],
+     79|     });
+     80|     expect(data.filteredMessages.value.map((message) => message.messag…
+       |                                                                             ^
+     81|     wrapper.unmount();
+     82|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/utils/io-toolkit/download.contract.test.ts > binary download boundary > uses the actual server filename header: attachment; filename*=UTF-8''%E6%8A%A5%E5%91%8A.csv
+AssertionError: expected null to be '报告.csv' // Object.is equality
+
+- Expected: 
+"报告.csv"
+
++ Received: 
+null
+
+ ❯ src/utils/io-toolkit/download.contract.test.ts:21:75
+     19|     ["attachment; filename=report.csv; filename*=UTF-8''%broken", 'rep…
+     20|   ])('uses the actual server filename header: %s', (header, filename) …
+     21|     expect(extractFilenameFromHeaders({ 'content-disposition': header …
+       |                                                                           ^
+     22|   });
+     23| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  src/utils/io-toolkit/download.contract.test.ts > binary download boundary > uses the actual server filename header: attachment; filename=report.csv; filename*=UTF-8''%E6%8A%A5%E5%91%8A.csv
+AssertionError: expected 'report.csv' to be '报告.csv' // Object.is equality
+
+Expected: "报告.csv"
+Received: "report.csv"
+
+ ❯ src/utils/io-toolkit/download.contract.test.ts:21:75
+     19|     ["attachment; filename=report.csv; filename*=UTF-8''%broken", 'rep…
+     20|   ])('uses the actual server filename header: %s', (header, filename) …
+     21|     expect(extractFilenameFromHeaders({ 'content-disposition': header …
+       |                                                                           ^
+     22|   });
+     23| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  7 failed | 3 passed (10)
+   Start at  02:19:31
+   Duration  1.87s (transform 918ms, setup 427ms, collect 1.30s, tests 52ms, environment 290ms, prepare 52ms)
+

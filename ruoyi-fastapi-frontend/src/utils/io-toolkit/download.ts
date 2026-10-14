@@ -10,13 +10,20 @@ export function extractFilenameFromHeaders(
       ? headers.get('content-disposition')
       : headers['content-disposition'];
   if (!raw) return null;
-  const match = /filename\\*?=([^;]+)/i.exec(raw);
+  const encoded = /(?:^|;)\s*filename\*\s*=\s*([^;]+)/i.exec(raw);
+  const extendedValue = encoded?.[1].trim().replace(/^"|"$/g, '');
+  const utf8 = extendedValue && /^UTF-8'[^']*'(.*)$/i.exec(extendedValue);
+  if (utf8) {
+    try {
+      return decodeURIComponent(utf8[1]);
+    } catch {
+      // A malformed extended name must not prevent downloading with its ASCII fallback.
+    }
+  }
+  const match = /(?:^|;)\s*filename\s*=\s*("(?:[^"\\]|\\.)*"|[^;]+)/i.exec(raw);
   if (!match) return null;
   const value = match[1].trim();
-  if (value.startsWith("UTF-8''")) {
-    return decodeURIComponent(value.slice(7));
-  }
-  return value.replace(/^\"|\"$/g, '');
+  return value.replace(/^"|"$/g, '');
 }
 
 export async function downloadBlob(
@@ -30,23 +37,32 @@ export async function downloadBlob(
 }
 
 export async function downloadFromResponse(
-  response: Response | AxiosResponse | Blob | ArrayBuffer,
+  response: Response | AxiosResponse<unknown> | Blob | ArrayBuffer,
   fallbackFilename: string,
   options?: DownloadOptions
 ): Promise<void> {
-  const isAxios = (resp: any): resp is AxiosResponse => !!resp && typeof resp.data !== 'undefined';
-  const isFetchResponse = (resp: any): resp is Response =>
-    !!resp && typeof (resp as Response).blob === 'function';
-  const isBlob = (resp: any): resp is Blob => typeof Blob !== 'undefined' && resp instanceof Blob;
-  const isArrayBuffer = (resp: any): resp is ArrayBuffer =>
-    typeof ArrayBuffer !== 'undefined' && resp instanceof ArrayBuffer;
+  const isBlob = (value: unknown): value is Blob =>
+    typeof Blob !== 'undefined' && value instanceof Blob;
+  const isArrayBuffer = (value: unknown): value is ArrayBuffer =>
+    typeof ArrayBuffer !== 'undefined' && value instanceof ArrayBuffer;
+  const isAxios = (value: unknown): value is AxiosResponse<Blob | ArrayBuffer> =>
+    !!value &&
+    typeof value === 'object' &&
+    'data' in value &&
+    (isBlob(value.data) || isArrayBuffer(value.data));
+  const isFetchResponse = (value: unknown): value is Response =>
+    typeof Response !== 'undefined' && value instanceof Response;
 
   let blob: Blob;
   let headers: Headers | Record<string, string> | undefined;
 
   if (isAxios(response)) {
-    blob = response.data as Blob;
-    headers = response.headers as Record<string, string>;
+    blob = isBlob(response.data) ? response.data : new Blob([response.data]);
+    headers = Object.fromEntries(
+      Object.entries(response.headers).filter(
+        (entry): entry is [string, string] => typeof entry[1] === 'string'
+      )
+    );
   } else if (isFetchResponse(response)) {
     blob = await response.blob();
     headers = response.headers;

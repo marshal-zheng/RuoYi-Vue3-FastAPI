@@ -1,0 +1,221 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 5 items
+
+tests/unit/test_collection_openapi_contract.py FFFFF                     [100%]
+
+=================================== FAILURES ===================================
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router0-/system/menu/list-row0] _
+
+router = <fastapi.routing.APIRouter object at 0x11c7a0f50>
+path = '/system/menu/list', row = {'menuId': 1, 'menuName': 'Menu'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+        validated = adapter.validate_python(payload)
+        assert validated.model_dump(by_alias=True)['items'][0].items() >= row.items()
+        with pytest.raises(ValidationError):
+            adapter.validate_python([row])
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+adapter    = TypeAdapter(CollectionResult[MenuModel])
+app        = <fastapi.applications.FastAPI object at 0x11cc85be0>
+path       = '/system/menu/list'
+payload    = {'items': [{'menuId': 1, 'menuName': 'Menu'}]}
+route      = APIRoute(path='/system/menu/list', name='get_system_menu_list', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x11c7a0f50>
+row        = {'menuId': 1, 'menuName': 'Menu'}
+validated  = CollectionResult[MenuModel](items=[MenuModel(menu_id=1, menu_name='Menu', parent_id=None, order_num=None, path=None, c... status=None, perms=None, icon=None, create_by=None, create_time=None, update_by=None, update_time=None, remark=None)])
+
+tests/unit/test_collection_openapi_contract.py:38: Failed
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router1-/system/dept/list-row1] _
+
+router = <fastapi.routing.APIRouter object at 0x11c73c7c0>
+path = '/system/dept/list', row = {'deptId': 2, 'deptName': 'Dept'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+        validated = adapter.validate_python(payload)
+        assert validated.model_dump(by_alias=True)['items'][0].items() >= row.items()
+        with pytest.raises(ValidationError):
+            adapter.validate_python([row])
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+adapter    = TypeAdapter(CollectionResult[DeptModel])
+app        = <fastapi.applications.FastAPI object at 0x11b671450>
+path       = '/system/dept/list'
+payload    = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+route      = APIRoute(path='/system/dept/list', name='get_system_dept_list', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x11c73c7c0>
+row        = {'deptId': 2, 'deptName': 'Dept'}
+validated  = CollectionResult[DeptModel](items=[DeptModel(dept_id=2, parent_id=None, ancestors=None, dept_name='Dept', order_num=No...one=None, email=None, status=None, del_flag=None, create_by=None, create_time=None, update_by=None, update_time=None)])
+
+tests/unit/test_collection_openapi_contract.py:38: Failed
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router2-/system/dept/list/exclude/{dept_id}-row2] _
+
+router = <fastapi.routing.APIRouter object at 0x11c73c7c0>
+path = '/system/dept/list/exclude/{dept_id}'
+row = {'deptId': 2, 'deptName': 'Dept'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+        validated = adapter.validate_python(payload)
+        assert validated.model_dump(by_alias=True)['items'][0].items() >= row.items()
+        with pytest.raises(ValidationError):
+            adapter.validate_python([row])
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+adapter    = TypeAdapter(CollectionResult[DeptModel])
+app        = <fastapi.applications.FastAPI object at 0x11cc8ad50>
+path       = '/system/dept/list/exclude/{dept_id}'
+payload    = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+route      = APIRoute(path='/system/dept/list/exclude/{dept_id}', name='get_system_dept_tree_for_edit_option', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x11c73c7c0>
+row        = {'deptId': 2, 'deptName': 'Dept'}
+validated  = CollectionResult[DeptModel](items=[DeptModel(dept_id=2, parent_id=None, ancestors=None, dept_name='Dept', order_num=No...one=None, email=None, status=None, del_flag=None, create_by=None, create_time=None, update_by=None, update_time=None)])
+
+tests/unit/test_collection_openapi_contract.py:38: Failed
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router3-/system/dict/type/optionselect-row3] _
+
+router = <fastapi.routing.APIRouter object at 0x11c73dae0>
+path = '/system/dict/type/optionselect'
+row = {'dictId': 3, 'dictType': 'status'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+        validated = adapter.validate_python(payload)
+        assert validated.model_dump(by_alias=True)['items'][0].items() >= row.items()
+        with pytest.raises(ValidationError):
+            adapter.validate_python([row])
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+adapter    = TypeAdapter(CollectionResult[DictTypeModel])
+app        = <fastapi.applications.FastAPI object at 0x11cf1a350>
+path       = '/system/dict/type/optionselect'
+payload    = {'items': [{'dictId': 3, 'dictType': 'status'}]}
+route      = APIRoute(path='/system/dict/type/optionselect', name='query_system_dict_type_options', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x11c73dae0>
+row        = {'dictId': 3, 'dictType': 'status'}
+validated  = CollectionResult[DictTypeModel](items=[DictTypeModel(dict_id=3, dict_name=None, dict_type='status', status=None, create_by=None, create_time=None, update_by=None, update_time=None, remark=None)])
+
+tests/unit/test_collection_openapi_contract.py:38: Failed
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router4-/device/category/options-row4] _
+
+router = <fastapi.routing.APIRouter object at 0x11bb76e40>
+path = '/device/category/options'
+row = {'deviceCategoryId': 8, 'name': 'Network'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+            (device_category_router, '/device/category/options', {'deviceCategoryId': 8, 'name': 'Network'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+        validated = adapter.validate_python(payload)
+        assert validated.model_dump(by_alias=True)['items'][0].items() >= row.items()
+        with pytest.raises(ValidationError):
+            adapter.validate_python([row])
+>       with pytest.raises(ValidationError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE <class 'pydantic_core._pydantic_core.ValidationError'>
+
+adapter    = TypeAdapter(CollectionResult[DeviceCategoryOptionModel])
+app        = <fastapi.applications.FastAPI object at 0x11d0b4050>
+path       = '/device/category/options'
+payload    = {'items': [{'deviceCategoryId': 8, 'name': 'Network'}]}
+route      = APIRoute(path='/device/category/options', name='get_device_category_options', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x11bb76e40>
+row        = {'deviceCategoryId': 8, 'name': 'Network'}
+validated  = CollectionResult[DeviceCategoryOptionModel](items=[DeviceCategoryOptionModel(device_category_id=8, name='Network')])
+
+tests/unit/test_collection_openapi_contract.py:38: Failed
+=========================== short test summary info ============================
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router0-/system/menu/list-row0]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router1-/system/dept/list-row1]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router2-/system/dept/list/exclude/{dept_id}-row2]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router3-/system/dict/type/optionselect-row3]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router4-/device/category/options-row4]
+============================== 5 failed in 0.50s ===============================

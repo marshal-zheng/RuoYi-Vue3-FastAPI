@@ -4,10 +4,11 @@
  */
 
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue';
+import { ElMessage } from 'element-plus';
 import { useDeviceSupport } from './useDeviceSupport.js';
 
 export function useContextMenu(graph, options = {}) {
-  const { isMacOs, isCtrlKeyPressed } = useDeviceSupport();
+  const { isMacOs } = useDeviceSupport();
 
   const contextMenu = ref({
     visible: false,
@@ -77,7 +78,7 @@ export function useContextMenu(graph, options = {}) {
         // 确保返回的是数组
         return Array.isArray(result) ? result : standardItems;
       } catch (error) {
-        console.error('自定义菜单处理器执行错误:', error);
+        ElMessage.error(error instanceof Error ? error.message : '自定义菜单加载失败');
         return standardItems;
       }
     }
@@ -88,16 +89,11 @@ export function useContextMenu(graph, options = {}) {
 
   // 获取剪贴板状态（需要外部注入）
   let clipboardHandler = null;
-  let historyHandler = null;
   let selectionHandler = null;
 
   // 设置处理器
   const setClipboardHandler = (handler) => {
     clipboardHandler = handler;
-  };
-
-  const setHistoryHandler = (handler) => {
-    historyHandler = handler;
   };
 
   const setSelectionHandler = (handler) => {
@@ -223,47 +219,6 @@ export function useContextMenu(graph, options = {}) {
   };
 
   // 辅助函数：切换节点锁定状态
-  const LOCK_META_KEY = 'lockState/originalStroke';
-
-  const toggleNodeLock = (node) => {
-    if (!node) return;
-
-    const locked = node.prop('locked') === true;
-    const newLocked = !locked;
-
-    node.prop('locked', newLocked);
-    node.prop('movable', !newLocked);
-    node.prop('draggable', !newLocked);
-
-    try {
-      if (typeof node.updateData === 'function') {
-        node.updateData({ locked: newLocked });
-      } else if (typeof node.setData === 'function') {
-        const current = node.getData ? node.getData() || {} : {};
-        node.setData({ ...current, locked: newLocked });
-      }
-    } catch (error) {
-      console.warn('同步节点锁定数据状态失败:', error);
-    }
-
-    const storedStroke = node.prop(LOCK_META_KEY);
-    const currentStroke = node.attr('body/stroke') || '#333';
-    const savedStroke = storedStroke || currentStroke || '#333';
-
-    node.prop(LOCK_META_KEY, newLocked ? savedStroke : null, { silent: true });
-
-    if (newLocked) {
-      node.attr('body/strokeDasharray', '5,5');
-      node.attr('body/stroke', '#ff6b6b');
-      node.attr('body/data-locked', 'true');
-    } else {
-      node.attr('body/strokeDasharray', '');
-      node.attr('body/stroke', savedStroke);
-      node.attr('body/data-locked', null);
-    }
-
-    console.log(`节点 ${node.id} ${newLocked ? '已锁定' : '已解锁'}`);
-  };
 
   // 辅助函数：编辑边标签
   const editEdgeLabel = (edge) => {
@@ -303,8 +258,6 @@ export function useContextMenu(graph, options = {}) {
 
   // 显示右键菜单
   const showContextMenu = (x, y, type, target = null) => {
-    console.log('showContextMenu called:', { x, y, type, target, enabled: config.enabled });
-
     if (!config.enabled) return;
 
     let items = [];
@@ -399,7 +352,7 @@ export function useContextMenu(graph, options = {}) {
       try {
         item.action();
       } catch (error) {
-        console.error('Context menu action error:', error);
+        ElMessage.error(error instanceof Error ? error.message : '菜单操作失败');
       }
     }
   };
@@ -416,7 +369,7 @@ export function useContextMenu(graph, options = {}) {
     if (typeof handler === 'function' || handler === null) {
       config.customMenuHandler = handler;
     } else {
-      console.warn('customMenuHandler 必须是一个函数或 null');
+      throw new TypeError('customMenuHandler 必须是一个函数或 null');
     }
   };
 
@@ -424,34 +377,30 @@ export function useContextMenu(graph, options = {}) {
   const setupGraphEvents = (graphInstance = null) => {
     const g = graphInstance || graph?.value || graph;
     if (!g || typeof g.on !== 'function') {
-      console.warn('Graph instance is not ready for context menu setup');
+      // Graph 还未就绪；调用方会在 ready 时重新注册事件。
       return;
     }
 
     // 节点右键
     g.on('node:contextmenu', ({ e, node }) => {
-      console.log('node:contextmenu triggered', { e, node });
       e.preventDefault();
       showContextMenu(e.clientX, e.clientY, 'node', node);
     });
 
     // 边右键
     g.on('edge:contextmenu', ({ e, edge }) => {
-      console.log('edge:contextmenu triggered', { e, edge });
       e.preventDefault();
       showContextMenu(e.clientX, e.clientY, 'edge', edge);
     });
 
     // 空白区域右键
     g.on('blank:contextmenu', ({ e }) => {
-      console.log('blank:contextmenu triggered', { e });
       e.preventDefault();
       showContextMenu(e.clientX, e.clientY, 'blank');
     });
 
     // 端口右键
     g.on('port:contextmenu', ({ e, port, node }) => {
-      console.log('port:contextmenu triggered', { e, port, node });
       e.preventDefault();
       showContextMenu(e.clientX, e.clientY, 'port', { port, node });
     });
@@ -508,7 +457,6 @@ export function useContextMenu(graph, options = {}) {
     handleMenuClick,
     setEnabled,
     setClipboardHandler,
-    setHistoryHandler,
     setSelectionHandler,
     setCustomMenuHandler, // 新增：设置自定义菜单处理器
     setupGraphEvents, // 允许手动设置事件

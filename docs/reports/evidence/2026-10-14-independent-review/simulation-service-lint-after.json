@@ -1,0 +1,6396 @@
+[
+  {
+    "cell": null,
+    "code": "UP035",
+    "end_location": {
+      "column": 61,
+      "row": 10
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "from typing import Dict, List, Optional\nfrom collections.abc import Awaitable, Callable",
+          "end_location": {
+            "column": 61,
+            "row": 10
+          },
+          "location": {
+            "column": 1,
+            "row": 10
+          }
+        }
+      ],
+      "message": "Import from `collections.abc`"
+    },
+    "location": {
+      "column": 1,
+      "row": 10
+    },
+    "message": "Import from `collections.abc` instead: `Awaitable`, `Callable`",
+    "noqa_row": 10,
+    "url": "https://docs.astral.sh/ruff/rules/deprecated-import"
+  },
+  {
+    "cell": null,
+    "code": "UP035",
+    "end_location": {
+      "column": 61,
+      "row": 10
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 10
+    },
+    "message": "`typing.Dict` is deprecated, use `dict` instead",
+    "noqa_row": 10,
+    "url": "https://docs.astral.sh/ruff/rules/deprecated-import"
+  },
+  {
+    "cell": null,
+    "code": "UP035",
+    "end_location": {
+      "column": 61,
+      "row": 10
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 1,
+      "row": 10
+    },
+    "message": "`typing.List` is deprecated, use `list` instead",
+    "noqa_row": 10,
+    "url": "https://docs.astral.sh/ruff/rules/deprecated-import"
+  },
+  {
+    "cell": null,
+    "code": "TC001",
+    "end_location": {
+      "column": 68,
+      "row": 44
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "unsafe",
+      "edits": [
+        {
+          "content": "from typing import Awaitable, Callable, Dict, List, Optional, TYPE_CHECKING",
+          "end_location": {
+            "column": 61,
+            "row": 10
+          },
+          "location": {
+            "column": 1,
+            "row": 10
+          }
+        },
+        {
+          "content": "",
+          "end_location": {
+            "column": 1,
+            "row": 45
+          },
+          "location": {
+            "column": 1,
+            "row": 44
+          }
+        },
+        {
+          "content": "\nif TYPE_CHECKING:\n    from modules.simulation.ports import ISimulationProjectTopologyPort\n",
+          "end_location": {
+            "column": 1,
+            "row": 55
+          },
+          "location": {
+            "column": 1,
+            "row": 55
+          }
+        }
+      ],
+      "message": "Move into type-checking block"
+    },
+    "location": {
+      "column": 38,
+      "row": 44
+    },
+    "message": "Move application import `modules.simulation.ports.ISimulationProjectTopologyPort` into a type-checking block",
+    "noqa_row": 44,
+    "url": "https://docs.astral.sh/ruff/rules/typing-only-first-party-import"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 26,
+      "row": 64
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 26,
+            "row": 64
+          },
+          "location": {
+            "column": 22,
+            "row": 64
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 22,
+      "row": 64
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 64,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 54,
+      "row": 64
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 52,
+      "row": 64
+    },
+    "message": "Mutable class attributes should be annotated with `typing.ClassVar`",
+    "noqa_row": 64,
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 14,
+      "row": 65
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 65
+    },
+    "message": "Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 65,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 22,
+      "row": 65
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 21,
+      "row": 65
+    },
+    "message": "Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 65,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 27,
+      "row": 66
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 27,
+            "row": 66
+          },
+          "location": {
+            "column": 23,
+            "row": 66
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 23,
+      "row": 66
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 66,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 37,
+      "row": 66
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 37,
+            "row": 66
+          },
+          "location": {
+            "column": 33,
+            "row": 66
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 33,
+      "row": 66
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 66,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 43,
+      "row": 66
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 41,
+      "row": 66
+    },
+    "message": "Mutable class attributes should be annotated with `typing.ClassVar`",
+    "noqa_row": 66,
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 17,
+      "row": 67
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 16,
+      "row": 67
+    },
+    "message": "Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 67,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 32,
+      "row": 67
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 31,
+      "row": 67
+    },
+    "message": "Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 67,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 29,
+      "row": 68
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 29,
+            "row": 68
+          },
+          "location": {
+            "column": 25,
+            "row": 68
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 25,
+      "row": 68
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 68,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 46,
+      "row": 68
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 44,
+      "row": 68
+    },
+    "message": "Mutable class attributes should be annotated with `typing.ClassVar`",
+    "noqa_row": 68,
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 27,
+      "row": 69
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 27,
+            "row": 69
+          },
+          "location": {
+            "column": 23,
+            "row": 69
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 23,
+      "row": 69
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 69,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF012",
+    "end_location": {
+      "column": 42,
+      "row": 69
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 40,
+      "row": 69
+    },
+    "message": "Mutable class attributes should be annotated with `typing.ClassVar`",
+    "noqa_row": 69,
+    "url": "https://docs.astral.sh/ruff/rules/mutable-class-default"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 41,
+      "row": 74
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "AsyncSession | None",
+          "end_location": {
+            "column": 41,
+            "row": 74
+          },
+          "location": {
+            "column": 19,
+            "row": 74
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 19,
+      "row": 74
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 74,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "RUF001",
+    "end_location": {
+      "column": 39,
+      "row": 93
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 38,
+      "row": 93
+    },
+    "message": "String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 93,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-string"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 105
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 32,
+            "row": 105
+          },
+          "location": {
+            "column": 19,
+            "row": 105
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 19,
+      "row": 105
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 105,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 106
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 106
+          },
+          "location": {
+            "column": 10,
+            "row": 106
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 106
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 106,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 71,
+      "row": 128
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 71,
+            "row": 128
+          },
+          "location": {
+            "column": 67,
+            "row": 128
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 67,
+      "row": 128
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 128,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 79,
+      "row": 131
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 79,
+            "row": 131
+          },
+          "location": {
+            "column": 75,
+            "row": 131
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 75,
+      "row": 131
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 131,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 84,
+      "row": 131
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 84,
+            "row": 131
+          },
+          "location": {
+            "column": 80,
+            "row": 131
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 80,
+      "row": 131
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 131,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 73,
+      "row": 134
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 73,
+            "row": 134
+          },
+          "location": {
+            "column": 69,
+            "row": 134
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 69,
+      "row": 134
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 134,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 78,
+      "row": 134
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 78,
+            "row": 134
+          },
+          "location": {
+            "column": 74,
+            "row": 134
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 74,
+      "row": 134
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 134,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 91,
+      "row": 137
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 91,
+            "row": 137
+          },
+          "location": {
+            "column": 87,
+            "row": 137
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 87,
+      "row": 137
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 137,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 96,
+      "row": 137
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 96,
+            "row": 137
+          },
+          "location": {
+            "column": 92,
+            "row": 137
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 92,
+      "row": 137
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 137,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 96,
+      "row": 143
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 96,
+            "row": 143
+          },
+          "location": {
+            "column": 92,
+            "row": 143
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 92,
+      "row": 143
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 143,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 101,
+      "row": 143
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 101,
+            "row": 143
+          },
+          "location": {
+            "column": 97,
+            "row": 143
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 97,
+      "row": 143
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 143,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 20,
+      "row": 152
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 20,
+            "row": 152
+          },
+          "location": {
+            "column": 16,
+            "row": 152
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 16,
+      "row": 152
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 152,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 25,
+      "row": 152
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 25,
+            "row": 152
+          },
+          "location": {
+            "column": 21,
+            "row": 152
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 21,
+      "row": 152
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 152,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 85,
+      "row": 155
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 85,
+            "row": 155
+          },
+          "location": {
+            "column": 81,
+            "row": 155
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 81,
+      "row": 155
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 155,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 90,
+      "row": 155
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 90,
+            "row": 155
+          },
+          "location": {
+            "column": 86,
+            "row": 155
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 86,
+      "row": 155
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 155,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 77,
+      "row": 161
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 77,
+            "row": 161
+          },
+          "location": {
+            "column": 64,
+            "row": 161
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 64,
+      "row": 161
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 161,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 93,
+      "row": 161
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 93,
+            "row": 161
+          },
+          "location": {
+            "column": 89,
+            "row": 161
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 89,
+      "row": 161
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 161,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 98,
+      "row": 161
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 98,
+            "row": 161
+          },
+          "location": {
+            "column": 94,
+            "row": 161
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 94,
+      "row": 161
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 161,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 57,
+      "row": 164
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 57,
+            "row": 164
+          },
+          "location": {
+            "column": 53,
+            "row": 164
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 53,
+      "row": 164
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 164,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 62,
+      "row": 164
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 62,
+            "row": 164
+          },
+          "location": {
+            "column": 58,
+            "row": 164
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 58,
+      "row": 164
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 164,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 31,
+      "row": 170
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 31,
+            "row": 170
+          },
+          "location": {
+            "column": 18,
+            "row": 170
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 170
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 170,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 172
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 14,
+            "row": 172
+          },
+          "location": {
+            "column": 10,
+            "row": 172
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 10,
+      "row": 172
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 172,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 19,
+      "row": 172
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 19,
+            "row": 172
+          },
+          "location": {
+            "column": 15,
+            "row": 172
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 15,
+      "row": 172
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 172,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 59,
+      "row": 184
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 59,
+            "row": 184
+          },
+          "location": {
+            "column": 55,
+            "row": 184
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 55,
+      "row": 184
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 184,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 64,
+      "row": 184
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 64,
+            "row": 184
+          },
+          "location": {
+            "column": 60,
+            "row": 184
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 60,
+      "row": 184
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 184,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 54,
+      "row": 187
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 54,
+            "row": 187
+          },
+          "location": {
+            "column": 50,
+            "row": 187
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 50,
+      "row": 187
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 187,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 59,
+      "row": 187
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 59,
+            "row": 187
+          },
+          "location": {
+            "column": 55,
+            "row": 187
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 55,
+      "row": 187
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 187,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 89,
+      "row": 190
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 89,
+            "row": 190
+          },
+          "location": {
+            "column": 85,
+            "row": 190
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 85,
+      "row": 190
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 190,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 94,
+      "row": 190
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 94,
+            "row": 190
+          },
+          "location": {
+            "column": 90,
+            "row": 190
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 90,
+      "row": 190
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 190,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 83,
+      "row": 196
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 83,
+            "row": 196
+          },
+          "location": {
+            "column": 79,
+            "row": 196
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 79,
+      "row": 196
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 196,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 88,
+      "row": 196
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 88,
+            "row": 196
+          },
+          "location": {
+            "column": 84,
+            "row": 196
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 84,
+      "row": 196
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 196,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 76,
+      "row": 216
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "float | None",
+          "end_location": {
+            "column": 76,
+            "row": 216
+          },
+          "location": {
+            "column": 61,
+            "row": 216
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 61,
+      "row": 216
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 216,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 58,
+      "row": 219
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 58,
+            "row": 219
+          },
+          "location": {
+            "column": 44,
+            "row": 219
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 44,
+      "row": 219
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 219,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 57,
+      "row": 219
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 57,
+            "row": 219
+          },
+          "location": {
+            "column": 53,
+            "row": 219
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 53,
+      "row": 219
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 219,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 14,
+      "row": 229
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 225
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "noqa_row": 225,
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 234
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "float | None",
+          "end_location": {
+            "column": 34,
+            "row": 234
+          },
+          "location": {
+            "column": 19,
+            "row": 234
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 19,
+      "row": 234
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 234,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 235
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 32,
+            "row": 235
+          },
+          "location": {
+            "column": 18,
+            "row": 235
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 235
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 235,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 31,
+      "row": 235
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 31,
+            "row": 235
+          },
+          "location": {
+            "column": 27,
+            "row": 235
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 27,
+      "row": 235
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 235,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 25,
+      "row": 236
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "float | None",
+          "end_location": {
+            "column": 25,
+            "row": 236
+          },
+          "location": {
+            "column": 10,
+            "row": 236
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 10,
+      "row": 236
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 236,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 14,
+      "row": 255
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 251
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "noqa_row": 251,
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 264
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 264
+          },
+          "location": {
+            "column": 21,
+            "row": 264
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 264
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 264,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 265
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 265
+          },
+          "location": {
+            "column": 21,
+            "row": 265
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 265
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 265,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 33,
+      "row": 266
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 33,
+            "row": 266
+          },
+          "location": {
+            "column": 20,
+            "row": 266
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 20,
+      "row": 266
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 266,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 267
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 32,
+            "row": 267
+          },
+          "location": {
+            "column": 18,
+            "row": 267
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 267
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 267,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 31,
+      "row": 267
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 31,
+            "row": 267
+          },
+          "location": {
+            "column": 27,
+            "row": 267
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 27,
+      "row": 267
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 267,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 269
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 269
+          },
+          "location": {
+            "column": 10,
+            "row": 269
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 269
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 269,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 59,
+      "row": 278
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 59,
+            "row": 278
+          },
+          "location": {
+            "column": 46,
+            "row": 278
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 46,
+      "row": 278
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 278,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 291
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 291
+          },
+          "location": {
+            "column": 21,
+            "row": 291
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 291
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 291,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 292
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 292
+          },
+          "location": {
+            "column": 21,
+            "row": 292
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 292
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 292,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 33,
+      "row": 293
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 33,
+            "row": 293
+          },
+          "location": {
+            "column": 20,
+            "row": 293
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 20,
+      "row": 293
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 293,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 294
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 32,
+            "row": 294
+          },
+          "location": {
+            "column": 18,
+            "row": 294
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 294
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 294,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 31,
+      "row": 294
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 31,
+            "row": 294
+          },
+          "location": {
+            "column": 27,
+            "row": 294
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 27,
+      "row": 294
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 294,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 296
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 296
+          },
+          "location": {
+            "column": 10,
+            "row": 296
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 296
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 296,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 31,
+      "row": 323
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 31,
+            "row": 323
+          },
+          "location": {
+            "column": 17,
+            "row": 323
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 17,
+      "row": 323
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 323,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 30,
+      "row": 323
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 30,
+            "row": 323
+          },
+          "location": {
+            "column": 26,
+            "row": 323
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 26,
+      "row": 323
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 323,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 324
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 324
+          },
+          "location": {
+            "column": 10,
+            "row": 324
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 324
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 324,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 51,
+      "row": 333
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 51,
+            "row": 333
+          },
+          "location": {
+            "column": 47,
+            "row": 333
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 47,
+      "row": 333
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 333,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 56,
+      "row": 333
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 56,
+            "row": 333
+          },
+          "location": {
+            "column": 52,
+            "row": 333
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 52,
+      "row": 333
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 333,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 53,
+      "row": 336
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 53,
+            "row": 336
+          },
+          "location": {
+            "column": 49,
+            "row": 336
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 49,
+      "row": 336
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 336,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 62,
+      "row": 336
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 62,
+            "row": 336
+          },
+          "location": {
+            "column": 58,
+            "row": 336
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 58,
+      "row": 336
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 336,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 73,
+      "row": 339
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 73,
+            "row": 339
+          },
+          "location": {
+            "column": 69,
+            "row": 339
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 69,
+      "row": 339
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 339,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 82,
+      "row": 339
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 82,
+            "row": 339
+          },
+          "location": {
+            "column": 78,
+            "row": 339
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 78,
+      "row": 339
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 339,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 68,
+      "row": 342
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 68,
+            "row": 342
+          },
+          "location": {
+            "column": 64,
+            "row": 342
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 64,
+      "row": 342
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 342,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 51,
+      "row": 351
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 51,
+            "row": 351
+          },
+          "location": {
+            "column": 47,
+            "row": 351
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 47,
+      "row": 351
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 351,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 56,
+      "row": 351
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 56,
+            "row": 351
+          },
+          "location": {
+            "column": 52,
+            "row": 351
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 52,
+      "row": 351
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 351,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 52,
+      "row": 354
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 52,
+            "row": 354
+          },
+          "location": {
+            "column": 48,
+            "row": 354
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 48,
+      "row": 354
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 354,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 61,
+      "row": 354
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 61,
+            "row": 354
+          },
+          "location": {
+            "column": 57,
+            "row": 354
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 57,
+      "row": 354
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 354,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 51,
+      "row": 364
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 51,
+            "row": 364
+          },
+          "location": {
+            "column": 47,
+            "row": 364
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 47,
+      "row": 364
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 364,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 29,
+      "row": 382
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 29,
+            "row": 382
+          },
+          "location": {
+            "column": 16,
+            "row": 382
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 16,
+      "row": 382
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 382,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 35,
+      "row": 388
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 35,
+            "row": 388
+          },
+          "location": {
+            "column": 31,
+            "row": 388
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 31,
+      "row": 388
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 388,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 40,
+      "row": 388
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 40,
+            "row": 388
+          },
+          "location": {
+            "column": 36,
+            "row": 388
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 36,
+      "row": 388
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 388,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 62,
+      "row": 388
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 62,
+            "row": 388
+          },
+          "location": {
+            "column": 58,
+            "row": 388
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 58,
+      "row": 388
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 388,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 67,
+      "row": 388
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 67,
+            "row": 388
+          },
+          "location": {
+            "column": 63,
+            "row": 388
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 63,
+      "row": 388
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 388,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 45,
+      "row": 395
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 45,
+            "row": 395
+          },
+          "location": {
+            "column": 41,
+            "row": 395
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 41,
+      "row": 395
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 395,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 64,
+      "row": 395
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 64,
+            "row": 395
+          },
+          "location": {
+            "column": 50,
+            "row": 395
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 50,
+      "row": 395
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 395,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 63,
+      "row": 395
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 63,
+            "row": 395
+          },
+          "location": {
+            "column": 59,
+            "row": 395
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 59,
+      "row": 395
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 395,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 43,
+      "row": 423
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 43,
+            "row": 423
+          },
+          "location": {
+            "column": 39,
+            "row": 423
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 39,
+      "row": 423
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 423,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 62,
+      "row": 423
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 62,
+            "row": 423
+          },
+          "location": {
+            "column": 48,
+            "row": 423
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 48,
+      "row": 423
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 423,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 61,
+      "row": 423
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 61,
+            "row": 423
+          },
+          "location": {
+            "column": 57,
+            "row": 423
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 57,
+      "row": 423
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 423,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "PLR0912",
+    "end_location": {
+      "column": 37,
+      "row": 442
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 15,
+      "row": 442
+    },
+    "message": "Too many branches (24 > 12)",
+    "noqa_row": 442,
+    "url": "https://docs.astral.sh/ruff/rules/too-many-branches"
+  },
+  {
+    "cell": null,
+    "code": "PLR0915",
+    "end_location": {
+      "column": 37,
+      "row": 442
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 15,
+      "row": 442
+    },
+    "message": "Too many statements (102 > 50)",
+    "noqa_row": 442,
+    "url": "https://docs.astral.sh/ruff/rules/too-many-statements"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 39,
+      "row": 447
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 39,
+            "row": 447
+          },
+          "location": {
+            "column": 35,
+            "row": 447
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 35,
+      "row": 447
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 447,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 12,
+      "row": 454
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 11,
+      "row": 454
+    },
+    "message": "Docstring contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 457,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 30,
+      "row": 459
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 30,
+            "row": 459
+          },
+          "location": {
+            "column": 26,
+            "row": 459
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 26,
+      "row": 459
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 459,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 35,
+      "row": 459
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 35,
+            "row": 459
+          },
+          "location": {
+            "column": 31,
+            "row": 459
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 31,
+      "row": 459
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 459,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 31,
+      "row": 460
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 31,
+            "row": 460
+          },
+          "location": {
+            "column": 27,
+            "row": 460
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 27,
+      "row": 460
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 460,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 36,
+      "row": 460
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 36,
+            "row": 460
+          },
+          "location": {
+            "column": 32,
+            "row": 460
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 32,
+      "row": 460
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 460,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 28,
+      "row": 461
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 28,
+            "row": 461
+          },
+          "location": {
+            "column": 24,
+            "row": 461
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 24,
+      "row": 461
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 461,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 33,
+      "row": 461
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 33,
+            "row": 461
+          },
+          "location": {
+            "column": 29,
+            "row": 461
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 29,
+      "row": 461
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 461,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 32,
+      "row": 462
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 32,
+            "row": 462
+          },
+          "location": {
+            "column": 28,
+            "row": 462
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 28,
+      "row": 462
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 462,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 37,
+      "row": 462
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 37,
+            "row": 462
+          },
+          "location": {
+            "column": 33,
+            "row": 462
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 33,
+      "row": 462
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 462,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 28,
+      "row": 463
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 28,
+            "row": 463
+          },
+          "location": {
+            "column": 24,
+            "row": 463
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 24,
+      "row": 463
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 463,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 33,
+      "row": 463
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 33,
+            "row": 463
+          },
+          "location": {
+            "column": 29,
+            "row": 463
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 29,
+      "row": 463
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 463,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "SIM118",
+    "end_location": {
+      "column": 48,
+      "row": 479
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "",
+          "end_location": {
+            "column": 48,
+            "row": 479
+          },
+          "location": {
+            "column": 41,
+            "row": 479
+          }
+        }
+      ],
+      "message": "Remove `.keys()`"
+    },
+    "location": {
+      "column": 17,
+      "row": 479
+    },
+    "message": "Use `key in dict` instead of `key in dict.keys()`",
+    "noqa_row": 479,
+    "url": "https://docs.astral.sh/ruff/rules/in-dict-keys"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 51,
+      "row": 483
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 51,
+            "row": 483
+          },
+          "location": {
+            "column": 47,
+            "row": 483
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 47,
+      "row": 483
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 483,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 51,
+      "row": 507
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 51,
+            "row": 507
+          },
+          "location": {
+            "column": 47,
+            "row": 507
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 47,
+      "row": 507
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 507,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 30,
+      "row": 668
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 30,
+            "row": 668
+          },
+          "location": {
+            "column": 17,
+            "row": 668
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 17,
+      "row": 668
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 668,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 43,
+      "row": 669
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "SimulationEngine | None",
+          "end_location": {
+            "column": 43,
+            "row": 669
+          },
+          "location": {
+            "column": 17,
+            "row": 669
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 17,
+      "row": 669
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 669,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 31,
+      "row": 670
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 31,
+            "row": 670
+          },
+          "location": {
+            "column": 17,
+            "row": 670
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 17,
+      "row": 670
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 670,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 30,
+      "row": 670
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 30,
+            "row": 670
+          },
+          "location": {
+            "column": 26,
+            "row": 670
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 26,
+      "row": 670
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 670,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 31,
+      "row": 671
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 31,
+            "row": 671
+          },
+          "location": {
+            "column": 18,
+            "row": 671
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 671
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 671,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 36,
+      "row": 672
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 36,
+            "row": 672
+          },
+          "location": {
+            "column": 23,
+            "row": 672
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 23,
+      "row": 672
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 672,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 80,
+      "row": 713
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 80,
+            "row": 713
+          },
+          "location": {
+            "column": 76,
+            "row": 713
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 76,
+      "row": 713
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 713,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 741
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 32,
+            "row": 741
+          },
+          "location": {
+            "column": 19,
+            "row": 741
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 19,
+      "row": 741
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 741,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 742
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 742
+          },
+          "location": {
+            "column": 10,
+            "row": 742
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 742
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 742,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 24,
+      "row": 775
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 23,
+      "row": 775
+    },
+    "message": "Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 775,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 33,
+      "row": 775
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 32,
+      "row": 775
+    },
+    "message": "Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 775,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "PLC0415",
+    "end_location": {
+      "column": 29,
+      "row": 808
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 808
+    },
+    "message": "`import` should be at the top-level of a file",
+    "noqa_row": 808,
+    "url": "https://docs.astral.sh/ruff/rules/import-outside-top-level"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 18,
+      "row": 818
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 815
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "noqa_row": 815,
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "RUF001",
+    "end_location": {
+      "column": 44,
+      "row": 817
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 43,
+      "row": 817
+    },
+    "message": "String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 817,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-string"
+  },
+  {
+    "cell": null,
+    "code": "B904",
+    "end_location": {
+      "column": 14,
+      "row": 821
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 819
+    },
+    "message": "Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling",
+    "noqa_row": 819,
+    "url": "https://docs.astral.sh/ruff/rules/raise-without-from-inside-except"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 16,
+      "row": 859
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 15,
+      "row": 859
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 860,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 24,
+      "row": 859
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 23,
+      "row": 859
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 860,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 26,
+      "row": 859
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 25,
+      "row": 859
+    },
+    "message": "Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 860,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 40,
+      "row": 859
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 39,
+      "row": 859
+    },
+    "message": "Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 860,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF001",
+    "end_location": {
+      "column": 76,
+      "row": 879
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 75,
+      "row": 879
+    },
+    "message": "String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 879,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-string"
+  },
+  {
+    "cell": null,
+    "code": "RUF001",
+    "end_location": {
+      "column": 83,
+      "row": 879
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 82,
+      "row": 879
+    },
+    "message": "String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 879,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-string"
+  },
+  {
+    "cell": null,
+    "code": "RUF001",
+    "end_location": {
+      "column": 39,
+      "row": 891
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 38,
+      "row": 891
+    },
+    "message": "String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 891,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-string"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 67,
+      "row": 975
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 67,
+            "row": 975
+          },
+          "location": {
+            "column": 63,
+            "row": 975
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 63,
+      "row": 975
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 975,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 29,
+      "row": 987
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 28,
+      "row": 987
+    },
+    "message": "Comment contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 987,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 37,
+      "row": 987
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 36,
+      "row": 987
+    },
+    "message": "Comment contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 987,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 88,
+      "row": 1015
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 88,
+            "row": 1015
+          },
+          "location": {
+            "column": 84,
+            "row": 1015
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 84,
+      "row": 1015
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1015,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 93,
+      "row": 1015
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 93,
+            "row": 1015
+          },
+          "location": {
+            "column": 89,
+            "row": 1015
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 89,
+      "row": 1015
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1015,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1017
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1017
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1025,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 21,
+      "row": 1017
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 20,
+      "row": 1017
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1025,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 82,
+      "row": 1035
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 82,
+            "row": 1035
+          },
+          "location": {
+            "column": 78,
+            "row": 1035
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 78,
+      "row": 1035
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1035,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 87,
+      "row": 1035
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 87,
+            "row": 1035
+          },
+          "location": {
+            "column": 83,
+            "row": 1035
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 83,
+      "row": 1035
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1035,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1037
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1037
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1045,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1037
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1037
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1045,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 86,
+      "row": 1053
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 86,
+            "row": 1053
+          },
+          "location": {
+            "column": 73,
+            "row": 1053
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 73,
+      "row": 1053
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1053,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 102,
+      "row": 1053
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 102,
+            "row": 1053
+          },
+          "location": {
+            "column": 98,
+            "row": 1053
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 98,
+      "row": 1053
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1053,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 107,
+      "row": 1053
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 107,
+            "row": 1053
+          },
+          "location": {
+            "column": 103,
+            "row": 1053
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 103,
+      "row": 1053
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1053,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1055
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1055
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1063,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 21,
+      "row": 1055
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 20,
+      "row": 1055
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1063,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 27,
+      "row": 1059
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 26,
+      "row": 1059
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1063,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1059
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1059
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1063,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 66,
+      "row": 1071
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 66,
+            "row": 1071
+          },
+          "location": {
+            "column": 62,
+            "row": 1071
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 62,
+      "row": 1071
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1071,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 71,
+      "row": 1071
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 71,
+            "row": 1071
+          },
+          "location": {
+            "column": 67,
+            "row": 1071
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 67,
+      "row": 1071
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1071,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1073
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1073
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1080,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1073
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1073
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1080,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 68,
+      "row": 1088
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 68,
+            "row": 1088
+          },
+          "location": {
+            "column": 64,
+            "row": 1088
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 64,
+      "row": 1088
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1088,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 73,
+      "row": 1088
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 73,
+            "row": 1088
+          },
+          "location": {
+            "column": 69,
+            "row": 1088
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 69,
+      "row": 1088
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1088,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1090
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1090
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1097,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 21,
+      "row": 1090
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 20,
+      "row": 1090
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1097,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 63,
+      "row": 1105
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 63,
+            "row": 1105
+          },
+          "location": {
+            "column": 59,
+            "row": 1105
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 59,
+      "row": 1105
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1105,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 68,
+      "row": 1105
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 68,
+            "row": 1105
+          },
+          "location": {
+            "column": 64,
+            "row": 1105
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 64,
+      "row": 1105
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1105,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1107
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1107
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1114,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1107
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1107
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1114,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 92,
+      "row": 1122
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 92,
+            "row": 1122
+          },
+          "location": {
+            "column": 88,
+            "row": 1122
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 88,
+      "row": 1122
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1122,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 97,
+      "row": 1122
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 97,
+            "row": 1122
+          },
+          "location": {
+            "column": 93,
+            "row": 1122
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 93,
+      "row": 1122
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1122,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1124
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1124
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1125,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1124
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1124
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1125,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 94,
+      "row": 1133
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 94,
+            "row": 1133
+          },
+          "location": {
+            "column": 90,
+            "row": 1133
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 90,
+      "row": 1133
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1133,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 99,
+      "row": 1133
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 99,
+            "row": 1133
+          },
+          "location": {
+            "column": 95,
+            "row": 1133
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 95,
+      "row": 1133
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1133,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 20,
+      "row": 1145
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 20,
+            "row": 1145
+          },
+          "location": {
+            "column": 16,
+            "row": 1145
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 16,
+      "row": 1145
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1145,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 25,
+      "row": 1145
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 25,
+            "row": 1145
+          },
+          "location": {
+            "column": 21,
+            "row": 1145
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 21,
+      "row": 1145
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1145,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 1154
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 14,
+            "row": 1154
+          },
+          "location": {
+            "column": 10,
+            "row": 1154
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 10,
+      "row": 1154
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1154,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 19,
+      "row": 1154
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 19,
+            "row": 1154
+          },
+          "location": {
+            "column": 15,
+            "row": 1154
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 15,
+      "row": 1154
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1154,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 114,
+      "row": 1175
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 114,
+            "row": 1175
+          },
+          "location": {
+            "column": 110,
+            "row": 1175
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 110,
+      "row": 1175
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1175,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 119,
+      "row": 1175
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 119,
+            "row": 1175
+          },
+          "location": {
+            "column": 115,
+            "row": 1175
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 115,
+      "row": 1175
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1175,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 1191
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 1191
+          },
+          "location": {
+            "column": 10,
+            "row": 1191
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 1191
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1191,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 23,
+      "row": 1227
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 22,
+      "row": 1227
+    },
+    "message": "Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1227,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 28,
+      "row": 1227
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 27,
+      "row": 1227
+    },
+    "message": "Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1227,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 31,
+      "row": 1236
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 30,
+      "row": 1236
+    },
+    "message": "Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 1236,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 23,
+      "row": 1310
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 22,
+      "row": 1310
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1314,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 31,
+      "row": 1310
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 30,
+      "row": 1310
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1314,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 85,
+      "row": 1364
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "float | None",
+          "end_location": {
+            "column": 85,
+            "row": 1364
+          },
+          "location": {
+            "column": 70,
+            "row": 1364
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 70,
+      "row": 1364
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1364,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 26,
+      "row": 1370
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 25,
+      "row": 1370
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1374,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 28,
+      "row": 1370
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 27,
+      "row": 1370
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1374,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 29,
+      "row": 1370
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 28,
+      "row": 1370
+    },
+    "message": "Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 1374,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 31,
+      "row": 1394
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 30,
+      "row": 1394
+    },
+    "message": "Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 1394,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 1398
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 1398
+          },
+          "location": {
+            "column": 21,
+            "row": 1398
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 1398
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1398,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 34,
+      "row": 1399
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 34,
+            "row": 1399
+          },
+          "location": {
+            "column": 21,
+            "row": 1399
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 21,
+      "row": 1399
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1399,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 33,
+      "row": 1400
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "str | None",
+          "end_location": {
+            "column": 33,
+            "row": 1400
+          },
+          "location": {
+            "column": 20,
+            "row": 1400
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 20,
+      "row": 1400
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1400,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 32,
+      "row": 1401
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 32,
+            "row": 1401
+          },
+          "location": {
+            "column": 18,
+            "row": 1401
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 18,
+      "row": 1401
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1401,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 31,
+      "row": 1401
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 31,
+            "row": 1401
+          },
+          "location": {
+            "column": 27,
+            "row": 1401
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 27,
+      "row": 1401
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1401,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 1403
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 1403
+          },
+          "location": {
+            "column": 10,
+            "row": 1403
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 1403
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1403,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 20,
+      "row": 1405
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 19,
+      "row": 1405
+    },
+    "message": "Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?",
+    "noqa_row": 1414,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP045",
+    "end_location": {
+      "column": 109,
+      "row": 1447
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "Dict | None",
+          "end_location": {
+            "column": 109,
+            "row": 1447
+          },
+          "location": {
+            "column": 95,
+            "row": 1447
+          }
+        }
+      ],
+      "message": "Convert to `X | None`"
+    },
+    "location": {
+      "column": 95,
+      "row": 1447
+    },
+    "message": "Use `X | None` for type annotations",
+    "noqa_row": 1447,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep604-annotation-optional"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 108,
+      "row": 1447
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 108,
+            "row": 1447
+          },
+          "location": {
+            "column": 104,
+            "row": 1447
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 104,
+      "row": 1447
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1447,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 14,
+      "row": 1448
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 14,
+            "row": 1448
+          },
+          "location": {
+            "column": 10,
+            "row": 1448
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 10,
+      "row": 1448
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1448,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 30,
+      "row": 1454
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 29,
+      "row": 1454
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1460,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 90,
+      "row": 1454
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 89,
+      "row": 1454
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1460,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 29,
+      "row": 1455
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 28,
+      "row": 1455
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1460,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 39,
+      "row": 1455
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 38,
+      "row": 1455
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1460,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 18,
+      "row": 1501
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 17,
+      "row": 1501
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1502,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 25,
+      "row": 1501
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 24,
+      "row": 1501
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1502,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 60,
+      "row": 1517
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 60,
+            "row": 1517
+          },
+          "location": {
+            "column": 56,
+            "row": 1517
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 56,
+      "row": 1517
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1517,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 65,
+      "row": 1517
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 65,
+            "row": 1517
+          },
+          "location": {
+            "column": 61,
+            "row": 1517
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 61,
+      "row": 1517
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1517,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 31,
+      "row": 1534
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 30,
+      "row": 1534
+    },
+    "message": "Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 1534,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 62,
+      "row": 1536
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 62,
+            "row": 1536
+          },
+          "location": {
+            "column": 58,
+            "row": 1536
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 58,
+      "row": 1536
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1536,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 71,
+      "row": 1536
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 71,
+            "row": 1536
+          },
+          "location": {
+            "column": 67,
+            "row": 1536
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 67,
+      "row": 1536
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1536,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 82,
+      "row": 1557
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 82,
+            "row": 1557
+          },
+          "location": {
+            "column": 78,
+            "row": 1557
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 78,
+      "row": 1557
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1557,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 91,
+      "row": 1557
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 91,
+            "row": 1557
+          },
+          "location": {
+            "column": 87,
+            "row": 1557
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 87,
+      "row": 1557
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1557,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 77,
+      "row": 1580
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 77,
+            "row": 1580
+          },
+          "location": {
+            "column": 73,
+            "row": 1580
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 73,
+      "row": 1580
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1580,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 60,
+      "row": 1651
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "list",
+          "end_location": {
+            "column": 60,
+            "row": 1651
+          },
+          "location": {
+            "column": 56,
+            "row": 1651
+          }
+        }
+      ],
+      "message": "Replace with `list`"
+    },
+    "location": {
+      "column": 56,
+      "row": 1651
+    },
+    "message": "Use `list` instead of `List` for type annotation",
+    "noqa_row": 1651,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 65,
+      "row": 1651
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 65,
+            "row": 1651
+          },
+          "location": {
+            "column": 61,
+            "row": 1651
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 61,
+      "row": 1651
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1651,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 57,
+      "row": 1676
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 57,
+            "row": 1676
+          },
+          "location": {
+            "column": 53,
+            "row": 1676
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 53,
+      "row": 1676
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1676,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 66,
+      "row": 1676
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 66,
+            "row": 1676
+          },
+          "location": {
+            "column": 62,
+            "row": 1676
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 62,
+      "row": 1676
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1676,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 41,
+      "row": 1681
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 40,
+      "row": 1681
+    },
+    "message": "Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?",
+    "noqa_row": 1686,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "RUF002",
+    "end_location": {
+      "column": 52,
+      "row": 1681
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 51,
+      "row": 1681
+    },
+    "message": "Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?",
+    "noqa_row": 1686,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-docstring"
+  },
+  {
+    "cell": null,
+    "code": "PLC0415",
+    "end_location": {
+      "column": 24,
+      "row": 1687
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 1687
+    },
+    "message": "`import` should be at the top-level of a file",
+    "noqa_row": 1687,
+    "url": "https://docs.astral.sh/ruff/rules/import-outside-top-level"
+  },
+  {
+    "cell": null,
+    "code": "PLC0415",
+    "end_location": {
+      "column": 42,
+      "row": 1688
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 1688
+    },
+    "message": "`import` should be at the top-level of a file",
+    "noqa_row": 1688,
+    "url": "https://docs.astral.sh/ruff/rules/import-outside-top-level"
+  },
+  {
+    "cell": null,
+    "code": "PLC0415",
+    "end_location": {
+      "column": 46,
+      "row": 1690
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 13,
+      "row": 1690
+    },
+    "message": "`import` should be at the top-level of a file",
+    "noqa_row": 1690,
+    "url": "https://docs.astral.sh/ruff/rules/import-outside-top-level"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 27,
+      "row": 1697
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 26,
+      "row": 1697
+    },
+    "message": "Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 1697,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "RUF003",
+    "end_location": {
+      "column": 31,
+      "row": 1777
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 30,
+      "row": 1777
+    },
+    "message": "Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?",
+    "noqa_row": 1777,
+    "url": "https://docs.astral.sh/ruff/rules/ambiguous-unicode-character-comment"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 61,
+      "row": 1779
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 61,
+            "row": 1779
+          },
+          "location": {
+            "column": 57,
+            "row": 1779
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 57,
+      "row": 1779
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1779,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "UP006",
+    "end_location": {
+      "column": 70,
+      "row": 1779
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": {
+      "applicability": "safe",
+      "edits": [
+        {
+          "content": "dict",
+          "end_location": {
+            "column": 70,
+            "row": 1779
+          },
+          "location": {
+            "column": 66,
+            "row": 1779
+          }
+        }
+      ],
+      "message": "Replace with `dict`"
+    },
+    "location": {
+      "column": 66,
+      "row": 1779
+    },
+    "message": "Use `dict` instead of `Dict` for type annotation",
+    "noqa_row": 1779,
+    "url": "https://docs.astral.sh/ruff/rules/non-pep585-annotation"
+  },
+  {
+    "cell": null,
+    "code": "PLC0415",
+    "end_location": {
+      "column": 70,
+      "row": 1789
+    },
+    "filename": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/module_admin/service/simulation_service.py",
+    "fix": null,
+    "location": {
+      "column": 9,
+      "row": 1789
+    },
+    "message": "`import` should be at the top-level of a file",
+    "noqa_row": 1789,
+    "url": "https://docs.astral.sh/ruff/rules/import-outside-top-level"
+  }
+]

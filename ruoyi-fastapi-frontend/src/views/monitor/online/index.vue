@@ -122,10 +122,7 @@ async function loadOnlineData(params) {
   const response = await initData(query);
   return response;
 }
-function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
-  handleRefresh();
-}
+
 function onSearch({ handleRefresh }) {
   handleRefresh();
 }

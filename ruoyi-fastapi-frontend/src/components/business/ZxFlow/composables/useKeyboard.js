@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onUnmounted, watch } from 'vue';
 import { useGraphInstance } from './useGraphInstance';
 import { useLatest } from './useLatest';
 

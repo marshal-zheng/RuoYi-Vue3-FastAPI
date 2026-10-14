@@ -44,34 +44,34 @@ describe('login API contract', () => {
   });
 
   it('clamps long login and register passwords before sending the request', async () => {
+    let loginPayload: Record<string, unknown> = {};
+    let registerPayload: Record<string, unknown> = {};
     mockServer.use(
-      http.post(createApiPath('/login'), async ({ request }) =>
-        HttpResponse.json({
-          token: 'jwt-token-admin',
-          csrfToken: 'csrf-token-from-login',
-          payload: await readJsonBody(request),
-        })
-      ),
-      http.post(createApiPath('/register'), async ({ request }) =>
-        HttpResponse.json({
-          userId: 10,
-          payload: await readJsonBody(request),
-        })
-      )
+      http.post(createApiPath('/login'), async ({ request }) => {
+        loginPayload = (await readJsonBody(request)) ?? {};
+        return HttpResponse.json({ token: 'jwt-token-admin', csrfToken: 'csrf-token-from-login' });
+      }),
+      http.post(createApiPath('/register'), async ({ request }) => {
+        registerPayload = (await readJsonBody(request)) ?? {};
+        return HttpResponse.json(
+          { data: { userId: 10, userName: 'new-user' }, roles: [], posts: [] },
+          { status: 201 }
+        );
+      })
     );
 
     const longPassword = '密码'.repeat(80);
     const clamped = clampBcryptPassword(longPassword);
 
-    const loginResult = await login('admin', longPassword, '1234', 'uuid-long');
-    expect(loginResult.payload.password).toBe(clamped);
+    await login('admin', longPassword, '1234', 'uuid-long');
+    expect(loginPayload.password).toBe(clamped);
 
-    const registerResult = await register({
+    await register({
       username: 'new-user',
       password: longPassword,
       confirmPassword: longPassword,
     });
-    expect(registerResult.payload).toMatchObject({
+    expect(registerPayload).toMatchObject({
       username: 'new-user',
       password: clamped,
       confirmPassword: clamped,

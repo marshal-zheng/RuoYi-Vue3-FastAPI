@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
+import { ref } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { addPost, updatePost } from '@/api/system/post';
 import { useDict } from '@/utils/dict';
@@ -35,8 +35,6 @@ import { useDict } from '@/utils/dict';
 const emit = defineEmits<{
   (e: 'confirm'): void;
 }>();
-
-const { proxy } = getCurrentInstance() as any;
 
 // 保留异步字典返回的 ref，避免复制请求完成前的空数组。
 const { sys_normal_disable: sysNormalDisable } = useDict('sys_normal_disable');
@@ -46,7 +44,7 @@ interface PostForm {
   postName: string;
   postCode: string;
   postSort: number;
-  status: string;
+  status: '0' | '1';
   remark: string;
 }
 

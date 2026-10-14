@@ -1,8 +1,19 @@
+export type DeviceCategoryRecord = Omit<DeviceCategoryModel, 'deviceCategoryId'> & {
+  deviceCategoryId: number;
+};
+export type DeviceCategoryQuery = Partial<Pick<DeviceCategoryModel, 'name' | 'status'>> & {
+  beginTime?: string;
+  endTime?: string;
+  page?: number;
+  pageSize?: number;
+};
+import type { HttpCollection, HttpOffsetPage } from '@/types/http-contract';
+import type { DeviceCategoryModel, DeviceCategoryOptionModel } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询设备分类列表
-export function listDeviceCategory(query?: Record<string, any>) {
-  return request({
+export function listDeviceCategory(query?: DeviceCategoryQuery) {
+  return request<HttpOffsetPage<DeviceCategoryRecord>>({
     url: '/device/category/list',
     method: 'get',
     params: query,
@@ -11,15 +22,15 @@ export function listDeviceCategory(query?: Record<string, any>) {
 
 // 查询设备分类详细
 export function getDeviceCategory(categoryId: number | string) {
-  return request({
+  return request<DeviceCategoryRecord>({
     url: '/device/category/' + categoryId,
     method: 'get',
   });
 }
 
 // 新增设备分类
-export function addDeviceCategory(data: Record<string, any>) {
-  return request({
+export function addDeviceCategory(data: DeviceCategoryModel) {
+  return request<DeviceCategoryRecord>({
     url: '/device/category',
     method: 'post',
     data: data,
@@ -28,8 +39,8 @@ export function addDeviceCategory(data: Record<string, any>) {
 }
 
 // 修改设备分类
-export function updateDeviceCategory(data: Record<string, any>) {
-  return request({
+export function updateDeviceCategory(data: DeviceCategoryModel) {
+  return request<DeviceCategoryRecord>({
     url: '/device/category',
     method: 'put',
     data: data,
@@ -39,7 +50,7 @@ export function updateDeviceCategory(data: Record<string, any>) {
 
 // 删除设备分类
 export function delDeviceCategory(categoryId: number | string) {
-  return request({
+  return request<null>({
     url: '/device/category/' + categoryId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'device.category.delete' },
@@ -47,8 +58,8 @@ export function delDeviceCategory(categoryId: number | string) {
 }
 
 // 导出设备分类数据
-export function exportDeviceCategory(query?: Record<string, any>) {
-  return request({
+export function exportDeviceCategory(query?: DeviceCategoryQuery) {
+  return request<Blob>({
     url: '/device/category/export',
     method: 'post',
     params: query,
@@ -58,24 +69,22 @@ export function exportDeviceCategory(query?: Record<string, any>) {
 }
 
 // 获取设备分类选项(用于下拉选择)
-export function getDeviceCategoryOptions(businessType: string = '9999') {
-  return request({
-    url: '/device/category/list',
+export type DeviceCategoryOption = DeviceCategoryOptionModel;
+export function getDeviceCategoryOptions() {
+  return request<HttpCollection<DeviceCategoryOption>>({
+    url: '/device/category/options',
     method: 'get',
-    params: {
-      business_type: businessType,
-    },
   });
 }
 
 // 检查分类名称是否唯一
 export function checkCategoryNameUnique(name: string, categoryId?: number | string) {
-  return request({
+  return request<boolean>({
     url: '/device/category/checkNameUnique',
     method: 'get',
     params: {
       name: name,
-      categoryId: categoryId,
+      category_id: categoryId,
     },
   });
 }

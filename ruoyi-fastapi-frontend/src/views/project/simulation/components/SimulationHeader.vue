@@ -255,7 +255,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits([
+defineEmits([
   'start',
   'pause',
   'resume',
@@ -269,7 +269,6 @@ const emit = defineEmits([
 ]);
 
 const localSpeed = ref(props.speed);
-const speedOptions = [0.5, 1, 2, 4];
 
 // 状态样式映射 - 使用克制的配色
 const statusStyles = {
@@ -304,11 +303,6 @@ const isSimulationActive = computed(() => {
 const formattedTime = computed(() => {
   return formatSimulationTime(props.elapsedTime);
 });
-
-function handleSpeedClick(speed) {
-  localSpeed.value = speed;
-  emit('speed-change', speed);
-}
 
 watch(
   () => props.speed,

@@ -1,24 +1,19 @@
-import {
-  DAG_EDGE,
-  DAG_NODE,
-} from "@/components/business/Dag/shapes/registerDagShapes";
-import { generateNodePorts } from "@/components/business/Dag/config/portConfig";
+import { DAG_EDGE, DAG_NODE } from '@/components/business/Dag/shapes/registerDagShapes';
+import { generateNodePorts } from '@/components/business/Dag/config/portConfig';
 
 function resolveEdgeEndpoint(endpoint, fallbackKeys = []) {
-  if (typeof endpoint === "string" || typeof endpoint === "number") {
+  if (typeof endpoint === 'string' || typeof endpoint === 'number') {
     return String(endpoint);
   }
-  if (endpoint && typeof endpoint === "object") {
-    return String(
-      endpoint.cell || endpoint.id || endpoint.nodeId || endpoint.node_id || "",
-    );
+  if (endpoint && typeof endpoint === 'object') {
+    return String(endpoint.cell || endpoint.id || endpoint.nodeId || endpoint.node_id || '');
   }
   for (const keyValue of fallbackKeys) {
-    if (keyValue !== undefined && keyValue !== null && keyValue !== "") {
+    if (keyValue !== undefined && keyValue !== null && keyValue !== '') {
       return String(keyValue);
     }
   }
-  return "";
+  return '';
 }
 
 function normalizeSimpleTopologyGraph(graphData) {
@@ -26,13 +21,8 @@ function normalizeSimpleTopologyGraph(graphData) {
   const edges = Array.isArray(graphData?.edges) ? graphData.edges : [];
 
   const nodeCells = nodes.map((node, index) => {
-    const label =
-      node.label ||
-      node.name ||
-      node.deviceName ||
-      node.id ||
-      `节点${index + 1}`;
-    const type = node.type || node.nodeType || "device";
+    const label = node.label || node.name || node.deviceName || node.id || `节点${index + 1}`;
+    const type = node.type || node.nodeType || 'device';
 
     return {
       id: String(node.id || `node-${index + 1}`),
@@ -46,8 +36,8 @@ function normalizeSimpleTopologyGraph(graphData) {
         type,
         label,
         name: label,
-        status: "default",
-        layoutDirection: "horizontal",
+        status: 'default',
+        layoutDirection: 'horizontal',
         properties: {
           ...(node.properties || {}),
           content: {
@@ -65,14 +55,8 @@ function normalizeSimpleTopologyGraph(graphData) {
 
   const edgeCells = edges
     .map((edge, index) => {
-      const sourceCell = resolveEdgeEndpoint(edge.source, [
-        edge.sourceNodeId,
-        edge.sourceId,
-      ]);
-      const targetCell = resolveEdgeEndpoint(edge.target, [
-        edge.targetNodeId,
-        edge.targetId,
-      ]);
+      const sourceCell = resolveEdgeEndpoint(edge.source, [edge.sourceNodeId, edge.sourceId]);
+      const targetCell = resolveEdgeEndpoint(edge.target, [edge.targetNodeId, edge.targetId]);
       if (!sourceCell || !targetCell) {
         return null;
       }
@@ -80,8 +64,8 @@ function normalizeSimpleTopologyGraph(graphData) {
       return {
         id: String(edge.id || `edge-${sourceCell}-${targetCell}-${index + 1}`),
         shape: DAG_EDGE,
-        source: { cell: sourceCell, port: edge.sourcePortId || "b" },
-        target: { cell: targetCell, port: edge.targetPortId || "t" },
+        source: { cell: sourceCell, port: edge.sourcePortId || 'b' },
+        target: { cell: targetCell, port: edge.targetPortId || 't' },
         animated: false,
       };
     })
@@ -93,7 +77,7 @@ function normalizeSimpleTopologyGraph(graphData) {
 export function resolveTopologyGraphJson(topologyData) {
   const graphData = topologyData?.graph || topologyData;
 
-  if (!graphData || typeof graphData !== "object") {
+  if (!graphData || typeof graphData !== 'object') {
     return null;
   }
 

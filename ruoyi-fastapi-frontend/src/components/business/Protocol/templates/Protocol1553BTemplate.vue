@@ -80,7 +80,25 @@
 <script setup lang="ts">
 import { ref, watch, reactive, computed, shallowRef } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import type { VxeTableInstance } from 'vxe-table';
+import type {
+  VxeTableInstance,
+  VxeTableDefines,
+  VxeTablePropTypes,
+  VxeTableProps,
+} from 'vxe-table';
+import type { DictItem } from '@/utils/dict';
+import type { ValidationIssue } from '@/components/ui/VxeTableValidation/types';
+import type {
+  DictAutocompleteCellParams,
+  DictAutocompleteRenderOptions,
+  DictEditorValue,
+} from '@/components/business/VxeDictAutocomplete/types';
+import { normalizeConfigEditorValue } from './editorTypes';
+import type {
+  Protocol1553BConfig,
+  ProtocolEditorField,
+  ProtocolConfigTableRow,
+} from './editorTypes';
 import { useDict } from '@/utils/dict';
 import {
   useVxeTableValidation,
@@ -91,7 +109,7 @@ import VxeSchemaTable from '@/components/ui/VxeSchemaTable/index.vue';
 import { createProtocolFieldColumns, createProtocolConfigColumns } from './vxeColumns';
 
 const props = defineProps<{
-  modelValue?: any;
+  modelValue?: Partial<Protocol1553BConfig>;
   protocolType?: string;
   deviceMode?: boolean;
   senderEditable?: boolean;
@@ -99,12 +117,12 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: any];
+  'update:modelValue': [value: Protocol1553BConfig];
 }>();
 
-const tableRef = shallowRef<VxeTableInstance>();
+const tableRef = shallowRef<VxeTableInstance<ProtocolEditorField>>();
 const schemaTableHooks = {
-  onTableReady: (table: VxeTableInstance) => {
+  onTableReady: (table: VxeTableInstance<ProtocolEditorField>) => {
     tableRef.value = table;
   },
   onEditClosed: handleEditClosed,
@@ -137,14 +155,13 @@ const {
 // 初始化校验框架
 const {
   issues: validationIssues,
-  errorCount,
   validate,
   getRowClassName,
   getCellClassName,
   getCellTooltip,
   toVxeEditRules,
   vxeValidConfig,
-} = useVxeTableValidation({
+} = useVxeTableValidation<ProtocolEditorField>({
   rules: {
     fieldName: [required('信息名称不能为空')],
   },
@@ -163,14 +180,14 @@ const {
 const vxeEditRules = computed(toVxeEditRules);
 
 // tooltip 配置：当单元格有校验错误时显示错误提示
-const tooltipConfig = {
+const tooltipConfig: VxeTablePropTypes.TooltipConfig<ProtocolEditorField> = {
   showAll: true,
-  contentMethod: ({ row, column, rowIndex }: any) => {
+  contentMethod: ({ column, rowIndex }) => {
     return getCellTooltip(rowIndex, column?.field);
   },
 };
 
-const defaultConfig = {
+const defaultConfig: Protocol1553BConfig = {
   sender: '',
   receiver: '',
   frequency: '',
@@ -187,12 +204,12 @@ const defaultConfig = {
   fields: [],
 };
 
-const localConfig = reactive({
+const localConfig = reactive<Protocol1553BConfig>({
   ...defaultConfig,
   ...(props.modelValue || {}),
 });
 
-const configTableData = ref([
+const configTableData = ref<ProtocolConfigTableRow[]>([
   {
     protocolName: '1553B',
     label1: '发送方',
@@ -231,7 +248,7 @@ const configTableData = ref([
 ]);
 
 // 辅助函数：根据字典获取 label
-const getLabel = (dict: any[], value: string, fallbackLabel: string = '') => {
+const getLabel = (dict: DictItem[], value: string, fallbackLabel: string = '') => {
   if (!value) return '';
   const found = dict?.find((item) => item.value === value);
   return found ? found.label : fallbackLabel || value;
@@ -287,7 +304,9 @@ watch(
   }
 );
 
-function configEditRender(field: 'value1' | 'value2') {
+function configEditRender(
+  field: 'value1' | 'value2'
+): DictAutocompleteRenderOptions<ProtocolConfigTableRow> {
   const getDictType = (row: Record<string, string>) => {
     if (field === 'value1' && row.label1 === '传输方式') return 'sys_protocol_method_1553b';
     if (field === 'value1' && row.label1 === '传输频率') return 'sys_protocol_frequency';
@@ -310,28 +329,13 @@ function configEditRender(field: 'value1' | 'value2') {
     return false;
   };
 
-  const extractValue = (evtOrValue: any) => {
-    if (evtOrValue && typeof evtOrValue === 'object') {
-      if ('value' in evtOrValue) return evtOrValue.value;
-      if ('target' in evtOrValue && 'value' in evtOrValue.target) return evtOrValue.target.value;
-    }
-    return evtOrValue;
-  };
-
-  const normalizeValLabel = (raw: any) => {
-    if (raw && typeof raw === 'object') {
-      return {
-        value: 'value' in raw ? raw.value : raw,
-        label: 'label' in raw ? raw.label : '',
-      };
-    }
-    return { value: raw, label: '' };
-  };
-
-  const handleUpdate = (cellParams: any, evtOrValue: any) => {
+  const handleUpdate = (
+    cellParams: DictAutocompleteCellParams<ProtocolConfigTableRow>,
+    evtOrValue?: DictEditorValue
+  ) => {
     const { row } = cellParams;
-    const { value: nextValue, label: nextLabel } = normalizeValLabel(
-      extractValue(evtOrValue ?? cellParams?.value)
+    const { value: nextValue, label: nextLabel } = normalizeConfigEditorValue(
+      evtOrValue ?? cellParams.value
     );
 
     if (field === 'value1') {
@@ -364,7 +368,7 @@ function configEditRender(field: 'value1' | 'value2') {
 
   return {
     name: 'DictAutocomplete',
-    props: ({ row }: any) => {
+    props: ({ row }) => {
       const dictType = getDictType(row);
       return {
         dictType,
@@ -374,16 +378,16 @@ function configEditRender(field: 'value1' | 'value2') {
       };
     },
     events: {
-      change: (cellParams: any, value: any) => handleUpdate(cellParams, value),
-      input: (cellParams: any, value: any) => handleUpdate(cellParams, value),
+      change: (cellParams, value) => handleUpdate(cellParams, value),
+      input: (cellParams, value) => handleUpdate(cellParams, value),
     },
   };
 }
 
-const configTableEditConfig = {
+const configTableEditConfig: VxeTablePropTypes.EditConfig<ProtocolConfigTableRow> = {
   trigger: 'click',
   mode: 'cell',
-  activeMethod({ row, column }: any) {
+  activeMethod({ row, column }) {
     const senderLocked = props.deviceMode || props.senderEditable === false;
     const receiverLocked = props.deviceMode || props.receiverEditable === false;
     if (column.field !== 'value1') return true;
@@ -412,7 +416,7 @@ const configSpanMethod = ({ rowIndex, columnIndex }: { rowIndex: number; columnI
   return { rowspan: 1, colspan: 1 };
 };
 
-const fieldSpanMethod = ({ columnIndex }: any) => {
+const fieldSpanMethod: VxeTableProps<ProtocolEditorField>['spanMethod'] = ({ columnIndex }) => {
   const valueFieldColIndex = 5;
   const unitColIndex = 6;
 
@@ -465,11 +469,11 @@ const insertRow = () => {
   });
 };
 
-const removeRow = (row: any) => {
-  const index = localConfig.fields.findIndex((item: any) => item.id === row.id);
+const removeRow = (row: ProtocolEditorField) => {
+  const index = localConfig.fields.findIndex((item: ProtocolEditorField) => item.id === row.id);
   if (index > -1) {
     localConfig.fields = localConfig.fields.filter(
-      (item: any) => item.id !== row.id && item.parentId !== row.id
+      (item: ProtocolEditorField) => item.id !== row.id && item.parentId !== row.id
     );
     // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
     ElMessage.success('删除成功');
@@ -489,9 +493,11 @@ const removeSelectRow = async () => {
     type: 'warning',
   })
     .then(() => {
-      const deleteIds = selectRecords.map((item: any) => item.id);
+      const deleteIds = selectRecords.map((item: ProtocolEditorField) => item.id);
       localConfig.fields = localConfig.fields.filter(
-        (item: any) => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
+        (item: ProtocolEditorField) =>
+          !deleteIds.includes(item.id) &&
+          (item.parentId === null || !deleteIds.includes(item.parentId))
       );
       // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
       ElMessage.success('删除成功');
@@ -500,7 +506,10 @@ const removeSelectRow = async () => {
 };
 
 // 编辑完成后自动校验
-function handleEditClosed({ row, column }: any) {
+function handleEditClosed({
+  row,
+  column,
+}: VxeTableDefines.EditClosedEventParams<ProtocolEditorField>) {
   setTimeout(async () => {
     // 先清除该单元格的 VxeTable 内置校验状态
     if (row && column?.field) {
@@ -514,7 +523,7 @@ function handleEditClosed({ row, column }: any) {
 }
 
 // 点击问题项跳转到对应单元格
-const handleIssueClick = (issue: any) => {
+const handleIssueClick = (issue: ValidationIssue) => {
   if (issue.rowIndex < 0) return;
   const $table = tableRef.value;
   if (!$table) return;

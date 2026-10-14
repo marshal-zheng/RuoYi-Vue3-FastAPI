@@ -11,7 +11,14 @@
         <!-- 仪表环 -->
         <div class="relative w-20 h-20 mx-auto">
           <svg viewBox="0 0 100 100" class="-rotate-90">
-            <circle cx="50" cy="50" r="45" fill="none" stroke-width="6" class="stroke-zx-border-default" />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              fill="none"
+              stroke-width="6"
+              class="stroke-zx-border-default"
+            />
             <circle
               cx="50"
               cy="50"
@@ -28,9 +35,10 @@
             <span class="text-lg font-bold text-zx-text-primary tabular-nums"
               >{{ Math.round(item.loadPercent) }}%</span
             >
-            <span class="text-[10px] text-zx-text-secondary uppercase tracking-wider font-medium mt-0.5">{{
-              item.protocol
-            }}</span>
+            <span
+              class="text-[10px] text-zx-text-secondary uppercase tracking-wider font-medium mt-0.5"
+              >{{ item.protocol }}</span
+            >
           </div>
         </div>
         <!-- 信息 -->
@@ -43,7 +51,10 @@
       </div>
 
       <!-- 空状态 -->
-      <div v-if="groupedBandwidth.length === 0" class="w-full text-center py-10 text-zx-text-secondary">
+      <div
+        v-if="groupedBandwidth.length === 0"
+        class="w-full text-center py-10 text-zx-text-secondary"
+      >
         <el-icon class="text-4xl mb-3 text-zx-text-disabled"><DataLine /></el-icon>
         <div class="text-sm font-medium">暂无带宽数据</div>
         <div class="text-xs text-zx-text-disabled mt-1">等待仿真开始</div>
@@ -293,7 +304,7 @@ function updateChart() {
 
   // 生成系列配置
   const series = Object.entries(seriesData)
-    .filter(([_, data]) => data.length > 0)
+    .filter(([, data]) => data.length > 0)
     .map(([name, data], index) => {
       const color = protocolColors[name] || `hsl(${(index * 60) % 360}, 70%, 60%)`;
       const gradients = gradientColors[name] || [`${color}40`, `${color}05`];
@@ -378,23 +389,33 @@ function updateChart() {
 }
 
 // Apply only presentation, preserving the current series data and legend selection.
-watch(chartTheme, (theme) => {
-  if (!theme || !showTrend.value) return;
-  if (!chartInstance) {
-    nextTick(() => { initChart(); updateChart(); });
-    return;
-  }
-  chartInstance.setOption({
-    textStyle: theme.textStyle,
-    tooltip: { ...theme.tooltip, axisPointer: { label: { backgroundColor: theme.backgroundColor } } },
-    legend: { textStyle: theme.legend.textStyle, inactiveColor: theme.legend.inactiveColor },
-    xAxis: theme.valueAxis,
-    yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
-    series: (chartInstance.getOption().series || []).map(() => ({
-      itemStyle: { borderColor: theme.backgroundColor },
-    })),
-  });
-}, { flush: 'post' });
+watch(
+  chartTheme,
+  (theme) => {
+    if (!theme || !showTrend.value) return;
+    if (!chartInstance) {
+      nextTick(() => {
+        initChart();
+        updateChart();
+      });
+      return;
+    }
+    chartInstance.setOption({
+      textStyle: theme.textStyle,
+      tooltip: {
+        ...theme.tooltip,
+        axisPointer: { label: { backgroundColor: theme.backgroundColor } },
+      },
+      legend: { textStyle: theme.legend.textStyle, inactiveColor: theme.legend.inactiveColor },
+      xAxis: theme.valueAxis,
+      yAxis: { ...theme.valueAxis, nameTextStyle: theme.legend.textStyle },
+      series: (chartInstance.getOption().series || []).map(() => ({
+        itemStyle: { borderColor: theme.backgroundColor },
+      })),
+    });
+  },
+  { flush: 'post' }
+);
 
 watch(() => props.bandwidthData, updateChart, { deep: true, immediate: true });
 

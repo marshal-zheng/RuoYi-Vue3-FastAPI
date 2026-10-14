@@ -1,6 +1,6 @@
 <template>
-  <ZxContentWrap class="home" data-testid="topology-page">
-    <div class="topology-canvas-wrap" data-testid="topology-canvas">
+  <ZxContentWrap class="home" data-testid="topology-page" fill>
+    <div class="topology-canvas-wrap" data-zx-fill data-testid="topology-canvas">
       <div
         v-if="topologyLoading"
         class="topology-loading-indicator"
@@ -516,7 +516,9 @@ async function handleSaveTopo() {
   try {
     await saveProjectTopology(payload);
     router.push(`/project/project-detail/index/${currentProjectId}`);
-  } catch {}
+  } catch {
+    // 自动反馈已展示保存失败；保留当前拓扑供用户重试。
+  }
 }
 
 /**
@@ -576,20 +578,8 @@ onMounted(() => {
 </script>
 
 <style lang="less">
-.home {
-  height: calc(100vh - 84px);
-  display: flex;
-  flex-direction: column;
-  &.zx-content-wrap .el-card__body {
-    height: 100%;
-    .zx-content-wrap__content {
-      height: 100%;
-    }
-  }
-}
-
 .topology-canvas-wrap {
-  height: 100%;
+  min-height: 0;
   position: relative;
 }
 

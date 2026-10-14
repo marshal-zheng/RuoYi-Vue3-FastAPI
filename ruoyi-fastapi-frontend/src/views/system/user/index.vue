@@ -211,8 +211,8 @@
                           >分配角色</ZxButton
                         >
                         <ZxMoreAction
-                          v-if="scope.row.userId !== 1 && getUserMoreActionList(scope.row).length"
-                          :list="getUserMoreActionList(scope.row)"
+                          v-if="scope.row.userId !== 1 && getUserMoreActionList().length"
+                          :list="getUserMoreActionList()"
                           @select="handleMoreActionSelect($event, scope.row)"
                         />
                       </div>
@@ -263,12 +263,10 @@ const gridListRef = ref();
 const userFormDialogRef = ref();
 const userImportDialogRef = ref();
 const currentQuery = ref({});
-const loading = ref(true);
-const showSearch = ref(true);
+
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
-const dateRange = ref([]);
 const deptSelectedId = ref();
 const deptName = ref('');
 const deptOptions = ref(undefined);
@@ -330,21 +328,21 @@ function handleNodeClick(data) {
   refreshList();
 }
 /** 搜索按钮操作 */
-function handleQuery() {
-  refreshList();
-}
+
 /** 重置按钮操作 */
-function resetQuery() {
-  dateRange.value = [];
-  deptSelectedId.value = undefined;
-  proxy.$refs.deptTreeRef.setCurrentKey(null);
-  refreshList();
-}
+
 /** 删除按钮操作 */
 function handleDelete(row) {
   const userIds = row.userId || ids.value;
+  const message = row.userId
+    ? `确认删除用户“${row.userName || `编号 ${row.userId}`}”吗？`
+    : `确认删除选中的 ${ids.value.length} 位用户吗？`;
   proxy.$modal
-    .confirm('是否确认删除用户编号为"' + userIds + '"的数据项？')
+    .confirm(message, '删除用户', {
+      confirmButtonText: '删除',
+      autofocus: false,
+      closeOnClickModal: false,
+    })
     .then(function () {
       return delUser(userIds);
     })
@@ -365,25 +363,17 @@ function handleExport() {
 function handleStatusChange(row) {
   let text = row.status === '0' ? '启用' : '停用';
   proxy.$modal
-    .confirm('确认要"' + text + '""' + row.userName + '"用户吗?')
+    .confirm(`确认${text}用户“${row.userName}”吗？`, `${text}用户`, {
+      confirmButtonText: text,
+      autofocus: row.status === '1' ? false : undefined,
+    })
     .then(() => changeUserStatus(row.userId, row.status))
     .catch(() => {
       row.status = row.status === '0' ? '1' : '0';
     });
 }
 /** 更多操作 */
-function handleCommand(command, row) {
-  switch (command) {
-    case 'handleResetPwd':
-      handleResetPwd(row);
-      break;
-    case 'handleAuthRole':
-      handleAuthRole(row);
-      break;
-    default:
-      break;
-  }
-}
+
 /** 跳转角色分配 */
 function handleAuthRole(row) {
   const userId = row.userId;
@@ -400,7 +390,7 @@ function handleResetPwd(row) {
       inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
       inputValidator: (value) => {
         if (/<|>|"|'|\||\\/.test(value)) {
-          return '不能包含非法字符：< > " \' \\\ |';
+          return '不能包含非法字符：< > " \' \\ |';
         }
       },
     })
@@ -442,7 +432,7 @@ function refreshList() {
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
+  updateState(`query.${key}`, value);
   updateState('pager.page', 1);
   handleRefresh();
 }
@@ -459,7 +449,7 @@ function onExport({ query }) {
 
 getDeptTree();
 
-function getUserMoreActionList(row) {
+function getUserMoreActionList() {
   const actions = [];
   if (checkPermi(['system:user:resetPwd'])) {
     actions.push({ label: '重置密码', eventTag: 'resetPwd' });

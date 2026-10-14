@@ -162,7 +162,12 @@ function getButtonClass(key) {
   width: 32px;
   height: 2px;
   border-radius: 1px;
-  background: linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent) 50%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent) 50%,
+    transparent 100%
+  );
   flex-shrink: 0;
 }
 
@@ -186,7 +191,9 @@ function getButtonClass(key) {
     }
 
     .collapse-icon {
-      filter: drop-shadow(0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 80%, transparent));
+      filter: drop-shadow(
+        0 0 8px color-mix(in srgb, var(--zx-semantic-accent-base) 80%, transparent)
+      );
       transform: rotate(180deg);
     }
   }
@@ -197,7 +204,11 @@ function getButtonClass(key) {
 }
 
 .collapse-glow {
-  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent) 0%,
+    transparent 70%
+  );
 }
 
 .collapse-shine {
@@ -299,7 +310,11 @@ function getButtonClass(key) {
 
 .disabled-overlay {
   opacity: 0.78 !important;
-  background: linear-gradient(180deg, var(--zx-semantic-surface-panel-fill) 0%, var(--zx-semantic-surface-card-fill) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--zx-semantic-surface-panel-fill) 0%,
+    var(--zx-semantic-surface-card-fill) 100%
+  );
   box-shadow: inset 0 0 24px color-mix(in srgb, var(--zx-semantic-border-default) 8%, transparent);
 }
 

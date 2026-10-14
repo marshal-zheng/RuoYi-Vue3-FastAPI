@@ -3,9 +3,10 @@
  * 负责将拓扑图渲染成图片供 Word 导出使用
  */
 
-/* eslint-disable no-console, @typescript-eslint/no-explicit-any */
 import { Graph } from '@antv/x6';
 import { Export } from '@antv/x6-plugin-export';
+import { ElMessage } from 'element-plus';
+import { isRecord } from '@/types/http-contract';
 import { getProjectTopology } from '@/api/project/topology';
 import {
   registerDagShapes,
@@ -35,7 +36,11 @@ export function blobToBase64(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new window.FileReader();
     reader.onloadend = () => {
-      const result = reader.result as string;
+      const result = reader.result;
+      if (typeof result !== 'string') {
+        reject(new TypeError('The image reader did not return a data URL'));
+        return;
+      }
       // 返回纯 base64 字符串（不含 data:xxx;base64, 前缀）
       const base64 = result.split(',')[1] || result;
       resolve(base64);
@@ -91,6 +96,22 @@ interface TopoExportOptions {
   backgroundColor?: string;
 }
 
+/** Topology is dynamic JSON; X6 performs its own metadata parsing after this boundary. */
+function decodeGraphJson(value: unknown): { cells: Record<string, unknown>[] } | null {
+  if (!isRecord(value) || !Array.isArray(value.cells) || value.cells.length === 0) return null;
+  const cells = value.cells;
+  if (!cells.every(isRecord)) return null;
+  if (
+    cells.some(
+      (cell) =>
+        (cell.id !== undefined && typeof cell.id !== 'string') ||
+        (cell.shape !== undefined && typeof cell.shape !== 'string')
+    )
+  )
+    return null;
+  return { cells };
+}
+
 /**
  * 根据项目和版本ID获取拓扑数据并渲染为图片
  * @returns base64 编码的图片字符串
@@ -110,14 +131,11 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
 
   try {
     // 1. 获取拓扑数据
-    const response: any = await getProjectTopology(projectId, versionId);
-    const topoData = response?.topologyData;
-    const graphJson = topoData?.graph;
+    const response = await getProjectTopology(projectId, versionId);
+    const topoData = isRecord(response) ? response.topologyData : undefined;
+    const graphJson = isRecord(topoData) ? decodeGraphJson(topoData.graph) : null;
 
-    if (!graphJson || !graphJson.cells || graphJson.cells.length === 0) {
-      console.warn('拓扑数据为空，跳过图片生成');
-      return null;
-    }
+    if (!graphJson) return null;
 
     // 预注册自定义图形/连线，确保与画布保持一致
     registerDagShapes();
@@ -126,7 +144,7 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
     container = createHiddenContainer(width, height);
 
     // 3. 创建 X6 Graph 实例
-    const baseGridOptions = {
+    const baseGridOptions: NonNullable<Graph.Options['grid']> = {
       visible: true,
       size: 14,
       type: 'mesh',
@@ -172,13 +190,18 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
       container.style.width = `${targetWidth}px`;
       container.style.height = `${targetHeight}px`;
       graph.zoomToFit({
-        padding: { top: padding, right: padding, bottom: padding, left: padding },
+        padding: {
+          top: padding,
+          right: padding,
+          bottom: padding,
+          left: padding,
+        },
         minScale: 0.2,
         maxScale: 1.0,
       });
       graph.centerContent();
-    } catch (error) {
-      console.warn('调整图布局失败:', error);
+    } catch {
+      ElMessage.warning('拓扑图布局调整失败，将按原布局生成图片');
     }
 
     // 再等待一下确保布局调整完成
@@ -197,7 +220,7 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
             quality: 1,
             copyStyles: true,
             preserveDimensions: true,
-          } as any
+          }
         );
       } catch (error) {
         reject(error);
@@ -209,8 +232,8 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
     const base64 = await blobToBase64(blob);
 
     return base64;
-  } catch (error) {
-    console.error('导出拓扑图失败:', error);
+  } catch {
+    ElMessage.warning('拓扑图片生成失败');
     return null;
   } finally {
     // 清理资源
@@ -231,15 +254,13 @@ export async function exportTopologyAsImage(options: TopoExportOptions): Promise
  * 直接从 graph JSON 数据导出图片（不需要调用 API）
  */
 export async function exportGraphJsonAsImage(
-  graphJson: any,
+  graphJson: unknown,
   options: Omit<TopoExportOptions, 'projectId' | 'versionId'> = {}
 ): Promise<string | null> {
   const { width = 1200, height = 800, padding = 40, backgroundColor = '#ffffff' } = options;
 
-  if (!graphJson || !graphJson.cells || graphJson.cells.length === 0) {
-    console.warn('拓扑数据为空，跳过图片生成');
-    return null;
-  }
+  const metadata = decodeGraphJson(graphJson);
+  if (!metadata) return null;
 
   let container: HTMLDivElement | null = null;
   let graph: Graph | null = null;
@@ -275,7 +296,7 @@ export async function exportGraphJsonAsImage(
     graph.use(new Export());
 
     // 加载拓扑数据
-    graph.fromJSON(graphJson);
+    graph.fromJSON(metadata);
 
     // 等待渲染完成
     await waitForGraphReady(graph);
@@ -283,13 +304,18 @@ export async function exportGraphJsonAsImage(
     // 自动适应画布
     try {
       graph.zoomToFit({
-        padding: { top: padding, right: padding, bottom: padding, left: padding },
+        padding: {
+          top: padding,
+          right: padding,
+          bottom: padding,
+          left: padding,
+        },
         minScale: 0.3,
         maxScale: 1.5,
       });
       graph.centerContent();
-    } catch (error) {
-      console.warn('调整图布局失败:', error);
+    } catch {
+      ElMessage.warning('拓扑图布局调整失败，将按原布局生成图片');
     }
 
     await sleep(200);
@@ -307,7 +333,7 @@ export async function exportGraphJsonAsImage(
             quality: 1,
             copyStyles: true,
             preserveDimensions: true,
-          } as any
+          }
         );
       } catch (error) {
         reject(error);
@@ -319,8 +345,8 @@ export async function exportGraphJsonAsImage(
     const base64 = await blobToBase64(blob);
 
     return base64;
-  } catch (error) {
-    console.error('导出拓扑图失败:', error);
+  } catch {
+    ElMessage.warning('拓扑图片生成失败');
     return null;
   } finally {
     if (graph) {

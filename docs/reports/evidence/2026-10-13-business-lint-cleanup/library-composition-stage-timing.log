@@ -1,0 +1,14 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/zxui/theme-host/__tests__/composition-stage-timing.test.ts (2 tests) 17619ms
+   ✓ keeps successful Seeds caches through real Host noops, axis round trips, portals and migration, then releases them 896ms
+   ✓ records 20 samples at Kernel, seed declaration batch and composition DOM owner boundaries 16723ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  23:08:02
+   Duration  19.34s (transform 829ms, setup 44ms, collect 1.40s, tests 17.62s, environment 123ms, prepare 29ms)
+

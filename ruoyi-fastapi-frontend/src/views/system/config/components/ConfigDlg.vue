@@ -42,7 +42,7 @@ interface ConfigForm {
   configName: string;
   configKey: string;
   configValue: string;
-  configType: string;
+  configType: 'Y' | 'N';
   remark: string;
 }
 

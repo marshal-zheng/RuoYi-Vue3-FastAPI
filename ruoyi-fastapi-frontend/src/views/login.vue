@@ -29,7 +29,13 @@
               <div class="flex justify-end mb-4">
                 <ZxThemePresetSwitch />
               </div>
-              <el-form ref="loginRef" :model="loginForm" :rules="loginRules" class="login-form">
+              <el-form
+                ref="loginRef"
+                :model="loginForm"
+                :rules="loginRules"
+                :validate-on-rule-change="false"
+                class="login-form"
+              >
                 <el-form-item prop="username">
                   <zx-input
                     v-model="loginForm.username"
@@ -171,8 +177,8 @@ const loginForm = ref({
 const showPassword = ref(false);
 
 const loginRules = computed(() => ({
-  username: [{ required: true, trigger: 'blur', message: '请输入您的账号' }],
-  password: [{ required: true, trigger: 'blur', message: '请输入您的密码' }],
+  username: [{ required: true, trigger: ['blur', 'change'], message: '请输入您的账号' }],
+  password: [{ required: true, trigger: ['blur', 'change'], message: '请输入您的密码' }],
   ...(captchaEnabled.value
     ? { code: [{ required: true, trigger: 'change', message: '请输入验证码' }] }
     : {}),
@@ -183,7 +189,7 @@ const loading = ref(false);
 // 验证码开关
 const captchaEnabled = ref(true);
 // 注册开关
-const register = ref(false);
+
 const redirect = ref(undefined);
 
 watch(

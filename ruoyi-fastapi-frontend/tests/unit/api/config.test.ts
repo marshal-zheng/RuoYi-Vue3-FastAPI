@@ -47,8 +47,14 @@ describe('Config API contract', () => {
       configKey: 'sys.index.skinName',
     });
 
-    await expect(configApi.getConfigKey('sys.index.skinName')).resolves.toBe('skin-blue');
-    await expect(configApi.getConfigKey('sys.account.captchaEnabled')).resolves.toBe('true');
+    await expect(configApi.getConfigKey('sys.index.skinName')).resolves.toEqual({
+      configKey: 'sys.index.skinName',
+      configValue: 'skin-blue',
+    });
+    await expect(configApi.getConfigKey('sys.account.captchaEnabled')).resolves.toEqual({
+      configKey: 'sys.account.captchaEnabled',
+      configValue: 'true',
+    });
   });
 
   it('handles config mutations through real request serialization', async () => {
@@ -59,10 +65,9 @@ describe('Config API contract', () => {
         configValue: 'test-value',
         configType: 'N',
       })
-    ).resolves.toMatchObject({
-      configId: 1000,
-      configKey: 'test.config.key',
-      configValue: 'test-value',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
     await expect(
@@ -71,13 +76,19 @@ describe('Config API contract', () => {
         configName: '更新参数',
         configValue: 'updated-value',
       })
-    ).resolves.toMatchObject({
-      configId: 1,
-      configValue: 'updated-value',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
-    await expect(configApi.delConfig('1,2,3')).resolves.toBeNull();
-    await expect(configApi.refreshCache()).resolves.toBeNull();
+    await expect(configApi.delConfig('1,2,3')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(configApi.refreshCache()).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
   });
 
   it('surfaces config API failures from the request error mapping', async () => {

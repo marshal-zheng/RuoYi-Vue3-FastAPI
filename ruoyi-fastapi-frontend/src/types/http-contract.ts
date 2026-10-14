@@ -1,8 +1,12 @@
 export interface HttpCollection<T = unknown> {
+  readonly pager?: HttpPager;
+  readonly __httpMeta?: HttpContractMeta;
   items: T[];
 }
 
 export interface HttpOffsetPage<T = unknown> {
+  readonly pager?: HttpPager;
+  readonly __httpMeta?: HttpContractMeta;
   items: T[];
   total: number;
   page: number;
@@ -10,6 +14,8 @@ export interface HttpOffsetPage<T = unknown> {
 }
 
 export interface HttpCursorPage<T = unknown> {
+  readonly pager?: HttpPager;
+  readonly __httpMeta?: HttpContractMeta;
   items: T[];
   pageSize: number;
   nextCursor?: string | null;

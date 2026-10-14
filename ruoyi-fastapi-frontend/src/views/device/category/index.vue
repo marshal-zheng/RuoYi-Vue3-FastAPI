@@ -105,8 +105,6 @@ const multiple = ref(true);
 const gridListRef = ref();
 const categoryDialogRef = ref();
 
-const data = reactive({});
-
 /** 使用 GridList 的 queryTransform 处理日期范围 */
 function queryTransform(query) {
   return serializeDateRange(query);
@@ -119,7 +117,7 @@ async function loadCategoryData(params) {
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
+  updateState(`query.${key}`, value);
   updateState('pager.page', 1);
   handleRefresh();
 }

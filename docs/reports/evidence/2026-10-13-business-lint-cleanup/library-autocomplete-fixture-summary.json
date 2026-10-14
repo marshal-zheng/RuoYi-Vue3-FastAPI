@@ -1,0 +1,21 @@
+{
+  "changedFiles": [
+    "/Users/hqz/Downloads/element-plus/packages/components/theme-provider/__tests__/theme-autocomplete-layout.test.ts"
+  ],
+  "productionSourceChanges": false,
+  "testFiles": 2,
+  "testsPassed": 5,
+  "strictScopedLintExitCode": 0,
+  "vitestTypesExitCode": 0,
+  "timingPolicy": "Controlled MO delivery and RAF frames; no timeout increase or retries",
+  "probe": "happy-dom-mutation-gc-probe.json",
+  "coverage": [
+    "CSS widths and fitInputWidth",
+    "ResizeObserver frame coalescing",
+    "Simultaneous owner isolation",
+    "Actual subscribed attribute filter",
+    "MutationObserver disconnect",
+    "Pending frame cancellation",
+    "Already captured frame does not update after unmount"
+  ]
+}

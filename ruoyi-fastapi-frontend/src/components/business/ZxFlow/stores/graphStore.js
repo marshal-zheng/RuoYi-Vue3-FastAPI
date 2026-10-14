@@ -72,7 +72,7 @@ export const useGraphStore = defineStore('graph', {
           });
         }
       } else {
-        console.error(`node id=${duplicated.id} already existed`);
+        throw new Error(`节点 ID ${duplicated.id} 已存在`);
       }
     },
 
@@ -95,8 +95,7 @@ export const useGraphStore = defineStore('graph', {
         const changed = typeof data === 'function' ? data({ ...node }) : data;
 
         if (changed.id !== undefined || changed.shape !== undefined) {
-          console.error(`id and shape can't be changed`);
-          return;
+          throw new Error('ID 和图形类型不能被修改');
         }
 
         apply(node, changed);
@@ -132,7 +131,7 @@ export const useGraphStore = defineStore('graph', {
           });
         }
       } else {
-        console.error(`edge id=${duplicated.id} already existed`);
+        throw new Error(`连接 ID ${duplicated.id} 已存在`);
       }
     },
 
@@ -155,8 +154,7 @@ export const useGraphStore = defineStore('graph', {
         const changed = typeof data === 'function' ? data({ ...edge }) : data;
 
         if (changed.id !== undefined || changed.shape !== undefined) {
-          console.error(`id and shape can't be changed`);
-          return;
+          throw new Error('ID 和图形类型不能被修改');
         }
 
         apply(edge, changed);

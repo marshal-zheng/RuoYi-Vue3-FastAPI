@@ -1,0 +1,38 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > resolves known keys from the registry 1ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=true 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false 0ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects invalid registry entries during startup validation 0ms
+ ✓ src/utils/generator/html.contract.test.ts > generated rating contract > exports the configured maximum to the real ElRate prop 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers 1ms
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > supports custom keys and identifiers which resemble object prototype properties 0ms
+ ✓ src/utils/http.test.ts > http contract client > configures multi-status success handling and items-based grid paging 22ms
+ ✓ src/utils/http.test.ts > http contract client > treats 201, 202 and 204 as successful contract responses 3ms
+ ✓ src/utils/http.test.ts > http contract client > attaches response headers and offset pager metadata for auto mutation feedback 7ms
+ ✓ src/utils/http.test.ts > http contract client > detects pure collection and cursor paging shapes without forcing query success toasts 6ms
+ ✓ src/utils/http.test.ts > http contract client > does not show expired-session feedback when already on the login page 3ms
+ ✓ src/utils/http.test.ts > http contract client > prompts relogin when a protected page receives an expired session 2ms
+ ✓ src/utils/http.test.ts > http contract client > does not prompt relogin for silent session restore failures 1ms
+ ✓ src/utils/http.test.ts > http contract client > closes an in-flight relogin prompt when entering the login route 10ms
+ ✓ src/utils/http.test.ts > http contract client > presents skipped relogin auth problems through the unified error channel 3ms
+ ✓ src/utils/http.test.ts > http contract client > normalizes problem details and forwards rate-limit headers to the problem presenter 4ms
+ ✓ src/utils/http.test.ts > http contract client > passes 422 validation problems through the unified error channel 12ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > updates all consumers from items and preserves submitted string values 6ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > retries failures instead of caching an empty dictionary 2ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > reads legacy identities without mutating saved fields or numeric semantics 2ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > generates a complete SFC accepted by the same source gate 38ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > keeps page generation supported and escapes string defaults 5ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > normalizes nested saved rows into full-width semantic layout 3ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > previews a legacy input using the same component and forwards slots/model once 19ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback 2ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > preserves immediate return values without a trailing callback 1ms
+
+ Test Files  7 passed (7)
+      Tests  27 passed (27)
+   Start at  22:43:33
+   Duration  8.84s (transform 4.30s, setup 3.40s, collect 6.89s, tests 172ms, environment 2.34s, prepare 288ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

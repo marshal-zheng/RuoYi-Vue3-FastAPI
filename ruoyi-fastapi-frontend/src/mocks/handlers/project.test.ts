@@ -19,13 +19,73 @@ describe('project/version/topology mock handlers', () => {
     dataSource = createMockDataSource(db);
     replaceMockDataSource(dataSource);
     await dataSource.init();
-    mockServer.use(...createMockHandlers({ strategy: 'pure', dataSource }));
+    mockServer.use(
+      ...createMockHandlers({ strategy: 'pure', dataSource, onMissingCapability: 'error' })
+    );
   });
 
   afterEach(async () => {
     replaceMockDataSource(undefined);
     replaceMockDemoDb(undefined);
     await db.delete();
+  });
+
+  it.each(['GET', 'PUT'])('rejects the obsolete nested topology %s route', async (method) => {
+    const response = await fetch(`/api/project/${MOCK_PROJECT_IDS.commandCenter}/topology`, {
+      method,
+      headers: { 'content-type': 'application/json' },
+      ...(method === 'PUT'
+        ? {
+            body: JSON.stringify({
+              versionId: MOCK_VERSION_IDS.commandCenterReview,
+              topologyData: { nodes: [], edges: [] },
+            }),
+          }
+        : {}),
+    });
+    expect(response.status).toBe(501);
+    expect(response.headers.get('X-Mock-Handler')).toBe('unhandled-api');
+  });
+
+  it('returns a created resource Location that reads the persisted project', async () => {
+    const response = await fetch('/api/project', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ projectName: 'created resource contract' }),
+    });
+    expect(response.status).toBe(201);
+    const created = await response.json();
+    const location = response.headers.get('location');
+    expect(location).toBe(new URL(`/api/project/${created.projectId}`, response.url).href);
+    if (!location) throw new Error('A persisted creation must return Location');
+    const resource = await fetch(location).then((res) => res.json());
+    expect(resource).toEqual(created);
+    const deleted = await fetch(location, { method: 'DELETE' });
+    expect(deleted.status).toBe(204);
+    expect(await deleted.text()).toBe('');
+    expect((await fetch(location)).status).toBe(404);
+  });
+
+  it('returns a created resource Location that reads the persisted version', async () => {
+    const response = await fetch('/api/project/version', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        projectId: MOCK_PROJECT_IDS.commandCenter,
+        versionName: 'created version',
+        versionNumber: '9.0.0',
+      }),
+    });
+    expect(response.status).toBe(201);
+    const created = await response.json();
+    const location = response.headers.get('location');
+    expect(location).toBe(new URL(`/api/project/version/${created.versionId}`, response.url).href);
+    if (!location) throw new Error('A persisted creation must return Location');
+    expect(await fetch(location).then((res) => res.json())).toEqual(created);
+    const deleted = await fetch(location, { method: 'DELETE' });
+    expect(deleted.status).toBe(204);
+    expect(await deleted.text()).toBe('');
+    expect((await fetch(location)).status).toBe(404);
   });
 
   it('persists project CRUD through the mock store', async () => {
@@ -56,6 +116,76 @@ describe('project/version/topology mock handlers', () => {
     });
   });
 
+  it('rejects the obsolete clone id alias and missing required names without writing a version', async () => {
+    const before = await dataSource.version.list(MOCK_PROJECT_IDS.commandCenter);
+    for (const body of [
+      {
+        versionId: MOCK_VERSION_IDS.commandCenterReview,
+        versionName: 'legacy',
+        versionNumber: '7.0.0',
+      },
+      { sourceVersionId: MOCK_VERSION_IDS.commandCenterReview, versionName: 'missing number' },
+    ]) {
+      const response = await fetch('/api/project/version/clone', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      expect(response.status).toBe(422);
+      expect(response.headers.get('location')).toBeNull();
+    }
+    expect((await dataSource.version.list(MOCK_PROJECT_IDS.commandCenter)).total).toBe(
+      before.total
+    );
+  });
+
+  it('clones to the requested version number and reads the persisted created resource', async () => {
+    const response = await fetch('/api/project/version/clone', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        sourceVersionId: MOCK_VERSION_IDS.commandCenterReview,
+        versionName: 'number contract',
+        versionNumber: '8.3.1',
+      }),
+    });
+    expect(response.status).toBe(201);
+    const body = await response.json();
+    expect(body).toMatchObject({
+      versionName: 'number contract',
+      versionNumber: '8.3.1',
+      isLocked: '0',
+    });
+    const location = response.headers.get('location');
+    if (!location) throw new Error('A successful clone must return its persisted Location');
+    expect(await fetch(location).then((res) => res.json())).toEqual(body);
+    expect(
+      await dataSource.topology.getByProjectVersion(MOCK_PROJECT_IDS.commandCenter, body.versionId)
+    ).toMatchObject({ graph: expect.objectContaining({ nodes: expect.any(Array) }) });
+  });
+
+  it('rejects a duplicate requested clone version number without adding a second copy', async () => {
+    const body = {
+      sourceVersionId: MOCK_VERSION_IDS.commandCenterReview,
+      versionName: 'unique clone',
+      versionNumber: '8.9.2',
+    };
+    const send = () =>
+      fetch('/api/project/version/clone', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+    expect((await send()).status).toBe(201);
+    const before = await dataSource.version.list(MOCK_PROJECT_IDS.commandCenter);
+    const duplicate = await send();
+    expect(duplicate.status).toBe(409);
+    expect(duplicate.headers.get('location')).toBeNull();
+    expect((await dataSource.version.list(MOCK_PROJECT_IDS.commandCenter)).total).toBe(
+      before.total
+    );
+  });
+
   it('handles version clone, lock/unlock, delete, and export placeholders', async () => {
     const cloned = await fetch('/api/project/version/clone', {
       method: 'POST',
@@ -63,6 +193,7 @@ describe('project/version/topology mock handlers', () => {
       body: JSON.stringify({
         sourceVersionId: MOCK_VERSION_IDS.commandCenterReview,
         versionName: '客户评审副本',
+        versionNumber: '7.2.0',
       }),
     }).then((response) => response.json());
 
@@ -74,6 +205,7 @@ describe('project/version/topology mock handlers', () => {
 
     expect(locked).toMatchObject({
       versionName: '客户评审副本',
+      versionNumber: '7.2.0',
       isLocked: '1',
     });
 

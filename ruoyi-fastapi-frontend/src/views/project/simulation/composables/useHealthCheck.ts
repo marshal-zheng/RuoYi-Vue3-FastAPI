@@ -1,3 +1,11 @@
+import type {
+  HealthCheckGraph,
+  SimulationNode,
+  SimulationEdge,
+  SimulationPort,
+  SimulationNodeData,
+} from './topology-types';
+
 /**
  * 健康自检 Composable
  * 用于仿真前的配置完整性和有效性检查
@@ -25,7 +33,7 @@ export interface CheckItem {
   status: CheckStatus;
   message: string;
   suggestion?: string;
-  details?: Record<string, any>;
+  details?: { isolatedNodes?: string[]; edgeIds?: string[]; issues?: HealthIssue[] };
 }
 
 /**
@@ -76,6 +84,22 @@ const PARAM_NAMES: Record<string, string> = {
   subAddress: '子地址',
 };
 
+interface HealthIssue {
+  issue: string;
+  message: string;
+  nodeId?: string;
+  nodeName?: string;
+  portId?: string;
+  portName?: string;
+  edgeId?: string;
+  interfaceType?: string;
+  missingParams?: string[];
+  sourceType?: string;
+  targetType?: string;
+  sourceValue?: import('@/api/simulation/types').ProtocolValue;
+  targetValue?: import('@/api/simulation/types').ProtocolValue;
+}
+
 export function useHealthCheck() {
   /**
    * 执行健康自检
@@ -84,8 +108,8 @@ export function useHealthCheck() {
    * @returns {HealthReport} 健康检查报告
    */
   function runHealthCheck(
-    graph: any,
-    isSimulationToken: (node: any) => boolean = () => false
+    graph: HealthCheckGraph | null,
+    isSimulationToken: (node: SimulationNode) => boolean = () => false
   ): HealthReport {
     const items: CheckItem[] = [];
     const timestamp = new Date().toISOString();
@@ -113,7 +137,7 @@ export function useHealthCheck() {
     }
 
     // 获取节点和边
-    const nodes = (graph.getNodes?.() || []).filter((node: any) => !isSimulationToken(node));
+    const nodes = (graph.getNodes?.() || []).filter((node) => !isSimulationToken(node));
     const edges = graph.getEdges?.() || [];
 
     // 1. 拓扑完整性检查
@@ -154,7 +178,7 @@ export function useHealthCheck() {
   /**
    * 1. 拓扑完整性检查
    */
-  function checkTopologyIntegrity(nodes: any[], edges: any[]): CheckItem[] {
+  function checkTopologyIntegrity(nodes: SimulationNode[], edges: SimulationEdge[]): CheckItem[] {
     const items: CheckItem[] = [];
 
     // 1.1 设备节点数量检查
@@ -209,19 +233,19 @@ export function useHealthCheck() {
     // 1.3 检查孤立节点（有节点但没有任何连接）
     if (nodes.length > 1 && edges.length > 0) {
       const connectedNodeIds = new Set<string>();
-      edges.forEach((edge: any) => {
+      edges.forEach((edge) => {
         const sourceId = edge.getSourceCellId?.();
         const targetId = edge.getTargetCellId?.();
         if (sourceId) connectedNodeIds.add(sourceId);
         if (targetId) connectedNodeIds.add(targetId);
       });
 
-      const isolatedNodes = nodes.filter((node: any) => !connectedNodeIds.has(node.id));
+      const isolatedNodes = nodes.filter((node) => !connectedNodeIds.has(node.id));
 
       if (isolatedNodes.length > 0) {
         const nodeNames = isolatedNodes
-          .map((node: any) => {
-            const data = node.getData?.() || {};
+          .map((node) => {
+            const data = node.getData<SimulationNodeData>() || {};
             return data.name || data.label || node.id;
           })
           .join('、');
@@ -233,7 +257,7 @@ export function useHealthCheck() {
           status: 'warning',
           message: `发现 ${isolatedNodes.length} 个孤立设备：${nodeNames}`,
           suggestion: '孤立设备不参与通信仿真，建议建立连接或移除',
-          details: { isolatedNodes: isolatedNodes.map((n: any) => n.id) },
+          details: { isolatedNodes: isolatedNodes.map((n) => n.id) },
         });
       }
     }
@@ -244,12 +268,12 @@ export function useHealthCheck() {
   /**
    * 2. 端口配置完整性检查
    */
-  function checkPortConfiguration(nodes: any[]): CheckItem[] {
+  function checkPortConfiguration(nodes: SimulationNode[]): CheckItem[] {
     const items: CheckItem[] = [];
-    const portIssues: any[] = [];
+    const portIssues: HealthIssue[] = [];
 
     // 优先从 params 取值，不存在时回退到 messageConfig.header，并尝试别名
-    const getParamValue = (port: any, key: string) => {
+    const getParamValue = (port: SimulationPort, key: string) => {
       const params = port?.params || {};
       const header = port?.messageConfig?.header || {};
       const lowerKey = key ? key.charAt(0).toLowerCase() + key.slice(1) : '';
@@ -276,8 +300,8 @@ export function useHealthCheck() {
       );
     };
 
-    nodes.forEach((node: any) => {
-      const data = node.getData?.() || {};
+    nodes.forEach((node) => {
+      const data = node.getData<SimulationNodeData>() || {};
       const nodeName = data.name || data.label || node.id;
       const ports = data.ports || [];
 
@@ -291,7 +315,7 @@ export function useHealthCheck() {
         return;
       }
 
-      ports.forEach((port: any) => {
+      ports.forEach((port) => {
         const portName = port.interfaceName || port.name || port.id;
         const interfaceType = (port.interfaceType || port.busType || '').toUpperCase();
 
@@ -336,7 +360,7 @@ export function useHealthCheck() {
         if (interfaceType === 'LAN' && ipAddress) {
           const ipPattern =
             /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-          if (!ipPattern.test(ipAddress)) {
+          if (!ipPattern.test(String(ipAddress))) {
             portIssues.push({
               nodeId: node.id,
               nodeName,
@@ -399,22 +423,25 @@ export function useHealthCheck() {
   /**
    * 3. 连接有效性检查
    */
-  function checkConnectionValidity(nodes: any[], edges: any[]): CheckItem[] {
+  function checkConnectionValidity(nodes: SimulationNode[], edges: SimulationEdge[]): CheckItem[] {
     const items: CheckItem[] = [];
-    const connectionIssues: any[] = [];
+    const connectionIssues: HealthIssue[] = [];
 
     // 构建节点端口映射
-    const nodePortMap = new Map();
-    nodes.forEach((node: any) => {
-      const data = node.getData?.() || {};
+    const nodePortMap = new Map<
+      string,
+      { name: string; ports: Map<string | undefined, SimulationPort> }
+    >();
+    nodes.forEach((node) => {
+      const data = node.getData<SimulationNodeData>() || {};
       const ports = data.ports || [];
       nodePortMap.set(node.id, {
         name: data.name || data.label || node.id,
-        ports: new Map(ports.map((p: any) => [p.id, p])),
+        ports: new Map(ports.map((p) => [p.id, p])),
       });
     });
 
-    edges.forEach((edge: any) => {
+    edges.forEach((edge) => {
       const sourceNodeId = edge.getSourceCellId?.();
       const targetNodeId = edge.getTargetCellId?.();
       const sourcePortId = edge.getSourcePortId?.();
@@ -516,22 +543,28 @@ export function useHealthCheck() {
   /**
    * 4. 通信参数一致性检查
    */
-  function checkParameterConsistency(nodes: any[], edges: any[]): CheckItem[] {
+  function checkParameterConsistency(
+    nodes: SimulationNode[],
+    edges: SimulationEdge[]
+  ): CheckItem[] {
     const items: CheckItem[] = [];
-    const parameterIssues: any[] = [];
+    const parameterIssues: HealthIssue[] = [];
 
     // 构建节点端口映射
-    const nodePortMap = new Map();
-    nodes.forEach((node: any) => {
-      const data = node.getData?.() || {};
+    const nodePortMap = new Map<
+      string,
+      { name: string; ports: Map<string | undefined, SimulationPort> }
+    >();
+    nodes.forEach((node) => {
+      const data = node.getData<SimulationNodeData>() || {};
       const ports = data.ports || [];
       nodePortMap.set(node.id, {
         name: data.name || data.label || node.id,
-        ports: new Map(ports.map((p: any) => [p.id, p])),
+        ports: new Map(ports.map((p) => [p.id, p])),
       });
     });
 
-    edges.forEach((edge: any) => {
+    edges.forEach((edge) => {
       const sourceNodeId = edge.getSourceCellId?.();
       const targetNodeId = edge.getTargetCellId?.();
       const sourcePortId = edge.getSourcePortId?.();
@@ -626,11 +659,14 @@ export function useHealthCheck() {
   /**
    * 5. 配置冲突检测
    */
-  function checkConfigurationConflicts(nodes: any[], edges: any[]): CheckItem[] {
+  function checkConfigurationConflicts(
+    nodes: SimulationNode[],
+    edges: SimulationEdge[]
+  ): CheckItem[] {
     const items: CheckItem[] = [];
 
     // 回环检测（自连接）
-    const loopbackEdges = edges.filter((edge: any) => {
+    const loopbackEdges = edges.filter((edge) => {
       const sourceId = edge.getSourceCellId?.();
       const targetId = edge.getTargetCellId?.();
       return sourceId && targetId && sourceId === targetId;
@@ -644,7 +680,7 @@ export function useHealthCheck() {
         status: 'warning',
         message: `检测到 ${loopbackEdges.length} 个回环连接（设备自连接）`,
         suggestion: '回环连接通常用于自测试场景，请确认是否符合预期',
-        details: { edgeIds: loopbackEdges.map((e: any) => e.id) },
+        details: { edgeIds: loopbackEdges.map((e) => e.id) },
       });
     } else {
       items.push({

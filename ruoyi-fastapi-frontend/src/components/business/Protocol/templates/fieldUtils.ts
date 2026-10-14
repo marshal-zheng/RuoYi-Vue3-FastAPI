@@ -41,24 +41,24 @@ export const createEmptyFieldRow = (
   ...overrides,
 });
 
-export const normalizeFieldRow = (row: any): ProtocolFieldRow => {
-  if (!row) {
-    return createEmptyFieldRow();
-  }
-  if ('seqNo' in row) {
-    return createEmptyFieldRow(row);
-  }
+const fieldText = (value: unknown, fallback = ''): string =>
+  typeof value === 'string' || typeof value === 'number' ? String(value) : fallback;
 
+export const normalizeFieldRow = (row: unknown): ProtocolFieldRow => {
   const normalized = createFieldSkeleton();
+  if (!row || typeof row !== 'object') return normalized;
+
   Object.entries(FIELD_KEY_MAP).forEach(([cnKey, enKey]) => {
-    if (Object.prototype.hasOwnProperty.call(row, cnKey)) {
-      normalized[enKey] = row[cnKey];
+    if (enKey in row) {
+      normalized[enKey] = fieldText(Reflect.get(row, enKey), normalized[enKey]);
+    } else if (cnKey in row) {
+      normalized[enKey] = fieldText(Reflect.get(row, cnKey), normalized[enKey]);
     }
   });
   return normalized;
 };
 
-export const normalizeFieldRows = (rows?: any[]): ProtocolFieldRow[] => {
+export const normalizeFieldRows = (rows?: unknown[]): ProtocolFieldRow[] => {
   if (!Array.isArray(rows)) return [];
   return rows.map((row) => normalizeFieldRow(row));
 };
@@ -76,5 +76,7 @@ export const getNextSeqNo = (rows: ProtocolFieldRow[]): string => {
 
 export const cloneConfig = <T>(config: T): T => JSON.parse(JSON.stringify(config));
 
-export const resolveEditorValue = (cellParams: any, value: any) =>
-  value !== undefined ? value : (cellParams?.cellValue ?? '');
+export const resolveEditorValue = <T>(
+  cellParams: { cellValue?: T } | undefined,
+  value: T | undefined
+) => (value !== undefined ? value : (cellParams?.cellValue ?? ''));

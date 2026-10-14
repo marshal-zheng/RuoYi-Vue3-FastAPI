@@ -1,15 +1,11 @@
-import {
-  listMockOverlaySummaries,
-  loadMockOverlayRegistry,
-  sortMockOverlayEntries,
-} from "./index";
+import { listMockOverlaySummaries, loadMockOverlayRegistry, sortMockOverlayEntries } from './index';
 import type {
   MockOverlayActivationInput,
   MockOverlayActivationSource,
   MockOverlayRegistryEntry,
   MockOverlayRegistrySummary,
   MockOverlayState,
-} from "./types";
+} from './types';
 
 export interface MockOverlayRuntimeOptions {
   registry?: MockOverlayRegistryEntry[];
@@ -22,7 +18,7 @@ function emptyState(): MockOverlayState {
   return {
     activeIds: [],
     activeEntries: [],
-    source: "none",
+    source: 'none',
   };
 }
 
@@ -67,30 +63,21 @@ function hasIntersection(left: string[], right: string[]) {
   return left.some((item) => right.includes(item));
 }
 
-function isCompatible(
-  left: MockOverlayRegistryEntry,
-  right: MockOverlayRegistryEntry,
-) {
+function isCompatible(left: MockOverlayRegistryEntry, right: MockOverlayRegistryEntry) {
   return (
     left.composition.compatibleWith?.includes(right.id) ||
     right.composition.compatibleWith?.includes(left.id)
   );
 }
 
-function explicitConflict(
-  left: MockOverlayRegistryEntry,
-  right: MockOverlayRegistryEntry,
-) {
+function explicitConflict(left: MockOverlayRegistryEntry, right: MockOverlayRegistryEntry) {
   return (
     left.composition.conflictsWith?.includes(right.id) ||
     right.composition.conflictsWith?.includes(left.id)
   );
 }
 
-function sameStateSemantic(
-  left: MockOverlayRegistryEntry,
-  right: MockOverlayRegistryEntry,
-) {
+function sameStateSemantic(left: MockOverlayRegistryEntry, right: MockOverlayRegistryEntry) {
   return (
     left.stateType === right.stateType &&
     left.response?.status === right.response?.status &&
@@ -100,13 +87,13 @@ function sameStateSemantic(
 
 export function resolveMockOverlayEntries(
   input: MockOverlayActivationInput,
-  registry: MockOverlayRegistryEntry[] = loadMockOverlayRegistry(),
+  registry: MockOverlayRegistryEntry[] = loadMockOverlayRegistry()
 ): MockOverlayRegistryEntry[] {
   const ids = overlayIds(input);
   const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
   if (duplicateIds.length) {
     throw new Error(
-      `Duplicate overlay activation id(s): ${Array.from(new Set(duplicateIds)).join(", ")}`,
+      `Duplicate overlay activation id(s): ${Array.from(new Set(duplicateIds)).join(', ')}`
     );
   }
 
@@ -120,19 +107,13 @@ export function resolveMockOverlayEntries(
   });
 
   for (let leftIndex = 0; leftIndex < entries.length; leftIndex += 1) {
-    for (
-      let rightIndex = leftIndex + 1;
-      rightIndex < entries.length;
-      rightIndex += 1
-    ) {
+    for (let rightIndex = leftIndex + 1; rightIndex < entries.length; rightIndex += 1) {
       const left = entries[leftIndex];
       const right = entries[rightIndex];
       if (!left || !right) continue;
 
       if (explicitConflict(left, right)) {
-        throw new Error(
-          `Mock overlay conflict: ${left.id} conflicts with ${right.id}.`,
-        );
+        throw new Error(`Mock overlay conflict: ${left.id} conflicts with ${right.id}.`);
       }
 
       const sameEndpoint = pairKey(left) === pairKey(right);
@@ -142,7 +123,7 @@ export function resolveMockOverlayEntries(
         !isCompatible(left, right)
       ) {
         throw new Error(
-          `Mock overlay conflict: ${left.id} cannot be combined with ${right.id} without compatibleWith metadata.`,
+          `Mock overlay conflict: ${left.id} cannot be combined with ${right.id} without compatibleWith metadata.`
         );
       }
     }
@@ -162,7 +143,7 @@ export class MockOverlayRuntime {
 
     const ids = overlayIds(options.initialOverlays);
     if (ids.length) {
-      this.state = this.resolveState(ids, options.source ?? "bootstrap");
+      this.state = this.resolveState(ids, options.source ?? 'bootstrap');
     }
   }
 
@@ -176,7 +157,7 @@ export class MockOverlayRuntime {
 
   activateOverlays(
     ids: string[],
-    source: MockOverlayActivationSource = "runtime-api",
+    source: MockOverlayActivationSource = 'runtime-api'
   ): MockOverlayState {
     const nextState = this.resolveState(ids, source);
     this.state = nextState;
@@ -188,27 +169,20 @@ export class MockOverlayRuntime {
     return this.getOverlayState();
   }
 
-  private resolveState(
-    ids: string[],
-    source: MockOverlayActivationSource,
-  ): MockOverlayState {
+  private resolveState(ids: string[], source: MockOverlayActivationSource): MockOverlayState {
     if (!this.allowOverlays && ids.length) {
-      throw new Error(
-        "Mock overlays are not available in the current runtime mode.",
-      );
+      throw new Error('Mock overlays are not available in the current runtime mode.');
     }
 
     const activeEntries = resolveMockOverlayEntries(ids, this.registry);
     return {
       activeIds: activeEntries.map((entry) => entry.id),
       activeEntries,
-      source: activeEntries.length ? source : "none",
+      source: activeEntries.length ? source : 'none',
     };
   }
 }
 
-export function createMockOverlayRuntime(
-  options: MockOverlayRuntimeOptions = {},
-) {
+export function createMockOverlayRuntime(options: MockOverlayRuntimeOptions = {}) {
   return new MockOverlayRuntime(options);
 }

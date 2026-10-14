@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { useDrawer } from '@zxio/zxui';
 import { ArrowRight, Box, Warning, Document } from '@element-plus/icons-vue';
 
@@ -194,17 +194,6 @@ const groupedPorts = computed(() => {
 // 监听 modelValue 变化
 // 通过父组件 ref 控制打开/关闭，无需监听外部 v-model
 
-// 监听数据变化，打印调试信息
-watch(
-  () => props.devicePorts,
-  (newPorts) => {
-    if (newPorts && newPorts.length > 0) {
-      newPorts.forEach((port, index) => {});
-    }
-  },
-  { immediate: true, deep: true }
-);
-
 // 切换端口折叠状态
 const togglePort = (portId) => {
   collapsedPorts.value[portId] = !collapsedPorts.value[portId];
@@ -228,10 +217,6 @@ const handleProtocolClick = (port, message) => {
 };
 
 // 关闭抽屉
-const handleClose = () => {
-  emit('update:modelValue', false);
-  drawer.close();
-};
 
 defineExpose({ open: drawer.open, close: drawer.close });
 </script>

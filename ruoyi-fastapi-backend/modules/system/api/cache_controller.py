@@ -1,18 +1,18 @@
 from fastapi import APIRouter, Depends, Request
-from typing import List
+
+from common.http_contracts import CollectionResult
 from container.dependencies import service_provider
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.cache_vo import CacheInfoModel, CacheMonitorModel
-from modules.system.application.services.cache_service import CacheService
 from modules.identity.ports import get_current_user
+from modules.system.application.services.cache_service import CacheService
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
+cache_router = APIRouter(prefix='/monitor/cache', dependencies=[Depends(get_current_user)])
 
-cacheController = APIRouter(prefix='/monitor/cache', dependencies=[Depends(get_current_user)])
 
-
-@cacheController.get(
+@cache_router.get(
     '', response_model=CacheMonitorModel, dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))]
 )
 async def get_monitor_cache_info(
@@ -26,9 +26,9 @@ async def get_monitor_cache_info(
     return ResponseUtil.ok_resource(cache_info_query_result)
 
 
-@cacheController.get(
+@cache_router.get(
     '/getNames',
-    response_model=List[CacheInfoModel],
+    response_model=CollectionResult[CacheInfoModel],
     dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))],
 )
 async def get_monitor_cache_name(
@@ -42,9 +42,9 @@ async def get_monitor_cache_name(
     return ResponseUtil.ok_resource(cache_name_list_result)
 
 
-@cacheController.get(
+@cache_router.get(
     '/getKeys/{cache_name}',
-    response_model=List[str],
+    response_model=CollectionResult[str],
     dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))],
 )
 async def get_monitor_cache_key(
@@ -59,7 +59,7 @@ async def get_monitor_cache_key(
     return ResponseUtil.ok_resource(cache_key_list_result)
 
 
-@cacheController.get(
+@cache_router.get(
     '/getValue/{cache_name}/{cache_key}',
     response_model=CacheInfoModel,
     dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))],
@@ -77,7 +77,7 @@ async def get_monitor_cache_value(
     return ResponseUtil.ok_resource(cache_value_list_result)
 
 
-@cacheController.delete(
+@cache_router.delete(
     '/clearCacheName/{cache_name}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))]
 )
 async def clear_monitor_cache_name(
@@ -91,9 +91,7 @@ async def clear_monitor_cache_name(
     return ResponseUtil.no_content()
 
 
-@cacheController.delete(
-    '/clearCacheKey/{cache_key}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))]
-)
+@cache_router.delete('/clearCacheKey/{cache_key}', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))])
 async def clear_monitor_cache_key(
     request: Request,
     cache_key: str,
@@ -105,7 +103,7 @@ async def clear_monitor_cache_key(
     return ResponseUtil.no_content()
 
 
-@cacheController.delete('/clearCacheAll', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))])
+@cache_router.delete('/clearCacheAll', dependencies=[Depends(CheckUserInterfaceAuth('monitor:cache:list'))])
 async def clear_monitor_cache_all(
     request: Request,
     cache_service: CacheService = Depends(service_provider('cache_service', require_session=False)),

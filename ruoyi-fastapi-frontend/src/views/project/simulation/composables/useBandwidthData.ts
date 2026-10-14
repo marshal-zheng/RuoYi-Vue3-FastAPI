@@ -250,7 +250,7 @@ export function useBandwidthData() {
     return Math.max(0, Number(item.bandwidth ?? item.bandwidthMbps ?? 0));
   };
 
-  const addDataPoint = (data: Partial<BandwidthDataPoint> & Record<string, any>) => {
+  const addDataPoint = (data: Partial<BandwidthDataPoint>) => {
     const bandwidth = getBandwidthValue(data);
     rawData.value.push({
       timestamp: Number(data.timestamp ?? Date.now()),

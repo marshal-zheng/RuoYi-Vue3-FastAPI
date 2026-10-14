@@ -1,4 +1,5 @@
 import { onBeforeUnmount, ref, onMounted, watch, inject, isRef } from 'vue';
+import { ElMessage } from 'element-plus';
 import { Dnd } from '@antv/x6-plugin-dnd';
 import { GRAPH_INSTANCE_KEY } from './useGraphInstance';
 
@@ -35,7 +36,6 @@ export function useDnd(arg1 = null, arg2 = {}) {
   if (isGraphLike(arg1)) {
     graphRef = arg1;
     options = arg2 || {};
-    console.log('[useDnd] Using provided graph instance');
   } else {
     options = arg1 || {};
     // 延迟获取 graph - 在 Vue setup 上下文中通过 inject 获取
@@ -43,24 +43,16 @@ export function useDnd(arg1 = null, arg2 = {}) {
       const context = inject(GRAPH_INSTANCE_KEY, null);
       if (context && context.graph) {
         graphRef = context.graph;
-        console.log('[useDnd] Got graph from inject:', {
-          isRef: !!graphRef?.__v_isRef,
-          hasValue: !!graphRef?.value,
-          valueType: graphRef?.value?.constructor?.name,
-        });
       } else {
-        console.log('[useDnd] No graph context available yet, will wait for it');
         graphRef = ref(null);
       }
-    } catch (e) {
-      console.log('[useDnd] inject failed (not in setup context), creating empty ref');
+    } catch {
       graphRef = ref(null);
     }
   }
 
   // 确保 graphRef 始终是一个 ref
   if (!graphRef) {
-    console.log('[useDnd] graphRef is null, creating empty ref');
     graphRef = ref(null);
   }
 
@@ -87,8 +79,7 @@ export function useDnd(arg1 = null, arg2 = {}) {
     if (typeof graphRef === 'function') {
       try {
         return graphRef();
-      } catch (error) {
-        console.log('[useDnd] readGraphSource: graph resolver threw error:', error);
+      } catch {
         return null;
       }
     }
@@ -98,57 +89,30 @@ export function useDnd(arg1 = null, arg2 = {}) {
     return graphRef;
   };
 
-  const describeGraphCandidate = () => {
-    const source = readGraphSource();
-    if (!source) {
-      if (typeof graphRef === 'function') {
-        return 'function';
-      }
-      if (isRef(graphRef)) {
-        return 'null';
-      }
-      return 'null';
-    }
-    return source.constructor?.name ?? typeof source;
-  };
-
   const getGraph = () => {
     if (!graphRef) {
-      console.log('[useDnd] getGraph: graphRef is null/undefined');
       return null;
     }
     if (typeof graphRef === 'function') {
       try {
         const result = graphRef();
         const resolved = resolveGraphInstance(result);
-        console.log('[useDnd] getGraph: graphRef is function, result:', {
-          resultType: result?.constructor?.name,
-          hasCreateNode: typeof resolved?.createNode === 'function',
-        });
+
         return resolved;
-      } catch (e) {
-        console.log('[useDnd] getGraph: graphRef function threw error:', e);
+      } catch {
         return null;
       }
     }
     const candidate = readGraphSource();
     const resolved = resolveGraphInstance(candidate ?? graphRef);
-    console.log('[useDnd] getGraph: returning graphRef.value or graphRef:', {
-      hasValue: isRef(graphRef) ? graphRef.value != null : undefined,
-      candidateType: candidate?.constructor?.name ?? typeof candidate,
-      hasCreateNode: typeof resolved?.createNode === 'function',
-    });
-    if (!resolved) {
-      console.log('[useDnd] getGraph: graph instance not ready (missing createNode)');
-    }
+
     return resolved;
   };
 
   const ensureInit = () => {
     const g = getGraph();
-    console.log('[useDnd] ensureInit called - graph:', !!g, 'dndRef:', !!dndRef.value);
+
     if (g && !dndRef.value) {
-      console.log('[useDnd] Initializing DnD with graph:', g?.constructor?.name);
       try {
         dndRef.value = new Dnd({
           target: g,
@@ -161,19 +125,13 @@ export function useDnd(arg1 = null, arg2 = {}) {
           getDropNode: (node) => node.clone(),
           ...options,
         });
-        console.log('[useDnd] DnD initialized successfully');
       } catch (error) {
-        console.error('[useDnd] Failed to initialize DnD:', error);
+        ElMessage.error(error instanceof Error ? error.message : '拖拽插件初始化失败');
       }
-    } else if (!g) {
-      console.log('[useDnd] Cannot initialize DnD: graph not available');
-    } else if (dndRef.value) {
-      console.log('[useDnd] DnD already initialized');
     }
   };
 
   onMounted(() => {
-    console.log('[useDnd] onMounted - checking if graph is ready');
     ensureInit();
   });
 
@@ -185,13 +143,7 @@ export function useDnd(arg1 = null, arg2 = {}) {
     watch(
       () => readGraphSource(),
       (newGraph) => {
-        console.log('[useDnd] Graph changed:', {
-          hasGraph: !!newGraph,
-          type: newGraph?.constructor?.name,
-          hasCreateNode: typeof newGraph?.createNode === 'function',
-        });
         if (newGraph && typeof newGraph.createNode === 'function') {
-          console.log('[useDnd] Graph became available, initializing DnD...');
           ensureInit();
         }
       },
@@ -217,39 +169,31 @@ export function useDnd(arg1 = null, arg2 = {}) {
 
   const runStart = (nodeOptions, event) => {
     const g = getGraph();
-    console.log(
-      '[useDnd] runStart called - graph available:',
-      !!g,
-      'hasCreateNode:',
-      typeof g?.createNode === 'function'
-    );
+
     if (!g || typeof g.createNode !== 'function') {
-      console.log('[useDnd] No valid graph instance available');
       return 'no-graph';
     }
     if (!dndRef.value) {
-      console.log('[useDnd] DnD not initialized, initializing now...');
       ensureInit();
     }
     if (!dndRef.value) {
-      console.error('[useDnd] Failed to initialize DnD even after ensureInit');
+      // 初始化已报告错误，保持 no-dnd 状态以便等待下一次 ready。
       return 'no-dnd';
     }
 
     try {
       const node = g.createNode(nodeOptions);
-      console.log('[useDnd] Created node for drag:', node?.id);
+
       dndRef.value.start(node, event);
-      console.log('[useDnd] DnD started successfully');
+
       return 'success';
     } catch (error) {
-      console.error('[useDnd] Error in runStart:', error);
+      ElMessage.error(error instanceof Error ? error.message : '拖拽操作失败');
       return 'error';
     }
   };
 
   const startDrag = (nodeOptions, event) => {
-    console.log('[useDnd] startDrag called');
     const result = runStart(nodeOptions, event);
     if (result === 'success' || result === 'error') {
       clearPending();
@@ -260,18 +204,17 @@ export function useDnd(arg1 = null, arg2 = {}) {
       return;
     }
 
-    console.warn('[useDnd] Graph not ready for DnD, waiting for availability...');
-    console.log('[useDnd] Current graph state:', describeGraphCandidate());
+    // 按现有惰性契约排队，等待图实例或拖拽插件就绪。
+
     pendingStart = { nodeOptions, event };
 
     // 设置 watch 监听 graphRef 和 dndRef 的变化
     if (!stopPendingWatch && shouldWatchGraph) {
-      console.log('[useDnd] Setting up watch for pending drag operation...');
       stopPendingWatch = watch(
         () => [readGraphSource(), dndRef.value],
-        ([graphValue, dnd]) => {
+        () => {
           if (!pendingStart) return;
-          console.log('[useDnd] Watch triggered - graph:', !!graphValue, 'dnd:', !!dnd);
+
           const status = runStart(pendingStart.nodeOptions, pendingStart.event);
           if (status === 'success' || status === 'error') {
             clearPending();
@@ -287,11 +230,10 @@ export function useDnd(arg1 = null, arg2 = {}) {
     }
     pendingTimeout = setTimeout(() => {
       if (!pendingStart) return;
-      console.log('[useDnd] Timeout reached, trying one last time...');
+
       const status = runStart(pendingStart.nodeOptions, pendingStart.event);
       if (status !== 'success') {
-        console.error('[useDnd] No graph available for DnD after waiting 3000ms');
-        console.log('[useDnd] Final graph state:', describeGraphCandidate());
+        ElMessage.error('画布尚未就绪，请稍后重试拖拽');
       }
       clearPending();
     }, 3000);

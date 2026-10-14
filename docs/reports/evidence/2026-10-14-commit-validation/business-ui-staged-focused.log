@@ -1,0 +1,43 @@
+
+ RUN  v3.2.4 /private/tmp/ruoyi-commit-plan-20261014/business-ui-staged/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > defaults to a visible header and breadcrumb with tags disabled 2ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > restores independent saved visibility choices 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > migrates old enabled tags once while preserving other layout preferences 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > uses defaults for malformed persisted tags and null settings 0ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > shares the committed preference between selector, Settings and Provider without reading DOM 18ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > projects the committed variant without changing the requested preference 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > rejects unsupported preferences instead of writing an unavailable theme 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > keeps the last committed density and stored choice when the scope rejects an update 1ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > persists only the latest density after a slower earlier request completes 0ms
+ ✓ src/theme/zx-dialog-portal.test.ts > theme preference ownership > keeps a successful density change when local storage rejects the write 0ms
+ ✓ src/layout/policy.test.ts > application chrome policy > keeps header, tags and breadcrumb preferences independent 1ms
+ ✓ src/layout/policy.test.ts > application chrome policy > applies only explicit route overrides without changing user preferences 0ms
+ ✓ src/layout/policy.test.ts > application chrome policy > ignores malformed route overrides 0ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > restores layout options without restoring retired colour settings 11ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > rejects retired colour settings while retaining layout changes 1ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference 1ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > throws when the theme host has not been bound 2ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > resolves with the confirmed payload 1ms
+ ✓ src/theme/confirm-input.test.ts > confirmInputDanger > rejects when the user cancels 1ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > binds the Host-owned preference lifecycle without projecting DOM from business code 14ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > rejects incomplete registrations instead of silently falling back 1ms
+ ✓ src/theme/zx-theme-host.test.ts > public theme deployment host > surfaces deployment diagnostics 0ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > uses collection items as the menu tree when adding a role 106ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows loading only while the menu request is pending 49ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows an empty state after loading an empty menu collection 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows a failure state and allows reopening to retry 90ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > preserves the role-specific menu response when editing a role 40ms
+ ✓ src/theme/zx-theme-packages.test.ts > ZX_THEME_PACKAGE_CHOICES > lists the currently enabled ZXUI presets 1ms
+ ✓ src/theme/zx-theme-deployment.test.ts > theme deployment registration > derives build packages from the selector catalog 1ms
+
+ Test Files  9 passed (9)
+      Tests  29 passed (29)
+   Start at  03:23:15
+   Duration  10.66s (transform 5.77s, setup 5.12s, collect 15.80s, tests 412ms, environment 3.44s, prepare 344ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

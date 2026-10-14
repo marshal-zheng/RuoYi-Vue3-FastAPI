@@ -26,15 +26,13 @@
 import { computed } from 'vue';
 import { ZxInput } from '@zxio/zxui';
 import DictAutocomplete from '@/components/business/DictAutocomplete/index.vue';
+import type { DictAutocompleteParams, DictEditorValue } from './types';
 
-const props = defineProps({
-  params: {
-    type: Object,
-    default: () => ({}),
-  },
+const props = withDefaults(defineProps<{ params?: DictAutocompleteParams }>(), {
+  params: () => ({}),
 });
 
-const emit = defineEmits(['change', 'input']);
+const emit = defineEmits<{ change: [value: DictEditorValue]; input: [value: string | number] }>();
 
 const dictType = computed(() => props.params?.dictType || '');
 const placeholder = computed(() => props.params?.placeholder || '请输入');
@@ -46,7 +44,8 @@ const uppercaseLabel = computed(() => props.params?.uppercaseLabel === true);
 const cellValue = computed({
   get() {
     const { row, column } = props.params || {};
-    return row?.[column?.field] ?? '';
+    const value = column ? row?.[column.field] : undefined;
+    return typeof value === 'string' || typeof value === 'number' ? value : '';
   },
   set(val) {
     const { row, column } = props.params || {};
@@ -58,12 +57,12 @@ const cellValue = computed({
 
 // 触发 change 事件，将值同步到父组件
 // 标准化：只传递实际值，符合 Vue 组件常规约定
-const handleChange = (val: any) => {
+const handleChange = (val: DictEditorValue) => {
   emit('change', val);
 };
 
 // 触发 input 事件
-const handleInput = (val: any) => {
+const handleInput = (val: string) => {
   emit('input', val);
 };
 </script>

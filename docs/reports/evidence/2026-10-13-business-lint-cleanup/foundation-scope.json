@@ -1,0 +1,126 @@
+[
+  {
+    "file": "src/directive/common/copyText.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/directive/permission/hasPermi.js",
+    "warnings": 2
+  },
+  {
+    "file": "src/directive/permission/hasRole.js",
+    "warnings": 2
+  },
+  {
+    "file": "src/layout/components/TagsView/ScrollPane.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/permission.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/plugins/download.js",
+    "warnings": 4
+  },
+  {
+    "file": "src/plugins/vxe-table.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/shims-vue.d.ts",
+    "warnings": 72
+  },
+  {
+    "file": "src/types/global.d.ts",
+    "warnings": 12
+  },
+  {
+    "file": "src/utils/colorUtils.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/utils/defineComponent.tsx",
+    "warnings": 62
+  },
+  {
+    "file": "src/utils/dict.ts",
+    "warnings": 2
+  },
+  {
+    "file": "src/utils/dynamicTitle.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/utils/feedback/registry.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/utils/generator/config.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/utils/generator/css.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/utils/generator/drawingDefalut.ts",
+    "warnings": 7
+  },
+  {
+    "file": "src/utils/generator/html.ts",
+    "warnings": 7
+  },
+  {
+    "file": "src/utils/generator/js.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/utils/generator/render.ts",
+    "warnings": 15
+  },
+  {
+    "file": "src/utils/helpers.ts",
+    "warnings": 58
+  },
+  {
+    "file": "src/utils/http.test.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/utils/index.ts",
+    "warnings": 22
+  },
+  {
+    "file": "src/utils/io-toolkit/download.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/utils/jsencrypt.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/utils/permission.ts",
+    "warnings": 2
+  },
+  {
+    "file": "src/utils/propsFactory.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/utils/request.ts",
+    "warnings": 12
+  },
+  {
+    "file": "src/utils/ruoyi.ts",
+    "warnings": 14
+  },
+  {
+    "file": "src/utils/scroll-to.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/utils/validate.ts",
+    "warnings": 6
+  }
+]

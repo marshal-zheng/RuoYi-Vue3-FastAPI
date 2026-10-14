@@ -302,14 +302,21 @@ function getSelectedEdgeInfo() {
   text-align: left;
   padding: 10px 12px;
   border-radius: var(--sim-radius-lg, 10px);
-  border: 1px solid var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
+  border: 1px solid
+    var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
   background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
   transition: all 0.2s ease;
   cursor: pointer;
 }
 .tpl-btn:hover:not(.tpl-btn-disabled) {
-  border-color: var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent));
-  box-shadow: var(--sim-shadow-glow, 0 8px 16px color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
+  border-color: var(
+    --sim-border-accent,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)
+  );
+  box-shadow: var(
+    --sim-shadow-glow,
+    0 8px 16px color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent)
+  );
   transform: translateY(-1px);
 }
 .tpl-btn-disabled {
@@ -340,14 +347,21 @@ function getSelectedEdgeInfo() {
 }
 .fault-item {
   padding: 10px 12px;
-  border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 18%, transparent));
+  border: 1px solid
+    var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 18%, transparent));
   border-radius: var(--sim-radius-lg, 10px);
   background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
   margin-bottom: 8px;
 }
 .fault-item.is-active {
-  border-color: var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent));
-  box-shadow: var(--sim-shadow-glow, 0 6px 20px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
+  border-color: var(
+    --sim-border-focus,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent)
+  );
+  box-shadow: var(
+    --sim-shadow-glow,
+    0 6px 20px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)
+  );
 }
 .fault-item.is-pending {
   border-color: var(--sim-warning-border, rgba(250, 204, 21, 0.4));
@@ -360,7 +374,10 @@ function getSelectedEdgeInfo() {
   align-items: center;
   padding: 2px 6px;
   border-radius: 6px;
-  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
+  background: var(
+    --sim-accent-bg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent)
+  );
   color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 700;
@@ -400,7 +417,8 @@ function getSelectedEdgeInfo() {
     var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)),
     color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)
   ) !important;
-  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)) !important;
+  border: 1px solid
+    var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
   transition: all var(--sim-transition-normal, 0.3s ease);
@@ -411,8 +429,14 @@ function getSelectedEdgeInfo() {
     color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent),
     color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent)
   ) !important;
-  border-color: var(--sim-accent-light, color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)) !important;
-  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent));
+  border-color: var(
+    --sim-accent-light,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)
+  ) !important;
+  box-shadow: var(
+    --sim-shadow-glow-accent,
+    0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent)
+  );
   transform: translateY(-1px);
 }
 .refresh-btn .el-icon {
@@ -447,8 +471,12 @@ function getSelectedEdgeInfo() {
   align-items: center;
   padding: 2px 8px;
   border-radius: 6px;
-  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
-  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
+  background: var(
+    --sim-accent-bg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)
+  );
+  border: 1px solid
+    var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
   color: var(--sim-accent, #22d3ee);
   font-size: 11px;
   font-weight: 600;

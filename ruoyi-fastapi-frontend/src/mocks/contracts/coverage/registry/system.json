@@ -35,15 +35,17 @@
     "mswPath": "/api/system/config",
     "handlerTag": "system:configCreate",
     "owner": "system-config",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -51,15 +53,17 @@
     "mswPath": "/api/system/config",
     "handlerTag": "system:configUpdate",
     "owner": "system-config",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -82,15 +86,17 @@
     "mswPath": "/api/system/config/:configIds",
     "handlerTag": "system:configDelete",
     "owner": "system-config",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -142,15 +148,17 @@
     "mswPath": "/api/system/config/refreshCache",
     "handlerTag": "system:configRefreshCache",
     "owner": "system-config",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/config.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "POST",
@@ -268,15 +276,17 @@
     "mswPath": "/api/system/dict/data",
     "handlerTag": "system:dictDataCreate",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -284,15 +294,17 @@
     "mswPath": "/api/system/dict/data",
     "handlerTag": "system:dictDataUpdate",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -315,15 +327,17 @@
     "mswPath": "/api/system/dict/data/:dictCodes",
     "handlerTag": "system:dictDataDelete",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "POST",
@@ -377,15 +391,17 @@
     "mswPath": "/api/system/dict/type",
     "handlerTag": "system:dictTypeCreate",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -393,15 +409,17 @@
     "mswPath": "/api/system/dict/type",
     "handlerTag": "system:dictTypeUpdate",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -424,15 +442,17 @@
     "mswPath": "/api/system/dict/type/:dictIds",
     "handlerTag": "system:dictTypeDelete",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "POST",
@@ -483,15 +503,17 @@
     "mswPath": "/api/system/dict/type/refreshCache",
     "handlerTag": "system:dictTypeRefreshCache",
     "owner": "system-dict",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/dict.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "POST",
@@ -499,15 +521,17 @@
     "mswPath": "/api/system/menu",
     "handlerTag": "system:menuCreate",
     "owner": "system-menu",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -515,15 +539,17 @@
     "mswPath": "/api/system/menu",
     "handlerTag": "system:menuUpdate",
     "owner": "system-menu",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "DELETE",
@@ -559,15 +585,17 @@
     "mswPath": "/api/system/menu/:menuId",
     "handlerTag": "system:menuDelete",
     "owner": "system-menu",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/menu.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -908,15 +936,17 @@
     "mswPath": "/api/system/role",
     "handlerTag": "system:roleCreate",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -924,15 +954,17 @@
     "mswPath": "/api/system/role",
     "handlerTag": "system:roleUpdate",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -955,15 +987,17 @@
     "mswPath": "/api/system/role/:roleIds",
     "handlerTag": "system:roleDelete",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -986,15 +1020,17 @@
     "mswPath": "/api/system/role/authUser/cancel",
     "handlerTag": "system:roleAuthCancel",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -1002,15 +1038,17 @@
     "mswPath": "/api/system/role/authUser/cancelAll",
     "handlerTag": "system:roleAuthCancelAll",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -1018,15 +1056,17 @@
     "mswPath": "/api/system/role/authUser/selectAll",
     "handlerTag": "system:roleAuthSelectAll",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",
@@ -1049,15 +1089,17 @@
     "mswPath": "/api/system/role/changeStatus",
     "handlerTag": "system:roleChangeStatus",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": true,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "PUT",
@@ -1065,15 +1107,17 @@
     "mswPath": "/api/system/role/dataScope",
     "handlerTag": "system:roleDataScope",
     "owner": "system-role",
-    "status": "mock-handled",
+    "status": "unsupported-501",
     "critical": false,
-    "schemaStatus": "schema-unavailable",
+    "schemaStatus": "not-applicable",
     "tests": [
       "ruoyi-fastapi-frontend/src/mocks/handlers/api-contract-schema.test.ts",
       "ruoyi-fastapi-frontend/tests/unit/api/role.test.ts"
     ],
-    "persistence": "none",
-    "reason": "OpenAPI response schema is empty, unreliable, or outside the P0 runtime schema gate."
+    "persistence": "unsupported-501",
+    "reason": "系统数据源只读，尚未实现此状态写入；离线模式返回明确501问题详情，避免虚假保存成功。",
+    "impact": "Offline system writes fail explicitly without mutating the read-only dataset.",
+    "migrationTarget": "Implement and validate a persistent system repository before enabling offline state writes."
   },
   {
     "method": "GET",

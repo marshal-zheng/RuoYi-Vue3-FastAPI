@@ -58,7 +58,9 @@
             placeholder="系统内置"
             clearable
             style="width: 200px"
-            @change="(v: any) => onFilterChange('configType', v, { handleRefresh, updateState })"
+            @change="
+              (v: unknown) => onFilterChange('configType', v, { handleRefresh, updateState })
+            "
           />
           <el-date-picker
             v-model="query.dateRange"
@@ -68,7 +70,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             style="width: 240px"
-            @change="(v: any) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+            @change="(v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
           />
         </template>
         <template #search>
@@ -133,6 +135,15 @@
 </template>
 
 <script setup lang="ts">
+import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { ConfigRecord } from '@/api/system/config';
+import type { ConfigPageQueryModel } from '@/api/_generated/types.gen';
+type ListQuery = ConfigPageQueryModel & { dateRange?: string[] | null };
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { ref, getCurrentInstance } from 'vue';
 import { parseTime } from '@/utils/ruoyi';
 import { serializeDateRange } from '@/utils/ruoyi';
@@ -140,35 +151,48 @@ import { listConfig, getConfig, delConfig, refreshCache } from '@/api/system/con
 import ConfigDlg from './ConfigDlg.vue';
 import DictSelect from '@/components/business/DictSelect/index.vue';
 
-const { proxy } = getCurrentInstance()!;
-const { sys_yes_no } = (proxy as any).useDict('sys_yes_no');
+const proxy = getCurrentInstance()!.proxy!;
+const { sys_yes_no } = proxy.useDict('sys_yes_no');
 
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<any>(null);
-const configDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const configDlgRef = ref<InstanceType<typeof ConfigDlg> | null>(null);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
-function queryTransform(query: Record<string, any>) {
+function queryTransform(query: ListQuery) {
   return serializeDateRange(query);
 }
 
 /** GridList 数据加载函数 */
-async function loadConfigData(params: Record<string, any>) {
+async function loadConfigData(params: ListLoadParams) {
   try {
-    return await listConfig(params);
-  } catch (e) {
+    return await listConfig({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
@@ -178,7 +202,7 @@ function handleRefresh() {
 }
 
 /** 多选框选中数据 */
-function handleSelectionChange(selection: any[]) {
+function handleSelectionChange(selection: ConfigRecord[]) {
   ids.value = selection.map((item) => item.configId);
   single.value = selection.length !== 1;
   multiple.value = !selection.length;
@@ -190,17 +214,25 @@ function handleAdd() {
 }
 
 /** 修改按钮操作 */
-async function handleUpdate(row?: any) {
-  const configId = row?.configId || ids.value;
+async function handleUpdate(row?: ConfigRecord) {
+  const configId = row?.configId || ids.value[0];
+  if (!configId) return;
   const response = await getConfig(configId);
   const data = response;
-  configDlgRef.value?.open(data);
+  configDlgRef.value?.open({
+    configId: data.configId ?? undefined,
+    configName: data.configName ?? undefined,
+    configKey: data.configKey ?? undefined,
+    configValue: data.configValue ?? undefined,
+    configType: data.configType ?? undefined,
+    remark: data.remark ?? undefined,
+  });
 }
 
 /** 删除按钮操作 */
-function handleDelete(row?: any) {
+function handleDelete(row?: ConfigRecord) {
   const configIds = row?.configId || ids.value.join(',');
-  (proxy as any).$modal
+  proxy.$modal
     .confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
     .then(() => delConfig(configIds))
     .then(() => {
@@ -210,8 +242,8 @@ function handleDelete(row?: any) {
 }
 
 /** 导出按钮操作 */
-function handleExport(query: Record<string, any>) {
-  (proxy as any).download('system/config/export', query, `config_${new Date().getTime()}.xlsx`);
+function handleExport(query: ListQuery) {
+  proxy.download('system/config/export', query, `config_${new Date().getTime()}.xlsx`);
 }
 
 /** 刷新缓存按钮操作 */

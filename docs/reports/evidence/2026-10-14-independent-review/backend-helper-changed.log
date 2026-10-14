@@ -1,0 +1,2636 @@
+
+==> Ruff Lint
+UP035 [*] Import from `collections.abc` instead: `Awaitable`, `Callable`
+  --> module_admin/service/simulation_service.py:10:1
+   |
+ 8 | import uuid
+ 9 | from datetime import datetime
+10 | from typing import Awaitable, Callable, Dict, List, Optional
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |
+12 | from fastapi import Depends, Request
+   |
+help: Import from `collections.abc`
+
+UP035 `typing.Dict` is deprecated, use `dict` instead
+  --> module_admin/service/simulation_service.py:10:1
+   |
+ 8 | import uuid
+ 9 | from datetime import datetime
+10 | from typing import Awaitable, Callable, Dict, List, Optional
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |
+12 | from fastapi import Depends, Request
+   |
+
+UP035 `typing.List` is deprecated, use `list` instead
+  --> module_admin/service/simulation_service.py:10:1
+   |
+ 8 | import uuid
+ 9 | from datetime import datetime
+10 | from typing import Awaitable, Callable, Dict, List, Optional
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |
+12 | from fastapi import Depends, Request
+   |
+
+TC001 Move application import `modules.simulation.ports.ISimulationProjectTopologyPort` into a type-checking block
+  --> module_admin/service/simulation_service.py:44:38
+   |
+42 | from modules.simulation.application.acl import to_simulation_topology
+43 | from modules.simulation.infrastructure.project_topology_adapter import SimulationProjectTopologyAdapter
+44 | from modules.simulation.ports import ISimulationProjectTopologyPort
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+45 | from ports import (
+46 |     IProjectTopologyRepository,
+   |
+help: Move into type-checking block
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> module_admin/service/simulation_service.py:64:22
+   |
+63 |     # 存储活动的仿真引擎实例
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+   |                      ^^^^
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+   |
+help: Replace with `dict`
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+  --> module_admin/service/simulation_service.py:64:52
+   |
+63 |     # 存储活动的仿真引擎实例
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+   |                                                    ^^
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+   |
+
+RUF003 Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+  --> module_admin/service/simulation_service.py:65:13
+   |
+63 |     # 存储活动的仿真引擎实例
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+65 |     # 会话配置缓存（支撑停止后重建）
+   |                   ^^
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+   |
+
+RUF003 Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+  --> module_admin/service/simulation_service.py:65:21
+   |
+63 |     # 存储活动的仿真引擎实例
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+65 |     # 会话配置缓存（支撑停止后重建）
+   |                                   ^^
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> module_admin/service/simulation_service.py:66:23
+   |
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+   |                       ^^^^
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+   |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> module_admin/service/simulation_service.py:66:33
+   |
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+   |                                 ^^^^
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+   |
+help: Replace with `dict`
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+  --> module_admin/service/simulation_service.py:66:41
+   |
+64 |     _active_engines: Dict[str, SimulationEngine] = {}
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+   |                                         ^^
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+   |
+
+RUF003 Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+  --> module_admin/service/simulation_service.py:67:16
+   |
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+   |                         ^^
+68 |     _snapshot_write_at: Dict[str, float] = {}
+69 |     _snapshot_status: Dict[str, str] = {}
+   |
+
+RUF003 Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+  --> module_admin/service/simulation_service.py:67:31
+   |
+65 |     # 会话配置缓存（支撑停止后重建）
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+   |                                                  ^^
+68 |     _snapshot_write_at: Dict[str, float] = {}
+69 |     _snapshot_status: Dict[str, str] = {}
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> module_admin/service/simulation_service.py:68:25
+   |
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+   |                         ^^^^
+69 |     _snapshot_status: Dict[str, str] = {}
+70 |     _snapshot_write_interval_sec: float = 0.5
+   |
+help: Replace with `dict`
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+  --> module_admin/service/simulation_service.py:68:44
+   |
+66 |     _session_configs: Dict[str, Dict] = {}
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+   |                                            ^^
+69 |     _snapshot_status: Dict[str, str] = {}
+70 |     _snapshot_write_interval_sec: float = 0.5
+   |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+  --> module_admin/service/simulation_service.py:69:23
+   |
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+69 |     _snapshot_status: Dict[str, str] = {}
+   |                       ^^^^
+70 |     _snapshot_write_interval_sec: float = 0.5
+   |
+help: Replace with `dict`
+
+RUF012 Mutable class attributes should be annotated with `typing.ClassVar`
+  --> module_admin/service/simulation_service.py:69:40
+   |
+67 |     # 运行态快照写入节流（避免高频轮询持续写Redis）
+68 |     _snapshot_write_at: Dict[str, float] = {}
+69 |     _snapshot_status: Dict[str, str] = {}
+   |                                        ^^
+70 |     _snapshot_write_interval_sec: float = 0.5
+   |
+
+UP045 [*] Use `X | None` for type annotations
+  --> module_admin/service/simulation_service.py:74:19
+   |
+72 |     def __init__(
+73 |         self,
+74 |         query_db: Optional[AsyncSession] = None,
+   |                   ^^^^^^^^^^^^^^^^^^^^^^
+75 |         project_topology_repo_factory: Callable[[AsyncSession], IProjectTopologyRepository] | None = None,
+76 |     ):
+   |
+help: Convert to `X | None`
+
+RUF001 String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+  --> module_admin/service/simulation_service.py:93:38
+   |
+91 |             raise ResourceNotFoundException(
+92 |                 error_code=ErrorCode.RESOURCE_NOT_FOUND,
+93 |                 user_message='拓扑数据不存在，请先创建拓扑',
+   |                                             ^^
+94 |             )
+95 |         return to_simulation_topology(topology_view)
+   |
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:105:19
+    |
+103 |         self,
+104 |         request: CreateSimulationSessionModel,
+105 |         operator: Optional[str] = None,
+    |                   ^^^^^^^^^^^^^
+106 |     ) -> Dict:
+107 |         return await self.create_session_services(
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:106:10
+    |
+104 |         request: CreateSimulationSessionModel,
+105 |         operator: Optional[str] = None,
+106 |     ) -> Dict:
+    |          ^^^^
+107 |         return await self.create_session_services(
+108 |             self._require_query_db(),
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:128:67
+    |
+126 |         return await self.resume_session_services(self._require_query_db(), session_id)
+127 |
+128 |     async def get_shared_session_status(self, session_id: str) -> Dict:
+    |                                                                   ^^^^
+129 |         return await self.get_shared_session_status_services(session_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:131:75
+    |
+129 |         return await self.get_shared_session_status_services(session_id)
+130 |
+131 |     def get_realtime_messages(self, session_id: str, limit: int = 100) -> List[Dict]:
+    |                                                                           ^^^^
+132 |         return self.get_realtime_messages_services(session_id, limit)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:131:80
+    |
+129 |         return await self.get_shared_session_status_services(session_id)
+130 |
+131 |     def get_realtime_messages(self, session_id: str, limit: int = 100) -> List[Dict]:
+    |                                                                                ^^^^
+132 |         return self.get_realtime_messages_services(session_id, limit)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:134:69
+    |
+132 |         return self.get_realtime_messages_services(session_id, limit)
+133 |
+134 |     def get_new_messages(self, session_id: str, limit: int = 20) -> List[Dict]:
+    |                                                                     ^^^^
+135 |         return self.get_new_messages_services(session_id, limit)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:134:74
+    |
+132 |         return self.get_realtime_messages_services(session_id, limit)
+133 |
+134 |     def get_new_messages(self, session_id: str, limit: int = 20) -> List[Dict]:
+    |                                                                          ^^^^
+135 |         return self.get_new_messages_services(session_id, limit)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:137:87
+    |
+135 |         return self.get_new_messages_services(session_id, limit)
+136 |
+137 |     async def read_messages_with_fallback(self, session_id: str, limit: int = 100) -> List[Dict]:
+    |                                                                                       ^^^^
+138 |         messages = self.get_realtime_messages(session_id, limit)
+139 |         if messages:
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:137:92
+    |
+135 |         return self.get_new_messages_services(session_id, limit)
+136 |
+137 |     async def read_messages_with_fallback(self, session_id: str, limit: int = 100) -> List[Dict]:
+    |                                                                                            ^^^^
+138 |         messages = self.get_realtime_messages(session_id, limit)
+139 |         if messages:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:143:92
+    |
+141 |         return await self.get_runtime_latest_events(session_id, 'messages', limit)
+142 |
+143 |     async def get_runtime_latest_events(self, session_id: str, stream: str, limit: int) -> List[Dict]:
+    |                                                                                            ^^^^
+144 |         return await self.get_runtime_latest_events_services(session_id, stream, limit)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:143:97
+    |
+141 |         return await self.get_runtime_latest_events(session_id, 'messages', limit)
+142 |
+143 |     async def get_runtime_latest_events(self, session_id: str, stream: str, limit: int) -> List[Dict]:
+    |                                                                                                 ^^^^
+144 |         return await self.get_runtime_latest_events_services(session_id, stream, limit)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:152:16
+    |
+150 |         offset: int,
+151 |         limit: int,
+152 |     ) -> tuple[List[Dict], int]:
+    |                ^^^^
+153 |         return await self.get_runtime_events_since_services(session_id, stream, offset, limit)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:152:21
+    |
+150 |         offset: int,
+151 |         limit: int,
+152 |     ) -> tuple[List[Dict], int]:
+    |                     ^^^^
+153 |         return await self.get_runtime_events_since_services(session_id, stream, offset, limit)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:155:81
+    |
+153 |         return await self.get_runtime_events_since_services(session_id, stream, offset, limit)
+154 |
+155 |     async def append_runtime_events(self, session_id: str, stream: str, events: List[Dict]) -> None:
+    |                                                                                 ^^^^
+156 |         await self.append_runtime_events_services(session_id, stream, events)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:155:86
+    |
+153 |         return await self.get_runtime_events_since_services(session_id, stream, offset, limit)
+154 |
+155 |     async def append_runtime_events(self, session_id: str, stream: str, events: List[Dict]) -> None:
+    |                                                                                      ^^^^
+156 |         await self.append_runtime_events_services(session_id, stream, events)
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:161:64
+    |
+159 |         return await self.get_runtime_stream_size_services(session_id, stream)
+160 |
+161 |     def get_realtime_bandwidth(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+    |                                                                ^^^^^^^^^^^^^
+162 |         return self.get_realtime_bandwidth_services(session_id, port_id)
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:161:89
+    |
+159 |         return await self.get_runtime_stream_size_services(session_id, stream)
+160 |
+161 |     def get_realtime_bandwidth(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+    |                                                                                         ^^^^
+162 |         return self.get_realtime_bandwidth_services(session_id, port_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:161:94
+    |
+159 |         return await self.get_runtime_stream_size_services(session_id, stream)
+160 |
+161 |     def get_realtime_bandwidth(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+    |                                                                                              ^^^^
+162 |         return self.get_realtime_bandwidth_services(session_id, port_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:164:53
+    |
+162 |         return self.get_realtime_bandwidth_services(session_id, port_id)
+163 |
+164 |     def get_new_bandwidth(self, session_id: str) -> List[Dict]:
+    |                                                     ^^^^
+165 |         return self.get_new_bandwidth_services(session_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:164:58
+    |
+162 |         return self.get_realtime_bandwidth_services(session_id, port_id)
+163 |
+164 |     def get_new_bandwidth(self, session_id: str) -> List[Dict]:
+    |                                                          ^^^^
+165 |         return self.get_new_bandwidth_services(session_id)
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:170:18
+    |
+168 |         self,
+169 |         session_id: str,
+170 |         port_id: Optional[str] = None,
+    |                  ^^^^^^^^^^^^^
+171 |         limit: int = 400,
+172 |     ) -> List[Dict]:
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:172:10
+    |
+170 |         port_id: Optional[str] = None,
+171 |         limit: int = 400,
+172 |     ) -> List[Dict]:
+    |          ^^^^
+173 |         bandwidth_data = self.get_realtime_bandwidth(session_id, port_id)
+174 |         if bandwidth_data:
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:172:15
+    |
+170 |         port_id: Optional[str] = None,
+171 |         limit: int = 400,
+172 |     ) -> List[Dict]:
+    |               ^^^^
+173 |         bandwidth_data = self.get_realtime_bandwidth(session_id, port_id)
+174 |         if bandwidth_data:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:184:55
+    |
+182 |         return shared_bandwidth
+183 |
+184 |     def get_realtime_alarms(self, session_id: str) -> List[Dict]:
+    |                                                       ^^^^
+185 |         return self.get_realtime_alarms_services(session_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:184:60
+    |
+182 |         return shared_bandwidth
+183 |
+184 |     def get_realtime_alarms(self, session_id: str) -> List[Dict]:
+    |                                                            ^^^^
+185 |         return self.get_realtime_alarms_services(session_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:187:50
+    |
+185 |         return self.get_realtime_alarms_services(session_id)
+186 |
+187 |     def get_new_alarms(self, session_id: str) -> List[Dict]:
+    |                                                  ^^^^
+188 |         return self.get_new_alarms_services(session_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:187:55
+    |
+185 |         return self.get_realtime_alarms_services(session_id)
+186 |
+187 |     def get_new_alarms(self, session_id: str) -> List[Dict]:
+    |                                                       ^^^^
+188 |         return self.get_new_alarms_services(session_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:190:85
+    |
+188 |         return self.get_new_alarms_services(session_id)
+189 |
+190 |     async def read_alarms_with_fallback(self, session_id: str, limit: int = 200) -> List[Dict]:
+    |                                                                                     ^^^^
+191 |         alarms = self.get_realtime_alarms(session_id)
+192 |         if alarms:
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:190:90
+    |
+188 |         return self.get_new_alarms_services(session_id)
+189 |
+190 |     async def read_alarms_with_fallback(self, session_id: str, limit: int = 200) -> List[Dict]:
+    |                                                                                          ^^^^
+191 |         alarms = self.get_realtime_alarms(session_id)
+192 |         if alarms:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:196:79
+    |
+194 |         return await self.get_runtime_latest_events(session_id, 'alarms', limit)
+195 |
+196 |     def get_new_fault_events(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+    |                                                                               ^^^^
+197 |         return self.get_new_fault_events_services(session_id, offset)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:196:84
+    |
+194 |         return await self.get_runtime_latest_events(session_id, 'alarms', limit)
+195 |
+196 |     def get_new_fault_events(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+    |                                                                                    ^^^^
+197 |         return self.get_new_fault_events_services(session_id, offset)
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:216:61
+    |
+214 |         return await self.step_once_services(session_id)
+215 |
+216 |     async def set_duration(self, session_id: str, duration: Optional[float]) -> CrudResponseModel:
+    |                                                             ^^^^^^^^^^^^^^^
+217 |         return await self.set_duration_services(session_id, duration)
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:219:44
+    |
+217 |         return await self.set_duration_services(session_id, duration)
+218 |
+219 |     def resolve_speed_input(self, payload: Optional[Dict]) -> float:
+    |                                            ^^^^^^^^^^^^^^
+220 |         normalized_payload = payload or {}
+221 |         raw_speed = normalized_payload.get('speed', normalized_payload.get('simulationSpeed', 1.0))
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:219:53
+    |
+217 |         return await self.set_duration_services(session_id, duration)
+218 |
+219 |     def resolve_speed_input(self, payload: Optional[Dict]) -> float:
+    |                                                     ^^^^
+220 |         normalized_payload = payload or {}
+221 |         raw_speed = normalized_payload.get('speed', normalized_payload.get('simulationSpeed', 1.0))
+    |
+help: Replace with `dict`
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> module_admin/service/simulation_service.py:225:13
+    |
+223 |               return float(raw_speed)
+224 |           except (TypeError, ValueError):
+225 | /             raise ValidationException(
+226 | |                 error_code=ErrorCode.INVALID_INPUT,
+227 | |                 field='speed',
+228 | |                 user_message='speed 参数格式错误',
+229 | |             )
+    | |_____________^
+230 |
+231 |       def resolve_duration_input(
+    |
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:234:19
+    |
+232 |         self,
+233 |         *,
+234 |         duration: Optional[float] = None,
+    |                   ^^^^^^^^^^^^^^^
+235 |         payload: Optional[Dict] = None,
+236 |     ) -> Optional[float]:
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:235:18
+    |
+233 |         *,
+234 |         duration: Optional[float] = None,
+235 |         payload: Optional[Dict] = None,
+    |                  ^^^^^^^^^^^^^^
+236 |     ) -> Optional[float]:
+237 |         raw_duration = duration
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:235:27
+    |
+233 |         *,
+234 |         duration: Optional[float] = None,
+235 |         payload: Optional[Dict] = None,
+    |                           ^^^^
+236 |     ) -> Optional[float]:
+237 |         raw_duration = duration
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:236:10
+    |
+234 |         duration: Optional[float] = None,
+235 |         payload: Optional[Dict] = None,
+236 |     ) -> Optional[float]:
+    |          ^^^^^^^^^^^^^^^
+237 |         raw_duration = duration
+238 |         if raw_duration is None:
+    |
+help: Convert to `X | None`
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> module_admin/service/simulation_service.py:251:13
+    |
+249 |               normalized = float(raw_duration)
+250 |           except (TypeError, ValueError):
+251 | /             raise ValidationException(
+252 | |                 error_code=ErrorCode.INVALID_INPUT,
+253 | |                 field='duration',
+254 | |                 user_message='duration 参数格式错误',
+255 | |             )
+    | |_____________^
+256 |
+257 |           if normalized <= 0:
+    |
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:264:21
+    |
+262 |         self,
+263 |         *,
+264 |         session_id: Optional[str] = None,
+    |                     ^^^^^^^^^^^^^
+265 |         fault_type: Optional[str] = None,
+266 |         target_id: Optional[str] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:265:21
+    |
+263 |         *,
+264 |         session_id: Optional[str] = None,
+265 |         fault_type: Optional[str] = None,
+    |                     ^^^^^^^^^^^^^
+266 |         target_id: Optional[str] = None,
+267 |         payload: Optional[Dict] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:266:20
+    |
+264 |         session_id: Optional[str] = None,
+265 |         fault_type: Optional[str] = None,
+266 |         target_id: Optional[str] = None,
+    |                    ^^^^^^^^^^^^^
+267 |         payload: Optional[Dict] = None,
+268 |         require_session_id: bool = False,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:267:18
+    |
+265 |         fault_type: Optional[str] = None,
+266 |         target_id: Optional[str] = None,
+267 |         payload: Optional[Dict] = None,
+    |                  ^^^^^^^^^^^^^^
+268 |         require_session_id: bool = False,
+269 |     ) -> Dict:
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:267:27
+    |
+265 |         fault_type: Optional[str] = None,
+266 |         target_id: Optional[str] = None,
+267 |         payload: Optional[Dict] = None,
+    |                           ^^^^
+268 |         require_session_id: bool = False,
+269 |     ) -> Dict:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:269:10
+    |
+267 |         payload: Optional[Dict] = None,
+268 |         require_session_id: bool = False,
+269 |     ) -> Dict:
+    |          ^^^^
+270 |         return self.build_fault_injection_request_services(
+271 |             session_id=session_id,
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:278:46
+    |
+276 |         )
+277 |
+278 |     def require_session_id(self, session_id: Optional[str]) -> str:
+    |                                              ^^^^^^^^^^^^^
+279 |         normalized = (session_id or '').strip()
+280 |         if not normalized:
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:291:21
+    |
+289 |         self,
+290 |         *,
+291 |         session_id: Optional[str] = None,
+    |                     ^^^^^^^^^^^^^
+292 |         fault_type: Optional[str] = None,
+293 |         target_id: Optional[str] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:292:21
+    |
+290 |         *,
+291 |         session_id: Optional[str] = None,
+292 |         fault_type: Optional[str] = None,
+    |                     ^^^^^^^^^^^^^
+293 |         target_id: Optional[str] = None,
+294 |         payload: Optional[Dict] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:293:20
+    |
+291 |         session_id: Optional[str] = None,
+292 |         fault_type: Optional[str] = None,
+293 |         target_id: Optional[str] = None,
+    |                    ^^^^^^^^^^^^^
+294 |         payload: Optional[Dict] = None,
+295 |         require_session_id: bool = False,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:294:18
+    |
+292 |         fault_type: Optional[str] = None,
+293 |         target_id: Optional[str] = None,
+294 |         payload: Optional[Dict] = None,
+    |                  ^^^^^^^^^^^^^^
+295 |         require_session_id: bool = False,
+296 |     ) -> Dict:
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:294:27
+    |
+292 |         fault_type: Optional[str] = None,
+293 |         target_id: Optional[str] = None,
+294 |         payload: Optional[Dict] = None,
+    |                           ^^^^
+295 |         require_session_id: bool = False,
+296 |     ) -> Dict:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:296:10
+    |
+294 |         payload: Optional[Dict] = None,
+295 |         require_session_id: bool = False,
+296 |     ) -> Dict:
+    |          ^^^^
+297 |         fault_request = self.build_fault_injection_request(
+298 |             session_id=session_id,
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:323:17
+    |
+321 |         fault_type: str,
+322 |         target_id: str,
+323 |         params: Optional[Dict] = None,
+    |                 ^^^^^^^^^^^^^^
+324 |     ) -> Dict:
+325 |         return self.inject_fault_services(session_id, fault_type, target_id, params)
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:323:26
+    |
+321 |         fault_type: str,
+322 |         target_id: str,
+323 |         params: Optional[Dict] = None,
+    |                          ^^^^
+324 |     ) -> Dict:
+325 |         return self.inject_fault_services(session_id, fault_type, target_id, params)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:324:10
+    |
+322 |         target_id: str,
+323 |         params: Optional[Dict] = None,
+324 |     ) -> Dict:
+    |          ^^^^
+325 |         return self.inject_fault_services(session_id, fault_type, target_id, params)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:333:47
+    |
+331 |         return self.clear_all_faults_services(session_id)
+332 |
+333 |     def list_faults(self, session_id: str) -> List[Dict]:
+    |                                               ^^^^
+334 |         return self.list_faults_services(session_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:333:52
+    |
+331 |         return self.clear_all_faults_services(session_id)
+332 |
+333 |     def list_faults(self, session_id: str) -> List[Dict]:
+    |                                                    ^^^^
+334 |         return self.list_faults_services(session_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:336:49
+    |
+334 |         return self.list_faults_services(session_id)
+335 |
+336 |     def add_event(self, session_id: str, event: Dict) -> Dict:
+    |                                                 ^^^^
+337 |         return self.add_event_services(session_id, event)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:336:58
+    |
+334 |         return self.list_faults_services(session_id)
+335 |
+336 |     def add_event(self, session_id: str, event: Dict) -> Dict:
+    |                                                          ^^^^
+337 |         return self.add_event_services(session_id, event)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:339:69
+    |
+337 |         return self.add_event_services(session_id, event)
+338 |
+339 |     def update_event(self, session_id: str, event_id: str, updates: Dict) -> Dict:
+    |                                                                     ^^^^
+340 |         return self.update_event_services(session_id, event_id, updates)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:339:78
+    |
+337 |         return self.add_event_services(session_id, event)
+338 |
+339 |     def update_event(self, session_id: str, event_id: str, updates: Dict) -> Dict:
+    |                                                                              ^^^^
+340 |         return self.update_event_services(session_id, event_id, updates)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:342:64
+    |
+340 |         return self.update_event_services(session_id, event_id, updates)
+341 |
+342 |     def trigger_event(self, session_id: str, event_id: str) -> Dict:
+    |                                                                ^^^^
+343 |         return self.trigger_event_services(session_id, event_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:351:47
+    |
+349 |         return self.remove_event_services(session_id, event_id)
+350 |
+351 |     def list_events(self, session_id: str) -> List[Dict]:
+    |                                               ^^^^
+352 |         return self.list_events_services(session_id)
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:351:52
+    |
+349 |         return self.remove_event_services(session_id, event_id)
+350 |
+351 |     def list_events(self, session_id: str) -> List[Dict]:
+    |                                                    ^^^^
+352 |         return self.list_events_services(session_id)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:354:48
+    |
+352 |         return self.list_events_services(session_id)
+353 |
+354 |     def validate_topology(self, topology_data: Dict) -> Dict:
+    |                                                ^^^^
+355 |         return self.validate_topology_services(topology_data)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:354:57
+    |
+352 |         return self.list_events_services(session_id)
+353 |
+354 |     def validate_topology(self, topology_data: Dict) -> Dict:
+    |                                                         ^^^^
+355 |         return self.validate_topology_services(topology_data)
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:364:47
+    |
+363 |     @staticmethod
+364 |     def _compute_push_limits(speed: float) -> Dict[str, int]:
+    |                                               ^^^^
+365 |         """Compute per-tick payload limits based on simulation speed."""
+366 |         clamped = max(0.5, min(speed or 1.0, 4.0))
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:382:16
+    |
+380 |         owner_acquired: bool,
+381 |         engine_present: bool,
+382 |         state: Optional[str],
+    |                ^^^^^^^^^^^^^
+383 |     ) -> bool:
+384 |         """Select local engine stream only for active owner worker."""
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:388:31
+    |
+387 |     @staticmethod
+388 |     def _trim_to_limit(items: List[Dict], limit: int) -> List[Dict]:
+    |                               ^^^^
+389 |         """Keep latest events only to bound memory and shared-stream pressure."""
+390 |         if limit <= 0 or not items:
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:388:36
+    |
+387 |     @staticmethod
+388 |     def _trim_to_limit(items: List[Dict], limit: int) -> List[Dict]:
+    |                                    ^^^^
+389 |         """Keep latest events only to bound memory and shared-stream pressure."""
+390 |         if limit <= 0 or not items:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:388:58
+    |
+387 |     @staticmethod
+388 |     def _trim_to_limit(items: List[Dict], limit: int) -> List[Dict]:
+    |                                                          ^^^^
+389 |         """Keep latest events only to bound memory and shared-stream pressure."""
+390 |         if limit <= 0 or not items:
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:388:63
+    |
+387 |     @staticmethod
+388 |     def _trim_to_limit(items: List[Dict], limit: int) -> List[Dict]:
+    |                                                               ^^^^
+389 |         """Keep latest events only to bound memory and shared-stream pressure."""
+390 |         if limit <= 0 or not items:
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:395:41
+    |
+394 |     @staticmethod
+395 |     def _build_animation_event(message: Dict) -> Optional[Dict]:
+    |                                         ^^^^
+396 |         """根据报文构建动画事件。"""
+397 |         protocol_type = message.get('protocolType') or message.get('protocol_type', 'LAN')
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:395:50
+    |
+394 |     @staticmethod
+395 |     def _build_animation_event(message: Dict) -> Optional[Dict]:
+    |                                                  ^^^^^^^^^^^^^^
+396 |         """根据报文构建动画事件。"""
+397 |         protocol_type = message.get('protocolType') or message.get('protocol_type', 'LAN')
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:395:59
+    |
+394 |     @staticmethod
+395 |     def _build_animation_event(message: Dict) -> Optional[Dict]:
+    |                                                           ^^^^
+396 |         """根据报文构建动画事件。"""
+397 |         protocol_type = message.get('protocolType') or message.get('protocol_type', 'LAN')
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:423:39
+    |
+422 |     @staticmethod
+423 |     def _build_error_animation(alarm: Dict) -> Optional[Dict]:
+    |                                       ^^^^
+424 |         """根据告警构建错误动画事件。"""
+425 |         alarm_type = alarm.get('alarmType') or alarm.get('alarm_type')
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:423:48
+    |
+422 |     @staticmethod
+423 |     def _build_error_animation(alarm: Dict) -> Optional[Dict]:
+    |                                                ^^^^^^^^^^^^^^
+424 |         """根据告警构建错误动画事件。"""
+425 |         alarm_type = alarm.get('alarmType') or alarm.get('alarm_type')
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:423:57
+    |
+422 |     @staticmethod
+423 |     def _build_error_animation(alarm: Dict) -> Optional[Dict]:
+    |                                                         ^^^^
+424 |         """根据告警构建错误动画事件。"""
+425 |         alarm_type = alarm.get('alarmType') or alarm.get('alarm_type')
+    |
+help: Replace with `dict`
+
+PLR0912 Too many branches (24 > 12)
+   --> module_admin/service/simulation_service.py:442:15
+    |
+440 |         return None
+441 |
+442 |     async def stream_session_updates(
+    |               ^^^^^^^^^^^^^^^^^^^^^^
+443 |         self,
+444 |         session_id: str,
+    |
+
+PLR0915 Too many statements (102 > 50)
+   --> module_admin/service/simulation_service.py:442:15
+    |
+440 |         return None
+441 |
+442 |     async def stream_session_updates(
+    |               ^^^^^^^^^^^^^^^^^^^^^^
+443 |         self,
+444 |         session_id: str,
+    |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:447:35
+    |
+445 |         *,
+446 |         has_connections: Callable[[str], Awaitable[bool]],
+447 |         broadcast: Callable[[str, Dict], Awaitable[None]],
+    |                                   ^^^^
+448 |         worker_id: str,
+449 |         owner_ttl_seconds: int = 10,
+    |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+   --> module_admin/service/simulation_service.py:454:11
+    |
+452 |         会话级实时推送主循环。
+453 |
+454 |         说明：
+    |             ^^
+455 |         - 统一 owner 协调、增量采集、共享流回放与节流广播逻辑。
+456 |         - Controller 仅负责连接管理与鉴权。
+    |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:459:26
+    |
+457 |         """
+458 |         last_push_time = time.time()
+459 |         buffer_messages: List[Dict] = []
+    |                          ^^^^
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:459:31
+    |
+457 |         """
+458 |         last_push_time = time.time()
+459 |         buffer_messages: List[Dict] = []
+    |                               ^^^^
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:460:27
+    |
+458 |         last_push_time = time.time()
+459 |         buffer_messages: List[Dict] = []
+460 |         buffer_bandwidth: List[Dict] = []
+    |                           ^^^^
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:460:32
+    |
+458 |         last_push_time = time.time()
+459 |         buffer_messages: List[Dict] = []
+460 |         buffer_bandwidth: List[Dict] = []
+    |                                ^^^^
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:461:24
+    |
+459 |         buffer_messages: List[Dict] = []
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+    |                        ^^^^
+462 |         buffer_animations: List[Dict] = []
+463 |         buffer_faults: List[Dict] = []
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:461:29
+    |
+459 |         buffer_messages: List[Dict] = []
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+    |                             ^^^^
+462 |         buffer_animations: List[Dict] = []
+463 |         buffer_faults: List[Dict] = []
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:462:28
+    |
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+    |                            ^^^^
+463 |         buffer_faults: List[Dict] = []
+464 |         local_fault_offset = 0
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:462:33
+    |
+460 |         buffer_bandwidth: List[Dict] = []
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+    |                                 ^^^^
+463 |         buffer_faults: List[Dict] = []
+464 |         local_fault_offset = 0
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+   --> module_admin/service/simulation_service.py:463:24
+    |
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+463 |         buffer_faults: List[Dict] = []
+    |                        ^^^^
+464 |         local_fault_offset = 0
+    |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:463:29
+    |
+461 |         buffer_alarms: List[Dict] = []
+462 |         buffer_animations: List[Dict] = []
+463 |         buffer_faults: List[Dict] = []
+    |                             ^^^^
+464 |         local_fault_offset = 0
+    |
+help: Replace with `dict`
+
+SIM118 [*] Use `key in dict` instead of `key in dict.keys()`
+   --> module_admin/service/simulation_service.py:479:17
+    |
+477 |             if shared_offsets_initialized:
+478 |                 return
+479 |             for stream in shared_offsets.keys():
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+480 |                 shared_offsets[stream] = await self.get_runtime_stream_size(session_id, stream)
+481 |             shared_offsets_initialized = True
+    |
+help: Remove `.keys()`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:483:47
+    |
+481 |             shared_offsets_initialized = True
+482 |
+483 |         async def collect_from_engine(limits: Dict[str, int]):
+    |                                               ^^^^
+484 |             nonlocal local_fault_offset
+485 |             new_messages = self.get_new_messages(session_id, limit=limits['messages'])
+    |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:507:47
+    |
+505 |             return new_messages, new_bandwidth, new_alarms, new_fault_events
+506 |
+507 |         async def collect_from_shared(limits: Dict[str, int]):
+    |                                               ^^^^
+508 |             await initialize_shared_offsets_if_needed()
+509 |             messages, shared_offsets['messages'] = await self.get_runtime_events_since(
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:668:17
+    |
+666 |         session_id: str,
+667 |         *,
+668 |         status: Optional[str] = None,
+    |                 ^^^^^^^^^^^^^
+669 |         engine: Optional[SimulationEngine] = None,
+670 |         config: Optional[Dict] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:669:17
+    |
+667 |         *,
+668 |         status: Optional[str] = None,
+669 |         engine: Optional[SimulationEngine] = None,
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
+670 |         config: Optional[Dict] = None,
+671 |         message: Optional[str] = None,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:670:17
+    |
+668 |         status: Optional[str] = None,
+669 |         engine: Optional[SimulationEngine] = None,
+670 |         config: Optional[Dict] = None,
+    |                 ^^^^^^^^^^^^^^
+671 |         message: Optional[str] = None,
+672 |         user_message: Optional[str] = None,
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:670:26
+    |
+668 |         status: Optional[str] = None,
+669 |         engine: Optional[SimulationEngine] = None,
+670 |         config: Optional[Dict] = None,
+    |                          ^^^^
+671 |         message: Optional[str] = None,
+672 |         user_message: Optional[str] = None,
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:671:18
+    |
+669 |         engine: Optional[SimulationEngine] = None,
+670 |         config: Optional[Dict] = None,
+671 |         message: Optional[str] = None,
+    |                  ^^^^^^^^^^^^^
+672 |         user_message: Optional[str] = None,
+673 |         force: bool = False,
+    |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:672:23
+    |
+670 |         config: Optional[Dict] = None,
+671 |         message: Optional[str] = None,
+672 |         user_message: Optional[str] = None,
+    |                       ^^^^^^^^^^^^^
+673 |         force: bool = False,
+674 |     ) -> None:
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:713:76
+    |
+711 |             self._snapshot_status[session_id] = current_status
+712 |
+713 |     async def get_shared_session_status_services(self, session_id: str) -> Dict:
+    |                                                                            ^^^^
+714 |         """
+715 |         Get session status with Redis-backed fallback for multi-worker visibility.
+    |
+help: Replace with `dict`
+
+UP045 [*] Use `X | None` for type annotations
+   --> module_admin/service/simulation_service.py:741:19
+    |
+739 |         query_db: AsyncSession,
+740 |         request: CreateSimulationSessionModel,
+741 |         operator: Optional[str] = None,
+    |                   ^^^^^^^^^^^^^
+742 |     ) -> Dict:
+743 |         """
+    |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:742:10
+    |
+740 |         request: CreateSimulationSessionModel,
+741 |         operator: Optional[str] = None,
+742 |     ) -> Dict:
+    |          ^^^^
+743 |         """
+744 |         创建仿真会话
+    |
+help: Replace with `dict`
+
+RUF003 Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+   --> module_admin/service/simulation_service.py:775:23
+    |
+773 |             await session_repo.add(db_session)
+774 |
+775 |             # 创建仿真引擎实例（传递全局策略配置）
+    |                               ^^
+776 |             engine = SimulationEngine(
+777 |                 session_id,
+    |
+
+RUF003 Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+   --> module_admin/service/simulation_service.py:775:32
+    |
+773 |             await session_repo.add(db_session)
+774 |
+775 |             # 创建仿真引擎实例（传递全局策略配置）
+    |                                                 ^^
+776 |             engine = SimulationEngine(
+777 |                 session_id,
+    |
+
+PLC0415 `import` should be at the top-level of a file
+   --> module_admin/service/simulation_service.py:808:13
+    |
+806 |             raise e
+807 |         except Exception as e:
+808 |             import traceback
+    |             ^^^^^^^^^^^^^^^^
+809 |
+810 |             error_detail = traceback.format_exc()
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> module_admin/service/simulation_service.py:815:17
+    |
+813 |               error_msg = str(e)
+814 |               if "doesn't exist" in error_msg or 'no such table' in error_msg.lower():
+815 | /                 raise SystemException(
+816 | |                     error_code=ErrorCode.SYSTEM_ERROR,
+817 | |                     user_message='仿真数据表不存在，请先执行 sql/simulation.sql 创建数据库表',
+818 | |                 )
+    | |_________________^
+819 |               raise SystemException(
+820 |                   error_code=ErrorCode.SYSTEM_ERROR, user_message=f'创建仿真会话失败: {error_msg}\n{error_detail}'
+    |
+
+RUF001 String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:817:43
+    |
+815 |                 raise SystemException(
+816 |                     error_code=ErrorCode.SYSTEM_ERROR,
+817 |                     user_message='仿真数据表不存在，请先执行 sql/simulation.sql 创建数据库表',
+    |                                                   ^^
+818 |                 )
+819 |             raise SystemException(
+    |
+
+B904 Within an `except` clause, raise exceptions with `raise ... from err` or `raise ... from None` to distinguish them from errors in exception handling
+   --> module_admin/service/simulation_service.py:819:13
+    |
+817 |                       user_message='仿真数据表不存在，请先执行 sql/simulation.sql 创建数据库表',
+818 |                   )
+819 | /             raise SystemException(
+820 | |                 error_code=ErrorCode.SYSTEM_ERROR, user_message=f'创建仿真会话失败: {error_msg}\n{error_detail}'
+821 | |             )
+    | |_____________^
+822 |
+823 |       @transactional()
+    |
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+   --> module_admin/service/simulation_service.py:859:15
+    |
+857 |     async def _rebuild_engine(self, query_db: AsyncSession, session_id: str) -> SimulationEngine:
+858 |         """
+859 |         当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
+    |                     ^^
+860 |         """
+861 |         session_repo: ISimulationSessionRepository = SimulationSessionRepository(query_db)
+    |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+   --> module_admin/service/simulation_service.py:859:23
+    |
+857 |     async def _rebuild_engine(self, query_db: AsyncSession, session_id: str) -> SimulationEngine:
+858 |         """
+859 |         当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
+    |                                     ^^
+860 |         """
+861 |         session_repo: ISimulationSessionRepository = SimulationSessionRepository(query_db)
+    |
+
+RUF002 Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:859:25
+    |
+857 |     async def _rebuild_engine(self, query_db: AsyncSession, session_id: str) -> SimulationEngine:
+858 |         """
+859 |         当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
+    |                                         ^^
+860 |         """
+861 |         session_repo: ISimulationSessionRepository = SimulationSessionRepository(query_db)
+    |
+
+RUF002 Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:859:39
+    |
+857 |     async def _rebuild_engine(self, query_db: AsyncSession, session_id: str) -> SimulationEngine:
+858 |         """
+859 |         当引擎不存在（如停止后被清理）时，基于会话记录与拓扑重建引擎，支持再次启动
+    |                                                                     ^^
+860 |         """
+861 |         session_repo: ISimulationSessionRepository = SimulationSessionRepository(query_db)
+    |
+
+RUF001 String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:879:75
+    |
+877 | …     if not cached:
+878 | …         raise ValidationException(
+879 | …             error_code=ErrorCode.INVALID_INPUT, user_message='仿真会话配置缺失，无法重建引擎，请重新创建会话'
+    |                                                                                 ^^
+880 | …         )
+    |
+
+RUF001 String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:879:82
+    |
+877 | …     if not cached:
+878 | …         raise ValidationException(
+879 | …             error_code=ErrorCode.INVALID_INPUT, user_message='仿真会话配置缺失，无法重建引擎，请重新创建会话'
+    |                                                                                               ^^
+880 | …         )
+    |
+
+RUF001 String contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:891:38
+    |
+889 |             raise ResourceNotFoundException(
+890 |                 error_code=ErrorCode.RESOURCE_NOT_FOUND,
+891 |                 user_message='拓扑数据不存在，无法重建仿真会话',
+    |                                             ^^
+892 |             ) from exc
+    |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+   --> module_admin/service/simulation_service.py:975:63
+    |
+973 |             await alarm_repo.batch_create(alarm_dos)
+974 |
+975 |     def get_session_status_services(self, session_id: str) -> Dict:
+    |                                                               ^^^^
+976 |         """
+977 |         获取仿真会话状态
+    |
+help: Replace with `dict`
+
+RUF003 Comment contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:987:28
+    |
+985 |         engine = self._active_engines.get(session_id)
+986 |         if not engine:
+987 |             # 若引擎不存在但会话记录仍在，返回已停止状态，便于WS保持
+    |                                         ^^
+988 |             cached = self._session_configs.get(session_id)
+989 |             if cached:
+    |
+
+RUF003 Comment contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+   --> module_admin/service/simulation_service.py:987:36
+    |
+985 |         engine = self._active_engines.get(session_id)
+986 |         if not engine:
+987 |             # 若引擎不存在但会话记录仍在，返回已停止状态，便于WS保持
+    |                                                         ^^
+988 |             cached = self._session_configs.get(session_id)
+989 |             if cached:
+    |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1015:84
+     |
+1013 |         return CamelCaseUtil.transform_result(status)
+1014 |
+1015 |     def get_realtime_messages_services(self, session_id: str, limit: int = 100) -> List[Dict]:
+     |                                                                                    ^^^^
+1016 |         """
+1017 |         获取实时报文数据（全量）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1015:89
+     |
+1013 |         return CamelCaseUtil.transform_result(status)
+1014 |
+1015 |     def get_realtime_messages_services(self, session_id: str, limit: int = 100) -> List[Dict]:
+     |                                                                                         ^^^^
+1016 |         """
+1017 |         获取实时报文数据（全量）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1017:17
+     |
+1015 |     def get_realtime_messages_services(self, session_id: str, limit: int = 100) -> List[Dict]:
+1016 |         """
+1017 |         获取实时报文数据（全量）
+     |                         ^^
+1018 |
+1019 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1017:20
+     |
+1015 |     def get_realtime_messages_services(self, session_id: str, limit: int = 100) -> List[Dict]:
+1016 |         """
+1017 |         获取实时报文数据（全量）
+     |                               ^^
+1018 |
+1019 |         参数:
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1035:78
+     |
+1033 |         return [CamelCaseUtil.transform_result(msg) for msg in messages]
+1034 |
+1035 |     def get_new_messages_services(self, session_id: str, limit: int = 20) -> List[Dict]:
+     |                                                                              ^^^^
+1036 |         """
+1037 |         获取增量报文数据（仅返回未推送过的新数据）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1035:83
+     |
+1033 |         return [CamelCaseUtil.transform_result(msg) for msg in messages]
+1034 |
+1035 |     def get_new_messages_services(self, session_id: str, limit: int = 20) -> List[Dict]:
+     |                                                                                   ^^^^
+1036 |         """
+1037 |         获取增量报文数据（仅返回未推送过的新数据）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1037:17
+     |
+1035 |     def get_new_messages_services(self, session_id: str, limit: int = 20) -> List[Dict]:
+1036 |         """
+1037 |         获取增量报文数据（仅返回未推送过的新数据）
+     |                         ^^
+1038 |
+1039 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1037:29
+     |
+1035 |     def get_new_messages_services(self, session_id: str, limit: int = 20) -> List[Dict]:
+1036 |         """
+1037 |         获取增量报文数据（仅返回未推送过的新数据）
+     |                                                 ^^
+1038 |
+1039 |         参数:
+     |
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1053:73
+     |
+1051 |         return [CamelCaseUtil.transform_result(msg) for msg in messages]
+1052 |
+1053 |     def get_realtime_bandwidth_services(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+     |                                                                         ^^^^^^^^^^^^^
+1054 |         """
+1055 |         获取实时带宽数据（全量）
+     |
+help: Convert to `X | None`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1053:98
+     |
+1051 |         return [CamelCaseUtil.transform_result(msg) for msg in messages]
+1052 |
+1053 |     def get_realtime_bandwidth_services(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+     |                                                                                                  ^^^^
+1054 |         """
+1055 |         获取实时带宽数据（全量）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1053:103
+     |
+1051 |         return [CamelCaseUtil.transform_result(msg) for msg in messages]
+1052 |
+1053 |     def get_realtime_bandwidth_services(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+     |                                                                                                       ^^^^
+1054 |         """
+1055 |         获取实时带宽数据（全量）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1055:17
+     |
+1053 |     def get_realtime_bandwidth_services(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+1054 |         """
+1055 |         获取实时带宽数据（全量）
+     |                         ^^
+1056 |
+1057 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1055:20
+     |
+1053 |     def get_realtime_bandwidth_services(self, session_id: str, port_id: Optional[str] = None) -> List[Dict]:
+1054 |         """
+1055 |         获取实时带宽数据（全量）
+     |                               ^^
+1056 |
+1057 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1059:26
+     |
+1057 |         参数:
+1058 |             session_id: 会话ID
+1059 |             port_id: 端口ID（可选）
+     |                            ^^
+1060 |
+1061 |         返回:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1059:29
+     |
+1057 |         参数:
+1058 |             session_id: 会话ID
+1059 |             port_id: 端口ID（可选）
+     |                                  ^^
+1060 |
+1061 |         返回:
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1071:62
+     |
+1069 |         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
+1070 |
+1071 |     def get_new_bandwidth_services(self, session_id: str) -> List[Dict]:
+     |                                                              ^^^^
+1072 |         """
+1073 |         获取增量带宽数据（仅返回未推送过的新数据）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1071:67
+     |
+1069 |         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
+1070 |
+1071 |     def get_new_bandwidth_services(self, session_id: str) -> List[Dict]:
+     |                                                                   ^^^^
+1072 |         """
+1073 |         获取增量带宽数据（仅返回未推送过的新数据）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1073:17
+     |
+1071 |     def get_new_bandwidth_services(self, session_id: str) -> List[Dict]:
+1072 |         """
+1073 |         获取增量带宽数据（仅返回未推送过的新数据）
+     |                         ^^
+1074 |
+1075 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1073:29
+     |
+1071 |     def get_new_bandwidth_services(self, session_id: str) -> List[Dict]:
+1072 |         """
+1073 |         获取增量带宽数据（仅返回未推送过的新数据）
+     |                                                 ^^
+1074 |
+1075 |         参数:
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1088:64
+     |
+1086 |         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
+1087 |
+1088 |     def get_realtime_alarms_services(self, session_id: str) -> List[Dict]:
+     |                                                                ^^^^
+1089 |         """
+1090 |         获取实时告警数据（全量）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1088:69
+     |
+1086 |         return [CamelCaseUtil.transform_result(bw) for bw in bandwidth_data]
+1087 |
+1088 |     def get_realtime_alarms_services(self, session_id: str) -> List[Dict]:
+     |                                                                     ^^^^
+1089 |         """
+1090 |         获取实时告警数据（全量）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1090:17
+     |
+1088 |     def get_realtime_alarms_services(self, session_id: str) -> List[Dict]:
+1089 |         """
+1090 |         获取实时告警数据（全量）
+     |                         ^^
+1091 |
+1092 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1090:20
+     |
+1088 |     def get_realtime_alarms_services(self, session_id: str) -> List[Dict]:
+1089 |         """
+1090 |         获取实时告警数据（全量）
+     |                               ^^
+1091 |
+1092 |         参数:
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1105:59
+     |
+1103 |         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+1104 |
+1105 |     def get_new_alarms_services(self, session_id: str) -> List[Dict]:
+     |                                                           ^^^^
+1106 |         """
+1107 |         获取增量告警数据（仅返回未推送过的新数据）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1105:64
+     |
+1103 |         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+1104 |
+1105 |     def get_new_alarms_services(self, session_id: str) -> List[Dict]:
+     |                                                                ^^^^
+1106 |         """
+1107 |         获取增量告警数据（仅返回未推送过的新数据）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1107:17
+     |
+1105 |     def get_new_alarms_services(self, session_id: str) -> List[Dict]:
+1106 |         """
+1107 |         获取增量告警数据（仅返回未推送过的新数据）
+     |                         ^^
+1108 |
+1109 |         参数:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1107:29
+     |
+1105 |     def get_new_alarms_services(self, session_id: str) -> List[Dict]:
+1106 |         """
+1107 |         获取增量告警数据（仅返回未推送过的新数据）
+     |                                                 ^^
+1108 |
+1109 |         参数:
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1122:88
+     |
+1120 |         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+1121 |
+1122 |     def get_new_fault_events_services(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+     |                                                                                        ^^^^
+1123 |         """
+1124 |         获取增量故障事件（创建/激活/过期/清除）
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1122:93
+     |
+1120 |         return [CamelCaseUtil.transform_result(alarm) for alarm in alarms]
+1121 |
+1122 |     def get_new_fault_events_services(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+     |                                                                                             ^^^^
+1123 |         """
+1124 |         获取增量故障事件（创建/激活/过期/清除）
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1124:17
+     |
+1122 |     def get_new_fault_events_services(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+1123 |         """
+1124 |         获取增量故障事件（创建/激活/过期/清除）
+     |                         ^^
+1125 |         """
+1126 |         engine = self._active_engines.get(session_id)
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1124:29
+     |
+1122 |     def get_new_fault_events_services(self, session_id: str, offset: int = 0) -> tuple[List[Dict], int]:
+1123 |         """
+1124 |         获取增量故障事件（创建/激活/过期/清除）
+     |                                              ^^
+1125 |         """
+1126 |         engine = self._active_engines.get(session_id)
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1133:90
+     |
+1131 |         return [CamelCaseUtil.transform_result(evt) for evt in events], new_offset
+1132 |
+1133 |     async def append_runtime_events_services(self, session_id: str, stream: str, events: List[Dict]) -> None:
+     |                                                                                          ^^^^
+1134 |         """Append runtime events into shared store."""
+1135 |         if not events:
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1133:95
+     |
+1131 |         return [CamelCaseUtil.transform_result(evt) for evt in events], new_offset
+1132 |
+1133 |     async def append_runtime_events_services(self, session_id: str, stream: str, events: List[Dict]) -> None:
+     |                                                                                               ^^^^
+1134 |         """Append runtime events into shared store."""
+1135 |         if not events:
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1145:16
+     |
+1143 |         offset: int,
+1144 |         limit: int,
+1145 |     ) -> tuple[List[Dict], int]:
+     |                ^^^^
+1146 |         """Read shared runtime events from offset."""
+1147 |         store = get_simulation_runtime_state_store()
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1145:21
+     |
+1143 |         offset: int,
+1144 |         limit: int,
+1145 |     ) -> tuple[List[Dict], int]:
+     |                     ^^^^
+1146 |         """Read shared runtime events from offset."""
+1147 |         store = get_simulation_runtime_state_store()
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1154:10
+     |
+1152 |         stream: str,
+1153 |         limit: int,
+1154 |     ) -> List[Dict]:
+     |          ^^^^
+1155 |         """Read latest shared runtime events."""
+1156 |         store = get_simulation_runtime_state_store()
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1154:15
+     |
+1152 |         stream: str,
+1153 |         limit: int,
+1154 |     ) -> List[Dict]:
+     |               ^^^^
+1155 |         """Read latest shared runtime events."""
+1156 |         store = get_simulation_runtime_state_store()
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1175:110
+     |
+1173 |         await store.release_session_producer_owner(session_id, worker_id)
+1174 |
+1175 |     async def get_historical_messages_services(self, query_db: AsyncSession, query: SimulationQueryModel) -> List[Dict]:
+     |                                                                                                              ^^^^
+1176 |         """
+1177 |         获取历史报文数据
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1175:115
+     |
+1173 |         await store.release_session_producer_owner(session_id, worker_id)
+1174 |
+1175 |     async def get_historical_messages_services(self, query_db: AsyncSession, query: SimulationQueryModel) -> List[Dict]:
+     |                                                                                                                   ^^^^
+1176 |         """
+1177 |         获取历史报文数据
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1191:10
+     |
+1190 |     async def export_simulation_data_services(self, query_db: AsyncSession, export_request: SimulationExportModel
+1191 |     ) -> Dict:
+     |          ^^^^
+1192 |         """
+1193 |         导出仿真数据
+     |
+help: Replace with `dict`
+
+RUF003 Comment contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1227:22
+     |
+1225 |             return {'format': 'json', 'data': result_data}
+1226 |         elif export_format == 'csv':
+1227 |             # CSV格式转换（简化实现）
+     |                          ^^
+1228 |             return {'format': 'csv', 'data': result_data, 'message': 'CSV导出功能待实现'}
+1229 |         else:
+     |
+
+RUF003 Comment contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1227:27
+     |
+1225 |             return {'format': 'json', 'data': result_data}
+1226 |         elif export_format == 'csv':
+1227 |             # CSV格式转换（简化实现）
+     |                                    ^^
+1228 |             return {'format': 'csv', 'data': result_data, 'message': 'CSV导出功能待实现'}
+1229 |         else:
+     |
+
+RUF003 Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+    --> module_admin/service/simulation_service.py:1236:30
+     |
+1234 |             )
+1235 |
+1236 |     # ==================== 新增：仿真控制增强 ====================
+     |                                ^^
+1237 |
+1238 |     @transactional()
+     |
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1310:22
+     |
+1308 |         参数:
+1309 |             session_id: 会话ID
+1310 |             speed: 速度（0.5-4.0）
+     |                        ^^
+1311 |
+1312 |         返回:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1310:30
+     |
+1308 |         参数:
+1309 |             session_id: 会话ID
+1310 |             speed: 速度（0.5-4.0）
+     |                                 ^^
+1311 |
+1312 |         返回:
+     |
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1364:70
+     |
+1362 |         return CrudResponseModel(is_success=True, message='单步执行完成')
+1363 |
+1364 |     async def set_duration_services(self, session_id: str, duration: Optional[float]) -> CrudResponseModel:
+     |                                                                      ^^^^^^^^^^^^^^^
+1365 |         """
+1366 |         设置仿真时长
+     |
+help: Convert to `X | None`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1370:25
+     |
+1368 |         参数:
+1369 |             session_id: 会话ID
+1370 |             duration: 时长（秒），None 表示无限制
+     |                           ^^
+1371 |
+1372 |         返回:
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1370:27
+     |
+1368 |         参数:
+1369 |             session_id: 会话ID
+1370 |             duration: 时长（秒），None 表示无限制
+     |                               ^^
+1371 |
+1372 |         返回:
+     |
+
+RUF002 Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+    --> module_admin/service/simulation_service.py:1370:28
+     |
+1368 |         参数:
+1369 |             session_id: 会话ID
+1370 |             duration: 时长（秒），None 表示无限制
+     |                                 ^^
+1371 |
+1372 |         返回:
+     |
+
+RUF003 Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+    --> module_admin/service/simulation_service.py:1394:30
+     |
+1392 |         return CrudResponseModel(is_success=True, message=msg)
+1393 |
+1394 |     # ==================== 新增：故障注入 ====================
+     |                                ^^
+1395 |
+1396 |     def build_fault_injection_request_services(self,
+     |
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1398:21
+     |
+1396 |     def build_fault_injection_request_services(self,
+1397 |         *,
+1398 |         session_id: Optional[str] = None,
+     |                     ^^^^^^^^^^^^^
+1399 |         fault_type: Optional[str] = None,
+1400 |         target_id: Optional[str] = None,
+     |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1399:21
+     |
+1397 |         *,
+1398 |         session_id: Optional[str] = None,
+1399 |         fault_type: Optional[str] = None,
+     |                     ^^^^^^^^^^^^^
+1400 |         target_id: Optional[str] = None,
+1401 |         payload: Optional[Dict] = None,
+     |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1400:20
+     |
+1398 |         session_id: Optional[str] = None,
+1399 |         fault_type: Optional[str] = None,
+1400 |         target_id: Optional[str] = None,
+     |                    ^^^^^^^^^^^^^
+1401 |         payload: Optional[Dict] = None,
+1402 |         require_session_id: bool = False,
+     |
+help: Convert to `X | None`
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1401:18
+     |
+1399 |         fault_type: Optional[str] = None,
+1400 |         target_id: Optional[str] = None,
+1401 |         payload: Optional[Dict] = None,
+     |                  ^^^^^^^^^^^^^^
+1402 |         require_session_id: bool = False,
+1403 |     ) -> Dict:
+     |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1401:27
+     |
+1399 |         fault_type: Optional[str] = None,
+1400 |         target_id: Optional[str] = None,
+1401 |         payload: Optional[Dict] = None,
+     |                           ^^^^
+1402 |         require_session_id: bool = False,
+1403 |     ) -> Dict:
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1403:10
+     |
+1401 |         payload: Optional[Dict] = None,
+1402 |         require_session_id: bool = False,
+1403 |     ) -> Dict:
+     |          ^^^^
+1404 |         """
+1405 |         统一故障注入请求解析，兼容 camelCase/snake_case。
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `，` (FULLWIDTH COMMA). Did you mean `,` (COMMA)?
+    --> module_admin/service/simulation_service.py:1405:19
+     |
+1403 |     ) -> Dict:
+1404 |         """
+1405 |         统一故障注入请求解析，兼容 camelCase/snake_case。
+     |                             ^^
+1406 |
+1407 |         返回:
+     |
+
+UP045 [*] Use `X | None` for type annotations
+    --> module_admin/service/simulation_service.py:1447:95
+     |
+1445 |         }
+1446 |
+1447 |     def inject_fault_services(self, session_id: str, fault_type: str, target_id: str, params: Optional[Dict] = None
+     |                                                                                               ^^^^^^^^^^^^^^
+1448 |     ) -> Dict:
+1449 |         """
+     |
+help: Convert to `X | None`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1447:104
+     |
+1445 |         }
+1446 |
+1447 |     def inject_fault_services(self, session_id: str, fault_type: str, target_id: str, params: Optional[Dict] = None
+     |                                                                                                        ^^^^
+1448 |     ) -> Dict:
+1449 |         """
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1448:10
+     |
+1447 |     def inject_fault_services(self, session_id: str, fault_type: str, target_id: str, params: Optional[Dict] = None
+1448 |     ) -> Dict:
+     |          ^^^^
+1449 |         """
+1450 |         注入故障
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1454:29
+     |
+1452 |         参数:
+1453 |             session_id: 会话ID
+1454 |             fault_type: 故障类型（disconnect, error_frame, device_failure, packet_loss, delay）
+     |                                 ^^
+1455 |             target_id: 目标ID（链路ID或节点ID）
+1456 |             params: 故障参数
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1454:89
+     |
+1452 |         参数:
+1453 |             session_id: 会话ID
+1454 |             fault_type: 故障类型（disconnect, error_frame, device_failure, packet_loss, delay）
+     |                                                                                              ^^
+1455 |             target_id: 目标ID（链路ID或节点ID）
+1456 |             params: 故障参数
+     |
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1455:28
+     |
+1453 |             session_id: 会话ID
+1454 |             fault_type: 故障类型（disconnect, error_frame, device_failure, packet_loss, delay）
+1455 |             target_id: 目标ID（链路ID或节点ID）
+     |                              ^^
+1456 |             params: 故障参数
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1455:38
+     |
+1453 |             session_id: 会话ID
+1454 |             fault_type: 故障类型（disconnect, error_frame, device_failure, packet_loss, delay）
+1455 |             target_id: 目标ID（链路ID或节点ID）
+     |                                              ^^
+1456 |             params: 故障参数
+     |
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1501:17
+     |
+1500 |         返回:
+1501 |             操作结果（包含清除数量）
+     |                     ^^
+1502 |         """
+1503 |         engine = self._active_engines.get(session_id)
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1501:24
+     |
+1500 |         返回:
+1501 |             操作结果（包含清除数量）
+     |                                   ^^
+1502 |         """
+1503 |         engine = self._active_engines.get(session_id)
+     |
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1517:56
+     |
+1515 |         return CrudResponseModel(is_success=True, message=f'已清除 {cleared_count} 个故障')
+1516 |
+1517 |     def list_faults_services(self, session_id: str) -> List[Dict]:
+     |                                                        ^^^^
+1518 |         """
+1519 |         获取故障列表
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1517:61
+     |
+1515 |         return CrudResponseModel(is_success=True, message=f'已清除 {cleared_count} 个故障')
+1516 |
+1517 |     def list_faults_services(self, session_id: str) -> List[Dict]:
+     |                                                             ^^^^
+1518 |         """
+1519 |         获取故障列表
+     |
+help: Replace with `dict`
+
+RUF003 Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+    --> module_admin/service/simulation_service.py:1534:30
+     |
+1532 |         return [CamelCaseUtil.transform_result(f) for f in faults]
+1533 |
+1534 |     # ==================== 新增：事件触发 ====================
+     |                                ^^
+1535 |
+1536 |     def add_event_services(self, session_id: str, event: Dict) -> Dict:
+     |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1536:58
+     |
+1534 |     # ==================== 新增：事件触发 ====================
+1535 |
+1536 |     def add_event_services(self, session_id: str, event: Dict) -> Dict:
+     |                                                          ^^^^
+1537 |         """
+1538 |         添加事件
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1536:67
+     |
+1534 |     # ==================== 新增：事件触发 ====================
+1535 |
+1536 |     def add_event_services(self, session_id: str, event: Dict) -> Dict:
+     |                                                                   ^^^^
+1537 |         """
+1538 |         添加事件
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1557:78
+     |
+1555 |         return CamelCaseUtil.transform_result(event_data)
+1556 |
+1557 |     def update_event_services(self, session_id: str, event_id: str, updates: Dict) -> Dict:
+     |                                                                              ^^^^
+1558 |         """
+1559 |         更新事件
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1557:87
+     |
+1555 |         return CamelCaseUtil.transform_result(event_data)
+1556 |
+1557 |     def update_event_services(self, session_id: str, event_id: str, updates: Dict) -> Dict:
+     |                                                                                       ^^^^
+1558 |         """
+1559 |         更新事件
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1580:73
+     |
+1578 |         return CamelCaseUtil.transform_result(event_data)
+1579 |
+1580 |     def trigger_event_services(self, session_id: str, event_id: str) -> Dict:
+     |                                                                         ^^^^
+1581 |         """
+1582 |         手动触发事件
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `list` instead of `List` for type annotation
+    --> module_admin/service/simulation_service.py:1651:56
+     |
+1649 |             raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='事件不存在')
+1650 |
+1651 |     def list_events_services(self, session_id: str) -> List[Dict]:
+     |                                                        ^^^^
+1652 |         """
+1653 |         获取事件列表
+     |
+help: Replace with `list`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1651:61
+     |
+1649 |             raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='事件不存在')
+1650 |
+1651 |     def list_events_services(self, session_id: str) -> List[Dict]:
+     |                                                             ^^^^
+1652 |         """
+1653 |         获取事件列表
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1676:53
+     |
+1674 |         """
+1675 |
+1676 |         def execute_action(session_id: str, action: Dict) -> Dict:
+     |                                                     ^^^^
+1677 |             """
+1678 |             执行事件动作
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1676:62
+     |
+1674 |         """
+1675 |
+1676 |         def execute_action(session_id: str, action: Dict) -> Dict:
+     |                                                              ^^^^
+1677 |             """
+1678 |             执行事件动作
+     |
+help: Replace with `dict`
+
+RUF002 Docstring contains ambiguous `（` (FULLWIDTH LEFT PARENTHESIS). Did you mean `(` (LEFT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1681:40
+     |
+1680 |             动作类型:
+1681 |                 - send_command: 发送指令/报文（A设备给B设备发指令）
+     |                                              ^^
+1682 |                 - send_message: 发送报文
+1683 |                 - inject_fault: 注入故障
+     |
+
+RUF002 Docstring contains ambiguous `）` (FULLWIDTH RIGHT PARENTHESIS). Did you mean `)` (RIGHT PARENTHESIS)?
+    --> module_admin/service/simulation_service.py:1681:51
+     |
+1680 |             动作类型:
+1681 |                 - send_command: 发送指令/报文（A设备给B设备发指令）
+     |                                                                  ^^
+1682 |                 - send_message: 发送报文
+1683 |                 - inject_fault: 注入故障
+     |
+
+PLC0415 `import` should be at the top-level of a file
+    --> module_admin/service/simulation_service.py:1687:13
+     |
+1685 |                 - log: 记录日志
+1686 |             """
+1687 |             import uuid
+     |             ^^^^^^^^^^^
+1688 |             from datetime import datetime
+     |
+
+PLC0415 `import` should be at the top-level of a file
+    --> module_admin/service/simulation_service.py:1688:13
+     |
+1686 |             """
+1687 |             import uuid
+1688 |             from datetime import datetime
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1689 |
+1690 |             from utils.log_util import logger
+     |
+
+PLC0415 `import` should be at the top-level of a file
+    --> module_admin/service/simulation_service.py:1690:13
+     |
+1688 |             from datetime import datetime
+1689 |
+1690 |             from utils.log_util import logger
+     |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1691 |
+1692 |             action_type = action.get('type')
+     |
+
+RUF003 Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+    --> module_admin/service/simulation_service.py:1697:26
+     |
+1696 |             if action_type in ('send_command', 'send_message'):
+1697 |                 # 发送指令/报文：A设备给B设备发送指令
+     |                                ^^
+1698 |                 source_node = params.get('sourceNodeId') or params.get('source_node_id')
+1699 |                 target_node = params.get('targetNodeId') or params.get('target_node_id')
+     |
+
+RUF003 Comment contains ambiguous `：` (FULLWIDTH COLON). Did you mean `:` (COLON)?
+    --> module_admin/service/simulation_service.py:1777:30
+     |
+1775 |         engine.event_service.set_action_executor(execute_action)
+1776 |
+1777 |     # ==================== 新增：拓扑验证 ====================
+     |                                ^^
+1778 |
+1779 |     def validate_topology_services(self, topology_data: Dict) -> Dict:
+     |
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1779:57
+     |
+1777 |     # ==================== 新增：拓扑验证 ====================
+1778 |
+1779 |     def validate_topology_services(self, topology_data: Dict) -> Dict:
+     |                                                         ^^^^
+1780 |         """
+1781 |         验证拓扑配置
+     |
+help: Replace with `dict`
+
+UP006 [*] Use `dict` instead of `Dict` for type annotation
+    --> module_admin/service/simulation_service.py:1779:66
+     |
+1777 |     # ==================== 新增：拓扑验证 ====================
+1778 |
+1779 |     def validate_topology_services(self, topology_data: Dict) -> Dict:
+     |                                                                  ^^^^
+1780 |         """
+1781 |         验证拓扑配置
+     |
+help: Replace with `dict`
+
+PLC0415 `import` should be at the top-level of a file
+    --> module_admin/service/simulation_service.py:1789:9
+     |
+1787 |             验证结果
+1788 |         """
+1789 |         from module_admin.service.alarm_detector import AlarmDetector
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1790 |
+1791 |         alarms = AlarmDetector.validate_topology(topology_data)
+     |
+
+Found 228 errors.
+[*] 155 fixable with the `--fix` option (1 hidden fix can be enabled with the `--unsafe-fixes` option).
+  [FAIL] Ruff lint failed
+
+==> Ruff Format
+Would reformat: module_admin/service/simulation_service.py
+1 file would be reformatted, 13 files already formatted
+  [FAIL] Ruff format check failed
+
+==> Mypy
+  [WARN] Mypy skipped
+
+==> Pytest
+  [WARN] Pytest skipped
+
+==> Guardrails
+  [OK] No new eval/exec usage
+  [OK] No new print() usage
+  [OK] No new direct SQL execution in controllers
+  [OK] No new broad exception blocks
+
+Validation failed with 2 error(s).

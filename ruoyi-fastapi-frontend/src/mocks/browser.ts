@@ -63,7 +63,6 @@ if (import.meta.hot) {
       const handlers =
         window.__MSW_RUNTIME_HANDLERS__ ?? createScenarioHandlers(strategy, scenario);
       worker.resetHandlers(...handlers);
-      console.log('[MSW] Handlers 已热更新');
     }
   });
 }

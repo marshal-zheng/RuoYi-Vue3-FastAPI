@@ -155,7 +155,7 @@ function handleExceed() {
 }
 
 // 上传成功回调
-function handleUploadSuccess(res, file) {
+function handleUploadSuccess(res) {
   // HTTP 2xx 已由拦截器判定，直接处理成功响应
   uploadList.value.push({ name: res.fileName, url: res.fileName });
   uploadedSuccessfully();

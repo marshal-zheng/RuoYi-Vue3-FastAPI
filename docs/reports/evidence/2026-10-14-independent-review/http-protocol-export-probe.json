@@ -1,0 +1,33 @@
+{
+  "jsonBody": {
+    "status": 422,
+    "body": {
+      "detail": [
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "protocolId"
+          ],
+          "msg": "Field required",
+          "input": null
+        }
+      ]
+    }
+  },
+  "formBody": {
+    "status": 200,
+    "contentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bodyHex": "504b030476616c69642d74657374"
+  },
+  "serviceCalls": [
+    [
+      [
+        7
+      ],
+      {}
+    ]
+  ],
+  "normalDbWrites": 0,
+  "note": "Fresh FastAPI ASGI app uses the real undecorated business endpoint signature/body parsing/response and a service double; removed operation log only."
+}

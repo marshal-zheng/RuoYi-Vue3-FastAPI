@@ -27,7 +27,7 @@
             placeholder="部门状态"
             clearable
             style="width: 200px"
-            @change="(v: any) => onFilterChange('status', v, { handleRefresh, updateState })"
+            @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
           >
             <el-option
               v-for="dict in sys_normal_disable"
@@ -104,19 +104,29 @@
 </template>
 
 <script setup lang="ts" name="DeptList">
+import { getCurrentInstance, ref, nextTick } from 'vue';
+import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
+import type { DeptRecord } from '@/api/system/dept';
+import type { DeptQueryModel } from '@/api/_generated/types.gen';
+type ListQuery = DeptQueryModel & { dateRange?: string[] | null };
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { listDept, getDept, delDept } from '@/api/system/dept';
 import { parseTime } from '@/utils/ruoyi';
 import DeptDlg from './DeptDlg.vue';
 
-const proxy = getCurrentInstance()?.proxy as any;
+const proxy = getCurrentInstance()!.proxy!;
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
-const gridListRef = ref<any>(null);
-const deptDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const deptDlgRef = ref<InstanceType<typeof DeptDlg> | null>(null);
 
-async function loadDeptData(params: any) {
+async function loadDeptData(params: ListLoadParams) {
   const query = {
     deptName: params.query?.deptName,
     status: params.query?.status,
@@ -125,21 +135,30 @@ async function loadDeptData(params: any) {
     const response = await listDept(query);
     const tree = proxy.handleTree(response.items, 'deptId');
     return { data: tree || [], total: 0 };
-  } catch (e) {
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
-function handleAdd(row?: any) {
+function handleAdd(row?: DeptRecord) {
   const data = row ? { parentId: row.deptId } : {};
   deptDlgRef.value?.open(data);
 }
@@ -152,13 +171,22 @@ function toggleExpandAll() {
   });
 }
 
-async function handleUpdate(row: any) {
+async function handleUpdate(row: DeptRecord) {
   const response = await getDept(row.deptId).catch(() => null);
   if (!response) return;
-  deptDlgRef.value?.open(response);
+  deptDlgRef.value?.open({
+    deptId: response.deptId ?? undefined,
+    parentId: response.parentId ?? undefined,
+    deptName: response.deptName ?? undefined,
+    orderNum: response.orderNum ?? undefined,
+    leader: response.leader ?? undefined,
+    phone: response.phone ?? undefined,
+    email: response.email ?? undefined,
+    status: response.status ?? undefined,
+  });
 }
 
-function handleDelete(row: any) {
+function handleDelete(row: DeptRecord) {
   proxy.$modal
     .confirm('是否确认删除名称为"' + row.deptName + '"的数据项?')
     .then(() => delDept(row.deptId))
@@ -168,7 +196,7 @@ function handleDelete(row: any) {
     .catch(() => {});
 }
 
-function getMoreActionList(row: any) {
+function getMoreActionList(row: DeptRecord) {
   const actions = [];
   if (row.parentId != 0) {
     actions.push({
@@ -182,7 +210,7 @@ function getMoreActionList(row: any) {
   return actions;
 }
 
-function handleMoreActionSelect(item: any, row: any) {
+function handleMoreActionSelect(item: ActionItem, row: DeptRecord) {
   switch (item.eventTag) {
     case 'delete':
       handleDelete(row);

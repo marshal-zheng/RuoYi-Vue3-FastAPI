@@ -93,7 +93,9 @@
                     formatTime(alarm.timestamp)
                   }}</span>
                 </div>
-                <div class="alarm-text text-[11px] text-zx-text-primary leading-relaxed line-clamp-2">
+                <div
+                  class="alarm-text text-[11px] text-zx-text-primary leading-relaxed line-clamp-2"
+                >
                   {{ alarm.message }}
                 </div>
               </div>
@@ -278,7 +280,10 @@ function getReasonLabel(alarmType) {
 
 function getReasonStyle(alarmType) {
   const key = (alarmType || '').toLowerCase();
-  const reason = reasonMap[key] || { color: 'var(--zx-semantic-text-secondary)', bg: 'var(--zx-semantic-fill-hover)' };
+  const reason = reasonMap[key] || {
+    color: 'var(--zx-semantic-text-secondary)',
+    bg: 'var(--zx-semantic-fill-hover)',
+  };
   return {
     color: reason.color,
     backgroundColor: reason.bg,

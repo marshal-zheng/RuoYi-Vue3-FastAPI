@@ -1,0 +1,17 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/components/dialog/__tests__/dialog.integration.test.tsx (42 tests) 3087ms
+ ✓ packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts (15 tests) 8ms
+ ✓ packages/components/drawer/__tests__/drawer.integration.test.tsx (5 tests) 422ms
+ ✓ packages/components/theme-provider/__tests__/theme-autocomplete-layout.test.ts (3 tests) 27ms
+ ✓ packages/components/_shared/__tests__/overlay-layout.test.tsx (11 tests) 619ms
+ ✓ packages/components/_shared/__tests__/modal-close.test.tsx (4 tests) 167ms
+
+ Test Files  6 passed (6)
+      Tests  80 passed (80)
+   Start at  02:10:21
+   Duration  8.24s (transform 930ms, setup 207ms, collect 2.53s, tests 4.33s, environment 524ms, prepare 143ms)
+

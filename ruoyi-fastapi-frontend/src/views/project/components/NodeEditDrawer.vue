@@ -103,6 +103,7 @@ const formRef = ref(null);
 
 // 使用 useDrawer
 const drawer = useDrawer({
+  divider: false,
   title: () => `节点配置 - ${formData.name || '未命名节点'}`,
   size: '700px',
   placement: 'right',
@@ -327,8 +328,8 @@ const groupedPorts = computed(() => {
   return Object.values(groups)
     .map((group) => {
       // 仅用于去重，不需要暴露到 UI
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { seenKeys, ...rest } = group;
+      const rest = { ...group };
+      delete rest.seenKeys;
       return rest;
     })
     .sort((a, b) => a.type.localeCompare(b.type));
@@ -340,16 +341,6 @@ const togglePort = (portType) => {
 };
 
 // 获取总线类型对应的标签类型
-const getBusTypeTagType = (busType) => {
-  const typeMap = {
-    RS422: 'warning',
-    RS485: 'danger',
-    CAN: 'primary',
-    Ethernet: 'success',
-    '1553B': 'info',
-  };
-  return typeMap[busType] || 'info';
-};
 
 // 点击协议卡片
 const handleProtocolClick = (protocolItem) => {

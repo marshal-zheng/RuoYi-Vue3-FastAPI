@@ -6,9 +6,9 @@ import { formLayoutPolicy, type FormColumns } from './policy';
 export { default as FormGrid } from './FormGrid.vue';
 export type { FormColumns } from './policy';
 
-type DialogOptions<T extends Record<string, any>> = NonNullable<Parameters<typeof useDialog<T>>[0]>;
+type DialogOptions<T extends object> = NonNullable<Parameters<typeof useDialog<T>>[0]>;
 type FormDialogStyle = Omit<CSSProperties, 'width' | 'height'> & { width?: never; height?: never };
-export type FormDialogOptions<T extends Record<string, any>> = Omit<
+export type FormDialogOptions<T extends object> = Omit<
   DialogOptions<T>,
   'width' | 'height' | 'dialogStyle'
 > & {
@@ -24,27 +24,27 @@ function checkColumns(columns: FormColumns) {
   }
 }
 
-function sanitize<T extends Record<string, any>>(options: Partial<FormDialogOptions<T>>) {
-  const { columns: _columns, width, height, dialogStyle, dialogSize: _size, ...rest } = options;
-  const safeStyle = dialogStyle ? { ...dialogStyle } : undefined;
+function sanitize<T extends object>(options: Partial<FormDialogOptions<T>>) {
+  const safeStyle = options.dialogStyle ? { ...options.dialogStyle } : undefined;
   if (
-    import.meta.env.DEV &&
-    (width !== undefined ||
-      height !== undefined ||
-      (safeStyle && ('width' in safeStyle || 'height' in safeStyle)))
+    options.width !== undefined ||
+    options.height !== undefined ||
+    (safeStyle && ('width' in safeStyle || 'height' in safeStyle))
   ) {
-    console.warn(
-      '[useFormDialog] width/height are ignored; use columns, dialogSize or dialogStyle.maxHeight'
+    throw new TypeError(
+      '[useFormDialog] width/height are unsupported; use columns, dialogSize or dialogStyle.maxHeight'
     );
   }
-  if (safeStyle) {
-    delete safeStyle.width;
-    delete safeStyle.height;
-  }
+  const rest = { ...options };
+  delete rest.columns;
+  delete rest.width;
+  delete rest.height;
+  delete rest.dialogStyle;
+  delete rest.dialogSize;
   return { ...rest, ...(safeStyle ? { dialogStyle: safeStyle } : {}) };
 }
 
-export function useFormDialog<T extends Record<string, any> = Record<string, any>>(
+export function useFormDialog<T extends object = Record<string, unknown>>(
   options: FormDialogOptions<T>
 ) {
   checkColumns(options.columns);

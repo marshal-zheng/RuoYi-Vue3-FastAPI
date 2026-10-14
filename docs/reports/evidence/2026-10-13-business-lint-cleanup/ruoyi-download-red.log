@@ -1,0 +1,51 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/utils/io-toolkit/download.contract.test.ts > binary download boundary > rejects an Axios response without a binary body 3ms
+   → promise resolved "undefined" instead of rejecting
+ × src/utils/io-toolkit/download.contract.test.ts > binary download boundary > preserves valid binary response contents and filename 1ms
+   → saved.text is not a function
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/io-toolkit/download.contract.test.ts > binary download boundary > rejects an Axios response without a binary body
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected: 
+Error {
+  "message": "rejected promise",
+}
+
++ Received: 
+undefined
+
+ ❯ src/utils/io-toolkit/download.contract.test.ts:13:61
+     11|   it('rejects an Axios response without a binary body', async () => {
+     12|     const response: AxiosResponse<undefined> = { data: undefined, stat…
+     13|     await expect(downloadFromResponse(response, 'empty.bin')).rejects.…
+       |                                                             ^
+     14|     expect(saveAs).not.toHaveBeenCalled();
+     15|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/utils/io-toolkit/download.contract.test.ts > binary download boundary > preserves valid binary response contents and filename
+TypeError: saved.text is not a function
+ ❯ src/utils/io-toolkit/download.contract.test.ts:24:24
+     22|     const [saved, filename] = saveAs.mock.calls[0];
+     23|     expect(filename).toBe('file.bin');
+     24|     expect(await saved.text()).toBe('payload');
+       |                        ^
+     25|   });
+     26| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:46:37
+   Duration  450ms (transform 112ms, setup 219ms, collect 8ms, tests 5ms, environment 131ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

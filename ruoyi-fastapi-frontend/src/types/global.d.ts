@@ -1,30 +1,28 @@
-/**
- * 全局类型声明
- */
+import type modal from '@/plugins/modal';
+/** Global component helpers retain the exact signatures of their implementations. */
 import type { HttpClientImpl } from '@zxio/http';
+import type { useDict } from '@/utils/dict';
+import type { download } from '@/utils/request';
+import type {
+  parseTime,
+  resetForm,
+  handleTree,
+  addDateRange,
+  selectDictLabel,
+  selectDictLabels,
+} from '@/utils/ruoyi';
 
-// 扩展 Vue 组件自定义属性
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   interface ComponentCustomProperties {
-    /** HTTP 客户端 - @zxio/http */
     $http: HttpClientImpl;
-    /** 字典 */
-    useDict: (...args: any[]) => any;
-    /** 下载 */
-    download: (...args: any[]) => any;
-    /** 时间格式化 */
-    parseTime: (time: any, pattern?: string) => string;
-    /** 重置表单 */
-    resetForm: (refName: any) => void;
-    /** 树形数据 */
-    handleTree: (...args: any[]) => any[];
-    /** 日期范围 */
-    addDateRange: (...args: any[]) => any;
-    /** 字典标签 */
-    selectDictLabel: (...args: any[]) => string;
-    /** 字典标签（多个） */
-    selectDictLabels: (...args: any[]) => string;
+    $modal: typeof modal;
+    useDict: typeof useDict;
+    download: typeof download;
+    parseTime: typeof parseTime;
+    resetForm: typeof resetForm;
+    handleTree: typeof handleTree;
+    addDateRange: typeof addDateRange;
+    selectDictLabel: typeof selectDictLabel;
+    selectDictLabels: typeof selectDictLabels;
   }
 }
-
-export {};

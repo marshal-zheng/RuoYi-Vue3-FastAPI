@@ -1,12 +1,26 @@
+import type { HttpClientConfig, ResolvedRequestOptions } from '@zxio/http';
+import type { AxiosResponse, AxiosError } from 'axios';
+import type { ExtendedAxiosRequestConfig } from './request';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const createHttpClient = vi.fn();
-const createGridListPlugin = vi.fn((config: any) => config);
+const createHttpClient = vi.fn((config: HttpClientConfig) => ({
+  __config: config,
+  request: vi.fn(),
+  get: vi.fn(),
+  post: vi.fn(),
+  put: vi.fn(),
+  delete: vi.fn(),
+}));
+const createGridListPlugin = vi.fn(
+  (config: Parameters<(typeof import('@zxio/http'))['createGridListPlugin']>[0]) => config
+);
 const presentSuccessFeedback = vi.fn();
 const presentProblemFeedback = vi.fn();
 const elMessageClose = vi.fn();
 const ElMessage = Object.assign(
-  vi.fn(() => ({ close: elMessageClose })),
+  vi.fn<(options: unknown) => { close: typeof elMessageClose }>(() => ({
+    close: elMessageClose,
+  })),
   {
     success: vi.fn(),
     error: vi.fn(),
@@ -25,6 +39,13 @@ vi.mock('element-plus', () => ({
   ElMessageBox: {
     alert: vi.fn(),
   },
+}));
+
+vi.mock('@/utils/feedback/message', () => ({
+  showMessage: async (options: unknown) => ({
+    ok: true,
+    value: ElMessage(options),
+  }),
 }));
 
 vi.mock('vue', () => ({
@@ -89,7 +110,7 @@ describe('http contract client', () => {
     vi.resetModules();
     vi.clearAllMocks();
     window.history.pushState({}, '', '/index');
-    createHttpClient.mockImplementation((config: any) => ({
+    createHttpClient.mockImplementation((config: HttpClientConfig) => ({
       __config: config,
       request: vi.fn(),
       get: vi.fn(),
@@ -100,10 +121,76 @@ describe('http contract client', () => {
   });
 
   const loadModule = async () => {
-    await import('@/utils/http');
+    const { http } = await import('@/utils/http');
+    const config = createHttpClient.mock.calls[0][0];
+    const grid = createGridListPlugin.mock.calls[0][0];
+    const policy = config.transforms?.[1];
+    const resolver = config.successResolver;
+    const afterResponse = policy?.afterResponse;
+    const onError = policy?.onError;
+    if (!resolver || !afterResponse || !onError || !grid?.resolveList || !grid.resolveTotal) {
+      throw new Error('The HTTP contract hooks were not configured');
+    }
+    const options: ResolvedRequestOptions = {
+      joinParamsToUrl: false,
+      joinTime: false,
+      withToken: false,
+      isTransformResponse: false,
+      isReturnNativeResponse: false,
+      successMessageMode: 'none',
+      showSuccessMessage: false,
+      errorMessageMode: 'none',
+      showErrorMessage: false,
+      ignoreCancelToken: false,
+    };
+    const context = {
+      client: http,
+      axiosInstance: http.axiosInstance,
+      notifier: { notify: vi.fn() },
+    };
+    type ResponseFixture = Pick<AxiosResponse<unknown>, 'status' | 'data'> & {
+      headers?: AxiosResponse['headers'];
+      config?: ExtendedAxiosRequestConfig;
+    };
+    const responseOf = (response: ResponseFixture): AxiosResponse<unknown> =>
+      Object.assign(response, {
+        statusText: '',
+        headers: response.headers ?? {},
+        config: { headers: {}, ...response.config },
+      });
+    type ErrorFixture = {
+      config: ExtendedAxiosRequestConfig;
+      response?: ResponseFixture;
+    };
     return {
-      clientConfig: createHttpClient.mock.calls[0][0],
-      gridConfig: createGridListPlugin.mock.calls[0][0],
+      clientConfig: {
+        ...config,
+        successResolver: ({ response }: { response: ResponseFixture }) =>
+          resolver({ response: responseOf(response), options }),
+        transforms: [
+          {},
+          {
+            afterResponse: (response: ResponseFixture) =>
+              afterResponse(responseOf(response), options, context),
+            onError: (fixture: ErrorFixture) => {
+              const error: AxiosError = {
+                name: 'AxiosError',
+                message: 'request failed',
+                isAxiosError: true,
+                toJSON: () => ({}),
+                config: { headers: {}, ...fixture.config },
+                ...(fixture.response ? { response: responseOf(fixture.response) } : {}),
+              };
+              return onError(error, options, context);
+            },
+          },
+        ] as const,
+      },
+      gridConfig: {
+        ...grid,
+        resolveList: grid.resolveList,
+        resolveTotal: grid.resolveTotal,
+      },
     };
   };
 
@@ -122,21 +209,31 @@ describe('http contract client', () => {
   it('treats 201, 202 and 204 as successful contract responses', async () => {
     const { clientConfig } = await loadModule();
 
-    expect(clientConfig.successResolver({ response: { status: 201, data: { id: 1 } } })).toEqual({
+    expect(
+      clientConfig.successResolver({
+        response: { status: 201, data: { id: 1 } },
+      })
+    ).toEqual({
       ok: true,
       data: { id: 1 },
       code: 201,
       raw: { id: 1 },
     });
-    expect(clientConfig.successResolver({ response: { status: 202, data: { jobId: 1 } } })).toEqual(
-      {
-        ok: true,
-        data: { jobId: 1 },
-        code: 202,
-        raw: { jobId: 1 },
-      }
-    );
-    expect(clientConfig.successResolver({ response: { status: 204, data: undefined } })).toEqual({
+    expect(
+      clientConfig.successResolver({
+        response: { status: 202, data: { jobId: 1 } },
+      })
+    ).toEqual({
+      ok: true,
+      data: { jobId: 1 },
+      code: 202,
+      raw: { jobId: 1 },
+    });
+    expect(
+      clientConfig.successResolver({
+        response: { status: 204, data: undefined },
+      })
+    ).toEqual({
       ok: true,
       data: null,
       code: 204,
@@ -147,7 +244,7 @@ describe('http contract client', () => {
   it('attaches response headers and offset pager metadata for auto mutation feedback', async () => {
     const { clientConfig } = await loadModule();
     const afterResponse = clientConfig.transforms[1].afterResponse;
-    const payload: Record<string, any> = {
+    const payload: Record<string, unknown> = {
       items: [{ id: 1 }],
       total: 12,
       page: 2,
@@ -163,7 +260,7 @@ describe('http contract client', () => {
       },
       config: {
         method: 'post',
-        feedback: { mode: 'auto', key: 'system.user.create' },
+        feedback: { mode: 'auto' as const, key: 'system.user.create' },
       },
     };
 
@@ -191,7 +288,7 @@ describe('http contract client', () => {
         status: 201,
         payload,
         feedback: expect.objectContaining({
-          mode: 'auto',
+          mode: 'auto' as const,
           key: 'system.user.create',
         }),
       })
@@ -202,7 +299,9 @@ describe('http contract client', () => {
     const { clientConfig } = await loadModule();
     const afterResponse = clientConfig.transforms[1].afterResponse;
 
-    const collectionPayload: Record<string, any> = { items: [{ id: 1 }, { id: 2 }] };
+    const collectionPayload: Record<string, unknown> = {
+      items: [{ id: 1 }, { id: 2 }],
+    };
     await afterResponse({
       status: 200,
       data: collectionPayload,
@@ -216,7 +315,7 @@ describe('http contract client', () => {
       total: 2,
     });
 
-    const cursorPayload: Record<string, any> = {
+    const cursorPayload: Record<string, unknown> = {
       items: [{ id: 1 }],
       pageSize: 50,
       nextCursor: 'cursor-2',
@@ -227,7 +326,7 @@ describe('http contract client', () => {
       headers: {},
       config: {
         method: 'get',
-        feedback: { mode: 'auto', key: 'system.user.create' },
+        feedback: { mode: 'auto' as const, key: 'system.user.create' },
       },
     });
     expect(cursorPayload.pager).toEqual({
@@ -313,7 +412,7 @@ describe('http contract client', () => {
         config: {
           method: 'post',
           skipRelogin: true,
-          feedback: { mode: 'auto' },
+          feedback: { mode: 'auto' as const },
         },
         response: {
           status: 401,
@@ -343,7 +442,7 @@ describe('http contract client', () => {
           detail: '用户名或密码错误',
         }),
         feedback: expect.objectContaining({
-          mode: 'auto',
+          mode: 'auto' as const,
         }),
       })
     );
@@ -355,7 +454,7 @@ describe('http contract client', () => {
     const error = {
       config: {
         method: 'post',
-        feedback: { mode: 'auto', key: 'monitor.job.run' },
+        feedback: { mode: 'auto' as const, key: 'monitor.job.run' },
       },
       response: {
         status: 429,
@@ -415,7 +514,7 @@ describe('http contract client', () => {
         config: {
           method: 'post',
           feedback: {
-            mode: 'auto',
+            mode: 'auto' as const,
             key: 'system.user.create',
             validationTarget,
           },

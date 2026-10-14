@@ -6,7 +6,15 @@
  * - 模式进入/退出
  * - 事件监听
  */
-import { ref, computed, type Ref, type ComputedRef } from 'vue';
+import { shallowRef, computed, type Ref, type ComputedRef } from 'vue';
+import type { FaultParameters } from '@/api/simulation/types';
+import type { FaultTypeValue, useFaultInjection } from './useFaultInjection';
+import type {
+  SimulationGraph,
+  SimulationEdge,
+  SimulationEdgeData,
+  SimulationNodeData,
+} from './topology-types';
 import { ElMessage } from 'element-plus';
 
 // 统一消息配置：短时长 + 合并同类
@@ -14,27 +22,20 @@ const msgOpts = { duration: 1500, grouping: true };
 
 interface DockState {
   fault: boolean;
-  [key: string]: any;
 }
 
-interface FaultInjection {
-  faults: Ref<any[]>;
-  clearFault: (faultId: string) => Promise<void>;
-  clearAllFaults: () => Promise<void>;
-  injectFault: (payload: any) => Promise<any>;
-  fetchFaults: () => Promise<any[]>;
-}
+type FaultInjection = ReturnType<typeof useFaultInjection>;
 
 interface FaultTemplate {
   label?: string;
   payload: {
-    type: string;
-    params?: Record<string, any>;
+    type: FaultTypeValue;
+    params?: FaultParameters;
   };
 }
 
 interface UseFaultInjectionUIOptions {
-  getGraphInstance: () => any;
+  getGraphInstance: () => SimulationGraph | null;
   dockState: DockState;
   faultInjection: FaultInjection;
 }
@@ -50,7 +51,7 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
   const { getGraphInstance, dockState, faultInjection } = options;
 
   // 选中的链路
-  const selectedEdge: Ref<any> = ref(null);
+  const selectedEdge = shallowRef<SimulationEdge | null>(null);
 
   // 保存边的原始样式
   const edgeOriginalStyles = new Map<string, { stroke: string; strokeWidth: number }>();
@@ -80,11 +81,11 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
    * 设置边的事件监听
    * @param {Object} graph - 图实例
    */
-  function setupEdgeEvents(graph: any) {
+  function setupEdgeEvents(graph: SimulationGraph | null) {
     if (!graph) return;
 
     // 监听边点击事件
-    graph.on('edge:click', ({ edge, e }: any) => {
+    graph.on('edge:click', ({ edge }) => {
       if (isFaultInjectionMode.value) {
         selectedEdge.value = edge;
         highlightSelectedEdge(edge);
@@ -103,19 +104,19 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
    * 高亮选中的边
    * @param {Object} edge - 边实例
    */
-  function highlightSelectedEdge(edge: any) {
+  function highlightSelectedEdge(edge: SimulationEdge | null) {
     const graph = getGraphInstance();
     if (!graph || !edge) return;
 
-    const selectedId = edge.id || edge.getID?.();
+    const selectedId = edge.id;
 
-    graph.getEdges().forEach((e: any) => {
-      const eId = e.id || e.getID?.();
+    graph.getEdges().forEach((e) => {
+      const eId = e.id;
       // 保存原始样式（如果还没保存）
       if (!edgeOriginalStyles.has(eId)) {
         edgeOriginalStyles.set(eId, {
-          stroke: e.attr('line/stroke') || '#64748b',
-          strokeWidth: e.attr('line/strokeWidth') || 2,
+          stroke: String(e.attr('line/stroke') || '#64748b'),
+          strokeWidth: Number(e.attr('line/strokeWidth') || 2),
         });
       }
 
@@ -143,8 +144,8 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
     if (!graph) return;
 
     // 恢复所有边的原始样式（除了已注入故障的边）
-    graph.getEdges().forEach((e: any) => {
-      const eId = e.id || e.getID?.();
+    graph.getEdges().forEach((e) => {
+      const eId = e.id;
       if (faultedEdges.has(eId)) return; // 保持故障边的红色
       const original = edgeOriginalStyles.get(eId);
       if (original) {
@@ -171,7 +172,7 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
    */
   async function handleFaultClear(faultId: string) {
     // 先找到这个故障对应的边 ID
-    const fault = faultInjection.faults.value?.find((f: any) => f.faultId === faultId);
+    const fault = faultInjection.faults.value?.find((f) => f.faultId === faultId);
     const edgeId = fault?.targetId || fault?.targetKey;
 
     await faultInjection.clearFault(faultId);
@@ -180,7 +181,7 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
     if (edgeId) {
       // 检查这条边是否还有其他故障
       const remainingFaults = faultInjection.faults.value?.filter(
-        (f: any) => (f.targetId === edgeId || f.targetKey === edgeId) && f.faultId !== faultId
+        (f) => (f.targetId === edgeId || f.targetKey === edgeId) && f.faultId !== faultId
       );
       if (!remainingFaults?.length) {
         clearEdgeFaultMark(edgeId);
@@ -204,10 +205,12 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
    * @param {Object} tpl - 模板对象
    * @param {Ref} hoveredEdge - 悬停的边
    */
-  async function handleFaultTemplate(tpl: FaultTemplate, hoveredEdge?: Ref<any>) {
+  async function handleFaultTemplate(tpl: FaultTemplate, hoveredEdge?: Ref<SimulationEdge | null>) {
     const edge = selectedEdge.value || hoveredEdge?.value;
     const targetId =
-      edge?.id || edge?.getID?.() || edge?.getData?.()?.id || edge?.getData?.()?.edgeId;
+      edge?.id ||
+      edge?.getData<SimulationEdgeData>()?.id ||
+      edge?.getData<SimulationEdgeData>()?.edgeId;
 
     if (!targetId) {
       ElMessage.warning({ message: '请先点击链路选中后再应用模板', ...msgOpts });
@@ -242,12 +245,12 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
   /**
    * 将边标记为故障状态（红色粗线）
    */
-  function markEdgeAsFaulted(edge: any) {
+  function markEdgeAsFaulted(edge: SimulationEdge | null) {
     if (!edge) return;
     const graph = getGraphInstance();
     if (!graph) return;
 
-    const edgeId = edge.id || edge.getID?.();
+    const edgeId = edge.id;
     if (!edgeId) return;
 
     // 记录故障边
@@ -264,18 +267,18 @@ export function useFaultInjectionUI(options: UseFaultInjectionUIOptions) {
   /**
    * 生成链路友好标签：设备A(端口) → 设备B(端口)
    */
-  function formatEdgeLabel(edge: any): string {
+  function formatEdgeLabel(edge: SimulationEdge | null): string {
     if (!edge) return '未知链路';
-    const data = edge.getData?.() || {};
+    const data = edge.getData<SimulationEdgeData>() || {};
 
     // 优先用图元上已有的友好名称
     const alias = data.alias || data.label || data.name || data.title;
-    const id = edge.id || edge.getID?.() || data.id || data.edgeId;
+    const id = edge.id || data.id || data.edgeId;
 
     const sourceNode = edge.getSourceNode?.();
     const targetNode = edge.getTargetNode?.();
-    const sourceData = sourceNode?.getData?.() || {};
-    const targetData = targetNode?.getData?.() || {};
+    const sourceData = sourceNode?.getData<SimulationNodeData>() || {};
+    const targetData = targetNode?.getData<SimulationNodeData>() || {};
 
     const srcName = sourceData.name || sourceData.label || sourceData.deviceName;
     const dstName = targetData.name || targetData.label || targetData.deviceName;

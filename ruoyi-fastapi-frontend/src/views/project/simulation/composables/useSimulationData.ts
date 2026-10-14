@@ -5,25 +5,13 @@
  */
 import { ref, computed, watch, onUnmounted, type Ref, type ComputedRef } from 'vue';
 import { useSimulationWebSocket } from './useSimulationWebSocket';
-
-interface Message {
-  [key: string]: any;
-  timestamp: number;
-  sendTimestamp?: number;
-  receiveTimestamp?: number;
-  payloadHex?: string;
-  fieldValues?: Record<string, any>;
-  senderNodeId?: string;
-  receiverNodeId?: string;
-  senderNodeName?: string;
-  receiverNodeName?: string;
-  protocolType?: string;
-  senderPortId?: string;
-  receiverPortId?: string;
-  fillStrategy?: string;
-  sizeBytes?: number;
-  isError?: boolean;
-}
+import type {
+  SimulationMessage as Message,
+  SimulationBandwidth as BandwidthData,
+  SimulationAlarm as AlarmData,
+  SimulationFaultEvent as FaultEventData,
+  SimulationStatistics,
+} from '@/api/simulation/types';
 
 interface MessageFilter {
   protocolType?: string;
@@ -47,29 +35,9 @@ interface FilterCondition {
   max?: number;
 }
 
-interface BandwidthData {
-  [key: string]: any;
-  timestamp: number;
-  protocolType?: string;
-  nodeId?: string;
-  portId?: string;
-}
-
-interface AlarmData {
-  [key: string]: any;
-  alarmId?: string;
-  level?: string;
-  type?: string;
-  timestamp: number;
-}
-
 interface AlarmFilter {
   level?: string;
   type?: string;
-}
-
-interface FaultEventData {
-  [key: string]: any;
 }
 
 interface IncrementalData<T> {
@@ -131,7 +99,15 @@ function matchesCondition(message: Message, condition: FilterCondition): boolean
 
   if (type === 'node') {
     const field = condition.field || 'senderNodeId';
-    const target = String((message as any)?.[field] || '').toLowerCase();
+    const nodeFields: Record<string, string | undefined> = {
+      senderNodeId: message.senderNodeId,
+      receiverNodeId: message.receiverNodeId,
+      senderNodeName: message.senderNodeName,
+      receiverNodeName: message.receiverNodeName,
+      senderPortId: message.senderPortId,
+      receiverPortId: message.receiverPortId,
+    };
+    const target = String(nodeFields[field] || '').toLowerCase();
     const value = String(condition.value || '').toLowerCase();
     if (!value) return null;
     return target.includes(value);
@@ -256,10 +232,10 @@ export function filterMessages(messages: Message[], filter: MessageFilter): Mess
     }
 
     // 时间范围过滤
-    if (filter.startTime && msg.timestamp < filter.startTime) {
+    if (filter.startTime && msg.timestamp !== undefined && msg.timestamp < filter.startTime) {
       return false;
     }
-    if (filter.endTime && msg.timestamp > filter.endTime) {
+    if (filter.endTime && msg.timestamp !== undefined && msg.timestamp > filter.endTime) {
       return false;
     }
 
@@ -335,7 +311,7 @@ export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
   const messageData: Ref<Message[]> = ref([]);
   const alarmData: Ref<AlarmData[]> = ref([]);
   const faultEventData: Ref<FaultEventData[]> = ref([]);
-  const statistics: Ref<Record<string, any>> = ref({});
+  const statistics: Ref<SimulationStatistics> = ref({});
 
   // 过滤条件
   const messageFilter: Ref<MessageFilter> = ref({});
@@ -499,8 +475,8 @@ export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
     return result.newData;
   }
 
-  function addMessage(message: Partial<Message> & Record<string, any>) {
-    const nextMessage = message as Message;
+  function addMessage(message: Partial<Message>) {
+    const nextMessage: Message = { ...message };
     const latest = messageData.value[messageData.value.length - 1];
     messageData.value.push(nextMessage);
     if (latest && (nextMessage.timestamp || 0) < (latest.timestamp || 0)) {
@@ -511,14 +487,14 @@ export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
     }
   }
 
-  function addAlarm(alarm: Partial<AlarmData> & Record<string, any>) {
+  function addAlarm(alarm: Partial<AlarmData>) {
     alarmData.value = cleanupOldData(
-      [...alarmData.value, alarm as AlarmData],
+      [...alarmData.value, { ...alarm, timestamp: alarm.timestamp ?? 0 }],
       DATA_LIMITS.MAX_ALARMS
     );
   }
 
-  function updateStatistics(nextStatistics: Record<string, any>) {
+  function updateStatistics(nextStatistics: SimulationStatistics) {
     statistics.value = { ...(nextStatistics || {}) };
   }
 
@@ -530,7 +506,10 @@ export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
 
   function getMessagesByTimeRange(startTime: number, endTime: number) {
     return messageData.value.filter(
-      (message) => message.timestamp >= startTime && message.timestamp <= endTime
+      (message) =>
+        message.timestamp !== undefined &&
+        message.timestamp >= startTime &&
+        message.timestamp <= endTime
     );
   }
 
@@ -567,7 +546,7 @@ export function useSimulationData(sessionId: Ref<string | null> = ref(null)) {
   }
 
   function getProtocolDistribution() {
-    const source = (statistics.value.messages_by_protocol || {}) as Record<string, unknown>;
+    const source = statistics.value.messages_by_protocol || {};
     const total = Object.values(source).reduce<number>((sum, value) => sum + Number(value || 0), 0);
     if (!total) return {};
     return Object.entries(source).reduce<Record<string, number>>((result, [protocol, count]) => {

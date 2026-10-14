@@ -588,7 +588,7 @@ const data = reactive({
     }
   ],
   layoutTreeProps: {
-    label(data, node) {
+    label(data) {
       return data.componentName || `${data.label}: ${data.vModel}`
     }
   }
@@ -640,7 +640,7 @@ function addTreeItem() {
   currentNode.value = props.activeData.options
 }
 
-function renderContent(h, { node, data, store }) {
+function renderContent(h, { node, data }) {
   return h('div', {
     class: "custom-tree-node"
   }, [
@@ -779,6 +779,9 @@ function tagChange(tagIcon) {
 <style scoped>
 .right-board {
   width: 350px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   position: absolute;
   right: 0;
   top: 0;
@@ -795,7 +798,8 @@ function tagChange(tagIcon) {
 
 .right-board .field-box {
   position: relative;
-  height: calc(100vh - 50px - 40px - 42px);
+  flex: 1 1 0;
+  min-height: 0;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -912,4 +916,7 @@ function tagChange(tagIcon) {
   font-size: 14px;
   padding-right: 8px;
 }
+</style>
+<style scoped>
+.right-board > .center-tabs { flex: 0 0 auto; }
 </style>

@@ -1,3 +1,7 @@
+import type { ComponentPublicInstance } from 'vue';
+import type { FormInstance } from 'element-plus';
+import { isRecord } from '@/types/http-contract';
+
 /**
  * 通用js方法封装处理
  * Copyright (c) 2019 ruoyi
@@ -8,10 +12,6 @@ interface DictItem {
   label: string;
 }
 
-interface TreeNode {
-  [key: string]: any;
-}
-
 interface TreeConfig {
   id: string;
   parentId: string;
@@ -19,7 +19,7 @@ interface TreeConfig {
 }
 
 // 日期格式化
-export function parseTime(time?: string | number | Date, pattern?: string): string | null {
+export function parseTime(time?: string | number | Date | null, pattern?: string): string | null {
   if (arguments.length === 0 || !time) {
     return null;
   }
@@ -65,24 +65,32 @@ export function parseTime(time?: string | number | Date, pattern?: string): stri
 }
 
 // 表单重置
-export function resetForm(this: any, refName: string): void {
-  if (this.$refs[refName]) {
-    this.$refs[refName].resetFields();
+export function resetForm(this: Pick<ComponentPublicInstance, '$refs'>, refName: string): void {
+  const form = this.$refs[refName];
+  if (
+    form &&
+    typeof form === 'object' &&
+    'resetFields' in form &&
+    typeof form.resetFields === 'function'
+  ) {
+    (form as Pick<FormInstance, 'resetFields'>).resetFields();
   }
 }
 
 // 添加日期范围
-export function addDateRange(params: any, dateRange: string[], propName?: string): any {
-  let search = params;
-  dateRange = Array.isArray(dateRange) ? dateRange : [];
-  if (typeof propName === 'undefined') {
-    search['beginTime'] = dateRange[0];
-    search['endTime'] = dateRange[1];
-  } else {
-    search['begin' + propName] = dateRange[0];
-    search['end' + propName] = dateRange[1];
-  }
-  return search;
+export function addDateRange<T extends object, Key extends string = 'Time'>(
+  params: T,
+  dateRange: readonly string[] | null | undefined,
+  propName?: Key
+): T & Record<`begin${Key}` | `end${Key}`, string | undefined>;
+export function addDateRange(
+  params: object,
+  dateRange: readonly string[] | null | undefined,
+  propName?: string
+): object {
+  const dates = Array.isArray(dateRange) ? dateRange : [];
+  const suffix = propName ?? 'Time';
+  return Object.assign(params, { [`begin${suffix}`]: dates[0], [`end${suffix}`]: dates[1] });
 }
 
 /**
@@ -91,9 +99,9 @@ export function addDateRange(params: any, dateRange: string[], propName?: string
  * @param propName 自定义字段名后缀，如 'CreateTime' -> beginCreateTime/endCreateTime
  */
 export function serializeDateRange(
-  query: Record<string, any>,
+  query: Record<string, unknown>,
   propName?: string
-): Record<string, any> {
+): Record<string, unknown> {
   const result = { ...query };
   const dateRange = result.dateRange;
 
@@ -115,7 +123,7 @@ export function serializeDateRange(
 }
 
 // 回显数据字典
-export function selectDictLabel(datas: DictItem[], value: string | number): string {
+export function selectDictLabel(datas: DictItem[], value: string | number | undefined): string {
   if (value === undefined) {
     return '';
   }
@@ -129,7 +137,7 @@ export function selectDictLabel(datas: DictItem[], value: string | number): stri
 // 回显数据字典（字符串数组）
 export function selectDictLabels(
   datas: DictItem[],
-  value: string | string[],
+  value: string | string[] | undefined,
   separator?: string
 ): string {
   if (value === undefined || (Array.isArray(value) && value.length === 0)) {
@@ -149,7 +157,7 @@ export function selectDictLabels(
 }
 
 // 字符串格式化(%s )
-export function sprintf(str: string, ...args: any[]): string {
+export function sprintf(str: string, ...args: unknown[]): string {
   var flag = true,
     i = 0;
   str = str.replace(/%s/g, function () {
@@ -158,30 +166,30 @@ export function sprintf(str: string, ...args: any[]): string {
       flag = false;
       return '';
     }
-    return arg;
+    return String(arg);
   });
   return flag ? str : '';
 }
 
 // 转换字符串，undefined,null等转化为""
-export function parseStrEmpty(str: any): string {
+export function parseStrEmpty<T>(str: T): T | '' {
   if (!str || str == 'undefined' || str == 'null') {
     return '';
   }
   return str;
 }
 
-// 数据合并
-export function mergeRecursive(source: any, target: any): any {
-  for (var p in target) {
-    try {
-      if (target[p].constructor == Object) {
-        source[p] = mergeRecursive(source[p], target[p]);
-      } else {
-        source[p] = target[p];
-      }
-    } catch (e) {
-      source[p] = target[p];
+// Dynamic merge data is inspected before recursion; callers retain an unknown value boundary.
+export function mergeRecursive(
+  source: Record<string, unknown>,
+  target: Record<string, unknown>
+): Record<string, unknown> {
+  for (const key in target) {
+    const value = target[key];
+    if (isRecord(value) && value.constructor === Object && isRecord(source[key])) {
+      source[key] = mergeRecursive(source[key], value);
+    } else {
+      source[key] = value;
     }
   }
   return source;
@@ -194,75 +202,70 @@ export function mergeRecursive(source: any, target: any): any {
  * @param {*} parentId 父节点字段 默认 'parentId'
  * @param {*} children 孩子节点字段 默认 'children'
  */
-export function handleTree(
-  data: TreeNode[],
+export type TreeNode<T, Key extends string = 'children'> = T & {
+  [Field in Key]?: TreeNode<T, Key>[];
+};
+
+export function handleTree<T extends object, Key extends string = 'children'>(
+  data: T[],
+  id?: string,
+  parentId?: string,
+  children?: Key
+): TreeNode<T, Key>[];
+export function handleTree<T extends object>(
+  data: T[],
   id?: string,
   parentId?: string,
   children?: string
-): TreeNode[] {
-  let config: TreeConfig = {
+): T[] {
+  const config: TreeConfig = {
     id: id || 'id',
     parentId: parentId || 'parentId',
     childrenList: children || 'children',
   };
-
-  var childrenListMap: { [key: string]: TreeNode[] } = {};
-  var nodeIds: { [key: string]: TreeNode } = {};
-  var tree: TreeNode[] = [];
-
-  for (let d of data) {
-    let parentId = d[config.parentId];
-    if (childrenListMap[parentId] == null) {
-      childrenListMap[parentId] = [];
-    }
-    nodeIds[d[config.id]] = d;
-    childrenListMap[parentId].push(d);
+  const childrenByParent = new Map<string, T[]>();
+  const nodeIds = new Set<string>();
+  for (const node of data) {
+    const parent = String(Reflect.get(node, config.parentId));
+    const siblings = childrenByParent.get(parent) ?? [];
+    siblings.push(node);
+    childrenByParent.set(parent, siblings);
+    nodeIds.add(String(Reflect.get(node, config.id)));
   }
-
-  for (let d of data) {
-    let parentId = d[config.parentId];
-    if (nodeIds[parentId] == null) {
-      tree.push(d);
-    }
-  }
-
-  for (let t of tree) {
-    adaptToChildrenList(t);
-  }
-
-  function adaptToChildrenList(o: TreeNode): void {
-    if (childrenListMap[o[config.id]] !== null) {
-      o[config.childrenList] = childrenListMap[o[config.id]];
-    }
-    if (o[config.childrenList]) {
-      for (let c of o[config.childrenList]) {
-        adaptToChildrenList(c);
-      }
-    }
-  }
-  return tree;
+  const roots = data.filter((node) => !nodeIds.has(String(Reflect.get(node, config.parentId))));
+  const attachChildren = (node: T): void => {
+    const descendants = childrenByParent.get(String(Reflect.get(node, config.id)));
+    Reflect.set(node, config.childrenList, descendants);
+    descendants?.forEach(attachChildren);
+  };
+  roots.forEach(attachChildren);
+  return roots;
 }
 
 /**
  * 参数处理
  * @param {*} params  参数
  */
-export function tansParams(params: any): string {
+export function tansParams(params: Record<string, unknown>): string {
   let result = '';
   for (const propName of Object.keys(params)) {
     const value = params[propName];
     var part = encodeURIComponent(propName) + '=';
     if (value !== null && value !== '' && typeof value !== 'undefined') {
-      if (typeof value === 'object') {
+      if (isRecord(value) || Array.isArray(value)) {
         for (const key of Object.keys(value)) {
-          if (value[key] !== null && value[key] !== '' && typeof value[key] !== 'undefined') {
+          if (
+            Reflect.get(value, key) !== null &&
+            Reflect.get(value, key) !== '' &&
+            Reflect.get(value, key) !== undefined
+          ) {
             let params = propName + '[' + key + ']';
             var subPart = encodeURIComponent(params) + '=';
-            result += subPart + encodeURIComponent(value[key]) + '&';
+            result += subPart + encodeURIComponent(String(Reflect.get(value, key))) + '&';
           }
         }
       } else {
-        result += part + encodeURIComponent(value) + '&';
+        result += part + encodeURIComponent(String(value)) + '&';
       }
     }
   }
@@ -282,6 +285,6 @@ export function getNormalPath(p?: string): string {
 }
 
 // 验证是否为blob格式
-export function blobValidate(data: any): boolean {
+export function blobValidate(data: Pick<Blob, 'type'>): boolean {
   return data.type !== 'application/json';
 }

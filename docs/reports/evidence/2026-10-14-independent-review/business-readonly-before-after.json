@@ -1,0 +1,18 @@
+{
+  "before": {
+    "error": null,
+    "warnings": [
+      [
+        "[仿真] 无法加载只读演示数据",
+        "HTTP request failed"
+      ]
+    ]
+  },
+  "after": {
+    "error": {
+      "name": "ReferenceError",
+      "message": "err is not defined"
+    },
+    "warnings": []
+  }
+}

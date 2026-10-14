@@ -229,7 +229,7 @@ describe('mock contract coverage registry', () => {
     const unsupportedEntries = report.entries.filter(
       (entry: { status: string }) => entry.status === 'unsupported-501'
     );
-    expect(unsupportedEntries).toHaveLength(13);
+    expect(unsupportedEntries).toHaveLength(35);
     expect(unsupportedEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

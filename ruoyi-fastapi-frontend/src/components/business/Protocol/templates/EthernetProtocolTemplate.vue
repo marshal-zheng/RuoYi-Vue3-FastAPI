@@ -90,14 +90,31 @@
 <script setup lang="ts">
 import { ref, watch, reactive, computed, shallowRef } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import type { VxeTableInstance } from 'vxe-table';
+import type {
+  VxeTableInstance,
+  VxeTableDefines,
+  VxeTablePropTypes,
+  VxeTableProps,
+} from 'vxe-table';
+import type { DictItem } from '@/utils/dict';
+import type { ValidationIssue } from '@/components/ui/VxeTableValidation/types';
+import type {
+  DictAutocompleteCellParams,
+  DictAutocompleteRenderOptions,
+  DictEditorValue,
+} from '@/components/business/VxeDictAutocomplete/types';
+import { normalizeConfigEditorValue } from './editorTypes';
+import type {
+  EthernetProtocolConfig,
+  ProtocolEditorField,
+  ProtocolConfigTableRow,
+} from './editorTypes';
 import { useDict } from '@/utils/dict';
 // 使用通用校验框架
 import {
   useVxeTableValidation,
   VxeValidationPanel,
   required,
-  positiveInteger,
   scale as scaleValidator,
   warning,
   lengthRange,
@@ -110,7 +127,7 @@ import VxeSchemaTable from '@/components/ui/VxeSchemaTable/index.vue';
 import { createProtocolFieldColumns, createProtocolConfigColumns } from './vxeColumns';
 
 const props = defineProps<{
-  modelValue?: any;
+  modelValue?: Partial<EthernetProtocolConfig>;
   protocolType?: string;
   deviceMode?: boolean;
   senderEditable?: boolean;
@@ -118,7 +135,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:modelValue': [value: any];
+  'update:modelValue': [value: EthernetProtocolConfig];
 }>();
 
 // 获取字典数据
@@ -134,9 +151,9 @@ const {
   'sys_protocol_error_handling'
 );
 
-const tableRef = shallowRef<VxeTableInstance>();
+const tableRef = shallowRef<VxeTableInstance<ProtocolEditorField>>();
 const schemaTableHooks = {
-  onTableReady: (table: VxeTableInstance) => {
+  onTableReady: (table: VxeTableInstance<ProtocolEditorField>) => {
     tableRef.value = table;
   },
   onEditClosed: handleEditClosed,
@@ -170,7 +187,7 @@ const DATA_TYPE_VALUE_RANGES: Record<string, { min: number; max: number }> = {
 };
 
 // 计算帧总长度的辅助函数
-const calculateFrameLength = (fields: any[]): number => {
+const calculateFrameLength = (fields: ProtocolEditorField[]): number => {
   if (!Array.isArray(fields)) return 0;
   return fields.reduce((sum, field) => {
     const bytes = parseNumber(field.byteCount);
@@ -206,7 +223,10 @@ const {
   toVxeEditRules,
   vxeValidConfig,
   setContext,
-} = useVxeTableValidation({
+} = useVxeTableValidation<
+  ProtocolEditorField,
+  Pick<EthernetProtocolConfig, 'frequency' | 'speed' | 'frameLength'> & { busType: 'Ethernet' }
+>({
   // 字段校验规则 - 类似 Element Plus 的配置方式
   rules: {
     fieldName: [required('信息名称不能为空')],
@@ -245,19 +265,28 @@ const {
   // 全局校验器
   globalValidators: [
     // 数值范围溢出校验
-    createValueRangeValidator({
+    createValueRangeValidator<
+      ProtocolEditorField,
+      Pick<EthernetProtocolConfig, 'frequency' | 'speed' | 'frameLength'> & { busType: 'Ethernet' }
+    >({
       dataTypeField: 'dataType',
       valueRangeField: 'valueRange',
       typeRanges: DATA_TYPE_VALUE_RANGES,
     }),
     // 带宽校验
-    createBandwidthValidator({
+    createBandwidthValidator<
+      ProtocolEditorField,
+      Pick<EthernetProtocolConfig, 'frequency' | 'speed' | 'frameLength'> & { busType: 'Ethernet' }
+    >({
       getFrameLength: calculateFrameLength,
       getFrequency: (ctx) => parseNumber(ctx?.frequency) || 1,
-      getBandwidthLimit: (ctx) => parseDataRate(ctx?.speed) || 1e9,
+      getBandwidthLimit: (ctx) => parseDataRate(ctx?.speed ?? '') || 1e9,
     }),
     // 帧长度校验
-    createFrameLengthValidator({
+    createFrameLengthValidator<
+      ProtocolEditorField,
+      Pick<EthernetProtocolConfig, 'frequency' | 'speed' | 'frameLength'> & { busType: 'Ethernet' }
+    >({
       getActualLength: calculateFrameLength,
       getConfiguredLimit: (ctx) => parseNumber(ctx?.frameLength) || undefined,
       busLimits: { Ethernet: 1500 },
@@ -282,14 +311,14 @@ const DATA_TYPE_BYTE_LENGTH_MAP: Record<string, number> = {
 };
 
 // tooltip 配置：当单元格有校验错误时显示错误提示
-const tooltipConfig = {
+const tooltipConfig: VxeTablePropTypes.TooltipConfig<ProtocolEditorField> = {
   showAll: true,
-  contentMethod: ({ row, column, rowIndex }: any) => {
+  contentMethod: ({ column, rowIndex }) => {
     return getCellTooltip(rowIndex, column?.field);
   },
 };
 
-const defaultConfig = {
+const defaultConfig: EthernetProtocolConfig = {
   sender: '',
   receiver: '',
   frequency: '',
@@ -306,20 +335,20 @@ const defaultConfig = {
   fields: [],
 };
 
-const localConfig = reactive({
+const localConfig = reactive<EthernetProtocolConfig>({
   ...defaultConfig,
   ...(props.modelValue || {}),
 });
 
 // 解析为正整数
-const parsePositiveInt = (val: any): number | null => {
+const parsePositiveInt = (val: string | number): number | null => {
   const num = Number(val);
   if (!Number.isFinite(num)) return null;
   if (num <= 0) return null;
   return Math.floor(num);
 };
 
-const inferStringByteLength = (field: any): number | null => {
+const inferStringByteLength = (field: ProtocolEditorField): number | null => {
   const manual = parsePositiveInt(field.byteCount);
   if (manual !== null) return manual;
   if (typeof field.valueRange === 'string') {
@@ -329,7 +358,7 @@ const inferStringByteLength = (field: any): number | null => {
   return null;
 };
 
-const getByteLengthByType = (field: any): number | null => {
+const getByteLengthByType = (field: ProtocolEditorField): number | null => {
   if (typeof field.dataType === 'string' && field.dataType) {
     const key = field.dataType.toUpperCase();
     if (key === 'STRING') return inferStringByteLength(field);
@@ -340,7 +369,7 @@ const getByteLengthByType = (field: any): number | null => {
 };
 
 // 根据数据类型和字节数计算每个字段的字节长度
-const getFieldByteLength = (field: any): number => {
+const getFieldByteLength = (field: ProtocolEditorField): number => {
   const typeLen = getByteLengthByType(field);
   if (typeLen !== null) {
     field.byteCount = typeLen;
@@ -356,7 +385,7 @@ const getFieldByteLength = (field: any): number => {
 
 const ensureByteCountSync = () => {
   if (!Array.isArray(localConfig.fields)) return;
-  localConfig.fields.forEach((field: any) => {
+  localConfig.fields.forEach((field: ProtocolEditorField) => {
     getFieldByteLength(field);
   });
 };
@@ -366,7 +395,7 @@ const recalcByteSequence = () => {
   if (!Array.isArray(localConfig.fields)) return;
 
   let offset = 0;
-  localConfig.fields.forEach((field: any) => {
+  localConfig.fields.forEach((field: ProtocolEditorField) => {
     const length = getFieldByteLength(field);
     if (!length) {
       field.byteSequence = '';
@@ -380,7 +409,7 @@ const recalcByteSequence = () => {
   });
 };
 
-const configTableData = ref([
+const configTableData = ref<ProtocolConfigTableRow[]>([
   {
     protocolName: '以太网',
     label1: '发送方',
@@ -419,7 +448,7 @@ const configTableData = ref([
 ]);
 
 // 辅助函数：根据字典获取 label
-const getLabel = (dict: any[], value: string, fallbackLabel: string = '') => {
+const getLabel = (dict: DictItem[], value: string, fallbackLabel: string = '') => {
   if (!value) return '';
   // 如果已有 label 且不为空，优先使用（但这里为了修复显示问题，我们优先查字典）
   // 实际上，如果 dictValue 是英文，我们想显示中文 label
@@ -477,7 +506,9 @@ watch(
   }
 );
 
-function configEditRender(field: 'value1' | 'value2') {
+function configEditRender(
+  field: 'value1' | 'value2'
+): DictAutocompleteRenderOptions<ProtocolConfigTableRow> {
   const getDictType = (row: Record<string, string>) => {
     if (field === 'value1' && row.label1 === '传输方式') return 'sys_protocol_method_ethernet';
     if (field === 'value1' && row.label1 === '传输频率') return 'sys_protocol_frequency';
@@ -501,28 +532,13 @@ function configEditRender(field: 'value1' | 'value2') {
     return false;
   };
 
-  const extractValue = (evtOrValue: any) => {
-    if (evtOrValue && typeof evtOrValue === 'object') {
-      if ('value' in evtOrValue) return evtOrValue.value;
-      if ('target' in evtOrValue && 'value' in evtOrValue.target) return evtOrValue.target.value;
-    }
-    return evtOrValue;
-  };
-
-  const normalizeValLabel = (raw: any) => {
-    if (raw && typeof raw === 'object') {
-      return {
-        value: 'value' in raw ? raw.value : raw,
-        label: 'label' in raw ? raw.label : '',
-      };
-    }
-    return { value: raw, label: '' };
-  };
-
-  const handleUpdate = (cellParams: any, evtOrValue: any) => {
+  const handleUpdate = (
+    cellParams: DictAutocompleteCellParams<ProtocolConfigTableRow>,
+    evtOrValue?: DictEditorValue
+  ) => {
     const { row } = cellParams;
-    const { value: nextValue, label: nextLabel } = normalizeValLabel(
-      extractValue(evtOrValue ?? cellParams?.value)
+    const { value: nextValue, label: nextLabel } = normalizeConfigEditorValue(
+      evtOrValue ?? cellParams.value
     );
 
     if (field === 'value1') {
@@ -555,7 +571,7 @@ function configEditRender(field: 'value1' | 'value2') {
 
   return {
     name: 'DictAutocomplete',
-    props: ({ row }: any) => {
+    props: ({ row }) => {
       const dictType = getDictType(row);
       return {
         dictType,
@@ -565,16 +581,16 @@ function configEditRender(field: 'value1' | 'value2') {
       };
     },
     events: {
-      change: (cellParams: any, value: any) => handleUpdate(cellParams, value),
-      input: (cellParams: any, value: any) => handleUpdate(cellParams, value),
+      change: (cellParams, value) => handleUpdate(cellParams, value),
+      input: (cellParams, value) => handleUpdate(cellParams, value),
     },
   };
 }
 
-const configTableEditConfig = {
+const configTableEditConfig: VxeTablePropTypes.EditConfig<ProtocolConfigTableRow> = {
   trigger: 'click',
   mode: 'cell',
-  activeMethod({ row, column }: any) {
+  activeMethod({ row, column }) {
     if (column.field !== 'value1') return true;
     const senderLocked = props.deviceMode || props.senderEditable === false;
     const receiverLocked = props.deviceMode || props.receiverEditable === false;
@@ -603,7 +619,7 @@ const configSpanMethod = ({ rowIndex, columnIndex }: { rowIndex: number; columnI
   return { rowspan: 1, colspan: 1 };
 };
 
-const fieldSpanMethod = ({ columnIndex }: any) => {
+const fieldSpanMethod: VxeTableProps<ProtocolEditorField>['spanMethod'] = ({ columnIndex }) => {
   const valueFieldColIndex = 5;
   const unitColIndex = 6;
 
@@ -656,11 +672,11 @@ const insertRow = () => {
   });
 };
 
-const removeRow = (row: any) => {
-  const index = localConfig.fields.findIndex((item: any) => item.id === row.id);
+const removeRow = (row: ProtocolEditorField) => {
+  const index = localConfig.fields.findIndex((item: ProtocolEditorField) => item.id === row.id);
   if (index > -1) {
     localConfig.fields = localConfig.fields.filter(
-      (item: any) => item.id !== row.id && item.parentId !== row.id
+      (item: ProtocolEditorField) => item.id !== row.id && item.parentId !== row.id
     );
     // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
     ElMessage.success('删除成功');
@@ -680,9 +696,11 @@ const removeSelectRow = async () => {
     type: 'warning',
   })
     .then(() => {
-      const deleteIds = selectRecords.map((item: any) => item.id);
+      const deleteIds = selectRecords.map((item: ProtocolEditorField) => item.id);
       localConfig.fields = localConfig.fields.filter(
-        (item: any) => !deleteIds.includes(item.id) && !deleteIds.includes(item.parentId)
+        (item: ProtocolEditorField) =>
+          !deleteIds.includes(item.id) &&
+          (item.parentId === null || !deleteIds.includes(item.parentId))
       );
       // message-governance-allow-local: 协议字段编辑器内的本地删除反馈
       ElMessage.success('删除成功');
@@ -716,7 +734,10 @@ const runValidation = async () => {
 };
 
 // 编辑完成后自动校验
-function handleEditClosed({ row, column }: any) {
+function handleEditClosed({
+  row,
+  column,
+}: VxeTableDefines.EditClosedEventParams<ProtocolEditorField>) {
   // 延迟执行，确保数据已更新
   setTimeout(async () => {
     // 先清除该单元格的 VxeTable 内置校验状态
@@ -729,7 +750,7 @@ function handleEditClosed({ row, column }: any) {
 }
 
 // 点击问题项跳转到对应单元格
-const handleIssueClick = (issue: any) => {
+const handleIssueClick = (issue: ValidationIssue) => {
   if (issue.rowIndex < 0) return;
 
   const $table = tableRef.value;

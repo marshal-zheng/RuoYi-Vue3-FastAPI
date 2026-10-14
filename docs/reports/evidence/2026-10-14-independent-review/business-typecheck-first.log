@@ -1,0 +1,2 @@
+tests/unit/api/project.test.ts(65,18): error TS2339: Property 'getProjectTopology' does not exist on type 'typeof import("/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/api/project/project")'.
+tests/unit/api/project.test.ts(72,18): error TS2339: Property 'updateProjectTopology' does not exist on type 'typeof import("/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/src/api/project/project")'.

@@ -26,6 +26,8 @@ interface UserState {
   avatar: string;
   roles: string[];
   permissions: string[];
+  csrfRefreshError: unknown;
+  logoutError: unknown;
 }
 
 const useUserStore = defineStore('user', {
@@ -37,6 +39,8 @@ const useUserStore = defineStore('user', {
     avatar: '',
     roles: [],
     permissions: [],
+    csrfRefreshError: null,
+    logoutError: null,
   }),
   actions: {
     // 登录
@@ -50,24 +54,24 @@ const useUserStore = defineStore('user', {
           .then(async (res) => {
             setToken(res.token);
             this.token = res.token;
-            const loginCsrfToken = res.csrfToken || res.csrf_token || '';
+            const loginCsrfToken = res.csrfToken || '';
             if (loginCsrfToken) {
               setCsrfToken(loginCsrfToken);
               resolve(res);
               return;
             }
             try {
-              const csrfResp = await request<{ csrfToken?: string; csrf_token?: string }>({
+              const csrfResp = await request<{ csrfToken?: string }>({
                 url: '/auth/csrf-token',
                 method: 'post',
                 silentSuccess: true,
               });
-              const csrfToken = csrfResp.csrfToken || csrfResp.csrf_token || '';
+              const csrfToken = csrfResp.csrfToken || '';
               if (csrfToken) {
                 setCsrfToken(csrfToken);
               }
             } catch (csrfError) {
-              console.warn('获取CSRF token失败，后续敏感操作可能被后端拒绝', csrfError);
+              this.csrfRefreshError = csrfError;
             }
             resolve(res);
           })
@@ -79,7 +83,7 @@ const useUserStore = defineStore('user', {
     // 新标签页/刷新后的会话恢复
     restoreSession() {
       return new Promise<boolean>((resolve) => {
-        request<{ token?: string; csrfToken?: string; csrf_token?: string }>({
+        request<{ token?: string; csrfToken?: string }>({
           url: '/auth/refresh',
           method: 'post',
           isToken: false,
@@ -97,7 +101,7 @@ const useUserStore = defineStore('user', {
             }
             setToken(token);
             this.token = token;
-            const csrfToken = res.csrfToken || res.csrf_token || '';
+            const csrfToken = res.csrfToken || '';
             if (csrfToken) {
               setCsrfToken(csrfToken);
             }
@@ -143,7 +147,7 @@ const useUserStore = defineStore('user', {
       return new Promise((resolve) => {
         logout(options)
           .catch((error) => {
-            console.warn('Logout request failed, fallback to client-side cleanup only.', error);
+            this.logoutError = error;
           })
           .then(() => {
             this.token = '';

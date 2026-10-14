@@ -27,11 +27,10 @@ function checkNodeHasModel(node) {
 }
 
 // 连线前检查函数
-const handleEdgeAdding = async ({ edge, isNew, options }) => {
+const handleEdgeAdding = async ({ edge, options }) => {
   const g = graph?.value;
-  console.log('g', g);
+
   if (!g) return;
-  console.log('g', g);
 
   try {
     const sourceId = edge.getSourceCellId?.();
@@ -48,7 +47,7 @@ const handleEdgeAdding = async ({ edge, isNew, options }) => {
 
     // 检查源节点是否为已绑定计算模型的叶子节点
     const sourceNode = g.getCellById(sourceId);
-    console.log('检查节点是否有计算模型:', checkNodeHasModel(sourceNode));
+
     if (checkNodeHasModel(sourceNode)) {
       try {
         // 显示确认对话框
@@ -61,10 +60,9 @@ const handleEdgeAdding = async ({ edge, isNew, options }) => {
 
         // 用户确认后，清除计算模型
         clearNodeComputeModel(g, sourceId);
-        console.log('用户确认，已清除计算模型');
-      } catch (error) {
+      } catch {
         // 用户取消，阻止连线
-        console.log('用户取消连线');
+
         options?.cancel && (options.cancel = true);
         edge.remove?.();
         return;
@@ -99,7 +97,6 @@ const getPortColor = (cell, portId) => {
 const handleEdgeConnected = async ({ edge }) => {
   const g = graph?.value;
   if (!edge || !g) return;
-  console.log('[DagConnect] edge:connected', edge?.id);
 
   // 设置边的颜色为源端口的颜色
   try {
@@ -114,7 +111,6 @@ const handleEdgeConnected = async ({ edge }) => {
             stroke: portColor,
           },
         });
-        console.log('[DagConnect] 设置边颜色为源端口颜色:', portColor);
       }
     }
   } catch (e) {
@@ -129,7 +125,9 @@ const handleEdgeConnected = async ({ edge }) => {
       edge.remove?.();
       return;
     }
-  } catch (e) {}
+  } catch {
+    // 读取连线关系失败时，保持连线前校验的结果；继续同步节点数据。
+  }
 
   // 检查源节点是否为已绑定计算模型的叶子节点
   try {
@@ -137,7 +135,7 @@ const handleEdgeConnected = async ({ edge }) => {
     if (sourceId) {
       const sourceNode = g.getCellById(sourceId);
       const needConfirm = checkNodeHasModel(sourceNode);
-      console.log('[DagConnect] source has model?', needConfirm);
+
       if (needConfirm) {
         try {
           await ElMessageBox.confirm('连线后会清除该节点的计算模型配置，是否继续？', '提示', {
@@ -148,10 +146,9 @@ const handleEdgeConnected = async ({ edge }) => {
           });
           // 用户确认后清除计算模型
           clearNodeComputeModel(g, sourceId);
-          console.log('[DagConnect] 已清除源节点计算模型');
-        } catch (err) {
+        } catch {
           // 用户取消：移除刚建立的连线并终止后续处理
-          console.log('[DagConnect] 用户取消，撤销本次连线');
+
           edge.remove?.();
           return;
         }
@@ -183,7 +180,6 @@ const handleEdgeConnected = async ({ edge }) => {
               parentNodeId: parentId,
             },
           });
-          console.log(`[DagConnect] 设置目标节点 ${targetId} 的 parentNodeId: ${parentId}`);
         }
       }
     }
@@ -224,9 +220,6 @@ const handleEdgeRemoved = ({ edge }) => {
             parentNodeId: newParentId || null,
           },
         });
-        console.log(
-          `[DagConnect] 更新目标节点 ${targetId} 的 parentNodeId: ${newParentId || 'null'}`
-        );
       }
     }
   } catch (e) {
@@ -270,8 +263,6 @@ const handleNodeAdded = ({ node }) => {
 const registerEventListeners = () => {
   const g = graph?.value;
   if (!g) return;
-
-  console.log('注册图事件监听器');
 
   // 注册事件监听器
   g.on('edge:adding', handleEdgeAdding);

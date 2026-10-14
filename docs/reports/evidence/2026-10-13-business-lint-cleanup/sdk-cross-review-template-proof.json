@@ -1,0 +1,17 @@
+[
+  {
+    "file": "client/client.gen.ts",
+    "regeneratedMatchesSource": true,
+    "ownerTemplateMatchesSource": true
+  },
+  {
+    "file": "client/types.gen.ts",
+    "regeneratedMatchesSource": true,
+    "ownerTemplateMatchesSource": true
+  },
+  {
+    "file": "core/serverSentEvents.gen.ts",
+    "regeneratedMatchesSource": true,
+    "ownerTemplateMatchesSource": true
+  }
+]

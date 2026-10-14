@@ -1,4 +1,5 @@
 import { computed } from 'vue';
+import { ElMessage } from 'element-plus';
 import { useGraphInstance } from './useGraphInstance';
 
 /**
@@ -21,15 +22,12 @@ export function useLoaded(pluginName) {
   // 安全调用函数（只有在插件加载后才执行）
   const safeCall = (callback) => {
     if (!graph || !graph.value) {
-      console.warn('Graph instance not available');
+      // 通过 false 告知调用方图实例尚未就绪。
       return false;
     }
 
     const plugin = graph.value.getPlugin(pluginName);
     if (!plugin) {
-      console.warn(
-        `Plugin ${pluginName} is not loaded. Please ensure the corresponding component is included.`
-      );
       return false;
     }
 
@@ -37,7 +35,7 @@ export function useLoaded(pluginName) {
       try {
         return callback(plugin);
       } catch (error) {
-        console.error(`Error calling function for plugin ${pluginName}:`, error);
+        ElMessage.error(error instanceof Error ? error.message : `图形插件 ${pluginName} 操作失败`);
         return false;
       }
     }

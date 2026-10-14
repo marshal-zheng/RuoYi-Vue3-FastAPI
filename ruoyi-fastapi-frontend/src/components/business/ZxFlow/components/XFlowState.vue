@@ -161,13 +161,6 @@ const onPropChange = (id, data, batchName) => {
 
   const cell = graph.value.getCellById(id);
   if (cell) {
-    console.log('onPropChange - 开始更新节点:', {
-      id,
-      data,
-      batchName,
-      currentData: cell.getData(),
-    });
-
     graph.value.startBatch(batchName);
     // 当包含 data 字段时，优先通过 setData 合并更新，以触发 x6-vue-shape 的重渲染
     let changed = data;
@@ -176,20 +169,17 @@ const onPropChange = (id, data, batchName) => {
       const prevData = cell.getData() || {};
       // 合并并写回，不使用 INNER_CALL 标记，确保触发响应式更新
       const mergedData = { ...prevData, ...nextData };
-      console.log('XFlowState - setData 合并数据:', { prevData, nextData, mergedData });
+
       cell.setData(mergedData);
       // 从后续属性处理中移除 data，避免被当成普通属性铺平
-      const { data: _omit, ...rest } = changed;
-      changed = rest;
+      changed = { ...changed };
+      delete changed.data;
     }
     // 其余属性仍按既有流程处理
     changed = cell.preprocess(changed, true);
     const properties = flatten(changed);
 
-    console.log('onPropChange - 处理后的属性:', { changed, properties });
-
     Object.keys(properties).forEach((key) => {
-      console.log('onPropChange - 设置属性:', key, properties[key]);
       cell.setPropByPath(key, properties[key], {
         [INNER_CALL]: true,
         rewrite: true,
@@ -198,8 +188,6 @@ const onPropChange = (id, data, batchName) => {
 
     onSpecialPropChange(id, data);
     graph.value.stopBatch(batchName);
-
-    console.log('onPropChange - 更新完成，新数据:', cell.getData());
   }
 };
 

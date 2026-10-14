@@ -30,7 +30,7 @@
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             style="width: 240px"
-            @change="(v: any) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+            @change="(v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
           />
         </template>
         <template #search>
@@ -112,11 +112,11 @@
       <el-descriptions-item label="工程描述">{{ detailData.projectDesc }}</el-descriptions-item>
       <el-descriptions-item label="创建人">{{ detailData.createBy }}</el-descriptions-item>
       <el-descriptions-item label="创建时间">{{
-        parseTime(detailData.createTime)
+        parseTime(detailData.createTime ?? undefined)
       }}</el-descriptions-item>
       <el-descriptions-item label="更新人">{{ detailData.updateBy }}</el-descriptions-item>
       <el-descriptions-item label="更新时间">{{
-        parseTime(detailData.updateTime)
+        parseTime(detailData.updateTime ?? undefined)
       }}</el-descriptions-item>
     </el-descriptions>
     <template #footer>
@@ -128,41 +128,66 @@
 </template>
 
 <script setup lang="ts" name="ProjectList">
+import { getCurrentInstance, ref } from 'vue';
+import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { ProjectRecord } from '@/api/system/project';
+import type { GetSystemProjectListProjectListGetData } from '@/api/_generated/types.gen';
+type ListQuery = NonNullable<GetSystemProjectListProjectListGetData['query']> & {
+  dateRange?: string[] | null;
+};
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { listProject, getProject, delProject } from '@/api/system/project';
 import { parseTime, serializeDateRange } from '@/utils/ruoyi';
 import ProjectDlg from './ProjectDlg.vue';
 
-const proxy = getCurrentInstance()?.proxy as any;
+const proxy = getCurrentInstance()!.proxy!;
 
 const ids = ref<number[]>([]);
 const multiple = ref(true);
-const gridListRef = ref<any>(null);
-const projectDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const projectDlgRef = ref<InstanceType<typeof ProjectDlg> | null>(null);
 const detailOpen = ref(false);
-const detailData = ref<any>({});
+const detailData = ref<Partial<ProjectRecord>>({});
 
-function queryTransform(query: any) {
+function queryTransform(query: ListQuery) {
   return serializeDateRange(query);
 }
 
-async function loadProjectData(params: any) {
+async function loadProjectData(params: ListLoadParams) {
   try {
-    return await listProject(params);
-  } catch (e) {
+    return await listProject({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
-function handleSelectionChange(selection: any[]) {
+function handleSelectionChange(selection: ProjectRecord[]) {
   ids.value = selection.map((item) => item.projectId);
   multiple.value = !selection.length;
 }
@@ -171,24 +196,27 @@ function handleAdd() {
   projectDlgRef.value?.open();
 }
 
-async function handleUpdate(row?: any) {
+async function handleUpdate(row?: ProjectRecord) {
   const projectId = row?.projectId || ids.value[0];
   if (!projectId) return;
 
   const response = await getProject(projectId).catch(() => null);
   if (!response) return;
-  projectDlgRef.value?.open(response);
+  projectDlgRef.value?.open({
+    projectId: response.projectId ?? undefined,
+    projectDesc: response.projectDesc ?? undefined,
+  });
 }
 
-async function handleDetail(row: any) {
+async function handleDetail(row: ProjectRecord) {
   const response = await getProject(row.projectId).catch(() => null);
   if (!response) return;
   detailData.value = response;
   detailOpen.value = true;
 }
 
-function handleDelete(row?: any) {
-  const projectIds = row?.projectId || ids.value;
+function handleDelete(row?: ProjectRecord) {
+  const projectIds = row?.projectId || ids.value.join(',');
   proxy.$modal
     .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
     .then(() => delProject(projectIds))

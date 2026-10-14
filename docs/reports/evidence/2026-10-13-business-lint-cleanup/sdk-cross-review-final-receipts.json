@@ -1,0 +1,72 @@
+[
+  {
+    "command": [
+      "./node_modules/.bin/openapi-ts",
+      "--input",
+      "../shared/openapi.json",
+      "--output",
+      "/tmp/ruoyi-sdk-cross-review-final-20261013",
+      "--client",
+      "@hey-api/client-fetch"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "scripts/postprocess-openapi.mjs",
+      "/tmp/ruoyi-sdk-cross-review-final-20261013"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "node",
+      "scripts/postprocess-openapi.mjs",
+      "/tmp/ruoyi-sdk-cross-review-final-20261013"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./node_modules/.bin/prettier",
+      "--write",
+      "/tmp/ruoyi-sdk-cross-review-final-20261013/**/*.ts",
+      "--single-quote",
+      "--trailing-comma",
+      "es5",
+      "--tab-width",
+      "2",
+      "--semi",
+      "--print-width",
+      "100"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./node_modules/.bin/tsc",
+      "--noEmit",
+      "--strict",
+      "--skipLibCheck",
+      "--target",
+      "ES2022",
+      "--module",
+      "ESNext",
+      "--moduleResolution",
+      "Bundler",
+      "--lib",
+      "ES2022,DOM",
+      "/tmp/ruoyi-sdk-cross-review-final-20261013/index.ts"
+    ],
+    "exitCode": 0
+  },
+  {
+    "command": [
+      "./node_modules/.bin/vitest",
+      "run",
+      "src/api/_generated-client-contract.test.ts"
+    ],
+    "exitCode": 0
+  }
+]

@@ -34,7 +34,7 @@
 import { computed, ref } from 'vue';
 import AlarmPanel from './AlarmPanel.vue';
 
-const props = defineProps({
+defineProps({
   alarms: {
     type: Array,
     default: () => [],

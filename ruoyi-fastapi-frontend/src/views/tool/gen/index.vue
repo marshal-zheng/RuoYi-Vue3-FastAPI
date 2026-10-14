@@ -214,7 +214,7 @@ const {
   title: '代码预览',
 
   footer: false,
-  noContentPadding: true,
+  bodyPadding: 0,
   defaultData: () => ({
     codeData: {},
     activeName: 'do.py',

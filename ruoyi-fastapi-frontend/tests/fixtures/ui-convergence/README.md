@@ -2,6 +2,8 @@
 
 该页加载真实业务 SFC、已安装 ZXUI 公开组件、业务 Host/Provider 和公开 deployment 资产。它不是产品路由。C/F 编号见仓库 `docs/reports/zxui-form-dialog-2026-09-22/browser-route-coverage.md`。
 
+2026-10-14 已移除无业务消费者的旧 DeviceClazzDialog、ProjectEditDialog、两个模拟 ExportDialog 和 F04/F05/F07/F08 夹具项；设备分类由 CategoryFormDialog（C01）统一处理，真实工程入口使用 ProjectFormDialog，真实导出页面及 VersionExportDialog 保持使用实际服务。历史检查编号保留，当前夹具共 19 项。
+
 在 frontend 目录运行：
 
 ```sh

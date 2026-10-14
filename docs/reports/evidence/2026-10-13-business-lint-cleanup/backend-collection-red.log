@@ -1,0 +1,423 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 4 items
+
+tests/unit/test_collection_openapi_contract.py FFFF                      [100%]
+
+=================================== FAILURES ===================================
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router0-/system/menu/list-row0] _
+
+router = <fastapi.routing.APIRouter object at 0x117e0a650>
+path = '/system/menu/list', row = {'menuId': 1, 'menuName': 'Menu'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(list[MenuModel])
+app        = <fastapi.applications.FastAPI object at 0x120941550>
+path       = '/system/menu/list'
+payload    = {'items': [{'menuId': 1, 'menuName': 'Menu'}]}
+route      = APIRoute(path='/system/menu/list', name='get_system_menu_list', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x117e0a650>
+row        = {'menuId': 1, 'menuName': 'Menu'}
+
+tests/unit/test_collection_openapi_contract.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(list[MenuModel])
+object = {'items': [{'menuId': 1, 'menuName': 'Menu'}]}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[MenuModel]
+E         Input should be a valid list [type=list_type, input_value={'items': [{'menuId': 1, 'menuName': 'Menu'}]}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': [{'menuId': 1, 'menuName': 'Menu'}]}
+self       = TypeAdapter(list[MenuModel])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router1-/system/dept/list-row1] _
+
+router = <fastapi.routing.APIRouter object at 0x116da9c70>
+path = '/system/dept/list', row = {'deptId': 2, 'deptName': 'Dept'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(list[DeptModel])
+app        = <fastapi.applications.FastAPI object at 0x115471450>
+path       = '/system/dept/list'
+payload    = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+route      = APIRoute(path='/system/dept/list', name='get_system_dept_list', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x116da9c70>
+row        = {'deptId': 2, 'deptName': 'Dept'}
+
+tests/unit/test_collection_openapi_contract.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(list[DeptModel])
+object = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[DeptModel]
+E         Input should be a valid list [type=list_type, input_value={'items': [{'deptId': 2, 'deptName': 'Dept'}]}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+self       = TypeAdapter(list[DeptModel])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router2-/system/dept/list/exclude/{dept_id}-row2] _
+
+router = <fastapi.routing.APIRouter object at 0x116da9c70>
+path = '/system/dept/list/exclude/{dept_id}'
+row = {'deptId': 2, 'deptName': 'Dept'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(list[DeptModel])
+app        = <fastapi.applications.FastAPI object at 0x12098a210>
+path       = '/system/dept/list/exclude/{dept_id}'
+payload    = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+route      = APIRoute(path='/system/dept/list/exclude/{dept_id}', name='get_system_dept_tree_for_edit_option', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x116da9c70>
+row        = {'deptId': 2, 'deptName': 'Dept'}
+
+tests/unit/test_collection_openapi_contract.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(list[DeptModel])
+object = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[DeptModel]
+E         Input should be a valid list [type=list_type, input_value={'items': [{'deptId': 2, 'deptName': 'Dept'}]}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': [{'deptId': 2, 'deptName': 'Dept'}]}
+self       = TypeAdapter(list[DeptModel])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+_ test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router3-/system/dict/type/optionselect-row3] _
+
+router = <fastapi.routing.APIRouter object at 0x117e50af0>
+path = '/system/dict/type/optionselect'
+row = {'dictId': 3, 'dictType': 'status'}
+
+    @pytest.mark.parametrize(
+        ('router', 'path', 'row'),
+        [
+            (menuController, '/system/menu/list', {'menuId': 1, 'menuName': 'Menu'}),
+            (deptController, '/system/dept/list', {'deptId': 2, 'deptName': 'Dept'}),
+            (deptController, '/system/dept/list/exclude/{dept_id}', {'deptId': 2, 'deptName': 'Dept'}),
+            (dictController, '/system/dict/type/optionselect', {'dictId': 3, 'dictType': 'status'}),
+        ],
+    )
+    def test_collection_schema_validates_factory_payload_and_rejects_bare_arrays(router, path, row):
+        app = FastAPI()
+        app.include_router(router)
+        route = next(route for route in app.routes if isinstance(route, APIRoute) and route.path == path)
+        payload = json.loads(ResponseUtil.ok_resource([row]).body)
+    
+        adapter = TypeAdapter(route.response_model)
+>       validated = adapter.validate_python(payload)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+adapter    = TypeAdapter(list[DictTypeModel])
+app        = <fastapi.applications.FastAPI object at 0x120de5a90>
+path       = '/system/dict/type/optionselect'
+payload    = {'items': [{'dictId': 3, 'dictType': 'status'}]}
+route      = APIRoute(path='/system/dict/type/optionselect', name='query_system_dict_type_options', methods=['GET'])
+router     = <fastapi.routing.APIRouter object at 0x117e50af0>
+row        = {'dictId': 3, 'dictType': 'status'}
+
+tests/unit/test_collection_openapi_contract.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = TypeAdapter(list[DictTypeModel])
+object = {'items': [{'dictId': 3, 'dictType': 'status'}]}
+
+    def validate_python(
+        self,
+        object: Any,
+        /,
+        *,
+        strict: bool | None = None,
+        from_attributes: bool | None = None,
+        context: dict[str, Any] | None = None,
+        experimental_allow_partial: bool | Literal['off', 'on', 'trailing-strings'] = False,
+        by_alias: bool | None = None,
+        by_name: bool | None = None,
+    ) -> T:
+        """Validate a Python object against the model.
+    
+        Args:
+            object: The Python object to validate against the model.
+            strict: Whether to strictly check types.
+            from_attributes: Whether to extract data from object attributes.
+            context: Additional context to pass to the validator.
+            experimental_allow_partial: **Experimental** whether to enable
+                [partial validation](../concepts/experimental.md#partial-validation), e.g. to process streams.
+                * False / 'off': Default behavior, no partial validation.
+                * True / 'on': Enable partial validation.
+                * 'trailing-strings': Enable partial validation and allow trailing strings in the input.
+            by_alias: Whether to use the field's alias when validating against the provided input data.
+            by_name: Whether to use the field's name when validating against the provided input data.
+    
+        !!! note
+            When using `TypeAdapter` with a Pydantic `dataclass`, the use of the `from_attributes`
+            argument is not supported.
+    
+        Returns:
+            The validated object.
+        """
+        if by_alias is False and by_name is not True:
+            raise PydanticUserError(
+                'At least one of `by_alias` or `by_name` must be set to True.',
+                code='validate-by-alias-and-name-false',
+            )
+    
+>       return self.validator.validate_python(
+            object,
+            strict=strict,
+            from_attributes=from_attributes,
+            context=context,
+            allow_partial=experimental_allow_partial,
+            by_alias=by_alias,
+            by_name=by_name,
+        )
+E       pydantic_core._pydantic_core.ValidationError: 1 validation error for list[DictTypeModel]
+E         Input should be a valid list [type=list_type, input_value={'items': [{'dictId': 3, 'dictType': 'status'}]}, input_type=dict]
+E           For further information visit https://errors.pydantic.dev/2.11/v/list_type
+
+by_alias   = None
+by_name    = None
+context    = None
+experimental_allow_partial = False
+from_attributes = None
+object     = {'items': [{'dictId': 3, 'dictType': 'status'}]}
+self       = TypeAdapter(list[DictTypeModel])
+strict     = None
+
+venv/lib/python3.13/site-packages/pydantic/type_adapter.py:421: ValidationError
+=========================== short test summary info ============================
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router0-/system/menu/list-row0]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router1-/system/dept/list-row1]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router2-/system/dept/list/exclude/{dept_id}-row2]
+FAILED tests/unit/test_collection_openapi_contract.py::test_collection_schema_validates_factory_payload_and_rejects_bare_arrays[router3-/system/dict/type/optionselect-row3]
+============================== 4 failed in 0.48s ===============================

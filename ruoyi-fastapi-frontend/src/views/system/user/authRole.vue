@@ -9,12 +9,8 @@
     <template #title>
       <div class="flex items-center gap-6">
         <span class="text-lg font-semibold">角色授权</span>
-        <span class="text-sm text-zx-text-secondary"
-          >用户昵称：{{ form.nickName }}</span
-        >
-        <span class="text-sm text-zx-text-secondary"
-          >登录账号：{{ form.userName }}</span
-        >
+        <span class="text-sm text-zx-text-secondary">用户昵称：{{ form.nickName }}</span>
+        <span class="text-sm text-zx-text-secondary">登录账号：{{ form.userName }}</span>
       </div>
     </template>
 

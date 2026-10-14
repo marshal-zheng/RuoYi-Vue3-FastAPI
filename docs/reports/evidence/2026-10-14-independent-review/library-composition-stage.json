@@ -1,0 +1,5294 @@
+{
+  "schema": "zx.theme-composition.stage-performance/1",
+  "environment": {
+    "recordedAt": "2026-10-14T01:54:42.029Z",
+    "experiment": "Coarse stage wrappers delegating to actual implementations; separate process from uninstrumented experiment",
+    "node": "v22.22.1",
+    "v8": "12.4.254.21-node.35",
+    "vitest": "2.1.9",
+    "happyDom": "17.6.3",
+    "os": {
+      "platform": "darwin",
+      "release": "24.5.0",
+      "architecture": "arm64",
+      "cpu": "Apple M4 Pro",
+      "logicalCpus": 14,
+      "totalMemoryBytes": 51539607552
+    },
+    "dom": "Vitest happy-dom, not browser paint/GPU/network latency",
+    "isolation": "Run one test file, --no-file-parallelism --maxWorkers=1 --minWorkers=1 --cache=false",
+    "setup": "Real public default Browser Host, published default manifest and CSS exports, one compiled business extension. Host creation/activation and fixture compilation occur outside named lifecycle batches. CSS asset I/O is process-cached by public export path.",
+    "manifestIdentity": {
+      "compilerName": "@zxio/theme-compiler",
+      "compilerVersion": "1.0.0",
+      "contractContentHash": "sha256:c7021546f7cee98e367fa58777177b75398b48afc5d6834714d5666b89ef16cb",
+      "contractVersion": "4.0.0",
+      "packageName": "@zxio/theme-default",
+      "packageVersion": "2.0.0",
+      "resolvedSchemaVersion": 1,
+      "sourceContentHash": "sha256:b30102b2d40e62a60e8479bf894ab9c5924d685bcaa9d9b5f2363894fd174445",
+      "sourceSchemaVersion": 4,
+      "themeId": "default",
+      "typeRegistryContentHash": "sha256:b9cfadbcf00c84e4e42ef16d7353e962d8f98a2861b0ecb414811388939a8262"
+    },
+    "extensionIdentity": {
+      "contentHash": "sha256:cbc6df3efa7fe73fd495f7b436d56eb39004ded1b180fe089f7bc288eddbb960",
+      "packageName": "@example/composition-performance",
+      "packageVersion": "1.0.0",
+      "planHash": "sha256:71f126c2ab206567c9d15b720864ff68535e815a1f0d824a22037ec21793465b"
+    },
+    "batchSizes": {
+      "samples": 20,
+      "warmNoops": 100,
+      "axisRoundTrips": 20,
+      "lruVisits": 17,
+      "defaultSeedCacheCapacity": 16
+    }
+  },
+  "units": "Milliseconds per complete named batch; *Calls/*Batches/*Hits are operation counts; cache sizes are entries; resource sizes are UTF-8 bytes; nearest-rank p95",
+  "boundaries": {
+    "deriveMs": "Actual deriveThemeSourceV4 call boundary; source validation remains in declaration-batch preparation",
+    "kernelResolveMs": "Actual themeKernel.resolveTheme call boundary",
+    "seedDeclarationBatchMs": "Actual successful cache-miss seedResolver.resolve batch minus nested derive/Kernel durations. Includes validation, serialization, Element Plus declaration mapping, freezing and LRU insertion. No per-token hooks.",
+    "seedCacheHitMs": "Successful warm seedResolver.resolve path, counted separately from declaration serialization",
+    "domOwnerMs": "Whole compositionOwner prepare/validate/apply/commit/finalize/attach/detach/dispose batches, including actual style leases/attributes and ownership bookkeeping. No per-variable hooks; lexical internal calls are not double-wrapped.",
+    "totalMs": "Instrumented complete operation batch, not a substitute for the independent uninstrumented report; stages do not claim to cover all Host/Runtime overhead"
+  },
+  "samples": [
+    {
+      "index": 1,
+      "operations": {
+        "cold": {
+          "totalMs": 63.16170899999997,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 1.1463329999996859,
+          "kernelResolveMs": 52.2924579999999,
+          "seedDeclarationBatchMs": 8.189876000000368,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.25816600000007384
+        },
+        "warm100": {
+          "totalMs": 0.7950419999997393,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 40.62329200000022,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 38.17883299999994,
+          "seedDeclarationBatchMs": 0.5272920000002159,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2932909999999538
+        },
+        "roundTrips20": {
+          "totalMs": 53.41600000000017,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0658709999988787,
+          "domOwnerMs": 5.604917999999998
+        },
+        "lru17": {
+          "totalMs": 619.8831249999998,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 577.5243330000012,
+          "seedDeclarationBatchMs": 7.377251999997952,
+          "seedCacheHitMs": 0.02408400000012989,
+          "domOwnerMs": 3.854749000000538
+        },
+        "evictedA": {
+          "totalMs": 37.52237500000001,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.33179100000007,
+          "seedDeclarationBatchMs": 0.47650100000009843,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22216699999944467
+        },
+        "newPortal": {
+          "totalMs": 0.15270800000007512,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.06683300000031522
+        },
+        "migrateRoot": {
+          "totalMs": 0.386417000000165,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1765000000004875
+        },
+        "dispose": {
+          "totalMs": 0.20325000000002547,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.019624000000021624
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 2,
+      "operations": {
+        "cold": {
+          "totalMs": 44.55150000000003,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.32816700000012133,
+          "kernelResolveMs": 36.16849999999977,
+          "seedDeclarationBatchMs": 6.66170800000009,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21895800000038435
+        },
+        "warm100": {
+          "totalMs": 0.9141250000002401,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.22258300000021,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.42120799999975,
+          "seedDeclarationBatchMs": 0.4420420000001286,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2341260000002876
+        },
+        "roundTrips20": {
+          "totalMs": 53.12416699999994,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0573760000011134,
+          "domOwnerMs": 5.153795999998238
+        },
+        "lru17": {
+          "totalMs": 680.150333,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 634.8124999999986,
+          "seedDeclarationBatchMs": 7.299293000000944,
+          "seedCacheHitMs": 0.02991599999995742,
+          "domOwnerMs": 4.138495000001512
+        },
+        "evictedA": {
+          "totalMs": 37.89470799999981,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.798917000000074,
+          "seedDeclarationBatchMs": 0.42229199999928824,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2222910000009506
+        },
+        "newPortal": {
+          "totalMs": 0.13850000000002183,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.06495899999936228
+        },
+        "migrateRoot": {
+          "totalMs": 0.2969169999996666,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13358400000106485
+        },
+        "dispose": {
+          "totalMs": 0.09808299999986048,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.01375000000007276
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 3,
+      "operations": {
+        "cold": {
+          "totalMs": 42.44474999999966,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.39399999999932334,
+          "kernelResolveMs": 34.63345799999934,
+          "seedDeclarationBatchMs": 6.073834000000716,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.19629199999781122
+        },
+        "warm100": {
+          "totalMs": 0.8869999999997162,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 37.51112499999999,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 34.590125000000626,
+          "seedDeclarationBatchMs": 0.41449999999986176,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2335830000010901
+        },
+        "roundTrips20": {
+          "totalMs": 50.51829199999975,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9222040000031484,
+          "domOwnerMs": 4.679918000007092
+        },
+        "lru17": {
+          "totalMs": 618.8010830000003,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 575.7056249999996,
+          "seedDeclarationBatchMs": 6.945250000001579,
+          "seedCacheHitMs": 0.023250000000189175,
+          "domOwnerMs": 3.8402889999988474
+        },
+        "evictedA": {
+          "totalMs": 38.862583000000086,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.748499999999694,
+          "seedDeclarationBatchMs": 0.4523330000001806,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2119989999982863
+        },
+        "newPortal": {
+          "totalMs": 0.13004100000034668,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.06000000000040018
+        },
+        "migrateRoot": {
+          "totalMs": 0.31066699999973935,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1396260000001348
+        },
+        "dispose": {
+          "totalMs": 0.09879199999977573,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.01341700000102719
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 4,
+      "operations": {
+        "cold": {
+          "totalMs": 45.25079199999982,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.227999999999156,
+          "kernelResolveMs": 37.36366700000053,
+          "seedDeclarationBatchMs": 6.283666000000267,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22054099999968457
+        },
+        "warm100": {
+          "totalMs": 0.7635000000000218,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.902790999999525,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.20874999999978,
+          "seedDeclarationBatchMs": 0.418416000000434,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21016699999927368
+        },
+        "roundTrips20": {
+          "totalMs": 51.74879200000032,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0245420000019294,
+          "domOwnerMs": 4.81149399998958
+        },
+        "lru17": {
+          "totalMs": 657.26325,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 615.1111640000017,
+          "seedDeclarationBatchMs": 7.621002999997472,
+          "seedCacheHitMs": 0.022042000000510598,
+          "domOwnerMs": 3.593664999999419
+        },
+        "evictedA": {
+          "totalMs": 37.335957999999664,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.21491700000024,
+          "seedDeclarationBatchMs": 0.4449580000000424,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2229989999987083
+        },
+        "newPortal": {
+          "totalMs": 0.12879199999952107,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05891599999995378
+        },
+        "migrateRoot": {
+          "totalMs": 0.31775000000016007,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13550000000122964
+        },
+        "dispose": {
+          "totalMs": 0.11041699999987031,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.013458000000355241
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 5,
+      "operations": {
+        "cold": {
+          "totalMs": 43.078583999999864,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.28533299999980954,
+          "kernelResolveMs": 35.44433299999946,
+          "seedDeclarationBatchMs": 6.024126000000251,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2066660000000411
+        },
+        "warm100": {
+          "totalMs": 0.8548329999994166,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 37.737584000000425,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 34.98225000000002,
+          "seedDeclarationBatchMs": 0.4385000000002037,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2209999999995489
+        },
+        "roundTrips20": {
+          "totalMs": 50.42462499999965,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9654990000017278,
+          "domOwnerMs": 4.519749000009142
+        },
+        "lru17": {
+          "totalMs": 635.6434159999999,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 594.1076240000002,
+          "seedDeclarationBatchMs": 7.048960999998599,
+          "seedCacheHitMs": 0.025041000000783242,
+          "domOwnerMs": 3.6235100000012608
+        },
+        "evictedA": {
+          "totalMs": 38.02483399999983,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.97312500000044,
+          "seedDeclarationBatchMs": 0.44741699999940465,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1877489999997124
+        },
+        "newPortal": {
+          "totalMs": 0.12291699999968841,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.053915999999844644
+        },
+        "migrateRoot": {
+          "totalMs": 0.28320800000074087,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13191699999879347
+        },
+        "dispose": {
+          "totalMs": 0.16354199999932462,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.012542000001303677
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 6,
+      "operations": {
+        "cold": {
+          "totalMs": 43.46479199999976,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.20100000000002183,
+          "kernelResolveMs": 35.80341700000008,
+          "seedDeclarationBatchMs": 6.040957999999591,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22608500000023923
+        },
+        "warm100": {
+          "totalMs": 0.8419160000003103,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 39.02087500000016,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.155124999999316,
+          "seedDeclarationBatchMs": 0.4150000000008731,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20504100000016479
+        },
+        "roundTrips20": {
+          "totalMs": 53.124917000000096,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.1169979999967836,
+          "domOwnerMs": 5.026287999996384
+        },
+        "lru17": {
+          "totalMs": 654.2396659999995,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 610.6330009999974,
+          "seedDeclarationBatchMs": 7.019374000001335,
+          "seedCacheHitMs": 0.021917000000030384,
+          "domOwnerMs": 3.610453000000234
+        },
+        "evictedA": {
+          "totalMs": 38.20758300000034,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.01204200000029,
+          "seedDeclarationBatchMs": 0.4484579999998459,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21312500000112777
+        },
+        "newPortal": {
+          "totalMs": 0.13104199999997945,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.06241700000009587
+        },
+        "migrateRoot": {
+          "totalMs": 0.30720799999926385,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13704100000086328
+        },
+        "dispose": {
+          "totalMs": 0.10870800000066083,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.013083000000733591
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 7,
+      "operations": {
+        "cold": {
+          "totalMs": 46.01879199999985,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.27770799999962037,
+          "kernelResolveMs": 37.50837500000034,
+          "seedDeclarationBatchMs": 6.806250999999975,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20329300000048534
+        },
+        "warm100": {
+          "totalMs": 0.7775000000001455,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.87708300000031,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.90491699999984,
+          "seedDeclarationBatchMs": 0.47937500000080036,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22500200000013137
+        },
+        "roundTrips20": {
+          "totalMs": 53.72662500000024,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0452900000027512,
+          "domOwnerMs": 5.014542000000802
+        },
+        "lru17": {
+          "totalMs": 629.5358340000002,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 587.6956250000003,
+          "seedDeclarationBatchMs": 7.497501000002558,
+          "seedCacheHitMs": 0.023959000000104425,
+          "domOwnerMs": 3.459298000002491
+        },
+        "evictedA": {
+          "totalMs": 38.685458999998446,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.43050000000039,
+          "seedDeclarationBatchMs": 0.4994589999987511,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21054200000071432
+        },
+        "newPortal": {
+          "totalMs": 0.1209579999995185,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05875000000014552
+        },
+        "migrateRoot": {
+          "totalMs": 0.2956670000003214,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13479199999892444
+        },
+        "dispose": {
+          "totalMs": 0.17166700000052515,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.013125999999829219
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 8,
+      "operations": {
+        "cold": {
+          "totalMs": 44.41450000000077,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.2156250000007276,
+          "kernelResolveMs": 37.04179199999999,
+          "seedDeclarationBatchMs": 5.792123999999603,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20129200000155834
+        },
+        "warm100": {
+          "totalMs": 0.7508330000000569,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 41.06579199999942,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 37.190457999999126,
+          "seedDeclarationBatchMs": 0.43404200000077253,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2605829999993148
+        },
+        "roundTrips20": {
+          "totalMs": 64.86133300000074,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.5122540000011213,
+          "domOwnerMs": 9.654177999997046
+        },
+        "lru17": {
+          "totalMs": 638.8022500000006,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 596.7772469999945,
+          "seedDeclarationBatchMs": 7.1929610000061075,
+          "seedCacheHitMs": 0.03429099999993923,
+          "domOwnerMs": 3.662080000005517
+        },
+        "evictedA": {
+          "totalMs": 40.11104200000045,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 37.98204199999964,
+          "seedDeclarationBatchMs": 0.44695800000044983,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20404100000087055
+        },
+        "newPortal": {
+          "totalMs": 0.334500000000844,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.055624999999054126
+        },
+        "migrateRoot": {
+          "totalMs": 0.4162079999987327,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.12941599999794562
+        },
+        "dispose": {
+          "totalMs": 0.32808399999885296,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.060333000001264736
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 9,
+      "operations": {
+        "cold": {
+          "totalMs": 45.949375000000146,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.2742080000007263,
+          "kernelResolveMs": 37.45316600000115,
+          "seedDeclarationBatchMs": 6.720000999999684,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22345700000005309
+        },
+        "warm100": {
+          "totalMs": 0.7599999999983993,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.52208400000018,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.800374999998894,
+          "seedDeclarationBatchMs": 0.4165000000011787,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.212959000002229
+        },
+        "roundTrips20": {
+          "totalMs": 51.732207999999446,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9953369999948336,
+          "domOwnerMs": 4.52888300000086
+        },
+        "lru17": {
+          "totalMs": 652.4341249999998,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 609.6684570000016,
+          "seedDeclarationBatchMs": 7.398583000001963,
+          "seedCacheHitMs": 0.02654199999960838,
+          "domOwnerMs": 3.7009589999943273
+        },
+        "evictedA": {
+          "totalMs": 38.033792000000176,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.996375000000626,
+          "seedDeclarationBatchMs": 0.4226669999989099,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20345700000143552
+        },
+        "newPortal": {
+          "totalMs": 0.13858299999992596,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05925000000024738
+        },
+        "migrateRoot": {
+          "totalMs": 0.4830000000001746,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21608399999786343
+        },
+        "dispose": {
+          "totalMs": 0.18887499999982538,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.013291000001117936
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 10,
+      "operations": {
+        "cold": {
+          "totalMs": 45.73754200000076,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.27008399999976973,
+          "kernelResolveMs": 37.970541999999114,
+          "seedDeclarationBatchMs": 6.0659990000003745,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20954300000084913
+        },
+        "warm100": {
+          "totalMs": 0.8113749999993161,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 40.53900000000067,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 37.64075000000048,
+          "seedDeclarationBatchMs": 0.4320419999985461,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21779199999764387
+        },
+        "roundTrips20": {
+          "totalMs": 53.01341599999978,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.1200019999996584,
+          "domOwnerMs": 4.931292999994184
+        },
+        "lru17": {
+          "totalMs": 634.7280409999985,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 593.8664170000011,
+          "seedDeclarationBatchMs": 7.001456000001781,
+          "seedCacheHitMs": 0.022582999999940512,
+          "domOwnerMs": 3.350789000000077
+        },
+        "evictedA": {
+          "totalMs": 38.544582999998966,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.51475000000028,
+          "seedDeclarationBatchMs": 0.42774999999892316,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.17874999999912689
+        },
+        "newPortal": {
+          "totalMs": 0.11041699999987031,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05424999999922875
+        },
+        "migrateRoot": {
+          "totalMs": 0.3048339999986638,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1309579999979178
+        },
+        "dispose": {
+          "totalMs": 0.0904580000005808,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.011458999999376829
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 11,
+      "operations": {
+        "cold": {
+          "totalMs": 43.30333400000018,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.19258300000001327,
+          "kernelResolveMs": 35.930207999999766,
+          "seedDeclarationBatchMs": 5.773959000001923,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18924999999944703
+        },
+        "warm100": {
+          "totalMs": 0.7940409999991971,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.88629099999889,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.01658399999906,
+          "seedDeclarationBatchMs": 0.44679100000030303,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21620800000164309
+        },
+        "roundTrips20": {
+          "totalMs": 49.073875000000044,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9599160000034317,
+          "domOwnerMs": 4.277705999989848
+        },
+        "lru17": {
+          "totalMs": 697.0332080000007,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 651.0612920000003,
+          "seedDeclarationBatchMs": 7.443999999999505,
+          "seedCacheHitMs": 0.022249999999985448,
+          "domOwnerMs": 3.709910999992644
+        },
+        "evictedA": {
+          "totalMs": 37.9202920000007,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.84391700000015,
+          "seedDeclarationBatchMs": 0.4444160000002739,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20337499999732245
+        },
+        "newPortal": {
+          "totalMs": 0.09458300000005693,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.052083000000493485
+        },
+        "migrateRoot": {
+          "totalMs": 0.2737919999999576,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.12650099999882514
+        },
+        "dispose": {
+          "totalMs": 0.10095799999908195,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.014791999999943073
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 12,
+      "operations": {
+        "cold": {
+          "totalMs": 43.26812500000051,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.2484999999996944,
+          "kernelResolveMs": 35.68987500000003,
+          "seedDeclarationBatchMs": 5.9465420000015,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.19183399999565154
+        },
+        "warm100": {
+          "totalMs": 0.7755419999994047,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 42.03320899999926,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 38.98570800000016,
+          "seedDeclarationBatchMs": 0.4699170000003505,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2287930000002234
+        },
+        "roundTrips20": {
+          "totalMs": 54.730125000000044,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.1229959999946004,
+          "domOwnerMs": 5.091207999990729
+        },
+        "lru17": {
+          "totalMs": 672.339833,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 623.6176669999986,
+          "seedDeclarationBatchMs": 11.369375999998738,
+          "seedCacheHitMs": 0.02237500000046566,
+          "domOwnerMs": 3.6444959999989806
+        },
+        "evictedA": {
+          "totalMs": 39.01233299999876,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.91474999999991,
+          "seedDeclarationBatchMs": 0.5321659999990516,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1952500000006694
+        },
+        "newPortal": {
+          "totalMs": 0.10124999999970896,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05395899999894027
+        },
+        "migrateRoot": {
+          "totalMs": 0.3258750000004511,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1667490000018006
+        },
+        "dispose": {
+          "totalMs": 0.09474999999838474,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.013539999999920838
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 13,
+      "operations": {
+        "cold": {
+          "totalMs": 46.37987500000054,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.19887500000004366,
+          "kernelResolveMs": 38.54954100000032,
+          "seedDeclarationBatchMs": 6.185666999999739,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21587699999872711
+        },
+        "warm100": {
+          "totalMs": 0.8106669999997393,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 41.519334000000526,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 38.28791600000113,
+          "seedDeclarationBatchMs": 0.46929199999976845,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.23200099999667145
+        },
+        "roundTrips20": {
+          "totalMs": 87.89537500000006,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.8171720000027562,
+          "domOwnerMs": 8.491002999990087
+        },
+        "lru17": {
+          "totalMs": 762.6365839999999,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 705.5667080000021,
+          "seedDeclarationBatchMs": 11.958709000004092,
+          "seedCacheHitMs": 0.029624999999214197,
+          "domOwnerMs": 4.158046000005925
+        },
+        "evictedA": {
+          "totalMs": 41.525666999999885,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 39.35350000000108,
+          "seedDeclarationBatchMs": 0.4507079999984853,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21729100000447943
+        },
+        "newPortal": {
+          "totalMs": 0.10054200000013225,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05595799999900919
+        },
+        "migrateRoot": {
+          "totalMs": 0.28412500000013097,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13204299999779323
+        },
+        "dispose": {
+          "totalMs": 0.10191700000177661,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.012915999999677297
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 14,
+      "operations": {
+        "cold": {
+          "totalMs": 45.57287499999984,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.27908300000126474,
+          "kernelResolveMs": 37.19733300000007,
+          "seedDeclarationBatchMs": 6.592875999998796,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.23945699999785575
+        },
+        "warm100": {
+          "totalMs": 0.8546249999999418,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 39.30170800000087,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.306249999999636,
+          "seedDeclarationBatchMs": 0.47712500000125146,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.23583400000097754
+        },
+        "roundTrips20": {
+          "totalMs": 58.59504200000083,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.209960999996838,
+          "domOwnerMs": 5.560337000004438
+        },
+        "lru17": {
+          "totalMs": 668.4397499999995,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 623.9211230000037,
+          "seedDeclarationBatchMs": 8.038501999995788,
+          "seedCacheHitMs": 0.02883300000030431,
+          "domOwnerMs": 3.6982070000012754
+        },
+        "evictedA": {
+          "totalMs": 38.56158299999879,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.548917000000074,
+          "seedDeclarationBatchMs": 0.45612399999845366,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18762600000081875
+        },
+        "newPortal": {
+          "totalMs": 0.0939170000001468,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.055041999999957625
+        },
+        "migrateRoot": {
+          "totalMs": 0.3236250000009022,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.16162400000393973
+        },
+        "dispose": {
+          "totalMs": 0.08525000000008731,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.011749999999665306
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 15,
+      "operations": {
+        "cold": {
+          "totalMs": 64.75058400000125,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.27891599999929895,
+          "kernelResolveMs": 53.790750000000116,
+          "seedDeclarationBatchMs": 9.031418000000485,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2217930000006163
+        },
+        "warm100": {
+          "totalMs": 0.8203340000000026,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 39.7327920000007,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 37.19537499999933,
+          "seedDeclarationBatchMs": 0.45770900000024994,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.22912600000017846
+        },
+        "roundTrips20": {
+          "totalMs": 50.30937499999891,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9790799999882438,
+          "domOwnerMs": 4.347087000005558
+        },
+        "lru17": {
+          "totalMs": 635.8830420000013,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 593.5383750000001,
+          "seedDeclarationBatchMs": 6.971709999996165,
+          "seedCacheHitMs": 0.026458999998794752,
+          "domOwnerMs": 3.5257429999946908
+        },
+        "evictedA": {
+          "totalMs": 41.30054199999904,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 39.23095900000044,
+          "seedDeclarationBatchMs": 0.4412080000001879,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.19954099999995378
+        },
+        "newPortal": {
+          "totalMs": 0.09770799999932933,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.0547500000011496
+        },
+        "migrateRoot": {
+          "totalMs": 0.2818330000009155,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.13008300000183226
+        },
+        "dispose": {
+          "totalMs": 0.09266700000080164,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.011458999999376829
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 16,
+      "operations": {
+        "cold": {
+          "totalMs": 46.57683299999917,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.21112499999981083,
+          "kernelResolveMs": 38.3832910000001,
+          "seedDeclarationBatchMs": 6.587916999998924,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20824999999786087
+        },
+        "warm100": {
+          "totalMs": 0.666957999999795,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 39.059792000000016,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.52779200000077,
+          "seedDeclarationBatchMs": 0.4257079999988491,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20349999999780266
+        },
+        "roundTrips20": {
+          "totalMs": 51.049708000000464,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0343730000004143,
+          "domOwnerMs": 4.454580000010537
+        },
+        "lru17": {
+          "totalMs": 697.2474170000005,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 650.3826219999992,
+          "seedDeclarationBatchMs": 8.42262600000322,
+          "seedCacheHitMs": 0.023791999999957625,
+          "domOwnerMs": 4.029501999988497
+        },
+        "evictedA": {
+          "totalMs": 49.987458000001425,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 47.37379099999998,
+          "seedDeclarationBatchMs": 0.5158339999998134,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.2288749999988795
+        },
+        "newPortal": {
+          "totalMs": 0.4394579999989219,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20891599999958999
+        },
+        "migrateRoot": {
+          "totalMs": 0.4189170000008744,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.17379199999777484
+        },
+        "dispose": {
+          "totalMs": 0.11895899999944959,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.012292000001252745
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 17,
+      "operations": {
+        "cold": {
+          "totalMs": 50.64366700000028,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.27004199999828415,
+          "kernelResolveMs": 41.3409159999992,
+          "seedDeclarationBatchMs": 7.609125000000859,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.19879200000104902
+        },
+        "warm100": {
+          "totalMs": 0.7686249999987922,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 41.31212500000038,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 38.18070799999987,
+          "seedDeclarationBatchMs": 0.4688339999993332,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21704099999806203
+        },
+        "roundTrips20": {
+          "totalMs": 57.681250000001455,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.2323360000045795,
+          "domOwnerMs": 5.310544000001755
+        },
+        "lru17": {
+          "totalMs": 668.0630419999998,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 624.3550400000004,
+          "seedDeclarationBatchMs": 7.335712000012791,
+          "seedCacheHitMs": 0.02824999999938882,
+          "domOwnerMs": 3.656416000016179
+        },
+        "evictedA": {
+          "totalMs": 38.75337500000023,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.5590830000001,
+          "seedDeclarationBatchMs": 0.5004169999992882,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1914580000047863
+        },
+        "newPortal": {
+          "totalMs": 0.15999999999985448,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.10095799999908195
+        },
+        "migrateRoot": {
+          "totalMs": 0.3583330000001297,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.17375000000174623
+        },
+        "dispose": {
+          "totalMs": 0.08483300000079907,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.011833000000478933
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 18,
+      "operations": {
+        "cold": {
+          "totalMs": 45.83066699999836,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.1891250000007858,
+          "kernelResolveMs": 38.063624999998865,
+          "seedDeclarationBatchMs": 6.251749999999447,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18529100000159815
+        },
+        "warm100": {
+          "totalMs": 0.7034579999999551,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.80374999999913,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.86329200000182,
+          "seedDeclarationBatchMs": 0.446457999998529,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.21771000000080676
+        },
+        "roundTrips20": {
+          "totalMs": 50.4230000000025,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0191259999883187,
+          "domOwnerMs": 4.38812499998312
+        },
+        "lru17": {
+          "totalMs": 668.6708330000001,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 624.970876000003,
+          "seedDeclarationBatchMs": 7.258207000006223,
+          "seedCacheHitMs": 0.02358299999832525,
+          "domOwnerMs": 3.4196690000244416
+        },
+        "evictedA": {
+          "totalMs": 37.3392500000009,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.38804199999868,
+          "seedDeclarationBatchMs": 0.4444580000017595,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.17550099999789381
+        },
+        "newPortal": {
+          "totalMs": 0.09024999999746797,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05100000000311411
+        },
+        "migrateRoot": {
+          "totalMs": 0.2550840000003518,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.12120900000081747
+        },
+        "dispose": {
+          "totalMs": 0.08445899999787798,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.010542000003624707
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 19,
+      "operations": {
+        "cold": {
+          "totalMs": 44.82500000000073,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.2509590000008757,
+          "kernelResolveMs": 36.94658299999719,
+          "seedDeclarationBatchMs": 5.307999000004202,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.19512399999439367
+        },
+        "warm100": {
+          "totalMs": 0.8674170000012964,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.92191699999967,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.63095799999792,
+          "seedDeclarationBatchMs": 0.440708000001905,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.20612600000094972
+        },
+        "roundTrips20": {
+          "totalMs": 52.47870799999873,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 1.0970440000091912,
+          "domOwnerMs": 4.551553000037529
+        },
+        "lru17": {
+          "totalMs": 666.0484589999978,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 623.7658740000043,
+          "seedDeclarationBatchMs": 7.371583999989525,
+          "seedCacheHitMs": 0.02958300000318559,
+          "domOwnerMs": 3.4523360000021057
+        },
+        "evictedA": {
+          "totalMs": 37.536833000001934,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.56108300000051,
+          "seedDeclarationBatchMs": 0.42091699999946286,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18741699999736738
+        },
+        "newPortal": {
+          "totalMs": 0.09733399999822723,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05574999999953434
+        },
+        "migrateRoot": {
+          "totalMs": 0.27704199999789125,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.1309160000018892
+        },
+        "dispose": {
+          "totalMs": 0.08491700000013225,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.011749000004783738
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 20,
+      "operations": {
+        "cold": {
+          "totalMs": 42.86145899999974,
+          "deriveCalls": 1,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0.1876669999983278,
+          "kernelResolveMs": 35.743500000000495,
+          "seedDeclarationBatchMs": 4.786998999999923,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18924900000274647
+        },
+        "warm100": {
+          "totalMs": 0.7544589999997697,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 0,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0
+        },
+        "coldB": {
+          "totalMs": 38.638999999999214,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 36.55937500000073,
+          "seedDeclarationBatchMs": 0.4385409999995318,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.17891600000075414
+        },
+        "roundTrips20": {
+          "totalMs": 49.89229200000045,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 40,
+          "ownerBatches": 200,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0.9826219999886234,
+          "domOwnerMs": 4.135130999959074
+        },
+        "lru17": {
+          "totalMs": 665.3804579999996,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 16,
+          "declarationBatches": 16,
+          "seedCacheHits": 1,
+          "ownerBatches": 85,
+          "deriveMs": 0,
+          "kernelResolveMs": 622.9648340000058,
+          "seedDeclarationBatchMs": 7.003625999997894,
+          "seedCacheHitMs": 0.03350000000136788,
+          "domOwnerMs": 3.4557459999741695
+        },
+        "evictedA": {
+          "totalMs": 37.957249999999476,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 1,
+          "declarationBatches": 1,
+          "seedCacheHits": 0,
+          "ownerBatches": 5,
+          "deriveMs": 0,
+          "kernelResolveMs": 35.93483300000298,
+          "seedDeclarationBatchMs": 0.43158399999447283,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.18800200000259792
+        },
+        "newPortal": {
+          "totalMs": 0.098667000002024,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 1,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.05904200000077253
+        },
+        "migrateRoot": {
+          "totalMs": 0.2935409999990952,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 6,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.12841599999956088
+        },
+        "dispose": {
+          "totalMs": 0.09866699999838602,
+          "deriveCalls": 0,
+          "kernelResolveCalls": 0,
+          "declarationBatches": 0,
+          "seedCacheHits": 0,
+          "ownerBatches": 3,
+          "deriveMs": 0,
+          "kernelResolveMs": 0,
+          "seedDeclarationBatchMs": 0,
+          "seedCacheHitMs": 0,
+          "domOwnerMs": 0.012165999996796018
+        }
+      },
+      "caches": {
+        "cold": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "warm100": {
+          "sources": 1,
+          "variants": 1,
+          "resolutions": 1
+        },
+        "coldB": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "roundTrips20": {
+          "sources": 1,
+          "variants": 2,
+          "resolutions": 2
+        },
+        "lru17": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 18
+        },
+        "evictedA": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "newPortal": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "migrateRoot": {
+          "sources": 1,
+          "variants": 16,
+          "resolutions": 19
+        },
+        "dispose": {
+          "sources": 0,
+          "variants": 0,
+          "resolutions": 19
+        }
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    }
+  ],
+  "statistics": {
+    "cold": {
+      "totalMs": {
+        "n": 20,
+        "median": 45.41183349999983,
+        "p95": 63.16170899999997
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 5,
+        "p95": 5
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0.2605004999995799,
+        "p95": 0.39399999999932334
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 37.2805000000003,
+        "p95": 52.2924579999999
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 6.218708499999593,
+        "p95": 8.189876000000368
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.20745799999895098,
+        "p95": 0.23945699999785575
+      }
+    },
+    "warm100": {
+      "totalMs": {
+        "n": 20,
+        "median": 0.7945414999994682,
+        "p95": 0.8869999999997162
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      }
+    },
+    "coldB": {
+      "totalMs": {
+        "n": 20,
+        "median": 38.97139599999991,
+        "p95": 41.519334000000526
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 5,
+        "p95": 5
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 36.417021000000204,
+        "p95": 38.28791600000113
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0.4413750000010168,
+        "p95": 0.47937500000080036
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.21939599999859638,
+        "p95": 0.2605829999993148
+      }
+    },
+    "roundTrips20": {
+      "totalMs": {
+        "n": 20,
+        "median": 52.746061999999256,
+        "p95": 64.86133300000074
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 40,
+        "p95": 40
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 200,
+        "p95": 200
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 1.0513330000019323,
+        "p95": 1.5122540000011213
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 4.871393499991882,
+        "p95": 8.491002999990087
+      }
+    },
+    "lru17": {
+      "totalMs": {
+        "n": 20,
+        "median": 661.3218539999998,
+        "p95": 697.2474170000005
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 16,
+        "p95": 16
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 16,
+        "p95": 16
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 85,
+        "p95": 85
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 619.0379990000038,
+        "p95": 651.0612920000003
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 7.353648000001158,
+        "p95": 11.369375999998738
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0.024562500000456566,
+        "p95": 0.03350000000136788
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 3.65045600000758,
+        "p95": 4.138495000001512
+      }
+    },
+    "evictedA": {
+      "totalMs": {
+        "n": 20,
+        "median": 38.37608299999965,
+        "p95": 41.525666999999885
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 5,
+        "p95": 5
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 36.22127100000034,
+        "p95": 39.35350000000108
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0.44718749999992724,
+        "p95": 0.5158339999998134
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.20341599999937898,
+        "p95": 0.2229989999987083
+      }
+    },
+    "newPortal": {
+      "totalMs": {
+        "n": 20,
+        "median": 0.12193749999960346,
+        "p95": 0.334500000000844
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 1,
+        "p95": 1
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.057353999999577354,
+        "p95": 0.10095799999908195
+      }
+    },
+    "migrateRoot": {
+      "totalMs": {
+        "n": 20,
+        "median": 0.3060209999989638,
+        "p95": 0.4189170000008744
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 6,
+        "p95": 6
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.13418799999999464,
+        "p95": 0.1765000000004875
+      }
+    },
+    "dispose": {
+      "totalMs": {
+        "n": 20,
+        "median": 0.09987499999942884,
+        "p95": 0.20325000000002547
+      },
+      "deriveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveCalls": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "declarationBatches": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHits": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "ownerBatches": {
+        "n": 20,
+        "median": 3,
+        "p95": 3
+      },
+      "deriveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "kernelResolveMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedDeclarationBatchMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "seedCacheHitMs": {
+        "n": 20,
+        "median": 0,
+        "p95": 0
+      },
+      "domOwnerMs": {
+        "n": 20,
+        "median": 0.012999500000205444,
+        "p95": 0.019624000000021624
+      }
+    }
+  }
+}

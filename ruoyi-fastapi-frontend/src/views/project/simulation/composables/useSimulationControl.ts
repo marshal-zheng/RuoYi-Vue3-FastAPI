@@ -3,16 +3,8 @@
  *
  * 管理仿真会话的生命周期和状态
  */
-import {
-  ref,
-  reactive,
-  computed,
-  watch,
-  onUnmounted,
-  isRef,
-  type Ref,
-  type ComputedRef,
-} from 'vue';
+import { ref, reactive, computed, onUnmounted, isRef, type Ref, type ComputedRef } from 'vue';
+import type { SimulationSessionOptions } from '@/api/simulation/types';
 import {
   createSimulationSession,
   startSimulationSession,
@@ -53,10 +45,7 @@ interface SimulationState {
   startTime: number | null;
 }
 
-interface SessionOptions {
-  speed?: number;
-  [key: string]: any;
-}
+type SessionOptions = SimulationSessionOptions;
 
 interface StatusUpdate {
   status?: SimulationStatusType;

@@ -14,11 +14,32 @@ const {
   dynamicTitle,
 } = defaultSettings;
 
-function getStorageSetting(): Record<string, any> {
+function getStorageSetting(): Partial<SettingsState> & { layoutVersion?: number } {
   try {
     const raw = localStorage.getItem('layout-setting');
     if (!raw) return {};
-    const saved = JSON.parse(raw);
+    const parsed: unknown = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    const saved = {
+      ...Object.fromEntries(
+        Object.entries(parsed).filter(
+          ([key, value]) =>
+            [
+              'topNav',
+              'tagsView',
+              'headerVisible',
+              'breadcrumbVisible',
+              'sidebarLogo',
+              'dynamicTitle',
+              'topNavBorder',
+            ].includes(key) && typeof value === 'boolean'
+        )
+      ),
+      layoutVersion:
+        'layoutVersion' in parsed && typeof parsed.layoutVersion === 'number'
+          ? parsed.layoutVersion
+          : undefined,
+    };
     if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return {};
     if (typeof saved.layoutVersion === 'number' && saved.layoutVersion >= LAYOUT_SETTINGS_VERSION) {
       return saved;
@@ -82,10 +103,38 @@ const useSettingsStore = defineStore('settings', {
   },
   actions: {
     // 修改布局设置
-    changeSetting(data: { key: string; value: any }) {
+    changeSetting(data: { key: string; value: unknown }) {
       const { key, value } = data;
-      if (this.hasOwnProperty(key)) {
-        (this as any)[key] = value;
+      if (key === 'title' && typeof value === 'string') {
+        this.title = value;
+        return;
+      }
+      if (typeof value !== 'boolean') return;
+      switch (key) {
+        case 'showSettings':
+          this.showSettings = value;
+          break;
+        case 'topNav':
+          this.topNav = value;
+          break;
+        case 'tagsView':
+          this.tagsView = value;
+          break;
+        case 'headerVisible':
+          this.headerVisible = value;
+          break;
+        case 'breadcrumbVisible':
+          this.breadcrumbVisible = value;
+          break;
+        case 'sidebarLogo':
+          this.sidebarLogo = value;
+          break;
+        case 'dynamicTitle':
+          this.dynamicTitle = value;
+          break;
+        case 'topNavBorder':
+          this.topNavBorder = value;
+          break;
       }
     },
     // 设置网页标题

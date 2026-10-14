@@ -1,21 +1,23 @@
-import { ref, computed, shallowRef, onMounted, watchEffect } from 'vue';
+import { ref, computed, shallowRef, onMounted } from 'vue';
 
-export type DataSourceFetcher = () => Promise<any[]>;
+export type DataSourceItem = Record<string, unknown>;
+
+export type DataSourceFetcher = () => Promise<DataSourceItem[]>;
 
 export type DataSourceOptions = {
   fetch?: DataSourceFetcher;
-  static?: any[];
+  static?: DataSourceItem[];
   labelKey?: string;
   valueKey?: string;
   cacheKey?: string;
 };
 
-const cacheStore = new Map<string, any[]>();
+const cacheStore = new Map<string, DataSourceItem[]>();
 
 export function useDataSource(options: DataSourceOptions) {
   const loading = ref(false);
   const error = shallowRef<unknown>(null);
-  const items = ref<any[]>([]);
+  const items = shallowRef<DataSourceItem[]>([]);
 
   const labelKey = options.labelKey ?? 'label';
   const valueKey = options.valueKey ?? 'value';

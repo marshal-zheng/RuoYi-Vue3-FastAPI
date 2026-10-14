@@ -92,12 +92,12 @@ watch(key, (val) => {
 }
 
 .icon-ul li:hover {
-  background: var(--zx-semantic-surface-sunken);
+  background: var(--zx-semantic-fill-hover);
 }
 
 .icon-ul li.active-item {
-  background: var(--zx-semantic-surface-elevated);
-  color: var(--zx-semantic-text-primary);
+  background: var(--zx-semantic-surface-selected-fill);
+  color: var(--zx-semantic-surface-selected-on-text);
 }
 
 .icon-ul li i {

@@ -1,0 +1,17 @@
+{
+  "backendFrame": {
+    "type": "status",
+    "data": {
+      "session_id": "review-stopped-session",
+      "status": "stopped",
+      "engine_present": false,
+      "message": "仿真已停止",
+      "speed": 1,
+      "elapsed_time": 0,
+      "message_count": 0,
+      "bandwidth_data_count": 0,
+      "alarm_count": 0
+    }
+  },
+  "decoded": null
+}

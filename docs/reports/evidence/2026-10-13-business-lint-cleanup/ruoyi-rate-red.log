@@ -1,0 +1,40 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/utils/generator/html.contract.test.ts > generated rating contract > exports the configured maximum to the real ElRate prop 3ms
+   → expected '<el-form ref="formRef" :model="formDa…' to contain ':max=\'7\''
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/generator/html.contract.test.ts > generated rating contract > exports the configured maximum to the real ElRate prop
+AssertionError: expected '<el-form ref="formRef" :model="formDa…' to contain ':max=\'7\''
+
+- Expected
++ Received
+
+- :max='7'
++ <el-form ref="formRef" :model="formData" :rules="rules" size="default"  label-width="100px" >
++     <el-form-item   label="Score" prop="score" >
++         <el-rate v-model="formData.score"    ></el-rate>
++       </el-form-item>
++     
++   </el-form>
+
+ ❯ src/utils/generator/html.contract.test.ts:8:18
+      6|   it('exports the configured maximum to the real ElRate prop', () => {
+      7|     const html = makeUpHtml({ ...formConf, fields: [{ tag: 'el-rate', …
+      8|     expect(html).toContain(":max='7'");
+       |                  ^
+      9|   });
+     10| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  22:43:22
+   Duration  1.29s (transform 380ms, setup 634ms, collect 40ms, tests 4ms, environment 314ms, prepare 40ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

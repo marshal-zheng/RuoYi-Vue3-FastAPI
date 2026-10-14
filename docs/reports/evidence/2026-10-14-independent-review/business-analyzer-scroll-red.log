@@ -1,0 +1,151 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > enables actual scrolling and emits the new preference without undefined callbacks
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > enables actual scrolling and emits the new preference without undefined callbacks
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > enables actual scrolling and emits the new preference without undefined callbacks
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > a rapid on/off change does not start scrolling in the next tick
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > a rapid on/off change does not start scrolling in the next tick
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > a rapid on/off change does not start scrolling in the next tick
+[Vue warn]: Failed to resolve component: el-input
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <ProtocolAnalyzer autoScroll=false messages= [ { messageId: 'message-1', sendTimestamp: 1 } ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+xxx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > enables actual scrolling and emits the new preference without undefined callbacks
+AssertionError: expected [ …(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   ReferenceError {
++     "message": "restartAutoScroll is not defined",
++   },
++ ]
+
+ ❯ src/views/project/simulation/components/ProtocolAnalyzer.test.ts:66:20
+     64|     checkbox.vm.$emit('change', true);
+     65|     await nextTick();
+     66|     expect(errors).toEqual([]);
+       |                    ^
+     67|     expect(wrapper.emitted('auto-scroll-change')).toEqual([[true]]);
+     68|     expect(frames.length).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > turning off stops an already scheduled animation
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   ReferenceError {
++     "message": "restartAutoScroll is not defined",
++   },
++   ReferenceError {
++     "message": "stopAutoScroll is not defined",
++   },
++ ]
+
+ ❯ src/views/project/simulation/components/ProtocolAnalyzer.test.ts:80:20
+     78|     checkbox.vm.$emit('change', false);
+     79|     await nextTick();
+     80|     expect(errors).toEqual([]);
+       |                    ^
+     81|     frames.shift()?.(200);
+     82|     expect(body.scrollTop).toBe(position);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/views/project/simulation/components/ProtocolAnalyzer.test.ts > protocol analyzer automatic scrolling > a rapid on/off change does not start scrolling in the next tick
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   ReferenceError {
++     "message": "restartAutoScroll is not defined",
++   },
++   ReferenceError {
++     "message": "stopAutoScroll is not defined",
++   },
++ ]
+
+ ❯ src/views/project/simulation/components/ProtocolAnalyzer.test.ts:91:20
+     89|     checkbox.vm.$emit('change', false);
+     90|     await nextTick();
+     91|     expect(errors).toEqual([]);
+       |                    ^
+     92|     expect(frames).toHaveLength(0);
+     93|     expect(body.scrollTop).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  02:32:14
+   Duration  745ms (transform 206ms, setup 219ms, collect 167ms, tests 38ms, environment 149ms, prepare 27ms)
+

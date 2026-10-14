@@ -1,0 +1,160 @@
+{
+  "kind": "zx.ai.production.source-closure.v1",
+  "root": {
+    "logicalName": "root",
+    "role": "bound",
+    "pathClass": "root",
+    "commit": "9e0d65039ecdf68de950242586828b68fe676696",
+    "clean": false,
+    "dependencyReasons": [
+      "package-artifact"
+    ]
+  },
+  "textEditor": {
+    "logicalName": "text-editor",
+    "role": "bound",
+    "pathClass": "independent-package",
+    "commit": "f7114002bcbe0e0eb2a838e4ec5b058a64b51a58",
+    "clean": true,
+    "dependencyReasons": [
+      "package-artifact",
+      "runtime-import",
+      "test-fixture",
+      "evidence-tool"
+    ]
+  },
+  "repositories": [
+    {
+      "logicalName": "root",
+      "role": "bound",
+      "pathClass": "root",
+      "commit": "9e0d65039ecdf68de950242586828b68fe676696",
+      "clean": false,
+      "dependencyReasons": [
+        "package-artifact"
+      ]
+    },
+    {
+      "logicalName": "text-editor",
+      "role": "bound",
+      "pathClass": "independent-package",
+      "commit": "f7114002bcbe0e0eb2a838e4ec5b058a64b51a58",
+      "clean": true,
+      "dependencyReasons": [
+        "package-artifact",
+        "runtime-import",
+        "test-fixture",
+        "evidence-tool"
+      ]
+    },
+    {
+      "logicalName": "chart",
+      "role": "inventory",
+      "pathClass": "independent-package",
+      "commit": "7238cd9c1c82df7fbae2362da7601584e4f718a7",
+      "clean": false,
+      "dependencyReasons": []
+    },
+    {
+      "logicalName": "drive",
+      "role": "inventory",
+      "pathClass": "independent-package",
+      "commit": "cea428799c8cd2ee1b1e4e896f69776a8455bfa8",
+      "clean": true,
+      "dependencyReasons": []
+    },
+    {
+      "logicalName": "document",
+      "role": "inventory",
+      "pathClass": "independent-package",
+      "commit": "b0e12f144a031b5d85e5430ad3796512c9f9eefb",
+      "clean": true,
+      "dependencyReasons": []
+    },
+    {
+      "logicalName": "keybindings",
+      "role": "inventory",
+      "pathClass": "independent-package",
+      "commit": "288484ae10deae0052d6a52417368d67112f44b1",
+      "clean": true,
+      "dependencyReasons": []
+    },
+    {
+      "logicalName": "text-editor-react",
+      "role": "inventory",
+      "pathClass": "independent-package",
+      "commit": "62f12b8a67c8eaba565f4542c1ed63212c32075a",
+      "clean": true,
+      "dependencyReasons": []
+    }
+  ],
+  "lockfileFingerprint": "sha256:008e9197a37d9dbf54366abe0a6457cd1d17049a302c7919e8c48102e8e7440c",
+  "artifactGraphFingerprint": "sha256:ac03aaa8cb113e67de3dee28a685f4fa6f4474db9c6695c927cb1e3f74a75cbe",
+  "configurationFingerprint": "sha256:f7771241f0647a8e17b1d997292ee1c9060ff2e6cd6aa9ee9a9f0028a11b1ce6",
+  "environmentProfile": "local-darwin-arm64-node22-v1",
+  "toolchain": {
+    "node": "v22.22.1",
+    "pnpm": "9.5.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "runner": "zx-ai-production-runner-v1",
+    "browser": "Google Chrome 155.0.8059.40"
+  },
+  "ownerManifests": [
+    {
+      "owner": "document",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/core.ts",
+      "fingerprint": "sha256:446973251462d57bd3ce70d0a88056affbcf76c9f7572f82cc62aed6e2670aba"
+    },
+    {
+      "owner": "schema",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/core/schema-kernel/index.ts",
+      "fingerprint": "sha256:ac6a2ed9bb3540f20d6cddcb3788150a7ea5d2e6712c66bc1567abc7357ca601"
+    },
+    {
+      "owner": "operation",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/operation-payload.ts",
+      "fingerprint": "sha256:ade189ca69a3a905aa3c67e4c65149ba704fdf23e7c272abad217e196449885d"
+    },
+    {
+      "owner": "runtime",
+      "version": "2.0.0",
+      "publicExport": "packages/text-editor/src/core/deterministic-runtime/manifest.ts",
+      "fingerprint": "sha256:3701cdc3775693879ee845ccaa32611901bd4a50d8946c7f323dee2462d31ccc"
+    },
+    {
+      "owner": "proposal",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/proposal-branch/index.ts",
+      "fingerprint": "sha256:de7e3a320959f3d61808a3b1bef34bc152e6e88b8cc00c7f74139bdb63c4430e"
+    },
+    {
+      "owner": "review",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/review-runtime/index.ts",
+      "fingerprint": "sha256:bc02384466e26522db0d71c3d9e02b2bc4ab27fdfe8cfebe606405665cb7987d"
+    },
+    {
+      "owner": "session",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/session-transport/index.ts",
+      "fingerprint": "sha256:de43e6e6d8d893f60df6931a11d4fb8b6617535b82f4370d548b1b57ce23fe98"
+    },
+    {
+      "owner": "collaboration",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/collaboration-rebase/index.ts",
+      "fingerprint": "sha256:de39ec12e768eaf9c8422a8be3b2f6e5ee05fb83361ad720d8f097a6805fc669"
+    },
+    {
+      "owner": "complex-node",
+      "version": "1.0.0",
+      "publicExport": "packages/text-editor/src/ai/complex-node/index.ts",
+      "fingerprint": "sha256:0aca0d9369cb1006e302db09df3bb991326d799a7b26234aa4dc329e09348152"
+    }
+  ],
+  "fingerprint": "sha256:a117e7972a42d7a9e5b0bae36ee06f72003bced1a1a3f654cc3448dd37725372"
+}

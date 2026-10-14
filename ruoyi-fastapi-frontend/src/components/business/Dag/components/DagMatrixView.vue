@@ -168,7 +168,7 @@
 import { ref, computed, watch, toRef } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { ElMessage, ElMessageBox } from 'element-plus';
-import { Search, Folder, Document, Connection, Plus, Edit, Delete } from '@element-plus/icons-vue';
+import { Search, Folder, Document, Connection } from '@element-plus/icons-vue';
 import { transformGraphToMatrix } from '../utils/matrixDataTransform.js';
 
 defineOptions({
@@ -240,12 +240,9 @@ const filteredData = computed(() => {
 // 方法
 const convertGraphToMatrix = (graphData) => {
   try {
-    console.log('🔄 转换图数据:', graphData);
     const treeData = transformGraphToMatrix(graphData, props.nodeRenderer);
-    console.log('🌳 树形数据:', treeData);
 
     const flattened = flattenTreeData(treeData);
-    console.log('📊 扁平化数据:', flattened);
 
     flatData.value = flattened;
   } catch (error) {
@@ -393,7 +390,7 @@ const handleDelete = async (row) => {
 
     emit('node-delete', row);
     ElMessage.success('删除成功');
-  } catch (error) {
+  } catch {
     // 用户取消
   }
 };

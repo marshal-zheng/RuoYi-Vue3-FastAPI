@@ -168,7 +168,7 @@ onMounted(() => {
 
 <style scoped>
 .project-entry {
-  min-height: calc(100vh - 84px);
+  min-height: 100cqh;
   display: flex;
   align-items: center;
   justify-content: center;

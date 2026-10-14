@@ -23,7 +23,7 @@ import { ref, onMounted } from 'vue';
 import { getDeviceCategoryOptions } from '@/api/device/category';
 
 // Props
-const props = defineProps({
+defineProps({
   modelValue: {
     type: String,
     default: '',
@@ -61,18 +61,12 @@ const categoryOptions = ref([]);
 async function loadCategories() {
   loading.value = true;
   try {
-    // 使用业务类型 9999 获取分类列表
-    const response = await getDeviceCategoryOptions('9999');
-    const categories = Array.isArray(response?.items)
-      ? response.items
-      : Array.isArray(response)
-        ? response
-        : [];
+    const { items: categories } = await getDeviceCategoryOptions();
 
     // 转换为选项格式
     categoryOptions.value = categories.map((item) => ({
-      label: item.category_name || item.name || item.categoryName,
-      value: item.category_name || item.name || item.categoryName,
+      label: item.name,
+      value: item.name,
     }));
   } finally {
     loading.value = false;

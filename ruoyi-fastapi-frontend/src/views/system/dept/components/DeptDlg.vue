@@ -52,11 +52,12 @@ import { useDict } from '@/utils/dict';
 import type { FormInstance } from 'element-plus';
 const formRef = ref<FormInstance>();
 
+import type { DeptRecord } from '@/api/system/dept';
 import { addDept, updateDept, listDept, listDeptExcludeChild } from '@/api/system/dept';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
-import { ref } from 'vue';
+import { ref, getCurrentInstance } from 'vue';
 
-const proxy = getCurrentInstance()?.proxy as any;
+const proxy = getCurrentInstance()!.proxy!;
 
 // 保留异步字典返回的 ref，避免复制请求完成前的空数组。
 const { sys_normal_disable: sys_normal_disable } = useDict('sys_normal_disable');
@@ -69,12 +70,12 @@ interface DeptForm {
   leader?: string;
   phone?: string;
   email?: string;
-  status?: string;
+  status?: '0' | '1';
 }
 
 const emit = defineEmits(['success']);
 
-const deptOptions = ref<any[]>([]);
+const deptOptions = ref<DeptRecord[]>([]);
 
 const formRules = {
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],

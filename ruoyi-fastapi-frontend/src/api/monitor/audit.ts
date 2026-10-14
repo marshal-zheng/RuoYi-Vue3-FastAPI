@@ -1,8 +1,12 @@
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type { GetSystemAuditLogListMonitorAuditListGetData } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询审计日志列表
-export function list(query?: Record<string, any>) {
-  return request({
+export function list(query?: NonNullable<GetSystemAuditLogListMonitorAuditListGetData['query']>) {
+  return request<
+    HttpOffsetPage<NonNullable<GetSystemAuditLogListMonitorAuditListGetData['query']>>
+  >({
     url: '/monitor/audit/list',
     method: 'get',
     params: query,
@@ -11,7 +15,7 @@ export function list(query?: Record<string, any>) {
 
 // 删除审计日志
 export function delAuditLog(auditId: number | string) {
-  return request({
+  return request<null>({
     url: '/monitor/audit/' + auditId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'monitor.audit.delete' },
@@ -20,7 +24,7 @@ export function delAuditLog(auditId: number | string) {
 
 // 清空审计日志
 export function cleanAuditLog() {
-  return request({
+  return request<null>({
     url: '/monitor/audit/clean',
     method: 'delete',
     feedback: { mode: 'auto', key: 'monitor.audit.clear' },

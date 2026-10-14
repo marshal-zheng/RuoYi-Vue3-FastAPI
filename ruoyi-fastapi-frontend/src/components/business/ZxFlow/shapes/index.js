@@ -1,6 +1,7 @@
 // XFlow Vue 库的基础图形支持
 // 这里只提供通用的图形注册工具和基础形状
 
+import { ElMessage } from 'element-plus';
 import { Graph } from '@antv/x6';
 import { register } from '@antv/x6-vue-shape';
 
@@ -30,17 +31,17 @@ export class ShapeRegistry {
    */
   static safeRegister(shapeName, config, callback) {
     if (this.isRegistered(shapeName)) {
-      console.warn(`Shape ${shapeName} already registered`);
+      // 已注册的图形保持原定义，通过 false 告知调用方无需重复注册。
       return false;
     }
 
     try {
-      const result = callback(config);
+      callback(config);
       this.markRegistered(shapeName);
-      console.log(`Shape ${shapeName} registered successfully`);
+
       return true;
     } catch (e) {
-      console.warn(`Failed to register shape ${shapeName}:`, e);
+      ElMessage.error(e instanceof Error ? e.message : `图形 ${shapeName} 注册失败`);
       return false;
     }
   }

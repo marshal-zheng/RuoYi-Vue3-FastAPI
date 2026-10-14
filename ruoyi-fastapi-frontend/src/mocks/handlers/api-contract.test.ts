@@ -67,10 +67,12 @@ describe('mock handlers through frontend API contracts', () => {
       permissions: ['*:*:*'],
     });
 
-    await expect(getRouters()).resolves.toEqual([
-      expect.objectContaining({ name: 'Project', path: '/project' }),
-      expect.objectContaining({ name: 'System', path: '/system' }),
-    ]);
+    await expect(getRouters()).resolves.toMatchObject({
+      items: [
+        expect.objectContaining({ name: 'Project', path: '/project' }),
+        expect.objectContaining({ name: 'System', path: '/system' }),
+      ],
+    });
     await expect(getDicts('sys_user_sex')).resolves.toMatchObject({
       items: expect.arrayContaining([
         expect.objectContaining({ dictType: 'sys_user_sex', dictValue: '0' }),
@@ -140,6 +142,7 @@ describe('mock handlers through frontend API contracts', () => {
 
     const cloned = await cloneProjectVersion({
       sourceVersionId: MOCK_VERSION_IDS.commandCenterReview,
+      versionNumber: 'API 合约副本',
       versionName: 'API 合约副本',
     });
     await expect(
@@ -175,20 +178,21 @@ describe('mock handlers through frontend API contracts', () => {
       status: 'running',
       messageCount: 2,
     });
-    await expect(getSimulationMessages(sessionId, 1)).resolves.toEqual([
-      expect.objectContaining({ sessionId }),
-    ]);
-    await expect(getSimulationBandwidth(sessionId)).resolves.toEqual([
-      expect.objectContaining({ sessionId, bandwidthMbps: 860 }),
-      expect.objectContaining({ sessionId, bandwidthMbps: 910 }),
-    ]);
-    await expect(getSimulationAlarms(sessionId)).resolves.toEqual([
-      expect.objectContaining({ sessionId, severity: 'warning' }),
-    ]);
-    await expect(getEvents(sessionId)).resolves.toEqual([
-      expect.objectContaining({ sessionId }),
-      expect.objectContaining({ sessionId }),
-    ]);
+    await expect(getSimulationMessages(sessionId, 1)).resolves.toMatchObject({
+      items: [expect.objectContaining({ sessionId })],
+    });
+    await expect(getSimulationBandwidth(sessionId)).resolves.toMatchObject({
+      items: [
+        expect.objectContaining({ sessionId, bandwidthMbps: 860 }),
+        expect.objectContaining({ sessionId, bandwidthMbps: 910 }),
+      ],
+    });
+    await expect(getSimulationAlarms(sessionId)).resolves.toMatchObject({
+      items: [expect.objectContaining({ sessionId, severity: 'warning' })],
+    });
+    await expect(getEvents(sessionId)).resolves.toMatchObject({
+      items: [expect.objectContaining({ sessionId }), expect.objectContaining({ sessionId })],
+    });
 
     await expect(pauseSimulationSession(sessionId)).rejects.toMatchObject({
       status: 501,
@@ -215,9 +219,13 @@ describe('mock handlers through frontend API contracts', () => {
     expect(missing.status).toBe(501);
     expect(missing.headers.get('X-Mock-Handler')).toBe('unhandled-api');
     await expect(missing.json()).resolves.toEqual({
-      code: 501,
-      msg: 'MOCK_API_NOT_IMPLEMENTED: PATCH /api/not-implemented-yet?trace=1 尚未在单套 mock 主线中实现',
-      data: null,
+      type: 'about:blank',
+      title: 'MOCK_API_NOT_IMPLEMENTED',
+      status: 501,
+      errorCode: 'MOCK_API_NOT_IMPLEMENTED',
+      detail:
+        'MOCK_API_NOT_IMPLEMENTED: PATCH /api/not-implemented-yet?trace=1 尚未在单套 mock 主线中实现',
+      instance: '/api/not-implemented-yet?trace=1',
     });
   });
 });

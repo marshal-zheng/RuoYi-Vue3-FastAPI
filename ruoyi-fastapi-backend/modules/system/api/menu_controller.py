@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.http_contracts import CollectionResult
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
@@ -74,7 +75,9 @@ async def get_system_role_menu_tree(
 
 
 @menuController.get(
-    '/list', response_model=list[MenuModel], dependencies=[Depends(CheckUserInterfaceAuth('system:menu:list'))]
+    '/list',
+    response_model=CollectionResult[MenuModel],
+    dependencies=[Depends(CheckUserInterfaceAuth('system:menu:list'))],
 )
 async def get_system_menu_list(
     request: Request,

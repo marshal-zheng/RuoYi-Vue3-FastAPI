@@ -38,7 +38,7 @@ export function useExport(graphInstance = null) {
 
   try {
     graph = graphInstance || useGraphInstance();
-  } catch (error) {
+  } catch {
     graph = graphInstance;
   }
 
@@ -83,7 +83,7 @@ export function useExport(graphInstance = null) {
         .join('');
       const existing = targetEl.getAttribute('style');
       targetEl.setAttribute('style', existing ? `${existing};${styleText}` : styleText);
-    } catch (error) {
+    } catch {
       // ignore style copy failures caused by inaccessible computed styles
     }
 
@@ -117,7 +117,7 @@ export function useExport(graphInstance = null) {
     merged.beforeSerialize = function beforeSerialize(svgEl) {
       try {
         inlineForeignObjectStyles(svgEl, g);
-      } catch (error) {
+      } catch {
         // ignore failures here and continue with export
       }
 

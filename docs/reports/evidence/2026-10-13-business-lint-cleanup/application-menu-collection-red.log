@@ -1,0 +1,47 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 43ms
+   → expected undefined to deeply equal [ ObjectContaining{…}, …(1) ]
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 25ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot
+AssertionError: expected undefined to deeply equal [ ObjectContaining{…}, …(1) ]
+
+- Expected: 
+[
+  ObjectContaining {
+    "component": "Layout",
+    "name": "Project",
+    "path": "/project",
+  },
+  ObjectContaining {
+    "component": "Layout",
+    "name": "System",
+    "path": "/system",
+  },
+]
+
++ Received: 
+undefined
+
+ ❯ src/api/menu-contract.test.ts:47:28
+     45|     const snapshot = await getRouters();
+     46|     expectTypeOf(snapshot).toEqualTypeOf<HttpCollection<BackendRoute>>…
+     47|     expect(snapshot.items).toEqual([
+       |                            ^
+     48|       expect.objectContaining({ name: 'Project', path: '/project', com…
+     49|       expect.objectContaining({ name: 'System', path: '/system', compo…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  23:24:55
+   Duration  1.59s (transform 806ms, setup 201ms, collect 1.04s, tests 70ms, environment 124ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

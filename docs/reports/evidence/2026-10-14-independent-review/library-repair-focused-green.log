@@ -1,0 +1,17 @@
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/components/dialog/__tests__/dialog.integration.test.tsx (42 tests) 3038ms
+ ✓ packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts (15 tests) 9ms
+ ✓ packages/components/drawer/__tests__/drawer.integration.test.tsx (5 tests) 416ms
+ ✓ packages/components/_shared/__tests__/overlay-layout.test.tsx (11 tests) 599ms
+ ✓ packages/components/theme-provider/__tests__/theme-autocomplete-layout.test.ts (3 tests) 31ms
+ ✓ packages/components/_shared/__tests__/modal-close.test.tsx (4 tests) 169ms
+ ✓ docs/.vitepress/theme/route-features.test.ts (5 tests) 106ms
+ ✓ scripts/theme-consumer-protocol/__tests__/consumer-feedback.test.ts (3 tests) 6ms
+
+ Test Files  8 passed (8)
+      Tests  88 passed (88)
+   Start at  02:22:06
+   Duration  8.89s (transform 948ms, setup 290ms, collect 2.64s, tests 4.37s, environment 703ms, prepare 195ms)
+

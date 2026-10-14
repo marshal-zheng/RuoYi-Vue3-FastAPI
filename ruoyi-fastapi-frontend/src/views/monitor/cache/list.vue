@@ -1,8 +1,8 @@
 <template>
-  <div class="app-container">
-    <el-row :gutter="10">
+  <div class="app-container cache-browser" data-zx-fill="anchor">
+    <el-row :gutter="10" class="cache-panels" data-zx-fill>
       <el-col :span="8">
-        <el-card style="height: calc(100vh - 125px)">
+        <el-card class="cache-card">
           <template #header>
             <Collection style="width: 1em; height: 1em; vertical-align: middle" />
             <span style="vertical-align: middle">缓存列表</span>
@@ -17,7 +17,7 @@
           <el-table
             v-loading="loading"
             :data="cacheNames"
-            :height="tableHeight"
+            height="100%"
             highlight-current-row
             @row-click="getCacheKeys"
             style="width: 100%"
@@ -58,7 +58,7 @@
       </el-col>
 
       <el-col :span="8">
-        <el-card style="height: calc(100vh - 125px)">
+        <el-card class="cache-card">
           <template #header>
             <Key style="width: 1em; height: 1em; vertical-align: middle" />
             <span style="vertical-align: middle">键名列表</span>
@@ -73,7 +73,7 @@
           <el-table
             v-loading="subLoading"
             :data="cacheKeys"
-            :height="tableHeight"
+            height="100%"
             highlight-current-row
             @row-click="handleCacheValue"
             style="width: 100%"
@@ -106,7 +106,7 @@
       </el-col>
 
       <el-col :span="8">
-        <el-card :bordered="false" style="height: calc(100vh - 125px)">
+        <el-card :bordered="false" class="cache-card">
           <template #header>
             <Document style="width: 1em; height: 1em; vertical-align: middle" />
             <span style="vertical-align: middle">缓存内容</span>
@@ -154,15 +154,12 @@ import {
   clearCacheAll,
 } from '@/api/monitor/cache';
 
-const { proxy } = getCurrentInstance();
-
 const cacheNames = ref([]);
 const cacheKeys = ref([]);
 const cacheForm = ref({});
 const loading = ref(true);
 const subLoading = ref(false);
 const nowCacheName = ref('');
-const tableHeight = ref(window.innerHeight - 200);
 
 /** 查询缓存名称列表 */
 function getCacheNames() {
@@ -235,3 +232,31 @@ function handleClearCacheAll() {
 
 getCacheNames();
 </script>
+
+<style scoped>
+.cache-panels {
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.cache-panels > :deep(.el-col) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.cache-card {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+}
+.cache-card :deep(.el-card__header) {
+  flex: 0 0 auto;
+}
+.cache-card :deep(.el-card__body) {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+}
+</style>

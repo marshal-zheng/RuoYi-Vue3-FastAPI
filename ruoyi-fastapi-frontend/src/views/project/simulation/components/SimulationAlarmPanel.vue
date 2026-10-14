@@ -19,7 +19,7 @@
 <script setup>
 import AlarmPanel from './AlarmPanel.vue';
 
-const props = defineProps({
+defineProps({
   alarms: {
     type: Array,
     default: () => [],

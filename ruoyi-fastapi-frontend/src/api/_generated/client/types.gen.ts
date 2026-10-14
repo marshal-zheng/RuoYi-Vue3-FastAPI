@@ -93,42 +93,40 @@ export interface ResolvedRequestOptions<
   serializedBody?: string;
 }
 
-export type RequestResult<
+export type RequestResultValue<
   TData = unknown,
   TError = unknown,
   ThrowOnError extends boolean = boolean,
   TResponseStyle extends ResponseStyle = 'fields',
 > = ThrowOnError extends true
-  ? Promise<
-      TResponseStyle extends 'data'
-        ? TData extends Record<string, unknown>
-          ? TData[keyof TData]
-          : TData
-        : {
+  ? TResponseStyle extends 'data'
+    ? TData extends Record<string, unknown>
+      ? TData[keyof TData]
+      : TData
+    : {
+        data: TData extends Record<string, unknown> ? TData[keyof TData] : TData;
+        request: Request;
+        response: Response;
+      }
+  : TResponseStyle extends 'data'
+    ? (TData extends Record<string, unknown> ? TData[keyof TData] : TData) | undefined
+    : (
+        | {
             data: TData extends Record<string, unknown> ? TData[keyof TData] : TData;
-            request: Request;
-            response: Response;
+            error: undefined;
           }
-    >
-  : Promise<
-      TResponseStyle extends 'data'
-        ? (TData extends Record<string, unknown> ? TData[keyof TData] : TData) | undefined
-        : (
-            | {
-                data: TData extends Record<string, unknown> ? TData[keyof TData] : TData;
-                error: undefined;
-              }
-            | {
-                data: undefined;
-                error: TError extends Record<string, unknown> ? TError[keyof TError] : TError;
-              }
-          ) & {
-            /** request may be undefined, because error may be from building the request object itself */
-            request?: Request;
-            /** response may be undefined, because error may be from building the request object itself or from a network error */
-            response?: Response;
+        | {
+            data: undefined;
+            error: TError extends Record<string, unknown> ? TError[keyof TError] : TError;
           }
-    >;
+      ) & { request?: Request; response?: Response };
+
+export type RequestResult<
+  TData = unknown,
+  TError = unknown,
+  ThrowOnError extends boolean = boolean,
+  TResponseStyle extends ResponseStyle = 'fields',
+> = Promise<RequestResultValue<TData, TError, ThrowOnError, TResponseStyle>>;
 
 export interface ClientOptions {
   baseUrl?: string;
@@ -147,12 +145,11 @@ type MethodFn = <
 
 type SseFn = <
   TData = unknown,
-  TError = unknown,
   ThrowOnError extends boolean = false,
   TResponseStyle extends ResponseStyle = 'fields',
 >(
-  options: Omit<RequestOptions<never, TResponseStyle, ThrowOnError>, 'method'>
-) => Promise<ServerSentEventsResult<TData, TError>>;
+  options: Omit<RequestOptions<TData, TResponseStyle, ThrowOnError>, 'method'>
+) => Promise<ServerSentEventsResult<TData>>;
 
 type RequestFn = <
   TData = unknown,

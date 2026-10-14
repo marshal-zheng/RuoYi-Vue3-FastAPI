@@ -1,18 +1,6 @@
 <template>
   <div class="top-right-btn" :style="style">
     <el-row>
-      <!-- <el-tooltip
-        class="item"
-        effect="dark"
-        :content="showSearch ? '隐藏搜索' : '显示搜索'"
-        placement="top"
-        v-if="search"
-      >
-        <el-button circle icon="Search" @click="toggleSearch()" />
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="刷新" placement="top">
-        <el-button circle icon="Refresh" @click="refresh()" />
-      </el-tooltip> -->
       <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="columns">
         <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'" />
         <el-dropdown
@@ -86,7 +74,7 @@ const props = defineProps({
   },
 });
 
-const emits = defineEmits(['update:showSearch', 'queryTable']);
+defineEmits(['update:showSearch', 'queryTable']);
 
 // 显隐数据
 const value = ref([]);
@@ -102,16 +90,6 @@ const style = computed(() => {
   }
   return ret;
 });
-
-// 搜索
-function toggleSearch() {
-  emits('update:showSearch', !props.showSearch);
-}
-
-// 刷新
-function refresh() {
-  emits('queryTable');
-}
 
 // 右侧列表元素变化
 function dataChange(data) {

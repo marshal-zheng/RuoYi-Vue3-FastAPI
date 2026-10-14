@@ -1,0 +1,37 @@
+{
+  "scope": "root-zxui-overlay-and-followup-validation-review",
+  "productionBehaviorEdits": false,
+  "findings": [
+    {
+      "priority": "P2",
+      "issue": "new overlay test any bypass",
+      "status": "fixed"
+    },
+    {
+      "priority": "P2",
+      "issue": "new lint disables and broad matcher",
+      "status": "fixed"
+    }
+  ],
+  "libraryFullLint": {
+    "exitCode": 0,
+    "files": 1894,
+    "errors": 0,
+    "warnings": 0
+  },
+  "focusedTests": {
+    "exitCode": 0,
+    "files": 8,
+    "passed": 88
+  },
+  "vitestTypesExitCode": 0,
+  "protocolToolsTypesExitCode": 0,
+  "protocolBrowserTypesExitCode": 0,
+  "publicConsumerCompileExitCode": 0,
+  "browserBuildExitCode": 0,
+  "packedExitCode": 0,
+  "hostedPackedExitCode": 0,
+  "browserMode": "isolated-headless-launch",
+  "fullAggregateRerunByThisSubtask": false,
+  "sourceFrozen": true
+}

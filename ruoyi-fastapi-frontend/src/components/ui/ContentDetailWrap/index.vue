@@ -8,11 +8,10 @@ const slots = useSlots();
 
 interface DetailItem {
   label: string;
-  value?: any;
+  value?: unknown;
   prop?: string;
   span?: number;
   render?: (item: DetailItem) => VNode | string;
-  [key: string]: any;
 }
 
 const props = defineProps({

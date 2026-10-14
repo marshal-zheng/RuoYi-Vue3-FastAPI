@@ -98,7 +98,14 @@ describe('mock overlay handlers', () => {
     expect(unsupported.status).toBe(501);
     expect(unsupported.headers.get('X-Mock-Handler')).toBe('simulation:session-start-unsupported');
     expect(unsupported.headers.get('X-Mock-Overlay')).toBe('simulation-start-unsupported');
+    expect(unsupported.headers.get('content-type')).toContain('application/problem+json');
+    expect(unsupportedBody).not.toHaveProperty('code');
+    expect(unsupportedBody).not.toHaveProperty('msg');
+    expect(unsupportedBody).not.toHaveProperty('data');
     expect(unsupportedBody).toMatchObject({
+      type: 'about:blank',
+      status: 501,
+      instance: '/api/simulation/sessions/demo/start',
       reason: '当前 demo-offline 只读模式不支持启动仿真',
       errorCode: 'MOCK_API_NOT_IMPLEMENTED',
     });

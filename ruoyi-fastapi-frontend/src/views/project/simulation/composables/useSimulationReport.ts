@@ -7,7 +7,6 @@ import type { Ref } from 'vue';
 
 interface MessageItem {
   messageId?: string;
-  [key: string]: any;
 }
 
 interface AlarmItem {
@@ -15,7 +14,6 @@ interface AlarmItem {
   type?: string;
   severity?: string;
   level?: string;
-  [key: string]: any;
 }
 
 interface BandwidthItem {
@@ -25,13 +23,11 @@ interface BandwidthItem {
   bandwidth_mbps?: number;
   loadPercent?: number;
   load_percent?: number;
-  [key: string]: any;
 }
 
 interface SimulationState {
   elapsedTime: number;
   startTime: number | string | Date;
-  [key: string]: any;
 }
 
 interface BandwidthStat {

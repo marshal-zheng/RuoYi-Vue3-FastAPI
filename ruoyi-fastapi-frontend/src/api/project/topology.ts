@@ -1,8 +1,9 @@
 import request from '@/utils/request';
 import type { AxiosRequestConfig } from 'axios';
+import type { ProjectTopologyModel } from '@/api/_generated/types.gen';
 
 // 保存工程拓扑数据
-export function saveProjectTopology(data: Record<string, any>) {
+export function saveProjectTopology(data: ProjectTopologyModel) {
   return request({
     url: '/project/topology/save',
     method: 'post',

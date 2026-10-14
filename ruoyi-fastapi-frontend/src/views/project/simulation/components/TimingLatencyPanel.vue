@@ -70,7 +70,11 @@
             <div
               v-if="timingTooltip.visible"
               class="chart-tooltip-fixed timing"
-              :style="{ ...chartStyle, left: timingTooltip.tooltipX + 'px', top: timingTooltip.tooltipY + 'px' }"
+              :style="{
+                ...chartStyle,
+                left: timingTooltip.tooltipX + 'px',
+                top: timingTooltip.tooltipY + 'px',
+              }"
             >
               <div class="tooltip-header">
                 <span class="tooltip-index">#{{ timingTooltip.index + 1 }}</span>
@@ -297,7 +301,6 @@ const viewOptions = [
 // 数据缓冲区
 const MAX_TIMING_POINTS = 60;
 const timingBuffer = ref([]);
-const bandwidthGroupBuffer = ref(new Map());
 
 // Tooltip状态
 const timingTooltip = ref({
@@ -856,7 +859,7 @@ function drawBandwidthChart() {
 
   // 为每个分组绘制曲线
   let colorIndex = 0;
-  groups.forEach((items, key) => {
+  groups.forEach((items) => {
     if (items.length === 0) return;
 
     const color = getGroupColor(colorIndex);
@@ -957,7 +960,7 @@ function handleBandwidthMouseMove(event) {
   const rect = canvas.getBoundingClientRect();
   const mouseX = event.clientX - rect.left;
 
-  const { padding, chartWidth, height } = bandwidthChartLayout.value;
+  const { padding, chartWidth } = bandwidthChartLayout.value;
 
   // 检查是否在图表区域内
   const relativeX = mouseX - padding.left;
@@ -970,7 +973,7 @@ function handleBandwidthMouseMove(event) {
   const tooltipGroups = [];
   let maxDataLength = 0;
 
-  groups.forEach((items, key) => {
+  groups.forEach((items) => {
     const sortedItems = [...items]
       .sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0))
       .slice(-60);
@@ -1225,8 +1228,6 @@ onUnmounted(() => {
   border-radius: 8px;
 }
 
-
-
 // 时序视图
 .timing-view {
   .timing-chart-wrapper {
@@ -1333,8 +1334,16 @@ onUnmounted(() => {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px, transparent 1px);
+      linear-gradient(
+        to right,
+        var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        var(--simulation-chart-grid, var(--zx-semantic-border-subtle)) 1px,
+        transparent 1px
+      );
     background-size: 20px 20px;
   }
 }

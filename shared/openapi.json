@@ -1063,6 +1063,108 @@
         "title": "CloneProjectVersionModel",
         "type": "object"
       },
+      "CollectionResult_CacheInfoModel_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "$ref": "#/components/schemas/CacheInfoModel"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[CacheInfoModel]",
+        "type": "object"
+      },
+      "CollectionResult_DeptModel_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "$ref": "#/components/schemas/DeptModel"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[DeptModel]",
+        "type": "object"
+      },
+      "CollectionResult_DeviceCategoryOptionModel_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "$ref": "#/components/schemas/DeviceCategoryOptionModel"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[DeviceCategoryOptionModel]",
+        "type": "object"
+      },
+      "CollectionResult_DictTypeModel_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "$ref": "#/components/schemas/DictTypeModel"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[DictTypeModel]",
+        "type": "object"
+      },
+      "CollectionResult_MenuModel_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "$ref": "#/components/schemas/MenuModel"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[MenuModel]",
+        "type": "object"
+      },
+      "CollectionResult_str_": {
+        "properties": {
+          "items": {
+            "description": "Collection items",
+            "items": {
+              "type": "string"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "CollectionResult[str]",
+        "type": "object"
+      },
       "ConfigModel": {
         "description": "参数配置表对应pydantic模型",
         "properties": {
@@ -2086,6 +2188,27 @@
           "name"
         ],
         "title": "DeviceCategoryModel",
+        "type": "object"
+      },
+      "DeviceCategoryOptionModel": {
+        "description": "设备分类选项模型（用于下拉选择）",
+        "properties": {
+          "deviceCategoryId": {
+            "description": "设备分类ID",
+            "title": "Devicecategoryid",
+            "type": "integer"
+          },
+          "name": {
+            "description": "分类名称",
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "deviceCategoryId",
+          "name"
+        ],
+        "title": "DeviceCategoryOptionModel",
         "type": "object"
       },
       "DeviceInterfaceModel": {
@@ -11084,8 +11207,15 @@
             "name": "category_id",
             "required": false,
             "schema": {
-              "title": "Category Id",
-              "type": "integer"
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category Id"
             }
           }
         ],
@@ -11147,13 +11277,15 @@
     },
     "/device/category/options": {
       "get": {
-        "description": "获取设备分类选项（用于下拉选择）",
+        "description": "获取设备分类选项(用于下拉选择)",
         "operationId": "get_device_category_options_device_category_options_get",
         "responses": {
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionResult_DeviceCategoryOptionModel_"
+                }
               }
             },
             "description": "Successful Response"
@@ -12587,11 +12719,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "type": "string"
-                  },
-                  "title": "Response Get Monitor Cache Key Monitor Cache Getkeys  Cache Name  Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_str_"
                 }
               }
             },
@@ -12627,11 +12755,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/CacheInfoModel"
-                  },
-                  "title": "Response Get Monitor Cache Name Monitor Cache Getnames Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_CacheInfoModel_"
                 }
               }
             },
@@ -19384,11 +19508,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DeptModel"
-                  },
-                  "title": "Response Get System Dept List System Dept List Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_DeptModel_"
                 }
               }
             },
@@ -19435,11 +19555,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DeptModel"
-                  },
-                  "title": "Response Get System Dept Tree For Edit Option System Dept List Exclude  Dept Id  Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_DeptModel_"
                 }
               }
             },
@@ -20614,11 +20730,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/DictTypeModel"
-                  },
-                  "title": "Response Query System Dict Type Options System Dict Type Optionselect Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_DictTypeModel_"
                 }
               }
             },
@@ -21293,11 +21405,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/MenuModel"
-                  },
-                  "title": "Response Get System Menu List System Menu List Get",
-                  "type": "array"
+                  "$ref": "#/components/schemas/CollectionResult_MenuModel_"
                 }
               }
             },

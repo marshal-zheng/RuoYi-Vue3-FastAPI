@@ -1,0 +1,152 @@
+[
+  {
+    "path": "src/api/_generated/client/client.gen.ts",
+    "added": [
+      "                  : { data: emptyData, error: undefined, ...result }) as RequestResultValue<",
+      "                // response.json() would throw; read as text and parse if non-empty.",
+      "                    : { data: response.body, error: undefined, ...result }) as RequestResultValue<",
+      "                : { data, error: undefined, ...result }) as RequestResultValue<",
+      "                options as ResolvedRequestOptions",
+      "              : { data: undefined, error: finalError, request, response }) as RequestResultValue<"
+    ]
+  },
+  {
+    "path": "src/api/_generated/core/serverSentEvents.gen.ts",
+    "added": [
+      "                yield data as TData extends Record<string, unknown> ? TData[keyof TData] : TData;"
+    ]
+  },
+  {
+    "path": "src/api/_generated-client-contract.test.ts",
+    "added": [
+      "  it.each(['data', 'fields'] as const)(",
+      "  it.each(['data', 'fields'] as const)(",
+      "  it.each(['data', 'fields'] as const)("
+    ]
+  },
+  {
+    "path": "src/api/menu-contract.test.ts",
+    "added": [
+      "  it('returns department resources and menu queries as collections', async () => {",
+      "  it('returns dictionary options as a collection consumed by dictionary forms', async () => {"
+    ]
+  },
+  {
+    "path": "src/api/system/notice.ts",
+    "added": [
+      "// JSON represents the backend bytes field as UTF-8 text, rather than multipart File."
+    ]
+  },
+  {
+    "path": "src/components/business/Protocol/templates/fieldUtils.ts",
+    "added": [
+      "      normalized[enKey] = fieldText(Reflect.get(row, enKey), normalized[enKey]);",
+      "      normalized[enKey] = fieldText(Reflect.get(row, cnKey), normalized[enKey]);"
+    ]
+  },
+  {
+    "path": "src/components/ui/VxeSchemaTable/index.vue",
+    "added": [
+      "    type: Array as PropType<VxeSchemaColumn<Row>[]>,",
+      "    type: Array as PropType<Row[]>,",
+      "  tableProps: Object as PropType<VxeTableProps<Row>>,",
+      "  spanMethod: Function as PropType<VxeTableProps<Row>['spanMethod']>,",
+      "  footerMethod: Function as PropType<VxeTableProps<Row>['footerMethod']>,",
+      "  editConfig: Object as PropType<VxeTableProps<Row>['editConfig']>,",
+      "  editRules: Object as PropType<VxeTableProps<Row>['editRules']>,",
+      "  hooks: Object as PropType<VxeSchemaHooks<Row>>,",
+      "      type: Object as PropType<VxeSchemaColumn<Row>>,",
+      "          value: Reflect.get(params.row, field),"
+    ]
+  },
+  {
+    "path": "src/components/ui/VxeTableValidation/validators.ts",
+    "added": [
+      "export const readField = (row: object, field: string): unknown => Reflect.get(row, field);"
+    ]
+  },
+  {
+    "path": "src/mocks/handlers/simulation.test.ts",
+    "added": [
+      "  it('serves empty fault lists and strategy options as collections', async () => {"
+    ]
+  },
+  {
+    "path": "src/plugins/vxe-table.ts",
+    "added": [
+      "      const option = renderOpts as DictAutocompleteRenderOptions<DictRendererRow>;"
+    ]
+  },
+  {
+    "path": "src/utils/colorUtils.ts",
+    "added": [
+      "    const { fn, values } = groups as {"
+    ]
+  },
+  {
+    "path": "src/utils/http.test.ts",
+    "added": [
+      "      Object.assign(response, {",
+      "        ] as const,",
+      "        feedback: { mode: 'auto' as const, key: 'system.user.create' },",
+      "          mode: 'auto' as const,",
+      "        feedback: { mode: 'auto' as const, key: 'system.user.create' },",
+      "          feedback: { mode: 'auto' as const },",
+      "          mode: 'auto' as const,",
+      "        feedback: { mode: 'auto' as const, key: 'monitor.job.run' },",
+      "            mode: 'auto' as const,"
+    ]
+  },
+  {
+    "path": "src/utils/io-toolkit/download.contract.test.ts",
+    "added": [
+      "import { Blob as NodeBlob } from 'node:buffer';"
+    ]
+  },
+  {
+    "path": "src/utils/ruoyi.tree.test.ts",
+    "added": [
+      "      children: undefined as unknown[] | undefined,",
+      "      children: undefined as unknown[] | undefined,",
+      "    const root = { key: '__proto__', parent: 'none', nodes: undefined as unknown[] | undefined };",
+      "    const child = { key: 'child', parent: '__proto__', nodes: undefined as unknown[] | undefined };"
+    ]
+  },
+  {
+    "path": "src/utils/ruoyi.ts",
+    "added": [
+      "    (form as Pick<FormInstance, 'resetFields'>).resetFields();",
+      "  return Object.assign(params, { [`begin${suffix}`]: dates[0], [`end${suffix}`]: dates[1] });",
+      "    const parent = String(Reflect.get(node, config.parentId));",
+      "    nodeIds.add(String(Reflect.get(node, config.id)));",
+      "  const roots = data.filter((node) => !nodeIds.has(String(Reflect.get(node, config.parentId))));",
+      "    const descendants = childrenByParent.get(String(Reflect.get(node, config.id)));",
+      "            Reflect.get(value, key) !== null &&",
+      "            Reflect.get(value, key) !== '' &&",
+      "            Reflect.get(value, key) !== undefined",
+      "            result += subPart + encodeURIComponent(String(Reflect.get(value, key))) + '&';"
+    ]
+  },
+  {
+    "path": "src/views/project/simulation/composables/useSimulationData.ts",
+    "added": [
+      "  SimulationMessage as Message,",
+      "  SimulationBandwidth as BandwidthData,",
+      "  SimulationAlarm as AlarmData,",
+      "  SimulationFaultEvent as FaultEventData,"
+    ]
+  },
+  {
+    "path": "src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "added": [
+      "  SimulationBandwidth as BandwidthDataPoint,",
+      "  SimulationAlarm as AlarmData,",
+      "  SimulationAnimation as AnimationEvent,",
+      "  SimulationFaultEvent as FaultEvent,",
+      "  SimulationBandwidth as BandwidthDataPoint,",
+      "  SimulationAlarm as AlarmData,",
+      "  SimulationAnimation as AnimationEvent,",
+      "  SimulationFaultEvent as FaultEvent,"
+    ]
+  }
+]

@@ -1,0 +1,1729 @@
+{
+  "schema": "zx.theme-composition.lifecycle-performance/1",
+  "environment": {
+    "recordedAt": "2026-10-13T22:05:12.462Z",
+    "experiment": "Uninstrumented complete lifecycle; stage experiment is a separate process",
+    "node": "v22.22.1",
+    "v8": "12.4.254.21-node.35",
+    "vitest": "2.1.9",
+    "happyDom": "17.6.3",
+    "os": {
+      "platform": "darwin",
+      "release": "24.5.0",
+      "architecture": "arm64",
+      "cpu": "Apple M4 Pro",
+      "logicalCpus": 14,
+      "totalMemoryBytes": 51539607552
+    },
+    "dom": "Vitest happy-dom, not browser paint/GPU/network latency",
+    "isolation": "Run one test file, --no-file-parallelism --maxWorkers=1 --minWorkers=1 --cache=false",
+    "setup": "Real public default Browser Host, published default manifest and CSS exports, one compiled business extension. Host creation/activation and fixture compilation occur outside named lifecycle batches. CSS asset I/O is process-cached by public export path.",
+    "manifestIdentity": {
+      "compilerName": "@zxio/theme-compiler",
+      "compilerVersion": "1.0.0",
+      "contractContentHash": "sha256:c7021546f7cee98e367fa58777177b75398b48afc5d6834714d5666b89ef16cb",
+      "contractVersion": "4.0.0",
+      "packageName": "@zxio/theme-default",
+      "packageVersion": "2.0.0",
+      "resolvedSchemaVersion": 1,
+      "sourceContentHash": "sha256:b30102b2d40e62a60e8479bf894ab9c5924d685bcaa9d9b5f2363894fd174445",
+      "sourceSchemaVersion": 4,
+      "themeId": "default",
+      "typeRegistryContentHash": "sha256:b9cfadbcf00c84e4e42ef16d7353e962d8f98a2861b0ecb414811388939a8262"
+    },
+    "extensionIdentity": {
+      "contentHash": "sha256:cbc6df3efa7fe73fd495f7b436d56eb39004ded1b180fe089f7bc288eddbb960",
+      "packageName": "@example/composition-performance",
+      "packageVersion": "1.0.0",
+      "planHash": "sha256:71f126c2ab206567c9d15b720864ff68535e815a1f0d824a22037ec21793465b"
+    },
+    "batchSizes": {
+      "samples": 20,
+      "warmNoops": 100,
+      "axisRoundTrips": 20,
+      "lruVisits": 17,
+      "defaultSeedCacheCapacity": 16
+    }
+  },
+  "units": "milliseconds per complete named operation batch; nearest-rank p95; CSS and declaration costs in UTF-8 bytes",
+  "boundaries": {
+    "cold": "Successful Host composition.update adding tenant Seeds to an activated business scope",
+    "warm100": "100 equivalent fresh composition requests, all successful noops",
+    "coldB": "First visit to a second concrete axis selection",
+    "roundTrips20": "20 A→B→A round trips after warming both selections",
+    "lru17": "17 sequential distinct selection visits, exceeding the app-owned successful declaration cache capacity of 16",
+    "evictedA": "Revisit initial selection after its LRU eviction",
+    "newPortal": "Acquire an initiating-scope portal with actual composition styles",
+    "migrateRoot": "Migrate the active root while a portal lease remains live",
+    "dispose": "Release portal and await Host disposal, including app-owned caches/resources"
+  },
+  "samples": [
+    {
+      "index": 0,
+      "operations": {
+        "cold": 61.17945899999995,
+        "warm100": 1.7445830000001479,
+        "coldB": 43.88112500000011,
+        "roundTrips20": 59.1139169999999,
+        "lru17": 667.52475,
+        "evictedA": 38.935541999999714,
+        "newPortal": 0.6044999999999163,
+        "migrateRoot": 0.728458000000046,
+        "dispose": 0.6859999999996944
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 1,
+      "operations": {
+        "cold": 66.51316599999973,
+        "warm100": 0.8330840000003263,
+        "coldB": 39.338209000000006,
+        "roundTrips20": 54.506124999999884,
+        "lru17": 633.4087079999999,
+        "evictedA": 39.42879099999982,
+        "newPortal": 0.1839999999997417,
+        "migrateRoot": 0.3367920000000595,
+        "dispose": 0.22566599999981918
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 2,
+      "operations": {
+        "cold": 45.73900000000003,
+        "warm100": 0.8186249999998836,
+        "coldB": 39.671792000000096,
+        "roundTrips20": 52.132624999999734,
+        "lru17": 654.7582090000005,
+        "evictedA": 37.84679199999937,
+        "newPortal": 0.13170799999988958,
+        "migrateRoot": 0.2912500000002183,
+        "dispose": 0.09887499999967986
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 3,
+      "operations": {
+        "cold": 43.640167000000474,
+        "warm100": 0.8306250000005093,
+        "coldB": 37.87433400000009,
+        "roundTrips20": 51.878584000000046,
+        "lru17": 644.2982499999998,
+        "evictedA": 38.553124999999454,
+        "newPortal": 0.14025000000037835,
+        "migrateRoot": 0.31537500000013097,
+        "dispose": 0.09987499999988358
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 4,
+      "operations": {
+        "cold": 44.114417000000685,
+        "warm100": 0.796584000000621,
+        "coldB": 38.453457999999955,
+        "roundTrips20": 53.57954100000006,
+        "lru17": 661.9219579999999,
+        "evictedA": 38.02424999999948,
+        "newPortal": 0.125583000000006,
+        "migrateRoot": 0.2992080000003625,
+        "dispose": 0.15895799999998417
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 5,
+      "operations": {
+        "cold": 44.975790999999845,
+        "warm100": 0.8743329999997513,
+        "coldB": 39.27620900000056,
+        "roundTrips20": 53.80720800000017,
+        "lru17": 635.0293750000001,
+        "evictedA": 39.07512499999939,
+        "newPortal": 0.16133300000001327,
+        "migrateRoot": 0.30083399999966787,
+        "dispose": 0.15949999999975262
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 6,
+      "operations": {
+        "cold": 42.87708399999974,
+        "warm100": 0.7285830000000715,
+        "coldB": 38.213958000000275,
+        "roundTrips20": 48.70537500000046,
+        "lru17": 661.9305420000001,
+        "evictedA": 37.267915999999786,
+        "newPortal": 0.1466660000005504,
+        "migrateRoot": 0.32183400000030815,
+        "dispose": 0.11220799999955489
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 7,
+      "operations": {
+        "cold": 43.02350000000024,
+        "warm100": 0.7775830000000497,
+        "coldB": 38.05004099999951,
+        "roundTrips20": 52.16283299999941,
+        "lru17": 637.9736669999993,
+        "evictedA": 38.59229199999936,
+        "newPortal": 0.11241700000027777,
+        "migrateRoot": 0.27133300000059535,
+        "dispose": 0.16775000000052387
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 8,
+      "operations": {
+        "cold": 62.98854200000096,
+        "warm100": 0.7494580000002316,
+        "coldB": 39.98954099999901,
+        "roundTrips20": 52.39375000000109,
+        "lru17": 622.6188750000001,
+        "evictedA": 37.67516699999942,
+        "newPortal": 0.36225000000013097,
+        "migrateRoot": 0.43787499999962165,
+        "dispose": 0.2997089999989839
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 9,
+      "operations": {
+        "cold": 43.12291699999878,
+        "warm100": 0.7524579999990237,
+        "coldB": 38.15087499999936,
+        "roundTrips20": 49.06483300000036,
+        "lru17": 671.0404169999983,
+        "evictedA": 40.46366699999999,
+        "newPortal": 0.1414169999989099,
+        "migrateRoot": 0.32370799999989686,
+        "dispose": 0.18162499999925785
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32686,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33100,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 10,
+      "operations": {
+        "cold": 45.81745800000135,
+        "warm100": 0.7582920000004378,
+        "coldB": 39.40783400000146,
+        "roundTrips20": 51.31941700000061,
+        "lru17": 641.8007079999988,
+        "evictedA": 37.95233300000109,
+        "newPortal": 0.10900000000037835,
+        "migrateRoot": 0.287625000000844,
+        "dispose": 0.09466599999905156
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 11,
+      "operations": {
+        "cold": 45.72862499999974,
+        "warm100": 0.8306250000005093,
+        "coldB": 40.81474999999955,
+        "roundTrips20": 64.12283399999978,
+        "lru17": 660.5021670000006,
+        "evictedA": 38.18470900000102,
+        "newPortal": 0.11104200000045239,
+        "migrateRoot": 0.26729100000011385,
+        "dispose": 0.09058300000106101
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 12,
+      "operations": {
+        "cold": 42.636375000000044,
+        "warm100": 0.7616249999991851,
+        "coldB": 38.09725000000071,
+        "roundTrips20": 50.72962499999994,
+        "lru17": 643.2173750000002,
+        "evictedA": 38.11641700000109,
+        "newPortal": 0.10187500000029104,
+        "migrateRoot": 0.2714169999999285,
+        "dispose": 0.08962499999870488
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 13,
+      "operations": {
+        "cold": 45.46191699999872,
+        "warm100": 0.6896249999990687,
+        "coldB": 38.06158400000095,
+        "roundTrips20": 50.185999999999694,
+        "lru17": 648.9120839999996,
+        "evictedA": 36.806915999999546,
+        "newPortal": 0.09591600000021572,
+        "migrateRoot": 0.2711669999989681,
+        "dispose": 0.09370800000033341
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 14,
+      "operations": {
+        "cold": 43.95995800000128,
+        "warm100": 0.8644590000003518,
+        "coldB": 38.77100000000064,
+        "roundTrips20": 50.28850000000057,
+        "lru17": 636.1684580000001,
+        "evictedA": 39.04041700000016,
+        "newPortal": 0.0900419999998121,
+        "migrateRoot": 0.26233400000091933,
+        "dispose": 0.0860000000011496
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 15,
+      "operations": {
+        "cold": 63.87187500000073,
+        "warm100": 0.6883330000000569,
+        "coldB": 38.70866600000045,
+        "roundTrips20": 51.77687499999956,
+        "lru17": 648.0677919999998,
+        "evictedA": 38.05687500000022,
+        "newPortal": 0.09695800000008603,
+        "migrateRoot": 0.2947920000005979,
+        "dispose": 0.08841700000084529
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 16,
+      "operations": {
+        "cold": 44.390166999999565,
+        "warm100": 0.6786249999986467,
+        "coldB": 38.30895899999996,
+        "roundTrips20": 49.720250000000306,
+        "lru17": 649.7343340000007,
+        "evictedA": 37.32154199999968,
+        "newPortal": 0.09349999999903957,
+        "migrateRoot": 0.2649580000015703,
+        "dispose": 0.08441700000003038
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 17,
+      "operations": {
+        "cold": 42.787083000001076,
+        "warm100": 0.7276249999995343,
+        "coldB": 38.725250000001324,
+        "roundTrips20": 50.70283299999937,
+        "lru17": 642.9044999999987,
+        "evictedA": 39.9721669999999,
+        "newPortal": 0.10487500000090222,
+        "migrateRoot": 0.2795829999995476,
+        "dispose": 0.08041600000069593
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 18,
+      "operations": {
+        "cold": 44.192666999999346,
+        "warm100": 0.7601250000006985,
+        "coldB": 39.19791600000099,
+        "roundTrips20": 50.007041000000754,
+        "lru17": 671.7849590000005,
+        "evictedA": 38.490084000000934,
+        "newPortal": 0.09808399999747053,
+        "migrateRoot": 0.2818750000005821,
+        "dispose": 0.08645899999828544
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    },
+    {
+      "index": 19,
+      "operations": {
+        "cold": 44.24108400000114,
+        "warm100": 0.6973749999997381,
+        "coldB": 38.6451249999991,
+        "roundTrips20": 48.56541599999764,
+        "lru17": 664.4804580000018,
+        "evictedA": 38.782500000001164,
+        "newPortal": 0.0961250000000291,
+        "migrateRoot": 0.25987499999973807,
+        "dispose": 0.08420799999657902
+      },
+      "seedDeclarationCount": 233,
+      "seedDeclarationBytes": 22415,
+      "costs": {
+        "beforeSeeds": {
+          "compositionStyleNodes": 1,
+          "compositionCssBytes": 177,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "cold": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "warm100": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "roundTrips20": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "lru17": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 32687,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 86530,
+          "portalHosts": 0
+        },
+        "evictedA": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 0
+        },
+        "newPortal": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "migrateRoot": {
+          "compositionStyleNodes": 2,
+          "compositionCssBytes": 33101,
+          "coreStyleNodes": 3,
+          "coreCssBytes": 87316,
+          "portalHosts": 1
+        },
+        "dispose": {
+          "compositionStyleNodes": 0,
+          "compositionCssBytes": 0,
+          "coreStyleNodes": 0,
+          "coreCssBytes": 0,
+          "portalHosts": 0
+        }
+      }
+    }
+  ],
+  "statistics": {
+    "cold": {
+      "n": 20,
+      "median": 44.31562550000035,
+      "p95": 63.87187500000073
+    },
+    "warm100": {
+      "n": 20,
+      "median": 0.7608749999999418,
+      "p95": 0.8743329999997513
+    },
+    "coldB": {
+      "n": 20,
+      "median": 38.716958000000886,
+      "p95": 40.81474999999955
+    },
+    "roundTrips20": {
+      "n": 20,
+      "median": 51.54814600000009,
+      "p95": 59.1139169999999
+    },
+    "lru17": {
+      "n": 20,
+      "median": 648.4899379999997,
+      "p95": 671.0404169999983
+    },
+    "evictedA": {
+      "n": 20,
+      "median": 38.33739650000098,
+      "p95": 39.9721669999999
+    },
+    "newPortal": {
+      "n": 20,
+      "median": 0.11172950000036508,
+      "p95": 0.36225000000013097
+    },
+    "migrateRoot": {
+      "n": 20,
+      "median": 0.28943750000053114,
+      "p95": 0.43787499999962165
+    },
+    "dispose": {
+      "n": 20,
+      "median": 0.09677049999936571,
+      "p95": 0.2997089999989839
+    }
+  }
+}

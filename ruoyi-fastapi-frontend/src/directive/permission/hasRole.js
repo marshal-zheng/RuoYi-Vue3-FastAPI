@@ -6,7 +6,7 @@
 import useUserStore from '@/store/modules/user';
 
 export default {
-  mounted(el, binding, vnode) {
+  mounted(el, binding) {
     const { value } = binding;
     const super_admin = 'admin';
     const roles = useUserStore().roles;
@@ -19,7 +19,7 @@ export default {
       });
 
       if (!hasRole) {
-        el.parentNode && el.parentNode.removeChild(el);
+        el.parentNode?.removeChild(el);
       }
     } else {
       throw new Error(`请设置角色权限标签值`);

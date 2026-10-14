@@ -1,0 +1,7 @@
+{
+  "attempt": 2,
+  "command": "node scripts/check-overlay-business.mjs",
+  "evidenceDirectory": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-13-business-lint-cleanup/business-browser",
+  "exitCode": 0,
+  "elapsedSeconds": 11.075
+}

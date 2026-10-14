@@ -169,12 +169,12 @@ const props = defineProps({
 });
 
 const searchKeyword = ref('');
-const idSeed = ref(0);
+
 const graphInstanceRef = toRef(props, 'graphInstance');
 const { startDrag } = useDnd(graphInstanceRef);
 
 // 使用新的 composable 处理用户数据
-const { processedOperators, categoryGroups, stats } = useUserOperators(
+const { processedOperators, categoryGroups } = useUserOperators(
   computed(() => props.operators),
   computed(() => props.layout)
 );
@@ -219,14 +219,6 @@ const handleMouseDown = (event, item) => {
   // useUserOperators 会把所有字段展平，所以直接从 item 上读取
   const isDeviceNode =
     item.nodeType === 'device-port-node' && item.ports && Array.isArray(item.ports);
-
-  console.log('拖拽节点信息:', {
-    title: item.title,
-    nodeType: item.nodeType,
-    isDeviceNode,
-    ports: item.ports,
-    item,
-  });
 
   // 根据节点类型选择 shape 和尺寸
   let shape, width, height, ports;

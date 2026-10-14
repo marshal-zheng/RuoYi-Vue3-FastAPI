@@ -2,18 +2,21 @@
 
 from __future__ import annotations
 
-from typing import Any, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from typing import Any, Generic, TypeVar
 
 from pydantic import Field
 
 from module_admin.entity.vo.base import CamelModelBase
 from utils.response_serializer import serialize_for_response
 
+CollectionItem = TypeVar('CollectionItem')
 
-class CollectionResult(CamelModelBase):
+
+class CollectionResult(CamelModelBase, Generic[CollectionItem]):
     """HTTP collection result without pagination metadata."""
 
-    items: list[Any] = Field(default_factory=list, description='Collection items')
+    items: list[CollectionItem] = Field(description='Collection items')
 
 
 class PagedResult(CamelModelBase):

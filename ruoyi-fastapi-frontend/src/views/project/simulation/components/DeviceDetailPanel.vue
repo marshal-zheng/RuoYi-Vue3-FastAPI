@@ -36,7 +36,9 @@
       <div v-if="node?.ports?.length" class="mt-3">
         <div class="flex items-center gap-2 mb-3">
           <div class="h-px flex-1 bg-zx-surface-field-fill/50"></div>
-          <span class="text-xs text-zx-text-secondary uppercase tracking-wider font-medium">端口列表</span>
+          <span class="text-xs text-zx-text-secondary uppercase tracking-wider font-medium"
+            >端口列表</span
+          >
           <div class="h-px flex-1 bg-zx-surface-field-fill/50"></div>
         </div>
         <div class="flex flex-col gap-2">
@@ -45,12 +47,14 @@
             :key="port.id"
             class="flex justify-between items-center py-2 px-3 rounded-md bg-zx-surface-card-fill/40 border border-zx-border-default/40 hover:bg-zx-surface-card-fill/60 hover:border-zx-border-default/50 transition-all duration-200 cursor-pointer group"
           >
-            <span class="text-xs text-zx-text-primary font-medium group-hover:text-zx-text-primary">{{
-              port.interfaceName || port.id
-            }}</span>
-            <span class="text-xs text-zx-accent-on-surface font-mono group-hover:text-zx-accent-on-surface">{{
-              port.interfaceType
-            }}</span>
+            <span
+              class="text-xs text-zx-text-primary font-medium group-hover:text-zx-text-primary"
+              >{{ port.interfaceName || port.id }}</span
+            >
+            <span
+              class="text-xs text-zx-accent-on-surface font-mono group-hover:text-zx-accent-on-surface"
+              >{{ port.interfaceType }}</span
+            >
           </div>
         </div>
       </div>

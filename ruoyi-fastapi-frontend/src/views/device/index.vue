@@ -173,7 +173,7 @@ async function loadDeviceData(params) {
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
+  updateState(`query.${key}`, value);
   updateState('pager.page', 1);
   handleRefresh();
 }
@@ -237,7 +237,7 @@ async function doImportFiles(fileList) {
     if (success > 0) {
       refreshList();
     }
-  } catch (_err) {
+  } catch {
     // 统一反馈层已负责展示 HTTP/业务失败提示
   } finally {
     importing.value = false;

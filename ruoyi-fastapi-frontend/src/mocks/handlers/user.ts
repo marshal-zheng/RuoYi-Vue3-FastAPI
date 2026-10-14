@@ -125,23 +125,6 @@ export function createUserHandlers(
         { strategy, tag: 'user:getInfo' }
       )
     ),
-    http.post(createApiPath('/logout'), ({ request }) =>
-      withBackendFallback(
-        request,
-        async () => {
-          await dataSource.init();
-          const token = getRequestToken(request);
-          if (token) {
-            await dataSource.auth.deleteSession(token);
-          }
-          return HttpResponse.json(resultSuccess(null));
-        },
-        {
-          strategy,
-          tag: 'user:logout',
-        }
-      )
-    ),
     http.post(createApiPath('/auth/logout'), ({ request }) =>
       withBackendFallback(
         request,
@@ -151,7 +134,7 @@ export function createUserHandlers(
           if (token) {
             await dataSource.auth.deleteSession(token);
           }
-          return HttpResponse.json(resultSuccess(null));
+          return new HttpResponse(null, { status: 204 });
         },
         {
           strategy,
@@ -252,7 +235,7 @@ export function createUserHandlers(
         async () => {
           await dataSource.init();
           const departments = await dataSource.system.listDepartments();
-          return HttpResponse.json(resultSuccess(buildDeptTree(departments)));
+          return HttpResponse.json(resultSuccess({ items: buildDeptTree(departments) }));
         },
         {
           strategy,

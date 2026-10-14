@@ -1,3 +1,4 @@
+import type { GeneratorValue } from './types';
 import { generatorTags } from './identity';
 
 // 正则验证规则接口
@@ -10,7 +11,7 @@ interface RegRule {
 interface ElementStyle {
   width?: string;
   height?: string;
-  [key: string]: any;
+  [key: string]: GeneratorValue;
 }
 
 // 默认表单元素接口
@@ -22,7 +23,7 @@ interface DefaultFormElement {
   formId: number;
   tag: string;
   placeholder: string;
-  defaultValue: string | number | boolean | any[];
+  defaultValue: string | number | boolean | GeneratorValue[];
   span: number;
   style: ElementStyle;
   clearable?: boolean;
@@ -47,7 +48,11 @@ interface DefaultFormElement {
   'step-strictly'?: boolean;
   filterable?: boolean;
   multiple?: boolean;
-  options?: Array<{ label: string; value: any; disabled?: boolean }>;
+  options?: Array<{
+    label: string;
+    value: string | number | boolean;
+    disabled?: boolean;
+  }>;
   size?: string;
   optionType?: string;
   border?: boolean;
@@ -55,8 +60,8 @@ interface DefaultFormElement {
   'inactive-text'?: string;
   'active-color'?: string;
   'inactive-color'?: string;
-  'active-value'?: any;
-  'inactive-value'?: any;
+  'active-value'?: string | number | boolean;
+  'inactive-value'?: string | number | boolean;
   'show-stops'?: boolean;
   range?: boolean;
   'start-placeholder'?: string;
@@ -65,7 +70,7 @@ interface DefaultFormElement {
   'is-range'?: boolean;
   format?: string;
   'value-format'?: string;
-  'picker-options'?: any;
+  'picker-options'?: Record<string, GeneratorValue>;
   'allow-half'?: boolean;
   'show-text'?: boolean;
   'show-score'?: boolean;
@@ -82,7 +87,14 @@ interface DefaultFormElement {
   fileSize?: number;
   sizeUnit?: string;
   icon?: string;
-  props?: any;
+  props?: {
+    props: {
+      multiple?: boolean;
+      value?: string;
+      label?: string;
+      children?: string;
+    };
+  };
   'show-all-levels'?: boolean;
   separator?: string;
 }

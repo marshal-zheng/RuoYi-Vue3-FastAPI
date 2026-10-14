@@ -1,0 +1,28 @@
+[
+  {
+    "name": "library-composition-timing",
+    "command": [
+      "pnpm",
+      "exec",
+      "vitest",
+      "run",
+      "packages/zxui/theme-host/__tests__/composition-performance.test.ts",
+      "--minWorkers=1",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "library-composition-stage",
+    "command": [
+      "pnpm",
+      "exec",
+      "vitest",
+      "run",
+      "packages/zxui/theme-host/__tests__/composition-stage-timing.test.ts",
+      "--minWorkers=1",
+      "--maxWorkers=1"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,3 +1,4 @@
+import modal from '@/plugins/modal';
 import { createApp, h, nextTick } from 'vue';
 import { createPinia } from 'pinia';
 import { createRouter, createWebHistory, RouterView } from 'vue-router';
@@ -56,7 +57,7 @@ const router = createRouter({
 const app = createApp({ render: () => h(RouterView) });
 app.use(createPinia()).use(router).use(ElementPlus).use(ZXUI);
 app.component('svg-icon', { render: () => h('span') });
-app.config.globalProperties.$modal = { loading() {}, closeLoading() {} };
+app.config.globalProperties.$modal = { ...modal, loading() {}, closeLoading() {} };
 await router.isReady();
 app.mount('#app');
 document.documentElement.style.setProperty('--base-sidebar-width', '220px');

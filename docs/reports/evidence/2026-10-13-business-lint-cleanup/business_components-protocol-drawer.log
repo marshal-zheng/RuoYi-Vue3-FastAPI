@@ -1,0 +1,15 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/ProtocolFormDrawer.test.ts > ProtocolFormDrawer > should render the protocol form inside the drawer shell 14ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  22:39:26
+   Duration  1.96s (transform 983ms, setup 218ms, collect 1.50s, tests 15ms, environment 130ms, prepare 22ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

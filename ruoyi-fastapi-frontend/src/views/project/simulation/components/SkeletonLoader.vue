@@ -163,7 +163,8 @@ defineProps({
     gap: 12px;
     margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
+    border-bottom: 1px solid
+      var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent));
   }
 
   &__row {

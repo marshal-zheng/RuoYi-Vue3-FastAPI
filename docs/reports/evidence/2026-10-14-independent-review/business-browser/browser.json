@@ -1,0 +1,555 @@
+{
+  "browser": "147.0.7727.15",
+  "cases": [
+    {
+      "themeId": "default",
+      "mode": "light",
+      "route": "/system/role",
+      "kind": "drawer",
+      "geometry": {
+        "themeId": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加角色\n全屏",
+        "panel": {
+          "left": 880,
+          "right": 1440,
+          "top": 0,
+          "bottom": 1000,
+          "height": 1000
+        },
+        "viewport": {
+          "left": 881,
+          "right": 1439,
+          "top": 57,
+          "bottom": 943,
+          "height": 886
+        },
+        "content": {
+          "left": 881,
+          "right": 1439,
+          "top": 57,
+          "bottom": 943,
+          "height": 886
+        },
+        "form": {
+          "left": 905,
+          "right": 1415,
+          "top": 73,
+          "bottom": 750.78125,
+          "height": 677.78125
+        },
+        "padding": [
+          16,
+          24,
+          16,
+          24
+        ],
+        "headerPadding": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "footerPadding": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "clientLeft": 881,
+        "clientRight": 1439,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 881,
+          "right": 1439,
+          "top": 943,
+          "bottom": 999,
+          "height": 56
+        }
+      }
+    },
+    {
+      "themeId": "default",
+      "mode": "light",
+      "route": "/system/role",
+      "kind": "drawer",
+      "viewport": "mobile",
+      "geometry": {
+        "themeId": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加角色\n全屏",
+        "panel": {
+          "left": 0,
+          "right": 390,
+          "top": 0,
+          "bottom": 844,
+          "height": 844
+        },
+        "viewport": {
+          "left": 1,
+          "right": 389,
+          "top": 61,
+          "bottom": 787,
+          "height": 726
+        },
+        "content": {
+          "left": 1,
+          "right": 389,
+          "top": 61,
+          "bottom": 787,
+          "height": 726
+        },
+        "form": {
+          "left": 17,
+          "right": 373,
+          "top": 77,
+          "bottom": 754.78125,
+          "height": 677.78125
+        },
+        "padding": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "headerPadding": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "footerPadding": [
+          12,
+          16,
+          12,
+          16
+        ],
+        "clientLeft": 1,
+        "clientRight": 389,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 1,
+          "right": 389,
+          "top": 787,
+          "bottom": 843,
+          "height": 56
+        }
+      }
+    },
+    {
+      "themeId": "default",
+      "mode": "light",
+      "route": "/system/user",
+      "kind": "dialog",
+      "geometry": {
+        "themeId": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加用户",
+        "panel": {
+          "left": 280,
+          "right": 1160,
+          "top": 262.609375,
+          "bottom": 737.390625,
+          "height": 474.78125
+        },
+        "viewport": {
+          "left": 281,
+          "right": 1159,
+          "top": 323.609375,
+          "bottom": 680.390625,
+          "height": 356.78125
+        },
+        "content": {
+          "left": 281,
+          "right": 1159,
+          "top": 323.609375,
+          "bottom": 680.390625,
+          "height": 356.78125
+        },
+        "form": {
+          "left": 305,
+          "right": 1135,
+          "top": 339.609375,
+          "bottom": 664.390625,
+          "height": 324.78125
+        },
+        "padding": [
+          16,
+          24,
+          16,
+          24
+        ],
+        "headerPadding": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "footerPadding": [
+          12,
+          24,
+          12,
+          24
+        ],
+        "clientLeft": 281,
+        "clientRight": 1159,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 281,
+          "right": 1159,
+          "top": 680.390625,
+          "bottom": 736.390625,
+          "height": 56
+        }
+      }
+    },
+    {
+      "themeId": "default",
+      "mode": "light",
+      "route": "/system/user",
+      "kind": "dialog",
+      "viewport": "mobile",
+      "geometry": {
+        "themeId": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加用户",
+        "panel": {
+          "left": 16,
+          "right": 374,
+          "top": 51.609375,
+          "bottom": 792.375,
+          "height": 740.765625
+        },
+        "viewport": {
+          "left": 17,
+          "right": 373,
+          "top": 112.609375,
+          "bottom": 723.375,
+          "height": 610.765625
+        },
+        "content": {
+          "left": 17,
+          "right": 373,
+          "top": 112.609375,
+          "bottom": 723.375,
+          "height": 610.765625
+        },
+        "form": {
+          "left": 33,
+          "right": 357,
+          "top": 128.609375,
+          "bottom": 707.375,
+          "height": 578.765625
+        },
+        "padding": [
+          16,
+          16,
+          16,
+          16
+        ],
+        "headerPadding": [
+          8,
+          16,
+          8,
+          16
+        ],
+        "footerPadding": [
+          12,
+          16,
+          12,
+          16
+        ],
+        "clientLeft": 17,
+        "clientRight": 373,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 17,
+          "right": 373,
+          "top": 723.375,
+          "bottom": 791.375,
+          "height": 68
+        }
+      }
+    },
+    {
+      "themeId": "army-pine",
+      "mode": "dark",
+      "route": "/system/role",
+      "kind": "drawer",
+      "geometry": {
+        "themeId": "army-pine",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加角色\n全屏",
+        "panel": {
+          "left": 880,
+          "right": 1440,
+          "top": 0,
+          "bottom": 1000,
+          "height": 1000
+        },
+        "viewport": {
+          "left": 881,
+          "right": 1439,
+          "top": 54,
+          "bottom": 946,
+          "height": 892
+        },
+        "content": {
+          "left": 881,
+          "right": 1439,
+          "top": 54,
+          "bottom": 946,
+          "height": 892
+        },
+        "form": {
+          "left": 902,
+          "right": 1418,
+          "top": 68,
+          "bottom": 735.78125,
+          "height": 667.78125
+        },
+        "padding": [
+          14,
+          21,
+          14,
+          21
+        ],
+        "headerPadding": [
+          10.5,
+          21,
+          10.5,
+          21
+        ],
+        "footerPadding": [
+          10.5,
+          21,
+          10.5,
+          21
+        ],
+        "clientLeft": 881,
+        "clientRight": 1439,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 881,
+          "right": 1439,
+          "top": 946,
+          "bottom": 999,
+          "height": 53
+        }
+      }
+    },
+    {
+      "themeId": "army-pine",
+      "mode": "dark",
+      "route": "/system/role",
+      "kind": "drawer",
+      "viewport": "mobile",
+      "geometry": {
+        "themeId": "army-pine",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加角色\n全屏",
+        "panel": {
+          "left": 0,
+          "right": 390,
+          "top": 0,
+          "bottom": 844,
+          "height": 844
+        },
+        "viewport": {
+          "left": 1,
+          "right": 389,
+          "top": 59,
+          "bottom": 790,
+          "height": 731
+        },
+        "content": {
+          "left": 1,
+          "right": 389,
+          "top": 59,
+          "bottom": 790,
+          "height": 731
+        },
+        "form": {
+          "left": 15,
+          "right": 375,
+          "top": 73,
+          "bottom": 740.78125,
+          "height": 667.78125
+        },
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "headerPadding": [
+          7,
+          14,
+          7,
+          14
+        ],
+        "footerPadding": [
+          10.5,
+          14,
+          10.5,
+          14
+        ],
+        "clientLeft": 1,
+        "clientRight": 389,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 1,
+          "right": 389,
+          "top": 790,
+          "bottom": 843,
+          "height": 53
+        }
+      }
+    },
+    {
+      "themeId": "army-pine",
+      "mode": "dark",
+      "route": "/system/user",
+      "kind": "dialog",
+      "geometry": {
+        "themeId": "army-pine",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加用户",
+        "panel": {
+          "left": 280,
+          "right": 1160,
+          "top": 273.609375,
+          "bottom": 726.390625,
+          "height": 452.78125
+        },
+        "viewport": {
+          "left": 281,
+          "right": 1159,
+          "top": 331.609375,
+          "bottom": 674.390625,
+          "height": 342.78125
+        },
+        "content": {
+          "left": 281,
+          "right": 1159,
+          "top": 331.609375,
+          "bottom": 674.390625,
+          "height": 342.78125
+        },
+        "form": {
+          "left": 302,
+          "right": 1138,
+          "top": 345.609375,
+          "bottom": 660.390625,
+          "height": 314.78125
+        },
+        "padding": [
+          14,
+          21,
+          14,
+          21
+        ],
+        "headerPadding": [
+          10.5,
+          21,
+          10.5,
+          21
+        ],
+        "footerPadding": [
+          10.5,
+          21,
+          10.5,
+          21
+        ],
+        "clientLeft": 281,
+        "clientRight": 1159,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 281,
+          "right": 1159,
+          "top": 674.390625,
+          "bottom": 725.390625,
+          "height": 51
+        }
+      }
+    },
+    {
+      "themeId": "army-pine",
+      "mode": "dark",
+      "route": "/system/user",
+      "kind": "dialog",
+      "viewport": "mobile",
+      "geometry": {
+        "themeId": "army-pine",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+        "title": "添加用户",
+        "panel": {
+          "left": 16,
+          "right": 374,
+          "top": 66.109375,
+          "bottom": 777.875,
+          "height": 711.765625
+        },
+        "viewport": {
+          "left": 17,
+          "right": 373,
+          "top": 125.109375,
+          "bottom": 711.875,
+          "height": 586.765625
+        },
+        "content": {
+          "left": 17,
+          "right": 373,
+          "top": 125.109375,
+          "bottom": 711.875,
+          "height": 586.765625
+        },
+        "form": {
+          "left": 31,
+          "right": 359,
+          "top": 139.109375,
+          "bottom": 697.875,
+          "height": 558.765625
+        },
+        "padding": [
+          14,
+          14,
+          14,
+          14
+        ],
+        "headerPadding": [
+          7,
+          14,
+          7,
+          14
+        ],
+        "footerPadding": [
+          10.5,
+          14,
+          10.5,
+          14
+        ],
+        "clientLeft": 17,
+        "clientRight": 373,
+        "divider": "1px",
+        "overflow": "auto",
+        "footer": {
+          "left": 17,
+          "right": 373,
+          "top": 711.875,
+          "bottom": 776.875,
+          "height": 65
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "businessWrites": []
+}

@@ -1,8 +1,19 @@
 import request from '@/utils/request';
+import type { HttpOffsetPage } from '@/types/http-contract';
+export type ProjectVersionRecord = Omit<ProjectVersionModel, 'versionId'> & { versionId: number };
+import type {
+  ProjectVersionModel,
+  CloneProjectVersionModel,
+  LockProjectVersionModel,
+  ExportProjectVersionModel,
+  GetProjectVersionListProjectVersionListGetData,
+} from '@/api/_generated/types.gen';
 
 // 查询项目版本列表
-export function listProjectVersion(query?: Record<string, any>) {
-  return request({
+export function listProjectVersion(
+  query?: GetProjectVersionListProjectVersionListGetData['query']
+) {
+  return request<HttpOffsetPage<ProjectVersionRecord>>({
     url: '/project/version/list',
     method: 'get',
     params: query,
@@ -11,15 +22,15 @@ export function listProjectVersion(query?: Record<string, any>) {
 
 // 查询项目版本详细
 export function getProjectVersion(versionId: number | string) {
-  return request({
+  return request<ProjectVersionRecord>({
     url: '/project/version/' + versionId,
     method: 'get',
   });
 }
 
 // 新增项目版本
-export function addProjectVersion(data: Record<string, any>) {
-  return request({
+export function addProjectVersion(data: ProjectVersionModel) {
+  return request<ProjectVersionRecord>({
     url: '/project/version',
     method: 'post',
     data: data,
@@ -28,8 +39,8 @@ export function addProjectVersion(data: Record<string, any>) {
 }
 
 // 修改项目版本
-export function updateProjectVersion(data: Record<string, any>) {
-  return request({
+export function updateProjectVersion(data: ProjectVersionModel) {
+  return request<ProjectVersionRecord>({
     url: '/project/version',
     method: 'put',
     data: data,
@@ -47,8 +58,8 @@ export function delProjectVersion(versionId: number | string) {
 }
 
 // 克隆项目版本
-export function cloneProjectVersion(data: Record<string, any>) {
-  return request({
+export function cloneProjectVersion(data: CloneProjectVersionModel) {
+  return request<ProjectVersionRecord>({
     url: '/project/version/clone',
     method: 'post',
     data: data,
@@ -57,8 +68,8 @@ export function cloneProjectVersion(data: Record<string, any>) {
 }
 
 // 固化/解除固化项目版本
-export function lockProjectVersion(data: Record<string, any>) {
-  return request({
+export function lockProjectVersion(data: LockProjectVersionModel) {
+  return request<ProjectVersionRecord>({
     url: '/project/version/lock',
     method: 'put',
     data: data,
@@ -85,8 +96,8 @@ export function unlockProjectVersions(projectId: number | string) {
 }
 
 // 导出项目版本为Word文档
-export function exportProjectVersion(data: Record<string, any>) {
-  return request({
+export function exportProjectVersion(data: ExportProjectVersionModel) {
+  return request<Blob>({
     url: '/project/version/export',
     method: 'post',
     data: data,
@@ -99,7 +110,7 @@ export function exportProjectVersion(data: Record<string, any>) {
 
 // 导出项目版本附录Excel（ZIP）
 export function exportProjectVersionExcel(versionId: number | string) {
-  return request({
+  return request<Blob>({
     url: `/project/version/export-excel/${versionId}`,
     method: 'get',
     responseType: 'blob',
@@ -110,7 +121,7 @@ export function exportProjectVersionExcel(versionId: number | string) {
 
 // 导出项目版本为XML
 export function exportProjectVersionXml(versionId: number | string) {
-  return request({
+  return request<Blob>({
     url: `/project/version/export-xml/${versionId}`,
     method: 'get',
     responseType: 'blob',

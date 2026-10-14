@@ -1,3 +1,8 @@
+export interface LoginSession {
+  token: string;
+  csrfToken?: string;
+}
+import type { UserInfoModel, UserDetailModel, UserRegister } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import { clampBcryptPassword } from '@/utils/password';
 
@@ -9,7 +14,7 @@ export function login(username: string, password: string, code: string, uuid: st
     code,
     uuid,
   });
-  return request({
+  return request<LoginSession>({
     url: '/login',
     headers: {
       isToken: false,
@@ -25,7 +30,7 @@ export function login(username: string, password: string, code: string, uuid: st
 }
 
 // 注册方法
-export function register(data: Record<string, any>) {
+export function register(data: UserRegister) {
   const payload = { ...data };
   if (payload.password) {
     payload.password = clampBcryptPassword(payload.password);
@@ -33,7 +38,7 @@ export function register(data: Record<string, any>) {
   if (payload.confirmPassword) {
     payload.confirmPassword = clampBcryptPassword(payload.confirmPassword);
   }
-  return request({
+  return request<UserDetailModel>({
     url: '/register',
     headers: {
       isToken: false,
@@ -46,7 +51,11 @@ export function register(data: Record<string, any>) {
 
 // 获取用户详细信息
 export function getInfo() {
-  return request({
+  return request<{
+    user: UserInfoModel & { userId: number; userName: string; nickName: string };
+    roles: string[];
+    permissions: string[];
+  }>({
     url: '/getInfo',
     method: 'get',
     skipRelogin: true,
@@ -60,7 +69,7 @@ interface LogoutRequestOptions {
 }
 
 export function logout(options: LogoutRequestOptions = {}) {
-  return request({
+  return request<null>({
     url: '/auth/logout',
     method: 'post',
     feedback: { mode: 'silent' },
@@ -72,7 +81,7 @@ export function logout(options: LogoutRequestOptions = {}) {
 
 // 获取验证码
 export function getCodeImg() {
-  return request({
+  return request<{ captchaEnabled: boolean; img: string; uuid: string }>({
     url: '/captchaImage',
     headers: {
       isToken: false,

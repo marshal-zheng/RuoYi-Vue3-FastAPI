@@ -59,7 +59,6 @@ const { formProps, layoutProps, dialogProps, dialogEvents, open, close, state } 
     emit('update:modelValue', false);
     return data;
   },
-  onConfirmError: (_e) => {},
 });
 
 const form = toRef(state, 'data');

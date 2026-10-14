@@ -1,0 +1,106 @@
+{
+  "baselineWarnings": 209,
+  "lint": {
+    "exitCode": 0,
+    "warnings": 0,
+    "errors": 0,
+    "files": 54
+  },
+  "focusedTests": {
+    "files": 13,
+    "tests": 159,
+    "exitCode": 0
+  },
+  "typecheck": {
+    "scopeDiagnostics": 0,
+    "fullExitCode": 0,
+    "fullDiagnostics": 0,
+    "evidence": "project-wire-types.log",
+    "remaining": "Root owns final all-gate validation."
+  },
+  "changedSourceFiles": [
+    "src/api/project/project.ts",
+    "src/api/project/topology.ts",
+    "src/api/project/version.ts",
+    "src/api/simulation/simulation.ts",
+    "src/views/project/components/ExportDialog.vue",
+    "src/views/project/components/NodeEditDrawer.vue",
+    "src/views/project/components/ProjectEditDialog.vue",
+    "src/views/project/components/ProjectFormDialog.vue",
+    "src/views/project/components/ProtocolEditDialog.vue",
+    "src/views/project/components/VersionList.vue",
+    "src/views/project/composables/useGraphStyle.js",
+    "src/views/project/composables/useSimulationCore.js",
+    "src/views/project/composables/useTopology.js",
+    "src/views/project/index.vue",
+    "src/views/project/simulation/backupindex.vue",
+    "src/views/project/simulation/components/AlarmPanelFloating.vue",
+    "src/views/project/simulation/components/BandwidthDashboard.vue",
+    "src/views/project/simulation/components/DataInjectionPanel.vue",
+    "src/views/project/simulation/components/EventFormDialog.vue",
+    "src/views/project/simulation/components/FaultInjectorMenu.vue",
+    "src/views/project/simulation/components/HealthCheckDialog.vue",
+    "src/views/project/simulation/components/ProtocolAnalyzer.vue",
+    "src/views/project/simulation/components/SimulationAlarmPanel.vue",
+    "src/views/project/simulation/components/SimulationHeader.vue",
+    "src/views/project/simulation/components/TimingLatencyPanel.vue",
+    "src/views/project/simulation/composables/useAlarmHandler.ts",
+    "src/views/project/simulation/composables/useBandwidthData.ts",
+    "src/views/project/simulation/composables/useEventTrigger.ts",
+    "src/views/project/simulation/composables/useFaultInjection.ts",
+    "src/views/project/simulation/composables/useFaultInjectionUI.ts",
+    "src/views/project/simulation/composables/useHealthCheck.ts",
+    "src/views/project/simulation/composables/useSimulationApi.ts",
+    "src/views/project/simulation/composables/useSimulationControl.ts",
+    "src/views/project/simulation/composables/useSimulationData.ts",
+    "src/views/project/simulation/composables/useSimulationDataManager.ts",
+    "src/views/project/simulation/composables/useSimulationReport.ts",
+    "src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "src/views/project/simulation/composables/useTopologyAnimation.ts",
+    "src/views/project/simulation/index.vue",
+    "src/views/project/topo.vue"
+  ],
+  "newFiles": [
+    "src/api/simulation/types.ts",
+    "src/views/project/simulation/composables/topology-types.ts",
+    "src/views/project/simulation/composables/websocket-contract.ts",
+    "tests/unit/simulation/health-check-contract.test.ts",
+    "tests/unit/simulation/transport-contract.test.ts",
+    "tests/unit/simulation/websocket-state.test.ts",
+    "tests/unit/simulation/http-collection-contract.test.ts",
+    "tests/fixtures/simulation-http-wire.py",
+    "tests/fixtures/simulation-http-wire.json"
+  ],
+  "changedTests": [
+    "tests/unit/api/project.test.ts",
+    "tests/unit/api/simulation.test.ts",
+    "tests/unit/composables/useEventTrigger.test.ts",
+    "tests/unit/composables/useSimulationData.test.ts",
+    "tests/unit/composables/useSimulationControl.test.ts",
+    "src/mocks/handlers/simulation.test.ts"
+  ],
+  "risks": [
+    "Malformed or unknown WebSocket frames are rejected before reactive consumers; prior stream data remains and lastError records the problem.",
+    "HTTP outer list resources consume HttpCollection.items exclusively, following actual controller/service/ResponseUtil wire output; embedded arrays and WebSocket frame arrays stay unchanged.",
+    "Missing fault identity/type/target fails explicitly instead of returning an asserted invalid value.",
+    "Start/stop API and useSimulationApi expose the actual 202 accepted command separately from polled status; the original useSimulationControl optimistic transition and WS synchronization flow is unchanged.",
+    "No simulation UI/dialog migration; this audit is HTTP/model/mock/type and necessary consumer correction only."
+  ],
+  "additionalChangedSources": [
+    "src/mocks/handlers/simulation.ts"
+  ],
+  "wireAudit": {
+    "sourceFrozen": true,
+    "collections": 7,
+    "acceptedCommands": 2,
+    "query": "port_id",
+    "runtimeRed": {
+      "failed": 4,
+      "passed": 2
+    },
+    "acceptedTypesRed": 4,
+    "actualFactoryEqualsFixture": true,
+    "databaseWrites": 0,
+    "report": "project-wire-audit.md"
+  }
+}

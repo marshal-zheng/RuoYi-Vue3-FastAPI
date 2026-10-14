@@ -8,7 +8,7 @@ import type {
   MockOpenApiProjectVersion,
   MockOpenApiRole,
   MockOpenApiTopology,
-} from "../contracts";
+} from '../contracts';
 
 export interface MockDataset {
   version: string;
@@ -53,8 +53,7 @@ export interface SimulationMockData {
   events: MockSimulationEvent[];
 }
 
-export interface MockAccount
-  extends Pick<MockOpenApiAccountUser, "userId" | "avatar" | "status"> {
+export interface MockAccount extends Pick<MockOpenApiAccountUser, 'userId' | 'avatar' | 'status'> {
   username: string;
   password: string;
   displayName: string;
@@ -71,25 +70,25 @@ export interface MockMenu extends MockOpenApiMenu {
   roles?: string[];
 }
 
-export interface MockDictData extends Omit<MockOpenApiDictData, "dictCode"> {
+export interface MockDictData extends Omit<MockOpenApiDictData, 'dictCode'> {
   id: number;
 }
 
-export interface MockDepartment extends MockOpenApiDepartment {}
+export type MockDepartment = MockOpenApiDepartment;
 
-export interface MockDevice extends MockOpenApiDevice {}
+export type MockDevice = MockOpenApiDevice;
 
-export interface MockProject extends MockOpenApiProject {}
+export type MockProject = MockOpenApiProject;
 
 export interface MockProjectVersion extends MockOpenApiProjectVersion {
   versionNumber?: string;
   description?: string;
-  isLocked?: "0" | "1";
+  isLocked?: '0' | '1';
   lockedBy?: string;
   lockedTime?: string;
 }
 
-export interface MockTopology extends MockOpenApiTopology {}
+export type MockTopology = MockOpenApiTopology;
 
 export interface MockSimulationSession {
   sessionId: string;

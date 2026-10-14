@@ -1,0 +1,62 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+stderr | tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects duplicate node identifiers before mutating state
+node id=first already existed
+
+stderr | tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects identity changes while retaining the existing edge
+id and shape can't be changed
+
+ × tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects duplicate node identifiers before mutating state 4ms
+   → expected [Function] to throw an error
+ × tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects identity changes while retaining the existing edge 1ms
+   → expected [Function] to throw an error
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects duplicate node identifiers before mutating state
+AssertionError: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ tests/unit/zxflow-invariants.test.ts:11:68
+      9|     const store = useGraphStore();
+     10|     store.addNodes([{ id: 'first', shape: 'rect' }]);
+     11|     expect(() => store.addNodes([{ id: 'first', shape: 'rect' }])).toT…
+       |                                                                    ^
+     12|     expect(store.nodes).toHaveLength(1);
+     13|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects identity changes while retaining the existing edge
+AssertionError: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ tests/unit/zxflow-invariants.test.ts:18:67
+     16|     const store = useGraphStore();
+     17|     store.addEdges([{ id: 'edge', shape: 'edge' }]);
+     18|     expect(() => store.updateEdge('edge', { id: 'replacement' })).toTh…
+       |                                                                   ^
+     19|     expect(store.edges[0].id).toBe('edge');
+     20|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:35:57
+   Duration  1000ms (transform 110ms, setup 272ms, collect 257ms, tests 6ms, environment 252ms, prepare 28ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

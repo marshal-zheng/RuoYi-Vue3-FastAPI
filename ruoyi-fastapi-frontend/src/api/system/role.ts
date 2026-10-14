@@ -1,8 +1,19 @@
+export type RoleRecord = Omit<RoleModel, 'roleId'> & { roleId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type {
+  AddRoleModel,
+  CrudUserRoleModel,
+  GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData,
+  GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData,
+  RoleModel,
+  RolePageQueryModel,
+  UserInfoModel,
+} from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询角色列表
-export function listRole(query?: Record<string, any>) {
-  return request({
+export function listRole(query?: RolePageQueryModel) {
+  return request<HttpOffsetPage<RoleRecord>>({
     url: '/system/role/list',
     method: 'get',
     params: query,
@@ -11,15 +22,15 @@ export function listRole(query?: Record<string, any>) {
 
 // 查询角色详细
 export function getRole(roleId: number | string) {
-  return request({
+  return request<RoleRecord>({
     url: '/system/role/' + roleId,
     method: 'get',
   });
 }
 
 // 新增角色
-export function addRole(data: Record<string, any>) {
-  return request({
+export function addRole(data: AddRoleModel) {
+  return request<RoleRecord>({
     url: '/system/role',
     method: 'post',
     data: data,
@@ -28,8 +39,8 @@ export function addRole(data: Record<string, any>) {
 }
 
 // 修改角色
-export function updateRole(data: Record<string, any>) {
-  return request({
+export function updateRole(data: RoleModel) {
+  return request<RoleRecord>({
     url: '/system/role',
     method: 'put',
     data: data,
@@ -38,8 +49,8 @@ export function updateRole(data: Record<string, any>) {
 }
 
 // 角色数据权限
-export function dataScope(data: Record<string, any>) {
-  return request({
+export function dataScope(data: AddRoleModel) {
+  return request<RoleRecord>({
     url: '/system/role/dataScope',
     method: 'put',
     data: data,
@@ -53,7 +64,7 @@ export function changeRoleStatus(roleId: number | string, status: string) {
     roleId,
     status,
   };
-  return request({
+  return request<RoleRecord>({
     url: '/system/role/changeStatus',
     method: 'put',
     data: data,
@@ -63,7 +74,7 @@ export function changeRoleStatus(roleId: number | string, status: string) {
 
 // 删除角色
 export function delRole(roleId: number | string) {
-  return request({
+  return request<null>({
     url: '/system/role/' + roleId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'system.role.delete' },
@@ -71,8 +82,10 @@ export function delRole(roleId: number | string) {
 }
 
 // 查询角色已授权用户列表
-export function allocatedUserList(query?: Record<string, any>) {
-  return request({
+export function allocatedUserList(
+  query?: NonNullable<GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData['query']>
+) {
+  return request<HttpOffsetPage<UserInfoModel>>({
     url: '/system/role/authUser/allocatedList',
     method: 'get',
     params: query,
@@ -80,8 +93,10 @@ export function allocatedUserList(query?: Record<string, any>) {
 }
 
 // 查询角色未授权用户列表
-export function unallocatedUserList(query?: Record<string, any>) {
-  return request({
+export function unallocatedUserList(
+  query?: NonNullable<GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData['query']>
+) {
+  return request<HttpOffsetPage<UserInfoModel>>({
     url: '/system/role/authUser/unallocatedList',
     method: 'get',
     params: query,
@@ -89,8 +104,8 @@ export function unallocatedUserList(query?: Record<string, any>) {
 }
 
 // 取消用户授权角色
-export function authUserCancel(data: Record<string, any>) {
-  return request({
+export function authUserCancel(data: CrudUserRoleModel) {
+  return request<null>({
     url: '/system/role/authUser/cancel',
     method: 'put',
     data: data,
@@ -99,8 +114,8 @@ export function authUserCancel(data: Record<string, any>) {
 }
 
 // 批量取消用户授权角色
-export function authUserCancelAll(data: Record<string, any>) {
-  return request({
+export function authUserCancelAll(data: CrudUserRoleModel) {
+  return request<null>({
     url: '/system/role/authUser/cancelAll',
     method: 'put',
     params: data,
@@ -109,8 +124,8 @@ export function authUserCancelAll(data: Record<string, any>) {
 }
 
 // 授权用户选择
-export function authUserSelectAll(data: Record<string, any>) {
-  return request({
+export function authUserSelectAll(data: CrudUserRoleModel) {
+  return request<null>({
     url: '/system/role/authUser/selectAll',
     method: 'put',
     params: data,
@@ -120,7 +135,7 @@ export function authUserSelectAll(data: Record<string, any>) {
 
 // 根据角色ID查询部门树结构
 export function deptTreeSelect(roleId: number | string) {
-  return request({
+  return request<{ depts: import('@/api/system/menu').MenuTreeNode[]; checkedKeys: number[] }>({
     url: '/system/role/deptTree/' + roleId,
     method: 'get',
   });

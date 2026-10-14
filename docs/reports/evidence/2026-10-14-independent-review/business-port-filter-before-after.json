@@ -1,0 +1,12 @@
+{
+  "before": {
+    "senderPort": true,
+    "receiverPort": true,
+    "senderNode": true
+  },
+  "after": {
+    "senderPort": false,
+    "receiverPort": false,
+    "senderNode": true
+  }
+}

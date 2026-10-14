@@ -6,105 +6,63 @@
 import { ref, shallowRef, onUnmounted, type Ref, type ShallowRef } from 'vue';
 import { ElMessage } from 'element-plus';
 import request from '@/utils/request';
+import { decodeWebSocketMessage, type WebSocketMessage } from './websocket-contract';
+import type {
+  SimulationStatusData,
+  SimulationMessage,
+  SimulationBandwidth as BandwidthDataPoint,
+  SimulationAlarm as AlarmData,
+  SimulationAnimation as AnimationEvent,
+  SimulationFaultEvent as FaultEvent,
+} from '@/api/simulation/types';
+export type { WebSocketMessage, WebSocketMessageType } from './websocket-contract';
+export type {
+  SimulationStatusData,
+  SimulationMessage,
+  SimulationBandwidth as BandwidthDataPoint,
+  SimulationAlarm as AlarmData,
+  SimulationAnimation as AnimationEvent,
+  SimulationFaultEvent as FaultEvent,
+} from '@/api/simulation/types';
 
 /**
  * WebSocket消息类型
  */
-export type WebSocketMessageType =
-  | 'status'
-  | 'messages'
-  | 'bandwidth'
-  | 'alarms'
-  | 'animation'
-  | 'faults'
-  | 'pong';
 
 /**
  * WebSocket消息结构
  */
-export interface WebSocketMessage {
-  type: WebSocketMessageType;
-  data: any;
-}
 
 /**
  * 仿真状态数据
  */
-export interface SimulationStatusData {
-  sessionId: string;
-  status: 'idle' | 'running' | 'paused' | 'stopped' | 'error';
-  startTime?: string;
-  endTime?: string;
-  messageCount: number;
-  alarmCount: number;
-  errorCount: number;
-}
 
 /**
  * 仿真报文数据
  */
-export interface SimulationMessage {
-  id: string;
-  timestamp: number;
-  sourceNode: string;
-  targetNode: string;
-  protocolType: string;
-  messageType: string;
-  data: any;
-  size: number;
-}
 
 /**
  * 带宽数据点
  */
-export interface BandwidthDataPoint {
-  timestamp: number;
-  portId: string;
-  bandwidth: number;
-  utilization: number;
-}
 
 /**
  * 告警数据
  */
-export interface AlarmData {
-  alarmId: string;
-  timestamp: number;
-  severity: 'info' | 'warning' | 'error' | 'critical';
-  message: string;
-  nodeId?: string;
-  edgeId?: string;
-  details?: any;
-}
 
 /**
  * 动画事件数据
  */
-export interface AnimationEvent {
-  type: 'traffic' | 'error' | 'node-active' | 'node-error';
-  edgeId?: string;
-  nodeId?: string;
-  protocolType?: string;
-  duration?: number;
-}
 
 /**
  * 故障事件数据
  */
-export interface FaultEvent {
-  faultId: string;
-  timestamp: number;
-  faultType: string;
-  targetNode?: string;
-  targetEdge?: string;
-  parameters: any;
-}
 
 /**
  * WebSocket返回类型
  */
 export interface UseSimulationWebSocketReturn {
   connected: Ref<boolean>;
+  lastError: Ref<string | null>;
   statusData: Ref<SimulationStatusData | null>;
   messagesData: ShallowRef<SimulationMessage[]>;
   bandwidthData: ShallowRef<BandwidthDataPoint[]>;
@@ -119,6 +77,7 @@ export interface UseSimulationWebSocketReturn {
 export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
   const ws = ref<WebSocket | null>(null);
   const connected = ref<boolean>(false);
+  const lastError = ref<string | null>(null);
   const reconnectAttempts = ref<number>(0);
   const maxReconnectAttempts = 5;
   const reconnectDelay = 3000; // 3秒
@@ -145,7 +104,6 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
 
   const connectInternal = async (sessionId: string): Promise<void> => {
     if (ws.value && ws.value.readyState === WebSocket.OPEN) {
-      console.log('WebSocket已连接');
       return;
     }
 
@@ -158,7 +116,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
       });
       wsTicket = ticketResp.wsTicket || ticketResp.ws_ticket || '';
     } catch (err) {
-      console.error('获取WebSocket票据失败:', err);
+      lastError.value = err instanceof Error ? err.message : '获取实时连接凭据失败';
       ElMessage.error('获取实时连接凭据失败');
       return;
     }
@@ -195,7 +153,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
       ws.value = new WebSocket(wsUrl);
 
       ws.value.onopen = () => {
-        console.log('WebSocket连接成功');
+        lastError.value = null;
         connected.value = true;
         reconnectAttempts.value = 0;
 
@@ -205,20 +163,24 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
 
       ws.value.onmessage = (event: MessageEvent) => {
         try {
-          const message: WebSocketMessage = JSON.parse(event.data);
-          handleMessage(message);
+          const raw: unknown = JSON.parse(event.data);
+          const message = decodeWebSocketMessage(raw);
+          if (message) {
+            handleMessage(message);
+          } else {
+            lastError.value = '实时消息格式无效';
+          }
         } catch (err) {
-          console.error('解析WebSocket消息失败:', err);
+          lastError.value = err instanceof Error ? err.message : '解析实时消息失败';
         }
       };
 
-      ws.value.onerror = (error: Event) => {
-        console.error('WebSocket错误:', error);
+      ws.value.onerror = () => {
+        lastError.value = '实时连接发生错误';
         connected.value = false;
       };
 
       ws.value.onclose = () => {
-        console.log('WebSocket连接关闭');
         connected.value = false;
         stopHeartbeat();
 
@@ -226,7 +188,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
         attemptReconnect(sessionId);
       };
     } catch (err) {
-      console.error('创建WebSocket连接失败:', err);
+      lastError.value = err instanceof Error ? err.message : '无法建立实时连接';
       ElMessage.error('无法建立实时连接');
     }
   };
@@ -235,6 +197,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
    * 处理接收到的消息
    */
   const handleMessage = (message: WebSocketMessage): void => {
+    if (message.type === 'pong') return;
     const { type, data } = message;
 
     switch (type) {
@@ -279,13 +242,6 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
         // 故障事件增量，保留最近200条
         faultEventsData.value = [...faultEventsData.value, ...data].slice(-200);
         break;
-
-      case 'pong':
-        // 心跳响应
-        break;
-
-      default:
-        console.warn('未知的消息类型:', type);
     }
   };
 
@@ -294,12 +250,12 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
    */
   const showAlarmNotification = (alarm: AlarmData): void => {
     // 检查是否已经弹出过该告警
-    if (notifiedAlarmIds.has(alarm.alarmId)) {
+    if (alarm.alarmId && notifiedAlarmIds.has(alarm.alarmId)) {
       return;
     }
 
     // 标记为已弹出
-    notifiedAlarmIds.add(alarm.alarmId);
+    if (alarm.alarmId) notifiedAlarmIds.add(alarm.alarmId);
 
     // 限制缓存大小，避免内存泄漏
     if (notifiedAlarmIds.size > 500) {
@@ -316,10 +272,10 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
       critical: 'error',
     };
 
-    const type = severityMap[alarm.severity] || 'warning';
+    const type = severityMap[alarm.severity || 'warning'] || 'warning';
     ElMessage({
       type,
-      message: alarm.message,
+      message: alarm.message || '仿真告警',
       duration: 5000,
     });
   };
@@ -350,13 +306,11 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
    */
   const attemptReconnect = (sessionId: string): void => {
     if (reconnectAttempts.value >= maxReconnectAttempts) {
-      console.log('达到最大重连次数，停止重连');
       ElMessage.error('实时连接已断开，请刷新页面');
       return;
     }
 
     reconnectAttempts.value++;
-    console.log(`尝试重连 (${reconnectAttempts.value}/${maxReconnectAttempts})`);
 
     reconnectTimer = setTimeout(() => {
       connect(sessionId);
@@ -402,6 +356,7 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
 
   return {
     connected,
+    lastError,
     statusData,
     messagesData,
     bandwidthData,

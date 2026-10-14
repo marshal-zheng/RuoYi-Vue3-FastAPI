@@ -23,19 +23,13 @@ export function provideGraphInstance() {
 
 // 使用 Graph 实例
 export function useGraphInstance(options = {}) {
-  const { required = true, warnIfMissing = !required } = options;
+  const { required = true } = options;
   // 传入默认值以避免 Vue 在注入缺失时输出控制台告警
   const context = inject(GRAPH_INSTANCE_KEY, null);
 
   if (!context) {
     if (required) {
       throw new Error('useGraphInstance must be used within XFlow component');
-    }
-
-    if (warnIfMissing && import.meta.env.DEV) {
-      console.warn(
-        '[ZxFlow] Graph instance context not found. Dag features may not work as expected.'
-      );
     }
 
     return ref(null);
@@ -45,5 +39,5 @@ export function useGraphInstance(options = {}) {
 }
 
 export function useOptionalGraphInstance() {
-  return useGraphInstance({ required: false, warnIfMissing: false });
+  return useGraphInstance({ required: false });
 }

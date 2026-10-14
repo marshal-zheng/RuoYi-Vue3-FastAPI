@@ -1,45 +1,46 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 
-const { registeredRouteNames, routeRemoverSpy, mockResolve, mockRouter, getRoutersMock } = vi.hoisted(() => {
-  const names = new Set<string>();
-  const removerSpy = vi.fn();
-  const resolve = vi.fn((path: string) => ({
-    matched: path === '/missing' ? [{ path: '/:pathMatch(.*)*' }] : [{ path: '/system' }],
-  }));
-  const router = {
-    addRoute: vi.fn((route: Record<string, any>) => {
-      if (typeof route.name === 'string') {
-        names.add(route.name);
-      }
-      return () => {
+const { registeredRouteNames, routeRemoverSpy, mockResolve, mockRouter, getRoutersMock } =
+  vi.hoisted(() => {
+    const names = new Set<string>();
+    const removerSpy = vi.fn();
+    const resolve = vi.fn((path: string) => ({
+      matched: path === '/missing' ? [{ path: '/:pathMatch(.*)*' }] : [{ path: '/system' }],
+    }));
+    const router = {
+      addRoute: vi.fn((route: import('vue-router').RouteRecordRaw) => {
         if (typeof route.name === 'string') {
-          names.delete(route.name);
+          names.add(route.name);
         }
-        removerSpy(route);
-      };
-    }),
-    removeRoute: vi.fn((routeName: string) => {
-      names.delete(routeName);
-    }),
-    hasRoute: vi.fn((routeName: string) => names.has(routeName)),
-    resolve,
-    replace: vi.fn().mockResolvedValue(undefined),
-    currentRoute: {
-      value: {
-        path: '/system/user',
-        fullPath: '/system/user',
+        return () => {
+          if (typeof route.name === 'string') {
+            names.delete(route.name);
+          }
+          removerSpy(route);
+        };
+      }),
+      removeRoute: vi.fn((routeName: string) => {
+        names.delete(routeName);
+      }),
+      hasRoute: vi.fn((routeName: string) => names.has(routeName)),
+      resolve,
+      replace: vi.fn().mockResolvedValue(undefined),
+      currentRoute: {
+        value: {
+          path: '/system/user',
+          fullPath: '/system/user',
+        },
       },
-    },
-  };
-  return {
-    registeredRouteNames: names,
-    routeRemoverSpy: removerSpy,
-    mockResolve: resolve,
-    mockRouter: router,
-    getRoutersMock: vi.fn(),
-  };
-});
+    };
+    return {
+      registeredRouteNames: names,
+      routeRemoverSpy: removerSpy,
+      mockResolve: resolve,
+      mockRouter: router,
+      getRoutersMock: vi.fn(),
+    };
+  });
 
 vi.mock('@/api/menu', () => ({
   getRouters: getRoutersMock,
@@ -50,9 +51,7 @@ vi.mock('@/router', () => ({
     { path: '/login', name: 'Login', hidden: true },
     { path: '/index', name: 'Index', hidden: false },
   ],
-  dynamicRoutes: [
-    { path: '/audit', name: 'AuditRoute', permissions: ['monitor:audit:list'] },
-  ],
+  dynamicRoutes: [{ path: '/audit', name: 'AuditRoute', permissions: ['monitor:audit:list'] }],
 }));
 vi.mock('@/layout/index.vue', () => ({ default: {} }));
 vi.mock('@/components/ui/ParentView/index.vue', () => ({ default: {} }));
@@ -82,22 +81,24 @@ describe('permission store route hot reload', () => {
   });
 
   it('generates routes and registers them into router', async () => {
-    getRoutersMock.mockResolvedValue([
-      {
-        path: '/system',
-        component: 'Layout',
-        name: 'System',
-        hidden: false,
-        children: [
-          {
-            path: 'user',
-            component: 'system/user/index',
-            name: 'SystemUser',
-            hidden: false,
-          },
-        ],
-      },
-    ] as any);
+    getRoutersMock.mockResolvedValue({
+      items: [
+        {
+          path: '/system',
+          component: 'Layout',
+          name: 'System',
+          hidden: false,
+          children: [
+            {
+              path: 'user',
+              component: 'system/user/index',
+              name: 'SystemUser',
+              hidden: false,
+            },
+          ],
+        },
+      ],
+    });
 
     const usePermissionStore = await loadPermissionStore();
     const store = usePermissionStore();
@@ -128,7 +129,7 @@ describe('permission store route hot reload', () => {
           ],
         },
       ],
-    } as any);
+    });
 
     const usePermissionStore = await loadPermissionStore();
     const store = usePermissionStore();
@@ -140,22 +141,24 @@ describe('permission store route hot reload', () => {
   });
 
   it('falls back to first menu path when current route disappears after reload', async () => {
-    getRoutersMock.mockResolvedValue([
-      {
-        path: '/system',
-        component: 'Layout',
-        name: 'System',
-        hidden: false,
-        children: [
-          {
-            path: 'user',
-            component: 'system/user/index',
-            name: 'SystemUser',
-            hidden: false,
-          },
-        ],
-      },
-    ] as any);
+    getRoutersMock.mockResolvedValue({
+      items: [
+        {
+          path: '/system',
+          component: 'Layout',
+          name: 'System',
+          hidden: false,
+          children: [
+            {
+              path: 'user',
+              component: 'system/user/index',
+              name: 'SystemUser',
+              hidden: false,
+            },
+          ],
+        },
+      ],
+    });
 
     const usePermissionStore = await loadPermissionStore();
     const store = usePermissionStore();
@@ -169,14 +172,16 @@ describe('permission store route hot reload', () => {
   });
 
   it('keeps existing routes when reload request fails', async () => {
-    getRoutersMock.mockResolvedValue([
-      {
-        path: '/system',
-        component: 'Layout',
-        name: 'System',
-        hidden: false,
-      },
-    ] as any);
+    getRoutersMock.mockResolvedValue({
+      items: [
+        {
+          path: '/system',
+          component: 'Layout',
+          name: 'System',
+          hidden: false,
+        },
+      ],
+    });
 
     const usePermissionStore = await loadPermissionStore();
     const store = usePermissionStore();
@@ -193,35 +198,39 @@ describe('permission store route hot reload', () => {
   });
 
   it('removes unnamed dynamic routes via route remover callbacks', async () => {
-    getRoutersMock.mockResolvedValueOnce([
-      {
-        path: '/anonymous',
-        component: 'Layout',
-        hidden: false,
-        children: [
-          {
-            path: 'page',
-            component: 'system/user/index',
-            hidden: false,
-          },
-        ],
-      },
-    ] as any);
+    getRoutersMock.mockResolvedValueOnce({
+      items: [
+        {
+          path: '/anonymous',
+          component: 'Layout',
+          hidden: false,
+          children: [
+            {
+              path: 'page',
+              component: 'system/user/index',
+              hidden: false,
+            },
+          ],
+        },
+      ],
+    });
 
-    getRoutersMock.mockResolvedValueOnce([
-      {
-        path: '/next',
-        component: 'Layout',
-        hidden: false,
-        children: [
-          {
-            path: 'page',
-            component: 'system/user/index',
-            hidden: false,
-          },
-        ],
-      },
-    ] as any);
+    getRoutersMock.mockResolvedValueOnce({
+      items: [
+        {
+          path: '/next',
+          component: 'Layout',
+          hidden: false,
+          children: [
+            {
+              path: 'page',
+              component: 'system/user/index',
+              hidden: false,
+            },
+          ],
+        },
+      ],
+    });
 
     const usePermissionStore = await loadPermissionStore();
     const store = usePermissionStore();
@@ -230,7 +239,9 @@ describe('permission store route hot reload', () => {
 
     expect(routeRemoverSpy).toHaveBeenCalled();
     expect(
-      routeRemoverSpy.mock.calls.some((call) => (call[0] as { path?: string }).path === '/anonymous')
+      routeRemoverSpy.mock.calls.some(
+        (call) => (call[0] as { path?: string }).path === '/anonymous'
+      )
     ).toBe(true);
   });
 });

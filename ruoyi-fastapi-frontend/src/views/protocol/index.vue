@@ -140,7 +140,6 @@
 import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listProtocol,
-  delProtocol,
   delProtocolBatch,
   addProtocol,
   updateProtocol,
@@ -148,7 +147,6 @@ import {
 } from '@/api/protocol/protocol';
 import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
 import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
-import { validateFile } from '@/utils/io-toolkit';
 import { ElMessage } from 'element-plus';
 
 const { proxy } = getCurrentInstance();
@@ -180,7 +178,7 @@ async function loadProtocolData(params) {
 
 /** 筛选条件变化处理 */
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
@@ -335,7 +333,7 @@ async function doImportFiles(fileList) {
     const result = await importProtocolBatch(formData);
     const batchResults = Array.isArray(result?.results) ? result.results : [];
     successCount = batchResults.filter((item) => item.success).length;
-  } catch (_error) {
+  } catch {
     successCount = 0;
   }
 

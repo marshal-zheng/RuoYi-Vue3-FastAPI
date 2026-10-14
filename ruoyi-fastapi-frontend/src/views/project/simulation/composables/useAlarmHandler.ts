@@ -1,3 +1,6 @@
+import type { SimulationGraph, SimulationNodeData } from './topology-types';
+import type { AlarmDetails } from '@/api/simulation/types';
+
 /**
  * 告警处理 Composable
  *
@@ -19,7 +22,7 @@ interface Alarm {
   affectedNodes?: string[];
   affected_nodes?: string[];
   affectedNodeIds?: string[];
-  details?: Record<string, any>;
+  details?: AlarmDetails;
   severity?: string;
 }
 
@@ -37,7 +40,7 @@ interface TopologyAnimation {
 }
 
 interface UseAlarmHandlerOptions {
-  getGraphInstance: () => any;
+  getGraphInstance: () => SimulationGraph | null;
   topologyAnimation: TopologyAnimation;
 }
 
@@ -136,7 +139,7 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
     }
 
     if (Array.isArray(details.connections)) {
-      details.connections.forEach((conn: any) => {
+      details.connections.forEach((conn) => {
         const connEdgeId = conn?.edgeId || conn?.edge_id;
         if (connEdgeId) {
           edgeIds.add(connEdgeId);
@@ -148,7 +151,7 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
     const portId = details.portId || details.port_id;
     if (portId) {
       const edges = graph.getEdges?.() || [];
-      edges.forEach((edge: any) => {
+      edges.forEach((edge) => {
         const sourcePortId = edge.getSourcePortId?.();
         const targetPortId = edge.getTargetPortId?.();
         if (sourcePortId === portId || targetPortId === portId) {
@@ -158,10 +161,10 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
       // 如果还没有找到节点，通过端口遍历节点查找
       if (nodeIds.size === 0) {
         const nodes = graph.getNodes?.() || [];
-        nodes.forEach((node: any) => {
-          const data = node.getData?.() || {};
+        nodes.forEach((node) => {
+          const data = node.getData<SimulationNodeData>() || {};
           const ports = data.ports || [];
-          const hit = ports.some((p: any) => p.id === portId);
+          const hit = ports.some((p) => p.id === portId);
           if (hit) {
             nodeIds.add(node.id);
           }
@@ -172,7 +175,7 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
     // 如果有节点但没有边，补充与节点相关的边
     if (nodeIds.size > 0 && edgeIds.size === 0) {
       const edges = graph.getEdges?.() || [];
-      edges.forEach((edge: any) => {
+      edges.forEach((edge) => {
         const sourceId = edge.getSourceCellId?.();
         const targetId = edge.getTargetCellId?.();
         if (nodeIds.has(sourceId) || nodeIds.has(targetId)) {
@@ -184,7 +187,7 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
     // 如果有多个节点，补充节点之间的边
     if (nodeIds.size >= 2) {
       const edges = graph.getEdges?.() || [];
-      edges.forEach((edge: any) => {
+      edges.forEach((edge) => {
         const sourceId = edge.getSourceCellId?.();
         const targetId = edge.getTargetCellId?.();
         if (nodeIds.has(sourceId) && nodeIds.has(targetId)) {
@@ -249,10 +252,6 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
    * 处理告警过滤变化
    * @param {Object} filter - 过滤条件
    */
-  function handleAlarmFilterChange(filter: Record<string, any>) {
-    // 告警过滤逻辑（预留扩展）
-  }
-
   return {
     // 常量
     ALARM_REASON_MAP,
@@ -262,7 +261,6 @@ export function useAlarmHandler(options: UseAlarmHandlerOptions) {
     getAlarmReason,
     collectAlarmTargets,
     handleAlarmClick,
-    handleAlarmFilterChange,
   };
 }
 

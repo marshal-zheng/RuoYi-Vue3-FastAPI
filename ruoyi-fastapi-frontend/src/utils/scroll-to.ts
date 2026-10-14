@@ -17,9 +17,7 @@ Math.easeInOutQuad = function (t: number, b: number, c: number, d: number): numb
 // requestAnimationFrame for Smart Animating http://goo.gl/sx5sts
 var requestAnimFrame = (function (): (callback: FrameRequestCallback) => number {
   return (
-    window.requestAnimationFrame ||
-    (window as any).webkitRequestAnimationFrame ||
-    (window as any).mozRequestAnimationFrame ||
+    window.requestAnimationFrame?.bind(window) ||
     function (callback: FrameRequestCallback): number {
       return window.setTimeout(callback, 1000 / 60);
     }
@@ -32,16 +30,11 @@ var requestAnimFrame = (function (): (callback: FrameRequestCallback) => number 
  */
 function move(amount: number): void {
   document.documentElement.scrollTop = amount;
-  (document.body.parentNode as any).scrollTop = amount;
   document.body.scrollTop = amount;
 }
 
 function position(): number {
-  return (
-    document.documentElement.scrollTop ||
-    (document.body.parentNode as any).scrollTop ||
-    document.body.scrollTop
-  );
+  return document.documentElement.scrollTop || document.body.scrollTop;
 }
 
 /**

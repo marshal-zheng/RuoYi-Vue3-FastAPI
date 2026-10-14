@@ -52,7 +52,7 @@
               placeholder="字典状态"
               clearable
               style="width: 240px; margin-left: 8px"
-              @change="(v: any) => onFilterChange('status', v, { handleRefresh, updateState })"
+              @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
             >
               <el-option
                 v-for="dict in sys_normal_disable"
@@ -69,7 +69,9 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               style="width: 308px; margin-left: 8px"
-              @change="(v: any) => onFilterChange('dateRange', v, { handleRefresh, updateState })"
+              @change="
+                (v: unknown) => onFilterChange('dateRange', v, { handleRefresh, updateState })
+              "
             />
           </template>
           <template #search>
@@ -139,41 +141,59 @@
 </template>
 
 <script setup lang="ts">
+import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { TypeRecord } from '@/api/system/dict/type';
+import type { DictTypePageQueryModel } from '@/api/_generated/types.gen';
+type ListQuery = DictTypePageQueryModel & { dateRange?: string[] | null };
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { ref, getCurrentInstance } from 'vue';
 import { parseTime, serializeDateRange } from '@/utils/ruoyi';
 import { listType, getType, delType, refreshCache } from '@/api/system/dict/type';
 import useDictStore from '@/store/modules/dict';
 import DictDlg from './DictDlg.vue';
 
-const { proxy } = getCurrentInstance()!;
-const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable');
+const proxy = getCurrentInstance()!.proxy!;
+const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<any>(null);
-const dictDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const dictDlgRef = ref<InstanceType<typeof DictDlg> | null>(null);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
-function queryTransform(query: Record<string, any>) {
+function queryTransform(query: ListQuery) {
   return serializeDateRange(query);
 }
 
 /** GridList 数据加载函数 */
-async function loadDictData(params: Record<string, any>) {
+async function loadDictData(params: ListLoadParams) {
   try {
-    return await listType(params);
-  } catch (e) {
+    return await listType({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
+  } catch {
     return { items: [], total: 0 };
   }
 }
 
-function onFilterChange(key: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [key]: value });
+function onFilterChange(key: string, value: unknown, { handleRefresh, updateState }: ListActions) {
+  updateState(`query.${key}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
@@ -183,7 +203,7 @@ function handleRefresh() {
 }
 
 /** 多选框选中数据 */
-function handleSelectionChange(selection: any[]) {
+function handleSelectionChange(selection: TypeRecord[]) {
   ids.value = selection.map((item) => item.dictId);
   single.value = selection.length !== 1;
   multiple.value = !selection.length;
@@ -195,17 +215,24 @@ function handleAdd() {
 }
 
 /** 修改按钮操作 */
-async function handleUpdate(row?: any) {
-  const dictId = row?.dictId || ids.value;
+async function handleUpdate(row?: TypeRecord) {
+  const dictId = row?.dictId || ids.value[0];
+  if (!dictId) return;
   const response = await getType(dictId);
   const data = response;
-  dictDlgRef.value?.open(data);
+  dictDlgRef.value?.open({
+    dictId: data.dictId ?? undefined,
+    dictName: data.dictName ?? undefined,
+    dictType: data.dictType ?? undefined,
+    status: data.status ?? undefined,
+    remark: data.remark ?? undefined,
+  });
 }
 
 /** 删除按钮操作 */
-function handleDelete(row?: any) {
-  const dictIds = row?.dictId || ids.value;
-  (proxy as any).$modal
+function handleDelete(row?: TypeRecord) {
+  const dictIds = row?.dictId || ids.value.join(',');
+  proxy.$modal
     .confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？')
     .then(() => delType(dictIds))
     .then(() => {
@@ -216,8 +243,8 @@ function handleDelete(row?: any) {
 
 /** 导出按钮操作 */
 function handleExport() {
-  const q = gridListRef.value?.getCurrentQuery?.() || {};
-  (proxy as any).download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`);
+  const q = gridListRef.value?.getStateSnapshot().query || {};
+  proxy.download('system/dict/type/export', q, `dict_${new Date().getTime()}.xlsx`);
 }
 
 /** 刷新缓存按钮操作 */

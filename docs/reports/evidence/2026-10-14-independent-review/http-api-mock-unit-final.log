@@ -1,0 +1,189 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route 58ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route 33ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 82ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/role without pretending to save 15ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns schema-compatible empty page projections with overlay headers 41ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > returns problem responses without writing through the data source 28ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project 54ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version 47ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/menu without pretending to save 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/config without pretending to save 17ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/data without pretending to save 18ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/type without pretending to save 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/role/99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/menu/99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/99 16ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/99 17ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/data/99 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancel 22ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/cancelAll?roleId=2&userIds=99 13ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/authUser/selectAll?roleId=2&userIds=99 17ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role 19ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > persists project CRUD through the mock store 30ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete clone id alias and missing required names without writing a version 26ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > clones to the requested version number and reads the persisted created resource 35ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/dataScope 9ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/role/changeStatus 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/menu 11ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/config 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/data 15ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation PUT /system/dict/type 16ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/config/refreshCache 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported readonly system mutation DELETE /system/dict/type/refreshCache 18ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects a duplicate requested clone version number without adding a second copy 31ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders 46ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects edits and topology saves for locked or mismatched versions 51ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 24ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > reads and saves topology by project/version 28ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > supports 403, 429, timeout, latency, and explicit unsupported responses 1105ms
+ ✓ src/mocks/overlays/handlers.test.ts > mock overlay handlers > exposes only read methods through the read-only projection wrapper 11ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema metadata > requires every openapi-validated registry entry to have a runtime schema case 1ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > validates core openapi-validated JSON responses through MSW 222ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > keeps schema-unavailable critical responses explicit and tagged 104ms
+ ✓ src/mocks/handlers/api-contract-schema.test.ts > mock handlers OpenAPI schema gate > validates unsupported-501 and binary response classifications 33ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > fetches csrf token through MSW after login when the login response has no csrf token 1857ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > restores session silently via refresh endpoint 26ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > clears local session when refresh endpoint rejects the session 10ms
+ ✓ src/store/modules/user.login.test.ts > user store login flow > passes silent options when logging out 14ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > runs control calls through the real HTTP request path 132ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > loads read models and export payloads through MSW 84ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers auth and system handlers via the real request path 92ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > handles event trigger and WebSocket URL construction 23ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API contract > maps 503, 429, and network failures from MSW 51ms
+ ✓ tests/unit/api/simulation.test.ts > Simulation API overlay contract > enters readonly and unsupported simulation states through API wrappers 35ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers project, version, and topology handlers via frontend API functions 99ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > covers simulation read models and unsupported writes via frontend API functions 86ms
+ ✓ src/mocks/handlers/api-contract.test.ts > mock handlers through frontend API contracts > returns deterministic 501 for demo-offline API gaps 37ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > fetches paged projects through the HTTP contract 59ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > handles project CRUD payloads through MSW handlers 58ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > supports topology and export endpoints without mocking request internals 38ms
+ ✓ tests/unit/api/project.test.ts > Project API contract > maps 503, 429, and network failures from the real request path 47ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project and version empty states through API wrappers 25ms
+ ✓ tests/unit/api/project.test.ts > Project API overlay contract > enters project write, rate-limit, forbidden, timeout, and topology errors through API wrappers 37ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 114ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 43ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 37ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 32ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads paged dict data and typed dict options through MSW 61ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads and mutates dict data through the real request path 41ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > surfaces dict data failures from the request error mapping 47ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads paged dict types and option select data through MSW 35ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads and mutates dict types through the real request path 39ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > surfaces dict type failures from the request error mapping 44ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > enumerates OpenAPI operations and schema availability from fixtures 2ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > matches OpenAPI and MSW path params by position instead of param names 1ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > keeps the committed registry aligned with shared/openapi.json 104ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > keeps real-only, missing, unsupported, and binary classifications explicit 52ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > rejects registry properties that are not allowed by registry.schema.json 13ms
+ ✓ src/mocks/contracts/coverage.test.ts > mock contract coverage registry > fails when registry handler tags do not match the runtime handler for the endpoint 10ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > loads role list and detail through the HTTP contract 52ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > handles role mutations through real request serialization 33ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > covers role authorization and dept tree endpoints via MSW 36ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > surfaces role API failures from the request error mapping 44ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads paged configs with query params through the HTTP contract 51ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads config detail and key-value lookups via MSW 41ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > handles config mutations through real request serialization 34ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > surfaces config API failures from the request error mapping 47ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > generates fresh login routes from the canonical collection without changing the HTTP snapshot 58ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns department resources and menu queries as collections 39ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > returns dictionary options as a collection consumed by dictionary forms 16ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'bare array' responses without registering routes 15ms
+ ✓ src/api/menu-contract.test.ts > system menu contracts through the mainline MSW and request client > rejects 'legacy data wrapper' responses without registering routes 10ms
+ ✓ src/api/login.test.ts > login API contract > serializes login payload as x-www-form-urlencoded data through MSW 35ms
+ ✓ src/api/login.test.ts > login API contract > clamps long login and register passwords before sending the request 21ms
+ ✓ src/api/login.test.ts > login API contract > covers auth metadata endpoints through the real request path 48ms
+ ✓ src/api/login.test.ts > login API contract > surfaces login API failures from the request error mapping 51ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > passes through successful upstream responses 61ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > falls back to mock data when upstream returns 404 63ms
+ ✓ src/mocks/handlers/fallback.integration.test.ts > fallback mock handlers > falls back to mock data when upstream is unreachable 31ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > seeds the independent mock dataset store with metadata 19ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > keeps persisted edits until an explicit reset restores the typed dataset 21ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > resets incompatible schema metadata to the current typed dataset 14ms
+ ✓ src/mocks/store/db.test.ts > MockDemoDb seed/reset > records compatible dataset upgrades without overwriting local demo edits 9ms
+ ✓ src/mocks/invariants/no-legacy-import.test.ts > mock mainline static boundaries > removes the legacy src/demo runtime tree 1ms
+ ✓ src/mocks/invariants/no-legacy-import.test.ts > mock mainline static boundaries > does not import legacy scenario runtime from current frontend source 38ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > loads menu list, details, and role tree through MSW 70ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > handles menu mutations via HTTP contract responses 24ms
+ ✓ tests/unit/api/menu.test.ts > Menu API contract > surfaces server-side menu failures through the request error mapping 52ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > starts fallback runtime with fallback strategy handlers 13ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > starts demo-offline runtime with debug devtools 4ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > applies and clears Playwright bootstrap overlays before first page requests 10ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > activates and resets overlays through the runtime debug API 16ms
+ ✓ src/mocks/runtime/setup.test.ts > setupMockRuntime > does not expose overlay APIs for fallback mode even when bootstrap exists 5ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > supports auth sessions and system read repositories 18ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > persists project, version, and topology changes across data source instances 17ms
+ ✓ src/mocks/store/datasource.test.ts > DexieMockDataSource > exposes simulation data as read-only repository queries 8ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 5ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 2ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > propagates a status-mapped SSE payload to callbacks and the generator 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > propagates standalone SSE resource data to the public callback 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps control-only SSE frames out of data callbacks while retaining their metadata 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps SSE validator failures unknown and normal completion void 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves native network errors in the unknown SSE error hook 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves non-2xx HTTP transport errors in the unknown SSE error hook 0ms
+ ✓ src/mocks/scenarios/error.test.ts > mock error scenarios > routes error-429 through the scenario factory with debug headers 12ms
+ ✓ src/mocks/scenarios/error.test.ts > mock error scenarios > routes error-5xx through the scenario factory with problem details 3ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > recognizes API requests by prefix 2ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > creates deterministic not implemented payloads 1ms
+ ✓ src/mocks/runtime/unhandled.test.ts > mock runtime unhandled API helpers > returns deterministic 501 responses with mock debug headers 9ms
+ ✓ src/api/protocol/export.contract.test.ts > protocol export wire contract > submits the real Form parameter and decodes the XLSX response as binary 34ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > returns mock response directly in pure strategy 4ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > passes through upstream success in fallback strategy 1ms
+ ✓ src/mocks/utils/with-backend-fallback.test.ts > withBackendFallback > falls back on upstream 404 and network errors 2ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses JSON bodies 3ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses x-www-form-urlencoded bodies 1ms
+ ✓ src/mocks/utils/request.test.ts > mock request body reader > parses FormData bodies 2ms
+ ✓ src/api/system/dict/data.test.ts > dictionary requests shared by hooks and selectors > keeps hook options when a selector requests the same dictionary concurrently 4ms
+ ✓ src/api/system/dict/data.test.ts > dictionary requests shared by hooks and selectors > releases failed and completed requests so later loads can fetch fresh data 1ms
+ ✓ src/mocks/index.test.ts > setupBrowserMocks > forwards custom runtime handlers to the browser worker 5ms
+ ✓ src/mocks/index.test.ts > setupBrowserMocks > does not start the worker when mock mode is off and no strategy is provided 1ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > loads committed overlay registry entries in a stable summary order 1ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > keeps committed registry documents valid against registry.schema.json 1ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects duplicate overlay ids 0ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects missing required fields with schema validation 0ms
+ ✓ src/mocks/overlays/registry.test.ts > mock overlay registry > rejects additional registry properties with schema validation 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > activates, lists, and resets overlays without touching dataset state 2ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > fails fast on unknown overlays and keeps the previous state 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > rejects conflicting overlays as one atomic activation request 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > keeps overlay state isolated per runtime instance 0ms
+ ✓ src/mocks/overlays/runtime.test.ts > mock overlay runtime > rejects activation when the runtime mode does not allow overlays 0ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps menu, dict, and department keys unique 1ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps menu parent and role references valid 1ms
+ ✓ src/mocks/invariants/system.test.ts > system mock invariants > keeps department parent references valid 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > defaults to real mode without legacy fallback variables 1ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > normalizes explicit runtime mode, API prefix, and debug flag 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > rejects unsupported runtime mode values 0ms
+ ✓ src/mocks/runtime/mode.test.ts > mock runtime mode > maps mock runtime modes to network strategies 0ms
+ ✓ src/mocks/invariants/dataset.test.ts > mock dataset invariants > uses the fixed dataset version and reference time 1ms
+ ✓ src/mocks/invariants/dataset.test.ts > mock dataset invariants > contains the first-batch domains 0ms
+ ✓ src/mocks/runtime/app-entry.test.ts > setupAppRuntimeMocks > does not start mocks in real mode and clears legacy devtools 1ms
+ ✓ src/mocks/runtime/app-entry.test.ts > setupAppRuntimeMocks > starts fallback and demo-offline through the unified mock runtime 1ms
+ ✓ src/mocks/invariants/auth.test.ts > auth mock invariants > keeps account usernames and role keys unique 1ms
+ ✓ src/mocks/invariants/auth.test.ts > auth mock invariants > keeps account role and permission references valid 1ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > preserves the new page payload without legacy remapping 1ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > emits page results with items/page/pageSize fields 0ms
+ ✓ src/mocks/utils/response.test.ts > mock response helpers > returns problem-details-shaped errors 0ms
+ ✓ src/mocks/invariants/project.test.ts > project mock invariants > keeps project, version, and topology keys unique 1ms
+ ✓ src/mocks/invariants/project.test.ts > project mock invariants > keeps versions and topologies traceable to projects 0ms
+ ✓ src/mocks/invariants/simulation.test.ts > simulation mock invariants > keeps simulation records traceable to existing project versions 1ms
+ ✓ src/mocks/invariants/simulation.test.ts > simulation mock invariants > keeps frame, message, and event session references valid 0ms
+
+ Test Files  39 passed (39)
+      Tests  178 passed (178)
+   Start at  02:36:50
+   Duration  7.45s (transform 1.60s, setup 5.20s, collect 5.92s, tests 7.20s, environment 6.43s, prepare 1.13s)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

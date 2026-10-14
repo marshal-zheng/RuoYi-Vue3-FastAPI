@@ -6,7 +6,7 @@
  *   import request from '@/utils/request'
  *   request({ url: '/api/xxx', method: 'get' })
  */
-import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { ElLoading, ElMessage } from 'element-plus';
 import { http, isRelogin } from './http';
 import { blobValidate } from '@/utils/ruoyi';
@@ -27,11 +27,11 @@ export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 interface RequestClient {
-  <T = any>(config: ExtendedAxiosRequestConfig): Promise<T>;
-  get<T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
-  post<T = any>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
-  put<T = any>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
-  delete<T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  <T = unknown>(config: ExtendedAxiosRequestConfig): Promise<T>;
+  get<T = unknown>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  post<T = unknown>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  put<T = unknown>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
+  delete<T = unknown>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
 }
 
 let downloadLoadingInstance: LoadingInstance;
@@ -42,14 +42,13 @@ export { isRelogin };
  * 兼容层请求函数
  * 保持与原有 request(config) 调用方式一致
  */
-function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> {
+function request<T = unknown>(config: ExtendedAxiosRequestConfig): Promise<T> {
   const { method = 'get', ...restConfig } = config;
   const lowerMethod = method.toLowerCase();
 
   // 提取自定义 headers 配置
   const headers = (config.headers || {}) as Record<string, unknown>;
   const withToken = config.isToken !== false && headers.isToken !== false;
-  const silentError = config.silentError === true || headers.silentError === true;
 
   // 构建请求配置
   const httpConfig = {
@@ -81,11 +80,11 @@ function request<T = any>(config: ExtendedAxiosRequestConfig): Promise<T> {
 
 const requestClient = request as RequestClient;
 
-requestClient.get = <T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T> => {
+requestClient.get = <T = unknown>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T> => {
   return request<T>({ ...config, url, method: 'get' });
 };
 
-requestClient.post = <T = any>(
+requestClient.post = <T = unknown>(
   url: string,
   data?: unknown,
   config?: ExtendedAxiosRequestConfig
@@ -93,7 +92,7 @@ requestClient.post = <T = any>(
   return request<T>({ ...config, url, method: 'post', data });
 };
 
-requestClient.put = <T = any>(
+requestClient.put = <T = unknown>(
   url: string,
   data?: unknown,
   config?: ExtendedAxiosRequestConfig
@@ -101,7 +100,10 @@ requestClient.put = <T = any>(
   return request<T>({ ...config, url, method: 'put', data });
 };
 
-requestClient.delete = <T = any>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T> => {
+requestClient.delete = <T = unknown>(
+  url: string,
+  config?: ExtendedAxiosRequestConfig
+): Promise<T> => {
   return request<T>({ ...config, url, method: 'delete' });
 };
 

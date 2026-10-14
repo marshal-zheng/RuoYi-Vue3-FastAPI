@@ -1,3 +1,4 @@
+import type { GeneratorValue } from './types';
 import { titleCase } from '@/utils/index';
 import { trigger } from './config';
 import { normalizeGeneratorFields, resolveGeneratorColumns } from './identity';
@@ -16,7 +17,7 @@ interface RegRule {
 // 选项接口
 interface Option {
   label: string;
-  value: any;
+  value: string | number | boolean;
   disabled?: boolean;
 }
 
@@ -26,7 +27,7 @@ interface PropsConfig {
     value?: string;
     label?: string;
     children?: string;
-    [key: string]: any;
+    [key: string]: GeneratorValue;
   };
 }
 
@@ -38,7 +39,7 @@ interface FormElement {
   tag: string;
   label?: string;
   placeholder?: string;
-  defaultValue?: any;
+  defaultValue?: GeneratorValue;
   multiple?: boolean;
   required?: boolean;
   regList?: RegRule[];
@@ -240,9 +241,9 @@ function buildOptionMethod(methodName: string, model: string, methodList: string
  */
 function buildProps(conf: FormElement, propsList: string[]): void {
   if (conf.dataType === 'dynamic') {
-    conf.valueKey !== 'value' && (conf.props!.props.value = conf.valueKey);
-    conf.labelKey !== 'label' && (conf.props!.props.label = conf.labelKey);
-    conf.childrenKey !== 'children' && (conf.props!.props.children = conf.childrenKey);
+    if (conf.valueKey !== 'value') conf.props!.props.value = conf.valueKey;
+    if (conf.labelKey !== 'label') conf.props!.props.label = conf.labelKey;
+    if (conf.childrenKey !== 'children') conf.props!.props.children = conf.childrenKey;
   }
   const str = `
   // props设置

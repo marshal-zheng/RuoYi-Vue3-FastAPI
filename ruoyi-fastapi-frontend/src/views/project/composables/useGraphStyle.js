@@ -2,7 +2,6 @@
  * 图形样式管理 Composable
  * 负责节点和边的样式控制、状态管理
  */
-import { ref } from 'vue';
 
 export function useGraphStyle() {
   const edgeOriginalStyles = new Map();

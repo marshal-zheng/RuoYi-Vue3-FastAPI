@@ -1,0 +1,19 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > defaults to a visible header and breadcrumb with tags disabled 4ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > restores independent saved visibility choices 2ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > migrates enabled tags once, retains supported chrome preferences and drops retired keys 2ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > uses defaults for malformed persisted tags and null settings 0ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads paged configs with query params through the HTTP contract 47ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads config detail and key-value lookups via MSW 37ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > handles config mutations through real request serialization 32ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > surfaces config API failures from the request error mapping 46ms
+
+ Test Files  2 passed (2)
+      Tests  8 passed (8)
+   Start at  23:06:05
+   Duration  2.79s (transform 1.35s, setup 667ms, collect 1.83s, tests 176ms, environment 561ms, prepare 66ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

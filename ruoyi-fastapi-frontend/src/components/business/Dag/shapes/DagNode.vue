@@ -104,15 +104,6 @@ const props = defineProps({
 const dataVersion = ref(0);
 const graphInstance = useOptionalGraphInstance();
 
-const formatWeightDisplay = (value) => {
-  const num = Number(value);
-  if (!Number.isFinite(num)) return '--';
-  // 使用 Math.round 来避免浮点数精度问题，与 IndicatorDagEditor 保持一致
-  const rounded = Math.round(num * 100) / 100;
-  const fixed = rounded.toFixed(2);
-  return fixed.endsWith('.00') ? String(rounded.toFixed(0)) : fixed;
-};
-
 const nodeData = computed(() => {
   // 依赖dataVersion来强制重新计算
   dataVersion.value;
@@ -123,7 +114,7 @@ const nodeData = computed(() => {
 // 监听节点数据变化，强制更新
 watch(
   () => props.node?.getData?.(),
-  (newData, oldData) => {
+  () => {
     // 强制重新计算
     dataVersion.value++;
   },
@@ -292,7 +283,7 @@ const formatTime = (timeStr) => {
       minute: '2-digit',
       second: '2-digit',
     });
-  } catch (error) {
+  } catch {
     return timeStr;
   }
 };

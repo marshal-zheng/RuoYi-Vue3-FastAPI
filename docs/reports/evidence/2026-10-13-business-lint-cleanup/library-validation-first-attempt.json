@@ -1,0 +1,56 @@
+[
+  {
+    "name": "library-lint",
+    "command": [
+      "pnpm",
+      "lint"
+    ],
+    "exitCode": 0,
+    "seconds": 1.48
+  },
+  {
+    "name": "library-typecheck",
+    "command": [
+      "pnpm",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "seconds": 11.37
+  },
+  {
+    "name": "library-ui-contracts",
+    "command": [
+      "pnpm",
+      "ui-contracts:check"
+    ],
+    "exitCode": 0,
+    "seconds": 4.01
+  },
+  {
+    "name": "library-build-theme",
+    "command": [
+      "pnpm",
+      "build:theme"
+    ],
+    "exitCode": 0,
+    "seconds": 0.73
+  },
+  {
+    "name": "library-build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 15.68
+  },
+  {
+    "name": "library-test-run",
+    "command": [
+      "pnpm",
+      "test:run"
+    ],
+    "exitCode": 1,
+    "seconds": 220.8
+  }
+]

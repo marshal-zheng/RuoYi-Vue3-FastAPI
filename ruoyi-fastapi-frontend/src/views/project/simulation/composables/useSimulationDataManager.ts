@@ -3,6 +3,7 @@
  * 优化 WebSocket 数据更新性能
  */
 import { shallowRef, onUnmounted } from 'vue';
+import type { SimulationAlarm } from '@/api/simulation/types';
 
 // 数据限制配置
 const MAX_BANDWIDTH_POINTS = 120; // 最多保留120个数据点（2分钟，每秒1个）
@@ -13,7 +14,6 @@ const BANDWIDTH_TIME_WINDOW = 120; // 120秒时间窗口
 interface BandwidthDataItem {
   timestamp: number;
   portId?: string;
-  [key: string]: any;
 }
 
 interface MessageDataItem {
@@ -31,12 +31,9 @@ interface MessageDataItem {
   sizeBytes?: number;
   size?: number;
   receiveTimestamp?: number;
-  [key: string]: any;
 }
 
-interface AlarmDataItem {
-  [key: string]: any;
-}
+type AlarmDataItem = SimulationAlarm;
 
 export function useSimulationDataManager() {
   // 使用 shallowRef 减少深度监听开销

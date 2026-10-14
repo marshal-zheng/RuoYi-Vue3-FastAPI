@@ -1,0 +1,1199 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ test:run /Users/hqz/Downloads/element-plus
+> vitest run && pnpm test:node-contracts && pnpm -C packages/mcp test && pnpm test:authority
+
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/hooks/__tests__/directional-navigation.test.ts (28 tests) 42ms
+stderr | packages/dashboard/__tests__/dashboard-grid.test.tsx > ZxDashboardGrid > remounts the engine so the editor follows the editable mode
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+[Vue warn]: Avoid app logic that relies on enumerating keys on a component instance. The keys will be empty in production mode to avoid performance overhead.
+
+ ✓ packages/dashboard/__tests__/dashboard-grid.test.tsx (17 tests) 40ms
+ ✓ packages/tokens/__tests__/kernel/public-contract.test.ts (19 tests) 86ms
+ ✓ scripts/theme-consumer/check-browser.test.ts (19 tests) 30ms
+ ✓ scripts/theme-consumer/structural-policy.test.ts (34 tests) 151ms
+ ✓ packages/tokens/__tests__/kernel/graph.test.ts (30 tests) 502ms
+ ✓ packages/zxui/theme-runtime/__tests__/stylesheet-registry.test.ts (11 tests) 470ms
+ ✓ packages/dashboard/__tests__/package-boundary.test.ts (16 tests) 13ms
+ ✓ packages/zxui/theme-runtime/__tests__/portal-registry.test.ts (12 tests) 301ms
+ ✓ packages/utils/__tests__/vue/props.test.ts (30 tests) 9ms
+ ✓ packages/zxui/theme-host/__tests__/display-layout.test.ts (13 tests) 436ms
+ ✓ packages/components/floating-panel/__tests__/floating-panel.interaction.test.tsx (22 tests) 189ms
+ ✓ packages/components/theme-provider/__tests__/theme-provider.test.tsx (9 tests) 344ms
+ ✓ packages/components/timeline/__tests__/timeline.test.tsx (65 tests) 417ms
+stdout | packages/tokens/__tests__/kernel/diagnostic-coverage.test.ts > diagnostic registry producer coverage > derives complete machine evidence from real Kernel producer paths
+diagnostic producer coverage (49/49):
+TK_AXIS_DECLARATION_INVALID -> source/axis-declaration-invalid
+TK_AXIS_DEFAULT_INVALID -> matrix/axis-default-invalid
+TK_AXIS_DEFAULT_REQUIRED -> matrix/axis-default-required
+TK_AXIS_VALUE_UNSUPPORTED -> matrix/axis-value
+TK_CONTRACT_BREAKING_CHANGE -> contract/breaking-change
+TK_CONTRACT_ENTRY_MISSING -> matrix/contract-entry
+TK_CONTRACT_LIFECYCLE_INVALID -> contract/lifecycle-invalid
+TK_CONTRACT_REPLACEMENT_INVALID -> contract/replacement-invalid
+TK_CONTRACT_TYPE_MISMATCH -> matrix/contract-type
+TK_CONTRACT_VERSION_REQUIRED -> source/contract-version-required
+TK_CONTRACT_VERSION_UNSUPPORTED -> source/contract-version-unsupported
+TK_DIFF_AXES_INVALID -> diff/axes-invalid
+TK_DIFF_OUTSIDE_CLOSURE -> diff/outside-closure
+TK_DIFF_SOURCE_MISMATCH -> diff/source-mismatch
+TK_ELEVATION_GROUP_INCOMPLETE -> contract/elevation-group-incomplete
+TK_EXPR_EVALUATION_INVALID -> matrix/evaluation
+TK_EXPR_NON_DETERMINISTIC -> expression/non-deterministic
+TK_EXPR_OPERAND_INVALID -> matrix/operand-type
+TK_EXPR_OPERATOR_UNKNOWN -> matrix/operator
+TK_EXPR_RESULT_TYPE_MISMATCH -> matrix/result-type
+TK_REF_COMPONENT_FORBIDDEN -> graph/component-forbidden
+TK_REF_CYCLE -> matrix/reference-cycle
+TK_REF_LAYER_FORBIDDEN -> graph/layer-forbidden
+TK_REF_TARGET_MISSING -> matrix/missing-reference
+TK_RESOLVED_VERSION_UNSUPPORTED -> resolved/version-unsupported
+TK_RESOURCE_LIMIT_EXCEEDED -> matrix/resource-limit
+TK_SCHEMA_JSON_VALUE_INVALID -> source/json-envelope
+TK_SCHEMA_LEGACY_SHAPE_UNSUPPORTED -> source/legacy-shape
+TK_SCHEMA_NAME_INVALID -> source/name-invalid
+TK_SCHEMA_THEME_ID_REQUIRED -> source/theme-id-required
+TK_SCHEMA_VERSION_REQUIRED -> source/schema-version-required
+TK_SCHEMA_VERSION_UNSUPPORTED -> matrix/schema-version
+TK_SOURCE_LOCATOR_INVALID -> source/locator
+TK_TRANSFORM_CONFLICT -> transform/conflict
+TK_TRANSFORM_MUTATION_FORBIDDEN -> matrix/transform-mutation
+TK_TRANSFORM_PATH_UNKNOWN -> matrix/transform-path
+TK_TRANSFORM_TYPE_MISMATCH -> matrix/transform-type
+TK_TYPE_ALIAS_MISMATCH -> matrix/alias-type
+TK_TYPE_REGISTRY_BUILTIN_CONFLICT -> registry/builtin-conflict
+TK_TYPE_REGISTRY_DUPLICATE -> registry/duplicate
+TK_TYPE_REGISTRY_ID_INVALID -> registry/id-invalid
+TK_TYPE_REGISTRY_NON_DETERMINISTIC -> registry/non-deterministic
+TK_TYPE_REGISTRY_SCHEMA_CANONICALIZATION_FAILED -> registry/canonicalization-failed
+TK_TYPE_REGISTRY_SCHEMA_HASH_INVALID -> registry/hash-invalid
+TK_TYPE_REGISTRY_SCHEMA_INVALID -> registry/schema-invalid
+TK_TYPE_REGISTRY_SCHEMA_JCS_INVALID -> registry/jcs-invalid
+TK_TYPE_REGISTRY_VERSION_MISMATCH -> registry/version-mismatch
+TK_TYPE_UNKNOWN -> matrix/unknown-type
+TK_TYPE_VALUE_INVALID -> source/type-value-invalid
+
+ ✓ packages/tokens/__tests__/kernel/diagnostic-coverage.test.ts (1 test) 496ms
+   ✓ diagnostic registry producer coverage > derives complete machine evidence from real Kernel producer paths 495ms
+ ✓ packages/tokens/__tests__/kernel/extension-registry.test.ts (22 tests) 58ms
+ ✓ packages/components/timeline/__tests__/progress-indicator-render-state.test.tsx (13 tests) 80ms
+ ✓ packages/theme-chalk/scripts/form-feedback.test.ts (7 tests) 70ms
+ ✓ packages/zxui/theme-runtime/__tests__/bootstrap-transaction.test.ts (5 tests) 175ms
+stderr | packages/zxui/theme-host/__tests__/theme-host.test.ts > createZxThemeHost > opens a drawer after the root theme changes
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxDrawer modelValue=false onUpdate:modelValue=fn<onUpdate:modelValue> title="Add role" > 
+  at <ZxThemeProvider themeId="default" mode="system" density="comfortable"  ... > 
+  at <App>
+
+ ✓ packages/zxui/theme-host/__tests__/use-display-layout-participant.test.ts (9 tests) 1125ms
+stderr | packages/zxui/theme-host/__tests__/theme-host.test.ts > createZxThemeHost > opens a drawer after the root theme changes
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxDrawer modelValue=true onUpdate:modelValue=fn<onUpdate:modelValue> title="Add role" > 
+  at <ZxThemeProvider themeId="defense-green" mode="system" density="comfortable"  ... > 
+  at <App>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxDrawer modelValue=true onUpdate:modelValue=fn<onUpdate:modelValue> title="Add role" > 
+  at <ZxThemeProvider themeId="defense-green" mode="system" density="comfortable"  ... > 
+  at <App>
+
+ ✓ packages/zxui/theme-host/__tests__/theme-host.test.ts (6 tests) 740ms
+ ✓ packages/zxui/theme-runtime/__tests__/composition-ssr.test.ts (17 tests) 348ms
+ ✓ packages/tokens/__tests__/extensions/protocol.test.ts (18 tests) 577ms
+   ✓ business theme extension protocol > handles long valid reference chains without recursive graph traversal 366ms
+ ✓ packages/zxui/theme-host/__tests__/display-metrics.test.ts (11 tests) 435ms
+ ✓ packages/components/timeline/__tests__/progress-indicator-hooks.test.ts (11 tests) 6ms
+ ✓ packages/zxui/theme-runtime/__tests__/composition.test.ts (10 tests) 255ms
+ ✓ packages/components/input/__tests__/input.test.tsx (18 tests) 271ms
+ ✓ packages/theme-consumer/__tests__/host-integration.test.tsx (11 tests) 1233ms
+   ✓ migrates shared consumer hosts by resolved identity and reclaims repeated destinations 351ms
+ ✓ packages/dashboard/__tests__/widget-resolver.test.tsx (10 tests) 41ms
+ ✓ packages/components/dialog/__tests__/overlay-navigation.test.ts (8 tests) 866ms
+ ✓ packages/components/dialog/__tests__/dialog.integration.test.tsx (42 tests) 3289ms
+ ✓ packages/theme-css-codec/__tests__/extensions.test.ts (41 tests) 13ms
+ ✓ packages/components/content-wrap/__tests__/content-wrap.test.tsx (23 tests) 195ms
+ ✓ packages/components/drawer/__tests__/drawer.test.tsx (17 tests) 1709ms
+ ✓ packages/zxui/theme-host/__tests__/bootstrap-host.test.ts (5 tests) 731ms
+   ✓ default Host bootstrap ownership and recovery > keeps the host alive when a feedback root unmounts and disposes it with the app 324ms
+ ✓ scripts/theme-consumer/hard-cut-policy.test.ts (10 tests) 37ms
+ ✓ packages/dashboard/__tests__/dashboard-designer.test.tsx (9 tests) 70ms
+ ✓ packages/theme-consumer/__tests__/vue-ssr-hydration.test.tsx (29 tests) 2437ms
+ ✓ packages/zxui/theme-host/__tests__/default-browser-host.test.ts (6 tests) 391ms
+ ✓ docs/.vitepress/vitepress/composables/__tests__/theme-lab-panzoom.test.ts (9 tests) 43ms
+ ✓ packages/zxui/__tests__/theme-runtime-hydration.test.tsx (5 tests) 358ms
+ ✓ packages/components/config-provider/__tests__/theme-runtime.test.tsx (7 tests) 324ms
+ ✓ scripts/theme-consumer/fixtures/ssr-hydration/public-consumer.test.ts (3 tests) 288ms
+ ✓ scripts/theme-consumer/check-packed.test.ts (60 tests) 8299ms
+   ✓ packed commit-set contract > runs exactly the deferred React-dependent inventory after React is packed 316ms
+   ✓ packed commit-set contract > replaces a hostile inherited heap limit for every exact-tar batch 304ms
+   ✓ packed commit-set contract > fails a native identity probe before Vitest and isolates probe process state 385ms
+   ✓ packed tar policy > installs two exact parent-scoped dependency versions with pnpm 9.5 5194ms
+   ✓ packed tar policy > fails closed for the five components hook exports when targets or closure drift 348ms
+ ✓ packages/components/tooltip-or-popover/__tests__/tooltip-or-popover.test.tsx (11 tests) 653ms
+ ✓ packages/components/drawer/__tests__/use-drawer-size.test.ts (11 tests) 18ms
+ ✓ packages/zxui/theme-host/__tests__/composition.test.ts (7 tests) 1074ms
+   ✓ business theme Host composition > inherits raw Seeds and resolves each child axes; reset restores inherited configuration 469ms
+ ✓ packages/zxui/theme-host/__tests__/composition-stage-timing.test.ts (2 tests | 1 skipped) 1592ms
+   ✓ keeps successful Seeds caches through real Host noops, axis round trips, portals and migration, then releases them 1592ms
+ ✓ packages/zxui/theme-runtime/__tests__/managed-inline.test.ts (12 tests) 453ms
+ ✓ packages/components/grid-list/__tests__/use-grid-request.test.ts (12 tests) 77ms
+ ✓ packages/zxui/theme-host/__tests__/composition-ssr.test.ts (4 tests) 764ms
+   ✓ adopts the exact SSR DOM and style nodes and removes transferred resources at disposal 302ms
+ ✓ packages/components/hooks/use-drawer/__tests__/use-drawer.test.ts (15 tests) 13ms
+ ✓ packages/zxui/theme-runtime/__tests__/lifecycle.test.ts (6 tests) 268ms
+ ✓ docs/examples/ai-editor/authoring-ux/deepseek-transport.target-text.test.ts (8 tests) 122ms
+ ✓ docs/examples/ai-editor/authoring-ux/multi-block-envelope.test.ts (14 tests) 3ms
+ ✓ packages/zxui/theme-host/__tests__/consumer-portal-migration.test.ts (9 tests) 31ms
+ ✓ packages/components/icon-select/__tests__/icon-select.test.tsx (8 tests) 328ms
+ ✓ packages/zxui/__tests__/theme-runtime-app-isolation.test.ts (3 tests) 196ms
+ ✓ packages/hooks/__tests__/use-draggable.test.ts (7 tests) 27ms
+stdout | scripts/release/preflight-publish-contracts.test.mjs > preflight-publish-contracts > runs the temporary structural replay without invoking a mirror-updating build
+✓ theme/zxui export contract passed
+
+ ✓ scripts/release/preflight-publish-contracts.test.mjs (10 tests) 15ms
+ ✓ packages/components/drawer/__tests__/drawer.integration.test.tsx (5 tests) 521ms
+ ✓ packages/zxui/theme-runtime/__tests__/manifest-registry.test.ts (6 tests) 366ms
+ ✓ packages/zxui/theme-runtime/__tests__/asset-cache.test.ts (5 tests) 82ms
+ ✓ packages/zxui/theme-host/__tests__/chart-projection.test.ts (2 tests) 124ms
+ ✓ packages/components/theme-provider/__tests__/theme-autocomplete-layout.test.ts (3 tests) 56ms
+ ✓ packages/components/list/__tests__/list.test.tsx (12 tests) 91ms
+ ✓ packages/tokens/__tests__/kernel/resolved-port.test.ts (20 tests) 2176ms
+ ✓ packages/tokens/__tests__/kernel/source-schema.test.ts (18 tests) 104ms
+ ✓ packages/theme-compiler/__tests__/dtcg-adapter.test.ts (11 tests) 14394ms
+   ✓ DTCG 2025.10 adapter > exports and reimports every public semantic token per variant 14230ms
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+[36m[tokens][0m clean /var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging
+vite v6.4.1 building for production...
+
+ ✓ packages/hooks/__tests__/use-responsive.test.ts (10 tests) 20ms
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+transforming...
+
+ ✓ packages/components/select/__tests__/select.test.tsx (10 tests) 531ms
+ ✓ packages/components/confirm-input/__tests__/confirm-input.test.tsx (10 tests) 56ms
+ ✓ packages/components/_shared/__tests__/overlay-layout.test.tsx (11 tests) 675ms
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+✓ 29 modules transformed.
+
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+rendering chunks...
+
+ ✓ packages/dashboard/__tests__/widget-registry.test.ts (9 tests) 11ms
+ ✓ packages/dashboard/__tests__/dashboard-renderer.test.tsx (9 tests) 50ms
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+
+[vite:dts] Start generate declaration files...
+computing gzip size...
+
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/semantic-contract/index.mjs             1.82 kB │ gzip:  0.73 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/display/index.mjs                      10.04 kB │ gzip:  2.65 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/extensions/index.mjs                   25.45 kB │ gzip:  6.06 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/_chunks/plan-B9Q2dq-j.mjs              46.66 kB │ gzip: 11.03 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/_chunks/public-contract-UdLYIjLH.mjs  129.74 kB │ gzip: 24.43 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/kernel/index.mjs                      180.71 kB │ gzip: 32.13 kB
+
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+[vite:dts] Declaration files built in 4988ms.
+
+
+ ✓ packages/components/content-wrap/__tests__/save-controller.test.ts (11 tests) 9ms
+normalized 0 declaration file(s) under ../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging
+ ✓ packages/tokens/__tests__/kernel/fixture-matrix.test.ts (23 tests) 10498ms
+   ✓ synthetic Kernel fixture matrix > covers every built-in, alias projection, expression, five axes, lifecycle, and resolved validation 10218ms
+ ✓ packages/zxui/__tests__/theme-runtime-ssr.test.ts (4 tests) 228ms
+npm warn Unknown env config "_zxio-registry". This will stop working in the next major version of npm.
+npm warn Unknown env config "store-dir". This will stop working in the next major version of npm.
+ ✓ packages/tokens/__tests__/kernel/resolver.test.ts (10 tests) 1526ms
+   ✓ staged theme resolver > normalizes equivalent source object permutations to identical bytes and hashes 772ms
+ ✓ packages/zxui/theme-runtime/__tests__/ssr-bootstrap.test.ts (6 tests) 143ms
+ ✓ packages/components/content-wrap/__tests__/pending-owner.test.ts (3 tests) 82ms
+ ✓ packages/dashboard/__tests__/dashboard-edit-feedback.test.tsx (7 tests) 22ms
+ ✓ packages/components/content-wrap/__tests__/content-wrap-actions.test.ts (17 tests) 113ms
+ ✓ packages/dashboard/__tests__/widget-validation-migration.test.ts (6 tests) 6ms
+stderr | packages/components/drawer/__tests__/drawer.header.test.tsx > ZxDrawer header > hides the handle when resizing is off or in fullscreen
+ElementPlusError: [zx-drawer] [API] disabled-width-drag is about to be deprecated in version 2.0.0, please use :resizable="false" instead.
+For more detail, please visit: /zh-CN/component/drawer
+
+    at Module.debugWarn (/Users/hqz/Downloads/element-plus/packages/utils/public/error.ts:21:9)
+    at __vite_ssr_import_0__.watch.immediate (/Users/hqz/Downloads/element-plus/packages/hooks/use-deprecated/index.ts:23:9)
+    at callWithErrorHandling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19)
+    at callWithAsyncErrorHandling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:207:17)
+    at baseWatchOptions.call (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:886:47)
+    at job (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+reactivity@3.5.40/node_modules/@vue/reactivity/dist/reactivity.cjs.js:1928:18)
+    at Object.watch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+reactivity@3.5.40/node_modules/@vue/reactivity/dist/reactivity.cjs.js:1963:7)
+    at doWatch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:914:34)
+    at Module.watch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:847:10)
+    at Module.useDeprecated (/Users/hqz/Downloads/element-plus/packages/hooks/use-deprecated/index.ts:19:3)
+
+ ✓ packages/components/drawer/__tests__/drawer.header.test.tsx (9 tests) 1101ms
+ ✓ packages/zxui/theme-runtime/__tests__/microfrontend.test.tsx (4 tests) 146ms
+ ✓ packages/components/floating-panel/__tests__/floating-panel.anchored.test.tsx (4 tests) 88ms
+ ✓ packages/components/theme-provider/__tests__/feedback.test.tsx (5 tests) 360ms
+ ✓ packages/components/list-view/__tests__/list-view.test.tsx (15 tests) 806ms
+   ✓ ZxListView > toggles group rows when clicking group toggle 572ms
+ ✓ packages/components/drawer/__tests__/bound-service.test.ts (5 tests) 431ms
+ ✓ packages/components/hooks/use-form-modal/__tests__/use-form-modal.test.ts (11 tests) 10ms
+ ✓ packages/components/date-picker/__tests__/date-picker.test.ts (4 tests) 884ms
+   ✓ owns the native date popup, retains raw props/slots and emits the formatted selection once 358ms
+   ✓ owns the native daterange popup, retains raw props/slots and emits the formatted selection once 400ms
+ ✓ packages/theme-compiler/__tests__/extensions/compiler.test.ts (13 tests) 195ms
+ ✓ packages/theme-compiler/__tests__/bootstrap.test.ts (18 tests) 2579ms
+   ✓ static bootstrap CSS profiles > accepts every registered ordinary on-demand plan through package exports 2570ms
+ ✓ packages/components/dialog/__tests__/dialog.test.tsx (2 tests) 210ms
+ ✓ scripts/theme-compiler/check-readonly.test.ts (4 tests) 162ms
+ ✓ packages/utils/__tests__/dom/style.test.ts (3 tests) 4ms
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > renders correctly
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1', 'Tag2' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > renders tags
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1', 'Tag2' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > does not render an empty append when the add button is hidden
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > uses the visible input label as the accessible name
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] inputLabel="Add technologies" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > renders the append only when the add button is enabled
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] showAddButton=true addButtonText="Add"  ... > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > emits update:modelValue when tag is added
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > emits remove event when tag is removed
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > beforeAdd hook can cancel add
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] beforeAdd=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [] beforeAdd=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > beforeRemove hook supports async guard
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > beforeRemove hook can cancel remove
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Test Tag' ] beforeRemove=fn<spy> ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > respects maxCount prop
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1', 'Tag2' ] maxCount=2 ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > disabled state works
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] disabled=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > readonly state works
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] readonly=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > different sizes work
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] size="large" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] size="default" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] size="small" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > custom tag slot works
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/tags-input/__tests__/tags-input.test.tsx > ZxTagsInput > prevents duplicate tags when allowDuplicates is false
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] allowDuplicates=false ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxTagsInput modelValue= [ 'Tag1' ] allowDuplicates=false ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/components/tags-input/__tests__/tags-input.test.tsx (16 tests) 90ms
+ ✓ scripts/release/publish-plan.test.mjs (6 tests) 21ms
+ ✓ packages/http/__tests__/client.test.ts (10 tests) 13ms
+ ✓ docs/.vitepress/vitepress/composables/__tests__/theme-lab-evidence.test.ts (10 tests) 12ms
+ ✓ packages/tokens/__tests__/kernel/axes.test.ts (10 tests) 310ms
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > renders slot content
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup> 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should render with correct class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply size modifier class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup size="small" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply vertical modifier class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup vertical=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply disabled modifier class when enabled is false
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup enabled=false ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply flat style class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup flat=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply round shape modifier class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup shape="round" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should emit update:modelValue on button click
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup modelValue="1" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should select first button by default when defaultFirstChecked is true
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup defaultFirstChecked=true ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should not emit events when enabled is false
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup enabled=false modelValue="1" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply row gap style when vertical
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup vertical=true rowGap=20 ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should apply custom active class
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup modelValue="1" activeClass="custom-active" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should respect value attribute when determining selection
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup modelValue="option-2" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+stderr | packages/components/button-group/__tests__/button-group.test.tsx > ZxButtonGroup > should fallback to button text when no value provided
+[Vue warn]: Slot "default" invoked outside of the render function: this will not track dependencies used in the slot. Invoke the slot function inside the render function instead. 
+  at <ZxButtonGroup modelValue="选项 B" ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/components/button-group/__tests__/button-group.test.tsx (14 tests) 44ms
+ ✓ packages/dashboard/__tests__/dashboard-a11y.test.ts (9 tests) 4ms
+ ✓ packages/tokens/__tests__/kernel/expressions.test.ts (33 tests) 7ms
+ ✓ packages/zxui/theme-runtime/__tests__/stress.test.ts (3 tests) 143ms
+ ✓ packages/dashboard/__tests__/dashboard-panel-state.test.tsx (8 tests) 28ms
+ ✓ packages/components/theme-provider/__tests__/element-plus-display-defaults.test.ts (13 tests) 2709ms
+   ✓ Element Plus display CSS cascade > keeps native date panel content in normal flow under scaled defaults and raw popup widths 354ms
+   ✓ Element Plus display CSS cascade > keeps native daterange panel content in normal flow under scaled defaults and raw popup widths 304ms
+   ✓ Element Plus display CSS cascade > keeps native monthrange panel content in normal flow under scaled defaults and raw popup widths 317ms
+ ✓ packages/components/theme-provider/__tests__/required-portal-binding.test.tsx (4 tests) 300ms
+ ✓ packages/zxui/theme-runtime/__tests__/selection-resolver.test.ts (5 tests) 168ms
+ ✓ packages/zxui/theme-host/__tests__/composition-css-values.test.ts (7 tests) 367ms
+ ✓ packages/theme-consumer/__tests__/vue-css-adapter.test.tsx (8 tests) 20ms
+ ✓ packages/dashboard/__tests__/validation.test.ts (9 tests) 8ms
+stdout | scripts/theme-kernel/check-readonly.test.ts > readonly repository inventory > preserves an existing dirty file while all command writes stay in TMPDIR
+fixture-positive: PASS (readonly inventory unchanged)
+
+ ✓ scripts/theme-kernel/check-readonly.test.ts (31 tests) 4180ms
+ ✓ packages/dashboard/__tests__/editor-clipboard.test.ts (9 tests) 5ms
+ ✓ packages/tokens/__tests__/kernel/real-themes.test.ts (10 tests) 23227ms
+   ✓ real Theme Source 4.0 packages > resolves every declared default five-axis combination against one public contract 12045ms
+   ✓ real Theme Source 4.0 packages > resolves every declared defense-green five-axis combination against one public contract 10169ms
+stderr | play/src/ai-production-hardening-workbench/public-scenario.test.ts > production-hardening public Workbench personas > replays long-form-writing through the public production facet
+[tiptap warn]: "@tiptap/extension-collaboration" comes with its own history support and is not compatible with "@tiptap/extension-undo-redo".
+
+ ✓ scripts/theme-consumer/admission/validation.test.ts (35 tests) 26788ms
+   ✓ surface role alias admission > admits exact owned aliases separately from structural geometry 6093ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"path":"docs/examples/card/custom.vue"} 5070ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"sourceName":"--zx-semantic-text-secondary"} 4418ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"replacement":"--zx-semantic-text-secondary"} 4341ms
+   ✓ surface role alias admission > does not allow alias classification to hide an unrelated owner: {"repository":"chart"} 3893ms
+   ✓ token write ownership > rechecks exact source recipes and rejects changed values or selectors 2966ms
+ ✓ packages/dashboard/__tests__/dashboard-header-mode.test.tsx (7 tests) 29ms
+stderr | play/src/ai-production-hardening-workbench/public-scenario.test.ts > production-hardening public Workbench personas > replays knowledge-base through the public production facet
+[tiptap warn]: "@tiptap/extension-collaboration" comes with its own history support and is not compatible with "@tiptap/extension-undo-redo".
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+ ✓ packages/theme-compiler/__tests__/css.test.ts (3 tests) 15150ms
+   ✓ ZX CSS target > emits scoped aliases without global or mode fallbacks 14671ms
+   ✓ ZX CSS target > preserves the complete per-variant declaration oracle in compact aggregate CSS 474ms
+stderr | play/src/ai-production-hardening-workbench/public-scenario.test.ts > production-hardening public Workbench personas > replays business-document through the public production facet
+[tiptap warn]: "@tiptap/extension-collaboration" comes with its own history support and is not compatible with "@tiptap/extension-undo-redo".
+
+ ✓ packages/components/drawer/__tests__/drawer.mode.test.tsx (4 tests) 586ms
+ ✓ packages/tokens/__tests__/kernel/contract-governance.test.ts (13 tests) 103ms
+ ✓ docs/examples/keybindings/__tests__/examples.test.ts (6 tests) 74ms
+ ✓ packages/tokens/__tests__/extensions/display-metrics.test.ts (5 tests) 178ms
+ ✓ play/src/ai-collaboration-rebase-workbench/public-scenario.test.ts (6 tests) 3870ms
+   ✓ S7 public collaboration-rebase workbench > runs the real public authority, fenced commit, undo, and reconnect path 1963ms
+stderr | packages/components/grid-list/__tests__/grid-list.test.tsx > ZxGridList > renders slot content
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/tokens/__tests__/display/display-contract.test.ts (5 tests) 11ms
+stderr | packages/components/grid-list/__tests__/grid-list.test.tsx > ZxGridList > marks the wrapper for the fill chain only in fill mode
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> fill=true > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+ElementPlusError: [ZxGridList] the `zx-grid-list--page` class is replaced by the `fill` prop; it still works, but no longer measures the viewport.
+    at Module.debugWarn (/Users/hqz/Downloads/element-plus/packages/utils/public/error.ts:21:9)
+    at __vite_ssr_import_1__.watch.immediate (/Users/hqz/Downloads/element-plus/packages/components/grid-list/src/grid-list.vue:183:9)
+    at callWithErrorHandling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19)
+    at callWithAsyncErrorHandling (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:207:17)
+    at baseWatchOptions.call (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:886:47)
+    at job (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+reactivity@3.5.40/node_modules/@vue/reactivity/dist/reactivity.cjs.js:1928:18)
+    at Object.watch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+reactivity@3.5.40/node_modules/@vue/reactivity/dist/reactivity.cjs.js:1963:7)
+    at doWatch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:914:34)
+    at Module.watch (/Users/hqz/Downloads/element-plus/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:847:10)
+    at setup (/Users/hqz/Downloads/element-plus/packages/components/grid-list/src/grid-list.vue:179:3)
+[Vue warn]: Failed to resolve directive: loading 
+  at <ZxGridList loadData=fn<loadData> class="zx-grid-list--page" > 
+  at <Anonymous > 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/components/grid-list/__tests__/grid-list.test.tsx (6 tests) 131ms
+ ✓ packages/dashboard/__tests__/dashboard-chrome-variant.test.tsx (9 tests) 31ms
+ ✓ packages/hooks/__tests__/directional-region.test.ts (2 tests) 24ms
+ ✓ packages/zxui/theme-host/__tests__/use-display-metrics.test.ts (3 tests) 486ms
+ ✓ packages/components/floating-panel/__tests__/floating-panel.drag-sync.test.tsx (1 test) 558ms
+   ✓ ZxFloatingPanel anchored drag sync > syncs anchored coordinates into draggable state 557ms
+ ✓ scripts/theme-consumer/check-composite.test.ts (7 tests) 9ms
+ ✓ packages/tokens/__tests__/kernel/diagnostics.test.ts (6 tests) 28ms
+ ✓ packages/theme-consumer/__tests__/vue-portal.test.tsx (2 tests) 21ms
+ ✓ packages/dashboard/__tests__/dashboard-dark-mode.test.tsx (9 tests) 9ms
+ ✓ packages/tokens/__tests__/kernel/diff.test.ts (6 tests) 840ms
+ ✓ packages/components/config-provider/__tests__/schema.test.ts (7 tests) 11ms
+ ✓ packages/theme-compiler/__tests__/tailwind-adapter.test.ts (4 tests) 29814ms
+   ✓ theme-neutral Tailwind contract adapter > is referenced identically by both themes 29770ms
+ ✓ scripts/release/normalize-dist-declarations.test.mjs (4 tests) 29ms
+ ✓ packages/hooks/__tests__/use-file-upload.test.ts (5 tests) 4ms
+ ✓ packages/zxui/theme-host/__tests__/composition-adapter-identity.test.ts (2 tests) 289ms
+ ✓ scripts/theme-consumer-protocol/compatibility.test.ts (7 tests) 104ms
+ ✓ internal/build/src/utils/module-inputs.test.ts (4 tests) 24ms
+ ✓ packages/zxui/theme-runtime/__tests__/transaction.test.ts (3 tests) 10ms
+ ✓ packages/dashboard/__tests__/designer-validation.test.ts (3 tests) 4ms
+{"schema":"zx.theme-delivery.compact-data/1","originalBytes":6592911,"encodedBytes":2043043,"savedBytes":4549868}
+ ✓ packages/theme-chalk/scripts/split-structural-style.test.ts (6 tests) 801ms
+   ✓ structural component delivery > keeps every selected original rule, at-rule and declaration in source order 325ms
+ ✓ packages/dashboard/__tests__/migration.test.ts (6 tests) 4ms
+ ✓ packages/components/more-action/__tests__/more-action.test.tsx (5 tests) 227ms
+{"sharedGzipBytes":499009,"separateGzipBytes":635105}
+ ✓ scripts/theme-delivery/compact-theme-data.test.ts (4 tests) 2054ms
+   ✓ restores exact public manifest/map JSON without eval and deterministically interns repeated strings 1124ms
+   ✓ shares manifest/deployment data with exact JSON values and a fixed gzip budget 923ms
+ ✓ scripts/theme-compiler/check-element-plus-inventory.test.ts (4 tests) 45ms
+stderr | packages/dashboard/__tests__/widget-context.test.tsx > DashboardWidgetContext > throws a diagnostic error when required context is missing
+[Vue warn]: Component is missing template or render function:  { setup: [Function: setup], components: {} } 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/dashboard/__tests__/widget-context.test.tsx (3 tests) 19ms
+ ✓ packages/components/hooks/use-dialog/__tests__/use-dialog.test.ts (5 tests) 8ms
+ ✓ packages/components/config-provider/__tests__/merge.test.ts (7 tests) 3ms
+ ✓ packages/components/progress-linear/__tests__/progress-linear.test.tsx (7 tests) 42ms
+ ✓ scripts/theme-consumer/check-commit-set.test.ts (12 tests) 10ms
+ ✓ packages/theme-compiler/__tests__/element-plus-adapter.test.ts (8 tests) 54910ms
+   ✓ Element Plus 2.13.x explicit adapter > emits alias and resolved modes with one source per target 14456ms
+   ✓ Element Plus 2.13.x explicit adapter > rejects a modifier override that is not a declaring modifier selector 27048ms
+   ✓ Element Plus 2.13.x explicit adapter > aggregates unknown targets, type drift, and duplicate targets 13381ms
+ ✓ packages/theme-css-codec/__tests__/equivalence.test.ts (13 tests) 4ms
+ ✓ docs/scripts/__tests__/markdown-examples.test.ts (11 tests) 3935ms
+   ✓ Markdown demo registration > development: compiles zh-CN/dashboard with every referenced demo bound 825ms
+   ✓ Markdown demo registration > development: compiles zh-CN/dashboard-workbench with every referenced demo bound 501ms
+   ✓ Markdown demo registration > development: compiles en-US/dashboard with every referenced demo bound 399ms
+   ✓ Markdown demo registration > development: compiles en-US/dashboard-workbench with every referenced demo bound 430ms
+   ✓ Markdown demo registration > production: compiles zh-CN/dashboard with every referenced demo bound 462ms
+   ✓ Markdown demo registration > production: compiles zh-CN/dashboard-workbench with every referenced demo bound 439ms
+   ✓ Markdown demo registration > production: compiles en-US/dashboard with every referenced demo bound 451ms
+   ✓ Markdown demo registration > production: compiles en-US/dashboard-workbench with every referenced demo bound 384ms
+ ✓ play/src/ai-production-hardening-workbench/public-scenario.test.ts (7 tests) 36238ms
+   ✓ production-hardening public Workbench personas > replays long-form-writing through the public production facet 8390ms
+   ✓ production-hardening public Workbench personas > replays knowledge-base through the public production facet 4294ms
+   ✓ production-hardening public Workbench personas > replays business-document through the public production facet 3119ms
+   ✓ production-hardening public Workbench personas > executes exact pathological expected predicates for long-form-writing 8668ms
+   ✓ production-hardening public Workbench personas > executes exact pathological expected predicates for knowledge-base 6350ms
+   ✓ production-hardening public Workbench personas > executes exact pathological expected predicates for business-document 5414ms
+ ✓ packages/theme-compiler/__tests__/public-api.test.ts (5 tests) 30876ms
+   ✓ @zxio/theme-compiler public result ABI > returns a recursively frozen, failure-atomic artifact set 16748ms
+   ✓ @zxio/theme-compiler public result ABI > rejects forged owner sets, identities, metadata, and base64 spellings 1200ms
+   ✓ @zxio/theme-compiler public result ABI > preserves request identity, descriptors, source, and contract on every path 12925ms
+ ✓ scripts/ai-production-hardening/runner-policy.test.mjs (7 tests) 5ms
+ ✓ packages/http/__tests__/retry.test.ts (7 tests) 12ms
+ ✓ packages/components/floating-panel/__tests__/floating-panel.test.tsx (4 tests) 163ms
+ ✓ packages/tokens/__tests__/extensions/managed-properties.test.ts (2 tests) 67ms
+ ✓ scripts/theme-consumer/check-task21-receipt.test.ts (3 tests) 5ms
+ ✓ packages/components/drawer/__tests__/drawer.divider.test.tsx (3 tests) 293ms
+ ✓ packages/http/__tests__/dedup.test.ts (7 tests) 46ms
+ ✓ packages/tokens/__tests__/kernel/token-types.test.ts (33 tests) 4ms
+ ✓ scripts/docs-theme-scope.test.ts (6 tests) 22ms
+ ✓ packages/http/__tests__/grid-list-plugin.test.ts (4 tests) 2ms
+ ✓ packages/components/theme-provider/__tests__/theme-popper-options.test.ts (2 tests) 118ms
+ ✓ packages/dashboard/__tests__/designer-panel-factory.test.ts (4 tests) 4ms
+ ✓ packages/tokens/__tests__/kernel/canonical-json.test.ts (5 tests) 4ms
+ ✓ packages/components/_shared/__tests__/display-preset-size.test.ts (3 tests) 17ms
+ ✓ packages/components/theme-provider/__tests__/overlay-integration.test.tsx (3 tests) 150ms
+ ✓ packages/components/split-box/__tests__/split-box.test.tsx (10 tests) 41ms
+ ✓ packages/components/capabilities/__tests__/capabilities.test.tsx (6 tests) 39ms
+ ✓ packages/tokens/__tests__/kernel/determinism.test.ts (2 tests) 16259ms
+   ✓ fixed-seed Kernel determinism > normalizes object keys, graph insertion order, and equivalent Theme Source arrays 15859ms
+   ✓ fixed-seed Kernel determinism > sorts and deduplicates independent diagnostics across equivalent permutations 399ms
+ ✓ packages/zxui/theme-host/__tests__/composition-seeds.test.ts (5 tests) 44509ms
+   ✓ composition Seeds use the canonical derivation pipeline > matches seed-only compiler output for default 15352ms
+   ✓ composition Seeds use the canonical derivation pipeline > matches seed-only compiler output for defense-green 14709ms
+   ✓ composition Seeds use the canonical derivation pipeline > matches seed-only compiler output for factory-blue 14202ms
+ ✓ packages/zxui/theme-host/__tests__/core-feedback.test.ts (3 tests) 50ms
+ ✓ internal/build/src/utils/slot-constructor.test.ts (5 tests) 1699ms
+   ✓ published Vue slot constructors > keeps named slots with props, events, exposed instance and static options 878ms
+   ✓ published Vue slot constructors > keeps named slots with props, events, exposed instance and static options 573ms
+ ✓ packages/dashboard/__tests__/import-export.test.ts (7 tests) 5ms
+ ✓ packages/utils/__tests__/dom/aria.test.ts (12 tests) 6ms
+ ✓ packages/hooks/__tests__/container-fit.test.ts (2 tests) 145ms
+ ✓ packages/components/dialog/__tests__/overlay-shortcuts.test.ts (2 tests) 258ms
+ ✓ packages/dashboard/__tests__/dashboard-panel-chrome.test.tsx (5 tests) 21ms
+ ✓ docs/scripts/__tests__/keybindings-generator-mcp.test.ts (4 tests) 20ms
+ ✓ packages/components/timeline/__tests__/timeline.theme.test.ts (3 tests) 4ms
+ ✓ packages/components/upload/__tests__/upload.theme.test.ts (4 tests) 3ms
+ ✓ scripts/theme-kernel/check-perf.test.ts (8 tests) 445ms
+   ✓ theme Kernel performance gate > builds a stable 2,000+ token, five-axis, multi-level and cyclic fixture 440ms
+ ✓ packages/components/flex-view/__tests__/flex-view.test.tsx (8 tests) 47ms
+ ✓ scripts/theme-consumer/large-css-contract.test.ts (3 tests) 41ms
+ ✓ packages/zxui/theme-runtime/__tests__/metrics.test.ts (2 tests) 44ms
+ ✓ packages/components/search/__tests__/zx-search.test.tsx (6 tests) 48ms
+ ✓ packages/theme-compiler/__tests__/artifact-graph.test.ts (5 tests) 77ms
+ ✓ packages/dashboard/__tests__/layout-adapter.test.ts (4 tests) 3ms
+ ✓ packages/components/_shared/__tests__/modal-close.test.tsx (4 tests) 215ms
+ ✓ packages/tokens/__tests__/extensions/adapter-identity.test.ts (2 tests) 68ms
+ ✓ packages/dashboard/__tests__/dashboard-build-output.test.ts (6 tests) 5ms
+ ✓ packages/dashboard/__tests__/legacy-gridcom.test.ts (3 tests) 10ms
+ ✓ packages/zxui/theme-host/__tests__/composition-inline.test.ts (3 tests) 148ms
+ ✓ packages/components/confirm-input/__tests__/confirm-input.theme.test.ts (2 tests) 8ms
+ ✓ docs/.vitepress/theme/route-features.test.ts (5 tests) 109ms
+stderr | packages/dashboard/__tests__/dashboard-runtime-context.test.tsx > DashboardRuntimeContext > throws a diagnostic error when required context is missing
+[Vue warn]: Component is missing template or render function:  { setup: [Function: setup], components: {} } 
+  at <Anonymous ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+ ✓ packages/dashboard/__tests__/dashboard-runtime-context.test.tsx (3 tests) 13ms
+ ✓ packages/theme-compiler/__tests__/typegen.test.ts (3 tests) 14080ms
+   ✓ manifest-driven public-only typegen > has exact bidirectional manifest/runtime parity 13547ms
+   ✓ manifest-driven public-only typegen > typechecks the exact positive and negative Kernel value domains 532ms
+ ✓ packages/hooks/__tests__/use-namespace.test.tsx (2 tests) 14ms
+ ✓ packages/utils/__tests__/vue/vnode.test.ts (7 tests) 3ms
+ ✓ packages/http/__tests__/concurrency.test.ts (3 tests) 11ms
+ ✓ packages/components/drawer/__tests__/drawer.locale.test.tsx (5 tests) 414ms
+ ✓ packages/components/page-layout/__tests__/page-layout.test.tsx (4 tests) 21ms
+ ✓ packages/tokens/__tests__/kernel/action-palette.test.ts (4 tests) 4ms
+ ✓ packages/utils/__tests__/types.test.ts (8 tests) 5ms
+ ✓ packages/components/search/__tests__/search.theme.test.ts (3 tests) 2ms
+ ✓ packages/components/list-view/__tests__/list-view-virtual.test.tsx (2 tests) 70ms
+ ✓ packages/zxui/__tests__/theme-runtime-dogfood.test.ts (3 tests) 75ms
+ ✓ packages/components/sparkline/__tests__/sparkline.test.tsx (4 tests) 27ms
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+ ✓ packages/theme-consumer/__tests__/protocol.test.ts (3 tests) 3ms
+ ✓ packages/dashboard/__tests__/basic-examples.test.ts (2 tests) 41ms
+ ✓ scripts/perf/check-bundle-budget.test.mjs (4 tests) 2ms
+stdout | scripts/release/check-publish-versions.test.mjs > check-publish-versions > passes when npm reports the target version is missing
+✓ @zxio/hooks@1.0.4 is not published yet
+
+ ✓ scripts/release/check-publish-versions.test.mjs (4 tests) 8ms
+ ✓ packages/theme-compiler/__tests__/element-plus-display-defaults.test.ts (4 tests) 39598ms
+   ✓ Element Plus component display defaults > rejects overlapping ownership and non-finite default recipes 39445ms
+ ✓ packages/zxui/theme-runtime/__tests__/target-coordinator.test.ts (2 tests) 3ms
+ ↓ packages/zxui/theme-host/__tests__/composition-performance.test.ts (1 test | 1 skipped)
+ ✓ packages/components/tag/__tests__/tag.theme.test.ts (3 tests) 2ms
+ ✓ packages/zxui/theme-runtime/__tests__/security.test.ts (3 tests) 45ms
+ ✓ scripts/theme-runtime/browser-baseline-schema.test.ts (3 tests) 2ms
+ ✓ packages/components/button/__tests__/button.test.tsx (8 tests) 30ms
+ ✓ packages/utils/__tests__/vue/install.test.ts (6 tests) 2ms
+ ✓ packages/dashboard/__tests__/dashboard-placeholder-style.test.ts (3 tests) 3ms
+ ✓ packages/zxui/theme-runtime/__tests__/diagnostics.test.ts (4 tests) 8ms
+ ✓ packages/components/__tests__/element-plus-cascader-ssr.test.ts (1 test) 35ms
+ ✓ packages/dashboard/__tests__/designer-palette.test.ts (2 tests) 11ms
+ ✓ packages/zxui/theme-runtime/__tests__/composition-css.test.ts (22 tests) 6ms
+ ✓ packages/http/__tests__/typed-api.test.ts (5 tests) 3ms
+ ✓ scripts/theme-consumer/current-inputs.test.ts (2 tests) 775ms
+   ✓ freezes dirty, added, deleted and executable inputs without changing the repository 553ms
+ ✓ packages/components/confirm-input/__tests__/bound-service.test.ts (1 test) 128ms
+ ✓ packages/components/floating-panel/__tests__/floating-panel.theme.test.ts (4 tests) 4ms
+ ✓ packages/theme-compiler/__tests__/extensions/matrix.test.ts (1 test) 180ms
+ ✓ packages/tokens/__tests__/kernel/content-hash.test.ts (3 tests) 8ms
+ ✓ packages/dashboard/__tests__/vue-grid-layout-adapter.test.ts (4 tests) 2ms
+ ✓ packages/utils/__tests__/raf.test.ts (2 tests) 25ms
+ ✓ packages/zxui/theme-runtime/__tests__/public-provider-port.test.ts (1 test) 49ms
+ ✓ packages/zxui/theme-host/__tests__/precompiled-host.test.ts (2 tests) 80ms
+ ✓ packages/dashboard/__tests__/dashboard-focus-ring.test.tsx (4 tests) 14ms
+ ✓ scripts/theme-consumer/native-bridge-policy.test.ts (2 tests) 20ms
+ ✓ docs/scripts/__tests__/generate-examples.test.ts (6 tests) 13ms
+ ✓ packages/theme-compiler/src/targets/css/aggregate-css.test.ts (2 tests) 7ms
+ ✓ scripts/perf/bundle-report.test.mjs (2 tests) 11ms
+ ✓ packages/dashboard/__tests__/dashboard-anim-tokens.test.ts (4 tests) 4ms
+ ✓ packages/components/input-number/__tests__/input-number.test.tsx (4 tests) 51ms
+ ✓ packages/components/search/__tests__/search-shortcuts.test.ts (1 test) 31ms
+ ✓ packages/components/content-wrap/__tests__/debounced-button.test.ts (1 test) 56ms
+ ✓ scripts/release/write-dist-package.test.mjs (1 test) 2ms
+ ✓ scripts/theme-consumer-protocol/coverage-schema.test.ts (8 tests) 3ms
+ ✓ packages/components/split-box/__tests__/split-box.theme.test.ts (4 tests) 4ms
+ ✓ packages/components/tooltip-or-popover/__tests__/tooltip-or-popover.theme.test.ts (2 tests) 2ms
+stderr | play/src/ai-complex-node-workbench/public-scenario.test.ts > AI complex-node public Dogfood Workbench > dogfood-five-node-success-path-uses-only-public-authorities
+[tiptap warn]: "@tiptap/extension-collaboration" comes with its own history support and is not compatible with "@tiptap/extension-undo-redo".
+
+ ✓ docs/scripts/__tests__/text-editor-shortcuts-mcp.test.ts (1 test) 36ms
+ ✓ packages/theme-compiler/__tests__/writer.test.ts (7 tests) 54118ms
+   ✓ controlled generated-root writer > atomically writes and compares a verified owner set 19510ms
+   ✓ controlled generated-root writer > migrates a previous tailwind adapter version only when all owned files still match its manifest 6173ms
+   ✓ controlled generated-root writer > migrates a previous elementPlus adapter version only when all owned files still match its manifest 6069ms
+   ✓ controlled generated-root writer > rejects unmanaged extras and generated-root symlinks 629ms
+   ✓ controlled generated-root writer > rejects broad roots without touching them 316ms
+   ✓ controlled generated-root writer > revalidates the complete artifact set before creating generated state 365ms
+   ✓ controlled generated-root writer > restores the complete previous root after a commit-phase failure 21052ms
+ ✓ packages/components/select/__tests__/select.theme.test.ts (3 tests) 2ms
+ ✓ packages/components/config-provider/__tests__/use-global-config.test.tsx (2 tests) 13ms
+ ✓ packages/components/content-wrap/__tests__/content-wrap.theme.test.tsx (2 tests) 25ms
+ ✓ packages/components/dialog/__tests__/dialog.theme.test.ts (2 tests) 2ms
+ ✓ packages/components/tags-input/__tests__/tags-input.theme.test.ts (2 tests) 3ms
+ ✓ packages/components/button/__tests__/button.theme.test.ts (3 tests) 2ms
+ ✓ packages/tokens/__tests__/extensions/semantic-catalog.test.ts (2 tests) 57ms
+stderr | play/src/ai-complex-node-workbench/public-scenario.test.ts > AI complex-node public Dogfood Workbench > dogfood-negative-matrix-surfaces-safe-recovery-and-api-friction
+[tiptap warn]: "@tiptap/extension-collaboration" comes with its own history support and is not compatible with "@tiptap/extension-undo-redo".
+
+stdout | packages/components/tabs/__tests__/tabs.test.tsx > ZxTabs > makes only the item component wrapper a fill link inside a pane
+<Suspense> is an experimental feature and its API will likely change.
+
+ ✓ packages/components/tabs/__tests__/tabs.test.tsx (3 tests) 24ms
+ ✓ packages/http/__tests__/canceler.test.ts (4 tests) 2ms
+ ✓ packages/components/tag/__tests__/tag.test.tsx (3 tests) 132ms
+ ✓ play/src/ai-complex-node-workbench/public-scenario.test.ts (3 tests) 4409ms
+   ✓ AI complex-node public Dogfood Workbench > dogfood-five-node-success-path-uses-only-public-authorities 2992ms
+   ✓ AI complex-node public Dogfood Workbench > dogfood-negative-matrix-surfaces-safe-recovery-and-api-friction 1412ms
+ ✓ packages/dashboard/__tests__/schema.test.ts (4 tests) 3ms
+ ✓ packages/tokens/__tests__/kernel/seed-validation.test.ts (5 tests) 3ms
+ ✓ scripts/theme/check-contrast.test.ts (2 tests) 2891ms
+   ✓ theme contrast policy > checks non-empty light/dark normal/high matrices for all nine themes 2887ms
+ ✓ packages/components/content-wrap/__tests__/cancel-shortcut.test.ts (1 test) 26ms
+DEPRECATION WARNING [legacy-js-api]: The legacy JS API is deprecated and will be removed in Dart Sass 2.0.0.
+
+More info: https://sass-lang.com/d/legacy-js-api
+
+ ✓ docs/.vitepress/vitepress/components/globals/contributors.test.ts (1 test) 13ms
+ ✓ packages/components/icon/__tests__/icon.test.tsx (7 tests) 20ms
+ ✓ packages/tokens/__tests__/kernel/readonly-snapshot.test.ts (2 tests) 153ms
+ ✓ scripts/theme-consumer/admission/repository-binding.test.ts (5 tests) 4ms
+ ✓ packages/components/more-action/__tests__/action-bar.test.tsx (1 test) 15ms
+ ✓ packages/dashboard/__tests__/widget-glob.test.ts (2 tests) 10ms
+ ✓ packages/components/grid-list/__tests__/grid-list.theme.test.ts (3 tests) 3ms
+ ✓ packages/components/more-action/__tests__/more-action.theme.test.ts (3 tests) 2ms
+ ✓ packages/utils/__tests__/vue/icon.test.ts (7 tests) 11ms
+ ✓ packages/components/list-toolbar/__tests__/list-toolbar.test.ts (1 test) 14ms
+ ✓ scripts/theme-delivery/bootstrap-profile-codec.test.ts (2 tests) 2ms
+ ✓ packages/components/config-provider/__tests__/feedback.test.ts (2 tests) 3ms
+ ✓ internal/build-utils/src/standalone-build.test.ts (1 test) 9ms
+ ✓ scripts/theme-consumer/current-host-contract.test.ts (1 test) 5ms
+ ✓ packages/tokens/__tests__/kernel/public-api.test.ts (3 tests) 15ms
+ ✓ packages/components/list/__tests__/list.theme.test.ts (2 tests) 1ms
+ ✓ packages/components/icon-select/__tests__/icon-select.theme.test.ts (2 tests) 1ms
+ ✓ packages/components/button-group/__tests__/button-group.theme.test.ts (2 tests) 1ms
+ ✓ docs/scripts/__tests__/text-editor-shortcuts-generator.test.ts (2 tests) 43ms
+ ✓ docs/.vitepress/vitepress/composables/__tests__/lang.test.ts (5 tests) 2ms
+ ✓ packages/theme-compiler/__tests__/extensions/writer.test.ts (1 test) 175ms
+ ✓ scripts/theme-consumer/check-trace.test.ts (6 tests) 5ms
+ ✓ internal/build/src/utils/relocate-declaration.test.ts (4 tests) 2ms
+ ✓ packages/http/__tests__/utils.test.ts (2 tests) 3ms
+ ✓ packages/components/list-view/__tests__/list-view.theme.test.ts (1 test) 9ms
+ ✓ packages/dashboard/__tests__/mode.test.ts (4 tests) 3ms
+ ✓ scripts/theme-consumer/host-exclusive-role-policy.test.ts (2 tests) 1ms
+ ✓ scripts/theme-compiler/check-hard-cut.test.ts (14 tests) 3ms
+ ✓ packages/utils/__tests__/objects.test.ts (3 tests) 2ms
+stdout | scripts/update-version.test.ts > updates versions without caching GIT_HEAD=""
+[log] Start updating version
+[log] Packages: "@zxio/example"
+[success] @zxio/example -> 1.2.3
+[success] Package versions updated
+
+stdout | scripts/update-version.test.ts > updates versions without caching GIT_HEAD="release-start-commit"
+[log] Start updating version
+[log] Packages: "@zxio/example"
+[success] @zxio/example -> 1.2.3
+[success] Package versions updated
+
+ ✓ scripts/update-version.test.ts (2 tests) 68ms
+ ✓ packages/hooks/__tests__/use-deprecated.test.ts (2 tests) 13ms
+ ✓ packages/components/empty/__tests__/empty.test.tsx (2 tests) 21ms
+ ✓ internal/build/src/plugins/element-plus-alias.test.ts (2 tests) 7ms
+ ✓ packages/utils/__tests__/vue/global-node.test.ts (4 tests) 3ms
+ ✓ packages/theme-compiler/__tests__/display-css.test.ts (1 test) 11ms
+ ✓ packages/utils/__tests__/vue/validator.test.ts (2 tests) 2ms
+ ✓ scripts/theme/check-contract-drift.test.ts (2 tests) 9ms
+ ✓ packages/components/progress-linear/__tests__/progress-linear.theme.test.ts (2 tests) 7ms
+ ✓ packages/utils/__tests__/arrays.test.ts (4 tests) 11ms
+ ✓ packages/utils/__tests__/strings.test.ts (3 tests) 5ms
+ ✓ docs/.vitepress/vitepress/composables/__tests__/sidebar.test.ts (2 tests) 372ms
+ ✓ packages/components/grid-list/__tests__/public-slots.test.ts (1 test) 1ms
+ ✓ packages/utils/__tests__/browser.test.ts (1 test) 3ms
+ ✓ packages/utils/__tests__/error.test.ts (2 tests) 7ms
+ ✓ scripts/release/publish-packages.test.mjs (1 test) 216ms
+ ✓ packages/components/hooks/use-layer-governance/__tests__/index.test.ts (1 test) 11ms
+ ✓ packages/utils/__tests__/vue/size.test.ts (3 tests) 1ms
+ ✓ packages/utils/__tests__/i18n.test.ts (1 test) 2ms
+ ✓ packages/utils/__tests__/typescript.test.ts (1 test) 1ms
+ ✓ packages/utils/__tests__/vue/refs.test.ts (1 test) 1ms
+ ✓ scripts/theme/create.test.ts (3 tests) 38053ms
+   ✓ pure Theme v4 create workflow > creates, compiles, checks, and packs a synthetic theme without workspace facts 17286ms
+   ✓ pure Theme v4 create workflow > uses the same exact release preflight and rejects export drift 20766ms
+ ✓ packages/theme-compiler/__tests__/aggregate-equivalence.test.ts (9 tests) 3446ms
+   ✓ all built-in themes and variants > default: aggregate equals every complete standalone variant 346ms
+   ✓ all built-in themes and variants > army-pine: aggregate equals every complete standalone variant 385ms
+   ✓ all built-in themes and variants > air-gray: aggregate equals every complete standalone variant 329ms
+   ✓ all built-in themes and variants > pap-olive: aggregate equals every complete standalone variant 425ms
+   ✓ all built-in themes and variants > rocket-moss: aggregate equals every complete standalone variant 482ms
+   ✓ all built-in themes and variants > factory-blue: aggregate equals every complete standalone variant 417ms
+   ✓ all built-in themes and variants > tech-blue: aggregate equals every complete standalone variant 366ms
+   ✓ all built-in themes and variants > industrial-blue: aggregate equals every complete standalone variant 400ms
+ ✓ packages/theme-compiler/__tests__/source-vite.test.ts (3 tests) 42ms
+ ✓ packages/zxui/theme-host/__tests__/deployment-resolver.test.ts (28 tests) 355ms
+ ✓ packages/theme-consumer/__tests__/package-exports.test.ts (1 test) 54ms
+ ✓ packages/components/upload/__tests__/upload.test.tsx (1 test) 21ms
+ ✓ packages/components/tabs/__tests__/tabs.ssr.test.ts (1 test) 13ms
+ ✓ scripts/theme-delivery/theme-deployment-dev-server.test.ts (6 tests) 1801ms
+   ✓ tracks the deployment source and replaces the cached map on regeneration 984ms
+   ✓ SSR-loads a compacted manifest through the shared catalog 790ms
+ ✓ scripts/theme-delivery/theme-canvas.test.ts (35 tests) 4268ms
+   ✓ production canvas and bootstrap agreement > selects canvas only with a valid profile and includes its exact CSP hash 2161ms
+   ✓ production canvas and bootstrap agreement > retains the SSR fallback canvas when the selected profile is unavailable 1726ms
+ ✓ packages/theme-compiler/__tests__/vite.test.ts (9 tests) 9679ms
+   ✓ serves exact hashed dev CSS and builds isolated assets without writing public/ 1555ms
+   ✓ refreshes atomic source replacements, retains valid assets on failure and recovers 2322ms
+   ✓ validates and recovers CSS-only edits without closing stable source watchers 2179ms
+   ✓ recovers a missing intermediate asset directory while retaining its stable ancestor 1076ms
+   ✓ keeps active metadata and hashed assets together when sources drift after candidate emission 868ms
+   ✓ adopts a valid narrower manifest after its retired variant assets are removed 1448ms
+ ✓ packages/theme-compiler/__tests__/deployment.test.ts (22 tests) 18956ms
+   ✓ public manifest deployment assembly > copies all 978 ordinary CSS exports byte-for-byte and deterministically replaces only its own output 2745ms
+   ✓ public manifest deployment assembly > accepts a newly compiled fixture using registration alone and relocated export targets 12443ms
+   ✓ public manifest deployment assembly > retains foreign/modified output on failed replacement: foreign 651ms
+   ✓ public manifest deployment assembly > retains foreign/modified output on failed replacement: modified 628ms
+   ✓ public manifest deployment assembly > retains foreign/modified output on failed replacement: symlink 641ms
+   ✓ public manifest deployment assembly > retains foreign/modified output on failed replacement: marker-symlink 587ms
+ ✓ packages/theme-compiler/__tests__/factory-blue-material.test.ts (4 tests) 64787ms
+   ✓ factory-blue public material contract > builds a complete third theme with visible light and dark material values 12921ms
+   ✓ factory-blue public material contract > does not change the deterministic default or defense-green artifact sets 51855ms
+ ✓ packages/theme-compiler/__tests__/determinism.test.ts (7 tests) 107324ms
+   ✓ compiler determinism > replays identical bytes across cwd, locale, timezone, and temp changes 29581ms
+   ✓ compiler determinism > replays the complete ArtifactSet in two absolute checkout paths and processes 28290ms
+   ✓ compiler determinism > ignores source and contract object insertion order 30862ms
+   ✓ compiler determinism > is not poisoned by a failed compile between two successes 18589ms
+ ✓ packages/theme-compiler/__tests__/cross-theme-matrix.test.ts (3 tests) 73352ms
+   ✓ real three-theme full-matrix gate > covers all 486 variants and every per-variant artifact reference 42038ms
+   ✓ real three-theme full-matrix gate > replays complete artifact sets byte-for-byte 31304ms
+stdout | packages/tokens/__tests__/kernel/package-exports.test.ts > tokens Kernel and extensions package boundary
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/semantic-contract/index.cjs             1.95 kB │ gzip:  0.78 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/display/index.cjs                      10.70 kB │ gzip:  2.76 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/extensions/index.cjs                   26.05 kB │ gzip:  6.03 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/_chunks/plan-ClhLHIqT.cjs              47.25 kB │ gzip: 11.04 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/_chunks/public-contract-CgOaMp4W.cjs  130.52 kB │ gzip: 24.47 kB
+../../../../../../var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/tokens-kernel-consumer-N7fhgp/staging/kernel/index.cjs                      183.60 kB │ gzip: 32.00 kB
+✓ built in 5.50s
+[36m[tokens][0m @zxio/tokens build complete
+
+ ✓ packages/tokens/__tests__/kernel/package-exports.test.ts (10 tests) 145009ms
+   ✓ tokens Kernel and extensions package boundary > loads the packed extension protocol and generated ESM/CJS refs with strict positive and negative types 839ms
+   ✓ tokens Kernel and extensions package boundary > enforces the source import boundary and packed public types 136922ms
+ ✓ packages/theme-compiler/__tests__/matrix.test.ts (6 tests) 196356ms
+   ✓ five-axis matrix identity > proves the real themes share contract, registry, axes, and adapter identity 29405ms
+   ✓ five-axis matrix identity > rejects missing, duplicate, extra, and identity-drifted matrices 11903ms
+   ✓ five-axis matrix identity > validates the public resolved-matrix envelope against Kernel facts 89398ms
+   ✓ five-axis matrix identity > accepts Kernel-proven matrices when every supported value is untransformed 32207ms
+   ✓ five-axis matrix identity > accepts a Kernel-proven matrix whose declared default has transforms 33430ms
+ ✓ packages/theme-compiler/__tests__/manifest.test.ts (9 tests) 207426ms
+   ✓ Theme Manifest v1 exact validator > validates complete identity, variants, artifacts, public surface, and adapters 14994ms
+   ✓ Theme Manifest v1 exact validator > authenticates every adapter target and rejects duplicate targets 346ms
+   ✓ Theme Manifest v1 exact validator > recursively rejects cross-platform paths, UUIDs, nonce values, and volatile keys 1410ms
+   ✓ Theme Manifest v1 exact validator > fails compilation before a volatile public description can enter an ArtifactSet 189952ms
+
+ Test Files  338 passed | 1 skipped (339)
+      Tests  2475 passed | 2 skipped (2477)
+   Start at  22:56:14
+   Duration  215.15s (transform 27.40s, setup 22.85s, collect 172.70s, tests 1367.77s, environment 45.14s, prepare 12.09s)
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ test:node-contracts /Users/hqz/Downloads/element-plus
+> node --import tsx --test scripts/contracts/*.test.mjs scripts/keybindings/*.test.mjs
+
+TAP version 13
+# Subtest: traces public contribution and imported action to a declared mount
+ok 1 - traces public contribution and imported action to a declared mount
+  ---
+  duration_ms: 14.71575
+  type: 'test'
+  ...
+# Subtest: traces core and aliased Vue owner contributions through static options and imported catalogs
+ok 2 - traces core and aliased Vue owner contributions through static options and imported catalogs
+  ---
+  duration_ms: 3.546333
+  type: 'test'
+  ...
+# Subtest: owner contributions reject dynamic arrays, dynamic overriding spreads and non-catalog tokens
+ok 3 - owner contributions reject dynamic arrays, dynamic overriding spreads and non-catalog tokens
+  ---
+  duration_ms: 5.499167
+  type: 'test'
+  ...
+# Subtest: an owner catalog request cannot stand in for actual registration or exempt a keyboard listener
+ok 4 - an owner catalog request cannot stand in for actual registration or exempt a keyboard listener
+  ---
+  duration_ms: 4.705166
+  type: 'test'
+  ...
+# Subtest: missing registration and inventory entries fail independently
+ok 5 - missing registration and inventory entries fail independently
+  ---
+  duration_ms: 1.881416
+  type: 'test'
+  ...
+# Subtest: duplicate logical owner is rejected, multiple instance entry points are allowed
+ok 6 - duplicate logical owner is rejected, multiple instance entry points are allowed
+  ---
+  duration_ms: 2.880125
+  type: 'test'
+  ...
+# Subtest: new parallel keyboard listener fails even beside a registered action
+ok 7 - new parallel keyboard listener fails even beside a registered action
+  ---
+  duration_ms: 1.57425
+  type: 'test'
+  ...
+# Subtest: stale, missing-symbol, and whole-file exceptions fail
+ok 8 - stale, missing-symbol, and whole-file exceptions fail
+  ---
+  duration_ms: 2.792917
+  type: 'test'
+  ...
+# Subtest: pending migration and retained legacy symbol fail the final gate
+ok 9 - pending migration and retained legacy symbol fail the final gate
+  ---
+  duration_ms: 2.907458
+  type: 'test'
+  ...
+# Subtest: catalog differences, new actions, and unresolved dynamic mounts fail closed
+ok 10 - catalog differences, new actions, and unresolved dynamic mounts fail closed
+  ---
+  duration_ms: 2.26325
+  type: 'test'
+  ...
+# Subtest: AST scanner recognizes Vue directives, TSX handlers, computed access, destructuring and owned keymaps
+ok 11 - AST scanner recognizes Vue directives, TSX handlers, computed access, destructuring and owned keymaps
+  ---
+  duration_ms: 2.19475
+  type: 'test'
+  ...
+# Subtest: Drive and test fixtures do not silently widen migration scope
+ok 12 - Drive and test fixtures do not silently widen migration scope
+  ---
+  duration_ms: 2.745875
+  type: 'test'
+  ...
+# Subtest: changing a previously exempted local handler requires ownership review
+ok 13 - changing a previously exempted local handler requires ownership review
+  ---
+  duration_ms: 1.749792
+  type: 'test'
+  ...
+# Subtest: renamed imports still reveal contributions and registrations; typed input receivers are scanned
+ok 14 - renamed imports still reveal contributions and registrations; typed input receivers are scanned
+  ---
+  duration_ms: 1.979667
+  type: 'test'
+  ...
+# Subtest: uses TS for ordinary generics and TSX only for JSX-bearing sources
+ok 15 - uses TS for ordinary generics and TSX only for JSX-bearing sources
+  ---
+  duration_ms: 0.505333
+  type: 'test'
+  ...
+# Subtest: traces a parameter-forwarding public registration helper and rejects dynamic callers
+ok 16 - traces a parameter-forwarding public registration helper and rejects dynamic callers
+  ---
+  duration_ms: 3.152208
+  type: 'test'
+  ...
+# Subtest: @zxio/components grants exactly the public core and vue facets
+ok 17 - @zxio/components grants exactly the public core and vue facets
+  ---
+  duration_ms: 0.522208
+  type: 'test'
+  ...
+# Subtest: @zxio/text-editor grants exactly the public core and vue facets
+ok 18 - @zxio/text-editor grants exactly the public core and vue facets
+  ---
+  duration_ms: 0.0555
+  type: 'test'
+  ...
+# Subtest: @zxio/document grants exactly the public core and vue facets
+ok 19 - @zxio/document grants exactly the public core and vue facets
+  ---
+  duration_ms: 0.087333
+  type: 'test'
+  ...
+# Subtest: ZXUI may ship the runtime dependency but cannot import the runtime directly
+ok 20 - ZXUI may ship the runtime dependency but cannot import the runtime directly
+  ---
+  duration_ms: 0.06475
+  type: 'test'
+  ...
+# Subtest: keybindings has no reverse UI dependency, even in a peer manifest
+ok 21 - keybindings has no reverse UI dependency, even in a peer manifest
+  ---
+  duration_ms: 0.04775
+  type: 'test'
+  ...
+# Subtest: facade source and exports use a type-copy-safe file and retain direct dependencies
+ok 22 - facade source and exports use a type-copy-safe file and retain direct dependencies
+  ---
+  duration_ms: 1.287917
+  type: 'test'
+  ...
+# Subtest: shared runtime contract requires only exact keybindings core/vue facets
+ok 23 - shared runtime contract requires only exact keybindings core/vue facets
+  ---
+  duration_ms: 0.345542
+  type: 'test'
+  ...
+# Subtest: real module and full bundle external predicates preserve the public shared runtime
+ok 24 - real module and full bundle external predicates preserve the public shared runtime
+  ---
+  duration_ms: 401.30225
+  type: 'test'
+  ...
+# Subtest: Vue consumers declare the 3.5 lifecycle API baseline
+ok 25 - Vue consumers declare the 3.5 lifecycle API baseline
+  ---
+  duration_ms: 0.423334
+  type: 'test'
+  ...
+# Subtest: ZXUI builds its existing public theme codec dependency without opening private codec paths
+ok 26 - ZXUI builds its existing public theme codec dependency without opening private codec paths
+  ---
+  duration_ms: 0.363584
+  type: 'test'
+  ...
+# Subtest: aggregate gate rejects missing independent packages and missing root tests
+ok 27 - aggregate gate rejects missing independent packages and missing root tests
+  ---
+  duration_ms: 1.165833
+  type: 'test'
+  ...
+# Subtest: an installed manifest alone cannot pass as package coverage
+ok 28 - an installed manifest alone cannot pass as package coverage
+  ---
+  duration_ms: 1.269125
+  type: 'test'
+  ...
+# Subtest: clean builds cover the real public dependency closure before every consumer
+ok 29 - clean builds cover the real public dependency closure before every consumer
+  ---
+  duration_ms: 3.430583
+  type: 'test'
+  ...
+# Subtest: browser summaries require actual matching engine/mode and executed joint cases
+ok 30 - browser summaries require actual matching engine/mode and executed joint cases
+  ---
+  duration_ms: 0.560958
+  type: 'test'
+  ...
+# Subtest: the browser gate rejects reports missing recording, confirmed replacement or nested fullscreen operations
+ok 31 - the browser gate rejects reports missing recording, confirmed replacement or nested fullscreen operations
+  ---
+  duration_ms: 0.108208
+  type: 'test'
+  ...
+# Subtest: performance gate rejects averages, missing scenarios, inactive fixtures and failed p95
+ok 32 - performance gate rejects averages, missing scenarios, inactive fixtures and failed p95
+  ---
+  duration_ms: 1.096458
+  type: 'test'
+  ...
+# Subtest: synthetic browser evidence is never native keyboard acceptance
+ok 33 - synthetic browser evidence is never native keyboard acceptance
+  ---
+  duration_ms: 0.136208
+  type: 'test'
+  ...
+# Subtest: candidate content hashes cannot masquerade as release commits; dirty and changed sources fail
+ok 34 - candidate content hashes cannot masquerade as release commits; dirty and changed sources fail
+  ---
+  duration_ms: 1.034208
+  type: 'test'
+  ...
+# Subtest: checkout configuration rejects missing or floating independent revisions
+ok 35 - checkout configuration rejects missing or floating independent revisions
+  ---
+  duration_ms: 0.185833
+  type: 'test'
+  ...
+# Subtest: source fingerprint covers additions, content changes and deletions independent of file order
+ok 36 - source fingerprint covers additions, content changes and deletions independent of file order
+  ---
+  duration_ms: 2.012208
+  type: 'test'
+  ...
+# Subtest: scoped workspace restores the exact original after failed installation
+ok 37 - scoped workspace restores the exact original after failed installation
+  ---
+  duration_ms: 0.790667
+  type: 'test'
+  ...
+# Subtest: real pnpm frozen install succeeds with an excluded missing docs/Drive workspace dependency
+ok 38 - real pnpm frozen install succeeds with an excluded missing docs/Drive workspace dependency
+  ---
+  duration_ms: 467.524792
+  type: 'test'
+  ...
+# Subtest: only the generated keybindings performance report is excluded from source pins
+ok 39 - only the generated keybindings performance report is excluded from source pins
+  ---
+  duration_ms: 0.190875
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 608.142375
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/mcp@1.0.0 test /Users/hqz/Downloads/element-plus/packages/mcp
+> vitest run --config vitest.config.ts
+
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/mcp/src/plugins/__tests__/router.test.ts (5 tests) 2ms
+ ✓ packages/mcp/src/tools/__tests__/host-integration.test.ts (3 tests) 9ms
+ ✓ packages/mcp/src/plugins/__tests__/loader.test.ts (4 tests) 123ms
+ ✓ packages/mcp/src/lib/__tests__/cache.test.ts (13 tests) 24ms
+ ✓ packages/mcp/src/plugins/__tests__/zxui-core.test.ts (7 tests) 7ms
+ ✓ packages/mcp/evaluation/dashboard-examples.test.ts (4 tests) 6ms
+ ✓ packages/mcp/src/plugins/__tests__/integration.test.ts (28 tests) 125ms
+ ✓ packages/mcp/evaluation/disclosure-quality.test.ts (11 tests) 534ms
+ ✓ packages/mcp/src/__tests__/transport.test.ts (9 tests) 1636ms
+   ✓ SDK v2 transport and registration > imports HTTP without a process entry or with a nonexistent entry 414ms
+   ✓ SDK v2 transport and registration > passes the official client, raw-wire and alternating-instance protocol gate 1200ms
+
+ Test Files  9 passed (9)
+      Tests  84 passed (84)
+   Start at  22:59:50
+   Duration  2.17s (transform 456ms, setup 0ms, collect 1.96s, tests 2.47s, environment 1ms, prepare 363ms)
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ test:authority /Users/hqz/Downloads/element-plus
+> node scripts/ai-production-hardening/check-local-authority-observation.mjs
+
+{"scope":"local-working-source-validation","sourceClosureFingerprint":"sha256:af8f91170b95455938317d36a4a778f7f65188add70ab41c4e6e847cce4d621b","rootClean":false,"personas":["long-form-writing","knowledge-base","business-document"],"stages":21,"valid":true}

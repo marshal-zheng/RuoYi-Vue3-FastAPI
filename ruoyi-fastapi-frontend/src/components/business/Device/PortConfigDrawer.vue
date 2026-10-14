@@ -74,7 +74,6 @@ const drawer = useDrawer({
     handleClose();
     return true;
   },
-  onConfirmError: (_e) => {},
 });
 
 const title = computed(() => props.title);

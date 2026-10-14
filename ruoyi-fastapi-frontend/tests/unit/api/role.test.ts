@@ -53,10 +53,9 @@ describe('Role API contract', () => {
         status: '0',
         menuIds: [1, 2, 3],
       })
-    ).resolves.toMatchObject({
-      roleId: 1000,
-      roleKey: 'test',
-      menuIds: [1, 2, 3],
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
     await expect(
@@ -65,9 +64,9 @@ describe('Role API contract', () => {
         roleName: '更新角色',
         roleKey: 'updated',
       })
-    ).resolves.toMatchObject({
-      roleId: 1,
-      roleKey: 'updated',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
     await expect(
@@ -76,18 +75,20 @@ describe('Role API contract', () => {
         dataScope: '2',
         deptIds: [1, 2, 3],
       })
-    ).resolves.toMatchObject({
-      roleId: 1,
-      dataScope: '2',
-      deptIds: [1, 2, 3],
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
-    await expect(roleApi.changeRoleStatus(1, '1')).resolves.toMatchObject({
-      roleId: 1,
-      status: '1',
+    await expect(roleApi.changeRoleStatus(1, '1')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
-    await expect(roleApi.delRole('1,2,3')).resolves.toBeNull();
+    await expect(roleApi.delRole('1,2,3')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
   });
 
   it('covers role authorization and dept tree endpoints via MSW', async () => {
@@ -97,12 +98,18 @@ describe('Role API contract', () => {
     await expect(roleApi.unallocatedUserList({ roleId: 1 })).resolves.toMatchObject({
       items: [expect.objectContaining({ userName: 'guest' })],
     });
-    await expect(roleApi.authUserCancel({ roleId: 1, userId: 2 })).resolves.toMatchObject({
-      roleId: 1,
-      userId: 2,
+    await expect(roleApi.authUserCancel({ roleId: 1, userId: 2 })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
-    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: '2,3' })).resolves.toBeNull();
-    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: '2,3' })).resolves.toBeNull();
+    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
     await expect(roleApi.deptTreeSelect(1)).resolves.toMatchObject({
       roleId: 1,
       checkedKeys: [100],

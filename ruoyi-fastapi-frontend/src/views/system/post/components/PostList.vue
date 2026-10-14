@@ -44,7 +44,7 @@
               placeholder="岗位状态"
               clearable
               style="width: 200px"
-              @change="(v: any) => onFilterChange('status', v, { handleRefresh, updateState })"
+              @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
             >
               <el-option
                 v-for="dict in sys_normal_disable"
@@ -114,34 +114,56 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance } from 'vue';
+import { getCurrentInstance, ref } from 'vue';
+import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { PostRecord } from '@/api/system/post';
+import type { PostPageQueryModel } from '@/api/_generated/types.gen';
+type ListQuery = PostPageQueryModel & { dateRange?: string[] | null };
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { parseTime } from '@/utils/ruoyi';
 import { listPost, getPost, delPost } from '@/api/system/post';
 import PostDlg from './PostDlg.vue';
 
-const { proxy } = getCurrentInstance()!;
-const { sys_normal_disable } = (proxy as any).useDict('sys_normal_disable');
+const proxy = getCurrentInstance()!.proxy!;
+const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<any>(null);
-const postDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const postDlgRef = ref<InstanceType<typeof PostDlg> | null>(null);
 
-async function loadPostData(params: Record<string, any>) {
+async function loadPostData(params: ListLoadParams) {
   try {
-    return await listPost(params);
-  } catch (e) {
+    return await listPost({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
@@ -149,7 +171,7 @@ function handleRefresh() {
   gridListRef.value?.refresh();
 }
 
-function handleSelectionChange(selection: any[]) {
+function handleSelectionChange(selection: PostRecord[]) {
   ids.value = selection.map((item) => item.postId);
   single.value = selection.length !== 1;
   multiple.value = !selection.length;
@@ -159,16 +181,24 @@ function handleAdd() {
   postDlgRef.value?.open();
 }
 
-async function handleUpdate(row?: any) {
-  const postId = row?.postId || ids.value;
+async function handleUpdate(row?: PostRecord) {
+  const postId = row?.postId || ids.value[0];
+  if (!postId) return;
   const response = await getPost(postId);
   const data = response;
-  postDlgRef.value?.open(data);
+  postDlgRef.value?.open({
+    postId: data.postId ?? undefined,
+    postName: data.postName ?? undefined,
+    postCode: data.postCode ?? undefined,
+    postSort: data.postSort ?? undefined,
+    status: data.status ?? undefined,
+    remark: data.remark ?? undefined,
+  });
 }
 
-function handleDelete(row?: any) {
-  const postIds = row?.postId || ids.value;
-  (proxy as any).$modal
+function handleDelete(row?: PostRecord) {
+  const postIds = row?.postId || ids.value.join(',');
+  proxy.$modal
     .confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
     .then(() => delPost(postIds))
     .then(() => {
@@ -177,7 +207,7 @@ function handleDelete(row?: any) {
     .catch(() => {});
 }
 
-function handleExport(query: Record<string, any>) {
-  (proxy as any).download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);
+function handleExport(query: ListQuery) {
+  proxy.download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);
 }
 </script>

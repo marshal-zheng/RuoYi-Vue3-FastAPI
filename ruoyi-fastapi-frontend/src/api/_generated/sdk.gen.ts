@@ -1224,7 +1224,7 @@ export const getDeviceCategoryListDeviceCategoryListGet = <ThrowOnError extends 
 /**
  * Get Device Category Options
  *
- * 获取设备分类选项（用于下拉选择）
+ * 获取设备分类选项(用于下拉选择)
  */
 export const getDeviceCategoryOptionsDeviceCategoryOptionsGet = <
   ThrowOnError extends boolean = false,

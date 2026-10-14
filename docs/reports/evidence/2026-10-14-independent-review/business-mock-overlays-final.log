@@ -1,0 +1,71 @@
+Mock overlay registry summary
+Overlays: total=11, coreMatrix=6, e2eEnabled=9
+State types: empty=2, latency=1, problem=3, forbidden=1, timeout=1, unsupported=2, readonly=1
+Issues: failures=0, warnings=65
+
+Warnings:
+- [critical-overlay-missing]  POST /auth/csrf-token (user:csrfToken) POST /auth/csrf-token is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /auth/logout (user:authLogout) POST /auth/logout is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /auth/refresh (user:refresh) POST /auth/refresh is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /auth/ws-ticket (user:wsTicket) POST /auth/ws-ticket is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /captchaImage (user:captcha) GET /captchaImage is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /device/list (device:list) GET /device/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /getInfo (user:getInfo) GET /getInfo is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /getRouters (system:getRouters) GET /getRouters is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /login (user:login) POST /login is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /project/{project_id} (project:get) GET /project/{project_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /project/{project_ids} (project:delete) DELETE /project/{project_ids} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /project/export/{project_id} (project:export) GET /project/export/{project_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /project/version (project:version:create) POST /project/version is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /project/version (project:version:update) PUT /project/version is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /project/version/{version_id} (project:version:get) GET /project/version/{version_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /project/version/{version_ids} (project:version:delete) DELETE /project/version/{version_ids} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /project/version/lock (project:version:lock) PUT /project/version/lock is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /project/version/unlock/project/{project_id} (project:version:unlock-project) PUT /project/version/unlock/project/{project_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/faults (simulation:faults) GET /simulation/faults is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/faults (simulation:fault-create-unsupported) POST /simulation/faults is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /simulation/faults/{fault_id} (simulation:fault-delete-unsupported) DELETE /simulation/faults/{fault_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/sessions/{session_id}/alarms (simulation:alarms) GET /simulation/sessions/{session_id}/alarms is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/sessions/{session_id}/bandwidth (simulation:bandwidth) GET /simulation/sessions/{session_id}/bandwidth is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/sessions/{session_id}/events (simulation:events) GET /simulation/sessions/{session_id}/events is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/events (simulation:event-create-unsupported) POST /simulation/sessions/{session_id}/events is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /simulation/sessions/{session_id}/events/{event_id} (simulation:event-delete-unsupported) DELETE /simulation/sessions/{session_id}/events/{event_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /simulation/sessions/{session_id}/events/{event_id} (simulation:event-update-unsupported) PUT /simulation/sessions/{session_id}/events/{event_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/events/{event_id}/trigger (simulation:event-trigger-unsupported) POST /simulation/sessions/{session_id}/events/{event_id}/trigger is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /simulation/sessions/{session_id}/faults (simulation:fault-clear-unsupported) DELETE /simulation/sessions/{session_id}/faults is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/sessions/{session_id}/messages (simulation:messages) GET /simulation/sessions/{session_id}/messages is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/resume (simulation:session-resume-unsupported) POST /simulation/sessions/{session_id}/resume is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/speed (simulation:session-speed-unsupported) POST /simulation/sessions/{session_id}/speed is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/sessions/{session_id}/status (simulation:status) GET /simulation/sessions/{session_id}/status is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/step (simulation:session-step-unsupported) POST /simulation/sessions/{session_id}/step is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /simulation/sessions/{session_id}/stop (simulation:session-stop-unsupported) POST /simulation/sessions/{session_id}/stop is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /simulation/strategies (simulation:strategies) GET /simulation/strategies is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dept/list (system:departments) GET /system/dept/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dept/treeselect (system:deptTree) GET /system/dept/treeselect is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /system/dict/data (system:dictDataCreate) POST /system/dict/data is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /system/dict/data (system:dictDataUpdate) PUT /system/dict/data is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/data/{dict_code} (system:dictDataDetail) GET /system/dict/data/{dict_code} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /system/dict/data/{dict_codes} (system:dictDataDelete) DELETE /system/dict/data/{dict_codes} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/data/list (system:dictDataList) GET /system/dict/data/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/data/type/{dict_type} (system:dict:type) GET /system/dict/data/type/{dict_type} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /system/dict/type (system:dictTypeCreate) POST /system/dict/type is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /system/dict/type (system:dictTypeUpdate) PUT /system/dict/type is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/type/{dict_id} (system:dictTypeDetail) GET /system/dict/type/{dict_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /system/dict/type/{dict_ids} (system:dictTypeDelete) DELETE /system/dict/type/{dict_ids} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/type/list (system:dictTypeList) GET /system/dict/type/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/dict/type/optionselect (system:dictTypeOptions) GET /system/dict/type/optionselect is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /system/dict/type/refreshCache (system:dictTypeRefreshCache) DELETE /system/dict/type/refreshCache is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /system/menu (system:menuCreate) POST /system/menu is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /system/menu (system:menuUpdate) PUT /system/menu is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/menu/{menu_id} (system:menuDetail) GET /system/menu/{menu_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /system/menu/{menu_ids} (system:menuDelete) DELETE /system/menu/{menu_ids} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/menu/list (system:menus) GET /system/menu/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/menu/roleMenuTreeselect/{role_id} (system:roleMenuTree) GET /system/menu/roleMenuTreeselect/{role_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/menu/treeselect (system:menuTree) GET /system/menu/treeselect is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  POST /system/role (system:roleCreate) POST /system/role is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /system/role (system:roleUpdate) PUT /system/role is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/role/{role_id} (system:roleDetail) GET /system/role/{role_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  DELETE /system/role/{role_ids} (system:roleDelete) DELETE /system/role/{role_ids} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  PUT /system/role/changeStatus (system:roleChangeStatus) PUT /system/role/changeStatus is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/role/deptTree/{role_id} (system:roleDeptTree) GET /system/role/deptTree/{role_id} is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.
+- [critical-overlay-missing]  GET /system/role/list (system:roles) GET /system/role/list is critical but has no page-state overlay yet; non-Core coverage is warning-only in this phase.

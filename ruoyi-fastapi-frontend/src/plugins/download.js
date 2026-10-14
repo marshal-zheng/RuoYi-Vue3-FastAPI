@@ -51,8 +51,7 @@ async function printErrMsg(data) {
       errorCode[rspObj?.status] ||
       errorCode['default'];
     ElMessage.error(errMsg);
-  } catch (error) {
-    console.error(error);
+  } catch {
     ElMessage.error('下载文件出现错误，请联系管理员！');
   }
 }
@@ -63,8 +62,7 @@ export default {
       const url = `/common/download?fileName=${encodeURIComponent(name)}&delete=${isDelete}`;
       const response = await requestFile({ url });
       await handleBlobResponse(response, name);
-    } catch (error) {
-      console.error(error);
+    } catch {
       ElMessage.error('下载文件出现错误，请联系管理员！');
     }
   },
@@ -73,8 +71,7 @@ export default {
       const url = `/common/download/resource?resource=${encodeURIComponent(resource)}`;
       const response = await requestFile({ url });
       await handleBlobResponse(response, resource);
-    } catch (error) {
-      console.error(error);
+    } catch {
       ElMessage.error('下载文件出现错误，请联系管理员！');
     }
   },
@@ -86,8 +83,7 @@ export default {
     try {
       const response = await requestFile({ url });
       await handleBlobResponse(response, name, 'application/zip');
-    } catch (error) {
-      console.error(error);
+    } catch {
       ElMessage.error('下载文件出现错误，请联系管理员！');
     } finally {
       downloadLoadingInstance?.close?.();

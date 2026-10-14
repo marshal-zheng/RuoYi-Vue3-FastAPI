@@ -1,0 +1,31 @@
+[
+  {
+    "name": "backend-scope-lint",
+    "command": [
+      "./venv/bin/ruff",
+      "check",
+      "modules/system/api/cache_controller.py",
+      "modules/system/api/__init__.py",
+      "modules/registry.py",
+      "tests/unit/test_collection_openapi_contract.py",
+      "tests/unit/controllers/test_simulation_controller.py",
+      "tests/unit/services/test_simulation_status_wire.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "backend-scope-format",
+    "command": [
+      "./venv/bin/ruff",
+      "format",
+      "--check",
+      "modules/system/api/cache_controller.py",
+      "modules/system/api/__init__.py",
+      "modules/registry.py",
+      "tests/unit/test_collection_openapi_contract.py",
+      "tests/unit/controllers/test_simulation_controller.py",
+      "tests/unit/services/test_simulation_status_wire.py"
+    ],
+    "exitCode": 0
+  }
+]

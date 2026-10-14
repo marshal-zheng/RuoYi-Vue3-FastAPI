@@ -1,0 +1,21 @@
+{
+  "src/views/register.vue": "735cde5ac8d0f8626fe74b61422f4c17c1a74cfab7374504bb1175d91811e4fe",
+  "src/views/project/simulation/index.vue": "7f23f4595f3d9941ff1ff8be9e9f4c0762a291ce599088db0461f5f8d75104fc",
+  "src/views/project/simulation/components/ProtocolAnalyzer.vue": "6bd0dc44b6dfd9773421cdf20906316763fa9a467f69929d2f5ceb08cd677d38",
+  "src/views/project/simulation/components/ProtocolAnalyzer.test.ts": "6674ce7f3887a1c5079028bd90dd1cd334748c0f24de4a8aba2482ac8a3aae33",
+  "src/views/project/simulation/composables/useSimulationData.ts": "46246dc14a5848631408b0fe1845d4ddb862be1d96f1bf491f567cffc74a4bef",
+  "src/views/project/composables/topoExportUtils.ts": "ef2d3402750905bec69bba62c043b22996984cc7e08af3dca1c428caf56419db",
+  "src/views/project/composables/topoExportUtils.test.ts": "4b82d7c04d0deef5da9f2d15df0d577e7b22cedfcc2775804ce1d04f4651dabc",
+  "src/views/project/components/NodeEditDrawer.vue": "cb4c2890085df1e00bdfb143514ffa98787f93ce3bf5547086fadb131b2da239",
+  "src/views/project/components/index.ts": "6543ff1cbb7f252d7d8122bb50050ed8252f53b17b34f8ed7aae5e39490823f4",
+  "src/components/business/Device/index.ts": "10a8479979cf00a9a29d9549cca9a4854343ee2ef8de6c95726fc30c061e3e7e",
+  "src/utils/io-toolkit/download.ts": "0f0fbaec30bc25dad025e90d36fbeaf277f4d7f6fa9e0899ffa16498b8b6bc40",
+  "src/utils/io-toolkit/download.contract.test.ts": "49060f0b6995cc7f1f73e89f4717d06fffb07795457fa31b2fbed7fd5913352e",
+  "tests/unit/business-lint-regressions.test.ts": "2c9bb0ac7791b4e9ecea4da11f385df48a5477ec2663eb7ffa8c350b3c15146f",
+  "tests/fixtures/ui-convergence/App.vue": "153310ee092c0fd09214294bd554fd9683fe1d2f36603ac0eef1f6263b64c899",
+  "tests/fixtures/ui-convergence/README.md": "5e5964fe4ec5e6ab2843c21f9fd659636e29d19178cdd6fb32ee1867d78d8e45",
+  "src/components/business/Device/DeviceClazzDialog.vue": null,
+  "src/views/project/components/ProjectEditDialog.vue": null,
+  "src/components/business/Device/ExportDialog.vue": null,
+  "src/views/project/components/ExportDialog.vue": null
+}

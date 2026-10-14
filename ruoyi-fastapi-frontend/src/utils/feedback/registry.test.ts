@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   assertFeedbackRegistry,
   getFeedbackRegistry,
-  resolveFeedbackRegistryEntryWithRuntime,
+  resolveFeedbackRegistryEntry,
 } from '@/utils/feedback/registry';
 
 describe('feedback registry', () => {
@@ -13,34 +13,13 @@ describe('feedback registry', () => {
     expect(registry['system.user.create']).toEqual({ success: '新增用户成功' });
   });
 
-  it('throws for missing keys in dev mode', () => {
-    expect(() =>
-      resolveFeedbackRegistryEntryWithRuntime('missing.key', {
-        isDev: true,
-        warn: vi.fn(),
-        warnedKeys: new Set(),
-      })
-    ).toThrow('[feedback] missing registry key: missing.key');
-  });
+  afterEach(() => vi.unstubAllEnvs());
 
-  it('warns once and falls back in prod mode', () => {
-    const warn = vi.fn();
-    const warnedKeys = new Set<string>();
-
-    const first = resolveFeedbackRegistryEntryWithRuntime('missing.key', {
-      isDev: false,
-      warn,
-      warnedKeys,
-    });
-    const second = resolveFeedbackRegistryEntryWithRuntime('missing.key', {
-      isDev: false,
-      warn,
-      warnedKeys,
-    });
-
-    expect(first).toEqual({ success: '操作成功' });
-    expect(second).toEqual({ success: '操作成功' });
-    expect(warn).toHaveBeenCalledTimes(1);
+  it.each([true, false])('rejects unregistered keys when DEV=%s', (isDev) => {
+    vi.stubEnv('DEV', isDev);
+    expect(() => resolveFeedbackRegistryEntry('missing.key')).toThrow(
+      '[feedback] missing registry key: missing.key'
+    );
   });
 
   it('rejects invalid registry entries during startup validation', () => {

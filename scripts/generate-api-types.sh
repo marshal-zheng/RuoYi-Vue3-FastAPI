@@ -99,25 +99,22 @@ fi
     --output "$OUTPUT_DIR" \
     --client @hey-api/client-fetch
 
+node "$FRONTEND_DIR/scripts/postprocess-openapi.mjs" "$OUTPUT_DIR"
+
 echo -e "${GREEN}      ✓ TypeScript 类型生成成功${NC}"
 
 # 步骤3：格式化生成的代码
 echo ""
 echo -e "${YELLOW}[3/3] 格式化生成的代码...${NC}"
 
-if command -v prettier &> /dev/null; then
-    prettier \
-        --write "$OUTPUT_DIR/**/*.ts" \
-        --single-quote \
-        --trailing-comma es5 \
-        --tab-width 2 \
-        --semi \
-        --print-width 100 \
-        2>/dev/null || true
-    echo -e "${GREEN}      ✓ 代码格式化完成${NC}"
-else
-    echo -e "${YELLOW}      ⚠ prettier 未安装，跳过格式化${NC}"
-fi
+"$FRONTEND_DIR/node_modules/.bin/prettier" \
+    --write "$OUTPUT_DIR/**/*.ts" \
+    --single-quote \
+    --trailing-comma es5 \
+    --tab-width 2 \
+    --semi \
+    --print-width 100
+echo -e "${GREEN}      ✓ 代码格式化完成${NC}"
 
 echo ""
 echo -e "${GREEN}========================================${NC}"

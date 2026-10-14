@@ -80,13 +80,6 @@ const unmatch = computed(() => {
   });
   return unmatch; // 返回标志的值
 });
-
-function handleArray(array) {
-  if (array.length === 0) return '';
-  return array.reduce((pre, cur) => {
-    return pre + ' ' + cur;
-  });
-}
 </script>
 
 <style scoped>

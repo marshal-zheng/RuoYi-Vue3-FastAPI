@@ -1,0 +1,126 @@
+{
+  "before": [
+    {
+      "type": "CAN",
+      "ports": [
+        {
+          "id": "port-can",
+          "interfaceType": "CAN",
+          "_originalIndex": 0
+        }
+      ],
+      "protocols": [
+        {
+          "id": "port-can_message-1",
+          "port": {
+            "id": "port-can",
+            "interfaceType": "CAN",
+            "_originalIndex": 0
+          },
+          "message": {
+            "id": "message-1",
+            "message": {
+              "header": {
+                "sender": "node-1",
+                "receiver": "node-2"
+              }
+            }
+          }
+        }
+      ],
+      "totalProtocols": 1
+    },
+    {
+      "type": "LAN",
+      "ports": [
+        {
+          "id": "port-lan",
+          "interfaceType": "LAN",
+          "_originalIndex": 1
+        }
+      ],
+      "protocols": [
+        {
+          "id": "port-lan_message-1",
+          "port": {
+            "id": "port-lan",
+            "interfaceType": "LAN",
+            "_originalIndex": 1
+          },
+          "message": {
+            "id": "message-1",
+            "message": {
+              "header": {
+                "sender": "node-1",
+                "receiver": "node-2"
+              }
+            }
+          }
+        }
+      ],
+      "totalProtocols": 1
+    }
+  ],
+  "after": [
+    {
+      "type": "CAN",
+      "ports": [
+        {
+          "id": "port-can",
+          "interfaceType": "CAN",
+          "_originalIndex": 0
+        }
+      ],
+      "protocols": [
+        {
+          "id": "port-can_message-1",
+          "port": {
+            "id": "port-can",
+            "interfaceType": "CAN",
+            "_originalIndex": 0
+          },
+          "message": {
+            "id": "message-1",
+            "message": {
+              "header": {
+                "sender": "node-1",
+                "receiver": "node-2"
+              }
+            }
+          }
+        }
+      ],
+      "totalProtocols": 1
+    },
+    {
+      "type": "LAN",
+      "ports": [
+        {
+          "id": "port-lan",
+          "interfaceType": "LAN",
+          "_originalIndex": 1
+        }
+      ],
+      "protocols": [
+        {
+          "id": "port-lan_message-1",
+          "port": {
+            "id": "port-lan",
+            "interfaceType": "LAN",
+            "_originalIndex": 1
+          },
+          "message": {
+            "id": "message-1",
+            "message": {
+              "header": {
+                "sender": "node-1",
+                "receiver": "node-2"
+              }
+            }
+          }
+        }
+      ],
+      "totalProtocols": 1
+    }
+  ]
+}

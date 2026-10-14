@@ -1,0 +1,4 @@
+src/api/_generated-client-contract.test.ts(153,48): error TS2344: Type 'Resource' does not satisfy the constraint '"Expected: ..., Actual: never"'.
+src/api/_generated-client-contract.test.ts(176,48): error TS2344: Type 'Resource' does not satisfy the constraint '"Expected: ..., Actual: unknown"'.
+src/api/_generated-client-contract.test.ts(177,21): error TS2345: Argument of type 'StreamEvent<unknown>' is not assignable to parameter of type 'StreamEvent<Resource>'.
+  Type 'unknown' is not assignable to type 'Resource'.

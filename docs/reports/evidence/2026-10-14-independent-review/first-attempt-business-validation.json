@@ -1,0 +1,11 @@
+[
+  {
+    "name": "business-lint-final",
+    "command": [
+      "yarn",
+      "lint:check"
+    ],
+    "exitCode": 1,
+    "seconds": 7.69
+  }
+]

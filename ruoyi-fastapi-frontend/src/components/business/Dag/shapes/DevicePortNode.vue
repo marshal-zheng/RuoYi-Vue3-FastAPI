@@ -90,7 +90,7 @@ const nodeData = computed(() => {
 });
 
 const label = computed(() => nodeData.value.label || '设备');
-const busType = computed(() => nodeData.value.busType || '');
+
 const ports = computed(() => nodeData.value.ports || []);
 
 // 尺寸常量
@@ -203,7 +203,7 @@ const syncPortPositions = () => {
 
   const allPorts = ports.value || [];
 
-  allPorts.forEach((port, index) => {
+  allPorts.forEach((port) => {
     const group = port.group;
     let x, y;
 

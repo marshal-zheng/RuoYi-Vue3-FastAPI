@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Form, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.http_contracts import CollectionResult
 from config.enums import BusinessType
 from config.get_db import get_db
 from module_admin.annotation.log_annotation import Log
@@ -14,12 +15,6 @@ from module_admin.entity.vo.dict_vo import (
     DictTypePageQueryModel,
 )
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from modules.system.application.services import (
-    DictDataService,
-    DictTypeService,
-    get_dict_data_service,
-    get_dict_type_service,
-)
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
@@ -39,6 +34,12 @@ from modules.system.application.queries import (
     GetDictTypeDetailQuery,
     GetDictTypeListQuery,
     GetDictTypeOptionsQuery,
+)
+from modules.system.application.services import (
+    DictDataService,
+    DictTypeService,
+    get_dict_data_service,
+    get_dict_type_service,
 )
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
@@ -189,7 +190,7 @@ async def delete_system_dict_type(
     return ResponseUtil.no_content()
 
 
-@dictController.get('/type/optionselect', response_model=list[DictTypeModel])
+@dictController.get('/type/optionselect', response_model=CollectionResult[DictTypeModel])
 async def query_system_dict_type_options(
     request: Request,
     mediator: Mediator = Depends(provide_system_mediator),

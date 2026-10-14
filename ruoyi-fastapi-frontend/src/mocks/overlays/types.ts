@@ -1,50 +1,42 @@
 export const MOCK_OVERLAY_STATE_TYPES = [
-  "empty",
-  "latency",
-  "problem",
-  "forbidden",
-  "timeout",
-  "unsupported",
-  "readonly",
+  'empty',
+  'latency',
+  'problem',
+  'forbidden',
+  'timeout',
+  'unsupported',
+  'readonly',
 ] as const;
 
 export const MOCK_OVERLAY_HTTP_METHODS = [
-  "GET",
-  "POST",
-  "PUT",
-  "DELETE",
-  "PATCH",
-  "OPTIONS",
-  "HEAD",
+  'GET',
+  'POST',
+  'PUT',
+  'DELETE',
+  'PATCH',
+  'OPTIONS',
+  'HEAD',
 ] as const;
 
 export const MOCK_OVERLAY_CONTRACT_EXCEPTIONS = [
-  "problem-response",
-  "schema-unavailable",
-  "local-contract",
-  "unhandled-api",
-  "not-applicable",
+  'problem-response',
+  'schema-unavailable',
+  'local-contract',
+  'unhandled-api',
+  'not-applicable',
 ] as const;
 
 export type MockOverlayStateType = (typeof MOCK_OVERLAY_STATE_TYPES)[number];
 
 export type MockOverlayHttpMethod = (typeof MOCK_OVERLAY_HTTP_METHODS)[number];
 
-export type MockOverlayContractException =
-  (typeof MOCK_OVERLAY_CONTRACT_EXCEPTIONS)[number];
+export type MockOverlayContractException = (typeof MOCK_OVERLAY_CONTRACT_EXCEPTIONS)[number];
 
-export type MockOverlayResetStrategy = "overlay-only";
+export type MockOverlayResetStrategy = 'overlay-only';
 
-export type MockOverlayActivationSource =
-  | "none"
-  | "bootstrap"
-  | "runtime-api"
-  | "vitest";
+export type MockOverlayActivationSource = 'none' | 'bootstrap' | 'runtime-api' | 'vitest';
 
-export type MockOverlayProjection =
-  | "empty-page"
-  | "empty-list"
-  | "readonly-view";
+export type MockOverlayProjection = 'empty-page' | 'empty-list' | 'readonly-view';
 
 export interface MockOverlayTarget {
   method: MockOverlayHttpMethod;
@@ -111,10 +103,7 @@ export interface MockOverlayState {
   source: MockOverlayActivationSource;
 }
 
-export type MockOverlayActivationInput =
-  | string[]
-  | MockOverlayState
-  | undefined;
+export type MockOverlayActivationInput = string[] | MockOverlayState | undefined;
 
 export interface MockOverlayValidationIssue {
   code: string;

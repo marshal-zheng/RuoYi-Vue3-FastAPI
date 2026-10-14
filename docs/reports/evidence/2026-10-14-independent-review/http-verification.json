@@ -1,0 +1,80 @@
+{
+  "scope": "HTTP/API/store/SDK/mocks independent review; source frozen after final strict optional property repair",
+  "commands": [
+    {
+      "command": "vitest run src/api src/store src/mocks tests/unit/api",
+      "exitCode": 0,
+      "testFiles": 39,
+      "tests": 178,
+      "evidence": "http-api-mock-unit-final.log"
+    },
+    {
+      "command": "vue-tsc --noEmit -p tsconfig.json",
+      "exitCode": 0,
+      "evidence": "http-type-final.log"
+    },
+    {
+      "command": "vue-tsc --noEmit -p tsconfig.strict.json",
+      "exitCode": 0,
+      "evidence": "http-mock-strict-final.log"
+    },
+    {
+      "command": "eslint src/api src/store src/mocks --max-warnings 0",
+      "exitCode": 0,
+      "errors": 0,
+      "warnings": 0,
+      "evidence": "http-lint-final.log"
+    },
+    {
+      "command": "tsc --noEmit --strict ... http-sdk-callback-probe.ts",
+      "exitCode": 0,
+      "evidence": "http-sdk-callback-final.log"
+    },
+    {
+      "command": "node scripts/check-mock-contracts.mjs --strict",
+      "exitCode": 0,
+      "evidence": "http-mock-contracts-final.log"
+    },
+    {
+      "command": "node scripts/check-mock-overlays.mjs --strict",
+      "exitCode": 0,
+      "evidence": "http-mock-overlays-final.log"
+    },
+    {
+      "command": "bash scripts/generate-api-types.sh --artifact",
+      "exitCode": 0,
+      "evidence": "http-sdk-generation.log"
+    },
+    {
+      "command": "isolated full generator -> owner postprocess -> formatter -> byte comparison + rejection control",
+      "exitCode": 0,
+      "filesCompared": 16,
+      "evidence": "http-sdk-proof.json"
+    },
+    {
+      "command": "pytest tests/unit/test_collection_openapi_contract.py tests/unit/test_device_category_routes.py tests/unit/test_response_util.py --no-cov -n 0",
+      "exitCode": 0,
+      "tests": 20,
+      "note": "Initial independent focused run before root added 2 cache schema cases",
+      "evidence": "http-backend-focused.log"
+    },
+    {
+      "command": "Fresh ASGI protocol signature/form/streaming service-double probe",
+      "exitCode": 0,
+      "jsonBodyStatus": 422,
+      "formBodyStatus": 200,
+      "normalDbWrites": 0,
+      "evidence": "http-protocol-export-probe.json"
+    }
+  ],
+  "negativeControls": {
+    "sseType": "never/unknown callback compiler errors",
+    "sseControl": "received 2 data callback calls, expected 1",
+    "oldMockStatusAndEnvelope": "12 expected failures",
+    "resourceCreationAndLegacy": "9 expected failures",
+    "finalContractBatch": "21 expected failures",
+    "duplicateCloneGuardRemoved": "1 expected failure"
+  },
+  "offlineBehaviorChange": "22 system write capabilities now explicitly deny unsupported writes with 501 ProblemDetails; total registry unsupported capabilities = 35; real backend behavior unchanged",
+  "normalDbBusinessWrites": 0
+}

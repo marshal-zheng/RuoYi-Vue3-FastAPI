@@ -1,0 +1,7 @@
+[90m@hey-api/openapi-ts v0.97.0[39m
+
+[90m[Job 1] [39m⏳ [36mGenerating from 1 input:[39m
+[90m[Job 1] [39m[36m  [1] [39m../shared/openapi.json
+[90m[Job 1] [39m[32m✅ Done![39m Your output is in [96m/tmp/ruoyi-openapi-regen-20261013[39m [90m(4 files in 278ms)[39m
+Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0
+Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0

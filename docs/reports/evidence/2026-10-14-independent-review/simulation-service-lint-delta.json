@@ -1,0 +1,6 @@
+{
+  "existingBefore": 228,
+  "existingAfter": 228,
+  "newDiagnostics": [],
+  "scope": "Existing whole-file Python style/complexity diagnostics kept; changed wire branch introduces none; backend full Ruff is not claimed passing."
+}

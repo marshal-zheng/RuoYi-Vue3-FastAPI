@@ -1,0 +1,59 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ × src/components/business/Device/selector/CategorySelector.test.ts > category options public API consumer > consumes collection items without the obsolete business-type argument 10ms
+   → expected '' to contain 'Network:Network'
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/business/Device/selector/CategorySelector.test.ts > category options public API consumer > consumes collection items without the obsolete business-type argument
+AssertionError: expected '' to contain 'Network:Network'
+
+- Expected
++ Received
+
+- Network:Network
+
+ ❯ src/components/business/Device/selector/CategorySelector.test.ts:23:28
+     21|     await flushPromises();
+     22|     expect(getDeviceCategoryOptions).toHaveBeenCalledExactlyOnceWith();
+     23|     expect(wrapper.text()).toContain('Network:Network');
+       |                            ^
+     24|     wrapper.unmount();
+     25|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 1 unhandled error during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯ Unhandled Rejection ⎯⎯⎯⎯⎯
+TypeError: categories.map is not a function
+ ❯ loadCategories src/components/business/Device/selector/CategorySelector.vue:67:40
+     65| 
+     66|     // 转换为选项格式
+     67|     categoryOptions.value = categories.map((item) => ({
+       |                                        ^
+     68|       label: item.name,
+     69|       value: item.name,
+
+This error originated in "src/components/business/Device/selector/CategorySelector.test.ts" test file. It doesn't mean the error was thrown inside the file itself, but while it was running.
+The latest test that might've caused the error is "consumes collection items without the obsolete business-type argument". It might mean one of the following:
+- The error was thrown, while Vitest was running this test.
+- If the error occurred after the test had been completed, this was the last documented test before it was thrown.
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+     Errors  1 error
+   Start at  23:31:25
+   Duration  704ms (transform 197ms, setup 223ms, collect 167ms, tests 11ms, environment 140ms, prepare 25ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

@@ -1,0 +1,18 @@
+
+/Users/hqz/Downloads/element-plus/scripts/ai-production-hardening/check-local-authority-observation.mjs
+  57:1  warning  Unexpected console statement  no-console
+
+/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/app.ts
+   9:38  warning  There is more than one component in this file  vue/one-component-per-file
+  50:32  warning  There is more than one component in this file  vue/one-component-per-file
+
+/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/client.ts
+  23:3  warning  Unexpected console statement  no-console
+
+/Users/hqz/Downloads/element-plus/scripts/theme-consumer-protocol/packed-browser.ts
+   28:21  warning  There is more than one component in this file  vue/one-component-per-file
+  112:36  warning  There is more than one component in this file  vue/one-component-per-file
+
+✖ 6 problems (0 errors, 6 warnings)
+
+ESLint found too many warnings (maximum: 0).

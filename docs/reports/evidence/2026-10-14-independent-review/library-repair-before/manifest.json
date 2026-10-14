@@ -1,0 +1,38 @@
+[
+  {
+    "path": "internal/eslint-config/index.js",
+    "sha256": "9e6c9951f791ab211d83b5dde43c1310140645b465b3c17c558bddaea7d7108f"
+  },
+  {
+    "path": "packages/components/_shared/__tests__/overlay-layout.test.tsx",
+    "sha256": "0731624a9efda6d96629c7bdaf82dd0ac55436afc668825e42f969a307f05f4e"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/app.ts",
+    "sha256": "7095de874d0ac72003538fc6a3325beae3295e44f5423c455a0d7fb62f970faf"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/packed-browser.ts",
+    "sha256": "53cfa490752cd6df8a329d20c4ff76e338dec69a76671495220b121302cb3f3f"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/client.ts",
+    "sha256": "e235f8839b71c368d71a096f4dc4cded2c78e1a7eb5aec105cf35027657468d2"
+  },
+  {
+    "path": "scripts/ai-production-hardening/check-local-authority-observation.mjs",
+    "sha256": "615416d7b0623e8bb59d8816c984ac3eee896fb51edef6aef811bb1642204dde"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/check-packed.mts",
+    "sha256": "45d583fb0b4c42009c049d569cf1a15c77b6e5d6ae83af388e9cf33f93bd159a"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/check-hosted-packed.mts",
+    "sha256": "62a374719fb2c74f4f20bf96e0a398eccbe59128515a16d69f502c500241a6ac"
+  },
+  {
+    "path": "scripts/theme-consumer-protocol/run-browser.mts",
+    "sha256": "979175d4efc199a5bfe3a8b7136c8414ff0f21b1c673ce31fa6df6a126ebb005"
+  }
+]

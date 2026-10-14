@@ -1,0 +1,47 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers 3ms
+   → expected [ { id: 1, parentId: +0, …(2) }, …(1) ] to deeply equal [ { id: 1, parentId: +0, …(2) } ]
+ ✓ src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > supports custom keys and identifiers which resemble object prototype properties 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/ruoyi.tree.test.ts > tree construction with API identifiers > joins numeric identifiers to their serialized parent identifiers
+AssertionError: expected [ { id: 1, parentId: +0, …(2) }, …(1) ] to deeply equal [ { id: 1, parentId: +0, …(2) } ]
+
+- Expected
++ Received
+
+@@ -3,6 +3,12 @@
+      "children": undefined,
+      "id": 1,
+      "name": "parent",
+      "parentId": 0,
+    },
++   {
++     "children": undefined,
++     "id": 2,
++     "name": "child",
++     "parentId": "1",
++   },
+  ]
+
+ ❯ src/utils/ruoyi.tree.test.ts:9:18
+      7|     const child = { id: 2, parentId: '1', name: 'child', children: und…
+      8|     const tree = handleTree([root, child]);
+      9|     expect(tree).toEqual([root]);
+       |                  ^
+     10|     expect(root.children).toEqual([child]);
+     11|     expect(root.children?.[0]).toBe(child);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:42:00
+   Duration  434ms (transform 108ms, setup 204ms, collect 8ms, tests 4ms, environment 132ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

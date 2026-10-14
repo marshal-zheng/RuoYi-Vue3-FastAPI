@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, inject } from 'vue';
+import { defineComponent, onMounted } from 'vue';
 import { useOptionalGraphInstance } from '../../ZxFlow/composables/useGraphInstance';
 import { useContextMenu } from '../../ZxFlow/composables/useContextMenu';
 import { useClipboard } from '../../ZxFlow/composables/useClipboard';
@@ -27,10 +27,9 @@ export default defineComponent({
       try {
         // 获取图实例
         const graph = useOptionalGraphInstance();
-        console.log('DagGraphHandler: Graph instance obtained:', graph);
 
         // 初始化右键菜单
-        console.log('DagGraphHandler: customMenuItems received:', props.customMenuItems);
+
         const contextMenuHandler = useContextMenu(graph, {
           enabled: true,
           enableBlankMenu: true,
@@ -38,7 +37,6 @@ export default defineComponent({
           enableEdgeMenu: true,
           customItems: props.customMenuItems,
         });
-        console.log('DagGraphHandler: contextMenuHandler created:', contextMenuHandler);
 
         // 初始化剪贴板和历史记录处理器
         const clipboardHandler = useClipboard(graph);
@@ -74,7 +72,9 @@ export default defineComponent({
                   const port = ports?.find((p) => p.id === portId);
                   if (port?.attrs?.portBody?.stroke) return port.attrs.portBody.stroke;
                   if (port?.attrs?.circle?.stroke) return port.attrs.circle.stroke;
-                } catch (e) {}
+                } catch {
+                  // 不支持端口配置的图形使用默认连接颜色。
+                }
                 return null;
               };
 
@@ -91,7 +91,7 @@ export default defineComponent({
                       targetMarker: null,
                     },
                   });
-                } catch (e) {
+                } catch {
                   // 忽略
                 }
               });
@@ -107,13 +107,10 @@ export default defineComponent({
               });
             }
 
-            console.log('DagGraphHandler: Graph events setup completed');
-
             // 通知父组件图实例已准备好
             emit('graph-ready', graph);
             emit('context-menu-ready', contextMenuHandler);
           } else {
-            console.log('DagGraphHandler: Graph instance not ready, retrying...');
             setTimeout(setupEvents, 100);
           }
         };

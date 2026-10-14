@@ -1,0 +1,16 @@
+../../../../../tmp/ruoyi-openapi-regen-20261013/client.gen.ts 23ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/client/client.gen.ts 27ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/client/index.ts 2ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/client/types.gen.ts 9ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/client/utils.gen.ts 19ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/auth.gen.ts 2ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/bodySerializer.gen.ts 4ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/params.gen.ts 5ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/pathSerializer.gen.ts 8ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/queryKeySerializer.gen.ts 4ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/serverSentEvents.gen.ts 7ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/types.gen.ts 3ms (unchanged)
+../../../../../tmp/ruoyi-openapi-regen-20261013/core/utils.gen.ts 4ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/index.ts 9ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/sdk.gen.ts 75ms
+../../../../../tmp/ruoyi-openapi-regen-20261013/types.gen.ts 99ms

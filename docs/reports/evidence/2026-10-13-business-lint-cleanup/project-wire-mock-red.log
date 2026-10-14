@@ -1,0 +1,77 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events 105ms
+   → expected '2026-04-29T22:00:00.000Z' to deeply equal Any<Number>
+ × src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query 41ms
+   → expected { items: [ { …(7) }, { …(7) } ] } to deeply equal { items: [] }
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves empty fault lists and strategy options as collections 38ms
+ ✓ src/mocks/handlers/simulation.test.ts > simulation mock handlers > returns deterministic unsupported responses for control and write operations 28ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/mocks/handlers/simulation.test.ts > simulation mock handlers > serves read-only status, messages, bandwidth, alarms, and events
+AssertionError: expected '2026-04-29T22:00:00.000Z' to deeply equal Any<Number>
+
+- Expected: 
+Any<Number>
+
++ Received: 
+"2026-04-29T22:00:00.000Z"
+
+ ❯ src/mocks/handlers/simulation.test.ts:46:41
+     44|     expect(status).toMatchObject({ sessionId, status: 'running', messa…
+     45|     expect(messages.items).toHaveLength(1);
+     46|     expect(messages.items[0].timestamp).toEqual(expect.any(Number));
+       |                                         ^
+     47|     expect(bandwidth.items[0]).toMatchObject({ sessionId, bandwidthMbp…
+     48|     expect(bandwidth.items[0].timestamp).toEqual(expect.any(Number));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/mocks/handlers/simulation.test.ts > simulation mock handlers > filters the bandwidth collection using the controller port_id query
+AssertionError: expected { items: [ { …(7) }, { …(7) } ] } to deeply equal { items: [] }
+
+- Expected
++ Received
+
+  {
+-   "items": [],
++   "items": [
++     {
++       "bandwidth": 860,
++       "bandwidthMbps": 860,
++       "id": "frame-001",
++       "latencyMs": 18,
++       "portId": "mock-port",
++       "sessionId": "sim-command-center-001",
++       "timestamp": "2026-04-29T22:00:00.000Z",
++     },
++     {
++       "bandwidth": 910,
++       "bandwidthMbps": 910,
++       "id": "frame-002",
++       "latencyMs": 16,
++       "portId": "mock-port",
++       "sessionId": "sim-command-center-001",
++       "timestamp": "2026-04-29T23:00:00.000Z",
++     },
++   ],
+  }
+
+ ❯ src/mocks/handlers/simulation.test.ts:64:5
+     62|     expect((await matching.json()).items).toHaveLength(2);
+     63|     const missing = await fetch(`/api/simulation/sessions/${sessionId}…
+     64|     await expect(missing.json()).resolves.toEqual({ items: [] });
+       |     ^
+     65|   });
+     66| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed (4)
+   Start at  23:34:29
+   Duration  751ms (transform 118ms, setup 219ms, collect 5ms, tests 212ms, environment 143ms, prepare 26ms)
+

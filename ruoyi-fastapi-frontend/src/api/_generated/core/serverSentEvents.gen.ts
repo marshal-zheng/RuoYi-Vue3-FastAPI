@@ -31,7 +31,9 @@ export type ServerSentEventsOptions<TData = unknown> = Omit<RequestInit, 'method
      * @param event Event streamed from the server.
      * @returns Nothing (void).
      */
-    onSseEvent?: (event: StreamEvent<TData>) => void;
+    onSseEvent?: (
+      event: StreamEvent<TData extends Record<string, unknown> ? TData[keyof TData] : TData>
+    ) => void;
     serializedBody?: RequestInit['body'];
     /**
      * Default retry delay in milliseconds.
@@ -91,7 +93,7 @@ export function createSseClient<TData = unknown>({
   sseSleepFn,
   url,
   ...options
-}: ServerSentEventsOptions): ServerSentEventsResult<TData> {
+}: ServerSentEventsOptions<TData>): ServerSentEventsResult<TData> {
   let lastEventId: string | undefined;
 
   const sleep = sseSleepFn ?? ((ms: number) => new Promise((resolve) => setTimeout(resolve, ms)));
@@ -180,6 +182,8 @@ export function createSseClient<TData = unknown>({
                 }
               }
 
+              if (!dataLines.length) continue;
+
               let data: unknown;
               let parsedJson = false;
 
@@ -203,15 +207,19 @@ export function createSseClient<TData = unknown>({
                 }
               }
 
+              // The transport payload is validated/transformed before adopting the caller's event type.
+              const eventData = data as TData extends Record<string, unknown>
+                ? TData[keyof TData]
+                : TData;
               onSseEvent?.({
-                data,
+                data: eventData,
                 event: eventName,
                 id: lastEventId,
                 retry: retryDelay,
               });
 
               if (dataLines.length) {
-                yield data as any;
+                yield eventData;
               }
             }
           }

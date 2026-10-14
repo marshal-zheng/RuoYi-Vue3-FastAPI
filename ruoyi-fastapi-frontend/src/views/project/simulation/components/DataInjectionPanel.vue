@@ -164,17 +164,9 @@
 <script setup>
 import { ref, computed, reactive } from 'vue';
 import { ElMessage } from 'element-plus';
-import {
-  Setting,
-  Check,
-  MagicStick,
-  Top,
-  Lock,
-  Refresh,
-  TrendCharts,
-} from '@element-plus/icons-vue';
+import { Setting, Check } from '@element-plus/icons-vue';
 
-const props = defineProps({
+defineProps({
   visible: {
     type: Boolean,
     default: true,
@@ -288,8 +280,12 @@ defineExpose({
 <style lang="less" scoped>
 /* 浮动面板样式 - 使用CSS变量 */
 .injection-floating {
-  border: 1px solid var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
-  box-shadow: var(--sim-shadow-glow-accent, 0 8px 32px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent));
+  border: 1px solid
+    var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent));
+  box-shadow: var(
+    --sim-shadow-glow-accent,
+    0 8px 32px color-mix(in srgb, var(--zx-semantic-accent-base) 15%, transparent)
+  );
 }
 
 .header {
@@ -336,16 +332,23 @@ defineExpose({
 .strategy-select {
   :deep(.el-input__wrapper) {
     background-color: var(--sim-fill-light, var(--zx-semantic-surface-card-fill)) !important;
-    border: 1px solid var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent)) !important;
+    border: 1px solid
+      var(--sim-border-base, color-mix(in srgb, var(--zx-semantic-border-default) 50%, transparent)) !important;
     box-shadow: none !important;
   }
 
   :deep(.el-input__wrapper:hover) {
-    border-color: var(--sim-border-accent, color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)) !important;
+    border-color: var(
+      --sim-border-accent,
+      color-mix(in srgb, var(--zx-semantic-accent-base) 40%, transparent)
+    ) !important;
   }
 
   :deep(.el-input__wrapper.is-focus) {
-    border-color: var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)) !important;
+    border-color: var(
+      --sim-border-focus,
+      color-mix(in srgb, var(--zx-semantic-accent-base) 60%, transparent)
+    ) !important;
   }
 
   :deep(.el-input__inner) {
@@ -361,7 +364,8 @@ defineExpose({
   margin-bottom: 16px;
   padding: 12px;
   background: var(--sim-fill-lighter, var(--zx-semantic-surface-card-fill));
-  border: 1px solid var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
+  border: 1px solid
+    var(--sim-border-light, color-mix(in srgb, var(--zx-semantic-accent-base) 8%, transparent));
   border-radius: var(--sim-radius-lg, 10px);
 
   .compact-item {
@@ -386,16 +390,27 @@ defineExpose({
     var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent)),
     color-mix(in srgb, var(--zx-semantic-accent-base) 20%, transparent)
   ) !important;
-  border: 1px solid var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent)) !important;
+  border: 1px solid
+    var(--sim-border-focus, color-mix(in srgb, var(--zx-semantic-accent-base) 50%, transparent)) !important;
   color: var(--sim-accent, #22d3ee) !important;
   font-weight: 600;
   transition: all var(--sim-transition-normal, 0.3s ease);
 }
 
 .apply-btn:hover {
-  background: linear-gradient(135deg, color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent), color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent)) !important;
-  border-color: var(--sim-accent-light, color-mix(in srgb, var(--zx-semantic-accent-base) 70%, transparent)) !important;
-  box-shadow: var(--sim-shadow-glow-accent, 0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent),
+    color-mix(in srgb, var(--zx-semantic-accent-base) 30%, transparent)
+  ) !important;
+  border-color: var(
+    --sim-accent-light,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 70%, transparent)
+  ) !important;
+  box-shadow: var(
+    --sim-shadow-glow-accent,
+    0 4px 12px color-mix(in srgb, var(--zx-semantic-accent-base) 25%, transparent)
+  );
   transform: translateY(-1px);
 }
 

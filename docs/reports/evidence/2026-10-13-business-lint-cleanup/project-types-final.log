@@ -1,0 +1,23 @@
+tests/fixtures/layout-regions/main.ts(59,1): error TS2740: Type '{ loading(): void; closeLoading(): void; }' is missing the following properties from type '{ alert(content: any): void; alertError(content: any): void; alertSuccess(content: any): void; alertWarning(content: any): void; confirm(content: any): Promise<MessageBoxData>; prompt(content: any): Promise<...>; loading(content: any): void; closeLoading(): void; }': alert, alertError, alertSuccess, alertWarning, and 2 more.
+tests/unit/utils/ruoyi.test.ts(13,3): error TS2305: Module '"@/utils/ruoyi"' has no exported member 'mergeRecursive'.
+tests/unit/utils/ruoyi.test.ts(86,21): error TS2339: Property 'beginTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(87,21): error TS2339: Property 'endTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(96,21): error TS2339: Property 'beginCreateTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(97,21): error TS2339: Property 'endCreateTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(104,21): error TS2339: Property 'beginTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(105,21): error TS2339: Property 'endTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(113,21): error TS2339: Property 'beginTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(114,21): error TS2339: Property 'endTime' does not exist on type '{ name: string; }'.
+tests/unit/utils/ruoyi.test.ts(301,22): error TS2339: Property 'children' does not exist on type '{ id: number; parentId: number; name: string; }'.
+tests/unit/utils/ruoyi.test.ts(311,22): error TS2339: Property 'kids' does not exist on type '{ key: number; parent: number; name: string; }'.
+tests/unit/utils/ruoyi.test.ts(338,22): error TS2339: Property 'children' does not exist on type '{ id: number; parentId: number; name: string; }'.
+tests/unit/utils/ruoyi.test.ts(432,35): error TS2345: Argument of type '{ type: string; }' is not assignable to parameter of type 'Blob'.
+  Type '{ type: string; }' is missing the following properties from type 'Blob': size, arrayBuffer, bytes, slice, and 2 more.
+tests/unit/utils/ruoyi.test.ts(438,35): error TS2345: Argument of type '{ type: string; }' is not assignable to parameter of type 'Blob'.
+  Type '{ type: string; }' is missing the following properties from type 'Blob': size, arrayBuffer, bytes, slice, and 2 more.
+tests/unit/utils/ruoyi.test.ts(444,35): error TS2345: Argument of type '{ type: string; }' is not assignable to parameter of type 'Blob'.
+  Type '{ type: string; }' is missing the following properties from type 'Blob': size, arrayBuffer, bytes, slice, and 2 more.
+tests/unit/utils/ruoyi.test.ts(450,35): error TS2345: Argument of type '{ type: string; }' is not assignable to parameter of type 'Blob'.
+  Type '{ type: string; }' is missing the following properties from type 'Blob': size, arrayBuffer, bytes, slice, and 2 more.
+tests/unit/utils/ruoyi.test.ts(456,35): error TS2345: Argument of type '{ type: string; }' is not assignable to parameter of type 'Blob'.
+  Type '{ type: string; }' is missing the following properties from type 'Blob': size, arrayBuffer, bytes, slice, and 2 more.

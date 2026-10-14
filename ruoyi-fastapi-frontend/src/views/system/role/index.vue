@@ -137,8 +137,8 @@
                   >分配用户</zx-button
                 >
                 <ZxMoreAction
-                  v-if="scope.row.roleId !== 1 && getRoleMoreActionList(scope.row).length"
-                  :list="getRoleMoreActionList(scope.row)"
+                  v-if="scope.row.roleId !== 1 && getRoleMoreActionList().length"
+                  :list="getRoleMoreActionList()"
                   @select="handleRoleMoreActionSelect($event, scope.row)"
                 />
               </div>
@@ -187,13 +187,13 @@ function queryTransform(query) {
 async function loadRoleData(params) {
   try {
     return await listRole(params);
-  } catch (e) {
+  } catch {
     return { items: [], total: 0 };
   }
 }
 
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
@@ -264,7 +264,7 @@ function handleDrawerSuccess() {
   gridListRef.value?.refresh();
 }
 
-function getRoleMoreActionList(row) {
+function getRoleMoreActionList() {
   const actions = [];
   if (checkPermi(['system:role:edit'])) {
     actions.push({ label: '数据权限', eventTag: 'dataScope' });

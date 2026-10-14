@@ -1,0 +1,54 @@
+{
+  "matrixCases": 26,
+  "resources": {
+    "before": {
+      "resizeCreated": 21,
+      "intersectionCreated": 11,
+      "globalListeners": 170,
+      "totalBounds": 305,
+      "ownedBounds": 0,
+      "ownedRaf": 0,
+      "activeGlobalListeners": 31,
+      "activeTargets": 4
+    },
+    "after": {
+      "resizeCreated": 21,
+      "intersectionCreated": 11,
+      "globalListeners": 170,
+      "totalBounds": 305,
+      "ownedBounds": 0,
+      "ownedRaf": 0,
+      "activeGlobalListeners": 31,
+      "activeTargets": 4
+    },
+    "closedCycles": {
+      "before": {
+        "resizeCreated": 21,
+        "intersectionCreated": 11,
+        "globalListeners": 170,
+        "totalBounds": 305,
+        "ownedBounds": 0,
+        "ownedRaf": 0,
+        "activeGlobalListeners": 18,
+        "activeTargets": 0
+      },
+      "after": {
+        "resizeCreated": 31,
+        "intersectionCreated": 16,
+        "globalListeners": 235,
+        "totalBounds": 315,
+        "ownedBounds": 0,
+        "ownedRaf": 0,
+        "activeGlobalListeners": 18,
+        "activeTargets": 0
+      },
+      "cycles": 5
+    }
+  },
+  "performance": {
+    "idleLayoutCount": 0,
+    "toggles": 40,
+    "layoutCount": 40,
+    "layoutDurationMs": 1.987
+  }
+}

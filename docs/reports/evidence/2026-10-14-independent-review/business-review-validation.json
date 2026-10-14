@@ -1,0 +1,58 @@
+{
+  "focusedVitest": {
+    "filesPassed": 11,
+    "testsPassed": 84,
+    "exitCode": 0
+  },
+  "newRegressionVitest": {
+    "filesPassed": 4,
+    "testsPassed": 16,
+    "exitCode": 0
+  },
+  "targetedEslint": {
+    "exitCode": 0,
+    "maxWarnings": 0
+  },
+  "additionalUndefinedReferenceScan": {
+    "modifiedVueFiles": 93,
+    "newUndefinedReferences": []
+  },
+  "typecheck": {
+    "exitCode": 0
+  },
+  "unsafeSourcePatternScan": {
+    "scope": [
+      "src/components",
+      "src/views",
+      "src/utils excluding request/http",
+      "src/directive",
+      "src/shims-vue.d.ts",
+      "src/types/global.d.ts"
+    ],
+    "patterns": [
+      "eslint-disable",
+      "@ts-ignore",
+      "@ts-nocheck",
+      "as any",
+      "as unknown as",
+      "as never",
+      "explicit any"
+    ],
+    "remaining": 0
+  },
+  "nodeGroupingEquivalence": {
+    "passed": true,
+    "sortedGroups": 2,
+    "deduplicatedProtocolsPerGroup": 1,
+    "seenKeysInUiPayload": false
+  },
+  "retiredDialogs": [
+    "src/components/business/Device/DeviceClazzDialog.vue",
+    "src/views/project/components/ProjectEditDialog.vue",
+    "src/components/business/Device/ExportDialog.vue",
+    "src/views/project/components/ExportDialog.vue"
+  ],
+  "liveFixtureCases": 19,
+  "normalDatabaseWrites": 0,
+  "computerUse": false
+}

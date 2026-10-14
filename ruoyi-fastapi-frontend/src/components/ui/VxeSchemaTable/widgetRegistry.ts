@@ -1,7 +1,9 @@
-import type { VxeTableDefines } from 'vxe-table';
-import type { VxeSchemaColumn } from './index.vue';
+import type { DataSourceItem } from './dataSource';
+import type { VxeSchemaColumn } from './types';
 
-export type VxeWidgetResolver = (column: VxeSchemaColumn) => Partial<VxeSchemaColumn>;
+export type VxeWidgetResolver = <Row extends object>(
+  column: VxeSchemaColumn<Row>
+) => Partial<VxeSchemaColumn<Row>>;
 export type VxeWidgetResolverMap = Record<string, VxeWidgetResolver>;
 
 const globalRegistry: VxeWidgetResolverMap = {};
@@ -15,15 +17,19 @@ export function getVxeWidget(name?: string, local?: VxeWidgetResolverMap) {
   return local?.[name] ?? globalRegistry[name];
 }
 
-export function resolveWidgetColumn(
-  column: VxeSchemaColumn,
+export function resolveWidgetColumn<Row extends object = DataSourceItem>(
+  column: VxeSchemaColumn<Row>,
   local?: VxeWidgetResolverMap
-): Partial<VxeSchemaColumn> {
+): Partial<VxeSchemaColumn<Row>> {
   const resolver = getVxeWidget(column.widget, local);
   return resolver ? resolver(column) : {};
 }
 
-const mergeEditRender = (base?: any, override?: any): any => {
+type EditRender<Row extends object> = VxeSchemaColumn<Row>['editRender'];
+const mergeEditRender = <Row extends object>(
+  base?: EditRender<Row>,
+  override?: EditRender<Row>
+): EditRender<Row> => {
   if (!base) return override;
   if (!override) return base;
   return {
@@ -33,11 +39,11 @@ const mergeEditRender = (base?: any, override?: any): any => {
   };
 };
 
-export function mergeColumnOptions(
-  base: Partial<VxeSchemaColumn>,
-  column: VxeSchemaColumn
-): VxeSchemaColumn {
-  const merged: VxeSchemaColumn = {
+export function mergeColumnOptions<Row extends object>(
+  base: Partial<VxeSchemaColumn<Row>>,
+  column: VxeSchemaColumn<Row>
+): VxeSchemaColumn<Row> {
+  const merged: VxeSchemaColumn<Row> = {
     ...base,
     ...column,
   };

@@ -1,0 +1,56 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+···xx
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in and searches
+AssertionError: expected [] to deeply equal [ 'match' ]
+
+- Expected
++ Received
+
+- [
+-   "match",
+- ]
++ []
+
+ ❯ tests/unit/business-lint-regressions.test.ts:98:79
+     96|         { messageId: 'other', senderPortId: 'LAN-1', receiverPortId: '…
+     97|       ]);
+     98|       expect(data.filteredMessages.value.map((message) => message.mess…
+       |                                                                               ^
+     99|         logic === 'and' ? ['match'] : ['match', 'sender-only']
+    100|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/unit/business-lint-regressions.test.ts > business behavior after lint cleanup > keeps both source and destination port conditions in or searches
+AssertionError: expected [] to deeply equal [ 'match', 'sender-only' ]
+
+- Expected
++ Received
+
+- [
+-   "match",
+-   "sender-only",
+- ]
++ []
+
+ ❯ tests/unit/business-lint-regressions.test.ts:98:79
+     96|         { messageId: 'other', senderPortId: 'LAN-1', receiverPortId: '…
+     97|       ]);
+     98|       expect(data.filteredMessages.value.map((message) => message.mess…
+       |                                                                               ^
+     99|         logic === 'and' ? ['match'] : ['match', 'sender-only']
+    100|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 3 passed (5)
+   Start at  02:22:08
+   Duration  2.51s (transform 1.13s, setup 309ms, collect 1.62s, tests 51ms, environment 273ms, prepare 33ms)
+

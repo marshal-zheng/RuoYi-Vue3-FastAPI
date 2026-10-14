@@ -1,0 +1,45 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > persists project CRUD through the mock store
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete clone id alias and missing required names without writing a version
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > clones to the requested version number and reads the persisted created resource
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects a duplicate requested clone version number without adding a second copy 62ms
+   → expected 201 to be 409 // Object.is equality
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects edits and topology saves for locked or mismatched versions
+ ↓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > reads and saves topology by project/version
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects a duplicate requested clone version number without adding a second copy
+AssertionError: expected 201 to be 409 // Object.is equality
+
+- Expected
++ Received
+
+- 409
++ 201
+
+ ❯ src/mocks/handlers/project.test.ts:181:30
+    179|     const before = await dataSource.version.list(MOCK_PROJECT_IDS.comm…
+    180|     const duplicate = await send();
+    181|     expect(duplicate.status).toBe(409);
+       |                              ^
+    182|     expect(duplicate.headers.get('location')).toBeNull();
+    183|     expect((await dataSource.version.list(MOCK_PROJECT_IDS.commandCent…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 skipped (11)
+   Start at  02:32:38
+   Duration  556ms (transform 127ms, setup 238ms, collect 8ms, tests 63ms, environment 146ms, prepare 26ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

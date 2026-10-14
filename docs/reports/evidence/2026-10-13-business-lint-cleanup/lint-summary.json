@@ -1,0 +1,28 @@
+{
+  "before": {
+    "files": 588,
+    "warningFiles": 200,
+    "errors": 0,
+    "warnings": 1230
+  },
+  "after": {
+    "files": 602,
+    "warningFiles": 0,
+    "errors": 0,
+    "warnings": 0
+  },
+  "baselineRules": {
+    "@typescript-eslint/no-explicit-any": 746,
+    "@typescript-eslint/no-unused-vars": 277,
+    "no-empty": 11,
+    "no-console": 91,
+    "@typescript-eslint/no-unused-expressions": 7,
+    "@typescript-eslint/no-empty-object-type": 84,
+    "@typescript-eslint/no-unsafe-function-type": 3,
+    "no-setter-return": 1,
+    "@typescript-eslint/no-this-alias": 1,
+    "no-useless-escape": 7,
+    "@typescript-eslint/ban-ts-comment": 1,
+    "vue/no-unused-vars": 1
+  }
+}

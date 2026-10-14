@@ -7,7 +7,7 @@
       :load-on-mounted="true"
       fill
     >
-      <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+      <template #form="{ query, refresh: handleRefresh, updateState }">
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
@@ -153,13 +153,11 @@
 </template>
 
 <script setup name="Logininfor">
-import { serializeDateRange } from '@/utils/ruoyi';
 import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from '@/api/monitor/logininfor';
 
 const { proxy } = getCurrentInstance();
 const { sys_common_status } = proxy.useDict('sys_common_status');
 
-const showSearch = ref(true);
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
@@ -168,27 +166,25 @@ const defaultSort = ref({ prop: 'loginTime', order: 'descending' });
 const gridListRef = ref(null);
 
 /** 使用 GridList 的 queryTransform 处理日期范围 */
-function queryTransform(query) {
-  return serializeDateRange(query);
-}
 
 /** GridList 数据加载函数 - 不处理参数转换 */
 async function loadLogininforData(params) {
   try {
     return await list(params);
-  } catch (e) {
+  } catch {
     return { data: [], total: 0 };
   }
 }
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 function onSearch({ handleRefresh }) {
   handleRefresh();
 }
 function onSortChange(c, { updateState, handleRefresh }) {
-  updateState({ orderByColumn: c.prop, isAsc: c.order });
+  updateState('query.orderByColumn', c.prop);
+  updateState('query.isAsc', c.order);
   handleRefresh();
 }
 /** 多选框选中数据 */

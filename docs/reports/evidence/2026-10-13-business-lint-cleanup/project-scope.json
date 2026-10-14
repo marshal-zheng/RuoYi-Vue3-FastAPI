@@ -1,0 +1,162 @@
+[
+  {
+    "file": "src/api/project/project.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/api/project/topology.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/project/version.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/api/simulation/simulation.ts",
+    "warnings": 10
+  },
+  {
+    "file": "src/views/project/components/ExportDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/components/NodeEditDrawer.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/components/ProjectEditDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/components/ProjectFormDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/components/ProtocolEditDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/components/VersionList.vue",
+    "warnings": 3
+  },
+  {
+    "file": "src/views/project/composables/useGraphStyle.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/composables/useSimulationCore.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/composables/useTopology.js",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/index.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/project/simulation/backupindex.vue",
+    "warnings": 8
+  },
+  {
+    "file": "src/views/project/simulation/components/AlarmPanelFloating.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/BandwidthDashboard.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/DataInjectionPanel.vue",
+    "warnings": 6
+  },
+  {
+    "file": "src/views/project/simulation/components/EventFormDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/FaultInjectorMenu.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/HealthCheckDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/ProtocolAnalyzer.vue",
+    "warnings": 3
+  },
+  {
+    "file": "src/views/project/simulation/components/SimulationAlarmPanel.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/components/SimulationHeader.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/project/simulation/components/TimingLatencyPanel.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/project/simulation/composables/useAlarmHandler.ts",
+    "warnings": 10
+  },
+  {
+    "file": "src/views/project/simulation/composables/useBandwidthData.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/project/simulation/composables/useEventTrigger.ts",
+    "warnings": 8
+  },
+  {
+    "file": "src/views/project/simulation/composables/useFaultInjection.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/views/project/simulation/composables/useFaultInjectionUI.ts",
+    "warnings": 19
+  },
+  {
+    "file": "src/views/project/simulation/composables/useHealthCheck.ts",
+    "warnings": 31
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationApi.ts",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationControl.ts",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationData.ts",
+    "warnings": 10
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationDataManager.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationReport.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/project/simulation/composables/useSimulationWebSocket.ts",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/project/simulation/composables/useTopologyAnimation.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/views/project/simulation/index.vue",
+    "warnings": 16
+  },
+  {
+    "file": "src/views/project/topo.vue",
+    "warnings": 1
+  }
+]

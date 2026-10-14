@@ -6,7 +6,7 @@
 import useUserStore from '@/store/modules/user';
 
 export default {
-  mounted(el, binding, vnode) {
+  mounted(el, binding) {
     const { value } = binding;
     const all_permission = '*:*:*';
     const permissions = useUserStore().permissions;
@@ -19,7 +19,7 @@ export default {
       });
 
       if (!hasPermissions) {
-        el.parentNode && el.parentNode.removeChild(el);
+        el.parentNode?.removeChild(el);
       }
     } else {
       throw new Error(`请设置操作权限标签值`);

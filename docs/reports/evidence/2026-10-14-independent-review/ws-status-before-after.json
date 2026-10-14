@@ -1,0 +1,64 @@
+[
+  {
+    "stage": "before",
+    "case": "saved-session",
+    "frame": {
+      "type": "status",
+      "data": {
+        "session_id": "saved-session",
+        "status": "stopped",
+        "engine_present": false,
+        "message": "仿真已停止",
+        "speed": 1.0,
+        "elapsed_time": 0,
+        "message_count": 0,
+        "bandwidth_data_count": 0,
+        "alarm_count": 0
+      }
+    }
+  },
+  {
+    "stage": "before",
+    "case": "missing-session",
+    "frame": {
+      "type": "status",
+      "data": {
+        "status": "not_found",
+        "message": "仿真会话不存在"
+      }
+    }
+  },
+  {
+    "stage": "after",
+    "case": "saved-session",
+    "frame": {
+      "type": "status",
+      "data": {
+        "sessionId": "saved-session",
+        "status": "stopped",
+        "enginePresent": false,
+        "message": "仿真已停止",
+        "speed": 1.0,
+        "elapsedTime": 0,
+        "messageCount": 0,
+        "bandwidthDataCount": 0,
+        "alarmCount": 0
+      }
+    }
+  },
+  {
+    "stage": "after",
+    "case": "missing-session",
+    "frame": {
+      "type": "status",
+      "data": {
+        "sessionId": "missing-session",
+        "status": "not_found",
+        "enginePresent": false,
+        "message": "仿真会话不存在",
+        "messageCount": 0,
+        "alarmCount": 0
+      }
+    }
+  }
+]

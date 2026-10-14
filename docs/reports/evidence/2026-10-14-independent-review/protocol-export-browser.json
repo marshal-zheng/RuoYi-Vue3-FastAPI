@@ -1,0 +1,27 @@
+{
+  "result": {
+    "isBlob": true,
+    "size": 7,
+    "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "bytes": [
+      80,
+      75,
+      3,
+      4,
+      0,
+      255,
+      128
+    ]
+  },
+  "requests": [
+    {
+      "method": "POST",
+      "contentType": "application/x-www-form-urlencoded",
+      "body": "protocolId=7"
+    }
+  ],
+  "unexpected": [],
+  "errors": [],
+  "browser": "147.0.7727.15",
+  "scope": "isolated native browser XHR + real API module; network export mocked; no backend writes"
+}

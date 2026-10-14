@@ -37,7 +37,7 @@ describe('independent chrome preferences', () => {
     expect(store.tagsView).toBe(true);
   });
 
-  it('migrates old enabled tags once while preserving other layout preferences', () => {
+  it('migrates enabled tags once, retains supported chrome preferences and drops retired keys', () => {
     localStorage.setItem(
       'layout-setting',
       JSON.stringify({
@@ -60,8 +60,9 @@ describe('independent chrome preferences', () => {
       headerVisible: false,
       breadcrumbVisible: false,
       sidebarLogo: false,
-      fixedHeader: true,
     });
+
+    expect(saved).not.toHaveProperty('fixedHeader');
 
     // A deliberate choice made after migration must survive the next startup.
     localStorage.setItem('layout-setting', JSON.stringify({ ...saved, tagsView: true }));

@@ -1,0 +1,25 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 5ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 2ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps SSE validator failures unknown and normal completion void 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves native network errors in the unknown SSE error hook 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves non-2xx HTTP transport errors in the unknown SSE error hook 0ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  23:11:39
+   Duration  827ms (transform 169ms, setup 317ms, collect 28ms, tests 17ms, environment 273ms, prepare 33ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

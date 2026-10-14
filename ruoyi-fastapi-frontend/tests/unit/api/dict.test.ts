@@ -56,9 +56,9 @@ describe('Dict Data API contract', () => {
         dictSort: 3,
         status: '0',
       })
-    ).resolves.toMatchObject({
-      dictCode: 1000,
-      dictValue: '2',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
     await expect(
@@ -67,12 +67,15 @@ describe('Dict Data API contract', () => {
         dictLabel: '男性',
         dictValue: '0',
       })
-    ).resolves.toMatchObject({
-      dictCode: 1,
-      dictLabel: '男性',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
-    await expect(dictDataApi.delData('1,2,3')).resolves.toBeNull();
+    await expect(dictDataApi.delData('1,2,3')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
   });
 
   it('surfaces dict data failures from the request error mapping', async () => {
@@ -115,9 +118,9 @@ describe('Dict Type API contract', () => {
       total: 1,
     });
 
-    await expect(dictTypeApi.optionselect()).resolves.toEqual(
-      expect.arrayContaining([expect.objectContaining({ dictType: 'sys_user_sex' })])
-    );
+    await expect(dictTypeApi.optionselect()).resolves.toMatchObject({
+      items: expect.arrayContaining([expect.objectContaining({ dictType: 'sys_user_sex' })]),
+    });
   });
 
   it('loads and mutates dict types through the real request path', async () => {
@@ -132,9 +135,9 @@ describe('Dict Type API contract', () => {
         dictType: 'test_dict',
         status: '0',
       })
-    ).resolves.toMatchObject({
-      dictId: 1000,
-      dictType: 'test_dict',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
     await expect(
@@ -143,13 +146,19 @@ describe('Dict Type API contract', () => {
         dictName: '更新字典',
         dictType: 'test_dict',
       })
-    ).resolves.toMatchObject({
-      dictId: 1,
-      dictName: '更新字典',
+    ).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
 
-    await expect(dictTypeApi.delType('1,2,3')).resolves.toBeNull();
-    await expect(dictTypeApi.refreshCache()).resolves.toBeNull();
+    await expect(dictTypeApi.delType('1,2,3')).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
+    await expect(dictTypeApi.refreshCache()).rejects.toMatchObject({
+      status: 501,
+      problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
+    });
   });
 
   it('surfaces dict type failures from the request error mapping', async () => {

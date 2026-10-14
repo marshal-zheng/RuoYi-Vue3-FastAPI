@@ -1,0 +1,14 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @ build:theme /Users/hqz/Downloads/element-plus
+> pnpm run -C packages/theme-chalk build -- --update-mirror
+
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+> @zxio/theme-chalk@1.0.0 build /Users/hqz/Downloads/element-plus/packages/theme-chalk
+> node --import tsx scripts/build.ts "--" "--update-mirror"
+
+Theme structural style build passed.

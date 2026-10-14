@@ -1,0 +1,53 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.12, pytest-9.0.2, pluggy-1.6.0
+rootdir: /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend
+configfile: pytest.ini
+plugins: xdist-3.8.0, anyio-4.10.0, asyncio-1.3.0, hypothesis-6.112.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 3 items
+
+tests/unit/test_device_category_routes.py FF.                            [100%]
+
+=================================== FAILURES ===================================
+_________ test_options_route_returns_collection_and_never_calls_detail _________
+
+category_app = (<fastapi.applications.FastAPI object at 0x1208b1940>, <AsyncMock spec='DeviceCategoryService' id='4840953168'>)
+
+    async def test_options_route_returns_collection_and_never_calls_detail(category_app):
+        app, service = category_app
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url='http://test') as client:
+            response = await client.get('/device/category/options')
+>       assert response.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+app        = <fastapi.applications.FastAPI object at 0x1208b1940>
+category_app = (<fastapi.applications.FastAPI object at 0x1208b1940>, <AsyncMock spec='DeviceCategoryService' id='4840953168'>)
+client     = <tests.conftest._PatchedAsyncClient object at 0x1208b2e40>
+response   = <Response [422 Unprocessable Entity]>
+service    = <AsyncMock spec='DeviceCategoryService' id='4840953168'>
+
+tests/unit/test_device_category_routes.py:36: AssertionError
+_____________ test_name_check_route_receives_excluded_category_id ______________
+
+category_app = (<fastapi.applications.FastAPI object at 0x120930f50>, <AsyncMock spec='DeviceCategoryService' id='4840962576'>)
+
+    async def test_name_check_route_receives_excluded_category_id(category_app):
+        app, service = category_app
+        async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url='http://test') as client:
+            response = await client.get('/device/category/checkNameUnique', params={'name': 'Network', 'category_id': 8})
+>       assert response.status_code == 200
+E       assert 422 == 200
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+app        = <fastapi.applications.FastAPI object at 0x120930f50>
+category_app = (<fastapi.applications.FastAPI object at 0x120930f50>, <AsyncMock spec='DeviceCategoryService' id='4840962576'>)
+client     = <tests.conftest._PatchedAsyncClient object at 0x1209339d0>
+response   = <Response [422 Unprocessable Entity]>
+service    = <AsyncMock spec='DeviceCategoryService' id='4840962576'>
+
+tests/unit/test_device_category_routes.py:46: AssertionError
+=========================== short test summary info ============================
+FAILED tests/unit/test_device_category_routes.py::test_options_route_returns_collection_and_never_calls_detail
+FAILED tests/unit/test_device_category_routes.py::test_name_check_route_receives_excluded_category_id
+========================= 2 failed, 1 passed in 0.24s ==========================

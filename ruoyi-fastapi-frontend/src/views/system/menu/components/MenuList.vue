@@ -27,7 +27,7 @@
             placeholder="菜单状态"
             clearable
             style="width: 200px"
-            @change="(v: any) => onFilterChange('status', v, { handleRefresh, updateState })"
+            @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
           >
             <el-option
               v-for="dict in sys_normal_disable"
@@ -114,7 +114,7 @@
                 >新增</zx-button
               >
               <ZxMoreAction
-                :list="getMoreActionList(scope.row)"
+                :list="getMoreActionList()"
                 @select="handleMoreActionSelect($event, scope.row)"
               />
             </div>
@@ -133,46 +133,63 @@
 </template>
 
 <script setup lang="ts" name="MenuList">
+import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
+import type { MenuRecord } from '@/api/system/menu';
+import type { GetSystemMenuListSystemMenuListGetData } from '@/api/_generated/types.gen';
+type ListQuery = NonNullable<GetSystemMenuListSystemMenuListGetData['query']> & {
+  dateRange?: string[] | null;
+};
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { ref, nextTick, getCurrentInstance } from 'vue';
 import { listMenu, getMenu, delMenu } from '@/api/system/menu';
 import MenuDrawer from './MenuDrawer.vue';
 
-const { proxy } = getCurrentInstance()!;
-const { sys_normal_disable, sys_show_hide } = (proxy as any).useDict(
-  'sys_normal_disable',
-  'sys_show_hide'
-);
-const { parseTime } = proxy as any;
+const proxy = getCurrentInstance()!.proxy!;
+const { sys_normal_disable, sys_show_hide } = proxy.useDict('sys_normal_disable', 'sys_show_hide');
+const { parseTime } = proxy;
 
 const isExpandAll = ref(false);
 const refreshTable = ref(true);
 const gridListRef = ref<InstanceType<(typeof import('@zxio/zxui'))['ZxGridList']> | null>(null);
 const menuDrawerRef = ref<InstanceType<typeof MenuDrawer> | null>(null);
 
-async function loadMenuData(params: any) {
+async function loadMenuData(params: ListLoadParams) {
   const query = {
     menuName: params.query?.menuName,
     status: params.query?.status,
   };
   try {
     const response = await listMenu(query);
-    const tree = (proxy as any).handleTree(response.items, 'menuId');
+    const tree = proxy.handleTree(response.items, 'menuId');
     return { data: tree || [], total: 0 };
-  } catch (e) {
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
-function handleAdd(row?: any) {
+function handleAdd(row?: MenuRecord) {
   const data = row?.menuId ? { parentId: row.menuId } : {};
   menuDrawerRef.value?.open(data);
 }
@@ -185,14 +202,29 @@ function toggleExpandAll() {
   });
 }
 
-async function handleUpdate(row: any) {
+async function handleUpdate(row: MenuRecord) {
   const response = await getMenu(row.menuId).catch(() => null);
   if (!response) return;
-  menuDrawerRef.value?.open(response);
+  menuDrawerRef.value?.open({
+    menuId: response.menuId ?? undefined,
+    parentId: response.parentId ?? undefined,
+    menuName: response.menuName ?? undefined,
+    menuType: response.menuType ?? undefined,
+    icon: response.icon ?? undefined,
+    orderNum: response.orderNum ?? undefined,
+    isFrame: response.isFrame ?? undefined,
+    isCache: response.isCache ?? undefined,
+    visible: response.visible ?? undefined,
+    status: response.status ?? undefined,
+    path: response.path ?? undefined,
+    component: response.component ?? undefined,
+    perms: response.perms ?? undefined,
+    query: response.query ?? undefined,
+  });
 }
 
-function handleDelete(row: any) {
-  (proxy as any).$modal
+function handleDelete(row: MenuRecord) {
+  proxy.$modal
     .confirm('是否确认删除名称为"' + row.menuName + '"的数据项?')
     .then(() => delMenu(row.menuId))
     .then(() => {
@@ -201,7 +233,7 @@ function handleDelete(row: any) {
     .catch(() => {});
 }
 
-function getMoreActionList(_row: any) {
+function getMoreActionList() {
   const actions = [];
   actions.push({
     label: '删除',
@@ -213,7 +245,7 @@ function getMoreActionList(_row: any) {
   return actions;
 }
 
-function handleMoreActionSelect(item: any, row: any) {
+function handleMoreActionSelect(item: ActionItem, row: MenuRecord) {
   switch (item.eventTag) {
     case 'delete':
       handleDelete(row);

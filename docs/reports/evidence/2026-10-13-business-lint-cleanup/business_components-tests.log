@@ -1,0 +1,16 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > normalizes scalar and dictionary editor values into the text config contract 1ms
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > reads the value from a real native input event 1ms
+ ✓ tests/unit/protocol-editor-values.test.ts > protocol editor boundaries > keeps field normalization within the declared row contract 1ms
+ ✓ tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects duplicate node identifiers before mutating state 2ms
+ ✓ tests/unit/zxflow-invariants.test.ts > graph state invariants > rejects identity changes while retaining the existing edge 1ms
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  22:38:37
+   Duration  649ms (transform 120ms, setup 440ms, collect 137ms, tests 7ms, environment 278ms, prepare 51ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

@@ -158,7 +158,9 @@
                   class="!w-24 sim-input-dark"
                   @input="handleAdvancedChange"
                 />
-                <span class="text-xs text-zx-text-secondary">{{ cond.type === 'size' ? 'B' : 'ms' }}</span>
+                <span class="text-xs text-zx-text-secondary">{{
+                  cond.type === 'size' ? 'B' : 'ms'
+                }}</span>
               </template>
 
               <template v-else>
@@ -334,7 +336,6 @@ const listRef = ref(null);
 const tableWidth = ref(0);
 const tableHeight = ref(200);
 const resizeObserver = ref(null);
-const rowHeight = 36;
 
 const selectedId = ref(null);
 const selectedMessage = ref(null);
@@ -381,12 +382,7 @@ const payloadTokens = computed(() =>
 const nodeTokens = computed(() =>
   normalizedConditions.value.filter((c) => c.type === 'node' && c.value).map((c) => c.value)
 );
-const fieldTokens = computed(() =>
-  normalizedConditions.value
-    .filter((c) => c.type === 'field')
-    .flatMap((c) => [c.value, c.key])
-    .filter(Boolean)
-);
+
 const protocolTokens = computed(() => {
   const tokens = [];
   if (localFilter.value.protocolType) tokens.push(localFilter.value.protocolType);
@@ -398,13 +394,6 @@ const protocolTokens = computed(() => {
 
 // 上层已按同样条件过滤过，这里直接透传，避免重复全量遍历
 const filteredMessages = computed(() => safeMessages.value);
-
-function getLatencyMs(message) {
-  const send = message?.sendTimestamp ?? message?.timestamp;
-  const recv = message?.receiveTimestamp;
-  if (!send || !recv) return null;
-  return Math.max(0, (recv - send) * 1000);
-}
 
 function createCondition(type = 'payload') {
   return {
@@ -609,9 +598,7 @@ function handleAutoScrollChange(val) {
   localAutoScroll.value = val;
   emit('auto-scroll-change', val);
   if (val) {
-    restartAutoScroll();
-  } else {
-    stopAutoScroll();
+    scrollToBottom();
   }
 }
 
@@ -732,6 +719,7 @@ function scrollToBottom() {
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
     const step = (now) => {
+      if (!localAutoScroll.value || !tableRef.value) return;
       const elapsed = now - startTime;
       const progress = Math.min(1, elapsed / duration);
       const eased = easeOutCubic(progress);
@@ -744,6 +732,7 @@ function scrollToBottom() {
   };
 
   nextTick(() => {
+    if (!localAutoScroll.value) return;
     const tableEl = tableRef.value?.$el;
     const scrollContainer =
       tableEl?.querySelector('.el-table-v2__body') || tableEl?.querySelector('.el-scrollbar__wrap');
@@ -846,11 +835,17 @@ onBeforeUnmount(() => {
 }
 
 :deep(.el-table-v2__row:hover) {
-  background-color: var(--sim-bg-hover, color-mix(in srgb, var(--zx-semantic-border-default) 35%, transparent));
+  background-color: var(
+    --sim-bg-hover,
+    color-mix(in srgb, var(--zx-semantic-border-default) 35%, transparent)
+  );
 }
 
 :deep(.protocol-analyzer__row--selected) {
-  background-color: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent));
+  background-color: var(
+    --sim-accent-bg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 12%, transparent)
+  );
   border-left: 2px solid var(--sim-accent, #22d3ee);
 }
 
@@ -877,7 +872,10 @@ onBeforeUnmount(() => {
 }
 
 .highlight-token {
-  background: var(--sim-accent-bg, color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent));
+  background: var(
+    --sim-accent-bg,
+    color-mix(in srgb, var(--zx-semantic-accent-base) 18%, transparent)
+  );
   color: var(--sim-text-primary, var(--zx-semantic-text-primary));
   padding: 0 2px;
   border-radius: 2px;

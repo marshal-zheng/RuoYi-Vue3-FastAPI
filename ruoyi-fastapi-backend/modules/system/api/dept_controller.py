@@ -3,6 +3,7 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.http_contracts import CollectionResult
 from config.enums import BusinessType
 from config.get_db import get_db
 from container.dependencies import service_provider
@@ -11,7 +12,6 @@ from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.dept_vo import DeleteDeptModel, DeptModel, DeptQueryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from modules.system.application.services.dept_service import DeptService
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import AddDeptCommand, DeleteDeptCommand, EditDeptCommand
@@ -22,6 +22,7 @@ from modules.system.application.queries import (
     GetDeptListQuery,
     GetDeptTreeSelectQuery,
 )
+from modules.system.application.services.dept_service import DeptService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
@@ -52,7 +53,7 @@ async def _load_dept_detail(
 
 @deptController.get(
     '/list/exclude/{dept_id}',
-    response_model=list[DeptModel],
+    response_model=CollectionResult[DeptModel],
     dependencies=[Depends(CheckUserInterfaceAuth('system:dept:list'))],
 )
 async def get_system_dept_tree_for_edit_option(
@@ -74,7 +75,9 @@ async def get_system_dept_tree_for_edit_option(
 
 
 @deptController.get(
-    '/list', response_model=list[DeptModel], dependencies=[Depends(CheckUserInterfaceAuth('system:dept:list'))]
+    '/list',
+    response_model=CollectionResult[DeptModel],
+    dependencies=[Depends(CheckUserInterfaceAuth('system:dept:list'))],
 )
 async def get_system_dept_list(
     request: Request,

@@ -1,0 +1,10 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+·············
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Start at  02:22:16
+   Duration  1.81s (transform 957ms, setup 661ms, collect 2.36s, tests 66ms, environment 463ms, prepare 82ms)
+

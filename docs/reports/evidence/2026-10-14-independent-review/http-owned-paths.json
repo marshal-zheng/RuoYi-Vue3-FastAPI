@@ -1,0 +1,230 @@
+[
+  {
+    "path": "src/api/_generated-client-contract.test.ts",
+    "beforeSha256": "36a5a4874914731b8bfcdd27dedb5b387801876be23fc1e3992682983786f576",
+    "afterSha256": "e72c6862f0aaf2fb0e5ae947ee876880cde54bfd73920ec3502483b01e46a63f",
+    "deleted": false
+  },
+  {
+    "path": "src/api/menu-contract.test.ts",
+    "beforeSha256": "0bca0e6a3a9aba1c76b818b180b40272e5d860e61693682cbdfeedc464b3cf3f",
+    "afterSha256": "5f7e721fed621d8a8ba6c587318cb05b93fffa41157e55aed908c9195f7a7b57",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_shared/http-client.ts",
+    "beforeSha256": "a10d85bf423646588bd1125e5c901dde405c131efd888c5d328cfb6a84c7a949",
+    "afterSha256": null,
+    "deleted": true
+  },
+  {
+    "path": "src/api/_shared/index.ts",
+    "beforeSha256": "5ba80741ef881797d5c51683e1f2337088d0ca5c74c483559de5dd4cb39d3c36",
+    "afterSha256": "0395702318a2553951526658f02260252c2b981e29820d1da0fe16c9eec911b3",
+    "deleted": false
+  },
+  {
+    "path": "src/api/system/user.ts",
+    "beforeSha256": "9280a6fdb9f369e0211d63595677e73660d78018e1e18830e69018623a97282e",
+    "afterSha256": "5e90ccbe1bc55b61785a44fb9e554c6a66e1673c417913e1b50f1dbb4fa16478",
+    "deleted": false
+  },
+  {
+    "path": "src/api/project/project.ts",
+    "beforeSha256": "eec9bbfc1ad4b59e7b0b2f353d71bcaec21a391690090d8eb72bd81eea9d4d9d",
+    "afterSha256": "e8246f8cd7e03dc67d3c328293ef703fe32fbc1e0095b3b7066ac5aa7ae09b84",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_generated/client/client.gen.ts",
+    "beforeSha256": "d238daecd60e9894449acbc5f409b1ed9d1b47b6bd1a83611cb0d78f90002fac",
+    "afterSha256": "881b10263f6a6c6aa6eb15179d13238095391465362135586cd5a97a204d0a9c",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_generated/client/types.gen.ts",
+    "beforeSha256": "17c9a1617cca798b45da13456b41852965f24ea54d62797940b5722aef56c335",
+    "afterSha256": "5a653b789d2f128a9c936d14fd864613088e6e42ff6069c0bac02097ceee7d33",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_generated/core/serverSentEvents.gen.ts",
+    "beforeSha256": "bcfecf57493659cf2c483f6b01cfb3a8bb290aa5449581f1c435e0ed0d51e735",
+    "afterSha256": "eaca8dd85d63a47ce07129d06e06c7f474eb943679b274539188b651b2398620",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_generated/types.gen.ts",
+    "beforeSha256": "e0340805750e520c0aead977e5d704679245cd646c2b59b214e589930cfd5e10",
+    "afterSha256": "89e30cfa1a801c395822a4905acfa0eccb8fe79b19faa8d47bb090b2bd561694",
+    "deleted": false
+  },
+  {
+    "path": "src/api/_generated/index.ts",
+    "beforeSha256": "54a0349a9aa5a40c3e0e474b2a999273b1df4191e5297aa50be523aa384f5396",
+    "afterSha256": "661e72b3bfeebeaec9f2e98a5bc64cd4bd4c929bc8858f78a1413bc5ee5b9816",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/contracts/response.ts",
+    "beforeSha256": "9d7a432d755263b597dac18d16005bc5ed1cb5b608a8fc5ee43cc44c98f2b902",
+    "afterSha256": null,
+    "deleted": true
+  },
+  {
+    "path": "src/mocks/contracts/index.ts",
+    "beforeSha256": "58e5b38b7f4d48e8ed447f77ce56182478a2f661226f6c23fd8ced752ee4d543",
+    "afterSha256": "404c30beb7131320841a34dba1548a7da1a03fdfd30b9c515df8cf1a7965af1c",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/system.ts",
+    "beforeSha256": "df76c54feb8fbdad317122d625e975ce5676eaedb57196ab0469b630526f786e",
+    "afterSha256": "2bc793abdf2464699ced791062c301a7e8d747c58bd0a7715b493d9edb7d2a8e",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/user.ts",
+    "beforeSha256": "1487243b69b851915ebcdbf6e865893985fa4a9d6074d6a62e98c83eb6db54a4",
+    "afterSha256": "bc6f93d5b6ceb2c8815c47bda2b25b64d550b033f095476162d12d4125bf1e11",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/simulation.ts",
+    "beforeSha256": "db3a4026863c762f2fe049536d4f50c9f0ffa494b35ddf4c63439c24696640f0",
+    "afterSha256": "0820d58ccc1bfaae67653e54774bf3095cbe53c9c1b81e5edff621f8025fb111",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/project.ts",
+    "beforeSha256": "ee6b0051a966b03123ee425d8e9d32e7b4fa87fe1befad19f52f467b6df51dac",
+    "afterSha256": "a0301b2cfc957c3b14813a2a08daf4231eafd9e9614a59d90c2fee1bbb758590",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/auth-system.test.ts",
+    "beforeSha256": "77934824728bd1dc2926044f0428f9776909b3a5c64d2e5ef89724fe1577726b",
+    "afterSha256": "a510973e1b95052835a50b3d02ece0270007b8481c6c8e7a0d56ae2b047e616a",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/simulation.test.ts",
+    "beforeSha256": "7d9656e5600d5680cd71ec46b99872582c419496dbff0cbde60f8247afb94185",
+    "afterSha256": "dfae7f12d8dfbaaa0887d9d9dccdda92959f902cb2cc75c7f76579231f8545e1",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/project.test.ts",
+    "beforeSha256": "f0634a71f91b3cae296e8911bb67b45fb99e844e2e7aa5b66090efb89d6cf536",
+    "afterSha256": "aa599c11999bf942050864917281ac117dc781b1185629583928238823335e93",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/api-contract.test.ts",
+    "beforeSha256": "3975f9b8349c5ff76745f9911c85bd50e3809fcff731a8f6fc4fb0d45884077a",
+    "afterSha256": "149e14b1bfd7837fd64a97212ef62f11713bb4cac1036470cd1fc8c6d45df27c",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/handlers/api-contract-schema.test.ts",
+    "beforeSha256": "3d38b2a81ac4b5597c2c3ad795f78505cdcdbec3c8bd8160accb348332b08ff9",
+    "afterSha256": "2f43d087b954eee5712f6ae784b76478f4b28993274d7001bbcc710851450e4d",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/runtime/unhandled.ts",
+    "beforeSha256": "89f35f2c8aecc6d83ac17d3a1b343402c214624c367ca73ca369e192daf95b2f",
+    "afterSha256": "5ba92e69a5e3735bae7c23ff0b8fc2c97d9916bf577bc100f147dc475709f042",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/runtime/unhandled.test.ts",
+    "beforeSha256": "499ede29195d939a773481a99aa92e2c2cc25e476e17b0eaad5854b443c84ed7",
+    "afterSha256": "72228d81b694a80e6b261078313e565ba4381867eb4f12ab79dc4de1327fc0a5",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/overlays/response.ts",
+    "beforeSha256": "dafac85233ac8a1a98ecc8f9b1d438378140d299b3bcc92194c6ebd6cb1fc88e",
+    "afterSha256": "10232d3d336937fa4fbd8c2dbb081dcdb37c020abd7db12f87a91575aed48b50",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/overlays/handlers.test.ts",
+    "beforeSha256": "3cb75d14ad8ba22d8300ddfa565c2f305eb3c036a4b7aedbca08edf86ff63198",
+    "afterSha256": "c6239d9ce1a8b3f1148d1ad1890a9116420799d0ae965d662524e0fb84f43075",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/contracts/coverage.test.ts",
+    "beforeSha256": "4e20674cca027a9df52ef49b9ec43a7cf203fd353914814c8413c27e5b2fa41c",
+    "afterSha256": "ed1d32e3a7243ccb51f34589e2f589fd95fe9fcec8634456944190512361fb94",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/contracts/coverage/registry/system.json",
+    "beforeSha256": "9ce07f6708b8c68f10385c2302d64ff30be6efed53bbbeff4ce9fe4e42a464da",
+    "afterSha256": "aa194b560ef4cb6fa6135ba46051e5b422c8592c8802227559671f859fe6cb9a",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/store/datasource.ts",
+    "beforeSha256": "0e1edf7444b0089bd9e27b5287498c326698a4a4a6c76dd9667c1ebfae5aab1c",
+    "afterSha256": "08365ce5b9a0f447e03c5b9d759754003634f533dc9e7d8fe31159d0479c0957",
+    "deleted": false
+  },
+  {
+    "path": "src/mocks/store/repositories/version.ts",
+    "beforeSha256": "2cc2de324b5048cce32607527d6e0e120180b71a89341ff20125045bdf365a79",
+    "afterSha256": "1481628fa038a7ae630411921b1a48641813a700043a5f8019758fd969d846ef",
+    "deleted": false
+  },
+  {
+    "path": "tests/unit/api/project.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "778a69df2f82431bd0926048f2b257fd5957dc1af7af95066ce5c2dbea371f32",
+    "deleted": false
+  },
+  {
+    "path": "tests/unit/api/role.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "410a549682b4eb9b11ec119e5cc6a53ef73dc8b17642fd9f0a6128caa4a0a562",
+    "deleted": false
+  },
+  {
+    "path": "tests/unit/api/menu.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "eaaf3a5ac81bc6fa04c7ff6db8533af60eff82de79e48f56af850ad23b723df7",
+    "deleted": false
+  },
+  {
+    "path": "tests/unit/api/config.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "1947a70e14e28c2ddfdc910998502cbc44e365fbf9f8048b74bb5a8ca037f37c",
+    "deleted": false
+  },
+  {
+    "path": "tests/unit/api/dict.test.ts",
+    "beforeSha256": null,
+    "afterSha256": "bdddf0b3c3df52483ad2018b97e7d18485075d754d35e54c40f0906b30403903",
+    "deleted": false
+  },
+  {
+    "path": "scripts/openapi-client/client-client.gen.ts.template",
+    "beforeSha256": null,
+    "afterSha256": "881b10263f6a6c6aa6eb15179d13238095391465362135586cd5a97a204d0a9c",
+    "deleted": false
+  },
+  {
+    "path": "scripts/openapi-client/client-types.gen.ts.template",
+    "beforeSha256": null,
+    "afterSha256": "5a653b789d2f128a9c936d14fd864613088e6e42ff6069c0bac02097ceee7d33",
+    "deleted": false
+  },
+  {
+    "path": "scripts/openapi-client/core-serverSentEvents.gen.ts.template",
+    "beforeSha256": null,
+    "afterSha256": "eaca8dd85d63a47ce07129d06e06c7f474eb943679b274539188b651b2398620",
+    "deleted": false
+  }
+]

@@ -132,7 +132,6 @@
           :collapsed-size="{ width: '46px', height: '46px' }"
           :default-collapsed="false"
           @alarm-click="handleAlarmClick"
-          @filter-change="handleAlarmFilterChange"
         />
 
         <!-- 时序/延迟分析面板 -->
@@ -141,7 +140,10 @@
           :visible="dockState.timing"
           :messages="filteredMessages"
           :bandwidth-data="bandwidthData"
-          :position="{ top: 'min(420px, max(14px, calc(100vh - 620px)))', left: '14px' }"
+          :position="{
+            top: 'min(420px, max(14px, calc(100vh - 620px)))',
+            left: '14px',
+          }"
           :size="{ width: '520px', maxHeight: '430px' }"
           :collapsed-size="{ width: '46px', height: '46px' }"
           :default-collapsed="false"
@@ -315,7 +317,6 @@ const {
   simulationState,
   sessionId,
   isRunning,
-  isPaused,
   start,
   pause,
   resume,
@@ -333,12 +334,7 @@ const {
   alarmData,
   statusData,
   filteredMessages,
-  filteredAlarms,
-  messageFilter,
-  alarmFilter,
   setMessageFilter,
-  setAlarmFilter,
-  clearData,
   updateBandwidthData,
   updateMessageData,
   updateAlarmData,
@@ -430,7 +426,7 @@ const normalizeGraphPorts = (graph) => {
 
 // 故障注入
 const faultInjection = useFaultInjection(sessionId);
-const { faults, injectFault, ingestFaultEvents, loading: faultsLoading } = faultInjection;
+const { faults, ingestFaultEvents, loading: faultsLoading } = faultInjection;
 
 // 事件触发
 const { eventList, loadEvents, createEvent, updateEvent, deleteEvent, triggerEvent } =
@@ -456,7 +452,7 @@ const currentNode = ref(null);
 const hoveredEdge = ref(null);
 const tooltipPosition = ref({ x: 0, y: 0 });
 const autoScroll = ref(true);
-const dashboardShowTrend = ref(false);
+
 const showEventPanel = ref(false);
 const simulationSummary = ref(null);
 
@@ -641,7 +637,7 @@ async function exitFaultMode() {
 }
 
 // 告警处理
-const { handleAlarmClick, handleAlarmFilterChange } = useAlarmHandler({
+const { handleAlarmClick } = useAlarmHandler({
   getGraphInstance,
   topologyAnimation: {
     highlightEdges,
@@ -666,7 +662,7 @@ async function loadProjectInfo() {
     const res = await getProject(projectId.value, { silentError: true });
     // http 客户端已解包 payload.data，直接访问字段
     projectName.value = res?.projectName || '未命名工程';
-  } catch (err) {
+  } catch {
     console.warn('[仿真] 无法获取工程信息，可能缺少 project:project:query 权限');
     projectName.value = '未命名工程';
   }
@@ -688,7 +684,7 @@ async function loadDeviceList() {
       ports: normalizePorts(device.interfaces || []),
       nodeType: 'device-port-node',
     }));
-  } catch (err) {
+  } catch {
     // 无设备列表权限时静默降级，仅在控制台记录
     console.warn('[仿真] 无法加载设备库，可能缺少 device:list:list 权限');
     operators.value = [];
@@ -764,20 +760,12 @@ async function loadReadonlySimulationSnapshot() {
       syncStatus(status);
       updateStatistics(status);
     }
-    if (Array.isArray(messages)) {
-      updateMessageData(messages);
-    }
-    if (Array.isArray(bandwidth)) {
-      updateBandwidthData(bandwidth);
-    }
-    if (Array.isArray(alarms)) {
-      updateAlarmData(alarms);
-    }
-    if (Array.isArray(events)) {
-      eventList.value = events;
-    }
-  } catch (err) {
-    console.warn('[仿真] 无法加载只读演示数据', err);
+    updateMessageData(messages.items);
+    updateBandwidthData(bandwidth.items);
+    updateAlarmData(alarms.items);
+    eventList.value = events.items;
+  } catch {
+    ElMessage.warning('无法加载只读演示数据');
   }
 }
 
@@ -914,7 +902,7 @@ function handleBack() {
 }
 
 // 节点事件处理
-function handleNodeClick({ node }) {
+function handleNodeClick() {
   // 点击节点时取消链路选中
   selectedEdge.value = null;
 }
@@ -958,11 +946,11 @@ function handleNodeUpdate({ nodeId, name, ports }) {
 }
 
 // 链路事件处理 (这些函数现在由 setupEdgeEvents 中的图实例事件监听处理)
-function handleEdgeClick({ edge, e }) {
+function handleEdgeClick() {
   // 由 setupEdgeEvents 处理
 }
 
-function handleEdgeMouseEnter({ edge, e }) {
+function handleEdgeMouseEnter() {
   // 由 setupEdgeEvents 处理
 }
 
@@ -977,19 +965,6 @@ function getEdgeBandwidth(edge) {
 }
 
 // 端口点击
-function handlePortClick(portData) {
-  const graph = getGraphInstance();
-  if (!graph) return;
-
-  const edges = graph.getEdges?.() || [];
-  edges.forEach((edge) => {
-    const sourcePortId = edge.getSourcePortId?.();
-    const targetPortId = edge.getTargetPortId?.();
-    if (sourcePortId === portData.portId || targetPortId === portData.portId) {
-      triggerTrafficAnimation(edge.id, portData.protocolType);
-    }
-  });
-}
 
 // 报文处理
 function handleMessageSelect(message) {

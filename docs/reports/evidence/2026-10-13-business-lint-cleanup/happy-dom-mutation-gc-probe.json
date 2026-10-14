@@ -1,0 +1,14 @@
+[
+  {
+    "collect": false,
+    "notices": 1,
+    "observerStillReferenced": true,
+    "connected": true
+  },
+  {
+    "collect": true,
+    "notices": 0,
+    "observerStillReferenced": true,
+    "connected": true
+  }
+]

@@ -1,21 +1,14 @@
-import { API_PREFIX } from "../constants";
-import { mockDataset } from "../data";
-import { createMockHandlers } from "../handlers";
-import { startBrowserMock } from "../browser";
-import {
-  createMockOverlayRuntime,
-  type MockOverlayRuntime,
-} from "../overlays/runtime";
-import type { MockOverlayRegistrySummary, MockOverlayState } from "../overlays";
-import type { MockDataSource } from "../store";
-import { getMockDataSource } from "../store";
-import type {
-  MockNetworkStrategy,
-  MockRuntimeHandler,
-  OnUnhandledRequestOption,
-} from "../types";
-import type { MockRuntimeMode } from "./mode";
-import { strategyForRuntimeMode } from "./mode";
+import { API_PREFIX } from '../constants';
+import { mockDataset } from '../data';
+import { createMockHandlers } from '../handlers';
+import { startBrowserMock } from '../browser';
+import { createMockOverlayRuntime, type MockOverlayRuntime } from '../overlays/runtime';
+import type { MockOverlayRegistrySummary, MockOverlayState } from '../overlays';
+import type { MockDataSource } from '../store';
+import { getMockDataSource } from '../store';
+import type { MockNetworkStrategy, MockRuntimeHandler, OnUnhandledRequestOption } from '../types';
+import type { MockRuntimeMode } from './mode';
+import { strategyForRuntimeMode } from './mode';
 
 export interface MockRuntimeSetupOptions {
   mode: MockRuntimeMode;
@@ -40,7 +33,7 @@ declare global {
   interface Window {
     __MOCK_RUNTIME__?: MockRuntimeDevtools;
     __MOCK_RUNTIME_BOOTSTRAP__?: {
-      source: "playwright" | "vitest";
+      source: 'playwright' | 'vitest';
       overlays?: string[];
     };
   }
@@ -50,7 +43,7 @@ function createRuntimeDevtools(
   mode: MockRuntimeMode,
   dataSource: MockDataSource,
   overlayRuntime: MockOverlayRuntime,
-  rebuildHandlers: () => void,
+  rebuildHandlers: () => void
 ): MockRuntimeDevtools {
   return {
     getMode: () => mode,
@@ -60,7 +53,7 @@ function createRuntimeDevtools(
     listOverlays: () => overlayRuntime.listOverlays(),
     getOverlayState: () => overlayRuntime.getOverlayState(),
     activateOverlays: async (ids: string[]) => {
-      const state = overlayRuntime.activateOverlays(ids, "runtime-api");
+      const state = overlayRuntime.activateOverlays(ids, 'runtime-api');
       rebuildHandlers();
       return state;
     },
@@ -73,33 +66,29 @@ function createRuntimeDevtools(
 }
 
 function scenarioForStrategy(strategy: MockNetworkStrategy) {
-  return strategy === "pure" ? "pure" : "default";
+  return strategy === 'pure' ? 'pure' : 'default';
 }
 
-export async function setupMockRuntime(
-  options: MockRuntimeSetupOptions,
-): Promise<void> {
+export async function setupMockRuntime(options: MockRuntimeSetupOptions): Promise<void> {
   const apiPrefix = options.apiPrefix ?? API_PREFIX;
   const dataSource = options.dataSource ?? getMockDataSource();
   const strategy = strategyForRuntimeMode(options.mode);
   const canUseOverlayApi =
-    options.mode === "demo-offline" &&
-    (options.debug || import.meta.env.MODE === "test");
+    options.mode === 'demo-offline' && (options.debug || import.meta.env.MODE === 'test');
   const bootstrap =
-    canUseOverlayApi && typeof window !== "undefined"
+    canUseOverlayApi && typeof window !== 'undefined'
       ? window.__MOCK_RUNTIME_BOOTSTRAP__
       : undefined;
   const overlayRuntime = createMockOverlayRuntime({
     allowOverlays: canUseOverlayApi,
     initialOverlays: bootstrap?.overlays,
-    source: bootstrap?.source === "vitest" ? "vitest" : "bootstrap",
+    source: bootstrap?.source === 'vitest' ? 'vitest' : 'bootstrap',
   });
   const handlers: MockRuntimeHandler[] = createMockHandlers({
     strategy,
     dataSource,
     apiPrefix,
-    onMissingCapability:
-      options.mode === "demo-offline" ? "error" : "passthrough",
+    onMissingCapability: options.mode === 'demo-offline' ? 'error' : 'passthrough',
     overlays: overlayRuntime.getOverlayState(),
   });
 
@@ -108,7 +97,7 @@ export async function setupMockRuntime(
     strategy,
     scenario: scenarioForStrategy(strategy),
     handlers,
-    onUnhandledRequest: options.onUnhandledRequest ?? "bypass",
+    onUnhandledRequest: options.onUnhandledRequest ?? 'bypass',
   });
 
   const rebuildHandlers = () => {
@@ -116,26 +105,25 @@ export async function setupMockRuntime(
       strategy,
       dataSource,
       apiPrefix,
-      onMissingCapability:
-        options.mode === "demo-offline" ? "error" : "passthrough",
+      onMissingCapability: options.mode === 'demo-offline' ? 'error' : 'passthrough',
       overlays: overlayRuntime.getOverlayState(),
     });
     worker?.resetHandlers(...nextHandlers);
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       window.__MSW_RUNTIME_HANDLERS__ = nextHandlers;
     }
   };
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     delete window.__MOCK_RUNTIME_BOOTSTRAP__;
   }
 
-  if (canUseOverlayApi && typeof window !== "undefined") {
+  if (canUseOverlayApi && typeof window !== 'undefined') {
     window.__MOCK_RUNTIME__ = createRuntimeDevtools(
       options.mode,
       dataSource,
       overlayRuntime,
-      rebuildHandlers,
+      rebuildHandlers
     );
   }
 }

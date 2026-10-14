@@ -987,7 +987,7 @@ class SimulationService:
             # 若引擎不存在但会话记录仍在，返回已停止状态，便于WS保持
             cached = self._session_configs.get(session_id)
             if cached:
-                return {
+                stopped_status = {
                     'session_id': session_id,
                     'status': SimulationStatusEnum.STOPPED.value,
                     'engine_present': False,
@@ -998,7 +998,15 @@ class SimulationService:
                     'bandwidth_data_count': 0,
                     'alarm_count': 0,
                 }
-            return {'status': 'not_found', 'message': '仿真会话不存在'}
+                return CamelCaseUtil.transform_result(stopped_status)
+            return {
+                'sessionId': session_id,
+                'status': 'not_found',
+                'enginePresent': False,
+                'message': '仿真会话不存在',
+                'messageCount': 0,
+                'alarmCount': 0,
+            }
 
         status = engine.get_status()
         status['engine_present'] = True

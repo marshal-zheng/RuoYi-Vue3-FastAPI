@@ -40,7 +40,9 @@
             placeholder="公告类型"
             clearable
             style="width: 200px"
-            @change="(v: any) => onFilterChange('noticeType', v, { handleRefresh, updateState })"
+            @change="
+              (v: unknown) => onFilterChange('noticeType', v, { handleRefresh, updateState })
+            "
           >
             <el-option
               v-for="dict in sys_notice_type"
@@ -114,11 +116,23 @@
 </template>
 
 <script setup lang="ts" name="NoticeList">
+import { getCurrentInstance, ref } from 'vue';
+import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
+import type { NoticeRecord } from '@/api/system/notice';
+import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';
+type ListQuery = NonNullable<GetSystemNoticeListSystemNoticeListGetData['query']> & {
+  dateRange?: string[] | null;
+};
+type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
+type ListActions = {
+  handleRefresh: ZxGridListInstance['refresh'];
+  updateState: ZxGridListInstance['updateState'];
+};
 import { listNotice, getNotice, delNotice } from '@/api/system/notice';
 import { parseTime } from '@/utils/ruoyi';
 import NoticeDlg from './NoticeDlg.vue';
 
-const proxy = getCurrentInstance()?.proxy as any;
+const proxy = getCurrentInstance()!.proxy!;
 const { sys_notice_status, sys_notice_type } = proxy.useDict(
   'sys_notice_status',
   'sys_notice_type'
@@ -127,27 +141,40 @@ const { sys_notice_status, sys_notice_type } = proxy.useDict(
 const ids = ref<number[]>([]);
 const single = ref(true);
 const multiple = ref(true);
-const gridListRef = ref<any>(null);
-const noticeDlgRef = ref<any>(null);
+const gridListRef = ref<ZxGridListInstance | null>(null);
+const noticeDlgRef = ref<InstanceType<typeof NoticeDlg> | null>(null);
 
-async function loadNoticeData(params: any) {
+async function loadNoticeData(params: ListLoadParams) {
   try {
-    return await listNotice(params);
-  } catch (e) {
+    return await listNotice({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
-function onFilterChange(field: string, value: any, { handleRefresh, updateState }: any) {
-  updateState({ [field]: value });
+function onFilterChange(
+  field: string,
+  value: unknown,
+  { handleRefresh, updateState }: ListActions
+) {
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }: any) {
+function onSearch({
+  handleRefresh,
+}: {
+  handleRefresh: ListActions['handleRefresh'];
+  updateState?: ListActions['updateState'];
+}) {
   handleRefresh();
 }
 
-function handleSelectionChange(selection: any[]) {
+function handleSelectionChange(selection: NoticeRecord[]) {
   ids.value = selection.map((item) => item.noticeId);
   single.value = selection.length !== 1;
   multiple.value = !selection.length;
@@ -157,17 +184,23 @@ function handleAdd() {
   noticeDlgRef.value?.open();
 }
 
-async function handleUpdate(row?: any) {
+async function handleUpdate(row?: NoticeRecord) {
   const noticeId = row?.noticeId || ids.value[0];
   if (!noticeId) return;
 
   const response = await getNotice(noticeId).catch(() => null);
   if (!response) return;
-  noticeDlgRef.value?.open(response);
+  noticeDlgRef.value?.open({
+    noticeId: response.noticeId ?? undefined,
+    noticeTitle: response.noticeTitle ?? undefined,
+    noticeType: response.noticeType ?? undefined,
+    noticeContent: response.noticeContent ?? undefined,
+    status: response.status ?? undefined,
+  });
 }
 
-function handleDelete(row?: any) {
-  const noticeIds = row?.noticeId || ids.value;
+function handleDelete(row?: NoticeRecord) {
+  const noticeIds = row?.noticeId || ids.value.join(',');
   proxy.$modal
     .confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？')
     .then(() => delNotice(noticeIds))

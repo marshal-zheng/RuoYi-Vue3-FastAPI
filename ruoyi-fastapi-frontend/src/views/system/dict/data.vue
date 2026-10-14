@@ -279,7 +279,7 @@ function getTypes(dictId) {
 /** 查询字典类型列表 */
 function getTypeList() {
   getDictOptionselect().then((response) => {
-    typeOptions.value = response;
+    typeOptions.value = response.items;
   });
 }
 /** 取消按钮 */
@@ -308,7 +308,7 @@ function refreshList() {
 
 /** 筛选变化 */
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
+  updateState(`query.${key}`, value);
   handleRefresh();
 }
 

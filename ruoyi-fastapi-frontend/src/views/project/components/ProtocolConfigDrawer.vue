@@ -103,6 +103,7 @@ const formRef = ref(null);
 const templateRef = ref(null);
 
 const drawer = useDrawer({
+  divider: true,
   size: 800,
   placement: 'right',
   okText: '确定',

@@ -1,0 +1,35 @@
+{
+  "reviewed": 97,
+  "newUndefinedReferences": [
+    {
+      "file": "src/views/project/simulation/index.vue",
+      "line": 768,
+      "column": 37,
+      "message": "'err' is not defined."
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 164,
+      "column": 28,
+      "message": "'res' is not defined."
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 164,
+      "column": 70,
+      "message": "'res' is not defined."
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 166,
+      "column": 50,
+      "message": "'res' is not defined."
+    },
+    {
+      "file": "src/views/register.vue",
+      "line": 167,
+      "column": 33,
+      "message": "'res' is not defined."
+    }
+  ]
+}

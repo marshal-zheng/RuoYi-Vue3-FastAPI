@@ -1,0 +1,22 @@
+
+==> Ruff Lint
+All checks passed!
+  [OK] Ruff lint passed
+
+==> Ruff Format
+9 files already formatted
+  [OK] Ruff format check passed
+
+==> Mypy
+  [WARN] Mypy skipped
+
+==> Pytest
+  [WARN] Pytest skipped
+
+==> Guardrails
+  [OK] No new eval/exec usage
+  [OK] No new print() usage
+  [OK] No new direct SQL execution in controllers
+  [OK] No new broad exception blocks
+
+Validation passed.

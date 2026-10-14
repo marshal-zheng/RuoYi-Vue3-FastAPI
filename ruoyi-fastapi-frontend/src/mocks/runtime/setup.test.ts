@@ -91,7 +91,9 @@ describe('setupMockRuntime', () => {
 
     await setupMockRuntime({ mode: 'demo-offline', apiPrefix: '/api', debug: true, dataSource });
 
-    await expect(window.__MOCK_RUNTIME__?.activateOverlays(['project-list-empty'])).resolves.toMatchObject({
+    await expect(
+      window.__MOCK_RUNTIME__?.activateOverlays(['project-list-empty'])
+    ).resolves.toMatchObject({
       activeIds: ['project-list-empty'],
       source: 'runtime-api',
     });

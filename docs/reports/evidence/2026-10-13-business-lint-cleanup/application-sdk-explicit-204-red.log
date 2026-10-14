@@ -1,0 +1,46 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 3ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > binds SSE error metadata to the error hook rather than the completion value 1ms
+ × src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+   → expected {} to be null
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics
+AssertionError: expected {} to be null
+
+- Expected: 
+null
+
++ Received: 
+{}
+
+ ❯ src/api/_generated-client-contract.test.ts:163:5
+    161|       .mockResolvedValueOnce(new Response('', { headers: { 'content-ty…
+    162|     const client = createClient({ baseUrl: 'https://sdk.test', fetch }…
+    163|     await expect(client.delete<null, ApiError, true, 'data'>({ url: '/…
+       |     ^
+    164|     await expect(client.get<unknown, ApiError, true, 'data'>({ url: '/…
+    165|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 11 passed (12)
+   Start at  23:02:54
+   Duration  524ms (transform 118ms, setup 204ms, collect 22ms, tests 15ms, environment 131ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

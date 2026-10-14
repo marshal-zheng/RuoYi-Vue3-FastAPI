@@ -76,6 +76,7 @@ const dataScopeOptions = [
 ];
 
 const drawer = useDrawer({
+  divider: true,
   placement: 'right',
   okText: '确定',
   defaultData: () => ({

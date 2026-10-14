@@ -211,13 +211,13 @@ interface MenuForm {
   menuId?: number;
   parentId?: number;
   menuName?: string;
-  menuType?: string;
+  menuType?: 'M' | 'C' | 'F';
   icon?: string;
   orderNum?: number;
-  isFrame?: string;
-  isCache?: string;
-  visible?: string;
-  status?: string;
+  isFrame?: '0' | '1' | 0 | 1;
+  isCache?: '0' | '1' | 0 | 1;
+  visible?: '0' | '1';
+  status?: '0' | '1';
   path?: string;
   component?: string;
   perms?: string;
@@ -237,6 +237,7 @@ const formRules = {
 };
 
 const drawer = useDrawer<MenuForm>({
+  divider: true,
   title: (data: MenuForm) => (data?.menuId ? '修改菜单' : '添加菜单'),
   size: '600px',
   formRef,

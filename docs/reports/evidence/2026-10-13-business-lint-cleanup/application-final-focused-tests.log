@@ -1,0 +1,87 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/login.test.ts > login API contract > serializes login payload as x-www-form-urlencoded data through MSW 33ms
+ ✓ src/api/login.test.ts > login API contract > clamps long login and register passwords before sending the request 20ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads paged configs with query params through the HTTP contract 51ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > loads config detail and key-value lookups via MSW 42ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads paged dict data and typed dict options through MSW 61ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > loads role list and detail through the HTTP contract 53ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > handles role mutations through real request serialization 34ms
+ ✓ src/api/login.test.ts > login API contract > covers auth metadata endpoints through the real request path 59ms
+ ✓ src/api/login.test.ts > login API contract > surfaces login API failures from the request error mapping 51ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > covers role authorization and dept tree endpoints via MSW 35ms
+ ✓ tests/unit/api/role.test.ts > Role API contract > surfaces role API failures from the request error mapping 45ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > handles config mutations through real request serialization 35ms
+ ✓ tests/unit/api/config.test.ts > Config API contract > surfaces config API failures from the request error mapping 46ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > loads and mutates dict data through the real request path 44ms
+ ✓ tests/unit/api/dict.test.ts > Dict Data API contract > surfaces dict data failures from the request error mapping 50ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads paged dict types and option select data through MSW 37ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > loads and mutates dict types through the real request path 38ms
+ ✓ tests/unit/api/dict.test.ts > Dict Type API contract > surfaces dict type failures from the request error mapping 44ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > generates routes and registers them into router 18ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > accepts collection-style router payloads from the new HTTP contract 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > falls back to first menu path when current route disappears after reload 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > keeps existing routes when reload request fails 1ms
+ ✓ tests/unit/stores/permission.test.ts > permission store route hot reload > removes unnamed dynamic routes via route remover callbacks 1ms
+stderr | tests/unit/components/MenuCollection.test.ts > menu collection consumers > builds the list tree from collection items
+[Vue warn]: Failed to resolve component: ZxListToolbar
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at <MenuList ref="VTU_COMPONENT" > 
+  at <VTUROOT>
+
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/MenuCollection.test.ts > menu collection consumers > builds the list tree from collection items 12ms
+ ✓ tests/unit/components/MenuCollection.test.ts > menu collection consumers > opens the drawer with array children from the tree collection 10ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > uses collection items as the menu tree when adding a role 33ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows loading only while the menu request is pending 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows an empty state after loading an empty menu collection 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > shows a failure state and allows reopening to retry 8ms
+ ✓ tests/unit/components/RoleFormDrawer.test.ts > RoleFormDrawer menu loading > preserves the role-specific menu response when editing a role 7ms
+ ✓ tests/unit/components/UserFormDialog.test.ts > UserFormDialog > should render the user form inside the dialog shell 25ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > updates query.'configType' before refreshing a filter 16ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > updates query.'status' before refreshing a filter 3ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > maps the public grid query and pager to flat HTTP parameters 2ms
+ ✓ tests/unit/components/ListQueryContract.test.ts > GridList public query contract > submits nested grid query fields to the tree endpoint 2ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 5ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > binds SSE error metadata to the error hook rather than the completion value 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > defaults to a visible header and breadcrumb with tags disabled 2ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > restores independent saved visibility choices 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > migrates enabled tags once, retains supported chrome preferences and drops retired keys 1ms
+ ✓ tests/unit/stores/layout-settings.test.ts > independent chrome preferences > uses defaults for malformed persisted tags and null settings 0ms
+ ✓ src/views/monitor/cache/index.test.ts > cache monitor chart theme integration > preserves chart data while updating both projections without another request 21ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > updates all consumers from items and preserves submitted string values 4ms
+ ✓ src/utils/dict.test.ts > dictionary collection consumer > retries failures instead of caching an empty dictionary 3ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > preserves a concrete row for messages and custom validators without an index signature 2ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > retains a typed context and row in global validators 0ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > throws an inspectable validation error that retains the actual result 1ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > does not call a row-dependent message factory without a row when deriving VXE rules 0ms
+ ✓ src/components/ui/VxeTableValidation/validation.test.ts > typed VXE validation contracts > rejects unsupported date input values at the validation boundary 0ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > restores layout options without restoring retired colour settings 2ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > rejects retired colour settings while retaining layout changes 1ms
+ ✓ tests/unit/stores/settings.test.ts > layout settings and ZXUI theme ownership > awaits committed mode changes through ZXUI preference 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"width":"640px"} 1ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"height":480} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"dialogStyle":{"width":"40vw"}} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects unsupported width/height at the JavaScript boundary: {"columns":1,"dialogStyle":{"height":"60vh"}} 0ms
+ ✓ src/components/ui/FormDialog/index.test.ts > FormDialog hard-cut geometry contract > rejects missing columns before constructing a dialog 0ms
+
+ Test Files  16 passed (16)
+      Tests  67 passed (67)
+   Start at  23:08:46
+   Duration  5.22s (transform 1.44s, setup 2.37s, collect 9.26s, tests 1.02s, environment 2.58s, prepare 456ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

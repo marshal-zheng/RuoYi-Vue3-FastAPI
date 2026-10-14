@@ -1,30 +1,30 @@
-import { delay as mswDelay, http } from "msw";
+import { delay as mswDelay, http } from 'msw';
 
 import type {
   MockProjectRepository,
   MockProjectVersionRepository,
   MockSimulationReadRepository,
   MockTopologyRepository,
-} from "../store/repositories";
-import type { MockDataSource } from "../store";
-import type { MockRuntimeHandler, MockStrategy } from "../types";
+} from '../store/repositories';
+import type { MockDataSource } from '../store';
+import type { MockRuntimeHandler, MockStrategy } from '../types';
 import {
   createOverlayPageResponse,
   createOverlayProblemResponse,
   createOverlaySuccessResponse,
-} from "./response";
-import { resolveMockOverlayEntries } from "./runtime";
+} from './response';
+import { resolveMockOverlayEntries } from './runtime';
 import type {
   MockOverlayActivationInput,
   MockOverlayHttpMethod,
   MockOverlayRegistryEntry,
-} from "./types";
+} from './types';
 
 export interface ReadonlyOverlayDataSource {
   init(): Promise<void>;
-  project: Pick<MockProjectRepository, "list" | "get">;
-  version: Pick<MockProjectVersionRepository, "list" | "get">;
-  topology: Pick<MockTopologyRepository, "getByProjectVersion">;
+  project: Pick<MockProjectRepository, 'list' | 'get'>;
+  version: Pick<MockProjectVersionRepository, 'list' | 'get'>;
+  topology: Pick<MockTopologyRepository, 'getByProjectVersion'>;
   simulation: MockSimulationReadRepository;
 }
 
@@ -44,23 +44,19 @@ function toNumber(value: unknown, fallback?: number): number | undefined {
 function queryPage(request: Request) {
   const searchParams = new URL(request.url).searchParams;
   return {
-    page: toNumber(searchParams.get("page"), 1) ?? 1,
-    pageSize:
-      toNumber(
-        searchParams.get("pageSize") ?? searchParams.get("page_size"),
-        10,
-      ) ?? 10,
+    page: toNumber(searchParams.get('page'), 1) ?? 1,
+    pageSize: toNumber(searchParams.get('pageSize') ?? searchParams.get('page_size'), 10) ?? 10,
   };
 }
 
 function normalizeApiPrefix(apiPrefix: string) {
-  const normalized = apiPrefix.startsWith("/") ? apiPrefix : `/${apiPrefix}`;
-  return normalized.replace(/\/+$/, "") || "/api";
+  const normalized = apiPrefix.startsWith('/') ? apiPrefix : `/${apiPrefix}`;
+  return normalized.replace(/\/+$/, '') || '/api';
 }
 
 function pathWithApiPrefix(mswPath: string, apiPrefix: string) {
   const prefix = normalizeApiPrefix(apiPrefix);
-  const suffix = mswPath.replace(/^\/api(?=\/|$)/, "");
+  const suffix = mswPath.replace(/^\/api(?=\/|$)/, '');
   if (/^https?:\/\//i.test(prefix)) {
     return `${prefix}${suffix}`;
   }
@@ -69,19 +65,19 @@ function pathWithApiPrefix(mswPath: string, apiPrefix: string) {
 
 function handlerForMethod(method: MockOverlayHttpMethod) {
   switch (method) {
-    case "GET":
+    case 'GET':
       return http.get;
-    case "POST":
+    case 'POST':
       return http.post;
-    case "PUT":
+    case 'PUT':
       return http.put;
-    case "DELETE":
+    case 'DELETE':
       return http.delete;
-    case "PATCH":
+    case 'PATCH':
       return http.patch;
-    case "OPTIONS":
+    case 'OPTIONS':
       return http.options;
-    case "HEAD":
+    case 'HEAD':
       return http.head;
     default:
       return http.all;
@@ -89,7 +85,7 @@ function handlerForMethod(method: MockOverlayHttpMethod) {
 }
 
 export function createReadonlyOverlayDataSource(
-  dataSource: MockDataSource,
+  dataSource: MockDataSource
 ): ReadonlyOverlayDataSource {
   return {
     init: () => dataSource.init(),
@@ -109,8 +105,7 @@ export function createReadonlyOverlayDataSource(
       listSessions: () => dataSource.simulation.listSessions(),
       getSession: (sessionId) => dataSource.simulation.getSession(sessionId),
       listFrames: (sessionId) => dataSource.simulation.listFrames(sessionId),
-      listMessages: (sessionId) =>
-        dataSource.simulation.listMessages(sessionId),
+      listMessages: (sessionId) => dataSource.simulation.listMessages(sessionId),
       listEvents: (sessionId) => dataSource.simulation.listEvents(sessionId),
     },
   };
@@ -119,23 +114,18 @@ export function createReadonlyOverlayDataSource(
 async function topologyProjection(
   request: Request,
   params: Record<string, unknown>,
-  dataSource: ReadonlyOverlayDataSource,
+  dataSource: ReadonlyOverlayDataSource
 ) {
   const projectId = toNumber(params.projectId);
   const searchParams = new URL(request.url).searchParams;
   const versionId =
-    toNumber(searchParams.get("version_id")) ??
-    toNumber(searchParams.get("versionId"));
+    toNumber(searchParams.get('version_id')) ?? toNumber(searchParams.get('versionId'));
   const topology =
     projectId && versionId
       ? await dataSource.topology.getByProjectVersion(projectId, versionId)
       : undefined;
   const topologyId = topology?.id
-    ? Math.abs(
-        topology.id
-          .split("")
-          .reduce((total, char) => total + char.charCodeAt(0), 0),
-      )
+    ? Math.abs(topology.id.split('').reduce((total, char) => total + char.charCodeAt(0), 0))
     : (projectId ?? 0);
 
   return {
@@ -148,16 +138,14 @@ async function topologyProjection(
   };
 }
 
-async function readonlySimulationProjection(
-  dataSource: ReadonlyOverlayDataSource,
-) {
+async function readonlySimulationProjection(dataSource: ReadonlyOverlayDataSource) {
   const sessions = await dataSource.simulation.listSessions();
   const session = sessions[0] ?? null;
   return session
     ? {
         ...session,
         readonly: true,
-        status: session.status ?? "readonly",
+        status: session.status ?? 'readonly',
       }
     : null;
 }
@@ -166,48 +154,46 @@ async function createSuccessProjection(
   entry: MockOverlayRegistryEntry,
   request: Request,
   params: Record<string, unknown>,
-  dataSource: ReadonlyOverlayDataSource,
+  dataSource: ReadonlyOverlayDataSource
 ) {
-  if (entry.response?.projection === "empty-page") {
+  if (entry.response?.projection === 'empty-page') {
     return {
-      kind: "page" as const,
+      kind: 'page' as const,
       items: [],
       total: 0,
       ...queryPage(request),
     };
   }
 
-  if (entry.response?.projection === "empty-list") {
+  if (entry.response?.projection === 'empty-list') {
     return {
-      kind: "data" as const,
+      kind: 'data' as const,
       data: [],
     };
   }
 
-  if (entry.response?.projection === "readonly-view") {
+  if (entry.response?.projection === 'readonly-view') {
     return {
-      kind: "data" as const,
+      kind: 'data' as const,
       data: await readonlySimulationProjection(dataSource),
     };
   }
 
-  if (entry.target.handlerTag === "project:topology:get") {
+  if (entry.target.handlerTag === 'project:topology:get') {
     return {
-      kind: "data" as const,
+      kind: 'data' as const,
       data: await topologyProjection(request, params, dataSource),
     };
   }
 
   return {
-    kind: "data" as const,
+    kind: 'data' as const,
     data: null,
   };
 }
 
 function shouldReturnProblem(entry: MockOverlayRegistryEntry) {
-  return ["problem", "forbidden", "timeout", "unsupported"].includes(
-    entry.stateType,
-  );
+  return ['problem', 'forbidden', 'timeout', 'unsupported'].includes(entry.stateType);
 }
 
 function createSingleOverlayHandler(
@@ -216,7 +202,7 @@ function createSingleOverlayHandler(
     strategy: MockStrategy;
     apiPrefix: string;
     dataSource: ReadonlyOverlayDataSource;
-  },
+  }
 ): MockRuntimeHandler {
   const register = handlerForMethod(entry.target.method);
   const path = pathWithApiPrefix(entry.target.mswPath, options.apiPrefix);
@@ -240,10 +226,10 @@ function createSingleOverlayHandler(
       entry,
       request,
       params as Record<string, unknown>,
-      options.dataSource,
+      options.dataSource
     );
 
-    if (projection.kind === "page") {
+    if (projection.kind === 'page') {
       return createOverlayPageResponse({
         request,
         entry,
@@ -265,19 +251,17 @@ function createSingleOverlayHandler(
 }
 
 export function createMockOverlayHandlers(
-  options: CreateMockOverlayHandlersOptions,
+  options: CreateMockOverlayHandlersOptions
 ): MockRuntimeHandler[] {
   const entries = resolveMockOverlayEntries(options.overlays);
   if (!entries.length) return [];
 
-  const readOnlyDataSource = createReadonlyOverlayDataSource(
-    options.dataSource,
-  );
+  const readOnlyDataSource = createReadonlyOverlayDataSource(options.dataSource);
   return entries.map((entry) =>
     createSingleOverlayHandler(entry, {
       strategy: options.strategy,
-      apiPrefix: options.apiPrefix ?? "/api",
+      apiPrefix: options.apiPrefix ?? '/api',
       dataSource: readOnlyDataSource,
-    }),
+    })
   );
 }

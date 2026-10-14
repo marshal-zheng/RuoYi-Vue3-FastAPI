@@ -1,0 +1,35 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/api/protocol/export.contract.test.ts > protocol export wire contract > submits the real Form parameter and decodes the XLSX response as binary 35ms
+   → protocolId Form field is required
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/api/protocol/export.contract.test.ts > protocol export wire contract > submits the real Form parameter and decodes the XLSX response as binary
+Error: protocolId Form field is required
+ ❯ createRequestError src/utils/http.ts:281:17
+    279| 
+    280| const createRequestError = (problem: ProblemDetails, meta: HttpContrac…
+    281|   const error = new Error(problem.detail || problem.title || '请求失败') a…
+       |                 ^
+    282|   error.problem = problem;
+    283|   error.meta = meta;
+ ❯ Object.onError src/utils/http.ts:488:11
+ ❯ node_modules/@zxio/http/dist/esm/client.js:72:72
+ ❯ HttpClientImpl.runErrorHooks node_modules/@zxio/http/dist/esm/client.js:272:19
+ ❯ executeRequest node_modules/@zxio/http/dist/esm/client.js:142:28
+ ❯ src/api/protocol/export.contract.test.ts:31:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { problem: { type: 'about:blank', title: '参数验证失败', status: 422, detail: 'protocolId Form field is required', instance: '', errorCode: undefined, requestId: undefined, traceId: undefined, errors: undefined }, meta: { status: 422, requestId: undefined, traceId: undefined, location: undefined, retryAfter: undefined, rateLimitLimit: undefined, rateLimitRemaining: undefined, rateLimitReset: undefined }, status: 422 }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  02:16:32
+   Duration  2.23s (transform 1.09s, setup 297ms, collect 1.43s, tests 36ms, environment 238ms, prepare 31ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

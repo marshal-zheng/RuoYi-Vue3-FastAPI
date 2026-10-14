@@ -1,8 +1,14 @@
+export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
+import type { HttpOffsetPage } from '@/types/http-contract';
+import type {
+  GetSystemProjectListProjectListGetData,
+  ProjectModel,
+} from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 
 // 查询工程列表
-export function listProject(query?: Record<string, any>) {
-  return request({
+export function listProject(query?: NonNullable<GetSystemProjectListProjectListGetData['query']>) {
+  return request<HttpOffsetPage<ProjectRecord>>({
     url: '/project/list',
     method: 'get',
     params: query,
@@ -11,7 +17,7 @@ export function listProject(query?: Record<string, any>) {
 
 // 查询工程详细
 export function getProject(projectId: number | string) {
-  return request({
+  return request<ProjectRecord>({
     url: '/project/' + projectId,
     method: 'get',
     feedback: { mode: 'auto' },
@@ -19,8 +25,8 @@ export function getProject(projectId: number | string) {
 }
 
 // 新增工程
-export function addProject(data: Record<string, any>) {
-  return request({
+export function addProject(data: ProjectModel) {
+  return request<ProjectRecord>({
     url: '/project',
     method: 'post',
     data: data,
@@ -29,8 +35,8 @@ export function addProject(data: Record<string, any>) {
 }
 
 // 修改工程
-export function updateProject(data: Record<string, any>) {
-  return request({
+export function updateProject(data: ProjectModel) {
+  return request<ProjectRecord>({
     url: '/project',
     method: 'put',
     data: data,
@@ -40,7 +46,7 @@ export function updateProject(data: Record<string, any>) {
 
 // 删除工程
 export function delProject(projectId: number | string) {
-  return request({
+  return request<null>({
     url: '/project/' + projectId,
     method: 'delete',
     feedback: { mode: 'auto', key: 'project.project.delete' },

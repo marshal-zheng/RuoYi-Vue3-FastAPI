@@ -1,6 +1,7 @@
 <template></template>
 
 <script setup>
+import { ElMessage } from 'element-plus';
 import { onMounted, watch, nextTick } from 'vue';
 import { useOptionalGraphInstance } from '../../ZxFlow/composables/useGraphInstance';
 import { useGraphStore } from '../../ZxFlow/composables/useGraphStore';
@@ -165,7 +166,9 @@ const loadAndSetData = async (dataSource) => {
 
     // 等待图实例准备好，然后进行布局
     waitForGraphAndLayout(nodes);
-  } catch (error) {}
+  } catch {
+    ElMessage.error('图数据加载失败，请检查节点和连接配置');
+  }
 };
 
 // 获取端口颜色的辅助函数
@@ -254,7 +257,9 @@ watch(
       await dagreLayout(g, newDirection, 100, 80);
       refreshCollapseState(g);
       g.centerContent?.();
-    } catch (error) {}
+    } catch {
+      ElMessage.error('图布局更新失败');
+    }
   }
 );
 

@@ -162,20 +162,21 @@ function queryTransform(query) {
 async function loadAuditData(params) {
   try {
     return await list(params);
-  } catch (e) {
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 function onSearch({ handleRefresh }) {
   handleRefresh();
 }
 function onSortChange(c, { updateState, handleRefresh }) {
-  updateState({ orderByColumn: c.prop, isAsc: c.order });
+  updateState('query.orderByColumn', c.prop);
+  updateState('query.isAsc', c.order);
   handleRefresh();
 }
 function handleSelectionChange(selection) {

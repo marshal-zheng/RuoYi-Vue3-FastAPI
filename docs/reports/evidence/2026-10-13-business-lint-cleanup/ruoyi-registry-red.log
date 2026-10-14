@@ -1,0 +1,41 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+stderr | src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false
+[Vue warn]: System: [feedback] missing registry key: missing.key
+
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > resolves known keys from the registry 1ms
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=true 1ms
+ × src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false 2ms
+   → expected [Function] to throw an error
+ ✓ src/utils/feedback/registry.test.ts > feedback registry > rejects invalid registry entries during startup validation 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/feedback/registry.test.ts > feedback registry > rejects unregistered keys when DEV=false
+AssertionError: expected [Function] to throw an error
+
+- Expected: 
+null
+
++ Received: 
+undefined
+
+ ❯ src/utils/feedback/registry.test.ts:20:63
+     18|   it.each([true, false])('rejects unregistered keys when DEV=%s', (isD…
+     19|     vi.stubEnv('DEV', isDev);
+     20|     expect(() => resolveFeedbackRegistryEntry('missing.key')).toThrow(…
+       |                                                               ^
+     21|   });
+     22| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 3 passed (4)
+   Start at  22:43:05
+   Duration  1.53s (transform 398ms, setup 729ms, collect 65ms, tests 7ms, environment 386ms, prepare 38ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

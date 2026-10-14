@@ -1,0 +1,96 @@
+{
+  "status": "pass",
+  "node": "v22.22.1",
+  "pnpm": "9.5.0",
+  "artifacts": [
+    {
+      "packageName": "@zxio/theme-consumer",
+      "version": "1.0.0",
+      "tarball": "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/zxio-theme-consumer-1.0.0.tgz",
+      "sha256": "sha256:13a9b51b76b422a1820de52d9fef48015aff33f5ab92ba99fa8db835ca7acab2"
+    },
+    {
+      "packageName": "@acme/widget",
+      "version": "1.0.0",
+      "tarball": "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/acme-widget-1.0.0.tgz",
+      "sha256": "sha256:88a8d178e54bc457e5ed8fb7733350b80677920dbc30ab43c818d5ab5a4e96ab"
+    },
+    {
+      "packageName": "@example/panel",
+      "version": "1.0.0",
+      "tarball": "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/example-panel-1.0.0.tgz",
+      "sha256": "sha256:9615e908d05463ed770b501826a4685da20d68ab2515932ee4f3b85c350561d9"
+    }
+  ],
+  "installation": {
+    "@zxio/theme-consumer": "file:/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/zxio-theme-consumer-1.0.0.tgz",
+    "@acme/widget": "file:/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/acme-widget-1.0.0.tgz",
+    "@example/panel": "file:/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/tarballs/example-panel-1.0.0.tgz",
+    "vue": "3.5.40",
+    "typescript": "5.5.4"
+  },
+  "pureCore": {
+    "status": "pass",
+    "graph": [
+      {
+        "path": "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/core-only",
+        "private": true
+      }
+    ],
+    "types": [
+      "ESM",
+      "CJS"
+    ]
+  },
+  "esm": "pass",
+  "cjs": "pass",
+  "types": [
+    "Bundler",
+    "NodeNext",
+    "Node16"
+  ],
+  "crossCopy": {
+    "status": "pass",
+    "copies": [
+      "ESM A portal",
+      "CJS B CSS"
+    ],
+    "events": [
+      "acquire-portal",
+      "bind-css",
+      "release-css",
+      "release-portal"
+    ],
+    "standalone": 2,
+    "subscriptionsAfterDispose": 0
+  },
+  "browserIdentity": {
+    "engine": "chromium",
+    "via": "launch",
+    "version": "148.0.7778.96"
+  },
+  "modules": [
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@zxio+theme-consumer@file+..+tarballs+zxio-theme-consumer-1.0.0.tgz_vue@3.5.40_typescript@5.5.4_/node_modules/@zxio/theme-consumer/dist/esm/index.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@zxio+theme-consumer@file+..+tarballs+zxio-theme-consumer-1.0.0.tgz_vue@3.5.40_typescript@5.5.4_/node_modules/@zxio/theme-consumer/dist/esm/vue/index.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/packed-standalone.ts",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/consumer-copy-b/dist/cjs/index.cjs",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@example+panel@file+..+tarballs+example-panel-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs_j4bh6gyde6o3xb3fieawjy6524/node_modules/@example/panel/dist/vue.mjs",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/consumer-copy-b/dist/cjs/vue/index.cjs",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/entry.ts",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@acme+widget@file+..+tarballs+acme-widget-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs+zxi_me6wz5cvadl6lobf4nxnznh2ru/node_modules/@acme/widget/dist/vue.mjs",
+    "\u0000/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/consumer-copy-b/dist/cjs/vue/index.cjs?commonjs-exports",
+    "\u0000/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/consumer-copy-b/dist/cjs/index.cjs?commonjs-proxy",
+    "\u0000/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/vue@3.5.40_typescript@5.5.4/node_modules/vue/dist/vue.runtime.esm-bundler.js?commonjs-proxy",
+    "\u0000commonjsHelpers.js",
+    "\u0000/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/consumer-copy-b/dist/cjs/index.cjs?commonjs-exports",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@example+panel@file+..+tarballs+example-panel-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs_j4bh6gyde6o3xb3fieawjy6524/node_modules/@example/panel/dist/core.mjs",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@acme+widget@file+..+tarballs+acme-widget-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs+zxi_me6wz5cvadl6lobf4nxnznh2ru/node_modules/@acme/widget/dist/core.mjs",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/vue@3.5.40_typescript@5.5.4/node_modules/vue/dist/vue.runtime.esm-bundler.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@example+panel@file+..+tarballs+example-panel-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs_j4bh6gyde6o3xb3fieawjy6524/node_modules/@example/panel/dist/style.css",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@acme+widget@file+..+tarballs+acme-widget-1.0.0.tgz_@zxio+theme-consumer@file+..+tarballs+zxi_me6wz5cvadl6lobf4nxnznh2ru/node_modules/@acme/widget/dist/style.css",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@vue+shared@3.5.40/node_modules/@vue/shared/dist/shared.esm-bundler.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@vue+runtime-dom@3.5.40/node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@vue+runtime-core@3.5.40/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js",
+    "/Users/hqz/Downloads/element-plus/node_modules/.consumer-packed/consumer/node_modules/.pnpm/@vue+reactivity@3.5.40/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js"
+  ]
+}

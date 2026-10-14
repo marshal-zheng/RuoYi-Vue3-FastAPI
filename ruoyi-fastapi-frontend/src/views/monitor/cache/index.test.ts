@@ -1,11 +1,21 @@
 import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Cache from './index.vue';
+import type { App, ShallowRef } from 'vue';
+import type { useZxChartThemeProjection } from '@zxio/zxui';
+import modal from '@/plugins/modal';
 
-const state = vi.hoisted(() => ({
+type ProjectionFixture = { ok: true; value: { identity: string } } | { ok: false };
+type ProjectionInput = Parameters<typeof useZxChartThemeProjection>[0];
+
+const state: {
+  getCache: ReturnType<typeof vi.fn>;
+  projection?: ShallowRef<ProjectionFixture>;
+  resolveManifest?: ProjectionInput['resolveManifest'];
+} = vi.hoisted(() => ({
   getCache: vi.fn(),
-  projection: null as any,
-  resolveManifest: null as any,
+  projection: undefined,
+  resolveManifest: undefined,
 }));
 
 vi.mock('@/api/monitor/cache', () => ({ getCache: state.getCache }));
@@ -17,9 +27,9 @@ vi.mock('virtual:zxui-theme-deployment', () => ({
 }));
 vi.mock('@zxio/zxui', async () => {
   const { shallowRef } = await import('vue');
-  state.projection = shallowRef({ ok: true, value: { identity: 'light' } });
+  state.projection = shallowRef<ProjectionFixture>({ ok: true, value: { identity: 'light' } });
   return {
-    useZxChartThemeProjection: (input: any) => {
+    useZxChartThemeProjection: (input: ProjectionInput) => {
       state.resolveManifest = input.resolveManifest;
       return state.projection;
     },
@@ -38,7 +48,7 @@ vi.mock('@zxio/chart', async () => {
 
 describe('cache monitor chart theme integration', () => {
   beforeEach(() => {
-    state.projection.value = { ok: true, value: { identity: 'light' } };
+    state.projection!.value = { ok: true, value: { identity: 'light' } };
     state.getCache.mockResolvedValue({
       info: { used_memory_human: '12M', used_cpu_user_children: '1.2' },
       commandStats: [{ name: 'get', value: 4 }],
@@ -50,7 +60,13 @@ describe('cache monitor chart theme integration', () => {
     const closeLoading = vi.fn();
     const wrapper = mount(Cache, {
       global: {
-        config: { globalProperties: { $modal: { loading, closeLoading } } },
+        plugins: [
+          {
+            install(app: App) {
+              app.config.globalProperties.$modal = { ...modal, loading, closeLoading };
+            },
+          },
+        ],
         stubs: {
           ElRow: { template: '<div><slot /></div>' },
           ElCol: { template: '<div><slot /></div>' },
@@ -76,11 +92,11 @@ describe('cache monitor chart theme integration', () => {
       detail: { formatter: '12M' },
       data: [{ value: 12, name: '内存消耗' }],
     });
-    expect(state.resolveManifest('default')).toEqual({
+    expect(state.resolveManifest!('default')).toEqual({
       identity: { themeId: 'default' },
     });
     const options = charts.map((chart) => chart.props('options'));
-    state.projection.value = { ok: true, value: { identity: 'dark' } };
+    state.projection!.value = { ok: true, value: { identity: 'dark' } };
     await flushPromises();
     for (const [index, chart] of charts.entries()) {
       expect(chart.props('themeProjection')).toEqual({ identity: 'dark' });
@@ -88,7 +104,7 @@ describe('cache monitor chart theme integration', () => {
     }
     expect(state.getCache).toHaveBeenCalledTimes(1);
     expect(closeLoading).toHaveBeenCalledTimes(1);
-    state.projection.value = { ok: false };
+    state.projection!.value = { ok: false };
     await flushPromises();
     expect(wrapper.findAllComponents({ name: 'ZxChart' })).toHaveLength(0);
     wrapper.unmount();

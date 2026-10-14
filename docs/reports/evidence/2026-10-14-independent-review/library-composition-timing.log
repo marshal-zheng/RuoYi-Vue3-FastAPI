@@ -1,0 +1,15 @@
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+ WARN  Issue while reading "/Users/hqz/Downloads/element-plus/.npmrc". Failed to replace env in config: ${NPM_BASIC_AUTH}
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/zxui/theme-host/__tests__/composition-performance.test.ts (1 test) 16493ms
+   ✓ records 20 uninstrumented real Host composition lifecycle samples 16493ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  02:54:03
+   Duration  18.34s (transform 843ms, setup 46ms, collect 1.46s, tests 16.49s, environment 179ms, prepare 35ms)
+

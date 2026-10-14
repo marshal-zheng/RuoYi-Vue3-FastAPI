@@ -3,12 +3,21 @@
  * 提供常用的校验规则，类似 async-validator
  */
 
-import type { ValidationRule, ValidatorFunction, GlobalValidator, ValidationIssue } from './types';
+import type {
+  ValidationRule,
+  ValidatorFunction,
+  GlobalValidator,
+  ValidationIssue,
+  ValidationRow,
+  ValidationContext,
+} from './types';
+
+export const readField = (row: object, field: string): unknown => Reflect.get(row, field);
 
 // ==================== 工具函数 ====================
 
 /** 判断值是否为空 */
-export const isEmpty = (value: any): boolean => {
+export const isEmpty = (value: unknown): boolean => {
   if (value === null || value === undefined) return true;
   if (typeof value === 'string' && value.trim() === '') return true;
   if (Array.isArray(value) && value.length === 0) return true;
@@ -16,14 +25,14 @@ export const isEmpty = (value: any): boolean => {
 };
 
 /** 解析数值 */
-export const parseNumber = (value: any): number | null => {
+export const parseNumber = (value: unknown): number | null => {
   if (value === null || value === undefined || value === '') return null;
   const num = Number(value);
   return Number.isFinite(num) ? num : null;
 };
 
 /** 获取值的长度 */
-export const getLength = (value: any): number => {
+export const getLength = (value: unknown): number => {
   if (value === null || value === undefined) return 0;
   if (typeof value === 'string') return value.length;
   if (Array.isArray(value)) return value.length;
@@ -32,7 +41,7 @@ export const getLength = (value: any): number => {
 
 // ==================== 类型校验器 ====================
 
-const typeValidators: Record<string, (value: any) => boolean> = {
+const typeValidators: Record<string, (value: unknown) => boolean> = {
   string: (value) => typeof value === 'string',
   number: (value) => {
     const num = parseNumber(value);
@@ -56,6 +65,7 @@ const typeValidators: Record<string, (value: any) => boolean> = {
   object: (value) => typeof value === 'object' && value !== null && !Array.isArray(value),
   date: (value) => {
     if (value instanceof Date) return !isNaN(value.getTime());
+    if (typeof value !== 'string' && typeof value !== 'number') return false;
     const date = new Date(value);
     return !isNaN(date.getTime());
   },
@@ -79,10 +89,10 @@ const typeValidators: Record<string, (value: any) => boolean> = {
 /**
  * 执行单条规则校验
  */
-export const validateByRule = (
-  value: any,
-  rule: ValidationRule,
-  row: any,
+export const validateByRule = <Row extends object = ValidationRow>(
+  value: unknown,
+  rule: ValidationRule<Row>,
+  row: Row,
   rowIndex: number,
   field: string
 ): string | null => {
@@ -194,11 +204,11 @@ export const validateByRule = (
 };
 
 /** 获取消息 */
-const getMessage = (
-  message: string | ((value: any, row: any) => string) | undefined,
+const getMessage = <Row extends object>(
+  message: string | ((value: unknown, row: Row) => string) | undefined,
   defaultMsg: string,
-  value: any,
-  row: any
+  value: unknown,
+  row: Row
 ): string => {
   if (!message) return defaultMsg;
   if (typeof message === 'function') return message(value, row);
@@ -279,7 +289,7 @@ export const url = (message?: string): ValidationRule => ({
 });
 
 /** 枚举规则 */
-export const oneOf = (values: any[], message?: string): ValidationRule => ({
+export const oneOf = (values: unknown[], message?: string): ValidationRule => ({
   enum: values,
   message: message || `必须是 [${values.join(', ')}] 之一`,
 });
@@ -375,16 +385,19 @@ export const scale = (zeroMessage?: string, typeMessage?: string): ValidationRul
 /**
  * 创建带宽校验器
  */
-export const createBandwidthValidator = (options: {
+export const createBandwidthValidator = <
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+>(options: {
   /** 获取帧长度的函数 */
-  getFrameLength: (data: any[]) => number;
+  getFrameLength: (data: Row[]) => number;
   /** 获取传输频率的函数 */
-  getFrequency: (context?: any) => number;
+  getFrequency: (context?: Partial<Context>) => number;
   /** 获取带宽限制的函数 */
-  getBandwidthLimit: (context?: any) => number;
+  getBandwidthLimit: (context?: Partial<Context>) => number;
   /** 格式化带宽显示 */
   formatBandwidth?: (bps: number) => string;
-}): GlobalValidator => {
+}): GlobalValidator<Row, Context> => {
   const defaultFormat = (bps: number): string => {
     if (bps >= 1e9) return `${(bps / 1e9).toFixed(2)} Gbps`;
     if (bps >= 1e6) return `${(bps / 1e6).toFixed(2)} Mbps`;
@@ -437,16 +450,19 @@ export const createBandwidthValidator = (options: {
 /**
  * 创建帧长度校验器
  */
-export const createFrameLengthValidator = (options: {
+export const createFrameLengthValidator = <
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+>(options: {
   /** 获取实际帧长度的函数 */
-  getActualLength: (data: any[]) => number;
+  getActualLength: (data: Row[]) => number;
   /** 获取配置的帧长度限制 */
-  getConfiguredLimit?: (context?: any) => number | undefined;
+  getConfiguredLimit?: (context?: Partial<Context>) => number | undefined;
   /** 总线类型帧长度限制 */
   busLimits?: Record<string, number>;
   /** 获取当前总线类型 */
-  getBusType?: (context?: any) => string | undefined;
-}): GlobalValidator => {
+  getBusType?: (context?: Partial<Context>) => string | undefined;
+}): GlobalValidator<Row, Context> => {
   return {
     name: 'frameLength',
     validator: (data, context) => {
@@ -489,22 +505,25 @@ export const createFrameLengthValidator = (options: {
 /**
  * 创建数值范围溢出校验器
  */
-export const createValueRangeValidator = (options: {
+export const createValueRangeValidator = <
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+>(options: {
   /** 数据类型字段名 */
   dataTypeField: string;
   /** 值域字段名 */
   valueRangeField: string;
   /** 数据类型对应的值范围 */
   typeRanges: Record<string, { min: number; max: number }>;
-}): GlobalValidator => {
+}): GlobalValidator<Row, Context> => {
   return {
     name: 'valueRange',
     validator: (data) => {
       const issues: ValidationIssue[] = [];
 
       data.forEach((row, index) => {
-        const dataType = row[options.dataTypeField];
-        const valueRange = row[options.valueRangeField];
+        const dataType = readField(row, options.dataTypeField);
+        const valueRange = readField(row, options.valueRangeField);
 
         if (!dataType || !valueRange) return;
 
@@ -542,22 +561,25 @@ export const createValueRangeValidator = (options: {
 /**
  * 创建唯一性校验器
  */
-export const createUniqueValidator = (options: {
+export const createUniqueValidator = <
+  Row extends object = ValidationRow,
+  Context extends object = ValidationContext,
+>(options: {
   /** 需要唯一的字段名 */
   field: string;
   /** 字段显示名称 */
   fieldLabel?: string;
   /** 是否忽略空值 */
   ignoreEmpty?: boolean;
-}): GlobalValidator => {
+}): GlobalValidator<Row, Context> => {
   return {
     name: `unique-${options.field}`,
     validator: (data) => {
       const issues: ValidationIssue[] = [];
-      const seen = new Map<any, number>();
+      const seen = new Map<unknown, number>();
 
       data.forEach((row, index) => {
-        const value = row[options.field];
+        const value = readField(row, options.field);
         if (options.ignoreEmpty !== false && isEmpty(value)) return;
 
         if (seen.has(value)) {

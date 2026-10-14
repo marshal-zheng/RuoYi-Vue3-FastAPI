@@ -98,7 +98,7 @@ import { ref, computed } from 'vue';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getUser, addUser, updateUser } from '@/api/system/user';
 
-const props = defineProps({
+defineProps({
   deptOptions: { type: Array, default: () => [] },
   statusOptions: { type: Array, default: () => [] },
   sexOptions: { type: Array, default: () => [] },

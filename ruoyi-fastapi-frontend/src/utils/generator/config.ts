@@ -1,3 +1,4 @@
+import type { GeneratorValue } from './types';
 import { generatorTags } from './identity';
 
 // 表单配置接口
@@ -56,7 +57,7 @@ export interface BaseComponent {
   tag: string;
   tagIcon: string;
   placeholder?: string;
-  defaultValue: any;
+  defaultValue: GeneratorValue;
   span: number;
   labelWidth: number | null;
   style?: ComponentStyle;
@@ -214,7 +215,7 @@ export interface LayoutComponent {
   tagIcon: string;
   label: string;
   layoutTree?: boolean;
-  children?: any[];
+  children?: (BaseComponent | LayoutComponent)[];
   document: string;
   type?: string;
   justify?: string;
@@ -242,7 +243,7 @@ export const formConf: FormConfig = {
   formBtns: true,
 };
 
-export const inputComponents: InputComponent[] = [
+export const inputComponents: (InputComponent | InputNumberComponent)[] = [
   {
     label: '单行文本',
     tag: generatorTags.input,
@@ -334,7 +335,7 @@ export const inputComponents: InputComponent[] = [
     regList: [],
     changeTag: true,
     document: 'https://element-plus.org/zh-CN/component/input-number',
-  } as any,
+  },
 ];
 
 export const selectComponents: (

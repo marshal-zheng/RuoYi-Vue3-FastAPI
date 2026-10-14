@@ -1,5 +1,6 @@
 <template>
   <ZxContentWrap
+    fill
     title="设备端口配置"
     message="双击设备查看协议列表 | 双击端口编辑 | 右键设备可添加端口 | 右键端口可编辑/删除"
   >
@@ -10,7 +11,7 @@
       <ZxButton type="primary" icon="Plus" @click="handleAddPort">添加端口</ZxButton>
       <ZxButton type="primary" icon="CircleCheck" @click="handleSave">保存</ZxButton>
     </template>
-    <div class="h-[720px]">
+    <div data-zx-fill>
       <XFlow>
         <XFlowGraph
           ref="graphRef"
@@ -155,10 +156,6 @@ function getDefaultParams(interfaceType) {
   return cfg ? cloneDeep(cfg) : {};
 }
 
-function getDefaultMessageConfig() {
-  return null;
-}
-
 function normalizeInterfaceId(value) {
   if (typeof value === 'number' && !Number.isNaN(value)) {
     return value;
@@ -233,10 +230,6 @@ async function handleSave() {
   } finally {
     loading.value = false;
   }
-}
-
-function goBack() {
-  router.push('/device/list');
 }
 
 async function loadDeviceInfo() {
@@ -449,11 +442,15 @@ function updateGraphData() {
         portBody: {
           stroke: color,
           strokeWidth: isSelected ? 2 : 1,
-          fill: isSelected ? 'var(--zx-semantic-surface-selected-fill)' : 'var(--zx-semantic-surface-field-fill)',
+          fill: isSelected
+            ? 'var(--zx-semantic-surface-selected-fill)'
+            : 'var(--zx-semantic-surface-field-fill)',
         },
         portLabel: {
           text,
-          fill: isSelected ? 'var(--zx-semantic-surface-selected-on-text)' : 'var(--zx-semantic-surface-field-on-text)',
+          fill: isSelected
+            ? 'var(--zx-semantic-surface-selected-on-text)'
+            : 'var(--zx-semantic-surface-field-on-text)',
           fontWeight: isSelected ? 600 : 500,
         },
       },
@@ -649,8 +646,20 @@ function updatePortHighlight() {
       const isSelected =
         normalizedSelectedKey && normalizePortKey(port?.id) === normalizedSelectedKey;
       node.setPortProp(port.id, ['attrs', 'portBody', 'strokeWidth'], isSelected ? 2 : 1);
-      node.setPortProp(port.id, ['attrs', 'portBody', 'fill'], isSelected ? 'var(--zx-semantic-surface-selected-fill)' : 'var(--zx-semantic-surface-field-fill)');
-      node.setPortProp(port.id, ['attrs', 'portLabel', 'fill'], isSelected ? 'var(--zx-semantic-surface-selected-on-text)' : 'var(--zx-semantic-surface-field-on-text)');
+      node.setPortProp(
+        port.id,
+        ['attrs', 'portBody', 'fill'],
+        isSelected
+          ? 'var(--zx-semantic-surface-selected-fill)'
+          : 'var(--zx-semantic-surface-field-fill)'
+      );
+      node.setPortProp(
+        port.id,
+        ['attrs', 'portLabel', 'fill'],
+        isSelected
+          ? 'var(--zx-semantic-surface-selected-on-text)'
+          : 'var(--zx-semantic-surface-field-on-text)'
+      );
       node.setPortProp(port.id, ['attrs', 'portLabel', 'fontWeight'], isSelected ? 600 : 500);
     });
     node.setData({ ...node.getData(), selectedPortId: selectedPortId.value });
@@ -662,8 +671,6 @@ function handleBusTypeChange(busType) {
     generatePortName(busType, portForm.position);
   }
 }
-
-function handlePositionChange(position) {}
 
 function generatePortName(busType) {
   portForm.interfaceName = busType;

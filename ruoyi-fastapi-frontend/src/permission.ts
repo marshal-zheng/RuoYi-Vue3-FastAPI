@@ -1,18 +1,19 @@
-import router from "./router";
-import NProgress from "nprogress";
-import "nprogress/nprogress.css";
-import { getToken } from "@/utils/auth";
-import { isPathMatch } from "@/utils/validate";
-import { isRelogin } from "@/utils/request";
-import useUserStore from "@/store/modules/user";
-import useSettingsStore from "@/store/modules/settings";
-import usePermissionStore from "@/store/modules/permission";
-import type { RouteLocationNormalized, NavigationGuardNext } from "vue-router";
-import { isDemoOfflineMode, resolveRuntimeConfig } from "@/mocks/runtime/mode";
+import { showMessage } from '@/utils/feedback/message';
+import router from './router';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+import { getToken } from '@/utils/auth';
+import { isPathMatch } from '@/utils/validate';
+import { isRelogin } from '@/utils/request';
+import useUserStore from '@/store/modules/user';
+import useSettingsStore from '@/store/modules/settings';
+import usePermissionStore from '@/store/modules/permission';
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import { isDemoOfflineMode, resolveRuntimeConfig } from '@/mocks/runtime/mode';
 
 NProgress.configure({ showSpinner: false });
 
-const whiteList: string[] = ["/login", "/register"];
+const whiteList: string[] = ['/login', '/register'];
 let restoringSessionPromise: Promise<boolean> | null = null;
 
 const isWhiteList = (path: string): boolean => {
@@ -20,28 +21,22 @@ const isWhiteList = (path: string): boolean => {
 };
 
 const isAuthExpiredError = (error: unknown): boolean => {
-  const message = (error as { message?: string })?.message || "";
-  const status = (error as { response?: { status?: number } })?.response
-    ?.status;
-  return (
-    status === 401 || message.includes("401") || message.includes("会话已过期")
-  );
+  const message = (error as { message?: string })?.message || '';
+  const status = (error as { response?: { status?: number } })?.response?.status;
+  return status === 401 || message.includes('401') || message.includes('会话已过期');
 };
 
-const resolveLandingRedirect = (
-  path: string,
-  firstMenuPath: string,
-): string => {
+const resolveLandingRedirect = (path: string, firstMenuPath: string): string => {
   if (!firstMenuPath) {
-    return "";
+    return '';
   }
-  if (path === "/" || path === "") {
+  if (path === '/' || path === '') {
     return firstMenuPath;
   }
-  if (path === "/index" && firstMenuPath !== "/index") {
+  if (path === '/index' && firstMenuPath !== '/index') {
     return firstMenuPath;
   }
-  return "";
+  return '';
 };
 
 const restoreSessionOnce = (): Promise<boolean> => {
@@ -60,11 +55,7 @@ const shouldAttemptSilentSessionRestore = (): boolean => {
 };
 
 router.beforeEach(
-  (
-    to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
-    next: NavigationGuardNext,
-  ) => {
+  (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     NProgress.start();
     if (getToken()) {
       const permissionStore = usePermissionStore();
@@ -72,8 +63,8 @@ router.beforeEach(
         useSettingsStore().setTitle(to.meta.title as string);
       }
       /* has token*/
-      if (to.path === "/login") {
-        next({ path: "/" });
+      if (to.path === '/login') {
+        next({ path: '/' });
         NProgress.done();
       } else if (isWhiteList(to.path)) {
         next();
@@ -86,10 +77,7 @@ router.beforeEach(
             .then(() => permissionStore.generateRoutes())
             .then(() => {
               isRelogin.show = false;
-              const redirectPath = resolveLandingRedirect(
-                to.path,
-                permissionStore.firstMenuPath,
-              );
+              const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
               if (redirectPath) {
                 next({ path: redirectPath, replace: true });
               } else {
@@ -100,25 +88,16 @@ router.beforeEach(
               isRelogin.show = false;
               useUserStore()
                 .logOut({ silentSuccess: true, silentError: true })
-                .then(() => {
+                .then(async () => {
                   if (!isAuthExpiredError(err)) {
-                    const errorMsg =
-                      (err as { message?: string })?.message ||
-                      "获取用户信息失败";
-                    console.error(
-                      "[permission] restore user info failed:",
-                      errorMsg,
-                      err,
-                    );
+                    const errorMsg = (err as { message?: string })?.message || '获取用户信息失败';
+                    await showMessage({ type: 'error', message: errorMsg });
                   }
-                  next({ path: "/" });
+                  next({ path: '/' });
                 });
             });
         } else {
-          const redirectPath = resolveLandingRedirect(
-            to.path,
-            permissionStore.firstMenuPath,
-          );
+          const redirectPath = resolveLandingRedirect(to.path, permissionStore.firstMenuPath);
           if (redirectPath) {
             next({ path: redirectPath, replace: true });
             NProgress.done();
@@ -151,7 +130,7 @@ router.beforeEach(
           });
       }
     }
-  },
+  }
 );
 
 router.afterEach(() => {

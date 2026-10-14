@@ -1,0 +1,13 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback 2ms
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > preserves immediate return values without a trailing callback 0ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  22:33:35
+   Duration  1.53s (transform 842ms, setup 208ms, collect 1.10s, tests 3ms, environment 124ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

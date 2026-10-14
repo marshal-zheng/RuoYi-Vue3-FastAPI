@@ -167,8 +167,6 @@ import {
   XFlowHistory,
   XFlowGrid,
   XFlowBackground,
-  XFlowMinimap,
-  XFlowContextMenu,
   XFlowSnapline,
   XFlowExport,
 } from '../ZxFlow/components';
@@ -389,15 +387,12 @@ const emit = defineEmits([
 const currentLayout = ref(props.layout === 'vertical' ? 'vertical' : 'horizontal');
 const minimapKey = ref(0);
 const graphInstance = ref(null);
-const matrixViewRef = ref(null);
+
 const dagPageRef = ref(null);
 const isFullscreen = ref(false);
 const exportActions = useExport(graphInstance);
 
 // 矩阵视图对话框管理
-const matrixDialogVisible = ref(false);
-const matrixLoading = ref(false);
-const currentGraphData = ref(null);
 
 // 对齐线配置
 const snaplineEnabled = ref(props.snaplineConfig.enabled);
@@ -467,7 +462,6 @@ const {
   operators: operatorsProp,
   operatorsLoading,
   dndConfig,
-  layout,
   customMenuHandler,
   initialGraphData,
   graphLoading,
@@ -526,18 +520,9 @@ const finalOperatorsLoading = computed(() => {
 });
 
 // 矩阵视图相关计算属性
-const matrixDialogTitle = computed(() => {
-  return '矩阵视图 - 数据管理';
-});
 
 // 全屏图标
 const fullScreenIcon = computed(() => (isFullscreen.value ? ScaleToOriginal : FullScreen));
-
-const onToolbarLayoutChange = (dir) => {
-  currentLayout.value = dir === 'LR' ? 'horizontal' : 'vertical';
-  // 布局切换后强制重建小地图，避免插件偶发不同步/空白
-  minimapKey.value += 1;
-};
 
 // 通过单选按钮切换布局（横向/纵向），并实时应用 dagre 布局
 const onLayoutRadioChange = async (val) => {
@@ -602,9 +587,6 @@ const onGraphDataUpdated = () => {
 };
 
 // 保存数据处理
-const onSave = (graphData) => {
-  emit('save', graphData);
-};
 
 // 节点单击事件透传
 const onNodeClick = ({ node, event, type }) => {
@@ -613,61 +595,12 @@ const onNodeClick = ({ node, event, type }) => {
 
 // 节点双击事件透传
 const onNodeDblclick = ({ node, event, type }) => {
-  console.log('DAGPage - onNodeDblclick 被调用:', { node, event, type });
   emit('node-dblclick', { node, event, type });
 };
 
 // 显示矩阵视图对话框
-const showMatrixDialog = async () => {
-  try {
-    matrixLoading.value = true;
-    const graphData = getSaveData();
-    currentGraphData.value = graphData;
-    matrixDialogVisible.value = true;
-  } catch (error) {
-    console.error('获取图数据失败:', error);
-    ElMessage.error('获取图数据失败');
-  } finally {
-    matrixLoading.value = false;
-  }
-};
 
 // 矩阵视图事件处理
-const onMatrixGraphDataUpdate = (graphData) => {
-  currentGraphData.value = graphData;
-  // 同步更新到图形视图
-  if (graphInstance.value && graphData) {
-    // 这里需要重新加载图数据
-    // 可以触发 DagInitData 的数据更新
-    emit('save', graphData);
-  }
-};
-
-const onMatrixNodeAdd = (nodeData) => {
-  emit('matrix-node-add', nodeData);
-};
-
-const onMatrixNodeUpdate = (nodeData) => {
-  emit('matrix-node-update', nodeData);
-};
-
-const onMatrixNodeDelete = (nodeData) => {
-  emit('matrix-node-delete', nodeData);
-};
-
-const onMatrixRowClick = (data) => {
-  emit('matrix-row-click', data);
-};
-
-const onMatrixSave = (graphData) => {
-  // 保存矩阵视图的更改到图形视图
-  currentGraphData.value = graphData;
-  emit('save', graphData);
-};
-
-const onMatrixDialogClose = () => {
-  matrixDialogVisible.value = false;
-};
 
 // 全屏功能
 const toggleFullscreen = async () => {
@@ -709,18 +642,12 @@ const toggleFullscreen = async () => {
 
 // 监听全屏状态变化
 const handleFullscreenChange = () => {
-  const wasFullscreen = isFullscreen.value;
   isFullscreen.value = !!(
     document.fullscreenElement ||
     document.webkitFullscreenElement ||
     document.mozFullScreenElement ||
     document.msFullscreenElement
   );
-  console.log('全屏状态变化:', {
-    from: wasFullscreen,
-    to: isFullscreen.value,
-    showToolbar: showToolbar.value,
-  });
 };
 
 // 添加全屏事件监听
@@ -775,8 +702,6 @@ const getSaveData = () => {
 
     // 获取所有边数据，格式与data.json保持一致
     const edges = g.getEdges().map((edge) => {
-      const sourceNode = edge.getSourceNode();
-      const targetNode = edge.getTargetNode();
       const sourcePoint = edge.getSourcePoint();
       const targetPoint = edge.getTargetPoint();
       const edgeData = edge.getData() || {};
@@ -799,7 +724,6 @@ const getSaveData = () => {
       edges,
     };
 
-    console.log('格式化后的图数据:', graphData);
     return graphData;
   } catch (error) {
     console.error('获取图数据时出错:', error);
@@ -813,41 +737,8 @@ const getGraph = () => {
 };
 
 // 处理XFlowGraph的ready事件，确保standardInteractions正确初始化
-const onGraphReady = (graph, keyboardMgr, standardInteractions) => {
-  console.log('DAGPage - onGraphReady 被调用');
-  console.log('DAGPage - 图实例:', graph);
-  console.log('DAGPage - 图中的节点数量:', graph?.getNodes?.()?.length || 0);
-
-  // 保存图实例引用
+const onGraphReady = (graph) => {
   graphInstance.value = graph;
-
-  // 测试：手动触发一个点击事件看看
-  setTimeout(() => {
-    const nodes = graph?.getNodes?.() || [];
-    console.log('DAGPage - 2秒后检查节点:', nodes.length);
-    if (nodes.length > 0) {
-      console.log('DAGPage - 第一个节点:', nodes[0].id, nodes[0].getData());
-    }
-  }, 2000);
-
-  // 检查对齐线插件是否正确加载
-  setTimeout(() => {
-    const snaplinePlugin = graph.getPlugin('snapline');
-    if (snaplinePlugin) {
-      console.log('✅ Snapline plugin loaded successfully:', snaplinePlugin);
-      console.log('Snapline config:', {
-        enabled: snaplineEnabled.value,
-        tolerance: snaplineTolerance.value,
-        sharp: snaplineSharp.value,
-      });
-    } else {
-      console.warn('❌ Snapline plugin not found');
-    }
-  }, 1000);
-
-  // 这里可以添加额外的图形初始化逻辑
-  // standardInteractions已经在XFlowGraph中正确设置了selectionHandler
-  console.log('DAG Graph ready:', { graph, keyboardMgr, standardInteractions });
 };
 
 // 暴露给外部使用的方法

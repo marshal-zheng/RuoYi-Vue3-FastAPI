@@ -1,0 +1,9 @@
+{
+  "controllerFactoryWireMatchesFixture": true,
+  "cases": 10,
+  "command": "cd ruoyi-fastapi-backend && ./venv/bin/python - < ../ruoyi-fastapi-frontend/tests/fixtures/simulation-http-wire.py",
+  "services": "read-only fixtures",
+  "controllers": "real current controller functions",
+  "auditDecorators": "unwrapped start/stop endpoints; no DB writes",
+  "scope": "HTTP serialization and accepted-command status/location; excludes authentication and real simulation engine"
+}

@@ -207,7 +207,7 @@
 <script setup name="VersionList">
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
-import { ref, reactive, watch, getCurrentInstance } from 'vue';
+import { ref, watch, getCurrentInstance } from 'vue';
 import { ElMessage } from 'element-plus';
 import { View, Delete, Lock, CopyDocument, Download } from '@element-plus/icons-vue';
 import {
@@ -293,11 +293,6 @@ watch(
 );
 
 /** 筛选变化处理 */
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
-  updateState('pager.page', 1);
-  handleRefresh();
-}
 
 /** 搜索处理 */
 function onSearch({ handleRefresh, updateState }) {
@@ -431,15 +426,6 @@ function handleDeleteVersion(row, handleRefresh) {
 }
 
 /** 新增版本 */
-function handleAddVersion() {
-  // 重置表单
-  editVersionForm.value.versionId = null;
-  editVersionForm.value.versionNumber = '';
-  editVersionForm.value.versionName = '';
-  editVersionForm.value.description = '';
-
-  editVersionDialog.value = true;
-}
 
 /** 仿真版本（跳转到仿真页面） */
 function handleSimulateVersion(row) {

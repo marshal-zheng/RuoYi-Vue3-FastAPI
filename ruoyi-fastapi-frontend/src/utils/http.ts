@@ -10,8 +10,7 @@ import {
   type SuccessResolver,
 } from '@zxio/http';
 import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { h } from 'vue';
+import { ElMessageBox } from 'element-plus';
 
 import { getCsrfToken, getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
@@ -33,6 +32,7 @@ import {
   resolveFeedbackOptions,
 } from '@/utils/feedback/presenter';
 import type { FeedbackOptions, ResolvedFeedbackOptions } from '@/utils/feedback/types';
+import { showMessage } from '@/utils/feedback/message';
 
 // 重新登录状态
 export let isRelogin = { show: false };
@@ -99,19 +99,22 @@ const shouldSkipRelogin = (config: unknown): boolean => {
 type ReloginMessageHandle = { close: () => void };
 
 let reloginMessage: ReloginMessageHandle | null = null;
+let reloginPromptVersion = 0;
 
 export const dismissReloginPrompt = (): void => {
+  reloginPromptVersion++;
   reloginMessage?.close();
   reloginMessage = null;
   isRelogin.show = false;
 };
 
-const triggerRelogin = (message: string): void => {
+const triggerRelogin = (): void => {
   if (isRelogin.show || isLoginRoute()) {
     return;
   }
 
   isRelogin.show = true;
+  const version = ++reloginPromptVersion;
   const loginUrl = buildLoginRedirectUrl();
 
   const doRedirect = (): void => {
@@ -123,37 +126,35 @@ const triggerRelogin = (message: string): void => {
       });
   };
 
-  const content = h('span', null, [
-    message || '未认证，请先登录',
-    h(
-      'a',
-      {
-        href: loginUrl,
-        style: 'margin-left: 8px; color: var(--el-color-primary); text-decoration: underline;',
-        onClick: (event: MouseEvent) => {
-          event.preventDefault();
-          doRedirect();
-        },
-      },
-      '去登录'
-    ),
-  ]);
-  reloginMessage = ElMessage({
-    message: content,
+  void showMessage({
+    message: '登录状态已失效',
     type: 'warning',
-    duration: 5000,
+    action: { label: '重新登录', href: loginUrl, onClick: doRedirect },
+    duration: 0,
     showClose: true,
     onClose: () => {
-      isRelogin.show = false;
-      reloginMessage = null;
+      if (version === reloginPromptVersion) {
+        isRelogin.show = false;
+        reloginMessage = null;
+      }
     },
+  }).then((result) => {
+    if (!result.ok) {
+      if (version === reloginPromptVersion) isRelogin.show = false;
+      return;
+    }
+    if (version !== reloginPromptVersion || isLoginRoute()) {
+      result.value.close();
+      return;
+    }
+    reloginMessage = result.value;
   });
 };
 
 const notifier: HttpNotifier = {
   notify() {},
   message(type, content) {
-    ElMessage[type](content);
+    void showMessage({ type, message: content });
   },
   modal(type, options) {
     ElMessageBox.alert(options.content, options.title || '提示', { type });
@@ -465,7 +466,7 @@ const afterResponseTransform: HttpTransformHook = {
       const silentError = readConfigFlag(config, 'silentError');
       const shouldPromptRelogin = !skipRelogin && !silentError && !onLoginPage;
       if (shouldPromptRelogin) {
-        triggerRelogin(problem.detail || problem.title || '未认证，请先登录');
+        triggerRelogin();
       } else if (skipRelogin && !silentError) {
         presentProblemFeedback({
           problem,

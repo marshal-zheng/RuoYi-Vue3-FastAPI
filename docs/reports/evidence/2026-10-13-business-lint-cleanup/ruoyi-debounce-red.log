@@ -1,0 +1,55 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ × src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback 3ms
+   → expected "spy" to be called once with arguments: [ 'last' ]
+
+Received: 
+
+  1st spy call:
+
+- [
+-   "last",
+- ]
++ []
+
+
+Number of calls: 1
+
+ ✓ src/utils/index.debounce.test.ts > debounce callback contract > preserves immediate return values without a trailing callback 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/utils/index.debounce.test.ts > debounce callback contract > delivers the last arguments and receiver to a delayed callback
+AssertionError: expected "spy" to be called once with arguments: [ 'last' ]
+
+Received: 
+
+  1st spy call:
+
+- [
+-   "last",
+- ]
++ []
+
+
+Number of calls: 1
+
+ ❯ src/utils/index.debounce.test.ts:15:31
+     13|     callback.call(receiver, 'last');
+     14|     vi.advanceTimersByTime(100);
+     15|     expect(receiver.callback).toHaveBeenCalledExactlyOnceWith('last');
+       |                               ^
+     16|     expect(receiver.callback.mock.contexts[0]).toBe(receiver);
+     17|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed (2)
+   Start at  22:32:51
+   Duration  1.83s (transform 967ms, setup 202ms, collect 1.33s, tests 5ms, environment 128ms, prepare 23ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

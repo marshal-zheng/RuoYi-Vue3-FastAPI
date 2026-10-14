@@ -3,7 +3,6 @@
  * 负责仿真流程控制、步骤管理、状态机
  */
 import { ref } from 'vue';
-import { ElMessage } from 'element-plus';
 
 // 边阶段序列配置
 const EDGE_PHASE_SEQUENCE = [

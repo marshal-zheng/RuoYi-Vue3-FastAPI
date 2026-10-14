@@ -1,0 +1,48 @@
+[90m@hey-api/openapi-ts v0.97.0[39m
+
+[90m[Job 1] [39m⏳ [36mGenerating from 1 input:[39m
+[90m[Job 1] [39m[36m  [1] [39m../shared/openapi.json
+[90m[Job 1] [39m[32m✅ Done![39m Your output is in [96m/tmp/ruoyi-sdk-cross-review-final-20261013[39m [90m(4 files in 262ms)[39m
+Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0
+Applied 3 reviewed SDK templates for @hey-api/openapi-ts 0.97.0
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/client.gen.ts 20ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/client/client.gen.ts 25ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/client/index.ts 2ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/client/types.gen.ts 8ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/client/utils.gen.ts 18ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/auth.gen.ts 2ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/bodySerializer.gen.ts 4ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/params.gen.ts 7ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/pathSerializer.gen.ts 8ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/queryKeySerializer.gen.ts 4ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/serverSentEvents.gen.ts 7ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/types.gen.ts 3ms (unchanged)
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/core/utils.gen.ts 4ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/index.ts 9ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/sdk.gen.ts 74ms
+../../../../../tmp/ruoyi-sdk-cross-review-final-20261013/types.gen.ts 94ms
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains data and error generics through public methods in fields mode 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > retains the response generic in data mode with throwOnError 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in data mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses a 204 response without attempting JSON in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns parsed failure details in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in data mode 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > rejects failures when throwOnError is enabled in fields mode 0ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > parses an empty 200 JSON body and forwards a transformed validated response 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > types SSE event data separately from normal void completion 4ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > keeps SSE validator failures unknown and normal completion void 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > returns null for explicit JSON 204 without changing empty 200 JSON semantics 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves native network errors in the unknown SSE error hook 1ms
+ ✓ src/api/_generated-client-contract.test.ts > generated Fetch SDK transport contract > preserves non-2xx HTTP transport errors in the unknown SSE error hook 0ms
+
+ Test Files  1 passed (1)
+      Tests  14 passed (14)
+   Start at  23:13:43
+   Duration  551ms (transform 123ms, setup 217ms, collect 24ms, tests 16ms, environment 137ms, prepare 25ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

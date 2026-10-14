@@ -1,0 +1,334 @@
+[
+  {
+    "file": "src/api/_generated/client/client.gen.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/_generated/core/serverSentEvents.gen.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/device/category.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/api/device/device.ts",
+    "warnings": 6
+  },
+  {
+    "file": "src/api/login.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/monitor/audit.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/monitor/job.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/monitor/jobLog.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/monitor/logininfor.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/monitor/online.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/monitor/operlog.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/api/protocol/protocol.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/api/system/config.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/dept.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/dict/data.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/dict/type.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/menu.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/notice.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/post.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/project.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/api/system/role.ts",
+    "warnings": 9
+  },
+  {
+    "file": "src/api/system/user.ts",
+    "warnings": 7
+  },
+  {
+    "file": "src/api/tool/gen.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/components/ui/ContentDetailWrap/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/Crontab/index.vue",
+    "warnings": 3
+  },
+  {
+    "file": "src/components/ui/DictTag/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/ui/Editor/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/FileUpload/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/FormDialog/index.ts",
+    "warnings": 8
+  },
+  {
+    "file": "src/components/ui/IconSelect/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/ui/ImageUpload/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/components/ui/RichEditor/upload.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/ui/RightToolbar/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/Screenfull/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/SizeSelect/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/components/ui/VxeSchemaTable/dataSource.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/components/ui/VxeSchemaTable/index.vue",
+    "warnings": 17
+  },
+  {
+    "file": "src/components/ui/VxeSchemaTable/widgetRegistry.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/components/ui/VxeTableValidation/types.ts",
+    "warnings": 17
+  },
+  {
+    "file": "src/components/ui/VxeTableValidation/useVxeTableValidation.ts",
+    "warnings": 16
+  },
+  {
+    "file": "src/components/ui/VxeTableValidation/validators.ts",
+    "warnings": 18
+  },
+  {
+    "file": "src/mocks/browser.ts",
+    "warnings": 1
+  },
+  {
+    "file": "src/mocks/data/types.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/store/modules/dict.ts",
+    "warnings": 5
+  },
+  {
+    "file": "src/store/modules/permission.ts",
+    "warnings": 22
+  },
+  {
+    "file": "src/store/modules/settings.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/store/modules/tagsView.ts",
+    "warnings": 4
+  },
+  {
+    "file": "src/store/modules/user.ts",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/dashboard/index.vue",
+    "warnings": 7
+  },
+  {
+    "file": "src/views/device/category/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/device/detail.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/device/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/login.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/monitor/audit/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/monitor/cache/index.test.ts",
+    "warnings": 3
+  },
+  {
+    "file": "src/views/monitor/cache/list.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/monitor/job/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/monitor/job/log.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/monitor/logininfor/index.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/monitor/online/index.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/protocol/index.vue",
+    "warnings": 3
+  },
+  {
+    "file": "src/views/register.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/config/components/ConfigList.vue",
+    "warnings": 15
+  },
+  {
+    "file": "src/views/system/dept/components/DeptDlg.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/dept/components/DeptList.vue",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/system/dict/components/DictDlg.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/dict/components/DictList.vue",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/system/menu/components/MenuList.vue",
+    "warnings": 16
+  },
+  {
+    "file": "src/views/system/notice/components/NoticeDlg.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/notice/components/NoticeList.vue",
+    "warnings": 11
+  },
+  {
+    "file": "src/views/system/post/components/PostDlg.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/post/components/PostList.vue",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/system/project/components/ProjectList.vue",
+    "warnings": 14
+  },
+  {
+    "file": "src/views/system/role/authUser.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/system/role/components/RoleFormDrawer.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/system/role/index.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/system/user/components/UserFormDialog.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/system/user/index.vue",
+    "warnings": 7
+  },
+  {
+    "file": "src/views/system/user/profile/resetPwd.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/tool/build/RightPanel.vue",
+    "warnings": 2
+  },
+  {
+    "file": "src/views/tool/build/index.vue",
+    "warnings": 4
+  },
+  {
+    "file": "src/views/tool/gen/genInfoForm.vue",
+    "warnings": 1
+  },
+  {
+    "file": "src/views/tool/gen/importTable.vue",
+    "warnings": 1
+  }
+]

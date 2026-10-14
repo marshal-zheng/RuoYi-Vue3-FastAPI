@@ -427,13 +427,13 @@ const open = toRef(jobDialog.state, 'visible');
 async function loadJobData(params) {
   try {
     return await listJob(params);
-  } catch (e) {
+  } catch {
     return { data: [], total: 0 };
   }
 }
 
 function onFilterChange(field, value, { handleRefresh, updateState }) {
-  updateState({ [field]: value });
+  updateState(`query.${field}`, value);
   handleRefresh();
 }
 

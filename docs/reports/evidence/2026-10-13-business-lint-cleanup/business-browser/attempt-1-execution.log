@@ -1,0 +1,36 @@
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+[2m  - waiting for getByTestId('demo-login-submit')[22m
+[2m    - locator resolved to <button type="button" data-v-d0e06bca="" aria-disabled="false" data-testid="demo-login-submit" class="el-button el-button--primary el-button--large w-full !h-11 font-bold tracking-[0.2em] !text-lg zx-btn">…</button>[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <vite-error-overlay></vite-error-overlay> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - <vite-error-overlay></vite-error-overlay> intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    58 × waiting for element to be visible, enabled and stable[22m
+[2m       - element is visible, enabled and stable[22m
+[2m       - scrolling into view if needed[22m
+[2m       - done scrolling[22m
+[2m       - <vite-error-overlay></vite-error-overlay> intercepts pointer events[22m
+[2m     - retrying click action[22m
+[2m       - waiting 500ms[22m
+
+    at /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/scripts/check-overlay-business.mjs:64:47 {
+  name: 'TimeoutError'
+}
+
+Node.js v22.22.1

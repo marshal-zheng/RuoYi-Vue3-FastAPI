@@ -1,0 +1,127 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > logs in, returns getInfo from data source, and clears session on logout 80ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/role without pretending to save 13ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route 61ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route 22ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project 21ms
+   → expected 200 to be 201 // Object.is equality
+ × src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version 19ms
+   → expected 200 to be 201 // Object.is equality
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > persists project CRUD through the mock store 28ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > handles version clone, lock/unlock, delete, and export placeholders 51ms
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/menu without pretending to save 15ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/config without pretending to save 12ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/data without pretending to save 14ms
+   → expected 200 to be 501 // Object.is equality
+ × src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/type without pretending to save 12ms
+   → expected 200 to be 501 // Object.is equality
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/role/99 9ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/menu/99 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/config/99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/type/99 14ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for DELETE /system/dict/data/99 14ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/cancel 11ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/cancelAll?roleId=2&userIds=99 10ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > returns the real empty 204 contract for PUT /system/role/authUser/selectAll?roleId=2&userIds=99 12ms
+ ✓ src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > serves routers, dicts, departments, roles, and user list from data source 24ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects edits and topology saves for locked or mismatched versions 36ms
+ ✓ src/mocks/handlers/project.test.ts > project/version/topology mock handlers > reads and saves topology by project/version 27ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/role without pretending to save
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/menu without pretending to save
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/config without pretending to save
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/data without pretending to save
+ FAIL  src/mocks/handlers/auth-system.test.ts > auth/system mock handlers > rejects unsupported offline create at /system/dict/type without pretending to save
+AssertionError: expected 200 to be 501 // Object.is equality
+
+- Expected
++ Received
+
+- 501
++ 200
+
+ ❯ src/mocks/handlers/auth-system.test.ts:94:29
+     92|       body: JSON.stringify({ roleName: 'unsaved', menuName: 'unsaved',…
+     93|     });
+     94|     expect(response.status).toBe(501);
+       |                             ^
+     95|     expect(response.headers.get('location')).toBeNull();
+     96|     expect(response.headers.get('content-type')).toContain('applicatio…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology GET route
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > rejects the obsolete nested topology PUT route
+AssertionError: expected 200 to be 501 // Object.is equality
+
+- Expected
++ Received
+
+- 501
++ 200
+
+ ❯ src/mocks/handlers/project.test.ts:37:29
+     35|       body: method === 'PUT' ? JSON.stringify({ versionId: MOCK_VERSIO…
+     36|     });
+     37|     expect(response.status).toBe(501);
+       |                             ^
+     38|     expect(response.headers.get('X-Mock-Handler')).toBe('unhandled-api…
+     39|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted project
+AssertionError: expected 200 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 200
+
+ ❯ src/mocks/handlers/project.test.ts:47:29
+     45|       body: JSON.stringify({ projectName: 'created resource contract' …
+     46|     });
+     47|     expect(response.status).toBe(201);
+       |                             ^
+     48|     const created = await response.json();
+     49|     const location = response.headers.get('location');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  src/mocks/handlers/project.test.ts > project/version/topology mock handlers > returns a created resource Location that reads the persisted version
+AssertionError: expected 200 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 200
+
+ ❯ src/mocks/handlers/project.test.ts:66:29
+     64|       body: JSON.stringify({ projectId: MOCK_PROJECT_IDS.commandCenter…
+     65|     });
+     66|     expect(response.status).toBe(201);
+       |                             ^
+     67|     const created = await response.json();
+     68|     const location = response.headers.get('location');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  9 failed | 14 passed (23)
+   Start at  02:24:19
+   Duration  994ms (transform 134ms, setup 624ms, collect 15ms, tests 530ms, environment 564ms, prepare 64ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

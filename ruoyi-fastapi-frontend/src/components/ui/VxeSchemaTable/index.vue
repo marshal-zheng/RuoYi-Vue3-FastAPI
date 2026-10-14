@@ -8,7 +8,11 @@
   </vxe-table>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+export type { VxeSchemaColumn, VxeSchemaHooks } from './types';
+</script>
+
+<script setup lang="ts" generic="Row extends object = Record<string, unknown>">
 import {
   computed,
   defineComponent,
@@ -21,52 +25,52 @@ import {
   useSlots,
 } from 'vue';
 import type { PropType, Slots } from 'vue';
-import type { VxeTableDefines, VxeTableProps, VxeTableInstance } from 'vxe-table';
+import type { VxeTableProps, VxeTableInstance, VxeTableEvents } from 'vxe-table';
 import { mergeColumnOptions, resolveWidgetColumn } from './widgetRegistry';
 import type { VxeWidgetResolverMap } from './widgetRegistry';
 import { useDataSource } from './dataSource';
+import type {
+  VxeSchemaColumn,
+  VxeSchemaHooks,
+  SchemaCellScope,
+  SchemaHeaderScope,
+  SchemaEditClosedParams,
+} from './types';
 
 const SLOT_KEY = Symbol('vxe-schema-table-slots');
 
-export type VxeSchemaColumn = VxeTableDefines.ColumnOptions & {
-  slot?: string;
-  headerSlot?: string;
-  children?: VxeSchemaColumn[];
-  render?: (scope: any) => any;
-  widget?: string;
-  widgetProps?: Record<string, any>;
-  dataSource?: DataSourceOptions;
-};
-
-export type VxeSchemaHooks = {
-  onTableReady?: (table: VxeTableInstance) => void;
-  onCellClick?: (params: any) => void;
-  onCellDblclick?: (params: any) => void;
-  onEditClosed?: (params: any) => void;
-  onValueChange?: (payload: { row: any; field: string; value: any; params: any }) => void;
-};
+defineSlots<
+  Record<
+    string,
+    (
+      props: Partial<SchemaCellScope<Row>> & {
+        dataSource?: ReturnType<typeof useDataSource> | null;
+      }
+    ) => import('vue').VNode[]
+  >
+>();
 
 const props = defineProps({
   columns: {
-    type: Array as PropType<VxeSchemaColumn[]>,
+    type: Array as PropType<VxeSchemaColumn<Row>[]>,
     required: true,
   },
   data: {
-    type: Array as PropType<any[]>,
+    type: Array as PropType<Row[]>,
     default: () => [],
   },
-  tableProps: Object as PropType<VxeTableProps>,
-  spanMethod: Function as PropType<VxeTableProps['spanMethod']>,
-  footerMethod: Function as PropType<VxeTableProps['footerMethod']>,
-  editConfig: Object as PropType<VxeTableProps['editConfig']>,
-  editRules: Object as PropType<VxeTableProps['editRules']>,
+  tableProps: Object as PropType<VxeTableProps<Row>>,
+  spanMethod: Function as PropType<VxeTableProps<Row>['spanMethod']>,
+  footerMethod: Function as PropType<VxeTableProps<Row>['footerMethod']>,
+  editConfig: Object as PropType<VxeTableProps<Row>['editConfig']>,
+  editRules: Object as PropType<VxeTableProps<Row>['editRules']>,
   widgets: Object as PropType<VxeWidgetResolverMap>,
-  hooks: Object as PropType<VxeSchemaHooks>,
+  hooks: Object as PropType<VxeSchemaHooks<Row>>,
 });
 
 const tableSlots = useSlots();
 provide(SLOT_KEY, tableSlots);
-const tableRef = ref<VxeTableInstance>();
+const tableRef = ref<VxeTableInstance<Row>>();
 
 const normalizedTableProps = computed(() => ({
   ...props.tableProps,
@@ -90,7 +94,7 @@ const SchemaColumn = defineComponent({
   name: 'SchemaColumn',
   props: {
     column: {
-      type: Object as PropType<VxeSchemaColumn>,
+      type: Object as PropType<VxeSchemaColumn<Row>>,
       required: true,
     },
   },
@@ -100,8 +104,8 @@ const SchemaColumn = defineComponent({
       ? useDataSource(columnProps.column.dataSource)
       : null;
 
-    const resolvedColumn = computed<VxeSchemaColumn>(() => {
-      const column: VxeSchemaColumn = { ...columnProps.column };
+    const resolvedColumn = computed<VxeSchemaColumn<Row>>(() => {
+      const column: VxeSchemaColumn<Row> = { ...columnProps.column };
 
       if (dataSourceCtx) {
         const baseEdit = column.editRender || { name: 'select' };
@@ -122,7 +126,7 @@ const SchemaColumn = defineComponent({
 
     return () => {
       const column = resolvedColumn.value;
-      const RecursiveSchemaColumn = resolveComponent('SchemaColumn') as any;
+      const RecursiveSchemaColumn = resolveComponent('SchemaColumn');
 
       const children = column.children?.map((child, idx) =>
         h(RecursiveSchemaColumn, {
@@ -136,17 +140,20 @@ const SchemaColumn = defineComponent({
         children && children.length
           ? () => children
           : slotName
-            ? (scope: any) => parentSlots?.[slotName]?.({ ...scope, dataSource: dataSourceCtx })
+            ? (scope: SchemaCellScope<Row>) =>
+                parentSlots?.[slotName]?.({ ...scope, dataSource: dataSourceCtx })
             : column.render
-              ? (scope: any) => column.render?.({ ...scope, dataSource: dataSourceCtx })
+              ? (scope: SchemaCellScope<Row>) =>
+                  column.render?.({ ...scope, dataSource: dataSourceCtx })
               : undefined;
 
       const headerSlotName = column.headerSlot;
       const headerSlot = headerSlotName
-        ? (scope: any) => parentSlots?.[headerSlotName]?.({ ...scope, dataSource: dataSourceCtx })
+        ? (scope: SchemaHeaderScope<Row>) =>
+            parentSlots?.[headerSlotName]?.({ ...scope, dataSource: dataSourceCtx })
         : undefined;
 
-      return h(resolveComponent('vxe-column') as any, column, {
+      return h(resolveComponent('vxe-column'), column, {
         default: defaultSlot,
         header: headerSlot,
       });
@@ -154,10 +161,10 @@ const SchemaColumn = defineComponent({
   },
 });
 
-function normalizeColumns(
-  columns: VxeSchemaColumn[],
+function normalizeColumns<T extends object>(
+  columns: VxeSchemaColumn<T>[],
   widgets?: VxeWidgetResolverMap
-): VxeSchemaColumn[] {
+): VxeSchemaColumn<T>[] {
   return columns.map((column) => {
     const widgetColumn = resolveWidgetColumn(column, widgets);
     const merged = mergeColumnOptions(widgetColumn, column);
@@ -170,23 +177,25 @@ function normalizeColumns(
   });
 }
 
-type DataSourceOptions = Parameters<typeof useDataSource>[0];
-
-function buildTableListeners(hooks?: VxeSchemaHooks) {
+function buildTableListeners<T extends object>(hooks?: VxeSchemaHooks<T>) {
   if (!hooks) return {};
-  const listeners: Record<string, any> = {};
+  const listeners: {
+    'cell-click'?: VxeTableEvents.CellClick<T>;
+    'cell-dblclick'?: VxeTableEvents.CellDblclick<T>;
+    'edit-closed'?: VxeTableEvents.EditClosed<T>;
+  } = {};
 
   if (hooks.onCellClick) listeners['cell-click'] = hooks.onCellClick;
   if (hooks.onCellDblclick) listeners['cell-dblclick'] = hooks.onCellDblclick;
   if (hooks.onEditClosed || hooks.onValueChange) {
-    listeners['edit-closed'] = (params: any) => {
+    listeners['edit-closed'] = (params: SchemaEditClosedParams<T>) => {
       hooks.onEditClosed?.(params);
       if (hooks.onValueChange && params?.row && params?.column?.field) {
         const field = params.column.field;
         hooks.onValueChange({
           row: params.row,
           field,
-          value: params.row[field],
+          value: Reflect.get(params.row, field),
           params,
         });
       }
