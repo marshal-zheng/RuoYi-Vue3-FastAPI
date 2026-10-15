@@ -1,0 +1,10 @@
+{
+  "transport": "Node fetch; bypasses Axios, ZXUI and business frontend",
+  "endpoint": "POST /system/user/export",
+  "requestBody": "page=1&pageSize=10",
+  "completed": false,
+  "error": "TimeoutError",
+  "durationMs": 5001,
+  "workerCpuAfterTimeoutPercent": 99.1,
+  "backendSourceChanges": "none"
+}

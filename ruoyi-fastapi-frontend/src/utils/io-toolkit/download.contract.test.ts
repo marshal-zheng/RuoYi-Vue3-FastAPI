@@ -53,4 +53,53 @@ describe('binary download boundary', () => {
     expect(filename).toBe('file.bin');
     expect(await saved.text()).toBe('payload');
   });
+
+  it('rejects a 200 Problem response instead of saving it as a file', async () => {
+    const problem = {
+      type: 'about:blank',
+      title: '导出失败',
+      status: 422,
+      detail: '导出条件无效',
+      instance: '/export',
+    };
+    const body = new Blob([JSON.stringify(problem)], { type: 'application/problem+json' });
+    await expect(downloadFromResponse(body, 'report.zip')).rejects.toMatchObject({
+      message: '导出条件无效',
+      data: problem,
+      raw: body,
+    });
+    expect(saveAs).not.toHaveBeenCalled();
+  });
+
+  it('saves a valid JSON attachment without classifying it as a failure', async () => {
+    const body = new Blob(['{"status":422,"title":"domain data"}'], { type: 'application/json' });
+    await downloadFromResponse(
+      {
+        data: body,
+        status: 200,
+        statusText: 'OK',
+        headers: { 'content-disposition': 'attachment; filename="data.json"' },
+        config: { headers: new AxiosHeaders() },
+      },
+      'fallback.json'
+    );
+    expect(saveAs).toHaveBeenCalledOnce();
+    expect(saveAs.mock.calls[0][1]).toBe('data.json');
+  });
+
+  it('rejects a non-success response even when transport validation allowed it', async () => {
+    await expect(
+      downloadFromResponse(
+        {
+          data: new Blob(['redirect body']),
+          status: 302,
+          statusText: 'Found',
+          headers: {},
+          config: { headers: new AxiosHeaders() },
+        },
+        'redirect.bin'
+      )
+    ).rejects.toMatchObject({ status: 302 });
+    expect(saveAs).not.toHaveBeenCalled();
+  });
 });

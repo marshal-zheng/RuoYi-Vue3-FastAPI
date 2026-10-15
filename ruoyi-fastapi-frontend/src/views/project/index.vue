@@ -263,6 +263,7 @@ import { default as ProjectFormDialog } from './components/ProjectFormDialog.vue
 import { confirmInputDanger } from '@/theme/confirm-input';
 import { ElMessage } from 'element-plus';
 import { downloadFromResponse, validateFile } from '@/utils/io-toolkit';
+import { isAbortError } from '@zxio/http';
 
 const { proxy } = getCurrentInstance();
 
@@ -458,10 +459,13 @@ async function handleExport(project) {
   const timestamp = new Date().toISOString().replace(/[-:T]/g, '').slice(0, 14);
   const safeName = (project.projectName || 'project').replace(/[\\/:*?"<>|\\s]+/g, '_');
   const filename = `${safeName}_export_${timestamp}.zip`;
-  const res = await exportProject(project.projectId);
-  await downloadFromResponse(res, filename);
-
-  ElMessage.success('工程导出成功');
+  try {
+    const res = await exportProject(project.projectId);
+    await downloadFromResponse(res, filename);
+    ElMessage.success('工程导出成功');
+  } catch (error) {
+    if (!isAbortError(error)) ElMessage.error(error?.message || '工程导出失败');
+  }
 }
 
 async function handleBatchExport() {
@@ -478,7 +482,9 @@ async function handleBatchExport() {
 
     ElMessage.success('批量导出任务已完成');
   } catch (error) {
-    ElMessage.error(error?.detail || error?.message || '批量导出失败');
+    if (!isAbortError(error)) {
+      ElMessage.error(error?.detail || error?.message || '批量导出失败');
+    }
   }
 }
 

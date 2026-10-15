@@ -5,7 +5,7 @@ import {
   createGridListPlugin,
   createHttpClient,
   isAbortError,
-  createHttpError,
+  resolveHttpError,
   type HttpError,
   type HttpClientImpl,
   type HttpNotifier,
@@ -257,6 +257,8 @@ const normalizeProblemDetails = (payload: unknown, status: number): ProblemDetai
       status: typeof payload.status === 'number' ? payload.status : status,
       detail:
         (payload.detail as string | undefined) ||
+        (typeof payload.message === 'string' ? payload.message : undefined) ||
+        (typeof payload.msg === 'string' ? payload.msg : undefined) ||
         (payload.title as string | undefined) ||
         '请求失败，请稍后重试',
       instance: typeof payload.instance === 'string' ? payload.instance : '',
@@ -275,7 +277,7 @@ const normalizeProblemDetails = (payload: unknown, status: number): ProblemDetai
       ? (errorCode as Record<number, string | undefined>)[status] || '请求失败'
       : '请求失败',
     status,
-    detail: '请求失败，请稍后重试',
+    detail: typeof payload === 'string' && payload.trim() ? payload : '请求失败，请稍后重试',
     instance: '',
   };
 };
@@ -462,7 +464,7 @@ const afterResponseTransform: HttpTransformHook = {
   },
 
   async onError(error) {
-    const axiosError = createHttpError(error);
+    const axiosError = await resolveHttpError(error);
     if (isAbortError(axiosError)) {
       throw axiosError;
     }

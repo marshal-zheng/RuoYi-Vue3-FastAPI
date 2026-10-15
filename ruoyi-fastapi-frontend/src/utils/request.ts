@@ -6,12 +6,11 @@
  *   import request from '@/utils/request'
  *   request({ url: '/api/xxx', method: 'get' })
  */
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { isAbortError } from '@zxio/http';
 import { ElLoading, ElMessage } from 'element-plus';
 import { http, isRelogin } from './http';
-import { blobValidate } from '@/utils/ruoyi';
-import { saveAs } from 'file-saver';
-import errorCode from '@/utils/errorCode';
+import { downloadFromResponse } from '@/utils/io-toolkit/download';
 import type { FeedbackOptions } from '@/utils/feedback/types';
 
 interface LoadingInstance {
@@ -34,7 +33,8 @@ interface RequestClient {
   delete<T = unknown>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
 }
 
-let downloadLoadingInstance: LoadingInstance;
+let downloadLoadingInstance: LoadingInstance | undefined;
+let activeDownloads = 0;
 
 export { isRelogin };
 
@@ -109,37 +109,6 @@ requestClient.delete = <T = unknown>(
 
 // ==================== 下载方法 ====================
 
-const resolveDownloadErrorMessage = async (data: unknown): Promise<string> => {
-  const fallback = '下载文件出现错误，请联系管理员！';
-  if (!data || typeof (data as Blob).text !== 'function') {
-    return fallback;
-  }
-  const resText = await (data as Blob).text();
-  const trimmed = (resText || '').trim();
-  if (!trimmed) {
-    return fallback;
-  }
-  if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-    return Promise.resolve()
-      .then(() => JSON.parse(trimmed))
-      .then((rspObj: Record<string, unknown>) => {
-        const status = rspObj?.status as number | undefined;
-        const code = rspObj?.errorCode as number | undefined;
-        const detail = rspObj?.detail as string | undefined;
-        const title = rspObj?.title as string | undefined;
-        return (
-          detail ||
-          title ||
-          (code ? errorCode[code] : undefined) ||
-          (status ? errorCode[status] : undefined) ||
-          errorCode['default']
-        );
-      })
-      .catch(() => trimmed.slice(0, 200) || fallback);
-  }
-  return trimmed.slice(0, 200) || fallback;
-};
-
 /**
  * 通用下载方法
  */
@@ -149,41 +118,43 @@ export function download(
   filename: string,
   config?: AxiosRequestConfig
 ): Promise<void> {
-  // The mask colour comes from the theme (--el-mask-color).
-  downloadLoadingInstance = ElLoading.service({
-    text: '正在下载数据，请稍候',
-  });
+  if (activeDownloads === 0) {
+    downloadLoadingInstance = ElLoading.service({ text: '正在下载数据，请稍候' });
+  }
+  activeDownloads++;
 
-  return http
-    .post<Blob>(
-      {
-        url,
-        data: params,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        responseType: 'blob',
-        feedback: { mode: 'silent' },
-        ...config,
-      } as ExtendedAxiosRequestConfig,
-      { isReturnNativeResponse: false, isTransformResponse: false }
-    )
-    .then(async (data: Blob) => {
-      const isBlob = blobValidate(data);
-      if (isBlob) {
-        const blob = new Blob([data]);
-        saveAs(blob, filename);
-      } else {
-        const errMsg = await resolveDownloadErrorMessage(data);
-        ElMessage.error(errMsg);
+  const task = (async () => {
+    try {
+      const response = await http.post<AxiosResponse<Blob>>(
+        {
+          url,
+          data: params,
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          responseType: 'blob',
+          ...config,
+          // 下载入口负责失败反馈，避免与全局错误反馈重复。
+          feedback: { mode: 'silent' },
+          silentError: true,
+        } as ExtendedAxiosRequestConfig,
+        { isReturnNativeResponse: true, isTransformResponse: false }
+      );
+      await downloadFromResponse(response, filename);
+    } finally {
+      activeDownloads--;
+      if (activeDownloads === 0) {
+        downloadLoadingInstance?.close();
+        downloadLoadingInstance = undefined;
       }
-      downloadLoadingInstance.close();
-    })
-    .catch(async (r: { response?: { data?: unknown } } | unknown) => {
-      const responseData = (r as { response?: { data?: unknown } })?.response?.data;
-      const errMsg =
-        (await resolveDownloadErrorMessage(responseData)) || '下载文件出现错误，请联系管理员！';
-      ElMessage.error(errMsg);
-      downloadLoadingInstance.close();
-    });
+    }
+  })();
+
+  // 反馈观察者不改变 task 的拒绝结果，也兼容页面不等待的事件调用。
+  void task.catch((error: unknown) => {
+    if (!isAbortError(error)) {
+      ElMessage.error(error instanceof Error ? error.message : '下载文件出现错误，请联系管理员！');
+    }
+  });
+  return task;
 }
 
 export default requestClient;

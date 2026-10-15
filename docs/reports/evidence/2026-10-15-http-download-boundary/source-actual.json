@@ -1,0 +1,93 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "adapter": "jsdom XMLHttpRequest",
+  "backend": "local FastAPI :8088",
+  "ui": "Only feedback/loading/file-save entry points stubbed; no browser clicks",
+  "gateway": "Delays real backend export responses only",
+  "businessDataChanges": "none; login/read/export/logout only",
+  "results": [
+    {
+      "name": "real-login",
+      "ok": true,
+      "userName": "admin"
+    },
+    {
+      "name": "actual-Word-through-download-wrapper",
+      "ok": true,
+      "bytes": 5336,
+      "filename": "初始版本_接口控制文件.doc",
+      "wireBytesPreserved": true,
+      "loadingClosed": 1
+    },
+    {
+      "name": "actual-Word-ZIP-XML-exports-save-original-bytes",
+      "ok": true,
+      "formats": [
+        {
+          "name": "word",
+          "bytes": 5336,
+          "filename": "version.doc"
+        },
+        {
+          "name": "zip",
+          "bytes": 165,
+          "filename": "appendix.zip"
+        },
+        {
+          "name": "xml",
+          "bytes": 603,
+          "filename": "version.xml"
+        }
+      ]
+    },
+    {
+      "name": "actual-422-Blob-decodes-and-rejects-once",
+      "ok": true,
+      "status": 422,
+      "parsedProblemPreserved": true,
+      "originalBlobAndCausePreserved": true,
+      "requestIdPresent": true,
+      "failureFeedbackCount": 1,
+      "loadingClosed": 1
+    },
+    {
+      "name": "actual-422-ArrayBuffer-decodes-with-original-context",
+      "ok": true,
+      "status": 422,
+      "parsedProblemPreserved": true,
+      "originalArrayBufferAndCausePreserved": true
+    },
+    {
+      "name": "actual-concurrent-exports-share-mask-until-last-settlement",
+      "ok": true,
+      "maskInstances": 1,
+      "closedAfterFirst": 0,
+      "closedAfterLast": 1
+    },
+    {
+      "name": "actual-in-flight-download-cancel-is-quiet-and-rejected",
+      "ok": true,
+      "errorType": "AbortError",
+      "code": "ERR_CANCELED",
+      "reasonPreserved": true,
+      "transportAbortCount": 1,
+      "failureFeedbackCount": 0,
+      "loadingClosed": 1
+    },
+    {
+      "name": "actual-export-save-failure-rejects-and-closes-loading",
+      "ok": true,
+      "originalSaveErrorPreserved": true,
+      "failureFeedbackCount": 1,
+      "loadingClosed": 1
+    },
+    {
+      "name": "legacy-fire-and-forget-failure-has-no-unhandled-rejection",
+      "ok": true,
+      "unhandledRejections": 0,
+      "failureFeedbackCount": 1,
+      "loadingClosed": 1
+    }
+  ]
+}

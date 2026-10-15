@@ -244,6 +244,61 @@ describe('http contract client', () => {
     });
   });
 
+  it('reads binary problem details without replacing the original response body', async () => {
+    const { rawOnError } = await loadModule();
+    const problem = {
+      type: 'about:blank',
+      title: '导出失败',
+      status: 422,
+      detail: '版本不存在',
+      instance: '/export',
+    };
+    const body = new Blob([JSON.stringify(problem)], { type: 'application/problem+json' });
+    const config = { headers: new AxiosHeaders(), url: '/export', responseType: 'blob' as const };
+    const response: AxiosResponse = {
+      config,
+      data: body,
+      status: 422,
+      statusText: 'Invalid',
+      headers: { 'x-request-id': 'binary-problem' },
+    };
+    const original = new AxiosError('HTTP 422', 'ERR_BAD_REQUEST', config, undefined, response);
+    await expect(rawOnError(original)).rejects.toMatchObject({
+      cause: original,
+      response,
+      raw: body,
+      data: problem,
+      problem,
+      message: '版本不存在',
+      meta: { requestId: 'binary-problem' },
+    });
+    expect(response.data).toBe(body);
+  });
+
+  it.each(['text', 'message', 'msg'])('retains the decoded %s failure message', async (format) => {
+    const { rawOnError } = await loadModule();
+    const message = '导出服务暂不可用';
+    const body = new Blob([format === 'text' ? message : JSON.stringify({ [format]: message })], {
+      type: format === 'text' ? 'text/plain' : 'application/json',
+    });
+    const config = { headers: new AxiosHeaders(), url: '/export' };
+    const response: AxiosResponse = {
+      config,
+      data: body,
+      status: 503,
+      statusText: 'Unavailable',
+      headers: {},
+    };
+    const original = new AxiosError('HTTP 503', 'ERR_BAD_RESPONSE', config, undefined, response);
+    await expect(rawOnError(original)).rejects.toMatchObject({
+      message,
+      problem: { detail: message },
+      raw: body,
+      response,
+      cause: original,
+    });
+  });
+
   it('configures multi-status success handling and items-based grid paging', async () => {
     const { clientConfig, gridConfig } = await loadModule();
 

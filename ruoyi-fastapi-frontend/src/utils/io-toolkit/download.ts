@@ -1,6 +1,8 @@
 import { saveAs } from 'file-saver';
+import { HttpError, resolveHttpError } from '@zxio/http';
 import type { AxiosResponse } from 'axios';
 import { DownloadOptions } from './types';
+import { isProblemDetails } from '@/types/http-contract';
 
 export function extractFilenameFromHeaders(
   headers: Headers | Record<string, string>
@@ -74,17 +76,49 @@ export async function downloadFromResponse(
     throw new TypeError('Unsupported response type for download');
   }
 
-  const filename =
-    extractFilenameFromHeaders(headers || {}) ||
-    fallbackFilename ||
-    options?.filename ||
-    'download';
+  const serverFilename = extractFilenameFromHeaders(headers || {});
+  const filename = serverFilename || fallbackFilename || options?.filename || 'download';
   const headerContentType = isAxios(response)
     ? response.headers?.['content-type']
     : isFetchResponse(response)
       ? response.headers.get('content-type')
       : null;
-  const contentType = headerContentType || options?.contentType || blob.type;
+  const contentType =
+    (typeof headerContentType === 'string' && headerContentType) ||
+    options?.contentType ||
+    blob.type;
+
+  const status = isAxios(response) || isFetchResponse(response) ? response.status : 200;
+  const failedStatus = status < 200 || status >= 300;
+  const disposition =
+    headers instanceof Headers
+      ? headers.get('content-disposition')
+      : headers?.['content-disposition'];
+  const attachment = !!serverFilename || /^attachment(?:;|$)/i.test(disposition || '');
+  const json = /^(?:application|text)\/(?:[^;]+\+)?json(?:;|$)/i.test(contentType || '');
+  if (failedStatus || (!attachment && json)) {
+    const originalBody = isAxios(response) ? response.data : blob;
+    const failure = await resolveHttpError(
+      new HttpError(
+        {
+          status,
+          message: '下载文件出现错误，请联系管理员！',
+          data: originalBody,
+          raw: originalBody,
+          ...(isFetchResponse(response) ? { cause: response } : {}),
+        },
+        isAxios(response) ? response : undefined,
+        isAxios(response) ? response.config : undefined
+      )
+    );
+    if (
+      failedStatus ||
+      /^application\/problem\+json(?:;|$)/i.test(contentType || '') ||
+      (isProblemDetails(failure.data) && failure.data.status >= 400)
+    ) {
+      throw failure;
+    }
+  }
 
   const wrappedBlob = contentType ? new Blob([blob], { type: contentType }) : blob;
   const finalName = filename;

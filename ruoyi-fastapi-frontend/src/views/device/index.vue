@@ -199,11 +199,17 @@ function handleBatchExport() {
     return;
   }
   exporting.value = true;
-  download('/device/export/batch', { deviceIds: ids.value }, `device_export_${Date.now()}.zip`, {
-    headers: { 'Content-Type': 'application/json' },
-  }).finally(() => {
+  const finishExport = () => {
     exporting.value = false;
-  });
+  };
+  void download(
+    '/device/export/batch',
+    { deviceIds: ids.value },
+    `device_export_${Date.now()}.zip`,
+    {
+      headers: { 'Content-Type': 'application/json' },
+    }
+  ).then(finishExport, finishExport);
 }
 
 // 文件变化时使用防抖，等待所有文件选择完成再导入（避免只提交第一个文件）
