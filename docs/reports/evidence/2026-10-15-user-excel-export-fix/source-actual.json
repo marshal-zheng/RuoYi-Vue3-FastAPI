@@ -1,0 +1,81 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "transport": "JSDOM XMLHttpRequest to real FastAPI :8088",
+  "entry": "business download(/system/user/export), application/x-www-form-urlencoded",
+  "ui": "Feedback/loading/file-save entry points stubbed; no browser clicks",
+  "businessRecordsChanged": false,
+  "results": [
+    {
+      "name": "real-login",
+      "ok": true,
+      "userName": "admin",
+      "durationMs": 302
+    },
+    {
+      "name": "real-user-Excel-through-business-form-download",
+      "ok": true,
+      "bytes": 5327,
+      "filename": "users.xlsx",
+      "formFieldsPreserved": true,
+      "wireBytesPreserved": true,
+      "failureFeedbackCount": 0,
+      "loadingClosed": 1,
+      "durationMs": 79
+    },
+    {
+      "name": "real-Excel-idempotent-first-and-replay",
+      "ok": true,
+      "firstBytes": 5327,
+      "repeatedBytes": 5327,
+      "sameFileBytes": true,
+      "firstRequestId": "bab38ebb3d54447fa441e12474102dfc, bab38ebb3d54447fa441e12474102dfc",
+      "repeatedRequestId": "bab38ebb3d54447fa441e12474102dfc, fb0912cb8bee40a78ba5eeda68907250",
+      "loadingClosed": 2,
+      "durationMs": 62,
+      "firstGenerationCount": 1,
+      "repeatGenerationCount": 0
+    },
+    {
+      "name": "same-key-different-form-still-conflicts",
+      "ok": true,
+      "status": 409,
+      "errorCode": 40901,
+      "rawBlobPreserved": true,
+      "feedbackCount": 1,
+      "loadingClosed": 1,
+      "durationMs": 4
+    },
+    {
+      "name": "security-token-source-rejections-preserved",
+      "ok": true,
+      "queryCookieFormStatuses": [
+        400,
+        400,
+        400
+      ],
+      "durationMs": 11
+    },
+    {
+      "name": "empty-form-user-export-completes",
+      "ok": true,
+      "status": 200,
+      "bytes": 5327,
+      "durationMs": 46
+    },
+    {
+      "name": "server-remains-responsive-after-exports",
+      "ok": true,
+      "docsStatus": 200,
+      "authenticatedQueryCompleted": true,
+      "durationMs": 21
+    }
+  ],
+  "workbook": {
+    "readableByOpenpyxl": true,
+    "sheets": 1,
+    "rowsIncludingHeader": 2,
+    "columns": 13,
+    "adminRowPresent": true
+  }
+}

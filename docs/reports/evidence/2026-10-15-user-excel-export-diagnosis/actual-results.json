@@ -1,0 +1,50 @@
+{
+  "transport": "Node fetch; no Axios/ZXUI/frontend",
+  "productionCodeChanges": "none",
+  "jsonRequest": "diagnostic control only; not a proposed API contract change",
+  "results": [
+    {
+      "name": "login-and-user-info",
+      "completed": true
+    },
+    {
+      "name": "same-user-export-JSON-control-default-filters",
+      "completed": true,
+      "status": 200,
+      "bytes": 5326,
+      "zipSignature": true,
+      "durationMs": 181
+    },
+    {
+      "name": "original-user-export-form-no-idempotency-key",
+      "completed": false,
+      "error": "TimeoutError",
+      "durationMs": 2503
+    },
+    {
+      "name": "docs-after-client-timeout",
+      "completed": false,
+      "error": "TimeoutError",
+      "durationMs": 601
+    }
+  ],
+  "controlWorkbook": {
+    "validXlsx": true,
+    "sheets": 1,
+    "rowsIncludingHeader": 2,
+    "columns": 13
+  },
+  "workerCpuPercentAtCapture": 100.0,
+  "exportGeneratedLogEvents": [
+    {
+      "time": "2026-10-15 10:36:28.594503+01:00",
+      "source": "modules.system.api.user_controller",
+      "line": 565
+    },
+    {
+      "time": "2026-10-15 10:36:28.672192+01:00",
+      "source": "modules.system.api.user_controller",
+      "line": 565
+    }
+  ]
+}

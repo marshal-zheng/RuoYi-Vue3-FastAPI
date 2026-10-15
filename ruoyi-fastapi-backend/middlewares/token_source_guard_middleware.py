@@ -32,7 +32,7 @@ class TokenSourceGuardASGIMiddleware:
         if violation is None:
             violation = self._cookie_violation(headers)
 
-        body = b''
+        body: bytes | None = None
         if violation is None and self._is_form_request(headers):
             body = await self._drain_request_body(receive)
             violation = self._form_violation(body)
@@ -42,7 +42,7 @@ class TokenSourceGuardASGIMiddleware:
             await self._reject(send=send, source=violation)
             return
 
-        replay_receive = self._build_replay_receive(body) if body else receive
+        replay_receive = self._build_replay_receive(body, receive) if body is not None else receive
         await self.app(scope, replay_receive, send)
 
     @staticmethod
@@ -105,14 +105,15 @@ class TokenSourceGuardASGIMiddleware:
         return b''.join(chunks)
 
     @staticmethod
-    def _build_replay_receive(body: bytes) -> Receive:
+    def _build_replay_receive(body: bytes, receive: Receive) -> Receive:
         state = {'sent': False}
 
         async def replay_receive() -> Message:
             if not state['sent']:
                 state['sent'] = True
                 return {'type': 'http.request', 'body': body, 'more_body': False}
-            return {'type': 'http.request', 'body': b'', 'more_body': False}
+            # Resume server events after the single body replay.
+            return await receive()
 
         return replay_receive
 

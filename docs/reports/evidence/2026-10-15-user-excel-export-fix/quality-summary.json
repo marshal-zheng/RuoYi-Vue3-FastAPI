@@ -1,0 +1,12 @@
+{
+  "baselineRuffDiagnostics": 62,
+  "currentRuffDiagnostics": 62,
+  "newRuffDiagnostics": 0,
+  "preExistingFormatFailures": [
+    "middlewares/idempotency_middleware.py",
+    "tests/unit/middlewares/test_idempotency_middleware.py"
+  ],
+  "conventionsScript": "failed on unchanged baseline lint/format issues; guardrails passed",
+  "regression": "4 new cases failed before correction; 21 middleware tests passed after correction",
+  "review": "read-only review passed; independently repeated 16 scoped tests"
+}

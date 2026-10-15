@@ -1,0 +1,118 @@
+[
+  {
+    "case": "plain-form-stream",
+    "completed": true,
+    "durationMs": 3,
+    "originalReceiveCalls": 2,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 10
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 0
+      }
+    ]
+  },
+  {
+    "case": "guard-form-stream",
+    "completed": true,
+    "durationMs": 3,
+    "originalReceiveCalls": 2,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 10
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 0
+      }
+    ]
+  },
+  {
+    "case": "guard-json-stream",
+    "completed": true,
+    "durationMs": 2,
+    "originalReceiveCalls": 2,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 10
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 0
+      }
+    ]
+  },
+  {
+    "case": "guard-form-json-response",
+    "completed": true,
+    "durationMs": 0,
+    "originalReceiveCalls": 1,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 11
+      }
+    ]
+  },
+  {
+    "case": "idempotency-json-stream-no-key",
+    "completed": true,
+    "durationMs": 2,
+    "originalReceiveCalls": 2,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 10
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 0
+      }
+    ]
+  },
+  {
+    "case": "idempotency-json-stream-with-key",
+    "completed": true,
+    "durationMs": 3,
+    "originalReceiveCalls": 2,
+    "events": [
+      {
+        "type": "http.response.start",
+        "bodyBytes": 0
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 10
+      },
+      {
+        "type": "http.response.body",
+        "bodyBytes": 0
+      }
+    ]
+  }
+]

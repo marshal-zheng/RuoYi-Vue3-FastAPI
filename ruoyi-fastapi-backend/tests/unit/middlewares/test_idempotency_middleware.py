@@ -3,7 +3,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from httpx import ASGITransport, AsyncClient
 
 from middlewares.idempotency_middleware import IdempotencyASGIMiddleware
@@ -97,6 +97,39 @@ async def test_without_idempotency_key_request_passthrough():
     assert first.status_code == 200
     assert second.status_code == 200
     assert app.state.write_calls == 2
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('body', [b'{"a":1}', b''])
+async def test_body_replay_waits_for_real_disconnect(body):
+    messages = asyncio.Queue()
+    messages.put_nowait({'type': 'http.request', 'body': body, 'more_body': False})
+    disconnect = {'type': 'http.disconnect'}
+
+    async def endpoint(scope, receive, send):
+        assert await Request(scope, receive).body() == body
+        pending = asyncio.create_task(receive())
+        try:
+            await asyncio.sleep(0)
+            assert not pending.done(), 'Body replay must wait for the server after the final chunk'
+            messages.put_nowait(disconnect)
+            assert await asyncio.wait_for(pending, timeout=1) is disconnect
+        finally:
+            pending.cancel()
+            await asyncio.gather(pending, return_exceptions=True)
+
+    middleware = IdempotencyASGIMiddleware(endpoint, path_prefixes=['/api'])
+    scope = {
+        'type': 'http',
+        'method': 'POST',
+        'path': '/api/write',
+        'headers': [
+            (b'content-type', b'application/json'),
+            (b'content-length', str(len(body)).encode()),
+            (b'idempotency-key', b'replay-disconnect'),
+        ],
+    }
+    await asyncio.wait_for(middleware(scope, messages.get, AsyncMock()), timeout=1)
 
 
 @pytest.mark.asyncio

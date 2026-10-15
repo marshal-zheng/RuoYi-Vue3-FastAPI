@@ -109,7 +109,7 @@ class IdempotencyASGIMiddleware:
 
         identity_scope = await self._resolve_identity_scope(scope, request_headers)
         request_body = await self._drain_request_body(receive)
-        replay_receive = self._build_replay_receive(request_body)
+        replay_receive = self._build_replay_receive(request_body, receive)
         content_type = request_headers.get('content-type', '')
         query_string = scope.get('query_string', b'')
         fingerprint = self._build_fingerprint(method, path, query_string, content_type, request_body, identity_scope)
@@ -230,14 +230,15 @@ class IdempotencyASGIMiddleware:
         return b''.join(chunks)
 
     @staticmethod
-    def _build_replay_receive(body: bytes) -> Receive:
+    def _build_replay_receive(body: bytes, receive: Receive) -> Receive:
         sent = {'done': False}
 
         async def replay_receive() -> Message:
             if not sent['done']:
                 sent['done'] = True
                 return {'type': 'http.request', 'body': body, 'more_body': False}
-            return {'type': 'http.request', 'body': b'', 'more_body': False}
+            # Resume server events after the single body replay.
+            return await receive()
 
         return replay_receive
 
