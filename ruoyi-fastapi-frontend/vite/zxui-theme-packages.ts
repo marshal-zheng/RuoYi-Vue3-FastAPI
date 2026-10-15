@@ -51,5 +51,8 @@ export function zxuiThemeDeploymentPlugin(options: {
 /** Select the library-owned source plugin from the same checkout as its components. */
 export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot: string) {
   const { zxuiSourcePlugin } = loadThemeCompiler(frontendRoot, workspaceRoot);
-  return zxuiSourcePlugin({ workspaceRoot, featurePackages: ['@zxio/chart', '@zxio/theme-tailwind'] });
+  return zxuiSourcePlugin({
+    workspaceRoot,
+    featurePackages: ['@zxio/chart', '@zxio/http', '@zxio/theme-tailwind'],
+  });
 }

@@ -1,0 +1,57 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "adapter": "jsdom XMLHttpRequest",
+  "backend": "local FastAPI :8088",
+  "businessFunction": "src/api/project/project.ts#getProject",
+  "controlledGateway": "Delays delivery only; forwards authenticated requests to real FastAPI",
+  "results": [
+    {
+      "name": "real-login-and-authenticated-session",
+      "ok": true,
+      "userName": "admin"
+    },
+    {
+      "name": "actual-project-request-external-cancellation",
+      "ok": true,
+      "errorType": "AbortError",
+      "code": "ERR_CANCELED",
+      "originalCausePreserved": true,
+      "reasonPreserved": true,
+      "transportAbortCount": 1,
+      "failureFeedbackCount": 0
+    },
+    {
+      "name": "superseded-completion-does-not-unregister-replacement",
+      "ok": true,
+      "firstCancelled": true,
+      "secondCancelled": true,
+      "thirdProjectId": 1,
+      "failureFeedbackCount": 0
+    },
+    {
+      "name": "completed-request-detaches-caller-signal-listener",
+      "ok": true,
+      "addedAbortListeners": 1,
+      "removedAbortListeners": 1,
+      "lateAbortHasNoTransportEffect": true
+    },
+    {
+      "name": "subsequent-direct-business-request-recovers",
+      "ok": true,
+      "projectId": 1
+    },
+    {
+      "name": "actual-422-preserves-original-failure-and-business-metadata",
+      "ok": true,
+      "errorType": "ValidationError",
+      "status": 422,
+      "originalCausePreserved": true,
+      "responsePreserved": true,
+      "configPreserved": true,
+      "problemStatus": 422,
+      "requestIdPresent": true,
+      "failureFeedbackCount": 1
+    }
+  ]
+}

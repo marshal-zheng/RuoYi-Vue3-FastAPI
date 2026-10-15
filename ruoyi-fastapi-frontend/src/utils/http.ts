@@ -4,12 +4,15 @@
 import {
   createGridListPlugin,
   createHttpClient,
+  isAbortError,
+  createHttpError,
+  type HttpError,
   type HttpClientImpl,
   type HttpNotifier,
   type HttpTransformHook,
   type SuccessResolver,
 } from '@zxio/http';
-import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessageBox } from 'element-plus';
 
 import { getCsrfToken, getToken } from '@/utils/auth';
@@ -44,7 +47,7 @@ type HttpConfigRecord = AxiosRequestConfig & {
   skipRelogin?: boolean;
 };
 
-type RequestError = Error & {
+type RequestError = HttpError & {
   problem?: ProblemDetails;
   meta?: HttpContractMeta;
   status?: number;
@@ -277,8 +280,13 @@ const normalizeProblemDetails = (payload: unknown, status: number): ProblemDetai
   };
 };
 
-const createRequestError = (problem: ProblemDetails, meta: HttpContractMeta): RequestError => {
-  const error = new Error(problem.detail || problem.title || '请求失败') as RequestError;
+const createRequestError = (
+  original: HttpError,
+  problem: ProblemDetails,
+  meta: HttpContractMeta
+): RequestError => {
+  const error = original as RequestError;
+  error.message = problem.detail || problem.title || '请求失败';
   error.problem = problem;
   error.meta = meta;
   error.status = problem.status || meta.status;
@@ -454,12 +462,15 @@ const afterResponseTransform: HttpTransformHook = {
   },
 
   async onError(error) {
-    const axiosError = error as AxiosError & { config?: HttpConfigRecord };
+    const axiosError = createHttpError(error);
+    if (isAbortError(axiosError)) {
+      throw axiosError;
+    }
     const config = (axiosError.config || {}) as HttpConfigRecord;
     const skipRelogin = shouldSkipRelogin(config);
     const status = axiosError.response?.status || 0;
     const meta = axiosError.response ? buildMeta(axiosError.response) : { status };
-    const problem = normalizeProblemDetails(axiosError.response?.data, status);
+    const problem = normalizeProblemDetails(axiosError.data, status);
 
     if (status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002) {
       const onLoginPage = isLoginRoute();
@@ -474,7 +485,7 @@ const afterResponseTransform: HttpTransformHook = {
           feedback: resolveFeedback(config),
         });
       }
-      throw createRequestError(problem, meta);
+      throw createRequestError(axiosError, problem, meta);
     }
 
     if (!readConfigFlag(config, 'silentError')) {
@@ -485,7 +496,7 @@ const afterResponseTransform: HttpTransformHook = {
       });
     }
 
-    throw createRequestError(problem, meta);
+    throw createRequestError(axiosError, problem, meta);
   },
 };
 

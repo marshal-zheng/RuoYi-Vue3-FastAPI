@@ -1,5 +1,5 @@
 import type { HttpClientConfig, ResolvedRequestOptions } from '@zxio/http';
-import { AxiosHeaders, type AxiosResponse, type AxiosError } from 'axios';
+import { AxiosHeaders, AxiosError, type AxiosResponse } from 'axios';
 import type { ExtendedAxiosRequestConfig } from './request';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -29,7 +29,8 @@ const ElMessage = Object.assign(
   }
 );
 
-vi.mock('@zxio/http', () => ({
+vi.mock('@zxio/http', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@zxio/http')>()),
   createHttpClient,
   createGridListPlugin,
 }));
@@ -166,6 +167,7 @@ describe('http contract client', () => {
       response?: ResponseFixture;
     };
     return {
+      rawOnError: (error: AxiosError) => onError(error, options, context),
       clientConfig: {
         ...config,
         successResolver: ({ response }: { response: ResponseFixture }) =>
@@ -199,6 +201,48 @@ describe('http contract client', () => {
       },
     };
   };
+
+  it('keeps cancellation recognizable and suppresses all business failure feedback', async () => {
+    const { rawOnError } = await loadModule();
+    const original = new AxiosError('cancelled', 'ERR_CANCELED', {
+      headers: new AxiosHeaders(),
+    });
+    await expect(rawOnError(original)).rejects.toMatchObject({
+      name: 'AbortError',
+      code: 'ERR_CANCELED',
+      cause: original,
+    });
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+    expect(ElMessage).not.toHaveBeenCalled();
+  });
+
+  it('adds business problem metadata while preserving the original failure context', async () => {
+    const { rawOnError } = await loadModule();
+    const config = { headers: new AxiosHeaders(), url: '/project/1' };
+    const response: AxiosResponse = {
+      config,
+      status: 503,
+      statusText: 'Unavailable',
+      headers: { 'x-request-id': 'req-original' },
+      data: {
+        type: 'about:blank',
+        title: '服务繁忙',
+        status: 503,
+        detail: '稍后重试',
+        instance: '/project/1',
+      },
+    };
+    const original = new AxiosError('HTTP 503', 'ERR_BAD_RESPONSE', config, undefined, response);
+    await expect(rawOnError(original)).rejects.toMatchObject({
+      name: 'ServerError',
+      code: 'ERR_BAD_RESPONSE',
+      cause: original,
+      response,
+      config,
+      problem: response.data,
+      meta: { requestId: 'req-original' },
+    });
+  });
 
   it('configures multi-status success handling and items-based grid paging', async () => {
     const { clientConfig, gridConfig } = await loadModule();

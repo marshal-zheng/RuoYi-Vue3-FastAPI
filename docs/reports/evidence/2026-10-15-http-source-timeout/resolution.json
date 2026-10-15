@@ -1,0 +1,7 @@
+{
+  "httpSource": "/Users/hqz/Downloads/element-plus/packages/http/src/index.ts",
+  "axiosResolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/axios/index.js?v=46f2d434",
+  "axiosVersion": "1.20.0",
+  "httpExcludedFromPrebundle": true,
+  "servedBusinessImportsHttpSource": true
+}

@@ -4253,12 +4253,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/http@file:./vendor/@zxio-http-1.0.0.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/http@file:./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/http@file:./vendor/@zxio-http-1.0.0.tgz#./vendor/@zxio-http-1.0.0.tgz::hash=b96013&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/http@file:./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz#./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz::hash=4825f3&locator=vfadmin%40workspace%3A."
   peerDependencies:
-    axios: "*"
-  checksum: 10c0/33a388b2c32cd39eaf601391e357fc5b0b2d76e21e40db0e86beb63c006ec628a38fa55405ad0eb0bf7e92ec6290416cc87d61316eaa2cfb4ebc1ccfe0ce5046
+    axios: ^1.18.0
+  checksum: 10c0/49039529937cda71ebb2a6534344a4ca87992cf6726a54aa5fcb563b1d6a898ea17f3a6fc0e77f44f07c9523a83a47ad68b7d78659c784a6775add92a6beee2d
   languageName: node
   linkType: hard
 
@@ -4309,9 +4309,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/theme-compiler@file:vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-http-source.20261015.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/theme-compiler@file:vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz#vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz::hash=7d5811&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-http-source.20261015.tgz#./vendor/zxio-theme-compiler-1.0.0-http-source.20261015.tgz::hash=bbfd38&locator=vfadmin%40workspace%3A."
   dependencies:
     "@zxio/theme-css-codec": "npm:1.0.0"
     "@zxio/tokens": "npm:2.0.0"
@@ -4322,7 +4322,7 @@ __metadata:
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10c0/448133448da8a9823b27be96813e5ab9a2b71f6bfe519fffe658c6577abe7437c3b39440782741f42c1f2b93005dfa77e04eceb0cb47ea4bcff2873c8cc742c0
+  checksum: 10c0/2d8f0b1c0f0ba4234b1071256c573ad78fa9f3252921d4dc9fa87557f074b9824a4dc95f7ff9ab800cc02ff79d9d8a91f7210d07136f902028adb01d7ca93630
   languageName: node
   linkType: hard
 
@@ -13730,10 +13730,10 @@ __metadata:
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz"
-    "@zxio/http": "file:./vendor/@zxio-http-1.0.0.tgz"
+    "@zxio/http": "file:./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
-    "@zxio/theme-compiler": "file:vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz"
+    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-http-source.20261015.tgz"
     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz"

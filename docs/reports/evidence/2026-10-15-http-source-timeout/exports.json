@@ -1,0 +1,64 @@
+{
+  "source": {
+    "httpSource": "/Users/hqz/Downloads/element-plus/packages/http/src/index.ts",
+    "axiosResolved": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/axios/index.js?v=46f2d434",
+    "axiosVersion": "1.20.0",
+    "httpExcludedFromPrebundle": true,
+    "servedBusinessImportsHttpSource": true
+  },
+  "selectedVersionId": 1,
+  "projectId": 1,
+  "results": [
+    {
+      "name": "real-word-export",
+      "ok": true,
+      "bytes": 5336,
+      "timeout": 120000,
+      "durationMs": 42
+    },
+    {
+      "name": "real-excel-zip-export",
+      "ok": true,
+      "bytes": 165,
+      "timeout": 120000,
+      "durationMs": 26
+    },
+    {
+      "name": "real-xml-export",
+      "ok": true,
+      "bytes": 603,
+      "timeout": 120000,
+      "durationMs": 30
+    },
+    {
+      "name": "real-xml-export-with-65-second-response-delay",
+      "ok": true,
+      "bytes": 603,
+      "timeout": 120000,
+      "durationMs": 65043,
+      "controlledResponseDelayMs": 65000
+    }
+  ],
+  "xhrReceipts": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:8088/project/version/export",
+      "timeout": 120000
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8088/project/version/export-excel/1",
+      "timeout": 120000
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:8088/project/version/export-xml/1",
+      "timeout": 120000
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:57036/project/version/export-xml/1",
+      "timeout": 120000
+    }
+  ]
+}

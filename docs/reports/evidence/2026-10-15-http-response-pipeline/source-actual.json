@@ -1,0 +1,90 @@
+{
+  "mode": "source",
+  "axios": "1.20.0",
+  "adapter": "jsdom XMLHttpRequest",
+  "backend": "local FastAPI :8088",
+  "uiVerification": "No browser clicks or computer use",
+  "businessDataChanges": "none; login/read/export/logout only",
+  "results": [
+    {
+      "name": "real-login-and-session",
+      "ok": true,
+      "userName": "admin"
+    },
+    {
+      "name": "actual-project-page-complete-processing-before-success",
+      "ok": true,
+      "items": 1,
+      "total": 1,
+      "page": 1,
+      "pageSize": 2,
+      "requestIdPreserved": true,
+      "nonEnumerableMetaPreserved": true,
+      "order": [
+        "late-hook",
+        "resolver"
+      ]
+    },
+    {
+      "name": "actual-role-page-keeps-business-shape",
+      "ok": true,
+      "items": 2,
+      "total": 2,
+      "requestIdPreserved": true,
+      "order": [
+        "late-hook",
+        "resolver"
+      ]
+    },
+    {
+      "name": "actual-dictionary-collection-keeps-items",
+      "ok": true,
+      "items": 21,
+      "requestIdPreserved": true,
+      "order": [
+        "late-hook",
+        "resolver"
+      ]
+    },
+    {
+      "name": "native-list-response-keeps-envelope-headers-and-processed-body",
+      "ok": true,
+      "status": 200,
+      "requestIdHeaderPreserved": true,
+      "processedBodyAndMetaPreserved": true,
+      "resolverCalls": 0,
+      "order": [
+        "late-hook"
+      ]
+    },
+    {
+      "name": "raw-list-body-keeps-processing-without-resolver",
+      "ok": true,
+      "items": 1,
+      "processedBodyAndMetaPreserved": true,
+      "resolverCalls": 0,
+      "order": [
+        "late-hook"
+      ]
+    },
+    {
+      "name": "actual-binary-export-still-passes-through",
+      "ok": true,
+      "bytes": 492,
+      "contentType": "application/zip",
+      "order": [
+        "late-hook",
+        "resolver"
+      ]
+    },
+    {
+      "name": "actual-422-still-rejects-with-original-error-context",
+      "ok": true,
+      "errorType": "ValidationError",
+      "status": 422,
+      "causeAndResponsePreserved": true,
+      "requestIdPreserved": true,
+      "failureFeedbackCount": 1
+    }
+  ]
+}
