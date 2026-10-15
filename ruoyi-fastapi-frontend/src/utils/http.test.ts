@@ -1,5 +1,5 @@
 import type { HttpClientConfig, ResolvedRequestOptions } from '@zxio/http';
-import type { AxiosResponse, AxiosError } from 'axios';
+import { AxiosHeaders, type AxiosResponse, type AxiosError } from 'axios';
 import type { ExtendedAxiosRequestConfig } from './request';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -156,7 +156,10 @@ describe('http contract client', () => {
       Object.assign(response, {
         statusText: '',
         headers: response.headers ?? {},
-        config: { headers: {}, ...response.config },
+        config: {
+          ...response.config,
+          headers: Object.assign(new AxiosHeaders(), response.config?.headers),
+        },
       });
     type ErrorFixture = {
       config: ExtendedAxiosRequestConfig;
@@ -178,7 +181,10 @@ describe('http contract client', () => {
                 message: 'request failed',
                 isAxiosError: true,
                 toJSON: () => ({}),
-                config: { headers: {}, ...fixture.config },
+                config: {
+                  ...fixture.config,
+                  headers: Object.assign(new AxiosHeaders(), fixture.config.headers),
+                },
                 ...(fixture.response ? { response: responseOf(fixture.response) } : {}),
               };
               return onError(error, options, context);

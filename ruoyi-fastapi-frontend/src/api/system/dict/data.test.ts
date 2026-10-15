@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { flushPromises } from '@vue/test-utils';
-import { CanceledError, type AxiosResponse, type AxiosRequestConfig } from 'axios';
+import {
+  CanceledError,
+  type AxiosResponse,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+} from 'axios';
 import { getDicts } from './data';
 import { useDict } from '@/utils/dict';
 
@@ -28,7 +33,7 @@ const payload = {
 function pendingResponse() {
   let finish!: () => void;
   adapter.mockImplementation(
-    (config: AxiosRequestConfig) =>
+    (config: InternalAxiosRequestConfig) =>
       new Promise<AxiosResponse>((resolve, reject) => {
         config.signal?.addEventListener?.('abort', () => reject(new CanceledError()));
         finish = () =>

@@ -1,6 +1,6 @@
 import { Blob as NodeBlob } from 'node:buffer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { AxiosResponse } from 'axios';
+import { AxiosHeaders, type AxiosResponse } from 'axios';
 import { downloadFromResponse, extractFilenameFromHeaders } from './download';
 
 const saveAs = vi.hoisted(() => vi.fn<(data: Blob, filename: string) => void>());
@@ -27,7 +27,7 @@ describe('binary download boundary', () => {
       status: 204,
       statusText: '',
       headers: { 'content-type': 'application/octet-stream' },
-      config: {},
+      config: { headers: new AxiosHeaders() },
     };
     await expect(downloadFromResponse(response, 'empty.bin')).rejects.toThrow(
       'Unsupported response type'
@@ -45,7 +45,7 @@ describe('binary download boundary', () => {
         'content-type': 'application/octet-stream',
         'content-disposition': 'attachment; filename="file.bin"',
       },
-      config: {},
+      config: { headers: new AxiosHeaders() },
     };
     await downloadFromResponse(response, 'fallback.bin');
     expect(saveAs).toHaveBeenCalledOnce();

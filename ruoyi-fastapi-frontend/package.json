@@ -86,7 +86,7 @@
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz",
     "@zxio/zxui": "file:vendor/zxio-zxui-3.0.0-next.0-overlay-validation.final.20261013.tgz",
     "ant-design-vue": "^4.1.1",
-    "axios": "0.28.1",
+    "axios": "1.20.0",
     "clipboard": "2.0.11",
     "dexie": "^4.4.2",
     "docx": "^9.5.1",

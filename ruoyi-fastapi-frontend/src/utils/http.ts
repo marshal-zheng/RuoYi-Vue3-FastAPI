@@ -493,17 +493,14 @@ export const http = createHttpClient({
   axiosConfig: {
     baseURL: import.meta.env.VITE_APP_BASE_API as string,
     timeout: 10000,
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8',
-    },
   },
   tokenProvider: {
     getToken: () => getToken() || '',
     applyToken(config, token) {
-      const headers = (config.headers || {}) as Record<string, unknown>;
+      const headers = (config.headers ??= {}) as Record<string, unknown>;
       const isToken = headers.isToken === false;
       if (!isToken && token.value) {
-        (config.headers as Record<string, string>)[token.headerName] = token.headerValue;
+        headers[token.headerName] = token.headerValue;
       }
     },
   },
