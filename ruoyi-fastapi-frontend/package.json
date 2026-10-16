@@ -71,7 +71,7 @@
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.10",
     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz",
-    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final3.20261016.tgz",
+    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz",
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz",
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz",
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz",

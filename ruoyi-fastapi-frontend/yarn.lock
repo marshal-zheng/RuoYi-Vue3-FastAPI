@@ -4084,16 +4084,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final3.20261016.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0
-  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final3.20261016.tgz#./vendor/zxio-dashboard-0.1.0-p0-final3.20261016.tgz::hash=444315&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz#./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz::hash=1bdf9e&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@zxio/vue-grid-layout": ^1.0.6
     vue: ^3.5.0
   peerDependenciesMeta:
     "@zxio/vue-grid-layout":
       optional: true
-  checksum: 10c0/65b4f02b1c8597ecc11e4f0007e8c9ae8bdd2cc44e4d6e5c5b2a2c06452d8408a78997b21672afe57ade377168cfef9e77386ba8c8d4e19819d650169c3e65f3
+  checksum: 10c0/a6572a7346361de5250ca7e31521ea7f2cbaa209de3f842f5bb3b0017d27e333696d6aaf3809c915a58ebfca35ebe2a6b885313eb94c4e65f7ff1bf78cb966c5
   languageName: node
   linkType: hard
 
@@ -13584,7 +13584,7 @@ __metadata:
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz"
-    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final3.20261016.tgz"
+    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-download-boundary.20261015.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
