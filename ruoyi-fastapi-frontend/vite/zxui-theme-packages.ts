@@ -53,6 +53,6 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
   const { zxuiSourcePlugin } = loadThemeCompiler(frontendRoot, workspaceRoot);
   return zxuiSourcePlugin({
     workspaceRoot,
-    featurePackages: ['@zxio/chart', '@zxio/http', '@zxio/theme-tailwind'],
+    featurePackages: ['@zxio/chart', '@zxio/dashboard', '@zxio/http', '@zxio/theme-tailwind'],
   });
 }
