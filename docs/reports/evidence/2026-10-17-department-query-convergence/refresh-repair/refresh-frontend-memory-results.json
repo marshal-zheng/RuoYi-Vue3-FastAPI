@@ -1,0 +1,112 @@
+{
+  "timestamp": "2026-10-17T10:54:38.604Z",
+  "mode": "scheduled-memory-only",
+  "liveNetwork": false,
+  "realWrites": false,
+  "queryCoreVersion": "5.90.16",
+  "vueQueryVersion": "5.92.5",
+  "results": [
+    {
+      "mode": "installed",
+      "schedule": "sequential-settled",
+      "reads": 3,
+      "abortedReads": 0,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "installed",
+      "schedule": "overlap-old-finishes-last",
+      "reads": 3,
+      "abortedReads": 1,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "installed",
+      "schedule": "same-turn-invalidations",
+      "reads": 3,
+      "abortedReads": 1,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "installed",
+      "schedule": "cancel-delay-interleave",
+      "reads": 3,
+      "abortedReads": 0,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "installed",
+      "schedule": "fresh-native-request-server-returns-stale",
+      "reads": 2,
+      "result": [
+        "parent"
+      ],
+      "fetchStatus": "idle",
+      "isInvalidated": false,
+      "explanation": "Native successful stale response is authoritative until another trigger; invalidation cannot infer database truth"
+    },
+    {
+      "mode": "source",
+      "schedule": "sequential-settled",
+      "reads": 3,
+      "abortedReads": 0,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "source",
+      "schedule": "overlap-old-finishes-last",
+      "reads": 3,
+      "abortedReads": 1,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "source",
+      "schedule": "same-turn-invalidations",
+      "reads": 3,
+      "abortedReads": 1,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "source",
+      "schedule": "cancel-delay-interleave",
+      "reads": 3,
+      "abortedReads": 0,
+      "result": [
+        "parent",
+        "child"
+      ]
+    },
+    {
+      "mode": "source",
+      "schedule": "fresh-native-request-server-returns-stale",
+      "reads": 2,
+      "result": [
+        "parent"
+      ],
+      "fetchStatus": "idle",
+      "isInvalidated": false,
+      "explanation": "Native successful stale response is authoritative until another trigger; invalidation cannot infer database truth"
+    }
+  ]
+}

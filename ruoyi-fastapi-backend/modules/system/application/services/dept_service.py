@@ -1,7 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List
 from config.constant import CommonConstant
-from config.env import CacheConfig
 from exceptions.exception import (
     ResourceNotFoundException,
     ResourceConflictException,
@@ -16,13 +15,14 @@ from modules.system.infrastructure.dept_repository import DeptRepository  # noqa
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.transaction_manager import transactional
-from utils.query_cache import get_query_cache
 from ports import IDeptRepository
 
 
 class DeptService:
     """
     部门管理模块服务层
+
+    读取沿用当前数据库事务的可见性, 不发布跨事务的 Redis 结果缓存。
     """
 
     def __init__(self, dept_repo: IDeptRepository, query_db: AsyncSession):
@@ -37,27 +37,10 @@ class DeptService:
         :param data_scope_sql: 数据权限对应的查询sql语句
         :return: 部门树信息对象
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key(
-            'dept:tree',
-            {
-                'dept_name': page_object.dept_name,
-                'data_scope': str(data_scope_sql),
-            },
+        dept_list_result = await self.dept_repo.find_all_for_tree(
+            dept_name=page_object.dept_name, data_scope_sql=data_scope_sql
         )
-
-        async def _load():
-            dept_list_result = await self.dept_repo.find_all_for_tree(
-                dept_name=page_object.dept_name, data_scope_sql=data_scope_sql
-            )
-            return self.list_to_tree(dept_list_result)
-
-        return await cache.get_or_set(
-            cache_key,
-            _load,
-            CacheConfig.query_cache_default_ttl,
-            CacheConfig.query_cache_lock_enabled,
-        )
+        return self.list_to_tree(dept_list_result)
 
     async def get_dept_for_edit_option_services(self, page_object: DeptModel, data_scope_sql: str):
         """
@@ -67,24 +50,10 @@ class DeptService:
         :param data_scope_sql: 数据权限对应的查询sql语句
         :return: 部门树信息对象
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key(
-            'dept:edit_option',
-            {
-                'exclude_dept_id': page_object.dept_id,
-                'data_scope': str(data_scope_sql),
-            },
-        )
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return cached
-
         dept_list_result = await self.dept_repo.find_for_edit_option(
             exclude_dept_id=page_object.dept_id, data_scope_sql=data_scope_sql
         )
-        result = CamelCaseUtil.transform_result(dept_list_result)
-        await cache.set(cache_key, result, CacheConfig.query_cache_default_ttl)
-        return result
+        return CamelCaseUtil.transform_result(dept_list_result)
 
     async def get_dept_list_services(self, page_object: DeptModel, data_scope_sql: str):
         """
@@ -94,29 +63,13 @@ class DeptService:
         :param data_scope_sql: 数据权限对应的查询sql语句
         :return: 部门列表信息对象
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key(
-            'dept:list',
-            {
-                'dept_id': page_object.dept_id,
-                'status': page_object.status,
-                'dept_name': page_object.dept_name,
-                'data_scope': str(data_scope_sql),
-            },
-        )
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return cached
-
         dept_list_result = await self.dept_repo.find_with_filters(
             dept_id=page_object.dept_id,
             status=page_object.status,
             dept_name=page_object.dept_name,
             data_scope_sql=data_scope_sql,
         )
-        result = CamelCaseUtil.transform_result(dept_list_result)
-        await cache.set(cache_key, result, CacheConfig.query_cache_default_ttl)
-        return result
+        return CamelCaseUtil.transform_result(dept_list_result)
 
     async def check_dept_data_scope_services(self, dept_id: int, data_scope_sql: str):
         """
@@ -178,7 +131,6 @@ class DeptService:
         page_object.ancestors = f'{parent_info.ancestors},{page_object.parent_id}'
         db_dept = DeptDO(**page_object.model_dump())
         add_result = await self.dept_repo.add(db_dept)
-        await self._invalidate_dept_cache()
         return CrudResponseModel(is_success=True, message='新增成功', result={'deptId': add_result.dept_id})
 
     @transactional()
@@ -227,7 +179,6 @@ class DeptService:
             await self.dept_repo.update(dept)
         if page_object.status == CommonConstant.DEPT_NORMAL and page_object.ancestors and page_object.ancestors != 0:
             await self.update_parent_dept_status_normal(page_object)
-        await self._invalidate_dept_cache()
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -258,7 +209,6 @@ class DeptService:
                     developer_message=f'Dept has users: dept_id={dept_id}',
                 )
             await self.dept_repo.soft_delete(int(dept_id), page_object.update_by)
-        await self._invalidate_dept_cache()
         return CrudResponseModel(is_success=True, message='删除成功')
 
     async def dept_detail_services(self, dept_id: int):
@@ -268,18 +218,11 @@ class DeptService:
         :param dept_id: 部门id
         :return: 部门id对应的信息
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key('dept:detail', {'dept_id': dept_id})
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return DeptModel(**cached)
-
         dept = await self.dept_repo.find_active_by_id(dept_id)
         if dept:
             result = DeptModel(**CamelCaseUtil.transform_result(dept))
         else:
             result = DeptModel(**dict())
-        await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
         return result
 
     @staticmethod
@@ -312,11 +255,6 @@ class DeptService:
             elif item.get('status') == CommonConstant.DEPT_DISABLE:
                 item['status'] = '停用'
         return ExcelUtil.export_list2excel(dept_list, mapping_dict)
-
-    @staticmethod
-    async def _invalidate_dept_cache():
-        cache = get_query_cache()
-        await cache.delete_pattern(f'{cache.key_prefix}:dept:*')
 
     @staticmethod
     def list_to_tree(permission_list: list) -> list:

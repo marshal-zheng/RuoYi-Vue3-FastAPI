@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-10-17T11:01:51Z",
+  "expectation": "fresh",
+  "marker": "codex_dept_refresh_2e75",
+  "realMySQL": true,
+  "realRedis": true,
+  "realLoopbackHTTP": true,
+  "computerUse": false,
+  "productAPIChanged": false,
+  "controlledHook": "process-local ContextVar from owned header plus real DeptRepository SQL-result barrier; Unix IPC only",
+  "cacheIsolation": "task-only Redis query namespace; other product Redis/session paths unchanged",
+  "events": [
+    {
+      "event": "parent_post_success",
+      "http": 201
+    },
+    {
+      "event": "old_get_sql_snapshot_loaded",
+      "owned": {
+        "parent": true,
+        "child": false
+      }
+    },
+    {
+      "event": "child_post_success_and_independent_sql_committed",
+      "http": 201,
+      "ownedActiveSQLCount": 2
+    },
+    {
+      "event": "old_get_completed",
+      "http": 200,
+      "containsOwnedChild": false
+    },
+    {
+      "event": "independent_get_completed",
+      "http": 200,
+      "containsOwnedChild": true,
+      "repositoryCalls": 1
+    }
+  ],
+  "cleanup": {
+    "created": 2,
+    "deleted": 2,
+    "verifiedAbsent": true
+  },
+  "passed": true,
+  "checks": {
+    "oldReadChild": false,
+    "independentReadChild": true,
+    "independentReadRepositoryCalls": 1,
+    "independentOwnedSQLCount": 2,
+    "ownedDepartmentCache": {
+      "ownedDeptCacheKeys": 0,
+      "namespaceIsolated": true
+    }
+  },
+  "ownSessionEnded": true,
+  "cacheCleanup": {
+    "ownedNamespace": "codex_dept_refresh_green_20261017",
+    "deletedKeys": 0,
+    "remainingKeys": 0
+  },
+  "controlState": {
+    "events": [
+      {
+        "event": "old_get_sql_snapshot_loaded",
+        "owned": {
+          "parent": true,
+          "child": false
+        }
+      },
+      {
+        "event": "old_get_snapshot_released",
+        "owned": {
+          "parent": true,
+          "child": false
+        }
+      }
+    ],
+    "repositoryCalls": {
+      "codex_dept_refresh_2e75_old": 1,
+      "codex_dept_refresh_2e75_fresh": 1
+    },
+    "requestStatuses": {
+      "codex_dept_refresh_2e75_parent": 201,
+      "codex_dept_refresh_2e75_child": 201,
+      "codex_dept_refresh_2e75_old": 200,
+      "codex_dept_refresh_2e75_fresh": 200,
+      "codex_dept_refresh_2e75_cleanup": 204
+    },
+    "hookActive": false
+  }
+}

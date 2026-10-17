@@ -1,0 +1,68 @@
+{
+  "scope": "in-memory controlled schedule; real QueryCache implementation and fake Redis transport; no database writes; not historical failure attribution",
+  "queryCacheSHA256": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+  "scenarios": [
+    {
+      "postCommitDelete": false,
+      "singleFlightLock": false,
+      "committedOwnedMarkerCount": 1,
+      "independentReadOwnedMarkerCount": 0,
+      "independentReadLoaderCalled": false,
+      "confirmedStaleFill": true,
+      "events": [
+        "writer.flush_then_delete_before_commit",
+        "reader.load_uncommitted_writer_not_visible",
+        "writer.outer_commit",
+        "reader.set_old_result_after_commit",
+        "independent_read_cache_hit_old_result"
+      ]
+    },
+    {
+      "postCommitDelete": false,
+      "singleFlightLock": true,
+      "committedOwnedMarkerCount": 1,
+      "independentReadOwnedMarkerCount": 0,
+      "independentReadLoaderCalled": false,
+      "confirmedStaleFill": true,
+      "events": [
+        "writer.flush_then_delete_before_commit",
+        "reader.load_uncommitted_writer_not_visible",
+        "writer.outer_commit",
+        "reader.set_old_result_after_commit",
+        "independent_read_cache_hit_old_result"
+      ]
+    },
+    {
+      "postCommitDelete": true,
+      "singleFlightLock": false,
+      "committedOwnedMarkerCount": 1,
+      "independentReadOwnedMarkerCount": 0,
+      "independentReadLoaderCalled": false,
+      "confirmedStaleFill": true,
+      "events": [
+        "writer.flush_then_delete_before_commit",
+        "reader.load_uncommitted_writer_not_visible",
+        "writer.outer_commit",
+        "hypothetical_post_commit_delete",
+        "reader.set_old_result_after_commit",
+        "independent_read_cache_hit_old_result"
+      ]
+    },
+    {
+      "postCommitDelete": true,
+      "singleFlightLock": true,
+      "committedOwnedMarkerCount": 1,
+      "independentReadOwnedMarkerCount": 0,
+      "independentReadLoaderCalled": false,
+      "confirmedStaleFill": true,
+      "events": [
+        "writer.flush_then_delete_before_commit",
+        "reader.load_uncommitted_writer_not_visible",
+        "writer.outer_commit",
+        "hypothetical_post_commit_delete",
+        "reader.set_old_result_after_commit",
+        "independent_read_cache_hit_old_result"
+      ]
+    }
+  ]
+}

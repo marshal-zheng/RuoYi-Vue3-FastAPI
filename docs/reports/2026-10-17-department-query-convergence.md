@@ -1,6 +1,6 @@
 # 部门管理与用户部门选择闭环
 
-当前状态：实现检查与两轮独立审查已通过，保留首次真实接口刷新超时这一未定诊断。实现位于项目本地工作树 `codex/department-query-convergence`，基线 `94528292c3483af52cdfeab6a95cb0d76d87bbb9`；本阶段没有合入源分支或发布，工作树保留供用户验收。
+当前状态：用户已认可上一阶段实现，并明确授权查清刷新超时、修复后完成源分支交付。本次已用真实 HTTP/MySQL/Redis 对照复现并修复旧读回填路径；新增复审和源交付正在进行。原始失败记录保留，不倒推缺失的历史响应。任务基线为 `94528292c3483af52cdfeab6a95cb0d76d87bbb9`，前端已验收实现检查点为 `fd51753`。
 
 ## 范围与方案依据
 
@@ -55,3 +55,31 @@
 THEME 实现已快进合入记录的 ZXUI `codex/http-vue-query-phase-a` 与 RuoYi `std` 源分支，并通过源目录基线验证；两仓共 6 个工作树、4 个临时分支已清理。未发布或推送。详见 [THEME 源分支记录](/Users/hqz/Downloads/element-plus/docs/specs/THEME-runtime-payload/delivery.md)。
 
 两仓 `delivery-proof` 通过，但 `delivery-status` 因源目录保留的无关未提交内容返回 `delivery_incomplete`、`finalClaimAllowed:false`。保留该原始工具状态，不将其改写成 `delivered_clean`，不把其他任务的工作纳入交付。本部门任务的工作树与该已清理的 THEME 任务独立。
+
+## 刷新超时根因与修复对照
+
+前端源码和本地产物的 4 种受控取消/失效交错均收敛到最新值，没有证据支持增加重复刷新、延时或调度器。若最新 GET 本身返回旧树，原生查询会正常进入已完成状态；这解释了为何请求已发生但等待新节点仍会超时。
+
+后端原实现中，部门写入在事务提交前清除 Redis 结果缓存，旧读取仍可在清除后把旧 SQL 快照写回。把删除移到提交后也不能阻止更晚的旧读取回填。实际 DeptService、QueryCache 的受控回归先观察到 7 项旧值断言失败；修复后通过。内存仓库的 commit/rollback 事件只证明服务与缓存时序，不能冒充真实数据库事务。
+
+另以任务自建 FastAPI 进程、真实 MySQL/Redis 和正常部门 HTTP 接口做相同时序的可控 A/B：测试进程在真实仓库 SELECT 返回后暂停旧 GET，父子创建仍走正常 POST；缓存使用任务独有命名空间，控制走本地 IPC，没有新增产品 API 或修改数据库权限。
+
+| 时序 | 原实现 | 修复后 |
+| --- | --- | --- |
+| 旧 GET 已读 SQL、尚未返回 | 只有父部门 | 只有父部门 |
+| 子部门 POST 返回 201 后独立 SQL | 父子共 2 条 | 父子共 2 条 |
+| 释放旧 GET | 200，旧快照缺少子部门 | 200，旧快照缺少子部门，符合在途读取语义 |
+| 再发独立 GET | 200，仍缺子部门；仓库调用 0 次 | 200，包含子部门；仓库调用 1 次 |
+| 部门结果缓存键 | 存在旧结果 | 0 |
+
+因此已确定并消除能产生首次超时表现的后端旧读回填机制。原始首次记录没有响应内容和详细时序，仍不能声称它只能由这个原因造成。A/B JSON 与实际输入边界见证据 `refresh-repair/http-{red,green}.json` 及 runtime 输入记录；最初历史文件未覆盖。
+
+修复删除 DeptService 的列表、正常部门树、排除树、详情四类 Redis 结果缓存及无用途失效，保留当前请求数据库事务的可见性。前端 QueryClient 继续共享读取，ZXUI 通用机制不引入部门知识。没有改部门过滤、数据范围、DTO、事务边界或写入业务规则。角色部门树同样复用此服务，其权限及 checkedKeys 契约保持。
+
+选型依据：本地只读统计为 10 个有效部门，每次树/列表只需 1 条 SELECT，正常树读取约 2.8 ms。移除重复状态的代价是每次 HTTP 多一次小查询；相比为本轮新增分布式版本、锁或提交后调度，维护成本更低。Redis 官方也明确说明 cache-aside 的 TTL 和删除不提供严格一致性：[cache-aside](https://redis.io/docs/latest/develop/use-cases/cache-aside/)、[一致性与旧值回填](https://redis.io/blog/cache-consistency-strategies/)。该规模与延迟是本机观测，不代表所有部署的容量保证。
+
+新增后端部门、用户/角色查询及事务相关检查共 **62 passed**。新测试 Ruff/format 通过。扩大检查中的旧集成套件在 HEAD/修复版均有相同 3 failed / 3 errors（既有 capability 403 断言、TestClient 跨事件循环连接）；Service 的 15 项 Ruff 及格式诊断也与基线相同，没有把它们写成全绿或扩大修改范围。对应 A/B 记录为 `refresh-repair/department-cache-impact-comparison.json`。
+
+修复候选上的正常前端业务 probe 在源码直连、本地产物模式各通过 1 轮，均使用原有真实 commands/options、没有额外刷新等待。连同 HTTP A/B，本次新增 4 轮共 8 条临时部门均正常软删除并通过 API/SQL 核对不存在；自建会话、后端进程、专用缓存键及 IPC socket 已清理。输入 SHA、局部 overlay 与 hook 边界见 `refresh-repair/runtime-inputs.json`。一次临时 trace header 实验被现有 CORS 拒绝后已回退，没有改产品 CORS 或把它算作业务验证成功。源分支交付后仍要使用无 overlay 的标准后端做最终验证。
+
+源目录服务文件还有其他未提交部门业务规则。本轮没有整份导入或提交它们：以原 HEAD、源当前文件和任务缓存修复作三方预演，只删除缓存职责；13 个其他方法在去除失效调用后 AST 一致。隔离 Git 实验已证明普通快进配合只准备重叠文件的目标 index entry，可同时保留该文件原有未提交规则、其他暂存项、工作文件及未跟踪文件。实际源操作仍须经过 source-head gate 和逐路径核对。

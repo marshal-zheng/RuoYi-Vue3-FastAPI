@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-10-17T11:03:40Z",
+  "backendSource": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+  "backendSourceHEAD": "94528292c3483af52cdfeab6a95cb0d76d87bbb9",
+  "sourceHasPreexistingDirtyBusinessRules": true,
+  "sourceProductFilesEditedByProbe": false,
+  "originalDeptServiceSHA256": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072",
+  "fixedOverlaySHA256": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+  "sourceRelatedFilesSHA256": {
+    "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072",
+    "ruoyi-fastapi-backend/utils/query_cache.py": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+    "ruoyi-fastapi-backend/utils/transaction_manager.py": "4cd744cbaa457ad98ac187db112e49910b77ed3ec64a32371b8855d6613953f5",
+    "ruoyi-fastapi-backend/config/get_db.py": "6eb1d58c1c83ac8f8aa296656645dc6357a8e66b9d1295989009e46aa7176cd0",
+    "ruoyi-fastapi-backend/modules/system/api/dept_controller.py": "29cf7f591266b503a12bc9cbde2aa88553c815d99281ece0af8a7c3b0e5793f2",
+    "ruoyi-fastapi-backend/modules/system/api/user_controller.py": "54a012540869e1986498ffd0ad903ed451e14744fd0be602cabe9a275d944a64"
+  },
+  "instrumentationSHA256": {
+    "backend_runner.py": "ae604fdd19030814b3f8c1a15dc0e64d8e63ed5e9cf259b4bfed64d7166fc32f",
+    "http_schedule.py": "8deda68e0bf51d7ee2712b83d95390c8aacf58c54b10e28d003141372fa850d9"
+  },
+  "instrumentationBoundary": {
+    "sourceBackendImported": true,
+    "originalMode": "unmodified source DeptService",
+    "fixedMode": "same source application and dependencies with DeptService class re-executed from source-preserving cache-removal overlay before importing server",
+    "sharedHooks": [
+      "owned ContextVar trace header",
+      "real repository SQL result barrier",
+      "Unix socket control only, no new product route",
+      "isolated Redis QueryCache namespace"
+    ],
+    "fixedOnlySemanticDifference": "DeptService reads bypass Redis result cache; now-unused dept invalidations removed",
+    "separateOwnedNamespacesForIsolation": true,
+    "realSQLAndHTTPAndRedis": true,
+    "fakedDataOrPermissions": false,
+    "noReload": true,
+    "host": "127.0.0.1",
+    "port": 8088
+  },
+  "commands": {
+    "runner": "./venv/bin/python <metadata>/refresh-http-probe/backend_runner.py --backend-root <source-backend> --control <owned-git-socket> --namespace <owned-prefix> [--service-overlay <metadata>/DeptService-source-preserved-fixed.py]",
+    "schedule": "./venv/bin/python <metadata>/refresh-http-probe/http_schedule.py --control <owned-git-socket> --output <evidence-json> --expect stale|fresh",
+    "normalFrontend": "corepack yarn vitest run --config tests/manual/department-query/vitest.config.ts"
+  },
+  "environmentVariableNames": [
+    "CODEX_DEPT_QUERY_WRITE",
+    "CODEX_DEPT_PASSWORD",
+    "CODEX_DEPT_USERNAME",
+    "VITE_ZXUI_LOCAL",
+    "VITE_ZXIO_REPO_ROOT",
+    "CODEX_DEPT_EVIDENCE"
+  ],
+  "credentialsPersisted": false,
+  "runPIDs": {
+    "original": 12129,
+    "fixed": 13222
+  },
+  "cleanup": {
+    "originalPIDAbsent": true,
+    "fixedPIDAbsent": true,
+    "host8088Closed": true,
+    "originalControlSocketAbsent": true,
+    "fixedControlSocketAbsent": true,
+    "ownNamespacesCleared": true,
+    "normalProbeFinalNamespaceRemainingKeys": 0,
+    "sharedMySQLRedisRetained": true,
+    "ownSocketCleanup": "Removed owned stale Unix socket files only after both task-owned runner PIDs were confirmed absent; normal SIGTERM exit 143."
+  },
+  "normalFrontendInputs": {
+    "frontendCwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+    "backendMode": "source-preserving fixed overlay, not final delivered standard backend",
+    "source": {
+      "passed": true,
+      "cleanup": {
+        "created": 2,
+        "deleted": 2,
+        "verifiedAbsent": true
+      }
+    },
+    "installed": {
+      "passed": true,
+      "cleanup": {
+        "created": 2,
+        "deleted": 2,
+        "verifiedAbsent": true
+      }
+    }
+  },
+  "limits": [
+    "Historical first response snapshots were not retained; this does not uniquely attribute that historical failure",
+    "These are real service/query/command HTTP probes, not browser UI/computer-use acceptance",
+    "A final no-overlay standard source-backend validation is still required after source delivery",
+    "Initial added custom trace header caused CORS preflight rejection before login; reverted completely and failure artifact retained separately"
+  ]
+}

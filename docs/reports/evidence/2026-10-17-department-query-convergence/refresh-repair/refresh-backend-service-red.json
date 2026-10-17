@@ -1,0 +1,43 @@
+{
+  "scope": "true DeptService add and tree reads, true QueryCache, fake Redis and scheduled repository; query_db=None so @transactional bypasses actual DB; outer commit is explicit repository event; no database writes and no product source edits; not attribution of historical first run",
+  "backendRoot": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+  "sourceSHA256": {
+    "utils/query_cache.py": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+    "modules/system/application/services/dept_service.py": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072"
+  },
+  "scenarios": [
+    {
+      "hypotheticalPostCommitDelete": false,
+      "committedOwnedChildren": 1,
+      "inFlightReadOwnedChildren": 0,
+      "independentReadOwnedChildren": 0,
+      "independentReadRepositoryCalls": 0,
+      "cacheContainsSerializedResults": true,
+      "eventOrder": [
+        "true DeptService tree warm",
+        "true DeptService add stages row and invalidates before outer commit",
+        "true DeptService tree miss captures old repository snapshot and waits",
+        "fake repository outer commit publishes staged child",
+        "release true DeptService old read to write cache",
+        "independent true DeptService tree read"
+      ]
+    },
+    {
+      "hypotheticalPostCommitDelete": true,
+      "committedOwnedChildren": 1,
+      "inFlightReadOwnedChildren": 0,
+      "independentReadOwnedChildren": 0,
+      "independentReadRepositoryCalls": 0,
+      "cacheContainsSerializedResults": true,
+      "eventOrder": [
+        "true DeptService tree warm",
+        "true DeptService add stages row and invalidates before outer commit",
+        "true DeptService tree miss captures old repository snapshot and waits",
+        "fake repository outer commit publishes staged child",
+        "hypothetical post-commit cache delete",
+        "release true DeptService old read to write cache",
+        "independent true DeptService tree read"
+      ]
+    }
+  ]
+}

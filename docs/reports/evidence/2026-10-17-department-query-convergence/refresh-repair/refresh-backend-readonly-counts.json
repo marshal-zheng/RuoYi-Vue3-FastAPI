@@ -1,0 +1,20 @@
+{
+  "readOnly": true,
+  "aggregateDepartmentCounts": {
+    "total": 75,
+    "active": 10,
+    "selectable": 10
+  },
+  "countQueryMilliseconds": [
+    3.843,
+    1.892,
+    1.68
+  ],
+  "transactionIsolation": "REPEATABLE-READ",
+  "runtimeVersions": {
+    "fastapi": "0.115.8",
+    "starlette": "0.45.3",
+    "SQLAlchemy": "2.0.48",
+    "redis": "5.2.1"
+  }
+}

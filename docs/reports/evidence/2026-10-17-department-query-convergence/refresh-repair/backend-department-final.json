@@ -1,0 +1,19 @@
+{
+  "command": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/unit/services/test_dept_read_freshness.py",
+    "tests/unit/services/test_dept_service.py",
+    "tests/unit/controllers/test_dept_controller.py",
+    "tests/unit/utils/test_transaction_manager.py",
+    "modules/system/tests/test_dept_read_queries.py",
+    "modules/system/tests/test_role_read_queries.py",
+    "modules/system/tests/test_user_read_queries.py"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-backend",
+  "exitCode": 0,
+  "seconds": 8.08,
+  "logSHA256": "b9acabdea98bd8b574bf7c860e096c4b18573dae3d6b2d7b12f4223d3fc82d1f"
+}

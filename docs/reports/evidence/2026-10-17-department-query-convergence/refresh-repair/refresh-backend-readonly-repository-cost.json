@@ -1,0 +1,32 @@
+{
+  "readOnly": true,
+  "scope": "existing local MySQL, real department repository, no Redis result caching, three samples only; not load or browser performance benchmark",
+  "repositoryMeasurements": {
+    "managementList": {
+      "rowCounts": [
+        10,
+        10,
+        10
+      ],
+      "databaseReadMillisecondsIncludingPoolCheckout": [
+        45.367,
+        9.928,
+        4.791
+      ],
+      "sqlStatementsPerRepositoryCall": 1
+    },
+    "userTree": {
+      "rowCounts": [
+        10,
+        10,
+        10
+      ],
+      "databaseReadMillisecondsIncludingPoolCheckout": [
+        2.893,
+        2.823,
+        2.834
+      ],
+      "sqlStatementsPerRepositoryCall": 1
+    }
+  }
+}

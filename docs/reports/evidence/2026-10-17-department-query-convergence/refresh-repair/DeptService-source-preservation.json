@@ -1,0 +1,59 @@
+{
+  "sourceOriginalSHA256": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072",
+  "candidateSHA256": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+  "conflictsResolved": "Keep source domain/404 behavior; remove only obsolete result-cache code",
+  "methodChecks": [
+    {
+      "method": "__init__",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "check_dept_data_scope_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "check_dept_name_unique_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "_resolve_parent_ancestors",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "_check_ancestor_activation_scope",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "add_dept_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "edit_dept_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "delete_dept_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "export_dept_list_services",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "list_to_tree",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "replace_first",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "update_parent_dept_status_normal",
+      "unrelatedSemanticsPreserved": true
+    },
+    {
+      "method": "update_dept_children",
+      "unrelatedSemanticsPreserved": true
+    }
+  ]
+}

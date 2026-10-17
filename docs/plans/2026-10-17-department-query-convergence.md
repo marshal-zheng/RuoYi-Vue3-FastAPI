@@ -103,7 +103,38 @@ STEERING: none
 
 ## Execution Handoff
 
-Continue current-session execution after the plan structure checks. The user has already approved implementation; no additional plan approval is required. Department source delivery or publication is not inferred from THEME delivery authorization.
+The user approved the reviewed worktree and explicitly authorized investigating the first refresh timeout, repairing a proven cause, validating it and delivering the department closure to recorded source branch `std`. Publication is not authorized. Continue within the existing task worktree; preserve unrelated source working-tree and index changes.
+
+### Task 5: Diagnose and remove the proven department stale-refill path
+
+**Status:** Implementation and required checks passed; final independent review in progress. Seven consistency regressions observed RED then GREEN; 62 focused backend tests passed. Real MySQL/Redis/HTTP controlled A/B reproduced stale cache on the original and fresh independent reads on the repair. Source/local-package normal probes both passed on the preserved source candidate, and all 8 new owned records were cleaned. Historical first-run attribution remains bounded by its missing response snapshot.
+
+**Files:** Department service and focused consistency regressions; manual probe diagnostics and bounded evidence.
+
+**Steps:**
+1. Preserve the original failed round and previous review evidence; do not infer a historical response that was never captured.
+2. Check source/local-package invalidation scheduling and actual backend transaction/cache ownership with controlled interleavings.
+3. Reproduce the stale-refill failure using actual DeptService and QueryCache; compare only changes needed for read consistency.
+4. Given ten effective local departments and approximately 3 ms tree reads, remove the four department Redis result-cache paths and obsolete invalidation instead of adding a distributed version/lock framework. Preserve repository filtering, permissions and existing read/write contracts.
+5. Observe meaningful regression RED before implementation, then GREEN, including delayed old reads and transaction-private details.
+6. Validate actual HTTP with the existing local runtime and source/local-package consumers, restrict writes to unique owned departments and verify cleanup.
+
+**Verification:** Focused backend department tests, deterministic before/after probes, actual HTTP, appropriate static checks and final independent review. An in-memory schedule is not an actual SQL transaction; a later successful round cannot uniquely attribute the first historical failure.
+
+**Dependencies:** Tasks 1–4.
+
+### Task 6: Deliver to the recorded source branch without importing unrelated work
+
+**Status:** Pending Task 5 and final review.
+
+**Steps:**
+1. Preserve source HEAD, index and hashes of all original dirty paths. Relevant source backend edits are context inputs; do not commit unrelated source changes or wholesale import a dirty service file.
+2. Commit verified intentional task changes, rehearse integration on the exact source HEAD and prove a selective three-way preservation of pre-existing edits where a delivery file overlaps a dirty source path.
+3. Recheck source HEAD and preservation inputs immediately before source mutation; fast-forward only the verified delivery commits.
+4. Run source baseline verification, record ancestry and preservation proofs, then safely remove only workflow-owned clean artifacts.
+5. Record the exact delivery tool status separately from source-content and preservation facts; never commit unrelated work to manufacture a clean status.
+
+**Verification:** Delivery Safety Kernel gates, actual source baseline checks, per-path/index preservation, durable ledger and cleanup proof.
 
 ## Status Sync Suggestion
 

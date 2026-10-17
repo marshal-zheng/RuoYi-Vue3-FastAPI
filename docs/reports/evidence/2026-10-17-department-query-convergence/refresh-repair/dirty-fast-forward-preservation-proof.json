@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "isolatedRepository": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/department-dirty-ff-proof-uie4nt_1",
+  "base": "ed1ecf26a01d14b2fde4c8b8b1abc93c50f44783",
+  "target": "835b07c0adc9f3ea8239b6b50b29cbd41bb2f7c7",
+  "normalFastForward": true,
+  "sourceWorkingFileMatchesRehearsedThreeWay": true,
+  "sourceIndexMatchesDeliveredBlob": true,
+  "unrelatedStagedIndexPreserved": true,
+  "unrelatedWorkingAndUntrackedBytesPreserved": true,
+  "sourceDirtyDomainEditsRemainUncommitted": true,
+  "method": "Prepare only overlapping path working content with verified three-way result, set only its index entry to target blob, then ordinary git merge --ff-only; no stash/reset/clean or broad index overwrite",
+  "mergeOutput": "Updating ed1ecf2..835b07c\nFast-forward\n service.py | 76 ++++++--------------------------------------------------------\n 1 file changed, 7 insertions(+), 69 deletions(-)\n"
+}

@@ -1,0 +1,43 @@
+{
+  "scope": "true DeptService add and tree reads, true QueryCache, fake Redis and scheduled repository; query_db=None so @transactional bypasses actual DB; outer commit is explicit repository event; no database writes and no product source edits; not attribution of historical first run",
+  "backendRoot": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-backend",
+  "sourceSHA256": {
+    "utils/query_cache.py": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+    "modules/system/application/services/dept_service.py": "e604022e94772980af1a6784946750ea5e4463f380e192165e10fdf1b9076854"
+  },
+  "scenarios": [
+    {
+      "hypotheticalPostCommitDelete": false,
+      "committedOwnedChildren": 1,
+      "inFlightReadOwnedChildren": 0,
+      "independentReadOwnedChildren": 1,
+      "independentReadRepositoryCalls": 1,
+      "cacheContainsSerializedResults": false,
+      "eventOrder": [
+        "true DeptService tree warm",
+        "true DeptService add returns with staged child before explicit outer commit",
+        "true DeptService tree read captures old repository snapshot and waits",
+        "fake repository outer commit publishes staged child",
+        "release true DeptService old snapshot and await read completion",
+        "independent true DeptService tree read"
+      ]
+    },
+    {
+      "hypotheticalPostCommitDelete": true,
+      "committedOwnedChildren": 1,
+      "inFlightReadOwnedChildren": 0,
+      "independentReadOwnedChildren": 1,
+      "independentReadRepositoryCalls": 1,
+      "cacheContainsSerializedResults": false,
+      "eventOrder": [
+        "true DeptService tree warm",
+        "true DeptService add returns with staged child before explicit outer commit",
+        "true DeptService tree read captures old repository snapshot and waits",
+        "fake repository outer commit publishes staged child",
+        "hypothetical post-commit cache delete",
+        "release true DeptService old snapshot and await read completion",
+        "independent true DeptService tree read"
+      ]
+    }
+  ]
+}
