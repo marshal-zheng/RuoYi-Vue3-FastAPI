@@ -84,6 +84,7 @@
       <template #table="{ grid, renderEmpty }">
         <el-table
           ref="roleTableRef"
+          row-key="roleId"
           :data="grid.list || []"
           @selection-change="handleSelectionChange"
         >
@@ -121,12 +122,12 @@
               />
             </template>
           </el-table-column>
-          <el-table-column label="创建时间" prop="createTime">
+          <el-table-column label="创建时间" prop="createTime" min-width="180">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="180" class-name="small-padding">
+          <el-table-column label="操作" width="180" fixed="right" class-name="small-padding">
             <template #default="scope">
               <div class="op-col__wrap">
                 <ZxButton

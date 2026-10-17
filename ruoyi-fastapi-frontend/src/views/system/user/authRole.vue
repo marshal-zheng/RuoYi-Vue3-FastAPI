@@ -39,8 +39,8 @@
           <el-table-column label="序号" width="55" type="index" />
           <el-table-column type="selection" :selectable="canSelectRole" width="55" />
           <el-table-column label="角色编号" prop="roleId" />
-          <el-table-column label="角色名称" prop="roleName" />
-          <el-table-column label="权限字符" prop="roleKey" />
+          <el-table-column label="角色名称" prop="roleName" :show-overflow-tooltip="true" />
+          <el-table-column label="权限字符" prop="roleKey" :show-overflow-tooltip="true" />
           <el-table-column label="状态" width="100">
             <template #default="scope">{{ scope.row.status === '1' ? '已停用' : '正常' }}</template>
           </el-table-column>

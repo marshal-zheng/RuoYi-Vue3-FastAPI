@@ -1,0 +1,29 @@
+{
+  "browserClosed": true,
+  "logoutEndpoint": "POST /api/auth/logout",
+  "logoutStatus": 204,
+  "ownedServerPids": [
+    41199,
+    41258,
+    41200,
+    66683,
+    66695,
+    76466,
+    77132
+  ],
+  "ownedServerPidsRemaining": [],
+  "frontendPort80Closed": true,
+  "backendPort8088Closed": true,
+  "worktreeDependencySymlinkRemoved": true,
+  "sharedMySQLRedisStopped": false,
+  "worktreeRemoved": false,
+  "completedOwnedExecSessions": [
+    32729,
+    20303,
+    66548,
+    15377,
+    28002,
+    51567,
+    42943
+  ]
+}

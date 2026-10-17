@@ -1,0 +1,24 @@
+{
+  "method": "Offline FastAPI user router schema, without lifespan or external connections",
+  "response": {
+    "$ref": "#/components/schemas/UserRoleResponseModel"
+  },
+  "roleComponent": "SelectedRoleModel",
+  "existingCreateTimeSchema": {
+    "anyOf": [
+      {
+        "type": "string",
+        "format": "date-time"
+      },
+      {
+        "type": "null"
+      }
+    ],
+    "title": "Createtime",
+    "description": "创建时间"
+  },
+  "sharedArtifactAlreadyHasField": true,
+  "generatedSelectedRoleModelAlreadyHasField": true,
+  "readModelExposedInSchema": false,
+  "generatedChangesRequired": false
+}

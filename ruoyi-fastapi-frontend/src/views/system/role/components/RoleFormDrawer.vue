@@ -34,7 +34,7 @@
       </el-form-item>
       <el-form-item prop="roleKey">
         <template #label>
-          <span class="flex items-center gap-1">
+          <span class="inline-flex items-center gap-1">
             <el-tooltip
               content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole('admin')`)"
               placement="top"

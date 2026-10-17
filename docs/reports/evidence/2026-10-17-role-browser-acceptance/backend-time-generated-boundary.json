@@ -1,0 +1,21 @@
+{
+  "method": "Offline FastAPI role router OpenAPI, without lifespan or external connections",
+  "routes": {
+    "/system/role/authUser/allocatedList": {
+      "$ref": "#/components/schemas/PageResponseModel"
+    },
+    "/system/role/authUser/unallocatedList": {
+      "$ref": "#/components/schemas/PageResponseModel"
+    }
+  },
+  "itemsSchema": {
+    "items": {},
+    "type": "array",
+    "title": "Items",
+    "default": []
+  },
+  "readModelExposedInSchema": false,
+  "sharedArtifactEndpointSchemasEqual": true,
+  "existingGeneratedUserInfoModelHasCreateTime": true,
+  "generatedChangesRequired": false
+}

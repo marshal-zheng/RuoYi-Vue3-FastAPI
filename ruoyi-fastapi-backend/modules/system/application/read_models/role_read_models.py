@@ -1,8 +1,6 @@
 """Role read models."""
 
-from __future__ import annotations
-
-from datetime import datetime  # noqa: TC003
+from datetime import datetime
 from typing import Any, Literal
 
 from pydantic import Field
@@ -61,6 +59,7 @@ class RoleUserItemReadModel(CamelModelBase):
     email: str | None = Field(default=None, description='Email')
     phonenumber: str | None = Field(default=None, description='Phone number')
     status: Literal['0', '1'] | None = Field(default=None, description='User status')
+    create_time: datetime | None = Field(default=None, description='Create time')
     dept: dict[str, Any] | None = Field(default=None, description='Department info')
 
 

@@ -1,0 +1,116 @@
+{
+  "base": "fe5081897704dc4bff1cfff5fbdc06ea357f7af5",
+  "scopedSourceMatchesIsolated": true,
+  "logs": [
+    {
+      "log": "backend-time-red-http.log",
+      "sha256": "a313d8f5b4ce044d6dcf6649a9ef53febdab408dc5e788b6db3255ce2021a9f5"
+    },
+    {
+      "log": "backend-authrole-time-red.log",
+      "sha256": "9a4986101d00b6e12d70eb8b5f94c3ff4c56b86b725970fefd152e2c4097c559"
+    },
+    {
+      "log": "browser-row-identity-red.log",
+      "sha256": "753449e70df99b4523b9f0ea9195d016227b9b180505cd98ec3103aa0f1ef951"
+    },
+    {
+      "log": "final-backend-validate.log",
+      "sha256": "fb2e031c6da5eef98108bb12b397b682ab5e4f079292089dd38a140aa2a591e3"
+    },
+    {
+      "log": "final-frontend-validate.log",
+      "sha256": "fda187f468e273e21c900e7c692023564044f531bfc6ae98ffce05a59fae7356"
+    },
+    {
+      "log": "backend-source-tests.log",
+      "sha256": "7710b7b0ff676239d24c30392a89824e86769ca172afab504a653cc6469e8463"
+    },
+    {
+      "log": "frontend-source-tests.log",
+      "sha256": "a49e3fb9e01a5615698eda91a1373edd0e8c9637606292aaaeed0ed0e129b34c"
+    },
+    {
+      "log": "frontend-types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "log": "frontend-ui-standards.log",
+      "sha256": "50a0318c5adf2d74286665505478d882945a204303fb611214127d3fba78d929"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "04-role-validation.jpg",
+      "bytes": 60700,
+      "sha256": "31669ba906c237f1920af40062574d5df2a4ed6ce3f4b2d644a5eeb2dce967de"
+    },
+    {
+      "file": "09-user-selector-ready.jpg",
+      "bytes": 85649,
+      "sha256": "b2eec463a1188da2325021a6de7af42aca0af96616bd75801723846ccbe1d409"
+    },
+    {
+      "file": "19-user-auth-1024-before-time.jpg",
+      "bytes": 77219,
+      "sha256": "0de97c8a1a9bbe89c04d70d1fa4b9d95017daf5d742844ea19da4b8aba58848c"
+    },
+    {
+      "file": "21-role-tooltip-1024.jpg",
+      "bytes": 96234,
+      "sha256": "f5300abadc2218effe143125e7015ff71e38f73a98aba2e368edf0187d9018ee"
+    },
+    {
+      "file": "24-select-all-1024.jpg",
+      "bytes": 85242,
+      "sha256": "754cc198c60f1ec019a7e93c03aace669f48bfbd4e58fe4c70964777fc636064"
+    },
+    {
+      "file": "25-batch-revoke-confirm-1024.jpg",
+      "bytes": 49786,
+      "sha256": "0229844e11827bb17450030c59c093a14717915ad3f2b0cf7fb7ce1735191f70"
+    },
+    {
+      "file": "26-selector-error-1024.jpg",
+      "bytes": 47892,
+      "sha256": "57a1a09ebc303cbd6c8dee364941ec71e88ec2893b82aae2778340b1730f9fbd"
+    },
+    {
+      "file": "28-role-list-1440-final.jpg",
+      "bytes": 68945,
+      "sha256": "8451571f52d1ca5623a78aa155e196e78e1415c8a6e0f2eb6032056a479f4948"
+    },
+    {
+      "file": "29-role-list-1024-final.jpg",
+      "bytes": 57820,
+      "sha256": "892390243dd61955057968f01f9481fa3131e7d9a234c04ad3aead5c0f727460"
+    },
+    {
+      "file": "30-role-form-1024-final.jpg",
+      "bytes": 50502,
+      "sha256": "302ba4214c9ed385b0e590f740140224c17a9fb15c01867398358aa89fdea995"
+    },
+    {
+      "file": "32-bidirectional-auth-final-1440.jpg",
+      "bytes": 115069,
+      "sha256": "3f7d2704d0b454c9570eaf0882db59e8fad6ae4be5b50f7507cde3466e0d0f81"
+    },
+    {
+      "file": "34-menu-permission-persisted.jpg",
+      "bytes": 63445,
+      "sha256": "eae6d02468c335c0965c6b1d1425b90bafa050e8ad86d0031555ed0c5fab4fa1"
+    },
+    {
+      "file": "35-data-scope-other-modes.jpg",
+      "bytes": 52331,
+      "sha256": "4c792bc4b1e82e9b9638630c8ea511bf302a54d8979c0af31ec305a57f62bd51"
+    },
+    {
+      "file": "17-data-scope-1024.jpg",
+      "bytes": 51196,
+      "sha256": "364e67ca137e3792755ebceca85464b1a25b19e196ca4427cd0e65b3a40f7a4c"
+    }
+  ],
+  "pageErrors": [],
+  "browserQARecords": 43
+}

@@ -4,6 +4,7 @@ import { defineComponent, h, onMounted, type App } from 'vue';
 import { createPinia } from 'pinia';
 import { flushPromises, mount } from '@vue/test-utils';
 import { VueQueryPlugin } from '@tanstack/vue-query';
+import { ElTable, ElTableColumn } from 'element-plus';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
 import RolePage from '@/views/system/role/index.vue';
@@ -16,12 +17,18 @@ const api = vi.hoisted(() => ({
   download: vi.fn(),
   navigate: vi.fn(),
   permission: vi.fn(),
+  openEditor: vi.fn(),
 }));
 vi.mock('@/api/system/role', () => api);
 vi.mock('@/utils/permission', () => ({ checkPermi: api.permission }));
 vi.mock('vue-router', () => ({ useRouter: () => ({ push: api.navigate }) }));
 vi.mock('@/views/system/role/components/RoleFormDrawer.vue', () => ({
-  default: { render: () => null },
+  default: {
+    setup(_: unknown, { expose }: { expose: (value: unknown) => void }) {
+      expose({ open: api.openEditor });
+      return () => null;
+    },
+  },
 }));
 vi.mock('@/views/system/role/components/RoleDataScopeDrawer.vue', () => ({
   default: { render: () => null },
@@ -43,9 +50,24 @@ const Grid = defineComponent({
     return () => h('section', slots.form?.({ query: {}, loading: false }));
   },
 });
+const TableGrid = defineComponent({
+  props: ['mode', 'rows', 'pagination', 'status'],
+  emits: ['refresh', 'page-change'],
+  setup(props, { slots }) {
+    return () =>
+      h('section', slots.table?.({ grid: { list: props.rows }, renderEmpty: () => null }));
+  },
+});
+const Button = defineComponent({
+  emits: ['click'],
+  setup(_, { emit, slots }) {
+    return () =>
+      h('button', { onClick: (event: MouseEvent) => emit('click', event) }, slots.default?.());
+  },
+});
 let pinia = createPinia();
 const mounted: ReturnType<typeof mount>[] = [];
-function page() {
+function page({ realTable = false } = {}) {
   const wrapper = mount(RolePage, {
     global: {
       plugins: [
@@ -60,14 +82,14 @@ function page() {
       stubs: {
         ZxContentWrap: Layout,
         ZxListToolbar: Layout,
-        ZxGridList: Grid,
-        ZxButton: true,
+        ZxGridList: realTable ? TableGrid : Grid,
+        ZxButton: realTable ? Button : true,
         ZxInput: true,
         ZxSearch: true,
         DictSelect: true,
         ElDatePicker: true,
-        ElTable: true,
-        ElTableColumn: true,
+        ElTable: realTable ? ElTable : true,
+        ElTableColumn: realTable ? ElTableColumn : true,
         ElSwitch: true,
         ZxMoreAction: true,
       },
@@ -100,6 +122,7 @@ beforeEach(() => {
   api.permission.mockReturnValue(true);
   api.changeRoleStatus.mockResolvedValue({});
   api.confirm.mockResolvedValue(undefined);
+  api.openEditor.mockResolvedValue(undefined);
   for (const key of ['ref', 'getCurrentInstance']) vi.stubGlobal(key, vue[key as keyof typeof vue]);
   vi.stubGlobal('useRouter', () => ({ push: api.navigate }));
 });
@@ -111,6 +134,34 @@ afterEach(() => {
 });
 
 describe('role list resource ownership', () => {
+  it('replaces action nodes when a refresh puts a different role at the same row index', async () => {
+    api.listRole.mockResolvedValue({
+      ...result(),
+      items: [{ roleId: 82, roleName: '角色 82', roleKey: 'role82', status: '0' }],
+    });
+    const { wrapper, state } = page({ realTable: true });
+    await flushPromises();
+    const oldRow = wrapper.get('tbody tr');
+    const oldEdit = oldRow.findAll('button').find((button) => button.text() === '修改')!;
+    expect(oldRow.text()).toContain('角色 82');
+
+    api.listRole.mockResolvedValue({
+      ...result(),
+      items: [{ roleId: 85, roleName: '角色 85', roleKey: 'role85', status: '0' }],
+    });
+    state.refreshList();
+    await flushPromises();
+
+    const newRow = wrapper.get('tbody tr');
+    const newEdit = newRow.findAll('button').find((button) => button.text() === '修改')!;
+    expect(newRow.text()).toContain('角色 85');
+    // A pointer/focus held on 82's action must not become an action on role 85.
+    expect(newEdit.element).not.toBe(oldEdit.element);
+    expect(wrapper.element.contains(oldEdit.element)).toBe(false);
+    await newEdit.trigger('click');
+    expect(api.openEditor).toHaveBeenCalledWith(85);
+  });
+
   it('uses submitted filters for paging/export and resets a new search to page one', async () => {
     const { state, grid } = page();
     await flushPromises();
@@ -132,7 +183,11 @@ describe('role list resource ownership', () => {
       beginTime: '2026-10-01',
       endTime: '2026-10-17',
     };
-    expect(api.listRole.mock.calls.at(-1)?.[0]).toEqual({ ...filters, page: 3, pageSize: 10 });
+    expect(api.listRole.mock.calls.at(-1)?.[0]).toEqual({
+      ...filters,
+      page: 3,
+      pageSize: 10,
+    });
     state.draft.roleName = 'unsent';
     state.handleExport();
     expect(api.download).toHaveBeenLastCalledWith(

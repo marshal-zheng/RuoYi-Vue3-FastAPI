@@ -1,0 +1,447 @@
+[
+  {
+    "id": "R1-page2",
+    "result": "pass",
+    "detail": "11条筛选结果实际按创建时间倒序，第二页为最早创建的角色01；先前第11个编号落在第二页的假设已纠正",
+    "time": "2026-10-17T13:00:08.734Z"
+  },
+  {
+    "id": "A1-cross-page",
+    "result": "pass",
+    "detail": "用户11与用户01跨页勾选，返回第一页用户11仍勾选，计数2",
+    "time": "2026-10-17T13:01:29.795Z"
+  },
+  {
+    "id": "A1-search",
+    "result": "pass",
+    "detail": "搜索用户01后只显示该行，跨搜索仍保留2人",
+    "time": "2026-10-17T13:01:37.866Z"
+  },
+  {
+    "id": "A1-save",
+    "result": "pass",
+    "detail": {
+      "visibleUsers": [
+        "用户名称用户昵称邮箱手机状态创建时间操作",
+        "bqa171407_07验收用户07正常取消授权",
+        "bqa171407_01验收用户01正常取消授权"
+      ],
+      "actualUserIds": [
+        118,
+        112
+      ]
+    },
+    "time": "2026-10-17T13:01:54.470Z"
+  },
+  {
+    "id": "A1-reopen",
+    "result": "pass",
+    "detail": "保存后重开，选择人数归零",
+    "time": "2026-10-17T13:01:54.534Z"
+  },
+  {
+    "id": "U2-role-return",
+    "result": "pass",
+    "detail": "关闭角色授权页后名称筛选和第2页恢复，角色01可见",
+    "time": "2026-10-17T13:02:38.851Z"
+  },
+  {
+    "id": "X2-session-expired",
+    "result": "observed",
+    "detail": "真实会话失效显示401和重新登录入口，原始截图保留；与产品交互缺陷分开记录",
+    "time": "2026-10-17T13:05:33.364Z"
+  },
+  {
+    "id": "R2-disabled-edit",
+    "result": "pass",
+    "detail": "真实停用详情可读，展开/折叠、全选/全不选、全屏/退出、备注保存均通过，必填标记已同行",
+    "time": "2026-10-17T13:09:04.006Z"
+  },
+  {
+    "id": "R3-custom-scope",
+    "result": "pass",
+    "detail": "自定义范围选择研发部门，保存重开保留勾选；1024视口按钮可达",
+    "time": "2026-10-17T13:10:07.675Z"
+  },
+  {
+    "id": "R3-restore",
+    "result": "pass",
+    "detail": "自定义范围恢复全部范围，完成模式往返",
+    "time": "2026-10-17T13:10:26.841Z"
+  },
+  {
+    "id": "U1-disabled-assignment",
+    "result": "pass",
+    "detail": "用户01真实保留角色82的停用关联，授权表仍勾选可见",
+    "time": "2026-10-17T13:11:35.830Z"
+  },
+  {
+    "id": "U1-draft-pages",
+    "result": "pass",
+    "detail": "取消已关联停用角色82，跨页勾选角色92，再返回82保持取消",
+    "time": "2026-10-17T13:11:35.941Z"
+  },
+  {
+    "id": "U1-full-save",
+    "result": "pass",
+    "detail": "真实保存后关联只剩角色92，取消82生效；用户列表筛选与第2页恢复，小视口分页自动紧凑显示",
+    "time": "2026-10-17T13:12:34.234Z"
+  },
+  {
+    "id": "U1-empty-save",
+    "result": "pass",
+    "detail": "真实UI保存空集合后独立读取关联为空；创建时间字段已回到用户授权目录",
+    "time": "2026-10-17T13:15:00.422Z"
+  },
+  {
+    "id": "U1-close-draft",
+    "result": "pass",
+    "detail": "勾选角色02后关闭不保存，再开未勾选；1024长文本tooltip完整可读",
+    "time": "2026-10-17T13:15:13.921Z"
+  },
+  {
+    "id": "R2-status-cycle",
+    "result": "pass",
+    "detail": "角色01完成正常→取消停用→停用→正常完整周期，固定操作列在1024可见",
+    "time": "2026-10-17T13:15:24.431Z"
+  },
+  {
+    "id": "A2-single-revoke",
+    "result": "pass",
+    "detail": "单条撤销先取消确认不变，再确认后用户11从分配列表移除",
+    "time": "2026-10-17T13:16:19.872Z"
+  },
+  {
+    "id": "A2-batch-revoke",
+    "result": "pass",
+    "detail": "先11人全量授权，单条撤销1，批量撤销2，独立读取剩8且操作按钮恢复可用",
+    "time": "2026-10-17T13:17:05.469Z"
+  },
+  {
+    "id": "X1-close-reopen",
+    "result": "pass",
+    "detail": "Enter提交后立即Escape关闭，重开名称为空/选择0人，旧搜索延迟900ms未污染新会话",
+    "time": "2026-10-17T13:17:07.055Z"
+  },
+  {
+    "id": "X2-retry",
+    "result": "pass",
+    "detail": "控制注入单个搜索503时展示错误与重新加载、确认禁用；恢复真实HTTP后点击重新加载显示用户09",
+    "time": "2026-10-17T13:17:42.270Z"
+  },
+  {
+    "id": "X2-keyboard",
+    "result": "pass",
+    "detail": "Tab按用户名→手机→搜索顺序移动焦点；Enter触发查询，Escape关闭，重置清空筛选",
+    "time": "2026-10-17T13:17:42.615Z"
+  },
+  {
+    "id": "V1-role-grid-fit",
+    "result": "pass",
+    "detail": {
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "document": {
+        "width": 1024,
+        "height": 768
+      },
+      "required": [
+        {
+          "text": "分配用户",
+          "x": 858,
+          "right": 916,
+          "bottom": 325
+        }
+      ]
+    },
+    "time": "2026-10-17T13:19:01.387Z"
+  },
+  {
+    "id": "V1-role-form-fit",
+    "result": "pass",
+    "detail": {
+      "box": {
+        "x": 464,
+        "y": 0,
+        "width": 560,
+        "height": 768,
+        "top": 0,
+        "right": 1024,
+        "bottom": 768,
+        "left": 464
+      },
+      "buttons": [
+        {
+          "text": "",
+          "box": {
+            "x": 975,
+            "y": 13,
+            "width": 32,
+            "height": 32,
+            "top": 13,
+            "right": 1007,
+            "bottom": 45,
+            "left": 975
+          }
+        },
+        {
+          "text": "全屏",
+          "box": {
+            "x": 899,
+            "y": 13,
+            "width": 68,
+            "height": 32,
+            "top": 13,
+            "right": 967,
+            "bottom": 45,
+            "left": 899
+          }
+        },
+        {
+          "text": "取消",
+          "box": {
+            "x": 867,
+            "y": 723,
+            "width": 60,
+            "height": 32,
+            "top": 723,
+            "right": 927,
+            "bottom": 755,
+            "left": 867
+          }
+        },
+        {
+          "text": "保存",
+          "box": {
+            "x": 939,
+            "y": 723,
+            "width": 60,
+            "height": 32,
+            "top": 723,
+            "right": 999,
+            "bottom": 755,
+            "left": 939
+          }
+        }
+      ]
+    },
+    "time": "2026-10-17T13:19:01.824Z"
+  },
+  {
+    "id": "X2-offline",
+    "result": "pass",
+    "detail": "真实浏览器断网切换后查询显示等待网络连接，恢复网络并清空条件后角色数据恢复",
+    "time": "2026-10-17T13:19:20.294Z"
+  },
+  {
+    "id": "exploratory-start",
+    "result": "running",
+    "detail": "键盘筛选、无结果/恢复、状态筛选、导出与工具栏修改，30-90秒自由探索",
+    "time": "2026-10-17T13:19:20.294Z"
+  },
+  {
+    "id": "R1-filter-cycles",
+    "result": "pass",
+    "detail": "工具栏选中修改目标正确，Escape关闭；键盘权限字符无结果/恢复，停用筛选空/正常筛选恢复",
+    "time": "2026-10-17T13:20:27.990Z"
+  },
+  {
+    "id": "R1-export",
+    "result": "pass",
+    "detail": {
+      "filename": "role_1792243228144.xlsx",
+      "bytes": 5286
+    },
+    "time": "2026-10-17T13:20:28.257Z"
+  },
+  {
+    "id": "exploratory-end",
+    "result": "pass",
+    "detail": {
+      "elapsedSeconds": 68,
+      "actions": "工具栏修改+Escape，键盘无结果筛选/恢复，状态停用/正常，日期范围，真实导出；未发现新的交互缺陷"
+    },
+    "time": "2026-10-17T13:20:28.257Z"
+  },
+  {
+    "id": "R2-browser-row-identity",
+    "result": "pass",
+    "detail": {
+      "oldRoleId": "85",
+      "oldRoleName": "bqa171407角色04",
+      "oldOperationDetached": true,
+      "newEditorName": "bqa171407角色01",
+      "method": "真实状态确认写入→真实列表刷新→检查原操作节点已脱离DOM，再点击当前行编辑核对名称"
+    },
+    "time": "2026-10-17T13:21:09.126Z"
+  },
+  {
+    "id": "runtime-frontend-reload",
+    "result": "observed",
+    "detail": "自由探索收尾发生外部Vite模块更新，筛选回到默认；已保留当前开发态重载边界，继续以明确条件复验",
+    "time": "2026-10-17T13:22:16.919Z"
+  },
+  {
+    "id": "U1-bidirectional-refresh",
+    "result": "pass",
+    "detail": "角色侧增量授予82后，用户侧重开同时勾选82与原83，包含最新时间；两方向更新互相可见",
+    "time": "2026-10-17T13:22:18.102Z"
+  },
+  {
+    "id": "cleanup-users-batch",
+    "result": "approved-scope",
+    "detail": {
+      "ids": [
+        122,
+        118,
+        119,
+        120,
+        121,
+        114,
+        115,
+        116,
+        117,
+        113
+      ]
+    },
+    "time": "2026-10-17T13:23:07.196Z"
+  },
+  {
+    "id": "cleanup-users",
+    "result": "pass",
+    "detail": {
+      "remaining": 0,
+      "deletedIds": [
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "lastId": 112
+    },
+    "time": "2026-10-17T13:23:08.222Z"
+  },
+  {
+    "id": "R2-delete-and-cleanup",
+    "result": "pass",
+    "detail": {
+      "batchCancelPreserved": true,
+      "batchDeleted": [
+        85,
+        82,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        83
+      ],
+      "singleDeleted": 84,
+      "remaining": 0
+    },
+    "time": "2026-10-17T13:23:38.195Z"
+  },
+  {
+    "id": "cleanup-session",
+    "result": "pass",
+    "detail": {
+      "loginFormVisible": true,
+      "logoutRequests": [
+        {
+          "time": 1792242333404,
+          "method": "POST",
+          "url": "/api/auth/logout",
+          "status": 204
+        },
+        {
+          "time": 1792242511771,
+          "method": "POST",
+          "url": "/api/auth/logout",
+          "status": 204
+        },
+        {
+          "time": 1792242852795,
+          "method": "POST",
+          "url": "/api/auth/logout",
+          "status": 204
+        },
+        {
+          "time": 1792243466505,
+          "method": "POST",
+          "url": "/api/auth/logout",
+          "status": 204
+        }
+      ],
+      "pageErrors": []
+    },
+    "time": "2026-10-17T13:24:45.648Z"
+  },
+  {
+    "id": "R2-menu-persistence",
+    "result": "pass",
+    "detail": {
+      "roleId": 93,
+      "selectedRoot": "系统管理",
+      "method": "真实勾选菜单→创建保存→重开编辑仍勾选；该角色未授予任何用户"
+    },
+    "time": "2026-10-17T13:27:50.991Z"
+  },
+  {
+    "id": "R3-mode-本部门数据权限",
+    "result": "pass",
+    "detail": "实际选择→保存→重开保持模式；不显示自定义部门树",
+    "time": "2026-10-17T13:29:54.266Z"
+  },
+  {
+    "id": "R3-mode-本部门及以下数据权限",
+    "result": "pass",
+    "detail": "实际选择→保存→重开保持模式；不显示自定义部门树",
+    "time": "2026-10-17T13:29:56.896Z"
+  },
+  {
+    "id": "R3-mode-仅本人数据权限",
+    "result": "pass",
+    "detail": "实际选择→保存→重开保持模式；不显示自定义部门树",
+    "time": "2026-10-17T13:29:59.487Z"
+  },
+  {
+    "id": "cleanup-extra-role",
+    "result": "pass",
+    "detail": {
+      "id": 93,
+      "allScopeModesCovered": true
+    },
+    "time": "2026-10-17T13:30:01.054Z"
+  },
+  {
+    "id": "cleanup-final-session",
+    "result": "pass",
+    "detail": {
+      "logoutStatus": 204,
+      "extraRoleDeleted": 93,
+      "pageErrors": []
+    },
+    "time": "2026-10-17T13:30:20.874Z"
+  },
+  {
+    "id": "runtime-frontend-reload-clarification",
+    "result": "observed",
+    "detail": "Vite日志确认14:21:35由src/types/auto-imports.d.ts触发页面重载；该文件初始与最终均无git差异，不能将触发方断言为外部任务。恢复后的明确筛选和双向结果已复验。"
+  },
+  {
+    "id": "supplement-session-interruption",
+    "result": "observed",
+    "detail": "补验出现401、getInfo/菜单事件401后自动退出，原始请求记录保留；恢复会话后连续完成剩余三模式及删除。未将该会话干扰判为已修产品缺陷。"
+  }
+]

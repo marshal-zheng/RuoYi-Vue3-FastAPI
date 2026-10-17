@@ -79,6 +79,7 @@ class UserAllocatedRoleReadModel(CamelModelBase):
     role_sort: int | None = Field(default=None, description='Role sort')
     data_scope: str | None = Field(default=None, description='Data scope')
     status: Literal['0', '1'] | None = Field(default=None, description='Role status')
+    create_time: datetime | None = Field(default=None, description='Create time')
     flag: bool | None = Field(default=None, description='Whether allocated')
 
 

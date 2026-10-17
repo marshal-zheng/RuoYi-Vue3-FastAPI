@@ -1,0 +1,10 @@
+{
+  "originalBackendSession": 32729,
+  "cause": "WatchFiles reload after concurrent source backend tests edits; affected login session invalidated",
+  "watchExamples": [
+    "tests/integration/test_user_management.py",
+    "tests/integration/test_system_cqrs_cutover.py"
+  ],
+  "recovery": "Stop owned backend and restart standard app.py --env=dev with APP_RELOAD=false; no config file edits",
+  "healthEndpoint": "Existing /health 500 ResponseUtil.success removed; unrelated endpoint, not modified"
+}

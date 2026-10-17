@@ -1,0 +1,50 @@
+{
+  "red": {
+    "command": [
+      "./node_modules/.bin/vitest",
+      "run",
+      "tests/role-query-list.test.ts",
+      "--reporter=verbose"
+    ],
+    "exitCode": 1,
+    "failed": 1,
+    "passed": 6,
+    "log": "browser-row-identity-red.log",
+    "sha256": "753449e70df99b4523b9f0ea9195d016227b9b180505cd98ec3103aa0f1ef951"
+  },
+  "green": {
+    "command": [
+      "./node_modules/.bin/vitest",
+      "run",
+      "tests/role-query-list.test.ts",
+      "--reporter=verbose"
+    ],
+    "exitCode": 0,
+    "log": "browser-row-identity-green.log",
+    "sha256": "3e3a3793d8463e3c12f77078a64ef453aa4678f833305df6d4eee7bbe40f9450"
+  },
+  "files": [
+    "ruoyi-fastapi-frontend/src/views/system/role/index.vue",
+    "ruoyi-fastapi-frontend/tests/role-query-list.test.ts"
+  ],
+  "elementPlus": {
+    "version": "2.13.0",
+    "source": "element-plus/es/components/table/src/table-body/render-helper.mjs",
+    "finding": "getKeyOfRow falls back to row index unless rowKey is supplied; row and cells use that key"
+  },
+  "eslint": {
+    "exitCode": 0,
+    "warnings": 2,
+    "baselineWarnings": 2,
+    "log": "browser-row-identity-eslint.log"
+  },
+  "frontendConventions": {
+    "command": [
+      "bash",
+      ".cursor/skills/frontend-conventions/scripts/validate.sh",
+      "--changed"
+    ],
+    "exitCode": 0,
+    "log": "browser-row-identity-validate.log"
+  }
+}

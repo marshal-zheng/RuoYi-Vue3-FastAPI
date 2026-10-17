@@ -1,5 +1,7 @@
 """Authorization editing exposes complete existing relations and enforces target scope."""
 
+import json
+from datetime import datetime
 from unittest.mock import AsyncMock
 
 import pytest
@@ -12,6 +14,7 @@ from module_admin.entity.vo.user_vo import UserRoleQueryModel
 from modules.system.application.handlers.query.user_query_handlers import GetUserAuthRoleQueryHandler
 from modules.system.application.queries.user_queries import GetUserAuthRoleQuery
 from modules.system.application.services.user_service import UserService
+from utils.response_util import ResponseUtil
 
 
 @pytest.mark.asyncio
@@ -68,3 +71,24 @@ async def test_authorization_read_rejects_out_of_scope_target_before_loading():
             GetUserAuthRoleQuery(query_db=object(), user_id=42, require_scope_check=True, data_scope_sql=False)
         )
     service.get_user_role_allocated_list_services.assert_not_awaited()
+
+
+@pytest.mark.parametrize('assigned', [True, False], ids=['assigned', 'available'])
+async def test_authorization_role_options_include_creation_time(db_session, assigned):
+    created_at = datetime(2026, 10, 17, 12, 34, 56)
+    db_session.add(UserDO(user_id=42, user_name='owned', nick_name='Owned', password='hash'))
+    db_session.add(RoleDO(role_id=20, role_name='Active', role_key='active', role_sort=2, create_time=created_at))
+    if assigned:
+        db_session.add(UserRoleDO(user_id=42, role_id=20))
+    await db_session.flush()
+
+    result = await GetUserAuthRoleQueryHandler(UserService(query_db=db_session)).handle(
+        GetUserAuthRoleQuery(query_db=db_session, user_id=42)
+    )
+
+    assert len(result.roles) == 1
+    assert result.roles[0].role_id == 20
+    assert result.roles[0].flag is assigned
+    response = ResponseUtil.ok_resource(result)
+    assert response.status_code == 200
+    assert json.loads(response.body)['roles'][0]['createTime'] == created_at.isoformat()

@@ -1,0 +1,13 @@
+{
+  "activeUsers": 0,
+  "activeRoles": 0,
+  "userRoles": 0,
+  "userPosts": 0,
+  "roleDepts": 0,
+  "roleMenus": 0,
+  "marker": "bqa171407",
+  "ownedUsers": 11,
+  "ownedRoles": 12,
+  "method": "Read-only SELECT after normal UI soft deletion",
+  "allOwnedBusinessDataClean": true
+}

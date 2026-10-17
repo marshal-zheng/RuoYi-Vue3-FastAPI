@@ -1,0 +1,96 @@
+{
+  "reviewedAt": "2026-10-17T13:16:26.878294+00:00",
+  "base": "fe5081897704dc4bff1cfff5fbdc06ea357f7af5",
+  "candidate": "uncommitted task worktree diff plus new test_role_user_read_contract.py",
+  "files": {
+    "ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue": {
+      "sourceSha256": "84099970a00c5ad8f987ce9cc803273a435c6ffab3f9bb9c4c73041b02351ee1",
+      "taskSha256": "84099970a00c5ad8f987ce9cc803273a435c6ffab3f9bb9c4c73041b02351ee1"
+    },
+    "ruoyi-fastapi-frontend/src/views/system/role/index.vue": {
+      "sourceSha256": "6e292b515415f343211146b3955c850e186836a470a8c71f8f8ac456378520e8",
+      "taskSha256": "6e292b515415f343211146b3955c850e186836a470a8c71f8f8ac456378520e8"
+    },
+    "ruoyi-fastapi-frontend/tests/role-query-list.test.ts": {
+      "sourceSha256": "b6f93b083c559c6cd324190ab034db1da67774c75e4fd7530bf989e178d751c8",
+      "taskSha256": "b6f93b083c559c6cd324190ab034db1da67774c75e4fd7530bf989e178d751c8"
+    },
+    "ruoyi-fastapi-backend/modules/system/application/read_models/role_read_models.py": {
+      "sourceSha256": "e1a1dd1b26f85b8c13466bc7a13e812623b04ff2c762e6a1471e28e942d9ecd6",
+      "taskSha256": "e1a1dd1b26f85b8c13466bc7a13e812623b04ff2c762e6a1471e28e942d9ecd6"
+    },
+    "ruoyi-fastapi-backend/tests/unit/services/test_role_user_read_contract.py": {
+      "sourceSha256": "4e036ae2c9efd9b66a987db737ca50bb2e7fc1b6829ee75b43639d7130fd1354",
+      "taskSha256": "4e036ae2c9efd9b66a987db737ca50bb2e7fc1b6829ee75b43639d7130fd1354"
+    },
+    "ruoyi-fastapi-frontend/src/views/system/user/authRole.vue": {
+      "sourceSha256": "0666fecb9e471730e72ea06eb5a36f9ad24a81c17a8a486a86d42a53e40cb605",
+      "taskSha256": "0666fecb9e471730e72ea06eb5a36f9ad24a81c17a8a486a86d42a53e40cb605"
+    },
+    "ruoyi-fastapi-backend/modules/system/application/read_models/user_read_models.py": {
+      "sourceSha256": "63701a2d4fbecefabb0486057eaac4cc360d1ef2b76a89df5f1e9928bbd3b83e",
+      "taskSha256": "63701a2d4fbecefabb0486057eaac4cc360d1ef2b76a89df5f1e9928bbd3b83e"
+    },
+    "ruoyi-fastapi-backend/tests/unit/services/test_user_authorization_read.py": {
+      "sourceSha256": "81d268ffb096b26bad4051a35eb4686e516a824f5b5e227b14e3b5868f05e759",
+      "taskSha256": "81d268ffb096b26bad4051a35eb4686e516a824f5b5e227b14e3b5868f05e759"
+    }
+  },
+  "allAppliedPathsEqual": true,
+  "commands": [
+    {
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-browser-acceptance/ruoyi-fastapi-backend",
+      "argv": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-n",
+        "0",
+        "--no-cov",
+        "tests/unit/services/test_role_user_read_contract.py",
+        "tests/unit/services/test_user_authorization_read.py",
+        "modules/system/tests/test_role_read_queries.py",
+        "modules/system/tests/test_user_read_queries.py",
+        "tests/unit/services/test_role_service.py"
+      ],
+      "exitCode": 0,
+      "passed": 25
+    },
+    {
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-browser-acceptance/ruoyi-fastapi-frontend",
+      "argv": [
+        "./node_modules/.bin/vitest",
+        "run",
+        "tests/role-query-list.test.ts",
+        "src/api/role-authorization-contract.test.ts",
+        "src/queries/system/role.test.ts",
+        "src/queries/system/user.test.ts",
+        "--reporter=verbose"
+      ],
+      "exitCode": 0,
+      "passed": 37
+    },
+    {
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-browser-acceptance",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "externalServicesUsed": false,
+  "browserUsed": false,
+  "realDatabaseUsed": false,
+  "finalLayoutDelta": {
+    "file": "ruoyi-fastapi-frontend/src/views/system/role/index.vue",
+    "change": "createTime column width=180 -> min-width=180",
+    "sourceAndTaskEqual": true,
+    "onlyDeltaFromReviewedCandidate": true,
+    "sha256": "6e292b515415f343211146b3955c850e186836a470a8c71f8f8ac456378520e8",
+    "assessment": "No P0/P1/P2; minimum column width retained while Element Plus can allocate remaining width",
+    "repeatedTests": false
+  }
+}
