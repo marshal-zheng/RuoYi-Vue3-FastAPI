@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createApp, nextTick, shallowRef } from 'vue';
 import { ZX_THEME_PACKAGE_CHOICES } from './zx-theme-packages';
-import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
+import type { ThemeRuntimeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 
 const api = vi.hoisted(() => ({
   createHost: vi.fn(),
@@ -31,11 +31,12 @@ import { zxThemePreferences } from './zx-theme-config';
 
 // The resolver and Host are mocked here; this fixture only exercises app wiring.
 const deployment = {
+  schema: 'zx.theme-runtime-deployment/1',
   deployment: { schema: 'zx.theme-deployment/1' },
   registrations: ZX_THEME_PACKAGE_CHOICES.map(({ id, packageName }) => ({
-    manifest: { identity: { themeId: id, packageName } },
+    runtime: { identity: { themeId: id, packageName } },
   })),
-} as unknown as ThemeDeploymentOutput;
+} as unknown as ThemeRuntimeDeploymentOutput;
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -102,7 +103,7 @@ describe('public theme deployment host', () => {
         ...deployment,
         registrations: deployment.registrations.slice(1),
       })
-    ).toThrow('Missing registered ZXUI theme manifest');
+    ).toThrow('Missing registered ZXUI runtime theme');
   });
 
   it('surfaces deployment diagnostics', () => {

@@ -11,63 +11,101 @@
             <table cellspacing="0" style="width: 100%">
               <tbody>
                 <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">Redis版本</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.redis_version }}</div>
+                    <div class="cell">Redis版本</div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">运行模式</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.redis_version }}
+                    </div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">运行模式</div>
+                  </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="cache.info">
                       {{ cache.info.redis_mode == 'standalone' ? '单机' : '集群' }}
                     </div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">端口</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.tcp_port }}</div>
+                    <div class="cell">端口</div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">客户端数</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.connected_clients }}</div>
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.tcp_port }}
+                    </div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">客户端数</div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.connected_clients }}
+                    </div>
                   </td>
                 </tr>
                 <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">运行时间(天)</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.uptime_in_days }}</div>
+                    <div class="cell">运行时间(天)</div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">使用内存</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.used_memory_human }}</div>
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.uptime_in_days }}
+                    </div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">使用CPU</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">使用内存</div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.used_memory_human }}
+                    </div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">使用CPU</div>
+                  </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="cache.info">
                       {{ parseFloat(cache.info.used_cpu_user_children).toFixed(2) }}
                     </div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">内存配置</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.info">{{ cache.info.maxmemory_human }}</div>
+                    <div class="cell">内存配置</div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell" v-if="cache.info">
+                      {{ cache.info.maxmemory_human }}
+                    </div>
                   </td>
                 </tr>
                 <tr>
-                  <td class="el-table__cell is-leaf"><div class="cell">AOF是否开启</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">AOF是否开启</div>
+                  </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="cache.info">
                       {{ cache.info.aof_enabled == '0' ? '否' : '是' }}
                     </div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">RDB是否成功</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">RDB是否成功</div>
+                  </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="cache.info">
                       {{ cache.info.rdb_last_bgsave_status }}
                     </div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">Key数量</div></td>
                   <td class="el-table__cell is-leaf">
-                    <div class="cell" v-if="cache.dbSize">{{ cache.dbSize }}</div>
+                    <div class="cell">Key数量</div>
                   </td>
-                  <td class="el-table__cell is-leaf"><div class="cell">网络入口/出口</div></td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell" v-if="cache.dbSize">
+                      {{ cache.dbSize }}
+                    </div>
+                  </td>
+                  <td class="el-table__cell is-leaf">
+                    <div class="cell">网络入口/出口</div>
+                  </td>
                   <td class="el-table__cell is-leaf">
                     <div class="cell" v-if="cache.info">
                       {{ cache.info.instantaneous_input_kbps }}kps/{{
@@ -125,16 +163,11 @@ import { computed, getCurrentInstance, ref } from 'vue';
 import { ZxChart } from '@zxio/chart';
 import '@zxio/chart/style';
 import { useZxChartThemeProjection } from '@zxio/zxui/theme-host/precompiled';
-import themeDeployment from 'virtual:zxui-theme-deployment';
 
 const cache = ref([]);
 const commandOptions = ref({});
 const memoryOptions = ref({});
-const projection = useZxChartThemeProjection({
-  resolveManifest: (themeId) =>
-    themeDeployment.registrations.find(({ manifest }) => manifest.identity.themeId === themeId)
-      ?.manifest,
-});
+const projection = useZxChartThemeProjection();
 const chartProjection = computed(() => (projection.value.ok ? projection.value.value : undefined));
 const { proxy } = getCurrentInstance();
 

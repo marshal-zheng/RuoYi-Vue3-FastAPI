@@ -12,7 +12,7 @@ import { http } from '@/utils/http';
 import { setupVXETable } from '@/plugins/vxe-table';
 import { parseTime, resetForm, handleTree, selectDictLabel, addDateRange } from '@/utils/ruoyi';
 import deployment from './theme-deployment.json';
-import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
+import type { ThemeRuntimeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 import App from './App.vue';
 import DictTag from '@/components/ui/DictTag/index.vue';
 import Pagination from '@/components/ui/Pagination/index.vue';
@@ -130,5 +130,5 @@ Object.assign(app.config.globalProperties, {
 });
 setupVXETable(app);
 // JSON imports widen schema/hash literals; the Host validates the fixture at runtime.
-bindZxThemeHost(app, deployment as unknown as ThemeDeploymentOutput);
+bindZxThemeHost(app, deployment as unknown as ThemeRuntimeDeploymentOutput);
 app.mount('#app');

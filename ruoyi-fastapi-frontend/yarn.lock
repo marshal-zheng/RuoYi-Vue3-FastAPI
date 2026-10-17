@@ -4208,9 +4208,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-footprint.final.20261017.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-footprint.final.20261017.tgz#./vendor/zxio-theme-compiler-1.0.0-footprint.final.20261017.tgz::hash=f0138f&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz#./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz::hash=0c83a4&locator=vfadmin%40workspace%3A."
   dependencies:
     "@zxio/theme-css-codec": "npm:1.0.0"
     "@zxio/tokens": "npm:2.0.0"
@@ -4222,7 +4222,7 @@ __metadata:
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10c0/eb6da748c0c7e9533fbc416e4908daa1f4b07d3e3cd1e9f5c3661e437eaa56b21e8d0c38b56daf8af766fe32c2a0d3bc77869484034d665fb19f22f243870bf5
+  checksum: 10c0/f5b1eaaeb565324d9925d34780a8f7277c97e5e0bba3e0bcec28aa1fd253e0a259b3bc8e08a92b4725bc5332bc874dad0e7e0fc7c7323d290a98719273d8d246
   languageName: node
   linkType: hard
 
@@ -4364,9 +4364,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-font-chunk.final3.20261017.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz::locator=vfadmin%40workspace%3A.":
   version: 3.0.0-next.0
-  resolution: "@zxio/zxui@file:vendor/zxio-zxui-3.0.0-next.0-font-chunk.final3.20261017.tgz#vendor/zxio-zxui-3.0.0-next.0-font-chunk.final3.20261017.tgz::hash=5b10e1&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz#./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz::hash=739350&locator=vfadmin%40workspace%3A."
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
     "@floating-ui/dom": "npm:^1.6.0"
@@ -4387,7 +4387,7 @@ __metadata:
   peerDependencies:
     element-plus: ^2.13.0
     vue: ^3.5.0
-  checksum: 10c0/fc318d4d556853e433fd8435ee9cab9760ee9c78d7f425980f9a259909005c3a5b1ace4c907c97c0878241b7ea2efdcd7e94748cfd6480cda35e9c7a5cea5cbb
+  checksum: 10c0/faed6f4a13634148a431445f72df743ebfa862b6b3bf500d93299718b1f7b9d41c20a713f83eb7bd38a54a79d062b106b262e49ba8aae0dc74b5e282d46ea0d9
   languageName: node
   linkType: hard
 
@@ -13759,7 +13759,7 @@ __metadata:
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
-    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-footprint.final.20261017.tgz"
+    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz"
     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz"
@@ -13771,7 +13771,7 @@ __metadata:
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
-    "@zxio/zxui": "file:vendor/zxio-zxui-3.0.0-next.0-font-chunk.final3.20261017.tgz"
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz"
     ajv: "npm:^8.20.0"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"

@@ -2,35 +2,28 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Cache from './index.vue';
 import type { App, ShallowRef } from 'vue';
-import type { useZxChartThemeProjection } from '@zxio/zxui/theme-host/precompiled';
 import modal from '@/plugins/modal';
 
 type ProjectionFixture = { ok: true; value: { identity: string } } | { ok: false };
-type ProjectionInput = Parameters<typeof useZxChartThemeProjection>[0];
 
 const state: {
   getCache: ReturnType<typeof vi.fn>;
   projection?: ShallowRef<ProjectionFixture>;
-  resolveManifest?: ProjectionInput['resolveManifest'];
+  projectionHook: ReturnType<typeof vi.fn>;
 } = vi.hoisted(() => ({
   getCache: vi.fn(),
   projection: undefined,
-  resolveManifest: undefined,
+  projectionHook: vi.fn(),
 }));
 
 vi.mock('@/api/monitor/cache', () => ({ getCache: state.getCache }));
 vi.mock('@zxio/chart/style', () => ({}));
-vi.mock('virtual:zxui-theme-deployment', () => ({
-  default: {
-    registrations: [{ manifest: { identity: { themeId: 'default' } } }],
-  },
-}));
 vi.mock('@zxio/zxui/theme-host/precompiled', async () => {
   const { shallowRef } = await import('vue');
   state.projection = shallowRef<ProjectionFixture>({ ok: true, value: { identity: 'light' } });
   return {
-    useZxChartThemeProjection: (input: ProjectionInput) => {
-      state.resolveManifest = input.resolveManifest;
+    useZxChartThemeProjection: (...args: unknown[]) => {
+      state.projectionHook(...args);
       return state.projection;
     },
   };
@@ -48,6 +41,7 @@ vi.mock('@zxio/chart', async () => {
 
 describe('cache monitor chart theme integration', () => {
   beforeEach(() => {
+    state.projectionHook.mockClear();
     state.projection!.value = { ok: true, value: { identity: 'light' } };
     state.getCache.mockResolvedValue({
       info: { used_memory_human: '12M', used_cpu_user_children: '1.2' },
@@ -92,9 +86,7 @@ describe('cache monitor chart theme integration', () => {
       detail: { formatter: '12M' },
       data: [{ value: 12, name: '内存消耗' }],
     });
-    expect(state.resolveManifest!('default')).toEqual({
-      identity: { themeId: 'default' },
-    });
+    expect(state.projectionHook).toHaveBeenCalledWith();
     const options = charts.map((chart) => chart.props('options'));
     state.projection!.value = { ok: true, value: { identity: 'dark' } };
     await flushPromises();

@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { emitThemeDeployment } from '@zxio/theme-compiler/deployment';
+import { createRequire } from 'node:module';
+import { createThemeRuntimeDeployment, emitThemeDeployment } from '@zxio/theme-compiler/deployment';
 import { ZX_THEME_PACKAGE_CHOICES } from '../../../src/theme/zx-theme-packages';
 import { formConf } from '../../../src/utils/generator/config';
 import { makeUpHtml, vueScript, vueTemplate } from '../../../src/utils/generator/html';
@@ -13,7 +14,13 @@ const output = emitThemeDeployment({
   assetBasePath: 'zx-theme-assets',
 });
 if (!output.ok) throw new Error(JSON.stringify(output.diagnostics));
-writeFileSync('tests/fixtures/ui-convergence/theme-deployment.json', JSON.stringify(output.value));
+const require = createRequire(resolve('package.json'));
+const runtime = createThemeRuntimeDeployment({
+  deployment: output.value.deployment,
+  manifestSources: packages.map((name) => readFileSync(require.resolve(`${name}/manifest.json`))),
+});
+if (!runtime.ok) throw new Error(JSON.stringify(runtime.diagnostics));
+writeFileSync('tests/fixtures/ui-convergence/theme-deployment.json', JSON.stringify(runtime.value));
 const conf = {
   ...formConf,
   fields: [

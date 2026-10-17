@@ -1,4 +1,4 @@
-import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
+import type { ThemeRuntimeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 import { createBoundConfirmInputFactory } from '@zxio/zxui/confirm-input';
 import {
   bindThemePreferenceController,
@@ -25,16 +25,16 @@ function diagnosticMessage(
   return diagnostics.map((item) => `${item.code}:${JSON.stringify(item.details ?? {})}`).join(', ');
 }
 
-export function bindZxThemeHost(app: App, themeDeployment: ThemeDeploymentOutput): void {
+export function bindZxThemeHost(app: App, themeDeployment: ThemeRuntimeDeploymentOutput): void {
   for (const choice of ZX_THEME_PACKAGE_CHOICES) {
     if (
       !themeDeployment.registrations.some(
-        ({ manifest }) =>
-          manifest.identity.themeId === choice.id &&
-          manifest.identity.packageName === choice.packageName
+        ({ runtime }) =>
+          runtime.identity.themeId === choice.id &&
+          runtime.identity.packageName === choice.packageName
       )
     ) {
-      throw new Error(`Missing registered ZXUI theme manifest: ${choice.packageName}/${choice.id}`);
+      throw new Error(`Missing registered ZXUI runtime theme: ${choice.packageName}/${choice.id}`);
     }
   }
   const assetResolver = createThemeDeploymentResolver({

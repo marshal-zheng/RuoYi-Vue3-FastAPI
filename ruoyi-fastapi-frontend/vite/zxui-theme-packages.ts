@@ -21,7 +21,7 @@ function loadThemeCompiler(frontendRoot: string, workspaceRoot?: string) {
   // tsx belongs to the prepared ZXUI checkout; nothing is globally registered.
   const { require: requireSource } = compilerRequire('tsx/cjs/api');
   return requireSource(
-    '@zxio/theme-compiler/vite/source',
+    compilerRequire.resolve('@zxio/theme-compiler/vite/source'),
     compilerRequire.resolve('@zxio/theme-compiler/package.json')
   ) as typeof import('@zxio/theme-compiler/vite');
 }
