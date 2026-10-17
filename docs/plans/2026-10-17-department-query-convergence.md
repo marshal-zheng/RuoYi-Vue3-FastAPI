@@ -107,7 +107,7 @@ The user approved the reviewed worktree and explicitly authorized investigating 
 
 ### Task 5: Diagnose and remove the proven department stale-refill path
 
-**Status:** Implementation and required checks passed; final independent review in progress. Seven consistency regressions observed RED then GREEN; 62 focused backend tests passed. Real MySQL/Redis/HTTP controlled A/B reproduced stale cache on the original and fresh independent reads on the repair. Source/local-package normal probes both passed on the preserved source candidate, and all 8 new owned records were cleaned. Historical first-run attribution remains bounded by its missing response snapshot.
+**Status:** Complete; independent repair review passed with no P0/P1/P2. Seven consistency regressions observed RED then GREEN; 62 focused backend tests passed. Real MySQL/Redis/HTTP controlled A/B reproduced stale cache on the original and fresh independent reads on the repair. Source/local-package normal probes both passed on the preserved source candidate, and all 8 new owned records were cleaned. Historical first-run attribution remains bounded by its missing response snapshot.
 
 **Files:** Department service and focused consistency regressions; manual probe diagnostics and bounded evidence.
 
@@ -125,7 +125,7 @@ The user approved the reviewed worktree and explicitly authorized investigating 
 
 ### Task 6: Deliver to the recorded source branch without importing unrelated work
 
-**Status:** Pending Task 5 and final review.
+**Status:** Delivery authorized; Task 5 and independent review passed. Source-head gate, actual source baseline and cleanup are next; they are not yet being claimed as complete.
 
 **Steps:**
 1. Preserve source HEAD, index and hashes of all original dirty paths. Relevant source backend edits are context inputs; do not commit unrelated source changes or wholesale import a dirty service file.
