@@ -1,0 +1,13 @@
+{
+  "sourceBranch": "std",
+  "base": "6feb8c50d44bf3c54c206698d60ef623c36fc8f1",
+  "implementationCommit": "5b0d62c1801747cfccd9f78d8e6b2b8e123d3a66",
+  "fastForwardExitCode": 0,
+  "indexClean": true,
+  "unrelatedPathsCompared": 3781,
+  "unrelatedPathsUnchanged": 3781,
+  "concurrentChangesDuringDelivery": [],
+  "newUnrelatedPathsDuringDelivery": [],
+  "authorizedWorkingFilesPreserved": true,
+  "appliedPathCount": 16
+}

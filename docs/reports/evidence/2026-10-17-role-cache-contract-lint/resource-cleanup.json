@@ -1,0 +1,9 @@
+{
+  "implementationCommit": "5b0d62c1801747cfccd9f78d8e6b2b8e123d3a66",
+  "ancestorOfStd": true,
+  "taskWorktree": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-cache-contract-lint",
+  "taskWorktreeRemoved": true,
+  "taskBranchRemoved": true,
+  "projectWorktreesParentPreserved": true,
+  "runtimeOrDatabaseMutations": false
+}

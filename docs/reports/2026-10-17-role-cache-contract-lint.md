@@ -31,8 +31,18 @@
 - 实际源范围内 `ruff check`、`ruff format --check`：15 文件通过。
 - 中文标点配置正反探针、源逻辑保留检查、`git diff --check` 通过。
 
-命令输出摘要、原日志 SHA 与迁移/保留证据位于 `docs/reports/evidence/2026-10-17-role-cache-contract-lint/`。本轮不宣称全后端所有文件 lint 全绿；上述范围已收敛。独立复审未发现 P0/P1/P2，并独立执行工作树 35 项、实际源 126 项回归及两处范围内 lint/format，全部通过。提交前在实际源重新执行完整相关集合，206 项通过。最终提交和清理由交付补记确认。
+命令输出摘要、原日志 SHA 与迁移/保留证据位于 `docs/reports/evidence/2026-10-17-role-cache-contract-lint/`。本轮不宣称全后端所有文件 lint 全绿；上述范围已收敛。独立复审未发现 P0/P1/P2，并独立执行工作树 35 项、实际源 126 项回归及两处范围内 lint/format，全部通过。提交前在实际源重新执行完整相关集合，206 项通过。最终交付结果见下文。
 
 ## 并发工作区保留
 
 初始源工作区有 800 个未提交路径，其中 8 个属于本轮授权范围。收尾期间另一个 dashboard 任务持续编辑范围外文件；中间盘点记录了 15 个范围外路径变化，其余 777 个未变，索引未变。本轮未写入或恢复这些并发改动。交付时重新记录快进前的当前内容，逐项比较快进后状态；不能将初始快照当作应恢复的目标。
+
+## std 交付结果
+
+实现提交 `5b0d62c1801747cfccd9f78d8e6b2b8e123d3a66` 已从项目本地工作树快进到 `std`，起点提交保持可追溯。交付前的索引仍为原样；仅将本轮审查后的提交内容纳入，源已有业务差异继续留在工作区。三份原未跟踪测试的剩余写入回归继续保持未提交，迁出的读取覆盖已纳入 tracked 测试；迁移证据为零上下文 unified diff。
+
+快进前后逐项比较 3,781 个范围外已跟踪、未跟踪及初始已删除路径，内容/模式全部一致，没有交付窗口内新增的范围外路径。16 个授权范围文件的工作区内容也保持快进前候选；详情见 [交付保留结果](evidence/2026-10-17-role-cache-contract-lint/source-delivery.json)。此前 dashboard 并发变化按当时的最新状态保留，没有恢复旧快照。
+
+在 `std@5b0d62c` 实际源目录再次执行相关回归，206 passed；15 个相关 Python 文件的 Ruff check 与 format check 均通过。[合入后验证](evidence/2026-10-17-role-cache-contract-lint/source-delivered-verification.json)保留完整命令和日志 SHA。本轮测试使用 SQLite 内存 fixture，没有操作真实数据库或运行服务。
+
+本轮工作树与 `codex/role-cache-contract-lint` 分支已删除，项目 `.worktrees` 父目录保留；[清理证据](evidence/2026-10-17-role-cache-contract-lint/resource-cleanup.json)已记录。提交未推送，工作区其他未提交内容继续保留。
