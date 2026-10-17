@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "checkoutPath": "/Users/hqz/dev/RuoYi-Vue3-FastAPI",
+  "commands": [
+    {
+      "name": "lint",
+      "command": [
+        "corepack",
+        "yarn",
+        "lint:check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 16.51,
+      "environment": {},
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-quality/lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "types",
+      "command": [
+        "corepack",
+        "yarn",
+        "type-check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 14.34,
+      "environment": {},
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-quality/types.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tests",
+      "command": [
+        "corepack",
+        "yarn",
+        "test:run"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 33.1,
+      "environment": {},
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-quality/tests.log",
+      "sha256": "33708fa42bbf578e06dc8303647b021bff335f2281469783dfba40bc8d83b60b"
+    },
+    {
+      "name": "ui",
+      "command": [
+        "corepack",
+        "yarn",
+        "ui:standards"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 4.79,
+      "environment": {},
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-quality/ui.log",
+      "sha256": "f52f26959b029b9efc32253b08fc431eb924e95e9aadcbcc5e79e37928fa2c7a"
+    },
+    {
+      "name": "source-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/role-authorization-source-baseline-builds-source-20261017",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 43.64,
+      "environment": {
+        "VITE_ZXUI_LOCAL": "true",
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus"
+      },
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-builds/source-build.log",
+      "sha256": "886c720bfe77d15c06d54a8959eac383d358da4c7d35bb5f9544cd0dfec9e083"
+    },
+    {
+      "name": "installed-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/role-authorization-source-baseline-builds-installed-20261017",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 35.93,
+      "environment": {
+        "VITE_ZXUI_LOCAL": "false"
+      },
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-baseline-builds/installed-build.log",
+      "sha256": "2a979f775aebb00551169e0195d8a74ef8c93ebe4ea18ce769f35599a23e1329"
+    },
+    {
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "--no-cov",
+        "tests/unit/services/test_role_query_consistency.py",
+        "tests/unit/services/test_user_authorization_read.py",
+        "tests/unit/services/test_role_service.py",
+        "tests/unit/services/test_menu_service.py",
+        "modules/system/tests/test_role_read_queries.py",
+        "modules/system/tests/test_menu_read_queries.py",
+        "modules/system/tests/test_user_read_queries.py",
+        "tests/unit/controllers/test_user_controller.py",
+        "tests/unit/utils/test_transaction_manager.py",
+        "tests/unit/controllers/test_user_role_write_contract.py",
+        "tests/unit/controllers/test_role_authorization_contract.py"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "seconds": 10.47,
+      "logSHA256": "7b7ba55ab09a6a02a36c5e6efec32c7825ec8ec79519cee303043ff03a298397"
+    }
+  ],
+  "realAPIEvidence": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/frontend-source-delivered-r2.json",
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/frontend-installed-delivered.json"
+  ],
+  "noOverlayRuntime": true,
+  "runtimeCodeCommit": "d558dfb635a9929d35a8ae5c9768d4ecf7617cac",
+  "preservationProof": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/source-post-merge-preservation.json",
+  "backendLimitations": "Source-only cache-implementation tests preserved: 126-item baseline 2 failures, candidate 6 failures; existing Ruff diagnostics unchanged, see reports. Focused current source contract tests 91 passed."
+}

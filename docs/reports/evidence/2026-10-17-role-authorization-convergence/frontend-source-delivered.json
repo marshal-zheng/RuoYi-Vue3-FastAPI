@@ -1,0 +1,44 @@
+{
+  "timestamp": "2026-10-17T11:55:25.402Z",
+  "marker": "codex_ra_vccb04a",
+  "mode": "source",
+  "transport": "Real business commands/query options/useQuery/HTTP to loopback FastAPI",
+  "runtime": "standard-source-no-overlay",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "sharedRoleRead": {
+      "subscribers": 2,
+      "requests": 1
+    }
+  },
+  "cleanup": {
+    "users": 0,
+    "roles": 0,
+    "verifiedAbsent": false,
+    "failure": {
+      "name": "ValidationError",
+      "status": 401,
+      "message": "用户token已失效，请重新登录"
+    }
+  },
+  "failure": {
+    "stage": "create-owned-fixtures",
+    "name": "ValidationError",
+    "status": 401,
+    "message": "用户token已失效，请重新登录"
+  },
+  "passed": false,
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/role/list": 3,
+    "GET /system/user/": 4,
+    "POST /system/role": 2,
+    "POST /system/user": 2,
+    "GET /system/user/list": 2,
+    "POST /auth/logout": 1
+  }
+}

@@ -108,4 +108,4 @@ References: [query keys](https://tanstack.com/query/latest/docs/framework/vue/gu
 - [x] Lists, authorization and navigation state.
 - [x] Evidence-backed backend decision.
 - [x] Independent review and candidate verification.
-- [ ] Source delivery, baseline and cleanup.
+- [x] Source delivery, baseline and cleanup.

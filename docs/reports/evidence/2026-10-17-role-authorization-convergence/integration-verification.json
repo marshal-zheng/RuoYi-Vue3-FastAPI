@@ -1,0 +1,25 @@
+{
+  "command": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "--no-cov",
+    "tests/unit/services/test_role_query_consistency.py",
+    "tests/unit/services/test_user_authorization_read.py",
+    "tests/unit/services/test_role_service.py",
+    "tests/unit/services/test_menu_service.py",
+    "modules/system/tests/test_role_read_queries.py",
+    "modules/system/tests/test_menu_read_queries.py",
+    "modules/system/tests/test_user_read_queries.py",
+    "tests/unit/controllers/test_user_controller.py",
+    "tests/unit/utils/test_transaction_manager.py"
+  ],
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-authorization-convergence-integration/ruoyi-fastapi-backend",
+  "exitCode": 0,
+  "seconds": 8.28,
+  "logSHA256": "7995c6c4d94d729ea03ac837fe10a62137b54eb4afb3841900ea8e1c70755bcf",
+  "base": "3e6936e1a839d21ebb17ac5eec36721772d8862f",
+  "head": "d558dfb635a9929d35a8ae5c9768d4ecf7617cac",
+  "status": "passed"
+}

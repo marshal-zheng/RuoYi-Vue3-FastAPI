@@ -1,0 +1,60 @@
+{
+  "deliveryStatus": "delivery_incomplete",
+  "finalClaimAllowed": false,
+  "reason": "one or more recorded delivery worktrees have staged, unstaged, untracked, or in-progress changes",
+  "deliveryProof": {
+    "status": "pass",
+    "sourceCheckoutPath": "/Users/hqz/dev/RuoYi-Vue3-FastAPI",
+    "sourceBranch": "std",
+    "sourceDeliveryCommit": "d558dfb635a9929d35a8ae5c9768d4ecf7617cac",
+    "deliveryProof": "ancestry",
+    "taskChanges": {
+      "status": "pass",
+      "method": "ancestry",
+      "proofSource": "delivery-proof --write-ledger",
+      "taskBranch": "codex/role-authorization-convergence",
+      "sourceBranch": "std",
+      "sourceDeliveryCommit": "d558dfb635a9929d35a8ae5c9768d4ecf7617cac"
+    },
+    "durableProofAccepted": true
+  },
+  "cleanupStatus": "complete",
+  "statusSync": "complete",
+  "artifactRemovalProof": {
+    "status": "pass",
+    "checked": [
+      {
+        "type": "worktree",
+        "kind": "task",
+        "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-authorization-convergence",
+        "removed": true,
+        "logicalRelease": false,
+        "releaseMethod": null
+      },
+      {
+        "type": "worktree",
+        "kind": "integration",
+        "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-authorization-convergence-integration",
+        "removed": true,
+        "logicalRelease": false,
+        "releaseMethod": null
+      },
+      {
+        "type": "branch",
+        "kind": "task",
+        "branch": "codex/role-authorization-convergence",
+        "removed": true
+      },
+      {
+        "type": "branch",
+        "kind": "integration",
+        "branch": "codex/role-authorization-convergence-integration",
+        "removed": true
+      }
+    ],
+    "proofSource": "live-git",
+    "checkedAt": "2026-10-17T11:59:33.814Z"
+  },
+  "retainedUnrelatedDirtyIsIntentional": true,
+  "rawStatusPath": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-authorization-convergence/delivery-status-before-doc-commit.json"
+}

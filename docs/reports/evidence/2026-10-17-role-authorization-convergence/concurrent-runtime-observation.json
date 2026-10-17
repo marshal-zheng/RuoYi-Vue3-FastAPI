@@ -1,0 +1,23 @@
+{
+  "port": 18088,
+  "pid": 88173,
+  "ownedByThisTask": false,
+  "processCommand": "python -m uvicorn server:app --host 127.0.0.1 --port 18088",
+  "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+  "logPath": "/private/tmp/dashboard-task11-20261017/backend-live.log",
+  "action": "Preserved other task process; this task original A/B PIDs absent",
+  "loginEvents": [
+    {
+      "time": "2026-10-17 12:55:31.493140+01:00",
+      "event": "login-success"
+    },
+    {
+      "time": "2026-10-17 12:57:27.116029+01:00",
+      "event": "login-success"
+    },
+    {
+      "time": "2026-10-17 12:58:22.098096+01:00",
+      "event": "login-success"
+    }
+  ]
+}

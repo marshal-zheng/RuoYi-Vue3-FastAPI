@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "sourceImplementationCommit": "d558dfb635a9929d35a8ae5c9768d4ecf7617cac",
+  "ruoyiInitialDirtyPaths": 756,
+  "ruoyiUnrelatedPathsUnchanged": 752,
+  "ruoyiOverlappingSourcePreservedCandidatesMatched": 4,
+  "sourceIndexRemainsClean": true,
+  "zxuiProductEditsByThisTask": 0,
+  "zxuiHead": "67e13c6cfa413d4c7a57bfa5d728dabc750d2972",
+  "zxuiConcurrentChangesObservedAndPreserved": [
+    "docs/codemaps/developer-surfaces.md",
+    "docs/codemaps/feature-packages.md",
+    "docs/plans/2026-10-16-dashboard-handoff.md",
+    "packages/dashboard/src/designer/components/dashboard-designer.vue",
+    "pnpm-lock.yaml",
+    "docs/plans/2026-10-14-continue-writing-context-window.md",
+    "docs/plans/2026-10-16-ai-writing-outcome-freshness-calibration.md",
+    "docs/plans/2026-10-17-dashboard-widget-pack.md",
+    "docs/plans/evidence/dashboard-task10-2026-10-17/chrome-source-progress.json",
+    "packages/dashboard-widgets/package.json"
+  ],
+  "zxuiNote": "Other dashboard task is active; do not claim original hashes all unchanged or overwrite concurrent work"
+}

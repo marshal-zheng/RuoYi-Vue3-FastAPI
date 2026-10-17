@@ -1,6 +1,6 @@
 # 角色管理与双向用户授权闭环
 
-候选实现与独立审查已完成；源分支交付及标准源基线验证由本文末尾与持久化交付账本记录。任务起点为 RuoYi `std@3e6936e1a839d21ebb17ac5eec36721772d8862f`，项目本地工作树为 `.worktrees/role-authorization-convergence`。ZXUI 源为 `codex/http-vue-query-phase-a@67e13c6cfa413d4c7a57bfa5d728dabc750d2972`。
+候选实现、独立审查、源分支交付及标准源基线验证已完成；源目录原有未提交工作保留。任务起点为 RuoYi `std@3e6936e1a839d21ebb17ac5eec36721772d8862f`，项目本地工作树为 `.worktrees/role-authorization-convergence`。ZXUI 源为 `codex/http-vue-query-phase-a@67e13c6cfa413d4c7a57bfa5d728dabc750d2972`。
 
 ## 根因与实现
 
@@ -58,3 +58,27 @@ authRole GET 在读取前检查目标用户数据范围，对不存在用户返�
 新的初始快照覆盖 RuoYi 756 个脏路径和 ZXUI 906 个脏路径的内容、权限、状态及 index。四个后端文件与源未提交工作重叠：user_controller、role_service、menu_service、user_service。候选只应用本轮增量，保留源 JSON 写、停用详情及 404 等规则；独立审查核对了 source-preserving.patch。
 
 以实际四文件做隔离 Git 预演，目标 index entry 配合普通 fast-forward 能同时保留源业务修改、其他暂存内容及未跟踪内容，[保留预演](evidence/2026-10-17-role-authorization-convergence/dirty-fast-forward-preservation-proof.json)通过。实际源 HEAD gate、逐路径保留、源无 overlay 验证及工作树/分支清理由后续交付记录确认。
+
+
+## 标准源验收与最终状态
+
+实现提交 `d558dfb635a9929d35a8ae5c9768d4ecf7617cac` 已经普通 fast-forward 交付到记录的 `std`。先在独立项目本地 integration 工作树合并并运行 49 项后端回归，再安装四处已审查的源保留增量、更新这四条目标 index entry 并正常快进。752 个非重叠原脏路径内容及权限保持不变，四处重叠精确匹配源保留候选；index 仍为空。没有 stash/reset/clean、打包源 dirty 提交或覆盖原业务规则。见[最终保留核对](evidence/2026-10-17-role-authorization-convergence/final-preservation.json)。
+
+标准源 backend 使用 `./venv/bin/python app.py --env=dev` / 8088，无 import overlay、barrier 或新增产品 API。源目录最终验证：
+
+| 验证 | 结果 |
+| --- | --- |
+| 前端 lint / type-check | 均 exit 0 |
+| 全量前端 tests | 136 文件、1297 tests 通过 |
+| UI standards | 520 文件零违规、23 tests 通过 |
+| 源码直连 / 本地 vendor 构建 | 均 exit 0 |
+| 源后端相关服务/查询/控制器/事务/JSON 写契约 | 91 tests 通过 |
+| 标准源真实 HTTP：源码 / 本地产物 | 均通过；每轮 3 用户、3 角色清理，正常 logout |
+
+[标准源验证](evidence/2026-10-17-role-authorization-convergence/source-baseline-verification.json)保留命令、退出码与日志 SHA。[源码真实链路](evidence/2026-10-17-role-authorization-convergence/frontend-source-delivered-r2.json)和[本地产物真实链路](evidence/2026-10-17-role-authorization-convergence/frontend-installed-delivered.json)均覆盖同条件共享、pageSize=1 的第二页、增量授权、完整替换、显式空数组、单条/批量撤销、角色目录更新、已有停用关联、编辑/数据范围与真实 HTTP 422。所有 8 个前端 marker 的独立只读 SQL/Redis 检查均为有效用户/角色 0、关系 0、用户会话索引 0；正常软删除记录保留，不以物理删除改变业务规则。
+
+标准源首次启动曾因旧自有进程尚在优雅退出而遇端口占用，待其结束后正常启动。首次标准源探针在 12:55:31.515 收到会话失效；另一个 dashboard 任务日志显示 12:55:31.493 成功登录，与单会话替换吻合。该次 1 用户/2 角色通过新会话独立清理，原失败与恢复证据保留；后续串行源码和本地产物均通过。不将此运行干扰归因于产品修复。
+
+两个任务工作树与对应分支已删除，原 `.worktrees` 父目录保留；本次所有后端 PID 已退出，8088 关闭，四个临时构建输出已删除。自有 A/B 的 18088 进程和 socket 已清理；另一 dashboard 任务随后在该端口启动 PID 88173，已确认所有权并保留。共享 MySQL/Redis 未停止。[资源清理](evidence/2026-10-17-role-authorization-convergence/final-runtime-cleanup.json)记录这一边界。ZXUI HEAD 未变，本轮未修改其产品源码；其他任务对 ZXUI 的并发修改完整保留，不宣称全部初始 hash 未变。
+
+交付 ancestry、源验证和任务清理 proof 均通过，持久化账本在 `.git/codex-deliveries/docs-plans-2026-10-17-role-authorization-convergence-md.json`。由于源目录故意保留原 dirty，严格 `delivery-status` 仍会返回 `delivery_incomplete / finalClaimAllowed:false`；不为刷成 clean 而提交、覆盖或删除他人工作。此标签与已证明的源实现交付、验证和任务资源清理分别记录。后端既有 lint 与 source-only 缓存断言限制仍见上文，不声称全仓库所有测试全绿。未推送、发布或进行浏览器视觉验收。

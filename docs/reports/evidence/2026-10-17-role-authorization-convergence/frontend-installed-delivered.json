@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-10-17T11:57:48.787Z",
+  "marker": "codex_ra_vcce2r7",
+  "mode": "installed",
+  "transport": "Real business commands/query options/useQuery/HTTP to loopback FastAPI",
+  "runtime": "standard-source-no-overlay",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "sharedRoleRead": {
+      "subscribers": 2,
+      "requests": 1
+    },
+    "roleCreateCatalog": true,
+    "authorizationPaging": {
+      "total": 3,
+      "pageSize": 1,
+      "distinctPage2": true
+    },
+    "incrementalGrant": true,
+    "fullReplacement": true,
+    "inactiveAssociationPreserved": true,
+    "explicitEmptyAndIncrementalRevokes": true,
+    "editorAndValidation": {
+      "dataScope": "2",
+      "invalidStatus": 422
+    }
+  },
+  "cleanup": {
+    "users": 3,
+    "roles": 3,
+    "verifiedAbsent": true
+  },
+  "passed": true,
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/role/list": 11,
+    "GET /system/user/": 17,
+    "POST /system/role": 3,
+    "POST /system/user": 3,
+    "GET /system/user/list": 5,
+    "GET /system/role/authUser/allocatedList": 22,
+    "GET /system/role/authUser/unallocatedList": 12,
+    "GET /system/user/authRole/:id": 11,
+    "PUT /system/role/authUser/selectAll": 1,
+    "PUT /system/user/authRole": 6,
+    "PUT /system/role": 1,
+    "PUT /system/role/changeStatus": 3,
+    "PUT /system/role/authUser/cancel": 1,
+    "PUT /system/role/authUser/cancelAll": 1,
+    "GET /system/role/:id": 2,
+    "GET /system/menu/roleMenuTreeselect/:id": 1,
+    "PUT /system/role/dataScope": 1,
+    "GET /system/role/deptTree/:id": 1,
+    "DELETE /system/user/:id": 3,
+    "DELETE /system/role/:id": 3,
+    "POST /auth/logout": 1
+  }
+}

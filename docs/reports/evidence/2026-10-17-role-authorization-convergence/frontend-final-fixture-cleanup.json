@@ -1,0 +1,88 @@
+{
+  "markers": [
+    "codex_ra_vcbqdze",
+    "codex_ra_vcbr5vn",
+    "codex_ra_vcbub88",
+    "codex_ra_vcbvxy3",
+    "codex_ra_vcbxdg3",
+    "codex_ra_vccb04a",
+    "codex_ra_vccdnb0",
+    "codex_ra_vcce2r7"
+  ],
+  "checkedReadOnly": true,
+  "rows": [
+    {
+      "marker": "codex_ra_vcbqdze",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vcbr5vn",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vcbub88",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vcbvxy3",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vcbxdg3",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vccb04a",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vccdnb0",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    },
+    {
+      "marker": "codex_ra_vcce2r7",
+      "activeUsers": 0,
+      "activeRoles": 0,
+      "userRoleAssociations": 0,
+      "roleMenuAssociations": 0,
+      "roleDeptAssociations": 0,
+      "ownedUserActiveSessionIndexes": 0
+    }
+  ],
+  "passed": true
+}

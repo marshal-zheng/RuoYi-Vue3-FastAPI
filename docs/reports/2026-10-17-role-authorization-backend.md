@@ -44,3 +44,5 @@ SQLAlchemy 官方说明字符串 SQL 与绑定参数值是分开的；跨进程�
 源现有写规则允许保留或删除已关联停用角色，也未在服务端禁止直接 API 新授予停用角色。本轮只修完整读取，不新增 source-only 写规则。管理员角色关联的操作资格沿用 `current_user.user.admin`，不是仅角色名称中含 `admin`。角色定义本身仍受管理员保护。
 
 原始证据保存在源 `.git/codex-delivery-preservation/role-authorization-convergence/backend/`：`unit-{red,green}.log`、`http-{red,green}.json`、`backend-{red,green}.log`、`source-tests-{baseline,candidate}.log`、`source-tests-comparison.json`、`ruff-{head,task}.json`、`lint-comparison.json`、`readonly-scale.json`、`owned-relations-session-cleanup.json`、`runtime-cleanup.json`、`source-inputs.json`、`source-preserving.patch`。最终候选只比真实 GREEN 运行多一处 `List[RoleDO]` → `list[RoleDO]` 返回注解；运行原始 SHA 另存 `runtime-inputs-before-final-annotation.json`，最终任务回归再次通过。仍需主任务在源交付后完成标准无 overlay 验证。
+
+源交付补记：实现现已交付 `std@d558dfb`，标准源 8088 无 overlay 的两种消费方式实链通过，源相关后端 91 tests 通过；最终保留、清理及全库检查边界见同目录 `2026-10-17-role-authorization-convergence.md`。

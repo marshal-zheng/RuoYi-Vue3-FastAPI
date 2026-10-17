@@ -1,0 +1,20 @@
+{
+  "ownedPidsAbsent": true,
+  "remainingOwnedProcesses": [],
+  "ownedPortsClosed": {
+    "8088": true,
+    "18088": false
+  },
+  "removedOwnedBuildOutputs": [
+    "/tmp/role-authorization-candidate-builds-source-20261017",
+    "/tmp/role-authorization-candidate-builds-installed-20261017",
+    "/tmp/role-authorization-source-baseline-builds-source-20261017",
+    "/tmp/role-authorization-source-baseline-builds-installed-20261017"
+  ],
+  "preExistingWorktreeParentPreserved": true,
+  "sharedMySQLRedisNotStopped": true,
+  "port18088ReoccupiedByOtherTask": true,
+  "nonOwnedProcessPreserved": 88173,
+  "status": "passed",
+  "note": "Own A/B 18088 process was stopped and closure proven earlier; another dashboard task subsequently reused port. No unrelated process stopped."
+}
