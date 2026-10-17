@@ -1,0 +1,145 @@
+{
+  "timestamp": "2026-10-17T11:09:53Z",
+  "sourceCwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI",
+  "sourceHEAD": "ad2c2941caf99d6ddb448dc08ecccf58c65faaf8",
+  "runtime": "Standard source daily backend; actual MySQL/Redis/HTTP; real source frontend commands/options/QueryClient",
+  "backendCommand": "./venv/bin/python app.py --env=dev",
+  "backendCwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+  "backendPIDs": {
+    "reloader": 29040,
+    "worker": 29140
+  },
+  "boundaries": {
+    "serviceOverlay": false,
+    "repositoryHook": false,
+    "controlledBarrier": false,
+    "specialRedisNamespace": false,
+    "productSourceOrConfigurationEditedByProbe": false,
+    "manualHarnessEdited": false,
+    "browserUIRendered": false,
+    "computerUse": false,
+    "existingUnrelatedDirtyPreserved": true,
+    "onlyOwnedTemporaryDepartmentWrites": true,
+    "loginAndLogoutUseExistingSecurityFlow": true
+  },
+  "runtimeSourceSHA256": {
+    "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/query/dept_query_handlers.py": "cb2e274c4f11e28b373e694acff6e5d587747a3661dd45762c4eacae282293aa",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/query/user_query_handlers.py": "961d67cf90dad97fc257af3784950c9f0cee5054d3b26adb295256022ea9a510",
+    "ruoyi-fastapi-backend/modules/system/api/dept_controller.py": "29cf7f591266b503a12bc9cbde2aa88553c815d99281ece0af8a7c3b0e5793f2",
+    "ruoyi-fastapi-backend/modules/system/api/user_controller.py": "54a012540869e1986498ffd0ad903ed451e14744fd0be602cabe9a275d944a64",
+    "ruoyi-fastapi-backend/config/get_db.py": "6eb1d58c1c83ac8f8aa296656645dc6357a8e66b9d1295989009e46aa7176cd0",
+    "ruoyi-fastapi-backend/utils/transaction_manager.py": "4cd744cbaa457ad98ac187db112e49910b77ed3ec64a32371b8855d6613953f5",
+    "ruoyi-fastapi-backend/utils/query_cache.py": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+    "ruoyi-fastapi-frontend/src/queries/system/dept.ts": "8068af0604d1a9d1eabc5e6fed780204a7633713eac8a692227e6dca27c07876",
+    "ruoyi-fastapi-frontend/src/queries/editor-read.ts": "6900fe63726f94e01d2000ef220d967094b9145463e6c15ec164fe6b70483b56",
+    "ruoyi-fastapi-frontend/tests/manual/department-query/real-api.probe.ts": "78c785eaa1ea555e915cde744f956c5e9c393bf72d7a192fe5929db49e7809f2",
+    "ruoyi-fastapi-frontend/tests/manual/department-query/vitest.config.ts": "b4cdb04ace174ed4b5cce5243395103626260ca3f2dc75bd89e64177ade23628",
+    "ruoyi-fastapi-frontend/package.json": "c1e3119ff2119a00e500dc08f9f7bc228931d61e4d6a3e8feb1957706d3273c7",
+    "ruoyi-fastapi-frontend/yarn.lock": "4ec04213cce6b2b150ac146b0d8d46d841019c3f08e529145a5ddd76fe759d4d"
+  },
+  "environmentVariableNames": [
+    "CODEX_DEPT_QUERY_WRITE",
+    "CODEX_DEPT_PASSWORD",
+    "VITE_ZXUI_LOCAL",
+    "VITE_ZXIO_REPO_ROOT",
+    "CODEX_DEPT_EVIDENCE"
+  ],
+  "modes": {
+    "source": {
+      "VITE_ZXUI_LOCAL": "true",
+      "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus",
+      "passed": true,
+      "checks": {
+        "coldSharing": {
+          "treeSubscribers": 2,
+          "treeRequests": 1
+        },
+        "create": {
+          "parentAndChildVisible": true
+        },
+        "rename": {
+          "managementAndBothTreeObserversUpdated": true,
+          "userListRefetched": true
+        },
+        "status": {
+          "disabledRetainedInManagement": true,
+          "userTreeNormalFilter": true,
+          "enabledRestored": true
+        },
+        "excludeAndEditor": {
+          "selfAndDescendantExcluded": true,
+          "editorReadUsesRealDetail": true
+        },
+        "parameterError": {
+          "status": 422,
+          "successfulCachePreserved": true
+        }
+      },
+      "cleanup": {
+        "created": 2,
+        "deleted": 2,
+        "verifiedAbsent": true
+      },
+      "ownSessionEnded": true
+    },
+    "installed": {
+      "VITE_ZXUI_LOCAL": "false",
+      "passed": true,
+      "checks": {
+        "coldSharing": {
+          "treeSubscribers": 2,
+          "treeRequests": 1
+        },
+        "create": {
+          "parentAndChildVisible": true
+        },
+        "rename": {
+          "managementAndBothTreeObserversUpdated": true,
+          "userListRefetched": true
+        },
+        "status": {
+          "disabledRetainedInManagement": true,
+          "userTreeNormalFilter": true,
+          "enabledRestored": true
+        },
+        "excludeAndEditor": {
+          "selfAndDescendantExcluded": true,
+          "editorReadUsesRealDetail": true
+        },
+        "parameterError": {
+          "status": 422,
+          "successfulCachePreserved": true
+        }
+      },
+      "cleanup": {
+        "created": 2,
+        "deleted": 2,
+        "verifiedAbsent": true
+      },
+      "ownSessionEnded": true
+    }
+  },
+  "ownedDeletedDetail": {
+    "timestamp": "2026-10-17T11:09:38Z",
+    "marker": "codex_dept_query_camyz5",
+    "scope": "Only read one deleted owned child from completed source normal probe; no extra department writes",
+    "standardSourceBackend": true,
+    "serviceOverlay": false,
+    "repositoryHook": false,
+    "passed": true,
+    "ownSessionEnded": true,
+    "status": 404,
+    "problemJSON": true
+  },
+  "cleanup": {
+    "reloaderPIDAbsent": true,
+    "workerPIDAbsent": true,
+    "host8088Closed": true,
+    "sharedMySQLRedisAndNativeForwardRetained": true
+  },
+  "verificationLogs": {
+    "source.log": "0d2ea7ab001c15e941349d328ad1cad363c4caa0b33cc1468647ed6f1b3587bd",
+    "installed.log": "958b11a9f55feb2f9c661d19e48c6606285bf2b3baf628bc8e94044cbee2f607"
+  }
+}

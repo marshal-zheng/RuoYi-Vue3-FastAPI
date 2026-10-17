@@ -1,0 +1,125 @@
+{
+  "checks": [
+    {
+      "name": "source-baseline-lint",
+      "command": [
+        "corepack",
+        "yarn",
+        "lint:check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 23.22,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-lint.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-baseline-types",
+      "command": [
+        "corepack",
+        "yarn",
+        "type-check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 34.68,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-types.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-baseline-tests",
+      "command": [
+        "corepack",
+        "yarn",
+        "test:run"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 52.37,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-tests.log",
+      "logSHA256": "87f4fda553814ebc239f47b47494ea30cfdca377c9c266c0db3ed80a6c5b6e52"
+    },
+    {
+      "name": "source-baseline-ui",
+      "command": [
+        "corepack",
+        "yarn",
+        "ui:standards"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 13.08,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-ui.log",
+      "logSHA256": "ba4ffdfe346b3a7c7fbfa4066d4275737fb6df58ced11122a9d977de0f9fd6bd"
+    },
+    {
+      "name": "source-baseline-source-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/department-query-source-delivery-20261017-r1",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 53.07,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-source-build.log",
+      "logSHA256": "f9049e048a086a91e8ad52252284c2cdcfa411b920e9b980e50bc1803e3fef7a",
+      "environment": {
+        "VITE_ZXUI_LOCAL": "true",
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus"
+      }
+    },
+    {
+      "name": "source-baseline-packed-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/department-query-packed-delivery-20261017-r1",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 26.88,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/department-checks/source-baseline-packed-build.log",
+      "logSHA256": "717ac318058846dc91ecc107f5310e22d7de3cc11407a44b8932371aa82fd466",
+      "environment": {
+        "VITE_ZXUI_LOCAL": "false"
+      }
+    },
+    {
+      "name": "source-baseline-backend",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/unit/services/test_dept_read_freshness.py",
+        "tests/unit/services/test_dept_write_boundaries.py",
+        "tests/unit/controllers/test_dept_write_contract.py",
+        "tests/unit/repositories/test_dept_repository.py",
+        "modules/system/tests/test_dept_read_queries.py",
+        "modules/system/tests/test_role_read_queries.py",
+        "modules/system/tests/test_user_read_queries.py",
+        "modules/system/tests/test_dept_write_commands.py"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "seconds": 13.92,
+      "logSHA256": "a8e1efa4808ddd954b5dab6c39be8f227ffba43032bc034b982becb122e4ef6f"
+    }
+  ],
+  "realAPI": [
+    "source.json",
+    "installed.json",
+    "owned-deleted-detail.json"
+  ],
+  "runtime": "runtime-receipt.json",
+  "sourceWorkingServiceSHA256": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+  "sourceDeliveryCodeCommit": "ad2c2941caf99d6ddb448dc08ecccf58c65faaf8",
+  "note": "Passed source baseline; this is not a claim that all unrelated backend work or all-repository diagnostics pass."
+}

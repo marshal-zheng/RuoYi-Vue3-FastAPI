@@ -1,0 +1,18 @@
+{
+  "sourceHeadGate": "pass",
+  "integrationBase": "94528292c3483af52cdfeab6a95cb0d76d87bbb9",
+  "verifiedIntegrationHead": "ad2c2941caf99d6ddb448dc08ecccf58c65faaf8",
+  "sourceWorkingBeforeSHA256": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072",
+  "sourceWorkingExpectedSHA256": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+  "oldIndexEntry": {
+    "mode": "100644",
+    "blob": "96512f65105dd1378b6ce877269219a596738cf9"
+  },
+  "newIndexBlob": "31d90f395a437e1202b405869cadda97ad457279",
+  "method": "Verified per-path three-way working content + target index entry + ordinary fast-forward",
+  "timestamp": "2026-10-17T11:07:34.780321+00:00",
+  "normalFastForward": "pass",
+  "sourceHeadAfter": "ad2c2941caf99d6ddb448dc08ecccf58c65faaf8",
+  "sourceWorkingAfterSHA256": "d591d1a0e89b56cde69c02f41d5dbff90b7070b61fb99d3aad0c5dd60f147d41",
+  "sourceLocalDomainChangesRemainUncommitted": true
+}

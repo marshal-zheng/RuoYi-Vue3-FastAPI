@@ -1,6 +1,6 @@
 # 部门管理与用户部门选择闭环
 
-当前状态：用户已认可上一阶段实现，并明确授权查清刷新超时、修复后完成源分支交付。本次已用真实 HTTP/MySQL/Redis 对照复现并修复旧读回填路径；新增复审和源交付正在进行。原始失败记录保留，不倒推缺失的历史响应。任务基线为 `94528292c3483af52cdfeab6a95cb0d76d87bbb9`，前端已验收实现检查点为 `fd51753`。
+当前状态：部门闭环与缓存修复已普通快进合入记录的 `std` 源分支（实现合入提交 `ad2c2941`），标准源目录基线验证通过。前端实现检查点 `fd51753`、缓存修复 `e0109c5`，任务起点 `94528292`。原始失败记录保留；本次真实 HTTP/MySQL/Redis A/B 证明并消除了后端旧读回填路径，不倒推缺失的历史响应。临时产物清理及准确终态由源账本持久化。
 
 ## 范围与方案依据
 
@@ -38,15 +38,15 @@
 | 真实 HTTP | 后续源码 3 轮、本地产物 4 轮通过；初次超时保留，不重复计算副本 |
 | 清理 | 8 轮 16 条自建部门均经现有 API 软删除并核对列表不存在；自建会话退出，任务后端进程停止 |
 
-命令、环境变量、退出码与原日志 hash 见 [验证摘要](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/docs/reports/evidence/2026-10-17-department-query-convergence/verification-summary.json)。原始日志持久化于 Git metadata，仓库只保存有限摘要和有意义的 RED/GREEN 记录。新工作树未包含忽略的 UI fixture，验证时复用了同一已验收 compiler/vendor 输入生成的源目录 fixture；其 SHA 与原因在 metadata 的 `fixture-input.json`，没有将生成 JSON 纳入产品修改。实际生产构建仍执行其正常资产生成。
+命令、环境变量、退出码与原日志 hash 见 [验证摘要](/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-17-department-query-convergence/verification-summary.json)。原始日志持久化于 Git metadata，仓库只保存有限摘要和有意义的 RED/GREEN 记录。新工作树未包含忽略的 UI fixture，验证时复用了同一已验收 compiler/vendor 输入生成的源目录 fixture；其 SHA 与原因在 metadata 的 `fixture-input.json`，没有将生成 JSON 纳入产品修改。实际生产构建仍执行其正常资产生成。
 
 源码构建使用 `VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus`，本地产物构建使用 `VITE_ZXUI_LOCAL=false`，复用 THEME 已验收的本地 vendor 包，其 SHA 见证据 `consumption-inputs.json`。最终构建输出分别为 `/tmp/department-query-source-20261017-r2`、`/tmp/department-query-packed-20261017-r2`。两种构建仍报告既有大 chunk 与 Browserslist 数据陈旧诊断；本轮没有调整阈值隐藏诊断，也没有扩展到仿真/编辑器的拆包工作。
 
-独立审查第 1 轮发现 P1 空缓存节点异常与 P2 异步已选标签旧值，已通过实际组件 RED/GREEN 修复。第 2 轮 `RESULT: PASS`、`RERUN_REQUIRED: no`，无剩余 P0/P1/P2。详见 [最终独立审查](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-final-review-round2.md)。该批准只证明本轮实现及列明验证，不扩大到浏览器验收、受限账号端到端验证、源分支交付或发布。
+独立审查第 1 轮发现 P1 空缓存节点异常与 P2 异步已选标签旧值，已通过实际组件 RED/GREEN 修复。第 2 轮 `RESULT: PASS`、`RERUN_REQUIRED: no`，无剩余 P0/P1/P2。详见 [最终独立审查](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/department-query-convergence/task-metadata/department-final-review-round2.md)。该批准只证明本轮实现及列明验证，不扩大到浏览器验收、受限账号端到端验证、源分支交付或发布。
 
-完成证明已从持久化上下文实际执行：`review mode: independent-subagent`，`review rounds: 2`，`subagentAttempt.tool/status: collaboration.spawn_agent/succeeded`，`final-review-proof: pass`，`claim-proof --claim implementation-complete: pass`。执行上下文为 [codex-execution-context.json](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/codex-execution-context.json)；对应原始 proof JSON 在同目录。首次 proof 因审查报告 V1 行的机器格式不匹配而拦下，独立审查者只修正格式后重新执行通过；未修改 guard 或证据结论。
+完成证明已从持久化上下文实际执行：`review mode: independent-subagent`，`review rounds: 2`，`subagentAttempt.tool/status: collaboration.spawn_agent/succeeded`，`final-review-proof: pass`，`claim-proof --claim implementation-complete: pass`。执行上下文为 [codex-execution-context.json](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/department-query-convergence/task-metadata/codex-execution-context.json)；对应原始 proof JSON 在同目录。首次 proof 因审查报告 V1 行的机器格式不匹配而拦下，独立审查者只修正格式后重新执行通过；未修改 guard 或证据结论。
 
-范围核对见 `scope-audit.json`：18 个前端实现/测试文件均在计划范围内，原源目录中相应路径与部门阶段起点字节一致；没有把源目录其他未提交工作引入任务工作树。计划阶段证据为 READ（真实 API/消费者、原生库实现、已有查询契约），SEARCH（真实调用与旧工厂/查询键残留），COMMAND（RED/GREEN、最终质量检查和两种构建）；任务与约束见 [执行计划](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/docs/plans/2026-10-17-department-query-convergence.md)。
+范围核对见 `scope-audit.json`：18 个前端实现/测试文件均在计划范围内，原源目录中相应路径与部门阶段起点字节一致；没有把源目录其他未提交工作引入任务工作树。计划阶段证据为 READ（真实 API/消费者、原生库实现、已有查询契约），SEARCH（真实调用与旧工厂/查询键残留），COMMAND（RED/GREEN、最终质量检查和两种构建）；任务与约束见 [执行计划](/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/plans/2026-10-17-department-query-convergence.md)。
 
 完整执行与审查 metadata：`.git/worktrees/department-query-convergence/`。证据目录只收录脱敏、有限的检查摘要与日志，不收录令牌、请求头、完整用户响应、数据库转储或后端原始日志。
 
@@ -83,3 +83,16 @@ THEME 实现已快进合入记录的 ZXUI `codex/http-vue-query-phase-a` 与 Ruo
 修复候选上的正常前端业务 probe 在源码直连、本地产物模式各通过 1 轮，均使用原有真实 commands/options、没有额外刷新等待。连同 HTTP A/B，本次新增 4 轮共 8 条临时部门均正常软删除并通过 API/SQL 核对不存在；自建会话、后端进程、专用缓存键及 IPC socket 已清理。输入 SHA、局部 overlay 与 hook 边界见 `refresh-repair/runtime-inputs.json`。一次临时 trace header 实验被现有 CORS 拒绝后已回退，没有改产品 CORS 或把它算作业务验证成功。源分支交付后仍要使用无 overlay 的标准后端做最终验证。
 
 源目录服务文件还有其他未提交部门业务规则。本轮没有整份导入或提交它们：以原 HEAD、源当前文件和任务缓存修复作三方预演，只删除缓存职责；13 个其他方法在去除失效调用后 AST 一致。隔离 Git 实验已证明普通快进配合只准备重叠文件的目标 index entry，可同时保留该文件原有未提交规则、其他暂存项、工作文件及未跟踪文件。实际源操作仍须经过 source-head gate 和逐路径核对。
+
+
+## 源分支验证与保留结果
+
+本次源目录标准启动没有 service overlay、仓库 hook、受控 barrier 或独有缓存命名空间。源码直连、本地产物实际业务 probe 各通过一轮，删除后的自建部门详情返回真实 HTTP 404。该阶段 4 条临时部门均已软删除核对不存在；本次根因修复各阶段新增合计 12 条自建部门全部清理，自建登录会话与后端进程已结束，现有 MySQL、Redis 和原生端口转发保留。
+
+源目录最终检查：133 文件 / 1252 前端 tests、84 个部门相关后端 tests、lint、type-check、23 项 UI 规范测试、源码直连与本地产物生产构建均通过。构建输出为 `/tmp/department-query-source-delivery-20261017-r1` 和 `/tmp/department-query-packed-delivery-20261017-r1`。这不是全后端或所有无关在研工作的全绿声明；前述 A/B 既有诊断边界不变。
+
+源 HEAD 经核对后普通快进，没有把源目录既有部门业务修改整份提交。755 个其他脏路径的字节及权限保持原样，其他 index entries 也未变化；重叠服务文件只合入缓存修复，其原有字段、权限、层级和 404 规则继续保持未提交。原 index、原服务文件及逐路径 SHA 存于 `.git/codex-delivery-preservation/department-query-convergence/`。没有动 steamer-front，没有发布或推送。
+
+修复新增独立审查 1 轮 PASS，无 P0/P1/P2；此前前端审查 2 轮仍保留。`final-review-proof`、实现完成 `claim-proof` 已通过。源标准运行、检查命令、退出码与原日志 SHA 见 [源基线摘要](/Users/hqz/dev/RuoYi-Vue3-FastAPI/docs/reports/evidence/2026-10-17-department-query-convergence/refresh-repair/source-baseline/verification-summary.json)。
+
+源合入 ancestry、基线证明、临时工作树/分支清理及最终工具状态见 [源交付账本](/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-deliveries/docs-plans-2026-10-17-department-query-convergence-md.json)。工作区的无关未提交内容按用户要求保留，不为了获得 `delivered_clean` 而扩大提交范围；准确终态以该账本与 delivery-status 原始输出为准。

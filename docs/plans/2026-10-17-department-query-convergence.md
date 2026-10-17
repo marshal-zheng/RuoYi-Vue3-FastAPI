@@ -125,7 +125,7 @@ The user approved the reviewed worktree and explicitly authorized investigating 
 
 ### Task 6: Deliver to the recorded source branch without importing unrelated work
 
-**Status:** Delivery authorized; Task 5 and independent review passed. Source-head gate, actual source baseline and cleanup are next; they are not yet being claimed as complete.
+**Status:** Source-head gate and ordinary fast-forward to `std` passed; standard source baseline passed (1252 frontend tests, 84 focused backend tests, lint/types/UI, source/package builds and no-overlay actual API). Durable source ledger owns final artifact cleanup and terminal delivery status. Unrelated working-tree/index content is preserved; no publication.
 
 **Steps:**
 1. Preserve source HEAD, index and hashes of all original dirty paths. Relevant source backend edits are context inputs; do not commit unrelated source changes or wholesale import a dirty service file.

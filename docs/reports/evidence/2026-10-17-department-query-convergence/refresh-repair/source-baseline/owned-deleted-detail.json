@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-10-17T11:09:38Z",
+  "marker": "codex_dept_query_camyz5",
+  "scope": "Only read one deleted owned child from completed source normal probe; no extra department writes",
+  "standardSourceBackend": true,
+  "serviceOverlay": false,
+  "repositoryHook": false,
+  "passed": true,
+  "ownSessionEnded": true,
+  "status": 404,
+  "problemJSON": true
+}
