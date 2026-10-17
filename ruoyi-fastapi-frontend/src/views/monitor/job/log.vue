@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <DictStatus :types="['sys_common_status', 'sys_job_group', 'sys_job_executor']" />
     <el-form
       :model="queryParams"
       ref="queryRef"
@@ -17,34 +18,22 @@
         />
       </el-form-item>
       <el-form-item label="任务组名" prop="jobGroup">
-        <el-select
+        <DictSelect
+          dict-type="sys_job_group"
           v-model="queryParams.jobGroup"
           placeholder="请选择任务组名"
           clearable
           style="width: 240px"
-        >
-          <el-option
-            v-for="dict in sys_job_group"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+        />
       </el-form-item>
       <el-form-item label="执行状态" prop="status">
-        <el-select
+        <DictSelect
+          dict-type="sys_common_status"
           v-model="queryParams.status"
           placeholder="请选择执行状态"
           clearable
           style="width: 240px"
-        >
-          <el-option
-            v-for="dict in sys_common_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+        />
       </el-form-item>
       <el-form-item label="执行时间" style="width: 308px">
         <el-date-picker
@@ -71,6 +60,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['monitor:job:remove']"
+          :loading="handleDeletePending"
           >删除</el-button
         >
       </el-col>
@@ -81,6 +71,7 @@
           icon="Delete"
           @click="handleClean"
           v-hasPermi="['monitor:job:remove']"
+          :loading="handleCleanPending"
           >清空</el-button
         >
       </el-col>
@@ -215,6 +206,7 @@
 </template>
 
 <script setup name="JobLog">
+import { useOperation } from '@/utils/operation';
 import { getJob } from '@/api/monitor/job';
 import { listJobLog, delJobLog, cleanJobLog } from '@/api/monitor/jobLog';
 
@@ -292,8 +284,8 @@ function handleView(row) {
   form.value = row;
 }
 /** 删除按钮操作 */
-function handleDelete() {
-  proxy.$modal
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async () => {
+  await proxy.$modal
     .confirm('是否确认删除调度日志编号为"' + ids.value + '"的数据项?')
     .then(function () {
       return delJobLog(ids.value);
@@ -302,10 +294,10 @@ function handleDelete() {
       getList();
     })
     .catch(() => {});
-}
+});
 /** 清空按钮操作 */
-function handleClean() {
-  proxy.$modal
+const { run: handleClean, pending: handleCleanPending } = useOperation(async () => {
+  await proxy.$modal
     .confirm('是否确认清空所有调度日志数据项?')
     .then(function () {
       return cleanJobLog();
@@ -314,7 +306,7 @@ function handleClean() {
       getList();
     })
     .catch(() => {});
-}
+});
 /** 导出按钮操作 */
 function handleExport() {
   proxy.download(

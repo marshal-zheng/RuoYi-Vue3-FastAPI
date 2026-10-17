@@ -171,9 +171,7 @@ export function resumeSimulationSession(sessionId: SessionId) {
  */
 export function stepSimulationSession(sessionId: SessionId) {
   return request.post(`/simulation/sessions/${sessionId}/step`, undefined, {
-    headers: {
-      repeatSubmit: false,
-    },
+    headers: {},
     feedback: { mode: 'silent' },
   });
 }

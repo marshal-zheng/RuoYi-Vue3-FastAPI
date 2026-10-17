@@ -1,7 +1,8 @@
+import { requestDetail } from '@/api/detail';
 export type PostRecord = Omit<PostModel, 'postId'> & { postId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type { PostModel, PostPageQueryModel } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询岗位列表
 export function listPost(query?: PostPageQueryModel) {
@@ -13,11 +14,19 @@ export function listPost(query?: PostPageQueryModel) {
 }
 
 // 查询岗位详细
-export function getPost(postId: number | string) {
-  return request<PostRecord>({
-    url: '/system/post/' + postId,
-    method: 'get',
-  });
+export function getPost(
+  postId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<PostRecord>(
+    {
+      ...config,
+      url: '/system/post/' + postId,
+      method: 'get',
+    },
+    'postId',
+    postId
+  );
 }
 
 // 新增岗位

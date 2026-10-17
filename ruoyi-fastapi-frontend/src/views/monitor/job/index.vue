@@ -8,6 +8,7 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_job_group', 'sys_job_status', 'sys_job_executor']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['monitor:job:add']"
@@ -27,6 +28,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['monitor:job:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
@@ -45,34 +47,22 @@
             >
           </template>
           <template #filters>
-            <el-select
+            <DictSelect
+              dict-type="sys_job_group"
               v-model="query.jobGroup"
               placeholder="请选择任务组名"
               clearable
               style="width: 200px"
               @change="(v) => onFilterChange('jobGroup', v, { handleRefresh, updateState })"
-            >
-              <el-option
-                v-for="dict in sys_job_group"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
-            <el-select
+            />
+            <DictSelect
+              dict-type="sys_job_status"
               v-model="query.status"
               placeholder="请选择任务状态"
               clearable
               style="width: 200px"
               @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            >
-              <el-option
-                v-for="dict in sys_job_status"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            />
           </template>
           <template #search>
             <ZxSearch
@@ -117,6 +107,7 @@
                 v-model="scope.row.status"
                 active-value="0"
                 inactive-value="1"
+                :disabled="statusOperations.get(scope.row)?.pending.value"
                 @change="handleStatusChange(scope.row)"
               />
             </template>
@@ -139,6 +130,7 @@
                   icon="Delete"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['monitor:job:remove']"
+                  :loading="handleDeletePending"
                 />
               </el-tooltip>
               <el-tooltip content="执行一次" placement="top">
@@ -148,6 +140,7 @@
                   icon="CaretRight"
                   @click="handleRun(scope.row)"
                   v-hasPermi="['monitor:job:changeStatus']"
+                  :loading="handleRunPending"
                 />
               </el-tooltip>
               <el-tooltip content="任务详细" placement="top">
@@ -190,14 +183,12 @@
           </el-form-item>
 
           <el-form-item label="任务分组" prop="jobGroup">
-            <el-select v-model="form.jobGroup" placeholder="请选择">
-              <el-option
-                v-for="dict in sys_job_group"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            <DictSelect
+              dict-type="sys_job_group"
+              :active="open"
+              v-model="form.jobGroup"
+              placeholder="请选择"
+            />
           </el-form-item>
 
           <el-form-item prop="jobGroup">
@@ -212,14 +203,12 @@
                 </el-tooltip>
               </span>
             </template>
-            <el-select v-model="form.jobExecutor" placeholder="请选择任务执行器">
-              <el-option
-                v-for="dict in sys_job_executor"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            <DictSelect
+              dict-type="sys_job_executor"
+              :active="open"
+              v-model="form.jobExecutor"
+              placeholder="请选择任务执行器"
+            />
           </el-form-item>
 
           <el-form-item data-form-full prop="invokeTarget">
@@ -258,6 +247,7 @@
 
           <template v-if="form.jobId !== undefined">
             <el-form-item data-form-full label="状态">
+              <DictStatus :types="['sys_job_status']" />
               <el-radio-group v-model="form.status">
                 <el-radio v-for="dict in sys_job_status" :key="dict.value" :value="dict.value">
                   {{ dict.label }}
@@ -284,7 +274,9 @@
       >
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
+          <el-button type="primary" @click="submitForm" :loading="submitFormPending"
+            >确 定</el-button
+          >
           <el-button @click="cancel">取 消</el-button>
         </div>
       </template>
@@ -370,6 +362,9 @@
 </template>
 
 <script setup name="Job">
+import { shallowReactive } from 'vue';
+
+import { useOperation } from '@/utils/operation';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
 import {
@@ -381,7 +376,7 @@ import {
   runJob,
   changeJobStatus,
 } from '@/api/monitor/job';
-import Crontab from '@/components/ui/Crontab';
+import Crontab from '@/components/ui/Crontab/index.vue';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
@@ -480,25 +475,33 @@ function handleSelectionChange(selection) {
 }
 
 /** 任务状态修改 */
+const statusOperations = shallowReactive(new WeakMap());
 function handleStatusChange(row) {
-  let text = row.status === '0' ? '启用' : '停用';
-  proxy.$modal
-    .confirm('确认要"' + text + '""' + row.jobName + '"任务吗?')
-    .then(() => changeJobStatus(row.jobId, row.status))
-    .then(() => {})
-    .catch(() => {
-      row.status = row.status === '0' ? '1' : '0';
+  let operation = statusOperations.get(row);
+  if (!operation) {
+    operation = useOperation(async () => {
+      let text = row.status === '0' ? '启用' : '停用';
+      await proxy.$modal
+        .confirm('确认要"' + text + '""' + row.jobName + '"任务吗?')
+        .then(() => changeJobStatus(row.jobId, row.status))
+        .then(() => {})
+        .catch(() => {
+          row.status = row.status === '0' ? '1' : '0';
+        });
     });
+    statusOperations.set(row, operation);
+  }
+  return operation.run();
 }
 
 /** 立即执行一次 */
-function handleRun(row) {
-  proxy.$modal
+const { run: handleRun, pending: handleRunPending } = useOperation(async (row) => {
+  await proxy.$modal
     .confirm('确认要立即执行一次"' + row.jobName + '"任务吗?')
-    .then(() => runJob(row.jobId, row.jobGroup))
+    .then(() => runJob(row.jobId))
     .then(() => {})
     .catch(() => {});
-}
+});
 
 /** 任务详细信息 */
 function handleView(row) {
@@ -544,35 +547,49 @@ function handleUpdate(row) {
 }
 
 /** 提交按钮 */
-function submitForm() {
-  proxy.$refs['jobRef'].validate((valid) => {
-    if (valid) {
-      if (form.value.jobId !== undefined) {
-        updateJob(form.value).then(() => {
-          open.value = false;
-          gridListRef.value?.refresh();
-        });
-      } else {
-        addJob(form.value).then(() => {
-          open.value = false;
-          gridListRef.value?.refresh();
-        });
-      }
+const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
+  const valid = await proxy.$refs['jobRef'].validate().catch(() => false);
+
+  if (valid) {
+    const data = form.value;
+    const payload = {
+      jobName: data.jobName,
+      jobGroup: data.jobGroup,
+      jobExecutor: data.jobExecutor,
+      invokeTarget: data.invokeTarget,
+      jobArgs: data.jobArgs,
+      jobKwargs: data.jobKwargs,
+      cronExpression: data.cronExpression,
+      misfirePolicy: data.misfirePolicy,
+      concurrent: data.concurrent,
+      status: data.status,
+      remark: data.remark,
+    };
+    if (data.jobId !== undefined) {
+      await updateJob({ ...payload, jobId: data.jobId }).then(() => {
+        open.value = false;
+        gridListRef.value?.refresh();
+      });
+    } else {
+      await addJob(payload).then(() => {
+        open.value = false;
+        gridListRef.value?.refresh();
+      });
     }
-  });
-}
+  }
+});
 
 /** 删除按钮操作 */
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const jobIds = row.jobId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除定时任务编号为"' + jobIds + '"的数据项?')
     .then(() => delJob(jobIds))
     .then(() => {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 
 /** 导出按钮操作 */
 function handleExport(query) {

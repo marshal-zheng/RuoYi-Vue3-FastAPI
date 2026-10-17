@@ -26,3 +26,14 @@ export function createFeedbackChannel<Options, Result>() {
 
   return { send, bind };
 }
+
+/** Feedback presentation must not change the operation it describes. */
+export function observeFeedback(present: () => unknown): void {
+  try {
+    void Promise.resolve(present()).catch(() => {
+      // Avoid reporting feedback failure through the same failed provider.
+    });
+  } catch {
+    // Includes message formatters and presentation adapters for field errors.
+  }
+}

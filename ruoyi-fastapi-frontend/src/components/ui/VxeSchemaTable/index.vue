@@ -26,6 +26,7 @@ import {
 } from 'vue';
 import type { PropType, Slots } from 'vue';
 import type { VxeTableProps, VxeTableInstance, VxeTableEvents } from 'vxe-table';
+import { useVXETable } from '@/plugins/vxe-table';
 import { mergeColumnOptions, resolveWidgetColumn } from './widgetRegistry';
 import type { VxeWidgetResolverMap } from './widgetRegistry';
 import { useDataSource } from './dataSource';
@@ -36,6 +37,8 @@ import type {
   SchemaHeaderScope,
   SchemaEditClosedParams,
 } from './types';
+
+useVXETable();
 
 const SLOT_KEY = Symbol('vxe-schema-table-slots');
 

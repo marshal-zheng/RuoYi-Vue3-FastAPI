@@ -95,6 +95,7 @@
                 icon="Delete"
                 @click="handleForceLogout(scope.row)"
                 v-hasPermi="['monitor:online:forceLogout']"
+                :loading="handleForceLogoutPending"
                 >强退</el-button
               >
             </template>
@@ -106,6 +107,7 @@
 </template>
 
 <script setup name="Online">
+import { useOperation } from '@/utils/operation';
 import { forceLogout, list as initData } from '@/api/monitor/online';
 
 const { proxy } = getCurrentInstance();
@@ -127,8 +129,8 @@ function onSearch({ handleRefresh }) {
   handleRefresh();
 }
 /** 强退按钮操作 */
-function handleForceLogout(row) {
-  proxy.$modal
+const { run: handleForceLogout, pending: handleForceLogoutPending } = useOperation(async (row) => {
+  await proxy.$modal
     .confirm('是否确认强退名称为"' + row.userName + '"的用户?')
     .then(function () {
       return forceLogout(row.tokenId);
@@ -137,5 +139,5 @@ function handleForceLogout(row) {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 </script>

@@ -62,7 +62,9 @@
           <el-button icon="RefreshRight" @click="rotateRight()"></el-button>
         </el-col>
         <el-col :lg="{ span: 2, offset: 6 }" :md="2">
-          <el-button type="primary" @click="uploadImg()">提 交</el-button>
+          <el-button type="primary" @click="uploadImg()" :loading="uploadImgPending"
+            >提 交</el-button
+          >
         </el-col>
       </el-row>
     </ZxDialog>
@@ -70,10 +72,12 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import 'vue-cropper/dist/index.css';
 import { ElMessage } from 'element-plus';
 import { VueCropper } from 'vue-cropper';
-import { uploadAvatar } from '@/api/system/user';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
 import useUserStore from '@/store/modules/user';
 
 const userStore = useUserStore();
@@ -82,6 +86,9 @@ const { proxy } = getCurrentInstance();
 const open = ref(false);
 const visible = ref(false);
 const title = ref('修改头像');
+let editorScope;
+let editorGeneration = 0;
+watch(queryScope, closeDialog, { flush: 'sync' });
 
 //图片裁剪数据
 const options = reactive({
@@ -97,6 +104,8 @@ const options = reactive({
 
 /** 编辑头像 */
 function editCropper() {
+  editorScope = requireQueryScope();
+  editorGeneration++;
   open.value = true;
 }
 /** 打开弹出层结束时的回调 */
@@ -123,35 +132,45 @@ function beforeUpload(file) {
   if (file.type.indexOf('image/') == -1) {
     ElMessage.error('文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。');
   } else {
+    const scope = editorScope;
+    const generation = editorGeneration;
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
+      if (scope !== queryScope.value || generation !== editorGeneration) return;
       options.img = reader.result;
       options.filename = file.name;
     };
   }
 }
 /** 上传图片 */
-function uploadImg() {
-  proxy.$refs.cropper.getCropBlob((data) => {
-    let formData = new FormData();
-    formData.append('avatarfile', data, options.filename);
-    uploadAvatar(formData).then((response) => {
-      open.value = false;
-      options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
-      userStore.avatar = options.img;
-      visible.value = false;
-    });
+const { run: uploadImg, pending: uploadImgPending } = useOperation(async () => {
+  const scope = editorScope;
+  const generation = editorGeneration;
+  if (!scope || scope !== queryScope.value) return;
+  const filename = options.filename;
+  const data = await new Promise((resolve) => proxy.$refs.cropper.getCropBlob(resolve));
+  if (scope !== queryScope.value || generation !== editorGeneration) return;
+  let formData = new FormData();
+  formData.append('avatarfile', data, filename);
+  await userCommands.uploadAvatar(captureUserCommand(formData, scope)).then((response) => {
+    if (scope !== queryScope.value || generation !== editorGeneration) return;
+    open.value = false;
+    options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl;
+    userStore.avatar = options.img;
+    visible.value = false;
   });
-}
+});
 /** 实时预览 */
 function realTime(data) {
   options.previews = data;
 }
 /** 关闭窗口 */
 function closeDialog() {
+  editorGeneration++;
+  open.value = false;
+  visible.value = false;
   options.img = userStore.avatar;
-  options.visible = false;
 }
 </script>
 

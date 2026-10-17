@@ -1,4 +1,9 @@
-import type { HttpClientConfig, ResolvedRequestOptions } from '@zxio/http';
+import type {
+  HttpClientConfig,
+  HttpError,
+  ResolvedRequestOptions,
+  RequestOptions,
+} from '@zxio/http';
 import { AxiosHeaders, AxiosError, type AxiosResponse } from 'axios';
 import type { ExtendedAxiosRequestConfig } from './request';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -18,7 +23,7 @@ const presentSuccessFeedback = vi.fn();
 const presentProblemFeedback = vi.fn();
 const elMessageClose = vi.fn();
 const ElMessage = Object.assign(
-  vi.fn<(options: unknown) => { close: typeof elMessageClose }>(() => ({
+  vi.fn<(options: unknown) => { close: () => void }>(() => ({
     close: elMessageClose,
   })),
   {
@@ -49,7 +54,8 @@ vi.mock('@/utils/feedback/message', () => ({
   }),
 }));
 
-vi.mock('vue', () => ({
+vi.mock('vue', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('vue')>()),
   h: vi.fn(() => 'mock-vnode'),
 }));
 
@@ -107,6 +113,26 @@ const expiredAuthError = {
 };
 
 describe('http contract client', () => {
+  it('leaves repeated writes to the business operation and never records a time fingerprint', async () => {
+    const cache = (await import('@/plugins/cache')).default;
+    const { http } = await import('@/utils/http');
+    const config = createHttpClient.mock.calls[0][0];
+    const beforeRequest = config.transforms?.[0]?.beforeRequest;
+    const request = {
+      url: '/system/config',
+      method: 'post',
+      data: { configKey: 'same' },
+      headers: {},
+    };
+    if (!beforeRequest) throw new Error('Missing request transform');
+    await beforeRequest({ ...request }, {} as ResolvedRequestOptions, {
+      client: http,
+      axiosInstance: http.axiosInstance,
+      notifier: { notify: vi.fn() },
+    });
+    expect(cache.session.setJSON).not.toHaveBeenCalled();
+  });
+
   beforeEach(() => {
     vi.resetModules();
     vi.clearAllMocks();
@@ -122,6 +148,7 @@ describe('http contract client', () => {
   });
 
   const loadModule = async () => {
+    const { resolveHttpError } = await import('@zxio/http');
     const { http } = await import('@/utils/http');
     const config = createHttpClient.mock.calls[0][0];
     const grid = createGridListPlugin.mock.calls[0][0];
@@ -142,7 +169,6 @@ describe('http contract client', () => {
       showSuccessMessage: false,
       errorMessageMode: 'none',
       showErrorMessage: false,
-      ignoreCancelToken: false,
     };
     const context = {
       client: http,
@@ -167,7 +193,10 @@ describe('http contract client', () => {
       response?: ResponseFixture;
     };
     return {
-      rawOnError: (error: AxiosError) => onError(error, options, context),
+      rawOnError: async (error: unknown, overrides?: RequestOptions): Promise<never> => {
+        await onError(await resolveHttpError(error), { ...options, ...overrides }, context);
+        throw new Error('Expected the business error hook to reject');
+      },
       clientConfig: {
         ...config,
         successResolver: ({ response }: { response: ResponseFixture }) =>
@@ -177,7 +206,7 @@ describe('http contract client', () => {
           {
             afterResponse: (response: ResponseFixture) =>
               afterResponse(responseOf(response), options, context),
-            onError: (fixture: ErrorFixture) => {
+            onError: async (fixture: ErrorFixture) => {
               const error: AxiosError = {
                 name: 'AxiosError',
                 message: 'request failed',
@@ -189,7 +218,7 @@ describe('http contract client', () => {
                 },
                 ...(fixture.response ? { response: responseOf(fixture.response) } : {}),
               };
-              return onError(error, options, context);
+              return onError(await resolveHttpError(error), options, context);
             },
           },
         ] as const,
@@ -201,6 +230,35 @@ describe('http contract client', () => {
       },
     };
   };
+
+  it.each([false, true])(
+    'preserves preparation failure detail and request feedback context (silentError=%s)',
+    async (silentError) => {
+      const { rawOnError } = await loadModule();
+      const { RequestPreparationError } = await import('@zxio/http');
+      const original = Object.freeze(new Error('请求签名准备失败'));
+      const config = {
+        url: '/system/config',
+        silentError,
+        feedback: { mode: 'auto' as const, key: 'system.config.create' },
+      };
+      const failure = new RequestPreparationError(original, config);
+      const result = await rawOnError(failure).catch((error) => error);
+      expect(result).toBe(failure);
+      expect(result.cause).toBe(original);
+      expect(result.config).toBe(config);
+      expect(result.message).toBe(original.message);
+      expect(result.problem.detail).toBe(original.message);
+      expect(presentProblemFeedback).toHaveBeenCalledTimes(silentError ? 0 : 1);
+      if (!silentError) {
+        expect(presentProblemFeedback).toHaveBeenCalledWith(
+          expect.objectContaining({
+            feedback: expect.objectContaining({ mode: 'auto', key: 'system.config.create' }),
+          })
+        );
+      }
+    }
+  );
 
   it('keeps cancellation recognizable and suppresses all business failure feedback', async () => {
     const { rawOnError } = await loadModule();
@@ -253,8 +311,14 @@ describe('http contract client', () => {
       detail: '版本不存在',
       instance: '/export',
     };
-    const body = new Blob([JSON.stringify(problem)], { type: 'application/problem+json' });
-    const config = { headers: new AxiosHeaders(), url: '/export', responseType: 'blob' as const };
+    const body = new Blob([JSON.stringify(problem)], {
+      type: 'application/problem+json',
+    });
+    const config = {
+      headers: new AxiosHeaders(),
+      url: '/export',
+      responseType: 'blob' as const,
+    };
     const response: AxiosResponse = {
       config,
       data: body,
@@ -609,6 +673,58 @@ describe('http contract client', () => {
     );
   });
 
+  it.each([
+    [403, 30009, '不允许操作超级管理员用户'],
+    [403, 30010, '没有权限访问用户数据'],
+    [422, 30011, '修改密码失败，旧密码错误'],
+  ])(
+    'presents user failure %s/%s without expiring the session',
+    async (status, errorCode, detail) => {
+      const { clientConfig } = await loadModule();
+      const { isRelogin } = await import('@/utils/http');
+      const failure = {
+        config: { method: 'put', feedback: { mode: 'auto' as const } },
+        response: {
+          status,
+          data: {
+            type: 'about:blank',
+            title: detail,
+            status,
+            detail,
+            errorCode,
+            ...(status === 422
+              ? {
+                  errors: [
+                    {
+                      field: 'oldPassword',
+                      message: detail,
+                      code: 'value_error',
+                    },
+                  ],
+                }
+              : {}),
+          },
+          headers: {},
+        },
+      };
+
+      await expect(clientConfig.transforms[1].onError(failure)).rejects.toMatchObject({
+        status,
+        problem: expect.objectContaining({ status, errorCode, detail }),
+      });
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      expect(presentProblemFeedback).toHaveBeenCalledTimes(1);
+      expect(presentProblemFeedback).toHaveBeenCalledWith(
+        expect.objectContaining({
+          problem: expect.objectContaining(failure.response.data),
+        })
+      );
+      expect(ElMessage).not.toHaveBeenCalled();
+      expect(isRelogin.show).toBe(false);
+    }
+  );
+
   it('passes 422 validation problems through the unified error channel', async () => {
     const { clientConfig } = await loadModule();
     const onError = clientConfig.transforms[1].onError;
@@ -655,5 +771,153 @@ describe('http contract client', () => {
         }),
       })
     );
+  });
+  it('releases failed relogin presentation without replacing the original 401', async () => {
+    const { clientConfig } = await loadModule();
+    const { isRelogin } = await import('@/utils/http');
+    const onError = clientConfig.transforms[1].onError;
+    ElMessage.mockImplementationOnce(() => {
+      throw new Error('message provider failed');
+    });
+    await expect(onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+      problem: { detail: '登录状态已过期，请重新登录' },
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(isRelogin.show).toBe(false);
+    await expect(onError(expiredAuthError)).rejects.toMatchObject({ status: 401 });
+    expect(ElMessage).toHaveBeenCalledTimes(2);
+  });
+
+  it('clears relogin state even if a message handle cannot close', async () => {
+    const { clientConfig } = await loadModule();
+    const { dismissReloginPrompt, isRelogin } = await import('@/utils/http');
+    await expect(clientConfig.transforms[1].onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+    });
+    elMessageClose.mockImplementationOnce(() => {
+      throw new Error('provider disposed');
+    });
+    expect(dismissReloginPrompt).not.toThrow();
+    expect(isRelogin.show).toBe(false);
+  });
+  it('contains asynchronous close failures from stale relogin prompts', async () => {
+    const { clientConfig } = await loadModule();
+    const { dismissReloginPrompt, isRelogin } = await import('@/utils/http');
+    let closeCalls = 0;
+    ElMessage.mockImplementationOnce(() => {
+      dismissReloginPrompt();
+      return {
+        close: () => {
+          closeCalls++;
+          return Promise.reject(new Error('stale close rejected'));
+        },
+      };
+    });
+    await expect(clientConfig.transforms[1].onError(expiredAuthError)).rejects.toMatchObject({
+      status: 401,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(closeCalls).toBe(1);
+    expect(isRelogin.show).toBe(false);
+  });
+  it('reuses auth recovery for a current read without changing its silent transport context', async () => {
+    const { clientConfig } = await loadModule();
+    const { presentRequestError, dismissReloginPrompt } = await import('@/utils/http');
+    const failure = await clientConfig.transforms[1]
+      .onError({
+        ...expiredAuthError,
+        config: { ...expiredAuthError.config, silentError: true },
+      })
+      .then(
+        () => {
+          throw new Error('Expected an HTTP failure');
+        },
+        (error) => error as HttpError
+      );
+    expect(ElMessage).not.toHaveBeenCalled();
+    presentRequestError(failure, {
+      ...failure.config,
+      silentError: false,
+      feedback: { mode: 'auto' },
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(ElMessage).toHaveBeenCalledTimes(1);
+    expect(ElMessage.mock.calls[0][0]).toMatchObject({
+      type: 'warning',
+      action: { label: '重新登录' },
+    });
+    expect(failure.config).toMatchObject({ silentError: true });
+    dismissReloginPrompt();
+  });
+  it.each([
+    [401, 500],
+    [400, 401],
+  ])(
+    'uses transport status %s for auth when problem status is %s',
+    async (status, problemStatus) => {
+      const { clientConfig } = await loadModule();
+      const { dismissReloginPrompt } = await import('@/utils/http');
+      await clientConfig.transforms[1]
+        .onError({
+          config: { url: '/private' },
+          response: {
+            status,
+            data: {
+              type: 'about:blank',
+              title: 'failure',
+              detail: 'failure',
+              status: problemStatus,
+            },
+          },
+        })
+        .catch(() => undefined);
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      expect(ElMessage).toHaveBeenCalledTimes(status === 401 ? 1 : 0);
+      dismissReloginPrompt();
+    }
+  );
+  it('leaves query read failures to local state while retaining current-scope auth recovery', async () => {
+    const { rawOnError } = await loadModule();
+    const { queryRequest } = await import('@zxio/http');
+    const { setQuerySession, scopeRequestOptions } = await import('@/queries/context');
+    const scope = setQuerySession(1, [], []);
+    const options = queryRequest(new AbortController().signal, scopeRequestOptions(scope)).options;
+    const failure = {
+      ...expiredAuthError,
+      response: {
+        ...expiredAuthError.response,
+        status: 503,
+        data: { status: 503, detail: 'offline' },
+      },
+    };
+    await rawOnError(failure, options).catch(() => undefined);
+    expect(presentProblemFeedback).not.toHaveBeenCalled();
+    expect(ElMessage).not.toHaveBeenCalled();
+    await rawOnError(expiredAuthError, options).catch(() => undefined);
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(ElMessage).toHaveBeenCalledTimes(1);
+  });
+
+  it('suppresses old-scope response feedback and rejects a queued request before token application', async () => {
+    const { rawOnError } = await loadModule();
+    const { setQuerySession, endQuerySession, scopeRequestOptions } = await import(
+      '@/queries/context'
+    );
+    const previous = setQuerySession(1, [], []);
+    const options = scopeRequestOptions(previous);
+    endQuerySession();
+    setQuerySession(2, [], []);
+    await rawOnError(expiredAuthError, options).catch(() => undefined);
+    expect(ElMessage).not.toHaveBeenCalled();
+    const config = createHttpClient.mock.calls[0][0];
+    const beforeRequest = config.transforms?.[0]?.beforeRequest;
+    await expect(
+      beforeRequest?.(
+        { url: '/system/dict/type', method: 'post' },
+        options as ResolvedRequestOptions,
+        {} as never
+      )
+    ).rejects.toMatchObject({ name: 'AbortError' });
   });
 });

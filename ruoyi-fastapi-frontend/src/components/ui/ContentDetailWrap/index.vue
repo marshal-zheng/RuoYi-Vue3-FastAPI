@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElCard, ElDescriptions, ElDescriptionsItem, ElSkeleton, ElTooltip } from 'element-plus';
-import { ZxPageLayout } from '@zxio/zxui';
+import { ZxPageLayout } from '@zxio/zxui/page-layout';
 import { propTypes } from '@/utils/propTypes';
 import { computed, useSlots, type VNode } from 'vue';
 

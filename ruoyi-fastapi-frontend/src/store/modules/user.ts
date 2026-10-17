@@ -5,6 +5,7 @@ import { isHttp, isEmpty } from '@/utils/validate';
 import { clampBcryptPassword } from '@/utils/password';
 import defAva from '@/assets/images/profile.jpg';
 import request from '@/utils/request';
+import { endQuerySession, setQuerySession } from '@/queries/context';
 
 interface UserInfo {
   username: string;
@@ -45,6 +46,7 @@ const useUserStore = defineStore('user', {
   actions: {
     // 登录
     login(userInfo: UserInfo) {
+      endQuerySession();
       const username = userInfo.username.trim();
       const password = clampBcryptPassword(userInfo.password);
       const code = userInfo.code;
@@ -94,6 +96,7 @@ const useUserStore = defineStore('user', {
           .then((res) => {
             const token = res.token || '';
             if (!token) {
+              endQuerySession();
               clearSecurityTokens();
               this.token = '';
               resolve(false);
@@ -108,6 +111,7 @@ const useUserStore = defineStore('user', {
             resolve(true);
           })
           .catch(() => {
+            endQuerySession();
             clearSecurityTokens();
             this.token = '';
             resolve(false);
@@ -135,6 +139,7 @@ const useUserStore = defineStore('user', {
             this.name = user.userName;
             this.nickName = user.nickName;
             this.avatar = avatar;
+            setQuerySession(this.id, this.roles, this.permissions);
             resolve(res);
           })
           .catch((error) => {
@@ -144,6 +149,7 @@ const useUserStore = defineStore('user', {
     },
     // 退出系统
     logOut(options: LogoutOptions = {}) {
+      endQuerySession();
       return new Promise((resolve) => {
         logout(options)
           .catch((error) => {

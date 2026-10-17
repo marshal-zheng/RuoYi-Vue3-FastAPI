@@ -11,7 +11,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { createTable } from '@/api/tool/gen';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 
 const emit = defineEmits(['ok']);
 

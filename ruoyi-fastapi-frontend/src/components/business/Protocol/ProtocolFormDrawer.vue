@@ -6,10 +6,15 @@
     size="70%"
     placement="right"
     :loading="drawerLoading"
+    :ok-disabled="drawerLoading || !detailReady || drawer.state.disabled"
     loadingType="skeleton"
     class="protocol-drawer"
   >
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
     <el-form
+      v-show="!loadError"
       ref="formRef"
       :model="drawer.state.data"
       :rules="formRules"
@@ -81,7 +86,8 @@
 
 <script setup name="ProtocolFormDrawer">
 import { ref, computed } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useEditorRead } from '@/utils/editor-read';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { getProtocol } from '@/api/protocol/protocol';
 import ProtocolTypeSelector from './selector/ProtocolTypeSelector.vue';
 import EthernetProtocolTemplate from './templates/EthernetProtocolTemplate.vue';
@@ -94,6 +100,10 @@ import ImportFileDialog from './ImportFileDialog.vue';
 
 const emit = defineEmits(['success']);
 const props = defineProps({
+  save: {
+    type: Function,
+    required: true,
+  },
   senderEditable: {
     type: Boolean,
     default: false,
@@ -107,6 +117,8 @@ const props = defineProps({
 const formRef = ref(null);
 const templateRef = ref(null); // 协议模板组件引用（VXE-Table 校验）
 const drawerLoading = ref(false);
+const detailReady = ref(false);
+const editTargetId = ref(null);
 const importDialogRef = ref(null);
 const senderEditable = computed(() => props.senderEditable !== false);
 const receiverEditable = computed(() => props.receiverEditable !== false);
@@ -130,6 +142,14 @@ const drawer = useDrawer({
     protocolConfig: {},
   }),
   async onConfirm() {
+    if (
+      drawerLoading.value ||
+      loadError.value ||
+      !detailReady.value ||
+      drawer.state.data.protocolId !== editTargetId.value
+    ) {
+      return false;
+    }
     // 校验协议模板（VXE-Table 表格校验）
     if (templateRef.value?.validateBeforeSave) {
       const templateValid = await templateRef.value.validateBeforeSave();
@@ -140,7 +160,8 @@ const drawer = useDrawer({
     }
 
     const submitData = { ...drawer.state.data };
-    emit('success', submitData);
+    await props.save(submitData);
+    emit('success');
     return true;
   },
   onConfirmError: () => {},
@@ -160,7 +181,12 @@ const isEdit = computed(() => !!drawer.state.data.protocolId);
 const formRules = {
   protocolName: [
     { required: true, message: '请输入协议名称', trigger: 'blur' },
-    { min: 2, max: 50, message: '协议名称长度在 2 到 50 个字符', trigger: 'blur' },
+    {
+      min: 2,
+      max: 50,
+      message: '协议名称长度在 2 到 50 个字符',
+      trigger: 'blur',
+    },
   ],
   protocolType: [{ required: true, message: '请选择协议类型', trigger: 'change' }],
   description: [{ max: 200, message: '备注信息不能超过 200 个字符', trigger: 'blur' }],
@@ -220,29 +246,46 @@ const handleImportConfirm = (data) => {
   drawer.state.data.protocolConfig = config;
 };
 
-const openDrawer = async (protocolData) => {
-  if (protocolData && protocolData.protocolId) {
-    drawer.open();
-    drawerLoading.value = true;
-    try {
-      // 调用详情接口获取完整数据（包含 protocolConfig）
-      // http 客户端已解包 payload.data，res 直接是协议数据
-      const detail = (await getProtocol(protocolData.protocolId)) || {};
-      drawer.state.data = {
-        protocolId: detail.protocolId,
-        protocolName: detail.protocolName || '',
-        protocolType: detail.protocolType || '',
-        description: detail.description || '',
-        remark: detail.remark || '',
-        protocolConfig: normalizeHeader(detail.protocolConfig || {}),
-      };
-    } finally {
-      drawerLoading.value = false;
+const {
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => drawer.state.visible, drawerLoading);
+
+const openDrawer = (protocolData) => {
+  const id = protocolData?.protocolId ?? null;
+  editTargetId.value = id;
+  return runRead(async (read) => {
+    detailReady.value = id === null;
+    drawer.open(id === null ? undefined : { protocolId: id });
+    drawer.setDisabled(true);
+    if (id === null) {
+      drawer.setDisabled(false);
+      return;
     }
-  } else {
-    drawer.open();
-  }
+    const detail = await getProtocol(id, { signal: read.signal, silentError: true });
+    if (!read.isCurrent()) return;
+    drawer.open({
+      protocolId: detail.protocolId,
+      protocolName: detail.protocolName || '',
+      protocolType: detail.protocolType || '',
+      description: detail.description || '',
+      remark: detail.remark || '',
+      protocolConfig: normalizeHeader(detail.protocolConfig || {}),
+    });
+    detailReady.value = true;
+    drawer.setDisabled(false);
+  });
 };
+function closeDrawer() {
+  cancelRead();
+  return drawer.close();
+}
+function handleRetry() {
+  return openDrawer({ protocolId: editTargetId.value }).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
+}
 
 // 兼容后端 header 字段命名（errorHandling -> errorHandle 等）
 const normalizeHeader = (rawConfig = {}) => {
@@ -258,7 +301,7 @@ const normalizeHeader = (rawConfig = {}) => {
 
 defineExpose({
   open: openDrawer,
-  close: drawer.close,
+  close: closeDrawer,
 });
 </script>
 

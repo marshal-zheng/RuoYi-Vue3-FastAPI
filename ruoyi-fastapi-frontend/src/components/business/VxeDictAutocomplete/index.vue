@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { ZxInput } from '@zxio/zxui';
+import { ZxInput } from '@zxio/zxui/input';
 import DictAutocomplete from '@/components/business/DictAutocomplete/index.vue';
 import type { DictAutocompleteParams, DictEditorValue } from './types';
 

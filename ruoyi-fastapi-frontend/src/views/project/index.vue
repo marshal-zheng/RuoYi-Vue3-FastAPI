@@ -24,6 +24,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['project:project:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
@@ -213,6 +214,7 @@
                     type="danger"
                     icon="Delete"
                     class="flex-1"
+                    :loading="handleDeletePending"
                     >删除</ZxButton
                   >
                 </div>
@@ -248,6 +250,7 @@
 </template>
 
 <script setup name="Project">
+import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listProject,
@@ -299,7 +302,9 @@ function refreshList() {
 }
 
 function handleAdd() {
-  projectDialogRef.value && projectDialogRef.value.open();
+  return projectDialogRef.value?.open().catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 function toggleSelection(project) {
@@ -315,7 +320,7 @@ function handleDetail(row) {
   proxy.$router.push('/project/project-detail/index/' + projectId);
 }
 
-async function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   let projectName = '';
   let projectIds = [];
 
@@ -357,7 +362,7 @@ async function handleDelete(row) {
   ids.value = [];
   single.value = true;
   multiple.value = true;
-}
+});
 
 function getProjectMoreActionList() {
   const actions = [];
@@ -402,21 +407,23 @@ function handleMoreActionSelect(item, project) {
 }
 
 function handleEdit(project) {
-  projectDialogRef.value && projectDialogRef.value.open(project.projectId);
+  return projectDialogRef.value?.open(project.projectId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
-function handleUnlockProjectVersions(project) {
+const { run: handleUnlockProjectVersions } = useOperation(async (project) => {
   if (!project?.projectId) {
     ElMessage.error('工程ID不存在，无法操作');
     return;
   }
-  proxy.$modal
+  await proxy.$modal
     .confirm(`是否批量解除工程"${project.projectName}"下的所有固化版本？`)
     .then(async () => {
       await unlockProjectVersions(project.projectId);
     })
     .catch(() => {});
-}
+});
 
 function handleCreateSuccess(payload) {
   // 编辑模式：刷新列表即可
@@ -495,7 +502,7 @@ function handleImportClick() {
   importFileInputRef.value?.click();
 }
 
-async function handleImportFileChange(event) {
+const { run: handleImportFileChange } = useOperation(async (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
 
@@ -519,7 +526,7 @@ async function handleImportFileChange(event) {
   if (successCount > 0) {
     refreshList();
   }
-}
+});
 </script>
 <style scoped>
 .project-grid__scroll {

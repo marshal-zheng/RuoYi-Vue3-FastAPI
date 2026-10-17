@@ -1,5 +1,6 @@
 import { defineComponent, getCurrentInstance, onUnmounted, watch } from 'vue';
-import { useThemeScope, useZxFeedback } from '@zxio/zxui';
+import { useThemeScope } from '@zxio/zxui/theme-provider';
+import { useZxFeedback } from '@zxio/zxui/config-provider';
 import { createModal } from '@/plugins/modal';
 import { bindMessageFeedback } from '@/utils/feedback/message';
 import { bindNotificationFeedback } from '@/utils/feedback/notification';

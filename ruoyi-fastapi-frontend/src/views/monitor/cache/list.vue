@@ -50,6 +50,7 @@
                   type="primary"
                   icon="Delete"
                   @click="handleClearCacheName(scope.row)"
+                  :loading="handleClearCacheNamePending"
                 ></el-button>
               </template>
             </el-table-column>
@@ -98,6 +99,7 @@
                   type="primary"
                   icon="Delete"
                   @click="handleClearCacheKey(scope.row)"
+                  :loading="handleClearCacheKeyPending"
                 ></el-button>
               </template>
             </el-table-column>
@@ -116,6 +118,7 @@
               type="primary"
               icon="Refresh"
               @click="handleClearCacheAll()"
+              :loading="handleClearCacheAllPending"
               >清理全部</el-button
             >
           </template>
@@ -145,6 +148,7 @@
 </template>
 
 <script setup name="CacheList">
+import { useOperation } from '@/utils/operation';
 import {
   listCacheName,
   listCacheKey,
@@ -176,11 +180,13 @@ function refreshCacheNames() {
 }
 
 /** 清理指定名称缓存 */
-function handleClearCacheName(row) {
-  clearCacheName(row.cacheName).then(() => {
-    getCacheKeys();
-  });
-}
+const { run: handleClearCacheName, pending: handleClearCacheNamePending } = useOperation(
+  async (row) => {
+    await clearCacheName(row.cacheName).then(() => {
+      getCacheKeys();
+    });
+  }
+);
 
 /** 查询缓存键名列表 */
 function getCacheKeys(row) {
@@ -202,11 +208,13 @@ function refreshCacheKeys() {
 }
 
 /** 清理指定键名缓存 */
-function handleClearCacheKey(cacheKey) {
-  clearCacheKey(cacheKey).then(() => {
-    getCacheKeys();
-  });
-}
+const { run: handleClearCacheKey, pending: handleClearCacheKeyPending } = useOperation(
+  async (cacheKey) => {
+    await clearCacheKey(cacheKey).then(() => {
+      getCacheKeys();
+    });
+  }
+);
 
 /** 列表前缀去除 */
 function nameFormatter(row) {
@@ -226,9 +234,9 @@ function handleCacheValue(cacheKey) {
 }
 
 /** 清理全部缓存 */
-function handleClearCacheAll() {
-  clearCacheAll().then(() => {});
-}
+const { run: handleClearCacheAll, pending: handleClearCacheAllPending } = useOperation(async () => {
+  await clearCacheAll().then(() => {});
+});
 
 getCacheNames();
 </script>

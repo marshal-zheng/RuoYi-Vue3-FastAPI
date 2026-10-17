@@ -5,6 +5,7 @@ import {
   type ProblemDetails,
 } from '@/types/http-contract';
 
+import { observeFeedback } from './channel';
 import { resolveFeedbackRegistryEntry } from './registry';
 import { showMessage } from './message';
 import { showNotification } from './notification';
@@ -74,107 +75,100 @@ export const presentSuccessFeedback = ({
   payload: unknown;
   meta: HttpContractMeta;
   feedback: ResolvedFeedbackOptions;
-}): void => {
-  if (feedback.mode !== 'auto') {
-    return;
-  }
+}): void =>
+  observeFeedback(() => {
+    if (feedback.mode !== 'auto') {
+      return;
+    }
 
-  const context: SuccessFeedbackContext = {
-    key: feedback.key,
-    status,
-    payload,
-    meta,
-    successContext: feedback.successContext,
-  };
-  const entry = feedback.key ? resolveFeedbackRegistryEntry(feedback.key) : { success: '操作成功' };
+    const context: SuccessFeedbackContext = {
+      key: feedback.key,
+      status,
+      payload,
+      meta,
+      successContext: feedback.successContext,
+    };
+    const entry = feedback.key
+      ? resolveFeedbackRegistryEntry(feedback.key)
+      : { success: '操作成功' };
 
-  if (status === 202) {
-    void showNotification({
-      type: 'info',
-      title: '已受理',
-      message: resolveMessage(entry.accepted, context, DEFAULT_ACCEPTED_MESSAGE),
-      duration: 4000,
+    if (status === 202) {
+      return showNotification({
+        type: 'info',
+        title: '已受理',
+        message: resolveMessage(entry.accepted, context, DEFAULT_ACCEPTED_MESSAGE),
+        duration: 4000,
+      });
+    }
+
+    const batchResult = readBatchSummary(payload);
+    if (batchResult) {
+      const succeeded = toNumber(batchResult.summary.succeeded) ?? 0;
+      const failed = toNumber(batchResult.summary.failed) ?? 0;
+      const total = toNumber(batchResult.summary.total) ?? batchResult.results.length;
+      const summaryMessage = `共 ${total} 项，成功 ${succeeded} 项，失败 ${failed} 项`;
+      if (failed > 0 && succeeded > 0) {
+        return showNotification({
+          type: 'warning',
+          title: '部分完成',
+          message: summaryMessage,
+          duration: 5000,
+        });
+      }
+      if (failed > 0) {
+        return showNotification({
+          type: 'error',
+          title: '操作未完成',
+          message: summaryMessage,
+          duration: 5000,
+        });
+      }
+    }
+
+    return showMessage({
+      type: 'success',
+      message: resolveMessage(entry.success, context, '操作成功'),
     });
-    return;
-  }
-
-  const batchResult = readBatchSummary(payload);
-  if (batchResult) {
-    const succeeded = toNumber(batchResult.summary.succeeded) ?? 0;
-    const failed = toNumber(batchResult.summary.failed) ?? 0;
-    const total = toNumber(batchResult.summary.total) ?? batchResult.results.length;
-    const summaryMessage = `共 ${total} 项，成功 ${succeeded} 项，失败 ${failed} 项`;
-    if (failed > 0 && succeeded > 0) {
-      void showNotification({
-        type: 'warning',
-        title: '部分完成',
-        message: summaryMessage,
-        duration: 5000,
-      });
-      return;
-    }
-    if (failed > 0) {
-      void showNotification({
-        type: 'error',
-        title: '操作未完成',
-        message: summaryMessage,
-        duration: 5000,
-      });
-      return;
-    }
-  }
-
-  void showMessage({
-    type: 'success',
-    message: resolveMessage(entry.success, context, '操作成功'),
   });
-};
 
-export const presentProblemFeedback = ({
-  problem,
-  meta,
-  feedback,
-}: ProblemFeedbackContext): void => {
-  if (feedback.mode !== 'auto') {
-    return;
-  }
+export const presentProblemFeedback = ({ problem, meta, feedback }: ProblemFeedbackContext): void =>
+  observeFeedback(() => {
+    if (feedback.mode !== 'auto') {
+      return;
+    }
 
-  if (problem.status === 422 && feedback.validationTarget && problem.errors?.length) {
-    feedback.validationTarget.apply(problem.errors);
-    return;
-  }
+    if (problem.status === 422 && feedback.validationTarget && problem.errors?.length) {
+      return feedback.validationTarget.apply(problem.errors);
+    }
 
-  const message = appendTracking(problem, meta);
-  if (problem.status === 429) {
-    void showNotification({
-      type: 'warning',
-      title: problem.title || '请求过于频繁',
-      message,
-      duration: 6000,
-    });
-    return;
-  }
+    const message = appendTracking(problem, meta);
+    if (problem.status === 429) {
+      return showNotification({
+        type: 'warning',
+        title: problem.title || '请求过于频繁',
+        message,
+        duration: 6000,
+      });
+    }
 
-  if (problem.status === 422) {
-    const errorLines = (problem.errors || []).map((item) => `${item.field}: ${item.message}`);
-    void showNotification({
-      type: 'error',
-      title: problem.title || '参数验证失败',
-      message: errorLines.length ? errorLines.join('\n') : message,
-      duration: 6000,
-    });
-    return;
-  }
+    if (problem.status === 422) {
+      const errorLines = (problem.errors || []).map((item) => `${item.field}: ${item.message}`);
+      return showNotification({
+        type: 'error',
+        title: problem.title || '参数验证失败',
+        message: errorLines.length ? errorLines.join('\n') : message,
+        duration: 6000,
+      });
+    }
 
-  if (problem.status >= 500 || [403, 404, 409].includes(problem.status)) {
-    void showNotification({
-      type: 'error',
-      title: problem.title || '请求失败',
-      message,
-      duration: 6000,
-    });
-    return;
-  }
+    if (problem.status >= 500 || [403, 404, 409].includes(problem.status)) {
+      return showNotification({
+        type: 'error',
+        title: problem.title || '请求失败',
+        message,
+        duration: 6000,
+      });
+    }
 
-  void showMessage({ type: 'error', message: problem.detail || problem.title || '请求失败' });
-};
+    return showMessage({ type: 'error', message: problem.detail || problem.title || '请求失败' });
+  });

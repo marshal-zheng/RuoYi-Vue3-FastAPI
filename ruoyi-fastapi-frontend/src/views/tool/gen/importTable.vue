@@ -64,7 +64,7 @@
 <script setup>
 import { ElMessage } from 'element-plus';
 import { listDbTable, importTable } from '@/api/tool/gen';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import { serializeDateRange } from '@/utils/ruoyi';
 
 const gridListRef = ref(null);

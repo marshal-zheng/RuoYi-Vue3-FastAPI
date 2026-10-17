@@ -1,67 +1,96 @@
+import { requestDetail } from '@/api/detail';
 export type TypeRecord = Omit<DictTypeModel, 'dictId'> & { dictId: number };
 import type { HttpCollection, HttpOffsetPage } from '@/types/http-contract';
 import type { DictTypeModel, DictTypePageQueryModel } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
+import type { RequestOptions, QueryRequestContext } from '@zxio/http';
 
 // 查询字典类型列表
-export function listType(query?: DictTypePageQueryModel) {
-  return request<HttpOffsetPage<TypeRecord>>({
-    url: '/system/dict/type/list',
-    method: 'get',
-    params: query,
-  });
+export function listType(query?: DictTypePageQueryModel, options?: RequestOptions) {
+  return request<HttpOffsetPage<TypeRecord>>(
+    {
+      url: '/system/dict/type/list',
+      method: 'get',
+      params: query,
+    },
+    options
+  );
 }
 
 // 查询字典类型详细
-export function getType(dictId: number | string) {
-  return request<TypeRecord>({
-    url: '/system/dict/type/' + dictId,
-    method: 'get',
-  });
+export function getType(
+  dictId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError' | 'requestOptions'>
+) {
+  return requestDetail<TypeRecord>(
+    {
+      ...config,
+      url: '/system/dict/type/' + dictId,
+      method: 'get',
+    },
+    'dictId',
+    dictId
+  );
 }
 
 // 新增字典类型
-export function addType(data: DictTypeModel) {
-  return request<TypeRecord>({
-    url: '/system/dict/type',
-    method: 'post',
-    data: data,
-    feedback: { mode: 'auto', key: 'system.dict-type.create' },
-  });
+export function addType(data: DictTypeModel, options?: RequestOptions) {
+  return request<TypeRecord>(
+    {
+      url: '/system/dict/type',
+      method: 'post',
+      data: data,
+      feedback: { mode: 'auto', key: 'system.dict-type.create' },
+    },
+    options
+  );
 }
 
 // 修改字典类型
-export function updateType(data: DictTypeModel) {
-  return request<TypeRecord>({
-    url: '/system/dict/type',
-    method: 'put',
-    data: data,
-    feedback: { mode: 'auto', key: 'system.dict-type.update' },
-  });
+export function updateType(data: DictTypeModel, options?: RequestOptions) {
+  return request<TypeRecord>(
+    {
+      url: '/system/dict/type',
+      method: 'put',
+      data: data,
+      feedback: { mode: 'auto', key: 'system.dict-type.update' },
+    },
+    options
+  );
 }
 
 // 删除字典类型
-export function delType(dictId: number | string) {
-  return request<null>({
-    url: '/system/dict/type/' + dictId,
-    method: 'delete',
-    feedback: { mode: 'auto', key: 'system.dict-type.delete' },
-  });
+export function delType(dictId: number | string, options?: RequestOptions) {
+  return request<null>(
+    {
+      url: '/system/dict/type/' + dictId,
+      method: 'delete',
+      feedback: { mode: 'auto', key: 'system.dict-type.delete' },
+    },
+    options
+  );
 }
 
 // 刷新字典缓存
-export function refreshCache() {
-  return request<{ status: 'refreshed' }>({
-    url: '/system/dict/type/refreshCache',
-    method: 'delete',
-    feedback: { mode: 'auto', key: 'system.dict-type.refresh-cache' },
-  });
+export function refreshCache(options?: RequestOptions) {
+  return request<{ status: 'refreshed' }>(
+    {
+      url: '/system/dict/type/refreshCache',
+      method: 'delete',
+      feedback: { mode: 'auto', key: 'system.dict-type.refresh-cache' },
+    },
+    options
+  );
 }
 
 // 获取字典选择框列表
-export function optionselect() {
-  return request<HttpCollection<DictTypeModel>>({
-    url: '/system/dict/type/optionselect',
-    method: 'get',
-  });
+export function optionselect(context?: QueryRequestContext) {
+  return request<HttpCollection<DictTypeModel>>(
+    {
+      url: '/system/dict/type/optionselect',
+      method: 'get',
+      signal: context?.signal,
+    },
+    context?.options
+  );
 }

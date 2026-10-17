@@ -1,7 +1,7 @@
-import request from '@/utils/request';
+import { requestDetail } from '@/api/detail';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { HttpOffsetPage } from '@/types/http-contract';
 export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
-import type { AxiosRequestConfig } from 'axios';
 import type {
   ProjectModel,
   GetSystemProjectListProjectListGetData,
@@ -13,11 +13,17 @@ export function listProject(query?: GetSystemProjectListProjectListGetData['quer
 }
 
 // 查询工程详细
-export function getProject(projectId: number | string, options: AxiosRequestConfig = {}) {
-  return request.get<ProjectRecord>('/project/' + projectId, {
-    feedback: { mode: 'auto' },
-    ...options,
-  });
+export function getProject(projectId: number | string, options: ExtendedAxiosRequestConfig = {}) {
+  return requestDetail<ProjectRecord>(
+    {
+      ...options,
+      url: '/project/' + projectId,
+      method: 'get',
+      feedback: { mode: 'auto' },
+    },
+    'projectId',
+    projectId
+  );
 }
 
 // 新增工程

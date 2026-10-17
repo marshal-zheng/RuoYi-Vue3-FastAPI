@@ -301,6 +301,29 @@ describe('useEventTrigger', () => {
   });
 
   describe('checkAndTriggerEvents', () => {
+    it('keeps automatic triggers pending per event while allowing other events in parallel', async () => {
+      const releases: Array<() => void> = [];
+      vi.mocked(simulationApi.triggerEvent).mockImplementation(
+        () =>
+          new Promise<void>((resolve) => {
+            releases.push(resolve);
+          })
+      );
+      const { checkAndTriggerEvents, eventList } = useEventTrigger(sessionId);
+      await Promise.resolve();
+      eventList.value = ['first', 'second'].map((eventId) => ({
+        eventId,
+        name: eventId,
+        status: 'pending',
+        condition: { type: ConditionType.TIME, value: { time: 10 } },
+        action: { type: ActionType.LOG, params: {} },
+      }));
+      checkAndTriggerEvents({ elapsedTime: 15 });
+      checkAndTriggerEvents({ elapsedTime: 16 });
+      expect(simulationApi.triggerEvent).toHaveBeenCalledTimes(2);
+      releases.forEach((release) => release());
+    });
+
     it('should trigger matching events', async () => {
       vi.mocked(simulationApi.triggerEvent).mockResolvedValue({});
       vi.mocked(simulationApi.getEvents).mockResolvedValue({ items: [] });

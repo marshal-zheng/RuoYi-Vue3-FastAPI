@@ -28,7 +28,7 @@
         >
           <div>
             <el-icon :size="30">
-              <component :is="icon" />
+              <component :is="ElementPlusIconsVue[icon]" />
             </el-icon>
             <div>{{ icon }}</div>
           </div>
@@ -40,7 +40,7 @@
 <script setup>
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import { watch, ref } from "vue";
-import { ZxDialog } from "@zxio/zxui";
+import { ZxDialog } from "@zxio/zxui/dialog";
 
 const iconList = ref([]);
 const originList = [];

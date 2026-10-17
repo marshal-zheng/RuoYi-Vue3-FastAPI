@@ -123,7 +123,10 @@ export function serializeDateRange(
 }
 
 // 回显数据字典
-export function selectDictLabel(datas: DictItem[], value: string | number | undefined): string {
+export function selectDictLabel(
+  datas: readonly DictItem[],
+  value: string | number | undefined
+): string {
   if (value === undefined) {
     return '';
   }
@@ -136,7 +139,7 @@ export function selectDictLabel(datas: DictItem[], value: string | number | unde
 
 // 回显数据字典（字符串数组）
 export function selectDictLabels(
-  datas: DictItem[],
+  datas: readonly DictItem[],
   value: string | string[] | undefined,
   separator?: string
 ): string {

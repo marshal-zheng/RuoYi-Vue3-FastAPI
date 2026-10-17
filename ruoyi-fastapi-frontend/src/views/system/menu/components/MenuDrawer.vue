@@ -1,6 +1,21 @@
 <template>
-  <ZxDrawer v-bind="drawer.drawerProps.value" v-on="drawer.drawerEvents.value">
-    <el-form ref="formRef" :model="drawer.state.data" :rules="formRules" label-position="top">
+  <ZxDrawer
+    v-bind="drawer.drawerProps.value"
+    v-on="drawer.drawerEvents.value"
+    :loading="detailLoading"
+    :ok-disabled="detailLoading || !!loadError || drawer.state.disabled"
+  >
+    <DictStatus :types="['sys_show_hide', 'sys_normal_disable']" />
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
+    <el-form
+      v-show="!loadError"
+      ref="formRef"
+      :model="drawer.state.data"
+      :rules="formRules"
+      label-position="top"
+    >
       <el-form-item label="上级菜单">
         <el-tree-select
           v-model="drawer.state.data.parentId"
@@ -192,20 +207,17 @@
 
 <script setup lang="ts" name="MenuDrawer">
 import { ref } from 'vue';
-import { addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
-import { useDrawer } from '@zxio/zxui';
+import { useEditorRead } from '@/utils/editor-read';
+import { useDict } from '@/utils/dict';
+import { getMenu, addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { QuestionFilled, Search } from '@element-plus/icons-vue';
-import { IconSelect } from '@/components/ui';
+import IconSelect from '@/components/ui/IconSelect/index.vue';
 
-interface DictItem {
-  label: string;
-  value: string;
-}
-
-defineProps<{
-  sysShowHide: DictItem[];
-  sysNormalDisable: DictItem[];
-}>();
+const { sys_show_hide: sysShowHide, sys_normal_disable: sysNormalDisable } = useDict(
+  'sys_show_hide',
+  'sys_normal_disable'
+);
 
 interface MenuForm {
   menuId?: number;
@@ -228,6 +240,8 @@ const emit = defineEmits(['success']);
 
 const menuOptions = ref<MenuTreeNode[]>([]);
 const formRef = ref();
+const detailLoading = ref(false);
+let requested: { menuId?: number; parentId?: number } = {};
 const iconSelectRef = ref();
 
 const formRules = {
@@ -258,6 +272,7 @@ const drawer = useDrawer<MenuForm>({
     query: undefined,
   }),
   onConfirm: async (data: MenuForm) => {
+    if (detailLoading.value || loadError.value || data.menuId !== requested.menuId) return false;
     if (data.menuId !== undefined) {
       await updateMenu(data);
     } else {
@@ -268,16 +283,56 @@ const drawer = useDrawer<MenuForm>({
   },
 });
 
-/** 打开抽屉 */
-async function openDrawer(data?: MenuForm) {
-  // 先打开抽屉
-  drawer.open(data);
+const {
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => drawer.state.visible, detailLoading);
 
-  // 加载菜单树数据
-  const response = await treeselect();
-  const menus = response.items;
-  // 添加主类目根节点，允许选择顶级菜单
-  menuOptions.value = [{ id: 0, label: '主类目', children: menus }];
+/** 只接收编辑身份或新增父级，不用列表快照回填详情。 */
+function openDrawer(data?: { menuId?: number; parentId?: number }) {
+  requested = { menuId: data?.menuId, parentId: data?.parentId ?? 0 };
+  const target = requested;
+  return runRead(async (read) => {
+    drawer.open(target);
+    drawer.setDisabled(true);
+    menuOptions.value = [];
+    const config = { signal: read.signal, silentError: true };
+    const [tree, detail] = await Promise.all([
+      treeselect(config),
+      target.menuId ? getMenu(target.menuId, config) : undefined,
+    ]);
+    if (!read.isCurrent()) return;
+    menuOptions.value = [{ id: 0, label: '主类目', children: tree.items }];
+    if (detail) {
+      drawer.open({
+        menuId: detail.menuId,
+        parentId: detail.parentId ?? 0,
+        menuName: detail.menuName ?? undefined,
+        menuType: detail.menuType ?? undefined,
+        icon: detail.icon ?? undefined,
+        orderNum: detail.orderNum ?? 0,
+        isFrame: detail.isFrame ?? '1',
+        isCache: detail.isCache ?? '0',
+        visible: detail.visible ?? '0',
+        status: detail.status ?? '0',
+        path: detail.path ?? undefined,
+        component: detail.component ?? undefined,
+        perms: detail.perms ?? undefined,
+        query: detail.query ?? undefined,
+      });
+    }
+    drawer.setDisabled(false);
+  });
+}
+function closeDrawer() {
+  cancelRead();
+  return drawer.close();
+}
+function handleRetry() {
+  return openDrawer(requested).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 /** 图标弹窗显示时重置搜索 */
@@ -290,5 +345,5 @@ function onIconSelected(name: string) {
   drawer.state.data.icon = name;
 }
 
-defineExpose({ open: openDrawer });
+defineExpose({ open: openDrawer, close: closeDrawer });
 </script>

@@ -18,6 +18,7 @@
             :disabled="multiple"
             @click="handleDelete"
             v-hasPermi="['system:project:remove']"
+            :loading="handleDeletePending"
             >删除</ZxButton
           >
         </template>
@@ -87,6 +88,7 @@
               type="danger"
               @click="handleDelete(scope.row)"
               v-hasPermi="['system:project:remove']"
+              :loading="handleDeletePending"
               >删除</el-button
             >
           </template>
@@ -128,6 +130,7 @@
 </template>
 
 <script setup lang="ts" name="ProjectList">
+import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref } from 'vue';
 import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
 import type { ProjectRecord } from '@/api/system/project';
@@ -193,18 +196,16 @@ function handleSelectionChange(selection: ProjectRecord[]) {
 }
 
 function handleAdd() {
-  projectDlgRef.value?.open();
+  return projectDlgRef.value?.open().catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
-async function handleUpdate(row?: ProjectRecord) {
-  const projectId = row?.projectId || ids.value[0];
-  if (!projectId) return;
-
-  const response = await getProject(projectId).catch(() => null);
-  if (!response) return;
-  projectDlgRef.value?.open({
-    projectId: response.projectId ?? undefined,
-    projectDesc: response.projectDesc ?? undefined,
+function handleUpdate(row?: ProjectRecord) {
+  const id = row?.projectId || ids.value[0];
+  if (!id) return;
+  return projectDlgRef.value?.open(id).catch(() => {
+    /* 当前读取已负责反馈。 */
   });
 }
 
@@ -215,14 +216,16 @@ async function handleDetail(row: ProjectRecord) {
   detailOpen.value = true;
 }
 
-function handleDelete(row?: ProjectRecord) {
-  const projectIds = row?.projectId || ids.value.join(',');
-  proxy.$modal
-    .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
-    .then(() => delProject(projectIds))
-    .then(() => {
-      gridListRef.value?.refresh();
-    })
-    .catch(() => {});
-}
+const { run: handleDelete, pending: handleDeletePending } = useOperation(
+  async (row?: ProjectRecord) => {
+    const projectIds = row?.projectId || ids.value.join(',');
+    await proxy.$modal
+      .confirm('是否确认删除工程编号为"' + projectIds + '"的数据项？')
+      .then(() => delProject(projectIds))
+      .then(() => {
+        gridListRef.value?.refresh();
+      })
+      .catch(() => {});
+  }
+);
 </script>

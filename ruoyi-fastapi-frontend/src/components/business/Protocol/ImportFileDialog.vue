@@ -52,7 +52,7 @@
 import { ref, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { saveAs } from 'file-saver';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import { downloadProtocolImportTemplate, previewProtocolImport } from '@/api/protocol/protocol';
 
 const props = defineProps({

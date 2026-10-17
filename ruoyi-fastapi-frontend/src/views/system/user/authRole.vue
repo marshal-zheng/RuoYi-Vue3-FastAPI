@@ -15,6 +15,7 @@
     </template>
 
     <ZxGridList
+      :key="queryScope?.key"
       ref="gridListRef"
       :load-data="loadRolesData"
       :show-pagination="true"
@@ -47,12 +48,16 @@
 </template>
 
 <script setup name="AuthRole">
-import { getAuthRole, updateAuthRole } from '@/api/system/user';
-import { onMounted } from 'vue';
+import { useOperation } from '@/utils/operation';
+import { getAuthRole } from '@/api/system/user';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope, scopeRequestOptions } from '@/queries/context';
+import { onMounted, watch } from 'vue';
 import { parseTime } from '@/utils/ruoyi';
 
 const route = useRoute();
 const { proxy } = getCurrentInstance();
+const pageScope = requireQueryScope();
 
 const roleIds = ref([]);
 const form = ref({
@@ -65,6 +70,16 @@ const gridListRef = ref(null);
 const roleRef = ref(null);
 // 标记是否已加载角色数据，避免列表先于数据加载触发导致空列表
 const rolesLoaded = ref(false);
+watch(
+  queryScope,
+  () => {
+    roleIds.value = [];
+    form.value = {};
+    rolesAll.value = [];
+    rolesLoaded.value = false;
+  },
+  { flush: 'sync' }
+);
 
 /** 单击选中行数据 */
 function clickRow(row) {
@@ -85,16 +100,18 @@ function close() {
   proxy.$tab.closeOpenPage(obj);
 }
 /** 提交按钮 */
-function submitForm() {
+const { run: submitForm } = useOperation(async () => {
+  if (pageScope !== queryScope.value) return;
   const userId = form.value.userId;
-  const rIds = roleIds.value.join(',');
-  updateAuthRole({ userId: userId, roleIds: rIds }).then(() => {
-    close();
+  const rIds = [...roleIds.value];
+  const command = captureUserCommand({ userId, roleIds: rIds }, pageScope);
+  await userCommands.assignRoles(command).then(() => {
+    if (pageScope === queryScope.value) close();
   });
-}
+});
 
 function handleSave() {
-  submitForm();
+  return submitForm();
 }
 
 function handleCancel() {
@@ -102,12 +119,14 @@ function handleCancel() {
 }
 
 async function loadRolesData(params) {
+  if (pageScope !== queryScope.value) return { list: [], total: 0 };
   // 若首次进入时数据尚未拉取，这里兜底请求一次
   if (!rolesLoaded.value) {
     const userId = route.params && route.params.userId;
     if (userId) {
       try {
-        const resp = await getAuthRole(userId);
+        const resp = await getAuthRole(userId, { requestOptions: scopeRequestOptions(pageScope) });
+        if (pageScope !== queryScope.value) return { list: [], total: 0 };
         form.value = resp.user || {};
         rolesAll.value = resp.roles || [];
       } catch (e) {
@@ -138,7 +157,10 @@ onMounted(async () => {
   const userId = route.params && route.params.userId;
   if (userId) {
     try {
-      const response = await getAuthRole(userId);
+      const response = await getAuthRole(userId, {
+        requestOptions: scopeRequestOptions(pageScope),
+      });
+      if (pageScope !== queryScope.value) return;
       form.value = response.user || {};
       rolesAll.value = response.roles || [];
       rolesLoaded.value = true;

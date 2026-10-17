@@ -1,3 +1,4 @@
+import { requestDetail } from '@/api/detail';
 import request from '@/utils/request';
 import type { HttpOffsetPage } from '@/types/http-contract';
 export type ProjectVersionRecord = Omit<ProjectVersionModel, 'versionId'> & { versionId: number };
@@ -22,10 +23,14 @@ export function listProjectVersion(
 
 // 查询项目版本详细
 export function getProjectVersion(versionId: number | string) {
-  return request<ProjectVersionRecord>({
-    url: '/project/version/' + versionId,
-    method: 'get',
-  });
+  return requestDetail<ProjectVersionRecord>(
+    {
+      url: '/project/version/' + versionId,
+      method: 'get',
+    },
+    'versionId',
+    versionId
+  );
 }
 
 // 新增项目版本

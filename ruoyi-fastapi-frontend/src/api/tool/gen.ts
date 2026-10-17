@@ -1,3 +1,4 @@
+import { requestDetail } from '@/api/detail';
 export interface GenTableDetail {
   info: GenTableModel;
   columns: GenTableColumnModel[];
@@ -33,10 +34,15 @@ export function listDbTable(query?: NonNullable<GetGenDbTableListToolGenDbListGe
 
 // 查询表详细信息
 export function getGenTable(tableId: number | string) {
-  return request<GenTableDetail>({
-    url: '/tool/gen/' + tableId,
-    method: 'get',
-  });
+  return requestDetail<GenTableDetail>(
+    {
+      url: '/tool/gen/' + tableId,
+      method: 'get',
+    },
+    'tableId',
+    tableId,
+    (payload) => payload?.info
+  );
 }
 
 // 修改代码生成信息

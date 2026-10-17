@@ -22,9 +22,7 @@ export async function expectRequestTimeout(
       timeout: 1,
       silentError: true,
       skipRelogin: true,
-      headers: {
-        repeatSubmit: false,
-      },
+      headers: {},
     })
   ).rejects.toMatchObject({
     status: 504,

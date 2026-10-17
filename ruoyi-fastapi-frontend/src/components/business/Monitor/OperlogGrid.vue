@@ -1,7 +1,14 @@
 <template>
   <div class="m-operlog-grid" data-zx-fill>
-    <ZxGridList ref="gridListRef" :load-data="loadOperlogData" :initial-state="initialState" fill>
+    <ZxGridList
+      ref="gridListRef"
+      :load-data="loadOperlogData"
+      :query-transform="queryTransform"
+      :initial-state="initialState"
+      fill
+    >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_oper_type', 'sys_common_status']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #filters>
             <slot
@@ -134,8 +141,9 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import { list, delOperlog, cleanOperlog } from '@/api/monitor/operlog';
-import { parseTime } from '@/utils/ruoyi';
+import { parseTime, serializeDateRange } from '@/utils/ruoyi';
 import { OperTypeSelector, OperStatusSelector } from './selector';
 import OperlogDetailDialog from './OperlogDetailDialog.vue';
 
@@ -158,28 +166,33 @@ const initialState = computed(() => ({
   },
 }));
 
+function queryTransform(query) {
+  return serializeDateRange(query);
+}
+
 async function loadOperlogData(params) {
-  const { page, size, dateRange, ...query } = params || {};
-  let requestParams = { page, pageSize: size, ...query };
-  if (dateRange && dateRange.length === 2) {
-    requestParams = proxy.addDateRange(requestParams, dateRange);
-    delete requestParams.dateRange;
-  }
-  const response = await list(requestParams);
-  return response;
+  return list({
+    ...params.query,
+    page: params.pager?.page,
+    pageSize: params.pager?.size,
+  });
 }
 
 function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState({ [key]: value });
+  updateState(`query.${key}`, value);
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
-function onSearch({ handleRefresh }) {
+function onSearch({ handleRefresh, updateState }) {
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
 function onSortChange(column, { updateState, handleRefresh }) {
-  updateState({ orderByColumn: column.prop, isAsc: column.order });
+  updateState('query.orderByColumn', column.order ? column.prop : undefined);
+  updateState('query.isAsc', column.order || undefined);
+  updateState('pager.page', 1);
   handleRefresh();
 }
 
@@ -192,10 +205,10 @@ function handleView(row) {
   detailDialogRef.value && detailDialogRef.value.open(row);
 }
 
-function deleteSelected() {
+const { run: deleteSelected } = useOperation(async () => {
   const operIds = ids.value;
   if (!operIds || operIds.length === 0) return;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除日志编号为"' + operIds + '"的数据项?')
     .then(function () {
       return delOperlog(operIds);
@@ -204,10 +217,10 @@ function deleteSelected() {
       gridListRef.value && gridListRef.value.refresh();
     })
     .catch(() => {});
-}
+});
 
-function cleanAll() {
-  proxy.$modal
+const { run: cleanAll } = useOperation(async () => {
+  await proxy.$modal
     .confirm('是否确认清空所有操作日志数据项?')
     .then(function () {
       return cleanOperlog();
@@ -216,28 +229,23 @@ function cleanAll() {
       gridListRef.value && gridListRef.value.refresh();
     })
     .catch(() => {});
-}
+});
 
 function exportCurrent() {
-  const q = gridListRef.value?.getCurrentQuery?.() || {};
-  const query = { ...q };
-  if (query.dateRange && query.dateRange.length === 2) {
-    const tmp = proxy.addDateRange({}, query.dateRange);
-    delete query.dateRange;
-    Object.assign(query, tmp);
-  }
-  proxy.download('monitor/operlog/export', query, `operlog_${new Date().getTime()}.xlsx`);
+  const snapshot = gridListRef.value?.getStateSnapshot();
+  if (!snapshot) return;
+  proxy.download(
+    'monitor/operlog/export',
+    queryTransform(snapshot.query),
+    `operlog_${new Date().getTime()}.xlsx`
+  );
 }
 
 function refresh() {
   gridListRef.value && gridListRef.value.refresh();
 }
 
-function getCurrentQuery() {
-  return gridListRef.value?.getCurrentQuery?.();
-}
-
 const emit = defineEmits(['selection-change']);
 
-defineExpose({ refresh, getCurrentQuery, deleteSelected, cleanAll, exportCurrent });
+defineExpose({ refresh, deleteSelected, cleanAll, exportCurrent });
 </script>

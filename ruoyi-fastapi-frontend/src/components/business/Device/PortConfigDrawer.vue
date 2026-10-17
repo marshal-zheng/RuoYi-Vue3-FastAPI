@@ -14,7 +14,7 @@
 
 <script setup name="PortConfigDrawer">
 import { ref, reactive, computed, watch } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useDrawer } from '@zxio/zxui/hooks';
 import ParamsConfigTab from './ParamsConfigTab.vue';
 import MessageConfigTab from './MessageConfigTab.vue';
 

@@ -1,7 +1,13 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @import "@zxio/theme-tailwind/v4.css";
 @import "./simulation-palette.css";
 @import "./theme.module.css";
+
+/* Only application templates contribute utilities; scripts and tests are not views. */
+@source "../../**/*.{vue,js,ts,jsx,tsx}";
+@source "../../../index.html";
+@source not "../../**/*.{test,spec}.{vue,js,ts,jsx,tsx}";
+@source not "../../**/__tests__/**";
 
 /* Shared recipes consume the public ZXUI contract at the element scope. */
 @layer components {

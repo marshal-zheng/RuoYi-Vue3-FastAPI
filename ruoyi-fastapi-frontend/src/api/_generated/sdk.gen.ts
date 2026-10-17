@@ -4656,9 +4656,9 @@ export const cancelSystemRoleUserSystemRoleAuthUserCancelPut = <
 export const batchCancelSystemRoleUserSystemRoleAuthUserCancelAllPut = <
   ThrowOnError extends boolean = false,
 >(
-  options?: Options<BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData, ThrowOnError>
+  options: Options<BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData, ThrowOnError>
 ) =>
-  (options?.client ?? client).put<
+  (options.client ?? client).put<
     BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses,
     BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutErrors,
     ThrowOnError
@@ -4666,6 +4666,10 @@ export const batchCancelSystemRoleUserSystemRoleAuthUserCancelAllPut = <
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/role/authUser/cancelAll',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**
@@ -4674,9 +4678,9 @@ export const batchCancelSystemRoleUserSystemRoleAuthUserCancelAllPut = <
 export const addSystemRoleUserSystemRoleAuthUserSelectAllPut = <
   ThrowOnError extends boolean = false,
 >(
-  options?: Options<AddSystemRoleUserSystemRoleAuthUserSelectAllPutData, ThrowOnError>
+  options: Options<AddSystemRoleUserSystemRoleAuthUserSelectAllPutData, ThrowOnError>
 ) =>
-  (options?.client ?? client).put<
+  (options.client ?? client).put<
     AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses,
     AddSystemRoleUserSystemRoleAuthUserSelectAllPutErrors,
     ThrowOnError
@@ -4684,6 +4688,10 @@ export const addSystemRoleUserSystemRoleAuthUserSelectAllPut = <
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/role/authUser/selectAll',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**
@@ -4906,6 +4914,10 @@ export const updateSystemRoleUserSystemUserAuthRolePut = <ThrowOnError extends b
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/user/authRole',
     ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**

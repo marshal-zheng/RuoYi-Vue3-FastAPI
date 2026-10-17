@@ -61,7 +61,7 @@ import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import defaultSettings from '@/settings';
 import headerLogo from '@/assets/logo/logo.png';
-import { ZxButton } from '@zxio/zxui';
+import { ZxButton } from '@zxio/zxui/button';
 import { resolveLayoutVisibility } from './policy';
 const route = useRoute();
 

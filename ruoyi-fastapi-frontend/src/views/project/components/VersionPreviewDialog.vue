@@ -5,7 +5,7 @@
 </template>
 
 <script setup name="VersionPreviewDialog">
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import { Editor as RichEditor } from '@/components/ui/RichEditor';
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({

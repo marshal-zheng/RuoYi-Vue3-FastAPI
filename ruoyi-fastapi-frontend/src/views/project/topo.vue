@@ -26,6 +26,7 @@
             data-testid="topology-save-button"
             :disabled="loading || topologyLoading"
             @click="handleSaveTopo"
+            :loading="handleSaveTopoPending"
           >
             保存
           </zx-button>
@@ -39,6 +40,7 @@
 </template>
 
 <script setup name="Index">
+import { useOperation } from '@/utils/operation';
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import XflowDAG from '@/components/business/Dag/index.vue';
@@ -501,7 +503,7 @@ function buildTopologySavePayload() {
 /**
  * 保存工程拓扑
  */
-async function handleSaveTopo() {
+const { run: handleSaveTopo, pending: handleSaveTopoPending } = useOperation(async () => {
   const currentProjectId = getProjectIdNumber();
   if (!currentProjectId) {
     ElMessage.error('保存失败：缺少工程ID');
@@ -519,7 +521,7 @@ async function handleSaveTopo() {
   } catch {
     // 自动反馈已展示保存失败；保留当前拓扑供用户重试。
   }
-}
+});
 
 /**
  * 从后端加载并回显已保存的拓扑数据

@@ -1,6 +1,24 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
-    <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
+    <span v-if="editorQuery.isPaused.value" aria-live="polite">用户详情等待网络连接</span>
+    <el-alert
+      v-else-if="editorQuery.error.value && !loadError"
+      title="用户详情刷新失败，保留编辑草稿"
+      type="error"
+      :closable="false"
+    >
+      <el-button link type="primary" @click="retryResource">重试读取</el-button>
+    </el-alert>
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
+    <el-form
+      v-show="!loadError"
+      ref="formRef"
+      :model="state.data"
+      :rules="formRules"
+      v-bind="formProps"
+    >
       <FormGrid v-bind="layoutProps">
         <el-form-item label="用户昵称" prop="nickName">
           <zx-input v-model="state.data.nickName" placeholder="请输入用户昵称" maxlength="30" />
@@ -43,17 +61,17 @@
         </template>
 
         <el-form-item label="用户性别">
-          <el-select v-model="state.data.sex" placeholder="请选择" style="width: 100%">
-            <el-option
-              v-for="dict in sexOptions"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
+          <DictSelect
+            dict-type="sys_user_sex"
+            :active="state.visible"
+            v-model="state.data.sex"
+            placeholder="请选择"
+            style="width: 100%"
+          />
         </el-form-item>
 
         <el-form-item label="状态">
+          <DictStatus :types="['sys_normal_disable']" />
           <el-radio-group v-model="state.data.status">
             <el-radio v-for="dict in statusOptions" :key="dict.value" :value="dict.value">
               {{ dict.label }}
@@ -94,21 +112,34 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, shallowRef, watch } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
+import { useEditorRead } from '@/utils/editor-read';
+import { useDict } from '@/utils/dict';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
-import { getUser, addUser, updateUser } from '@/api/system/user';
+import {
+  captureUserCommand,
+  userCommands,
+  readUserEditor,
+  userDetailOptions,
+  userCreateOptions,
+} from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
 
 defineProps({
   deptOptions: { type: Array, default: () => [] },
-  statusOptions: { type: Array, default: () => [] },
-  sexOptions: { type: Array, default: () => [] },
 });
+
+const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 
 const emit = defineEmits(['success']);
 
 const formRef = ref();
 const postOptions = ref([]);
 const roleOptions = ref([]);
+const detailLoading = ref(false);
+const requestedId = ref();
+const editorScope = shallowRef(null);
 
 const formRules = computed(() => ({
   userName: [
@@ -153,7 +184,7 @@ const formRules = computed(() => ({
   ],
 }));
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setLoading } =
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
   useFormDialog({
     columns: 2,
     title: (data) => (data?.userId ? '修改用户' : '添加用户'),
@@ -163,6 +194,7 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
     preValidate: true,
     autoScrollToError: true,
     autoResetForm: true,
+    loading: detailLoading,
     defaultData: () => ({
       userId: undefined,
       deptId: undefined,
@@ -178,11 +210,37 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       roleIds: [],
     }),
     onConfirm: async (data) => {
+      const scope = editorScope.value;
+      if (
+        !state.visible ||
+        !scope ||
+        scope !== queryScope.value ||
+        detailLoading.value ||
+        loadError.value
+      )
+        return false;
+      const payload = {
+        deptId: data.deptId,
+        userName: data.userName,
+        nickName: data.nickName,
+        phonenumber: data.phonenumber,
+        email: data.email,
+        sex: data.sex,
+        status: data.status,
+        remark: data.remark,
+        postIds: data.postIds,
+        roleIds: data.roleIds,
+      };
       if (data.userId) {
-        await updateUser(data);
+        await userCommands.updateUser(
+          captureUserCommand({ ...payload, userId: data.userId }, scope)
+        );
       } else {
-        await addUser(data);
+        await userCommands.createUser(
+          captureUserCommand({ ...payload, password: data.password }, scope)
+        );
       }
+      if (scope !== queryScope.value || state.data !== data) return false;
       emit('success');
     },
     // 错误消息已在 http 层统一处理，无需重复显示
@@ -190,16 +248,44 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
 
 const isEdit = computed(() => !!state.data.userId);
 
-/** 打开对话框 */
-async function openDialog(userId) {
-  setLoading(true);
-  try {
-    const response = await getUser(userId);
+const {
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => state.visible, detailLoading);
+const editorQuery = useQuery(
+  computed(() => {
+    const scope = state.visible ? editorScope.value : null;
+    return requestedId.value === undefined
+      ? userCreateOptions(scope)
+      : userDetailOptions(scope, requestedId.value);
+  })
+);
+watch(
+  queryScope,
+  () => {
+    cancelRead();
+    close();
+  },
+  { flush: 'sync' }
+);
+
+/** 打开对话框；新增也需要本次打开的岗位和角色选项。 */
+function openDialog(userId) {
+  const scope = requireQueryScope();
+  editorScope.value = scope;
+  requestedId.value = userId;
+  return runRead(async (read) => {
+    open(userId ? { userId } : undefined);
+    postOptions.value = [];
+    roleOptions.value = [];
+    setDisabled(true);
+    const response = await readUserEditor(scope, userId, read.signal);
+    if (!read.isCurrent() || scope !== queryScope.value) return;
     postOptions.value = response.posts || [];
     roleOptions.value = response.roles || [];
-
     if (userId) {
-      const userData = response.data || {};
+      const userData = response.data;
       open({
         userId: userData.userId,
         deptId: userData.deptId,
@@ -210,16 +296,33 @@ async function openDialog(userId) {
         sex: userData.sex,
         status: userData.status,
         remark: userData.remark,
-        postIds: response.postIds || [],
-        roleIds: response.roleIds || [],
+        postIds: [...(response.postIds || [])],
+        roleIds: [...(response.roleIds || [])],
       });
     } else {
       open();
     }
-  } finally {
-    setLoading(false);
+    setDisabled(false);
+  });
+}
+
+function closeDialog() {
+  cancelRead();
+  return close();
+}
+
+function handleRetry() {
+  return openDialog(requestedId.value).catch(() => {
+    // 当前读取已负责反馈；重试点击只承接拒绝。
+  });
+}
+function retryResource() {
+  if (editorQuery.isEnabled.value) {
+    void editorQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {
+      // The observer retains the read failure without replacing the draft.
+    });
   }
 }
 
-defineExpose({ open: openDialog, close });
+defineExpose({ open: openDialog, close: closeDialog });
 </script>

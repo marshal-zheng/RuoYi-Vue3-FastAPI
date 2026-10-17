@@ -6,7 +6,7 @@ import {
   type MockDemoDb,
   type MockMetaRecord,
 } from './db';
-import { fingerprintDataset } from './seed';
+import { fingerprintDataset } from './fingerprint';
 
 interface ResetMockDemoDbOptions {
   resetAt?: string;

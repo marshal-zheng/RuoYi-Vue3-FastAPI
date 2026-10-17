@@ -515,14 +515,19 @@ export function useEventTrigger(sessionId: Ref<string | null>) {
    * 检查并触发匹配的事件
    * @param {Object} state - 当前仿真状态
    */
+  const automaticTriggers = new Set<string>();
   function checkAndTriggerEvents(state: SimulationState | null | undefined) {
     const pendingEvents = eventList.value.filter((e) => e.status === 'pending');
 
     for (const event of pendingEvents) {
-      if (matchCondition(event.condition, state)) {
-        triggerEvent(event.eventId).catch((error: unknown) => {
-          lastError.value = error instanceof Error ? error.message : '触发事件失败';
-        });
+      const key = `${sessionId.value}:${event.eventId}`;
+      if (matchCondition(event.condition, state) && !automaticTriggers.has(key)) {
+        automaticTriggers.add(key);
+        triggerEvent(event.eventId)
+          .catch((error: unknown) => {
+            lastError.value = error instanceof Error ? error.message : '触发事件失败';
+          })
+          .finally(() => automaticTriggers.delete(key));
       }
     }
   }

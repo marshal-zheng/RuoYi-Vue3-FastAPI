@@ -7,6 +7,7 @@
     fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+      <DictStatus :types="['sys_normal_disable']" />
       <ZxListToolbar aria-label="列表操作与筛选">
         <template #actions>
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:menu:add']"
@@ -22,20 +23,14 @@
             style="width: 200px"
             @keyup.enter="() => onSearch({ handleRefresh, updateState })"
           />
-          <el-select
+          <DictSelect
+            dict-type="sys_normal_disable"
             v-model="query.status"
             placeholder="菜单状态"
             clearable
             style="width: 200px"
             @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-          >
-            <el-option
-              v-for="dict in sys_normal_disable"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
+          />
         </template>
         <template #search>
           <ZxSearch
@@ -124,15 +119,11 @@
     </template>
   </ZxGridList>
 
-  <MenuDrawer
-    ref="menuDrawerRef"
-    :sys-show-hide="sys_show_hide"
-    :sys-normal-disable="sys_normal_disable"
-    @success="gridListRef?.refresh()"
-  />
+  <MenuDrawer ref="menuDrawerRef" @success="gridListRef?.refresh()" />
 </template>
 
 <script setup lang="ts" name="MenuList">
+import { useOperation } from '@/utils/operation';
 import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
 import type { MenuRecord } from '@/api/system/menu';
 import type { GetSystemMenuListSystemMenuListGetData } from '@/api/_generated/types.gen';
@@ -145,11 +136,11 @@ type ListActions = {
   updateState: ZxGridListInstance['updateState'];
 };
 import { ref, nextTick, getCurrentInstance } from 'vue';
-import { listMenu, getMenu, delMenu } from '@/api/system/menu';
+import { listMenu, delMenu } from '@/api/system/menu';
 import MenuDrawer from './MenuDrawer.vue';
 
 const proxy = getCurrentInstance()!.proxy!;
-const { sys_normal_disable, sys_show_hide } = proxy.useDict('sys_normal_disable', 'sys_show_hide');
+const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 const { parseTime } = proxy;
 
 const isExpandAll = ref(false);
@@ -191,7 +182,9 @@ function onSearch({
 
 function handleAdd(row?: MenuRecord) {
   const data = row?.menuId ? { parentId: row.menuId } : {};
-  menuDrawerRef.value?.open(data);
+  return menuDrawerRef.value?.open(data).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 function toggleExpandAll() {
@@ -202,36 +195,21 @@ function toggleExpandAll() {
   });
 }
 
-async function handleUpdate(row: MenuRecord) {
-  const response = await getMenu(row.menuId).catch(() => null);
-  if (!response) return;
-  menuDrawerRef.value?.open({
-    menuId: response.menuId ?? undefined,
-    parentId: response.parentId ?? undefined,
-    menuName: response.menuName ?? undefined,
-    menuType: response.menuType ?? undefined,
-    icon: response.icon ?? undefined,
-    orderNum: response.orderNum ?? undefined,
-    isFrame: response.isFrame ?? undefined,
-    isCache: response.isCache ?? undefined,
-    visible: response.visible ?? undefined,
-    status: response.status ?? undefined,
-    path: response.path ?? undefined,
-    component: response.component ?? undefined,
-    perms: response.perms ?? undefined,
-    query: response.query ?? undefined,
+function handleUpdate(row: MenuRecord) {
+  return menuDrawerRef.value?.open({ menuId: row.menuId }).catch(() => {
+    /* 当前读取已负责反馈。 */
   });
 }
 
-function handleDelete(row: MenuRecord) {
-  proxy.$modal
+const { run: handleDelete } = useOperation(async (row: MenuRecord) => {
+  await proxy.$modal
     .confirm('是否确认删除名称为"' + row.menuName + '"的数据项?')
     .then(() => delMenu(row.menuId))
     .then(() => {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 
 function getMoreActionList() {
   const actions = [];

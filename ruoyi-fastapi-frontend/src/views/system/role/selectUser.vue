@@ -9,6 +9,7 @@
     title="选择用户"
     v-model="visible"
   >
+    <DictStatus :types="['sys_normal_disable']" />
     <el-form :model="queryParams" ref="queryRef" :inline="true">
       <el-form-item label="用户名称" prop="userName">
         <zx-input
@@ -67,7 +68,9 @@
     </el-row>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleSelectUser">确 定</el-button>
+        <el-button type="primary" @click="handleSelectUser" :loading="handleSelectUserPending"
+          >确 定</el-button
+        >
         <el-button @click="visible = false">取 消</el-button>
       </div>
     </template>
@@ -75,8 +78,12 @@
 </template>
 
 <script setup name="SelectUser">
+import { useOperation } from '@/utils/operation';
 import { ElMessage } from 'element-plus';
-import { authUserSelectAll, unallocatedUserList } from '@/api/system/role';
+import { unallocatedUserList } from '@/api/system/role';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
+import { watch } from 'vue';
 
 const props = defineProps({
   roleId: {
@@ -91,6 +98,14 @@ const userList = ref([]);
 const visible = ref(false);
 const total = ref(0);
 const userIds = ref([]);
+let openingScope;
+watch(
+  queryScope,
+  () => {
+    visible.value = false;
+  },
+  { flush: 'sync' }
+);
 
 const queryParams = reactive({
   page: 1,
@@ -102,6 +117,7 @@ const queryParams = reactive({
 
 // 显示弹框
 function show() {
+  openingScope = requireQueryScope();
   queryParams.roleId = props.roleId;
   getList();
   visible.value = true;
@@ -116,7 +132,9 @@ function handleSelectionChange(selection) {
 }
 // 查询表数据
 function getList() {
-  unallocatedUserList(queryParams).then((res) => {
+  const scope = openingScope;
+  unallocatedUserList({ ...queryParams }).then((res) => {
+    if (!visible.value || scope !== queryScope.value || scope !== openingScope) return;
     userList.value = res.items;
     total.value = res.total;
   });
@@ -133,18 +151,21 @@ function resetQuery() {
 }
 const emit = defineEmits(['ok']);
 /** 选择授权用户操作 */
-function handleSelectUser() {
-  const roleId = queryParams.roleId;
-  const uIds = userIds.value.join(',');
-  if (uIds == '') {
+const { run: handleSelectUser, pending: handleSelectUserPending } = useOperation(async () => {
+  if (!visible.value || openingScope !== queryScope.value) return;
+  const roleId = Number(queryParams.roleId);
+  const uIds = [...userIds.value];
+  if (uIds.length === 0) {
     ElMessage.error('请选择要分配的用户');
     return;
   }
-  authUserSelectAll({ roleId: roleId, userIds: uIds }).then(() => {
+  const command = captureUserCommand({ roleId, userIds: uIds }, openingScope);
+  await userCommands.assignRoleUsers(command).then(() => {
+    if (command.scope !== queryScope.value) return;
     visible.value = false;
     emit('ok');
   });
-}
+});
 
 defineExpose({
   show,

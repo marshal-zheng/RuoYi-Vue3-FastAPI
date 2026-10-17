@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { nextTick } from 'vue';
 import { ElTree } from 'element-plus';
 import RoleFormDrawer from '@/views/system/role/components/RoleFormDrawer.vue';
@@ -22,17 +23,24 @@ const slotStub = { inheritAttrs: false, template: '<div><slot /></div>' };
 const menuItems: MenuTreeNode[] = [
   { id: 1, label: '系统管理', children: [{ id: 2, label: '用户管理' }] },
 ];
+const queryClients: QueryClient[] = [];
 
 function mountDrawer() {
+  const queryClient = new QueryClient();
+  queryClients.push(queryClient);
   return mount(RoleFormDrawer, {
     global: {
+      plugins: [[VueQueryPlugin, { queryClient }]],
       components: { ElTree },
       stubs: {
+        DictStatus: true,
         ZxDrawer: {
           ...slotStub,
           name: 'ZxDrawer',
           props: ['loading', 'okDisabled'],
         },
+        ElAlert: slotStub,
+        ElButton: slotStub,
         ElForm: slotStub,
         ElFormItem: slotStub,
         ElTree: false,
@@ -64,6 +72,7 @@ function createDrawer() {
 
 afterEach(() => {
   wrappers.splice(0).forEach((wrapper) => wrapper.unmount());
+  queryClients.splice(0).forEach((client) => client.clear());
 });
 
 describe('RoleFormDrawer menu loading', () => {
@@ -116,7 +125,7 @@ describe('RoleFormDrawer menu loading', () => {
     vi.mocked(treeselect).mockRejectedValueOnce(new Error('菜单请求失败'));
     const { open, tree, drawer } = createDrawer();
 
-    await expect(open()).resolves.toBeUndefined();
+    await expect(open()).rejects.toThrow('菜单请求失败');
     await nextTick();
     expect(drawer().props('loading')).toBe(false);
     expect(drawer().props('okDisabled')).toBe(true);

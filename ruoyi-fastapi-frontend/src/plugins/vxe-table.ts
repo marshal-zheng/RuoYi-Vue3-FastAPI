@@ -4,7 +4,7 @@ import type {
   DictEditorValue,
   DictEditorRow,
 } from '@/components/business/VxeDictAutocomplete/types';
-import { App, h } from 'vue';
+import { getCurrentInstance, h, type App } from 'vue';
 import VXETable from 'vxe-table';
 import 'vxe-table/lib/style.css';
 import '@zxio/zxui/style/vxe-table.css';
@@ -15,13 +15,22 @@ import VxeDictAutocomplete from '@/components/business/VxeDictAutocomplete/index
 import { installVxeThemeLayout } from './vxe-layout';
 
 type DictRendererRow = DictEditorRow;
+const installed = new WeakSet<App>();
+let runtimeConfigured = false;
 
-export function setupVXETable(app: App) {
-  installVxeThemeLayout(app);
+/** Register synchronously before a table consumer's first render. */
+export function useVXETable() {
+  const instance = getCurrentInstance();
+  if (!instance) throw new Error('useVXETable must be called during component setup');
+  setupVXETable(instance.appContext.app);
+}
+
+/** VXE owns one process-wide renderer and locale registry. */
+function configureVXETable() {
+  if (runtimeConfigured) return;
   VXETable.use(VXETablePluginElement);
-  VXETable.setConfig({
-    i18n: (key) => zhCN[key],
-  });
+  VXETable.setI18n('zh-CN', zhCN);
+  VXETable.setLanguage('zh-CN');
 
   VXETable.renderer.add('DictAutocomplete', {
     // Ensure the input is focused as soon as the cell enters edit mode
@@ -72,5 +81,13 @@ export function setupVXETable(app: App) {
     },
   });
 
+  runtimeConfigured = true;
+}
+
+export function setupVXETable(app: App) {
+  if (installed.has(app)) return;
+  configureVXETable();
+  installVxeThemeLayout(app);
   app.use(VXETable);
+  installed.add(app);
 }

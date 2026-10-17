@@ -120,6 +120,7 @@
                   type="primary"
                   :data-testid="`version-lock-${row.versionId}`"
                   @click="handleLockVersion(row, handleRefresh)"
+                  :loading="handleLockVersionPending"
                   >固化</ZxButton
                 >
                 <ZxMoreAction
@@ -185,7 +186,12 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="editVersionDialog = false">取消</el-button>
-          <el-button type="primary" @click="handleSaveEditVersion">保存</el-button>
+          <el-button
+            type="primary"
+            @click="handleSaveEditVersion"
+            :loading="handleSaveEditVersionPending"
+            >保存</el-button
+          >
         </div>
       </template>
     </ZxDialog>
@@ -205,6 +211,7 @@
 </template>
 
 <script setup name="VersionList">
+import { useOperation } from '@/utils/operation';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
 import { ref, watch, getCurrentInstance } from 'vue';
@@ -398,7 +405,7 @@ const handleMoreActionSelect = async (item, row, handleRefresh) => {
 };
 
 /** 删除版本 */
-function handleDeleteVersion(row, handleRefresh) {
+const { run: handleDeleteVersion } = useOperation(async (row, handleRefresh) => {
   const versionIds = row?.versionId || ids.value.join(',');
   let confirmMessage = '';
 
@@ -408,7 +415,7 @@ function handleDeleteVersion(row, handleRefresh) {
     confirmMessage = `是否确认删除选中的 ${ids.value.length} 个版本？`;
   }
 
-  proxy.$modal
+  await proxy.$modal
     .confirm(confirmMessage)
     .then(async () => {
       try {
@@ -423,7 +430,7 @@ function handleDeleteVersion(row, handleRefresh) {
       }
     })
     .catch(() => {});
-}
+});
 
 /** 新增版本 */
 
@@ -456,60 +463,64 @@ function handleEditVersionTopo(row) {
 }
 
 /** 保存编辑版本 */
-async function handleSaveEditVersion() {
-  // 验证表单
-  if (!editVersionForm.value.versionNumber || !editVersionForm.value.versionName) {
-    ElMessage.error('版本号和版本名称不能为空');
-    return;
+const { run: handleSaveEditVersion, pending: handleSaveEditVersionPending } = useOperation(
+  async () => {
+    // 验证表单
+    if (!editVersionForm.value.versionNumber || !editVersionForm.value.versionName) {
+      ElMessage.error('版本号和版本名称不能为空');
+      return;
+    }
+
+    const data = {
+      versionId: editVersionForm.value.versionId,
+      projectId: props.projectId,
+      versionNumber: editVersionForm.value.versionNumber,
+      versionName: editVersionForm.value.versionName,
+      description: editVersionForm.value.description,
+    };
+
+    if (editVersionForm.value.versionId) {
+      await updateProjectVersion(data);
+    } else {
+      await addProjectVersion(data);
+    }
+
+    editVersionDialog.value = false;
+
+    // 刷新列表
+    if (versionGridListRef.value) {
+      versionGridListRef.value.refresh();
+    }
   }
-
-  const data = {
-    versionId: editVersionForm.value.versionId,
-    projectId: props.projectId,
-    versionNumber: editVersionForm.value.versionNumber,
-    versionName: editVersionForm.value.versionName,
-    description: editVersionForm.value.description,
-  };
-
-  if (editVersionForm.value.versionId) {
-    await updateProjectVersion(data);
-  } else {
-    await addProjectVersion(data);
-  }
-
-  editVersionDialog.value = false;
-
-  // 刷新列表
-  if (versionGridListRef.value) {
-    versionGridListRef.value.refresh();
-  }
-}
+);
 
 /** 固化版本 */
-function handleLockVersion(row, handleRefresh) {
-  proxy.$modal
-    .confirm(`确定要固化版本"${row.versionName}"吗？固化后将无法编辑和删除。`)
-    .then(async () => {
-      try {
-        await lockProjectVersion({
-          versionId: row.versionId,
-          isLocked: '1',
-        });
-        if (handleRefresh) {
-          handleRefresh();
-        } else if (versionGridListRef.value) {
-          versionGridListRef.value.refresh();
+const { run: handleLockVersion, pending: handleLockVersionPending } = useOperation(
+  async (row, handleRefresh) => {
+    await proxy.$modal
+      .confirm(`确定要固化版本"${row.versionName}"吗？固化后将无法编辑和删除。`)
+      .then(async () => {
+        try {
+          await lockProjectVersion({
+            versionId: row.versionId,
+            isLocked: '1',
+          });
+          if (handleRefresh) {
+            handleRefresh();
+          } else if (versionGridListRef.value) {
+            versionGridListRef.value.refresh();
+          }
+        } catch (error) {
+          console.error('固化版本失败:', error);
         }
-      } catch (error) {
-        console.error('固化版本失败:', error);
-      }
-    })
-    .catch(() => {});
-}
+      })
+      .catch(() => {});
+  }
+);
 
 /** 解除固化版本 */
-function handleUnlockVersion(row, handleRefresh) {
-  proxy.$modal
+const { run: handleUnlockVersion } = useOperation(async (row, handleRefresh) => {
+  await proxy.$modal
     .confirm(`确定要解除版本"${row.versionName}"的固化状态吗？`)
     .then(async () => {
       try {
@@ -527,7 +538,7 @@ function handleUnlockVersion(row, handleRefresh) {
       }
     })
     .catch(() => {});
-}
+});
 
 /** 克隆版本 */
 function handleCloneVersion(row) {

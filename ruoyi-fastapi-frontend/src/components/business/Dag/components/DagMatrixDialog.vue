@@ -51,7 +51,7 @@
 import { ref, computed, watch } from 'vue';
 import { ElMessage } from 'element-plus';
 import { FullScreen, Minus, Download } from '@element-plus/icons-vue';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import DagMatrixView from './DagMatrixView.vue';
 
 defineOptions({

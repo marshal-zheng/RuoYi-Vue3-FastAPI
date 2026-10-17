@@ -1,6 +1,7 @@
+import { requestDetail } from '@/api/detail';
 export type MenuRecord = MenuItem & MenuModel;
 import type { GetSystemMenuListSystemMenuListGetData, MenuModel } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { HttpCollection } from '@/types/http-contract';
 
 export interface MenuItem {
@@ -26,25 +27,38 @@ export function listMenu(query?: NonNullable<GetSystemMenuListSystemMenuListGetD
 }
 
 // 查询菜单详细
-export function getMenu(menuId: number | string) {
-  return request<MenuRecord>({
-    url: '/system/menu/' + menuId,
-    method: 'get',
-    feedback: { mode: 'auto' },
-  });
+export function getMenu(
+  menuId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<MenuRecord>(
+    {
+      ...config,
+      url: '/system/menu/' + menuId,
+      method: 'get',
+      feedback: { mode: 'auto' },
+    },
+    'menuId',
+    menuId
+  );
 }
 
 // 查询菜单下拉树结构
-export function treeselect() {
+export function treeselect(config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>) {
   return request<HttpCollection<MenuTreeNode>>({
+    ...config,
     url: '/system/menu/treeselect',
     method: 'get',
   });
 }
 
 // 根据角色ID查询菜单下拉树结构
-export function roleMenuTreeselect(roleId: number | string) {
+export function roleMenuTreeselect(
+  roleId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
   return request<{ menus: MenuTreeNode[]; checkedKeys: number[] }>({
+    ...config,
     url: '/system/menu/roleMenuTreeselect/' + roleId,
     method: 'get',
   });

@@ -18,7 +18,6 @@ export function login(username: string, password: string, code: string, uuid: st
     url: '/login',
     headers: {
       isToken: false,
-      repeatSubmit: false,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     method: 'post',

@@ -1,5 +1,6 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { shallowMount } from '@vue/test-utils';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { ref, type App } from 'vue';
 import MenuList from '@/views/system/menu/components/MenuList.vue';
 import MenuDrawer from '@/views/system/menu/components/MenuDrawer.vue';
@@ -14,7 +15,7 @@ vi.mock('@/api/system/menu', () => ({
   addMenu: vi.fn(),
   updateMenu: vi.fn(),
 }));
-vi.mock('@/components/ui', () => ({ IconSelect: { template: '<div />' } }));
+vi.mock('@/components/ui/IconSelect/index.vue', () => ({ default: { template: '<div />' } }));
 
 const slotStub = { inheritAttrs: false, template: '<div><slot /></div>' };
 const fieldStubs = Object.fromEntries(
@@ -27,6 +28,8 @@ const fieldStubs = Object.fromEntries(
     'ElTableColumn',
     'ZxIcon',
     'DictTag',
+    'DictStatus',
+    'DictSelect',
     'ZxMoreAction',
     'ElTable',
     'ElRadio',
@@ -38,6 +41,13 @@ const fieldStubs = Object.fromEntries(
     'ElTooltip',
   ].map((name) => [name, slotStub])
 );
+const queryClients: QueryClient[] = [];
+function queryPlugin(): [typeof VueQueryPlugin, { queryClient: QueryClient }] {
+  const queryClient = new QueryClient();
+  queryClients.push(queryClient);
+  return [VueQueryPlugin, { queryClient }];
+}
+afterEach(() => queryClients.splice(0).forEach((client) => client.clear()));
 
 describe('menu collection consumers', () => {
   it('builds the list tree from collection items', async () => {
@@ -50,6 +60,7 @@ describe('menu collection consumers', () => {
     const wrapper = shallowMount(MenuList, {
       global: {
         plugins: [
+          queryPlugin(),
           {
             install(app: App) {
               app.config.globalProperties.useDict = () => ({
@@ -85,8 +96,8 @@ describe('menu collection consumers', () => {
       items: [{ id: 1, label: '系统管理', children: [] }],
     });
     const wrapper = shallowMount(MenuDrawer, {
-      props: { sysShowHide: [], sysNormalDisable: [] },
       global: {
+        plugins: [queryPlugin()],
         stubs: {
           ...fieldStubs,
           ZxDrawer: slotStub,

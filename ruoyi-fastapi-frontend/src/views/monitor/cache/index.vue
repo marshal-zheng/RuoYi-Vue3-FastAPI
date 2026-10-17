@@ -124,7 +124,7 @@ import { getCache } from '@/api/monitor/cache';
 import { computed, getCurrentInstance, ref } from 'vue';
 import { ZxChart } from '@zxio/chart';
 import '@zxio/chart/style';
-import { useZxChartThemeProjection } from '@zxio/zxui';
+import { useZxChartThemeProjection } from '@zxio/zxui/theme-host/precompiled';
 import themeDeployment from 'virtual:zxui-theme-deployment';
 
 const cache = ref([]);

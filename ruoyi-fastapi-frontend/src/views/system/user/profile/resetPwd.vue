@@ -25,16 +25,19 @@
       />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">保存</el-button>
+      <el-button type="primary" @click="submit" :loading="submitPending">保存</el-button>
       <el-button type="danger" @click="close">关闭</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup>
-import { updateUserPwd } from '@/api/system/user';
+import { useOperation } from '@/utils/operation';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
 
 const { proxy } = getCurrentInstance();
+const profileScope = requireQueryScope();
 
 const user = reactive({
   oldPassword: undefined,
@@ -63,13 +66,19 @@ const rules = ref({
 });
 
 /** 提交按钮 */
-function submit() {
-  proxy.$refs.pwdRef.validate((valid) => {
-    if (valid) {
-      updateUserPwd(user.oldPassword, user.newPassword).then(() => {});
-    }
-  });
-}
+const { run: submit, pending: submitPending } = useOperation(async () => {
+  const scope = profileScope;
+  if (scope !== queryScope.value) return;
+  const command = captureUserCommand(
+    { oldPassword: user.oldPassword, newPassword: user.newPassword },
+    scope
+  );
+  const valid = await proxy.$refs.pwdRef.validate().catch(() => false);
+
+  if (valid && scope === queryScope.value) {
+    await userCommands.updatePassword(command);
+  }
+});
 /** 关闭按钮 */
 function close() {
   proxy.$tab.closePage();

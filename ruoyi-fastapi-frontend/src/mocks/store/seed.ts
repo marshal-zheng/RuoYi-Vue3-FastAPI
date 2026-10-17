@@ -2,30 +2,10 @@ import type { MockDataset } from '../data';
 import { MOCK_REFERENCE_TIME, mockDataset } from '../data';
 import { getMockDemoDb, MOCK_DEMO_SCHEMA_VERSION, type MockDemoDb } from './db';
 
-export function stableStringify(value: unknown): string {
-  if (Array.isArray(value)) {
-    return `[${value.map((item) => stableStringify(item)).join(',')}]`;
-  }
-  if (value && typeof value === 'object') {
-    const entries = Object.entries(value as Record<string, unknown>).sort(([left], [right]) =>
-      left.localeCompare(right)
-    );
-    return `{${entries
-      .map(([key, item]) => `${JSON.stringify(key)}:${stableStringify(item)}`)
-      .join(',')}}`;
-  }
-  return JSON.stringify(value);
-}
+import { fingerprintDataset } from './fingerprint';
+import { resetMockDemoDb } from './reset';
 
-export function fingerprintDataset(dataset: MockDataset): string {
-  const text = stableStringify(dataset);
-  let hash = 0x811c9dc5;
-  for (let index = 0; index < text.length; index += 1) {
-    hash ^= text.charCodeAt(index);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return `fnv1a-${(hash >>> 0).toString(16).padStart(8, '0')}`;
-}
+export { fingerprintDataset, stableStringify } from './fingerprint';
 
 async function recordPendingDatasetUpgrade(
   db: MockDemoDb,
@@ -70,13 +50,11 @@ export async function ensureMockDemoDbSeeded(
   ]);
 
   if (!schemaVersion || !datasetVersion || !datasetFingerprint) {
-    const { resetMockDemoDb } = await import('./reset');
     await resetMockDemoDb(db, dataset);
     return;
   }
 
   if (schemaVersion.value !== MOCK_DEMO_SCHEMA_VERSION) {
-    const { resetMockDemoDb } = await import('./reset');
     await resetMockDemoDb(db, dataset);
     return;
   }

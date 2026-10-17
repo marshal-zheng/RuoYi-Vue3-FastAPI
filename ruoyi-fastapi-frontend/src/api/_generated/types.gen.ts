@@ -5,274 +5,6 @@ export type ClientOptions = {
 };
 
 /**
- * AddRoleModel
- *
- * 新增角色模型
- */
-export type AddRoleModel = {
-  /**
-   * Admin
-   *
-   * 是否为admin
-   */
-  admin?: boolean | null;
-  /**
-   * Createby
-   *
-   * 创建者
-   */
-  createBy?: string | null;
-  /**
-   * Createtime
-   *
-   * 创建时间
-   */
-  createTime?: string | null;
-  /**
-   * Datascope
-   *
-   * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）
-   */
-  dataScope?: string | null;
-  /**
-   * Delflag
-   *
-   * 删除标志（0代表存在 2代表删除）
-   */
-  delFlag?: '0' | '2' | null;
-  /**
-   * Deptcheckstrictly
-   *
-   * 部门树选择项是否关联显示
-   */
-  deptCheckStrictly?: number | boolean | null;
-  /**
-   * Deptids
-   *
-   * 部门ID信息
-   */
-  deptIds?: Array<unknown>;
-  /**
-   * Menucheckstrictly
-   *
-   * 菜单树选择项是否关联显示
-   */
-  menuCheckStrictly?: number | boolean | null;
-  /**
-   * Menuids
-   *
-   * 菜单ID信息
-   */
-  menuIds?: Array<unknown>;
-  /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
-   * Roleid
-   *
-   * 角色ID
-   */
-  roleId?: number | null;
-  /**
-   * Rolekey
-   *
-   * 角色权限字符串
-   */
-  roleKey?: string | null;
-  /**
-   * Rolename
-   *
-   * 角色名称
-   */
-  roleName?: string | null;
-  /**
-   * Rolesort
-   *
-   * 显示顺序
-   */
-  roleSort?: number | null;
-  /**
-   * Status
-   *
-   * 角色状态（0正常 1停用）
-   */
-  status?: '0' | '1' | null;
-  /**
-   * Type
-   *
-   * 操作类型
-   */
-  type?: string | null;
-  /**
-   * Updateby
-   *
-   * 更新者
-   */
-  updateBy?: string | null;
-  /**
-   * Updatetime
-   *
-   * 更新时间
-   */
-  updateTime?: string | null;
-};
-
-/**
- * AddUserModel
- *
- * 新增用户模型
- */
-export type AddUserModel = {
-  /**
-   * Admin
-   *
-   * 是否为admin
-   */
-  admin?: boolean | null;
-  /**
-   * Avatar
-   *
-   * 头像地址
-   */
-  avatar?: string | null;
-  /**
-   * Createby
-   *
-   * 创建者
-   */
-  createBy?: string | null;
-  /**
-   * Createtime
-   *
-   * 创建时间
-   */
-  createTime?: string | null;
-  /**
-   * Delflag
-   *
-   * 删除标志（0代表存在 2代表删除）
-   */
-  delFlag?: '0' | '2' | null;
-  /**
-   * Deptid
-   *
-   * 部门ID
-   */
-  deptId?: number | null;
-  /**
-   * Email
-   *
-   * 用户邮箱
-   */
-  email?: string | null;
-  /**
-   * Idcard
-   *
-   * 身份证号
-   */
-  idCard?: string | null;
-  /**
-   * Logindate
-   *
-   * 最后登录时间
-   */
-  loginDate?: string | null;
-  /**
-   * Loginip
-   *
-   * 最后登录IP
-   */
-  loginIp?: string | null;
-  /**
-   * Nickname
-   *
-   * 用户昵称
-   */
-  nickName?: string | null;
-  /**
-   * Password
-   *
-   * 密码
-   */
-  password?: string | null;
-  /**
-   * Phonenumber
-   *
-   * 手机号码
-   */
-  phonenumber?: string | null;
-  /**
-   * Postids
-   *
-   * 岗位ID信息
-   */
-  postIds?: Array<unknown> | null;
-  /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
-   * Roleids
-   *
-   * 角色ID信息
-   */
-  roleIds?: Array<unknown> | null;
-  /**
-   * Sex
-   *
-   * 用户性别（0男 1女 2未知）
-   */
-  sex?: '0' | '1' | '2' | null;
-  /**
-   * Status
-   *
-   * 帐号状态（0正常 1停用）
-   */
-  status?: '0' | '1' | null;
-  /**
-   * Type
-   *
-   * 操作类型
-   */
-  type?: string | null;
-  /**
-   * Updateby
-   *
-   * 更新者
-   */
-  updateBy?: string | null;
-  /**
-   * Updatetime
-   *
-   * 更新时间
-   */
-  updateTime?: string | null;
-  /**
-   * Userid
-   *
-   * 用户ID
-   */
-  userId?: number | null;
-  /**
-   * Username
-   *
-   * 用户账号
-   */
-  userName?: string | null;
-  /**
-   * Usertype
-   *
-   * 用户类型（00系统用户）
-   */
-  userType?: string | null;
-};
-
-/**
  * BatchDeviceIdsModel
  *
  * 批量设备ID模型
@@ -917,38 +649,6 @@ export type CreateSimulationSessionModel = {
 };
 
 /**
- * CrudUserRoleModel
- *
- * 新增、删除用户关联角色及角色关联用户模型
- */
-export type CrudUserRoleModel = {
-  /**
-   * Roleid
-   *
-   * 角色ID
-   */
-  roleId?: number | null;
-  /**
-   * Roleids
-   *
-   * 角色ID信息
-   */
-  roleIds?: string | null;
-  /**
-   * Userid
-   *
-   * 用户ID
-   */
-  userId?: number | null;
-  /**
-   * Userids
-   *
-   * 用户ID信息
-   */
-  userIds?: string | null;
-};
-
-/**
  * CurrentUserModel
  */
 export type CurrentUserModel = {
@@ -968,6 +668,54 @@ export type CurrentUserModel = {
    * 用户信息
    */
   user: UserInfoModel | null;
+};
+
+/**
+ * DeptCreateModel
+ */
+export type DeptCreateModel = {
+  /**
+   * Deptname
+   *
+   * 部门名称
+   */
+  deptName: string;
+  /**
+   * Email
+   *
+   * 邮箱
+   */
+  email?: string | null;
+  /**
+   * Leader
+   *
+   * 负责人
+   */
+  leader?: string | null;
+  /**
+   * Ordernum
+   *
+   * 显示顺序
+   */
+  orderNum: number;
+  /**
+   * Parentid
+   *
+   * 父部门ID, 0为根部门
+   */
+  parentId: number;
+  /**
+   * Phone
+   *
+   * 联系电话
+   */
+  phone?: string | null;
+  /**
+   * Status
+   *
+   * 部门状态(0正常 1停用)
+   */
+  status?: '0' | '1';
 };
 
 /**
@@ -1164,6 +912,60 @@ export type DeptQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * DeptUpdateModel
+ */
+export type DeptUpdateModel = {
+  /**
+   * Deptid
+   *
+   * 部门ID
+   */
+  deptId: number;
+  /**
+   * Deptname
+   *
+   * 部门名称
+   */
+  deptName?: string;
+  /**
+   * Email
+   *
+   * 邮箱
+   */
+  email?: string | null;
+  /**
+   * Leader
+   *
+   * 负责人
+   */
+  leader?: string | null;
+  /**
+   * Ordernum
+   *
+   * 显示顺序
+   */
+  orderNum?: number;
+  /**
+   * Parentid
+   *
+   * 父部门ID, 0为根部门
+   */
+  parentId?: number;
+  /**
+   * Phone
+   *
+   * 联系电话
+   */
+  phone?: string | null;
+  /**
+   * Status
+   *
+   * 部门状态(0正常 1停用)
+   */
+  status?: '0' | '1';
 };
 
 /**
@@ -1974,116 +1776,6 @@ export type EditGenTableModel = {
    * 树父编码字段
    */
   treeParentCode?: string | null;
-  /**
-   * Updateby
-   *
-   * 更新者
-   */
-  updateBy?: string | null;
-  /**
-   * Updatetime
-   *
-   * 更新时间
-   */
-  updateTime?: string | null;
-};
-
-/**
- * EditJobModel
- *
- * 编辑定时任务模型
- */
-export type EditJobModel = {
-  /**
-   * Concurrent
-   *
-   * 是否并发执行（0允许 1禁止）
-   */
-  concurrent?: '0' | '1' | null;
-  /**
-   * Createby
-   *
-   * 创建者
-   */
-  createBy?: string | null;
-  /**
-   * Createtime
-   *
-   * 创建时间
-   */
-  createTime?: string | null;
-  /**
-   * Cronexpression
-   *
-   * cron执行表达式
-   */
-  cronExpression?: string | null;
-  /**
-   * Invoketarget
-   *
-   * 调用目标字符串
-   */
-  invokeTarget?: string | null;
-  /**
-   * Jobargs
-   *
-   * 位置参数
-   */
-  jobArgs?: string | null;
-  /**
-   * Jobexecutor
-   *
-   * 任务执行器
-   */
-  jobExecutor?: string | null;
-  /**
-   * Jobgroup
-   *
-   * 任务组名
-   */
-  jobGroup?: string | null;
-  /**
-   * Jobid
-   *
-   * 任务ID
-   */
-  jobId?: number | null;
-  /**
-   * Jobkwargs
-   *
-   * 关键字参数
-   */
-  jobKwargs?: string | null;
-  /**
-   * Jobname
-   *
-   * 任务名称
-   */
-  jobName?: string | null;
-  /**
-   * Misfirepolicy
-   *
-   * 计划执行错误策略（1立即执行 2执行一次 3放弃执行）
-   */
-  misfirePolicy?: '1' | '2' | '3' | null;
-  /**
-   * Remark
-   *
-   * 备注信息
-   */
-  remark?: string | null;
-  /**
-   * Status
-   *
-   * 状态（0正常 1暂停）
-   */
-  status?: '0' | '1' | null;
-  /**
-   * Type
-   *
-   * 操作类型
-   */
-  type?: string | null;
   /**
    * Updateby
    *
@@ -3015,6 +2707,78 @@ export type HttpValidationError = {
 };
 
 /**
+ * JobCreateModel
+ */
+export type JobCreateModel = {
+  /**
+   * Concurrent
+   *
+   * 是否并发执行
+   */
+  concurrent?: '0' | '1';
+  /**
+   * Cronexpression
+   *
+   * Cron执行表达式
+   */
+  cronExpression: string;
+  /**
+   * Invoketarget
+   *
+   * 已注册调用目标
+   */
+  invokeTarget: string;
+  /**
+   * Jobargs
+   *
+   * 逗号分隔的位置参数
+   */
+  jobArgs?: string | null;
+  /**
+   * Jobexecutor
+   *
+   * 任务执行器
+   */
+  jobExecutor?: string;
+  /**
+   * Jobgroup
+   *
+   * 任务组名
+   */
+  jobGroup?: string;
+  /**
+   * Jobkwargs
+   *
+   * JSON对象形式的关键字参数
+   */
+  jobKwargs?: string | null;
+  /**
+   * Jobname
+   *
+   * 任务名称
+   */
+  jobName: string;
+  /**
+   * Misfirepolicy
+   *
+   * 计划执行错误策略
+   */
+  misfirePolicy?: '1' | '2' | '3';
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Status
+   *
+   * 状态(0正常 1暂停)
+   */
+  status?: '0' | '1';
+};
+
+/**
  * JobLogPageQueryModel
  *
  * 定时任务日志管理分页查询模型
@@ -3348,6 +3112,114 @@ export type JobPageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * JobRunModel
+ */
+export type JobRunModel = {
+  /**
+   * Jobid
+   *
+   * 任务ID
+   */
+  jobId: number;
+};
+
+/**
+ * JobStatusUpdateModel
+ */
+export type JobStatusUpdateModel = {
+  /**
+   * Jobid
+   *
+   * 任务ID
+   */
+  jobId: number;
+  /**
+   * Status
+   *
+   * 状态(0正常 1暂停)
+   */
+  status: '0' | '1';
+};
+
+/**
+ * JobUpdateModel
+ */
+export type JobUpdateModel = {
+  /**
+   * Concurrent
+   *
+   * 是否并发执行
+   */
+  concurrent?: '0' | '1';
+  /**
+   * Cronexpression
+   *
+   * Cron执行表达式
+   */
+  cronExpression?: string;
+  /**
+   * Invoketarget
+   *
+   * 已注册调用目标
+   */
+  invokeTarget?: string;
+  /**
+   * Jobargs
+   *
+   * 逗号分隔的位置参数
+   */
+  jobArgs?: string | null;
+  /**
+   * Jobexecutor
+   *
+   * 任务执行器
+   */
+  jobExecutor?: string;
+  /**
+   * Jobgroup
+   *
+   * 任务组名
+   */
+  jobGroup?: string;
+  /**
+   * Jobid
+   *
+   * 任务ID
+   */
+  jobId: number;
+  /**
+   * Jobkwargs
+   *
+   * JSON对象形式的关键字参数
+   */
+  jobKwargs?: string | null;
+  /**
+   * Jobname
+   *
+   * 任务名称
+   */
+  jobName?: string;
+  /**
+   * Misfirepolicy
+   *
+   * 计划执行错误策略
+   */
+  misfirePolicy?: '1' | '2' | '3';
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Status
+   *
+   * 状态(0正常 1暂停)
+   */
+  status?: '0' | '1';
 };
 
 /**
@@ -4510,13 +4382,91 @@ export type ResetPasswordModel = {
    *
    * 新密码
    */
-  newPassword?: string | null;
+  newPassword: string;
   /**
    * Oldpassword
    *
    * 旧密码
    */
-  oldPassword?: string | null;
+  oldPassword: string;
+};
+
+/**
+ * RoleCreateModel
+ */
+export type RoleCreateModel = {
+  /**
+   * Menucheckstrictly
+   *
+   * 菜单树选择项是否关联显示
+   */
+  menuCheckStrictly?: boolean | null;
+  /**
+   * Menuids
+   *
+   * 菜单ID; 未提供保留, 空数组或null清空
+   */
+  menuIds?: Array<number> | null;
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Rolekey
+   *
+   * 角色权限字符串
+   */
+  roleKey: string;
+  /**
+   * Rolename
+   *
+   * 角色名称
+   */
+  roleName: string;
+  /**
+   * Rolesort
+   *
+   * 显示顺序
+   */
+  roleSort: number;
+  /**
+   * Status
+   *
+   * 角色状态
+   */
+  status?: '0' | '1';
+};
+
+/**
+ * RoleDataScopeUpdateModel
+ */
+export type RoleDataScopeUpdateModel = {
+  /**
+   * Datascope
+   *
+   * 数据范围
+   */
+  dataScope: '1' | '2' | '3' | '4' | '5';
+  /**
+   * Deptcheckstrictly
+   *
+   * 部门树选择项是否关联显示
+   */
+  deptCheckStrictly?: boolean | null;
+  /**
+   * Deptids
+   *
+   * 部门ID; 未提供保留, 空数组或null清空
+   */
+  deptIds?: Array<number> | null;
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
 };
 
 /**
@@ -4737,6 +4687,132 @@ export type RolePageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * RoleStatusUpdateModel
+ */
+export type RoleStatusUpdateModel = {
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
+  /**
+   * Status
+   *
+   * 角色状态
+   */
+  status: '0' | '1';
+};
+
+/**
+ * RoleUpdateModel
+ */
+export type RoleUpdateModel = {
+  /**
+   * Menucheckstrictly
+   *
+   * 菜单树选择项是否关联显示
+   */
+  menuCheckStrictly?: boolean | null;
+  /**
+   * Menuids
+   *
+   * 菜单ID; 未提供保留, 空数组或null清空
+   */
+  menuIds?: Array<number> | null;
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
+  /**
+   * Rolekey
+   *
+   * 角色权限字符串
+   */
+  roleKey?: string;
+  /**
+   * Rolename
+   *
+   * 角色名称
+   */
+  roleName?: string;
+  /**
+   * Rolesort
+   *
+   * 显示顺序
+   */
+  roleSort?: number;
+  /**
+   * Status
+   *
+   * 角色状态
+   */
+  status?: '0' | '1';
+};
+
+/**
+ * RoleUserRevokeModel
+ */
+export type RoleUserRevokeModel = {
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
+  /**
+   * Userid
+   *
+   * 取消授权的用户ID
+   */
+  userId: number;
+};
+
+/**
+ * RoleUsersGrantModel
+ */
+export type RoleUsersGrantModel = {
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
+  /**
+   * Userids
+   *
+   * 增量授权用户ID集合, 不影响其他角色关联
+   */
+  userIds: Array<number>;
+};
+
+/**
+ * RoleUsersRevokeModel
+ */
+export type RoleUsersRevokeModel = {
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId: number;
+  /**
+   * Userids
+   *
+   * 取消授权用户ID集合, 只删除指定关联
+   */
+  userIds: Array<number>;
 };
 
 /**
@@ -4999,6 +5075,84 @@ export type Token = {
    * token类型
    */
   tokenType: string;
+};
+
+/**
+ * UserCreateModel
+ */
+export type UserCreateModel = {
+  /**
+   * Deptid
+   *
+   * 部门ID
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * 邮箱
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * 身份证号
+   */
+  idCard?: string | null;
+  /**
+   * Nickname
+   *
+   * 用户昵称
+   */
+  nickName: string;
+  /**
+   * Password
+   *
+   * 初始密码
+   */
+  password: string;
+  /**
+   * Phonenumber
+   *
+   * 手机号码
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * 岗位ID; 未提供保留, 空数组或null清空
+   */
+  postIds?: Array<number> | null;
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Roleids
+   *
+   * 角色ID; 未提供保留, 空数组或null清空
+   */
+  roleIds?: Array<number> | null;
+  /**
+   * Sex
+   *
+   * 用户性别
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * 帐号状态
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Username
+   *
+   * 用户账号
+   */
+  userName: string;
 };
 
 /**
@@ -5374,6 +5528,38 @@ export type UserProfileModel = {
 };
 
 /**
+ * UserProfileUpdateModel
+ *
+ * The authenticated user can edit these profile fields only.
+ */
+export type UserProfileUpdateModel = {
+  /**
+   * Email
+   *
+   * 邮箱
+   */
+  email?: string | null;
+  /**
+   * Nickname
+   *
+   * 用户昵称
+   */
+  nickName?: string;
+  /**
+   * Phonenumber
+   *
+   * 手机号码
+   */
+  phonenumber?: string | null;
+  /**
+   * Sex
+   *
+   * 用户性别
+   */
+  sex?: '0' | '1' | '2' | null;
+};
+
+/**
  * UserRegister
  */
 export type UserRegister = {
@@ -5425,6 +5611,120 @@ export type UserRoleResponseModel = {
    * 用户信息
    */
   user: UserInfoModel;
+};
+
+/**
+ * UserRolesAssignModel
+ */
+export type UserRolesAssignModel = {
+  /**
+   * Roleids
+   *
+   * 完整角色ID集合, 空数组清空; 缺失或null无效
+   */
+  roleIds: Array<number>;
+  /**
+   * Userid
+   *
+   * 用户ID
+   */
+  userId: number;
+};
+
+/**
+ * UserStatusUpdateModel
+ */
+export type UserStatusUpdateModel = {
+  /**
+   * Status
+   *
+   * 帐号状态
+   */
+  status: '0' | '1';
+  /**
+   * Userid
+   *
+   * 用户ID
+   */
+  userId: number;
+};
+
+/**
+ * UserUpdateModel
+ */
+export type UserUpdateModel = {
+  /**
+   * Deptid
+   *
+   * 部门ID
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * 邮箱
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * 身份证号
+   */
+  idCard?: string | null;
+  /**
+   * Nickname
+   *
+   * 用户昵称
+   */
+  nickName?: string;
+  /**
+   * Phonenumber
+   *
+   * 手机号码
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * 岗位ID; 未提供保留, 空数组或null清空
+   */
+  postIds?: Array<number> | null;
+  /**
+   * Remark
+   *
+   * 备注
+   */
+  remark?: string | null;
+  /**
+   * Roleids
+   *
+   * 角色ID; 未提供保留, 空数组或null清空
+   */
+  roleIds?: Array<number> | null;
+  /**
+   * Sex
+   *
+   * 用户性别
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * 帐号状态
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Userid
+   *
+   * 用户ID
+   */
+  userId: number;
+  /**
+   * Username
+   *
+   * 用户账号
+   */
+  userName?: string;
 };
 
 /**
@@ -6876,7 +7176,7 @@ export type GetMonitorCacheValueMonitorCacheGetValueCacheNameCacheKeyGetResponse
   GetMonitorCacheValueMonitorCacheGetValueCacheNameCacheKeyGetResponses[keyof GetMonitorCacheValueMonitorCacheGetValueCacheNameCacheKeyGetResponses];
 
 export type AddSystemJobMonitorJobPostData = {
-  body: JobModel;
+  body: JobCreateModel;
   path?: never;
   query?: never;
   url: '/monitor/job';
@@ -6900,7 +7200,7 @@ export type AddSystemJobMonitorJobPostResponses = {
 };
 
 export type EditSystemJobMonitorJobPutData = {
-  body: EditJobModel;
+  body: JobUpdateModel;
   path?: never;
   query?: never;
   url: '/monitor/job';
@@ -6924,7 +7224,7 @@ export type EditSystemJobMonitorJobPutResponses = {
 };
 
 export type ChangeSystemJobStatusMonitorJobChangeStatusPutData = {
-  body: EditJobModel;
+  body: JobStatusUpdateModel;
   path?: never;
   query?: never;
   url: '/monitor/job/changeStatus';
@@ -7120,7 +7420,7 @@ export type GetSystemJobListMonitorJobListGetResponse =
   GetSystemJobListMonitorJobListGetResponses[keyof GetSystemJobListMonitorJobListGetResponses];
 
 export type ExecuteSystemJobMonitorJobRunPutData = {
-  body: JobModel;
+  body: JobRunModel;
   path?: never;
   query?: never;
   url: '/monitor/job/run';
@@ -10062,7 +10362,7 @@ export type QueryDetailSystemConfigSystemConfigConfigIdGetResponse =
   QueryDetailSystemConfigSystemConfigConfigIdGetResponses[keyof QueryDetailSystemConfigSystemConfigConfigIdGetResponses];
 
 export type AddSystemDeptSystemDeptPostData = {
-  body: DeptModel;
+  body: DeptCreateModel;
   path?: never;
   query?: never;
   url: '/system/dept';
@@ -10086,7 +10386,7 @@ export type AddSystemDeptSystemDeptPostResponses = {
 };
 
 export type EditSystemDeptSystemDeptPutData = {
-  body: DeptModel;
+  body: DeptUpdateModel;
   path?: never;
   query?: never;
   url: '/system/dept';
@@ -12098,7 +12398,7 @@ export type QueryProtocolDetailSystemProtocolProtocolIdGetResponses = {
 };
 
 export type AddSystemRoleSystemRolePostData = {
-  body: AddRoleModel;
+  body: RoleCreateModel;
   path?: never;
   query?: never;
   url: '/system/role';
@@ -12122,7 +12422,7 @@ export type AddSystemRoleSystemRolePostResponses = {
 };
 
 export type EditSystemRoleSystemRolePutData = {
-  body: AddRoleModel;
+  body: RoleUpdateModel;
   path?: never;
   query?: never;
   url: '/system/role';
@@ -12318,7 +12618,7 @@ export type GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetResponse
   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetResponses[keyof GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetResponses];
 
 export type CancelSystemRoleUserSystemRoleAuthUserCancelPutData = {
-  body: CrudUserRoleModel;
+  body: RoleUserRevokeModel;
   path?: never;
   query?: never;
   url: '/system/role/authUser/cancel';
@@ -12338,38 +12638,16 @@ export type CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  204: void;
 };
 
+export type CancelSystemRoleUserSystemRoleAuthUserCancelPutResponse =
+  CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses[keyof CancelSystemRoleUserSystemRoleAuthUserCancelPutResponses];
+
 export type BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutData = {
-  body?: never;
+  body: RoleUsersRevokeModel;
   path?: never;
-  query?: {
-    /**
-     * Userid
-     *
-     * 用户ID
-     */
-    userId?: number | null;
-    /**
-     * Userids
-     *
-     * 用户ID信息
-     */
-    userIds?: string | null;
-    /**
-     * Roleid
-     *
-     * 角色ID
-     */
-    roleId?: number | null;
-    /**
-     * Roleids
-     *
-     * 角色ID信息
-     */
-    roleIds?: string | null;
-  };
+  query?: never;
   url: '/system/role/authUser/cancelAll';
 };
 
@@ -12387,38 +12665,16 @@ export type BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  204: void;
 };
 
+export type BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponse =
+  BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses[keyof BatchCancelSystemRoleUserSystemRoleAuthUserCancelAllPutResponses];
+
 export type AddSystemRoleUserSystemRoleAuthUserSelectAllPutData = {
-  body?: never;
+  body: RoleUsersGrantModel;
   path?: never;
-  query?: {
-    /**
-     * Userid
-     *
-     * 用户ID
-     */
-    userId?: number | null;
-    /**
-     * Userids
-     *
-     * 用户ID信息
-     */
-    userIds?: string | null;
-    /**
-     * Roleid
-     *
-     * 角色ID
-     */
-    roleId?: number | null;
-    /**
-     * Roleids
-     *
-     * 角色ID信息
-     */
-    roleIds?: string | null;
-  };
+  query?: never;
   url: '/system/role/authUser/selectAll';
 };
 
@@ -12436,8 +12692,11 @@ export type AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  204: void;
 };
+
+export type AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponse =
+  AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses[keyof AddSystemRoleUserSystemRoleAuthUserSelectAllPutResponses];
 
 export type GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData = {
   body?: never;
@@ -12612,7 +12871,7 @@ export type GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetResp
   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetResponses[keyof GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetResponses];
 
 export type ResetSystemRoleStatusSystemRoleChangeStatusPutData = {
-  body: AddRoleModel;
+  body: RoleStatusUpdateModel;
   path?: never;
   query?: never;
   url: '/system/role/changeStatus';
@@ -12636,7 +12895,7 @@ export type ResetSystemRoleStatusSystemRoleChangeStatusPutResponses = {
 };
 
 export type EditSystemRoleDatascopeSystemRoleDataScopePutData = {
-  body: AddRoleModel;
+  body: RoleDataScopeUpdateModel;
   path?: never;
   query?: never;
   url: '/system/role/dataScope';
@@ -12916,7 +13175,7 @@ export type QueryDetailSystemRoleSystemRoleRoleIdGetResponse =
   QueryDetailSystemRoleSystemRoleRoleIdGetResponses[keyof QueryDetailSystemRoleSystemRoleRoleIdGetResponses];
 
 export type AddSystemUserSystemUserPostData = {
-  body: AddUserModel;
+  body: UserCreateModel;
   path?: never;
   query?: never;
   url: '/system/user';
@@ -12940,7 +13199,7 @@ export type AddSystemUserSystemUserPostResponses = {
 };
 
 export type EditSystemUserSystemUserPutData = {
-  body: EditUserModel;
+  body: UserUpdateModel;
   path?: never;
   query?: never;
   url: '/system/user';
@@ -12996,18 +13255,9 @@ export type QueryDetailSystemUserSystemUserGetResponse =
   QueryDetailSystemUserSystemUserGetResponses[keyof QueryDetailSystemUserSystemUserGetResponses];
 
 export type UpdateSystemRoleUserSystemUserAuthRolePutData = {
-  body?: never;
+  body: UserRolesAssignModel;
   path?: never;
-  query: {
-    /**
-     * Userid
-     */
-    userId: number;
-    /**
-     * Roleids
-     */
-    roleIds: string;
-  };
+  query?: never;
   url: '/system/user/authRole';
 };
 
@@ -13025,7 +13275,7 @@ export type UpdateSystemRoleUserSystemUserAuthRolePutResponses = {
   /**
    * Successful Response
    */
-  200: UserRoleResponseModel;
+  204: void;
 };
 
 export type UpdateSystemRoleUserSystemUserAuthRolePutResponse =
@@ -13064,7 +13314,7 @@ export type GetSystemAllocatedRoleListSystemUserAuthRoleUserIdGetResponse =
   GetSystemAllocatedRoleListSystemUserAuthRoleUserIdGetResponses[keyof GetSystemAllocatedRoleListSystemUserAuthRoleUserIdGetResponses];
 
 export type ChangeSystemUserStatusSystemUserChangeStatusPutData = {
-  body: EditUserModel;
+  body: UserStatusUpdateModel;
   path?: never;
   query?: never;
   url: '/system/user/changeStatus';
@@ -13364,7 +13614,7 @@ export type QueryDetailSystemUserProfileSystemUserProfileGetResponse =
   QueryDetailSystemUserProfileSystemUserProfileGetResponses[keyof QueryDetailSystemUserProfileSystemUserProfileGetResponses];
 
 export type ChangeSystemUserProfileInfoSystemUserProfilePutData = {
-  body: UserInfoModel;
+  body: UserProfileUpdateModel;
   path?: never;
   query?: never;
   url: '/system/user/profile';

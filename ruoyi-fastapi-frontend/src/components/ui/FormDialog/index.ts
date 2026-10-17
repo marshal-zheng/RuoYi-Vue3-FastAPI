@@ -1,5 +1,5 @@
 import { computed, reactive, shallowReactive, unref } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import type { CSSProperties } from 'vue';
 import { formLayoutPolicy, type FormColumns } from './policy';
 

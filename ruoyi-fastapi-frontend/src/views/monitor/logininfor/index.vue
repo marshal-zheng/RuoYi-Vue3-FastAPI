@@ -8,6 +8,7 @@
       fill
     >
       <template #form="{ query, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_common_status']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
@@ -16,6 +17,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['monitor:logininfor:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
@@ -23,6 +25,7 @@
               icon="Delete"
               @click="handleClean"
               v-hasPermi="['monitor:logininfor:remove']"
+              :loading="handleCleanPending"
               >清空</ZxButton
             >
             <ZxButton
@@ -31,6 +34,7 @@
               :disabled="single"
               @click="handleUnlock"
               v-hasPermi="['monitor:logininfor:unlock']"
+              :loading="handleUnlockPending"
               >解锁</ZxButton
             >
             <ZxButton
@@ -56,20 +60,14 @@
               style="width: 240px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-select
+            <DictSelect
+              dict-type="sys_common_status"
               v-model="query.status"
               placeholder="登录状态"
               clearable
               style="width: 240px"
               @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            >
-              <el-option
-                v-for="dict in sys_common_status"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            />
             <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD HH:mm:ss"
@@ -153,6 +151,7 @@
 </template>
 
 <script setup name="Logininfor">
+import { useOperation } from '@/utils/operation';
 import { list, delLogininfor, cleanLogininfor, unlockLogininfor } from '@/api/monitor/logininfor';
 
 const { proxy } = getCurrentInstance();
@@ -195,9 +194,9 @@ function handleSelectionChange(selection) {
   selectName.value = selection.map((item) => item.userName);
 }
 /** 删除按钮操作 */
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const infoIds = row.infoId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?')
     .then(function () {
       return delLogininfor(infoIds);
@@ -206,10 +205,10 @@ function handleDelete(row) {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 /** 清空按钮操作 */
-function handleClean() {
-  proxy.$modal
+const { run: handleClean, pending: handleCleanPending } = useOperation(async () => {
+  await proxy.$modal
     .confirm('是否确认清空所有登录日志数据项?')
     .then(function () {
       return cleanLogininfor();
@@ -218,18 +217,18 @@ function handleClean() {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 /** 解锁按钮操作 */
-function handleUnlock() {
+const { run: handleUnlock, pending: handleUnlockPending } = useOperation(async () => {
   const username = selectName.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认解锁用户"' + username + '"数据项?')
     .then(function () {
       return unlockLogininfor(username);
     })
     .then(() => {})
     .catch(() => {});
-}
+});
 function handleExport(query) {
   const params = proxy.addDateRange(
     {

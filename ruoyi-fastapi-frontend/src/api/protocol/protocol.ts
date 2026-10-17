@@ -1,3 +1,4 @@
+import { requestDetail } from '@/api/detail';
 export type ProtocolRecord = Omit<ProtocolModel, 'protocolId'> & { protocolId: number };
 import type { GetProtocolListSystemProtocolListGetData } from '@/api/_generated/types.gen';
 export type ProtocolListQuery = NonNullable<GetProtocolListSystemProtocolListGetData['query']>;
@@ -10,7 +11,7 @@ export interface ProtocolImportPreview {
 
 import type { HttpOffsetPage, BatchResult } from '@/types/http-contract';
 import type { ProtocolModel } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询协议列表
 export function listProtocol(query?: ProtocolListQuery) {
@@ -22,11 +23,19 @@ export function listProtocol(query?: ProtocolListQuery) {
 }
 
 // 查询协议详细
-export function getProtocol(protocolId: number | string) {
-  return request<ProtocolRecord>({
-    url: '/system/protocol/' + protocolId,
-    method: 'get',
-  });
+export function getProtocol(
+  protocolId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<ProtocolRecord>(
+    {
+      ...config,
+      url: '/system/protocol/' + protocolId,
+      method: 'get',
+    },
+    'protocolId',
+    protocolId
+  );
 }
 
 // 新增协议
@@ -108,8 +117,7 @@ export function importProtocol(formData: FormData) {
     url: '/system/protocol/import',
     method: 'post',
     data: formData,
-    // 批量导入需要连续发起多次请求，关闭全局防重复提交校验避免被拦截
-    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    headers: { 'Content-Type': 'multipart/form-data' },
     feedback: { mode: 'auto', key: 'protocol.protocol.import' },
   });
 }
@@ -120,7 +128,7 @@ export function importProtocolBatch(formData: FormData) {
     url: '/system/protocol/importBatch',
     method: 'post',
     data: formData,
-    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    headers: { 'Content-Type': 'multipart/form-data' },
     feedback: { mode: 'auto', key: 'protocol.protocol.import-batch' },
   });
 }

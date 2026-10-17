@@ -1,5 +1,10 @@
 <template>
-  <zx-select v-model="value" :options="options" :placeholder="placeholder" v-bind="$attrs" />
+  <DictSelect
+    dict-type="sys_oper_type"
+    v-model="value"
+    :placeholder="placeholder"
+    v-bind="$attrs"
+  />
 </template>
 
 <script setup>
@@ -8,11 +13,6 @@ const props = defineProps({
   placeholder: String,
 });
 const emit = defineEmits(['update:modelValue', 'change']);
-const { proxy } = getCurrentInstance();
-const { sys_oper_type } = proxy.useDict('sys_oper_type');
-const options = computed(() =>
-  (sys_oper_type.value || []).map((d) => ({ label: d.label, value: d.value }))
-);
 const value = computed({
   get: () => props.modelValue,
   set: (v) => {

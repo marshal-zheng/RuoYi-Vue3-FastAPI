@@ -17,6 +17,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['monitor:audit:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
@@ -24,6 +25,7 @@
               icon="Delete"
               @click="handleClean"
               v-hasPermi="['monitor:audit:remove']"
+              :loading="handleCleanPending"
               >清空</ZxButton
             >
           </template>
@@ -136,6 +138,7 @@
 </template>
 
 <script setup name="AuditLog">
+import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import { list, delAuditLog, cleanAuditLog } from '@/api/monitor/audit';
 import TableNameSelector from '@/components/business/Monitor/selector/TableNameSelector.vue';
@@ -183,9 +186,9 @@ function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.auditId);
   multiple.value = !selection.length;
 }
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const auditIds = row?.auditId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除审计日志编号为"' + auditIds + '"的数据项?')
     .then(function () {
       return delAuditLog(auditIds);
@@ -194,9 +197,9 @@ function handleDelete(row) {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
-function handleClean() {
-  proxy.$modal
+});
+const { run: handleClean, pending: handleCleanPending } = useOperation(async () => {
+  await proxy.$modal
     .confirm('是否确认清空所有审计日志数据项?')
     .then(function () {
       return cleanAuditLog();
@@ -205,5 +208,5 @@ function handleClean() {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 </script>

@@ -22,6 +22,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['device:category:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
           </template>
@@ -80,6 +81,7 @@
                 type="danger"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['device:category:remove']"
+                :loading="handleDeletePending"
                 >删除</zx-button
               >
             </template>
@@ -93,6 +95,7 @@
 </template>
 
 <script setup name="DeviceCategory">
+import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import { listDeviceCategory, delDeviceCategory } from '@/api/device/category';
 import { CategoryFormDialog } from '@/components/business/Device';
@@ -139,9 +142,9 @@ function handleUpdate(row) {
   categoryDialogRef.value && categoryDialogRef.value.open(payload);
 }
 
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const categoryIds = row?.device_category_id || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除设备分类编号为"' + categoryIds + '"的数据项？')
     .then(function () {
       return delDeviceCategory(categoryIds);
@@ -150,7 +153,7 @@ function handleDelete(row) {
       refreshList();
     })
     .catch(() => {});
-}
+});
 
 function refreshList() {
   gridListRef.value && gridListRef.value.refresh();

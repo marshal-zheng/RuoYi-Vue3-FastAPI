@@ -13,13 +13,14 @@
       fill
     >
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_normal_disable']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
               type="primary"
               icon="Plus"
               @click="openSelectUser"
-              v-hasPermi="['system:role:add']"
+              v-hasPermi="['system:role:edit']"
               >添加用户</ZxButton
             >
             <ZxButton
@@ -27,7 +28,8 @@
               icon="CircleClose"
               :disabled="multiple"
               @click="cancelAuthUserAll"
-              v-hasPermi="['system:role:remove']"
+              v-hasPermi="['system:role:edit']"
+              :loading="cancelAuthUserAllPending"
               >批量取消授权</ZxButton
             >
           </template>
@@ -88,7 +90,8 @@
                   link
                   type="primary"
                   @click="cancelAuthUser(scope.row)"
-                  v-hasPermi="['system:role:remove']"
+                  v-hasPermi="['system:role:edit']"
+                  :loading="cancelAuthUserPending"
                   >取消授权</ZxButton
                 >
               </div>
@@ -107,12 +110,16 @@
 </template>
 
 <script setup name="AuthUser">
-import selectUser from './selectUser';
-import { allocatedUserList, authUserCancel, authUserCancelAll } from '@/api/system/role';
+import { useOperation } from '@/utils/operation';
+import selectUser from './selectUser.vue';
+import { allocatedUserList } from '@/api/system/role';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
 import { parseTime } from '@/utils/ruoyi';
 
 const route = useRoute();
 const { proxy } = getCurrentInstance();
+const pageScope = requireQueryScope();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const gridListRef = ref(null);
@@ -151,29 +158,36 @@ function handleClose() {
   proxy.$tab.closeOpenPage(obj);
 }
 
-function cancelAuthUser(row) {
-  proxy.$modal
+const { run: cancelAuthUser, pending: cancelAuthUserPending } = useOperation(async (row) => {
+  if (pageScope !== queryScope.value) return;
+  const command = captureUserCommand(
+    { userId: row.userId, roleId: Number(route.params.roleId) },
+    pageScope
+  );
+  await proxy.$modal
     .confirm('确认要取消该用户"' + row.userName + '"角色吗？')
     .then(function () {
-      return authUserCancel({ userId: row.userId, roleId: route.params.roleId });
+      return userCommands.unassignRoleUser(command);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      if (command.scope === queryScope.value) gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 
-function cancelAuthUserAll() {
-  const roleId = route.params.roleId;
-  const uIds = userIds.value.join(',');
-  proxy.$modal
+const { run: cancelAuthUserAll, pending: cancelAuthUserAllPending } = useOperation(async () => {
+  if (pageScope !== queryScope.value) return;
+  const roleId = Number(route.params.roleId);
+  const uIds = [...userIds.value];
+  const command = captureUserCommand({ roleId, userIds: uIds }, pageScope);
+  await proxy.$modal
     .confirm('是否取消选中用户授权数据项?')
     .then(function () {
-      return authUserCancelAll({ roleId: roleId, userIds: uIds });
+      return userCommands.unassignRoleUsers(command);
     })
     .then(() => {
-      gridListRef.value?.refresh();
+      if (command.scope === queryScope.value) gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 </script>

@@ -29,7 +29,7 @@
 <script setup>
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import MessageConfigTab from '@/components/business/Device/MessageConfigTab.vue';
 import ProtocolTemplateSelector from '@/components/business/Protocol/selector/ProtocolTemplateSelector.vue';
 

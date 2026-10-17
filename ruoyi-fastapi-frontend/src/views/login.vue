@@ -146,6 +146,7 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import { getCodeImg } from '@/api/login';
 import Cookies from 'js-cookie';
 import useUserStore from '@/store/modules/user';
@@ -185,7 +186,6 @@ const loginRules = computed(() => ({
 }));
 
 const codeUrl = ref('');
-const loading = ref(false);
 // 验证码开关
 const captchaEnabled = ref(true);
 // 注册开关
@@ -200,51 +200,47 @@ watch(
   { immediate: true }
 );
 
-function handleLogin() {
-  proxy.$refs.loginRef.validate((valid) => {
-    if (valid) {
-      loading.value = true;
-      // 仅记住账号，不持久化密码
-      if (loginForm.value.rememberMe) {
-        Cookies.set('username', loginForm.value.username, { expires: 30 });
-        Cookies.set('rememberMe', loginForm.value.rememberMe, { expires: 30 });
-      } else {
-        // 否则移除
-        Cookies.remove('username');
-        Cookies.remove('rememberMe');
-      }
-      // 调用action的登录方法
-      userStore
-        .login(loginForm.value)
-        .then(async () => {
-          const query = route.query;
-          const otherQueryParams = Object.keys(query).reduce((acc, cur) => {
-            if (cur !== 'redirect') {
-              acc[cur] = query[cur];
-            }
-            return acc;
-          }, {});
-          try {
-            await router.push({
-              path: redirect.value || '/',
-              query: otherQueryParams,
-            });
-          } catch {
-            loading.value = false;
-          }
-        })
-        .catch(() => {
-          // 重新获取验证码
-          if (captchaEnabled.value) {
-            getCode();
-          }
-        })
-        .finally(() => {
-          loading.value = false;
-        });
+const { run: handleLogin, pending: loading } = useOperation(async () => {
+  const valid = await proxy.$refs.loginRef.validate().catch(() => false);
+
+  if (valid) {
+    // 仅记住账号，不持久化密码
+    if (loginForm.value.rememberMe) {
+      Cookies.set('username', loginForm.value.username, { expires: 30 });
+      Cookies.set('rememberMe', loginForm.value.rememberMe, { expires: 30 });
+    } else {
+      // 否则移除
+      Cookies.remove('username');
+      Cookies.remove('rememberMe');
     }
-  });
-}
+    // 调用action的登录方法
+    await userStore
+      .login(loginForm.value)
+      .then(async () => {
+        const query = route.query;
+        const otherQueryParams = Object.keys(query).reduce((acc, cur) => {
+          if (cur !== 'redirect') {
+            acc[cur] = query[cur];
+          }
+          return acc;
+        }, {});
+        try {
+          await router.push({
+            path: redirect.value || '/',
+            query: otherQueryParams,
+          });
+        } catch {
+          // 登录会话已建立；导航失败后由操作生命周期释放 loading。
+        }
+      })
+      .catch(() => {
+        // 重新获取验证码
+        if (captchaEnabled.value) {
+          getCode();
+        }
+      });
+  }
+});
 
 function getCode() {
   getCodeImg().then((res) => {

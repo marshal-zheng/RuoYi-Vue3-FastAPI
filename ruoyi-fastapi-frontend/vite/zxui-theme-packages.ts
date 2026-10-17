@@ -13,7 +13,9 @@ function loadThemeCompiler(frontendRoot: string, workspaceRoot?: string) {
     path.resolve(workspaceRoot || frontendRoot, 'package.json')
   );
   if (!workspaceRoot) {
-    return compilerRequire('@zxio/theme-compiler/vite') as typeof import('@zxio/theme-compiler/vite');
+    return compilerRequire(
+      '@zxio/theme-compiler/vite'
+    ) as typeof import('@zxio/theme-compiler/vite');
   }
   // The public source facet keeps Vite tooling and browser components on the same revision.
   // tsx belongs to the prepared ZXUI checkout; nothing is globally registered.
@@ -53,6 +55,12 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
   const { zxuiSourcePlugin } = loadThemeCompiler(frontendRoot, workspaceRoot);
   return zxuiSourcePlugin({
     workspaceRoot,
-    featurePackages: ['@zxio/chart', '@zxio/dashboard', '@zxio/http', '@zxio/theme-tailwind'],
+    featurePackages: [
+      '@zxio/chart',
+      '@zxio/dashboard',
+      '@zxio/http',
+      '@zxio/theme-tailwind',
+      '@zxio/vue-query',
+    ],
   });
 }

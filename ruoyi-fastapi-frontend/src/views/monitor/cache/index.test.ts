@@ -2,7 +2,7 @@ import { flushPromises, mount } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import Cache from './index.vue';
 import type { App, ShallowRef } from 'vue';
-import type { useZxChartThemeProjection } from '@zxio/zxui';
+import type { useZxChartThemeProjection } from '@zxio/zxui/theme-host/precompiled';
 import modal from '@/plugins/modal';
 
 type ProjectionFixture = { ok: true; value: { identity: string } } | { ok: false };
@@ -25,7 +25,7 @@ vi.mock('virtual:zxui-theme-deployment', () => ({
     registrations: [{ manifest: { identity: { themeId: 'default' } } }],
   },
 }));
-vi.mock('@zxio/zxui', async () => {
+vi.mock('@zxio/zxui/theme-host/precompiled', async () => {
   const { shallowRef } = await import('vue');
   state.projection = shallowRef<ProjectionFixture>({ ok: true, value: { identity: 'light' } });
   return {

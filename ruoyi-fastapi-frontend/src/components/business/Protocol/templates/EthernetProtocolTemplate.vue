@@ -1,5 +1,13 @@
 <template>
   <div class="protocol-template-wrapper">
+    <DictStatus
+      :types="[
+        'sys_protocol_method_ethernet',
+        'sys_protocol_frequency',
+        'sys_protocol_speed_ethernet',
+        'sys_protocol_error_handling',
+      ]"
+    />
     <!-- 工具栏 -->
     <div class="table-toolbar flex mb-3">
       <slot name="toolbar">
@@ -89,6 +97,7 @@
 
 <script setup lang="ts">
 import { ref, watch, reactive, computed, shallowRef } from 'vue';
+import { useVXETable } from '@/plugins/vxe-table';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import type {
   VxeTableInstance,
@@ -125,6 +134,8 @@ import {
 } from '@/components/ui/VxeTableValidation';
 import VxeSchemaTable from '@/components/ui/VxeSchemaTable/index.vue';
 import { createProtocolFieldColumns, createProtocolConfigColumns } from './vxeColumns';
+
+useVXETable();
 
 const props = defineProps<{
   modelValue?: Partial<EthernetProtocolConfig>;
@@ -448,7 +459,7 @@ const configTableData = ref<ProtocolConfigTableRow[]>([
 ]);
 
 // 辅助函数：根据字典获取 label
-const getLabel = (dict: DictItem[], value: string, fallbackLabel: string = '') => {
+const getLabel = (dict: readonly DictItem[], value: string, fallbackLabel: string = '') => {
   if (!value) return '';
   // 如果已有 label 且不为空，优先使用（但这里为了修复显示问题，我们优先查字典）
   // 实际上，如果 dictValue 是英文，我们想显示中文 label

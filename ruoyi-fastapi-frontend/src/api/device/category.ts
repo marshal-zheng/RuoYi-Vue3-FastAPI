@@ -1,3 +1,4 @@
+import { requestDetail } from '@/api/detail';
 export type DeviceCategoryRecord = Omit<DeviceCategoryModel, 'deviceCategoryId'> & {
   deviceCategoryId: number;
 };
@@ -22,10 +23,14 @@ export function listDeviceCategory(query?: DeviceCategoryQuery) {
 
 // 查询设备分类详细
 export function getDeviceCategory(categoryId: number | string) {
-  return request<DeviceCategoryRecord>({
-    url: '/device/category/' + categoryId,
-    method: 'get',
-  });
+  return requestDetail<DeviceCategoryRecord>(
+    {
+      url: '/device/category/' + categoryId,
+      method: 'get',
+    },
+    'deviceCategoryId',
+    categoryId
+  );
 }
 
 // 新增设备分类

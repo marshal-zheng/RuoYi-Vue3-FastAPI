@@ -1,18 +1,15 @@
 import { createApp } from 'vue';
 
-import Cookies from 'js-cookie';
-import { setupVXETable } from '@/plugins/vxe-table';
-
 // Iconify 图标库
 import '@iconify/iconify';
 import { Icon } from '@iconify/vue';
 
-import ElementPlus from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import 'element-plus/dist/index.css';
 import locale from 'element-plus/es/locale/lang/zh-cn';
 
 // ZXUI component aliases must follow Element Plus declarations of equal specificity.
-import ZXUI from '@zxio/zxui';
+import { ZxConfigPlugin } from '@zxio/zxui/config-provider';
 import '@zxio/zxui/style';
 import { bindZxThemeHost } from '@/theme/zx-theme-host';
 import themeDeployment from 'virtual:zxui-theme-deployment';
@@ -39,6 +36,10 @@ import './permission'; // permission control
 import './utils/auth-feedback-boundary';
 
 import { useDict } from '@/utils/dict';
+import { setupQueries } from '@/queries/client';
+import DictStatus from '@/components/business/DictStatus/index.vue';
+import DictSelect from '@/components/business/DictSelect/index.vue';
+import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
 import { resolveRuntimeConfig, type RuntimeConfig } from '@/mocks/runtime/mode';
 import {
   parseTime,
@@ -56,8 +57,6 @@ import { setupAppRuntimeMocks } from '@/mocks/runtime/app-entry';
 import Pagination from '@/components/ui/Pagination';
 // 自定义表格工具组件
 import RightToolbar from '@/components/ui/RightToolbar';
-// 富文本组件
-import Editor from '@/components/ui/Editor';
 // 文件上传组件
 import FileUpload from '@/components/ui/FileUpload';
 // 图片上传组件
@@ -81,36 +80,32 @@ app.config.globalProperties.selectDictLabels = selectDictLabels;
 
 // 全局组件挂载
 app.component('DictTag', DictTag);
+app.component('DictStatus', DictStatus);
+app.component('DictSelect', DictSelect);
+app.component('DictTypeSelect', DictTypeSelect);
 app.component('Pagination', Pagination);
 app.component('FileUpload', FileUpload);
 app.component('ImageUpload', ImageUpload);
 app.component('ImagePreview', ImagePreview);
 app.component('RightToolbar', RightToolbar);
-app.component('Editor', Editor);
 app.component('Icon', Icon);
 
 app.use(store);
+setupQueries(app);
 app.use(plugins);
 app.use(elementIcons);
 app.component('svg-icon', SvgIcon);
 
 directive(app);
 
-// 使用element-plus 并且设置全局的大小
-app.use(ElementPlus, {
-  locale: locale,
-  // 支持 large、default、small
-  size: (Cookies.get('size') as 'large' | 'default' | 'small') || 'default',
-});
-
-app.use(ZXUI, {
+// The app config and EP feedback services are independent of component registration.
+app.use(ElMessageBox);
+app.use(ZxConfigPlugin, {
+  locale,
   size: 'default',
   namespace: 'zx',
-  // zIndex: 3000
 });
 bindZxThemeHost(app, themeDeployment);
-
-setupVXETable(app);
 
 startDevMenuHotSync();
 

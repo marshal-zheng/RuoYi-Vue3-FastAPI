@@ -9,7 +9,9 @@
         >已配置 {{ devicePorts.length }} 个端口</el-tag
       >
       <ZxButton type="primary" icon="Plus" @click="handleAddPort">添加端口</ZxButton>
-      <ZxButton type="primary" icon="CircleCheck" @click="handleSave">保存</ZxButton>
+      <ZxButton type="primary" icon="CircleCheck" @click="handleSave" :loading="handleSavePending"
+        >保存</ZxButton
+      >
     </template>
     <div data-zx-fill>
       <XFlow>
@@ -57,6 +59,7 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import { ref, reactive, computed, nextTick, onMounted, onBeforeUnmount, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { ElMessage, ElMessageBox } from 'element-plus';
@@ -197,7 +200,7 @@ function findPortIndexByKey(key) {
   return tempPorts.value.findIndex((port) => getPortKey(port) === normalizedKey);
 }
 
-async function handleSave() {
+const { run: handleSave, pending: handleSavePending } = useOperation(async () => {
   try {
     loading.value = true;
     const submitData = {
@@ -222,15 +225,15 @@ async function handleSave() {
     };
     if (submitData.deviceId) {
       await updateDevice(submitData);
-      router.push('/device/list');
+      await router.push('/device/list');
     } else {
       await addDevice(submitData);
-      router.push('/device/list');
+      await router.push('/device/list');
     }
   } finally {
     loading.value = false;
   }
-}
+});
 
 async function loadDeviceInfo() {
   const id = deviceId.value;

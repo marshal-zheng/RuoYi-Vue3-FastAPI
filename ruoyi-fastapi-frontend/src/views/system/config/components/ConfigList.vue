@@ -8,6 +8,7 @@
     fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+      <DictStatus :types="['sys_yes_no']" />
       <ZxListToolbar aria-label="列表操作与筛选">
         <template #actions>
           <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:config:add']"
@@ -27,12 +28,13 @@
             :disabled="multiple"
             @click="handleDelete"
             v-hasPermi="['system:config:remove']"
+            :loading="handleDeletePending"
             >删除</ZxButton
           >
           <ZxButton
             type="warning"
             icon="Download"
-            @click="() => handleExport(query)"
+            @click="handleExport"
             v-hasPermi="['system:config:export']"
             >导出</ZxButton
           >
@@ -41,6 +43,7 @@
             icon="Refresh"
             @click="handleRefreshCache"
             v-hasPermi="['system:config:remove']"
+            :loading="handleRefreshCachePending"
             >刷新缓存</ZxButton
           >
         </template>
@@ -122,6 +125,7 @@
               type="danger"
               @click="handleDelete(scope.row)"
               v-hasPermi="['system:config:remove']"
+              :loading="handleDeletePending"
               >删除</el-button
             >
           </template>
@@ -135,6 +139,7 @@
 </template>
 
 <script setup lang="ts">
+import { useOperation } from '@/utils/operation';
 import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
 import type { ConfigRecord } from '@/api/system/config';
 import type { ConfigPageQueryModel } from '@/api/_generated/types.gen';
@@ -147,7 +152,7 @@ type ListActions = {
 import { ref, getCurrentInstance } from 'vue';
 import { parseTime } from '@/utils/ruoyi';
 import { serializeDateRange } from '@/utils/ruoyi';
-import { listConfig, getConfig, delConfig, refreshCache } from '@/api/system/config';
+import { listConfig, delConfig, refreshCache } from '@/api/system/config';
 import ConfigDlg from './ConfigDlg.vue';
 import DictSelect from '@/components/business/DictSelect/index.vue';
 
@@ -210,44 +215,47 @@ function handleSelectionChange(selection: ConfigRecord[]) {
 
 /** 新增按钮操作 */
 function handleAdd() {
-  configDlgRef.value?.open();
+  return configDlgRef.value?.open().catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 /** 修改按钮操作 */
-async function handleUpdate(row?: ConfigRecord) {
-  const configId = row?.configId || ids.value[0];
-  if (!configId) return;
-  const response = await getConfig(configId);
-  const data = response;
-  configDlgRef.value?.open({
-    configId: data.configId ?? undefined,
-    configName: data.configName ?? undefined,
-    configKey: data.configKey ?? undefined,
-    configValue: data.configValue ?? undefined,
-    configType: data.configType ?? undefined,
-    remark: data.remark ?? undefined,
+function handleUpdate(row?: ConfigRecord) {
+  const id = row?.configId || ids.value[0];
+  if (!id) return;
+  return configDlgRef.value?.open(id).catch(() => {
+    /* 当前读取已负责反馈。 */
   });
 }
 
 /** 删除按钮操作 */
-function handleDelete(row?: ConfigRecord) {
-  const configIds = row?.configId || ids.value.join(',');
-  proxy.$modal
-    .confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
-    .then(() => delConfig(configIds))
-    .then(() => {
-      gridListRef.value?.refresh();
-    })
-    .catch(() => {});
-}
+const { run: handleDelete, pending: handleDeletePending } = useOperation(
+  async (row?: ConfigRecord) => {
+    const configIds = row?.configId || ids.value.join(',');
+    await proxy.$modal
+      .confirm('是否确认删除参数编号为"' + configIds + '"的数据项？')
+      .then(() => delConfig(configIds))
+      .then(() => {
+        gridListRef.value?.refresh();
+      })
+      .catch(() => {});
+  }
+);
 
 /** 导出按钮操作 */
-function handleExport(query: ListQuery) {
-  proxy.download('system/config/export', query, `config_${new Date().getTime()}.xlsx`);
+function handleExport() {
+  const snapshot = gridListRef.value?.getStateSnapshot();
+  if (!snapshot) return;
+  proxy.download(
+    'system/config/export',
+    queryTransform(snapshot.query as ListQuery),
+    `config_${new Date().getTime()}.xlsx`
+  );
 }
 
 /** 刷新缓存按钮操作 */
-async function handleRefreshCache() {
+const { run: handleRefreshCache, pending: handleRefreshCachePending } = useOperation(async () => {
   await refreshCache();
-}
+});
 </script>

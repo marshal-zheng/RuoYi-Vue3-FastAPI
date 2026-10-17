@@ -1,7 +1,8 @@
+import { requestDetail } from '@/api/detail';
 export type ConfigRecord = Omit<ConfigModel, 'configId'> & { configId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type { ConfigModel, ConfigPageQueryModel } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询参数列表
 export function listConfig(query?: ConfigPageQueryModel) {
@@ -13,11 +14,19 @@ export function listConfig(query?: ConfigPageQueryModel) {
 }
 
 // 查询参数详细
-export function getConfig(configId: number | string) {
-  return request<ConfigRecord>({
-    url: '/system/config/' + configId,
-    method: 'get',
-  });
+export function getConfig(
+  configId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<ConfigRecord>(
+    {
+      ...config,
+      url: '/system/config/' + configId,
+      method: 'get',
+    },
+    'configId',
+    configId
+  );
 }
 
 // 根据参数键名查询参数值

@@ -1,3 +1,4 @@
+import { observeFeedback } from '@/utils/feedback/channel';
 /**
  * @zxio/http 全局 HTTP 客户端配置
  */
@@ -5,6 +6,7 @@ import {
   createGridListPlugin,
   createHttpClient,
   isAbortError,
+  isQueryRequest,
   resolveHttpError,
   type HttpError,
   type HttpClientImpl,
@@ -17,7 +19,6 @@ import { ElMessageBox } from 'element-plus';
 
 import { getCsrfToken, getToken } from '@/utils/auth';
 import errorCode from '@/utils/errorCode';
-import cache from '@/plugins/cache';
 import { isHashRouteMode } from '@/router/history';
 import useUserStore from '@/store/modules/user';
 import {
@@ -36,6 +37,7 @@ import {
 } from '@/utils/feedback/presenter';
 import type { FeedbackOptions, ResolvedFeedbackOptions } from '@/utils/feedback/types';
 import { showMessage } from '@/utils/feedback/message';
+import { assertRequestScope, isRequestScopeCurrent } from '@/queries/context';
 
 // 重新登录状态
 export let isRelogin = { show: false };
@@ -106,61 +108,69 @@ let reloginPromptVersion = 0;
 
 export const dismissReloginPrompt = (): void => {
   reloginPromptVersion++;
-  reloginMessage?.close();
+  const message = reloginMessage;
   reloginMessage = null;
   isRelogin.show = false;
+  observeFeedback(() => message?.close());
 };
 
-const triggerRelogin = (): void => {
-  if (isRelogin.show || isLoginRoute()) {
-    return;
-  }
+const triggerRelogin = (): void =>
+  observeFeedback(async () => {
+    if (isRelogin.show || isLoginRoute()) {
+      return;
+    }
 
-  isRelogin.show = true;
-  const version = ++reloginPromptVersion;
-  const loginUrl = buildLoginRedirectUrl();
+    isRelogin.show = true;
+    const version = ++reloginPromptVersion;
+    const loginUrl = buildLoginRedirectUrl();
 
-  const doRedirect = (): void => {
-    dismissReloginPrompt();
-    useUserStore()
-      .logOut({ silentSuccess: true, silentError: true })
-      .then(() => {
-        location.href = loginUrl;
+    const doRedirect = (): void => {
+      dismissReloginPrompt();
+      useUserStore()
+        .logOut({ silentSuccess: true, silentError: true })
+        .then(() => {
+          location.href = loginUrl;
+        });
+    };
+
+    try {
+      const result = await showMessage({
+        message: '登录状态已失效',
+        type: 'warning',
+        action: { label: '重新登录', href: loginUrl, onClick: doRedirect },
+        duration: 0,
+        showClose: true,
+        onClose: () => {
+          if (version === reloginPromptVersion) {
+            isRelogin.show = false;
+            reloginMessage = null;
+          }
+        },
       });
-  };
-
-  void showMessage({
-    message: '登录状态已失效',
-    type: 'warning',
-    action: { label: '重新登录', href: loginUrl, onClick: doRedirect },
-    duration: 0,
-    showClose: true,
-    onClose: () => {
+      if (!result.ok) {
+        if (version === reloginPromptVersion) isRelogin.show = false;
+        return;
+      }
+      if (version !== reloginPromptVersion || isLoginRoute()) {
+        await result.value.close();
+        return;
+      }
+      reloginMessage = result.value;
+    } catch {
       if (version === reloginPromptVersion) {
         isRelogin.show = false;
         reloginMessage = null;
       }
-    },
-  }).then((result) => {
-    if (!result.ok) {
-      if (version === reloginPromptVersion) isRelogin.show = false;
-      return;
     }
-    if (version !== reloginPromptVersion || isLoginRoute()) {
-      result.value.close();
-      return;
-    }
-    reloginMessage = result.value;
   });
-};
 
 const notifier: HttpNotifier = {
   notify() {},
   message(type, content) {
-    void showMessage({ type, message: content });
+    return showMessage({ type, message: content });
   },
   modal(type, options) {
-    ElMessageBox.alert(options.content, options.title || '提示', { type });
+    return ElMessageBox.alert(options.content, options.title || '提示', { type });
   },
 };
 
@@ -366,7 +376,8 @@ const normalizeGridParams = (params: Record<string, unknown>): Record<string, un
 };
 
 const beforeRequestTransform: HttpTransformHook = {
-  async beforeRequest(config) {
+  async beforeRequest(config, options) {
+    assertRequestScope(options);
     const requestConfig = config as HttpConfigRecord;
 
     if (requestConfig.data instanceof FormData) {
@@ -384,39 +395,6 @@ const beforeRequestTransform: HttpTransformHook = {
       }
     }
 
-    const headers = (requestConfig.headers || {}) as Record<string, unknown>;
-    const isRepeatSubmit = headers.repeatSubmit === false;
-    if (
-      !isRepeatSubmit &&
-      ['post', 'put', 'patch'].includes((requestConfig.method || 'get').toLowerCase())
-    ) {
-      const requestObj = {
-        url: requestConfig.url,
-        data:
-          typeof requestConfig.data === 'object' && !(requestConfig.data instanceof FormData)
-            ? JSON.stringify(requestConfig.data)
-            : requestConfig.data,
-        time: Date.now(),
-      };
-      const requestSize = Object.keys(JSON.stringify(requestObj)).length;
-      const limitSize = 5 * 1024 * 1024;
-
-      if (requestSize < limitSize) {
-        const sessionObj = cache.session.getJSON('sessionObj');
-        if (sessionObj) {
-          const interval = 1000;
-          if (
-            sessionObj.data === requestObj.data &&
-            requestObj.time - sessionObj.time < interval &&
-            sessionObj.url === requestObj.url
-          ) {
-            return Promise.reject(new Error('数据正在处理，请勿重复提交'));
-          }
-        }
-        cache.session.setJSON('sessionObj', requestObj);
-      }
-    }
-
     const method = (requestConfig.method || 'get').toLowerCase();
     if (['post', 'put', 'patch', 'delete'].includes(method)) {
       const csrfToken = getCsrfToken();
@@ -430,10 +408,45 @@ const beforeRequestTransform: HttpTransformHook = {
   },
 };
 
+/** Present an already normalized business failure for the interaction that still owns it. */
+export function presentRequestError(
+  original: HttpError,
+  config: HttpConfigRecord = original.config || {}
+): void {
+  const error = original as RequestError;
+  const { problem, meta } = error;
+  if (!problem || !meta || isAbortError(error)) return;
+  const status = meta.status;
+  const skipRelogin = shouldSkipRelogin(config);
+  if (status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002) {
+    const onLoginPage = isLoginRoute();
+    const silentError = readConfigFlag(config, 'silentError');
+    const shouldPromptRelogin = !skipRelogin && !silentError && !onLoginPage;
+    if (shouldPromptRelogin) {
+      triggerRelogin();
+    } else if (skipRelogin && !silentError) {
+      presentProblemFeedback({
+        problem,
+        meta,
+        feedback: resolveFeedback(config),
+      });
+    }
+    return;
+  }
+
+  if (!readConfigFlag(config, 'silentError')) {
+    presentProblemFeedback({
+      problem,
+      meta,
+      feedback: resolveFeedback(config),
+    });
+  }
+}
+
 const MUTATION_METHODS = new Set(['post', 'put', 'delete', 'patch']);
 
 const afterResponseTransform: HttpTransformHook = {
-  async afterResponse(response) {
+  async afterResponse(response, options) {
     const config = response.config as HttpConfigRecord;
     const method = (config.method || 'get').toLowerCase();
     const feedback = resolveFeedback(config);
@@ -451,7 +464,7 @@ const afterResponseTransform: HttpTransformHook = {
       return response;
     }
 
-    if (!readConfigFlag(config, 'silentSuccess')) {
+    if (isRequestScopeCurrent(options) && !readConfigFlag(config, 'silentSuccess')) {
       presentSuccessFeedback({
         status: response.status,
         payload,
@@ -463,42 +476,28 @@ const afterResponseTransform: HttpTransformHook = {
     return response;
   },
 
-  async onError(error) {
+  async onError(error, options) {
     const axiosError = await resolveHttpError(error);
     if (isAbortError(axiosError)) {
       throw axiosError;
     }
     const config = (axiosError.config || {}) as HttpConfigRecord;
-    const skipRelogin = shouldSkipRelogin(config);
     const status = axiosError.response?.status || 0;
     const meta = axiosError.response ? buildMeta(axiosError.response) : { status };
-    const problem = normalizeProblemDetails(axiosError.data, status);
+    const localFailureMessage =
+      !axiosError.response &&
+      (axiosError.name === 'RequestPreparationError' || axiosError.name === 'HttpError')
+        ? axiosError.message
+        : undefined;
+    const problem = normalizeProblemDetails(axiosError.data ?? localFailureMessage, status);
 
-    if (status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002) {
-      const onLoginPage = isLoginRoute();
-      const silentError = readConfigFlag(config, 'silentError');
-      const shouldPromptRelogin = !skipRelogin && !silentError && !onLoginPage;
-      if (shouldPromptRelogin) {
-        triggerRelogin();
-      } else if (skipRelogin && !silentError) {
-        presentProblemFeedback({
-          problem,
-          meta,
-          feedback: resolveFeedback(config),
-        });
-      }
-      throw createRequestError(axiosError, problem, meta);
+    const requestError = createRequestError(axiosError, problem, meta);
+    if (isRequestScopeCurrent(options)) {
+      const authFailure =
+        status === 401 || problem.errorCode === 20001 || problem.errorCode === 20002;
+      if (authFailure || !isQueryRequest(options)) presentRequestError(requestError, config);
     }
-
-    if (!readConfigFlag(config, 'silentError')) {
-      presentProblemFeedback({
-        problem,
-        meta,
-        feedback: resolveFeedback(config),
-      });
-    }
-
-    throw createRequestError(axiosError, problem, meta);
+    throw requestError;
   },
 };
 
@@ -509,7 +508,8 @@ export const http = createHttpClient({
   },
   tokenProvider: {
     getToken: () => getToken() || '',
-    applyToken(config, token) {
+    applyToken(config, token, options) {
+      assertRequestScope(options);
       const headers = (config.headers ??= {}) as Record<string, unknown>;
       const isToken = headers.isToken === false;
       if (!isToken && token.value) {

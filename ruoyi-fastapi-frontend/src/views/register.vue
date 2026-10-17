@@ -90,6 +90,7 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import { ElMessageBox } from 'element-plus';
 import { getCodeImg, register } from '@/api/login';
 
@@ -130,34 +131,29 @@ const registerRules = {
 };
 
 const codeUrl = ref('');
-const loading = ref(false);
 const captchaEnabled = ref(true);
 
-function handleRegister() {
-  proxy.$refs.registerRef.validate((valid) => {
-    if (valid) {
-      loading.value = true;
-      register(registerForm.value)
-        .then(() => {
-          const username = registerForm.value.username;
-          // The success type carries the emphasis; the username stays plain text.
-          ElMessageBox.alert('恭喜你，您的账号 ' + username + ' 注册成功！', '系统提示', {
-            type: 'success',
-          })
-            .then(() => {
-              router.push('/login');
-            })
-            .catch(() => {});
+const { run: handleRegister, pending: loading } = useOperation(async () => {
+  const valid = await proxy.$refs.registerRef.validate().catch(() => false);
+
+  if (valid) {
+    await register(registerForm.value)
+      .then(async () => {
+        const username = registerForm.value.username;
+        // The success type carries the emphasis; the username stays plain text.
+        await ElMessageBox.alert('恭喜你，您的账号 ' + username + ' 注册成功！', '系统提示', {
+          type: 'success',
         })
-        .catch(() => {
-          loading.value = false;
-          if (captchaEnabled) {
-            getCode();
-          }
-        });
-    }
-  });
-}
+          .then(() => router.push('/login'))
+          .catch(() => {});
+      })
+      .catch(() => {
+        if (captchaEnabled) {
+          getCode();
+        }
+      });
+  }
+});
 
 function getCode() {
   getCodeImg().then((res) => {

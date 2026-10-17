@@ -7,10 +7,11 @@
  *   request({ url: '/api/xxx', method: 'get' })
  */
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { isAbortError } from '@zxio/http';
+import { isAbortError, type RequestOptions } from '@zxio/http';
 import { ElLoading, ElMessage } from 'element-plus';
 import { http, isRelogin } from './http';
 import { downloadFromResponse } from '@/utils/io-toolkit/download';
+import { observeFeedback } from '@/utils/feedback/channel';
 import type { FeedbackOptions } from '@/utils/feedback/types';
 
 interface LoadingInstance {
@@ -18,6 +19,7 @@ interface LoadingInstance {
 }
 
 export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
+  requestOptions?: RequestOptions;
   isToken?: boolean;
   silentSuccess?: boolean;
   silentError?: boolean;
@@ -26,7 +28,7 @@ export interface ExtendedAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 interface RequestClient {
-  <T = unknown>(config: ExtendedAxiosRequestConfig): Promise<T>;
+  <T = unknown>(config: ExtendedAxiosRequestConfig, options?: RequestOptions): Promise<T>;
   get<T = unknown>(url: string, config?: ExtendedAxiosRequestConfig): Promise<T>;
   post<T = unknown>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
   put<T = unknown>(url: string, data?: unknown, config?: ExtendedAxiosRequestConfig): Promise<T>;
@@ -42,7 +44,10 @@ export { isRelogin };
  * 兼容层请求函数
  * 保持与原有 request(config) 调用方式一致
  */
-function request<T = unknown>(config: ExtendedAxiosRequestConfig): Promise<T> {
+function request<T = unknown>(
+  config: ExtendedAxiosRequestConfig,
+  options?: RequestOptions
+): Promise<T> {
   const { method = 'get', ...restConfig } = config;
   const lowerMethod = method.toLowerCase();
 
@@ -61,6 +66,7 @@ function request<T = unknown>(config: ExtendedAxiosRequestConfig): Promise<T> {
     withToken,
     showErrorMessage: false,
     showSuccessMessage: false,
+    ...options,
   };
 
   // 根据方法类型调用对应的 http 方法
@@ -118,6 +124,20 @@ export function download(
   filename: string,
   config?: AxiosRequestConfig
 ): Promise<void> {
+  return downloadFile(
+    {
+      url,
+      data: params,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      ...config,
+      method: 'post',
+    },
+    filename
+  );
+}
+
+/** HTTP 文件下载共用执行入口，负责反馈和并行任务的 loading 生命周期。 */
+export function downloadFile(config: ExtendedAxiosRequestConfig, filename: string): Promise<void> {
   if (activeDownloads === 0) {
     downloadLoadingInstance = ElLoading.service({ text: '正在下载数据，请稍候' });
   }
@@ -125,11 +145,9 @@ export function download(
 
   const task = (async () => {
     try {
-      const response = await http.post<AxiosResponse<Blob>>(
+      const response = await http.request<AxiosResponse<Blob>>(
         {
-          url,
-          data: params,
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          method: 'get',
           responseType: 'blob',
           ...config,
           // 下载入口负责失败反馈，避免与全局错误反馈重复。
@@ -149,11 +167,16 @@ export function download(
   })();
 
   // 反馈观察者不改变 task 的拒绝结果，也兼容页面不等待的事件调用。
-  void task.catch((error: unknown) => {
-    if (!isAbortError(error)) {
-      ElMessage.error(error instanceof Error ? error.message : '下载文件出现错误，请联系管理员！');
-    }
-  });
+  observeFeedback(() =>
+    task.catch((error: unknown) => {
+      if (!isAbortError(error)) {
+        return ElMessage.error(
+          error instanceof Error ? error.message : '下载文件出现错误，请联系管理员！'
+        );
+      }
+      return undefined;
+    })
+  );
   return task;
 }
 

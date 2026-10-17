@@ -5,8 +5,12 @@
     title="分配数据权限"
     placement="right"
     :loading="drawerLoading"
+    :ok-disabled="drawerLoading || !!loadError || drawer.state.disabled"
   >
-    <el-form :model="drawer.state.data" label-position="top" class="role-form">
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
+    <el-form v-show="!loadError" :model="drawer.state.data" label-position="top" class="role-form">
       <el-form-item label="角色名称">
         <zx-input v-model="drawer.state.data.roleName" disabled />
       </el-form-item>
@@ -55,7 +59,8 @@
 
 <script setup>
 import { ref, nextTick } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useEditorRead } from '@/utils/editor-read';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { getRole, dataScope, deptTreeSelect } from '@/api/system/role';
 
 const emit = defineEmits(['success']);
@@ -64,7 +69,7 @@ const deptRef = ref();
 const deptOptions = ref([]);
 const deptExpand = ref(true);
 const deptNodeAll = ref(false);
-const drawerLoading = ref(false);
+let requestedId;
 
 /** 数据范围选项 */
 const dataScopeOptions = [
@@ -88,12 +93,25 @@ const drawer = useDrawer({
     deptIds: [],
   }),
   async onConfirm() {
-    const submitData = { ...drawer.state.data, deptIds: getDeptAllCheckedKeys() };
+    if (drawerLoading.value || loadError.value) return false;
+    const submitData = {
+      roleId: drawer.state.data.roleId,
+      dataScope: drawer.state.data.dataScope,
+      deptCheckStrictly: drawer.state.data.deptCheckStrictly,
+      deptIds: getDeptAllCheckedKeys(),
+    };
     await dataScope(submitData);
     emit('success');
     return true;
   },
 });
+
+const {
+  loading: drawerLoading,
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => drawer.state.visible);
 
 /** 获取所有选中的部门节点 */
 function getDeptAllCheckedKeys() {
@@ -132,36 +150,46 @@ function resetDeptTree() {
 }
 
 /** 打开抽屉 */
-async function openDrawer(roleId) {
-  resetDeptTree();
-  drawer.open();
-  drawerLoading.value = true;
-
-  try {
-    const [roleRes, deptRes] = await Promise.all([getRole(roleId), deptTreeSelect(roleId)]);
-
+function openDrawer(roleId) {
+  requestedId = roleId;
+  return runRead(async (read) => {
+    drawer.open({ roleId });
+    drawer.setDisabled(true);
+    resetDeptTree();
+    deptOptions.value = [];
+    const config = { signal: read.signal, silentError: true };
+    const [roleData, deptRes] = await Promise.all([
+      getRole(roleId, config),
+      deptTreeSelect(roleId, config),
+    ]);
+    if (!read.isCurrent()) return;
     deptOptions.value = deptRes.depts || [];
-    const roleData = roleRes || {};
-
-    drawer.state.data = {
+    drawer.open({
       roleId: roleData.roleId,
       roleName: roleData.roleName,
       roleKey: roleData.roleKey,
       dataScope: roleData.dataScope || '1',
       deptCheckStrictly: roleData.deptCheckStrictly,
-    };
-
-    nextTick(() => {
-      nextTick(() => {
-        deptRef.value?.setCheckedKeys(deptRes.checkedKeys || []);
-      });
     });
-  } finally {
-    drawerLoading.value = false;
-  }
+    drawer.setDisabled(true);
+    await nextTick();
+    await nextTick();
+    if (!read.isCurrent()) return;
+    deptRef.value?.setCheckedKeys(deptRes.checkedKeys || []);
+    drawer.setDisabled(false);
+  });
+}
+function closeDrawer() {
+  cancelRead();
+  return drawer.close();
+}
+function handleRetry() {
+  return openDrawer(requestedId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
-defineExpose({ open: openDrawer, close: drawer.close });
+defineExpose({ open: openDrawer, close: closeDrawer });
 </script>
 
 <style scoped lang="less">

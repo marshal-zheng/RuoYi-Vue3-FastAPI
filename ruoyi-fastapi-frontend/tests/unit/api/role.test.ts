@@ -102,11 +102,11 @@ describe('Role API contract', () => {
       status: 501,
       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
-    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
+    await expect(roleApi.authUserCancelAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
       status: 501,
       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });
-    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: '2,3' })).rejects.toMatchObject({
+    await expect(roleApi.authUserSelectAll({ roleId: 1, userIds: [2, 3] })).rejects.toMatchObject({
       status: 501,
       problem: { errorCode: 'MOCK_SYSTEM_WRITE_NOT_SUPPORTED' },
     });

@@ -18,6 +18,7 @@
         :disabled="multiple"
         @click="handleDelete"
         v-hasPermi="['system:user:remove']"
+        :loading="handleDeletePending"
         >删除</ZxButton
       >
       <ZxButton type="info" icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']"
@@ -26,7 +27,7 @@
       <ZxButton
         type="warning"
         icon="Download"
-        @click="() => onExport({ query })"
+        @click="handleExport"
         v-hasPermi="['system:user:export']"
         >导出</ZxButton
       >
@@ -48,7 +49,12 @@
                 class="w-full"
               />
             </div>
-            <div class="flex-1 overflow-auto">
+            <div class="flex-1 overflow-auto" v-loading="deptStatus.loading">
+              <div v-if="deptStatus.error" role="alert">
+                部门读取失败
+                <ZxButton type="text" @click="refreshDepartments">重试</ZxButton>
+              </div>
+              <div v-else-if="deptStatus.paused" role="status">部门等待网络连接</div>
               <el-tree
                 :data="deptOptions"
                 :props="{ label: 'label', children: 'children' }"
@@ -67,77 +73,75 @@
         <!-- 用户数据 -->
         <template #second>
           <div data-zx-fill>
-            <ZxGridList ref="gridListRef" :load-data="loadUserData" fill>
-              <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+            <ZxGridList
+              v-if="queryScope"
+              :key="queryScope.key"
+              mode="controlled"
+              :rows="userRows"
+              :pagination="pagination"
+              :status="listStatus"
+              fill
+              @page-change="handlePageChange"
+              @refresh="refreshList"
+            >
+              <template #form>
                 <ZxListToolbar aria-label="列表操作与筛选">
                   <template #filters>
                     <zx-input
-                      v-model="query.userName"
+                      v-model="draft.userName"
                       placeholder="请输入用户名称"
                       clearable
                       style="width: 240px"
-                      @change="(v) => onFilterChange('userName', v, { handleRefresh, updateState })"
+                      @change="onSearch"
                     />
                     <zx-input
-                      v-model="query.phonenumber"
+                      v-model="draft.phonenumber"
                       placeholder="请输入手机号码"
                       clearable
                       style="width: 240px"
-                      @change="
-                        (v) => onFilterChange('phonenumber', v, { handleRefresh, updateState })
-                      "
+                      @change="onSearch"
                     />
-                    <el-select
-                      v-model="query.status"
+                    <DictSelect
+                      dict-type="sys_normal_disable"
+                      v-model="draft.status"
                       placeholder="用户状态"
                       clearable
                       style="width: 240px"
-                      @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-                    >
-                      <el-option
-                        v-for="dict in sys_normal_disable"
-                        :key="dict.value"
-                        :label="dict.label"
-                        :value="dict.value"
-                      />
-                    </el-select>
+                      @change="onSearch"
+                    />
                     <el-date-picker
-                      v-model="query.dateRange"
+                      v-model="draft.dateRange"
                       value-format="YYYY-MM-DD"
                       type="daterange"
                       range-separator="-"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
                       style="width: 308px"
-                      @change="
-                        (v) => onFilterChange('dateRange', v, { handleRefresh, updateState })
-                      "
+                      @change="onSearch"
                     />
                   </template>
                   <template #search>
                     <ZxSearch
-                      v-model="query.userName"
+                      v-model="draft.userName"
                       placeholder="搜索用户名称"
-                      :loading="loading"
+                      :loading="listStatus.loading"
                       search-mode="click"
-                      @search="() => onSearch({ handleRefresh, updateState })"
-                      @clear="() => onSearch({ handleRefresh, updateState })"
+                      @search="onSearch"
+                      @clear="onSearch"
                     />
-                    <!-- <right-toolbar
-                      v-model:showSearch="showSearch"
-                      @queryTable="handleRefresh"
-                      :columns="columns"
-                    /> -->
                   </template>
                 </ZxListToolbar>
               </template>
 
-              <template #table="{ grid }">
+              <template #table="{ grid, renderEmpty }">
                 <el-table
-                  v-loading="grid.loading"
+                  ref="userTableRef"
                   :data="grid.list || []"
                   @selection-change="handleSelectionChange"
                 >
+                  <template #empty>
+                    <component :is="renderEmpty" />
+                  </template>
                   <el-table-column type="selection" width="50" />
                   <el-table-column
                     label="用户编号"
@@ -176,10 +180,12 @@
                   <el-table-column label="状态" key="status" v-if="columns[5].visible">
                     <template #default="scope">
                       <el-switch
-                        v-model="scope.row.status"
+                        :model-value="scope.row.status"
                         active-value="0"
                         inactive-value="1"
-                        @change="handleStatusChange(scope.row)"
+                        :loading="statusOperations.get(scope.row.userId)?.pending.value"
+                        :disabled="statusOperations.has(scope.row.userId)"
+                        @change="(value) => handleStatusChange(value, scope.row)"
                       />
                     </template>
                   </el-table-column>
@@ -230,8 +236,6 @@
     <UserFormDialog
       ref="userFormDialogRef"
       :dept-options="enabledDeptOptions"
-      :status-options="sys_normal_disable"
-      :sex-options="sys_user_sex"
       @success="handleDialogSuccess"
     />
 
@@ -241,225 +245,245 @@
 </template>
 
 <script setup name="User">
+import { computed, getCurrentInstance, reactive, ref, shallowReactive, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useQuery } from '@tanstack/vue-query';
+import { queryScope } from '@/queries/context';
+import {
+  captureUserCommand,
+  normalizeUserFilters,
+  userCommands,
+  userDeptTreeOptions,
+  userListOptions,
+} from '@/queries/system/user';
+import { useOperation } from '@/utils/operation';
 import useAppStore from '@/store/modules/app';
 import { checkPermi } from '@/utils/permission';
-import { serializeDateRange } from '@/utils/ruoyi';
-import {
-  changeUserStatus,
-  listUser,
-  resetUserPwd,
-  delUser,
-  deptTreeSelect,
-} from '@/api/system/user';
 import UserFormDialog from './components/UserFormDialog.vue';
 import UserImportDialog from './components/UserImportDialog.vue';
 
 const router = useRouter();
 const appStore = useAppStore();
 const { proxy } = getCurrentInstance();
-const { sys_normal_disable, sys_user_sex } = proxy.useDict('sys_normal_disable', 'sys_user_sex');
-
-const gridListRef = ref();
+const userTableRef = ref();
+const deptTreeRef = ref();
 const userFormDialogRef = ref();
 const userImportDialogRef = ref();
-const currentQuery = ref({});
-
 const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
-const deptSelectedId = ref();
 const deptName = ref('');
-const deptOptions = ref(undefined);
-const enabledDeptOptions = ref(undefined);
-// 列显隐信息
+const draft = reactive({});
+const submitted = ref(normalizeUserFilters({}));
+const currentPage = ref(1);
+const pageSize = ref(10);
+const emptyRows = Object.freeze([]);
+
+const userQuery = useQuery(() =>
+  userListOptions(queryScope.value, {
+    ...submitted.value,
+    page: currentPage.value,
+    pageSize: pageSize.value,
+  })
+);
+const departmentQuery = useQuery(() => userDeptTreeOptions(queryScope.value));
+const userRows = computed(() => userQuery.data.value?.items ?? emptyRows);
+const pagination = computed(() => ({
+  page: currentPage.value,
+  size: pageSize.value,
+  total: userQuery.data.value?.total ?? 0,
+}));
+const listStatus = computed(() => ({
+  loading: userQuery.isLoading.value,
+  refreshing: userQuery.isFetching.value && userQuery.data.value !== undefined,
+  error: userQuery.error.value,
+  paused: userQuery.fetchStatus.value === 'paused',
+}));
+const deptOptions = computed(() => departmentQuery.data.value ?? emptyRows);
+const enabledDeptOptions = computed(() => filterDisabledDept(deptOptions.value));
+const deptStatus = computed(() => ({
+  loading: departmentQuery.isLoading.value,
+  error: departmentQuery.error.value,
+  paused: departmentQuery.fetchStatus.value === 'paused',
+}));
 const columns = ref([
-  { key: 0, label: `用户编号`, visible: true },
-  { key: 1, label: `用户名称`, visible: true },
-  { key: 2, label: `用户昵称`, visible: true },
-  { key: 3, label: `部门`, visible: true },
-  { key: 4, label: `手机号码`, visible: true },
-  { key: 5, label: `状态`, visible: true },
-  { key: 6, label: `创建时间`, visible: true },
+  { key: 0, label: '用户编号', visible: true },
+  { key: 1, label: '用户名称', visible: true },
+  { key: 2, label: '用户昵称', visible: true },
+  { key: 3, label: '部门', visible: true },
+  { key: 4, label: '手机号码', visible: true },
+  { key: 5, label: '状态', visible: true },
+  { key: 6, label: '创建时间', visible: true },
 ]);
-
-/** 通过条件过滤节点  */
-const filterNode = (value, data) => {
-  if (!value) return true;
-  return data.label.indexOf(value) !== -1;
-};
-/** 根据名称筛选部门树 */
-watch(deptName, (val) => {
-  proxy.$refs['deptTreeRef'].filter(val);
+const filterNode = (value, data) => !value || data.label.includes(value);
+watch(deptName, (value) => deptTreeRef.value?.filter(value));
+function filterDisabledDept(items) {
+  return items
+    .filter((item) => !item.disabled)
+    .map((item) => ({
+      ...item,
+      ...(item.children ? { children: filterDisabledDept(item.children) } : {}),
+    }));
+}
+function clearSelection() {
+  userTableRef.value?.clearSelection();
+  handleSelectionChange([]);
+}
+watch(userRows, clearSelection);
+// A delete may remove the last row on the last page. Wait for that page's result
+// before correcting the page; pending keys must not be clamped using an old total.
+watch(userQuery.data, (result) => {
+  if (!result) return;
+  const lastPage = Math.max(1, Math.ceil(result.total / pageSize.value));
+  if (currentPage.value > lastPage) currentPage.value = lastPage;
 });
-/** GridList 数据加载 */
-function queryTransform(query) {
-  return serializeDateRange(query);
-}
-
-async function loadUserData(params) {
-  const query = queryTransform({ ...(params?.query || {}), deptId: deptSelectedId.value });
-  const res = await listUser({ ...params, query });
-  currentQuery.value = query;
-  return res;
-}
-/** 查询部门下拉树结构 */
-function getDeptTree() {
-  deptTreeSelect().then((response) => {
-    const data = response.items;
-    deptOptions.value = data;
-    enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(data)));
-  });
-}
-/** 过滤禁用的部门 */
-function filterDisabledDept(deptList) {
-  return deptList.filter((dept) => {
-    if (dept.disabled) {
-      return false;
-    }
-    if (dept.children && dept.children.length) {
-      dept.children = filterDisabledDept(dept.children);
-    }
-    return true;
-  });
-}
-/** 节点单击事件 */
+const statusOperations = shallowReactive(new Map());
+watch(
+  queryScope,
+  () => {
+    Object.keys(draft).forEach((key) => delete draft[key]);
+    submitted.value = normalizeUserFilters({});
+    currentPage.value = 1;
+    pageSize.value = 10;
+    deptName.value = '';
+    deptTreeRef.value?.setCurrentKey(null);
+    statusOperations.clear();
+    clearSelection();
+  },
+  { flush: 'sync' }
+);
 function handleNodeClick(data) {
-  deptSelectedId.value = data.id;
-  refreshList();
+  draft.deptId = data.id;
+  onSearch();
 }
-/** 搜索按钮操作 */
+function onSearch() {
+  const nextFilters = normalizeUserFilters(draft);
+  const unchanged =
+    currentPage.value === 1 &&
+    Object.keys(nextFilters).length === Object.keys(submitted.value).length &&
+    Object.entries(nextFilters).every(([key, value]) => submitted.value[key] === value);
+  submitted.value = nextFilters;
+  currentPage.value = 1;
+  clearSelection();
+  if (unchanged) refreshList();
+}
+function handlePageChange({ page, size }) {
+  currentPage.value = size === pageSize.value ? page : 1;
+  pageSize.value = size;
+  clearSelection();
+}
+function refreshList() {
+  if (queryScope.value) void userQuery.refetch({ cancelRefetch: false });
+}
+function refreshDepartments() {
+  if (queryScope.value) void departmentQuery.refetch({ cancelRefetch: false });
+}
+function handleExport() {
+  if (!queryScope.value) return;
+  proxy.download('system/user/export', { ...submitted.value }, `user_${Date.now()}.xlsx`);
+}
 
-/** 重置按钮操作 */
-
-/** 删除按钮操作 */
-function handleDelete(row) {
-  const userIds = row.userId || ids.value;
-  const message = row.userId
-    ? `确认删除用户“${row.userName || `编号 ${row.userId}`}”吗？`
-    : `确认删除选中的 ${ids.value.length} 位用户吗？`;
-  proxy.$modal
-    .confirm(message, '删除用户', {
+const deleteOperation = useOperation(async (command, message) => {
+  try {
+    await proxy.$modal.confirm(message, '删除用户', {
       confirmButtonText: '删除',
       autofocus: false,
       closeOnClickModal: false,
-    })
-    .then(function () {
-      return delUser(userIds);
-    })
-    .then(() => {
-      refreshList();
-    })
-    .catch(() => {});
-}
-/** 导出按钮操作 */
-function handleExport() {
-  proxy.download(
-    'system/user/export',
-    { ...(currentQuery.value || {}) },
-    `user_${new Date().getTime()}.xlsx`
-  );
-}
-/** 用户状态修改  */
-function handleStatusChange(row) {
-  let text = row.status === '0' ? '启用' : '停用';
-  proxy.$modal
-    .confirm(`确认${text}用户“${row.userName}”吗？`, `${text}用户`, {
-      confirmButtonText: text,
-      autofocus: row.status === '1' ? false : undefined,
-    })
-    .then(() => changeUserStatus(row.userId, row.status))
-    .catch(() => {
-      row.status = row.status === '0' ? '1' : '0';
     });
+    await userCommands.deleteUsers(command);
+    if (queryScope.value?.key === command.scope.key) clearSelection();
+  } catch {
+    // Confirmation cancellation or the public command's HTTP feedback completes this flow.
+  }
+});
+const handleDeletePending = deleteOperation.pending;
+function handleDelete(row = {}) {
+  const scope = queryScope.value;
+  const selected = row.userId ? [row.userId] : [...ids.value];
+  if (!scope || !selected.length) return Promise.resolve();
+  const message = row.userId
+    ? `确认删除用户“${row.userName || `编号 ${row.userId}`}”吗？`
+    : `确认删除选中的 ${selected.length} 位用户吗？`;
+  return deleteOperation.run(captureUserCommand(selected, scope), message);
 }
-/** 更多操作 */
-
-/** 跳转角色分配 */
+function handleStatusChange(status, row) {
+  const scope = queryScope.value;
+  if (!scope || status === row.status) return Promise.resolve();
+  const existing = statusOperations.get(row.userId);
+  if (existing) return existing.run();
+  const command = captureUserCommand({ userId: row.userId, status }, scope);
+  const text = status === '0' ? '启用' : '停用';
+  const operation = useOperation(async () => {
+    try {
+      await proxy.$modal.confirm(`确认${text}用户“${row.userName}”吗？`, `${text}用户`, {
+        confirmButtonText: text,
+        autofocus: status === '1' ? false : undefined,
+      });
+      await userCommands.changeStatus(command);
+    } catch {
+      // Rows remain server-owned on cancellation and failure; no rollback mutation is needed.
+    } finally {
+      if (statusOperations.get(row.userId) === operation) statusOperations.delete(row.userId);
+    }
+  });
+  statusOperations.set(row.userId, operation);
+  return operation.run();
+}
 function handleAuthRole(row) {
-  const userId = row.userId;
-  router.push('/system/user-auth/role/' + userId);
+  router.push('/system/user-auth/role/' + row.userId);
 }
-/** 重置密码按钮操作 */
-function handleResetPwd(row) {
-  proxy
-    .$prompt('请输入"' + row.userName + '"的新密码', '提示', {
+const resetPasswordOperation = useOperation(async (scope, userId, userName) => {
+  try {
+    const { value } = await proxy.$prompt('请输入"' + userName + '"的新密码', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       closeOnClickModal: false,
       inputPattern: /^.{5,20}$/,
       inputErrorMessage: '用户密码长度必须介于 5 和 20 之间',
       inputValidator: (value) => {
-        if (/<|>|"|'|\||\\/.test(value)) {
-          return '不能包含非法字符：< > " \' \\ |';
-        }
+        if (/<|>|"|'|\||\\/.test(value)) return '不能包含非法字符';
       },
-    })
-    .then(({ value }) => {
-      resetUserPwd(row.userId, value).then(() => {
-        proxy.$modal.alertSuccess('修改成功，新密码是：' + value);
-      });
-    })
-    .catch(() => {});
+    });
+    await userCommands.resetPassword(captureUserCommand({ userId, password: value }, scope));
+    if (queryScope.value?.key === scope.key)
+      proxy.$modal.alertSuccess('修改成功，新密码是：' + value);
+  } catch {
+    // The command rejects expired scopes before sending and owns write feedback.
+  }
+});
+function handleResetPwd(row) {
+  const scope = queryScope.value;
+  if (scope) return resetPasswordOperation.run(scope, row.userId, row.userName);
 }
-/** 选择条数  */
 function handleSelectionChange(selection) {
   ids.value = selection.map((item) => item.userId);
-  single.value = selection.length != 1;
-  multiple.value = !selection.length;
+  single.value = selection.length !== 1;
+  multiple.value = selection.length === 0;
 }
-/** 导入按钮操作 */
 function handleImport() {
   userImportDialogRef.value?.open();
 }
-/** 新增按钮操作 */
 function handleAdd() {
-  userFormDialogRef.value?.open();
+  return userFormDialogRef.value?.open().catch(() => {
+    // The dialog owns current-read feedback and ignores expired opens.
+  });
 }
-
-/** 修改按钮操作 */
-function handleUpdate(row) {
+function handleUpdate(row = {}) {
   const userId = row.userId || ids.value[0];
-  userFormDialogRef.value?.open(userId);
+  return userFormDialogRef.value?.open(userId).catch(() => {
+    // The dialog owns current-read feedback and ignores expired opens.
+  });
 }
-
-/** 对话框成功回调 */
 function handleDialogSuccess() {
-  refreshList();
+  clearSelection();
 }
-
-function refreshList() {
-  gridListRef.value && gridListRef.value.refresh && gridListRef.value.refresh();
-}
-
-function onFilterChange(key, value, { handleRefresh, updateState }) {
-  updateState(`query.${key}`, value);
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onSearch({ handleRefresh, updateState }) {
-  updateState('pager.page', 1);
-  handleRefresh();
-}
-
-function onExport({ query }) {
-  currentQuery.value = { ...(query || {}) };
-  handleExport();
-}
-
-getDeptTree();
-
 function getUserMoreActionList() {
   const actions = [];
-  if (checkPermi(['system:user:resetPwd'])) {
+  if (checkPermi(['system:user:resetPwd']))
     actions.push({ label: '重置密码', eventTag: 'resetPwd' });
-  }
-  if (checkPermi(['system:user:remove'])) {
-    actions.push({ label: '删除', eventTag: 'delete' });
-  }
+  if (checkPermi(['system:user:remove'])) actions.push({ label: '删除', eventTag: 'delete' });
   return actions;
 }
-
 function handleMoreActionSelect(item, row) {
   switch (item.eventTag) {
     case 'resetPwd':

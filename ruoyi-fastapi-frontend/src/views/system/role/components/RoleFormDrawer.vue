@@ -5,9 +5,13 @@
     :title="isEdit ? '修改角色' : '添加角色'"
     placement="right"
     :loading="drawerLoading"
-    :ok-disabled="drawerLoading || menuLoadFailed || drawer.state.disabled"
+    :ok-disabled="drawerLoading || !!loadError || drawer.state.disabled"
   >
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
     <el-form
+      v-show="!loadError"
       ref="formRef"
       :model="drawer.state.data"
       :rules="formRules"
@@ -40,6 +44,7 @@
         />
       </el-form-item>
       <el-form-item label="状态">
+        <DictStatus :types="['sys_normal_disable']" />
         <el-radio-group v-model="drawer.state.data.status">
           <el-radio v-for="dict in statusOptions" :key="dict.value" :value="dict.value">
             {{ dict.label }}
@@ -81,13 +86,13 @@
 
 <script setup>
 import { ref, computed, nextTick } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useEditorRead } from '@/utils/editor-read';
+import { useDict } from '@/utils/dict';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { addRole, getRole, updateRole } from '@/api/system/role';
 import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu';
 
-defineProps({
-  statusOptions: { type: Array, default: () => [] },
-});
+const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 
 const emit = defineEmits(['success']);
 
@@ -96,11 +101,11 @@ const menuRef = ref();
 const menuOptions = ref([]);
 const menuExpand = ref(false);
 const menuNodeAll = ref(false);
-const drawerLoading = ref(false);
-const menuLoadFailed = ref(false);
+let requestedId;
+
 const menuEmptyText = computed(() => {
   if (drawerLoading.value) return '加载中，请稍候';
-  if (menuLoadFailed.value) return '菜单加载失败，请关闭后重试';
+  if (loadError.value) return '菜单加载失败，请关闭后重试';
   return '暂无菜单数据';
 });
 
@@ -128,12 +133,18 @@ const drawer = useDrawer({
     remark: '',
   }),
   async onConfirm() {
+    if (drawerLoading.value || loadError.value) return false;
     const submitData = {
-      ...drawer.state.data,
+      roleName: drawer.state.data.roleName,
+      roleKey: drawer.state.data.roleKey,
+      roleSort: drawer.state.data.roleSort,
+      status: drawer.state.data.status,
+      menuCheckStrictly: drawer.state.data.menuCheckStrictly,
+      remark: drawer.state.data.remark,
       menuIds: getMenuAllCheckedKeys(),
     };
-    if (submitData.roleId) {
-      await updateRole(submitData);
+    if (drawer.state.data.roleId) {
+      await updateRole({ ...submitData, roleId: drawer.state.data.roleId });
     } else {
       await addRole(submitData);
     }
@@ -143,6 +154,13 @@ const drawer = useDrawer({
 });
 
 const isEdit = computed(() => !!drawer.state.data.roleId);
+
+const {
+  loading: drawerLoading,
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => drawer.state.visible);
 
 /** 获取所有选中的菜单节点 */
 function getMenuAllCheckedKeys() {
@@ -174,20 +192,22 @@ function resetMenuTree() {
 }
 
 /** 打开抽屉 */
-async function openDrawer(roleId) {
-  resetMenuTree();
-  menuOptions.value = [];
-  menuLoadFailed.value = false;
-  drawerLoading.value = true;
-  drawer.open();
-
-  try {
+function openDrawer(roleId) {
+  requestedId = roleId;
+  return runRead(async (read) => {
+    drawer.open(roleId ? { roleId } : undefined);
+    drawer.setDisabled(true);
+    resetMenuTree();
+    menuOptions.value = [];
+    const config = { signal: read.signal, silentError: true };
     if (roleId) {
-      const [roleRes, menuRes] = await Promise.all([getRole(roleId), roleMenuTreeselect(roleId)]);
-      // 后端返回的数据已经是正确的树形结构，直接使用
+      const [roleData, menuRes] = await Promise.all([
+        getRole(roleId, config),
+        roleMenuTreeselect(roleId, config),
+      ]);
+      if (!read.isCurrent()) return;
       menuOptions.value = menuRes.menus || [];
-      const roleData = roleRes || {};
-      drawer.state.data = {
+      drawer.open({
         roleId: roleData.roleId,
         roleName: roleData.roleName,
         roleKey: roleData.roleKey,
@@ -195,25 +215,31 @@ async function openDrawer(roleId) {
         status: roleData.status,
         menuCheckStrictly: roleData.menuCheckStrictly,
         remark: roleData.remark,
-      };
-      nextTick(() => {
-        const checkedKeys = menuRes.checkedKeys || [];
-        checkedKeys.forEach((v) => {
-          nextTick(() => menuRef.value?.setChecked(v, true, false));
-        });
       });
+      drawer.setDisabled(true);
+      await nextTick();
+      await nextTick();
+      if (!read.isCurrent()) return;
+      (menuRes.checkedKeys || []).forEach((id) => menuRef.value?.setChecked(id, true, false));
     } else {
-      const menuRes = await menuTreeselect();
+      const menuRes = await menuTreeselect(config);
+      if (!read.isCurrent()) return;
       menuOptions.value = menuRes.items;
     }
-  } catch {
-    menuLoadFailed.value = true;
-  } finally {
-    drawerLoading.value = false;
-  }
+    drawer.setDisabled(false);
+  });
+}
+function closeDrawer() {
+  cancelRead();
+  return drawer.close();
+}
+function handleRetry() {
+  return openDrawer(requestedId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
-defineExpose({ open: openDrawer, close: drawer.close });
+defineExpose({ open: openDrawer, close: closeDrawer });
 </script>
 
 <style scoped lang="less">

@@ -36,6 +36,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['device:list:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
           </template>
@@ -140,6 +141,7 @@
 </template>
 
 <script setup name="Device">
+import { useOperation } from '@/utils/operation';
 import { ElMessage } from 'element-plus';
 import { listDevice, delDevice, importDeviceBatch } from '@/api/device/device';
 import { download } from '@/utils/request';
@@ -281,9 +283,9 @@ function handleUpdate(row) {
   router.push(`/device/detail/index/${row.deviceId}`);
 }
 
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const deviceIds = row?.deviceId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除设备编号为"' + deviceIds + '"的数据项？')
     .then(function () {
       return delDevice(deviceIds);
@@ -291,7 +293,7 @@ function handleDelete(row) {
     .then(() => {
       refreshList();
     });
-}
+});
 
 function handleClone(row) {
   cloneDialogRef.value.open(row, () => {

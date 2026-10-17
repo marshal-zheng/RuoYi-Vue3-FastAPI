@@ -15,7 +15,7 @@
 <script setup name="ProjectInfo">
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { ZxTabs } from '@zxio/zxui';
+import { ZxTabs } from '@zxio/zxui/tabs';
 import { getProject } from '@/api/project/project';
 import ContentDetailWrap from '@/components/ui/ContentDetailWrap/index';
 import { VersionList } from './components';

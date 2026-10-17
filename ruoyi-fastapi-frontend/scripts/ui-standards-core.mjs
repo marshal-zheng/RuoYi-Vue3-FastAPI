@@ -1,6 +1,7 @@
 import { parse } from '@vue/compiler-sfc';
 import ts from 'typescript';
 import postcss from 'postcss';
+import path from 'node:path';
 
 const PRESETS = new Set(['sm', 'md', 'lg', 'xl', 'small', 'large']);
 const CORE_THEME_VARIABLE = /^--(?:el|zx)-/;
@@ -35,6 +36,332 @@ function checker(source, filePath) {
   };
 }
 
+const QUERY_CACHE_COMMANDS = new Set([
+  'invalidateQueries',
+  'cancelQueries',
+  'removeQueries',
+  'resetQueries',
+  'setQueryData',
+  'setQueriesData',
+  'clear',
+]);
+const QUERY_KEY_ARGUMENTS = new Set([
+  'getQueryData',
+  'getQueryState',
+  'setQueryData',
+  'getQueryDefaults',
+  'setQueryDefaults',
+]);
+const QUERY_WRAPPERS = new Set([
+  'ref',
+  'shallowRef',
+  'reactive',
+  'shallowReactive',
+  'computed',
+  'unref',
+  'toValue',
+]);
+const QUERY_RESOURCE_POLICY =
+  /^(?:queryKey|queryFn|queryHash|queryKeyHashFn|enabled|staleTime|gcTime|retry.*|refetch.*|networkMode|initialData.*|placeholderData|persister|structuralSharing)$/;
+
+/** Import provenance and local expressions only; public query modules own their exports. */
+function analyzeQuerySources(ast, ctx, offset, filePath) {
+  const normalizedFile = filePath.replaceAll('\\', '/');
+  const isQueryModule = (module) => /(?:^|\/)src\/queries(?:\/|$)/.test(module);
+  if (isQueryModule(normalizedFile)) return;
+  const isConsumer = /(?:^|\/)src\/(?:views|components)\//.test(normalizedFile);
+  const modulePath = (source) =>
+    source.startsWith('@/')
+      ? `src/${source.slice(2)}`
+      : source.startsWith('.')
+        ? path.posix.normalize(path.posix.join(path.posix.dirname(normalizedFile), source))
+        : source;
+  const scopes = new WeakMap();
+  const root = { parent: null, bindings: new Map() };
+  function bindName(name, scope, value, type) {
+    if (ts.isIdentifier(name)) scope.bindings.set(name.text, { value, type });
+    else if (ts.isObjectBindingPattern(name)) {
+      for (const entry of name.elements)
+        if (ts.isIdentifier(entry.name))
+          scope.bindings.set(entry.name.text, {
+            value,
+            member: entry.propertyName?.text ?? entry.name.text,
+          });
+    }
+  }
+  function index(node, scope) {
+    if (ts.isFunctionDeclaration(node) && node.name)
+      scope.bindings.set(node.name.text, { value: node });
+    if (ts.isFunctionLike(node) || ts.isBlock(node)) scope = { parent: scope, bindings: new Map() };
+    scopes.set(node, scope);
+    if (ts.isVariableDeclaration(node) || ts.isParameter(node))
+      bindName(node.name, scope, node.initializer, node.type);
+    if (
+      ts.isImportDeclaration(node) &&
+      node.importClause &&
+      ts.isStringLiteral(node.moduleSpecifier)
+    ) {
+      const module = modulePath(node.moduleSpecifier.text);
+      const clause = node.importClause;
+      if (clause.name) scope.bindings.set(clause.name.text, { module, name: 'default' });
+      const named = clause.namedBindings;
+      if (named && ts.isNamespaceImport(named))
+        scope.bindings.set(named.name.text, { module, name: '' });
+      else if (named)
+        for (const entry of named.elements)
+          scope.bindings.set(entry.name.text, {
+            module,
+            name: entry.propertyName?.text ?? entry.name.text,
+          });
+    }
+    ts.forEachChild(node, (child) => index(child, scope));
+  }
+  index(ast, root);
+  function binding(node) {
+    for (let scope = scopes.get(node); scope; scope = scope.parent) {
+      const found = scope.bindings.get(node.text);
+      if (found) return found;
+    }
+    return undefined;
+  }
+  function origin(node, seen = new Set()) {
+    node = unparen(node);
+    if (!node || seen.has(node)) return null;
+    seen = new Set([...seen, node]);
+    if (ts.isIdentifier(node)) {
+      const found = binding(node);
+      if (found?.module) return found;
+      if (found?.member && isClient(found.value))
+        return { module: 'QueryClient', name: found.member };
+      return found?.value ? origin(found.value, seen) : null;
+    }
+    if (ts.isPropertyAccessExpression(node) || ts.isQualifiedName(node)) {
+      if (ts.isPropertyAccessExpression(node) && isClient(node.expression))
+        return { module: 'QueryClient', name: node.name.text };
+      const parent = origin(node.expression ?? node.left, seen);
+      const name = (node.name ?? node.right).text;
+      if (parent)
+        return {
+          module: parent.module,
+          name: [parent.name, name].filter(Boolean).join('.'),
+        };
+    }
+    return null;
+  }
+  const isTanStack = (source, name) =>
+    source?.module === '@tanstack/vue-query' && source.name === name;
+  const isImportedClient = (source) =>
+    source &&
+    /(?:^|\/)src\/queries\/client(?:\.[cm]?[jt]s)?$/.test(source.module) &&
+    ['queryClient', 'default'].includes(source.name);
+  function isClient(node, seen = new Set()) {
+    node = unparen(node);
+    if (!node || seen.has(node)) return false;
+    seen = new Set([...seen, node]);
+    if (ts.isIdentifier(node)) {
+      const found = binding(node);
+      if (found?.module) return isImportedClient(found);
+      if (
+        found?.type &&
+        ts.isTypeReferenceNode(found.type) &&
+        isTanStack(origin(found.type.typeName), 'QueryClient')
+      )
+        return true;
+      return found?.value ? isClient(found.value, seen) : false;
+    }
+    if (ts.isPropertyAccessExpression(node)) return isImportedClient(origin(node));
+    if (ts.isNewExpression(node)) return isTanStack(origin(node.expression), 'QueryClient');
+    return ts.isCallExpression(node) && isTanStack(origin(node.expression), 'useQueryClient');
+  }
+  function returns(node) {
+    if (!node.body) return [];
+    if (!ts.isBlock(node.body)) return node.body ? [node.body] : [];
+    const values = [];
+    const walk = (child) => {
+      if (ts.isReturnStatement(child)) {
+        values.push(child.expression);
+        return;
+      }
+      if (!ts.isFunctionLike(child)) ts.forEachChild(child, walk);
+    };
+    ts.forEachChild(node.body, walk);
+    return values;
+  }
+  function wrapper(node) {
+    if (!ts.isCallExpression(node)) return false;
+    const imported = origin(node.expression);
+    return (
+      (imported?.module === 'vue' && QUERY_WRAPPERS.has(imported.name)) ||
+      (ts.isIdentifier(node.expression) &&
+        !binding(node.expression) &&
+        QUERY_WRAPPERS.has(node.expression.text))
+    );
+  }
+  // Follow reactive containers/getters without evaluating or dereferencing their parameters.
+  function follow(node, inspect, seen = new Set()) {
+    node = unparen(node);
+    if (!node || seen.has(node)) return false;
+    seen = new Set([...seen, node]);
+    if (ts.isIdentifier(node)) {
+      const found = binding(node);
+      if (found?.value && !found.member) return follow(found.value, inspect, seen);
+    }
+    if (
+      ts.isArrowFunction(node) ||
+      ts.isFunctionExpression(node) ||
+      ts.isFunctionDeclaration(node)
+    ) {
+      const values = returns(node);
+      return values.length > 0 && values.every((value) => follow(value, inspect, seen));
+    }
+    if (ts.isPropertyAccessExpression(node) && node.name.text === 'value')
+      return follow(node.expression, inspect, seen);
+    if (wrapper(node)) return follow(node.arguments[0], inspect, seen);
+    if (ts.isConditionalExpression(node))
+      return follow(node.whenTrue, inspect, seen) && follow(node.whenFalse, inspect, seen);
+    return inspect(node, seen);
+  }
+  const isFactory = (node) => isQueryModule(origin(node)?.module ?? '');
+  function optionsFromFactory(node, seen) {
+    return follow(
+      node,
+      (value, visited) => {
+        if (ts.isCallExpression(value)) return isFactory(value.expression);
+        if (!ts.isObjectLiteralExpression(value)) return false;
+        let factory = false;
+        for (const entry of value.properties) {
+          if (ts.isSpreadAssignment(entry)) {
+            if (!optionsFromFactory(entry.expression, visited)) return false;
+            factory = true;
+          } else if (
+            ts.isComputedPropertyName(entry.name) ||
+            QUERY_RESOURCE_POLICY.test(String(propName(entry)))
+          )
+            return false;
+        }
+        return factory;
+      },
+      seen
+    );
+  }
+  function queryArrayFromFactory(node, seen) {
+    return follow(
+      node,
+      (value, visited) => {
+        if (ts.isArrayLiteralExpression(value))
+          return value.elements.every((item) =>
+            ts.isSpreadElement(item)
+              ? queryArrayFromFactory(item.expression, visited)
+              : optionsFromFactory(item, visited)
+          );
+        if (ts.isCallExpression(value)) {
+          if (isFactory(value.expression)) return true;
+          if (
+            ts.isPropertyAccessExpression(value.expression) &&
+            value.expression.name.text === 'map'
+          ) {
+            const callback = value.arguments[0];
+            return isFactory(callback) || optionsFromFactory(callback, visited);
+          }
+        }
+        return false;
+      },
+      seen
+    );
+  }
+  function multipleFromFactory(node) {
+    return follow(node, (value, visited) => {
+      if (!ts.isObjectLiteralExpression(value)) return false;
+      const queries = value.properties.find((entry) => propName(entry) === 'queries');
+      return (
+        queries &&
+        queryArrayFromFactory(
+          ts.isShorthandPropertyAssignment(queries) ? queries.name : queries.initializer,
+          visited
+        )
+      );
+    });
+  }
+  const reportedKeys = new Set();
+  function literalKey(node) {
+    follow(node, (value) => {
+      if (ts.isArrayLiteralExpression(value) && !reportedKeys.has(value)) {
+        reportedKeys.add(value);
+        ctx.add(
+          'query-key-definition',
+          '查询 key 数组须集中在 src/queries，由公共查询工厂导出。',
+          offset + value.getStart(ast)
+        );
+      }
+      return true;
+    });
+  }
+  function inspectKeys(node, seen) {
+    follow(
+      node,
+      (value, visited) => {
+        if (ts.isObjectLiteralExpression(value)) {
+          for (const entry of value.properties) {
+            if (ts.isSpreadAssignment(entry)) inspectKeys(entry.expression, visited);
+            else {
+              const expression = ts.isShorthandPropertyAssignment(entry)
+                ? entry.name
+                : entry.initializer;
+              if (propName(entry) === 'queryKey') literalKey(expression);
+              if (propName(entry) === 'queries') inspectKeys(expression, visited);
+            }
+          }
+        } else if (ts.isArrayLiteralExpression(value))
+          for (const entry of value.elements) inspectKeys(entry, visited);
+        else if (
+          ts.isCallExpression(value) &&
+          ts.isPropertyAccessExpression(value.expression) &&
+          value.expression.name.text === 'map'
+        )
+          inspectKeys(value.arguments[0], visited);
+        return true;
+      },
+      seen
+    );
+  }
+  function inspect(node) {
+    if (ts.isCallExpression(node)) {
+      const imported = origin(node.expression);
+      const nativeQuery = isTanStack(imported, 'useQuery');
+      const multiple = isTanStack(imported, 'useQueries');
+      const select =
+        imported?.module === '@zxio/vue-query/ui' && imported.name === 'useQuerySelect';
+      if (nativeQuery || multiple || select || isTanStack(imported, 'queryOptions')) {
+        inspectKeys(node.arguments[0]);
+        if (
+          isConsumer &&
+          (nativeQuery || multiple || select) &&
+          !(multiple
+            ? multipleFromFactory(node.arguments[0])
+            : optionsFromFactory(node.arguments[0]))
+        )
+          ctx.add(
+            'query-options-source',
+            '查询 options 须来自 src/queries 公共工厂；允许本地 ref/computed/getter 与工厂数组/map，不在页面覆盖资源策略。动态来源无法局部解析时请改用可识别的工厂引用。',
+            offset + node.getStart(ast)
+          );
+      }
+      if (imported?.module === 'QueryClient') {
+        if (QUERY_CACHE_COMMANDS.has(imported.name))
+          ctx.add(
+            'query-cache-command',
+            '原生缓存修改须集中在 src/queries 公共命令或会话入口。',
+            offset + node.getStart(ast)
+          );
+        if (QUERY_KEY_ARGUMENTS.has(imported.name)) literalKey(node.arguments[0]);
+        else inspectKeys(node.arguments[0]);
+      }
+    }
+    ts.forEachChild(node, inspect);
+  }
+  inspect(ast);
+}
+
 /** Narrow local analysis: literal options/constants and the mandated form entry. */
 function analyzeScript(text, ctx, offset = 0, filePath = '') {
   const ast = ts.createSourceFile(
@@ -44,6 +371,7 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
     true,
     ts.ScriptKind.TSX
   );
+  analyzeQuerySources(ast, ctx, offset, filePath);
   const locals = new Map();
   const hooks = new Map([
     ['useDialog', 'dialog'],

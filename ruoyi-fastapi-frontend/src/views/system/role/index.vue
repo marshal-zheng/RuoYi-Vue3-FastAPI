@@ -28,12 +28,13 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['system:role:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
               type="warning"
               icon="Download"
-              @click="() => handleExport(query)"
+              @click="handleExport"
               v-hasPermi="['system:role:export']"
               >导出</ZxButton
             >
@@ -46,20 +47,14 @@
               style="width: 240px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-select
+            <DictSelect
+              dict-type="sys_normal_disable"
               v-model="query.status"
               placeholder="角色状态"
               clearable
               style="width: 160px"
               @change="(v) => onFilterChange('status', v, { handleRefresh, updateState })"
-            >
-              <el-option
-                v-for="dict in sys_normal_disable"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            />
             <el-date-picker
               v-model="query.dateRange"
               value-format="YYYY-MM-DD"
@@ -110,6 +105,7 @@
                 v-model="scope.row.status"
                 active-value="0"
                 inactive-value="1"
+                :disabled="statusOperations.get(scope.row)?.pending.value"
                 @change="handleStatusChange(scope.row)"
               />
             </template>
@@ -149,11 +145,7 @@
     </ZxGridList>
 
     <!-- 添加或修改角色抽屉 -->
-    <RoleFormDrawer
-      ref="roleFormDrawerRef"
-      :status-options="sys_normal_disable"
-      @success="handleDrawerSuccess"
-    />
+    <RoleFormDrawer ref="roleFormDrawerRef" @success="handleDrawerSuccess" />
 
     <!-- 分配角色数据权限抽屉 -->
     <RoleDataScopeDrawer ref="roleDataScopeDrawerRef" @success="handleDrawerSuccess" />
@@ -161,6 +153,9 @@
 </template>
 
 <script setup name="Role">
+import { shallowReactive } from 'vue';
+
+import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import { changeRoleStatus, delRole, listRole } from '@/api/system/role';
 import { checkPermi } from '@/utils/permission';
@@ -169,7 +164,6 @@ import RoleDataScopeDrawer from './components/RoleDataScopeDrawer.vue';
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
-const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const ids = ref([]);
 const single = ref(true);
@@ -186,7 +180,11 @@ function queryTransform(query) {
 /** GridList 数据加载函数 - 不处理参数转换 */
 async function loadRoleData(params) {
   try {
-    return await listRole(params);
+    return await listRole({
+      ...params.query,
+      page: params.pager?.page,
+      pageSize: params.pager?.size,
+    });
   } catch {
     return { items: [], total: 0 };
   }
@@ -201,9 +199,9 @@ function onSearch({ handleRefresh }) {
   handleRefresh();
 }
 /** 删除按钮操作 */
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const roleIds = row.roleId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?')
     .then(function () {
       return delRole(roleIds);
@@ -212,9 +210,15 @@ function handleDelete(row) {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
-function handleExport(query) {
-  proxy.download('system/role/export', query, `role_${new Date().getTime()}.xlsx`);
+});
+function handleExport() {
+  const snapshot = gridListRef.value?.getStateSnapshot();
+  if (!snapshot) return;
+  proxy.download(
+    'system/role/export',
+    queryTransform(snapshot.query),
+    `role_${new Date().getTime()}.xlsx`
+  );
 }
 
 /** 多选框选中数据 */
@@ -225,17 +229,25 @@ function handleSelectionChange(selection) {
 }
 
 /** 角色状态修改 */
+const statusOperations = shallowReactive(new WeakMap());
 function handleStatusChange(row) {
-  let text = row.status === '0' ? '启用' : '停用';
-  proxy.$modal
-    .confirm('确认要"' + text + '""' + row.roleName + '"角色吗?')
-    .then(function () {
-      return changeRoleStatus(row.roleId, row.status);
-    })
-    .then(() => {})
-    .catch(function () {
-      row.status = row.status === '0' ? '1' : '0';
+  let operation = statusOperations.get(row);
+  if (!operation) {
+    operation = useOperation(async () => {
+      let text = row.status === '0' ? '启用' : '停用';
+      await proxy.$modal
+        .confirm('确认要"' + text + '""' + row.roleName + '"角色吗?')
+        .then(function () {
+          return changeRoleStatus(row.roleId, row.status);
+        })
+        .then(() => {})
+        .catch(function () {
+          row.status = row.status === '0' ? '1' : '0';
+        });
     });
+    statusOperations.set(row, operation);
+  }
+  return operation.run();
 }
 
 /** 分配用户 */
@@ -245,18 +257,25 @@ function handleAuthUser(row) {
 
 /** 添加角色 */
 function handleAdd() {
-  roleFormDrawerRef.value?.open();
+  return roleFormDrawerRef.value?.open().catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 /** 修改角色 */
 function handleUpdate(row) {
-  const roleId = row.roleId || ids.value[0];
-  roleFormDrawerRef.value?.open(roleId);
+  const roleId = row?.roleId || ids.value[0];
+  if (!roleId) return;
+  return roleFormDrawerRef.value?.open(roleId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 /** 分配数据权限操作 */
 function handleDataScope(row) {
-  roleDataScopeDrawerRef.value?.open(row.roleId);
+  return roleDataScopeDrawerRef.value?.open(row.roleId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 /** 抽屉成功回调 */

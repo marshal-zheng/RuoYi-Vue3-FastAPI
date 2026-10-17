@@ -19,7 +19,7 @@
 import { ref, computed } from 'vue';
 import { Lock } from '@element-plus/icons-vue';
 import { parseTime } from '@/utils/ruoyi';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 
 const versionData = ref({});
 

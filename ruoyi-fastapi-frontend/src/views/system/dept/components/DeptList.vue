@@ -7,6 +7,7 @@
     fill
   >
     <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+      <DictStatus :types="['sys_normal_disable']" />
       <ZxListToolbar aria-label="列表操作与筛选">
         <template #actions>
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:dept:add']"
@@ -22,20 +23,14 @@
             style="width: 200px"
             @keyup.enter="() => onSearch({ handleRefresh, updateState })"
           />
-          <el-select
+          <DictSelect
+            dict-type="sys_normal_disable"
             v-model="query.status"
             placeholder="部门状态"
             clearable
             style="width: 200px"
             @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-          >
-            <el-option
-              v-for="dict in sys_normal_disable"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            />
-          </el-select>
+          />
         </template>
         <template #search>
           <ZxSearch
@@ -104,6 +99,7 @@
 </template>
 
 <script setup lang="ts" name="DeptList">
+import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref, nextTick } from 'vue';
 import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
 import type { DeptRecord } from '@/api/system/dept';
@@ -114,7 +110,7 @@ type ListActions = {
   handleRefresh: ZxGridListInstance['refresh'];
   updateState: ZxGridListInstance['updateState'];
 };
-import { listDept, getDept, delDept } from '@/api/system/dept';
+import { listDept, delDept } from '@/api/system/dept';
 import { parseTime } from '@/utils/ruoyi';
 import DeptDlg from './DeptDlg.vue';
 
@@ -160,7 +156,9 @@ function onSearch({
 
 function handleAdd(row?: DeptRecord) {
   const data = row ? { parentId: row.deptId } : {};
-  deptDlgRef.value?.open(data);
+  return deptDlgRef.value?.open(data).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
 function toggleExpandAll() {
@@ -171,30 +169,21 @@ function toggleExpandAll() {
   });
 }
 
-async function handleUpdate(row: DeptRecord) {
-  const response = await getDept(row.deptId).catch(() => null);
-  if (!response) return;
-  deptDlgRef.value?.open({
-    deptId: response.deptId ?? undefined,
-    parentId: response.parentId ?? undefined,
-    deptName: response.deptName ?? undefined,
-    orderNum: response.orderNum ?? undefined,
-    leader: response.leader ?? undefined,
-    phone: response.phone ?? undefined,
-    email: response.email ?? undefined,
-    status: response.status ?? undefined,
+function handleUpdate(row: DeptRecord) {
+  return deptDlgRef.value?.open({ deptId: row.deptId }).catch(() => {
+    /* 当前读取已负责反馈。 */
   });
 }
 
-function handleDelete(row: DeptRecord) {
-  proxy.$modal
+const { run: handleDelete } = useOperation(async (row: DeptRecord) => {
+  await proxy.$modal
     .confirm('是否确认删除名称为"' + row.deptName + '"的数据项?')
     .then(() => delDept(row.deptId))
     .then(() => {
       gridListRef.value?.refresh();
     })
     .catch(() => {});
-}
+});
 
 function getMoreActionList(row: DeptRecord) {
   const actions = [];

@@ -1,13 +1,26 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
-    <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
+    <el-form
+      v-show="!loadError"
+      ref="formRef"
+      :model="state.data"
+      :rules="formRules"
+      v-bind="formProps"
+    >
       <FormGrid v-bind="layoutProps">
         <template v-if="state.data.parentId !== 0">
           <el-form-item data-form-full label="上级部门" prop="parentId">
             <el-tree-select
               v-model="state.data.parentId"
               :data="deptOptions"
-              :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
+              :props="{
+                value: 'deptId',
+                label: 'deptName',
+                children: 'children',
+              }"
               value-key="deptId"
               placeholder="选择上级部门"
               check-strictly
@@ -36,6 +49,7 @@
         </el-form-item>
 
         <el-form-item label="部门状态">
+          <DictStatus :types="['sys_normal_disable']" />
           <el-radio-group v-model="state.data.status">
             <el-radio v-for="dict in sys_normal_disable" :key="dict.value" :value="dict.value">{{
               dict.label
@@ -48,12 +62,13 @@
 </template>
 
 <script setup lang="ts" name="DeptDlg">
+import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
 import type { FormInstance } from 'element-plus';
 const formRef = ref<FormInstance>();
 
 import type { DeptRecord } from '@/api/system/dept';
-import { addDept, updateDept, listDept, listDeptExcludeChild } from '@/api/system/dept';
+import { getDept, addDept, updateDept, listDept, listDeptExcludeChild } from '@/api/system/dept';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { ref, getCurrentInstance } from 'vue';
 
@@ -76,51 +91,122 @@ interface DeptForm {
 const emit = defineEmits(['success']);
 
 const deptOptions = ref<DeptRecord[]>([]);
+const detailLoading = ref(false);
+let requestedData: Partial<DeptForm> | undefined;
 
 const formRules = {
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
   deptName: [{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
   orderNum: [{ required: true, message: '显示排序不能为空', trigger: 'blur' }],
-  email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+  email: [
+    {
+      type: 'email',
+      message: '请输入正确的邮箱地址',
+      trigger: ['blur', 'change'],
+    },
+  ],
   phone: [
-    { pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur' },
+    {
+      pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+      message: '请输入正确的手机号码',
+      trigger: 'blur',
+    },
   ],
 };
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open } = useFormDialog<DeptForm>({
-  columns: 2,
-  formRef: formRef,
-  title: (data: DeptForm) => (data?.deptId ? '修改部门' : '添加部门'),
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+  useFormDialog<DeptForm>({
+    columns: 2,
+    loading: detailLoading,
+    formRef: formRef,
+    title: (data: DeptForm) => (data?.deptId ? '修改部门' : '添加部门'),
 
-  defaultData: () => ({
-    deptId: undefined,
-    parentId: undefined,
-    deptName: undefined,
-    orderNum: 0,
-    leader: undefined,
-    phone: undefined,
-    email: undefined,
-    status: '0',
-  }),
-  onOpen: async (data: DeptForm) => {
-    if (data?.deptId) {
-      const response = await listDeptExcludeChild(data.deptId);
-      deptOptions.value = proxy.handleTree(response.items, 'deptId');
-    } else {
-      const response = await listDept();
-      deptOptions.value = proxy.handleTree(response.items, 'deptId');
-    }
-  },
-  onConfirm: async (data: DeptForm) => {
-    if (data.deptId !== undefined) {
-      await updateDept(data);
-    } else {
-      await addDept(data);
-    }
-    emit('success');
-    return true;
-  },
-});
+    defaultData: () => ({
+      deptId: undefined,
+      parentId: undefined,
+      deptName: undefined,
+      orderNum: 0,
+      leader: undefined,
+      phone: undefined,
+      email: undefined,
+      status: '0',
+    }),
+    onConfirm: async (data: DeptForm) => {
+      if (detailLoading.value || loadError.value) return false;
+      const payload = {
+        parentId: data.parentId,
+        deptName: data.deptName,
+        orderNum: data.orderNum,
+        leader: data.leader,
+        phone: data.phone,
+        email: data.email,
+        status: data.status,
+      };
+      if (data.deptId !== undefined) {
+        await updateDept({ ...payload, deptId: data.deptId });
+      } else {
+        if (
+          payload.parentId === undefined ||
+          payload.deptName === undefined ||
+          payload.orderNum === undefined
+        )
+          return false;
+        await addDept({
+          ...payload,
+          parentId: payload.parentId,
+          deptName: payload.deptName,
+          orderNum: payload.orderNum,
+        });
+      }
+      emit('success');
+      return true;
+    },
+  });
 
-defineExpose({ open });
+const {
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => state.visible, detailLoading);
+
+function openDialog(seed?: Partial<DeptForm>) {
+  requestedData = seed ? { ...seed } : undefined;
+  return runRead(async (read) => {
+    open(seed);
+    deptOptions.value = [];
+    setDisabled(true);
+    const config = { signal: read.signal, silentError: true };
+    const [data, options] = seed?.deptId
+      ? await Promise.all([getDept(seed.deptId, config), listDeptExcludeChild(seed.deptId, config)])
+      : [seed, await listDept(undefined, config)];
+    if (!read.isCurrent()) return;
+    deptOptions.value = proxy.handleTree(options.items, 'deptId');
+    open(
+      seed?.deptId && data
+        ? {
+            deptId: data.deptId ?? undefined,
+            parentId: data.parentId ?? undefined,
+            deptName: data.deptName ?? undefined,
+            orderNum: data.orderNum ?? undefined,
+            leader: data.leader ?? undefined,
+            phone: data.phone ?? undefined,
+            email: data.email ?? undefined,
+            status: data.status ?? undefined,
+          }
+        : seed
+    );
+    setDisabled(false);
+  });
+}
+function closeDialog() {
+  cancelRead();
+  return close();
+}
+function handleRetry() {
+  return openDialog(requestedData).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
+}
+
+defineExpose({ open: openDialog, close: closeDialog });
 </script>

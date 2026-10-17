@@ -479,6 +479,7 @@
 
 <script setup>
 import draggable from "vuedraggable/dist/vuedraggable.common"
+import { ElLink } from 'element-plus'
 import { isNumberStr } from '@/utils/index'
 import IconsDialog from './IconsDialog'
 import TreeNodeDialog from './TreeNodeDialog'
@@ -648,7 +649,7 @@ function renderContent(h, { node, data }) {
     h('span', {
       class: "node-operation"
     }, [
-      h(resolveComponent('el-link'), {
+      h(ElLink, {
         type: "primary",
         icon: "Plus",
         underline: false,
@@ -657,7 +658,7 @@ function renderContent(h, { node, data }) {
 
         }
       }),
-      h(resolveComponent('el-link'), {
+      h(ElLink, {
         type: "danger",
         icon: "Delete",
         underline: false,

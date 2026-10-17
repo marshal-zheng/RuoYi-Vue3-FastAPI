@@ -1,3 +1,4 @@
+import { requestDetail } from '@/api/detail';
 export type DeviceRecord = Omit<DeviceModel, 'deviceId'> & { deviceId: number };
 export type DeviceQuery = Partial<Pick<DeviceModel, 'deviceName' | 'busType'>> & {
   beginTime?: string;
@@ -26,10 +27,14 @@ export function listDevice(query?: DeviceQuery, options: AxiosRequestConfig = {}
 
 // 查询设备详细（包含接口配置）
 export function getDevice(deviceId: number | string) {
-  return request<DeviceRecord>({
-    url: '/device/' + deviceId,
-    method: 'get',
-  });
+  return requestDetail<DeviceRecord>(
+    {
+      url: '/device/' + deviceId,
+      method: 'get',
+    },
+    'deviceId',
+    deviceId
+  );
 }
 
 // 新增设备（包含接口）
@@ -89,7 +94,7 @@ export function importDeviceBatch(formData: FormData) {
     url: '/device/import/batch',
     method: 'post',
     data: formData,
-    headers: { 'Content-Type': 'multipart/form-data', repeatSubmit: false },
+    headers: { 'Content-Type': 'multipart/form-data' },
     feedback: { mode: 'auto', key: 'device.device.import-batch' },
   });
 }

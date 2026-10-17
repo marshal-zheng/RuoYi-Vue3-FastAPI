@@ -96,7 +96,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { ArrowRight, Box, Warning, Document } from '@element-plus/icons-vue';
 
 const props = defineProps({

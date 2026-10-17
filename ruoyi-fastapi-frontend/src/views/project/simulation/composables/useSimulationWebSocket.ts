@@ -102,12 +102,20 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
     void connectInternal(sessionId);
   };
 
+  let ticketPending = false;
+  let connectionGeneration = 0;
   const connectInternal = async (sessionId: string): Promise<void> => {
-    if (ws.value && ws.value.readyState === WebSocket.OPEN) {
+    if (
+      ticketPending ||
+      (ws.value &&
+        (ws.value.readyState === WebSocket.OPEN || ws.value.readyState === WebSocket.CONNECTING))
+    ) {
       return;
     }
 
     let wsTicket = '';
+    const attempt = connectionGeneration;
+    ticketPending = true;
     try {
       const ticketResp = await request<{ wsTicket?: string; ws_ticket?: string }>({
         url: '/auth/ws-ticket',
@@ -116,11 +124,15 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
       });
       wsTicket = ticketResp.wsTicket || ticketResp.ws_ticket || '';
     } catch (err) {
+      if (attempt !== connectionGeneration) return;
       lastError.value = err instanceof Error ? err.message : '获取实时连接凭据失败';
       ElMessage.error('获取实时连接凭据失败');
       return;
+    } finally {
+      if (attempt === connectionGeneration) ticketPending = false;
     }
 
+    if (attempt !== connectionGeneration) return;
     if (!wsTicket) {
       ElMessage.error('实时连接凭据为空');
       return;
@@ -321,6 +333,8 @@ export function useSimulationWebSocket(): UseSimulationWebSocketReturn {
    * 断开连接
    */
   const disconnect = (): void => {
+    connectionGeneration += 1;
+    ticketPending = false;
     if (reconnectTimer) {
       clearTimeout(reconnectTimer);
       reconnectTimer = null;

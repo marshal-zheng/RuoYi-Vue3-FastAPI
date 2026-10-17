@@ -1,10 +1,11 @@
+import { requestDetail } from '@/api/detail';
 export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type {
   GetSystemProjectListProjectListGetData,
   ProjectModel,
 } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询工程列表
 export function listProject(query?: NonNullable<GetSystemProjectListProjectListGetData['query']>) {
@@ -16,12 +17,20 @@ export function listProject(query?: NonNullable<GetSystemProjectListProjectListG
 }
 
 // 查询工程详细
-export function getProject(projectId: number | string) {
-  return request<ProjectRecord>({
-    url: '/project/' + projectId,
-    method: 'get',
-    feedback: { mode: 'auto' },
-  });
+export function getProject(
+  projectId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<ProjectRecord>(
+    {
+      ...config,
+      url: '/project/' + projectId,
+      method: 'get',
+      feedback: { mode: 'auto' },
+    },
+    'projectId',
+    projectId
+  );
 }
 
 // 新增工程

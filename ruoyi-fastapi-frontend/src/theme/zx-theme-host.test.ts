@@ -5,17 +5,24 @@ import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
 
 const api = vi.hoisted(() => ({
   createHost: vi.fn(),
+  createFullHost: vi.fn(),
   createResolver: vi.fn(),
   createConfirm: vi.fn(),
   bindPreferences: vi.fn(),
 }));
 vi.mock('@zxio/zxui/theme-host', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@zxio/zxui/theme-host')>()),
+  createDefaultBrowserThemeHost: api.createFullHost,
+  createThemeDeploymentResolver: api.createResolver,
+  bindThemePreferenceController: api.bindPreferences,
+}));
+vi.mock('@zxio/zxui/theme-host/precompiled', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@zxio/zxui/theme-host/precompiled')>()),
   createDefaultBrowserThemeHost: api.createHost,
   createThemeDeploymentResolver: api.createResolver,
   bindThemePreferenceController: api.bindPreferences,
 }));
-vi.mock('@zxio/zxui', () => ({
+vi.mock('@zxio/zxui/confirm-input', () => ({
   createBoundConfirmInputFactory: api.createConfirm,
 }));
 
@@ -31,6 +38,10 @@ const deployment = {
 } as unknown as ThemeDeploymentOutput;
 
 beforeEach(() => {
+  vi.clearAllMocks();
+  api.createFullHost.mockImplementation(() => {
+    throw new Error('The application consumes precompiled theme variants');
+  });
   vi.stubEnv('BASE_URL', '/admin/');
   api.createResolver.mockReturnValue({ ok: true, value: { resolve: vi.fn() } });
 });
@@ -53,11 +64,15 @@ describe('public theme deployment host', () => {
     });
     const app = createApp({ template: '<div />' });
     bindZxThemeHost(app, deployment);
+    expect(api.createFullHost).not.toHaveBeenCalled();
+    expect(api.createHost).toHaveBeenCalledOnce();
     expect(api.createResolver).toHaveBeenCalledWith({
       deployment: deployment.deployment,
       baseURL: new URL('/admin/', document.baseURI).href,
     });
     expect(api.createHost.mock.calls[0][0].themes).toBe(deployment.registrations);
+    expect(api.createHost.mock.calls[0][0]).not.toHaveProperty('seedPolicy');
+    expect(api.createHost.mock.calls[0][0]).not.toHaveProperty('composition.seeds');
     rootScope.value = {
       state: 'ready',
       resolved: {

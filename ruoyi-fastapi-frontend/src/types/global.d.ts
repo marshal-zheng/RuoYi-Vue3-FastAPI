@@ -13,6 +13,13 @@ import type {
 } from '@/utils/ruoyi';
 
 declare module 'vue' {
+  interface GlobalComponents {
+    DictSelect: (typeof import('@/components/business/DictSelect/index.vue'))['default'];
+    DictTypeSelect: (typeof import('@/components/business/DictTypeSelect/index.vue'))['default'];
+    DictStatus: (typeof import('@/components/business/DictStatus/index.vue'))['default'];
+    DictTag: (typeof import('@/components/ui/DictTag/index.vue'))['default'];
+  }
+
   interface ComponentCustomProperties {
     $http: HttpClientImpl;
     $modal: typeof modal;

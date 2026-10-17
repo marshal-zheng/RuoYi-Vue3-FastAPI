@@ -6,7 +6,9 @@ import { http, HttpResponse } from 'msw';
 
 import { getRouters, type BackendRoute } from './menu';
 import { listDept, type DeptRecord } from './system/dept';
-import { deptTreeSelect } from './system/user';
+import { deptTreeSelect, updateAuthRole } from './system/user';
+import { authUserCancelAll, authUserSelectAll } from './system/role';
+import { createTable, importTable } from './tool/gen';
 import { listMenu, treeselect } from './system/menu';
 import { optionselect } from './system/dict/type';
 import { login } from './login';
@@ -94,6 +96,69 @@ describe('system menu contracts through the mainline MSW and request client', ()
       expect.arrayContaining([expect.objectContaining({ dictType: 'sys_user_sex' })])
     );
   });
+
+  it.each([
+    {
+      method: 'put',
+      path: '/system/user/authRole',
+      query: { userId: 7, roleIds: [2] },
+      run: () => updateAuthRole({ userId: 7, roleIds: [2] }),
+    },
+    {
+      method: 'put',
+      path: '/system/role/authUser/cancelAll',
+      query: { roleId: 2, userIds: [7] },
+      run: () => authUserCancelAll({ roleId: 2, userIds: [7] }),
+    },
+    {
+      method: 'put',
+      path: '/system/role/authUser/selectAll',
+      query: { roleId: 2, userIds: [7] },
+      run: () => authUserSelectAll({ roleId: 2, userIds: [7] }),
+    },
+    {
+      method: 'post',
+      path: '/tool/gen/importTable',
+      query: { tables: 'sample_table' },
+      run: () => importTable({ tables: 'sample_table' }),
+    },
+    {
+      method: 'post',
+      path: '/tool/gen/createTable',
+      query: { sql: 'SELECT 1' },
+      run: () => createTable({ sql: 'SELECT 1' }),
+    },
+  ])(
+    'serializes $method $path according to its write contract',
+    async ({ method, path, query, run }) => {
+      let body = '';
+      let search = new URLSearchParams();
+      const handler = method === 'put' ? http.put : http.post;
+      mockServer.use(
+        handler(`/api${path}`, async ({ request }) => {
+          body = await request.text();
+          search = new URL(request.url).searchParams;
+          return method === 'put'
+            ? new HttpResponse(null, { status: 204 })
+            : HttpResponse.json({
+                tableNames: [],
+                importedCount: 0,
+                createdCount: 0,
+              });
+        })
+      );
+
+      await run();
+
+      if (method === 'put') {
+        expect(JSON.parse(body)).toEqual(query);
+        expect([...search]).toEqual([]);
+      } else {
+        for (const [key, value] of Object.entries(query)) expect(search.get(key)).toBe(value);
+        expect(body).toBe('');
+      }
+    }
+  );
 
   it.each([
     { name: 'bare array', body: [{ path: '/legacy', component: 'Layout', name: 'Legacy' }] },

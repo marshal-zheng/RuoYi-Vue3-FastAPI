@@ -176,4 +176,78 @@ describe('feedback presenter', () => {
     expect(notificationWarning.mock.calls[0][0].message).toContain('Request ID: req-1');
     expect(notificationWarning.mock.calls[0][0].message).toContain('Trace ID: trace-1');
   });
+  it('contains a success message formatter failure', async () => {
+    resolveFeedbackRegistryEntry.mockReturnValue({
+      success: () => {
+        throw new Error('formatter failed');
+      },
+    });
+    const { presentSuccessFeedback } = await import('@/utils/feedback/presenter');
+    expect(() =>
+      presentSuccessFeedback({
+        status: 201,
+        payload: { id: 1 },
+        meta: { status: 201 },
+        feedback: { mode: 'auto', key: 'system.user.create', successContext: {} },
+      })
+    ).not.toThrow();
+  });
+
+  it('contains validation error presentation failures', async () => {
+    const { presentProblemFeedback } = await import('@/utils/feedback/presenter');
+    expect(() =>
+      presentProblemFeedback({
+        problem: {
+          type: 'about:blank',
+          title: 'Invalid',
+          status: 422,
+          detail: 'invalid',
+          instance: '',
+          errors: [{ field: 'name', message: 'required', code: 'missing' }],
+        },
+        meta: { status: 422 },
+        feedback: {
+          mode: 'auto',
+          successContext: {},
+          validationTarget: {
+            apply: () => {
+              throw new Error('form unmounted');
+            },
+          },
+        },
+      })
+    ).not.toThrow();
+  });
+
+  it('handles rejected message and notification promises', async () => {
+    messageSuccess.mockImplementationOnce(() => {
+      throw new Error('message provider failed');
+    });
+    notificationError.mockImplementationOnce(() => {
+      throw new Error('notification provider failed');
+    });
+    const { presentSuccessFeedback, presentProblemFeedback } = await import(
+      '@/utils/feedback/presenter'
+    );
+    presentSuccessFeedback({
+      status: 201,
+      payload: {},
+      meta: { status: 201 },
+      feedback: { mode: 'auto', successContext: {} },
+    });
+    presentProblemFeedback({
+      problem: {
+        type: 'about:blank',
+        title: 'Failed',
+        status: 500,
+        detail: 'original failure',
+        instance: '',
+      },
+      meta: { status: 500 },
+      feedback: { mode: 'auto', successContext: {} },
+    });
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(messageSuccess).toHaveBeenCalled();
+    expect(notificationError).toHaveBeenCalled();
+  });
 });

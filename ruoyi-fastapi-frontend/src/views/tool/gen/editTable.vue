@@ -119,20 +119,13 @@
           </el-table-column>
           <el-table-column label="字典类型" min-width="12%">
             <template #default="scope">
-              <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
-                <el-option
-                  v-for="dict in dictOptions"
-                  :key="dict.dictType"
-                  :label="dict.dictName"
-                  :value="dict.dictType"
-                >
-                  <span style="float: left">{{ dict.dictName }}</span>
-                  <span
-                    style="float: right; color: var(--zx-semantic-text-secondary); font-size: 13px"
-                    >{{ dict.dictType }}</span
-                  >
-                </el-option>
-              </el-select>
+              <DictTypeSelect
+                v-model="scope.row.dictType"
+                :active="activeName === 'columnInfo'"
+                clearable
+                filterable
+                placeholder="请选择"
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -143,7 +136,9 @@
     </el-tabs>
     <el-form label-width="100px">
       <div style="text-align: center; margin-left: -100px; margin-top: 10px">
-        <el-button type="primary" @click="submitForm()">提交</el-button>
+        <el-button type="primary" @click="submitForm()" :loading="submitFormPending"
+          >提交</el-button
+        >
         <el-button @click="close()">返回</el-button>
       </div>
     </el-form>
@@ -151,9 +146,10 @@
 </template>
 
 <script setup name="GenEdit">
+import { useOperation } from '@/utils/operation';
 import { ElMessage } from 'element-plus';
 import { getGenTable, updateGenTable } from '@/api/tool/gen';
-import { optionselect as getDictOptionselect } from '@/api/system/dict/type';
+import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
 import basicInfoForm from './basicInfoForm';
 import genInfoForm from './genInfoForm';
 
@@ -163,14 +159,13 @@ const { proxy } = getCurrentInstance();
 const activeName = ref('columnInfo');
 const tables = ref([]);
 const columns = ref([]);
-const dictOptions = ref([]);
 const info = ref({});
 
 /** 提交按钮 */
-function submitForm() {
+const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
   const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
   const genForm = proxy.$refs.genInfo.$refs.genInfoForm;
-  Promise.all([basicForm, genForm].map(getFormPromise)).then((res) => {
+  await Promise.all([basicForm, genForm].map(getFormPromise)).then(async (res) => {
     const validateResult = res.every((item) => !!item);
     if (validateResult) {
       const genTable = Object.assign({}, info.value);
@@ -181,14 +176,14 @@ function submitForm() {
         treeParentCode: info.value.treeParentCode,
         parentMenuId: info.value.parentMenuId,
       };
-      updateGenTable(genTable).then(() => {
+      await updateGenTable(genTable).then(() => {
         close();
       });
     } else {
       ElMessage.error('表单校验未通过，请重新检查提交内容');
     }
   });
-}
+});
 
 function getFormPromise(form) {
   return new Promise((resolve) => {
@@ -215,10 +210,6 @@ function close() {
         columns: res.columns,
       };
       tables.value = res.tables;
-    });
-    /** 查询字典下拉列表 */
-    getDictOptionselect().then((response) => {
-      dictOptions.value = response.items;
     });
   }
 })();

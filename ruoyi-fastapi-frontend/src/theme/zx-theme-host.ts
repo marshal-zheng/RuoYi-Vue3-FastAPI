@@ -1,10 +1,10 @@
 import type { ThemeDeploymentOutput } from '@zxio/theme-compiler/deployment';
-import { createBoundConfirmInputFactory } from '@zxio/zxui';
+import { createBoundConfirmInputFactory } from '@zxio/zxui/confirm-input';
 import {
   bindThemePreferenceController,
   createDefaultBrowserThemeHost,
   createThemeDeploymentResolver,
-} from '@zxio/zxui/theme-host';
+} from '@zxio/zxui/theme-host/precompiled';
 import type { App } from 'vue';
 import { ElMessage } from 'element-plus';
 

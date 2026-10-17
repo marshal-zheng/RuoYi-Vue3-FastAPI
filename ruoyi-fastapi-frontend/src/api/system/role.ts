@@ -1,15 +1,22 @@
+import { requestDetail } from '@/api/detail';
+import type { RequestOptions } from '@zxio/http';
 export type RoleRecord = Omit<RoleModel, 'roleId'> & { roleId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type {
-  AddRoleModel,
-  CrudUserRoleModel,
+  RoleCreateModel,
+  RoleUpdateModel,
+  RoleStatusUpdateModel,
+  RoleDataScopeUpdateModel,
+  RoleUserRevokeModel,
+  RoleUsersRevokeModel,
+  RoleUsersGrantModel,
   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData,
   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData,
   RoleModel,
   RolePageQueryModel,
   UserInfoModel,
 } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询角色列表
 export function listRole(query?: RolePageQueryModel) {
@@ -21,15 +28,23 @@ export function listRole(query?: RolePageQueryModel) {
 }
 
 // 查询角色详细
-export function getRole(roleId: number | string) {
-  return request<RoleRecord>({
-    url: '/system/role/' + roleId,
-    method: 'get',
-  });
+export function getRole(
+  roleId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<RoleRecord>(
+    {
+      ...config,
+      url: '/system/role/' + roleId,
+      method: 'get',
+    },
+    'roleId',
+    roleId
+  );
 }
 
 // 新增角色
-export function addRole(data: AddRoleModel) {
+export function addRole(data: RoleCreateModel) {
   return request<RoleRecord>({
     url: '/system/role',
     method: 'post',
@@ -39,7 +54,7 @@ export function addRole(data: AddRoleModel) {
 }
 
 // 修改角色
-export function updateRole(data: RoleModel) {
+export function updateRole(data: RoleUpdateModel) {
   return request<RoleRecord>({
     url: '/system/role',
     method: 'put',
@@ -49,7 +64,7 @@ export function updateRole(data: RoleModel) {
 }
 
 // 角色数据权限
-export function dataScope(data: AddRoleModel) {
+export function dataScope(data: RoleDataScopeUpdateModel) {
   return request<RoleRecord>({
     url: '/system/role/dataScope',
     method: 'put',
@@ -59,7 +74,10 @@ export function dataScope(data: AddRoleModel) {
 }
 
 // 角色状态修改
-export function changeRoleStatus(roleId: number | string, status: string) {
+export function changeRoleStatus(
+  roleId: RoleStatusUpdateModel['roleId'],
+  status: RoleStatusUpdateModel['status']
+) {
   const data = {
     roleId,
     status,
@@ -104,38 +122,54 @@ export function unallocatedUserList(
 }
 
 // 取消用户授权角色
-export function authUserCancel(data: CrudUserRoleModel) {
-  return request<null>({
-    url: '/system/role/authUser/cancel',
-    method: 'put',
-    data: data,
-    feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
-  });
+export function authUserCancel(data: RoleUserRevokeModel, options?: RequestOptions) {
+  return request<null>(
+    {
+      url: '/system/role/authUser/cancel',
+      method: 'put',
+      data,
+      feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
+    },
+    options
+  );
 }
 
 // 批量取消用户授权角色
-export function authUserCancelAll(data: CrudUserRoleModel) {
-  return request<null>({
-    url: '/system/role/authUser/cancelAll',
-    method: 'put',
-    params: data,
-    feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
-  });
+export function authUserCancelAll(data: RoleUsersRevokeModel, options?: RequestOptions) {
+  return request<null>(
+    {
+      url: '/system/role/authUser/cancelAll',
+      method: 'put',
+      data,
+      feedback: { mode: 'auto', key: 'system.role.auth-user.remove' },
+    },
+    options
+  );
 }
 
 // 授权用户选择
-export function authUserSelectAll(data: CrudUserRoleModel) {
-  return request<null>({
-    url: '/system/role/authUser/selectAll',
-    method: 'put',
-    params: data,
-    feedback: { mode: 'auto', key: 'system.role.auth-user.assign' },
-  });
+export function authUserSelectAll(data: RoleUsersGrantModel, options?: RequestOptions) {
+  return request<null>(
+    {
+      url: '/system/role/authUser/selectAll',
+      method: 'put',
+      data,
+      feedback: { mode: 'auto', key: 'system.role.auth-user.assign' },
+    },
+    options
+  );
 }
 
 // 根据角色ID查询部门树结构
-export function deptTreeSelect(roleId: number | string) {
-  return request<{ depts: import('@/api/system/menu').MenuTreeNode[]; checkedKeys: number[] }>({
+export function deptTreeSelect(
+  roleId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return request<{
+    depts: import('@/api/system/menu').MenuTreeNode[];
+    checkedKeys: number[];
+  }>({
+    ...config,
     url: '/system/role/deptTree/' + roleId,
     method: 'get',
   });

@@ -124,3 +124,152 @@ describe('UI standards shared SFC checker', () => {
     ).toEqual([]);
   });
 });
+
+describe('query definition source checker', () => {
+  const checkQuery = (source: string, filePath = 'src/views/example.vue') =>
+    checkSource(source, { filePath });
+  const queryRules = (source: string, filePath = 'src/views/example.ts') =>
+    checkQuery(source, filePath).map((item: { rule: string }) => item.rule);
+
+  it('accepts public factory aliases through locals, ref, computed and getters', () => {
+    expect(
+      checkQuery(`<script setup lang="ts">
+        import { useQuery as query } from '@tanstack/vue-query';
+        import { computed as derive, ref } from 'vue';
+        import { dictOptions as factory } from '@/queries/system/dict';
+        const current = ref(factory(scope, { type }));
+        const options = derive(() => factory(scope, { type: type.value }));
+        const getter = () => options.value;
+        query(current); query(options); query(getter);
+        query(derive(() => factory(scope, { type: () => props.type })));
+        query({ ...factory(scope, { type }), select: items => items.slice(0, 3) });
+      </script><template><div /></template>`)
+    ).toEqual([]);
+  });
+
+  it('accepts relative and namespace factories and reactive useQueries arrays or maps', () => {
+    expect(
+      checkQuery(
+        `
+        import * as query from '@tanstack/vue-query';
+        import { computed } from 'vue';
+        import * as shared from '../../queries/system/dict';
+        import { dictOptions as factory } from '@/queries/system/dict';
+        const queries = computed(() => types.value.map(type => shared.dictOptions(scope, { type })));
+        query.useQuery(computed(() => shared.dictQueries.options(scope, type)));
+        query.useQueries({ queries });
+        query.useQueries(computed(() => ({ queries: [factory(scope, first), factory(scope, second)] })));
+        query.useQueries({ queries: types.map(factory) });
+      `,
+        'src/components/business/Example.ts'
+      )
+    ).toEqual([]);
+  });
+
+  it('ignores same-named ordinary functions, objects and shadowed TanStack bindings', () => {
+    expect(
+      checkQuery(
+        `
+        import { useQuery } from '@tanstack/vue-query';
+        import { useQueries } from './ordinary';
+        const client = { invalidateQueries() {}, setQueryData() {} };
+        const record = { queryKey: ['ordinary'] };
+        function run(useQuery: Function) { useQuery({ queryKey: ['ordinary'] }); }
+        useQueries({ queries: [{ queryKey: ['ordinary'] }] });
+        client.invalidateQueries(); client.setQueryData(['ordinary'], 1);
+      `,
+        'src/components/ordinary.ts'
+      )
+    ).toEqual([]);
+  });
+
+  it('allows query definitions and native cache operations inside src/queries', () => {
+    expect(
+      checkQuery(
+        `
+        import { queryOptions, QueryClient } from '@tanstack/vue-query';
+        const client = new QueryClient();
+        const options = queryOptions({ queryKey: ['dict'], queryFn: fetchDict, staleTime: 10 });
+        client.invalidateQueries({ queryKey: ['dict'] }); client.setQueryData(['dict'], []);
+      `,
+        '/workspace/src/queries/system/dict.ts'
+      )
+    ).toEqual([]);
+  });
+
+  it('rejects literal keys resolved through local variables and reactive wrappers outside queries', () => {
+    const violations = checkQuery(
+      `
+      import { useQuery as nativeQuery, queryOptions as options } from '@tanstack/vue-query';
+      import { computed } from 'vue';
+      const key = ['dict'] as const;
+      const inline = computed(() => ({ queryKey: key, queryFn: fetchDict }));
+      nativeQuery(inline);
+      options({ queryKey: ['other'], queryFn: fetchOther });
+    `,
+      'src/utils/inline-query.ts'
+    );
+    expect(
+      violations.filter((item: { rule: string }) => item.rule === 'query-key-definition')
+    ).toHaveLength(2);
+    expect(
+      violations.every((item: { line: number; column: number }) => item.line > 0 && item.column > 0)
+    ).toBe(true);
+  });
+
+  it('rejects inline requests, resource overrides and unresolved option sources in views/components', () => {
+    expect(
+      queryRules(`
+        import { useQuery as query } from '@tanstack/vue-query';
+        import { dictOptions } from '@/queries/system/dict';
+        query({ queryKey: ['dict'], queryFn: fetchDict });
+        query({ ...dictOptions(scope, type), enabled: true });
+        query({ ...dictOptions(scope, type), staleTime: 10, refetchOnWindowFocus: false });
+        query(externalOptions);
+      `).filter((rule: string) => rule === 'query-options-source')
+    ).toHaveLength(4);
+  });
+
+  it('rejects public key helpers used to rebuild options and mixed useQueries maps', () => {
+    expect(
+      queryRules(`
+        import { useQuery, useQueries } from '@tanstack/vue-query';
+        import { dictKeys, dictOptions } from '@/queries/system/dict';
+        useQuery({ queryKey: dictKeys.all(scope), queryFn: fetchDict });
+        useQueries({ queries: types.map(type => ({ ...dictOptions(scope, type), retry: 3 })) });
+        useQueries({ queries: [dictOptions(scope, type), unknownFactory()] });
+      `).filter((rule: string) => rule === 'query-options-source')
+    ).toHaveLength(3);
+  });
+
+  it('recognizes QueryClient aliases, local aliases, destructured methods and typed parameters', () => {
+    const result = queryRules(
+      `
+      import { QueryClient as Client, useQueryClient as currentClient } from '@tanstack/vue-query';
+      import { queryClient as sharedClient } from '@/queries/client';
+      import * as appQueries from '@/queries/client';
+      const client = currentClient(); const alias = client;
+      const constructed = new Client();
+      const { removeQueries: remove } = client;
+      alias.invalidateQueries(filters); constructed.cancelQueries(filters); remove(filters);
+      sharedClient.setQueryData(key, []);
+      const namespacedClient = appQueries.queryClient; namespacedClient.removeQueries(filters);
+      function write(client: Client) { client.setQueriesData(filters, []); }
+    `,
+      'src/utils/cache-write.ts'
+    );
+    expect(result.filter((rule: string) => rule === 'query-cache-command')).toHaveLength(6);
+  });
+
+  it('rejects literal keys on known QueryClient reads and useQuerySelect inline policies', () => {
+    expect(
+      queryRules(`
+        import * as Query from '@tanstack/vue-query';
+        import { useQuerySelect as select } from '@zxio/vue-query/ui';
+        const client = new Query.QueryClient();
+        client.getQueryData(['dict']);
+        select(() => ({ queryKey: ['dict'], queryFn: fetchDict }));
+      `)
+    ).toEqual(expect.arrayContaining(['query-key-definition', 'query-options-source']));
+  });
+});

@@ -16,14 +16,16 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">保存</el-button>
+      <el-button type="primary" @click="submit" :loading="submitPending">保存</el-button>
       <el-button type="danger" @click="close">关闭</el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script setup>
-import { updateUserProfile } from '@/api/system/user';
+import { useOperation } from '@/utils/operation';
+import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { queryScope, requireQueryScope } from '@/queries/context';
 
 const props = defineProps({
   user: {
@@ -32,6 +34,7 @@ const props = defineProps({
 });
 
 const { proxy } = getCurrentInstance();
+const profileScope = requireQueryScope();
 
 const form = ref({});
 const rules = ref({
@@ -47,16 +50,20 @@ const rules = ref({
 });
 
 /** 提交按钮 */
-function submit() {
-  proxy.$refs.userRef.validate((valid) => {
-    if (valid) {
-      updateUserProfile(form.value).then(() => {
-        props.user.phonenumber = form.value.phonenumber;
-        props.user.email = form.value.email;
-      });
-    }
-  });
-}
+const { run: submit, pending: submitPending } = useOperation(async () => {
+  const scope = profileScope;
+  if (scope !== queryScope.value) return;
+  const command = captureUserCommand(form.value, scope);
+  const valid = await proxy.$refs.userRef.validate().catch(() => false);
+
+  if (valid && scope === queryScope.value) {
+    await userCommands.updateProfile(command).then(() => {
+      if (scope !== queryScope.value) return;
+      props.user.phonenumber = command.input.phonenumber;
+      props.user.email = command.input.email;
+    });
+  }
+});
 
 /** 关闭按钮 */
 function close() {

@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ZxPageLayout } from '@zxio/zxui';
+import { ZxPageLayout } from '@zxio/zxui/page-layout';
 import useSettingsStore from '@/store/modules/settings';
 import copyright from './Copyright/index';
 import iframeToggle from './IframeToggle/index';

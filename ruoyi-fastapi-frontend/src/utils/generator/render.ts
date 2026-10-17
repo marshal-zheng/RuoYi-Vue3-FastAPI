@@ -2,8 +2,48 @@ import { isRecord } from '@/types/http-contract';
 import { defineComponent, h, resolveComponent } from 'vue';
 import { makeMap } from '@/utils/index';
 import { ZxInput } from '@zxio/zxui/input';
+import {
+  ElButton,
+  ElCascader,
+  ElCheckbox,
+  ElCheckboxButton,
+  ElCheckboxGroup,
+  ElColorPicker,
+  ElDatePicker,
+  ElIcon,
+  ElInputNumber,
+  ElOption,
+  ElRadio,
+  ElRadioButton,
+  ElRadioGroup,
+  ElRate,
+  ElSelect,
+  ElSlider,
+  ElSwitch,
+  ElTimePicker,
+  ElUpload,
+} from 'element-plus';
+import { Plus } from '@element-plus/icons-vue';
 import { generatorTags, resolveGeneratorTag } from './identity';
-import type { PropType, CSSProperties, VNodeChild } from 'vue';
+import type { Component, PropType, CSSProperties, VNodeChild } from 'vue';
+
+// Saved designs keep their tag identity; preview owns the concrete components.
+const generatorComponents: Record<string, Component> = {
+  [generatorTags.input]: ZxInput,
+  'el-button': ElButton,
+  'el-cascader': ElCascader,
+  'el-checkbox-group': ElCheckboxGroup,
+  'el-color-picker': ElColorPicker,
+  'el-date-picker': ElDatePicker,
+  'el-input-number': ElInputNumber,
+  'el-radio-group': ElRadioGroup,
+  'el-rate': ElRate,
+  'el-select': ElSelect,
+  'el-slider': ElSlider,
+  'el-switch': ElSwitch,
+  'el-time-picker': ElTimePicker,
+  'el-upload': ElUpload,
+};
 
 // 选项接口
 interface Option {
@@ -97,7 +137,7 @@ const componentChild: ComponentChildConfig = {
   'el-select': {
     options(h, conf) {
       return conf.options!.map((item) =>
-        h(resolveComponent('el-option'), {
+        h(ElOption, {
           label: item.label,
           value: item.value,
         })
@@ -109,7 +149,7 @@ const componentChild: ComponentChildConfig = {
       return conf.optionType === 'button'
         ? conf.options!.map((item) =>
             h(
-              resolveComponent('el-radio-button'),
+              ElRadioButton,
               {
                 label: item.value,
               },
@@ -118,7 +158,7 @@ const componentChild: ComponentChildConfig = {
           )
         : conf.options!.map((item) =>
             h(
-              resolveComponent('el-radio'),
+              ElRadio,
               {
                 label: item.value,
                 border: conf.border,
@@ -133,7 +173,7 @@ const componentChild: ComponentChildConfig = {
       return conf.optionType === 'button'
         ? conf.options!.map((item) =>
             h(
-              resolveComponent('el-checkbox-button'),
+              ElCheckboxButton,
               {
                 label: item.value,
               },
@@ -142,7 +182,7 @@ const componentChild: ComponentChildConfig = {
           )
         : conf.options!.map((item) =>
             h(
-              resolveComponent('el-checkbox'),
+              ElCheckbox,
               {
                 label: item.value,
                 border: conf.border,
@@ -161,12 +201,12 @@ const componentChild: ComponentChildConfig = {
       //   }, () => '只能上传不超过' + conf.fileSize + conf.sizeUnit + '的' + conf.accept + '文件')
       // }
       if (conf['list-type'] === 'picture-card') {
-        return h(resolveComponent('el-icon'), option, () => h(resolveComponent('Plus')));
+        return h(ElIcon, option, () => h(Plus));
       } else {
         // option.size = "small"
         option.type = 'primary';
         option.icon = 'Upload';
-        return h(resolveComponent('el-button'), option, () => conf.buttonText);
+        return h(ElButton, option, () => conf.buttonText);
       }
     },
   },
@@ -265,7 +305,7 @@ export default defineComponent({
     }
 
     return h(
-      confClone.tag === generatorTags.input ? ZxInput : resolveComponent(confClone.tag),
+      generatorComponents[confClone.tag] ?? resolveComponent(confClone.tag),
       {
         ...this.$attrs,
         ...dataObject.props,

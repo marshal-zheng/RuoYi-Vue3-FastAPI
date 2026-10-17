@@ -2,6 +2,7 @@
   <ZxContentWrap fill>
     <ZxGridList ref="gridListRef" :load-data="loadPostData" :load-on-mounted="true" fill>
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_normal_disable']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton type="primary" icon="Plus" @click="handleAdd" v-hasPermi="['system:post:add']"
@@ -21,6 +22,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['system:post:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
             <ZxButton
@@ -39,20 +41,14 @@
               style="width: 200px"
               @keyup.enter="() => onSearch({ handleRefresh, updateState })"
             />
-            <el-select
+            <DictSelect
+              dict-type="sys_normal_disable"
               v-model="query.status"
               placeholder="岗位状态"
               clearable
               style="width: 200px"
               @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
-            >
-              <el-option
-                v-for="dict in sys_normal_disable"
-                :key="dict.value"
-                :label="dict.label"
-                :value="dict.value"
-              />
-            </el-select>
+            />
           </template>
           <template #search>
             <ZxSearch
@@ -101,6 +97,7 @@
                 type="danger"
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:post:remove']"
+                :loading="handleDeletePending"
                 >删除</el-button
               >
             </template>
@@ -114,6 +111,7 @@
 </template>
 
 <script setup lang="ts">
+import { useOperation } from '@/utils/operation';
 import { getCurrentInstance, ref } from 'vue';
 import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
 import type { PostRecord } from '@/api/system/post';
@@ -125,7 +123,7 @@ type ListActions = {
   updateState: ZxGridListInstance['updateState'];
 };
 import { parseTime } from '@/utils/ruoyi';
-import { listPost, getPost, delPost } from '@/api/system/post';
+import { listPost, delPost } from '@/api/system/post';
 import PostDlg from './PostDlg.vue';
 
 const proxy = getCurrentInstance()!.proxy!;
@@ -178,34 +176,31 @@ function handleSelectionChange(selection: PostRecord[]) {
 }
 
 function handleAdd() {
-  postDlgRef.value?.open();
-}
-
-async function handleUpdate(row?: PostRecord) {
-  const postId = row?.postId || ids.value[0];
-  if (!postId) return;
-  const response = await getPost(postId);
-  const data = response;
-  postDlgRef.value?.open({
-    postId: data.postId ?? undefined,
-    postName: data.postName ?? undefined,
-    postCode: data.postCode ?? undefined,
-    postSort: data.postSort ?? undefined,
-    status: data.status ?? undefined,
-    remark: data.remark ?? undefined,
+  return postDlgRef.value?.open().catch(() => {
+    /* 当前读取已负责反馈。 */
   });
 }
 
-function handleDelete(row?: PostRecord) {
-  const postIds = row?.postId || ids.value.join(',');
-  proxy.$modal
-    .confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
-    .then(() => delPost(postIds))
-    .then(() => {
-      handleRefresh();
-    })
-    .catch(() => {});
+function handleUpdate(row?: PostRecord) {
+  const id = row?.postId || ids.value[0];
+  if (!id) return;
+  return postDlgRef.value?.open(id).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
+
+const { run: handleDelete, pending: handleDeletePending } = useOperation(
+  async (row?: PostRecord) => {
+    const postIds = row?.postId || ids.value.join(',');
+    await proxy.$modal
+      .confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？')
+      .then(() => delPost(postIds))
+      .then(() => {
+        handleRefresh();
+      })
+      .catch(() => {});
+  }
+);
 
 function handleExport(query: ListQuery) {
   proxy.download('system/post/export', query, `post_${new Date().getTime()}.xlsx`);

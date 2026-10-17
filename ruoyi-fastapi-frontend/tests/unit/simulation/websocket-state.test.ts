@@ -37,6 +37,48 @@ const mountStream = () => {
 };
 
 describe('simulation WebSocket state', () => {
+  it('allows a new session after disconnect while ignoring the previous ticket completion', async () => {
+    let release!: (value: unknown) => void;
+    vi.mocked(request).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          release = resolve;
+        })
+    );
+    const { stream, wrapper } = mountStream();
+    stream.connect('old-session');
+    stream.disconnect();
+    stream.connect('new-session');
+    await Promise.resolve();
+    release({ wsTicket: 'old-ticket' });
+    await Promise.resolve();
+    expect(request).toHaveBeenCalledTimes(2);
+    expect(TestSocket.instances).toHaveLength(1);
+    expect(TestSocket.instances[0].url).toContain('new-session');
+    wrapper.unmount();
+  });
+
+  it('requests one ticket during connection reentry and permits retry after failure', async () => {
+    let fail!: (error: unknown) => void;
+    vi.mocked(request).mockImplementationOnce(
+      () =>
+        new Promise((_, reject) => {
+          fail = reject;
+        })
+    );
+    const { stream, wrapper } = mountStream();
+    stream.connect('session-1');
+    stream.connect('session-1');
+    expect(request).toHaveBeenCalledTimes(1);
+    fail(new Error('temporary ticket failure'));
+    await Promise.resolve();
+    stream.connect('session-1');
+    await Promise.resolve();
+    expect(request).toHaveBeenCalledTimes(2);
+    expect(TestSocket.instances).toHaveLength(1);
+    wrapper.unmount();
+  });
+
   beforeEach(() => {
     TestSocket.instances = [];
     vi.stubGlobal('WebSocket', TestSocket);

@@ -1,6 +1,7 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
     <div class="py-4">
+      <DictStatus :types="['sys_oper_type']" />
       <el-descriptions :column="1" border>
         <el-descriptions-item label="操作模块：">
           <div class="text-zx-text-primary">
@@ -86,15 +87,13 @@
 </template>
 
 <script setup>
-import { computed, getCurrentInstance, ref } from 'vue';
-import { useDialog } from '@zxio/zxui';
+import { computed, getCurrentInstance } from 'vue';
+import { useDialog } from '@zxio/zxui/hooks';
 import { parseTime } from '@/utils/ruoyi';
 
 const { proxy } = getCurrentInstance();
 
-// 延迟加载字典数据
-const sys_oper_type = ref([]);
-let dictLoaded = false;
+const { sys_oper_type } = proxy.useDict('sys_oper_type');
 
 const { state, dialogProps, dialogEvents, open, close } = useDialog({
   dialogSize: 'lg',
@@ -118,14 +117,6 @@ const { state, dialogProps, dialogEvents, open, close } = useDialog({
     operTime: '',
     errorMsg: '',
   }),
-  onOpen: () => {
-    // 只在第一次打开时加载字典
-    if (!dictLoaded) {
-      const dict = proxy.useDict('sys_oper_type');
-      sys_oper_type.value = dict.sys_oper_type?.value || [];
-      dictLoaded = true;
-    }
-  },
   onConfirm: async () => {
     close();
     return state.data;

@@ -83,7 +83,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useDrawer } from '@zxio/zxui';
+import { useDrawer } from '@zxio/zxui/hooks';
 import ProtocolTypeSelector from '@/components/business/Protocol/selector/ProtocolTypeSelector.vue';
 import EthernetProtocolTemplate from '@/components/business/Protocol/templates/EthernetProtocolTemplate.vue';
 import RS422ProtocolTemplate from '@/components/business/Protocol/templates/RS422ProtocolTemplate.vue';

@@ -1,10 +1,11 @@
+import { requestDetail } from '@/api/detail';
 import type { NoticeModel } from '@/api/_generated/types.gen';
 // JSON represents the backend bytes field as UTF-8 text, rather than multipart File.
 export type NoticePayload = Omit<NoticeModel, 'noticeContent'> & { noticeContent?: string | null };
 export type NoticeRecord = Omit<NoticePayload, 'noticeId'> & { noticeId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type { GetSystemNoticeListSystemNoticeListGetData } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询公告列表
 export function listNotice(
@@ -18,12 +19,20 @@ export function listNotice(
 }
 
 // 查询公告详细
-export function getNotice(noticeId: number | string) {
-  return request<NoticeRecord>({
-    url: '/system/notice/' + noticeId,
-    method: 'get',
-    feedback: { mode: 'auto' },
-  });
+export function getNotice(
+  noticeId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
+  return requestDetail<NoticeRecord>(
+    {
+      ...config,
+      url: '/system/notice/' + noticeId,
+      method: 'get',
+      feedback: { mode: 'auto' },
+    },
+    'noticeId',
+    noticeId
+  );
 }
 
 // 新增公告

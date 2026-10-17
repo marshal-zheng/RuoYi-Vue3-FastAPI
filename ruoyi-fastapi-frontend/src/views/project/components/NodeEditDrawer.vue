@@ -86,7 +86,7 @@
 <script setup>
 import { ref, reactive, watch, nextTick, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import { useDrawer } from '@zxio/zxui';
+import { useDrawer } from '@zxio/zxui/hooks';
 import { Box, ArrowRight, Document, Warning } from '@element-plus/icons-vue';
 import ProtocolEditDialog from './ProtocolEditDialog.vue';
 

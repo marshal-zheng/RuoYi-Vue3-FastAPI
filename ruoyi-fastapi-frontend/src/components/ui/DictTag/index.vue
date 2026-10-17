@@ -1,87 +1,86 @@
 <template>
-  <div>
-    <template v-for="(item, index) in options">
-      <template v-if="values.includes(item.value)">
-        <span
-          v-if="
-            (item.elTagType == 'default' || item.elTagType == '') &&
-            (item.elTagClass == '' || item.elTagClass == null)
-          "
-          :key="item.value"
-          :index="index"
-          :class="item.elTagClass"
-          >{{ item.label + ' ' }}</span
-        >
-        <el-tag
-          v-else
-          :disable-transitions="true"
-          :key="item.value + ''"
-          :index="index"
-          :type="item.elTagType"
-          :class="item.elTagClass"
-          >{{ item.label + ' ' }}</el-tag
-        >
-      </template>
+  <span>
+    <template v-for="item in displayItems" :key="item.value">
+      <span v-if="!item.elTagType || item.elTagType === 'default'" :class="item.elTagClass"
+        >{{ item.label }}
+      </span>
+      <el-tag
+        v-else
+        :disable-transitions="true"
+        :type="tagType(item.elTagType)"
+        :class="item.elTagClass"
+        >{{ item.label }}
+      </el-tag>
     </template>
-    <template v-if="unmatch && showValue">
-      {{ unmatchArray | handleArray }}
-    </template>
-  </div>
+  </span>
 </template>
+<script setup lang="ts">
+import { computed, shallowRef, watch } from 'vue';
+import { queryScope } from '@/queries/context';
 
-<script setup>
-// 记录未匹配的项
-const unmatchArray = ref([]);
+interface DictTagOption {
+  readonly label: string;
+  readonly value: string | number;
+  readonly elTagType?: string;
+  readonly elTagClass?: string;
+}
+const props = withDefaults(
+  defineProps<{
+    options?: readonly DictTagOption[];
+    value?: string | number | readonly (string | number)[];
+    showValue?: boolean;
+    separator?: string;
+  }>(),
+  { options: () => [], showValue: true, separator: ',' }
+);
+function tagType(type?: string) {
+  switch (type) {
+    case 'primary':
+    case 'success':
+    case 'info':
+    case 'warning':
+    case 'danger':
+      return type;
+    default:
+      return undefined;
+  }
+}
 
-const props = defineProps({
-  // 数据
-  options: {
-    type: Array,
-    default: null,
+const values = computed(() =>
+  props.value == null || props.value === ''
+    ? []
+    : Array.isArray(props.value)
+      ? props.value.map(String)
+      : String(props.value).split(props.separator)
+);
+// Display metadata for the selected values only; absence never proves invalidity.
+const labels = shallowRef(new Map<string, DictTagOption>());
+watch(
+  () => [queryScope.value?.key, ...values.value],
+  () => {
+    labels.value = new Map();
   },
-  // 当前的值
-  value: [Number, String, Array],
-  // 当未找到匹配的数据时，显示value
-  showValue: {
-    type: Boolean,
-    default: true,
-  },
-  separator: {
-    type: String,
-    default: ',',
-  },
-});
-
-const values = computed(() => {
-  if (props.value === null || typeof props.value === 'undefined' || props.value === '') return [];
-  return Array.isArray(props.value)
-    ? props.value.map((item) => '' + item)
-    : String(props.value).split(props.separator);
-});
-
-const unmatch = computed(() => {
-  unmatchArray.value = [];
-  // 没有value不显示
-  if (
-    props.value === null ||
-    typeof props.value === 'undefined' ||
-    props.value === '' ||
-    !Array.isArray(props.options) ||
-    props.options.length === 0
-  )
-    return false;
-  // 传入值为数组
-  let unmatch = false; // 添加一个标志来判断是否有未匹配项
-  values.value.forEach((item) => {
-    if (!props.options.some((v) => v.value === item)) {
-      unmatchArray.value.push(item);
-      unmatch = true; // 如果有未匹配项，将标志设置为true
+  { flush: 'sync' }
+);
+watch(
+  () => [props.options, values.value],
+  () => {
+    const next = new Map(labels.value);
+    for (const option of props.options ?? []) {
+      if (values.value.includes(String(option.value))) next.set(String(option.value), option);
     }
-  });
-  return unmatch; // 返回标志的值
-});
+    labels.value = next;
+  },
+  { immediate: true }
+);
+const displayItems = computed(() =>
+  values.value.flatMap((value) => {
+    const option =
+      (props.options ?? []).find((item) => String(item.value) === value) ?? labels.value.get(value);
+    return option ? [option] : props.showValue ? [{ value, label: value } as DictTagOption] : [];
+  })
+);
 </script>
-
 <style scoped>
 .el-tag + .el-tag {
   margin-left: 10px;

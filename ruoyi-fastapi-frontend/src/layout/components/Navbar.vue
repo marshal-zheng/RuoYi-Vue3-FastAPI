@@ -56,6 +56,7 @@
 </template>
 
 <script setup>
+import { useOperation } from '@/utils/operation';
 import { ElMessageBox } from 'element-plus';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import TopNav from '@/components/ui/TopNav';
@@ -88,20 +89,20 @@ function handleCommand(command) {
   }
 }
 
-function logout() {
-  ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
+const { run: logout } = useOperation(async () => {
+  await ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
     zIndex: 9999,
   })
-    .then(() => {
-      userStore.logOut().then(() => {
+    .then(async () => {
+      await userStore.logOut().then(() => {
         location.href = '/login';
       });
     })
     .catch(() => {});
-}
+});
 
 const emits = defineEmits(['setLayout']);
 function setLayout() {

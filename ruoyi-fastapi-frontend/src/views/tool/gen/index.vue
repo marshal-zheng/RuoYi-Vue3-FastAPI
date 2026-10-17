@@ -15,8 +15,9 @@
               type="primary"
               icon="Download"
               :disabled="multiple"
-              @click="handleGenTable"
+              @click="handleGenTableClick"
               v-hasPermi="['tool:gen:code']"
+              :loading="handleGenTablePending"
               >生成</ZxButton
             >
             <ZxButton type="primary" icon="Plus" @click="openCreateTable" v-hasRole="['admin']"
@@ -43,6 +44,7 @@
               :disabled="multiple"
               @click="handleDelete"
               v-hasPermi="['tool:gen:remove']"
+              :loading="handleDeletePending"
               >删除</ZxButton
             >
           </template>
@@ -130,6 +132,7 @@
                   icon="Delete"
                   @click="handleDelete(scope.row)"
                   v-hasPermi="['tool:gen:remove']"
+                  :loading="handleDeletePending"
                 ></el-button>
               </el-tooltip>
               <el-tooltip content="同步" placement="top">
@@ -139,6 +142,7 @@
                   icon="Refresh"
                   @click="handleSynchDb(scope.row)"
                   v-hasPermi="['tool:gen:edit']"
+                  :loading="handleSynchDbPending"
                 ></el-button>
               </el-tooltip>
               <el-tooltip content="生成代码" placement="top">
@@ -146,8 +150,9 @@
                   link
                   type="primary"
                   icon="Download"
-                  @click="handleGenTable(scope.row)"
+                  @click="handleGenTableClick(scope.row)"
                   v-hasPermi="['tool:gen:code']"
+                  :loading="handleGenTablePending"
                 ></el-button>
               </el-tooltip>
             </template>
@@ -185,8 +190,9 @@
 </template>
 
 <script setup name="Gen">
+import { useOperation } from '@/utils/operation';
 import { listTable, previewTable, delTable, genCode, synchDb } from '@/api/tool/gen';
-import { useDialog } from '@zxio/zxui';
+import { useDialog } from '@zxio/zxui/hooks';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
 import { serializeDateRange } from '@/utils/ruoyi';
@@ -250,32 +256,40 @@ function handleRefresh() {
 }
 
 /** 生成代码操作 */
-function handleGenTable(row) {
+const { run: handleGenTable, pending: handleGenTablePending } = useOperation(async (row) => {
   const tbNames = row?.tableName || tableNames.value;
   if (!tbNames || tbNames === '') {
     ElMessage.error('请选择要生成的数据');
     return;
   }
   if (row?.genType === '1') {
-    genCode(row.tableName).then(() => {
+    await genCode(row.tableName).then(() => {
       ElMessage.success('成功生成到自定义路径：' + row.genPath);
     });
   } else {
-    proxy.$download.zip('/tool/gen/batchGenCode?tables=' + tbNames, 'vfadmin.zip');
+    await proxy.$download.zip('/tool/gen/batchGenCode?tables=' + tbNames, 'vfadmin.zip');
   }
+});
+
+function handleGenTableClick(row) {
+  const task = handleGenTable(row);
+  if (row?.genType === '1') return task;
+  return task.catch(() => {
+    // ZIP 下载入口已负责反馈；事件终点承接拒绝，避免将取消上报为 Vue 未处理错误。
+  });
 }
 
 /** 同步数据库操作 */
-function handleSynchDb(row) {
+const { run: handleSynchDb, pending: handleSynchDbPending } = useOperation(async (row) => {
   const tableName = row.tableName;
-  proxy.$modal
+  await proxy.$modal
     .confirm('确认要强制同步"' + tableName + '"表结构吗？')
     .then(() => synchDb(tableName))
     .then(() => {
       handleRefresh();
     })
     .catch(() => {});
-}
+});
 
 /** 打开导入表弹窗 */
 function openImportTable() {
@@ -321,16 +335,16 @@ function handleEditTable(row) {
 }
 
 /** 删除按钮操作 */
-function handleDelete(row) {
+const { run: handleDelete, pending: handleDeletePending } = useOperation(async (row) => {
   const tableIds = row?.tableId || ids.value;
-  proxy.$modal
+  await proxy.$modal
     .confirm('是否确认删除表编号为"' + tableIds + '"的数据项？')
     .then(() => delTable(tableIds))
     .then(() => {
       handleRefresh();
     })
     .catch(() => {});
-}
+});
 </script>
 
 <style scoped>

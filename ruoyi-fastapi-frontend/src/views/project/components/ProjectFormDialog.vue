@@ -1,6 +1,9 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents" data-testid="project-form-dialog">
-    <div class="py-4">
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
+      <el-button link type="primary" @click="handleRetry">重试</el-button>
+    </el-alert>
+    <div v-show="!loadError" class="py-4">
       <el-form ref="formRef" :model="state.data" :rules="formRules" v-bind="formProps">
         <FormGrid v-bind="layoutProps">
           <el-form-item label="工程名称" prop="projectName">
@@ -29,20 +32,24 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useEditorRead } from '@/utils/editor-read';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getProject, addProject, updateProject } from '@/api/project/project';
 
 const emit = defineEmits(['success']);
 
 const formRef = ref();
+const detailLoading = ref(false);
+let requestedId = null;
 
 const formRules = computed(() => ({
   projectName: [{ required: true, message: '工程名称不能为空', trigger: 'blur' }],
 }));
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setLoading } =
+const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
   useFormDialog({
     columns: 1,
+    loading: detailLoading,
     title: (data) => (data?.projectId ? '编辑工程' : '添加工程'),
 
     okText: computed(() => (state.data.projectId ? '保存' : '下一步')),
@@ -56,6 +63,7 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       projectDesc: '',
     }),
     onConfirm: async (data) => {
+      if (detailLoading.value || loadError.value || data.projectId !== requestedId) return false;
       if (data.projectId) {
         const res = await updateProject(data);
         emit('success', { mode: 'edit', data: res });
@@ -69,30 +77,45 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
     },
   });
 
-async function openDialog(payload) {
-  if (
-    payload &&
-    (payload.projectId || typeof payload === 'number' || typeof payload === 'string')
-  ) {
-    const id = payload.projectId || payload;
-    setLoading(true);
-    try {
-      const resp = await getProject(id);
-      const detail = resp || {};
-      open({
-        projectId: detail.projectId,
-        projectName: detail.projectName,
-        projectDesc: detail.projectDesc,
-      });
-    } finally {
-      setLoading(false);
+const {
+  error: loadError,
+  run: runRead,
+  cancel: cancelRead,
+} = useEditorRead(() => state.visible, detailLoading);
+
+function openDialog(payload) {
+  const id =
+    payload?.projectId ||
+    (typeof payload === 'number' || typeof payload === 'string' ? payload : null);
+  requestedId = id === null ? null : Number(id);
+  return runRead(async (read) => {
+    open(id ? { projectId: requestedId } : undefined);
+    setDisabled(true);
+    if (!id) {
+      setDisabled(false);
+      return;
     }
-  } else {
-    open();
-  }
+    const detail = await getProject(id, { signal: read.signal, silentError: true });
+    if (!read.isCurrent()) return;
+    open({
+      projectId: detail.projectId,
+      projectName: detail.projectName ?? '',
+      projectDesc: detail.projectDesc ?? '',
+    });
+    setDisabled(false);
+  });
+}
+function closeDialog() {
+  cancelRead();
+  return close();
+}
+function handleRetry() {
+  return openDialog(requestedId).catch(() => {
+    /* 当前读取已负责反馈。 */
+  });
 }
 
-defineExpose({ open: openDialog, close });
+defineExpose({ open: openDialog, close: closeDialog });
 </script>
 
 <style scoped></style>

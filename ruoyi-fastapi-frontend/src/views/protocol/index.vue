@@ -10,6 +10,7 @@
     >
       <!-- 工具栏：左-操作 | 中-筛选 | 右-搜索 -->
       <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+        <DictStatus :types="['sys_normal_disable']" />
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
@@ -132,11 +133,12 @@
     </ZxGridList>
 
     <!-- 协议表单 Drawer -->
-    <ProtocolFormDrawer ref="protocolDrawerRef" @success="handleProtocolSaveSuccess" />
+    <ProtocolFormDrawer ref="protocolDrawerRef" :save="handleProtocolSaveSuccess" />
   </ZxContentWrap>
 </template>
 
 <script setup name="Protocol">
+import { useOperation } from '@/utils/operation';
 import { serializeDateRange } from '@/utils/ruoyi';
 import {
   listProtocol,
@@ -202,11 +204,13 @@ function handleAddProtocol() {
 
 /** 编辑按钮操作 - 打开编辑 Drawer */
 function handleDetailPage(row) {
-  protocolDrawerRef.value?.open(row);
+  protocolDrawerRef.value?.open(row).catch(() => {
+    /* 详情读取已负责反馈。 */
+  });
 }
 
 /** 删除按钮操作 */
-function handleDelete(row) {
+const { run: handleDelete } = useOperation(async (row) => {
   const protocolIdsRaw = row.protocolId ? [row.protocolId] : ids.value;
   const protocolIds = (protocolIdsRaw || []).filter((id) => id !== undefined && id !== null);
   let confirmMessage = '';
@@ -221,7 +225,7 @@ function handleDelete(row) {
       confirmMessage = '是否确认删除选中的 ' + selectedProtocols.length + ' 个协议？';
     }
   }
-  proxy.$modal
+  await proxy.$modal
     .confirm(confirmMessage)
     .then(function () {
       if (!protocolIds || protocolIds.length === 0) {
@@ -236,7 +240,7 @@ function handleDelete(row) {
     .catch((err) => {
       if (err?.message === 'no_ids') return;
     });
-}
+});
 
 /** 批量删除按钮操作 */
 function handleBatchDelete() {

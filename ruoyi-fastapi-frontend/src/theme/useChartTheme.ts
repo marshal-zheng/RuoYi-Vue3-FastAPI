@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { useZxChartThemeProjection } from '@zxio/zxui';
+import { useZxChartThemeProjection } from '@zxio/zxui/theme-host/precompiled';
 import { createChartEChartsTheme } from '@zxio/chart';
 import themeDeployment from 'virtual:zxui-theme-deployment';
 
