@@ -1,0 +1,105 @@
+{
+  "baseCommit": "94528292c3483af52cdfeab6a95cb0d76d87bbb9",
+  "taskBranch": "codex/department-query-convergence",
+  "sourceHeads": {
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI": "94528292c3483af52cdfeab6a95cb0d76d87bbb9",
+    "/Users/hqz/Downloads/element-plus": "67e13c6cfa413d4c7a57bfa5d728dabc750d2972"
+  },
+  "implementationFileSHA256": {
+    "ruoyi-fastapi-frontend/src/api/system/dept.ts": "cb59055b651b69c5818b4db07861970cfe6bb8c409cfce6ea62159edf67a202a",
+    "ruoyi-fastapi-frontend/src/queries/editor-read.ts": "6900fe63726f94e01d2000ef220d967094b9145463e6c15ec164fe6b70483b56",
+    "ruoyi-fastapi-frontend/src/queries/system/dept.test.ts": "7dcb9e4916c7041783f434801ba7cb832b23d1ebf3fbf76915881cdd2383af91",
+    "ruoyi-fastapi-frontend/src/queries/system/dept.ts": "8068af0604d1a9d1eabc5e6fed780204a7633713eac8a692227e6dca27c07876",
+    "ruoyi-fastapi-frontend/src/queries/system/user.test.ts": "90b878e82b651cdd4e4211d5f34b29b59acf56edb8c776b5dc25b2817c3528d7",
+    "ruoyi-fastapi-frontend/src/queries/system/user.ts": "76191a2a980ad49f4eb3fadcd914e2868c9e303c48b09c7afabf4e7179ba051e",
+    "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptDlg.vue": "4cfbb4b672606bb89bf35698beba45635f51d37b28fa8b1bc1f266e179e63bd6",
+    "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptList.vue": "51862d9af6d3ffa3fab4820edcd30da3691a9877cdcefa85d3fce4ea2b1a5cd9",
+    "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue": "124b7d40b09789030399c4a4651e3fe0f7055c5a145bd8db750cc7046072615e",
+    "ruoyi-fastapi-frontend/src/views/system/user/index.vue": "45c29927a76b4e185bdad794ff4d986168d2f3d1b468205c791c3d54cd2e90dd",
+    "ruoyi-fastapi-frontend/tests/manual/department-query/README.md": "fdbbe71569e848011dce28edd764523939d715f5b1faff567cf50db57c9e56d4",
+    "ruoyi-fastapi-frontend/tests/manual/department-query/real-api.probe.ts": "78c785eaa1ea555e915cde744f956c5e9c393bf72d7a192fe5929db49e7809f2",
+    "ruoyi-fastapi-frontend/tests/manual/department-query/vitest.config.ts": "b4cdb04ace174ed4b5cce5243395103626260ca3f2dc75bd89e64177ade23628",
+    "ruoyi-fastapi-frontend/tests/unit/components/DeptDlg.test.ts": "eb546cfe15d2f69dcc284fcf86ff1237435542bffbc09d31bc835a238f90b3e6",
+    "ruoyi-fastapi-frontend/tests/unit/components/DeptList.test.ts": "71decac2db98264fbc03cdc38bb660ddba5137f7cf87e5dc7feef2335da43f3e",
+    "ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts": "c15887be84a37935ccec4d23478b3655eb9a5697b5806882a2719d6dabe8378a",
+    "ruoyi-fastapi-frontend/tests/unit/components/ListQueryContract.test.ts": "a125d181c2a244f4c9a22aee7a34c5efb5547c80f9a068cd7641ef66dc95613b",
+    "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts": "a750a3f8820e0760192d2c6b95a6b826759b0ce8db10bbfee45dfbd2abf6bdf7"
+  },
+  "sourceImplementationPathsUnchanged": [
+    {
+      "path": "ruoyi-fastapi-frontend/src/api/system/dept.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/queries/editor-read.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/queries/system/dept.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/queries/system/dept.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/queries/system/user.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/queries/system/user.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptDlg.vue",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/dept/components/DeptList.vue",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/user/components/UserFormDialog.vue",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/system/user/index.vue",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/manual/department-query/README.md",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/manual/department-query/real-api.probe.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/manual/department-query/vitest.config.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/DeptDlg.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/DeptList.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/EditorReadLifecycle.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/ListQueryContract.test.ts",
+      "sourceMatchesDepartmentStart": true
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/tests/unit/components/UserFormDialog.test.ts",
+      "sourceMatchesDepartmentStart": true
+    }
+  ],
+  "forbiddenPathChanges": [],
+  "intentionalWorkingTreeChanges": true,
+  "committed": false
+}

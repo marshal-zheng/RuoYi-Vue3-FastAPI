@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-10-17T08:53:43.628Z",
+  "mode": "installed",
+  "marker": "codex_dept_query_c5tc98",
+  "transport": "Actual business deptCommands/query factories/request/http to loopback FastAPI",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "coldSharing": {
+      "treeSubscribers": 2,
+      "treeRequests": 1
+    }
+  },
+  "cleanup": {
+    "created": 2,
+    "deleted": 2,
+    "verifiedAbsent": true
+  },
+  "authorization": {
+    "managementListPermission": "system:dept:list",
+    "userTreePermission": "system:user:list",
+    "permissionDataUnchanged": true
+  },
+  "passed": false,
+  "failure": {
+    "stage": "create-parent-child",
+    "name": "Error",
+    "status": 0,
+    "message": "Timed out: created records in active queries"
+  },
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/dept/list": 5,
+    "GET /system/user/deptTree": 3,
+    "POST /system/dept": 2,
+    "DELETE /system/dept/:id": 2,
+    "POST /auth/logout": 1
+  }
+}

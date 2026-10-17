@@ -1,4 +1,4 @@
-import { isCancelledError, queryOptions, skipToken } from '@tanstack/vue-query';
+import { queryOptions, skipToken } from '@tanstack/vue-query';
 import { AbortError, queryRequest, type RequestOptions } from '@zxio/http';
 import { invalidateQueryGroups, type QueryGroupFilter } from '@zxio/vue-query/core';
 import * as api from '@/api/system/user';
@@ -14,8 +14,8 @@ import type {
   RoleUsersRevokeModel,
   RoleUsersGrantModel,
 } from '@/api/_generated/types.gen';
-import type { MenuTreeNode } from '@/api/system/menu';
 import { queryClient } from '../client';
+import { readEditorResource } from '../editor-read';
 import {
   assertRequestScope,
   requireQueryScope,
@@ -59,7 +59,6 @@ export const userKeys = {
   details: (scope: QueryScope) => [...userKeys.all(scope), 'detail'] as const,
   detail: (scope: QueryScope, id: number) => [...userKeys.details(scope), id] as const,
   formOptions: (scope: QueryScope) => [...userKeys.all(scope), 'form-options'] as const,
-  departments: (scope: QueryScope) => [...userKeys.all(scope), 'departments'] as const,
 };
 
 export function userListOptions(
@@ -77,24 +76,6 @@ export function userListOptions(
       : (['ruoyi', 'disabled', 'users', 'list', params] as const),
     queryFn: scope
       ? ({ signal }) => api.listUser(params, queryRequest(signal, scopeRequestOptions(scope)))
-      : skipToken,
-    enabled: scope !== null,
-    staleTime: 30_000,
-    retry: false,
-  });
-}
-export function userDeptTreeOptions(scope: QueryScope | null) {
-  return queryOptions({
-    queryKey: scope
-      ? userKeys.departments(scope)
-      : (['ruoyi', 'disabled', 'users', 'departments'] as const),
-    queryFn: scope
-      ? async ({ signal }): Promise<readonly MenuTreeNode[]> => {
-          const response = await api.deptTreeSelect(
-            queryRequest(signal, scopeRequestOptions(scope))
-          );
-          return response.items;
-        }
       : skipToken,
     enabled: scope !== null,
     staleTime: 30_000,
@@ -150,37 +131,16 @@ export async function readUserEditor(
   if (!scope || (id !== undefined && (!Number.isSafeInteger(Number(id)) || Number(id) <= 0))) {
     throw new AbortError({ message: '用户编辑条件已失效' });
   }
-  const ended = () => new AbortError({ message: '用户编辑已结束' });
-  if (openingSignal?.aborted) throw ended();
-  let removeAbortListener: (() => void) | undefined;
-  // End only the opening's wait. Another subscriber keeps the native read.
-  const openingEnded = openingSignal
-    ? new Promise<never>((_, reject) => {
-        const abort = () => reject(ended());
-        openingSignal.addEventListener('abort', abort, { once: true });
-        removeAbortListener = () => openingSignal.removeEventListener('abort', abort);
-      })
-    : undefined;
-  try {
-    while (true) {
-      if (openingSignal?.aborted) throw ended();
-      assertRequestScope(scopeRequestOptions(scope));
-      try {
-        const reading =
-          id === undefined
-            ? queryClient.fetchQuery(userCreateOptions(scope))
-            : queryClient.fetchQuery(userDetailOptions(scope, id));
-        return await (openingEnded ? Promise.race([reading, openingEnded]) : reading);
-      } catch (error) {
-        if (!isCancelledError(error)) throw error;
-        // A resource write can cancel the first snapshot. Join its replacement
-        // while this opening is current, without displaying cancellation.
-      }
-    }
-  } finally {
-    removeAbortListener?.();
-  }
+  return readEditorResource(
+    scope,
+    () =>
+      id === undefined
+        ? queryClient.fetchQuery(userCreateOptions(scope))
+        : queryClient.fetchQuery(userDetailOptions(scope, id)),
+    openingSignal
+  );
 }
+
 export interface UserCommand<T> {
   readonly scope: QueryScope;
   readonly input: T;

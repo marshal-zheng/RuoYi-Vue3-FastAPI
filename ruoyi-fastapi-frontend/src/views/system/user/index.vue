@@ -233,11 +233,7 @@
     </div>
 
     <!-- 添加或修改用户配置对话框 -->
-    <UserFormDialog
-      ref="userFormDialogRef"
-      :dept-options="enabledDeptOptions"
-      @success="handleDialogSuccess"
-    />
+    <UserFormDialog ref="userFormDialogRef" @success="handleDialogSuccess" />
 
     <!-- 用户导入对话框 -->
     <UserImportDialog ref="userImportDialogRef" @success="handleDialogSuccess" />
@@ -253,9 +249,9 @@ import {
   captureUserCommand,
   normalizeUserFilters,
   userCommands,
-  userDeptTreeOptions,
   userListOptions,
 } from '@/queries/system/user';
+import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
 import { useOperation } from '@/utils/operation';
 import useAppStore from '@/store/modules/app';
 import { checkPermi } from '@/utils/permission';
@@ -299,8 +295,7 @@ const listStatus = computed(() => ({
   error: userQuery.error.value,
   paused: userQuery.fetchStatus.value === 'paused',
 }));
-const deptOptions = computed(() => departmentQuery.data.value ?? emptyRows);
-const enabledDeptOptions = computed(() => filterDisabledDept(deptOptions.value));
+const deptOptions = computed(() => copyUserDeptTree(departmentQuery.data.value ?? emptyRows));
 const deptStatus = computed(() => ({
   loading: departmentQuery.isLoading.value,
   error: departmentQuery.error.value,
@@ -317,14 +312,6 @@ const columns = ref([
 ]);
 const filterNode = (value, data) => !value || data.label.includes(value);
 watch(deptName, (value) => deptTreeRef.value?.filter(value));
-function filterDisabledDept(items) {
-  return items
-    .filter((item) => !item.disabled)
-    .map((item) => ({
-      ...item,
-      ...(item.children ? { children: filterDisabledDept(item.children) } : {}),
-    }));
-}
 function clearSelection() {
   userTableRef.value?.clearSelection();
   handleSelectionChange([]);

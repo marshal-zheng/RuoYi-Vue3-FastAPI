@@ -28,12 +28,33 @@
           <el-tree-select
             v-model="state.data.deptId"
             :data="deptOptions"
+            :cache-data="selectedDeptCache"
+            :loading="departmentQuery.isLoading.value"
             :props="{ value: 'id', label: 'label', children: 'children' }"
             value-key="id"
             placeholder="请选择归属部门"
             check-strictly
             style="width: 100%"
-          />
+          >
+            <template #label="{ value, label }">
+              {{
+                selectedDepartment && selectedDepartment.id === value
+                  ? selectedDepartment.label
+                  : label
+              }}
+            </template>
+          </el-tree-select>
+          <span v-if="departmentQuery.isPaused.value" role="status">部门列表等待网络连接</span>
+          <el-alert
+            v-else-if="departmentQuery.error.value"
+            :title="
+              departmentQuery.data.value ? '部门列表刷新失败，保留当前选择' : '部门列表读取失败'
+            "
+            type="error"
+            :closable="false"
+          >
+            <el-button link type="primary" @click="retryDepartments">重试</el-button>
+          </el-alert>
         </el-form-item>
 
         <el-form-item label="手机号码" prop="phonenumber">
@@ -125,10 +146,7 @@ import {
   userCreateOptions,
 } from '@/queries/system/user';
 import { queryScope, requireQueryScope } from '@/queries/context';
-
-defineProps({
-  deptOptions: { type: Array, default: () => [] },
-});
+import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
 
 const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 
@@ -140,6 +158,7 @@ const roleOptions = ref([]);
 const detailLoading = ref(false);
 const requestedId = ref();
 const editorScope = shallowRef(null);
+const selectedDepartment = shallowRef(null);
 
 const formRules = computed(() => ({
   userName: [
@@ -261,10 +280,39 @@ const editorQuery = useQuery(
       : userDetailOptions(scope, requestedId.value);
   })
 );
+const departmentQuery = useQuery(() =>
+  userDeptTreeOptions(
+    state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+  )
+);
+const deptOptions = computed(() => copyUserDeptTree(departmentQuery.data.value ?? []));
+const selectedDeptCache = computed(() =>
+  selectedDepartment.value && selectedDepartment.value.id === state.data.deptId
+    ? [selectedDepartment.value]
+    : []
+);
+function findDepartment(nodes, id) {
+  for (const node of nodes) {
+    if (String(node.id) === String(id)) return node;
+    const found = node.children && findDepartment(node.children, id);
+    if (found) return found;
+  }
+}
+watch(
+  [() => state.data.deptId, deptOptions],
+  ([id, options]) => {
+    if (!state.visible) return;
+    const current = findDepartment(options, id);
+    if (current) selectedDepartment.value = { id, label: current.label };
+    else if (selectedDepartment.value?.id !== id) selectedDepartment.value = null;
+  },
+  { flush: 'sync' }
+);
 watch(
   queryScope,
   () => {
     cancelRead();
+    selectedDepartment.value = null;
     close();
   },
   { flush: 'sync' }
@@ -286,6 +334,9 @@ function openDialog(userId) {
     roleOptions.value = response.roles || [];
     if (userId) {
       const userData = response.data;
+      if (userData.dept?.deptName) {
+        selectedDepartment.value = { id: userData.deptId, label: userData.dept.deptName };
+      }
       open({
         userId: userData.userId,
         deptId: userData.deptId,
@@ -320,6 +371,13 @@ function retryResource() {
   if (editorQuery.isEnabled.value) {
     void editorQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {
       // The observer retains the read failure without replacing the draft.
+    });
+  }
+}
+function retryDepartments() {
+  if (departmentQuery.isEnabled.value) {
+    void departmentQuery.refetch({ cancelRefetch: false, throwOnError: true }).catch(() => {
+      // The local observer owns the department read failure; the user draft remains editable.
     });
   }
 }

@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-10-17T08:56:03.212Z",
+  "mode": "installed",
+  "marker": "codex_dept_query_c5wbyk",
+  "transport": "Actual business deptCommands/query factories/request/http to loopback FastAPI",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "coldSharing": {
+      "treeSubscribers": 2,
+      "treeRequests": 1
+    },
+    "create": {
+      "parentAndChildVisible": true
+    },
+    "rename": {
+      "managementAndBothTreeObserversUpdated": true,
+      "userListRefetched": true
+    },
+    "status": {
+      "disabledRetainedInManagement": true,
+      "userTreeNormalFilter": true,
+      "enabledRestored": true
+    },
+    "excludeAndEditor": {
+      "selfAndDescendantExcluded": true,
+      "editorReadUsesRealDetail": true
+    },
+    "parameterError": {
+      "status": 422,
+      "successfulCachePreserved": true
+    }
+  },
+  "cleanup": {
+    "created": 2,
+    "deleted": 2,
+    "verifiedAbsent": true
+  },
+  "authorization": {
+    "managementListPermission": "system:dept:list",
+    "userTreePermission": "system:user:list",
+    "permissionDataUnchanged": true
+  },
+  "passed": true,
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/dept/list": 9,
+    "GET /system/user/deptTree": 6,
+    "POST /system/dept": 2,
+    "GET /system/user/list": 4,
+    "PUT /system/dept": 3,
+    "GET /system/dept/list/exclude/:id": 2,
+    "GET /system/dept/:id": 1,
+    "DELETE /system/dept/:id": 2,
+    "POST /auth/logout": 1
+  }
+}

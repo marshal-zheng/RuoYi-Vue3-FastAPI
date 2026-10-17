@@ -1,0 +1,77 @@
+{
+  "timestamp": "2026-10-17T08:55:11.866463+00:00",
+  "scope": "Existing local ruoyi-redis-local and task-owned source backend only",
+  "localDocker": {
+    "context": "colima",
+    "endpoint": "unix:///Users/hqz/.colima/default/docker.sock",
+    "colimaVersion": "HEAD-4dacd64",
+    "limaVersion": "1.0.7"
+  },
+  "before": {
+    "hostIPv4_6379": "Connection refused",
+    "hostIPv6_6379": "Connection refused",
+    "macOSListener6379": false,
+    "vmListener": "127.0.0.1:6379 LISTEN",
+    "containerPing": "PONG",
+    "connectedClientsIncludingProbe": 1,
+    "onlyClientCommand": "client|list",
+    "rdbLastSaveStatus": "ok",
+    "mountedPersistence": "local volume at /data"
+  },
+  "recovery": {
+    "redisSave": "OK",
+    "restartExistingRedis": "completed; host still refused",
+    "originalForwardFailure": "ha.stderr.log line 97: native SSH -O forward for 6379 exited 255",
+    "nativeMasterPID": 17444,
+    "command": "ssh -F /Users/hqz/.colima/_lima/colima/ssh.config -O forward -L127.0.0.1:6379:127.0.0.1:6379 lima-colima",
+    "commandExit": 0,
+    "newSSHConnectionOrProxy": false,
+    "colimaRestarted": false,
+    "configOrVolumesChanged": false
+  },
+  "after": {
+    "hostRedisRESP": "+PONG",
+    "backendDocsHTTP": 200,
+    "backendCommand": "./venv/bin/python app.py --env=dev",
+    "backendReloaderPID": 44026,
+    "backendWorkerPID": 44090
+  },
+  "readOnlyCommands": [
+    "docker context show",
+    "docker context inspect",
+    "docker inspect ruoyi-redis-local (ports/mounts/image only)",
+    "docker exec ruoyi-redis-local redis-cli INFO clients",
+    "docker exec ruoyi-redis-local redis-cli INFO persistence",
+    "docker exec ruoyi-redis-local redis-cli CLIENT LIST (only aggregate retained)",
+    "nc -vz 127.0.0.1 6379",
+    "nc -vz ::1 6379",
+    "lsof -nP -iTCP:6379",
+    "colima ssh -- sudo ss -lnt sport = :6379",
+    "colima version",
+    "limactl --version"
+  ],
+  "limits": "No business env changes, no permissions changes, no database seed/reset. No computer use.",
+  "backendInputBoundary": {
+    "sourceCwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+    "gitHEAD": "94528292c3483af52cdfeab6a95cb0d76d87bbb9",
+    "existingBackendDirty": true,
+    "dirtyEntryCount": 91,
+    "relatedFileSHA256": {
+      "ruoyi-fastapi-backend/modules/system/application/services/dept_service.py": "ec9f02b5a696b0c70026f7622a5d2293095ec435563405be5ed3e6a41872b072",
+      "ruoyi-fastapi-backend/utils/query_cache.py": "020403cc564a564989a6dea233d36ccfe5b68ed4331d7a09b9da9ec0f6c811fb",
+      "ruoyi-fastapi-backend/utils/transaction_manager.py": "4cd744cbaa457ad98ac187db112e49910b77ed3ec64a32371b8855d6613953f5",
+      "ruoyi-fastapi-backend/modules/system/api/dept_controller.py": "29cf7f591266b503a12bc9cbde2aa88553c815d99281ece0af8a7c3b0e5793f2",
+      "ruoyi-fastapi-backend/modules/system/api/user_controller.py": "54a012540869e1986498ffd0ad903ed451e14744fd0be602cabe9a275d944a64"
+    },
+    "meaning": "Actual backend was the existing source checkout including its pre-existing changes, not an assertion that it equals the task worktree baseline. No backend source edited by this validation agent."
+  },
+  "taskBackendCleanup": {
+    "stoppedReloaderPID": 44026,
+    "stoppedWorkerPID": 44090,
+    "bothPIDsAbsent": true,
+    "host8088Closed": true,
+    "retainedOriginalRedisAndMySQL": true,
+    "retainedRecoveredNative6379": true,
+    "checkedAt": "2026-10-17T08:57:34.073077+00:00"
+  }
+}

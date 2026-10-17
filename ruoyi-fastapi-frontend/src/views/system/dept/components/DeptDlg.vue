@@ -1,5 +1,24 @@
 <template>
   <ZxDialog v-bind="dialogProps" v-on="dialogEvents">
+    <span v-if="editorQuery.isPaused.value || parentQuery.isPaused.value" aria-live="polite">
+      部门读取等待网络连接
+    </span>
+    <el-alert
+      v-if="parentQuery.error.value && !loadError"
+      title="上级部门刷新失败，保留当前选项与编辑草稿"
+      type="error"
+      :closable="false"
+    >
+      <el-button link type="primary" @click="retryParentOptions">重试读取</el-button>
+    </el-alert>
+    <el-alert
+      v-if="editorQuery.error.value && !loadError"
+      title="部门详情刷新失败，保留编辑草稿"
+      type="error"
+      :closable="false"
+    >
+      <el-button link type="primary" @click="retryDetail">重试读取</el-button>
+    </el-alert>
     <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
@@ -68,11 +87,18 @@ import type { FormInstance } from 'element-plus';
 const formRef = ref<FormInstance>();
 
 import type { DeptRecord } from '@/api/system/dept';
-import { getDept, addDept, updateDept, listDept, listDeptExcludeChild } from '@/api/system/dept';
+import {
+  captureDeptCommand,
+  deptCommands,
+  deptDetailOptions,
+  deptParentOptions,
+  readDeptEditor,
+} from '@/queries/system/dept';
+import { queryScope, requireQueryScope, type QueryScope } from '@/queries/context';
+import { useQuery } from '@tanstack/vue-query';
+import { handleTree } from '@/utils/ruoyi';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
-import { ref, getCurrentInstance } from 'vue';
-
-const proxy = getCurrentInstance()!.proxy!;
+import { computed, ref, shallowRef, watch } from 'vue';
 
 // 保留异步字典返回的 ref，避免复制请求完成前的空数组。
 const { sys_normal_disable: sys_normal_disable } = useDict('sys_normal_disable');
@@ -90,9 +116,10 @@ interface DeptForm {
 
 const emit = defineEmits(['success']);
 
-const deptOptions = ref<DeptRecord[]>([]);
 const detailLoading = ref(false);
 let requestedData: Partial<DeptForm> | undefined;
+const requestedId = ref<number>();
+const editorScope = shallowRef<QueryScope | null>(null);
 
 const formRules = {
   parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
@@ -132,7 +159,15 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       status: '0',
     }),
     onConfirm: async (data: DeptForm) => {
-      if (detailLoading.value || loadError.value) return false;
+      const scope = editorScope.value;
+      if (
+        !state.visible ||
+        !scope ||
+        scope !== queryScope.value ||
+        detailLoading.value ||
+        loadError.value
+      )
+        return false;
       const payload = {
         parentId: data.parentId,
         deptName: data.deptName,
@@ -143,7 +178,9 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
         status: data.status,
       };
       if (data.deptId !== undefined) {
-        await updateDept({ ...payload, deptId: data.deptId });
+        await deptCommands.updateDept(
+          captureDeptCommand({ ...payload, deptId: data.deptId }, scope)
+        );
       } else {
         if (
           payload.parentId === undefined ||
@@ -151,13 +188,19 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
           payload.orderNum === undefined
         )
           return false;
-        await addDept({
-          ...payload,
-          parentId: payload.parentId,
-          deptName: payload.deptName,
-          orderNum: payload.orderNum,
-        });
+        await deptCommands.createDept(
+          captureDeptCommand(
+            {
+              ...payload,
+              parentId: payload.parentId,
+              deptName: payload.deptName,
+              orderNum: payload.orderNum,
+            },
+            scope
+          )
+        );
       }
+      if (scope !== queryScope.value || state.data !== data) return false;
       emit('success');
       return true;
     },
@@ -169,18 +212,41 @@ const {
   cancel: cancelRead,
 } = useEditorRead(() => state.visible, detailLoading);
 
+const activeScope = computed(() =>
+  state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+);
+const editorQuery = useQuery(() => deptDetailOptions(activeScope.value, requestedId.value));
+const parentQuery = useQuery(() => deptParentOptions(activeScope.value, requestedId.value));
+const deptOptions = computed(() =>
+  handleTree(
+    (parentQuery.data.value?.items ?? []).map((row: DeptRecord) => ({
+      ...row,
+    })),
+    'deptId'
+  )
+);
+watch(
+  queryScope,
+  () => {
+    cancelRead();
+    editorScope.value = null;
+    state.visible = false;
+  },
+  { flush: 'sync' }
+);
+
 function openDialog(seed?: Partial<DeptForm>) {
+  const scope = requireQueryScope();
+  editorScope.value = scope;
   requestedData = seed ? { ...seed } : undefined;
+  requestedId.value = seed?.deptId;
   return runRead(async (read) => {
     open(seed);
-    deptOptions.value = [];
     setDisabled(true);
-    const config = { signal: read.signal, silentError: true };
-    const [data, options] = seed?.deptId
-      ? await Promise.all([getDept(seed.deptId, config), listDeptExcludeChild(seed.deptId, config)])
-      : [seed, await listDept(undefined, config)];
-    if (!read.isCurrent()) return;
-    deptOptions.value = proxy.handleTree(options.items, 'deptId');
+    const response = await readDeptEditor(scope, seed?.deptId, read.signal);
+    if (!read.isCurrent() || scope !== queryScope.value) return;
+    const data = response.data;
+    // Copy the initial detail once; later observer updates only affect choices and status.
     open(
       seed?.deptId && data
         ? {
@@ -206,6 +272,12 @@ function handleRetry() {
   return openDialog(requestedData).catch(() => {
     /* 当前读取已负责反馈。 */
   });
+}
+function retryParentOptions() {
+  if (parentQuery.isEnabled.value) void parentQuery.refetch({ cancelRefetch: false });
+}
+function retryDetail() {
+  if (editorQuery.isEnabled.value) void editorQuery.refetch({ cancelRefetch: false });
 }
 
 defineExpose({ open: openDialog, close: closeDialog });

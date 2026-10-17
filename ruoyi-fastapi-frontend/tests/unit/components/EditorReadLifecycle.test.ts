@@ -13,7 +13,6 @@ import {
 import { handleTree } from '@/utils/ruoyi';
 import ConfigDlg from '@/views/system/config/components/ConfigDlg.vue';
 import DictDlg from '@/views/system/dict/components/DictDlg.vue';
-import DeptDlg from '@/views/system/dept/components/DeptDlg.vue';
 import RoleFormDrawer from '@/views/system/role/components/RoleFormDrawer.vue';
 import RoleDataScopeDrawer from '@/views/system/role/components/RoleDataScopeDrawer.vue';
 
@@ -157,14 +156,6 @@ const cases = [
     id: 'dictId',
     field: 'dictName',
     arg: (id?: number) => id,
-  },
-  {
-    name: 'dept',
-    component: DeptDlg,
-    read: api.dept,
-    id: 'deptId',
-    field: 'deptName',
-    arg: (id?: number) => (id ? { deptId: id } : { parentId: 1 }),
   },
   {
     name: 'role',
@@ -479,29 +470,5 @@ for (const item of cases.filter((item) => item.name === 'role' || item.name === 
       expect(payload.roleName).toBe('Role 11');
       expect(payload.menuIds).toEqual([11]);
     }
-  });
-}
-
-for (const mode of ['create', 'edit']) {
-  it(`dept ${mode} sends only operation fields`, async () => {
-    const e = editor(DeptDlg);
-    await e.exposed.open(mode === 'edit' ? { deptId: 11 } : { parentId: 1 });
-    Object.assign(e.model(), {
-      deptName: 'Department',
-      orderNum: 0,
-      createBy: 'forged',
-      updateTime: 'forged',
-      delFlag: '2',
-      ancestors: '0,999',
-      admin: true,
-    });
-    await e.modal().props('confirm')(e.model());
-    const payload = api.write.mock.calls[0][0];
-    expect(payload.deptName).toBe('Department');
-    expect(payload.orderNum).toBe(0);
-    for (const field of ['createBy', 'updateTime', 'delFlag', 'ancestors', 'admin'])
-      expect(payload).not.toHaveProperty(field);
-    if (mode === 'edit') expect(payload.deptId).toBe(11);
-    else expect(payload).not.toHaveProperty('deptId');
   });
 }

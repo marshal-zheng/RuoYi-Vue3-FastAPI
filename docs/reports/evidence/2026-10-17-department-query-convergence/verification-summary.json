@@ -1,0 +1,103 @@
+{
+  "checks": [
+    {
+      "name": "frontend-lint",
+      "command": [
+        "corepack",
+        "yarn",
+        "lint:check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 13.18,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/frontend-lint.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boundedSummary": "checks/frontend-lint.summary.txt"
+    },
+    {
+      "name": "frontend-types",
+      "command": [
+        "corepack",
+        "yarn",
+        "type-check"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 16.15,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/frontend-types.log",
+      "logSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boundedSummary": "checks/frontend-types.summary.txt"
+    },
+    {
+      "name": "frontend-tests",
+      "command": [
+        "corepack",
+        "yarn",
+        "test:run"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 28.82,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/frontend-tests.log",
+      "logSHA256": "54f1a5b0ce5475ffe704217e4143b8244a78a041172dcd6e4f19e03248506c41",
+      "boundedSummary": "checks/frontend-tests.summary.txt"
+    },
+    {
+      "name": "ui-standards",
+      "command": [
+        "corepack",
+        "yarn",
+        "ui:standards"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 8.81,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/ui-standards.log",
+      "logSHA256": "f73f659f3e2fa5842fd318c8f56a438ae8469206425061d1a6a7cabce63283fa",
+      "boundedSummary": "checks/ui-standards.summary.txt"
+    },
+    {
+      "name": "source-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/department-query-source-20261017-r2",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 32.5,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/source-build.log",
+      "logSHA256": "c13e645bc70239656892ef04f694cce1d92b963fa91cf83f796c6263e8e63fd9",
+      "environment": {
+        "VITE_ZXUI_LOCAL": "true",
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus"
+      },
+      "boundedSummary": "checks/source-build.summary.txt"
+    },
+    {
+      "name": "packed-build",
+      "command": [
+        "corepack",
+        "yarn",
+        "build:prod",
+        "--outDir",
+        "/tmp/department-query-packed-20261017-r2",
+        "--manifest"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/department-query-convergence/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "seconds": 24.52,
+      "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks/packed-build.log",
+      "logSHA256": "3b81be20941877f3ac22c76274a0f59de5d792834a1b8364f85068c006cb470b",
+      "environment": {
+        "VITE_ZXUI_LOCAL": "false"
+      },
+      "boundedSummary": "checks/packed-build.summary.txt"
+    }
+  ],
+  "fullLogsInGitMetadata": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/department-query-convergence/department-checks",
+  "note": "Summaries are bounded extracts; original hashes and exit codes refer to full logs in Git metadata. Native RED logs intentionally record pre-fix failures."
+}

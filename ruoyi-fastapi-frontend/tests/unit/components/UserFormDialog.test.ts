@@ -5,23 +5,43 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { onlineManager, useQuery, VueQueryPlugin } from '@tanstack/vue-query';
 import { isAbortError } from '@zxio/http';
+import { ElOption, ElSelect, ElTreeSelect } from 'element-plus';
 import { defineComponent, h, nextTick, ref } from 'vue';
-import { addUser, getUser, updateUser } from '@/api/system/user';
+import { addUser, deptTreeSelect, getUser, updateUser } from '@/api/system/user';
+import { updateDept } from '@/api/system/dept';
 import UserFormDialog from '@/views/system/user/components/UserFormDialog.vue';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
 import { captureUserCommand, userCommands, userDetailOptions } from '@/queries/system/user';
+import {
+  captureDeptCommand,
+  deptCommands,
+  deptKeys,
+  userDeptTreeOptions,
+} from '@/queries/system/dept';
 
 vi.mock('@/api/system/user', () => ({
   getUser: vi.fn(),
   addUser: vi.fn(),
   updateUser: vi.fn(),
+  deptTreeSelect: vi.fn(),
+}));
+vi.mock('@/api/system/dept', () => ({
+  listDept: vi.fn(),
+  listDeptExcludeChild: vi.fn(),
+  getDept: vi.fn(),
+  addDept: vi.fn(),
+  updateDept: vi.fn(),
+  delDept: vi.fn(),
 }));
 vi.mock('@/utils/dict', () => ({ useDict: () => ({ sys_normal_disable: ref([]) }) }));
 
 const feedback = vi.hoisted(() => ({ error: vi.fn(), problem: vi.fn(), recovery: vi.fn() }));
 vi.mock('@/utils/http', () => ({ presentRequestError: feedback.recovery }));
-vi.mock('element-plus', () => ({ ElMessage: { error: feedback.error } }));
+vi.mock('element-plus', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('element-plus')>()),
+  ElMessage: { error: feedback.error },
+}));
 vi.mock('@/utils/feedback/presenter', () => ({
   presentProblemFeedback: feedback.problem,
   resolveFeedbackOptions: (options: unknown) => options,
@@ -79,13 +99,12 @@ const formStub = {
   template: '<form><slot /></form>',
 };
 
-function mountDialog() {
+function mountDialog(nativeTree = false) {
   const wrapper = mount(UserFormDialog, {
-    props: {
-      deptOptions: [{ id: 1, label: '研发部' }],
-    },
+    attachTo: nativeTree ? document.body : undefined,
     global: {
       plugins: [[VueQueryPlugin, { queryClient }]],
+      components: { ElTreeSelect, ElSelect, ElOption },
       stubs: {
         DictStatus: true,
         DictSelect: true,
@@ -95,12 +114,19 @@ function mountDialog() {
         ElRow: renderSlotStub,
         ElCol: renderSlotStub,
         ZxInput: { inheritAttrs: false, template: '<input />' },
-        ElTreeSelect: { inheritAttrs: false, template: '<select />' },
-        ElSelect: renderSlotStub,
-        ElOption: true,
+        ElTreeSelect: nativeTree
+          ? false
+          : {
+              name: 'ElTreeSelect',
+              props: ['data', 'modelValue', 'cacheData'],
+              inheritAttrs: false,
+              template: '<select />',
+            },
+        ElSelect: nativeTree ? false : renderSlotStub,
+        ElOption: nativeTree ? false : true,
         ElRadioGroup: renderSlotStub,
         ElRadio: renderSlotStub,
-        ElAlert: { props: ['title'], template: '<aside><slot /></aside>' },
+        ElAlert: { props: ['title'], template: '<aside>{{ title }}<slot /></aside>' },
         ElButton: { template: '<button><slot /></button>' },
       },
     },
@@ -113,6 +139,7 @@ beforeEach(() => {
   queryClient.clear();
   setQuerySession(1, [], []);
   onlineManager.setOnline(true);
+  vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 1, label: '研发部' }] });
 });
 afterEach(() => {
   mounted.splice(0).forEach((wrapper) => wrapper.unmount());
@@ -123,6 +150,161 @@ afterEach(() => {
 });
 
 describe('UserFormDialog', () => {
+  it('starts the native department selector without a null cache node', () => {
+    expect(() => mountDialog(true)).not.toThrow();
+  });
+
+  it('updates the native collapsed department label after an asynchronous edit and keeps keyboard selection', async () => {
+    const scope = setQuerySession(1, [], []);
+    const response = deferred();
+    vi.mocked(getUser).mockReturnValueOnce(response.promise);
+    vi.mocked(deptTreeSelect).mockResolvedValueOnce({
+      items: [{ id: 1, label: 'Root', children: [{ id: 9, label: '原部门' }] }],
+    });
+    const wrapper = mountDialog(true);
+    const opening = (wrapper.vm as unknown as DialogApi).open(42);
+    await flushPromises();
+    const tree = wrapper.getComponent(ElTreeSelect);
+    const element = tree.element;
+    expect(tree.props('modelValue')).toBeUndefined();
+    expect(document.querySelector('.el-tree-node[data-key="9"]')).toBeNull();
+    response.resolve({
+      ...detail(42),
+      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '原部门' } },
+    });
+    await opening;
+    await flushPromises();
+    const selectedLabel = () => tree.get('.el-select__selected-item.el-select__placeholder').text();
+    expect(selectedLabel()).toBe('原部门');
+    const model = wrapper.findComponent(dialogStub).props('formModel');
+    model.nickName = '尚未保存的输入';
+    vi.mocked(deptTreeSelect).mockResolvedValueOnce({
+      items: [{ id: 1, label: 'Root', children: [{ id: 9, label: '新部门' }] }],
+    });
+    await queryClient.invalidateQueries({ queryKey: deptKeys.userTree(scope) });
+    await flushPromises();
+    expect(tree.props('data')).toEqual([
+      { id: 1, label: 'Root', children: [{ id: 9, label: '新部门' }] },
+    ]);
+    expect(tree.props('cacheData')).toEqual([{ id: 9, label: '新部门' }]);
+    expect(tree.element).toBe(element);
+    expect(selectedLabel()).toBe('新部门');
+    expect(model.nickName).toBe('尚未保存的输入');
+    vi.mocked(deptTreeSelect).mockRejectedValueOnce(new Error('部门刷新失败'));
+    await queryClient.invalidateQueries({ queryKey: deptKeys.userTree(scope) });
+    await flushPromises();
+    expect(wrapper.text()).toContain('部门列表刷新失败');
+    expect(selectedLabel()).toBe('新部门');
+    expect(model.deptId).toBe(9);
+    expect(model.nickName).toBe('尚未保存的输入');
+
+    const input = tree.get('input');
+    input.element.focus();
+    await input.trigger('keydown', { key: 'Enter', code: 'Enter' });
+    await flushPromises();
+    expect(input.attributes('aria-expanded')).toBe('true');
+    const popupId = input.attributes('aria-controls');
+    expect(popupId).toBeDefined();
+    const popup = document.getElementById(popupId!)!;
+    const root = popup.querySelector('.el-tree-node[data-key="1"]')!;
+    root
+      .querySelector('.el-tree-node__expand-icon')!
+      .dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    await flushPromises();
+    expect(popup.querySelector('.el-tree-node[data-key="9"] .is-selected')).not.toBeNull();
+    await input.trigger('keydown', { key: 'ArrowDown', code: 'ArrowDown' });
+    await new Promise((resolve) => setTimeout(resolve, 30));
+    await input.trigger('keydown', { key: 'Enter', code: 'Enter' });
+    await flushPromises();
+    expect(model.deptId).toBe(1);
+    expect(selectedLabel()).toBe('Root');
+  });
+
+  it('shows the current disabled department label from detail when choices omit the value', async () => {
+    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [] });
+    vi.mocked(getUser)
+      .mockResolvedValueOnce({
+        ...detail(42),
+        data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门旧名' } },
+      })
+      .mockResolvedValueOnce({
+        ...detail(43),
+        data: { ...detail(43).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门新名' } },
+      });
+    const wrapper = mountDialog(true);
+    const api = wrapper.vm as unknown as DialogApi;
+    await api.open(42);
+    await flushPromises();
+    const tree = wrapper.getComponent(ElTreeSelect);
+    const element = tree.element;
+    const selectedLabel = () => tree.get('.el-select__selected-item.el-select__placeholder').text();
+    expect(selectedLabel()).toBe('停用部门旧名');
+    await api.close();
+    await api.open(43);
+    await flushPromises();
+    expect(tree.props('data')).toEqual([]);
+    expect(tree.props('modelValue')).toBe(9);
+    expect(tree.props('cacheData')).toEqual([{ id: 9, label: '停用部门新名' }]);
+    expect(tree.element).toBe(element);
+    expect(selectedLabel()).toBe('停用部门新名');
+  });
+
+  it('shares department reads and follows department writes without replacing the user draft', async () => {
+    const scope = setQuerySession(1, [], []);
+    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 9, label: '原部门' }] });
+    vi.mocked(getUser).mockResolvedValue({
+      ...detail(42),
+      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '原部门' } },
+    });
+    const shared = mount(
+      defineComponent({
+        setup() {
+          useQuery(() => userDeptTreeOptions(scope));
+          return () => h('div');
+        },
+      }),
+      { global: { plugins: [[VueQueryPlugin, { queryClient }]] } }
+    );
+    mounted.push(shared);
+    const wrapper = mountDialog();
+    await (wrapper.vm as unknown as DialogApi).open(42);
+    await flushPromises();
+    const tree = wrapper.findComponent({ name: 'ElTreeSelect' });
+    expect(deptTreeSelect).toHaveBeenCalledTimes(1);
+    expect(tree.props('data')).toEqual([{ id: 9, label: '原部门' }]);
+    const model = wrapper.findComponent(dialogStub).props('formModel');
+    model.nickName = '尚未保存的输入';
+    vi.mocked(updateDept).mockResolvedValue({ deptId: 9, deptName: '新部门' });
+    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 9, label: '新部门' }] });
+    await deptCommands.updateDept(captureDeptCommand({ deptId: 9, deptName: '新部门' }));
+    await flushPromises();
+    expect(deptTreeSelect).toHaveBeenCalledTimes(2);
+    expect(tree.props('data')).toEqual([{ id: 9, label: '新部门' }]);
+    expect(model.nickName).toBe('尚未保存的输入');
+    expect(model.deptId).toBe(9);
+    vi.mocked(deptTreeSelect).mockRejectedValueOnce(new Error('部门网络不可用'));
+    await queryClient.invalidateQueries({ queryKey: deptKeys.all(scope) });
+    await flushPromises();
+    expect(wrapper.text()).toContain('部门列表刷新失败');
+    expect(tree.props('data')).toEqual([{ id: 9, label: '新部门' }]);
+    expect(model.nickName).toBe('尚未保存的输入');
+  });
+
+  it('retains the selected department label when the normal-department choices omit it', async () => {
+    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [] });
+    vi.mocked(getUser).mockResolvedValue({
+      ...detail(42),
+      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门' } },
+    });
+    const wrapper = mountDialog();
+    await (wrapper.vm as unknown as DialogApi).open(42);
+    await flushPromises();
+    const tree = wrapper.findComponent({ name: 'ElTreeSelect' });
+    expect(tree.props('data')).toEqual([]);
+    expect(tree.props('modelValue')).toBe(9);
+    expect(tree.props('cacheData')).toEqual([{ id: 9, label: '停用部门' }]);
+  });
+
   it('ends a closed opening wait while another observer keeps the shared read', async () => {
     const scope = setQuerySession(1, [], []);
     const response = deferred();
@@ -133,7 +315,9 @@ describe('UserFormDialog', () => {
         return () => h('span', query.data.value?.data?.userId ?? '');
       },
     });
-    const shared = mount(SharedReader, { global: { plugins: [[VueQueryPlugin, { queryClient }]] } });
+    const shared = mount(SharedReader, {
+      global: { plugins: [[VueQueryPlugin, { queryClient }]] },
+    });
     try {
       const wrapper = mountDialog();
       const api = wrapper.vm as unknown as DialogApi;

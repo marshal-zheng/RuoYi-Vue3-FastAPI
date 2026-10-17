@@ -1,0 +1,80 @@
+{
+  "rounds": [
+    {
+      "file": "installed-initial-failure.json",
+      "mode": "installed",
+      "passed": false,
+      "marker": "codex_dept_query_c5tc98",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "installed-actual.json",
+      "mode": "installed",
+      "passed": true,
+      "marker": "codex_dept_query_c5uzkn",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "installed-repeat-1.json",
+      "mode": "installed",
+      "passed": true,
+      "marker": "codex_dept_query_c5wbyk",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "installed-repeat-2.json",
+      "mode": "installed",
+      "passed": true,
+      "marker": "codex_dept_query_c5wevc",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "installed-repeat-3.json",
+      "mode": "installed",
+      "passed": true,
+      "marker": "codex_dept_query_c5whpu",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "source-repeat-1.json",
+      "mode": "source",
+      "passed": true,
+      "marker": "codex_dept_query_c5vo1c",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "source-repeat-2.json",
+      "mode": "source",
+      "passed": true,
+      "marker": "codex_dept_query_c5wl0g",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    },
+    {
+      "file": "source-repeat-3.json",
+      "mode": "source",
+      "passed": true,
+      "marker": "codex_dept_query_c5wod2",
+      "created": 2,
+      "deleted": 2,
+      "verifiedAbsent": true
+    }
+  ],
+  "totalCreated": 16,
+  "totalDeleted": 16,
+  "sourceActualIsCopyOf": "source-repeat-1.json",
+  "initialFailureRootCause": "undetermined; subsequent passing rounds do not establish elimination of a race"
+}

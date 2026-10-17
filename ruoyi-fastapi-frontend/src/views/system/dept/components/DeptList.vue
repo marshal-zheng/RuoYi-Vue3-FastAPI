@@ -1,12 +1,15 @@
 <template>
   <ZxGridList
-    ref="gridListRef"
-    :load-data="loadDeptData"
+    v-if="queryScope"
+    :key="queryScope.key"
+    mode="controlled"
+    :rows="deptRows"
+    :status="listStatus"
     :show-pagination="false"
-    :load-on-mounted="true"
     fill
+    @refresh="refreshList"
   >
-    <template #form="{ query, loading, refresh: handleRefresh, updateState }">
+    <template #form>
       <DictStatus :types="['sys_normal_disable']" />
       <ZxListToolbar aria-label="列表操作与筛选">
         <template #actions>
@@ -17,43 +20,45 @@
         </template>
         <template #filters>
           <zx-input
-            v-model="query.deptName"
+            v-model="draft.deptName"
             placeholder="请输入部门名称"
             clearable
             style="width: 200px"
-            @keyup.enter="() => onSearch({ handleRefresh, updateState })"
+            @keyup.enter="onSearch"
           />
           <DictSelect
             dict-type="sys_normal_disable"
-            v-model="query.status"
+            v-model="draft.status"
             placeholder="部门状态"
             clearable
             style="width: 200px"
-            @change="(v: unknown) => onFilterChange('status', v, { handleRefresh, updateState })"
+            @change="onSearch"
           />
         </template>
         <template #search>
           <ZxSearch
-            v-model="query.deptName"
+            v-model="draft.deptName"
             placeholder="搜索部门名称"
-            :loading="loading"
+            :loading="listStatus.loading"
             search-mode="click"
-            @search="() => onSearch({ handleRefresh, updateState })"
-            @clear="() => onSearch({ handleRefresh, updateState })"
+            @search="onSearch"
+            @clear="onSearch"
           />
         </template>
       </ZxListToolbar>
     </template>
 
-    <template #table="{ grid }">
+    <template #table="{ grid, renderEmpty }">
       <el-table
         v-if="refreshTable"
-        v-loading="grid.loading"
         :data="grid.list || []"
         row-key="deptId"
         :default-expand-all="isExpandAll"
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
+        <template #empty>
+          <component :is="renderEmpty" />
+        </template>
         <el-table-column prop="deptName" label="部门名称"></el-table-column>
         <el-table-column prop="orderNum" label="排序"></el-table-column>
         <el-table-column prop="status" label="状态">
@@ -95,72 +100,74 @@
     </template>
   </ZxGridList>
 
-  <DeptDlg ref="deptDlgRef" @success="gridListRef?.refresh()" />
+  <DeptDlg ref="deptDlgRef" />
 </template>
 
 <script setup lang="ts" name="DeptList">
-import { useOperation } from '@/utils/operation';
-import { getCurrentInstance, ref, nextTick } from 'vue';
-import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
+import { computed, getCurrentInstance, nextTick, reactive, ref, watch } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
+import type { ActionItem } from '@zxio/zxui';
 import type { DeptRecord } from '@/api/system/dept';
-import type { DeptQueryModel } from '@/api/_generated/types.gen';
-type ListQuery = DeptQueryModel & { dateRange?: string[] | null };
-type ListLoadParams = Partial<Pick<GridListState<ListQuery, never>, 'query' | 'pager'>>;
-type ListActions = {
-  handleRefresh: ZxGridListInstance['refresh'];
-  updateState: ZxGridListInstance['updateState'];
-};
-import { listDept, delDept } from '@/api/system/dept';
-import { parseTime } from '@/utils/ruoyi';
+import { useOperation } from '@/utils/operation';
+import { handleTree, parseTime } from '@/utils/ruoyi';
+import { queryScope, type QueryScope } from '@/queries/context';
+import {
+  captureDeptCommand,
+  deptCommands,
+  deptListOptions,
+  normalizeDeptFilters,
+} from '@/queries/system/dept';
 import DeptDlg from './DeptDlg.vue';
 
 const proxy = getCurrentInstance()!.proxy!;
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
-
 const isExpandAll = ref(true);
 const refreshTable = ref(true);
-const gridListRef = ref<ZxGridListInstance | null>(null);
 const deptDlgRef = ref<InstanceType<typeof DeptDlg> | null>(null);
+const draft = reactive<{ deptName?: string; status?: '0' | '1' }>({});
+const submitted = ref(normalizeDeptFilters({}));
+const departmentQuery = useQuery(() => deptListOptions(queryScope.value, submitted.value));
+// handleTree attaches children in place; native cache records stay flat and immutable.
+const deptRows = computed(() =>
+  handleTree(
+    (departmentQuery.data.value?.items ?? []).map((row) => ({ ...row })),
+    'deptId'
+  )
+);
+const listStatus = computed(() => ({
+  loading: departmentQuery.isLoading.value,
+  refreshing: departmentQuery.isFetching.value && departmentQuery.data.value !== undefined,
+  error: departmentQuery.error.value,
+  paused: departmentQuery.fetchStatus.value === 'paused',
+}));
+watch(
+  queryScope,
+  () => {
+    draft.deptName = undefined;
+    draft.status = undefined;
+    submitted.value = normalizeDeptFilters({});
+  },
+  { flush: 'sync' }
+);
 
-async function loadDeptData(params: ListLoadParams) {
-  const query = {
-    deptName: params.query?.deptName,
-    status: params.query?.status,
-  };
-  try {
-    const response = await listDept(query);
-    const tree = proxy.handleTree(response.items, 'deptId');
-    return { data: tree || [], total: 0 };
-  } catch {
-    return { data: [], total: 0 };
-  }
+function onSearch() {
+  const nextFilters = normalizeDeptFilters(draft);
+  const unchanged =
+    Object.keys(nextFilters).length === Object.keys(submitted.value).length &&
+    nextFilters.deptName === submitted.value.deptName &&
+    nextFilters.status === submitted.value.status;
+  submitted.value = nextFilters;
+  if (unchanged) refreshList();
 }
-
-function onFilterChange(
-  field: string,
-  value: unknown,
-  { handleRefresh, updateState }: ListActions
-) {
-  updateState(`query.${field}`, value);
-  handleRefresh();
+function refreshList() {
+  if (queryScope.value) void departmentQuery.refetch({ cancelRefetch: false });
 }
-
-function onSearch({
-  handleRefresh,
-}: {
-  handleRefresh: ListActions['handleRefresh'];
-  updateState?: ListActions['updateState'];
-}) {
-  handleRefresh();
-}
-
 function handleAdd(row?: DeptRecord) {
   const data = row ? { parentId: row.deptId } : {};
   return deptDlgRef.value?.open(data).catch(() => {
     /* 当前读取已负责反馈。 */
   });
 }
-
 function toggleExpandAll() {
   refreshTable.value = false;
   isExpandAll.value = !isExpandAll.value;
@@ -168,23 +175,26 @@ function toggleExpandAll() {
     refreshTable.value = true;
   });
 }
-
 function handleUpdate(row: DeptRecord) {
   return deptDlgRef.value?.open({ deptId: row.deptId }).catch(() => {
     /* 当前读取已负责反馈。 */
   });
 }
 
-const { run: handleDelete } = useOperation(async (row: DeptRecord) => {
-  await proxy.$modal
-    .confirm('是否确认删除名称为"' + row.deptName + '"的数据项?')
-    .then(() => delDept(row.deptId))
-    .then(() => {
-      gridListRef.value?.refresh();
-    })
-    .catch(() => {});
+const deleteOperation = useOperation(async (id: number, name: string, scope: QueryScope) => {
+  const command = captureDeptCommand(id, scope);
+  try {
+    await proxy.$modal.confirm('是否确认删除名称为"' + name + '"的数据项?');
+    await deptCommands.deleteDept(command);
+  } catch {
+    // Confirmation cancellation and write errors leave the server-owned rows intact.
+  }
 });
-
+function handleDelete(row: DeptRecord) {
+  const scope = queryScope.value;
+  if (!scope) return;
+  return deleteOperation.run(row.deptId, row.deptName ?? '', scope);
+}
 function getMoreActionList(row: DeptRecord) {
   const actions = [];
   if (row.parentId != 0) {
@@ -198,14 +208,8 @@ function getMoreActionList(row: DeptRecord) {
   }
   return actions;
 }
-
 function handleMoreActionSelect(item: ActionItem, row: DeptRecord) {
-  switch (item.eventTag) {
-    case 'delete':
-      handleDelete(row);
-      break;
-    default:
-      break;
-  }
+  if (item.eventTag === 'delete') return handleDelete(row);
+  return undefined;
 }
 </script>

@@ -1,0 +1,24 @@
+{
+  "@zxio/http": {
+    "reference": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz",
+    "sha256": "06dfd7aaf8e52bf491b97a46680b5e677bd1b34618e0564e62e472bd1b88a74c"
+  },
+  "@zxio/vue-query": {
+    "reference": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz",
+    "sha256": "ffc491e679e79b457ded527632c3b9780dd37112adcead551ef291f9c0c85ee6"
+  },
+  "@zxio/zxui": {
+    "reference": "file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz",
+    "sha256": "551185311f9100778764485e7b65854c8a2d212699c28a1758b31d57461e286f"
+  },
+  "@zxio/theme-compiler": {
+    "reference": "file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz",
+    "sha256": "4e30e7f104cb90dea9ff8b9fe6c39f36f555cd280b8b38c749526a300869c304"
+  },
+  "nativeTreeSelect": {
+    "package": "element-plus",
+    "version": "2.13.0",
+    "cacheImplementationSHA256": "354d8896b99c6c3f5581f34f961be7e2e09d066e475cf0d74a97d5f3c42c938e",
+    "publicLabelSlot": "https://element-plus.org/en-US/component/select.html#select-slots"
+  }
+}

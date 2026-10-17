@@ -14,6 +14,7 @@ import * as roleApi from '@/api/system/role';
 import { queryClient } from '../client';
 import { endQuerySession, setQuerySession } from '../context';
 import * as userDomain from './user';
+import { userDeptTreeOptions } from './dept';
 
 vi.mock('@/api/system/user', () => ({
   listUser: vi.fn(),
@@ -98,7 +99,7 @@ describe('public user resource', () => {
     expect(user.normalizeUserFilters({ dateRange: null, status: '' })).toEqual({});
     expect(unref(user.userListOptions(null, {})).queryFn).toBe(skipToken);
     vi.mocked(api.deptTreeSelect).mockResolvedValue({ items: [{ id: 1, label: '研发' }] });
-    expect(await queryClient.fetchQuery(user.userDeptTreeOptions(scope))).toEqual([
+    expect(await queryClient.fetchQuery(userDeptTreeOptions(scope))).toEqual([
       { id: 1, label: '研发' },
     ]);
   });
