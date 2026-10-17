@@ -1,0 +1,6 @@
+{
+  "beforeSha256": "20144291477b7a1a037a59a26fd4d48be9bd7caf366bac680860b981f0409126",
+  "afterSha256": "9e6ceb59b290a7d8d21a1850c978e6b8c6216fca344779f22c07e2a802372d4e",
+  "executableAndFieldAstEqualWithOptionalListUnionNormalization": true,
+  "scope": "Ruff import sorting + equivalent built-in generic/union annotations only"
+}

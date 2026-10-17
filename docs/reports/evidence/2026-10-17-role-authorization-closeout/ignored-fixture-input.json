@@ -1,0 +1,7 @@
+{
+  "path": "ruoyi-fastapi-frontend/tests/fixtures/ui-convergence/theme-deployment.json",
+  "source": "Existing ignored source-generated fixture, same compiler/vendor input as prior stage",
+  "sha256": "e982950b14c5ab7f91812b466afd776ea29b6c1ab3289d0e136f4fe7c7da123b",
+  "bytes": 6053700,
+  "committed": false
+}

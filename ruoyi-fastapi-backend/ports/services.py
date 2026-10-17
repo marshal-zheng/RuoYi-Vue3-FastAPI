@@ -830,10 +830,14 @@ class IRoleService(IBaseService, Protocol):
     async def export_role_list_services(self, role_list: list) -> Any:
         """Contract for `RoleService.export_role_list_services`."""
 
-    async def get_role_user_allocated_list_services(self, page_object: Any, data_scope_sql: str, is_page: bool = False) -> Any:
+    async def get_role_user_allocated_list_services(
+        self, page_object: Any, data_scope_sql: str, is_page: bool = False
+    ) -> Any:
         """Contract for `RoleService.get_role_user_allocated_list_services`."""
 
-    async def get_role_user_unallocated_list_services(self, page_object: Any, data_scope_sql: str, is_page: bool = False) -> Any:
+    async def get_role_user_unallocated_list_services(
+        self, page_object: Any, data_scope_sql: str, is_page: bool = False
+    ) -> Any:
         """Contract for `RoleService.get_role_user_unallocated_list_services`."""
 
 
@@ -1208,15 +1212,6 @@ class IUserService(IBaseService, Protocol):
 
     async def get_user_role_allocated_list_services(self, query_db: Any, page_object: Any) -> Any:
         """Contract for `UserService.get_user_role_allocated_list_services`."""
-
-    async def add_user_role_services(self, query_db: Any, page_object: Any) -> Any:
-        """Contract for `UserService.add_user_role_services`."""
-
-    async def delete_user_role_services(self, query_db: Any, page_object: Any) -> Any:
-        """Contract for `UserService.delete_user_role_services`."""
-
-    async def detail_user_role_services(self, query_db: Any, page_object: Any) -> Any:
-        """Contract for `UserService.detail_user_role_services`."""
 
 
 __all__ = [

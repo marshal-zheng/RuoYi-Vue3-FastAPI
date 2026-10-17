@@ -15,9 +15,9 @@ from exceptions.exception import BusinessException, SystemException
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
+from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel
 from module_admin.entity.vo.user_vo import (
     AddUserModel,
-    CrudUserRoleModel,
     CurrentUserModel,
     DeleteUserModel,
     EditUserModel,
@@ -593,14 +593,13 @@ async def get_system_allocated_role_list(
 
 @userController.put(
     '/authRole',
-    response_model=UserRoleResponseModel,
+    status_code=204,
     dependencies=[Depends(CheckUserInterfaceAuth('system:user:edit'))],
 )
 @Log(title='用户管理', business_type=BusinessType.GRANT)
 async def update_system_role_user(
     request: Request,
-    user_id: int = Query(alias='userId'),
-    role_ids: str = Query(alias='roleIds'),
+    user_role: UserRolesAssignModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
@@ -609,7 +608,7 @@ async def update_system_role_user(
 ):
     assign_command = AssignUserRolesCommand(
         query_db=query_db,
-        user_role=CrudUserRoleModel(userId=user_id, roleIds=role_ids),
+        user_role=user_role,
         enforce_scope_checks=not current_user.user.admin,
         user_data_scope_sql=user_data_scope_sql,
         role_data_scope_sql=role_data_scope_sql,

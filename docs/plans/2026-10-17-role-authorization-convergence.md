@@ -109,3 +109,16 @@ References: [query keys](https://tanstack.com/query/latest/docs/framework/vue/gu
 - [x] Evidence-backed backend decision.
 - [x] Independent review and candidate verification.
 - [x] Source delivery, baseline and cleanup.
+
+## Final closeout audit follow-up
+
+The final whole-stage audit found a delivery dependency missed by the original source-only verification: committed frontend authorization writes used JSON arrays while committed backend routes still expected query/string payloads. The correct backend write chain existed only in preserved source changes. Prior browser and source evidence remains valid for that working tree, but does not establish a standalone committed contract.
+
+- [x] Reproduce the committed mismatch with real FastAPI JSON requests.
+- [x] Deliver only authorization DTOs, commands, handlers, service, DI, routes and their necessary tests; remove unused old paths.
+- [x] Synchronize the four checked-in OpenAPI operations with the existing generated client contract.
+- [x] Verify isolated production DI/HTTP/SQLite round trips, scoped lint and independent review.
+- [x] Remove related frontend test lint omissions without changing assertions.
+- [ ] Record final std delivery, source verification, preservation and worktree cleanup.
+
+Evidence and final scope reconciliation: [stage closeout audit](../reports/2026-10-17-role-authorization-closeout.md).

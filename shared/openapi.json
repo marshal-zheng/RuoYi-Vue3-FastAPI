@@ -1580,61 +1580,6 @@
         "title": "CreateSimulationSessionModel",
         "type": "object"
       },
-      "CrudUserRoleModel": {
-        "description": "新增、删除用户关联角色及角色关联用户模型",
-        "properties": {
-          "roleId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "角色ID",
-            "title": "Roleid"
-          },
-          "roleIds": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "角色ID信息",
-            "title": "Roleids"
-          },
-          "userId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户ID",
-            "title": "Userid"
-          },
-          "userIds": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户ID信息",
-            "title": "Userids"
-          }
-        },
-        "title": "CrudUserRoleModel",
-        "type": "object"
-      },
       "CurrentUserModel": {
         "properties": {
           "permissions": {
@@ -8822,6 +8767,89 @@
         "title": "RolePageQueryModel",
         "type": "object"
       },
+      "RoleUserRevokeModel": {
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "description": "角色ID",
+            "exclusiveMinimum": 0.0,
+            "maximum": 2147483647.0,
+            "title": "Roleid",
+            "type": "integer"
+          },
+          "userId": {
+            "description": "取消授权的用户ID",
+            "exclusiveMinimum": 0.0,
+            "maximum": 2147483647.0,
+            "title": "Userid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "roleId",
+          "userId"
+        ],
+        "title": "RoleUserRevokeModel",
+        "type": "object"
+      },
+      "RoleUsersGrantModel": {
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "description": "角色ID",
+            "exclusiveMinimum": 0.0,
+            "maximum": 2147483647.0,
+            "title": "Roleid",
+            "type": "integer"
+          },
+          "userIds": {
+            "description": "增量授权用户ID集合, 不影响其他角色关联",
+            "items": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 2147483647.0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "title": "Userids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "roleId",
+          "userIds"
+        ],
+        "title": "RoleUsersGrantModel",
+        "type": "object"
+      },
+      "RoleUsersRevokeModel": {
+        "additionalProperties": false,
+        "properties": {
+          "roleId": {
+            "description": "角色ID",
+            "exclusiveMinimum": 0.0,
+            "maximum": 2147483647.0,
+            "title": "Roleid",
+            "type": "integer"
+          },
+          "userIds": {
+            "description": "取消授权用户ID集合, 只删除指定关联",
+            "items": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 2147483647.0,
+              "type": "integer"
+            },
+            "minItems": 1,
+            "title": "Userids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "roleId",
+          "userIds"
+        ],
+        "title": "RoleUsersRevokeModel",
+        "type": "object"
+      },
       "SelectedRoleModel": {
         "description": "是否选择角色模型",
         "properties": {
@@ -10163,6 +10191,34 @@
           "user"
         ],
         "title": "UserRoleResponseModel",
+        "type": "object"
+      },
+      "UserRolesAssignModel": {
+        "additionalProperties": false,
+        "properties": {
+          "roleIds": {
+            "description": "完整角色ID集合, 空数组清空; 缺失或null无效",
+            "items": {
+              "exclusiveMinimum": 0.0,
+              "maximum": 2147483647.0,
+              "type": "integer"
+            },
+            "title": "Roleids",
+            "type": "array"
+          },
+          "userId": {
+            "description": "用户ID",
+            "exclusiveMinimum": 0.0,
+            "maximum": 2147483647.0,
+            "title": "Userid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "userId",
+          "roleIds"
+        ],
+        "title": "UserRolesAssignModel",
         "type": "object"
       },
       "ValidationError": {
@@ -23896,19 +23952,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CrudUserRoleModel"
+                "$ref": "#/components/schemas/RoleUserRevokeModel"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            },
+          "204": {
             "description": "Successful Response"
           },
           "422": {
@@ -23936,87 +23987,18 @@
     "/system/role/authUser/cancelAll": {
       "put": {
         "operationId": "batch_cancel_system_role_user_system_role_authUser_cancelAll_put",
-        "parameters": [
-          {
-            "description": "用户ID",
-            "in": "query",
-            "name": "userId",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "用户ID",
-              "title": "Userid"
-            }
-          },
-          {
-            "description": "用户ID信息",
-            "in": "query",
-            "name": "userIds",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "用户ID信息",
-              "title": "Userids"
-            }
-          },
-          {
-            "description": "角色ID",
-            "in": "query",
-            "name": "roleId",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "角色ID",
-              "title": "Roleid"
-            }
-          },
-          {
-            "description": "角色ID信息",
-            "in": "query",
-            "name": "roleIds",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "角色ID信息",
-              "title": "Roleids"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleUsersRevokeModel"
               }
-            },
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
             "description": "Successful Response"
           },
           "422": {
@@ -24044,87 +24026,18 @@
     "/system/role/authUser/selectAll": {
       "put": {
         "operationId": "add_system_role_user_system_role_authUser_selectAll_put",
-        "parameters": [
-          {
-            "description": "用户ID",
-            "in": "query",
-            "name": "userId",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "用户ID",
-              "title": "Userid"
-            }
-          },
-          {
-            "description": "用户ID信息",
-            "in": "query",
-            "name": "userIds",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "用户ID信息",
-              "title": "Userids"
-            }
-          },
-          {
-            "description": "角色ID",
-            "in": "query",
-            "name": "roleId",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "角色ID",
-              "title": "Roleid"
-            }
-          },
-          {
-            "description": "角色ID信息",
-            "in": "query",
-            "name": "roleIds",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "角色ID信息",
-              "title": "Roleids"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {}
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleUsersGrantModel"
               }
-            },
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
             "description": "Successful Response"
           },
           "422": {
@@ -25426,35 +25339,18 @@
     "/system/user/authRole": {
       "put": {
         "operationId": "update_system_role_user_system_user_authRole_put",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "title": "Userid",
-              "type": "integer"
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserRolesAssignModel"
+              }
             }
           },
-          {
-            "in": "query",
-            "name": "roleIds",
-            "required": true,
-            "schema": {
-              "title": "Roleids",
-              "type": "string"
-            }
-          }
-        ],
+          "required": true
+        },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/UserRoleResponseModel"
-                }
-              }
-            },
+          "204": {
             "description": "Successful Response"
           },
           "422": {

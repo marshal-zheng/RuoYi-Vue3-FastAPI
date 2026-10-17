@@ -5,7 +5,23 @@ import { createPinia } from 'pinia';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
+import type { UserFilters } from '@/queries/system/user';
 import UserPage from '@/views/system/user/index.vue';
+
+interface UserPageState {
+  draft: UserFilters & { dateRange: string[] | null };
+  submitted: UserFilters;
+  ids: number[];
+  onSearch(): void;
+  handleExport(): void;
+  handleNodeClick(node: { id: number }): void;
+  handleSelectionChange(rows: { userId: number }[]): void;
+  handleAuthRole(row: { userId: number }): void;
+  handleStatusChange(
+    status: '0' | '1',
+    row: { userId: number; status: '0' | '1' }
+  ): Promise<void> | undefined;
+}
 
 const api = vi.hoisted(() => ({
   listUser: vi.fn(),
@@ -95,7 +111,7 @@ function editor() {
   });
   mounted.push(wrapper);
   // Read production setup state; the test contains no duplicate filter or write implementation.
-  const state = wrapper.vm as unknown as Record<string, any>;
+  const state = wrapper.vm as unknown as UserPageState;
   return { wrapper, state, grid: () => wrapper.findComponent(Grid) };
 }
 function deferred<T>() {

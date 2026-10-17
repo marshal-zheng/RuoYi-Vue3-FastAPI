@@ -1,0 +1,14 @@
+[
+  {
+    "file": "tests/list-export-query-parity.test.ts",
+    "runtimeAstUnchangedExceptCompletingModalStub": true
+  },
+  {
+    "file": "tests/role-query-list.test.ts",
+    "runtimeAstUnchangedExceptCompletingModalStub": true
+  },
+  {
+    "file": "tests/user-query-export.test.ts",
+    "runtimeAstUnchangedExceptCompletingModalStub": true
+  }
+]

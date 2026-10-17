@@ -16,12 +16,13 @@ from modules.system.application.commands.user_commands import (
     ResetUserPasswordCommand,
 )
 from modules.system.application.contracts import CommandResult, ICommandHandler
-from modules.system.application.handlers.command.result_data import command_result_data
 from modules.system.application.event_factory import build_system_event
+from modules.system.application.handlers.command.result_data import command_result_data
 
 if TYPE_CHECKING:
     from modules.system.application.services.dept_service import DeptService
     from modules.system.application.services.role_service import RoleService
+    from modules.system.application.services.user_role_service import UserRoleService
     from modules.system.application.services.user_service import UserService
 
 
@@ -225,22 +226,17 @@ class ImportUsersCommandHandler(ICommandHandler[ImportUsersCommand, dict[str, st
 class AssignUserRolesCommandHandler(ICommandHandler[AssignUserRolesCommand, dict[str, str]]):
     """Handle assign roles to user command."""
 
-    def __init__(self, user_service: UserService, role_service: RoleService):
-        self._user_service = user_service
-        self._role_service = role_service
+    def __init__(self, user_role_service: UserRoleService):
+        self._user_role_service = user_role_service
 
     async def handle(self, request: AssignUserRolesCommand) -> CommandResult[dict[str, str]]:
-        if request.enforce_scope_checks and request.user_role.user_id is not None:
-            await self._user_service.check_user_data_scope_services(
-                request.query_db,
-                request.user_role.user_id,
-                request.user_data_scope_sql,
-            )
-            role_ids = request.user_role.role_ids or ''
-            if role_ids:
-                await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
-
-        assign_result = await self._user_service.add_user_role_services(request.query_db, request.user_role)
+        assign_result = await self._user_role_service.assign_user_roles(
+            request.query_db,
+            request.user_role,
+            enforce_scope_checks=request.enforce_scope_checks,
+            user_data_scope_sql=request.user_data_scope_sql,
+            role_data_scope_sql=request.role_data_scope_sql,
+        )
         event = build_system_event(
             event_type='system.user.roles_assigned',
             aggregate_type='user',

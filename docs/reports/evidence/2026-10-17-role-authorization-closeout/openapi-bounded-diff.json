@@ -1,0 +1,20 @@
+{
+  "modified_put_operations": [
+    "/system/user/authRole",
+    "/system/role/authUser/selectAll",
+    "/system/role/authUser/cancel",
+    "/system/role/authUser/cancelAll"
+  ],
+  "added_schemas": [
+    "UserRolesAssignModel",
+    "RoleUsersGrantModel",
+    "RoleUserRevokeModel",
+    "RoleUsersRevokeModel"
+  ],
+  "removed_schemas": [
+    "CrudUserRoleModel"
+  ],
+  "all_other_json_semantics_unchanged": true,
+  "generated_types_have_existing_new_dtos": true,
+  "new_runtime_modules_all_under_worktree": true
+}

@@ -6,9 +6,9 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel  # noqa: TC001
 from module_admin.entity.vo.user_vo import (  # noqa: TC001
     AddUserModel,
-    CrudUserRoleModel,
     CurrentUserModel,
     DeleteUserModel,
     EditUserModel,
@@ -80,7 +80,7 @@ class ImportUsersCommand(_UserDbCommandContext):
 class AssignUserRolesCommand(_UserDbCommandContext):
     """Assign roles to a user."""
 
-    user_role: CrudUserRoleModel = Field(description='User-role assignment payload')
+    user_role: UserRolesAssignModel = Field(description='User-role assignment payload')
     enforce_scope_checks: bool = Field(default=False, description='Whether to enforce user/role scope checks')
     user_data_scope_sql: Any = Field(default='True', description='User data-scope SQL')
     role_data_scope_sql: Any = Field(default='True', description='Role data-scope SQL')

@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from config.constant import CommonConstant
-from exceptions.exception import AuthException
+from exceptions.exception import PermissionException
 from module_admin.entity.vo.user_vo import UserModel
 from modules.system.application.services.user_service import UserService
 
@@ -16,7 +16,7 @@ async def test_check_user_allowed_blocks_admin_user():
     admin_user = UserModel(userId=1)
     service = UserService()
 
-    with pytest.raises(AuthException):
+    with pytest.raises(PermissionException):
         await service.check_user_allowed_services(admin_user)
 
 

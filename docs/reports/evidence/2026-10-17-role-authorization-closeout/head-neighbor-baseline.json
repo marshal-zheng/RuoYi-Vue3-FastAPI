@@ -1,0 +1,16 @@
+{
+  "head": "7b6fbd0ab8f1b9475e6401a3dc10362f926c32a4",
+  "temporary_archive_removed": true,
+  "command": [
+    "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+    "-m",
+    "pytest",
+    "modules/system/tests/test_config_refresh_command.py",
+    "modules/system/tests/test_dev_menu_sync_controller.py",
+    "--no-cov",
+    "-n0",
+    "-q"
+  ],
+  "exit_code": 1,
+  "only_tracked_HEAD_files": true
+}

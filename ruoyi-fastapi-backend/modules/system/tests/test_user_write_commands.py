@@ -5,9 +5,9 @@ from datetime import datetime
 
 import pytest
 
+from module_admin.entity.vo.user_role_write_vo import UserRolesAssignModel
 from module_admin.entity.vo.user_vo import (
     AddUserModel,
-    CrudUserRoleModel,
     CurrentUserModel,
     DeleteUserModel,
     EditUserModel,
@@ -87,7 +87,7 @@ class _UserServiceStub:
         )
         return _CrudResponse(is_success=True, message='导入成功')
 
-    async def add_user_role_services(self, query_db, payload):
+    async def assign_user_roles(self, query_db, payload, **scope):
         self.assign_called_with = (query_db, payload)
         return _CrudResponse(is_success=True, message='分配成功')
 
@@ -147,7 +147,7 @@ async def test_user_command_handlers_success() -> None:
     delete_handler = DeleteUserCommandHandler(user_service)
     reset_handler = ResetUserPasswordCommandHandler(user_service)
     import_handler = ImportUsersCommandHandler(user_service)
-    assign_handler = AssignUserRolesCommandHandler(user_service, role_service)
+    assign_handler = AssignUserRolesCommandHandler(user_service)
 
     add_result = await add_handler.handle(
         AddUserCommand(
@@ -214,7 +214,7 @@ async def test_user_command_handlers_success() -> None:
     assign_result = await assign_handler.handle(
         AssignUserRolesCommand(
             query_db=query_db,
-            user_role=CrudUserRoleModel(userId=2, roleIds='1,2'),
+            user_role=UserRolesAssignModel(userId=2, roleIds=[1, 2]),
             operator='admin',
         )
     )

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "modules/system/api/role_controller.py",
+    "executableAstUnchanged": true,
+    "beforeSha256": "c841f6d1300646f45b9523ab55b32ae9d0d99dce2aa717d24783a64c4e24984e",
+    "afterSha256": "61907f5b327d9ece9adc522899df2daae8897721c2ded71bf89795c28c53e8a7"
+  },
+  {
+    "path": "modules/system/application/handlers/command/user_command_handlers.py",
+    "executableAstUnchanged": true,
+    "beforeSha256": "a17ab1f363a12900cc8898090b5f23b87f331ad90cc6c3852dd2fbf37c2f9d9a",
+    "afterSha256": "a4a960b5a99e146f1148c4a1640c5808cbd53356f5be0d4e3ccf4e8382bc7402"
+  },
+  {
+    "path": "modules/system/tests/test_role_write_commands.py",
+    "executableAstUnchanged": true,
+    "beforeSha256": "4692b2dbc519cb99a3f4f5d434b72b4326dce8582004b0b7d556d20596fe2bc6",
+    "afterSha256": "aa4407cba0be675202090019a6f14f4e9dcd2195236c65a02b7d975bf42dc38d"
+  },
+  {
+    "path": "modules/system/tests/test_user_write_commands.py",
+    "executableAstUnchanged": true,
+    "beforeSha256": "b5d2f4aa676aad9697263e6402a3e4920c6eb31a8724582ad508ac615852dc47",
+    "afterSha256": "534c6abd1fc54609dfd84220aedbc0ff947af1e9a37a4afd5ef0e5fff47a8517"
+  },
+  {
+    "path": "ports/services.py",
+    "executableAstUnchanged": true,
+    "beforeSha256": "2ae9325c32f450b8edec0e692835c81fce2529837d561af5f167664f44c46ac9",
+    "afterSha256": "472c885c2130ef1be164499d678b370911eb168d574aa6673c4b116b425d039f"
+  }
+]

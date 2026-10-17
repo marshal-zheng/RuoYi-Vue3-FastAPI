@@ -10,14 +10,15 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleModel, RolePageQueryModel
-from module_admin.entity.vo.user_vo import CrudUserRoleModel, CurrentUserModel, UserRolePageQueryModel
+from module_admin.entity.vo.user_role_write_vo import RoleUserRevokeModel, RoleUsersGrantModel, RoleUsersRevokeModel
+from module_admin.entity.vo.user_vo import CurrentUserModel, UserRolePageQueryModel
 from modules.identity.ports import get_current_user
-from modules.system.application.services.role_service import RoleService
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
     AddRoleCommand,
     AddRoleUserCommand,
     AssignRoleDataScopeCommand,
+    BatchCancelRoleUserCommand,
     CancelRoleUserCommand,
     ChangeRoleStatusCommand,
     DeleteRoleCommand,
@@ -31,6 +32,7 @@ from modules.system.application.queries import (
     GetRoleListQuery,
     GetRoleUnallocatedUsersQuery,
 )
+from modules.system.application.services.role_service import RoleService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
@@ -372,21 +374,25 @@ async def get_system_unallocated_user_list(
     return ok_page_result(role_user_unallocated_page_query_result)
 
 
-@roleController.put('/authUser/selectAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '/authUser/selectAll', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @Log(title='角色管理', business_type=BusinessType.GRANT)
 async def add_system_role_user(
     request: Request,
-    add_role_user: CrudUserRoleModel = Depends(CrudUserRoleModel.as_query),
+    add_role_user: RoleUsersGrantModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
-    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
     grant_command = AddRoleUserCommand(
         role_user=add_role_user,
         query_db=query_db,
-        enforce_data_scope=not current_user.user.admin,
-        data_scope_sql=data_scope_sql,
+        enforce_scope_checks=not current_user.user.admin,
+        user_data_scope_sql=user_data_scope_sql,
+        role_data_scope_sql=role_data_scope_sql,
         operator=current_user.user.user_name,
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),
@@ -398,18 +404,25 @@ async def add_system_role_user(
     return ResponseUtil.no_content()
 
 
-@roleController.put('/authUser/cancel', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '/authUser/cancel', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @Log(title='角色管理', business_type=BusinessType.GRANT)
 async def cancel_system_role_user(
     request: Request,
-    cancel_user_role: CrudUserRoleModel,
+    cancel_user_role: RoleUserRevokeModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
     cancel_command = CancelRoleUserCommand(
         role_user=cancel_user_role,
         query_db=query_db,
+        enforce_scope_checks=not current_user.user.admin,
+        user_data_scope_sql=user_data_scope_sql,
+        role_data_scope_sql=role_data_scope_sql,
         operator=current_user.user.user_name,
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),
@@ -421,18 +434,25 @@ async def cancel_system_role_user(
     return ResponseUtil.no_content()
 
 
-@roleController.put('/authUser/cancelAll', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '/authUser/cancelAll', status_code=204, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @Log(title='角色管理', business_type=BusinessType.GRANT)
 async def batch_cancel_system_role_user(
     request: Request,
-    batch_cancel_user_role: CrudUserRoleModel = Depends(CrudUserRoleModel.as_query),
+    batch_cancel_user_role: RoleUsersRevokeModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
+    user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
+    role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
-    cancel_command = CancelRoleUserCommand(
+    cancel_command = BatchCancelRoleUserCommand(
         role_user=batch_cancel_user_role,
         query_db=query_db,
+        enforce_scope_checks=not current_user.user.admin,
+        user_data_scope_sql=user_data_scope_sql,
+        role_data_scope_sql=role_data_scope_sql,
         operator=current_user.user.user_name,
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),

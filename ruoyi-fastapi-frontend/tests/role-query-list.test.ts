@@ -7,7 +7,21 @@ import { VueQueryPlugin } from '@tanstack/vue-query';
 import { ElTable, ElTableColumn } from 'element-plus';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
+import type { RoleFilters } from '@/queries/system/role';
 import RolePage from '@/views/system/role/index.vue';
+
+interface RolePageState {
+  draft: RoleFilters & { dateRange: string[] | null };
+  submitted: RoleFilters;
+  refreshList(): void;
+  onSearch(): void;
+  handleExport(): void;
+  handleAuthUser(row: { roleId: number }): void;
+  handleStatusChange(
+    status: '0' | '1',
+    row: { roleId: number; status: '0' | '1' }
+  ): Promise<void> | undefined;
+}
 
 const api = vi.hoisted(() => ({
   listRole: vi.fn(),
@@ -74,7 +88,16 @@ function page({ realTable = false } = {}) {
         pinia,
         [VueQueryPlugin, { queryClient }],
         (app: App) => {
-          app.config.globalProperties.$modal = { confirm: api.confirm } as any;
+          app.config.globalProperties.$modal = {
+            confirm: api.confirm,
+            alert: vi.fn(),
+            alertError: vi.fn(),
+            alertSuccess: vi.fn(),
+            alertWarning: vi.fn(),
+            prompt: vi.fn(),
+            loading: vi.fn(),
+            closeLoading: vi.fn(),
+          };
           app.config.globalProperties.download = api.download;
         },
       ],
@@ -98,7 +121,7 @@ function page({ realTable = false } = {}) {
   mounted.push(wrapper);
   return {
     wrapper,
-    state: wrapper.vm as unknown as Record<string, any>,
+    state: wrapper.vm as unknown as RolePageState,
     grid: () => wrapper.findComponent(Grid),
   };
 }

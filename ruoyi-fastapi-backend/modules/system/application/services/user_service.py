@@ -11,6 +11,7 @@ from config.constant import CommonConstant
 from config.error_codes import ErrorCode
 from exceptions.exception import (
     AuthException,
+    PermissionException,
     ResourceConflictException,
     ResourceNotFoundException,
     ValidationException,
@@ -20,7 +21,6 @@ from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.user_vo import (
     AddUserModel,
-    CrudUserRoleModel,
     CurrentUserModel,
     DeleteUserModel,
     EditUserModel,
@@ -31,7 +31,6 @@ from module_admin.entity.vo.user_vo import (
     UserModel,
     UserPageQueryModel,
     UserProfileModel,
-    UserRoleModel,
     UserRoleQueryModel,
     UserRoleResponseModel,
 )
@@ -189,7 +188,7 @@ class UserService:
         :return: 校验结果
         """
         if check_user.admin:
-            raise AuthException(
+            raise PermissionException(
                 error_code=ErrorCode.ADMIN_USER_OPERATION_FORBIDDEN, user_message='不允许操作超级管理员用户'
             )
         else:
@@ -211,7 +210,9 @@ class UserService:
         if items:
             return CrudResponseModel(is_success=True, message='校验通过')
         else:
-            raise AuthException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
+            raise PermissionException(
+                error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据'
+            )
 
     async def check_user_name_unique_services(self, query_db: AsyncSession, page_object: UserModel):
         """
@@ -746,70 +747,3 @@ class UserService:
         ]
         result = UserRoleResponseModel(roles=query_role_list, user=user)
         return result
-
-    @transactional()
-    async def add_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
-        """
-        新增用户关联角色信息service
-        :param query_db: orm对象
-        :param page_object: 新增用户关联角色对象
-        :return: 新增用户关联角色校验结果
-        """
-        user_role_repo = self._user_role_repo(query_db)
-        if page_object.user_id and page_object.role_ids:
-            role_id_list = page_object.role_ids.split(',')
-            await user_role_repo.delete_by_user_id(page_object.user_id)
-            for role_id in role_id_list:
-                db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=int(role_id))
-                await user_role_repo.add(db_user_role)
-            return CrudResponseModel(is_success=True, message='分配成功')
-        elif page_object.user_id and not page_object.role_ids:
-            await user_role_repo.delete_by_user_id(page_object.user_id)
-            return CrudResponseModel(is_success=True, message='分配成功')
-        elif page_object.user_ids and page_object.role_id:
-            user_id_list = page_object.user_ids.split(',')
-            for user_id in user_id_list:
-                user_role = await self.detail_user_role_services(
-                    query_db, UserRoleModel(userId=user_id, roleId=page_object.role_id)
-                )
-                if user_role:
-                    continue
-                else:
-                    db_user_role = UserRoleDO(user_id=int(user_id), role_id=page_object.role_id)
-                    await user_role_repo.add(db_user_role)
-            return CrudResponseModel(is_success=True, message='新增成功')
-        else:
-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足新增条件')
-
-    @transactional()
-    async def delete_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
-        """
-        删除用户关联角色信息service
-        :param query_db: orm对象
-        :param page_object: 删除用户关联角色对象
-        :return: 删除用户关联角色校验结果
-        """
-        if not ((page_object.user_id and page_object.role_id) or (page_object.user_ids and page_object.role_id)):
-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='传入用户角色关联信息为空')
-        user_role_repo = self._user_role_repo(query_db)
-        if page_object.user_id and page_object.role_id:
-            await user_role_repo.delete_by_user_and_role(page_object.user_id, page_object.role_id)
-            return CrudResponseModel(is_success=True, message='删除成功')
-        elif page_object.user_ids and page_object.role_id:
-            user_id_list = page_object.user_ids.split(',')
-            for user_id in user_id_list:
-                await user_role_repo.delete_by_user_and_role(int(user_id), page_object.role_id)
-            return CrudResponseModel(is_success=True, message='删除成功')
-        else:
-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足删除条件')
-
-    async def detail_user_role_services(self, query_db: AsyncSession, page_object: UserRoleModel):
-        """
-        获取用户关联角色详细信息service
-        :param query_db: orm对象
-        :param page_object: 用户关联角色对象
-        :return: 用户关联角色详细信息
-        """
-        user_role_repo = self._user_role_repo(query_db)
-        user_role = await user_role_repo.find_by_user_and_role(page_object.user_id, page_object.role_id)
-        return user_role

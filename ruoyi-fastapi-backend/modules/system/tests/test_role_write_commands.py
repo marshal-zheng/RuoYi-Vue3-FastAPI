@@ -6,12 +6,13 @@ from datetime import datetime
 import pytest
 
 from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel
-from module_admin.entity.vo.user_vo import CrudUserRoleModel
+from module_admin.entity.vo.user_role_write_vo import RoleUserRevokeModel, RoleUsersGrantModel, RoleUsersRevokeModel
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
     AddRoleCommand,
     AddRoleUserCommand,
     AssignRoleDataScopeCommand,
+    BatchCancelRoleUserCommand,
     CancelRoleUserCommand,
     ChangeRoleStatusCommand,
     DeleteRoleCommand,
@@ -21,6 +22,7 @@ from modules.system.application.handlers.command.role_command_handlers import (
     AddRoleCommandHandler,
     AddRoleUserCommandHandler,
     AssignRoleDataScopeCommandHandler,
+    BatchCancelRoleUserCommandHandler,
     CancelRoleUserCommandHandler,
     ChangeRoleStatusCommandHandler,
     DeleteRoleCommandHandler,
@@ -73,13 +75,15 @@ class _UserServiceStub:
         self.add_called_with = None
         self.delete_called_with = None
 
-    async def add_user_role_services(self, query_db, payload):
+    async def grant_role_users(self, query_db, payload, **scope):
         self.add_called_with = (query_db, payload)
         return _CrudResponse(is_success=True, message='分配成功')
 
-    async def delete_user_role_services(self, query_db, payload):
+    async def revoke_role_user(self, query_db, payload, **scope):
         self.delete_called_with = (query_db, payload)
         return _CrudResponse(is_success=True, message='删除成功')
+
+    revoke_role_users = revoke_role_user
 
 
 @pytest.mark.asyncio
@@ -178,27 +182,42 @@ async def test_system_mediator_dispatches_role_write_commands() -> None:
 
 @pytest.mark.asyncio
 async def test_role_user_command_handlers_success() -> None:
-    role_service = _RoleServiceStub()
     user_service = _UserServiceStub()
-    add_handler = AddRoleUserCommandHandler(user_service, role_service)
+    add_handler = AddRoleUserCommandHandler(user_service)
     cancel_handler = CancelRoleUserCommandHandler(user_service)
     query_db = object()
 
     grant_result = await add_handler.handle(
         AddRoleUserCommand(
-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+            role_user=RoleUsersGrantModel(userIds=[42, 43], roleId=2),
             query_db=query_db,
+            enforce_scope_checks=True,
+            user_data_scope_sql='True',
+            role_data_scope_sql='True',
             operator='admin',
         )
     )
     cancel_result = await cancel_handler.handle(
         CancelRoleUserCommand(
-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+            role_user=RoleUserRevokeModel(userId=42, roleId=2),
             query_db=query_db,
+            enforce_scope_checks=True,
+            user_data_scope_sql='True',
+            role_data_scope_sql='True',
             operator='admin',
         )
     )
 
+    batch_result = await BatchCancelRoleUserCommandHandler(user_service).handle(
+        BatchCancelRoleUserCommand(
+            query_db=query_db,
+            role_user=RoleUsersRevokeModel(roleId=2, userIds=[42, 43]),
+            enforce_scope_checks=True,
+            user_data_scope_sql='True',
+            role_data_scope_sql='True',
+        )
+    )
+    assert batch_result.status == 'deleted'
     assert grant_result.status == 'granted'
     assert cancel_result.status == 'deleted'
     assert user_service.add_called_with is not None
@@ -206,22 +225,29 @@ async def test_role_user_command_handlers_success() -> None:
 
 
 @pytest.mark.asyncio
-async def test_system_mediator_dispatches_role_user_commands() -> None:
+async def test_system_mediator_dispatches_role_user_commands(monkeypatch) -> None:
     role_service = _RoleServiceStub()
     user_service = _UserServiceStub()
+    monkeypatch.setattr('modules.system.api.dependencies.UserRoleService', lambda *_: user_service)
     mediator = provide_system_mediator(role_service=role_service, user_service=user_service)
     query_db = object()
 
     grant_result = await mediator.send(
         AddRoleUserCommand(
-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+            role_user=RoleUsersGrantModel(userIds=[42, 43], roleId=2),
             query_db=query_db,
+            enforce_scope_checks=True,
+            user_data_scope_sql='True',
+            role_data_scope_sql='True',
         )
     )
     cancel_result = await mediator.send(
         CancelRoleUserCommand(
-            role_user=CrudUserRoleModel(userIds='1,2', roleId=2),
+            role_user=RoleUserRevokeModel(userId=42, roleId=2),
             query_db=query_db,
+            enforce_scope_checks=True,
+            user_data_scope_sql='True',
+            role_data_scope_sql='True',
         )
     )
 

@@ -1,0 +1,28 @@
+{
+  "remaining_models_schema_equal_to_HEAD": [
+    "TokenData",
+    "UserModel",
+    "UserPostModel",
+    "UserInfoModel",
+    "CurrentUserModel",
+    "UserDetailModel",
+    "UserProfileModel",
+    "UserQueryModel",
+    "UserPageQueryModel",
+    "AddUserModel",
+    "EditUserModel",
+    "ResetPasswordModel",
+    "ResetUserModel",
+    "DeleteUserModel",
+    "UserRoleQueryModel",
+    "UserRolePageQueryModel",
+    "SelectedRoleModel",
+    "UserRoleResponseModel"
+  ],
+  "baseline_HEAD_user_vo_ruff_diagnostics": 77,
+  "semantic_removals": [
+    "CrudUserRoleModel",
+    "UserRoleModel"
+  ],
+  "all_other_changes": "Ruff safe import/equivalent modern typing/formatting only"
+}

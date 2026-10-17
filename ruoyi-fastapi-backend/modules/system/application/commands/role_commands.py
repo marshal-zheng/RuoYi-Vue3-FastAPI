@@ -7,7 +7,11 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 
 from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel  # noqa: TC001
-from module_admin.entity.vo.user_vo import CrudUserRoleModel  # noqa: TC001
+from module_admin.entity.vo.user_role_write_vo import (  # noqa: TC001
+    RoleUserRevokeModel,
+    RoleUsersGrantModel,
+    RoleUsersRevokeModel,
+)
 
 
 class _RoleCommandContext(BaseModel):
@@ -58,13 +62,19 @@ class ChangeRoleStatusCommand(_RoleDataScopeContext):
     role: AddRoleModel = Field(description='Role payload for status update')
 
 
-class AddRoleUserCommand(_RoleDataScopeContext):
-    """Assign users to role."""
+class _RoleUserScopeContext(_RoleCommandContext):
+    enforce_scope_checks: bool = Field(description='Whether the actor is subject to user/role data scopes')
+    user_data_scope_sql: Any = Field(description='User data-scope SQL')
+    role_data_scope_sql: Any = Field(description='Role/Dept data-scope SQL')
 
-    role_user: CrudUserRoleModel = Field(description='Role-user payload to assign')
+
+class AddRoleUserCommand(_RoleUserScopeContext):
+    role_user: RoleUsersGrantModel = Field(description='Users to grant this role')
 
 
-class CancelRoleUserCommand(_RoleCommandContext):
-    """Remove role assignment from users."""
+class CancelRoleUserCommand(_RoleUserScopeContext):
+    role_user: RoleUserRevokeModel = Field(description='Single role-user association to revoke')
 
-    role_user: CrudUserRoleModel = Field(description='Role-user payload to cancel')
+
+class BatchCancelRoleUserCommand(_RoleUserScopeContext):
+    role_user: RoleUsersRevokeModel = Field(description='Role-user associations to revoke together')

@@ -31,6 +31,7 @@ from modules.system.application.commands.role_commands import (
     AddRoleCommand,
     AddRoleUserCommand,
     AssignRoleDataScopeCommand,
+    BatchCancelRoleUserCommand,
     CancelRoleUserCommand,
     ChangeRoleStatusCommand,
     DeleteRoleCommand,
@@ -84,6 +85,7 @@ from modules.system.application.handlers.command.role_command_handlers import (
     AddRoleCommandHandler,
     AddRoleUserCommandHandler,
     AssignRoleDataScopeCommandHandler,
+    BatchCancelRoleUserCommandHandler,
     CancelRoleUserCommandHandler,
     ChangeRoleStatusCommandHandler,
     DeleteRoleCommandHandler,
@@ -186,11 +188,12 @@ from modules.system.application.queries.user_queries import (
     GetUserListQuery,
     GetUserProfileQuery,
 )
+from modules.system.application.services.user_role_service import UserRoleService
 
 if TYPE_CHECKING:
+    from modules.system.application.services import DictDataService, DictTypeService
     from modules.system.application.services.config_service import ConfigService
     from modules.system.application.services.dept_service import DeptService
-    from modules.system.application.services import DictDataService, DictTypeService
     from modules.system.application.services.menu_service import MenuService
     from modules.system.application.services.notice_service import NoticeService
     from modules.system.application.services.post_service import PostService
@@ -211,6 +214,7 @@ def provide_system_mediator(  # noqa: PLR0915
 ) -> Mediator:
     """Build request-scoped mediator with explicit system handlers."""
     registry = HandlerRegistry()
+    user_role_service = UserRoleService(user_service, role_service)
     registry.register_command(
         AddConfigCommand,
         AddConfigCommandHandler(config_service),
@@ -325,12 +329,13 @@ def provide_system_mediator(  # noqa: PLR0915
     )
     registry.register_command(
         AddRoleUserCommand,
-        AddRoleUserCommandHandler(user_service, role_service),
+        AddRoleUserCommandHandler(user_role_service),
     )
     registry.register_command(
         CancelRoleUserCommand,
-        CancelRoleUserCommandHandler(user_service),
+        CancelRoleUserCommandHandler(user_role_service),
     )
+    registry.register_command(BatchCancelRoleUserCommand, BatchCancelRoleUserCommandHandler(user_role_service))
     registry.register_command(
         AddUserCommand,
         AddUserCommandHandler(user_service, dept_service, role_service),
@@ -353,7 +358,7 @@ def provide_system_mediator(  # noqa: PLR0915
     )
     registry.register_command(
         AssignUserRolesCommand,
-        AssignUserRolesCommandHandler(user_service, role_service),
+        AssignUserRolesCommandHandler(user_role_service),
     )
     registry.register_query(
         GetConfigListQuery,

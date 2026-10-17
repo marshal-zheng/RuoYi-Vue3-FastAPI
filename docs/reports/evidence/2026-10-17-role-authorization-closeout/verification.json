@@ -1,0 +1,397 @@
+{
+  "baseCommit": "7b6fbd0ab8f1b9475e6401a3dc10362f926c32a4",
+  "sourceBranch": "std",
+  "scope": "Role management and bidirectional authorization final closeout",
+  "isolatedBackendTests": 222,
+  "isolatedFrontendTests": 122,
+  "sourceBackendTests": 276,
+  "scopedFrontendEslintFiles": 22,
+  "scopedBackendRuffFiles": 20,
+  "independentReview": {
+    "round1": "FAIL P1 missing committed JSON authorization write dependencies",
+    "round2": "PASS, no P0/P1/P2",
+    "independentBackendTests": 99,
+    "independentFrontendTests": 23,
+    "finalDeltaSubsetTests": 11,
+    "subsetNotAddedToTotals": true
+  },
+  "checks": [
+    {
+      "evidence": "backend-tests.json",
+      "result": {
+        "command": [
+          "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "-n",
+          "0",
+          "--no-cov",
+          "tests/unit/services/test_uncached_detail_contract.py",
+          "tests/unit/services/test_role_query_consistency.py",
+          "tests/unit/services/test_user_authorization_read.py",
+          "tests/unit/services/test_role_service.py",
+          "tests/unit/services/test_menu_service.py",
+          "tests/unit/services/test_user_service.py",
+          "tests/unit/services/test_dept_read_freshness.py",
+          "modules/system/tests/test_role_read_queries.py",
+          "modules/system/tests/test_menu_read_queries.py",
+          "modules/system/tests/test_user_read_queries.py",
+          "modules/system/tests/test_dept_read_queries.py",
+          "tests/unit/controllers/test_user_controller.py",
+          "tests/unit/utils/test_transaction_manager.py",
+          "tests/unit/services/test_role_authorization.py",
+          "tests/unit/services/test_role_write_relations.py",
+          "tests/unit/services/test_detail_resource_contract.py",
+          "tests/unit/controllers/test_role_authorization_contract.py",
+          "tests/unit/controllers/test_user_role_write_contract.py",
+          "tests/unit/services/test_role_user_read_contract.py"
+        ],
+        "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+        "exitCode": 0,
+        "seconds": 7.07,
+        "sha256": "c6d883850c634c73865979c4a308a4a1558a09b541fe8937a9fdd9d3fb237a1c"
+      }
+    },
+    {
+      "evidence": "frontend-tests-final.json",
+      "result": {
+        "command": [
+          "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/.bin/vitest",
+          "run",
+          "tests/role-query-list.test.ts",
+          "tests/unit/components/RoleFormDrawer.test.ts",
+          "tests/unit/components/RoleAuthorization.test.ts",
+          "tests/unit/components/RoleAuthorizationMounted.test.ts",
+          "src/queries/system/role.test.ts",
+          "src/queries/system/user.test.ts",
+          "src/api/role-authorization-contract.test.ts",
+          "tests/user-query-export.test.ts",
+          "tests/list-export-query-parity.test.ts",
+          "tests/unit/components/EditorReadLifecycle.test.ts",
+          "src/api/editor-read-options.test.ts"
+        ],
+        "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+        "exitCode": 0,
+        "seconds": 4.8,
+        "sha256": "7e681a5bcbf87056b4f0f14cb0323a56334b4e92291b3881cdf1f04ff0eae62f"
+      }
+    },
+    {
+      "evidence": "frontend-lint-final.json",
+      "result": {
+        "command": [
+          "./node_modules/.bin/eslint",
+          "--max-warnings",
+          "0",
+          "src/api/system/menu.ts",
+          "src/api/system/role.ts",
+          "src/api/system/user.ts",
+          "src/queries/system/role.test.ts",
+          "src/queries/system/role.ts",
+          "src/queries/system/user.test.ts",
+          "src/queries/system/user.ts",
+          "src/store/modules/system-list-navigation.ts",
+          "src/views/system/role/authUser.vue",
+          "src/views/system/role/components/RoleDataScopeDrawer.vue",
+          "src/views/system/role/components/RoleFormDrawer.vue",
+          "src/views/system/role/index.vue",
+          "src/views/system/role/selectUser.vue",
+          "src/views/system/user/authRole.vue",
+          "src/views/system/user/index.vue",
+          "tests/list-export-query-parity.test.ts",
+          "tests/role-query-list.test.ts",
+          "tests/unit/components/EditorReadLifecycle.test.ts",
+          "tests/unit/components/RoleAuthorization.test.ts",
+          "tests/unit/components/RoleAuthorizationMounted.test.ts",
+          "tests/unit/components/RoleFormDrawer.test.ts",
+          "tests/user-query-export.test.ts"
+        ],
+        "files": 22,
+        "exitCode": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "evidence": "frontend-quality.json",
+      "result": [
+        {
+          "name": "frontend-types",
+          "command": [
+            "corepack",
+            "yarn",
+            "type-check"
+          ],
+          "exitCode": 0,
+          "seconds": 14.28,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "name": "frontend-ui-standards",
+          "command": [
+            "corepack",
+            "yarn",
+            "ui:standards"
+          ],
+          "exitCode": 0,
+          "seconds": 3.86,
+          "sha256": "92c0eb415751a7a01275b44d2b10699e6bdd82c635fb83de3b54f620dcbd567f"
+        }
+      ]
+    },
+    {
+      "evidence": "backend-lint.json",
+      "result": [
+        {
+          "command": [
+            "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+            "check",
+            "modules/system/api/user_controller.py",
+            "modules/system/application/handlers/query/user_query_handlers.py",
+            "modules/system/application/queries/user_queries.py",
+            "modules/system/application/services/menu_service.py",
+            "modules/system/application/services/role_service.py",
+            "modules/system/application/services/user_service.py",
+            "modules/system/infrastructure/role_repository.py",
+            "modules/system/application/services/dept_service.py",
+            "tests/unit/services/test_role_authorization.py",
+            "tests/unit/services/test_role_write_relations.py",
+            "tests/unit/services/test_detail_resource_contract.py",
+            "tests/unit/services/test_role_query_consistency.py",
+            "tests/unit/services/test_role_service.py",
+            "tests/unit/services/test_user_authorization_read.py",
+            "tests/unit/services/test_uncached_detail_contract.py",
+            "modules/system/application/read_models/role_read_models.py",
+            "modules/system/application/read_models/user_read_models.py",
+            "tests/unit/services/test_role_user_read_contract.py"
+          ],
+          "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+          "exitCode": 0,
+          "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+        },
+        {
+          "command": [
+            "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+            "format",
+            "--check",
+            "modules/system/api/user_controller.py",
+            "modules/system/application/handlers/query/user_query_handlers.py",
+            "modules/system/application/queries/user_queries.py",
+            "modules/system/application/services/menu_service.py",
+            "modules/system/application/services/role_service.py",
+            "modules/system/application/services/user_service.py",
+            "modules/system/infrastructure/role_repository.py",
+            "modules/system/application/services/dept_service.py",
+            "tests/unit/services/test_role_authorization.py",
+            "tests/unit/services/test_role_write_relations.py",
+            "tests/unit/services/test_detail_resource_contract.py",
+            "tests/unit/services/test_role_query_consistency.py",
+            "tests/unit/services/test_role_service.py",
+            "tests/unit/services/test_user_authorization_read.py",
+            "tests/unit/services/test_uncached_detail_contract.py",
+            "modules/system/application/read_models/role_read_models.py",
+            "modules/system/application/read_models/user_read_models.py",
+            "tests/unit/services/test_role_user_read_contract.py"
+          ],
+          "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+          "exitCode": 0,
+          "sha256": "c4fd3f494556e5e7cf4355131a1080dbdcf0bbf09664638af9984db197ad88c0"
+        }
+      ]
+    },
+    {
+      "evidence": "clean-candidate-types-final.json",
+      "result": {
+        "command": [
+          "corepack",
+          "yarn",
+          "type-check"
+        ],
+        "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-auth-delivery-closeout/ruoyi-fastapi-frontend",
+        "exitCode": 0,
+        "seconds": 12.23,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "evidence": "clean-candidate-frontend-tests.json",
+      "result": {
+        "command": [
+          "./node_modules/.bin/vitest",
+          "run",
+          "tests/role-query-list.test.ts",
+          "tests/unit/components/RoleFormDrawer.test.ts",
+          "tests/unit/components/RoleAuthorization.test.ts",
+          "tests/unit/components/RoleAuthorizationMounted.test.ts",
+          "src/queries/system/role.test.ts",
+          "src/queries/system/user.test.ts",
+          "src/api/role-authorization-contract.test.ts",
+          "tests/user-query-export.test.ts",
+          "tests/list-export-query-parity.test.ts",
+          "tests/unit/components/EditorReadLifecycle.test.ts",
+          "src/api/editor-read-options.test.ts"
+        ],
+        "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-auth-delivery-closeout/ruoyi-fastapi-frontend",
+        "exitCode": 0,
+        "seconds": 5.28,
+        "sha256": "c23d0996e6719ebf42a70ca3ad39783aae9d3dab8cec53c0a9e73c1790f3d1c0"
+      }
+    },
+    {
+      "evidence": "source-auth-tests.json",
+      "result": {
+        "command": [
+          "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+          "-m",
+          "pytest",
+          "-q",
+          "-n",
+          "0",
+          "--no-cov",
+          "tests/unit/services/test_uncached_detail_contract.py",
+          "tests/unit/services/test_role_query_consistency.py",
+          "tests/unit/services/test_user_authorization_read.py",
+          "tests/unit/services/test_role_service.py",
+          "tests/unit/services/test_menu_service.py",
+          "tests/unit/services/test_user_service.py",
+          "tests/unit/services/test_dept_read_freshness.py",
+          "modules/system/tests/test_role_read_queries.py",
+          "modules/system/tests/test_menu_read_queries.py",
+          "modules/system/tests/test_user_read_queries.py",
+          "modules/system/tests/test_dept_read_queries.py",
+          "tests/unit/controllers/test_user_controller.py",
+          "tests/unit/utils/test_transaction_manager.py",
+          "tests/unit/services/test_role_authorization.py",
+          "tests/unit/services/test_role_write_relations.py",
+          "tests/unit/services/test_detail_resource_contract.py",
+          "tests/unit/controllers/test_role_authorization_contract.py",
+          "tests/unit/controllers/test_user_role_write_contract.py",
+          "tests/unit/services/test_role_user_read_contract.py",
+          "tests/unit/controllers/test_role_authorization_http.py",
+          "tests/unit/services/test_user_role_authorization_writes.py"
+        ],
+        "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+        "exitCode": 0,
+        "seconds": 10.78,
+        "sha256": "5481c3af00f25994d44b04b0f2662e685309c49828209016ee353802b3f8d701"
+      }
+    },
+    {
+      "evidence": "source-auth-lint-final.json",
+      "result": [
+        {
+          "command": [
+            "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+            "check",
+            "module_admin/entity/vo/user_role_write_vo.py",
+            "module_admin/entity/vo/user_vo.py",
+            "modules/system/api/dependencies.py",
+            "modules/system/api/role_controller.py",
+            "modules/system/api/user_controller.py",
+            "modules/system/application/commands/__init__.py",
+            "modules/system/application/commands/role_commands.py",
+            "modules/system/application/commands/user_commands.py",
+            "modules/system/application/handlers/command/__init__.py",
+            "modules/system/application/handlers/command/role_command_handlers.py",
+            "modules/system/application/handlers/command/user_command_handlers.py",
+            "modules/system/application/services/user_role_service.py",
+            "modules/system/application/services/user_service.py",
+            "modules/system/tests/test_role_write_commands.py",
+            "modules/system/tests/test_user_write_commands.py",
+            "ports/services.py",
+            "tests/unit/controllers/test_role_authorization_contract.py",
+            "tests/unit/controllers/test_role_authorization_http.py",
+            "tests/unit/services/test_user_role_authorization_writes.py",
+            "tests/unit/services/test_user_service.py"
+          ],
+          "exitCode": 0,
+          "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+        },
+        {
+          "command": [
+            "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+            "format",
+            "--check",
+            "module_admin/entity/vo/user_role_write_vo.py",
+            "module_admin/entity/vo/user_vo.py",
+            "modules/system/api/dependencies.py",
+            "modules/system/api/role_controller.py",
+            "modules/system/api/user_controller.py",
+            "modules/system/application/commands/__init__.py",
+            "modules/system/application/commands/role_commands.py",
+            "modules/system/application/commands/user_commands.py",
+            "modules/system/application/handlers/command/__init__.py",
+            "modules/system/application/handlers/command/role_command_handlers.py",
+            "modules/system/application/handlers/command/user_command_handlers.py",
+            "modules/system/application/services/user_role_service.py",
+            "modules/system/application/services/user_service.py",
+            "modules/system/tests/test_role_write_commands.py",
+            "modules/system/tests/test_user_write_commands.py",
+            "ports/services.py",
+            "tests/unit/controllers/test_role_authorization_contract.py",
+            "tests/unit/controllers/test_role_authorization_http.py",
+            "tests/unit/services/test_user_role_authorization_writes.py",
+            "tests/unit/services/test_user_service.py"
+          ],
+          "exitCode": 0,
+          "sha256": "793e2905062e677bc49a961cd9fd445b511f01c6196d6dfc46ac854a2639a903"
+        }
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "log": "auth-write/red-http.log",
+      "sha256": "67798100c82833dfd3b7ecad32c03f1969edd622bc7ec57e074b847413caf0af"
+    },
+    {
+      "log": "auth-write/green-affected-backend.log",
+      "sha256": "9f61591a38365dc9d780f027138035a46020452f991f827caa94832153e5d847"
+    },
+    {
+      "log": "auth-write/conventions.log",
+      "sha256": "06ddc2512efdb6f206b4dd6951186bf7cdfe737e2762ad331c26e3cd0b0b590e"
+    },
+    {
+      "log": "auth-write/head-neighbor-baseline.log",
+      "sha256": "113cec33ffc6e78df3d3c42c32c8e6a8ee315898b8a1efb6e4cd8f86ae51d6e6"
+    },
+    {
+      "log": "source-auth-tests.log",
+      "sha256": "5481c3af00f25994d44b04b0f2662e685309c49828209016ee353802b3f8d701"
+    },
+    {
+      "log": "frontend-tests-final.log",
+      "sha256": "7e681a5bcbf87056b4f0f14cb0323a56334b4e92291b3881cdf1f04ff0eae62f"
+    },
+    {
+      "log": "source-auth-lint-final-0.log",
+      "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+    },
+    {
+      "log": "source-auth-lint-final-1.log",
+      "sha256": "793e2905062e677bc49a961cd9fd445b511f01c6196d6dfc46ac854a2639a903"
+    },
+    {
+      "log": "frontend-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "originalSixCommitsReachable": true,
+  "browserEvidence": {
+    "previouslyCompleted": true,
+    "screenshotsHashChecked": 14,
+    "hashMismatches": 0,
+    "newBrowserActionsInThisAudit": false
+  },
+  "knownUnrelatedFailures": {
+    "failedItems": 7,
+    "files": [
+      "modules/system/tests/test_config_refresh_command.py",
+      "modules/system/tests/test_dev_menu_sync_controller.py"
+    ],
+    "reproducedOnTrackedHeadArchive": true,
+    "excludedFromIsolated222Collection": true
+  },
+  "rawLogsDirectory": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-final-closeout"
+}
