@@ -40,4 +40,11 @@
 
 11 个验收用户和 12 个验收角色均通过正常界面删除。独立只读 SELECT 确认有效用户/角色、用户角色/岗位、角色部门/菜单关系全部为 0，保留正常软删除记录，见[清理核对](evidence/2026-10-17-role-browser-acceptance/fixture-cleanup.json)。本轮登录正常注销，浏览器及自有开发服务器关闭，已有 MySQL/Redis 保留。
 
-源其他未提交工作保持原归属。最终 `std` 提交、交付窗口哈希保留核对及工作树清理由交付补记确认；不宣称全库所有历史测试或所有页面均已通过。
+源其他未提交工作保持原归属。交付与清理结果见下文；不宣称全库所有历史测试或所有页面均已通过。
+
+
+## std 最终交付
+
+实现与验收证据提交 `97e31e848afe2198d04abc8f5f49089dd4d040ed` 已普通快进到 `std`。交付前后比较当前 RuoYi 3,802 个范围外路径、ZXUI 9,826 个路径，内容和模式全部一致；本轮 8 个产品/测试文件与审查候选逐项相同，索引为空。初始到交付前分别观察到 2/10 个并发路径漂移，只记录并保留最新内容，没有恢复旧快照。[交付保留证明](evidence/2026-10-17-role-browser-acceptance/source-delivery.json)保留这两个时间边界。
+
+合入后在实际源再次执行相关集合：后端 210 passed，前端 7 个 suite / 67 passed，见[合入后验证](evidence/2026-10-17-role-browser-acceptance/delivered-verification.json)。本轮工作树和分支已删除，项目 `.worktrees` 父目录保留；[资源清理](evidence/2026-10-17-role-browser-acceptance/runtime-cleanup.json)已记录。未推送远端，其他未提交工作继续留在源工作区。

@@ -1,0 +1,60 @@
+{
+  "sourceHead": "97e31e848afe2198d04abc8f5f49089dd4d040ed",
+  "backendTests": 210,
+  "frontendTests": 67,
+  "checks": [
+    {
+      "name": "delivered-backend-source-tests",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "-n",
+        "0",
+        "--no-cov",
+        "tests/unit/services/test_uncached_detail_contract.py",
+        "tests/unit/services/test_role_query_consistency.py",
+        "tests/unit/services/test_user_authorization_read.py",
+        "tests/unit/services/test_role_service.py",
+        "tests/unit/services/test_menu_service.py",
+        "tests/unit/services/test_user_service.py",
+        "tests/unit/services/test_dept_read_freshness.py",
+        "modules/system/tests/test_role_read_queries.py",
+        "modules/system/tests/test_menu_read_queries.py",
+        "modules/system/tests/test_user_read_queries.py",
+        "modules/system/tests/test_dept_read_queries.py",
+        "tests/unit/controllers/test_user_controller.py",
+        "tests/unit/utils/test_transaction_manager.py",
+        "tests/unit/services/test_role_authorization.py",
+        "tests/unit/services/test_role_write_relations.py",
+        "tests/unit/services/test_detail_resource_contract.py",
+        "tests/unit/controllers/test_role_authorization_contract.py",
+        "tests/unit/controllers/test_user_role_write_contract.py",
+        "tests/unit/services/test_role_user_read_contract.py"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "log": "delivered-backend-source-tests.log",
+      "sha256": "bd2791364fd39f12290ea5f5d05bbb70afe68bd5662f15a95e1a4faf62eb4d65"
+    },
+    {
+      "name": "delivered-frontend-source-tests",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/.bin/vitest",
+        "run",
+        "tests/role-query-list.test.ts",
+        "tests/unit/components/RoleFormDrawer.test.ts",
+        "tests/unit/components/RoleAuthorization.test.ts",
+        "tests/unit/components/RoleAuthorizationMounted.test.ts",
+        "src/queries/system/role.test.ts",
+        "src/queries/system/user.test.ts",
+        "src/api/role-authorization-contract.test.ts"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend",
+      "exitCode": 0,
+      "log": "delivered-frontend-source-tests.log",
+      "sha256": "0495231de168d7f8a44beda5965608436124b2901d1c5220a587fba3bbba77b2"
+    }
+  ]
+}

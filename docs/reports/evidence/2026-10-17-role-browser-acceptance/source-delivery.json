@@ -1,0 +1,27 @@
+{
+  "sourceBranch": "std",
+  "base": "fe5081897704dc4bff1cfff5fbdc06ea357f7af5",
+  "implementationCommit": "97e31e848afe2198d04abc8f5f49089dd4d040ed",
+  "fastForwardExitCode": 0,
+  "indexClean": true,
+  "appliedCodeFiles": 8,
+  "preservation": {
+    "ruoyi": {
+      "compared": 3802,
+      "unchanged": 3802,
+      "concurrentChanges": [],
+      "newUnrelatedPaths": []
+    },
+    "zxui": {
+      "compared": 9826,
+      "unchanged": 9826,
+      "concurrentChanges": [],
+      "newUnrelatedPaths": []
+    }
+  },
+  "initialDriftCounts": {
+    "ruoyi": 2,
+    "zxui": 10
+  },
+  "scopedSourceMatchesCommit": true
+}
