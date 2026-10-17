@@ -19,9 +19,10 @@ export function formatSimulationTime(seconds: number): string {
     return '00:00:00.000';
   }
 
-  // 提取整数秒和毫秒
-  const totalSeconds = Math.floor(seconds);
-  const milliseconds = Math.round((seconds - totalSeconds) * 1000);
+  // 先按毫秒取整，再拆分，保证舍入进位同步更新秒、分和小时
+  const totalMilliseconds = Math.round(seconds * 1000);
+  const totalSeconds = Math.floor(totalMilliseconds / 1000);
+  const milliseconds = totalMilliseconds % 1000;
 
   // 计算时分秒
   const hours = Math.floor(totalSeconds / 3600);
