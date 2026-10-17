@@ -119,6 +119,6 @@ The final whole-stage audit found a delivery dependency missed by the original s
 - [x] Synchronize the four checked-in OpenAPI operations with the existing generated client contract.
 - [x] Verify isolated production DI/HTTP/SQLite round trips, scoped lint and independent review.
 - [x] Remove related frontend test lint omissions without changing assertions.
-- [ ] Record final std delivery, source verification, preservation and worktree cleanup.
+- [x] Record final std delivery, source verification, preservation and worktree cleanup.
 
 Evidence and final scope reconciliation: [stage closeout audit](../reports/2026-10-17-role-authorization-closeout.md).

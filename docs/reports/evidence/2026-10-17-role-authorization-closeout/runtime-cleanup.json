@@ -1,0 +1,12 @@
+{
+  "worktreeRemoved": true,
+  "taskBranchRemoved": true,
+  "dependencySymlinkUnlinkedWithoutRemovingSourceDependencies": true,
+  "ignoredFixtureRemovedWithOwnedWorktree": true,
+  "projectWorktreesParentPreserved": true,
+  "newBrowserActions": false,
+  "newRealDatabaseWrites": false,
+  "newServicesStarted": false,
+  "sharedMySqlRedisStopped": false,
+  "worktreesNow": "worktree /Users/hqz/dev/RuoYi-Vue3-FastAPI\nHEAD 8cc591270bb8349585c3c95654eae70ec1e2a3e2\nbranch refs/heads/std\n\n"
+}
