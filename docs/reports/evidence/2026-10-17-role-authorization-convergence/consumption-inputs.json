@@ -1,0 +1,91 @@
+{
+  "zxuiSource": {
+    "root": "/Users/hqz/Downloads/element-plus",
+    "branch": "codex/http-vue-query-phase-a",
+    "head": "67e13c6cfa413d4c7a57bfa5d728dabc750d2972"
+  },
+  "vendor": [
+    {
+      "path": "vendor/@zxio-http-1.0.0.tgz",
+      "sha256": "afe5ffae524c4dac50c51fbf8e08358824c415dc3561bd49f770ecdbe30b3b62"
+    },
+    {
+      "path": "vendor/zxio-http-1.0.0-cancellation.20261015.tgz",
+      "sha256": "baca6c457ed408aa38ce2ce6f6a0a140e3e2700c3714937071c69e16e04afd46"
+    },
+    {
+      "path": "vendor/zxio-http-1.0.0-download-boundary.20261015.tgz",
+      "sha256": "dca07c3edf70076452b5a028a9cbb2b7369aea332979f6be912d71887e2ab641"
+    },
+    {
+      "path": "vendor/zxio-http-1.0.0-query.final.20261016.tgz",
+      "sha256": "06dfd7aaf8e52bf491b97a46680b5e677bd1b34618e0564e62e472bd1b88a74c"
+    },
+    {
+      "path": "vendor/zxio-http-1.0.0-response-pipeline.20261015.tgz",
+      "sha256": "cb5dcc419e24e53df6c6f78e824db70b28eab734d3d225f75209619f8f52022a"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0-dashboard.20261016.tgz",
+      "sha256": "c0252163a07120875e48c1cefe78675f088383d69fbda54555121cb19c998698"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0-footprint.final.20261017.tgz",
+      "sha256": "9f0e595acb83cec2329dbe8fee5614b85d244c2f009647aacfdf92ad3f42416e"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0-http-source.20261015.tgz",
+      "sha256": "15d0aab94485a33cb9c12f00b21372ebbf10e0cb8bb6e7a2b89699527b8b2ff1"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0-overlay-validation.final.2.20261013.tgz",
+      "sha256": "2b34b4937ee428dd1b20a041cda5a29c50cacf2ff30710cbc401ed6bd8c87553"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz",
+      "sha256": "4e30e7f104cb90dea9ff8b9fe6c39f36f555cd280b8b38c749526a300869c304"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0.business-theme-preview.tgz",
+      "sha256": "c9e87b166a75031f190b3723614086a136bff71e35b8a15125bc090658739cd8"
+    },
+    {
+      "path": "vendor/zxio-theme-compiler-1.0.0.tgz",
+      "sha256": "a472a0057627d2a3c26f289005932439d642adab9a86f0f72d4422f37a4de7e0"
+    },
+    {
+      "path": "vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz",
+      "sha256": "ffc491e679e79b457ded527632c3b9780dd37112adcead551ef291f9c0c85ee6"
+    },
+    {
+      "path": "vendor/zxio-zxui-3.0.0-next.0-density.20260928.tgz",
+      "sha256": "133f7006203ac22105f0476604928bcdf694a8a7139211e922c876011cf71bfa"
+    },
+    {
+      "path": "vendor/zxio-zxui-3.0.0-next.0-font-chunk.final3.20261017.tgz",
+      "sha256": "46412845c5884e5ed1fcffd8c5f336e3260ccf0fee9df6780e9b5a288f01e455"
+    },
+    {
+      "path": "vendor/zxio-zxui-3.0.0-next.0-overlay-validation.final.20261013.tgz",
+      "sha256": "07005ff2f4d315d2abd1d645f86e95ec15b4b88b10740d3a078fd0e66019e4ba"
+    },
+    {
+      "path": "vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz",
+      "sha256": "551185311f9100778764485e7b65854c8a2d212699c28a1758b31d57461e286f"
+    }
+  ],
+  "installedPackages": {
+    "zxui": {
+      "version": "3.0.0-next.0",
+      "manifestSha256": "8bdf1ea6fec8a50f5db5a4e68be85b06d9579fb275635cbc99b1699ebac3e587"
+    },
+    "http": {
+      "version": "1.0.0",
+      "manifestSha256": "d89969a1af029c811293ed40d240c45da1637be2621904c0a05a1382c1428481"
+    },
+    "vue-query": {
+      "version": "1.0.0",
+      "manifestSha256": "6a591bf32cb7c3ca2920f084c298a090d85399607cb37b181d3f88c4e59007ae"
+    }
+  }
+}

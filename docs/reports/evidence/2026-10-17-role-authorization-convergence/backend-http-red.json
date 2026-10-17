@@ -1,0 +1,111 @@
+{
+  "timestamp": "2026-10-17T11:40:30Z",
+  "expectation": "red",
+  "marker": "cqx_11a2bc",
+  "realHTTP": true,
+  "realMySQL": true,
+  "realRedis": true,
+  "computerUse": false,
+  "port": 18088,
+  "owned": {
+    "roles": [
+      59,
+      60,
+      61
+    ],
+    "users": [
+      92,
+      93
+    ],
+    "depts": [
+      193,
+      194
+    ]
+  },
+  "checks": {
+    "role_list": {
+      "old": "cqx_11a2bc_probe_v1",
+      "fresh": "cqx_11a2bc_probe_v1",
+      "committedRoleName": "cqx_11a2bc_probe_v2",
+      "expectedOld": "cqx_11a2bc_probe_v1",
+      "expectedNew": "cqx_11a2bc_probe_v2"
+    },
+    "role_detail": {
+      "old": "cqx_11a2bc_probe_v2",
+      "fresh": "cqx_11a2bc_probe_v2",
+      "committedRoleName": "cqx_11a2bc_probe_v3",
+      "expectedOld": "cqx_11a2bc_probe_v2",
+      "expectedNew": "cqx_11a2bc_probe_v3"
+    },
+    "role_menu_tree": {
+      "old": [],
+      "fresh": [],
+      "committedRoleName": "cqx_11a2bc_probe_v3",
+      "expectedOld": [],
+      "expectedNew": [
+        101
+      ]
+    },
+    "scopeIsolation": {
+      "actual": [
+        [
+          60
+        ],
+        [
+          60
+        ]
+      ],
+      "expected": [
+        [
+          60
+        ],
+        [
+          61
+        ]
+      ]
+    },
+    "authorizationReadScope": {
+      "http": 200
+    },
+    "assignedDisabledVisible": false
+  },
+  "cleanup": {
+    "activeOwnedCounts": {
+      "sys_user": 0,
+      "sys_role": 0,
+      "sys_dept": 0
+    },
+    "verifiedAbsent": true,
+    "adminSessionEnded": true
+  },
+  "passed": true,
+  "cacheCleanup": {
+    "ownedKeys": 0
+  },
+  "controlState": {
+    "armed": null,
+    "calls": {
+      "codex_role_query_cqx_11a2bc_role_list:role_list": 1,
+      "codex_role_query_cqx_11a2bc_role_detail:role_detail": 1,
+      "codex_role_query_cqx_11a2bc_role_menu_tree:role_detail": 1,
+      "codex_role_query_cqx_11a2bc_role_menu_tree:role_menu": 1
+    },
+    "events": [
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_11a2bc_role_list",
+        "method": "role_list"
+      },
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_11a2bc_role_detail",
+        "method": "role_detail"
+      },
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_11a2bc_role_menu_tree",
+        "method": "role_menu"
+      }
+    ]
+  }
+}

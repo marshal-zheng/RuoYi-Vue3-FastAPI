@@ -1,0 +1,18 @@
+{
+  "method": "actual four-file dirty content + verified candidate content + target index entries + ordinary fast-forward",
+  "paths": [
+    "ruoyi-fastapi-backend/modules/system/api/user_controller.py",
+    "ruoyi-fastapi-backend/modules/system/application/services/menu_service.py",
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py",
+    "ruoyi-fastapi-backend/modules/system/application/services/user_service.py"
+  ],
+  "checks": {
+    "headAdvanced": true,
+    "unrelatedIndexPreserved": true,
+    "unrelatedWorktreePreserved": true,
+    "mergedContentPreserved": true,
+    "targetIndexEntries": true,
+    "dirtyBusinessRulesRemain": true
+  },
+  "passed": true
+}

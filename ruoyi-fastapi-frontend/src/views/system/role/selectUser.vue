@@ -34,41 +34,54 @@
         <el-button icon="Refresh" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-row>
-      <el-table
-        @row-click="clickRow"
-        ref="refTable"
-        :data="userList"
-        @selection-change="handleSelectionChange"
-        height="260px"
-      >
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-        <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
-        <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-        <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
-        <el-table-column label="状态" prop="status">
-          <template #default="scope">
-            <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" width="180">
-          <template #default="scope">
-            <span>{{ parseTime(scope.row.createTime) }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination
-        v-show="total > 0"
-        :total="total"
-        v-model:page="queryParams.page"
-        v-model:limit="queryParams.pageSize"
-        @pagination="getList"
-      />
-    </el-row>
+    <ZxGridList
+      mode="controlled"
+      :rows="userList"
+      :pagination="pagination"
+      :status="listStatus"
+      @page-change="handlePageChange"
+      @refresh="getList"
+    >
+      <template #table="{ grid, renderEmpty }">
+        <el-table
+          @row-click="clickRow"
+          ref="refTable"
+          :data="grid.list"
+          @select="handleSelectionChange"
+          @select-all="handleSelectionChange"
+          row-key="userId"
+          height="260px"
+        >
+          <template #empty><component :is="renderEmpty" /></template>
+          <el-table-column type="selection" :selectable="canSelectUser" width="55" />
+          <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
+          <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
+          <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
+          <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
+          <el-table-column label="状态" prop="status">
+            <template #default="scope">
+              <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
+            </template>
+          </el-table-column>
+          <el-table-column label="创建时间" prop="createTime" width="180">
+            <template #default="scope">
+              <span>{{ parseTime(scope.row.createTime) }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </template>
+    </ZxGridList>
+    <p class="text-sm text-zx-text-secondary">
+      已选 {{ userIds.length }} 人（跨页和搜索保留，关闭后清空）
+    </p>
+    <p v-if="writeError" role="alert">{{ writeError }}</p>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="handleSelectUser" :loading="handleSelectUserPending"
+        <el-button
+          type="primary"
+          :disabled="!canEdit || !userIds.length"
+          @click="handleSelectUser"
+          :loading="handleSelectUserPending"
           >确 定</el-button
         >
         <el-button @click="visible = false">取 消</el-button>
@@ -78,96 +91,170 @@
 </template>
 
 <script setup name="SelectUser">
+import { computed, getCurrentInstance, nextTick, reactive, ref, shallowRef, watch } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 import { useOperation } from '@/utils/operation';
 import { ElMessage } from 'element-plus';
-import { unallocatedUserList } from '@/api/system/role';
-import { captureUserCommand, userCommands } from '@/queries/system/user';
+import { captureUserCommand, roleUsersOptions, userCommands } from '@/queries/system/user';
 import { queryScope, requireQueryScope } from '@/queries/context';
-import { watch } from 'vue';
+import { checkPermi } from '@/utils/permission';
+import { parseTime } from '@/utils/ruoyi';
 
-const props = defineProps({
-  roleId: {
-    type: [Number, String],
-  },
-});
-
+const props = defineProps({ roleId: { type: [Number, String] } });
+const emit = defineEmits(['ok']);
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
-
-const userList = ref([]);
+const refTable = ref(null);
 const visible = ref(false);
-const total = ref(0);
 const userIds = ref([]);
-let openingScope;
+const openingScope = shallowRef(null);
+const openingRoleId = ref(0);
+let opening = 0;
+const writeError = ref('');
+const queryParams = reactive({ userName: '', phonenumber: '' });
+const submitted = ref({});
+const currentPage = ref(1);
+const pageSize = ref(10);
+const canEdit = computed(
+  () =>
+    visible.value &&
+    openingScope.value === queryScope.value &&
+    checkPermi(['system:role:edit']) &&
+    (openingRoleId.value !== 1 || openingScope.value?.userId === '1')
+);
+const usersQuery = useQuery(() =>
+  roleUsersOptions(
+    visible.value && openingScope.value === queryScope.value ? openingScope.value : null,
+    openingRoleId.value,
+    'unallocated',
+    { ...submitted.value, page: currentPage.value, pageSize: pageSize.value }
+  )
+);
+const userList = computed(() => usersQuery.data.value?.items ?? []);
+const pagination = computed(() => ({
+  page: currentPage.value,
+  size: pageSize.value,
+  total: usersQuery.data.value?.total ?? 0,
+}));
+const listStatus = computed(() => ({
+  loading: usersQuery.isLoading.value,
+  refreshing: usersQuery.isFetching.value && usersQuery.data.value !== undefined,
+  error: usersQuery.error.value,
+  paused: usersQuery.fetchStatus.value === 'paused',
+}));
 watch(
-  queryScope,
+  [queryScope, () => props.roleId],
   () => {
     visible.value = false;
   },
   { flush: 'sync' }
 );
-
-const queryParams = reactive({
-  page: 1,
-  pageSize: 10,
-  roleId: undefined,
-  userName: undefined,
-  phonenumber: undefined,
+watch(
+  visible,
+  (value) => {
+    if (!value) {
+      opening++;
+      userIds.value = [];
+      writeError.value = '';
+    }
+  },
+  { flush: 'sync' }
+);
+watch(usersQuery.data, (result) => {
+  if (result)
+    currentPage.value = Math.min(
+      currentPage.value,
+      Math.max(1, Math.ceil(result.total / pageSize.value))
+    );
 });
-
-// 显示弹框
+watch(
+  userList,
+  async () => {
+    await nextTick();
+    refTable.value?.clearSelection();
+    for (const row of userList.value)
+      if (userIds.value.includes(row.userId)) refTable.value?.toggleRowSelection(row, true);
+  },
+  { flush: 'post' }
+);
 function show() {
-  openingScope = requireQueryScope();
-  queryParams.roleId = props.roleId;
-  getList();
+  opening++;
+  openingScope.value = requireQueryScope();
+  openingRoleId.value = Number(props.roleId);
+  queryParams.userName = '';
+  queryParams.phonenumber = '';
+  submitted.value = {};
+  currentPage.value = 1;
+  pageSize.value = 10;
+  userIds.value = [];
+  writeError.value = '';
+  refTable.value?.clearSelection();
   visible.value = true;
 }
-/**选择行 */
+function canSelectUser(row) {
+  return canEdit.value && Number(row.userId) !== 1;
+}
 function clickRow(row) {
-  proxy.$refs['refTable'].toggleRowSelection(row);
+  if (!canSelectUser(row)) return;
+  refTable.value?.toggleRowSelection(row);
+  handleSelectionChange(refTable.value?.getSelectionRows() ?? []);
 }
-// 多选框选中数据
+// Element Plus select/select-all represent user intent. Data changes and restoration
+// emit selection-change as well, so they must never erase off-page selections.
 function handleSelectionChange(selection) {
-  userIds.value = selection.map((item) => item.userId);
+  const currentIds = new Set(userList.value.map((row) => row.userId));
+  userIds.value = [
+    ...new Set([
+      ...userIds.value.filter((id) => !currentIds.has(id)),
+      ...selection.filter(canSelectUser).map((row) => row.userId),
+    ]),
+  ];
 }
-// 查询表数据
 function getList() {
-  const scope = openingScope;
-  unallocatedUserList({ ...queryParams }).then((res) => {
-    if (!visible.value || scope !== queryScope.value || scope !== openingScope) return;
-    userList.value = res.items;
-    total.value = res.total;
-  });
+  if (visible.value && openingScope.value === queryScope.value)
+    void usersQuery.refetch({ cancelRefetch: false });
 }
-/** 搜索按钮操作 */
 function handleQuery() {
-  queryParams.page = 1;
-  getList();
+  const next = {
+    userName: queryParams.userName.trim(),
+    phonenumber: queryParams.phonenumber.trim(),
+  };
+  const unchanged =
+    currentPage.value === 1 && JSON.stringify(next) === JSON.stringify(submitted.value);
+  submitted.value = next;
+  currentPage.value = 1;
+  if (unchanged) getList();
 }
-/** 重置按钮操作 */
 function resetQuery() {
-  proxy.resetForm('queryRef');
+  queryParams.userName = '';
+  queryParams.phonenumber = '';
   handleQuery();
 }
-const emit = defineEmits(['ok']);
-/** 选择授权用户操作 */
+function handlePageChange({ page, size }) {
+  currentPage.value = size === pageSize.value ? page : 1;
+  pageSize.value = size;
+}
 const { run: handleSelectUser, pending: handleSelectUserPending } = useOperation(async () => {
-  if (!visible.value || openingScope !== queryScope.value) return;
-  const roleId = Number(queryParams.roleId);
-  const uIds = [...userIds.value];
-  if (uIds.length === 0) {
+  if (!canEdit.value) return;
+  if (!userIds.value.length) {
     ElMessage.error('请选择要分配的用户');
     return;
   }
-  const command = captureUserCommand({ roleId, userIds: uIds }, openingScope);
-  await userCommands.assignRoleUsers(command).then(() => {
-    if (command.scope !== queryScope.value) return;
+  const generation = opening;
+  const command = captureUserCommand(
+    { roleId: openingRoleId.value, userIds: userIds.value },
+    openingScope.value
+  );
+  writeError.value = '';
+  try {
+    await userCommands.assignRoleUsers(command);
+    if (generation !== opening || command.scope !== queryScope.value) return;
     visible.value = false;
     emit('ok');
-  });
+  } catch {
+    if (generation === opening && command.scope === queryScope.value)
+      writeError.value = '分配失败，已保留所选用户，请重试。';
+  }
 });
-
-defineExpose({
-  show,
-});
+defineExpose({ show });
 </script>

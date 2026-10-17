@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-10-17T11:39:59.747Z",
+  "marker": "codex_ra_vcbr5vn",
+  "mode": "installed",
+  "transport": "Real business commands/query options/useQuery/HTTP to local standard FastAPI",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "sharedRoleRead": {
+      "subscribers": 2,
+      "requests": 1
+    },
+    "roleCreateCatalog": true,
+    "authorizationPaging": {
+      "total": 3,
+      "pageSize": 1,
+      "distinctPage2": true
+    },
+    "incrementalGrant": true,
+    "fullReplacement": true
+  },
+  "cleanup": {
+    "users": 0,
+    "roles": 0,
+    "verifiedAbsent": false,
+    "failure": {
+      "name": "ValidationError",
+      "status": 401,
+      "message": "用户token不合法"
+    }
+  },
+  "failure": {
+    "stage": "role-rename-and-inactive-association",
+    "name": "Error",
+    "status": 0,
+    "message": "Timed out: inactive association stays visible"
+  },
+  "passed": false,
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/role/list": 7,
+    "GET /system/user/": 11,
+    "POST /system/role": 3,
+    "POST /system/user": 3,
+    "GET /system/user/list": 4,
+    "GET /system/role/authUser/allocatedList": 10,
+    "GET /system/role/authUser/unallocatedList": 6,
+    "GET /system/user/authRole/:id": 5,
+    "PUT /system/role/authUser/selectAll": 1,
+    "PUT /system/user/authRole": 1,
+    "PUT /system/role": 1,
+    "PUT /system/role/changeStatus": 1,
+    "POST /auth/logout": 1
+  }
+}

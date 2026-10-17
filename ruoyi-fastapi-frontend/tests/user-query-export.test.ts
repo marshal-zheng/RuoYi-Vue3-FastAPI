@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { defineComponent, h, nextTick, type App } from 'vue';
 import { flushPromises, mount } from '@vue/test-utils';
+import { createPinia } from 'pinia';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
@@ -14,18 +15,19 @@ const api = vi.hoisted(() => ({
   resetUserPwd: vi.fn(),
   confirm: vi.fn(),
   download: vi.fn(),
+  navigate: vi.fn(),
 }));
 vi.mock('@/api/system/user', () => api);
 vi.mock('@/store/modules/app', () => ({
   default: () => ({ device: 'desktop' }),
 }));
 vi.mock('@/utils/permission', () => ({ checkPermi: () => true }));
-vi.mock('vue-router', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+vi.mock('vue-router', () => ({ useRouter: () => ({ push: api.navigate }) }));
 vi.mock('@/views/system/user/components/UserFormDialog.vue', () => ({
-  default: {},
+  default: { render: () => null },
 }));
 vi.mock('@/views/system/user/components/UserImportDialog.vue', () => ({
-  default: {},
+  default: { render: () => null },
 }));
 
 const Layout = defineComponent({
@@ -51,10 +53,12 @@ const Tree = defineComponent({
   },
 });
 const mounted: ReturnType<typeof mount>[] = [];
+let pinia = createPinia();
 function editor() {
   const wrapper = mount(UserPage, {
     global: {
       plugins: [
+        pinia,
         [VueQueryPlugin, { queryClient }],
         (app: App) => {
           app.config.globalProperties.$modal = {
@@ -82,6 +86,10 @@ function editor() {
         DictSelect: true,
         ElTree: Tree,
         ElDatePicker: true,
+        ElTable: true,
+        ElTableColumn: true,
+        ElSwitch: true,
+        ZxMoreAction: true,
       },
     },
   });
@@ -103,6 +111,7 @@ const page = (name = 'server') => ({
 });
 beforeEach(() => {
   vi.resetAllMocks();
+  pinia = createPinia();
   endQuerySession();
   queryClient.clear();
   setQuerySession(1, ['admin'], ['system:user:list']);
@@ -256,5 +265,51 @@ describe('user native query and submitted filter ownership', () => {
       page: 1,
       pageSize: 10,
     });
+  });
+});
+
+describe('user authorization return state', () => {
+  it('restores submitted filters and page after the list remounts, without restoring unsent edits', async () => {
+    const before = editor();
+    await flushPromises();
+    Object.assign(before.state.draft, {
+      userName: ' selected ',
+      dateRange: ['2026-10-01', '2026-10-17'],
+    });
+    before.state.handleNodeClick({ id: 103 });
+    await flushPromises();
+    before.grid().vm.$emit('page-change', { page: 2, size: 10 });
+    await flushPromises();
+    before.state.draft.userName = 'unsent';
+    before.state.handleAuthRole({ userId: 42 });
+    expect(api.navigate).toHaveBeenCalledWith('/system/user-auth/role/42');
+    before.wrapper.unmount();
+    const after = editor();
+    await flushPromises();
+    expect(after.grid().props('pagination').page).toBe(2);
+    expect(after.state.submitted).toEqual({
+      userName: 'selected',
+      deptId: 103,
+      beginTime: '2026-10-01',
+      endTime: '2026-10-17',
+    });
+    expect(after.state.draft.userName).toBe('selected');
+    expect(after.state.draft.dateRange).toEqual(['2026-10-01', '2026-10-17']);
+    after.state.handleExport();
+    expect(api.download.mock.calls.at(-1)?.[1]).toEqual(after.state.submitted);
+  });
+
+  it('does not carry a previous session list snapshot into a new account', async () => {
+    const before = editor();
+    await flushPromises();
+    before.state.draft.userName = 'old-scope';
+    before.state.onSearch();
+    before.state.handleAuthRole({ userId: 42 });
+    before.wrapper.unmount();
+    setQuerySession(9, [], []);
+    const after = editor();
+    await flushPromises();
+    expect(after.state.submitted).toEqual({});
+    expect(after.grid().props('pagination').page).toBe(1);
   });
 });

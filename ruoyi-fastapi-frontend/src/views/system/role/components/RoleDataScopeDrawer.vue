@@ -7,6 +7,17 @@
     :loading="drawerLoading"
     :ok-disabled="drawerLoading || !!loadError || drawer.state.disabled"
   >
+    <span v-if="editorQuery.isPaused.value || deptQuery.isPaused.value" aria-live="polite">
+      数据权限读取等待网络连接
+    </span>
+    <el-alert
+      v-else-if="!loadError && (editorQuery.error.value || deptQuery.error.value)"
+      title="数据权限刷新失败，保留编辑草稿"
+      type="error"
+      :closable="false"
+    >
+      <el-button link type="primary" @click="retryResources">重试读取</el-button>
+    </el-alert>
     <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
@@ -58,10 +69,18 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref, computed, nextTick, shallowRef, watch } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 import { useEditorRead } from '@/utils/editor-read';
 import { useDrawer } from '@zxio/zxui/hooks';
-import { getRole, dataScope, deptTreeSelect } from '@/api/system/role';
+import {
+  captureRoleCommand,
+  roleCommands,
+  roleDetailOptions,
+  roleDeptOptions,
+  readRoleDataScopeEditor,
+} from '@/queries/system/role';
+import { queryScope, requireQueryScope } from '@/queries/context';
 
 const emit = defineEmits(['success']);
 
@@ -69,7 +88,8 @@ const deptRef = ref();
 const deptOptions = ref([]);
 const deptExpand = ref(true);
 const deptNodeAll = ref(false);
-let requestedId;
+const requestedId = ref();
+const editorScope = shallowRef(null);
 
 /** 数据范围选项 */
 const dataScopeOptions = [
@@ -93,14 +113,25 @@ const drawer = useDrawer({
     deptIds: [],
   }),
   async onConfirm() {
-    if (drawerLoading.value || loadError.value) return false;
+    const scope = editorScope.value;
+    const data = drawer.state.data;
+    if (
+      !drawer.state.visible ||
+      !scope ||
+      scope !== queryScope.value ||
+      drawerLoading.value ||
+      loadError.value
+    )
+      return false;
     const submitData = {
       roleId: drawer.state.data.roleId,
       dataScope: drawer.state.data.dataScope,
       deptCheckStrictly: drawer.state.data.deptCheckStrictly,
       deptIds: getDeptAllCheckedKeys(),
     };
-    await dataScope(submitData);
+    await roleCommands.updateDataScope(captureRoleCommand(submitData, scope));
+    if (scope !== queryScope.value || drawer.state.data !== data || !drawer.state.visible)
+      return false;
     emit('success');
     return true;
   },
@@ -112,6 +143,20 @@ const {
   run: runRead,
   cancel: cancelRead,
 } = useEditorRead(() => drawer.state.visible);
+const activeScope = computed(() =>
+  drawer.state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+);
+const editorQuery = useQuery(() => roleDetailOptions(activeScope.value, requestedId.value));
+const deptQuery = useQuery(() => roleDeptOptions(activeScope.value, requestedId.value));
+watch(
+  queryScope,
+  () => {
+    cancelRead();
+    editorScope.value = null;
+    drawer.state.visible = false;
+  },
+  { flush: 'sync' }
+);
 
 /** 获取所有选中的部门节点 */
 function getDeptAllCheckedKeys() {
@@ -151,18 +196,23 @@ function resetDeptTree() {
 
 /** 打开抽屉 */
 function openDrawer(roleId) {
-  requestedId = roleId;
+  const scope = requireQueryScope();
+  editorScope.value = scope;
+  requestedId.value = roleId;
   return runRead(async (read) => {
     drawer.open({ roleId });
     drawer.setDisabled(true);
     resetDeptTree();
     deptOptions.value = [];
-    const config = { signal: read.signal, silentError: true };
-    const [roleData, deptRes] = await Promise.all([
-      getRole(roleId, config),
-      deptTreeSelect(roleId, config),
-    ]);
-    if (!read.isCurrent()) return;
+    let response;
+    try {
+      response = await readRoleDataScopeEditor(scope, roleId, read.signal);
+    } catch (error) {
+      if (!read.isCurrent()) return;
+      throw error;
+    }
+    if (!read.isCurrent() || scope !== queryScope.value) return;
+    const { data: roleData, depts: deptRes } = response;
     deptOptions.value = deptRes.depts || [];
     drawer.open({
       roleId: roleData.roleId,
@@ -184,9 +234,14 @@ function closeDrawer() {
   return drawer.close();
 }
 function handleRetry() {
-  return openDrawer(requestedId).catch(() => {
+  return openDrawer(requestedId.value).catch(() => {
     /* 当前读取已负责反馈。 */
   });
+}
+
+function retryResources() {
+  if (editorQuery.isEnabled.value) void editorQuery.refetch({ cancelRefetch: false });
+  if (deptQuery.isEnabled.value) void deptQuery.refetch({ cancelRefetch: false });
 }
 
 defineExpose({ open: openDrawer, close: closeDrawer });

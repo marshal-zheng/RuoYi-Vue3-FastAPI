@@ -1,6 +1,8 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
+import { VueQueryPlugin } from '@tanstack/vue-query';
+import { queryClient } from '@/queries/client';
+import { endQuerySession, setQuerySession } from '@/queries/context';
 import { nextTick } from 'vue';
 import { ElTree } from 'element-plus';
 import RoleFormDrawer from '@/views/system/role/components/RoleFormDrawer.vue';
@@ -23,11 +25,8 @@ const slotStub = { inheritAttrs: false, template: '<div><slot /></div>' };
 const menuItems: MenuTreeNode[] = [
   { id: 1, label: '系统管理', children: [{ id: 2, label: '用户管理' }] },
 ];
-const queryClients: QueryClient[] = [];
 
 function mountDrawer() {
-  const queryClient = new QueryClient();
-  queryClients.push(queryClient);
   return mount(RoleFormDrawer, {
     global: {
       plugins: [[VueQueryPlugin, { queryClient }]],
@@ -70,9 +69,16 @@ function createDrawer() {
   return { open, tree, drawer };
 }
 
+beforeEach(() => {
+  endQuerySession();
+  queryClient.clear();
+  setQuerySession(1, [], []);
+});
+
 afterEach(() => {
   wrappers.splice(0).forEach((wrapper) => wrapper.unmount());
-  queryClients.splice(0).forEach((client) => client.clear());
+  endQuerySession();
+  queryClient.clear();
 });
 
 describe('RoleFormDrawer menu loading', () => {

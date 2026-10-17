@@ -1,0 +1,8 @@
+{
+  "marker": "codex_ra_vcbr5vn",
+  "reason": "Recovery after concurrent admin session replacement",
+  "usersDeleted": 3,
+  "rolesDeleted": 3,
+  "verifiedAbsent": true,
+  "ownSessionEnded": true
+}

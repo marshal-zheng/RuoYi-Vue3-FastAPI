@@ -219,7 +219,7 @@ export function uploadAvatar(data: FormData, options?: RequestOptions) {
 // 查询授权角色
 export function getAuthRole(
   userId: number | string,
-  config?: Pick<ExtendedAxiosRequestConfig, 'requestOptions'>
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'requestOptions'>
 ) {
   return request<UserRoleResponseModel>({
     ...config,

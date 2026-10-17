@@ -7,6 +7,17 @@
     :loading="drawerLoading"
     :ok-disabled="drawerLoading || !!loadError || drawer.state.disabled"
   >
+    <span v-if="editorQuery.isPaused.value || menuQuery.isPaused.value" aria-live="polite">
+      角色权限读取等待网络连接
+    </span>
+    <el-alert
+      v-else-if="!loadError && (editorQuery.error.value || menuQuery.error.value)"
+      title="角色权限刷新失败，保留编辑草稿"
+      type="error"
+      :closable="false"
+    >
+      <el-button link type="primary" @click="retryResources">重试读取</el-button>
+    </el-alert>
     <el-alert v-if="loadError" :title="loadError" type="error" :closable="false" show-icon>
       <el-button link type="primary" @click="handleRetry">重试</el-button>
     </el-alert>
@@ -85,12 +96,19 @@
 </template>
 
 <script setup>
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, nextTick, shallowRef, watch } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
 import { useDrawer } from '@zxio/zxui/hooks';
-import { addRole, getRole, updateRole } from '@/api/system/role';
-import { roleMenuTreeselect, treeselect as menuTreeselect } from '@/api/system/menu';
+import {
+  captureRoleCommand,
+  roleCommands,
+  roleDetailOptions,
+  roleMenuOptions,
+  readRoleEditor,
+} from '@/queries/system/role';
+import { queryScope, requireQueryScope } from '@/queries/context';
 
 const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 
@@ -101,7 +119,8 @@ const menuRef = ref();
 const menuOptions = ref([]);
 const menuExpand = ref(false);
 const menuNodeAll = ref(false);
-let requestedId;
+const requestedId = ref();
+const editorScope = shallowRef(null);
 
 const menuEmptyText = computed(() => {
   if (drawerLoading.value) return '加载中，请稍候';
@@ -133,7 +152,16 @@ const drawer = useDrawer({
     remark: '',
   }),
   async onConfirm() {
-    if (drawerLoading.value || loadError.value) return false;
+    const scope = editorScope.value;
+    const data = drawer.state.data;
+    if (
+      !drawer.state.visible ||
+      !scope ||
+      scope !== queryScope.value ||
+      drawerLoading.value ||
+      loadError.value
+    )
+      return false;
     const submitData = {
       roleName: drawer.state.data.roleName,
       roleKey: drawer.state.data.roleKey,
@@ -144,10 +172,14 @@ const drawer = useDrawer({
       menuIds: getMenuAllCheckedKeys(),
     };
     if (drawer.state.data.roleId) {
-      await updateRole({ ...submitData, roleId: drawer.state.data.roleId });
+      await roleCommands.updateRole(
+        captureRoleCommand({ ...submitData, roleId: data.roleId }, scope)
+      );
     } else {
-      await addRole(submitData);
+      await roleCommands.createRole(captureRoleCommand(submitData, scope));
     }
+    if (scope !== queryScope.value || drawer.state.data !== data || !drawer.state.visible)
+      return false;
     emit('success');
     return true;
   },
@@ -161,6 +193,20 @@ const {
   run: runRead,
   cancel: cancelRead,
 } = useEditorRead(() => drawer.state.visible);
+const activeScope = computed(() =>
+  drawer.state.visible && editorScope.value === queryScope.value ? editorScope.value : null
+);
+const editorQuery = useQuery(() => roleDetailOptions(activeScope.value, requestedId.value));
+const menuQuery = useQuery(() => roleMenuOptions(activeScope.value, requestedId.value));
+watch(
+  queryScope,
+  () => {
+    cancelRead();
+    editorScope.value = null;
+    drawer.state.visible = false;
+  },
+  { flush: 'sync' }
+);
 
 /** 获取所有选中的菜单节点 */
 function getMenuAllCheckedKeys() {
@@ -193,19 +239,24 @@ function resetMenuTree() {
 
 /** 打开抽屉 */
 function openDrawer(roleId) {
-  requestedId = roleId;
+  const scope = requireQueryScope();
+  editorScope.value = scope;
+  requestedId.value = roleId;
   return runRead(async (read) => {
     drawer.open(roleId ? { roleId } : undefined);
     drawer.setDisabled(true);
     resetMenuTree();
     menuOptions.value = [];
-    const config = { signal: read.signal, silentError: true };
-    if (roleId) {
-      const [roleData, menuRes] = await Promise.all([
-        getRole(roleId, config),
-        roleMenuTreeselect(roleId, config),
-      ]);
+    let response;
+    try {
+      response = await readRoleEditor(scope, roleId, read.signal);
+    } catch (error) {
       if (!read.isCurrent()) return;
+      throw error;
+    }
+    if (!read.isCurrent() || scope !== queryScope.value) return;
+    const { data: roleData, menus: menuRes } = response;
+    if (roleId) {
       menuOptions.value = menuRes.menus || [];
       drawer.open({
         roleId: roleData.roleId,
@@ -222,9 +273,7 @@ function openDrawer(roleId) {
       if (!read.isCurrent()) return;
       (menuRes.checkedKeys || []).forEach((id) => menuRef.value?.setChecked(id, true, false));
     } else {
-      const menuRes = await menuTreeselect(config);
-      if (!read.isCurrent()) return;
-      menuOptions.value = menuRes.items;
+      menuOptions.value = menuRes.menus;
     }
     drawer.setDisabled(false);
   });
@@ -234,9 +283,14 @@ function closeDrawer() {
   return drawer.close();
 }
 function handleRetry() {
-  return openDrawer(requestedId).catch(() => {
+  return openDrawer(requestedId.value).catch(() => {
     /* 当前读取已负责反馈。 */
   });
+}
+
+function retryResources() {
+  if (editorQuery.isEnabled.value) void editorQuery.refetch({ cancelRefetch: false });
+  if (menuQuery.isEnabled.value) void menuQuery.refetch({ cancelRefetch: false });
 }
 
 defineExpose({ open: openDrawer, close: closeDrawer });

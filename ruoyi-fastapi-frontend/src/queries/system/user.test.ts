@@ -26,12 +26,15 @@ vi.mock('@/api/system/user', () => ({
   changeUserStatus: vi.fn(),
   resetUserPwd: vi.fn(),
   updateAuthRole: vi.fn(),
+  getAuthRole: vi.fn(),
   updateUserProfile: vi.fn(),
   updateUserPwd: vi.fn(),
   uploadAvatar: vi.fn(),
   importUserExcel: vi.fn(),
 }));
 vi.mock('@/api/system/role', () => ({
+  allocatedUserList: vi.fn(),
+  unallocatedUserList: vi.fn(),
   authUserCancel: vi.fn(),
   authUserCancelAll: vi.fn(),
   authUserSelectAll: vi.fn(),
@@ -46,7 +49,13 @@ const page = (userName = 'before') => ({
   page: 1,
   pageSize: 10,
 });
-const detail = () => ({ data: page().items[0], posts: [], roles: [], postIds: [3], roleIds: [2] });
+const detail = () => ({
+  data: page().items[0],
+  posts: [],
+  roles: [],
+  postIds: [3],
+  roleIds: [2],
+});
 beforeEach(() => {
   endQuerySession();
   queryClient.clear();
@@ -98,7 +107,9 @@ describe('public user resource', () => {
     );
     expect(user.normalizeUserFilters({ dateRange: null, status: '' })).toEqual({});
     expect(unref(user.userListOptions(null, {})).queryFn).toBe(skipToken);
-    vi.mocked(api.deptTreeSelect).mockResolvedValue({ items: [{ id: 1, label: '研发' }] });
+    vi.mocked(api.deptTreeSelect).mockResolvedValue({
+      items: [{ id: 1, label: '研发' }],
+    });
     expect(await queryClient.fetchQuery(userDeptTreeOptions(scope))).toEqual([
       { id: 1, label: '研发' },
     ]);
@@ -241,7 +252,11 @@ describe('public user resource', () => {
       const key = [...user.userKeys.all(scope), 'probe'];
       queryClient.setQueryData(key, []);
       const input = {
-        createUser: { userName: 'alice', nickName: 'Alice', password: 'Create123' },
+        createUser: {
+          userName: 'alice',
+          nickName: 'Alice',
+          password: 'Create123',
+        },
         updateUser: { userId: 7, nickName: 'Alice' },
         deleteUsers: [7, 8],
         changeStatus: { userId: 7, status: '1' },
@@ -250,7 +265,10 @@ describe('public user resource', () => {
         updateProfile: { nickName: 'Alice' },
         updatePassword: { oldPassword: 'Old123', newPassword: 'New123' },
         uploadAvatar: new FormData(),
-        importExcel: { file: new File(['excel'], 'users.xlsx'), updateSupport: false },
+        importExcel: {
+          file: new File(['excel'], 'users.xlsx'),
+          updateSupport: false,
+        },
       }[name];
       await (
         user.userCommands[name] as (
@@ -261,4 +279,75 @@ describe('public user resource', () => {
       expect(queryClient.getQueryCache().find({ queryKey: key })?.state.isInvalidated).toBe(true);
     }
   );
+});
+
+describe('bidirectional authorization reads', () => {
+  it('shares the complete user role snapshot and invalidates both directions after a write', async () => {
+    expect(userDomain).toHaveProperty('userAuthRoleOptions');
+    const scope = setQuerySession(1, [], []);
+    const response = {
+      user: page().items[0],
+      roles: [{ roleId: 2, flag: true }],
+    };
+    vi.mocked(api.getAuthRole).mockResolvedValue(response);
+    const options = userDomain.userAuthRoleOptions(scope, '7');
+    const [first, second] = await Promise.all([
+      queryClient.fetchQuery(options),
+      queryClient.fetchQuery(userDomain.userAuthRoleOptions(scope, 7)),
+    ]);
+    expect(first).toEqual(response);
+    expect(second).toEqual(response);
+    expect(api.getAuthRole).toHaveBeenCalledTimes(1);
+    expect(isQueryRequest(vi.mocked(api.getAuthRole).mock.calls[0][1]?.requestOptions)).toBe(true);
+    const list = userDomain.roleUsersOptions(scope, 2, 'allocated');
+    queryClient.setQueryData(list.queryKey, page());
+    await userDomain.userCommands.assignRoles(
+      userDomain.captureUserCommand({ userId: 7, roleIds: [] })
+    );
+    await flushPromises();
+    for (const key of [options.queryKey, list.queryKey])
+      expect(queryClient.getQueryCache().find({ queryKey: key })?.state.isInvalidated).toBe(true);
+    expect(unref(userDomain.userAuthRoleOptions(scope, 0)).enabled).toBe(false);
+  });
+
+  it('uses allocation, role and normalized paging/search snapshots as resource identity', async () => {
+    expect(userDomain).toHaveProperty('roleUsersOptions');
+    const scope = setQuerySession(1, [], []);
+    const input = {
+      userName: ' alice ',
+      phonenumber: ' 138 ',
+      page: '2',
+      pageSize: '20',
+    };
+    const options = userDomain.roleUsersOptions(scope, '2', 'unallocated', input);
+    expect(unref(options).staleTime).toBe(0);
+    expect(unref(userDomain.roleUsersOptions(scope, '2', 'allocated', input)).staleTime).toBe(
+      30_000
+    );
+    input.userName = 'later';
+    input.page = '3';
+    vi.mocked(roleApi.unallocatedUserList).mockResolvedValue(page());
+    await queryClient.fetchQuery(options);
+    expect(roleApi.unallocatedUserList).toHaveBeenCalledWith(
+      {
+        roleId: 2,
+        userName: 'alice',
+        phonenumber: '138',
+        page: 2,
+        pageSize: 20,
+      },
+      expect.objectContaining({ signal: expect.any(AbortSignal) })
+    );
+    expect(isQueryRequest(vi.mocked(roleApi.unallocatedUserList).mock.calls[0][1]?.options)).toBe(
+      true
+    );
+    expect(options.queryKey).not.toEqual(
+      userDomain.roleUsersOptions(scope, 2, 'allocated', input).queryKey
+    );
+    vi.mocked(roleApi.allocatedUserList).mockRejectedValue(new Error('read failed'));
+    await expect(
+      queryClient.fetchQuery(userDomain.roleUsersOptions(scope, 2, 'allocated'))
+    ).rejects.toThrow('read failed');
+    expect(unref(userDomain.roleUsersOptions(null, 2, 'allocated')).enabled).toBe(false);
+  });
 });

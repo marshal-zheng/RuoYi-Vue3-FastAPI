@@ -1,0 +1,41 @@
+{
+  "timestamp": "2026-10-17T11:39:23.594Z",
+  "marker": "codex_ra_vcbqdze",
+  "mode": "installed",
+  "transport": "Real business commands/query options/useQuery/HTTP to local standard FastAPI",
+  "mocks": false,
+  "uiRendered": false,
+  "checks": {
+    "sharedRoleRead": {
+      "subscribers": 2,
+      "requests": 1
+    }
+  },
+  "cleanup": {
+    "users": 1,
+    "roles": 1,
+    "verifiedAbsent": true
+  },
+  "failure": {
+    "stage": "create-owned-fixtures",
+    "name": "Error",
+    "status": 0,
+    "message": "Created user missing identity"
+  },
+  "passed": false,
+  "ownSessionEnded": true,
+  "requestCounts": {
+    "GET /captchaImage": 1,
+    "POST /login": 1,
+    "GET /getInfo": 1,
+    "GET /system/role/list": 4,
+    "GET /system/user/": 2,
+    "POST /system/role": 1,
+    "POST /system/user": 1,
+    "GET /system/user/list": 2,
+    "PUT /system/user/authRole": 1,
+    "DELETE /system/user/:id": 1,
+    "DELETE /system/role/:id": 1,
+    "POST /auth/logout": 1
+  }
+}

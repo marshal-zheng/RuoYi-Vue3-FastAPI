@@ -1,0 +1,10 @@
+{
+  "ownedPidsAbsent": true,
+  "port18088Closed": true,
+  "ownedSocketsAbsent": true,
+  "finalCandidateDeltaFromRuntime": "RoleRepository new method return annotation List[RoleDO] -> list[RoleDO] only; no runtime behavior changed",
+  "removedOwnedSocketsAfterPidExit": [
+    "role-red.sock",
+    "role-green.sock"
+  ]
+}

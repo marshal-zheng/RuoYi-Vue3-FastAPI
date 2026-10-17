@@ -1,0 +1,9 @@
+{
+  "source": "local read-only MySQL observation",
+  "counts": {
+    "sys_role": 2,
+    "sys_menu": 94
+  },
+  "activeRoleOptionsRows": 1,
+  "activeRoleOptionsQueryMs": 1.407
+}

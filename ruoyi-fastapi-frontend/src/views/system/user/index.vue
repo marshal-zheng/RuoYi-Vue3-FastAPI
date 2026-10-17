@@ -57,6 +57,7 @@
               <div v-else-if="deptStatus.paused" role="status">部门等待网络连接</div>
               <el-tree
                 :data="deptOptions"
+                :current-node-key="submitted.deptId"
                 :props="{ label: 'label', children: 'children' }"
                 :expand-on-click-node="false"
                 :filter-node-method="filterNode"
@@ -254,6 +255,7 @@ import {
 import { copyUserDeptTree, userDeptTreeOptions } from '@/queries/system/dept';
 import { useOperation } from '@/utils/operation';
 import useAppStore from '@/store/modules/app';
+import { useSystemListNavigation } from '@/store/modules/system-list-navigation';
 import { checkPermi } from '@/utils/permission';
 import UserFormDialog from './components/UserFormDialog.vue';
 import UserImportDialog from './components/UserImportDialog.vue';
@@ -269,10 +271,17 @@ const ids = ref([]);
 const single = ref(true);
 const multiple = ref(true);
 const deptName = ref('');
-const draft = reactive({});
-const submitted = ref(normalizeUserFilters({}));
-const currentPage = ref(1);
-const pageSize = ref(10);
+const listNavigation = useSystemListNavigation();
+const restored = listNavigation.take('users');
+const submitted = ref(normalizeUserFilters(restored?.filters));
+const draft = reactive({
+  ...submitted.value,
+  ...(submitted.value.beginTime || submitted.value.endTime
+    ? { dateRange: [submitted.value.beginTime, submitted.value.endTime] }
+    : {}),
+});
+const currentPage = ref(restored?.page ?? 1);
+const pageSize = ref(restored?.size ?? 10);
 const emptyRows = Object.freeze([]);
 
 const userQuery = useQuery(() =>
@@ -417,6 +426,11 @@ function handleStatusChange(status, row) {
   return operation.run();
 }
 function handleAuthRole(row) {
+  listNavigation.remember('users', {
+    filters: submitted.value,
+    page: currentPage.value,
+    size: pageSize.value,
+  });
   router.push('/system/user-auth/role/' + row.userId);
 }
 const resetPasswordOperation = useOperation(async (scope, userId, userName) => {

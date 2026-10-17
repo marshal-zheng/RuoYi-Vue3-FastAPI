@@ -44,7 +44,9 @@ export function getMenu(
 }
 
 // 查询菜单下拉树结构
-export function treeselect(config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>) {
+export function treeselect(
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError' | 'requestOptions'>
+) {
   return request<HttpCollection<MenuTreeNode>>({
     ...config,
     url: '/system/menu/treeselect',
@@ -55,7 +57,7 @@ export function treeselect(config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 
 // 根据角色ID查询菜单下拉树结构
 export function roleMenuTreeselect(
   roleId: number | string,
-  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError' | 'requestOptions'>
 ) {
   return request<{ menus: MenuTreeNode[]; checkedKeys: number[] }>({
     ...config,

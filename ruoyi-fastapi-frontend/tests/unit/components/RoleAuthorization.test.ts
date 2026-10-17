@@ -1,9 +1,11 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { flushPromises, shallowMount } from '@vue/test-utils';
 import * as vue from 'vue';
+import { VueQueryPlugin } from '@tanstack/vue-query';
+import { useRoute } from 'vue-router';
 import type { ComponentCustomProperties } from 'vue';
 import { getAuthRole } from '@/api/system/user';
-import { unallocatedUserList } from '@/api/system/role';
+import { allocatedUserList, unallocatedUserList } from '@/api/system/role';
 import AuthRole from '@/views/system/user/authRole.vue';
 import AuthUser from '@/views/system/role/authUser.vue';
 import SelectUser from '@/views/system/role/selectUser.vue';
@@ -27,6 +29,11 @@ vi.mock('@/api/system/role', () => ({
   authUserCancel: api.revoke,
   authUserCancelAll: api.batch,
 }));
+vi.mock('vue-router', () => ({ useRoute: vi.fn() }));
+vi.mock('@/utils/permission', () => ({
+  checkPermi: vi.fn(() => true),
+  checkRole: vi.fn(() => true),
+}));
 const mounted: ReturnType<typeof shallowMount>[] = [];
 const confirm = vi.fn<() => Promise<unknown>>();
 function page(component: typeof AuthRole, props = {}) {
@@ -35,6 +42,7 @@ function page(component: typeof AuthRole, props = {}) {
     {
       props,
       global: {
+        plugins: [[VueQueryPlugin, { queryClient }]],
         config: {
           globalProperties: {
             useDict: () => ({ sys_normal_disable: vue.ref([]) }),
@@ -46,7 +54,20 @@ function page(component: typeof AuthRole, props = {}) {
     }
   );
   mounted.push(wrapper);
-  return (wrapper.vm as any).$.setupState;
+  return (
+    wrapper.vm as unknown as {
+      $: {
+        setupState: {
+          cancelAuthUser(row: { userId: number; userName: string }): Promise<void>;
+          cancelAuthUserAll(): Promise<void>;
+          handleSelectionChange(rows: { roleId?: number; userId?: number }[]): void;
+          handleSave(): Promise<void>;
+          show(): void;
+          handleSelectUser(): Promise<void>;
+        };
+      };
+    }
+  ).$.setupState;
 }
 beforeEach(() => {
   queryClient.clear();
@@ -55,16 +76,22 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.mocked(getAuthRole).mockResolvedValue({
     user: { userId: 42 },
-    roles: [],
-  } as any);
+    roles: [{ roleId: 20, roleName: 'staff' }],
+  } as never);
+  vi.mocked(allocatedUserList).mockResolvedValue({
+    items: [],
+    total: 0,
+  } as never);
   vi.mocked(unallocatedUserList).mockResolvedValue({
     items: [],
     total: 0,
-  } as any);
+  } as never);
   for (const f of Object.values(api)) f.mockResolvedValue(null);
   for (const key of ['ref', 'reactive', 'getCurrentInstance', 'nextTick'])
     vi.stubGlobal(key, vue[key as keyof typeof vue]);
-  vi.stubGlobal('useRoute', () => ({ params: { userId: '42', roleId: '20' } }));
+  vi.mocked(useRoute).mockReturnValue({
+    params: { userId: '42', roleId: '20' },
+  } as never);
 });
 afterEach(() => {
   mounted.splice(0).forEach((w) => w.unmount());
@@ -93,10 +120,16 @@ it('user role page submits full selection and an explicit empty array', async ()
   await flushPromises();
   s.handleSelectionChange([{ roleId: 20 }]);
   await s.handleSave();
-  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({ userId: 42, roleIds: [20] });
+  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({
+    userId: 42,
+    roleIds: [20],
+  });
   s.handleSelectionChange([]);
   await s.handleSave();
-  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({ userId: 42, roleIds: [] });
+  expect(api.assign.mock.calls.at(-1)?.[0]).toEqual({
+    userId: 42,
+    roleIds: [],
+  });
 });
 it('role page revokes only the selected relation(s) with numeric route ID', async () => {
   const s = page(AuthUser);

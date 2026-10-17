@@ -59,6 +59,13 @@ export const userKeys = {
   details: (scope: QueryScope) => [...userKeys.all(scope), 'detail'] as const,
   detail: (scope: QueryScope, id: number) => [...userKeys.details(scope), id] as const,
   formOptions: (scope: QueryScope) => [...userKeys.all(scope), 'form-options'] as const,
+  authRole: (scope: QueryScope, id: number) => [...userKeys.all(scope), 'auth-role', id] as const,
+  roleUsers: (
+    scope: QueryScope,
+    roleId: number,
+    allocation: 'allocated' | 'unallocated',
+    params: Readonly<Record<string, unknown>>
+  ) => [...userKeys.all(scope), 'role-users', roleId, allocation, params] as const,
 };
 
 export function userListOptions(
@@ -96,7 +103,7 @@ export function userDetailOptions(scope: QueryScope | null, input: unknown) {
         }
       : skipToken,
     enabled: ready,
-    // This response embeds role/post catalogs whose writes are not Query resources yet.
+    // Post catalog writes remain outside Query; every opening reads current embedded catalogs.
     staleTime: 0,
     retry: false,
   });
@@ -118,6 +125,72 @@ export function userCreateOptions(scope: QueryScope | null) {
     enabled: scope !== null,
     // Each editor opening waits for current role/post catalogs; concurrent openings still share.
     staleTime: 0,
+    retry: false,
+  });
+}
+
+/** One server snapshot owns both the user and the complete selectable role catalog. */
+export function userAuthRoleOptions(scope: QueryScope | null, input: unknown) {
+  const id = Number(input);
+  const ready = scope !== null && Number.isSafeInteger(id) && id > 0;
+  return queryOptions({
+    queryKey: ready
+      ? userKeys.authRole(scope, id)
+      : (['ruoyi', scope?.key ?? 'disabled', 'users', 'auth-role', 0] as const),
+    queryFn: ready
+      ? ({ signal }) => {
+          const context = queryRequest(signal, scopeRequestOptions(scope));
+          return api.getAuthRole(id, {
+            signal: context.signal,
+            requestOptions: context.options,
+          });
+        }
+      : skipToken,
+    enabled: ready,
+    staleTime: 0,
+    retry: false,
+  });
+}
+
+export function roleUsersOptions(
+  scope: QueryScope | null,
+  inputRoleId: unknown,
+  allocation: 'allocated' | 'unallocated',
+  input: Readonly<Record<string, unknown>> = {}
+) {
+  const roleId = Number(inputRoleId);
+  const ready = scope !== null && Number.isSafeInteger(roleId) && roleId > 0;
+  const params = {
+    ...normalizeUserFilters({
+      userName: input.userName,
+      phonenumber: input.phonenumber,
+    }),
+    roleId,
+    page: positiveInteger(input.page, 1),
+    pageSize: positiveInteger(input.pageSize, 10),
+  };
+  return queryOptions({
+    queryKey: ready
+      ? userKeys.roleUsers(scope, roleId, allocation, params)
+      : ([
+          'ruoyi',
+          scope?.key ?? 'disabled',
+          'users',
+          'role-users',
+          0,
+          allocation,
+          params,
+        ] as const),
+    queryFn: ready
+      ? ({ signal }) =>
+          (allocation === 'allocated' ? roleApi.allocatedUserList : roleApi.unallocatedUserList)(
+            params,
+            queryRequest(signal, scopeRequestOptions(scope))
+          )
+      : skipToken,
+    enabled: ready,
+    // Each selector opening checks current eligibility; allocated lists share recent reads.
+    staleTime: allocation === 'unallocated' ? 0 : 30_000,
     retry: false,
   });
 }

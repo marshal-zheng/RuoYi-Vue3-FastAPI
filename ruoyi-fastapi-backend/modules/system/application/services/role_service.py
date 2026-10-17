@@ -3,7 +3,6 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.constant import CommonConstant
-from config.env import CacheConfig
 from config.error_codes import ErrorCode
 from exceptions.exception import PermissionException, ResourceConflictException, ResourceNotFoundException, ValidationException
 from module_admin.entity.do.enums import StatusEnum
@@ -15,7 +14,6 @@ from ports import IRoleDeptRepository, IRoleMenuRepository, IRoleRepository, IUs
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.page_util import PageResponseModel
-from utils.query_cache import get_query_cache
 from utils.transaction_manager import transactional
 
 
@@ -44,19 +42,8 @@ class RoleService:
 
         :return: 角色列表不分页信息对象
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key('role:select', {})
-
-        async def _load():
-            role_list_result = await self.role_repo.find_all_active()
-            return CamelCaseUtil.transform_result(role_list_result)
-
-        return await cache.get_or_set(
-            cache_key,
-            _load,
-            CacheConfig.query_cache_default_ttl,
-            CacheConfig.query_cache_lock_enabled,
-        )
+        role_list_result = await self.role_repo.find_all_active()
+        return CamelCaseUtil.transform_result(role_list_result)
 
     async def get_role_dept_tree_services(self, role_id: int):
         """
@@ -78,28 +65,6 @@ class RoleService:
         :param is_page: 是否开启分页
         :return: 角色列表信息对象
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key(
-            'role:list',
-            {
-                'page': query_object.page if is_page else 1,
-                'pageSize': query_object.page_size if is_page else 10000,
-                'role_id': query_object.role_id,
-                'role_name': query_object.role_name,
-                'role_key': query_object.role_key,
-                'status': query_object.status,
-                'begin_time': query_object.begin_time,
-                'end_time': query_object.end_time,
-                'data_scope': str(data_scope_sql),
-                'is_page': is_page,
-            },
-        )
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            if is_page:
-                return PageResponseModel(**cached)
-            return cached
-
         if is_page:
             role_list_result = await self.role_repo.paginate_with_filters(
                 page=query_object.page,
@@ -126,10 +91,6 @@ class RoleService:
             )
             role_list_result = role_list_result.items if hasattr(role_list_result, 'items') else role_list_result
 
-        if is_page:
-            await cache.set(cache_key, role_list_result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
-        else:
-            await cache.set(cache_key, role_list_result, CacheConfig.query_cache_default_ttl)
         return role_list_result
 
     async def check_role_allowed_services(self, check_role: RoleModel):
@@ -226,7 +187,6 @@ class RoleService:
             for menu in page_object.menu_ids:
                 db_role_menu = RoleMenuDO(role_id=role_id, menu_id=menu)
                 await self.role_menu_repo.add(db_role_menu)
-        await self._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='新增成功', result={'roleId': role_id})
 
     @transactional()
@@ -276,7 +236,6 @@ class RoleService:
                 for menu in page_object.menu_ids:
                     db_role_menu = RoleMenuDO(role_id=page_object.role_id, menu_id=menu)
                     await self.role_menu_repo.add(db_role_menu)
-        await self._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -307,7 +266,6 @@ class RoleService:
             for dept in page_object.dept_ids:
                 db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
                 await self.role_dept_repo.add(db_role_dept)
-        await self._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='分配成功')
 
     @transactional()
@@ -338,7 +296,6 @@ class RoleService:
             await self.role_menu_repo.delete_by_role_id(role_id_value)
             await self.role_dept_repo.delete_by_role_id(role_id_value)
             await self.role_repo.soft_delete(role_id_value, page_object.update_by)
-        await self._invalidate_role_cache()
         return CrudResponseModel(is_success=True, message='删除成功')
 
     async def role_detail_services(self, role_id: int):
@@ -348,27 +305,12 @@ class RoleService:
         :param role_id: 角色id
         :return: 角色id对应的信息
         """
-        cache = get_query_cache()
-        cache_key = cache.build_key('role:detail', {'role_id': role_id})
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return RoleModel(**cached)
-
         role = await self.role_repo.find_active_by_id(role_id)
         if role:
             result = RoleModel(**CamelCaseUtil.transform_result(role))
         else:
             result = RoleModel(**{})
-        await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
         return result
-
-    @staticmethod
-    async def _invalidate_role_cache():
-        cache = get_query_cache()
-        await cache.delete_pattern(f'{cache.key_prefix}:role:*')
-        await cache.delete_pattern(f'{cache.key_prefix}:menu:role_tree:*')
-        await cache.delete_pattern(f'{cache.key_prefix}:menu:tree:*')
-        await cache.delete_pattern(f'{cache.key_prefix}:menu:list:*')
 
     @staticmethod
     async def export_role_list_services(role_list: List):

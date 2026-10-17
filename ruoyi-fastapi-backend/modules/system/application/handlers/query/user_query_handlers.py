@@ -201,6 +201,10 @@ class GetUserAuthRoleQueryHandler(IQueryHandler[GetUserAuthRoleQuery, UserRoleRe
         self._user_service = user_service
 
     async def handle(self, request: GetUserAuthRoleQuery) -> UserRoleResponseReadModel:
+        if request.require_scope_check:
+            await self._user_service.check_user_data_scope_services(
+                request.query_db, request.user_id, request.data_scope_sql
+            )
         query = UserRoleQueryModel(userId=request.user_id)
         auth_role_result = await self._user_service.get_user_role_allocated_list_services(request.query_db, query)
 

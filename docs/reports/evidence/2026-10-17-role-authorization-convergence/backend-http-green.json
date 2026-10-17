@@ -1,0 +1,117 @@
+{
+  "timestamp": "2026-10-17T11:41:44Z",
+  "expectation": "green",
+  "marker": "cqx_a3c947",
+  "realHTTP": true,
+  "realMySQL": true,
+  "realRedis": true,
+  "computerUse": false,
+  "port": 18088,
+  "owned": {
+    "roles": [
+      62,
+      63,
+      64
+    ],
+    "users": [
+      94,
+      95
+    ],
+    "depts": [
+      195,
+      196
+    ]
+  },
+  "checks": {
+    "role_list": {
+      "old": "cqx_a3c947_probe_v1",
+      "fresh": "cqx_a3c947_probe_v2",
+      "committedRoleName": "cqx_a3c947_probe_v2",
+      "expectedOld": "cqx_a3c947_probe_v1",
+      "expectedNew": "cqx_a3c947_probe_v2"
+    },
+    "role_detail": {
+      "old": "cqx_a3c947_probe_v2",
+      "fresh": "cqx_a3c947_probe_v3",
+      "committedRoleName": "cqx_a3c947_probe_v3",
+      "expectedOld": "cqx_a3c947_probe_v2",
+      "expectedNew": "cqx_a3c947_probe_v3"
+    },
+    "role_menu_tree": {
+      "old": [],
+      "fresh": [
+        101
+      ],
+      "committedRoleName": "cqx_a3c947_probe_v3",
+      "expectedOld": [],
+      "expectedNew": [
+        101
+      ]
+    },
+    "scopeIsolation": {
+      "actual": [
+        [
+          63
+        ],
+        [
+          64
+        ]
+      ],
+      "expected": [
+        [
+          63
+        ],
+        [
+          64
+        ]
+      ]
+    },
+    "authorizationReadScope": {
+      "http": 403
+    },
+    "assignedDisabledVisible": true
+  },
+  "cleanup": {
+    "activeOwnedCounts": {
+      "sys_user": 0,
+      "sys_role": 0,
+      "sys_dept": 0
+    },
+    "verifiedAbsent": true,
+    "adminSessionEnded": true
+  },
+  "passed": true,
+  "cacheCleanup": {
+    "ownedKeys": 0
+  },
+  "controlState": {
+    "armed": null,
+    "calls": {
+      "codex_role_query_cqx_a3c947_role_list:role_list": 1,
+      "codex_role_query_cqx_a3c947_role_list_fresh:role_list": 1,
+      "codex_role_query_cqx_a3c947_role_detail:role_detail": 1,
+      "codex_role_query_cqx_a3c947_role_detail_fresh:role_detail": 1,
+      "codex_role_query_cqx_a3c947_role_menu_tree:role_detail": 1,
+      "codex_role_query_cqx_a3c947_role_menu_tree:role_menu": 1,
+      "codex_role_query_cqx_a3c947_role_menu_tree_fresh:role_detail": 1,
+      "codex_role_query_cqx_a3c947_role_menu_tree_fresh:role_menu": 1
+    },
+    "events": [
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_a3c947_role_list",
+        "method": "role_list"
+      },
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_a3c947_role_detail",
+        "method": "role_detail"
+      },
+      {
+        "event": "repository_snapshot_loaded",
+        "trace": "codex_role_query_cqx_a3c947_role_menu_tree",
+        "method": "role_menu"
+      }
+    ]
+  }
+}

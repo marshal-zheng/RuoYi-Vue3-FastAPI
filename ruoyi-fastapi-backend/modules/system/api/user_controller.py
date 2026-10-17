@@ -576,11 +576,15 @@ async def get_system_allocated_role_list(
     request: Request,
     user_id: int,
     query_db: AsyncSession = Depends(get_db),
+    current_user: CurrentUserModel = Depends(get_current_user),
+    data_scope_sql: str = Depends(GetDataScope('UserDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
     auth_role_query = GetUserAuthRoleQuery(
         query_db=query_db,
         user_id=user_id,
+        data_scope_sql=data_scope_sql,
+        require_scope_check=not current_user.user.admin,
         trace_id=request.headers.get('x-trace-id'),
         request_id=request.headers.get('x-request-id'),
     )

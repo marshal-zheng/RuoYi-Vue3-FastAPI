@@ -5,7 +5,7 @@
 from datetime import datetime, time
 from typing import Any, Dict, List, Optional
 
-from sqlalchemy import and_, desc, func, select, update
+from sqlalchemy import and_, desc, func, or_, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.entity.do.role_do import RoleDO, RoleMenuDO
@@ -100,6 +100,23 @@ class RoleRepository(BaseRepository[RoleDO]):
         result = await self.db.execute(stmt)
         return result.scalars().all()
     
+    async def find_for_user_authorization(self, user_id: int) -> list[RoleDO]:
+        """Active choices plus all existing assignments, including disabled and admin roles."""
+        assigned = select(UserRoleDO.role_id).where(UserRoleDO.user_id == user_id)
+        stmt = (
+            select(RoleDO)
+            .where(
+                not_deleted(RoleDO.del_flag),
+                or_(
+                    and_(RoleDO.status == StatusEnum.NORMAL.value, RoleDO.role_id != 1),
+                    RoleDO.role_id.in_(assigned),
+                ),
+            )
+            .order_by(RoleDO.role_sort, RoleDO.role_id)
+        )
+        result = await self.db.execute(stmt)
+        return result.scalars().all()
+
     async def paginate_with_filters(
         self,
         page: int,

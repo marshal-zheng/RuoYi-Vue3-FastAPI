@@ -49,29 +49,12 @@ class MenuService:
                 field='current_user',
             )
 
-        cache = get_query_cache()
         is_admin = bool(getattr(current_user.user, 'admin', False)) or 'admin' in (current_user.roles or [])
-        cache_key = cache.build_key(
-            'menu:tree',
-            {
-                'user_id': current_user.user.user_id,
-                'is_admin': is_admin,
-            },
-        )
-
-        async def _load():
-            if is_admin:
-                menu_list_result = await self.menu_repo.find_all_active()
-            else:
-                menu_list_result = await self.menu_repo.find_menus_by_user(current_user.user.user_id)
-            return self.list_to_tree(menu_list_result)
-
-        return await cache.get_or_set(
-            cache_key,
-            _load,
-            CacheConfig.query_cache_default_ttl,
-            CacheConfig.query_cache_lock_enabled,
-        )
+        if is_admin:
+            menu_list_result = await self.menu_repo.find_all_active()
+        else:
+            menu_list_result = await self.menu_repo.find_menus_by_user(current_user.user.user_id)
+        return self.list_to_tree(menu_list_result)
 
     async def get_role_menu_tree_services(self, role_id: int, current_user: Optional[CurrentUserModel] = None):
         """
@@ -88,20 +71,7 @@ class MenuService:
                 field='current_user',
             )
 
-        cache = get_query_cache()
         is_admin = bool(getattr(current_user.user, 'admin', False)) or 'admin' in (current_user.roles or [])
-        cache_key = cache.build_key(
-            'menu:role_tree',
-            {
-                'role_id': role_id,
-                'user_id': current_user.user.user_id,
-                'is_admin': is_admin,
-            },
-        )
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return RoleMenuQueryModel(**cached)
-
         if is_admin:
             menu_list_result = await self.menu_repo.find_all_active()
         else:
@@ -112,7 +82,7 @@ class MenuService:
         role_menu_list = await self.role_menu_repo.find_by_role_id(role_id) if role else []
         checked_keys = [row.menu_id for row in role_menu_list]
         result = RoleMenuQueryModel(menus=menu_tree_result, checkedKeys=checked_keys)
-        await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
+
         return result
 
     async def get_menu_list_services(
@@ -134,22 +104,7 @@ class MenuService:
                 field='current_user',
             )
 
-        cache = get_query_cache()
         is_admin = bool(getattr(current_user.user, 'admin', False)) or 'admin' in (current_user.roles or [])
-        cache_key = cache.build_key(
-            'menu:list',
-            {
-                'user_id': current_user.user.user_id if not is_admin else None,
-                'is_admin': is_admin,
-                'menu_name': page_object.menu_name,
-                'visible': page_object.visible,
-                'status': page_object.status,
-            },
-        )
-        cached = await cache.get(cache_key)
-        if cached is not None:
-            return cached
-
         menu_list_result = await self.menu_repo.find_with_filters(
             user_id=current_user.user.user_id if not is_admin else None,
             menu_name=page_object.menu_name,
@@ -158,7 +113,7 @@ class MenuService:
             is_admin=is_admin,
         )
         result = CamelCaseUtil.transform_result(menu_list_result)
-        await cache.set(cache_key, result, CacheConfig.query_cache_default_ttl)
+
         return result
 
     async def check_menu_name_unique_services(self, page_object: MenuModel):

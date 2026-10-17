@@ -36,7 +36,7 @@ from module_admin.entity.vo.user_vo import (
 from modules.system.infrastructure.user_post_repository import UserPostRepository
 from modules.system.infrastructure.user_repository import UserRepository
 from modules.system.infrastructure.user_role_repository import UserRoleRepository
-from modules.system.application.services.role_service import RoleService
+from modules.system.infrastructure.role_repository import RoleRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.page_util import PageResponseModel
@@ -704,22 +704,25 @@ class UserService:
         """
         user_repo = self._user_repo(query_db)
         query_user = await user_repo.get_user_with_relations(page_object.user_id)
+        if query_user.get('user_basic_info') is None:
+            raise ResourceNotFoundException(error_code=ErrorCode.USER_NOT_FOUND, user_message='用户不存在')
+        relations = await self._user_role_repo(query_db).find_by_user_id(page_object.user_id)
+        assigned_ids = {row.role_id for row in relations}
+        available_roles = await RoleRepository(query_db).find_for_user_authorization(page_object.user_id)
+        assigned_roles = [row for row in available_roles if row.role_id in assigned_ids]
         post_ids = ','.join([str(row.post_id) for row in query_user.get('user_post_info')])
-        role_ids = ','.join([str(row.role_id) for row in query_user.get('user_role_info')])
+        role_ids = ','.join(str(role_id) for role_id in sorted(assigned_ids))
         user = UserInfoModel(
             **CamelCaseUtil.transform_result(query_user.get('user_basic_info')),
             postIds=post_ids,
             roleIds=role_ids,
             dept=CamelCaseUtil.transform_result(query_user.get('user_dept_info')),
-            role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
+            role=CamelCaseUtil.transform_result(assigned_roles),
         )
         query_role_list = [
-            SelectedRoleModel(**row) for row in await RoleService.get_role_select_option_services(query_db)
+            SelectedRoleModel(**CamelCaseUtil.transform_result(row), flag=row.role_id in assigned_ids)
+            for row in available_roles
         ]
-        for model_a in query_role_list:
-            for model_b in user.role:
-                if model_a.role_id == model_b.role_id:
-                    model_a.flag = True
         result = UserRoleResponseModel(roles=query_role_list, user=user)
         return result
     @transactional()

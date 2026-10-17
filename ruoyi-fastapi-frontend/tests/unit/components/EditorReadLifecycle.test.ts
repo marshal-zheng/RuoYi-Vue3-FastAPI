@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
-import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
+import { VueQueryPlugin } from '@tanstack/vue-query';
+import { queryClient } from '@/queries/client';
+import { roleKeys } from '@/queries/system/role';
 import { endQuerySession, setQuerySession } from '@/queries/context';
 import {
   defineComponent,
@@ -175,10 +177,8 @@ const cases = [
   },
 ];
 const mounted: ReturnType<typeof mount>[] = [];
-const queryClients: QueryClient[] = [];
+
 function editor(component: Component) {
-  const queryClient = new QueryClient();
-  queryClients.push(queryClient);
   const wrapper = mount(component, {
     global: {
       plugins: [[VueQueryPlugin, { queryClient }]],
@@ -227,6 +227,9 @@ const outcome = <T>(task: Promise<T>) =>
     (error) => ({ error })
   );
 beforeEach(() => {
+  endQuerySession();
+  queryClient.clear();
+  setQuerySession(1, [], []);
   vi.resetAllMocks();
   onTreeData = undefined;
   [api.config, api.dict, api.dept, api.role].forEach((read) =>
@@ -248,7 +251,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   mounted.splice(0).forEach((wrapper) => wrapper.unmount());
-  queryClients.splice(0).forEach((client) => client.clear());
+  queryClient.clear();
   endQuerySession();
 });
 
@@ -289,6 +292,8 @@ for (const item of cases)
       expect(await e.modal().props('confirm')({})).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
       const second = e.exposed.open(item.arg(22));
+      // Native observers release the previous key on the Vue update.
+      await nextTick();
       expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
       b.resolve(detail(22));
       await second;
@@ -470,5 +475,54 @@ for (const item of cases.filter((item) => item.name === 'role' || item.name === 
       expect(payload.roleName).toBe('Role 11');
       expect(payload.menuIds).toEqual([11]);
     }
+  });
+}
+
+for (const item of cases.filter((item) => item.name === 'role' || item.name === 'scope')) {
+  it(`${item.name} closes and refuses an old confirm after the authorization scope changes`, async () => {
+    const e = editor(item.component);
+    await e.exposed.open(11);
+    const confirm = e.modal().props('confirm');
+    setQuerySession(2, [], []);
+    await nextTick();
+    expect(e.modal().props('modelValue')).toBe(false);
+    expect(await confirm(e.model())).toBe(false);
+    expect(api.write).not.toHaveBeenCalled();
+  });
+
+  it(`${item.name} refreshes its query resources without replacing draft fields or tree selection`, async () => {
+    const scope = setQuerySession(1, [], []);
+    const e = editor(item.component);
+    await e.exposed.open(11);
+    e.model().roleName = 'Unsaved draft';
+    const selected = e.wrapper.findComponent(tree).vm as unknown as {
+      setCheckedKeys: (keys: number[]) => void;
+      getCheckedKeys: () => number[];
+    };
+    selected.setCheckedKeys([99]);
+    api.role.mockResolvedValue({ ...detail(11), roleName: 'Refreshed role' });
+    await queryClient.invalidateQueries({ queryKey: roleKeys.all(scope) });
+    await flushPromises();
+    expect(api.role).toHaveBeenCalledTimes(2);
+    expect(e.model().roleName).toBe('Unsaved draft');
+    expect(selected.getCheckedKeys()).toEqual([99]);
+  });
+
+  it(`${item.name} keeps a reopened editor when the previous write finishes`, async () => {
+    const e = editor(item.component);
+    await e.exposed.open(11);
+    let complete!: () => void;
+    api.write.mockReturnValue(
+      new Promise<void>((resolve) => {
+        complete = resolve;
+      })
+    );
+    const saving = e.modal().props('confirm')(e.model());
+    await e.exposed.open(22);
+    complete();
+    expect(await saving).toBe(false);
+    expect(e.modal().props('modelValue')).toBe(true);
+    expect(e.model().roleId).toBe(22);
+    expect(e.wrapper.emitted('success')).toBeUndefined();
   });
 }

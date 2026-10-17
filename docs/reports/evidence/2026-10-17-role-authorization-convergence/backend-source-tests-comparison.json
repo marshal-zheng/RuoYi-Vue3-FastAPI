@@ -1,0 +1,36 @@
+{
+  "baseline": {
+    "exit": 1,
+    "tail": [
+      "        msg        = 'Expected delete to have been awaited once. Awaited 0 times.'",
+      "        self       = <AsyncMock name='mock.delete' id='4684314144'>",
+      "=============================== warnings summary ===============================",
+      "venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1303",
+      "  /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1303: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; anyio",
+      "    self._mark_plugins_for_rewrite(hook, disable_autoload)",
+      "",
+      "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+      "=========================== short test summary info ============================",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[None-DeptService]",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[999-DeptService]",
+      "=================== 2 failed, 124 passed, 1 warning in 0.68s ==================="
+    ]
+  },
+  "candidate": {
+    "exit": 1,
+    "tail": [
+      "  /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/lib/python3.13/site-packages/_pytest/config/__init__.py:1303: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; anyio",
+      "    self._mark_plugins_for_rewrite(hook, disable_autoload)",
+      "",
+      "-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html",
+      "=========================== short test summary info ============================",
+      "FAILED tests/unit/services/test_role_authorization.py::test_authorization_page_load_works_without_a_warm_role_options_cache",
+      "FAILED tests/unit/services/test_role_write_relations.py::test_management_detail_can_read_a_disabled_role",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[None-DeptService]",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[None-RoleService]",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[999-DeptService]",
+      "FAILED tests/unit/services/test_detail_resource_contract.py::test_old_invalid_detail_cache_is_removed_and_missing_entity_still_404[999-RoleService]",
+      "=================== 6 failed, 120 passed, 1 warning in 0.73s ==================="
+    ]
+  }
+}

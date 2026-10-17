@@ -1,0 +1,13 @@
+{
+  "head": {
+    "lintExit": 1,
+    "diagnostics": 125,
+    "formatExit": 1
+  },
+  "task": {
+    "lintExit": 1,
+    "diagnostics": 125,
+    "formatExit": 1
+  },
+  "newDiagnostics": []
+}

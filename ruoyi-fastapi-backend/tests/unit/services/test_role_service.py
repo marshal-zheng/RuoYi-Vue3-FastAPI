@@ -15,28 +15,6 @@ from modules.system.application.services.role_service import RoleService
 from utils.page_util import PageResponseModel
 
 
-class FakeCache:
-    def __init__(self):
-        self.key_prefix = 'cache'
-        self._store = {}
-        self.deleted_patterns = []
-        self.get = AsyncMock(side_effect=self._get_impl)
-        self.set = AsyncMock(side_effect=self._set_impl)
-        self.delete_pattern = AsyncMock(side_effect=self._delete_pattern_impl)
-
-    def build_key(self, prefix: str, payload: dict) -> str:
-        return f'{prefix}:{payload}'
-
-    async def _get_impl(self, key):
-        return self._store.get(key)
-
-    async def _set_impl(self, key, value, ttl):
-        self._store[key] = value
-
-    async def _delete_pattern_impl(self, pattern):
-        self.deleted_patterns.append(pattern)
-
-
 def build_service(role_repo=None):
     return RoleService(
         role_repo=role_repo or AsyncMock(),
@@ -139,32 +117,19 @@ class TestRoleServiceDataScope:
             await service.check_role_data_scope_services('1,2', '1=1')
 
 
-class TestRoleServiceCacheAndExport:
+class TestRoleServiceReadsAndExport:
     @pytest.mark.asyncio
-    async def test_role_detail_uses_cache_when_hit(self, monkeypatch):
-        cache = FakeCache()
-        key = cache.build_key('role:detail', {'role_id': 7})
-        cache._store[key] = {'roleId': 7, 'roleName': 'cached', 'roleKey': 'cached'}
-
-        monkeypatch.setattr('modules.system.application.services.role_service.get_query_cache', lambda: cache)
-        service = build_service(role_repo=AsyncMock())
-
-        result = await service.role_detail_services(7)
-
-        assert result.role_id == 7
-        assert result.role_name == 'cached'
-
-    @pytest.mark.asyncio
-    async def test_invalidate_role_cache_deletes_expected_patterns(self, monkeypatch):
-        cache = FakeCache()
-        monkeypatch.setattr('modules.system.application.services.role_service.get_query_cache', lambda: cache)
-
-        await RoleService._invalidate_role_cache()
-
-        assert f'{cache.key_prefix}:role:*' in cache.deleted_patterns
-        assert f'{cache.key_prefix}:menu:role_tree:*' in cache.deleted_patterns
-        assert f'{cache.key_prefix}:menu:tree:*' in cache.deleted_patterns
-        assert f'{cache.key_prefix}:menu:list:*' in cache.deleted_patterns
+    async def test_role_detail_reads_the_repository_each_time(self):
+        role_repo = AsyncMock()
+        role_repo.find_active_by_id = role_repo.find_by_id = AsyncMock(
+            side_effect=[
+                {'roleId': 7, 'roleName': 'first', 'roleKey': 'owned'},
+                {'roleId': 7, 'roleName': 'second', 'roleKey': 'owned'},
+            ]
+        )
+        service = build_service(role_repo)
+        assert (await service.role_detail_services(7)).role_name == 'first'
+        assert (await service.role_detail_services(7)).role_name == 'second'
 
     @pytest.mark.asyncio
     async def test_export_role_list_maps_status_before_export(self, monkeypatch):

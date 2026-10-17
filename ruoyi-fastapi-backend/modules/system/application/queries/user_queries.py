@@ -57,3 +57,5 @@ class GetUserAuthRoleQuery(_UserDbQueryContext):
     """Query roles allocated to a user."""
 
     user_id: int = Field(description='Target user id')
+    data_scope_sql: Any = Field(default='True', description='Data scope SQL for user filtering')
+    require_scope_check: bool = Field(default=False, description='Whether to enforce target user data scope')

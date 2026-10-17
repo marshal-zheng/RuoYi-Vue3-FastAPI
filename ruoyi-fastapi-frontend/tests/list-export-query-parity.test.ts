@@ -16,15 +16,6 @@ const cases = [
     dateRange: ["2026-10-01", "2026-10-16"],
   },
   {
-    name: "role",
-    file: "src/views/system/role/index.vue",
-    load: "loadRoleData",
-    export: "handleExport",
-    url: "system/role/export",
-    query: { roleName: "filtered", roleKey: "test_key", status: "1" },
-    dateRange: ["2026-10-01", "2026-10-16"],
-  },
-  {
     name: "dictionary type",
     file: "src/views/system/dict/components/DictList.vue",
     load: "loadDictData",
@@ -165,7 +156,7 @@ describe("business list and Excel export filter parity", () => {
   );
 
   it("operation-log filter and sort events use public GridList state paths and preserve module scope", () => {
-    const { snapshot, grid, handlers, source } = setup(cases[4]);
+    const { snapshot, grid, handlers, source } = setup(cases.find((item) => item.name === "operation log")!);
     snapshot.query = { title: "工程管理", operName: "admin" };
     const actions = {
       updateState: grid.updateState,
