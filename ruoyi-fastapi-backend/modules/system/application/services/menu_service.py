@@ -1,5 +1,3 @@
-from typing import Optional
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.constant import CommonConstant, MenuConstant
@@ -35,7 +33,7 @@ class MenuService:
         self.role_menu_repo = role_menu_repo
         self.query_db = query_db
 
-    async def get_menu_tree_services(self, current_user: Optional[CurrentUserModel] = None):
+    async def get_menu_tree_services(self, current_user: CurrentUserModel | None = None):
         """
         获取菜单树信息service
 
@@ -56,7 +54,7 @@ class MenuService:
             menu_list_result = await self.menu_repo.find_menus_by_user(current_user.user.user_id)
         return self.list_to_tree(menu_list_result)
 
-    async def get_role_menu_tree_services(self, role_id: int, current_user: Optional[CurrentUserModel] = None):
+    async def get_role_menu_tree_services(self, role_id: int, current_user: CurrentUserModel | None = None):
         """
         根据角色id获取菜单树信息service
 
@@ -88,7 +86,7 @@ class MenuService:
     async def get_menu_list_services(
         self,
         page_object: MenuQueryModel,
-        current_user: Optional[CurrentUserModel] = None,
+        current_user: CurrentUserModel | None = None,
     ):
         """
         获取菜单列表信息service
@@ -124,7 +122,9 @@ class MenuService:
         :return: 校验结果
         """
         menu_id = -1 if page_object.menu_id is None else page_object.menu_id
-        menu = await self.menu_repo.find_by_parent_and_name(parent_id=page_object.parent_id, menu_name=page_object.menu_name)
+        menu = await self.menu_repo.find_by_parent_and_name(
+            parent_id=page_object.parent_id, menu_name=page_object.menu_name
+        )
         if menu and menu.menu_id != menu_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
@@ -142,8 +142,7 @@ class MenuService:
                 user_message=f'新增菜单{page_object.menu_name}失败，菜单名称已存在',
                 error_code=ErrorCode.MENU_NOT_FOUND,
                 developer_message=(
-                    f'Menu name already exists: parent_id={page_object.parent_id}, '
-                    f'menu_name={page_object.menu_name}'
+                    f'Menu name already exists: parent_id={page_object.parent_id}, menu_name={page_object.menu_name}'
                 ),
             )
 
@@ -181,8 +180,7 @@ class MenuService:
                 user_message=f'修改菜单{page_object.menu_name}失败，菜单名称已存在',
                 error_code=ErrorCode.MENU_NOT_FOUND,
                 developer_message=(
-                    f'Menu name already exists: parent_id={page_object.parent_id}, '
-                    f'menu_name={page_object.menu_name}'
+                    f'Menu name already exists: parent_id={page_object.parent_id}, menu_name={page_object.menu_name}'
                 ),
             )
 
@@ -257,10 +255,7 @@ class MenuService:
             return MenuModel(**cached)
 
         menu = await self.menu_repo.find_by_id(menu_id)
-        if menu:
-            result = MenuModel(**CamelCaseUtil.transform_result(menu))
-        else:
-            result = MenuModel(**{})
+        result = MenuModel(**CamelCaseUtil.transform_result(menu)) if menu else MenuModel(**{})
         await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
         return result
 
@@ -278,8 +273,7 @@ class MenuService:
         :return: 菜单树形嵌套数据
         """
         permission_list = [
-            {'id': item.menu_id, 'label': item.menu_name, 'parentId': item.parent_id}
-            for item in permission_list
+            {'id': item.menu_id, 'label': item.menu_name, 'parentId': item.parent_id} for item in permission_list
         ]
         mapping = {item['id']: item for item in permission_list}
         container: list = []

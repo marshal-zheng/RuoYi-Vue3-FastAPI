@@ -1,0 +1,21 @@
+[
+  {
+    "case": "chinese",
+    "exitCode": 0,
+    "codes": []
+  },
+  {
+    "case": "homoglyph",
+    "exitCode": 1,
+    "codes": [
+      "RUF001"
+    ]
+  },
+  {
+    "case": "undefined",
+    "exitCode": 1,
+    "codes": [
+      "F821"
+    ]
+  }
+]

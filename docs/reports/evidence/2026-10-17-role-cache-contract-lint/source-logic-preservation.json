@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "normalization": "Ignore imports, annotations and docstrings; inline extracted uniqueness helper; normalize dict keyword literal and explicit zip strict=False. All remaining executable AST must match. Runtime/type effects separately validated with tests.",
+  "files": [
+    {
+      "path": "modules/system/api/user_controller.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/handlers/query/user_query_handlers.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/queries/user_queries.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/services/menu_service.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/services/role_service.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/services/user_service.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/infrastructure/role_repository.py",
+      "normalizedExecutableASTEqual": true
+    },
+    {
+      "path": "modules/system/application/services/dept_service.py",
+      "normalizedExecutableASTEqual": true
+    }
+  ]
+}

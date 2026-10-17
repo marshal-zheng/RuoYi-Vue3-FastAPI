@@ -1,0 +1,70 @@
+{
+  "outsideOwnedDirtyChecked": 792,
+  "outsideOwnedDirtyChanges": [
+    {
+      "path": "ruoyi-fastapi-frontend/package.json",
+      "sha256": {
+        "before": "cf5b103645ab3ec0a7a1c6721922e3d03ab20633b4f6b3c892cafdb49ca8c6f3",
+        "now": "f02fa50668efa5108bc5df223d83ed246358b25beb69abf296f020112524caae"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts",
+      "sha256": {
+        "before": "da28c112594dd2aed28c93325ae340d4989620d40b91c5a5d2c466ffdadfb77e",
+        "now": "22b5a19f737a6fe61fe032433132facf432a2f63b0e96b852e5ee19842b68e73"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthChartPanel.vue",
+      "sha256": {
+        "before": "dc176de713cf10b5b5f2836f8ea226484b66939a5d83de46beda3865c996766c",
+        "now": "473c5511ba68895d7541f7f70a8986961ba56e0a0ae22f89406197c14b20585c"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/project/simulation/components/DataInjectionPanel.vue",
+      "sha256": {
+        "before": "f5f946df7e704bac468536ebcb376739da6fe0f5393b1a51c33eea9ae72dbca6",
+        "now": "b647ca49d2ae66113b9c787dd128d19b70f45c58d304eecfd2d7296f5e2abb93"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/project/simulation/components/TimingLatencyPanel.vue",
+      "sha256": {
+        "before": "7b6f3f676cb4d1573b54cf0a755774c6019a94e6905c3ec82b1e46b6b20bf17b",
+        "now": "a72f746aa7d95be1767448902ba61daf437f171bb2e35fc1bba573a21e1c27af"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/yarn.lock",
+      "sha256": {
+        "before": "da649bd5c683c0811f91dd5fc93c984949c0ea488e34e7c8f2dd2ac52eed8136",
+        "now": "e2987b6d72334dab659f4e7bb7a31a3600a51fb7b0ec99ca5af6449fe35eac37"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py",
+      "sha256": {
+        "before": "d831b5d8afc74da3948a0b7f72db8a14d804fc9e23098a35b383b5c2b13ad24e",
+        "now": "ff4b5ae01b49a39a353d733d02210d6967d78230bc69c669de2792d630a0cc23"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmDashboardPanel.vue",
+      "sha256": {
+        "before": "589dab2604e5c5706ea2e16ae330ff21b60efcda45af730586afea59a325a814",
+        "now": "7ce65a46fad1de4a65739229fe0847627f622fd7d851a83f4e03d76432749873"
+      }
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardPanel.vue",
+      "sha256": {
+        "before": "34514576fe8cda032cb1be097557fb839063d888532cdbee77e17cd240288089",
+        "now": "a6173e96a94c33ca392c7a1e9ad24ea9df01b6158b969e7a3c644b98c9d176f9"
+      }
+    }
+  ],
+  "indexByteEqual": true,
+  "sourceCandidateContentDifferences": []
+}

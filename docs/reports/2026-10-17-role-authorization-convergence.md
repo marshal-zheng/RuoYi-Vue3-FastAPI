@@ -82,3 +82,6 @@ authRole GET 在读取前检查目标用户数据范围，对不存在用户返�
 两个任务工作树与对应分支已删除，原 `.worktrees` 父目录保留；本次所有后端 PID 已退出，8088 关闭，四个临时构建输出已删除。自有 A/B 的 18088 进程和 socket 已清理；另一 dashboard 任务随后在该端口启动 PID 88173，已确认所有权并保留。共享 MySQL/Redis 未停止。[资源清理](evidence/2026-10-17-role-authorization-convergence/final-runtime-cleanup.json)记录这一边界。ZXUI HEAD 未变，本轮未修改其产品源码；其他任务对 ZXUI 的并发修改完整保留，不宣称全部初始 hash 未变。
 
 交付 ancestry、源验证和任务清理 proof 均通过，持久化账本在 `.git/codex-deliveries/docs-plans-2026-10-17-role-authorization-convergence-md.json`。由于源目录故意保留原 dirty，严格 `delivery-status` 仍会返回 `delivery_incomplete / finalClaimAllowed:false`；不为刷成 clean 而提交、覆盖或删除他人工作。此标签与已证明的源实现交付、验证和任务资源清理分别记录。后端既有 lint 与 source-only 缓存断言限制仍见上文，不声称全仓库所有测试全绿。未推送、发布或进行浏览器视觉验收。
+
+
+后续收敛：本报告记录的旧缓存断言和相关 lint 限制已由 [后端契约与 lint 收敛](2026-10-17-role-cache-contract-lint.md) 按新读取契约处理。历史失败证据保留，最终范围及结果见该报告。

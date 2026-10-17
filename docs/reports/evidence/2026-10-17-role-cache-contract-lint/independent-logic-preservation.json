@@ -1,0 +1,56 @@
+{
+  "sourceProducts": [
+    {
+      "path": "modules/system/api/user_controller.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/handlers/query/user_query_handlers.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/queries/user_queries.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/services/menu_service.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/services/role_service.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/services/user_service.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/infrastructure/role_repository.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    },
+    {
+      "path": "modules/system/application/services/dept_service.py",
+      "currentSourceNormalizedExecutableASTEqualToBefore": true
+    }
+  ],
+  "retainedSourceTests": [
+    {
+      "path": "tests/unit/services/test_role_authorization.py",
+      "retainedFunctionCount": 9,
+      "removedReadTests": [
+        "test_authorization_page_load_works_without_a_warm_role_options_cache"
+      ],
+      "retainedFunctionASTEqual": true,
+      "normalization": "Ignore obsolete _invalidate_role_cache assignments only; imports handled separately."
+    },
+    {
+      "path": "tests/unit/services/test_role_write_relations.py",
+      "retainedFunctionCount": 4,
+      "removedReadTests": [
+        "test_management_detail_can_read_a_disabled_role"
+      ],
+      "retainedFunctionASTEqual": true,
+      "normalization": "Ignore obsolete _invalidate_role_cache assignments only; imports handled separately."
+    }
+  ]
+}

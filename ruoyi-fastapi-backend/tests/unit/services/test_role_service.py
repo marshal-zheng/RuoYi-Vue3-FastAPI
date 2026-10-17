@@ -121,7 +121,7 @@ class TestRoleServiceReadsAndExport:
     @pytest.mark.asyncio
     async def test_role_detail_reads_the_repository_each_time(self):
         role_repo = AsyncMock()
-        role_repo.find_active_by_id = role_repo.find_by_id = AsyncMock(
+        role_repo.find_by_id = AsyncMock(
             side_effect=[
                 {'roleId': 7, 'roleName': 'first', 'roleKey': 'owned'},
                 {'roleId': 7, 'roleName': 'second', 'roleKey': 'owned'},

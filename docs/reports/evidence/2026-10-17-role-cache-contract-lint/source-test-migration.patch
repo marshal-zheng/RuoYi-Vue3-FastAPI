@@ -1,0 +1,58 @@
+--- a/ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py
++++ b/ruoyi-fastapi-backend/tests/unit/services/test_role_authorization.py
+@@ -12 +12 @@
+-from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel, UserRoleQueryModel
++from module_admin.entity.vo.user_vo import AddUserModel, EditUserModel
+@@ -29 +28,0 @@
+-from modules.system.application.services import role_service as role_module
+@@ -254,16 +252,0 @@
+-
+-
+-@pytest.mark.asyncio
+-async def test_authorization_page_load_works_without_a_warm_role_options_cache(authorization, monkeypatch):
+-    async def load_directly(key, loader, *_):
+-        return await loader()
+-
+-    cache = AsyncMock()
+-    cache.build_key = lambda *_: 'role:select:cold'
+-    cache.get_or_set.side_effect = load_directly
+-    monkeypatch.setattr(role_module, 'get_query_cache', lambda: cache)
+-    _, _, _, db = authorization
+-    result = await UserService(query_db=db).get_user_role_allocated_list_services(db, UserRoleQueryModel(userId=42))
+-    assert result.user.user_id == 42
+-    assert {role.role_id for role in result.roles} == {20, 21}
+-    assert {role.role_id for role in result.roles if role.flag} == {20}
+--- a/ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py
++++ b/ruoyi-fastapi-backend/tests/unit/services/test_role_write_relations.py
+@@ -4 +4 @@
+-from unittest.mock import AsyncMock, MagicMock, patch
++from unittest.mock import AsyncMock
+@@ -37 +36,0 @@
+-    service._invalidate_role_cache = AsyncMock()
+@@ -80 +78,0 @@
+-    service._invalidate_role_cache = AsyncMock()
+@@ -158,18 +155,0 @@
+-
+-
+-@pytest.mark.asyncio
+-async def test_management_detail_can_read_a_disabled_role(db_session):
+-    role = RoleDO(role_id=42, role_name='Disabled', role_key='disabled', role_sort=1, status='1')
+-    db_session.add(role)
+-    await db_session.flush()
+-    service = RoleService(RoleRepository(db_session), AsyncMock(), AsyncMock(), AsyncMock(), db_session)
+-    cache = MagicMock()
+-    cache.get = AsyncMock(return_value=None)
+-    cache.set = AsyncMock()
+-    cache.build_key.return_value = 'owned-role-42'
+-    cache.get.return_value = None
+-
+-    with patch('modules.system.application.services.role_service.get_query_cache', return_value=cache):
+-        result = await service.role_detail_services(42)
+-    assert result.role_id == 42
+-    assert result.status == '1'
+--- a/ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
++++ b/ruoyi-fastapi-backend/tests/unit/services/test_detail_resource_contract.py
+@@ -115 +115,2 @@
+-@pytest.mark.parametrize('case', [CASES[3], CASES[4], CASES[5]], ids=lambda case: case[1])
++# Only menu details retain a result cache; role/dept reads live in test_uncached_detail_contract.py.
++@pytest.mark.parametrize('case', [CASES[5]], ids=lambda case: case[1])

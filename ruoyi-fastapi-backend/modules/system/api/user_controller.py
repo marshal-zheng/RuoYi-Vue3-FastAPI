@@ -1,7 +1,7 @@
 from contextlib import suppress
 from datetime import datetime
 from pathlib import Path
-from typing import Literal, Optional, Union
+from typing import Literal
 
 from fastapi import APIRouter, Depends, File, Form, Query, Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,7 +30,6 @@ from module_admin.entity.vo.user_vo import (
     UserRoleResponseModel,
 )
 from modules.identity.ports import get_current_user
-from modules.system.application.services.user_service import UserService
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
     AddUserCommand,
@@ -48,6 +47,7 @@ from modules.system.application.queries import (
     GetUserListQuery,
     GetUserProfileQuery,
 )
+from modules.system.application.services.user_service import UserService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
@@ -236,9 +236,7 @@ async def delete_system_user(
     if user_id_list and current_user.user.user_id in list(map(int, user_id_list)):
         logger.warning('当前登录用户不能删除')
         raise BusinessException(
-            user_message='当前登录用户不能删除',
-            error_code=ErrorCode.USER_NOT_FOUND,
-            http_status=400
+            user_message='当前登录用户不能删除', error_code=ErrorCode.USER_NOT_FOUND, http_status=400
         )
     delete_user = DeleteUserModel(userIds=user_ids, updateBy=current_user.user.user_name, updateTime=datetime.now())
     delete_command = DeleteUserCommand(
@@ -358,7 +356,7 @@ async def query_detail_system_user_profile(
 )
 async def query_detail_system_user(
     request: Request,
-    user_id: Optional[Union[int, Literal['']]] = '',
+    user_id: int | Literal[''] | None = '',
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('UserDO')),
@@ -421,8 +419,7 @@ async def change_system_user_profile_avatar(
         return ResponseUtil.ok_resource({'imgUrl': edit_user.avatar})
 
     raise SystemException(
-        user_message='上传图片失败, 请重试',
-        developer_message='Avatar upload failed: file is None or empty'
+        user_message='上传图片失败, 请重试', developer_message='Avatar upload failed: file is None or empty'
     )
 
 

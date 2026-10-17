@@ -1,0 +1,24 @@
+{
+  "sourceBase": "6feb8c50d44bf3c54c206698d60ef623c36fc8f1",
+  "initialDirtyPaths": 800,
+  "originalDirtyPathsInAuthorizedScope": 8,
+  "unrelatedDirtyPathsUnchanged": 777,
+  "concurrentUnrelatedChanges": [
+    "ruoyi-fastapi-frontend/package.json",
+    "ruoyi-fastapi-frontend/src/mocks/contracts/coverage.test.ts",
+    "ruoyi-fastapi-frontend/src/views/project/simulation/components/BandwidthChartPanel.vue",
+    "ruoyi-fastapi-frontend/src/views/project/simulation/components/DataInjectionPanel.vue",
+    "ruoyi-fastapi-frontend/src/views/project/simulation/components/TimingLatencyPanel.vue",
+    "ruoyi-fastapi-frontend/yarn.lock",
+    "ruoyi-fastapi-backend/alembic/versions/20261017_add_dashboard.py",
+    "ruoyi-fastapi-frontend/src/views/project/simulation/components/AlarmDashboardPanel.vue",
+    "ruoyi-fastapi-frontend/src/views/project/simulation/components/FaultBoardPanel.vue",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-task11.2.20261017.tgz",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-task11.20261017.tgz",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-0.1.0-dashboard-task12-final.20261017.tgz",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-dashboard-task11.2.20261017.tgz",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-dashboard-task11.20261017.tgz",
+    "ruoyi-fastapi-frontend/vendor/zxio-dashboard-widgets-0.1.0-dashboard-task12-final.20261017.tgz"
+  ],
+  "indexUnchanged": true
+}

@@ -1,0 +1,49 @@
+[
+  {
+    "phase": "original-source",
+    "result": "failed",
+    "counts": {
+      "passed": 120,
+      "failed": 6
+    },
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/tests-before.log",
+    "sha256": "8d74920f648a92dfb23a5d0bad92cecf4ef6952fb9a8c585745e3da546a21396"
+  },
+  {
+    "phase": "contract-red",
+    "result": "failed",
+    "counts": {
+      "passed": 1,
+      "failed": 9
+    },
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/new-contract-red.log",
+    "sha256": "a6b33b53e33409e56cce64f99ef35c90e2a5ab111651a89a7d83df9a41e604ce"
+  },
+  {
+    "phase": "isolated-task",
+    "result": "passed",
+    "counts": {
+      "passed": 73,
+      "failed": 0
+    },
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/task-tests.log",
+    "sha256": "48e438ceeee185eda80dd8ef8d8a3af0160d55f2f7f3494dc1c68b2185299c49"
+  },
+  {
+    "phase": "actual-source",
+    "result": "passed",
+    "counts": {
+      "passed": 206,
+      "failed": 0
+    },
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/source-tests.log",
+    "sha256": "f18e6454bd0c6fbe6de13bd1dcd95d998ad32f2cc0c30ec0bdee861a0ba10423"
+  },
+  {
+    "phase": "task-validate",
+    "result": "passed",
+    "counts": {},
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/task-validate.log",
+    "sha256": "c805c72dcf6645268573589c3a076eb7feb9b4fa38c8b455666fe65fc7163d39"
+  }
+]

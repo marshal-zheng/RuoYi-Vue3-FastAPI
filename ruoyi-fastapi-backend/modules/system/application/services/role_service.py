@@ -1,14 +1,23 @@
-from typing import List
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode
-from exceptions.exception import PermissionException, ResourceConflictException, ResourceNotFoundException, ValidationException
+from exceptions.exception import (
+    PermissionException,
+    ResourceConflictException,
+    ResourceNotFoundException,
+    ValidationException,
+)
 from module_admin.entity.do.enums import StatusEnum
-from module_admin.entity.do.role_do import RoleDO, RoleDeptDO, RoleMenuDO
+from module_admin.entity.do.role_do import RoleDeptDO, RoleDO, RoleMenuDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleDeptQueryModel, RoleModel, RolePageQueryModel
+from module_admin.entity.vo.role_vo import (
+    AddRoleModel,
+    DeleteRoleModel,
+    RoleDeptQueryModel,
+    RoleModel,
+    RolePageQueryModel,
+)
 from module_admin.entity.vo.user_vo import UserInfoModel, UserRolePageQueryModel
 from ports import IRoleDeptRepository, IRoleMenuRepository, IRoleRepository, IUserRepository
 from utils.common_util import CamelCaseUtil
@@ -56,7 +65,9 @@ class RoleService:
         checked_keys = [row.dept_id for row in role_dept_list]
         return RoleDeptQueryModel(checkedKeys=checked_keys)
 
-    async def get_role_list_services(self, query_object: RolePageQueryModel, data_scope_sql: str, is_page: bool = False):
+    async def get_role_list_services(
+        self, query_object: RolePageQueryModel, data_scope_sql: str, is_page: bool = False
+    ):
         """
         获取角色列表信息service
 
@@ -305,15 +316,20 @@ class RoleService:
         :param role_id: 角色id
         :return: 角色id对应的信息
         """
-        role = await self.role_repo.find_active_by_id(role_id)
+        # Management details must remain available after disabling a role.
+        role = await self.role_repo.find_by_id(role_id)
         if role:
             result = RoleModel(**CamelCaseUtil.transform_result(role))
         else:
-            result = RoleModel(**{})
+            raise ResourceNotFoundException(
+                user_message='角色不存在',
+                error_code=ErrorCode.ROLE_NOT_FOUND,
+                developer_message=f'role_id={role_id} not found',
+            )
         return result
 
     @staticmethod
-    async def export_role_list_services(role_list: List):
+    async def export_role_list_services(role_list: list):
         """
         导出角色列表信息service
 

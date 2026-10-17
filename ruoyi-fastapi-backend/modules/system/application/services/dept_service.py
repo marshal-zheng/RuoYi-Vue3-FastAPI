@@ -1,21 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+
 from config.constant import CommonConstant
-from exceptions.exception import (
-    ResourceNotFoundException,
-    ResourceConflictException,
-    ValidationException,
-    PermissionException,
-)
 from config.error_codes import ErrorCode
+from exceptions.exception import (
+    PermissionException,
+    ResourceConflictException,
+    ResourceNotFoundException,
+    ValidationException,
+)
 from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.dept_vo import DeleteDeptModel, DeptModel
 from modules.system.infrastructure.dept_repository import DeptRepository  # noqa: F401 - test patch target
+from ports import IDeptRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.transaction_manager import transactional
-from ports import IDeptRepository
 
 
 class DeptService:
@@ -96,7 +96,9 @@ class DeptService:
         :return: 校验结果
         """
         dept_id = -1 if page_object.dept_id is None else page_object.dept_id
-        dept = await self.dept_repo.find_by_parent_and_name(parent_id=page_object.parent_id, dept_name=page_object.dept_name)
+        dept = await self.dept_repo.find_by_parent_and_name(
+            parent_id=page_object.parent_id, dept_name=page_object.dept_name
+        )
         if dept and dept.dept_id != dept_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
@@ -222,11 +224,15 @@ class DeptService:
         if dept:
             result = DeptModel(**CamelCaseUtil.transform_result(dept))
         else:
-            result = DeptModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='部门不存在',
+                error_code=ErrorCode.DEPT_NOT_FOUND,
+                developer_message=f'dept_id={dept_id} not found',
+            )
         return result
 
     @staticmethod
-    async def export_dept_list_services(dept_list: List):
+    async def export_dept_list_services(dept_list: list):
         """
         导出部门信息service
 
@@ -265,10 +271,10 @@ class DeptService:
         :return: 部门树形嵌套数据
         """
         permission_list = [
-            dict(id=item.dept_id, label=item.dept_name, parentId=item.parent_id) for item in permission_list
+            {'id': item.dept_id, 'label': item.dept_name, 'parentId': item.parent_id} for item in permission_list
         ]
         # 转成id为key的字典
-        mapping: dict = dict(zip([i['id'] for i in permission_list], permission_list))
+        mapping: dict = dict(zip([i['id'] for i in permission_list], permission_list, strict=False))
 
         # 树容器
         container: list = []

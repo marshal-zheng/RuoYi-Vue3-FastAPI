@@ -1,0 +1,53 @@
+[
+  {
+    "command": [
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+      "check",
+      "modules/system/api/user_controller.py",
+      "modules/system/application/handlers/query/user_query_handlers.py",
+      "modules/system/application/queries/user_queries.py",
+      "modules/system/application/services/menu_service.py",
+      "modules/system/application/services/role_service.py",
+      "modules/system/application/services/user_service.py",
+      "modules/system/infrastructure/role_repository.py",
+      "modules/system/application/services/dept_service.py",
+      "tests/unit/services/test_role_authorization.py",
+      "tests/unit/services/test_role_write_relations.py",
+      "tests/unit/services/test_detail_resource_contract.py",
+      "tests/unit/services/test_role_query_consistency.py",
+      "tests/unit/services/test_role_service.py",
+      "tests/unit/services/test_user_authorization_read.py",
+      "tests/unit/services/test_uncached_detail_contract.py"
+    ],
+    "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+    "exitCode": 0,
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/source-ruff-check.log",
+    "sha256": "82b3e6a6c090a57601d22943bd23fca9218d1031dbe5a7b754092f9a156b4f18"
+  },
+  {
+    "command": [
+      "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/ruff",
+      "format",
+      "--check",
+      "modules/system/api/user_controller.py",
+      "modules/system/application/handlers/query/user_query_handlers.py",
+      "modules/system/application/queries/user_queries.py",
+      "modules/system/application/services/menu_service.py",
+      "modules/system/application/services/role_service.py",
+      "modules/system/application/services/user_service.py",
+      "modules/system/infrastructure/role_repository.py",
+      "modules/system/application/services/dept_service.py",
+      "tests/unit/services/test_role_authorization.py",
+      "tests/unit/services/test_role_write_relations.py",
+      "tests/unit/services/test_detail_resource_contract.py",
+      "tests/unit/services/test_role_query_consistency.py",
+      "tests/unit/services/test_role_service.py",
+      "tests/unit/services/test_user_authorization_read.py",
+      "tests/unit/services/test_uncached_detail_contract.py"
+    ],
+    "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+    "exitCode": 0,
+    "log": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-cache-contract-lint/source-ruff-format.log",
+    "sha256": "d41ae50829b47e318b0787bc39d2a2ea2d52b518cfc7900d2efd569e6d26ab88"
+  }
+]

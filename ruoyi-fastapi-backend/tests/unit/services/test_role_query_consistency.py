@@ -12,8 +12,6 @@ from module_admin.entity.do.role_do import RoleDO, RoleMenuDO
 from module_admin.entity.vo.menu_vo import MenuQueryModel
 from module_admin.entity.vo.role_vo import RolePageQueryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel, UserInfoModel
-from modules.system.application.services import menu_service as menu_module
-from modules.system.application.services import role_service as role_module
 from modules.system.application.services.menu_service import MenuService
 from modules.system.application.services.role_service import RoleService
 from utils.page_util import PageResponseModel
@@ -43,8 +41,7 @@ class MemoryRedis:
 @pytest.fixture
 def query_cache(monkeypatch):
     cache = QueryCache(MemoryRedis(), key_prefix='owned_role_regression', is_async=True)
-    monkeypatch.setattr(role_module, 'get_query_cache', lambda: cache, raising=False)
-    monkeypatch.setattr(menu_module, 'get_query_cache', lambda: cache, raising=False)
+    monkeypatch.setattr('utils.query_cache._query_cache', cache)
     return cache
 
 
@@ -112,7 +109,7 @@ async def test_completed_old_read_cannot_poison_next_independent_read(resource, 
     try:
         await asyncio.wait_for(loaded.wait(), 2)
         state['version'] = 2
-        # This is precisely the cache delete done by the existing write path; HTTP exercises the full transaction.
+        # Reproduce the former cache-aside invalidation schedule without restoring removed service hooks.
         await query_cache.delete_pattern(f'{query_cache.key_prefix}:*')
         release.set()
         await old

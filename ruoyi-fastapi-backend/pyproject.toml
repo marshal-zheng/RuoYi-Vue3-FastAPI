@@ -57,6 +57,8 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 [tool.ruff.lint]
+# Intentional punctuation in Chinese messages and documentation; keep RUF001-003 enabled.
+allowed-confusables = ["，", "：", "（", "）"]
 select = [
     "E",      # pycodestyle errors
     "W",      # pycodestyle warnings

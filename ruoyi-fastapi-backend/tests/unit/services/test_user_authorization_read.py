@@ -3,6 +3,7 @@
 from unittest.mock import AsyncMock
 
 import pytest
+from sqlalchemy import delete
 
 from exceptions.exception import PermissionException, ResourceNotFoundException
 from module_admin.entity.do.role_do import RoleDO
@@ -33,6 +34,20 @@ async def test_authorization_read_includes_assigned_disabled_and_admin_roles(db_
     assert {role.role_id for role in result.roles if role.flag} == {1, 21}
     assert {role.role_id for role in result.user.role} == {1, 21}
     assert set(result.user.role_ids.split(',')) == {'1', '21'}
+
+    await db_session.execute(delete(UserRoleDO).where(UserRoleDO.user_id == 42, UserRoleDO.role_id == 21))
+    db_session.add(UserRoleDO(user_id=42, role_id=20))
+    active_role = await db_session.get(RoleDO, 20)
+    active_role.role_name = 'Renamed'
+    await db_session.flush()
+
+    refreshed = await UserService(query_db=db_session).get_user_role_allocated_list_services(
+        db_session, UserRoleQueryModel(userId=42)
+    )
+    assert {role.role_id for role in refreshed.roles} == {1, 20}
+    assert {role.role_id for role in refreshed.roles if role.flag} == {1, 20}
+    assert next(role.role_name for role in refreshed.roles if role.role_id == 20) == 'Renamed'
+    assert {role.role_id for role in result.roles if role.flag} == {1, 21}
 
 
 @pytest.mark.asyncio

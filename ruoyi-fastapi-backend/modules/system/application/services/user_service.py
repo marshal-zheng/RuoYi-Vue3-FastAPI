@@ -1,21 +1,23 @@
 import io
-import pandas as pd
+from collections.abc import Callable
 from datetime import datetime
+from typing import Any
+
+import pandas as pd
 from fastapi import Request, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any, Callable, List, Optional, Union
+
 from config.constant import CommonConstant
-from exceptions.exception import (
-    ValidationException,
-    ResourceNotFoundException,
-    ResourceConflictException,
-    AuthException,
-)
 from config.error_codes import ErrorCode
+from exceptions.exception import (
+    AuthException,
+    ResourceConflictException,
+    ResourceNotFoundException,
+    ValidationException,
+)
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.do.user_do import UserDO, UserPostDO, UserRoleDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from utils.transaction_manager import transactional
 from module_admin.entity.vo.user_vo import (
     AddUserModel,
     CrudUserRoleModel,
@@ -33,15 +35,16 @@ from module_admin.entity.vo.user_vo import (
     UserRoleQueryModel,
     UserRoleResponseModel,
 )
+from modules.system.infrastructure.role_repository import RoleRepository
 from modules.system.infrastructure.user_post_repository import UserPostRepository
 from modules.system.infrastructure.user_repository import UserRepository
 from modules.system.infrastructure.user_role_repository import UserRoleRepository
-from modules.system.infrastructure.role_repository import RoleRepository
+from ports import IConfigService, IDeptService, IUserPostRepository, IUserRepository, IUserRoleRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.page_util import PageResponseModel
 from utils.pwd_util import PwdUtil
-from ports import IConfigService, IDeptService, IUserPostRepository, IUserRepository, IUserRoleRepository
+from utils.transaction_manager import transactional
 
 
 def _normalize_user_import_row(row) -> dict[str, Any]:
@@ -96,12 +99,12 @@ class UserService:
 
     def __init__(
         self,
-        query_db: Optional[AsyncSession] = None,
-        config_service: Optional[IConfigService] = None,
-        dept_service: Optional[IDeptService] = None,
-        user_repo_factory: Optional[Callable[[AsyncSession], IUserRepository]] = None,
-        user_role_repo_factory: Optional[Callable[[AsyncSession], IUserRoleRepository]] = None,
-        user_post_repo_factory: Optional[Callable[[AsyncSession], IUserPostRepository]] = None,
+        query_db: AsyncSession | None = None,
+        config_service: IConfigService | None = None,
+        dept_service: IDeptService | None = None,
+        user_repo_factory: Callable[[AsyncSession], IUserRepository] | None = None,
+        user_role_repo_factory: Callable[[AsyncSession], IUserRoleRepository] | None = None,
+        user_post_repo_factory: Callable[[AsyncSession], IUserPostRepository] | None = None,
     ):
         self.query_db = query_db
         self.config_service = config_service
@@ -178,6 +181,7 @@ class UserService:
             if items:
                 user_list_result = [{**row[0], 'dept': row[1]} for row in items]
         return user_list_result
+
     async def check_user_allowed_services(self, check_user: UserModel):
         """
         校验用户是否允许操作service
@@ -190,6 +194,7 @@ class UserService:
             )
         else:
             return CrudResponseModel(is_success=True, message='校验通过')
+
     async def check_user_data_scope_services(self, query_db: AsyncSession, user_id: int, data_scope_sql: str):
         """
         校验用户数据权限service
@@ -207,6 +212,7 @@ class UserService:
             return CrudResponseModel(is_success=True, message='校验通过')
         else:
             raise AuthException(error_code=ErrorCode.DATA_SCOPE_PERMISSION_DENIED, user_message='没有权限访问用户数据')
+
     async def check_user_name_unique_services(self, query_db: AsyncSession, page_object: UserModel):
         """
         校验用户名是否唯一service
@@ -220,6 +226,7 @@ class UserService:
             finder=user_repo.find_by_username,
             value=page_object.user_name,
         )
+
     async def check_phonenumber_unique_services(self, query_db: AsyncSession, page_object: UserModel):
         """
         校验用户手机号是否唯一service
@@ -233,6 +240,7 @@ class UserService:
             finder=user_repo.find_by_phone,
             value=page_object.phonenumber,
         )
+
     async def check_email_unique_services(self, query_db: AsyncSession, page_object: UserModel):
         """
         校验用户邮箱是否唯一service
@@ -246,6 +254,7 @@ class UserService:
             finder=user_repo.find_by_email,
             value=page_object.email,
         )
+
     async def check_id_card_unique_services(self, query_db: AsyncSession, page_object: UserModel):
         """
         校验用户身份证号是否唯一service
@@ -259,6 +268,7 @@ class UserService:
             finder=user_repo.find_by_id_card,
             value=page_object.id_card,
         )
+
     async def _check_unique(self, page_object: UserModel, finder, value):
         user_id = -1 if page_object.user_id is None else page_object.user_id
         if not value:
@@ -267,6 +277,7 @@ class UserService:
         if user and user.user_id != user_id:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
+
     @transactional()
     async def add_user_services(self, query_db: AsyncSession, page_object: AddUserModel):
         """
@@ -311,6 +322,29 @@ class UserService:
                 db_user_post = UserPostDO(user_id=user_id, post_id=post)
                 await user_post_repo.add(db_user_post)
         return CrudResponseModel(is_success=True, message='新增成功', result={'userId': user_id})
+
+    async def _check_edit_user_uniqueness(self, query_db: AsyncSession, page_object: EditUserModel):
+        if not await self.check_user_name_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                error_code=ErrorCode.USER_NAME_ALREADY_EXISTS,
+                user_message=f'修改用户{page_object.user_name}失败，登录账号已存在',
+            )
+        elif page_object.phonenumber and not await self.check_phonenumber_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                error_code=ErrorCode.USER_PHONE_ALREADY_EXISTS,
+                user_message=f'修改用户{page_object.user_name}失败，手机号码已存在',
+            )
+        elif page_object.email and not await self.check_email_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                error_code=ErrorCode.USER_EMAIL_ALREADY_EXISTS,
+                user_message=f'修改用户{page_object.user_name}失败，邮箱账号已存在',
+            )
+        elif page_object.id_card and not await self.check_id_card_unique_services(query_db, page_object):
+            raise ResourceConflictException(
+                error_code=ErrorCode.RESOURCE_CONFLICT,
+                user_message=f'修改用户{page_object.user_name}失败，身份证号已存在',
+            )
+
     @transactional()
     async def edit_user_services(self, query_db: AsyncSession, page_object: EditUserModel):
         """
@@ -320,43 +354,24 @@ class UserService:
         :return: 编辑用户校验结果
         """
         edit_user = page_object.model_dump(exclude_unset=True, exclude={'admin'})
-        if page_object.type != 'status' and page_object.type != 'avatar' and page_object.type != 'pwd':
+        if page_object.type not in {'status', 'avatar', 'pwd'}:
             del edit_user['role_ids']
             del edit_user['post_ids']
             del edit_user['role']
-        if page_object.type == 'status' or page_object.type == 'avatar' or page_object.type == 'pwd':
+        if page_object.type in {'status', 'avatar', 'pwd'}:
             del edit_user['type']
         user_repo = self._user_repo(query_db)
         db_user = await user_repo.get_by_id(page_object.user_id)
         if not db_user:
             raise ResourceNotFoundException(error_code=ErrorCode.USER_NOT_FOUND, user_message='用户不存在')
-        if page_object.type != 'status' and page_object.type != 'avatar' and page_object.type != 'pwd':
-            if not await self.check_user_name_unique_services(query_db, page_object):
-                raise ResourceConflictException(
-                    error_code=ErrorCode.USER_NAME_ALREADY_EXISTS,
-                    user_message=f'修改用户{page_object.user_name}失败，登录账号已存在',
-                )
-            elif page_object.phonenumber and not await self.check_phonenumber_unique_services(query_db, page_object):
-                raise ResourceConflictException(
-                    error_code=ErrorCode.USER_PHONE_ALREADY_EXISTS,
-                    user_message=f'修改用户{page_object.user_name}失败，手机号码已存在',
-                )
-            elif page_object.email and not await self.check_email_unique_services(query_db, page_object):
-                raise ResourceConflictException(
-                    error_code=ErrorCode.USER_EMAIL_ALREADY_EXISTS,
-                    user_message=f'修改用户{page_object.user_name}失败，邮箱账号已存在',
-                )
-            elif page_object.id_card and not await self.check_id_card_unique_services(query_db, page_object):
-                raise ResourceConflictException(
-                    error_code=ErrorCode.RESOURCE_CONFLICT,
-                    user_message=f'修改用户{page_object.user_name}失败，身份证号已存在',
-                )
+        if page_object.type not in {'status', 'avatar', 'pwd'}:
+            await self._check_edit_user_uniqueness(query_db, page_object)
         if db_user:
             for key, value in edit_user.items():
                 if hasattr(db_user, key):
                     setattr(db_user, key, value)
             await user_repo.update(db_user)
-        if page_object.type != 'status' and page_object.type != 'avatar' and page_object.type != 'pwd':
+        if page_object.type not in {'status', 'avatar', 'pwd'}:
             user_role_repo = self._user_role_repo(query_db)
             user_post_repo = self._user_post_repo(query_db)
             await user_role_repo.delete_by_user_id(page_object.user_id)
@@ -370,6 +385,7 @@ class UserService:
                     db_user_post = UserPostDO(user_id=page_object.user_id, post_id=post)
                     await user_post_repo.add(db_user_post)
         return CrudResponseModel(is_success=True, message='更新成功')
+
     @transactional()
     async def delete_user_services(self, query_db: AsyncSession, page_object: DeleteUserModel):
         """
@@ -391,12 +407,13 @@ class UserService:
             await user_post_repo.delete_by_user_id(int(user_id))
             await user_repo.soft_delete(int(user_id), page_object.update_by)
         return CrudResponseModel(is_success=True, message='删除成功')
+
     async def user_detail_services(
         self,
         query_db: AsyncSession,
-        user_id: Union[int, str],
-        posts: Optional[List] = None,
-        roles: Optional[List] = None,
+        user_id: int | str,
+        posts: list | None = None,
+        roles: list | None = None,
     ):
         """
         获取用户详细信息service
@@ -411,8 +428,6 @@ class UserService:
             query_user = await user_repo.get_user_with_relations(user_id=user_id)
             if not query_user or not query_user.get('user_basic_info'):
                 # 用户不存在，抛出 404 异常
-                from exceptions.exception import ResourceNotFoundException
-                from config.error_codes import ErrorCode
                 raise ResourceNotFoundException(
                     user_message='用户不存在',
                     error_code=ErrorCode.USER_NOT_FOUND,
@@ -438,6 +453,7 @@ class UserService:
                 roles=role_options,
             )
         return UserDetailModel(posts=post_options, roles=role_options)
+
     async def user_profile_services(self, query_db: AsyncSession, user_id: int):
         """
         获取用户个人详细信息service
@@ -466,6 +482,7 @@ class UserService:
             postGroup=post_group,
             roleGroup=role_group,
         )
+
     @transactional()
     async def reset_user_services(self, query_db: AsyncSession, page_object: ResetUserModel):
         """
@@ -497,6 +514,7 @@ class UserService:
                     setattr(db_user, key, value)
             await user_repo.update(db_user)
         return CrudResponseModel(is_success=True, message='重置成功')
+
     @transactional()
     async def batch_import_user_services(
         self,
@@ -645,6 +663,7 @@ class UserService:
                 },
             },
         )
+
     @staticmethod
     async def get_user_import_template_services():
         """
@@ -658,8 +677,9 @@ class UserService:
             header_list=header_list, selector_header_list=selector_header_list, option_list=option_list
         )
         return binary_data
+
     @staticmethod
-    async def export_user_list_services(user_list: List):
+    async def export_user_list_services(user_list: list):
         """
         导出用户信息service
         :param user_list: 用户信息列表
@@ -695,6 +715,7 @@ class UserService:
                 item['sex'] = '未知'
         binary_data = ExcelUtil.export_list2excel(user_list, mapping_dict)
         return binary_data
+
     async def get_user_role_allocated_list_services(self, query_db: AsyncSession, page_object: UserRoleQueryModel):
         """
         根据用户id获取已分配角色列表
@@ -725,6 +746,7 @@ class UserService:
         ]
         result = UserRoleResponseModel(roles=query_role_list, user=user)
         return result
+
     @transactional()
     async def add_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
         """
@@ -758,6 +780,7 @@ class UserService:
             return CrudResponseModel(is_success=True, message='新增成功')
         else:
             raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足新增条件')
+
     @transactional()
     async def delete_user_role_services(self, query_db: AsyncSession, page_object: CrudUserRoleModel):
         """
@@ -779,6 +802,7 @@ class UserService:
             return CrudResponseModel(is_success=True, message='删除成功')
         else:
             raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='不满足删除条件')
+
     async def detail_user_role_services(self, query_db: AsyncSession, page_object: UserRoleModel):
         """
         获取用户关联角色详细信息service
