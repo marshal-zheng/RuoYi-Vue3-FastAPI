@@ -1,0 +1,14 @@
+{
+  "worktreeRemoved": true,
+  "taskBranchRemoved": true,
+  "sourceNodeModulesPreserved": true,
+  "worktreeParentPreserved": true,
+  "ownedBuildOutputsRemoved": true,
+  "removedBuildPaths": [
+    "/tmp/ruoyi-role-final-audit-20261018-installed-build",
+    "/tmp/ruoyi-role-final-audit-20261018-source-build"
+  ],
+  "noNewServicesOrRealDatabaseFixturesCreated": true,
+  "sharedMySqlRedisUntouched": true,
+  "pushed": false
+}

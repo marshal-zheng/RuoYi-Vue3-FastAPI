@@ -1,0 +1,43 @@
+{
+  "implementationCommit": "53084de708a2864f91e8a4c4645fd033828cb1cc",
+  "reviewedSevenFiles": {
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py": {
+      "reviewedSha256": "903e5f0b314fa581fbc429af6b1d67cbc3f002f649fbf00e3a0d0b63cd92b652",
+      "committedSha256": "903e5f0b314fa581fbc429af6b1d67cbc3f002f649fbf00e3a0d0b63cd92b652",
+      "sourceWorkingSha256": "903e5f0b314fa581fbc429af6b1d67cbc3f002f649fbf00e3a0d0b63cd92b652"
+    },
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py": {
+      "reviewedSha256": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1",
+      "committedSha256": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1",
+      "sourceWorkingSha256": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1"
+    },
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py": {
+      "reviewedSha256": "bb2c1d963598143ee3352ccddb4bb9277d241fa126dbd4f4d766858e90fbefe2",
+      "committedSha256": "bb2c1d963598143ee3352ccddb4bb9277d241fa126dbd4f4d766858e90fbefe2",
+      "sourceWorkingSha256": "bb2c1d963598143ee3352ccddb4bb9277d241fa126dbd4f4d766858e90fbefe2"
+    },
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py": {
+      "reviewedSha256": "607145cc76ab993f412b7a7eef1fca4d02d1e6ae5beff0ef5864bace422edda3",
+      "committedSha256": "607145cc76ab993f412b7a7eef1fca4d02d1e6ae5beff0ef5864bace422edda3",
+      "sourceWorkingSha256": "607145cc76ab993f412b7a7eef1fca4d02d1e6ae5beff0ef5864bace422edda3"
+    },
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py": {
+      "reviewedSha256": "97aa4bed52474f02a2f09921ce4f190020e1b04ebc800c3a7b71a162c2b7edc1",
+      "committedSha256": "97aa4bed52474f02a2f09921ce4f190020e1b04ebc800c3a7b71a162c2b7edc1",
+      "sourceWorkingSha256": "97aa4bed52474f02a2f09921ce4f190020e1b04ebc800c3a7b71a162c2b7edc1"
+    },
+    "shared/openapi.json": {
+      "reviewedSha256": "313e96d8ef8f9debe1f57f65318598c1ca280b3f95b52086f32864cf3bd8b533",
+      "committedSha256": "313e96d8ef8f9debe1f57f65318598c1ca280b3f95b52086f32864cf3bd8b533",
+      "sourceWorkingSha256": "534dfad1b5f60b67099b70307660803a3f086da38b159a15c4886100fc7a2a05"
+    },
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts": {
+      "reviewedSha256": "77dc5b14dabc04a6755d8ae59a502425a568281552b33659a806592438c1cb39",
+      "committedSha256": "77dc5b14dabc04a6755d8ae59a502425a568281552b33659a806592438c1cb39",
+      "sourceWorkingSha256": "533ed0ad5e3bfeee3c5d32f1725270b2adc70a971c3aee669be32b071758dbcc"
+    }
+  },
+  "allSevenCommittedMatchReview": true,
+  "sourceRoleWriteOperationsAndSchemasMatchCommit": true,
+  "ordinarySourceWorkingFilesMayRetainUnrelatedChanges": true
+}

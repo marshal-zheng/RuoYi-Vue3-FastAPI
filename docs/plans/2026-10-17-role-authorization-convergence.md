@@ -133,6 +133,6 @@ The next whole-stage audit found a separate ordinary-role dependency: four commi
 - [x] Verify real HTTP/production DI/SQLite regression, existing authorization boundaries, scoped quality gates and independent review.
 - [x] Recheck historical UI source/screenshot hashes, stage commits and plan/report links.
 - [x] Record the unchanged unrelated source FormDialog type-check failure separately from passing clean-candidate checks.
-- [ ] Record exact std delivery, final source verification, preservation and temporary resource cleanup.
+- [x] Record exact std delivery, final source verification, preservation and temporary resource cleanup.
 
 Evidence and current completion boundary: [final whole-stage audit](../reports/2026-10-18-role-authorization-final-audit.md).

@@ -1,0 +1,150 @@
+{
+  "baseCommit": "991631e1b7947642612e023ca154c26a4c75d68f",
+  "implementationCommit": "53084de708a2864f91e8a4c4645fd033828cb1cc",
+  "branch": "std",
+  "normalFastForward": true,
+  "primedOnlyDirtyTargetIndexEntries": [
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py",
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py",
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py",
+    "shared/openapi.json",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts"
+  ],
+  "sourceWorkingProductBytesUnchangedByMerge": true,
+  "beforeMergePaths": 3863,
+  "afterMergePaths": 3883,
+  "preexistingPathsUnchangedExceptCleanTaskDocsAndConcurrentEdits": 3855,
+  "taskDocumentChanges": [
+    "docs/plans/2026-10-17-role-authorization-convergence.md",
+    "docs/reports/2026-10-17-role-authorization-closeout.md",
+    "docs/reports/2026-10-18-role-authorization-final-audit.md",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/artifact-audit.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/bounded-product-proof.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/candidate-manifest.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/fixture-input.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/generated-role-bounded-proof.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/independent-review-round1.md",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/independent-review-round2.md",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/independent-round1-reviewed.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/independent-round2-inputs.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/independent-round2-verification.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/openapi-bounded-delta.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/role-model-schema-preservation.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/source-installation-preservation.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/source-installation-proof.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/source-role-vo-schema-preservation.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/unrelated-source-typecheck.json",
+    "docs/reports/evidence/2026-10-18-role-authorization-final-audit/verification.json"
+  ],
+  "concurrentOutOfScopeSourceEditsRetained": {
+    "docs/plans/2026-10-18-session-renewal.md": {
+      "before": null,
+      "after": {
+        "mode": 420,
+        "sha256": "838573eb62ba78fa8f0f18226581f965e04b733df09541f47c7400ae0b174b7a",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-backend/modules/identity/api/login_controller.py": {
+      "before": {
+        "mode": 420,
+        "sha256": "e0d6d7e66c867cca1f40e0fa5310e289dfcaf9afd21db068b49c3f20cae61f15",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "497dbd26124e6be6ce6684c4d380662906675d1f98078da844ea456c6b1917af",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-backend/modules/identity/application/services/security_token_service.py": {
+      "before": {
+        "mode": 420,
+        "sha256": "ef9fe78ba0a57d69a2e30ac2f35e7f46ea3e5af73c72c0eb12a8441cb8b90379",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "10e22d16ee0c97f4a346e90eda77bdb1b58149247958807f6e7f32eb603f63b2",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-frontend/src/api/login.ts": {
+      "before": {
+        "mode": 420,
+        "sha256": "41f32b07c2910f2da474cc3397c77aebe9aab2db73ef7f2225b67412cc662d2d",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "1e6cd30ae3976f49f6c61efb1e1668480ea389114c641fd0624833c80396b3bc",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-frontend/src/store/modules/user.ts": {
+      "before": {
+        "mode": 420,
+        "sha256": "d1d0b409e80eecc35bce0934d6a89b472607c096bf79d73187008b932da14d07",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "f09de65c8f715e14cffc09fb0c080c037e0524bb4a087dacc422921c71233e96",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-frontend/src/utils/auth.ts": {
+      "before": {
+        "mode": 420,
+        "sha256": "cb24a76222e130a723fa2110ca9c934a433ff7e9d27ac2dddedb59bf528d1583",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "f086f589fa0f7aca78150d8d61984b86af62771f8c1d0fdbd4aceb6ea8bd15ea",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-frontend/src/utils/http.ts": {
+      "before": {
+        "mode": 420,
+        "sha256": "d922bf861963babdf9a5d64d69941cfc40aecb2fff69601f6b896bd4697f7912",
+        "symlink": false
+      },
+      "after": {
+        "mode": 420,
+        "sha256": "e7444d43c3019b1139bbe4735dd1a7606e8631ebea21d768afce594d7060c923",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    },
+    "ruoyi-fastapi-frontend/src/utils/session.ts": {
+      "before": null,
+      "after": {
+        "mode": 420,
+        "sha256": "7a26759d14d2c799ed705d625ec6679e94783d4e50b2637b3e79970d2b3170b9",
+        "symlink": false
+      },
+      "notInOurCommit": true,
+      "neverWrittenOrRestoredByThisTask": true
+    }
+  },
+  "indexClean": true,
+  "candidateSevenBlobHashesMatch": true,
+  "pushed": false
+}

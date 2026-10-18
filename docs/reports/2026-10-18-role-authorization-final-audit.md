@@ -41,3 +41,12 @@
 实际源目录 `yarn type-check` 返回 TS2305：`src/components/ui/FormDialog/index.ts:3` 导入的 `DialogOptions` 不由当前安装的 `@zxio/zxui/hooks` 导出。该未提交文件从本轮开始至今 SHA256 相同，干净 std 使用既有派生类型且类型检查通过。本次保留这项其他阶段的类型迁移及依赖状态，不覆盖、不收编到角色提交。见[范围外源检查证据](evidence/2026-10-18-role-authorization-final-audit/unrelated-source-typecheck.json)。
 
 独立复审结论针对本次候选与阶段契约，不代表带其他未提交改动的源工作区全局检查通过。未运行全仓测试，不声明全仓全绿；手机端、其他主题、仿真及全系统 health、远端推送和发布仍在本阶段之外。
+
+
+## std 最终交付回执
+
+实现及审计提交 `53084de708a2864f91e8a4c4645fd033828cb1cc` 已普通快进到 `std`。七个候选文件的提交 blob SHA256 与独立复审输入完全一致；源保留其他 OpenAPI 改动时，四个角色写 operation/schema 仍与提交一致。提交后真实源后端 **338 passed**、前端 **11 suites / 122 passed**，见[交付后验证](evidence/2026-10-18-role-authorization-final-audit/delivered-verification.json)和[候选一致性](evidence/2026-10-18-role-authorization-final-audit/committed-candidate-proof.json)。
+
+安装阶段核对原 3,862 个路径，仅有四个原文件和一份新增角色回归被本轮明确修改，其余 3,858 个原路径内容/模式不变。快进交付时七个重叠产品路径的工作区字节全部保留，仅正常写入原本干净的阶段文档；同期其他任务更新的会话文档和登录/令牌前后端文件单列记录，均未收编或回退。索引为空。见[源交付保留](evidence/2026-10-18-role-authorization-final-audit/source-delivery.json)。
+
+项目内临时工作树、任务分支、依赖软链接和两份临时构建输出已删除，源 node_modules 与原 worktree 父目录保留。没有新增服务/真实数据，也未停止共享 MySQL/Redis；没有推送。见[资源清理](evidence/2026-10-18-role-authorization-final-audit/runtime-cleanup.json)。本阶段没有剩余产品或交付必需项；前述范围外源全局类型检查失败仍单独保留。
