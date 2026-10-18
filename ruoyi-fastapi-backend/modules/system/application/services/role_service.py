@@ -208,18 +208,15 @@ class RoleService:
         :param page_object: 编辑角色对象
         :return: 编辑角色校验结果
         """
-        edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin'})
-        if page_object.type != 'status':
-            del edit_role['menu_ids']
-        if page_object.type == 'status':
-            del edit_role['type']
-        role_info = await self.role_detail_services(edit_role.get('role_id'))
-        if not role_info.role_id:
-            raise ResourceNotFoundException(
-                user_message='角色不存在',
-                error_code=ErrorCode.ROLE_NOT_FOUND,
-                developer_message=f'Role not found: role_id={edit_role.get("role_id")}',
-            )
+        writable = (
+            {'status'}
+            if page_object.type == 'status'
+            else {'role_name', 'role_key', 'role_sort', 'status', 'menu_check_strictly', 'remark'}
+        )
+        edit_role = page_object.model_dump(
+            exclude_unset=True, include=writable | {'role_id', 'update_by', 'update_time'}
+        )
+        await self.role_detail_services(edit_role.get('role_id'))
 
         if page_object.type != 'status':
             if not await self.check_role_name_unique_services(page_object):
@@ -241,7 +238,7 @@ class RoleService:
                 if hasattr(db_role, key):
                     setattr(db_role, key, value)
             await self.role_repo.update(db_role)
-        if page_object.type != 'status':
+        if page_object.type != 'status' and 'menu_ids' in page_object.model_fields_set:
             await self.role_menu_repo.delete_by_role_id(page_object.role_id)
             if page_object.menu_ids:
                 for menu in page_object.menu_ids:
@@ -257,14 +254,11 @@ class RoleService:
         :param page_object: 角色数据权限对象
         :return: 分配角色数据权限结果
         """
-        edit_role = page_object.model_dump(exclude_unset=True, exclude={'admin', 'dept_ids'})
-        role_info = await self.role_detail_services(page_object.role_id)
-        if not role_info.role_id:
-            raise ResourceNotFoundException(
-                user_message='角色不存在',
-                error_code=ErrorCode.ROLE_NOT_FOUND,
-                developer_message=f'Role not found: role_id={page_object.role_id}',
-            )
+        edit_role = page_object.model_dump(
+            exclude_unset=True,
+            include={'role_id', 'data_scope', 'dept_check_strictly', 'update_by', 'update_time'},
+        )
+        await self.role_detail_services(page_object.role_id)
 
         db_role = await self.role_repo.find_by_id(page_object.role_id)
         if db_role:
@@ -272,11 +266,12 @@ class RoleService:
                 if hasattr(db_role, key):
                     setattr(db_role, key, value)
             await self.role_repo.update(db_role)
-        await self.role_dept_repo.delete_by_role_id(page_object.role_id)
-        if page_object.dept_ids and page_object.data_scope == '2':
-            for dept in page_object.dept_ids:
-                db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
-                await self.role_dept_repo.add(db_role_dept)
+        if 'dept_ids' in page_object.model_fields_set:
+            await self.role_dept_repo.delete_by_role_id(page_object.role_id)
+            if page_object.dept_ids and db_role.data_scope == '2':
+                for dept in page_object.dept_ids:
+                    db_role_dept = RoleDeptDO(role_id=page_object.role_id, dept_id=dept)
+                    await self.role_dept_repo.add(db_role_dept)
         return CrudResponseModel(is_success=True, message='分配成功')
 
     @transactional()

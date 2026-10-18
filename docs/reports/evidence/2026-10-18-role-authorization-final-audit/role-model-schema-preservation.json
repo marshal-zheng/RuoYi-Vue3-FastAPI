@@ -1,0 +1,12 @@
+{
+  "AddRoleModel": false,
+  "DeleteRoleModel": true,
+  "EditRoleModel": false,
+  "RoleDeptModel": true,
+  "RoleDeptQueryModel": true,
+  "RoleMenuModel": true,
+  "RoleMenuQueryModel": true,
+  "RoleModel": true,
+  "RolePageQueryModel": true,
+  "RoleQueryModel": true
+}

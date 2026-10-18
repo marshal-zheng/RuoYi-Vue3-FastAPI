@@ -1,0 +1,14 @@
+{
+  "roleVoOnlyEquivalentTypingAndFormatting": true,
+  "sourceControllerOnlyFourWriteResponseMetadata": true,
+  "sourceExistingDtoAndServiceBytesPreserved": true,
+  "sourceOpenapiOnlyFourWriteContractsUpdated": true,
+  "sourceGeneratedOnlyEightDeclarationsUpdated": true,
+  "installedSourcePaths": [
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+    "shared/openapi.json",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py"
+  ]
+}

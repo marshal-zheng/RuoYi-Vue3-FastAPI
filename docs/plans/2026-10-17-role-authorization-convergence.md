@@ -122,3 +122,17 @@ The final whole-stage audit found a delivery dependency missed by the original s
 - [x] Record final std delivery, source verification, preservation and worktree cleanup.
 
 Evidence and final scope reconciliation: [stage closeout audit](../reports/2026-10-17-role-authorization-closeout.md).
+
+## 2026-10-18 whole-stage role write contract follow-up
+
+The next whole-stage audit found a separate ordinary-role dependency: four committed public DTOs did not match the committed generic backend inputs. The existing full-form browser path passed, while omitted relations, explicit clearing and invalid fields violated the public contract.
+
+- [x] Independently reproduce all eight contract symptoms on clean std and preserve first-round FAIL.
+- [x] Deliver four role DTOs, unset-preserving controller conversion and operation-specific service fields/relations without cache compatibility.
+- [x] Align only four OpenAPI operations/schemas and their generated response declarations with actual HTTP resources/statuses.
+- [x] Verify real HTTP/production DI/SQLite regression, existing authorization boundaries, scoped quality gates and independent review.
+- [x] Recheck historical UI source/screenshot hashes, stage commits and plan/report links.
+- [x] Record the unchanged unrelated source FormDialog type-check failure separately from passing clean-candidate checks.
+- [ ] Record exact std delivery, final source verification, preservation and temporary resource cleanup.
+
+Evidence and current completion boundary: [final whole-stage audit](../reports/2026-10-18-role-authorization-final-audit.md).

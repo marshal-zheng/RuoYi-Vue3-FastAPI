@@ -1,0 +1,29 @@
+{
+  "baseSHA": "991631e1b7947642612e023ca154c26a4c75d68f",
+  "readFilesSHA256": {
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py": "f6c85e053c16010e80ff252fda11370b0cab74a522dda0d3c9ef369c047c1d00",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py": "401f0f263674ba895d4b01323c3fec48caa2e0d089620f2896fee628a44f6f7c",
+    "ruoyi-fastapi-backend/modules/system/application/commands/role_commands.py": "f35981baa24d0f141e1bd486325d114a42b0010ba5fdb000a6d45c7ba1474dab",
+    "ruoyi-fastapi-backend/modules/system/application/handlers/command/role_command_handlers.py": "abb833f87b1b97107f239d395549183db47ea191b6d4cdd4301130f51cfc4cba",
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py": "cc848f6d04434932369f6a5ede239444a6c492b9168070490eb02ad24bd88a03",
+    "ruoyi-fastapi-backend/modules/system/infrastructure/role_repository.py": "9b96de08c866afbcc0864fb9608197b65672f652c0a161447fb2153ad788a8c2",
+    "ruoyi-fastapi-backend/modules/system/application/services/user_role_service.py": "8b6959c8f6511a1ff2b60310bc24837faf81fcf80d958f677b1c0977ad3bd2f8",
+    "ruoyi-fastapi-frontend/src/api/system/role.ts": "0432195037c069013183c99f78f25e2657f9f049ff5de7a61c2f74993e444db8",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts": "b6d6548093ea7a0f4c01fcd55dc3940fb66da852837bcb4f463a88ddacbadbd4",
+    "ruoyi-fastapi-frontend/src/views/system/role/components/RoleFormDrawer.vue": "84099970a00c5ad8f987ce9cc803273a435c6ffab3f9bb9c4c73041b02351ee1",
+    "ruoyi-fastapi-frontend/src/views/system/role/components/RoleDataScopeDrawer.vue": "8e2136f205e7a312f16200b96b1348a292fdc00f04b47b2b89ea1cc11461f55b",
+    "ruoyi-fastapi-frontend/src/views/system/role/index.vue": "6e292b515415f343211146b3955c850e186836a470a8c71f8f8ac456378520e8",
+    "ruoyi-fastapi-frontend/src/views/system/role/authUser.vue": "b245088ca39f3c48b2653040837ad1ef536ded10267a285ffb419ff4e1b60f11",
+    "ruoyi-fastapi-frontend/src/views/system/role/selectUser.vue": "6f75b455572d1017f43612fa065913660fcbbc1a78e48ab60d8eb57878901497",
+    "ruoyi-fastapi-frontend/src/views/system/user/authRole.vue": "0666fecb9e471730e72ea06eb5a36f9ad24a81c17a8a486a86d42a53e40cb605",
+    "ruoyi-fastapi-frontend/src/queries/system/role.ts": "39aa0ba1f75d9002510c18372f0e731082735ede7450fcfa953cdd73f9908b28",
+    "ruoyi-fastapi-frontend/src/store/modules/system-list-navigation.ts": "2f4ad3502c7aae123422fbe280537367ef6a64af5dd55b91c81db2d80842e816",
+    "shared/openapi.json": "9a82291423462b25a6e50907f11c1ee22cd65232da37c1ccd57d7a5e4f5402db"
+  },
+  "P0": 0,
+  "P1": 0,
+  "P2": 1,
+  "RERUN": "FAIL: 8 typed-contract symptoms; current drawer mainflow GREEN",
+  "probe": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/role-stage-final-audit-20261018/test_independent_role_crud_probe.py",
+  "probeSha256": "05db0ba8450c97075fea7a4b26f9e02edba0be6e41ea54efb4b31b7142e9ad28"
+}

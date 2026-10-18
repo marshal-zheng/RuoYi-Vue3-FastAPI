@@ -1,0 +1,23 @@
+{
+  "serviceChangedMethods": [
+    "edit_role_services",
+    "role_datascope_services"
+  ],
+  "serviceCandidateMatchesExistingSourceAst": true,
+  "controllerChangedHandlers": [
+    "add_system_role",
+    "edit_system_role",
+    "edit_system_role_datascope",
+    "reset_system_role_status"
+  ],
+  "publicDTOExactlyMatchesExistingSource": true,
+  "ordinaryCreateServiceUnchanged": true,
+  "frozenManifest": {
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py": "903e5f0b314fa581fbc429af6b1d67cbc3f002f649fbf00e3a0d0b63cd92b652",
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py": "bb2c1d963598143ee3352ccddb4bb9277d241fa126dbd4f4d766858e90fbefe2",
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py": "607145cc76ab993f412b7a7eef1fca4d02d1e6ae5beff0ef5864bace422edda3",
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py": "97aa4bed52474f02a2f09921ce4f190020e1b04ebc800c3a7b71a162c2b7edc1",
+    "shared/openapi.json": "313e96d8ef8f9debe1f57f65318598c1ca280b3f95b52086f32864cf3bd8b533"
+  }
+}

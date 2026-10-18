@@ -1,0 +1,32 @@
+{
+  "changedOperations": [
+    [
+      "/system/role",
+      "post"
+    ],
+    [
+      "/system/role",
+      "put"
+    ],
+    [
+      "/system/role/dataScope",
+      "put"
+    ],
+    [
+      "/system/role/changeStatus",
+      "put"
+    ]
+  ],
+  "addedSchemas": [
+    "RoleCreateModel",
+    "RoleUpdateModel",
+    "RoleStatusUpdateModel",
+    "RoleDataScopeUpdateModel"
+  ],
+  "removedSchemas": [
+    "AddRoleModel"
+  ],
+  "unrelatedOpenapiPreserved": true,
+  "roleModelUnchanged": true,
+  "artifactSha256": "313e96d8ef8f9debe1f57f65318598c1ca280b3f95b52086f32864cf3bd8b533"
+}

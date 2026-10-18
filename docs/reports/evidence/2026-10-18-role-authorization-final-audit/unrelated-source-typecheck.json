@@ -1,0 +1,11 @@
+{
+  "scope": "Pre-existing unrelated source change, intentionally preserved",
+  "file": "ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts",
+  "beforeTaskSha256": "e61a934ff5c2e42f29fa1e671e0d16a049a9a86559b26fd22369b91d75997f0d",
+  "afterTaskSha256": "e61a934ff5c2e42f29fa1e671e0d16a049a9a86559b26fd22369b91d75997f0d",
+  "bytesUnchanged": true,
+  "sourceError": "TS2305: @zxio/zxui/hooks has no exported member DialogOptions",
+  "committedFileHasNoExplicitDialogOptionsImport": true,
+  "isolatedCandidateTypeCheckPassed": true,
+  "noSourceOrLibraryFixApplied": true
+}

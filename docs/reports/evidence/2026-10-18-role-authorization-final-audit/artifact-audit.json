@@ -1,0 +1,106 @@
+{
+  "sourceHead": "991631e1b7947642612e023ca154c26a4c75d68f",
+  "ancestry": [
+    {
+      "commit": "d558dfb",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "6feb8c5",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "5b0d62c",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "fe50818",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "97e31e8",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "7b6fbd0",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "8cc5912",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "c65cddf",
+      "ancestorOfStd": true
+    },
+    {
+      "commit": "991631e",
+      "ancestorOfStd": true
+    }
+  ],
+  "phaseFrontendProductFiles": 15,
+  "phaseFrontendSourceDiffersFromCommit": [],
+  "browserUiProductDifferencesSinceAcceptance": [],
+  "screenshots": [
+    {
+      "path": "04-role-validation.jpg",
+      "match": true
+    },
+    {
+      "path": "09-user-selector-ready.jpg",
+      "match": true
+    },
+    {
+      "path": "19-user-auth-1024-before-time.jpg",
+      "match": true
+    },
+    {
+      "path": "21-role-tooltip-1024.jpg",
+      "match": true
+    },
+    {
+      "path": "24-select-all-1024.jpg",
+      "match": true
+    },
+    {
+      "path": "25-batch-revoke-confirm-1024.jpg",
+      "match": true
+    },
+    {
+      "path": "26-selector-error-1024.jpg",
+      "match": true
+    },
+    {
+      "path": "28-role-list-1440-final.jpg",
+      "match": true
+    },
+    {
+      "path": "29-role-list-1024-final.jpg",
+      "match": true
+    },
+    {
+      "path": "30-role-form-1024-final.jpg",
+      "match": true
+    },
+    {
+      "path": "32-bidirectional-auth-final-1440.jpg",
+      "match": true
+    },
+    {
+      "path": "34-menu-permission-persisted.jpg",
+      "match": true
+    },
+    {
+      "path": "35-data-scope-other-modes.jpg",
+      "match": true
+    },
+    {
+      "path": "17-data-scope-1024.jpg",
+      "match": true
+    }
+  ],
+  "checkedLocalLinks": 45,
+  "brokenLocalLinks": [],
+  "uncheckedPlanItems": [],
+  "remainingOldStageBranches": ""
+}

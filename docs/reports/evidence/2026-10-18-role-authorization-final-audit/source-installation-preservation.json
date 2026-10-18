@@ -1,0 +1,14 @@
+{
+  "originalPaths": 3862,
+  "currentPaths": 3863,
+  "authorizedInstalledPaths": [
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts",
+    "shared/openapi.json"
+  ],
+  "unrelatedOriginalPathsUnchanged": 3858,
+  "unexpectedChanges": [],
+  "indexClean": true
+}

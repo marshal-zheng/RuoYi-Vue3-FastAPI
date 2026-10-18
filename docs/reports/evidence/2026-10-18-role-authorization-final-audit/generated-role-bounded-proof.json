@@ -1,0 +1,31 @@
+{
+  "generatorVersion": "0.97.0",
+  "changed": [
+    "AddSystemRoleSystemRolePostResponses",
+    "EditSystemRoleDatascopeSystemRoleDataScopePutResponses",
+    "EditSystemRoleSystemRolePutResponses",
+    "ResetSystemRoleStatusSystemRoleChangeStatusPutResponses"
+  ],
+  "added": [
+    "AddSystemRoleSystemRolePostResponse",
+    "EditSystemRoleDatascopeSystemRoleDataScopePutResponse",
+    "EditSystemRoleSystemRolePutResponse",
+    "ResetSystemRoleStatusSystemRoleChangeStatusPutResponse"
+  ],
+  "otherDeclarationsUnchanged": true,
+  "parity": {
+    "AddSystemRoleSystemRolePostResponses": true,
+    "EditSystemRoleDatascopeSystemRoleDataScopePutResponses": true,
+    "EditSystemRoleSystemRolePutResponses": true,
+    "ResetSystemRoleStatusSystemRoleChangeStatusPutResponses": true,
+    "AddSystemRoleSystemRolePostResponse": true,
+    "EditSystemRoleDatascopeSystemRoleDataScopePutResponse": true,
+    "EditSystemRoleSystemRolePutResponse": true,
+    "ResetSystemRoleStatusSystemRoleChangeStatusPutResponse": true,
+    "RoleCreateModel": true,
+    "RoleUpdateModel": true,
+    "RoleStatusUpdateModel": true,
+    "RoleDataScopeUpdateModel": true
+  },
+  "sha256": "77dc5b14dabc04a6755d8ae59a502425a568281552b33659a806592438c1cb39"
+}

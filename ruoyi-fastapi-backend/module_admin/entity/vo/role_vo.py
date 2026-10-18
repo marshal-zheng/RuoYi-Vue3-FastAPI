@@ -1,10 +1,12 @@
 from datetime import datetime
+from typing import Literal
+
 from pydantic import ConfigDict, Field, field_validator, model_validator
-from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
-from typing import List, Literal, Optional, Union
+
 from module_admin.annotation.pydantic_annotation import as_query
+from module_admin.entity.vo.base import CamelModelBase
 
 
 class RoleModel(CamelModelBase):
@@ -14,28 +16,28 @@ class RoleModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    role_id: Optional[int] = Field(default=None, description='角色ID')
-    role_name: Optional[str] = Field(default=None, description='角色名称')
-    role_key: Optional[str] = Field(default=None, description='角色权限字符串')
-    role_sort: Optional[int] = Field(default=None, description='显示顺序')
-    data_scope: Optional[str] = Field(
+    role_id: int | None = Field(default=None, description='角色ID')
+    role_name: str | None = Field(default=None, description='角色名称')
+    role_key: str | None = Field(default=None, description='角色权限字符串')
+    role_sort: int | None = Field(default=None, description='显示顺序')
+    data_scope: str | None = Field(
         default=None,
         description='数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）',
     )
-    menu_check_strictly: Optional[Union[int, bool]] = Field(default=None, description='菜单树选择项是否关联显示')
-    dept_check_strictly: Optional[Union[int, bool]] = Field(default=None, description='部门树选择项是否关联显示')
-    status: Optional[Literal['0', '1']] = Field(default=None, description='角色状态（0正常 1停用）')
-    del_flag: Optional[Literal['0', '2']] = Field(default=None, description='删除标志（0代表存在 2代表删除）')
-    create_by: Optional[str] = Field(default=None, description='创建者')
-    create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-    remark: Optional[str] = Field(default=None, description='备注')
-    admin: Optional[bool] = Field(default=False, description='是否为admin')
+    menu_check_strictly: int | bool | None = Field(default=None, description='菜单树选择项是否关联显示')
+    dept_check_strictly: int | bool | None = Field(default=None, description='部门树选择项是否关联显示')
+    status: Literal['0', '1'] | None = Field(default=None, description='角色状态（0正常 1停用）')
+    del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
+    remark: str | None = Field(default=None, description='备注')
+    admin: bool | None = Field(default=False, description='是否为admin')
 
     @field_validator('menu_check_strictly', 'dept_check_strictly')
     @classmethod
-    def check_filed_mapping(cls, v: Union[int, bool]) -> Union[int, bool]:
+    def check_filed_mapping(cls, v: int | bool) -> int | bool:
         if v == 1:
             v = True
         elif v == 0:
@@ -90,8 +92,8 @@ class RoleMenuModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    role_id: Optional[int] = Field(default=None, description='角色ID')
-    menu_id: Optional[int] = Field(default=None, description='菜单ID')
+    role_id: int | None = Field(default=None, description='角色ID')
+    menu_id: int | None = Field(default=None, description='菜单ID')
 
 
 class RoleDeptModel(CamelModelBase):
@@ -101,8 +103,8 @@ class RoleDeptModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    role_id: Optional[int] = Field(default=None, description='角色ID')
-    dept_id: Optional[int] = Field(default=None, description='部门ID')
+    role_id: int | None = Field(default=None, description='角色ID')
+    dept_id: int | None = Field(default=None, description='部门ID')
 
 
 class RoleQueryModel(RoleModel):
@@ -110,8 +112,8 @@ class RoleQueryModel(RoleModel):
     角色管理不分页查询模型
     """
 
-    begin_time: Optional[str] = Field(default=None, description='开始时间')
-    end_time: Optional[str] = Field(default=None, description='结束时间')
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
 
 
 @as_query
@@ -131,8 +133,8 @@ class RoleMenuQueryModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
-    menus: List = Field(default=[], description='菜单信息')
-    checked_keys: List[int] = Field(default=[], description='已选择的菜单ID信息')
+    menus: list = Field(default=[], description='菜单信息')
+    checked_keys: list[int] = Field(default=[], description='已选择的菜单ID信息')
 
 
 class RoleDeptQueryModel(CamelModelBase):
@@ -142,8 +144,8 @@ class RoleDeptQueryModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
-    depts: List = Field(default=[], description='部门信息')
-    checked_keys: List[int] = Field(default=[], description='已选择的部门ID信息')
+    depts: list = Field(default=[], description='部门信息')
+    checked_keys: list[int] = Field(default=[], description='已选择的部门ID信息')
 
 
 class AddRoleModel(RoleModel):
@@ -151,9 +153,9 @@ class AddRoleModel(RoleModel):
     新增角色模型
     """
 
-    dept_ids: List = Field(default=[], description='部门ID信息')
-    menu_ids: List = Field(default=[], description='菜单ID信息')
-    type: Optional[str] = Field(default=None, description='操作类型')
+    dept_ids: list[int] | None = Field(default=None, description='部门ID信息')
+    menu_ids: list[int] | None = Field(default=None, description='菜单ID信息')
+    type: str | None = Field(default=None, description='操作类型')
 
 
 class EditRoleModel(AddRoleModel):
@@ -172,5 +174,5 @@ class DeleteRoleModel(CamelModelBase):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
     role_ids: str = Field(description='需要删除的菜单ID')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')

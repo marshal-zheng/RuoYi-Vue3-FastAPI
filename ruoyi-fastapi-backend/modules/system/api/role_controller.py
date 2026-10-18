@@ -10,6 +10,12 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleModel, RolePageQueryModel
+from module_admin.entity.vo.role_write_vo import (
+    RoleCreateModel,
+    RoleDataScopeUpdateModel,
+    RoleStatusUpdateModel,
+    RoleUpdateModel,
+)
 from module_admin.entity.vo.user_role_write_vo import RoleUserRevokeModel, RoleUsersGrantModel, RoleUsersRevokeModel
 from module_admin.entity.vo.user_vo import CurrentUserModel, UserRolePageQueryModel
 from modules.identity.ports import get_current_user
@@ -105,16 +111,19 @@ async def get_system_role_list(
     return ok_page_result(role_page_query_result)
 
 
-@roleController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:role:add'))])
+@roleController.post(
+    '', status_code=201, response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:add'))]
+)
 @ValidateFields(validate_model='add_role')
 @Log(title='角色管理', business_type=BusinessType.INSERT)
 async def add_system_role(
     request: Request,
-    add_role: AddRoleModel,
+    add_role: RoleCreateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    add_role = AddRoleModel(**add_role.model_dump(exclude_unset=True))
     add_role.create_by = current_user.user.user_name
     add_role.create_time = datetime.now()
     add_role.update_by = current_user.user.user_name
@@ -136,17 +145,18 @@ async def add_system_role(
     return ResponseUtil.created_resource(resource, location=location)
 
 
-@roleController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put('', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
 @ValidateFields(validate_model='edit_role')
 @Log(title='角色管理', business_type=BusinessType.UPDATE)
 async def edit_system_role(
     request: Request,
-    edit_role: AddRoleModel,
+    edit_role: RoleUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    edit_role = AddRoleModel(**edit_role.model_dump(exclude_unset=True))
     edit_role.update_by = current_user.user.user_name
     edit_role.update_time = datetime.now()
     edit_command = EditRoleCommand(
@@ -172,21 +182,20 @@ async def edit_system_role(
     return ResponseUtil.ok_resource(resource)
 
 
-@roleController.put('/dataScope', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '/dataScope', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @Log(title='角色管理', business_type=BusinessType.GRANT)
 async def edit_system_role_datascope(
     request: Request,
-    role_data_scope: AddRoleModel,
+    role_data_scope: RoleDataScopeUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
     edit_role = AddRoleModel(
-        roleId=role_data_scope.role_id,
-        dataScope=role_data_scope.data_scope,
-        deptIds=role_data_scope.dept_ids,
-        deptCheckStrictly=role_data_scope.dept_check_strictly,
+        **role_data_scope.model_dump(exclude_unset=True),
         updateBy=current_user.user.user_name,
         updateTime=datetime.now(),
     )
@@ -286,11 +295,13 @@ async def export_system_role_list(
     return ResponseUtil.streaming(data=bytes2file_response(role_export_result))
 
 
-@roleController.put('/changeStatus', dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '/changeStatus', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @Log(title='角色管理', business_type=BusinessType.UPDATE)
 async def reset_system_role_status(
     request: Request,
-    change_role: AddRoleModel,
+    change_role: RoleStatusUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('DeptDO')),

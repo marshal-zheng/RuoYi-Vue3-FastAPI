@@ -12418,8 +12418,11 @@ export type AddSystemRoleSystemRolePostResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  201: RoleModel;
 };
+
+export type AddSystemRoleSystemRolePostResponse =
+  AddSystemRoleSystemRolePostResponses[keyof AddSystemRoleSystemRolePostResponses];
 
 export type EditSystemRoleSystemRolePutData = {
   body: RoleUpdateModel;
@@ -12442,8 +12445,11 @@ export type EditSystemRoleSystemRolePutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: RoleModel;
 };
+
+export type EditSystemRoleSystemRolePutResponse =
+  EditSystemRoleSystemRolePutResponses[keyof EditSystemRoleSystemRolePutResponses];
 
 export type GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData = {
   body?: never;
@@ -12891,8 +12897,11 @@ export type ResetSystemRoleStatusSystemRoleChangeStatusPutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: RoleModel;
 };
+
+export type ResetSystemRoleStatusSystemRoleChangeStatusPutResponse =
+  ResetSystemRoleStatusSystemRoleChangeStatusPutResponses[keyof ResetSystemRoleStatusSystemRoleChangeStatusPutResponses];
 
 export type EditSystemRoleDatascopeSystemRoleDataScopePutData = {
   body: RoleDataScopeUpdateModel;
@@ -12915,8 +12924,11 @@ export type EditSystemRoleDatascopeSystemRoleDataScopePutResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: RoleModel;
 };
+
+export type EditSystemRoleDatascopeSystemRoleDataScopePutResponse =
+  EditSystemRoleDatascopeSystemRoleDataScopePutResponses[keyof EditSystemRoleDatascopeSystemRoleDataScopePutResponses];
 
 export type GetSystemRoleDeptTreeSystemRoleDeptTreeRoleIdGetData = {
   body?: never;

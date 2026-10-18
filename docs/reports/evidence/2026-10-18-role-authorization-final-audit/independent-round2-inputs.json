@@ -1,0 +1,53 @@
+{
+  "baseSHA": "991631e1b7947642612e023ca154c26a4c75d68f",
+  "reviewedFilesSHA256": {
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py": "903e5f0b314fa581fbc429af6b1d67cbc3f002f649fbf00e3a0d0b63cd92b652",
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py": "59f0c5591d59151ce2a2e76904e5e32afff8e7ee3569c5ba55e314a692557db1",
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py": "bb2c1d963598143ee3352ccddb4bb9277d241fa126dbd4f4d766858e90fbefe2",
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py": "607145cc76ab993f412b7a7eef1fca4d02d1e6ae5beff0ef5864bace422edda3",
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py": "97aa4bed52474f02a2f09921ce4f190020e1b04ebc800c3a7b71a162c2b7edc1",
+    "shared/openapi.json": "313e96d8ef8f9debe1f57f65318598c1ca280b3f95b52086f32864cf3bd8b533",
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts": "77dc5b14dabc04a6755d8ae59a502425a568281552b33659a806592438c1cb39"
+  },
+  "frozenManifestMatchedAfterTests": {
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_vo.py": true,
+    "ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py": true,
+    "ruoyi-fastapi-backend/modules/system/api/role_controller.py": true,
+    "ruoyi-fastapi-backend/modules/system/application/services/role_service.py": true,
+    "ruoyi-fastapi-backend/tests/unit/controllers/test_role_write_http.py": true,
+    "shared/openapi.json": true,
+    "ruoyi-fastapi-frontend/src/api/_generated/types.gen.ts": true
+  },
+  "openapiOnlyFourRoleWriteOperationsAndFiveSchemaChanges": true,
+  "fourGeneratedResponsesAndFourAliasesOnly": true,
+  "generatedIndependentReexecution": false,
+  "noRemainingP0P1P2": true,
+  "runtimeModules": {
+    "modules.system.api.role_controller": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-stage-final-audit/ruoyi-fastapi-backend/modules/system/api/role_controller.py",
+    "modules.system.application.services.role_service": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-stage-final-audit/ruoyi-fastapi-backend/modules/system/application/services/role_service.py",
+    "modules.system.application.services.user_role_service": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-stage-final-audit/ruoyi-fastapi-backend/modules/system/application/services/user_role_service.py",
+    "module_admin.entity.vo.role_write_vo": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/role-stage-final-audit/ruoyi-fastapi-backend/module_admin/entity/vo/role_write_vo.py"
+  },
+  "runtimeModulesInsideCandidate": true,
+  "unchangedRoleReadQueryDeleteSchemas": {
+    "RoleModel": true,
+    "RoleMenuModel": true,
+    "RoleDeptModel": true,
+    "RoleQueryModel": true,
+    "RolePageQueryModel": true,
+    "RoleMenuQueryModel": true,
+    "RoleDeptQueryModel": true,
+    "DeleteRoleModel": true
+  },
+  "sourceGlobalTypecheckBoundary": {
+    "file": "ruoyi-fastapi-frontend/src/components/ui/FormDialog/index.ts",
+    "diagnostic": "TS2305: DialogOptions is not exported from @zxio/zxui/hooks by currently installed package",
+    "sourceUnrelatedFileUnchanged": true,
+    "sha256": "e61a934ff5c2e42f29fa1e671e0d16a049a9a86559b26fd22369b91d75997f0d",
+    "sourceGlobalTypecheck": "failed",
+    "candidateTypecheck": "passed (root evidence)"
+  },
+  "frozenManifestRecheckedAtReviewEnd": true,
+  "initialCandidateDiffBeforeReportDocumentationWasExactly7": true,
+  "onlySevenProductTestArtifactCandidateFilesChanged": true
+}
