@@ -33,8 +33,12 @@ async def test_refresh_config_cache_command_handler_success() -> None:
 
     assert result.success is True
     assert result.status == 'refreshed'
-    assert result.data == {'message': '刷新成功'}
+    assert result.data == {}
     assert result.metadata['operator'] == 'admin'
+    assert result.metadata['trace_id'] == 'trace-1'
+    assert result.metadata['request_id'] == 'req-1'
+    assert len(result.events) == 1
+    assert result.events[0].event_type == 'system.config.cache_refreshed'
     assert config_service.called_with is command.redis_client
 
 
@@ -47,6 +51,7 @@ async def test_refresh_config_cache_command_handler_raises_when_redis_missing() 
         await handler.handle(RefreshConfigCacheCommand(redis_client=None))
 
     assert exc_info.value.error_code == ErrorCode.CACHE_ERROR
+    assert config_service.called_with is None
 
 
 @pytest.mark.asyncio
@@ -54,8 +59,11 @@ async def test_system_mediator_dispatches_refresh_command() -> None:
     config_service = _ConfigServiceStub()
     mediator = provide_system_mediator(config_service=config_service)
 
-    result = await mediator.send(RefreshConfigCacheCommand(redis_client=object(), operator='tester'))
+    redis_client = object()
+    result = await mediator.send(RefreshConfigCacheCommand(redis_client=redis_client, operator='tester'))
 
     assert result.success is True
-    assert result.data == {'message': '刷新成功'}
+    assert result.data == {}
+    assert result.status == 'refreshed'
     assert result.metadata['operator'] == 'tester'
+    assert config_service.called_with is redis_client

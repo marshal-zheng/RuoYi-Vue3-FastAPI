@@ -1,0 +1,44 @@
+[
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/application/handlers/command/config_command_handlers.py",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "81ec2b52d367cb0f825b0676e96f34832b07605505f28d38ebf3f3357d57cbc5"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/api/config_controller.py",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "9d55af1cb9fd8ce598a81744e3938df96caa41a937fa259bca87ba7ecc599437"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/modules/system/api/dev_menu_sync_controller.py",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "68e99f106f219f0275d0ed352e6b59bae655ab3ba75237a077c0c52b3181680b"
+  },
+  {
+    "path": "ruoyi-fastapi-backend/utils/response_util.py",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "54a7576240046670c30e8626783506a3bfb3f5f1e3b9cf93b3d496d9f863d02e"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/system/config.ts",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "953e2cc8c8c8d763d0f27c1f8e675de2e79b30916cd29e50546cc82fb281e3b9"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/api/system/devMenuSync.ts",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "96731cd83f89cc2da879aa7604a11884c2e25ae2a08de5537b7be3fc3269e0bc"
+  },
+  {
+    "path": "ruoyi-fastapi-frontend/src/plugins/dev-menu-hot-sync.ts",
+    "sourceEqualsHead": true,
+    "candidateEqualsHead": true,
+    "sha256": "5438e900816d48e1811e4d6c1f76bcdce632140acb2070d1085782500c858eb6"
+  }
+]

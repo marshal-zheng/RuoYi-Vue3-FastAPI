@@ -1,0 +1,124 @@
+{
+  "baseCommit": "c65cddfde6d0f24640d00f2eed38f83ac38fd926",
+  "baselineCommittedHead": {
+    "failed": 7,
+    "passed": 7
+  },
+  "baselineSourcePassed": 14,
+  "isolatedCandidateExpandedPassed": 155,
+  "sourceExpandedPassed": 163,
+  "independentTestsPassed": 16,
+  "independentReview": "PASS; P0/P1/P2 none",
+  "productionFilesChanged": false,
+  "checks": [
+    {
+      "name": "baseline-head",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "modules/system/tests/test_config_refresh_command.py",
+        "modules/system/tests/test_dev_menu_sync_controller.py",
+        "--no-cov",
+        "-n0",
+        "-q"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/config-dev-menu-contract/ruoyi-fastapi-backend",
+      "exitCode": 1,
+      "sha256": "2aa27c3fa755dceb48451207d36bbca45d9a1b8f5271ff3161bbbc77ca90b8dc"
+    },
+    {
+      "name": "baseline-source",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "modules/system/tests/test_config_refresh_command.py",
+        "modules/system/tests/test_dev_menu_sync_controller.py",
+        "--no-cov",
+        "-n0",
+        "-q"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "sha256": "683d4e50131c14980a432df86ed4a9193d76796f7df3523ca7054ed58e8a93eb"
+    },
+    {
+      "name": "focused-green",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "modules/system/tests/test_config_refresh_command.py",
+        "modules/system/tests/test_dev_menu_sync_controller.py",
+        "--no-cov",
+        "-n0",
+        "-q"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/config-dev-menu-contract/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "sha256": "7e37ae802f9aef4b2b05ab92c2e0f135c38c163170ad14cd960d85b0c871acfe"
+    },
+    {
+      "name": "expanded-green",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "modules/system/tests",
+        "tests/unit/controllers/test_config_controller.py",
+        "tests/unit/services/test_config_service.py",
+        "tests/unit/test_response_util.py",
+        "tests/unit/scripts/test_managed_data_fast_reconcile_service.py",
+        "--no-cov",
+        "-n0",
+        "-q"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/config-dev-menu-contract/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "seconds": 3.74,
+      "sha256": "cbfa0bfd4a6963f09a48a8ce2e726e753b3f0ad8d99977eae3cd4e73fd1b5ced"
+    },
+    {
+      "name": "source-expanded",
+      "command": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend/venv/bin/python",
+        "-m",
+        "pytest",
+        "modules/system/tests",
+        "tests/unit/controllers/test_config_controller.py",
+        "tests/unit/services/test_config_service.py",
+        "tests/unit/test_response_util.py",
+        "tests/unit/scripts/test_managed_data_fast_reconcile_service.py",
+        "--no-cov",
+        "-n0",
+        "-q"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-backend",
+      "exitCode": 0,
+      "sha256": "a7fddae46eefdabea8af8a337be2ab26d4613daa671251255d2f9196b79c1ee1"
+    },
+    {
+      "name": "conventions-final",
+      "command": [
+        "bash",
+        ".cursor/skills/backend-conventions/scripts/validate.sh",
+        "--changed"
+      ],
+      "cwd": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/config-dev-menu-contract",
+      "exitCode": 0,
+      "sha256": "98653ee93ae19badffd66e31c4917ab3055a557de6495fae7c4d1737db0735f2"
+    }
+  ],
+  "reviewedTests": [
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/tests/test_config_refresh_command.py",
+      "sha256": "d32b473bd2c0172d827c6e34f07e897e79a881fda7cd2fb26e69bbcf32e5467e"
+    },
+    {
+      "path": "ruoyi-fastapi-backend/modules/system/tests/test_dev_menu_sync_controller.py",
+      "sha256": "98dd68603c2be99c43d94983baf3f88f6f6925a47586d8fb891d3f6850571260"
+    }
+  ],
+  "rawEvidenceDirectory": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/codex-delivery-preservation/config-dev-menu-contract"
+}

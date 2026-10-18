@@ -83,7 +83,8 @@ def test_signature_endpoint_returns_signature_when_enabled(controller_context, m
 
     response = client.get('/dev/menu/signature')
     assert response.status_code == 200
-    payload = response.json()['data']
+    payload = response.json()
+    assert 'data' not in payload
     assert payload['signature'] == 'signature-demo'
     assert payload['lastSyncStatus'] in {'idle', 'ok', 'failed'}
     get_signature.assert_awaited()
@@ -116,7 +117,8 @@ def test_status_endpoint_returns_runtime_diagnostics(controller_context, monkeyp
 
     response = client.get('/dev/menu/status')
     assert response.status_code == 200
-    payload = response.json()['data']
+    payload = response.json()
+    assert 'data' not in payload
     assert payload['enabled'] is True
     assert payload['modulesRoot'] == str(tmp_path)
     assert payload['modulesRootExists'] is True
@@ -256,7 +258,8 @@ def test_sync_endpoint_supports_dry_run(controller_context, monkeypatch):
 
     response = client.post('/dev/menu/sync', json={'dryRun': True, 'trigger': 'manual'})
     assert response.status_code == 200
-    payload = response.json()['data']
+    payload = response.json()
+    assert 'data' not in payload
     assert payload['dryRun'] is True
     assert payload['compiledChecksum'] == 'checksum-dry-run'
     assert payload['affectedObjectsCount'] == 2
@@ -298,7 +301,8 @@ def test_sync_endpoint_publishes_menu_changed_and_updates_runtime(controller_con
 
     response = client.post('/dev/menu/sync', json={'dryRun': False, 'trigger': 'manual'})
     assert response.status_code == 200
-    payload = response.json()['data']
+    payload = response.json()
+    assert 'data' not in payload
     assert payload['stateChanged'] is True
     assert payload['compiledChecksum'] == 'checksum-new'
     assert payload['changedDomains'] == ['menus']
@@ -319,7 +323,9 @@ def test_sync_endpoint_publishes_menu_changed_and_updates_runtime(controller_con
     )
 
 
-def test_sync_endpoint_does_not_publish_menu_changed_for_config_only_mutation(controller_context, monkeypatch, tmp_path):
+def test_sync_endpoint_does_not_publish_menu_changed_for_config_only_mutation(
+    controller_context, monkeypatch, tmp_path
+):
     client, app, controller_module = controller_context
 
     _enable_dev_menu_api(controller_module, monkeypatch)
@@ -349,8 +355,8 @@ def test_sync_endpoint_does_not_publish_menu_changed_for_config_only_mutation(co
 
     response = client.post('/dev/menu/sync', json={'dryRun': False, 'trigger': 'manual'})
     assert response.status_code == 200
-    payload = response.json()['data']
-
+    payload = response.json()
+    assert 'data' not in payload
     assert payload['stateChanged'] is True
     assert payload['changedDomains'] == ['configs']
     assert payload['menuReloadRequired'] is False
