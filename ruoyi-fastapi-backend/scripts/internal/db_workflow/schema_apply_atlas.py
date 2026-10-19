@@ -32,6 +32,7 @@ MODEL_MODULES = (
     'module_admin.entity.do.config_do',
     'module_admin.entity.do.db_workflow_do',
     'module_admin.entity.do.notice_do',
+    'module_admin.entity.do.dashboard_do',
     'module_admin.entity.do.log_do',
     'module_admin.entity.do.audit_log_do',
     'module_admin.entity.do.job_do',

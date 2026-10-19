@@ -24,6 +24,7 @@ from modules.system.api.config_controller import configController
 from modules.system.api.dept_controller import deptController
 from modules.system.api.dev_menu_sync_controller import devMenuSyncController
 from modules.system.api.dict_controller import dictController
+from modules.system.api.dashboard_controller import dashboard_controller
 from modules.system.api.event_controller import eventController
 from modules.system.api.log_controller import logController
 from modules.system.api.menu_controller import menuController
@@ -111,6 +112,7 @@ def _should_register_dev_menu_router() -> bool:
 
 def _build_system_routers() -> tuple[RouterRegistration, ...]:
     routers: list[RouterRegistration] = [
+        RouterRegistration(router=dashboard_controller, tags=('系统管理-仪表盘',), capability_module_key='platform'),
         RouterRegistration(router=menuController, tags=('系统管理-菜单管理',), capability_module_key='platform'),
         RouterRegistration(router=deptController, tags=('系统管理-部门管理',), capability_module_key='platform'),
         RouterRegistration(router=postController, tags=('系统管理-岗位管理',), capability_module_key='platform'),
