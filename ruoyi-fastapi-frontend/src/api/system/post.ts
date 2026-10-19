@@ -30,8 +30,9 @@ export function getPost(
 }
 
 // 新增岗位
-export function addPost(data: PostModel) {
+export function addPost(data: PostModel, config?: Pick<ExtendedAxiosRequestConfig, 'silentError'>) {
   return request<PostRecord>({
+    ...config,
     url: '/system/post',
     method: 'post',
     data: data,
@@ -40,8 +41,12 @@ export function addPost(data: PostModel) {
 }
 
 // 修改岗位
-export function updatePost(data: PostModel) {
+export function updatePost(
+  data: PostModel,
+  config?: Pick<ExtendedAxiosRequestConfig, 'silentError'>
+) {
   return request<PostRecord>({
+    ...config,
     url: '/system/post',
     method: 'put',
     data: data,

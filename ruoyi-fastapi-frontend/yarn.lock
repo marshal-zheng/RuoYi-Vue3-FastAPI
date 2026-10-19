@@ -1427,6 +1427,130 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@form-create/component-elm-checkbox@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-checkbox@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/3a7b3dfcec554e87a4ff26d9320dbe190d73664a791140d283a13e398aad7d708cfcafb15d4d50038ee3cc18579a39c3631226276ed0e8aced4e7eba3bae7c9a
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-frame@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-frame@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/26003c582ab63b853a82d1fe3bc895bd6b0ec5f00171bad8bed5ba3cfd9219de0066a3fceffd078ec2f9e2cc638c0eea6432b04a39c2eef02399fa8f5b6fd983
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-group@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-group@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/a699e5ab5fd93878b75f0c45b02fffec6c23ebd8ba8889f29049a13ce274552b81e0389c8aa15d7f6a3b350bf399b90ca458fb5000a1b281ebb3247217705387
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-radio@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-radio@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/aedbe275652b744c774d659cd71cfbe2f49ca2e2150bd136c5d65e64879726f1c8a40a256eb39e714edd3b5fd0a4d7c58fe6ad8e3e2b3d1ee36227e8379adbcb
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-select@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-select@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/76236ab293d50fb8d44938763abc44c22e6570a7382ccffb57ffeadaa85589ffc7fdcdc97b778db6f2e87b4ad6ace610ac4977e2f2a67cd02e1a8b7d5fe2d67a
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-tree@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-tree@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/3cdb209281d67b76369f2b0ab636b0817dbc062571890c8ec3439110bc23908635dd904732d60cbb1fc5dbd68c5d7dc537d2f411530c39d8776fc5a844e6a851
+  languageName: node
+  linkType: hard
+
+"@form-create/component-elm-upload@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-elm-upload@npm:3.3.0"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/d21133bc8a60b32034f38f8c7ab1b0a520db4bfba9925cd9a33cca83dd8a3c7faf793f9de471024ee79c55242c68d1a732012e87b4bd246f2f73d777cc78cba4
+  languageName: node
+  linkType: hard
+
+"@form-create/component-subform@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/component-subform@npm:3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/85a698a2c0f3975ae608187fedeac2bdce980580c0550dbc364bccca18eed4dcd76662251a1389977e55174ae14d1db54c0324d400135a2d37482aa7ee3167b6
+  languageName: node
+  linkType: hard
+
+"@form-create/core@npm:^3.3.5":
+  version: 3.3.5
+  resolution: "@form-create/core@npm:3.3.5"
+  dependencies:
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/006ef2ab8a3478fbe5ac789e9965080909e9b436ebdcb391612a6d6acc6755bfa1c4532d85143c8d22a794b3959c5bfd313697dd02f2983b22f390fa8abcf4fd
+  languageName: node
+  linkType: hard
+
+"@form-create/element-ui@npm:3.3.5":
+  version: 3.3.5
+  resolution: "@form-create/element-ui@npm:3.3.5"
+  dependencies:
+    "@form-create/component-elm-checkbox": "npm:^3.3.0"
+    "@form-create/component-elm-frame": "npm:^3.3.0"
+    "@form-create/component-elm-group": "npm:^3.3.0"
+    "@form-create/component-elm-radio": "npm:^3.3.0"
+    "@form-create/component-elm-select": "npm:^3.3.0"
+    "@form-create/component-elm-tree": "npm:^3.3.0"
+    "@form-create/component-elm-upload": "npm:^3.3.0"
+    "@form-create/component-subform": "npm:^3.3.0"
+    "@form-create/core": "npm:^3.3.5"
+    "@form-create/utils": "npm:^3.3.0"
+  peerDependencies:
+    vue: ^3.5.12
+  checksum: 10c0/6f3426b8781cee6d60bb6bbaf73c546b88d5656440836ee7f19def86f2321f9b9882cc2c0c0aab54b87414c3a0fdef193a74875a0e69b7acade104d755a183d9
+  languageName: node
+  linkType: hard
+
+"@form-create/utils@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@form-create/utils@npm:3.3.0"
+  checksum: 10c0/6b0dc3fa573cd33b5eb3e8989359c433aae3589df5d41f0b313f4a70a38912cf5221fabf38380c6b922ba5f7a11e6017ea0c3ceb3c5290906063baa724fe7362
+  languageName: node
+  linkType: hard
+
 "@hey-api/codegen-core@npm:0.8.1":
   version: 0.8.1
   resolution: "@hey-api/codegen-core@npm:0.8.1"
@@ -4179,6 +4303,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz::locator=vfadmin%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz#./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz::hash=7fa0df&locator=vfadmin%40workspace%3A."
+  peerDependencies:
+    "@form-create/element-ui": 3.3.5
+    "@zxio/zxui": ^3.0.0-next.0
+    element-plus: ^2.13.0
+    vue: ^3.5.0
+  peerDependenciesMeta:
+    "@form-create/element-ui":
+      optional: true
+  checksum: 10c0/cabb40bce862ca9568f41f6390819576bf2cf5effa0e93a51ddfe2b124db47ca40517f370a06ae4254ff53861cece90f3ac943f5f74f868c69af83b7ab1bb225
+  languageName: node
+  linkType: hard
+
 "@zxio/shared@npm:^1.0.5":
   version: 1.0.5
   resolution: "@zxio/shared@npm:1.0.5"
@@ -4208,9 +4347,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.0
-  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz#./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz::hash=0c83a4&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/theme-compiler@file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz#./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz::hash=c8b053&locator=vfadmin%40workspace%3A."
   dependencies:
     "@zxio/theme-css-codec": "npm:1.0.0"
     "@zxio/tokens": "npm:2.0.0"
@@ -4222,7 +4361,7 @@ __metadata:
   peerDependenciesMeta:
     vite:
       optional: true
-  checksum: 10c0/f5b1eaaeb565324d9925d34780a8f7277c97e5e0bba3e0bcec28aa1fd253e0a259b3bc8e08a92b4725bc5332bc874dad0e7e0fc7c7323d290a98719273d8d246
+  checksum: 10c0/b942f1b2864f5069403a95a74f5c6b0b7920b795a2f27e0b0de02e92392e65c2c57cb1ec324ac3679cdc440b27818aaaa7fa705f2058480a6a7ee4632cf5f844
   languageName: node
   linkType: hard
 
@@ -4364,9 +4503,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::locator=vfadmin%40workspace%3A.":
   version: 3.0.0-next.0
-  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz#./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz::hash=739350&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz#./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::hash=b2aa87&locator=vfadmin%40workspace%3A."
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
     "@floating-ui/dom": "npm:^1.6.0"
@@ -4387,7 +4526,7 @@ __metadata:
   peerDependencies:
     element-plus: ^2.13.0
     vue: ^3.5.0
-  checksum: 10c0/faed6f4a13634148a431445f72df743ebfa862b6b3bf500d93299718b1f7b9d41c20a713f83eb7bd38a54a79d062b106b262e49ba8aae0dc74b5e282d46ea0d9
+  checksum: 10c0/e4b8aa76f3e11770dc4b07204b21772e0ebe96f035ddf7907717e7d5ffe1c3d65cf8840907050ea7fa196f9730073580696e33285c3130c12cbc01a20e289f70
   languageName: node
   linkType: hard
 
@@ -13727,6 +13866,7 @@ __metadata:
     "@element-plus/icons-vue": "npm:2.3.2"
     "@eslint/js": "npm:^9.34.0"
     "@faker-js/faker": "npm:^10.1.0"
+    "@form-create/element-ui": "npm:3.3.5"
     "@hey-api/openapi-ts": "npm:0.97.0"
     "@iconify/iconify": "npm:^3.1.1"
     "@iconify/vue": "npm:^4.3.0"
@@ -13757,9 +13897,10 @@ __metadata:
     "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz"
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
-    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz"
+    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"
     "@zxio/theme-default": "file:./vendor/zxio-theme-default-2.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-defense-green": "file:./vendor/zxio-theme-defense-green-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-factory-blue": "file:./vendor/zxio-theme-factory-blue-1.0.0-overlay-validation.20261013.tgz"
@@ -13771,7 +13912,7 @@ __metadata:
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz"
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz"
     ajv: "npm:^8.20.0"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"

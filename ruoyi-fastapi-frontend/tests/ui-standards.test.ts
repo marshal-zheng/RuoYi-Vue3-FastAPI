@@ -11,6 +11,36 @@ const validForm = `<template><ZxDialog v-bind="dialogProps"><el-form v-bind="for
 const rules = (source: string) => checkVueSource(source).map((item: { rule: string }) => item.rule);
 
 describe('UI standards shared SFC checker', () => {
+  const schemaForm = `<script setup>
+    import { schemaFormDialog as schemaDialog } from '@/components/ui/FormDialog';
+    const { dialogProps, schemaFormProps } = schemaDialog({ columns: 1 });
+  </script><template><ZxDialog v-bind="dialogProps">
+    <ZxSchemaForm v-bind="schemaFormProps" />
+  </ZxDialog></template>`;
+
+  it('accepts SchemaForm presentation without a native form or a second form model', () => {
+    expect(checkVueSource(schemaForm)).toEqual([]);
+  });
+
+  it('requires SchemaForm presentation from the same entry and rejects native form-ref casts', () => {
+    expect(rules(schemaForm.replace('v-bind="schemaFormProps"', ':label-width="80"'))).toEqual(
+      expect.arrayContaining(['schema-form-source', 'form-label-width'])
+    );
+    expect(
+      rules(schemaForm.replace('v-bind="dialogProps"', 'v-bind="dialogProps" :form-ref="formRef"'))
+    ).toContain('schema-form-ref');
+    expect(
+      rules(
+        schemaForm
+          .replace('v-bind="schemaFormProps"', 'v-bind="other.schemaFormProps"')
+          .replace(
+            'const { dialogProps',
+            'const other = schemaDialog({ columns: 1 }); const { dialogProps'
+          )
+      )
+    ).toContain('schema-form-source');
+  });
+
   it('accepts generated and handwritten thin forms with aliases and local destructuring', () => {
     expect(checkVueSource(validForm)).toEqual([]);
   });

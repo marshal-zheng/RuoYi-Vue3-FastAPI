@@ -376,6 +376,7 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
   const hooks = new Map([
     ['useDialog', 'dialog'],
     ['useFormDialog', 'form'],
+    ['schemaFormDialog', 'schema'],
   ]);
   const bindings = new Map();
   const calls = [];
@@ -389,8 +390,19 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
     ) {
       for (const element of node.importClause.namedBindings.elements) {
         const original = element.propertyName?.text ?? element.name.text;
-        if (original === 'useDialog' || original === 'useFormDialog')
-          hooks.set(element.name.text, original === 'useDialog' ? 'dialog' : 'form');
+        if (
+          original === 'useDialog' ||
+          original === 'useFormDialog' ||
+          original === 'schemaFormDialog'
+        )
+          hooks.set(
+            element.name.text,
+            original === 'schemaFormDialog'
+              ? 'schema'
+              : original === 'useDialog'
+                ? 'dialog'
+                : 'form'
+          );
       }
     }
     ts.forEachChild(node, visit);
@@ -468,10 +480,10 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
       else if (style.has('width') || style.has('height'))
         ctx.add('dialog-dimensions', 'dialogStyle 不得绕过预设尺寸或内容高度。', at);
     }
-    if (kind === 'form') {
+    if (kind === 'form' || kind === 'schema') {
       const columns = literal(props.get('columns'));
       if (!['1', '2', '3'].includes(columns))
-        ctx.add('form-columns', 'useFormDialog 须显式提供可解析的 columns: 1 | 2 | 3。', at);
+        ctx.add('form-columns', '表单入口须显式提供可解析的 columns: 1 | 2 | 3。', at);
       if (props.has('dialogSize') && !PRESETS.has(literal(props.get('dialogSize'))))
         ctx.add('dialog-preset', 'dialogSize 覆盖必须是合法预设。', at);
     } else {
@@ -538,13 +550,17 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
           declaration = declaration.parent;
         if (declaration && ts.isVariableDeclaration(declaration)) {
           if (ts.isIdentifier(declaration.name)) {
-            for (const key of ['dialogProps', 'formProps', 'layoutProps'])
-              bindings.set(`${declaration.name.text}.${key}`, { kind, key, owner });
+            for (const key of ['dialogProps', 'formProps', 'layoutProps', 'schemaFormProps'])
+              bindings.set(`${declaration.name.text}.${key}`, {
+                kind,
+                key,
+                owner,
+              });
           } else if (ts.isObjectBindingPattern(declaration.name)) {
             for (const entry of declaration.name.elements) {
               const key = entry.propertyName?.text ?? entry.name.text;
               if (
-                ['dialogProps', 'formProps', 'layoutProps'].includes(key) &&
+                ['dialogProps', 'formProps', 'layoutProps', 'schemaFormProps'].includes(key) &&
                 ts.isIdentifier(entry.name)
               )
                 bindings.set(entry.name.text, { kind, key, owner });
@@ -574,7 +590,14 @@ function analyzeScript(text, ctx, offset = 0, filePath = '') {
     ts.forEachChild(node, bindLocalDestructuring);
   };
   bindLocalDestructuring(ast);
-  return { bindings, calls, properties, literal, resolve, validateDialogOptions };
+  return {
+    bindings,
+    calls,
+    properties,
+    literal,
+    resolve,
+    validateDialogOptions,
+  };
 }
 
 function checkStyles(text, ctx, offset = 0) {
@@ -697,7 +720,7 @@ export function checkVueSource(source, { filePath = 'generated.vue', checkRawInp
         const known = binding(value(item));
         if (known?.key === 'dialogProps') {
           hasSize = true;
-          if (known.kind === 'form') dialog.owner = known.owner;
+          if (known.kind === 'form' || known.kind === 'schema') dialog.owner = known.owner;
         } else if (analysis) {
           const options = expression(value(item));
           analysis.validateDialogOptions(
@@ -733,6 +756,29 @@ export function checkVueSource(source, { filePath = 'generated.vue', checkRawInp
             ctx.add('dialog-dimensions', 'style 不能绕过弹框预设尺寸和内容高度。', at(style));
         }
       }
+    }
+    if (dialog && tag === 'zxschemaform') {
+      const schemaBinding = spread(node)
+        .map((item) => binding(value(item)))
+        .find((entry) => entry?.key === 'schemaFormProps' && entry.kind === 'schema');
+      if (!schemaBinding || !dialog.owner || schemaBinding.owner !== dialog.owner)
+        ctx.add(
+          'schema-form-source',
+          'Schema 表单与弹框须绑定同一 schemaFormDialog 返回的 schemaFormProps/dialogProps。',
+          at(node)
+        );
+      if (prop(dialog.node, 'form-ref') || prop(dialog.node, 'formRef'))
+        ctx.add(
+          'schema-form-ref',
+          'SchemaForm 自己拥有验证和值，不能作为原生 ElForm 的 form-ref 传给弹框。',
+          at(dialog.node)
+        );
+      if (prop(node, 'label-width') || prop(node, 'labelWidth'))
+        ctx.add(
+          'form-label-width',
+          '标签宽度由 schemaFormProps 统一下发，调用点不另写 label-width。',
+          at(node)
+        );
     }
     if (
       dialog &&

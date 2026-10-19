@@ -59,6 +59,7 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
       '@zxio/chart',
       '@zxio/dashboard',
       '@zxio/http',
+      '@zxio/schema-form',
       '@zxio/theme-tailwind',
       '@zxio/vue-query',
     ],

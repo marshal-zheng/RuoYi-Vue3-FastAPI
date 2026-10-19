@@ -87,7 +87,7 @@
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz",
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz",
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz",
-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-runtime-payload.final3.20261017.tgz",
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz",
     "ant-design-vue": "^4.1.1",
     "axios": "1.20.0",
     "clipboard": "2.0.11",
@@ -115,7 +115,9 @@
     "vxe-table": "4",
     "vxe-table-plugin-element": "^4.0.4",
     "xe-utils": "^3.7.9",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "@form-create/element-ui": "3.3.5",
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz"
   },
   "resolutions": {
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz",
@@ -143,7 +145,7 @@
     "@vitest/coverage-v8": "^4.0.18",
     "@vitest/ui": "^3.2.4",
     "@vue/compiler-sfc": "3.5.43",
-    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-runtime-payload.20261017.tgz",
+    "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz",
     "ajv": "^8.20.0",
     "autoprefixer": "^10.4.21",
     "cross-env": "^10.1.0",

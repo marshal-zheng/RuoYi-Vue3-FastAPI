@@ -1,12 +1,12 @@
 import { computed, reactive, shallowReactive, unref } from 'vue';
 import { useDialog } from '@zxio/zxui/hooks';
+import type { DialogOptions } from '@zxio/zxui/hooks';
 import type { CSSProperties } from 'vue';
 import { formLayoutPolicy, type FormColumns } from './policy';
 
 export { default as FormGrid } from './FormGrid.vue';
 export type { FormColumns } from './policy';
 
-type DialogOptions<T extends object> = NonNullable<Parameters<typeof useDialog<T>>[0]>;
 type FormDialogStyle = Omit<CSSProperties, 'width' | 'height'> & { width?: never; height?: never };
 export type FormDialogOptions<T extends object> = Omit<
   DialogOptions<T>,
@@ -69,6 +69,21 @@ export function useFormDialog<T extends object = Record<string, unknown>>(
       }
       if ('dialogSize' in value) sizeOverride.value = value.dialogSize;
       dialog.updateOptions({ ...sanitize(value), dialogSize });
+    },
+  };
+}
+
+/** SchemaForm owns values and validation; this entry shares presentation policy only. */
+export function schemaFormDialog(options: { columns: FormColumns }) {
+  checkColumns(options.columns);
+  return {
+    dialogProps: {
+      dialogSize: formLayoutPolicy.dialogSize[options.columns],
+      showFullScreen: false,
+    },
+    schemaFormProps: {
+      labelWidth: formLayoutPolicy.labelWidth,
+      labelPosition: 'left' as const,
     },
   };
 }
