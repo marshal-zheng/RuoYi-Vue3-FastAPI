@@ -58,6 +58,7 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
     featurePackages: [
       '@zxio/chart',
       '@zxio/dashboard',
+      '@zxio/dashboard-widgets',
       '@zxio/http',
       '@zxio/schema-form',
       '@zxio/theme-tailwind',

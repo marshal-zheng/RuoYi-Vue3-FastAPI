@@ -3010,6 +3010,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/linkify-it@npm:^5":
+  version: 5.0.0
+  resolution: "@types/linkify-it@npm:5.0.0"
+  checksum: 10c0/7bbbf45b9dde17bf3f184fee585aef0e7342f6954f0377a24e4ff42ab5a85d5b806aaa5c8d16e2faf2a6b87b2d94467a196b7d2b85c9c7de2f0eaac5487aaab8
+  languageName: node
+  linkType: hard
+
 "@types/lodash-es@npm:^4.17.12":
   version: 4.17.12
   resolution: "@types/lodash-es@npm:4.17.12"
@@ -3030,6 +3037,23 @@ __metadata:
   version: 4.17.25
   resolution: "@types/lodash@npm:4.17.25"
   checksum: 10c0/ca2049f16bf527e04d6e27702e3912a484faaff587de77a5c58e0d243b9292a655e1d7f7e5bdf2ffdf49a76da10673097f8dd4901990679058d47ccd99051877
+  languageName: node
+  linkType: hard
+
+"@types/markdown-it@npm:^14.1.2":
+  version: 14.2.0
+  resolution: "@types/markdown-it@npm:14.2.0"
+  dependencies:
+    "@types/linkify-it": "npm:^5"
+    "@types/mdurl": "npm:^2"
+  checksum: 10c0/60ff1a0495ef303310744566342c49b4b3e76fbdca82c5ec28d88731fc934b0c63335d25bca6133903c877f2c41c59cdfddefb3626c6ee0780b9573ddf6aefe4
+  languageName: node
+  linkType: hard
+
+"@types/mdurl@npm:^2":
+  version: 2.0.0
+  resolution: "@types/mdurl@npm:2.0.0"
+  checksum: 10c0/cde7bb571630ed1ceb3b92a28f7b59890bb38b8f34cd35326e2df43eebfc74985e6aa6fd4184e307393bad8a9e0783a519a3f9d13c8e03788c0f98e5ec869c5e
   languageName: node
   linkType: hard
 
@@ -4227,16 +4251,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/chart@file:./vendor/zxio-chart-2.0.0.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/chart@file:./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz::locator=vfadmin%40workspace%3A.":
   version: 2.0.0
-  resolution: "@zxio/chart@file:./vendor/zxio-chart-2.0.0.tgz#./vendor/zxio-chart-2.0.0.tgz::hash=a3974e&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/chart@file:./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz#./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz::hash=8e1636&locator=vfadmin%40workspace%3A."
   dependencies:
     "@zxio/shared": "npm:^1.0.5"
   peerDependencies:
     echarts: ^5.0.0 || ^6.0.0
     vue: ^3.4.0
     vue-echarts: ^7.0.0 || ^8.0.0
-  checksum: 10c0/28adac6e1f3f4218b98c88abe0142872b87db671df2e1bed6276b2d608da19315a1ff2ead1227a8cb8e92f718e05a6ae3d45f767ad4d819d4b51ff628c80fd10
+  checksum: 10c0/4086a0855522a3e85e6b42036c94dd8572466f6cdf1e2002bf56ab6cfd65500bbd91e7ca199a3b692fe2d846e16b6acb37ebae5eed67bd8c69d3e7db016bc5d1
   languageName: node
   linkType: hard
 
@@ -4249,16 +4273,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/dashboard-widgets@file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0
-  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz#./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz::hash=1bdf9e&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/dashboard-widgets@file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz#./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz::hash=5d1ff5&locator=vfadmin%40workspace%3A."
+  dependencies:
+    "@types/markdown-it": "npm:^14.1.2"
+    markdown-it: "npm:^14.1.0"
+  peerDependencies:
+    "@zxio/chart": ^2.0.0
+    "@zxio/dashboard": ^0.1.0
+    "@zxio/zxui": ^3.0.0-next.0
+    vue: ^3.5.0
+  checksum: 10c0/ed0c225d68514bfedc2c6c972368d38ffc031d769538f3e7bd6dcab04f733fc79267b2f63ad1a7af92ec4bc64e658ccc364214b7eb8fc4f624cbaba45a26d945
+  languageName: node
+  linkType: hard
+
+"@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz::locator=vfadmin%40workspace%3A.":
+  version: 0.1.0
+  resolution: "@zxio/dashboard@file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz#./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz::hash=ca5c86&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@zxio/vue-grid-layout": ^1.0.6
     vue: ^3.5.0
   peerDependenciesMeta:
     "@zxio/vue-grid-layout":
       optional: true
-  checksum: 10c0/a6572a7346361de5250ca7e31521ea7f2cbaa209de3f842f5bb3b0017d27e333696d6aaf3809c915a58ebfca35ebe2a6b885313eb94c4e65f7ff1bf78cb966c5
+  checksum: 10c0/1d936b625011d5d844b3954e49c6e0ee09cf464bf8064945de687651ff8c120085a263e49d01610592b8a52ebf4feb78f5370ad19237c6f37348ef9d9eca4c0c
   languageName: node
   linkType: hard
 
@@ -9775,6 +9814,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linkify-it@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "linkify-it@npm:5.0.2"
+  dependencies:
+    uc.micro: "npm:^2.0.0"
+  checksum: 10c0/dd70b1735a13d41a2cff0a058ac3771166038f23f6aff004dd53873cf985c64b107902fe0b544a5b3d1ff6e63249cf9c648fb3ae9f285481db48f56887adb0d6
+  languageName: node
+  linkType: hard
+
 "loader-utils@npm:^1.1.0":
   version: 1.4.2
   resolution: "loader-utils@npm:1.4.2"
@@ -10083,6 +10131,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"markdown-it@npm:^14.1.0":
+  version: 14.3.3
+  resolution: "markdown-it@npm:14.3.3"
+  dependencies:
+    argparse: "npm:^2.0.1"
+    entities: "npm:^4.5.0"
+    linkify-it: "npm:^5.0.2"
+    mdurl: "npm:^2.0.0"
+    punycode.js: "npm:^2.3.1"
+    uc.micro: "npm:^2.1.0"
+  bin:
+    markdown-it: bin/markdown-it.mjs
+  checksum: 10c0/d6075ad320731d7fb9f127e496677f4e36cbdba839d7387dabf1f0d07b5c02bdffb46fb3969033817c04e60017e05d4269e4aa74bee58cc0a562a17cc0b6b8ff
+  languageName: node
+  linkType: hard
+
 "math-intrinsics@npm:^1.1.0":
   version: 1.1.0
   resolution: "math-intrinsics@npm:1.1.0"
@@ -10094,6 +10158,13 @@ __metadata:
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
   checksum: 10c0/67241f8708c1e665a061d2b042d2d243366e93e5bf1f917693007f6d55111588b952dcbfd3ea9c2d0969fb754aad81b30fdcfdcc24546495fc3b24336b28d4bd
+  languageName: node
+  linkType: hard
+
+"mdurl@npm:^2.0.0":
+  version: 2.1.0
+  resolution: "mdurl@npm:2.1.0"
+  checksum: 10c0/aed11a75b791d596c7104fa6a3d84680e87cd2bfdb32ecfe512e795481d40a64b21d627b325ffd58aadcd15faf7498ac06130b8f198ebec437aceeead24bd1b1
   languageName: node
   linkType: hard
 
@@ -11567,6 +11638,13 @@ __metadata:
     end-of-stream: "npm:^1.1.0"
     once: "npm:^1.3.1"
   checksum: 10c0/ada5cdf1d813065bbc99aa2c393b8f6beee73b5de2890a8754c9f488d7323ffd2ca5f5a0943b48934e3fcbd97637d0337369c3c631aeb9614915db629f1c75c9
+  languageName: node
+  linkType: hard
+
+"punycode.js@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "punycode.js@npm:2.3.1"
+  checksum: 10c0/1d12c1c0e06127fa5db56bd7fdf698daf9a78104456a6b67326877afc21feaa821257b171539caedd2f0524027fa38e67b13dd094159c8d70b6d26d2bea4dfdb
   languageName: node
   linkType: hard
 
@@ -13530,6 +13608,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uc.micro@npm:^2.0.0, uc.micro@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "uc.micro@npm:2.1.0"
+  checksum: 10c0/8862eddb412dda76f15db8ad1c640ccc2f47cdf8252a4a30be908d535602c8d33f9855dfcccb8b8837855c1ce1eaa563f7fa7ebe3c98fd0794351aab9b9c55fa
+  languageName: node
+  linkType: hard
+
 "ufo@npm:^1.6.1":
   version: 1.6.1
   resolution: "ufo@npm:1.6.1"
@@ -13894,8 +13979,9 @@ __metadata:
     "@vueuse/core": "npm:10.11.0"
     "@wangeditor/editor": "npm:^5.1.23"
     "@wangeditor/editor-for-vue": "npm:^5.1.10"
-    "@zxio/chart": "file:./vendor/zxio-chart-2.0.0.tgz"
-    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-p0-final4.1.20261016.tgz"
+    "@zxio/chart": "file:./vendor/zxio-chart-2.0.0-dashboard-committed.20261019.tgz"
+    "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
+    "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
     "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
