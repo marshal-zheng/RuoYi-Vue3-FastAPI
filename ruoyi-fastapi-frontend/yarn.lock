@@ -4513,9 +4513,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.0.6
-  resolution: "@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz#./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz::hash=99dcb7&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/vue-grid-layout@file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz#./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz::hash=b506e6&locator=vfadmin%40workspace%3A."
   dependencies:
     "@emotion/css": "npm:^11.11.2"
     "@zxio/theme-consumer": "npm:1.0.0"
@@ -4524,7 +4524,7 @@ __metadata:
     resize-observer-polyfill: "npm:^1.5.1"
   peerDependencies:
     vue: ^3.5.0
-  checksum: 10c0/7a60b926bc02af7bbe76bd08217f69d9952a2bb1180bca13f32eae9b902948bbf98dc9fcedbce0998b68e0179ca135060033632b772744ae3211b048a2cd61d1
+  checksum: 10c0/ab717fedb1bbb89347517a4579a7ee59bc409aad5b5f0231a147c213906b5b624b0d824bdc08400c5060109ebf806957c7b8c36318db10718e3bbb98014d537f
   languageName: node
   linkType: hard
 
@@ -13996,7 +13996,7 @@ __metadata:
     "@zxio/theme-tailwind": "file:./vendor/zxio-theme-tailwind-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-tech-blue": "file:./vendor/zxio-theme-tech-blue-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
-    "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard.20261016.tgz"
+    "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
     "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz"
     ajv: "npm:^8.20.0"
