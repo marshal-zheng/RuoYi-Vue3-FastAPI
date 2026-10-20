@@ -6,19 +6,15 @@
     :style="customStyle"
     @update:model-value="handleChange"
   >
-    <el-radio
-      v-for="option in protocolOptions"
-      :key="option.value"
-      :label="option.value"
-    >
+    <el-radio v-for="option in protocolOptions" :key="option.value" :label="option.value">
       {{ option.label }}
     </el-radio>
   </el-radio-group>
 </template>
 
 <script setup name="ProtocolSelector">
-import { defaultProtocolOptions } from "./options";
-import { computed } from "vue";
+import { defaultProtocolOptions } from './options';
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -31,7 +27,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: "default",
+    default: 'default',
   },
   customStyle: {
     type: Object,
@@ -43,7 +39,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认协议类型选项
 
@@ -53,7 +49,7 @@ const protocolOptions = computed(() => {
 });
 
 function handleChange(value) {
-  emit("update:modelValue", value);
-  emit("change", value);
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>

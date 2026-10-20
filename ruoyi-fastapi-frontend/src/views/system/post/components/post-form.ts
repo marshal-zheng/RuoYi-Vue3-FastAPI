@@ -1,7 +1,7 @@
+import { isField } from '@formily/core';
 import type { Values } from '@zxio/schema-form';
 import type {
   BusinessContext,
-  Field,
   FieldIssue,
   NativeSchema,
   SettledCheck,
@@ -25,12 +25,14 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
   const createSchema = (ctx: BusinessContext<PostValues>): NativeSchema => {
     ctx.bindResource(statusOptions, (options) => {
       latestOptions = options;
-      ctx.form.query('status').forEach((field: Field) =>
-        ctx.configure(field, {
-          dataSource: [...options],
-          componentProps: { options: [...options] },
-        })
-      );
+      ctx.form.query('status').forEach((field) => {
+        if (isField(field)) {
+          ctx.configure(field, {
+            dataSource: [...options],
+            componentProps: { options: [...options] },
+          });
+        }
+      });
     });
     const text = (title: string, max: number) => ({
       type: 'string',

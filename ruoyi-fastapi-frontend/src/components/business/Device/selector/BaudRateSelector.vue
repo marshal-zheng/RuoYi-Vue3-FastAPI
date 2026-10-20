@@ -18,8 +18,8 @@
 </template>
 
 <script setup name="BaudRateSelector">
-import { defaultSerialBaudRates, defaultCanBaudRates } from "./options";
-import { computed } from "vue";
+import { defaultSerialBaudRates, defaultCanBaudRates } from './options';
+import { computed } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -28,12 +28,12 @@ const props = defineProps({
   },
   interfaceType: {
     type: String,
-    default: "serial", // 'serial' for RS422/RS485, 'can' for CAN
-    validator: (value) => ["serial", "can"].includes(value),
+    default: 'serial', // 'serial' for RS422/RS485, 'can' for CAN
+    validator: (value) => ['serial', 'can'].includes(value),
   },
   placeholder: {
     type: String,
-    default: "请选择波特率",
+    default: '请选择波特率',
   },
   disabled: {
     type: Boolean,
@@ -45,7 +45,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: "default",
+    default: 'default',
   },
   customStyle: {
     type: Object,
@@ -57,7 +57,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["update:modelValue", "change"]);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 // 默认波特率选项
 
@@ -67,13 +67,11 @@ const baudRateOptions = computed(() => {
     return props.options;
   }
 
-  return props.interfaceType === "can"
-    ? defaultCanBaudRates
-    : defaultSerialBaudRates;
+  return props.interfaceType === 'can' ? defaultCanBaudRates : defaultSerialBaudRates;
 });
 
 function handleChange(value) {
-  emit("update:modelValue", value);
-  emit("change", value);
+  emit('update:modelValue', value);
+  emit('change', value);
 }
 </script>

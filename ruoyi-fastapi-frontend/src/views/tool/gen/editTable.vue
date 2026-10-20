@@ -57,29 +57,17 @@
           </el-table-column>
           <el-table-column label="编辑" min-width="5%">
             <template #default="scope">
-              <el-checkbox
-                true-label="1"
-                false-label="0"
-                v-model="scope.row.isEdit"
-              ></el-checkbox>
+              <el-checkbox true-label="1" false-label="0" v-model="scope.row.isEdit"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="列表" min-width="5%">
             <template #default="scope">
-              <el-checkbox
-                true-label="1"
-                false-label="0"
-                v-model="scope.row.isList"
-              ></el-checkbox>
+              <el-checkbox true-label="1" false-label="0" v-model="scope.row.isList"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询" min-width="5%">
             <template #default="scope">
-              <el-checkbox
-                true-label="1"
-                false-label="0"
-                v-model="scope.row.isQuery"
-              ></el-checkbox>
+              <el-checkbox true-label="1" false-label="0" v-model="scope.row.isQuery"></el-checkbox>
             </template>
           </el-table-column>
           <el-table-column label="查询方式" min-width="10%">
@@ -148,10 +136,7 @@
     </el-tabs>
     <el-form label-width="100px">
       <div style="text-align: center; margin-left: -100px; margin-top: 10px">
-        <el-button
-          type="primary"
-          @click="submitForm()"
-          :loading="submitFormPending"
+        <el-button type="primary" @click="submitForm()" :loading="submitFormPending"
           >提交</el-button
         >
         <el-button @click="close()">返回</el-button>
@@ -161,42 +146,38 @@
 </template>
 
 <script setup name="GenEdit">
-import { useOperation } from "@/utils/operation";
-import { ElMessage } from "element-plus";
-import { getGenTable, updateGenTable } from "@/api/tool/gen";
-import DictTypeSelect from "@/components/business/DictTypeSelect/index.vue";
-import basicInfoForm from "./basicInfoForm";
-import genInfoForm from "./genInfoForm";
-import { buildGenTablePayload } from "./gen-config-policy";
+import { useOperation } from '@/utils/operation';
+import { ElMessage } from 'element-plus';
+import { getGenTable, updateGenTable } from '@/api/tool/gen';
+import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
+import basicInfoForm from './basicInfoForm';
+import genInfoForm from './genInfoForm';
+import { buildGenTablePayload } from './gen-config-policy';
 
 const route = useRoute();
 const { proxy } = getCurrentInstance();
 
-const activeName = ref("columnInfo");
+const activeName = ref('columnInfo');
 const tables = ref([]);
 const columns = ref([]);
 const info = ref({});
 
 /** 提交按钮 */
-const { run: submitForm, pending: submitFormPending } = useOperation(
-  async () => {
-    const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
-    const genForm = proxy.$refs.genInfo.$refs.genInfoForm;
-    await Promise.all([basicForm, genForm].map(getFormPromise)).then(
-      async (res) => {
-        const validateResult = res.every((item) => !!item);
-        if (validateResult) {
-          const genTable = buildGenTablePayload(info.value, columns.value);
-          await updateGenTable(genTable).then(() => {
-            close();
-          });
-        } else {
-          ElMessage.error("表单校验未通过，请重新检查提交内容");
-        }
-      },
-    );
-  },
-);
+const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
+  const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
+  const genForm = proxy.$refs.genInfo.$refs.genInfoForm;
+  await Promise.all([basicForm, genForm].map(getFormPromise)).then(async (res) => {
+    const validateResult = res.every((item) => !!item);
+    if (validateResult) {
+      const genTable = buildGenTablePayload(info.value, columns.value);
+      await updateGenTable(genTable).then(() => {
+        close();
+      });
+    } else {
+      ElMessage.error('表单校验未通过，请重新检查提交内容');
+    }
+  });
+});
 
 function getFormPromise(form) {
   return new Promise((resolve) => {
@@ -208,7 +189,7 @@ function getFormPromise(form) {
 
 function close() {
   const obj = {
-    path: "/tool/gen",
+    path: '/tool/gen',
     query: { t: Date.now(), page: route.query.page },
   };
   proxy.$tab.closeOpenPage(obj);
