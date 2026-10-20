@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, nextTick, computed } from 'vue';
+import { ref, watch, nextTick, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useDrawer } from '@zxio/zxui/hooks';
 import { Box, ArrowRight, Document, Warning } from '@element-plus/icons-vue';
@@ -103,13 +103,20 @@ const formRef = ref(null);
 
 // 使用 useDrawer
 const drawer = useDrawer({
+  defaultData: () => ({
+    name: '',
+    deviceType: '',
+    model: '',
+    manufacturer: '',
+    version: '',
+    remark: '',
+  }),
   divider: false,
-  title: () => `节点配置 - ${formData.name || '未命名节点'}`,
+  title: () => `节点配置 - ${drawer.state.data.name || '未命名节点'}`,
   size: '700px',
   placement: 'right',
   okText: '保存',
   formRef,
-  formModel: computed(() => formData),
   preValidate: true,
   autoScrollToError: true,
   async onConfirm() {
@@ -117,7 +124,7 @@ const drawer = useDrawer({
     emit('submit', {
       nodeId: props.nodeData?.id,
       node: props.nodeData,
-      name: formData.name,
+      name: drawer.state.data.name,
       ports: portList.value,
     });
 
@@ -125,16 +132,6 @@ const drawer = useDrawer({
     ElMessage.success('保存成功');
     return true;
   },
-});
-
-// 表单数据
-const formData = reactive({
-  name: '',
-  deviceType: '',
-  model: '',
-  manufacturer: '',
-  version: '',
-  remark: '',
 });
 
 // 端口列表
@@ -162,12 +159,14 @@ watch(
 const initFormData = () => {
   nextTick(() => {
     const data = props.nodeData?.data || {};
-    formData.name = data.name || data.label || '';
-    formData.deviceType = data.deviceType || '';
-    formData.model = data.model || '';
-    formData.manufacturer = data.manufacturer || '';
-    formData.version = data.version || '';
-    formData.remark = data.remark || data.value || '';
+    drawer.setData({
+      name: data.name || data.label || '',
+      deviceType: data.deviceType || '',
+      model: data.model || '',
+      manufacturer: data.manufacturer || '',
+      version: data.version || '',
+      remark: data.remark || data.value || '',
+    });
 
     // 加载端口列表，并附加对端设备名称
     const ports = Array.isArray(data.ports) ? data.ports : [];
@@ -236,7 +235,7 @@ const getPortMessages = (port) => {
 
   const messageConfig = port.messageConfig || {};
   const currentDeviceName =
-    formData.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
+    drawer.state.data.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
   const peerDeviceNames = getPeerDeviceNames(port);
   const baseHeader = cloneHeader(messageConfig.header);
 
@@ -353,7 +352,7 @@ const handleProtocolClick = (protocolItem) => {
   if (!port) return;
 
   const currentDeviceName =
-    formData.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
+    drawer.state.data.name || props.nodeData?.data?.name || props.nodeData?.data?.label || '';
 
   // 优先使用协议消息头中的接收方作为对端设备名称
   let peerDeviceName = messageData.header?.receiver;

@@ -108,7 +108,6 @@ const drawer = useDrawer({
   placement: 'right',
   okText: '确定',
   formRef,
-  formModel: computed(() => drawer.state.data),
   preValidate: true,
   autoScrollToError: true,
   autoResetForm: true,
