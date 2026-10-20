@@ -1,76 +1,68 @@
 <template>
-  <ZxDrawer v-bind="drawer.drawerProps.value" v-on="drawer.drawerEvents.value" @close="handleClose">
+  <ZxDrawer
+    v-bind="drawer.drawerProps.value"
+    v-on="drawer.drawerEvents.value"
+    @close="handleClose"
+  >
     <ZxTabs v-model="activeTab" :items="tabItems" class="port-config-tabs" lazy>
       <template #params>
-        <ParamsConfigTab ref="paramsConfigTabRef" :port-info="portInfo" v-model="paramsForm" />
+        <ParamsConfigTab
+          ref="paramsConfigTabRef"
+          :port-info="portInfo"
+          v-model="paramsForm"
+        />
       </template>
 
       <template #message>
-        <MessageConfigTab ref="messageConfigTabRef" :port-info="portInfo" :device-mode="true" />
+        <MessageConfigTab
+          ref="messageConfigTabRef"
+          :port-info="portInfo"
+          :device-mode="true"
+        />
       </template>
     </ZxTabs>
   </ZxDrawer>
 </template>
 
 <script setup name="PortConfigDrawer">
-import { ref, reactive, computed, watch } from 'vue';
-import { useDrawer } from '@zxio/zxui/hooks';
-import ParamsConfigTab from './ParamsConfigTab.vue';
-import MessageConfigTab from './MessageConfigTab.vue';
+import { submitCurrentPortTab } from "./port-params-policy";
+import { ref, reactive, computed, watch } from "vue";
+import { useDrawer } from "@zxio/zxui/hooks";
+import ParamsConfigTab from "./ParamsConfigTab.vue";
+import MessageConfigTab from "./MessageConfigTab.vue";
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
-  title: { type: String, default: '端口配置' },
+  title: { type: String, default: "端口配置" },
   portInfo: {
     type: Object,
     default: () => ({}),
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'close', 'submit']);
+const emit = defineEmits(["update:modelValue", "close", "submit"]);
 
 const drawer = useDrawer({
   divider: true,
   title: () => title.value,
-  size: '75%',
-  placement: 'right',
-  okText: '确定',
+  size: "75%",
+  placement: "right",
+  okText: "确定",
   preValidate: false,
   autoScrollToError: true,
   autoResetForm: true,
   defaultData: () => ({}),
   onConfirm: async () => {
-    let dataToSubmit = { ...props.portInfo };
-    if (activeTab.value === 'params') {
-      if (!paramsConfigTabRef.value) {
-        drawer.close();
-        emit('update:modelValue', false);
-        return;
-      }
-      const valid = await paramsConfigTabRef.value.validate();
-      if (!valid) {
-        // 校验失败，不保存并关闭抽屉
-        return false;
-      }
-      const params = paramsConfigTabRef.value.getFormData();
-      dataToSubmit.params = params;
-      emit('submit', dataToSubmit);
-    } else if (activeTab.value === 'message') {
-      if (!messageConfigTabRef.value) {
-        drawer.close();
-        emit('update:modelValue', false);
-        return;
-      }
-      // 验证表单（包含协议模板校验）
-      const valid = await messageConfigTabRef.value.validate();
-      if (!valid) {
-        // 校验失败，不保存并关闭抽屉
-        return false;
-      }
-      const messageConfig = messageConfigTabRef.value.getFormData();
-      dataToSubmit.messageConfig = messageConfig;
-      emit('submit', dataToSubmit);
-    }
+    const payload = await submitCurrentPortTab(
+      props.portInfo,
+      activeTab.value,
+      {
+        params: paramsConfigTabRef.value,
+        message: messageConfigTabRef.value,
+      },
+    );
+    if (payload === false) return false;
+    if (payload) emit("submit", payload);
     handleClose();
     return true;
   },
@@ -87,16 +79,16 @@ watch(
       drawer.close();
       handleClose();
     }
-  }
+  },
 );
 
 // 当前激活的 Tab
-const activeTab = ref('params');
+const activeTab = ref("params");
 
 // ZxTabs 配置
 const tabItems = [
-  { key: 'params', label: '参数配置' },
-  { key: 'message', label: '报文配置' },
+  { key: "params", label: "参数配置" },
+  { key: "message", label: "报文配置" },
 ];
 
 // 表单引用
@@ -107,11 +99,11 @@ const messageConfigTabRef = ref();
 const paramsForm = reactive({});
 
 function handleClose() {
-  activeTab.value = 'params';
+  activeTab.value = "params";
   paramsConfigTabRef.value?.clearValidate();
   messageConfigTabRef.value?.clearValidate();
-  emit('close');
-  emit('update:modelValue', false);
+  emit("close");
+  emit("update:modelValue", false);
   drawer.close();
 }
 

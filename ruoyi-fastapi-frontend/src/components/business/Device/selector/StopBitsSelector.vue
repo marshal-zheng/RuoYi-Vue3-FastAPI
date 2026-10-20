@@ -18,7 +18,8 @@
 </template>
 
 <script setup name="StopBitsSelector">
-import { computed } from 'vue';
+import { defaultStopBitsOptions } from "./options";
+import { computed } from "vue";
 
 const props = defineProps({
   modelValue: {
@@ -27,7 +28,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请选择停止位',
+    default: "请选择停止位",
   },
   disabled: {
     type: Boolean,
@@ -39,7 +40,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'default',
+    default: "default",
   },
   customStyle: {
     type: Object,
@@ -51,14 +52,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(["update:modelValue", "change"]);
 
 // 默认停止位选项
-const defaultStopBitsOptions = [
-  { label: '1', value: 1 },
-  { label: '1.5', value: 1.5 },
-  { label: '2', value: 2 },
-];
 
 // 计算停止位选项
 const stopBitsOptions = computed(() => {
@@ -66,7 +62,7 @@ const stopBitsOptions = computed(() => {
 });
 
 function handleChange(value) {
-  emit('update:modelValue', value);
-  emit('change', value);
+  emit("update:modelValue", value);
+  emit("change", value);
 }
 </script>

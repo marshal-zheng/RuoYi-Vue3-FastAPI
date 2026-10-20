@@ -18,7 +18,8 @@
 </template>
 
 <script setup name="DataBitsSelector">
-import { computed } from 'vue';
+import { defaultDataBitsOptions } from "./options";
+import { computed } from "vue";
 
 const props = defineProps({
   modelValue: {
@@ -27,7 +28,7 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请选择数据位',
+    default: "请选择数据位",
   },
   disabled: {
     type: Boolean,
@@ -39,7 +40,7 @@ const props = defineProps({
   },
   size: {
     type: String,
-    default: 'default',
+    default: "default",
   },
   customStyle: {
     type: Object,
@@ -51,15 +52,9 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(["update:modelValue", "change"]);
 
 // 默认数据位选项
-const defaultDataBitsOptions = [
-  { label: '5', value: 5 },
-  { label: '6', value: 6 },
-  { label: '7', value: 7 },
-  { label: '8', value: 8 },
-];
 
 // 计算数据位选项
 const dataBitsOptions = computed(() => {
@@ -67,7 +62,7 @@ const dataBitsOptions = computed(() => {
 });
 
 function handleChange(value) {
-  emit('update:modelValue', value);
-  emit('change', value);
+  emit("update:modelValue", value);
+  emit("change", value);
 }
 </script>

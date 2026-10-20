@@ -1,7 +1,7 @@
 import { onScopeDispose, ref, watch, type Ref } from 'vue';
 import { isAbortError, type HttpError } from '@zxio/http';
-import { ElMessage } from 'element-plus';
 import { presentRequestError } from '@/utils/http';
+import { isRecord } from '@/types/http-contract';
 
 interface EditorRead {
   signal: AbortSignal;
@@ -48,14 +48,17 @@ export function useEditorRead(visible: () => boolean, loading: Ref<boolean> = re
         controller.abort('editor-read-failed');
         error.value = failure instanceof Error ? failure.message : '获取信息失败，请重试';
         const problem = failure as HttpError & { problem?: unknown };
-        if (problem?.problem) {
+        // Every consumer renders error + retry inline. Only authentication needs a global action.
+        if (
+          isRecord(problem?.problem) &&
+          (problem.problem.status === 401 ||
+            [20001, 20002].includes(Number(problem.problem.errorCode)))
+        ) {
           presentRequestError(problem, {
             ...problem.config,
             silentError: false,
             feedback: { mode: 'auto' },
           });
-        } else {
-          ElMessage.error(error.value);
         }
       }
       throw failure;

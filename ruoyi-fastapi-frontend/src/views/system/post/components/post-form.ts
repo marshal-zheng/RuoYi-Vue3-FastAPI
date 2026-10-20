@@ -1,4 +1,11 @@
-import type { FieldIssue, RuleFor, Values } from '@zxio/schema-form/form-create';
+import type { Values } from '@zxio/schema-form';
+import type {
+  BusinessContext,
+  Field,
+  FieldIssue,
+  NativeSchema,
+  SettledCheck,
+} from '@zxio/schema-form/formily';
 import type { PostModel } from '@/api/_generated/types.gen';
 import { isProblemDetails, isRecord } from '@/types/http-contract';
 
@@ -13,77 +20,95 @@ export type PostValues = {
 export type StatusOption = { label: string; value: '0' | '1' };
 const limits = { name: 50, code: 64 } as const;
 
-export function createPostRules(
-  statusOptions: () => readonly StatusOption[]
-): RuleFor<PostValues>[] {
-  return [
-    {
-      type: 'ZxInput',
-      field: 'postName',
-      title: '岗位名称',
-      props: { maxlength: limits.name, placeholder: '请输入岗位名称' },
-      validate: [
+export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
+  let latestOptions = statusOptions();
+  const createSchema = (ctx: BusinessContext<PostValues>): NativeSchema => {
+    ctx.bindResource(statusOptions, (options) => {
+      latestOptions = options;
+      ctx.form.query('status').forEach((field: Field) =>
+        ctx.configure(field, {
+          dataSource: [...options],
+          componentProps: { options: [...options] },
+        })
+      );
+    });
+    const text = (title: string, max: number) => ({
+      type: 'string',
+      title,
+      'x-component': 'ZxInput',
+      'x-component-props': { maxlength: max, placeholder: `请输入${title}` },
+      'x-validator': [
         {
           required: true,
-          whitespace: true,
-          max: limits.name,
-          message: `岗位名称不能为空且不能超过 ${limits.name} 个字符`,
-          trigger: 'blur',
+          triggerType: 'onBlur',
+          message: `${title}不能为空且不能超过 ${max} 个字符`,
+          validator: (value: unknown) =>
+            typeof value === 'string' && !!value.trim() && value.length <= max
+              ? ''
+              : `${title}不能为空且不能超过 ${max} 个字符`,
         },
       ],
-    },
-    {
-      type: 'ZxInput',
-      field: 'postCode',
-      title: '岗位编码',
-      props: { maxlength: limits.code, placeholder: '请输入岗位编码' },
-      validate: [
-        {
-          required: true,
-          whitespace: true,
-          max: limits.code,
-          message: `岗位编码不能为空且不能超过 ${limits.code} 个字符`,
-          trigger: 'blur',
+    });
+    return {
+      type: 'object',
+      properties: {
+        postName: text('岗位名称', limits.name),
+        postCode: text('岗位编码', limits.code),
+        postSort: {
+          type: 'number',
+          title: '岗位顺序',
+          'x-component': 'ZxInputNumber',
+          'x-component-props': {
+            min: 0,
+            precision: 0,
+            controlsPosition: 'right',
+          },
+          'x-validator': [
+            {
+              required: true,
+              message: '请输入大于或等于 0 的整数',
+              validator: (value: unknown) =>
+                typeof value === 'number' && Number.isInteger(value) && value >= 0
+                  ? ''
+                  : '请输入大于或等于 0 的整数',
+            },
+          ],
         },
-      ],
-    },
-    {
-      type: 'ZxInputNumber',
-      field: 'postSort',
-      title: '岗位顺序',
-      props: { min: 0, precision: 0, controlsPosition: 'right' },
-      validate: [
-        {
-          required: true,
-          type: 'integer',
-          min: 0,
-          message: '请输入大于或等于 0 的整数',
-          trigger: 'change',
+        status: {
+          type: 'string',
+          title: '岗位状态',
+          'x-component': 'ZxRadioGroup',
+          'x-component-props': { options: [...latestOptions] },
+          'x-validator': [
+            {
+              required: true,
+              message: '请选择岗位状态',
+              validator: (value: unknown) =>
+                value === '0' || value === '1' ? '' : '请选择岗位状态',
+            },
+          ],
         },
-      ],
-    },
-    {
-      type: 'ZxRadioGroup',
-      field: 'status',
-      title: '岗位状态',
-      props: { options: statusOptions },
-      validate: [
-        {
-          required: true,
-          type: 'enum',
-          enum: ['0', '1'],
-          message: '请选择岗位状态',
-          trigger: 'change',
+        remark: {
+          type: 'string',
+          title: '备注',
+          'x-component': 'ZxInput',
+          'x-component-props': {
+            type: 'textarea',
+            rows: 3,
+            placeholder: '请输入内容',
+          },
         },
-      ],
-    },
-    {
-      type: 'ZxInput',
-      field: 'remark',
-      title: '备注',
-      props: { type: 'textarea', rows: 3, placeholder: '请输入内容' },
-    },
-  ];
+      },
+    };
+  };
+  const assertSettled: SettledCheck<PostValues> = (_values, states) => {
+    const state = states.find((item) => item.path[0] === 'status');
+    return JSON.stringify(state?.dataSource) === JSON.stringify(latestOptions) &&
+      JSON.stringify(state?.componentProps.options) === JSON.stringify(latestOptions)
+      ? []
+      : [{ message: '岗位状态字典尚未同步' }];
+  };
+  return { createSchema, assertSettled };
 }
 
 export function initialPost(detail?: PostModel): PostValues {
@@ -140,7 +165,12 @@ export function postFieldIssues(error: unknown): FieldIssue[] {
   };
   return error.problem.errors.flatMap((issue) =>
     isRecord(issue) && typeof issue.field === 'string' && typeof issue.message === 'string'
-      ? [{ field: aliases[issue.field] ?? issue.field, message: issue.message }]
+      ? [
+          {
+            ...(issue.field ? { path: [aliases[issue.field] ?? issue.field] } : {}),
+            message: issue.message,
+          },
+        ]
       : []
   );
 }

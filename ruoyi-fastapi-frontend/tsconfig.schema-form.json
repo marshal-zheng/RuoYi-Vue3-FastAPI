@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src/shims-vue.d.ts",
+    "src/theme/theme-deployment.d.ts",
+    "src/types/**/*.d.ts",
+    "src/components/business/Protocol/templates/RS422ProtocolTemplate.vue",
+    "src/components/business/Device/ParamsConfigTab.vue",
+    "src/components/business/Device/PortConfigDrawer.vue",
+    "src/views/device/detail.vue",
+    "src/views/tool/gen/editTable.vue",
+    "src/views/tool/gen/genInfoForm.vue",
+    "src/views/system/post/components/PostDlg.vue",
+    "tests/unit/components/PostSaveFeedback.test.ts"
+  ]
+}

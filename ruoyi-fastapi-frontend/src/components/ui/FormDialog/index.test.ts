@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { useFormDialog } from './index';
+import { schemaFormDialog, useFormDialog } from './index';
 
 describe('FormDialog hard-cut geometry contract', () => {
   it.each([
@@ -17,5 +17,11 @@ describe('FormDialog hard-cut geometry contract', () => {
     expect(() => Reflect.apply(useFormDialog, undefined, [{}])).toThrow(
       'columns must explicitly be 1, 2 or 3'
     );
+  });
+
+  it('passes the requested columns to the schema form and matching dialog preset', () => {
+    const { dialogProps, schemaFormProps } = schemaFormDialog({ columns: 2 });
+    expect(dialogProps.dialogSize).toBe('lg');
+    expect(schemaFormProps).toHaveProperty('columns', 2);
   });
 });
