@@ -1427,127 +1427,107 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-checkbox@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-checkbox@npm:3.3.0"
+"@formily/core@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/core@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/3a7b3dfcec554e87a4ff26d9320dbe190d73664a791140d283a13e398aad7d708cfcafb15d4d50038ee3cc18579a39c3631226276ed0e8aced4e7eba3bae7c9a
+    "@formily/reactive": "npm:2.3.7"
+    "@formily/shared": "npm:2.3.7"
+    "@formily/validator": "npm:2.3.7"
+  checksum: 10c0/e1b9d73622282115ec33ed049dd3237ec35dfe5d2c73d330020ae8ac8449776291f14a8d7741e781774e8e20422206f93edc9b71a47764e28ec2351537358c4c
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-frame@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-frame@npm:3.3.0"
+"@formily/json-schema@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/json-schema@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
+    "@formily/core": "npm:2.3.7"
+    "@formily/reactive": "npm:2.3.7"
+    "@formily/shared": "npm:2.3.7"
   peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/26003c582ab63b853a82d1fe3bc895bd6b0ec5f00171bad8bed5ba3cfd9219de0066a3fceffd078ec2f9e2cc638c0eea6432b04a39c2eef02399fa8f5b6fd983
+    typescript: ">4.1.5"
+  checksum: 10c0/accca718d3d668d513b012584ad5c4f77689ddf2e65ad1771894e4627b6a0c5930e2d05c44d73a5714f0d57a83a1208f706439fff22d72cc5f49416326d69a3d
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-group@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-group@npm:3.3.0"
+"@formily/path@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/path@npm:2.3.7"
+  checksum: 10c0/5bd28664989b7568be4d58ccb7b9642b858560335127f5f53402eccb7ace6e83c07eec3c7971bb37ffc5d24c2715f2383375e4313291535106b03c6c70c6ef0a
+  languageName: node
+  linkType: hard
+
+"@formily/reactive-vue@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/reactive-vue@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
+    "@formily/reactive": "npm:2.3.7"
+    vue-demi: "npm:>=0.13.6"
   peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/a699e5ab5fd93878b75f0c45b02fffec6c23ebd8ba8889f29049a13ce274552b81e0389c8aa15d7f6a3b350bf399b90ca458fb5000a1b281ebb3247217705387
+    "@vue/composition-api": ^1.0.0-beta.1
+    vue: ^2.6.0 || >=3.0.0-rc.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  checksum: 10c0/b0bb3bb66cbf6bc2fe751e1c6c29f69662b29c857a7649ab57314ee4cb081fb8556d2978506649d634e79b6f91a5a71d59063d61b68ea17c35b561beb076cbb4
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-radio@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-radio@npm:3.3.0"
+"@formily/reactive@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/reactive@npm:2.3.7"
+  checksum: 10c0/c64b4f083b96e684787e651f4d2bb9b000191e2d5345aa136b2ebb7308a4041a86383f152cc876731104a7627becff07e307cfd6ce4a4c6d9cba57812252d409
+  languageName: node
+  linkType: hard
+
+"@formily/shared@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/shared@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/aedbe275652b744c774d659cd71cfbe2f49ca2e2150bd136c5d65e64879726f1c8a40a256eb39e714edd3b5fd0a4d7c58fe6ad8e3e2b3d1ee36227e8379adbcb
+    "@formily/path": "npm:2.3.7"
+    camel-case: "npm:^4.1.1"
+    lower-case: "npm:^2.0.1"
+    no-case: "npm:^3.0.4"
+    param-case: "npm:^3.0.4"
+    pascal-case: "npm:^3.1.1"
+    upper-case: "npm:^2.0.1"
+  checksum: 10c0/f7245de3d1b03d40a732a671a492f1bd21671984f1c70ae97104bfc4cc3f0a4e7352c152786213d34da6f65ae5f9c84bc88ba60e5db8c07e48d1d7ecc8e84204
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-select@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-select@npm:3.3.0"
+"@formily/validator@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/validator@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/76236ab293d50fb8d44938763abc44c22e6570a7382ccffb57ffeadaa85589ffc7fdcdc97b778db6f2e87b4ad6ace610ac4977e2f2a67cd02e1a8b7d5fe2d67a
+    "@formily/shared": "npm:2.3.7"
+  checksum: 10c0/e3ffc6aad6be6e43e805bc02a54c32a5593d9952efa0c203edea621009d5a1aeaa5b85f9fa4f27fea9950398ca2704e654598b71decd327ea2ac6f7d34e3fc5d
   languageName: node
   linkType: hard
 
-"@form-create/component-elm-tree@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-tree@npm:3.3.0"
+"@formily/vue@npm:2.3.7":
+  version: 2.3.7
+  resolution: "@formily/vue@npm:2.3.7"
   dependencies:
-    "@form-create/utils": "npm:^3.3.0"
+    "@formily/core": "npm:2.3.7"
+    "@formily/json-schema": "npm:2.3.7"
+    "@formily/reactive": "npm:2.3.7"
+    "@formily/reactive-vue": "npm:2.3.7"
+    "@formily/shared": "npm:2.3.7"
+    "@formily/validator": "npm:2.3.7"
+    fs-extra: "npm:^10.0.0"
+    vue-demi: "npm:>=0.13.6"
+    vue-frag: "npm:^1.1.4"
   peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/3cdb209281d67b76369f2b0ab636b0817dbc062571890c8ec3439110bc23908635dd904732d60cbb1fc5dbd68c5d7dc537d2f411530c39d8776fc5a844e6a851
-  languageName: node
-  linkType: hard
-
-"@form-create/component-elm-upload@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-elm-upload@npm:3.3.0"
-  dependencies:
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/d21133bc8a60b32034f38f8c7ab1b0a520db4bfba9925cd9a33cca83dd8a3c7faf793f9de471024ee79c55242c68d1a732012e87b4bd246f2f73d777cc78cba4
-  languageName: node
-  linkType: hard
-
-"@form-create/component-subform@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/component-subform@npm:3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/85a698a2c0f3975ae608187fedeac2bdce980580c0550dbc364bccca18eed4dcd76662251a1389977e55174ae14d1db54c0324d400135a2d37482aa7ee3167b6
-  languageName: node
-  linkType: hard
-
-"@form-create/core@npm:^3.3.5":
-  version: 3.3.5
-  resolution: "@form-create/core@npm:3.3.5"
-  dependencies:
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/006ef2ab8a3478fbe5ac789e9965080909e9b436ebdcb391612a6d6acc6755bfa1c4532d85143c8d22a794b3959c5bfd313697dd02f2983b22f390fa8abcf4fd
-  languageName: node
-  linkType: hard
-
-"@form-create/element-ui@npm:3.3.5":
-  version: 3.3.5
-  resolution: "@form-create/element-ui@npm:3.3.5"
-  dependencies:
-    "@form-create/component-elm-checkbox": "npm:^3.3.0"
-    "@form-create/component-elm-frame": "npm:^3.3.0"
-    "@form-create/component-elm-group": "npm:^3.3.0"
-    "@form-create/component-elm-radio": "npm:^3.3.0"
-    "@form-create/component-elm-select": "npm:^3.3.0"
-    "@form-create/component-elm-tree": "npm:^3.3.0"
-    "@form-create/component-elm-upload": "npm:^3.3.0"
-    "@form-create/component-subform": "npm:^3.3.0"
-    "@form-create/core": "npm:^3.3.5"
-    "@form-create/utils": "npm:^3.3.0"
-  peerDependencies:
-    vue: ^3.5.12
-  checksum: 10c0/6f3426b8781cee6d60bb6bbaf73c546b88d5656440836ee7f19def86f2321f9b9882cc2c0c0aab54b87414c3a0fdef193a74875a0e69b7acade104d755a183d9
-  languageName: node
-  linkType: hard
-
-"@form-create/utils@npm:^3.3.0":
-  version: 3.3.0
-  resolution: "@form-create/utils@npm:3.3.0"
-  checksum: 10c0/6b0dc3fa573cd33b5eb3e8989359c433aae3589df5d41f0b313f4a70a38912cf5221fabf38380c6b922ba5f7a11e6017ea0c3ceb3c5290906063baa724fe7362
+    "@vue/composition-api": ^1.0.0-beta.1
+    vue: ^2.6.0 || >=3.0.0-rc.0
+  peerDependenciesMeta:
+    "@vue/composition-api":
+      optional: true
+  bin:
+    formily-vue-fix: bin/formily-vue-fix.js
+    formily-vue-switch: bin/formily-vue-switch.js
+  checksum: 10c0/50a708313d6a89ffd86da2603f5e4c3b3327bcddb9baa712c68051537647c2d5cc2ff38c9a24fa28c46dc3e1016ef1ed0082512c2d1e7727b276f9ac2e7d821f
   languageName: node
   linkType: hard
 
@@ -4342,18 +4322,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0
-  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz#./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz::hash=7fa0df&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz#vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz::hash=f63ede&locator=vfadmin%40workspace%3A."
   peerDependencies:
-    "@form-create/element-ui": 3.3.5
+    "@formily/core": 2.3.7
+    "@formily/reactive": 2.3.7
+    "@formily/validator": 2.3.7
+    "@formily/vue": 2.3.7
     "@zxio/zxui": ^3.0.0-next.0
     element-plus: ^2.13.0
     vue: ^3.5.0
   peerDependenciesMeta:
-    "@form-create/element-ui":
+    "@formily/core":
       optional: true
-  checksum: 10c0/cabb40bce862ca9568f41f6390819576bf2cf5effa0e93a51ddfe2b124db47ca40517f370a06ae4254ff53861cece90f3ac943f5f74f868c69af83b7ab1bb225
+    "@formily/reactive":
+      optional: true
+    "@formily/validator":
+      optional: true
+    "@formily/vue":
+      optional: true
+  checksum: 10c0/bef8a6786bb012c6e4b039660bbf8c9da98a78fb9f9432ad1259e03cb6ddbbd92dee0c2eb7d24cd00101bb96301b51d9af2553be43d5f39d6eb46f63e404baf5
   languageName: node
   linkType: hard
 
@@ -5395,6 +5384,16 @@ __metadata:
   version: 3.1.0
   resolution: "callsites@npm:3.1.0"
   checksum: 10c0/fff92277400eb06c3079f9e74f3af120db9f8ea03bad0e84d9aede54bbe2d44a56cccb5f6cf12211f93f52306df87077ecec5b712794c5a9b5dac6d615a3f301
+  languageName: node
+  linkType: hard
+
+"camel-case@npm:^4.1.1":
+  version: 4.1.2
+  resolution: "camel-case@npm:4.1.2"
+  dependencies:
+    pascal-case: "npm:^3.1.2"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/bf9eefaee1f20edbed2e9a442a226793bc72336e2b99e5e48c6b7252b6f70b080fc46d8246ab91939e2af91c36cdd422e0af35161e58dd089590f302f8f64c8a
   languageName: node
   linkType: hard
 
@@ -6634,6 +6633,16 @@ __metadata:
     domelementtype: "npm:^2.3.0"
     domhandler: "npm:^5.0.3"
   checksum: 10c0/47938f473b987ea71cd59e59626eb8666d3aa8feba5266e45527f3b636c7883cca7e582d901531961f742c519d7514636b7973353b648762b2e3bedbf235fada
+  languageName: node
+  linkType: hard
+
+"dot-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "dot-case@npm:3.0.4"
+  dependencies:
+    no-case: "npm:^3.0.4"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/5b859ea65097a7ea870e2c91b5768b72ddf7fa947223fd29e167bcdff58fe731d941c48e47a38ec8aa8e43044c8fbd15cd8fa21689a526bc34b6548197cd5b05
   languageName: node
   linkType: hard
 
@@ -10002,6 +10011,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lower-case@npm:^2.0.1, lower-case@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "lower-case@npm:2.0.2"
+  dependencies:
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/3d925e090315cf7dc1caa358e0477e186ffa23947740e4314a7429b6e62d72742e0bbe7536a5ae56d19d7618ce998aba05caca53c2902bd5742fdca5fc57fd7b
+  languageName: node
+  linkType: hard
+
 "lru-cache@npm:^10.2.0, lru-cache@npm:^10.4.3":
   version: 10.4.3
   resolution: "lru-cache@npm:10.4.3"
@@ -10689,6 +10707,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"no-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "no-case@npm:3.0.4"
+  dependencies:
+    lower-case: "npm:^2.0.2"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/8ef545f0b3f8677c848f86ecbd42ca0ff3cd9dd71c158527b344c69ba14710d816d8489c746b6ca225e7b615108938a0bda0a54706f8c255933703ac1cf8e703
+  languageName: node
+  linkType: hard
+
 "node-addon-api@npm:^7.0.0":
   version: 7.1.1
   resolution: "node-addon-api@npm:7.1.1"
@@ -11031,6 +11059,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"param-case@npm:^3.0.4":
+  version: 3.0.4
+  resolution: "param-case@npm:3.0.4"
+  dependencies:
+    dot-case: "npm:^3.0.4"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/ccc053f3019f878eca10e70ec546d92f51a592f762917dafab11c8b532715dcff58356118a6f350976e4ab109e321756f05739643ed0ca94298e82291e6f9e76
+  languageName: node
+  linkType: hard
+
 "parchment@npm:^1.1.4":
   version: 1.1.4
   resolution: "parchment@npm:1.1.4"
@@ -11091,6 +11129,16 @@ __metadata:
   dependencies:
     entities: "npm:^6.0.0"
   checksum: 10c0/7fd2e4e247e85241d6f2a464d0085eed599a26d7b0a5233790c49f53473232eb85350e8133344d9b3fd58b89339e7ad7270fe1f89d28abe50674ec97b87f80b5
+  languageName: node
+  linkType: hard
+
+"pascal-case@npm:^3.1.1, pascal-case@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "pascal-case@npm:3.1.2"
+  dependencies:
+    no-case: "npm:^3.0.4"
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/05ff7c344809fd272fc5030ae0ee3da8e4e63f36d47a1e0a4855ca59736254192c5a27b5822ed4bae96e54048eec5f6907713cfcfff7cdf7a464eaf7490786d8
   languageName: node
   linkType: hard
 
@@ -13854,6 +13902,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"upper-case@npm:^2.0.1":
+  version: 2.0.2
+  resolution: "upper-case@npm:2.0.2"
+  dependencies:
+    tslib: "npm:^2.0.3"
+  checksum: 10c0/5ac176c9d3757abb71400df167f9abb46d63152d5797c630d1a9f083fbabd89711fb4b3dc6de06ff0138fe8946fa5b8518b4fcdae9ca8a3e341417075beae069
+  languageName: node
+  linkType: hard
+
 "uri-js@npm:^4.2.2":
   version: 4.4.1
   resolution: "uri-js@npm:4.4.1"
@@ -13951,7 +14008,10 @@ __metadata:
     "@element-plus/icons-vue": "npm:2.3.2"
     "@eslint/js": "npm:^9.34.0"
     "@faker-js/faker": "npm:^10.1.0"
-    "@form-create/element-ui": "npm:3.3.5"
+    "@formily/core": "npm:2.3.7"
+    "@formily/reactive": "npm:2.3.7"
+    "@formily/validator": "npm:2.3.7"
+    "@formily/vue": "npm:2.3.7"
     "@hey-api/openapi-ts": "npm:0.97.0"
     "@iconify/iconify": "npm:^3.1.1"
     "@iconify/vue": "npm:^4.3.0"
@@ -13983,7 +14043,7 @@ __metadata:
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-closeout.20261019.tgz"
+    "@zxio/schema-form": "file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"
@@ -14222,7 +14282,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-demi@npm:>=0.14.5, vue-demi@npm:>=0.14.8, vue-demi@npm:^0.14.10, vue-demi@npm:latest":
+"vue-demi@npm:>=0.13.6, vue-demi@npm:>=0.14.5, vue-demi@npm:>=0.14.8, vue-demi@npm:^0.14.10, vue-demi@npm:latest":
   version: 0.14.10
   resolution: "vue-demi@npm:0.14.10"
   peerDependencies:
@@ -14283,6 +14343,15 @@ __metadata:
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
   checksum: 10c0/44424733b9a75cde2c7c3ad03427264cc39eb0c1300f3157d4476b7faf9ff3d567b725b17a60bcfb03f42eb6c32a190473d27f4e1866081e019b3e1cd0e53799
+  languageName: node
+  linkType: hard
+
+"vue-frag@npm:^1.1.4":
+  version: 1.4.3
+  resolution: "vue-frag@npm:1.4.3"
+  peerDependencies:
+    vue: ^2.6.0
+  checksum: 10c0/338d3475de637f8c7179e9a8e00b6bd9d7ed6aef138db7f16d7a6d4f4b8ebee66e725a3e6061afa4ac72d4b55521a84309397d082384db41bf22a9bade1dc1c2
   languageName: node
   linkType: hard
 

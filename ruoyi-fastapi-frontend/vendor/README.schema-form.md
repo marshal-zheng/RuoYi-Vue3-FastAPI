@@ -1,25 +1,9 @@
-# Schema package release-closeout snapshot
+# Schema Form Formily 任务快照
 
-The post dialog consumes `@zxio/schema-form/form-create` through
-`zxio-schema-form-0.1.0-closeout.20261019.tgz`. The identical tarball is used by
-x6-devkit. The filename suffix identifies local acceptance; the package version
-is `0.1.0`. It is built from ZXUI `packages/schema-form/dist`, including public
-JS/types/style, README and LICENSE. Runtime files match the previously accepted
-pilot byte for byte.
+当前任务使用 `zxio-schema-form-0.1.0-formily.20261020-r2.tgz`，包版本 0.1.0，SHA256 `a046609c0a91d9f343410a10daa5997ee8c00820e767f472feecefabb791592f`。来源为 ZXUI 隔离 worktree packages/schema-form/dist，由 package build 与 npm pack 生成，未发布 npm。
 
-The application explicitly installs `@form-create/element-ui@3.3.5` for this
-optional facet. Vue, Element Plus and ZXUI are host peers. The schema package
-never owns HTTP requests, post identity/DTOs, dictionary loading or dialog closure.
+独立表单入口为 @zxio/schema-form/formily，宿主显式安装 @formily/core、@formily/vue、@formily/reactive、@formily/validator 精确 2.3.7。root/fields 的 JS 与声明均无引擎依赖，DAG/Dashboard 继续拥有原 draft/history/preview。
 
-Keep the current ZXUI and theme-compiler snapshots: they contain the public field
-and source-plugin changes needed by this consumer. Other Dashboard/HTTP/theme
-snapshots belong to their respective deliveries and are not cleanup candidates.
-`VITE_ZXUI_LOCAL=true` with an explicit `VITE_ZXIO_REPO_ROOT` remains the supported
-source-debugging path; normal production builds use locked package dependencies.
+源码联调使用 `VITE_ZXUI_LOCAL=true VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus/worktrees/schemaform-formily`。源 checkout 不写回。岗位 Dialog 仅拥有显示、记录身份和读取；Formily 会话拥有编辑值/校验/保存基线，不绑定 Element Plus FormInstance。服务写入未知后读取核对，禁止盲目重发。
 
-After the corresponding packages are authorized and published, upgrade the
-compatible ZXUI/theme packages, replace schema-form's file dependency with its
-published `0.1.0`, and regenerate `yarn.lock`. Verify typecheck, post regressions,
-production build and the real post page before removing the replaced snapshots.
-Do not substitute registry versions merely because their version numbers match
-an unpublished local snapshot.
+本轮回归包括源码挂载与 tarball 消费；本机 Redis/Colima 故障已在保全备份后恢复；真实岗位与协议 HTTP 读写/回读/核对/清理通过。happy-dom 不证明人工视觉。完整证据在 ZXUI docs/specs/SCHEMAFORM-formily-runtime-migration/evidence/execution/。
