@@ -7,7 +7,10 @@ import { formLayoutPolicy, type FormColumns } from './policy';
 export { default as FormGrid } from './FormGrid.vue';
 export type { FormColumns } from './policy';
 
-type FormDialogStyle = Omit<CSSProperties, 'width' | 'height'> & { width?: never; height?: never };
+type FormDialogStyle = Omit<CSSProperties, 'width' | 'height'> & {
+  width?: never;
+  height?: never;
+};
 export type FormDialogOptions<T extends object> = Omit<
   DialogOptions<T>,
   'width' | 'height' | 'dialogStyle'
@@ -57,7 +60,11 @@ export function useFormDialog<T extends object = Record<string, unknown>>(
     }
     return size;
   });
-  const dialog = useDialog<T>({ showFullScreen: false, ...sanitize(options), dialogSize });
+  const dialog = useDialog<T>({
+    showFullScreen: false,
+    ...sanitize(options),
+    dialogSize,
+  });
   return {
     ...dialog,
     formProps: { labelWidth: formLayoutPolicy.labelWidth },
@@ -82,6 +89,7 @@ export function schemaFormDialog(options: { columns: FormColumns }) {
       showFullScreen: false,
     },
     schemaFormProps: {
+      columns: options.columns,
       labelWidth: formLayoutPolicy.labelWidth,
       labelPosition: 'left' as const,
     },

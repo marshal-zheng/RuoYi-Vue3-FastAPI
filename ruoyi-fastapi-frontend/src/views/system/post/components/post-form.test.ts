@@ -24,13 +24,15 @@ describe('post write boundary', () => {
             { field: 'post_name', message: '名称不能为空' },
             { field: 'postCode', message: '编码不能为空' },
             { field: 'unknown', message: '其他问题' },
+            { field: '', message: '表单无法保存' },
           ],
         },
       })
     ).toEqual([
-      { field: 'postName', message: '名称不能为空' },
-      { field: 'postCode', message: '编码不能为空' },
-      { field: 'unknown', message: '其他问题' },
+      { path: ['postName'], message: '名称不能为空' },
+      { path: ['postCode'], message: '编码不能为空' },
+      { path: ['unknown'], message: '其他问题' },
+      { message: '表单无法保存' },
     ]);
   });
 

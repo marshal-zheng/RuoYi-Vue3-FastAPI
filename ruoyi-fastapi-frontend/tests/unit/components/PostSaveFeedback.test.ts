@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import PostDlg from '@/views/system/post/components/PostDlg.vue';
 import type { Save } from '@zxio/schema-form/form-create';
+import type { PostValues } from '@/views/system/post/components/post-form';
 
 const api = vi.hoisted(() => ({ read: vi.fn(), add: vi.fn(), update: vi.fn(), recover: vi.fn() }));
 vi.mock('@/api/system/post', () => ({
@@ -22,9 +23,9 @@ vi.mock('@zxio/schema-form/form-create', () => ({
   },
 }));
 
-const values = { postName: 'QA', postCode: 'qa', postSort: 0, status: '0', remark: '' };
+const values: PostValues = { postName: 'QA', postCode: 'qa', postSort: 0, status: '0', remark: '' };
 let wrapper: ReturnType<typeof mount>;
-async function opening(id?: number): Promise<Save> {
+async function opening(id?: number): Promise<Save<PostValues>> {
   wrapper = mount(PostDlg, {
     global: {
       stubs: {
@@ -75,7 +76,7 @@ describe('post save feedback ownership', () => {
     );
     await expect(save(values, new AbortController().signal)).resolves.toEqual({
       ok: false,
-      issues: [{ field: 'postCode', message: 'invalid code' }],
+      issues: [{ path: ['postCode'], message: 'invalid code' }],
     });
     expect(api.update).toHaveBeenCalledExactlyOnceWith(
       { ...values, postId: 31 },

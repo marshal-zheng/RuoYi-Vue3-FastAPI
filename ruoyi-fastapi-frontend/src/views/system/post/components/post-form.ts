@@ -140,7 +140,12 @@ export function postFieldIssues(error: unknown): FieldIssue[] {
   };
   return error.problem.errors.flatMap((issue) =>
     isRecord(issue) && typeof issue.field === 'string' && typeof issue.message === 'string'
-      ? [{ field: aliases[issue.field] ?? issue.field, message: issue.message }]
+      ? [
+          {
+            ...(issue.field ? { path: [aliases[issue.field] ?? issue.field] } : {}),
+            message: issue.message,
+          },
+        ]
       : []
   );
 }

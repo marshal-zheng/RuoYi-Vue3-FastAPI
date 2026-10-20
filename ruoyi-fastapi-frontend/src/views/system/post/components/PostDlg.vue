@@ -55,8 +55,8 @@ const visible = ref(false);
 const requestedId = ref<number>();
 const detailLoading = ref(false);
 const dialogRef = ref<ZxDialogExpose>();
-const formRef = ref<SchemaFormInstance>();
-const session = shallowRef<{ key: number; initial: PostValues; save: Save }>();
+const formRef = ref<SchemaFormInstance<PostValues>>();
+const session = shallowRef<{ key: number; initial: PostValues; save: Save<PostValues> }>();
 const pending = computed(() => formRef.value?.pending ?? false);
 const { dialogProps, schemaFormProps } = schemaFormDialog({ columns: 1 });
 const { sys_normal_disable: sysNormalDisable } = useDict('sys_normal_disable');
@@ -113,7 +113,7 @@ async function openDialog(id?: number): Promise<void> {
         if (signal.aborted || key !== generation || !visible.value) {
           return {
             ok: false,
-            issues: [{ field: '', message: '编辑会话已结束，请重新打开岗位' }],
+            issues: [{ message: '编辑会话已结束，请重新打开岗位' }],
           };
         }
         const dto = toPostDto(values, id);
