@@ -4,6 +4,7 @@
 
 /* 2. Import component-specific styles */
 @import './element-ui.css';
+@import './navigation-tokens.css';
 @import './sidebar.css';
 @import './overlay.css';
 

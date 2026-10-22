@@ -5,9 +5,6 @@
   :root,
   [data-zx-theme][data-zx-variant] {
     /* Layout and component variables */
-    --sidebar-width: 200px;
-    --base-sidebar-width: 200px;
-    --navbar-height: 50px;
     --footer-height: 60px;
     
     /* Component-specific variables that extend Element Plus */
@@ -35,17 +32,6 @@
     --tags-item-border: var(--el-border-color-light);
     --tags-item-hover: var(--el-fill-color-light);
     --tags-close-hover: var(--zx-semantic-fill-hover);
-
-    /* Logo variables - Logo 相关样式 */
-    --logo-height: 50px;
-    --logo-title-font-size: 13px;
-    --logo-title-font-weight: 600;
-
-    /* Navigation geometry; colours come from the ZXUI surface roles. */
-    --top-header-height: 50px;
-    --left-menu-min-width: 64px;
-    --left-menu-active-bar-width: 4px;
-    --left-menu-item-radius: 10px;
 
     --app-footer-height: 0px;
     --app-content-padding: 20px;
@@ -281,25 +267,6 @@
   .fade-transform-leave-to {
     opacity: 0;
     transform: translateX(30px);
-  }
-  
-  /* Breadcrumb transition */
-  .breadcrumb-enter-active,
-  .breadcrumb-leave-active {
-    transition: all .5s;
-  }
-  .breadcrumb-enter-from,
-  .breadcrumb-leave-active {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  
-  .breadcrumb-move {
-    transition: all 0.5s;
-  }
-  
-  .breadcrumb-leave-active {
-    position: absolute;
   }
   
   /* Slide transitions */

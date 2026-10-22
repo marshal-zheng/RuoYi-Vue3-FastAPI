@@ -1,0 +1,104 @@
+{
+  "checks": [
+    "collapsed popup route + active state",
+    "single expanded brand after Space",
+    "top-right user menu opens by click",
+    "mobile opening focuses sidebar toggle",
+    "mobile drawer has expanded menu",
+    "mobile Escape returns focus",
+    "mobile selection closes and restores focus",
+    "mobile outside click closes and restores focus",
+    "tags preference retains layout",
+    "hide brand preference retains toggle",
+    "breadcrumb visibility preference",
+    "header visibility preference",
+    "native drawer traps reverse tab away from background",
+    "native drawer Escape restores launcher",
+    "native drawer selection restores launcher",
+    "native drawer outside click restores launcher",
+    "native TopNav overflow exposes clipped route",
+    "hidden header lets main occupy top",
+    "header-hidden mobile recovery focus round trip",
+    "TopNav sidebar-hidden profile uses full-width header",
+    "user menu exists only in header",
+    "theme and mode round trip",
+    "expanding rail restores current nested route",
+    "login brand retains heading and wraps at mobile width",
+    "native drawer traps forward Tab away from background"
+  ],
+  "desktopMetrics": {
+    "header": {
+      "x": 250,
+      "y": 0,
+      "width": 1350,
+      "height": 56
+    },
+    "brand": {
+      "x": 0,
+      "y": 0,
+      "width": 249,
+      "height": 56
+    },
+    "sidebar": {
+      "x": 0,
+      "y": 0,
+      "width": 250,
+      "height": 1000
+    },
+    "row": {
+      "x": 51,
+      "y": 118,
+      "width": 188,
+      "height": 44
+    },
+    "rowGap": "4px",
+    "marker": "3px",
+    "radius": "6px",
+    "themeControls": [
+      {
+        "label": "ZXUI 主题：森绿",
+        "height": 40
+      },
+      {
+        "label": "切换到浅色模式",
+        "height": 40
+      },
+      {
+        "label": "用户菜单：超级管理员",
+        "height": 40
+      }
+    ],
+    "brandTitle": "XX系统总线设计仿真系统(扩充)",
+    "scrollWidth": 1600,
+    "viewport": 1600
+  },
+  "fitMetrics": [
+    {
+      "viewport": 768,
+      "header": {
+        "left": 0,
+        "right": 768,
+        "height": 56
+      },
+      "user": {
+        "left": 616,
+        "right": 752
+      },
+      "scrollWidth": 768
+    },
+    {
+      "viewport": 390,
+      "header": {
+        "left": 0,
+        "right": 390,
+        "height": 56
+      },
+      "user": {
+        "left": 328,
+        "right": 382
+      },
+      "scrollWidth": 390
+    }
+  ],
+  "errors": []
+}

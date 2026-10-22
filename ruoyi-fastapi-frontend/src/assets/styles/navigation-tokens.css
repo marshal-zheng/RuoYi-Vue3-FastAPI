@@ -1,0 +1,132 @@
+/* Application navigation defaults. Edit this entry point to tune the whole shell.
+ * Geometry belongs to this app; colour, typography, radius and motion consume the
+ * public theme contract. This file never assigns a ZXUI / Element Plus token.
+ * Bind at every theme scope so teleported menus and nested themes resolve locally.
+ */
+@layer theme {
+  :root {
+    --app-nav-sidebar-width: 250px;
+    --app-nav-rail-width: 50px;
+    --app-nav-header-height: 56px;
+    --app-nav-mobile-breakpoint: 992;
+    --app-nav-space: 4px;
+    --app-nav-item-height: 44px;
+    --app-nav-item-inset: 0px;
+    --app-nav-icon-size: 24px;
+    --app-nav-control-size: 40px;
+    --app-nav-compact-logo-size: 28px;
+    --app-nav-brand-size: 32px;
+    --app-nav-indicator-width: 3px;
+    --app-nav-line-width: 1px;
+    --app-nav-focus-width: 2px;
+    --app-nav-control-radius: 50%;
+    --app-nav-chevron-size: 15px;
+    --app-nav-action-icon-size: 20px;
+    --app-nav-avatar-max-width: 12em;
+    --app-nav-header-layer: 9;
+    --app-nav-sidebar-layer: 1001;
+    --app-nav-font-weight: 400;
+    --app-nav-brand-font-weight: 600;
+    --app-nav-breadcrumb-muted-opacity: 0.7;
+    --app-nav-motion-scale: 1; /* Non-negative multiplier; 0 disables navigation motion. */
+    --app-nav-ease-panel: cubic-bezier(0.25, 0.8, 0.25, 1);
+    --app-nav-ease-group: cubic-bezier(0.35, 0, 0.25, 1);
+    --app-nav-ease-state: ease;
+    --app-nav-ease-control: ease-in-out;
+  }
+
+  /* Rebind recipes, not defaults, at theme scopes. Global geometry overrides
+     still inherit into every Host; theme-dependent roles resolve locally. */
+  :root,
+  [data-zx-theme][data-zx-variant] {
+    --app-nav-item-radius: calc(var(--zx-semantic-radius-control) * 1.5);
+    --app-nav-item-gap: var(--app-nav-space);
+    --app-nav-icon-gap: calc(var(--app-nav-space) * 3);
+    --app-nav-content-start: calc(var(--app-nav-space) * 5.5);
+    --app-nav-content-end: calc(var(--app-nav-space) * 4);
+    --app-nav-nesting-step: calc(var(--app-nav-space) * 4);
+    --app-nav-guide-start: calc(
+      var(--app-nav-content-start) + var(--app-nav-icon-size) / 2
+    );
+    --app-nav-child-content-start: calc(
+      var(--app-nav-guide-start) + var(--app-nav-space) * 8
+    );
+    --app-nav-group-space: calc(var(--app-nav-space) * 2);
+    --app-nav-menu-top: calc(var(--app-nav-space) * 3);
+    --app-nav-menu-bottom: calc(var(--app-nav-space) * 4);
+    --app-nav-control-end: calc(
+      (
+          var(--app-nav-rail-width) - var(--app-nav-line-width) -
+            var(--app-nav-control-size)
+        ) /
+        2
+    );
+    --app-nav-brand-start: calc(var(--app-nav-space) * 4);
+    --app-nav-brand-end: calc(
+      var(--app-nav-control-size) + var(--app-nav-control-end) +
+        var(--app-nav-space) * 2
+    );
+    --app-nav-brand-inset: calc(
+      (var(--app-nav-control-size) - var(--app-nav-compact-logo-size)) / 2
+    );
+    --app-nav-popup-min-width: var(--app-nav-sidebar-width);
+    --app-nav-scrollbar-size: calc(var(--app-nav-space) * 1.5);
+
+    --app-nav-font-size: var(--zx-semantic-typography-size-base);
+    --app-nav-font-family: var(--zx-semantic-typography-family);
+    --app-nav-emphasis-weight: var(--zx-semantic-typography-weight-primary);
+    --app-nav-brand-font-size: var(--zx-semantic-typography-size-medium);
+    --app-nav-breadcrumb-current-size: var(--zx-semantic-typography-size-large);
+    --app-nav-breadcrumb-offset: calc(var(--app-nav-space) * 5);
+    --app-nav-brand-line-height: var(--zx-semantic-typography-line-height-base);
+    --app-nav-text: var(--zx-semantic-surface-panel-on-text);
+    --app-nav-hover-text: var(--zx-semantic-accent-on-surface);
+    --app-nav-hover-fill: var(--zx-semantic-fill-hover);
+    --app-nav-group-hover-fill: transparent;
+    --app-nav-active-text: var(--zx-semantic-surface-selected-on-text);
+    --app-nav-active-fill: var(--zx-semantic-surface-selected-fill);
+    --app-nav-active-highlight: var(--zx-semantic-surface-selected-highlight);
+    --app-nav-active-shadow:
+      var(--zx-semantic-surface-selected-depth),
+      var(--zx-semantic-surface-selected-inner);
+    --app-nav-indicator: var(--zx-semantic-accent-base);
+    --app-nav-guide: var(--zx-semantic-border-subtle);
+    --app-nav-focus: var(--zx-semantic-action-focus-ring);
+    --app-nav-popup-text: var(--zx-semantic-surface-overlay-on-text);
+    --app-nav-popup-fill: var(--zx-semantic-surface-overlay-fill);
+    --app-nav-header-text: var(--zx-semantic-surface-header-on-text);
+    --app-nav-header-muted: var(--zx-semantic-surface-header-on-text-secondary);
+    --app-nav-scrollbar-track: var(--zx-semantic-fill-scrollbar-track);
+    --app-nav-scrollbar-thumb: var(--zx-semantic-fill-scrollbar-thumb);
+
+    --app-nav-motion-fast: calc(var(--zx-semantic-motion-duration-fast) * var(--app-nav-motion-scale));
+    --app-nav-motion-control: calc(var(--zx-semantic-motion-duration) * var(--app-nav-motion-scale));
+    --app-nav-motion-panel: calc(var(--app-nav-motion-control) * 2);
+    --app-nav-motion-group: calc(var(--app-nav-motion-control) * 2.5);
+    --app-nav-motion-arrow: calc(var(--app-nav-motion-control) * 1.5);
+    --app-nav-state-transition:
+      background-color var(--app-nav-motion-fast) var(--app-nav-ease-state),
+      color var(--app-nav-motion-fast) var(--app-nav-ease-state),
+      box-shadow var(--app-nav-motion-fast) var(--app-nav-ease-state);
+
+    /* Existing header consumers use these names; keep their mapping here. */
+    --top-header-hamburger-color: var(--app-nav-header-text);
+    --top-header-breadcrumb-color: var(--app-nav-header-text);
+    --top-header-breadcrumb-hover-color: var(--app-nav-header-text);
+    --top-header-breadcrumb-separator-color: var(--app-nav-header-muted);
+    --top-header-avatar-icon-color: var(--app-nav-header-muted);
+    --top-header-avatar-icon-hover-color: var(--app-nav-header-text);
+    --top-header-avatar-text-color: var(--app-nav-header-text);
+    --top-header-avatar-text-hover-color: var(--app-nav-header-text);
+    --top-header-avatar-bg-hover: var(--app-nav-hover-fill);
+  }
+
+  /* Cover every navigation consumer, including teleported menu transitions. */
+  @media (prefers-reduced-motion: reduce) {
+    :root,
+    [data-zx-theme][data-zx-variant] {
+      --app-nav-motion-fast: 0s;
+      --app-nav-motion-control: 0s;
+    }
+  }
+}

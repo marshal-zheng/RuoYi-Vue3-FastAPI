@@ -94,15 +94,14 @@ getBreadcrumb();
 <style scoped>
 .app-breadcrumb.el-breadcrumb {
   display: inline-block;
-  font-size: 14px;
-  line-height: 50px;
-  margin-left: 8px;
+  font-size: var(--app-nav-font-size);
+  line-height: var(--app-nav-brand-line-height);
 }
 
 .app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__inner) {
   color: var(--top-header-breadcrumb-color);
-  font-weight: 500;
-  transition: color 0.3s;
+  font-weight: var(--app-nav-font-weight);
+  transition: color var(--app-nav-motion-control) var(--app-nav-ease-control);
 }
 
 .app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__inner:hover) {
@@ -116,16 +115,50 @@ getBreadcrumb();
 .app-breadcrumb.el-breadcrumb .no-redirect {
   color: var(--top-header-breadcrumb-color);
   cursor: text;
-  opacity: 0.8;
+}
+
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__item:last-child) {
+  font-size: var(--app-nav-breadcrumb-current-size);
+}
+
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__item:last-child .el-breadcrumb__inner) {
+  font-weight: var(--app-nav-emphasis-weight);
+}
+
+.app-breadcrumb.el-breadcrumb :deep(.el-breadcrumb__item:not(:last-child)) {
+  opacity: var(--app-nav-breadcrumb-muted-opacity);
 }
 
 .app-breadcrumb.el-breadcrumb a {
   color: var(--top-header-breadcrumb-color);
-  font-weight: 500;
-  transition: color 0.3s;
+  font-weight: var(--app-nav-emphasis-weight);
+  transition: color var(--app-nav-motion-control) var(--app-nav-ease-control);
 }
 
 .app-breadcrumb.el-breadcrumb a:hover {
   color: var(--top-header-breadcrumb-hover-color);
+}
+
+.breadcrumb-enter-active,
+.breadcrumb-leave-active,
+.breadcrumb-move {
+  transition:
+    opacity var(--app-nav-motion-panel) var(--app-nav-ease-panel),
+    transform var(--app-nav-motion-panel) var(--app-nav-ease-panel);
+}
+.breadcrumb-enter-from,
+.breadcrumb-leave-to {
+  opacity: 0;
+  transform: translateX(var(--app-nav-breadcrumb-offset));
+}
+.breadcrumb-leave-active {
+  position: absolute;
+}
+@media (prefers-reduced-motion: reduce) {
+  .breadcrumb-enter-active,
+  .breadcrumb-leave-active,
+  .breadcrumb-move {
+    transition: none;
+  }
 }
 </style>

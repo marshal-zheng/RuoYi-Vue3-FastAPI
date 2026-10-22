@@ -1,0 +1,468 @@
+{
+  "checks": [
+    {
+      "name": "嵌套与快速反向折叠通过",
+      "data": {
+        "interruptedWidth": 235.140625,
+        "final": {
+          "theme": "default",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+          "width": 50,
+          "headerHeight": 56,
+          "icon": 24,
+          "activeGaps": [],
+          "opened": [],
+          "bodyOverflow": false
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "一处全局几何与 header 字体",
+      "data": {
+        "geometry": {
+          "theme": "default",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+          "width": 300,
+          "headerHeight": 64,
+          "icon": 28,
+          "activeGaps": [
+            0,
+            1
+          ],
+          "row": 48,
+          "opened": [
+            "/system/system"
+          ],
+          "bodyOverflow": false
+        },
+        "fontFamilies": [
+          "monospace",
+          "monospace",
+          "monospace"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "浮层同步几何字体与动效",
+      "data": {
+        "width": 300,
+        "row": 48,
+        "font": "monospace",
+        "weight": "500",
+        "arrow": "0s",
+        "radius": "0px"
+      },
+      "passed": true
+    },
+    {
+      "name": "隐藏header恢复入口也统一尺寸",
+      "data": [
+        {
+          "label": "展开导航",
+          "w": 48,
+          "h": 48,
+          "icon": 28
+        },
+        {
+          "label": "打开布局设置",
+          "w": 48,
+          "h": 48,
+          "icon": 26
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "无header移动抽屉与焦点",
+      "data": {
+        "width": 300,
+        "focus": "sidebar-toggle"
+      },
+      "passed": true
+    },
+    {
+      "name": "关闭抽屉恢复键盘焦点",
+      "data": "mobile-navigation-recovery",
+      "passed": true
+    },
+    {
+      "name": "系统减少动态效果覆盖侧栏浮层",
+      "data": [
+        {
+          "duration": "0s",
+          "transform": "matrix(0.45, 0, 0, 0.45, 0, 0)"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "森绿深色active维持主题语义",
+      "data": {
+        "bg": "color(srgb 0.5 0.62 0.54 / 0.11)",
+        "text": "color(srgb 0.9181 0.9591 0.9446)",
+        "expectedBg": "color(srgb 0.5 0.62 0.54 / 0.11)",
+        "expectedText": "color(srgb 0.9181 0.9591 0.9446)",
+        "theme": "army-pine"
+      },
+      "passed": true
+    },
+    {
+      "name": "森绿深色hover可见",
+      "data": {
+        "bg": "color(srgb 0.28 0.4 0.34 / 0.08)",
+        "color": "color(srgb 0.79267 0.85737 0.82322)"
+      },
+      "passed": true
+    },
+    {
+      "name": "真实Tab叶子焦点可见",
+      "data": {
+        "focusPath": [
+          {
+            "tag": "LI",
+            "href": null,
+            "group": "/system/system"
+          },
+          {
+            "tag": "A",
+            "href": "/system/user"
+          }
+        ],
+        "leafFocus": {
+          "outline": "solid",
+          "width": "2px",
+          "focusVisible": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "主题折叠存在连续中间帧",
+      "data": [
+        {
+          "t": -4.40000001192675,
+          "width": 250,
+          "group": 428
+        },
+        {
+          "t": 12.699999988079071,
+          "width": 250,
+          "group": 428
+        },
+        {
+          "t": 21.59999998807325,
+          "width": 250,
+          "group": 428
+        },
+        {
+          "t": 29.899999988090713,
+          "width": 250,
+          "group": 428
+        },
+        {
+          "t": 37.19999998807907,
+          "width": 232.953125,
+          "group": 427.140625
+        },
+        {
+          "t": 46.59999998807325,
+          "width": 211.0625,
+          "group": 423.296875
+        },
+        {
+          "t": 54.29999998808489,
+          "width": 193.203125,
+          "group": 417.453125
+        },
+        {
+          "t": 63.19999998807907,
+          "width": 173.09375,
+          "group": 407.125
+        },
+        {
+          "t": 79.79999998808489,
+          "width": 139.25,
+          "group": 375.609375
+        },
+        {
+          "t": 88.09999998807325,
+          "width": 125,
+          "group": 353.296875
+        },
+        {
+          "t": 104.89999998809071,
+          "width": 102.234375,
+          "group": 296.9375
+        },
+        {
+          "t": 120.59999998807325,
+          "width": 87.265625,
+          "group": 239.21875
+        },
+        {
+          "t": 138.19999998807907,
+          "width": 75.625,
+          "group": 180.53125
+        },
+        {
+          "t": 154.8999999880907,
+          "width": 67.953125,
+          "group": 135.09375
+        },
+        {
+          "t": 163.09999998807325,
+          "width": 65.046875,
+          "group": 116.359375
+        },
+        {
+          "t": 179.7999999880849,
+          "width": 60.390625,
+          "group": 84.5
+        },
+        {
+          "t": 196.09999998807325,
+          "width": 57.09375,
+          "group": 60.265625
+        },
+        {
+          "t": 212.19999998807907,
+          "width": 54.703125,
+          "group": 41.65625
+        },
+        {
+          "t": 229.09999998807325,
+          "width": 52.90625,
+          "group": 26.78125
+        },
+        {
+          "t": 238.19999998807907,
+          "width": 52.171875,
+          "group": 20.421875
+        },
+        {
+          "t": 254.8999999880907,
+          "width": 51.171875,
+          "group": 11.375
+        },
+        {
+          "t": 270.7999999880849,
+          "width": 50.546875,
+          "group": 5.46875
+        },
+        {
+          "t": 288.09999998807325,
+          "width": 50.15625,
+          "group": 1.609375
+        },
+        {
+          "t": 303.99999998806743,
+          "width": 50,
+          "group": 0.109375
+        },
+        {
+          "t": 320.7999999880849,
+          "width": 50,
+          "group": 0
+        },
+        {
+          "t": 338.19999998807907,
+          "width": 50,
+          "group": 0
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "收起默认Logo且hover切换入口",
+      "data": {
+        "logoIdle": "1",
+        "logoHover": "0"
+      },
+      "passed": true
+    },
+    {
+      "name": "图标组点击只展开指定分组",
+      "data": [
+        "/monitor/monitor"
+      ],
+      "passed": true
+    },
+    {
+      "name": "深色移动导航布局和焦点",
+      "data": {
+        "width": 250,
+        "height": 844,
+        "nav": 844,
+        "overflow": false,
+        "animations": [
+          350.00000000000006,
+          350.00000000000006,
+          350.00000000000006
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "TopNav更多字体图标与OS减少动效",
+      "data": {
+        "topnavPopup": {
+          "row": 44,
+          "font": "monospace",
+          "icon": 28
+        },
+        "topnavFrames": [
+          {
+            "duration": "0s",
+            "transform": "matrix(1, 0, 0, 0, 0, 0)"
+          }
+        ],
+        "moreArrow": "0s"
+      },
+      "passed": true
+    },
+    {
+      "name": "临时覆盖移除恢复默认尺寸",
+      "data": {
+        "theme": "default",
+        "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+        "width": 250,
+        "headerHeight": 56,
+        "icon": 24,
+        "activeGaps": [
+          0,
+          1
+        ],
+        "row": 44,
+        "opened": [
+          "/system/system"
+        ],
+        "bodyOverflow": false
+      },
+      "passed": true
+    },
+    {
+      "name": "ZXUI源码直连且无运行错误",
+      "data": {
+        "sourceCount": 130,
+        "samples": [
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/zxui/config-provider/index.ts?t=1792638669467",
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/theme-chalk/src/structural.css?t=1792653093475",
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/components/config-provider/index.ts?t=1792638669467",
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/zxui/config-provider/install.ts?t=1792638669467",
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/zxui/theme-host/precompiled.ts?t=1792638669467"
+        ],
+        "errors": []
+      },
+      "passed": true
+    },
+    {
+      "name": "移动菜单过渡结束后全部可见",
+      "data": {
+        "leafCount": 8,
+        "rows": [
+          {
+            "title": "系统管理",
+            "bottom": 112
+          },
+          {
+            "title": "用户管理",
+            "bottom": 164
+          },
+          {
+            "title": "角色管理",
+            "bottom": 212
+          },
+          {
+            "title": "菜单管理",
+            "bottom": 260
+          },
+          {
+            "title": "部门管理",
+            "bottom": 308
+          },
+          {
+            "title": "岗位管理",
+            "bottom": 356
+          },
+          {
+            "title": "字典管理",
+            "bottom": 404
+          },
+          {
+            "title": "参数设置",
+            "bottom": 452
+          },
+          {
+            "title": "通知公告",
+            "bottom": 500
+          },
+          {
+            "title": "日志管理",
+            "bottom": 548
+          },
+          {
+            "title": "系统监控",
+            "bottom": 600
+          },
+          {
+            "title": "系统工具",
+            "bottom": 648
+          },
+          {
+            "title": "工程管理",
+            "bottom": 696
+          }
+        ],
+        "height": 844
+      },
+      "passed": true
+    },
+    {
+      "name": "选中材质和独立指示条三处同步",
+      "data": {
+        "leafMaterial": {
+          "shadow": "color(srgb 0.12 0.14 0.18) 0px 0px 0px 4px inset",
+          "highlight": "linear-gradient(90deg, rgba(0, 0, 0, 0), color(srgb 0.12 0.14 0.18))",
+          "indicator": "3px"
+        },
+        "railMaterial": {
+          "shadow": "color(srgb 0.12 0.14 0.18) 0px 0px 0px 4px inset",
+          "highlight": "linear-gradient(90deg, rgba(0, 0, 0, 0), color(srgb 0.12 0.14 0.18))",
+          "indicator": "3px"
+        },
+        "popupMaterial": {
+          "shadow": "color(srgb 0.12 0.14 0.18) 0px 0px 0px 4px inset",
+          "highlight": "linear-gradient(90deg, rgba(0, 0, 0, 0), color(srgb 0.12 0.14 0.18))",
+          "indicator": "3px"
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "最终默认主题恢复且无运行异常",
+      "data": {
+        "defaults": {
+          "theme": "default",
+          "variant": "mode-light__density-default__contrast-normal__motion-full__radius-default",
+          "width": 250,
+          "headerHeight": 56,
+          "icon": 24,
+          "activeGaps": [
+            0,
+            1
+          ],
+          "row": 44,
+          "opened": [
+            "/system/system"
+          ],
+          "bodyOverflow": false
+        },
+        "errors": []
+      },
+      "passed": true
+    }
+  ],
+  "errors": []
+}

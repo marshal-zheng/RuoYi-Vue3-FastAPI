@@ -1,0 +1,523 @@
+{
+  "before": {
+    "expandedWidth": 250,
+    "activeLeftGap": 51,
+    "activeRightGap": 11,
+    "iconWidth": 24,
+    "railWidth": 64
+  },
+  "checks": [
+    "reference expanded width, icon and row size",
+    "selected row spans full sidebar content width",
+    "hover row has no side gap",
+    "one root override updates sidebar, header, row and icon together",
+    "global icon override survives rail mode",
+    "global overrides reach teleported popup geometry and spacing",
+    "default rail is 50px with 24px icon and full row surface",
+    "rail defaults to logo",
+    "logo hover reveals expand icon",
+    "nested depth indents content and guide without shrinking row surface",
+    "nested keyboard close retains parent group",
+    "hovering selected leaf retains selected theme surface",
+    "new rail geometry preserves simultaneous folding motion",
+    "icons settle at centred reference rail position",
+    "default teleported selected row has full width surface",
+    "popup leaf routing stays in rail mode",
+    "army dark keeps reference geometry and full selected surface",
+    "new geometry preserves mid-fold reverse and open group",
+    "reduced motion disables group transition",
+    "reduced motion reaches new 50px rail immediately",
+    "mobile root grid remains full width and hides avatar label",
+    "mobile drawer shares configured width, icons and full row surface",
+    "mobile focus remains in drawer",
+    "mobile Escape restores header launcher focus",
+    "TopNav icons consume the same global navigation icon size",
+    "TopNav still fits beside header actions at narrow desktop width",
+    "global responsive breakpoint is consumed by application device policy",
+    "one global mapping changes hover, active surface and radius",
+    "one motion scale disables panel, state, arrow, toggle and breadcrumb transitions",
+    "same state and motion mapping reaches teleported popup",
+    "temporary global override restores to original theme",
+    "TopNav overflow popup shares geometry, typography and icon overrides",
+    "TopNav overflow popup shares global hover and motion scale",
+    "global test restores theme motion scale and timing",
+    "editing only the unified source entry hot-updates all row heights and restores without extra file edits",
+    "motion scale zero disables mobile drawer and mask transitions",
+    "restored motion scale controls both mobile drawer and mask timing",
+    "system reduced motion also disables mobile drawer and mask"
+  ],
+  "default": {
+    "width": 250,
+    "leftGap": 0,
+    "rightGap": 1,
+    "icon": 24,
+    "rowHeight": 44,
+    "headerHeight": 56,
+    "headerX": 250,
+    "normalFont": "14px"
+  },
+  "rail": {
+    "width": 50,
+    "icon": 24,
+    "row": {
+      "x": 0,
+      "y": 68,
+      "width": 49,
+      "height": 44,
+      "top": 68,
+      "right": 49,
+      "bottom": 112,
+      "left": 0
+    },
+    "logoOpacity": "1",
+    "iconOpacity": "0"
+  },
+  "nested": {
+    "padding": "82px",
+    "level": "2",
+    "rect": {
+      "x": 0,
+      "y": 556,
+      "width": 249,
+      "height": 44,
+      "top": 556,
+      "right": 249,
+      "bottom": 600,
+      "left": 0
+    },
+    "guide": "50px"
+  },
+  "globalGeometry": {
+    "width": 300,
+    "leftGap": 0,
+    "rightGap": 1,
+    "icon": 28,
+    "rowHeight": 48,
+    "headerHeight": 64,
+    "headerX": 300,
+    "normalFont": "14px"
+  },
+  "globalPopupGeometry": {
+    "width": 300,
+    "rowHeight": 48,
+    "rowGap": "5px"
+  },
+  "globalState": {
+    "activeFill": "color(srgb 0.93003 0.933104 0.939252)",
+    "hoverFill": "color(srgb 0.25 0.55 0.98 / 0.11)",
+    "radius": "0px",
+    "headerFill": "color(srgb 0.93003 0.933104 0.939252)",
+    "durations": {
+      "panel": "0s",
+      "row": "0s, 0s, 0s",
+      "arrow": "0s",
+      "control": "0s",
+      "breadcrumb": "0s"
+    }
+  },
+  "globalPopupState": {
+    "fill": "color(srgb 0.93003 0.933104 0.939252)",
+    "radius": "0px",
+    "animations": 0
+  },
+  "topnavPopup": {
+    "width": 250,
+    "rowHeight": 44,
+    "left": 0,
+    "right": 0,
+    "font": "20px",
+    "fill": "color(srgb 0.25 0.55 0.98 / 0.11)",
+    "duration": "0s, 0s, 0s",
+    "icon": 28,
+    "animations": 0
+  },
+  "army": {
+    "width": 250,
+    "leftGap": 0,
+    "rightGap": 1,
+    "icon": 24,
+    "rowHeight": 44,
+    "headerHeight": 56,
+    "headerX": 250,
+    "normalFont": "14px"
+  },
+  "mobile": {
+    "wrapper": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 844,
+      "top": 0,
+      "right": 390,
+      "bottom": 844,
+      "left": 0
+    },
+    "header": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 56,
+      "top": 0,
+      "right": 390,
+      "bottom": 56,
+      "left": 0
+    },
+    "bodyWidth": 390,
+    "avatar": "none"
+  },
+  "mobileZero": {
+    "drawerDuration": "0s",
+    "animations": 0,
+    "drawerX": 0
+  },
+  "mobileMotion": {
+    "drawerDuration": "0.18s",
+    "maskDuration": "0.18s",
+    "animations": [
+      {
+        "target": "el-overlay is-drawer app-navigation-overlay el-modal-drawer el-drawer-fade-enter-active el-drawer-fade-enter-to",
+        "duration": 180
+      },
+      {
+        "target": "app-navigation-drawer el-drawer ltr open",
+        "duration": 180
+      }
+    ]
+  },
+  "mobileReduced": {
+    "drawer": "0s",
+    "animations": 0
+  },
+  "liveConfig": {
+    "changed": true,
+    "restored": true
+  },
+  "foldFrames": [
+    {
+      "t": 6,
+      "width": 250,
+      "height": 428,
+      "iconCenter": 34
+    },
+    {
+      "t": 14,
+      "width": 235.078125,
+      "height": 427.34375,
+      "iconCenter": 33.28125
+    },
+    {
+      "t": 23,
+      "width": 220.0625,
+      "height": 425.28125,
+      "iconCenter": 32.578125
+    },
+    {
+      "t": 30,
+      "width": 206.109375,
+      "height": 421.9375,
+      "iconCenter": 31.90625
+    },
+    {
+      "t": 39,
+      "width": 189.921875,
+      "height": 416.0625,
+      "iconCenter": 31.140625
+    },
+    {
+      "t": 56,
+      "width": 161.1875,
+      "height": 398.53125,
+      "iconCenter": 29.78125
+    },
+    {
+      "t": 73,
+      "width": 135.796875,
+      "height": 370.859375,
+      "iconCenter": 28.5625
+    },
+    {
+      "t": 89,
+      "width": 115.21875,
+      "height": 332.90625,
+      "iconCenter": 27.59375
+    },
+    {
+      "t": 106,
+      "width": 99.515625,
+      "height": 287.859375,
+      "iconCenter": 26.84375
+    },
+    {
+      "t": 122,
+      "width": 87.890625,
+      "height": 242.03125,
+      "iconCenter": 26.296875
+    },
+    {
+      "t": 148,
+      "width": 74.640625,
+      "height": 175.03125,
+      "iconCenter": 25.65625
+    },
+    {
+      "t": 155,
+      "width": 71.84375,
+      "height": 158.8125,
+      "iconCenter": 25.53125
+    },
+    {
+      "t": 180,
+      "width": 64.28125,
+      "height": 111.328125,
+      "iconCenter": 25.171875
+    },
+    {
+      "t": 198,
+      "width": 60.59375,
+      "height": 85.984375,
+      "iconCenter": 25
+    },
+    {
+      "t": 214,
+      "width": 57.859375,
+      "height": 66.03125,
+      "iconCenter": 24.859375
+    },
+    {
+      "t": 239,
+      "width": 54.84375,
+      "height": 42.671875,
+      "iconCenter": 24.71875
+    },
+    {
+      "t": 247,
+      "width": 54.0625,
+      "height": 36.4375,
+      "iconCenter": 24.6875
+    },
+    {
+      "t": 272,
+      "width": 52.25,
+      "height": 21.125,
+      "iconCenter": 24.59375
+    },
+    {
+      "t": 289,
+      "width": 51.40625,
+      "height": 13.625,
+      "iconCenter": 24.5625
+    },
+    {
+      "t": 298,
+      "width": 51.078125,
+      "height": 10.609375,
+      "iconCenter": 24.546875
+    },
+    {
+      "t": 314,
+      "width": 50.578125,
+      "height": 5.828125,
+      "iconCenter": 24.515625
+    },
+    {
+      "t": 330,
+      "width": 50.25,
+      "height": 2.6875,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 348,
+      "width": 50.0625,
+      "height": 0.671875,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 355,
+      "width": 50.015625,
+      "height": 0.21875,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 372,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 389,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 406,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 423,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 431,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 439,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 448,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 456,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 464,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 472,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 481,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 489,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 498,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 506,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 514,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 523,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 531,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 539,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 547,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 555,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 564,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 573,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 581,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 589,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 597,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 606,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 613,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 623,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 631,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 639,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 648,
+      "width": 50,
+      "iconCenter": 24.5
+    },
+    {
+      "t": 656,
+      "width": 50,
+      "iconCenter": 24.5
+    }
+  ],
+  "final": {
+    "width": 250,
+    "leftGap": 0,
+    "rightGap": 1,
+    "icon": 24,
+    "rowHeight": 44,
+    "headerHeight": 56,
+    "headerX": 250,
+    "normalFont": "14px"
+  },
+  "finalTiming": {
+    "duration": "0.36s",
+    "easing": "cubic-bezier(0.25, 0.8, 0.25, 1)",
+    "scale": "1"
+  },
+  "sourceLinks": [
+    "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/zxui/config-provider/index.ts?t=1792638669467",
+    "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/theme-chalk/src/structural.css?t=1792640134533",
+    "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/components/config-provider/index.ts?t=1792638669467",
+    "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/zxui/config-provider/install.ts?t=1792638669467"
+  ],
+  "pageErrors": []
+}

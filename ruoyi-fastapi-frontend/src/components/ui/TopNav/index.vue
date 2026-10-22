@@ -2,49 +2,32 @@
   <el-menu
     :default-active="activeMenu"
     mode="horizontal"
+    popper-class="app-topnav-popper"
+    :ellipsis-icon="OverflowIcon"
     @select="handleSelect"
-    :ellipsis="false"
     :class="{ 'has-bottom-border': settingsStore.topNavBorder }"
   >
-    <template v-for="(item, index) in topMenus">
-      <el-menu-item :index="item.path" :key="index" v-if="index < visibleNumber">
-        <ZxIcon
-          v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-          :icon="resolveMenuIcon(item.meta.icon)"
-          :size="16"
-        />
-        {{ item.meta.title }}
-      </el-menu-item>
-    </template>
-
-    <!-- 顶部菜单超出数量折叠 -->
-    <el-sub-menu index="more" v-if="topMenus.length > visibleNumber">
-      <template #title>更多菜单</template>
-      <template v-for="(item, index) in topMenus">
-        <el-menu-item :index="item.path" :key="index" v-if="index >= visibleNumber">
-          <ZxIcon
-            v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-            :icon="resolveMenuIcon(item.meta.icon)"
-            :size="16"
-          />
-          {{ item.meta.title }}
-        </el-menu-item>
-      </template>
-    </el-sub-menu>
+    <el-menu-item v-for="item in topMenus" :index="item.path" :key="item.path">
+      <ZxIcon
+        v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
+        :icon="resolveMenuIcon(item.meta.icon)"
+        size="var(--app-nav-icon-size)"
+      />
+      {{ item.meta.title }}
+    </el-menu-item>
   </el-menu>
 </template>
 
 <script setup>
+import { h } from 'vue';
 import { constantRoutes } from '@/router';
 import { isHttp } from '@/utils/validate';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
 
-// 顶部栏初始数
-const visibleNumber = ref(null);
-// 当前激活菜单的 index
-const currentIndex = ref(null);
+const OverflowIcon = () => h('span', { role: 'img', 'aria-label': '更多菜单' }, '⋯');
+
 // 隐藏侧边栏路由
 const hideList = ['/index', '/user/profile'];
 
@@ -128,13 +111,7 @@ function resolveMenuIcon(icon) {
   return `svg-icon:${icon}`;
 }
 
-function setVisibleNumber() {
-  const width = document.body.getBoundingClientRect().width / 3;
-  visibleNumber.value = parseInt(width / 85);
-}
-
 function handleSelect(key) {
-  currentIndex.value = key;
   const route = routers.value.find((item) => item.path === key);
   if (isHttp(key)) {
     // http(s):// 路径新窗口打开
@@ -172,45 +149,38 @@ function activeRoutes(key) {
   }
   return routes;
 }
-
-onMounted(() => {
-  window.addEventListener('resize', setVisibleNumber);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', setVisibleNumber);
-});
-
-onMounted(() => {
-  setVisibleNumber();
-});
 </script>
 
 <style>
 /* TopNav 顶部菜单整体容器，复用顶部导航主题色 */
 .topmenu-container.el-menu--horizontal {
-  height: var(--top-header-height);
-  line-height: var(--top-header-height);
+  font-family: var(--app-nav-font-family);
+  height: var(--app-nav-header-height);
+  line-height: var(--app-nav-header-height);
   border-bottom: none;
   background-color: transparent;
   box-shadow: none;
   display: flex;
   align-items: center;
+  flex: 1;
+  min-width: 0;
+  width: 0;
 }
 
 .topmenu-container.el-menu--horizontal > .el-menu-item,
 .topmenu-container.el-menu--horizontal > .el-sub-menu .el-sub-menu__title {
   float: none;
-  height: var(--top-header-height) !important;
-  line-height: var(--top-header-height) !important;
-  color: var(--zx-semantic-surface-header-on-text) !important;
-  padding: 0 16px !important;
+  height: var(--app-nav-header-height) !important;
+  line-height: var(--app-nav-header-height) !important;
+  color: var(--app-nav-header-text) !important;
+  padding: 0 var(--app-nav-content-end) !important;
   margin: 0 !important;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--app-nav-font-size);
+  font-weight: var(--app-nav-emphasis-weight);
   border-radius: 0;
-  border-bottom: 3px solid transparent !important;
+  border-bottom: var(--app-nav-indicator-width) solid transparent !important;
   box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--app-nav-state-transition);
 }
 
 /* 悬停和焦点保留 header 文字语义，不覆盖激活项的 selected 表面。 */
@@ -219,18 +189,18 @@ onMounted(() => {
 .topmenu-container.el-menu--horizontal
   > .el-sub-menu:not(.is-disabled):not(.is-active)
   .el-sub-menu__title:is(:focus, :hover) {
-  background-color: var(--zx-semantic-fill-hover) !important;
-  color: var(--zx-semantic-surface-header-on-text) !important;
+  background-color: var(--app-nav-hover-fill) !important;
+  color: var(--app-nav-hover-text) !important;
 }
 
 /* 激活、悬停激活项和聚焦激活项共用主题的 selected 表面。 */
 .topmenu-container.el-menu--horizontal > .el-menu-item.is-active,
 .topmenu-container.el-menu--horizontal > .el-sub-menu.is-active .el-sub-menu__title {
-  color: var(--zx-semantic-surface-selected-on-text) !important;
-  font-weight: 700 !important;
-  background-color: var(--zx-semantic-surface-selected-fill) !important;
-  background-image: var(--zx-semantic-surface-selected-highlight);
-  box-shadow: var(--zx-semantic-surface-selected-depth), var(--zx-semantic-surface-selected-inner);
+  color: var(--app-nav-active-text) !important;
+  font-weight: var(--app-nav-emphasis-weight) !important;
+  background-color: var(--app-nav-active-fill) !important;
+  background-image: var(--app-nav-active-highlight);
+  box-shadow: var(--app-nav-active-shadow);
 }
 
 /* 边框开关只控制底部指示线，激活项的主题材质保持一致。 */
@@ -245,19 +215,22 @@ onMounted(() => {
 .topmenu-container.el-menu--horizontal.has-bottom-border
   > .el-sub-menu.is-active
   .el-sub-menu__title {
-  border-bottom-color: var(--zx-semantic-accent-base) !important;
+  border-bottom-color: var(--app-nav-indicator) !important;
 }
 
 /* 图标右间距 */
 .topmenu-container .zx-icon {
-  margin-right: 6px;
+  margin-right: calc(var(--app-nav-space) * 1.5);
 }
 
 /* topmenu more arrow */
 .topmenu-container .el-sub-menu .el-sub-menu__icon-arrow {
+  width: var(--app-nav-chevron-size);
+  font-size: var(--app-nav-chevron-size);
+  transition: transform var(--app-nav-motion-arrow) var(--app-nav-ease-control);
   position: static;
   vertical-align: middle;
-  margin-left: 8px;
-  margin-top: 0px;
+  margin-left: calc(var(--app-nav-space) * 2);
+  margin-top: 0;
 }
 </style>

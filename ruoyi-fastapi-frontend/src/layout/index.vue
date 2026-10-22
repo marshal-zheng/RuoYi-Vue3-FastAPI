@@ -1,53 +1,55 @@
 <template>
   <div :class="[classObj, { sidebarHidden: sidebar.hide }]" class="app-wrapper">
-    <div
-      v-if="device === 'mobile' && sidebar.opened"
-      class="drawer-bg"
-      @click="handleClickOutside"
-    />
-    <div
+    <header
       v-if="visibility.headerVisible"
       class="app-header flex items-center justify-between"
       data-zx-surface="header"
     >
-      <div v-if="showLogo" class="flex items-center h-[50px] px-4 gap-2">
-        <img :src="headerLogo" class="w-8 h-8 shrink-0" alt="" />
-        <span
-          v-if="!isCollapse"
-          class="text-[16px] font-semibold leading-none tracking-[0.5px] select-none"
-          >{{ headerTitle }}</span
-        >
-      </div>
       <Navbar
         class="flex-1"
         :breadcrumb-visible="visibility.breadcrumbVisible"
         @setLayout="setLayout"
       />
-    </div>
-    <Sidebar
-      v-if="!sidebar.hide"
-      :header-visible="visibility.headerVisible"
-      class="sidebar-container"
-    />
+    </header>
+    <Sidebar v-if="!sidebar.hide && device !== 'mobile'" class="sidebar-container" />
+    <el-drawer
+      v-if="!sidebar.hide && device === 'mobile'"
+      :model-value="sidebar.opened"
+      direction="ltr"
+      size="min(var(--app-nav-sidebar-width), calc(100vw - var(--app-nav-header-height)))"
+      title="主导航"
+      :with-header="false"
+      :show-close="false"
+      append-to-body
+      class="app-navigation-drawer"
+      body-class="app-navigation-drawer__body"
+      modal-class="app-navigation-overlay"
+      @close="handleClickOutside"
+      @opened="focusNavigation"
+      @closed="restoreNavigationFocus"
+    >
+      <Sidebar @close="handleClickOutside" />
+    </el-drawer>
     <div :class="{ sidebarHide: sidebar.hide }" class="main-container">
       <TagsView v-if="visibility.tagsView" class="app-tabs" />
       <AppMain />
     </div>
     <div v-if="!visibility.headerVisible" class="layout-recovery">
-      <ZxButton
-        v-if="!sidebar.hide"
-        icon="Menu"
-        circle
-        aria-label="展开或收起导航"
-        @click="appStore.toggleSideBar()"
+      <Hamburger
+        v-if="!sidebar.hide && device === 'mobile'"
+        :is-active="sidebar.opened"
+        id="mobile-navigation-recovery"
+        @toggleClick="appStore.toggleSideBar()"
       />
       <ZxButton
         v-if="settingsStore.showSettings"
-        icon="Setting"
+        class="layout-settings-recovery"
         circle
         aria-label="打开布局设置"
         @click="setLayout"
-      />
+      >
+        <ZxIcon icon="Setting" size="var(--app-nav-action-icon-size)" />
+      </ZxButton>
     </div>
     <Settings ref="settingRef" />
   </div>
@@ -59,9 +61,9 @@ import Sidebar from './components/Sidebar/index.vue';
 import { AppMain, Navbar, Settings, TagsView } from './components';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
-import defaultSettings from '@/settings';
-import headerLogo from '@/assets/logo/logo.png';
 import { ZxButton } from '@zxio/zxui/button';
+import { ZxIcon } from '@zxio/zxui/icon';
+import Hamburger from '@/components/ui/Hamburger';
 import { resolveLayoutVisibility } from './policy';
 const route = useRoute();
 
@@ -70,9 +72,6 @@ const appStore = useAppStore();
 const sidebar = computed(() => appStore.sidebar);
 const device = computed(() => useAppStore().device);
 const visibility = computed(() => resolveLayoutVisibility(settingsStore, route.meta));
-const showLogo = computed(() => settingsStore.sidebarLogo);
-const isCollapse = computed(() => !sidebar.value.opened);
-const headerTitle = computed(() => defaultSettings.title || import.meta.env.VITE_APP_TITLE);
 
 const classObj = computed(() => ({
   hideSidebar: !sidebar.value.opened,
@@ -82,7 +81,6 @@ const classObj = computed(() => ({
 }));
 
 const { width } = useWindowSize();
-const WIDTH = 992; // refer to Bootstrap's responsive design
 
 watch(
   () => device.value,
@@ -94,13 +92,27 @@ watch(
 );
 
 watchEffect(() => {
-  if (width.value - 1 < WIDTH) {
+  const breakpoint = Number.parseFloat(
+    getComputedStyle(document.body).getPropertyValue('--app-nav-mobile-breakpoint')
+  );
+  if (width.value - 1 < breakpoint) {
     useAppStore().toggleDevice('mobile');
     useAppStore().closeSideBar({ withoutAnimation: true });
   } else {
     useAppStore().toggleDevice('desktop');
   }
 });
+
+function focusNavigation() {
+  document.getElementById('sidebar-toggle')?.focus();
+}
+
+function restoreNavigationFocus() {
+  const target = visibility.value.headerVisible
+    ? 'hamburger-container'
+    : 'mobile-navigation-recovery';
+  document.getElementById(target)?.focus();
+}
 
 function handleClickOutside() {
   useAppStore().closeSideBar({ withoutAnimation: false });
@@ -113,46 +125,13 @@ function setLayout() {
 </script>
 
 <style lang="less" scoped>
-@import '@/assets/styles/mixin.less';
-@import '@/assets/styles/variables.module.less';
-
-// Keep the tint local so Vite HMR does not compile this block against a stale mixin import.
-@on-surface-tint: ~'color-mix(in oklab, currentColor calc(var(--zx-semantic-fill-current-tint) * 1%), transparent)';
-
-// The header surface paints background, border, shadow and on-text colour.
-// Its children still read the legacy --top-header-* names, so they are rebound
-// here, at the scope boundary, instead of on the document root.
 .app-header {
-  // A top band only separates itself from the content below it.
-  border-width: 0 0 1px;
-
-  --top-header-text-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
-  --top-header-icon-hover-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-hover-bg: @on-surface-tint;
-
-  --top-header-hamburger-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-hamburger-hover-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-hamburger-hover-bg: @on-surface-tint;
-  --top-header-menu-hover-bg: @on-surface-tint;
-  --top-header-menu-active-bg: var(--zx-semantic-fill-selected);
-
-  --top-header-breadcrumb-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-breadcrumb-hover-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-breadcrumb-separator-color: var(--zx-semantic-surface-header-on-text-secondary);
-
-  --top-header-avatar-icon-color: var(--zx-semantic-surface-header-on-text-secondary);
-  --top-header-avatar-icon-hover-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-avatar-text-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-avatar-text-hover-color: var(--zx-semantic-surface-header-on-text);
-  --top-header-avatar-bg-hover: @on-surface-tint;
-
-  --logo-title-text-color: var(--zx-semantic-surface-header-on-text);
-  --logo-title-text-hover-color: var(--zx-semantic-surface-header-on-text);
+  border-width: 0 0 var(--app-nav-line-width);
+  font-family: var(--app-nav-font-family);
 }
 
 .app-wrapper {
-  --app-sidebar-size: var(--base-sidebar-width);
+  --app-sidebar-size: var(--app-nav-sidebar-width);
   display: grid;
   grid-template-columns: var(--app-sidebar-size) minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
@@ -161,23 +140,30 @@ function setLayout() {
   height: 100dvh;
   width: 100%;
   overflow: hidden;
+  transition: grid-template-columns var(--app-nav-motion-panel) var(--app-nav-ease-panel);
 }
 .app-wrapper.hideSidebar {
-  --app-sidebar-size: 54px;
+  --app-sidebar-size: var(--app-nav-rail-width);
 }
 .app-wrapper.sidebarHidden,
 .app-wrapper.mobile {
   --app-sidebar-size: 0px;
 }
+.app-wrapper.sidebarHidden,
+.app-wrapper.mobile,
+.app-wrapper.withoutAnimation {
+  transition: none;
+}
 .app-header {
-  grid-column: 1 / -1;
+  grid-column: 2;
   grid-row: 1;
+  height: var(--app-nav-header-height);
   min-width: 0;
-  z-index: 9;
+  z-index: var(--app-nav-header-layer);
 }
 .app-wrapper > .sidebar-container {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 1 / -1;
   position: relative;
   top: auto;
   bottom: auto;
@@ -199,24 +185,36 @@ function setLayout() {
 .app-tabs {
   flex: 0 0 auto;
 }
-.app-wrapper.mobile > .sidebar-container {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  height: 100%;
-}
-.drawer-bg {
-  background: var(--zx-semantic-overlay-modal);
-  position: absolute;
-  inset: 0;
-  z-index: 999;
+.app-wrapper.sidebarHidden > .app-header,
+.app-wrapper.mobile > .app-header {
+  grid-column: 1 / -1;
 }
 .layout-recovery {
+  font-family: var(--app-nav-font-family);
   position: absolute;
-  right: 16px;
-  bottom: 16px;
+  right: var(--app-nav-content-end);
+  bottom: var(--app-nav-content-end);
   display: flex;
-  gap: 8px;
-  z-index: 9;
+  gap: calc(var(--app-nav-space) * 2);
+  z-index: var(--app-nav-header-layer);
+}
+.layout-recovery .layout-settings-recovery {
+  width: var(--app-nav-control-size);
+  height: var(--app-nav-control-size);
+  min-width: var(--app-nav-control-size);
+  padding: 0;
+  border-radius: var(--app-nav-control-radius);
+  font-family: var(--app-nav-font-family);
+  transition: var(--app-nav-state-transition);
+}
+.layout-recovery .layout-settings-recovery:focus-visible {
+  outline: var(--app-nav-focus-width) solid var(--app-nav-focus);
+  outline-offset: calc(-1 * var(--app-nav-focus-width));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-wrapper {
+    transition: none;
+  }
 }
 </style>

@@ -1,10 +1,11 @@
 <template>
-  <div class="navbar flex justify-between h-[50px] overflow-hidden relative">
+  <div class="navbar flex justify-between relative">
     <div class="navbar-navigation flex items-center">
       <hamburger
+        v-if="appStore.device === 'mobile' && !appStore.sidebar.hide"
         id="hamburger-container"
         :is-active="appStore.sidebar.opened"
-        class="hamburger-container h-full leading-[46px] cursor-pointer transition-all duration-300 px-4"
+        class="hamburger-container"
         style="color: var(--top-header-hamburger-color)"
         @toggleClick="toggleSideBar"
       />
@@ -13,30 +14,27 @@
         id="breadcrumb-container"
         class="breadcrumb-container"
       />
-      <top-nav v-if="settingsStore.topNav" id="topmenu-container" class="topmenu-container ml-2" />
+      <top-nav v-if="settingsStore.topNav" id="topmenu-container" class="topmenu-container" />
     </div>
 
-    <div class="navbar-actions flex items-center mr-4 gap-3">
+    <div class="navbar-actions flex items-center">
       <ZxThemePresetSwitch />
-      <el-dropdown
-        @command="handleCommand"
-        class="avatar-container flex ml-4 cursor-pointer"
-        trigger="hover"
-      >
-        <div
+      <el-dropdown @command="handleCommand" class="avatar-container flex" trigger="click">
+        <button
+          type="button"
           :aria-label="`用户菜单：${userStore.nickName}`"
-          class="avatar-wrapper flex items-center gap-2 px-3 py-1.5 rounded-md transition-all duration-300 font-medium"
+          class="avatar-wrapper flex items-center"
           style="color: var(--top-header-avatar-text-color)"
         >
           <ZxIcon
             icon="User"
-            :size="20"
-            class="transition-colors duration-300"
+            size="var(--app-nav-action-icon-size)"
+            class="avatar-icon"
             style="color: var(--top-header-avatar-icon-color)"
           />
-          <span class="avatar-name text-sm">{{ userStore.nickName }}</span>
-          <ZxIcon icon="ArrowDown" :size="14" class="ml-0" />
-        </div>
+          <span class="avatar-name">{{ userStore.nickName }}</span>
+          <ZxIcon icon="ArrowDown" size="var(--app-nav-chevron-size)" class="ml-0" />
+        </button>
         <template #dropdown>
           <el-dropdown-menu>
             <router-link to="/user/profile">
@@ -111,10 +109,28 @@ function setLayout() {
 </script>
 
 <style scoped>
+.navbar {
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  padding-inline: calc(var(--app-nav-space) * 5) var(--app-nav-content-end);
+  gap: var(--app-nav-content-end);
+}
 .navbar-navigation {
   flex: 1;
   min-width: 0;
+  gap: var(--app-nav-icon-gap);
   overflow: hidden;
+}
+.navbar-actions {
+  gap: var(--app-nav-content-end);
+}
+.navbar-actions :deep(.zx-theme-preset-switch),
+.navbar-actions :deep(.zx-theme-mode-switch) {
+  height: var(--app-nav-control-size);
+}
+.navbar-actions :deep(.zx-theme-mode-switch) {
+  width: var(--app-nav-control-size);
 }
 .navbar-actions,
 .hamburger-container {
@@ -126,39 +142,58 @@ function setLayout() {
   white-space: nowrap;
 }
 .avatar-name {
-  max-width: 12em;
+  max-width: var(--app-nav-avatar-max-width);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-@media (max-width: 640px) {
-  .navbar-actions {
-    gap: 8px;
-    margin-right: 8px;
-  }
-  .avatar-container {
-    margin-left: 0;
-  }
-  .avatar-wrapper {
-    padding-inline: 6px;
-  }
-  .avatar-name {
-    display: none;
-  }
-  .breadcrumb-container :deep(.el-breadcrumb__item:not(:last-child)) {
-    display: none;
-  }
-  .breadcrumb-container :deep(.el-breadcrumb__inner) {
-    display: block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+.avatar-wrapper {
+  min-height: var(--app-nav-control-size);
+  min-width: var(--app-nav-control-size);
+  padding: 0 calc(var(--app-nav-space) * 2);
+  border: 0;
+  border-radius: var(--app-nav-item-radius);
+  background: transparent;
+  font: inherit;
+  gap: calc(var(--app-nav-space) * 2);
+  font-size: var(--app-nav-font-size);
+  font-weight: var(--app-nav-emphasis-weight);
+  cursor: pointer;
 }
-
-.hamburger-container:hover {
-  background: var(--top-header-hamburger-hover-bg);
-  color: var(--top-header-hamburger-hover-color);
+.avatar-wrapper:focus-visible {
+  outline: var(--app-nav-focus-width) solid var(--app-nav-focus);
+  outline-offset: calc(-1 * var(--app-nav-focus-width));
+}
+.topmenu-container {
+  margin-inline-start: calc(var(--app-nav-space) * 2);
+}
+.avatar-icon {
+  transition: color var(--app-nav-motion-fast) var(--app-nav-ease-state);
+}
+:global(.app-wrapper.mobile .navbar) {
+  padding-inline: calc(var(--app-nav-space) * 2);
+  gap: calc(var(--app-nav-space) * 2);
+}
+:global(.app-wrapper.mobile .navbar-actions) {
+  gap: calc(var(--app-nav-space) * 2);
+}
+:global(.app-wrapper.mobile .navbar-actions .zx-theme-preset-switch) {
+  width: var(--app-nav-control-size);
+}
+:global(.app-wrapper.mobile .avatar-wrapper) {
+  padding-inline: calc(var(--app-nav-space) * 1.5);
+}
+:global(.app-wrapper.mobile .avatar-name) {
+  display: none;
+}
+:global(.app-wrapper.mobile .breadcrumb-container .el-breadcrumb__item:not(:last-child)) {
+  display: none;
+}
+:global(.app-wrapper.mobile .breadcrumb-container .el-breadcrumb__inner) {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .avatar-wrapper:hover {

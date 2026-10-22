@@ -1,5 +1,10 @@
 <template>
-  <div v-if="!item.hidden">
+  <div
+    v-if="!item.hidden"
+    class="sidebar-entry"
+    :class="{ 'is-nested': depth > 0 }"
+    :style="{ '--app-nav-level': depth }"
+  >
     <template
       v-if="
         hasOneShowingChild(item.children, item) &&
@@ -10,7 +15,8 @@
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path, onlyOneChild.query)">
         <el-menu-item
           :index="resolvePath(onlyOneChild.path)"
-          :class="{ 'submenu-title-noDropdown': !isNest }"
+          :aria-label="onlyOneChild.meta.title"
+          :class="{ 'submenu-title-noDropdown': depth === 0 }"
         >
           <svg-icon :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" />
           <template #title
@@ -22,7 +28,19 @@
       </app-link>
     </template>
 
-    <el-sub-menu v-else ref="subMenu" :index="resolvePath(item.path)" teleported>
+    <el-sub-menu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      :aria-label="item.meta?.title"
+      :data-sidebar-group="resolvePath(item.path)"
+      tabindex="0"
+      popper-class="app-sidebar-popper"
+      teleported
+      @click.capture="activateGroup"
+      @keydown.enter.capture="activateGroup"
+      @keydown.space.capture="activateGroup"
+    >
       <template v-if="item.meta" #title>
         <svg-icon :icon-class="item.meta && item.meta.icon" />
         <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
@@ -31,7 +49,7 @@
       <sidebar-item
         v-for="(child, index) in item.children"
         :key="child.path + index"
-        :is-nest="true"
+        :depth="depth + 1"
         :item="child"
         :base-path="resolvePath(child.path)"
         class="nest-menu"
@@ -51,17 +69,36 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  isNest: {
-    type: Boolean,
-    default: false,
+  depth: {
+    type: Number,
+    default: 0,
   },
   basePath: {
     type: String,
     default: '',
   },
+  collapsed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
+const emit = defineEmits(['expand-group']);
 const onlyOneChild = ref({});
+
+function activateGroup(event) {
+  if (!props.collapsed) {
+    if (event.type === 'keydown' && event.target === event.currentTarget) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.currentTarget.querySelector(':scope > .el-sub-menu__title')?.click();
+    }
+    return;
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  emit('expand-group', resolvePath(props.item.path));
+}
 
 function hasOneShowingChild(children = [], parent) {
   if (!children) {
@@ -98,7 +135,10 @@ function resolvePath(routePath, routeQuery) {
   }
   if (routeQuery) {
     let query = JSON.parse(routeQuery);
-    return { path: getNormalPath(props.basePath + '/' + routePath), query: query };
+    return {
+      path: getNormalPath(props.basePath + '/' + routePath),
+      query: query,
+    };
   }
   return getNormalPath(props.basePath + '/' + routePath);
 }

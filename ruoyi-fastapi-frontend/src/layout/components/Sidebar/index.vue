@@ -1,53 +1,146 @@
 <template>
-  <div
-    :class="{ 'has-logo': showLogo, 'no-logo-spacing': !showLogo }"
+  <nav
+    id="app-sidebar"
     class="sidebar-container"
+    :class="{
+      'is-collapsed': isCollapse,
+      'is-collapsing': isCollapse && !menuCollapsed,
+    }"
+    aria-label="主导航"
     data-zx-surface="panel"
   >
-    <Logo v-if="showLogo" :collapse="isCollapse" />
-    <el-scrollbar wrap-class="scrollbar-wrapper">
+    <div class="sidebar-header" data-zx-surface="header">
+      <Logo
+        v-if="settingsStore.sidebarLogo"
+        :collapse="false"
+        :aria-hidden="isCollapse || undefined"
+        :inert="isCollapse"
+      />
+      <Hamburger
+        id="sidebar-toggle"
+        :is-active="appStore.sidebar.opened"
+        @toggleClick="appStore.toggleSideBar()"
+      >
+        <template v-if="settingsStore.sidebarLogo && appStore.device !== 'mobile'" #brand>
+          <img :src="compactLogo" class="sidebar-compact-logo" alt="" />
+        </template>
+      </Hamburger>
+    </div>
+    <el-scrollbar wrap-class="scrollbar-wrapper" @click="expandFromRail">
       <el-menu
+        ref="menuRef"
+        :key="menuCollapsed ? 'rail' : 'expanded'"
         :default-active="activeMenu"
-        :collapse="isCollapse"
-        background-color="var(--left-menu-bg-color)"
-        text-color="var(--left-menu-text-color)"
-        :unique-opened="settingsStore.uniqueOpened"
-        active-text-color="var(--left-menu-text-active-color)"
+        :collapse="menuCollapsed"
+        :unique-opened="defaultSettings.uniqueOpened"
         :collapse-transition="false"
         mode="vertical"
         class="sidebar-menu"
+        @select="closeMobileNavigation"
       >
         <sidebar-item
           v-for="(route, index) in sidebarRouters"
           :key="route.path + index"
           :item="route"
           :base-path="route.path"
+          :collapsed="isCollapse"
+          @expand-group="expandGroup"
         />
       </el-menu>
     </el-scrollbar>
-  </div>
+  </nav>
 </template>
 
 <script setup>
 import Logo from './Logo';
+import Hamburger from '@/components/ui/Hamburger';
 import SidebarItem from './SidebarItem';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
+import compactLogo from '@/assets/logo/logo.png';
+import defaultSettings from '@/settings';
 
-const props = defineProps({ headerVisible: { type: Boolean, default: true } });
+const emit = defineEmits(['close']);
 const route = useRoute();
 const appStore = useAppStore();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
+const menuRef = ref(null);
 
 const sidebarRouters = computed(() => permissionStore.sidebarRouters);
-const isCollapse = computed(() => !appStore.sidebar.opened);
+const isCollapse = computed(() => appStore.device !== 'mobile' && !appStore.sidebar.opened);
+const menuCollapsed = ref(isCollapse.value);
+let foldingGroups = [];
 
-// Brand placement follows header visibility, independently of multi-page tabs.
-const showLogo = computed(
-  () => settingsStore.sidebarLogo && (!props.headerVisible || isCollapse.value)
-);
+watch(isCollapse, async (collapsed, _, onCleanup) => {
+  let cancelled = false;
+  onCleanup(() => (cancelled = true));
+
+  if (!collapsed) {
+    menuCollapsed.value = false;
+    await nextTick();
+    if (cancelled) return;
+    foldingGroups.forEach((index) => menuRef.value?.open(index));
+    foldingGroups = [];
+    return;
+  }
+
+  const menu = menuRef.value?.$el;
+  foldingGroups = Array.from(menu?.querySelectorAll('.el-sub-menu.is-opened') ?? []).map(
+    (group) => group.dataset.sidebarGroup
+  );
+  if (
+    appStore.sidebar.withoutAnimation ||
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  ) {
+    menuCollapsed.value = true;
+    foldingGroups = [];
+    return;
+  }
+
+  // Keep the menu mounted until its native transitions and the shell have folded.
+  foldingGroups.forEach((index) => menuRef.value.close(index));
+  await nextTick();
+  await new Promise(requestAnimationFrame);
+  if (cancelled) return;
+  const transitions = menu
+    .getAnimations({ subtree: true })
+    .filter((animation) =>
+      animation.effect?.target?.matches('.el-menu--inline, .el-sub-menu__title, .el-menu-item')
+    );
+  await Promise.all(transitions.map((animation) => animation.finished.catch(() => {})));
+  if (!cancelled) {
+    menuCollapsed.value = true;
+    foldingGroups = [];
+  }
+});
+
+function closeMobileNavigation() {
+  if (appStore.device === 'mobile') emit('close');
+}
+
+function expandFromRail(event) {
+  if (
+    isCollapse.value &&
+    event.target instanceof Element &&
+    !event.target.closest('a, button, [role="menuitem"], .el-scrollbar__bar')
+  ) {
+    appStore.toggleSideBar();
+  }
+}
+
+async function expandGroup(index) {
+  if (!isCollapse.value) return;
+  foldingGroups = [];
+  appStore.toggleSideBar();
+  await nextTick();
+  menuRef.value?.open(index);
+  await nextTick();
+  menuRef.value?.$el.querySelector(`[data-sidebar-group="${CSS.escape(index)}"]`)?.focus({
+    preventScroll: true,
+  });
+}
 
 const activeMenu = computed(() => {
   const { meta, path } = route;
@@ -59,247 +152,62 @@ const activeMenu = computed(() => {
 </script>
 
 <style lang="less" scoped>
-@import '@/assets/styles/mixin.less';
-
 .sidebar-container {
-  // The panel surface paints background, border and depth. The menu sits
-  // transparently on top of it, so only the interaction states are defined
-  // here — rebound at this boundary rather than on the document root.
-  --left-menu-bg-color: transparent;
-  --left-menu-bg-light-color: transparent;
-  --left-menu-submenu-bg-color: transparent;
-  --left-menu-text-color: var(--zx-semantic-surface-panel-on-text);
-  --left-menu-submenu-text-color: var(--zx-semantic-surface-panel-on-text);
-  --left-menu-text-active-color: var(--zx-semantic-surface-selected-on-text);
-  --left-menu-active-indicator-color: var(--zx-semantic-accent-base);
-  --left-menu-hover-bg-color: @on-surface-tint;
-  --left-menu-submenu-hover-bg-color: @on-surface-tint;
-  --left-menu-bg-active-color: var(--zx-semantic-surface-selected-fill);
-  --left-menu-collapse-bg-active-color: var(--zx-semantic-surface-selected-fill);
-  --left-menu-border-color: var(--zx-semantic-border-subtle);
-  --left-menu-indent-color: var(--zx-semantic-border-subtle);
-  --left-menu-active-shadow:
-    var(--zx-semantic-surface-selected-depth), var(--zx-semantic-surface-selected-inner);
-  --left-menu-box-shadow:
-    var(--zx-semantic-surface-panel-depth), var(--zx-semantic-surface-panel-inner);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--app-nav-font-family);
+  border-width: 0 var(--app-nav-line-width) 0 0;
 
-  transition: width var(--transition-time-02);
-  box-shadow: var(--left-menu-box-shadow);
-  // Like the app-shell aside, the rail only separates itself from the content,
-  // so the logo strip starts flush with the top header band.
-  border-width: 0 1px 0 0;
+  .sidebar-header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 0 0 var(--app-nav-header-height);
+    min-width: 0;
+    border-width: 0 0 var(--app-nav-line-width);
 
-  .scrollbar-wrapper {
-    background-color: var(--left-menu-bg-color);
-  }
-
-  :deep(.sidebar-menu) {
-    border: none;
-    height: 100%;
-    width: 100% !important;
-    background-color: var(--left-menu-bg-color);
-
-    // 父级菜单标题的hover效果
-    .el-sub-menu__title {
-      position: relative;
-      background-color: transparent !important;
-
-      &:hover {
-        color: var(--left-menu-text-color) !important;
-        background-color: transparent !important;
-      }
+    .sidebar-logo-container {
+      position: absolute;
+      inset-inline: var(--app-nav-brand-start) var(--app-nav-brand-end);
+      opacity: 1;
+      visibility: visible;
+      transition:
+        opacity var(--app-nav-motion-fast) var(--app-nav-ease-state),
+        visibility 0s;
     }
 
-    // 选中子级时，父级标题保持常规颜色（不高亮）
-    .is-active {
-      & > .el-sub-menu__title {
-        color: var(--left-menu-text-color) !important;
-        background-color: transparent !important;
-
-        &:hover {
-          color: var(--left-menu-text-color) !important;
-        }
-      }
+    .navigation-toggle {
+      position: absolute;
+      inset-inline-end: var(--app-nav-control-end);
     }
 
-    // 一级菜单项
-    .el-menu-item {
-      position: relative;
-      z-index: 0;
-      background-color: transparent !important;
-
-      &:hover {
-        color: var(--left-menu-text-color) !important;
-        background-color: transparent !important;
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          left: var(--left-menu-active-bar-width);
-          background: var(--left-menu-hover-bg-color);
-          border-top-right-radius: var(--left-menu-item-radius);
-          border-bottom-right-radius: var(--left-menu-item-radius);
-          z-index: -1;
-        }
-      }
-    }
-
-    // 选中状态的菜单项
-    .el-menu-item.is-active {
-      color: var(--left-menu-text-active-color) !important;
-      position: relative;
-      background-color: transparent !important;
-
-      &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        left: var(--left-menu-active-bar-width);
-        background: var(--left-menu-bg-active-color);
-        border-top-right-radius: var(--left-menu-item-radius);
-        border-bottom-right-radius: var(--left-menu-item-radius);
-        z-index: -1;
-        box-shadow: var(--left-menu-active-shadow);
-        transition:
-          background 0.25s ease,
-          box-shadow 0.25s ease;
-      }
-
-      // 左侧高亮竖条
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--left-menu-active-bar-width);
-        background-color: var(--left-menu-active-indicator-color);
-      }
-
-      &:hover {
-        color: var(--left-menu-text-active-color) !important;
-        background-color: transparent !important;
-
-        &::after {
-          background: var(--left-menu-bg-active-color);
-        }
-      }
-    }
-
-    // 子菜单样式
-    .el-menu {
-      background-color: var(--left-menu-bg-color) !important;
-
-      .el-sub-menu__title {
-        position: relative;
-        z-index: 0;
-        background-color: transparent !important;
-
-        // 左侧缩进指示线
-        &::before {
-          content: '';
-          position: absolute;
-          left: 16px;
-          top: 0;
-          bottom: 0;
-          width: 2px;
-          background-color: var(--left-menu-indent-color);
-          z-index: 1;
-        }
-
-        &:hover {
-          background-color: transparent !important;
-          color: var(--left-menu-text-color) !important;
-        }
-      }
-
-      .el-menu-item {
-        position: relative;
-        z-index: 0;
-        background-color: transparent !important;
-
-        // 左侧缩进指示线
-        &::before {
-          content: '';
-          position: absolute;
-          left: 16px;
-          top: 0;
-          bottom: 0;
-          width: 2px;
-          background-color: var(--left-menu-indent-color);
-          z-index: 1;
-        }
-
-        &:hover {
-          background-color: transparent !important;
-
-          &::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            left: calc(16px + 2px);
-            background: var(--left-menu-hover-bg-color);
-            border-top-right-radius: var(--left-menu-item-radius);
-            border-bottom-right-radius: var(--left-menu-item-radius);
-            z-index: -1;
-          }
-        }
-      }
-
-      // 子菜单项的 active 状态
-      .el-menu-item.is-active {
-        color: var(--left-menu-text-active-color) !important;
-
-        &::before {
-          background-color: var(--left-menu-active-indicator-color);
-          width: 3px;
-        }
-
-        &::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          left: calc(16px + 3px);
-          background: var(--left-menu-bg-active-color);
-          border-top-right-radius: var(--left-menu-item-radius);
-          border-bottom-right-radius: var(--left-menu-item-radius);
-          z-index: -1;
-          box-shadow: var(--left-menu-active-shadow);
-          transition:
-            background 0.25s ease,
-            box-shadow 0.25s ease;
-        }
-
-        &:hover {
-          color: var(--left-menu-text-active-color) !important;
-          background-color: transparent !important;
-        }
-      }
+    .sidebar-compact-logo {
+      display: block;
+      width: var(--app-nav-compact-logo-size);
+      height: var(--app-nav-compact-logo-size);
     }
   }
 
-  // 折叠状态
-  :deep(.el-menu--collapse) {
-    width: var(--left-menu-min-width);
+  &.is-collapsed .sidebar-logo-container {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition-delay: 0s, var(--app-nav-motion-fast);
+  }
 
-    & > .is-active,
-    & > .is-active > .el-sub-menu__title {
-      position: relative;
-      color: var(--left-menu-text-active-color) !important;
-      background-color: var(--left-menu-collapse-bg-active-color) !important;
+  .el-scrollbar {
+    flex: 1;
+    min-height: 0;
+  }
 
-      // 折叠状态下的左侧高亮竖条
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: var(--left-menu-active-bar-width);
-        background-color: var(--left-menu-active-indicator-color);
-      }
-    }
+  &.is-collapsed .el-scrollbar {
+    cursor: e-resize;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-container .sidebar-header .sidebar-logo-container {
+    transition: none;
   }
 }
 </style>

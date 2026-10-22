@@ -31,10 +31,9 @@ describe('Hamburger Component', () => {
   });
 
   it('emits toggleClick event when clicked', async () => {
-    const { container, emitted } = render(Hamburger);
+    const { getByRole, emitted } = render(Hamburger);
 
-    const clickableDiv = container.querySelector('div');
-    await fireEvent.click(clickableDiv!);
+    await fireEvent.click(getByRole('button', { name: '展开导航' }));
 
     expect(emitted('toggleClick')).toHaveLength(1);
   });
@@ -45,9 +44,29 @@ describe('Hamburger Component', () => {
     expect(svg).not.toHaveClass('is-active');
   });
 
-  it('has correct styling', () => {
-    const { container } = render(Hamburger);
-    const clickableDiv = container.querySelector('div');
-    expect(clickableDiv).toHaveStyle('padding: 0 15px');
+  it('exposes the controlled navigation and its expanded state', async () => {
+    const { getByRole, rerender } = render(Hamburger);
+    const button = getByRole('button', { name: '展开导航' });
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveAttribute('aria-controls', 'app-sidebar');
+    expect(button).toHaveAttribute('aria-expanded', 'false');
+
+    await rerender({ isActive: true });
+    expect(getByRole('button', { name: '收起导航' })).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('keeps the collapsed brand decorative and retains the expansion action', async () => {
+    const { getByRole, container, rerender } = render(Hamburger, {
+      slots: { brand: '<img src="/brand.png" alt="" />' },
+    });
+    expect(getByRole('button', { name: '展开导航' })).toHaveClass('has-brand');
+    expect(container.querySelector('.navigation-toggle-brand')).toHaveAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+    await rerender({ isActive: true });
+    expect(getByRole('button', { name: '收起导航' })).not.toHaveClass('has-brand');
+    expect(container.querySelector('.navigation-toggle-brand')).not.toBeInTheDocument();
   });
 });
