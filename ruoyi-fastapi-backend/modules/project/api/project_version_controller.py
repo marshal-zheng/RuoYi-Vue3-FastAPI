@@ -35,7 +35,7 @@ projectVersionController = APIRouter(
 
 async def _load_project_version_detail(version_id: int, project_version_service: ProjectVersionService):
     detail_version_result = await project_version_service.project_version_detail_services(version_id)
-    return detail_version_result or {}
+    return detail_version_result
 
 
 @projectVersionController.get(

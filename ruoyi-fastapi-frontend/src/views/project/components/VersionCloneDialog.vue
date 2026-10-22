@@ -58,7 +58,8 @@
 </template>
 
 <script setup name="VersionCloneDialog">
-import { ref, toRef } from 'vue';
+import { ref, toRef, watch } from 'vue';
+import { presentRequestError } from '@/utils/http';
 import { cloneProjectVersion } from '@/api/project/version';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 
@@ -71,6 +72,7 @@ const rules = {
 
 const cloneError = ref('');
 let onSuccessCallback = null;
+let opening = 0;
 
 function resolveCloneError(error) {
   return error?.problem?.detail || error?.detail || error?.message || '克隆版本失败';
@@ -78,21 +80,33 @@ function resolveCloneError(error) {
 
 async function confirmCloneVersion() {
   cloneError.value = '';
+  const currentOpening = opening;
+  const callback = onSuccessCallback;
   try {
-    await cloneProjectVersion({
-      sourceVersionId: formData.value.sourceVersionId,
-      versionNumber: formData.value.versionNumber,
-      versionName: formData.value.versionName,
-      description: formData.value.description,
-    });
+    await cloneProjectVersion(
+      {
+        sourceVersionId: formData.value.sourceVersionId,
+        versionNumber: formData.value.versionNumber,
+        versionName: formData.value.versionName,
+        description: formData.value.description,
+      },
+      { silentError: true }
+    );
   } catch (error) {
+    if (currentOpening !== opening || !dialog.state.visible) return false;
+    if (
+      error?.problem?.status === 401 ||
+      [20001, 20002].includes(Number(error?.problem?.errorCode))
+    ) {
+      presentRequestError(error, { silentError: false, feedback: { mode: 'auto' } });
+      return false;
+    }
     cloneError.value = resolveCloneError(error);
     return false;
   }
 
-  if (onSuccessCallback) {
-    onSuccessCallback();
-  }
+  if (currentOpening !== opening || !dialog.state.visible) return false;
+  callback?.();
 
   return true;
 }
@@ -117,9 +131,18 @@ const dialog = useFormDialog({
   },
 });
 
+watch(
+  () => dialog.state.visible,
+  (visible) => {
+    if (!visible) opening += 1;
+  },
+  { flush: 'sync' }
+);
+
 const formData = toRef(dialog.state, 'data');
 
 const open = (sourceVersion, onSuccess) => {
+  opening += 1;
   cloneError.value = '';
   onSuccessCallback = onSuccess;
   dialog.open({

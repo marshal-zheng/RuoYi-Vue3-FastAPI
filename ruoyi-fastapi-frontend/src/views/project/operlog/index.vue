@@ -11,7 +11,6 @@
     <OperlogGrid ref="operlogGridRef" module="工程管理" @selection-change="onSelectionChange"
       ><template #filters>
         <ZxButton
-          type="warning"
           icon="Download"
           @click="() => operlogGridRef?.exportCurrent?.()"
           v-hasPermi="['monitor:operlog:export']"

@@ -12,10 +12,8 @@
     <div class="table-toolbar flex mb-3">
       <slot name="toolbar">
         <div class="toolbar-left flex items-center gap-2">
-          <zx-button type="primary" icon="Plus" size="medium" @click="insertRow"
-            >添加字段</zx-button
-          >
-          <zx-button type="danger" icon="Delete" size="medium" @click="removeSelectRow"
+          <zx-button icon="Plus" size="medium" @click="insertRow">添加字段</zx-button>
+          <zx-button plain type="danger" icon="Delete" size="medium" @click="removeSelectRow"
             >删除选中</zx-button
           >
         </div>

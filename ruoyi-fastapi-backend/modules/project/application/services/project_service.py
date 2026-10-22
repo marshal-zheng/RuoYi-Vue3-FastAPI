@@ -9,7 +9,12 @@ from zipfile import is_zipfile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from config.error_codes import ErrorCode
-from exceptions.exception import ResourceNotFoundException, ServiceException, ValidationException
+from exceptions.exception import (
+    ResourceConflictException,
+    ResourceNotFoundException,
+    ServiceException,
+    ValidationException,
+)
 from module_admin.entity.do.device_do import DeviceDO, DeviceInterfaceDO
 from module_admin.entity.do.enums import EnableStatusEnum, LockStatusEnum
 from module_admin.entity.do.project_do import ProjectDO
@@ -232,7 +237,7 @@ class ProjectService:
             for project_id, versions in locked_map.items():
                 version_names = '、'.join([version.version_name for version in versions])
                 blocked_messages.append(f'工程ID {project_id} 存在固化版本：{version_names}')
-            raise ServiceException(user_message='；'.join(blocked_messages))
+            raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message='；'.join(blocked_messages))
 
         await self.project_repo.soft_delete_batch(project_id_list, page_object.update_by or '')
         return CrudResponseModel(is_success=True, message='删除成功')
@@ -248,7 +253,11 @@ class ProjectService:
         if project:
             return CamelCaseUtil.transform_result(project)
 
-        return CamelCaseUtil.transform_result({})
+        raise ResourceNotFoundException(
+            user_message='工程不存在',
+            error_code=ErrorCode.PROJECT_NOT_FOUND,
+            developer_message=f'project_id={project_id} not found',
+        )
 
     async def export_project_services(self, project_id: int):
         """

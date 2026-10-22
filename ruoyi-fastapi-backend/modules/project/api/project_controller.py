@@ -15,6 +15,7 @@ from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
 from module_admin.entity.vo.project_vo import (
     BatchProjectIdsModel,
     DeleteProjectModel,
+    ProjectCreatedModel,
     ProjectImportDataModel,
     ProjectModel,
     ProjectPageQueryModel,
@@ -36,7 +37,7 @@ projectController = APIRouter(prefix='/project', dependencies=[Depends(get_curre
 
 async def _load_project_detail(project_id: int, project_service: ProjectService):
     detail_project_result = await project_service.get_project_detail(project_id)
-    return detail_project_result or {}
+    return detail_project_result
 
 
 @projectController.get(
@@ -58,7 +59,10 @@ async def get_system_project_list(
     return ResponseUtil.ok_resource(project_query_result)
 
 
-@projectController.post('', dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))])
+@projectController.post(
+    '', status_code=201, response_model=ProjectCreatedModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('project:project:add'))],
+)
 @Log(title='工程管理-工程', business_type=BusinessType.INSERT)
 async def add_system_project(
     request: Request,
@@ -76,7 +80,8 @@ async def add_system_project(
     logger.info(add_project_result.message)
 
     project_id = require_int_value(add_project_result.result, 'projectId', 'project_id', contract_name='project.create')
-    resource = await _load_project_detail(project_id, project_service)
+    version_id = require_int_value(add_project_result.result, 'versionId', 'version_id', contract_name='project.create')
+    resource = {**(await _load_project_detail(project_id, project_service)), 'versionId': version_id}
     location = ResponseUtil.build_absolute_location(request, f'/project/{project_id}')
     return ResponseUtil.created_resource(resource, location=location)
 

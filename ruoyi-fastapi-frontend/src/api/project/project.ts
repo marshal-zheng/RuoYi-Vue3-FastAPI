@@ -3,6 +3,7 @@ import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { HttpOffsetPage } from '@/types/http-contract';
 export type ProjectRecord = Omit<ProjectModel, 'projectId'> & { projectId: number };
 import type {
+  ProjectCreatedModel,
   ProjectModel,
   GetSystemProjectListProjectListGetData,
 } from '@/api/_generated/types.gen';
@@ -28,7 +29,7 @@ export function getProject(projectId: number | string, options: ExtendedAxiosReq
 
 // 新增工程
 export function addProject(data: ProjectModel) {
-  return request.post<ProjectRecord>('/project', data, {
+  return request.post<ProjectCreatedModel>('/project', data, {
     feedback: { mode: 'auto', key: 'project.project.create' },
   });
 }

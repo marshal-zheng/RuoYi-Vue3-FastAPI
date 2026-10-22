@@ -8,7 +8,10 @@ from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.project_topology_vo import ProjectTopologyModel
 from utils.common_util import CamelCaseUtil
 from utils.transaction_manager import transactional
-from ports import IProjectTopologyRepository
+from ports import IProjectTopologyRepository, IProjectRepository, IProjectVersionRepository
+from exceptions.exception import ResourceNotFoundException, ResourceConflictException
+from config.error_codes import ErrorCode
+from module_admin.entity.do.enums import LockStatusEnum
 
 
 class ProjectTopologyService:
@@ -16,9 +19,21 @@ class ProjectTopologyService:
     工程拓扑数据模块服务层
     """
 
-    def __init__(self, topology_repo: IProjectTopologyRepository):
+    def __init__(self, topology_repo: IProjectTopologyRepository, project_repo: IProjectRepository, version_repo: IProjectVersionRepository):
         self.query_db = getattr(topology_repo, 'db', None)
         self.topology_repo = topology_repo
+        self.project_repo = project_repo
+        self.version_repo = version_repo
+
+    async def _require_context(self, project_id: int, version_id: int | None, *, writing: bool = False):
+        if await self.project_repo.find_by_id(project_id) is None:
+            raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='工程不存在')
+        if version_id is not None:
+            version = await self.version_repo.find_by_id(version_id)
+            if version is None or version.project_id != project_id:
+                raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='工程版本不存在')
+            if writing and version.is_locked == LockStatusEnum.LOCKED.value:
+                raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message='固化版本不允许保存拓扑')
 
     async def save_project_topology(
         self, topology: ProjectTopologyModel, operator: Optional[str] = None
@@ -37,6 +52,7 @@ class ProjectTopologyService:
         """
         保存工程拓扑数据 service
         """
+        await self._require_context(topology.project_id, topology.version_id, writing=True)
         now = datetime.now()
         effective_operator = operator or topology.update_by or topology.create_by or 'system'
         if not topology.create_by:
@@ -63,6 +79,7 @@ class ProjectTopologyService:
         """
         获取工程拓扑数据 service
         """
+        await self._require_context(project_id, version_id)
         topo = await self.topology_repo.find_by_project_and_version(project_id, version_id)
         if topo:
             return CamelCaseUtil.transform_result(topo)

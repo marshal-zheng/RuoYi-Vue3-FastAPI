@@ -72,7 +72,7 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       const res = await addProject(data);
       // http 客户端已解包 payload.data，res 直接是项目数据
       const newId = res?.projectId || res?.id || null;
-      emit('success', { mode: 'create', projectId: newId, data: res });
+      emit('success', { mode: 'create', projectId: newId, versionId: res.versionId, data: res });
       return res;
     },
   });

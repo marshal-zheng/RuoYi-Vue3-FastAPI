@@ -8,7 +8,7 @@
       <el-tag v-if="!loading" type="info" size="large"
         >已配置 {{ devicePorts.length }} 个端口</el-tag
       >
-      <ZxButton type="primary" icon="Plus" @click="handleAddPort">添加端口</ZxButton>
+      <ZxButton icon="Plus" @click="handleAddPort">添加端口</ZxButton>
       <ZxButton type="primary" icon="CircleCheck" @click="handleSave" :loading="handleSavePending"
         >保存</ZxButton
       >
