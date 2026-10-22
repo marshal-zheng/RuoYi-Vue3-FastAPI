@@ -29,5 +29,11 @@
     "sha256": "488ba07bc021622efa282fab9a063136acf3c48e252908b0c65d0ee26dd9443b",
     "status": "superseded-own-candidate-removed",
     "reason": "controlled over-limit draft rehydration fix in .4"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.4.tgz",
+    "sha256": "ff7e867b12426ccf25d893dd7484fe034e54892e7f89768b15f45e8eec57d624",
+    "status": "superseded-own-candidate-removed",
+    "reason": "link portal composition draft and key isolation fixed in .5"
   }
 ]

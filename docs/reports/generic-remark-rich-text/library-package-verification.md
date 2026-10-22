@@ -6,7 +6,7 @@
 
 | 包 | 实际安装版本 | 应用 vendor 文件 SHA-256 |
 | --- | --- | --- |
-| @zxio/text-editor | 1.0.0-remark-a.20261022.4 | `ff7e867b12426ccf25d893dd7484fe034e54892e7f89768b15f45e8eec57d624` |
+| @zxio/text-editor | 1.0.0-remark-a.20261022.5 | `42cda3aa6d7cd9528325dbcaabf16149263aa1db3f868a3a1e8adbc3d7ae3f1e` |
 | @zxio/schema-form | 0.1.0-remark-a.20261022.1 | `1fadc9526ab14583a82172a88216fc126a1cf731b0479ca386be6c29c7545be2` |
 
 两包均以 `file:./vendor/...` 进入应用 package.json/yarn.lock。`YARN_ENABLE_SCRIPTS=false yarn install` 退出 0，随后直接读取 node_modules 包清单确认版本。旧的本轮候选与未采用的 theme-compiler 候选已移除，摘要保留在 superseded-candidates.json；既有供应包未清理。部署侧 theme-compiler 继续匹配现有主题资产；源码模式仅为 source plugin 使用 host 源码编译器，没有升级部署主题协议。
@@ -38,3 +38,5 @@ SchemaForm 的 port 幂等退休与 mounted 后恢复修复见 frontend-generato
 以上为静态、真实组件 DOM 与构建证据；测试主题 owner/portal port 是明确的替身，不能证明真实明暗主题、density、链接浮层归属或浏览器焦点已验收。
 
 受控字段通过私有 injection context 在首次恢复时允许保留输入所超出的字符/字节/节点预算，结构/版本/meta/URL/深度与原始硬防护保持。Field首次watch立即置blocking，超限仍不可提交；公开TextEditor setDocument/setContent与外部watch仍完整预算。真实Formily超限→hide/show→完整可编辑→submit拒绝→改正可提交回归已先红后绿。最终.4的lint/157tests/build日志分别为 `/tmp/remark-library-draft-eslint.log`、`/tmp/remark-library-draft-tests.log`、`/tmp/remark-editor-draft-build.log`。
+
+最终.5补齐链接portal的IME边界：原生URL input持续维护同一交互linkDraft；组合Enter/Escape不确定/取消，不阻止IME默认动作；capture保留未完成URL，组合结束后Enter才提交。同一最终测试在旧.4源码真实失败，新实现库全组158项（99契约+16runtime+43既有）通过，ESLint/build/pack全部退出0。流水证据 `/tmp/remark-editor-ime-release-results.json`，红 `/tmp/remark-portal-ime-final-red.log`，绿 `/tmp/remark-library-ime-final-tests.log`。组合ZXUI来源与实际安装验证见source-delivery.md。

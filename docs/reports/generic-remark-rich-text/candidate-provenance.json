@@ -1,0 +1,127 @@
+{
+  "baseCommit": "0040e473639d3212f9fea3d9a7d664fabcf2ab41",
+  "candidateRoot": "/Users/hqz/Downloads/element-plus/.worktrees/generic-remark-raw-candidate",
+  "inputs": [
+    {
+      "path": "packages/components/input-number/__tests__/input-number.test.tsx",
+      "sourceSha256": "4977a31abc13ed808ce9f4978b03447886bf16fd95e166f249390e45c4bd8cbe"
+    },
+    {
+      "path": "packages/components/input-number/index.ts",
+      "sourceSha256": "e393e073015f1a57cf81cc681288007c72652cc96989687cab77c9df27ef7ae5"
+    },
+    {
+      "path": "packages/components/input-number/src/input-number-core.vue",
+      "sourceSha256": "395533674200318e38dd300d5b5fc6351ddadb4d2e80f1a6d20750d40504e457"
+    },
+    {
+      "path": "packages/components/input-number/src/input-number.vue",
+      "sourceSha256": "7f4cab606e879e2db6b7a5db8ed26b1565547fd9108acdf432f91decbdf55a07"
+    },
+    {
+      "path": "packages/components/input-number/src/instance.ts",
+      "sourceSha256": "dd237a34a83f4facf81ea5d595f04f26f9422c21284cb676a9631bd2c3964bd3"
+    },
+    {
+      "path": "packages/components/input-number/src/number-control.vue",
+      "sourceSha256": "9c6939dcfbcde86f5e64b5020f616af19c8cef9fdc341d6c1525bf234a090d20"
+    },
+    {
+      "path": "packages/components/input-number/src/props.ts",
+      "sourceSha256": "53cdc172ca3792950ae6801585e4440c456f1bccd2be2c38a015a446003d3a94"
+    },
+    {
+      "path": "packages/components/input-number/style/css.ts",
+      "sourceSha256": "a51b1ea5db2f41b42bb8b6677d545afc5b59db2a1a3b761d23aadf8a44cd0201"
+    },
+    {
+      "path": "packages/components/input-number/style/index.ts",
+      "sourceSha256": "a51b1ea5db2f41b42bb8b6677d545afc5b59db2a1a3b761d23aadf8a44cd0201"
+    }
+  ],
+  "runtime": {
+    "sharedReadOnlyExternalStore": "/Users/hqz/Downloads/element-plus/node_modules/.pnpm",
+    "workspaceLinksRemappedToCandidate": true,
+    "externalKeybindingsManifest": "/Users/hqz/Downloads/element-plus/packages/keybindings/package.json",
+    "externalKeybindingsDist": "/Users/hqz/Downloads/element-plus/packages/keybindings/dist",
+    "buildUtilsStubsMustRegenerateInCandidate": true
+  },
+  "candidateVersion": "3.0.0-next.0-remark-raw.20261022.1",
+  "baseBranch": "codex/http-vue-query-phase-a",
+  "candidateBranch": "codex/generic-remark-raw-candidate",
+  "scope": "Committed icons baseline plus current InputNumber controlled-raw API only; no other dirty library business code imported.",
+  "actualChangedTrackedPaths": [
+    "packages/components/input-number/__tests__/input-number.test.tsx",
+    "packages/components/input-number/src/input-number-core.vue",
+    "packages/components/input-number/src/number-control.vue",
+    "packages/components/input-number/src/props.ts",
+    "packages/zxui/package.json"
+  ],
+  "sourceInputsUnchangedAtCompletion": true,
+  "patch": {
+    "path": "/Users/hqz/Downloads/element-plus/.git/worktrees/generic-remark-raw-candidate/codex-remark-raw-candidate.patch",
+    "sha256": "84dc6d0f1f3455f30de86611ba87534af2f38689dbf62824f11cc7d7c3a849f6"
+  },
+  "tarball": {
+    "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/generic-remark-rich-text/ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-remark-raw.20261022.1.tgz",
+    "version": "3.0.0-next.0-remark-raw.20261022.1",
+    "sha256": "9a8b2540581fdee21da846ab71e4086d97c4d17a20bb6d17495ff7b7f22fc555",
+    "size": 3481370
+  },
+  "prerequisiteBuilds": [
+    "candidate HEAD internal/build-constants and internal/build-utils --stub, asserted projRoot=candidate",
+    "candidate HEAD packages/theme-consumer build",
+    "candidate HEAD packages/theme-css-codec build"
+  ],
+  "checks": {
+    "baselineInputNumber": {
+      "passed": 10,
+      "log": "/tmp/remark-raw-inputnumber-baseline.log"
+    },
+    "newRawRegressionRed": {
+      "failed": 1,
+      "reason": "type number instead of required text",
+      "log": "/tmp/remark-raw-inputnumber-red.log"
+    },
+    "sourceInputNumber": {
+      "passed": 11,
+      "log": "/tmp/remark-raw-inputnumber-green.log"
+    },
+    "builtEsmPublicInputNumber": {
+      "passed": 11,
+      "log": "/tmp/remark-raw-built-inputnumber-tests.log",
+      "note": "Same test file redirected to produced public ESM leaf; public shared dependency uses the same HEAD workspace entry; Element Plus peer links point to read-only installed runtime."
+    },
+    "committedIconsAndPublicResolver": {
+      "passed": 14,
+      "log": "/tmp/remark-raw-icons-public-tests.log"
+    },
+    "ownedEslint": {
+      "exitCode": 0,
+      "log": "/tmp/remark-raw-inputnumber-lint.log"
+    },
+    "fullBuildIncludingDeclarationTypecheck": {
+      "exitCode": 0,
+      "duration": "25s",
+      "log": "/tmp/remark-raw-zxui-build-final.log"
+    },
+    "publicPackageContract": {
+      "exitCode": 0,
+      "scope": "--packages @zxio/zxui",
+      "log": "/tmp/remark-raw-public-package-contracts.log"
+    },
+    "publicBuildExternals": {
+      "exitCode": 0,
+      "scope": "--packages @zxio/zxui",
+      "log": "/tmp/remark-raw-public-build-externals.log"
+    },
+    "allExplicitExportTargets": 174,
+    "diffCheck": 0
+  },
+  "limits": [
+    "No browser/computer use or real UI acceptance performed.",
+    "Combined application integration install/typecheck/build/tests remain the parent executor responsibility.",
+    "App source and task actual package.json/yarn.lock were not edited by this executor.",
+    "No npm publish, source overwrite or implementation commit performed."
+  ]
+}
