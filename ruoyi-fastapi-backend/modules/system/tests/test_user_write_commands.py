@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -129,6 +130,13 @@ def _build_current_user() -> CurrentUserModel:
             roleIds='1',
             postIds='1',
         ),
+    )
+
+
+@pytest.fixture(autouse=True)
+def authorization_preflight(monkeypatch):
+    monkeypatch.setattr(
+        'modules.system.application.services.user_role_service.UserRoleService.check_user_roles', AsyncMock()
     )
 
 

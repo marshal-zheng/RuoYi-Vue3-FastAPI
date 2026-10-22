@@ -8,9 +8,10 @@ from typing import Literal
 from pydantic import Field
 
 from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue
 
 
-class ConfigListItemReadModel(CamelModelBase):
+class ConfigListItemReadModel(CamelModelBase, RemarkReadProjection):
     """Read model for config list item."""
 
     config_id: int | None = Field(default=None, description='Config id')
@@ -22,7 +23,7 @@ class ConfigListItemReadModel(CamelModelBase):
     create_time: datetime | None = Field(default=None, description='Create time')
     update_by: str | None = Field(default=None, description='Updater')
     update_time: datetime | None = Field(default=None, description='Update time')
-    remark: str | None = Field(default=None, description='Remark')
+    remark: RemarkValue = Field(default=None, description='Remark')
 
 
 class ConfigPageReadModel(CamelModelBase):

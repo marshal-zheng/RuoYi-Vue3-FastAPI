@@ -20,10 +20,11 @@ function loadThemeCompiler(frontendRoot: string, workspaceRoot?: string) {
   // The public source facet keeps Vite tooling and browser components on the same revision.
   // tsx belongs to the prepared ZXUI checkout; nothing is globally registered.
   const { require: requireSource } = compilerRequire('tsx/cjs/api');
+  const sourcePackageRequire = createRequire(path.resolve(workspaceRoot, 'packages/theme-compiler/package.json'));
   return requireSource(
-    compilerRequire.resolve('@zxio/theme-compiler/vite/source'),
-    compilerRequire.resolve('@zxio/theme-compiler/package.json')
-  ) as typeof import('@zxio/theme-compiler/vite');
+    sourcePackageRequire.resolve('@zxio/theme-compiler/vite/source'),
+    sourcePackageRequire.resolve('@zxio/theme-compiler/package.json')
+  );
 }
 
 export function zxuiThemeDeploymentPlugin(options: {
@@ -39,7 +40,9 @@ export function zxuiThemeDeploymentPlugin(options: {
       );
     }
   }
-  const { themeDeploymentPlugin } = loadThemeCompiler(frontendRoot, localRepoRoot);
+  // Theme manifests are versioned deployment assets. Keep their compiler paired
+  // with the installed packages; source UI resolution is independently opt-in.
+  const { themeDeploymentPlugin } = loadThemeCompiler(frontendRoot);
   return themeDeploymentPlugin({
     packages: ZX_THEME_PACKAGE_CHOICES.map(({ packageName, id }) => ({
       packageName,
@@ -61,6 +64,7 @@ export function zxuiSourceIntegrationPlugin(frontendRoot: string, workspaceRoot:
       '@zxio/dashboard-widgets',
       '@zxio/http',
       '@zxio/schema-form',
+      '@zxio/text-editor',
       '@zxio/theme-tailwind',
       '@zxio/vue-query',
     ],

@@ -28,8 +28,10 @@ export function buildGenTablePayload<T extends Record<string, unknown>>(
   info: T,
   columns: unknown[]
 ) {
+  const editable = { ...info };
+  delete editable.remarkText;
   return {
-    ...info,
+    ...editable,
     columns,
     params: {
       treeCode: info.treeCode,
@@ -38,4 +40,13 @@ export function buildGenTablePayload<T extends Record<string, unknown>>(
       parentMenuId: info.parentMenuId,
     },
   };
+}
+
+/** Compare the JSON write value without making object-key order an edit. */
+export function genTableDraftSnapshot(info: Record<string, unknown>, columns: unknown[]): string {
+  return JSON.stringify(buildGenTablePayload(info, columns), (_key, value) =>
+    value && typeof value === 'object' && !Array.isArray(value)
+      ? Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)))
+      : value
+  );
 }

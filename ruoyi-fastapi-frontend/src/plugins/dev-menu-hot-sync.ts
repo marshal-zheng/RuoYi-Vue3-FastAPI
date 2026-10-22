@@ -10,6 +10,8 @@ import {
 } from '@/config/devMenuSync';
 import usePermissionStore from '@/store/modules/permission';
 import { getToken } from '@/utils/auth';
+import { watch, type WatchStopHandle } from 'vue';
+import { queryScope } from '@/queries/context';
 
 const AUTH_ERROR_RETRY_DELAY_MS = 60_000;
 const MAX_SSE_FAILURES_BEFORE_FALLBACK = 3;
@@ -43,6 +45,9 @@ let sseFailureCount = 0;
 let featureUnavailable = false;
 let activeListenersBound = false;
 let autoSyncPaused = false;
+let connectionGeneration = 0;
+let connecting = false;
+let stopScopeWatch: WatchStopHandle | undefined;
 
 type DevMenuSyncGlobalApi = {
   refreshRoutes: () => Promise<void>;
@@ -137,6 +142,8 @@ const stopFallbackPolling = (): void => {
 };
 
 const stopAutomaticSync = (): void => {
+  connectionGeneration++;
+  connecting = false;
   clearReconnectTimer();
   stopFallbackPolling();
   closeEventSource();
@@ -257,6 +264,7 @@ function startFallbackPolling(options: { immediate?: boolean } = {}): void {
 }
 
 async function probeSseAvailability(): Promise<ProbeResult> {
+  const generation = connectionGeneration;
   if (!getToken()) {
     latestSignature = null;
     return 'no_token';
@@ -264,12 +272,14 @@ async function probeSseAvailability(): Promise<ProbeResult> {
 
   try {
     const payload = await getDevMenuSignature();
+    if (generation !== connectionGeneration) return 'no_token';
     authRetryAfterTs = 0;
     if (payload?.signature) {
       latestSignature = payload.signature;
     }
     return 'ok';
   } catch (error) {
+    if (generation !== connectionGeneration) return 'no_token';
     if (isNotFoundFailure(error)) {
       disableFeature('backend returned 404 for dev menu sync');
       return 'disabled';
@@ -326,6 +336,7 @@ async function ensureSseConnection(options: { immediate?: boolean } = {}): Promi
     !isDevMenuSyncSseEnabled ||
     isAutoSyncBlocked() ||
     eventSource !== null ||
+    connecting ||
     authRetryAfterTs > Date.now() ||
     !getToken()
   ) {
@@ -344,18 +355,27 @@ async function ensureSseConnection(options: { immediate?: boolean } = {}): Promi
     return;
   }
 
+  const generation = connectionGeneration;
+  connecting = true;
+  const probe = await probeSseAvailability();
+  if (generation !== connectionGeneration) return;
+  connecting = false;
+  if (probe !== 'ok' || isAutoSyncBlocked() || !getToken()) return;
   bindActiveListeners();
   const source = new window.EventSource(DEV_MENU_EVENTS_URL, { withCredentials: true });
   eventSource = source;
   source.addEventListener('open', () => {
+    if (source !== eventSource) return;
     sseFailureCount = 0;
     authRetryAfterTs = 0;
     stopFallbackPolling();
   });
   source.addEventListener('menu_changed', (event) => {
+    if (source !== eventSource) return;
     void handleSseMenuChanged(event as MessageEvent<string>);
   });
   source.onerror = () => {
+    if (source !== eventSource) return;
     void handleSseError();
   };
 }
@@ -425,6 +445,18 @@ export function startDevMenuHotSync(): void {
   autoSyncPaused = false;
 
   bindGlobalApi();
+  stopScopeWatch?.();
+  stopScopeWatch = watch(
+    queryScope,
+    () => {
+      stopAutomaticSync();
+      authRetryAfterTs = 0;
+      if (!queryScope.value || devMenuSyncMode === 'manual') return;
+      if (isDevMenuSyncSseEnabled) void ensureSseConnection({ immediate: true });
+      else if (isDevMenuSyncPollingEnabled) startFallbackPolling();
+    },
+    { flush: 'sync' }
+  );
 
   if (devMenuSyncMode === 'manual') {
     stopAutomaticSync();
@@ -448,6 +480,8 @@ export function startDevMenuHotSync(): void {
 }
 
 export function stopDevMenuHotSync(): void {
+  stopScopeWatch?.();
+  stopScopeWatch = undefined;
   stopAutomaticSync();
   latestSignature = null;
   authRetryAfterTs = 0;

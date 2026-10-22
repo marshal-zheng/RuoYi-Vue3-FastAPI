@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "body": {
+    "format": "json",
+    "content": {
+      "type": "doc",
+      "content": []
+    }
+  },
+  "annotations": [],
+  "assets": [],
+  "meta": {
+    "schemaVersion": "stable-block-identity/v2"
+  }
+}

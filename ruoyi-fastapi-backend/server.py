@@ -4,6 +4,7 @@ import sys
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Response
+from fastapi.responses import JSONResponse
 
 from config.database import async_engine
 from config.env import (
@@ -216,15 +217,7 @@ async def lifespan(app: FastAPI):
     else:
         logger.info('查询缓存已禁用')
 
-    app.state.count_cache = container.count_cache
-    if CacheConfig.count_cache_enabled:
-        logger.info('COUNT 缓存已启用')
-    else:
-        logger.info('COUNT 缓存已禁用')
-
     app.state.resilience_runtime = build_resilience_runtime(redis_client=app.state.redis, db_engine=async_engine)
-    if app.state.count_cache is not None:
-        app.state.count_cache.set_resilience_executor(app.state.resilience_runtime.executor)
 
     app.state.event_runtime = EventSystemRuntime(
         container=container,
@@ -356,8 +349,8 @@ async def health_check():
     provider_summary = {}
     if isinstance(app_container, AppContainer):
         provider_summary = app_container.provider_health_summary()
-    return ResponseUtil.success(
-        data={
+    return ResponseUtil.ok_resource(
+        {
             'status': 'ok',
             'app': AppConfig.app_name,
             'version': AppConfig.app_version,
@@ -379,8 +372,8 @@ async def readiness_check():
         ]
     )
     if is_ready:
-        return ResponseUtil.success(data={'status': 'ready', 'containerReady': container_ready})
-    return ResponseUtil.error(msg='服务未就绪', data={'status': 'not_ready', 'containerReady': container_ready})
+        return ResponseUtil.ok_resource({'status': 'ready', 'containerReady': container_ready})
+    return JSONResponse(status_code=503, content={'status': 'not_ready', 'containerReady': container_ready})
 
 
 @app.get('/health/db', tags=['健康检查'])
@@ -392,42 +385,41 @@ async def database_health_check():
     """
     health_checker = getattr(app.state, 'pool_health_checker', None)
     if not health_checker:
-        return ResponseUtil.error(msg='健康检查器未初始化')
+        return JSONResponse(status_code=503, content={'status': 'unhealthy', 'message': '健康检查器未初始化'})
     
     health = health_checker.check_health(async_engine)
     
-    if health['status'] == 'critical':
-        return ResponseUtil.error(msg=health['message'], data=health)
-    elif health['status'] == 'warning':
-        return ResponseUtil.success(message=health['message'], data=health)
-    else:
-        return ResponseUtil.success(data=health)
+    response = ResponseUtil.ok_resource(health)
+    response.status_code = 503 if health['status'] == 'critical' else 200
+    return response
 
 
 @app.get('/health/deep', tags=['健康检查'])
 async def deep_health_check():
     runtime = getattr(app.state, 'resilience_runtime', None)
     if runtime is None:
-        return ResponseUtil.success(
-            http_status=503,
-            data={'status': 'unhealthy', 'detail': 'resilience_runtime_not_initialized'},
+        return JSONResponse(
+            status_code=503,
+            content={'status': 'unhealthy', 'detail': 'resilience_runtime_not_initialized'},
         )
 
     http_status, payload = await runtime.deep_health_checker.run()
-    return ResponseUtil.success(http_status=http_status, data=payload)
+    response = ResponseUtil.ok_resource(payload)
+    response.status_code = http_status
+    return response
 
 
 @app.get('/health/events', tags=['健康检查'])
 async def event_health_check():
     event_runtime = getattr(app.state, 'event_runtime', None)
     if event_runtime is None:
-        return ResponseUtil.success(
-            http_status=503,
-            data={'status': 'unhealthy', 'detail': 'event_runtime_not_initialized'},
+        return JSONResponse(
+            status_code=503,
+            content={'status': 'unhealthy', 'detail': 'event_runtime_not_initialized'},
         )
     payload = await event_runtime.health()
     status = 'healthy' if payload.get('running') else 'degraded'
-    return ResponseUtil.success(data={'status': status, **payload})
+    return ResponseUtil.ok_resource({'status': status, **payload})
 
 
 @app.get('/health/query-stats', tags=['健康检查'])
@@ -439,10 +431,10 @@ async def query_stats():
     """
     monitor = getattr(app.state, 'query_monitor', None)
     if not monitor:
-        return ResponseUtil.error(msg='性能监控器未初始化')
+        return JSONResponse(status_code=503, content={'status': 'unhealthy', 'message': '性能监控器未初始化'})
     
     stats = monitor.get_stats()
-    return ResponseUtil.success(data={
+    return ResponseUtil.ok_resource({
         'total_queries': stats['total_queries'],
         'slow_queries': stats['slow_queries'],
         'slow_query_rate': f"{stats['slow_query_rate']:.2f}%",

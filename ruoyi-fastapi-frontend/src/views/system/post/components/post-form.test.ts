@@ -6,7 +6,7 @@ const valid = {
   postCode: 'business',
   postSort: 0,
   status: '0',
-  remark: '',
+  remark: null,
 };
 
 describe('post write boundary', () => {
@@ -37,10 +37,10 @@ describe('post write boundary', () => {
   });
 
   it('keeps zero sort and empty remark, while identity and audit fields cannot leak from inputs', () => {
-    expect(initialPost({ postSort: 0, status: '1', remark: '' })).toMatchObject({
+    expect(initialPost({ postSort: 0, status: '1', remark: null })).toMatchObject({
       postSort: 0,
       status: '1',
-      remark: '',
+      remark: null,
     });
     expect(toPostDto({ ...valid, postId: 999, createBy: 'forged' }, 7)).toEqual({
       ...valid,
@@ -59,7 +59,7 @@ describe('post write boundary', () => {
     { postSort: '0' },
     { status: 0 },
     { status: 'deleted' },
-    { remark: null },
+    { remark: 'old string' },
   ])('rejects malformed runtime values before reaching the API: %j', (invalid) => {
     expect(() => toPostDto({ ...valid, ...invalid })).toThrow('岗位数据格式不正确');
   });

@@ -21,7 +21,9 @@
               :loading="importing"
               v-hasPermi="['device:list:add']"
               @change="handleImportFileChange"
-            />
+            >
+              <ZxButton icon="Upload">导入设备</ZxButton>
+            </ZxUpload>
             <ZxButton
               icon="Download"
               :disabled="multiple"
@@ -31,6 +33,7 @@
               >批量导出</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"

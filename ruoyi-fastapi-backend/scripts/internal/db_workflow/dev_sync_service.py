@@ -8,14 +8,30 @@ from time import perf_counter
 from typing import TYPE_CHECKING, Literal
 
 from config.database import AsyncSessionLocal
+from scripts.data_migrations.remark_document_v2 import prepare_configured_database, verify_configured_database
+
 from .managed_data_fast_reconcile_service import (
     PostconditionVerificationError,
-    PostconditionVerificationResult,
-    PostconditionVerifier,
+)
+from .managed_data_fast_reconcile_service import (
+    PostconditionVerificationResult as PostconditionVerificationResult,  # noqa: PLC0414 -- Existing public re-export.
+)
+from .managed_data_fast_reconcile_service import (
+    PostconditionVerifier as PostconditionVerifier,  # noqa: PLC0414 -- Existing public re-export.
+)
+from .managed_data_fast_reconcile_service import (
     compiled_checksum_for_bundle as _compiled_checksum_for_bundle,
+)
+from .managed_data_fast_reconcile_service import (
     declaration_objects as _declaration_objects,
+)
+from .managed_data_fast_reconcile_service import (
     elapsed_ms as _elapsed_ms,
+)
+from .managed_data_fast_reconcile_service import (
     load_managed_data_declaration_bundle as _load_declaration_bundle,
+)
+from .managed_data_fast_reconcile_service import (
     reconcile_managed_data as _reconcile_managed_data,
 )
 
@@ -63,6 +79,7 @@ class DevSyncReport:
     metadata_updated_objects: int = 0
     metadata_deactivated_objects: int = 0
 
+
 def execute_dev_sync(  # noqa: PLR0915
     *,
     project_root: Path,
@@ -70,6 +87,10 @@ def execute_dev_sync(  # noqa: PLR0915
     invoked_by_startup: bool,
     schema_apply_runner_loader,
     session_factory=AsyncSessionLocal,
+    remark_backup_manifest=None,
+    remark_writers_stopped=False,
+    remark_prepare_runner=None,
+    remark_verify_runner=None,
 ) -> DevSyncReport:
     """Run declaration validation, schema sync, and managed data apply."""
 
@@ -89,6 +110,7 @@ def execute_dev_sync(  # noqa: PLR0915
     metadata_updated_objects = 0
     metadata_deactivated_objects = 0
     failed_step = 'none'
+    active_step = 'declaration-validation'
     affected_objects: tuple[str, ...] = ()
     residual_objects: tuple[str, ...] = ()
 
@@ -104,6 +126,11 @@ def execute_dev_sync(  # noqa: PLR0915
             affected_objects=_declaration_objects(declaration_bundle),
         )
 
+        active_step = 'remark-preflight'
+        (remark_prepare_runner or prepare_configured_database)(
+            backup_manifest=remark_backup_manifest, writers_stopped=remark_writers_stopped
+        )
+        active_step = 'schema-sync'
         schema_started_at = perf_counter()
         runner = schema_apply_runner_loader(workflow_status.db_dev_sync_engine)
         schema_result = runner(
@@ -118,6 +145,7 @@ def execute_dev_sync(  # noqa: PLR0915
             duration_ms=_elapsed_ms(schema_started_at),
         )
 
+        active_step = 'managed-data-apply'
         reconcile_result = asyncio.run(
             _reconcile_managed_data(
                 declaration_bundle=declaration_bundle,
@@ -132,6 +160,8 @@ def execute_dev_sync(  # noqa: PLR0915
             duration_ms=managed_sync_result.apply_duration_ms,
             affected_objects=managed_sync_result.affected_objects,
         )
+        active_step = 'remark-postcondition'
+        (remark_verify_runner or verify_configured_database)()
         postcondition_verify = DevSyncStepReport(
             step='postcondition-verify',
             status='success',
@@ -232,11 +262,11 @@ def execute_dev_sync(  # noqa: PLR0915
             )
             failed_step = 'postcondition-verify'
 
+        if active_step.startswith('remark-'):
+            failed_step = active_step
         if not affected_objects:
             affected_objects = (
-                declaration_validation.affected_objects
-                or schema_sync.affected_objects
-                or managed_data.affected_objects
+                declaration_validation.affected_objects or schema_sync.affected_objects or managed_data.affected_objects
             )
         if not residual_objects:
             residual_objects = postcondition_verify.affected_objects
@@ -284,6 +314,8 @@ def execute_dev_sync(  # noqa: PLR0915
         metadata_updated_objects=metadata_updated_objects,
         metadata_deactivated_objects=metadata_deactivated_objects,
     )
+
+
 def _skipped_step(step: str) -> DevSyncStepReport:
     return DevSyncStepReport(step=step, status='skipped', result='skipped', duration_ms=0)
 

@@ -13,6 +13,8 @@ from typing import TYPE_CHECKING, Any, Literal
 
 import yaml
 
+from .remark_inputs import release_row
+
 if TYPE_CHECKING:
     from .managed_data_declaration_loader import ManagedDataTargetState, ReleasePlanSelection
     from .managed_data_planner import ManagedDataPlan
@@ -155,9 +157,7 @@ class ReleaseBundleService:
     @staticmethod
     def _validate_bundle_id(bundle_id: str) -> None:
         if not BUNDLE_ID_PATTERN.match(bundle_id):
-            raise ValueError(
-                'bundle_id must match YYYYMMDD_NNN_slug, for example 20260402_001_datasource-baseline'
-            )
+            raise ValueError('bundle_id must match YYYYMMDD_NNN_slug, for example 20260402_001_datasource-baseline')
 
     def _assert_existing_files_compatible(
         self,
@@ -171,7 +171,7 @@ class ReleaseBundleService:
             path = bundle_dir / filename
             if not path.exists():
                 continue
-            existing_payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+            existing_payload = yaml.safe_load(path.read_text(encoding='utf-8')) or {}
             existing_checksum = compute_payload_checksum(existing_payload)
             desired_checksum = compute_payload_checksum(payload)
             if existing_checksum != desired_checksum:
@@ -375,14 +375,10 @@ def build_target_state_payload(target_state: ManagedDataTargetState) -> dict[str
 
     return {
         'menus': {str(menu_id): row for menu_id, row in sorted(target_state.menus.items())},
-        'role_grants': {
-            role_key: list(menu_ids)
-            for role_key, menu_ids in sorted(target_state.role_grants.items())
-        },
+        'role_grants': {role_key: list(menu_ids) for role_key, menu_ids in sorted(target_state.role_grants.items())},
         'dict_types': dict(sorted(target_state.dict_types.items())),
         'dict_data': {
-            f'{dict_type}:{dict_value}': row
-            for (dict_type, dict_value), row in sorted(target_state.dict_data.items())
+            f'{dict_type}:{dict_value}': row for (dict_type, dict_value), row in sorted(target_state.dict_data.items())
         },
         'configs': dict(sorted(target_state.configs.items())),
     }
@@ -395,25 +391,22 @@ def load_target_state_payload(payload: dict[str, Any]):
         'scripts.internal.db_workflow.managed_data_declaration_loader'
     ).ManagedDataTargetState
 
-    menus = {
-        int(menu_id): dict(row)
-        for menu_id, row in dict(payload.get('menus') or {}).items()
-    }
+    menus = {int(menu_id): dict(row) for menu_id, row in dict(payload.get('menus') or {}).items()}
     role_grants = {
         str(role_key): tuple(int(menu_id) for menu_id in menu_ids)
         for role_key, menu_ids in dict(payload.get('role_grants') or {}).items()
     }
     dict_types = {
-        str(dict_type): dict(row)
+        str(dict_type): release_row('sys_dict_type', row)
         for dict_type, row in dict(payload.get('dict_types') or {}).items()
     }
     dict_data = {
-        (str(dict_type), str(dict_value)): dict(row)
+        (str(dict_type), str(dict_value)): release_row('sys_dict_data', row)
         for combined_key, row in dict(payload.get('dict_data') or {}).items()
         for dict_type, _, dict_value in [str(combined_key).partition(':')]
     }
     configs = {
-        str(config_key): dict(row)
+        str(config_key): release_row('sys_config', row)
         for config_key, row in dict(payload.get('configs') or {}).items()
     }
     return managed_data_target_state_type(
@@ -481,7 +474,9 @@ def load_managed_object_snapshot(payload: dict[str, Any], *, artifact_name: str)
     for index, row in enumerate(managed_objects):
         if not isinstance(row, dict):
             raise ValueError(f'{artifact_name} managed_objects[{index}] must be a mapping')
-        missing = [field for field in required_fields if not isinstance(row.get(field), str) or not str(row[field]).strip()]
+        missing = [
+            field for field in required_fields if not isinstance(row.get(field), str) or not str(row[field]).strip()
+        ]
         if missing:
             raise ValueError(f'{artifact_name} managed_objects[{index}] missing fields: {", ".join(missing)}')
         normalized.append({field: str(row[field]).strip() for field in required_fields})

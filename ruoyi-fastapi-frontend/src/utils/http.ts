@@ -18,6 +18,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessageBox } from 'element-plus';
 
 import { getCsrfToken, getToken } from '@/utils/auth';
+import { createSessionTransport } from '@/utils/session';
 import errorCode from '@/utils/errorCode';
 import { isHashRouteMode } from '@/router/history';
 import useUserStore from '@/store/modules/user';
@@ -501,10 +502,16 @@ const afterResponseTransform: HttpTransformHook = {
   },
 };
 
+const sessionTransport = createSessionTransport((token) => {
+  useUserStore().token = token;
+});
+export const refreshHttpSession = sessionTransport.refresh;
+
 export const http = createHttpClient({
   axiosConfig: {
     baseURL: import.meta.env.VITE_APP_BASE_API as string,
     timeout: 10000,
+    adapter: sessionTransport.adapter,
   },
   tokenProvider: {
     getToken: () => getToken() || '',

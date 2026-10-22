@@ -9,7 +9,7 @@ from container.dependencies import service_provider
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
-from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RoleModel, RolePageQueryModel
+from module_admin.entity.vo.role_vo import AddRoleModel, DeleteRoleModel, RolePageQueryModel
 from module_admin.entity.vo.role_write_vo import (
     RoleCreateModel,
     RoleDataScopeUpdateModel,
@@ -38,6 +38,7 @@ from modules.system.application.queries import (
     GetRoleListQuery,
     GetRoleUnallocatedUsersQuery,
 )
+from modules.system.application.read_models.role_read_models import RoleDetailReadModel, RolePageReadModel
 from modules.system.application.services.role_service import RoleService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import ok_page_result, require_int_value
@@ -90,7 +91,7 @@ async def get_system_role_dept_tree(
 
 
 @roleController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:list'))]
+    '/list', response_model=RolePageReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:list'))]
 )
 async def get_system_role_list(
     request: Request,
@@ -112,7 +113,10 @@ async def get_system_role_list(
 
 
 @roleController.post(
-    '', status_code=201, response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:add'))]
+    '',
+    status_code=201,
+    response_model=RoleDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:role:add'))],
 )
 @ValidateFields(validate_model='add_role')
 @Log(title='角色管理', business_type=BusinessType.INSERT)
@@ -145,7 +149,9 @@ async def add_system_role(
     return ResponseUtil.created_resource(resource, location=location)
 
 
-@roleController.put('', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))])
+@roleController.put(
+    '', response_model=RoleDetailReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+)
 @ValidateFields(validate_model='edit_role')
 @Log(title='角色管理', business_type=BusinessType.UPDATE)
 async def edit_system_role(
@@ -183,7 +189,7 @@ async def edit_system_role(
 
 
 @roleController.put(
-    '/dataScope', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+    '/dataScope', response_model=RoleDetailReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
 )
 @Log(title='角色管理', business_type=BusinessType.GRANT)
 async def edit_system_role_datascope(
@@ -250,7 +256,9 @@ async def delete_system_role(
 
 
 @roleController.get(
-    '/{role_id}', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:query'))]
+    '/{role_id}',
+    response_model=RoleDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:role:query'))],
 )
 async def query_detail_system_role(
     request: Request,
@@ -296,7 +304,9 @@ async def export_system_role_list(
 
 
 @roleController.put(
-    '/changeStatus', response_model=RoleModel, dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))]
+    '/changeStatus',
+    response_model=RoleDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:role:edit'))],
 )
 @Log(title='角色管理', business_type=BusinessType.UPDATE)
 async def reset_system_role_status(

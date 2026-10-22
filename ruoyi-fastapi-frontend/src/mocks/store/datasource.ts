@@ -255,7 +255,7 @@ class DexieProjectVersionRepository implements MockProjectVersionRepository {
       throw new MockRepositoryError(`版本不存在或已被删除: ${versionId}`, 404);
     }
     if (isVersionLocked(current)) {
-      throw new MockRepositoryError('固化版本不允许编辑', 400);
+      throw new MockRepositoryError('固化版本不允许编辑', 409);
     }
     const nextProjectId = input.projectId ? Number(input.projectId) : current.projectId;
     if (nextProjectId !== current.projectId) {
@@ -353,7 +353,7 @@ class DexieProjectVersionRepository implements MockProjectVersionRepository {
       throw new MockRepositoryError(`版本不存在或已被删除: ${versionId}`, 404);
     }
     if (isVersionLocked(current)) {
-      throw new MockRepositoryError(`版本"${current.versionName}"已固化，不能删除`, 400);
+      throw new MockRepositoryError(`版本"${current.versionName}"已固化，不能删除`, 409);
     }
     await this.db.transaction('rw', [this.db.projectVersions, this.db.topologies], async () => {
       await this.db.projectVersions.delete(versionId);
@@ -408,10 +408,10 @@ class DexieTopologyRepository implements MockTopologyRepository {
       throw new MockRepositoryError(`版本不存在或已被删除: ${versionId}`, 404);
     }
     if (version.projectId !== projectId) {
-      throw new MockRepositoryError('版本不属于当前工程', 400);
+      throw new MockRepositoryError('版本不属于当前工程', 404);
     }
     if (isVersionLocked(version)) {
-      throw new MockRepositoryError('固化版本不允许保存拓扑', 400);
+      throw new MockRepositoryError('固化版本不允许保存拓扑', 409);
     }
     if (!graph || typeof graph !== 'object') {
       throw new MockRepositoryError('拓扑数据不能为空', 400);

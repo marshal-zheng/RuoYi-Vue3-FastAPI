@@ -6,10 +6,11 @@ from typing import Any, Literal
 from pydantic import Field
 
 from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue
 from modules.system.application.read_models.dept_read_models import DeptTreeNodeReadModel
 
 
-class RoleItemReadModel(CamelModelBase):
+class RoleItemReadModel(CamelModelBase, RemarkReadProjection):
     """Read model for role list item."""
 
     role_id: int | None = Field(default=None, description='Role id')
@@ -25,7 +26,7 @@ class RoleItemReadModel(CamelModelBase):
     create_time: datetime | None = Field(default=None, description='Create time')
     update_by: str | None = Field(default=None, description='Updater')
     update_time: datetime | None = Field(default=None, description='Update time')
-    remark: str | None = Field(default=None, description='Remark')
+    remark: RemarkValue = Field(default=None, description='Remark')
     admin: bool | None = Field(default=None, description='Admin role flag')
 
 

@@ -95,10 +95,14 @@ def _project_topology_service_factory(session: AsyncSession | None) -> Any:
         raise RuntimeError('project_topology_service requires request session')
 
     from modules.project.infrastructure.project_topology_repository import ProjectTopologyRepository
+    from modules.project.infrastructure.project_repository import ProjectRepository  # noqa: PLC0415
+    from modules.project.infrastructure.project_version_repository import ProjectVersionRepository  # noqa: PLC0415
     from modules.project.application.services.project_topology_service import ProjectTopologyService
 
     return ProjectTopologyService(
         topology_repo=ProjectTopologyRepository(session),
+        project_repo=ProjectRepository(session),
+        version_repo=ProjectVersionRepository(session),
     )
 
 

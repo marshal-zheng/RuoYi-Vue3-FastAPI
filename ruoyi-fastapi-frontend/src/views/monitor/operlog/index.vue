@@ -2,6 +2,7 @@
   <ZxContentWrap fill>
     <template #header-right>
       <ZxButton
+        plain
         type="danger"
         icon="Delete"
         :disabled="multiple"
@@ -10,6 +11,7 @@
         >删除</ZxButton
       >
       <ZxButton
+        plain
         type="danger"
         icon="Delete"
         @click="() => operlogGridRef?.cleanAll?.()"
@@ -17,7 +19,6 @@
         >清空</ZxButton
       >
       <ZxButton
-        type="warning"
         icon="Download"
         @click="() => operlogGridRef?.exportCurrent?.()"
         v-hasPermi="['monitor:operlog:export']"

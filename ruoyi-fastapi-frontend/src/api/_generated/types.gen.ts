@@ -33,6 +33,16 @@ export type BatchProjectIdsModel = {
 };
 
 /**
+ * BlockAttrs
+ */
+export type BlockAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+};
+
+/**
  * Body_batch_import_system_user_system_user_importData_post
  */
 export type BodyBatchImportSystemUserSystemUserImportDataPost = {
@@ -211,6 +221,46 @@ export type BodyProtocolImportPreviewSystemProtocolImportPreviewPost = {
 };
 
 /**
+ * BoldMark
+ */
+export type BoldMark = {
+  /**
+   * Type
+   */
+  type: 'bold';
+};
+
+/**
+ * BulletListNode
+ */
+export type BulletListNodeInput = {
+  attrs: BlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<ListItemNodeInput>;
+  /**
+   * Type
+   */
+  type: 'bulletList';
+};
+
+/**
+ * BulletListNode
+ */
+export type BulletListNodeOutput = {
+  attrs: BlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<ListItemNodeOutput>;
+  /**
+   * Type
+   */
+  type: 'bulletList';
+};
+
+/**
  * CacheInfoModel
  *
  * 缓存监控对象对应pydantic模型
@@ -383,15 +433,15 @@ export type CollectionResultDeviceCategoryOptionModel = {
 };
 
 /**
- * CollectionResult[DictTypeModel]
+ * CollectionResult[DictTypeDetailReadModel]
  */
-export type CollectionResultDictTypeModel = {
+export type CollectionResultDictTypeDetailReadModel = {
   /**
    * Items
    *
    * Collection items
    */
-  items: Array<DictTypeModel>;
+  items: Array<DictTypeDetailReadModel>;
 };
 
 /**
@@ -416,6 +466,146 @@ export type CollectionResultStr = {
    * Collection items
    */
   items: Array<string>;
+};
+
+/**
+ * ConfigDetailReadModel
+ *
+ * Read model for config detail.
+ */
+export type ConfigDetailReadModel = {
+  /**
+   * Configid
+   *
+   * Config id
+   */
+  configId?: number | null;
+  /**
+   * Configkey
+   *
+   * Config key
+   */
+  configKey?: string | null;
+  /**
+   * Configname
+   *
+   * Config name
+   */
+  configName?: string | null;
+  /**
+   * Configtype
+   *
+   * Built-in flag
+   */
+  configType?: 'Y' | 'N' | null;
+  /**
+   * Configvalue
+   *
+   * Config value
+   */
+  configValue?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * ConfigListItemReadModel
+ *
+ * Read model for config list item.
+ */
+export type ConfigListItemReadModel = {
+  /**
+   * Configid
+   *
+   * Config id
+   */
+  configId?: number | null;
+  /**
+   * Configkey
+   *
+   * Config key
+   */
+  configKey?: string | null;
+  /**
+   * Configname
+   *
+   * Config name
+   */
+  configName?: string | null;
+  /**
+   * Configtype
+   *
+   * Built-in flag
+   */
+  configType?: 'Y' | 'N' | null;
+  /**
+   * Configvalue
+   *
+   * Config value
+   */
+  configValue?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
 };
 
 /**
@@ -467,11 +657,9 @@ export type ConfigModel = {
    */
   createTime?: string | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Updateby
    *
@@ -488,8 +676,6 @@ export type ConfigModel = {
 
 /**
  * ConfigPageQueryModel
- *
- * 参数配置管理分页查询模型
  */
 export type ConfigPageQueryModel = {
   /**
@@ -559,12 +745,6 @@ export type ConfigPageQueryModel = {
    */
   pageSize?: number;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Updateby
    *
    * 更新者
@@ -576,6 +756,44 @@ export type ConfigPageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * ConfigPageReadModel
+ *
+ * Read model for paged config list.
+ */
+export type ConfigPageReadModel = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<ConfigListItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
 };
 
 /**
@@ -668,6 +886,22 @@ export type CurrentUserModel = {
    * 用户信息
    */
   user: UserInfoModel | null;
+};
+
+/**
+ * DashboardSaveModel
+ */
+export type DashboardSaveModel = {
+  /**
+   * Document
+   */
+  document: {
+    [key: string]: unknown;
+  };
+  /**
+   * Expectedrevision
+   */
+  expectedRevision: number | null;
 };
 
 /**
@@ -1235,6 +1469,194 @@ export type DeviceModel = {
 };
 
 /**
+ * DictDataDetailReadModel
+ *
+ * Read model for dictionary-data detail.
+ */
+export type DictDataDetailReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Cssclass
+   *
+   * CSS class
+   */
+  cssClass?: string | null;
+  /**
+   * Dictcode
+   *
+   * Dictionary data code
+   */
+  dictCode?: number | null;
+  /**
+   * Dictlabel
+   *
+   * Label
+   */
+  dictLabel?: string | null;
+  /**
+   * Dictsort
+   *
+   * Sort order
+   */
+  dictSort?: number | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Dictvalue
+   *
+   * Value
+   */
+  dictValue?: string | null;
+  /**
+   * Isdefault
+   *
+   * Default flag
+   */
+  isDefault?: 'Y' | 'N' | null;
+  /**
+   * Listclass
+   *
+   * List class
+   */
+  listClass?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictDataItemReadModel
+ *
+ * Read model for dictionary-data item.
+ */
+export type DictDataItemReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Cssclass
+   *
+   * CSS class
+   */
+  cssClass?: string | null;
+  /**
+   * Dictcode
+   *
+   * Dictionary data code
+   */
+  dictCode?: number | null;
+  /**
+   * Dictlabel
+   *
+   * Label
+   */
+  dictLabel?: string | null;
+  /**
+   * Dictsort
+   *
+   * Sort order
+   */
+  dictSort?: number | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Dictvalue
+   *
+   * Value
+   */
+  dictValue?: string | null;
+  /**
+   * Isdefault
+   *
+   * Default flag
+   */
+  isDefault?: 'Y' | 'N' | null;
+  /**
+   * Listclass
+   *
+   * List class
+   */
+  listClass?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
  * DictDataModel
  *
  * 字典数据表对应pydantic模型
@@ -1301,11 +1723,9 @@ export type DictDataModel = {
    */
   listClass?: string | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Status
    *
@@ -1328,8 +1748,6 @@ export type DictDataModel = {
 
 /**
  * DictDataPageQueryModel
- *
- * 字典数据管理分页查询模型
  */
 export type DictDataPageQueryModel = {
   /**
@@ -1417,12 +1835,6 @@ export type DictDataPageQueryModel = {
    */
   pageSize?: number;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Status
    *
    * 状态（0正常 1停用）
@@ -1438,6 +1850,172 @@ export type DictDataPageQueryModel = {
    * Updatetime
    *
    * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictDataPageReadModel
+ *
+ * Read model for paged dictionary-data list.
+ */
+export type DictDataPageReadModel = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<DictDataItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * DictTypeDetailReadModel
+ *
+ * Read model for dictionary-type detail.
+ */
+export type DictTypeDetailReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Dictid
+   *
+   * Dictionary type id
+   */
+  dictId?: number | null;
+  /**
+   * Dictname
+   *
+   * Dictionary type name
+   */
+  dictName?: string | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictTypeItemReadModel
+ *
+ * Read model for dictionary-type list item.
+ */
+export type DictTypeItemReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Dictid
+   *
+   * Dictionary type id
+   */
+  dictId?: number | null;
+  /**
+   * Dictname
+   *
+   * Dictionary type name
+   */
+  dictName?: string | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
    */
   updateTime?: string | null;
 };
@@ -1479,11 +2057,9 @@ export type DictTypeModel = {
    */
   dictType?: string | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Status
    *
@@ -1506,8 +2082,6 @@ export type DictTypeModel = {
 
 /**
  * DictTypePageQueryModel
- *
- * 字典类型管理分页查询模型
  */
 export type DictTypePageQueryModel = {
   /**
@@ -1565,12 +2139,6 @@ export type DictTypePageQueryModel = {
    */
   pageSize?: number;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Status
    *
    * 状态（0正常 1停用）
@@ -1588,6 +2156,124 @@ export type DictTypePageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * DictTypePageReadModel
+ *
+ * Read model for paged dictionary-type list.
+ */
+export type DictTypePageReadModel = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<DictTypeItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * DocumentBody
+ */
+export type DocumentBodyInput = {
+  content: DocumentRootInput;
+  /**
+   * Format
+   */
+  format: 'json';
+};
+
+/**
+ * DocumentBody
+ */
+export type DocumentBodyOutput = {
+  content: DocumentRootOutput;
+  /**
+   * Format
+   */
+  format: 'json';
+};
+
+/**
+ * DocumentMeta
+ */
+export type DocumentMeta = {
+  /**
+   * Schemaversion
+   */
+  schemaVersion: 'stable-block-identity/v2';
+};
+
+/**
+ * DocumentRoot
+ */
+export type DocumentRootInput = {
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & ParagraphNodeInput)
+    | ({
+        type: 'bulletList';
+      } & BulletListNodeInput)
+    | ({
+        type: 'orderedList';
+      } & OrderedListNodeInput)
+  >;
+  /**
+   * Type
+   */
+  type: 'doc';
+};
+
+/**
+ * DocumentRoot
+ */
+export type DocumentRootOutput = {
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & ParagraphNodeOutput)
+    | ({
+        type: 'bulletList';
+      } & BulletListNodeOutput)
+    | ({
+        type: 'orderedList';
+      } & OrderedListNodeOutput)
+  >;
+  /**
+   * Type
+   */
+  type: 'doc';
 };
 
 /**
@@ -1695,11 +2381,9 @@ export type EditGenTableModel = {
    */
   pkColumn?: GenTableColumnModel | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Sub
    *
@@ -1709,7 +2393,7 @@ export type EditGenTableModel = {
   /**
    * 子表信息
    */
-  subTable?: GenTableModel | null;
+  subTable?: GenTableModelInput | null;
   /**
    * Subtablefkname
    *
@@ -1881,11 +2565,9 @@ export type EditUserModel = {
    */
   postIds?: Array<unknown> | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Role
    *
@@ -2469,11 +3151,26 @@ export type GenTableColumnModel = {
 };
 
 /**
+ * GenTableDetailReadModel
+ */
+export type GenTableDetailReadModel = {
+  /**
+   * Columns
+   */
+  columns: Array<GenTableColumnModel>;
+  info: GenTableReadModel;
+  /**
+   * Tables
+   */
+  tables: Array<GenTableReadModel>;
+};
+
+/**
  * GenTableModel
  *
  * 代码生成业务表模型
  */
-export type GenTableModel = {
+export type GenTableModelInput = {
   /**
    * Businessname
    *
@@ -2569,11 +3266,9 @@ export type GenTableModel = {
    */
   pkColumn?: GenTableColumnModel | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Sub
    *
@@ -2583,7 +3278,7 @@ export type GenTableModel = {
   /**
    * 子表信息
    */
-  subTable?: GenTableModel | null;
+  subTable?: GenTableModelInput | null;
   /**
    * Subtablefkname
    *
@@ -2665,6 +3360,222 @@ export type GenTableModel = {
 };
 
 /**
+ * GenTableModel
+ *
+ * 代码生成业务表模型
+ */
+export type GenTableModelOutput = {
+  /**
+   * Businessname
+   *
+   * 生成业务名
+   */
+  businessName?: string | null;
+  /**
+   * Classname
+   *
+   * 实体类名称
+   */
+  className?: string | null;
+  /**
+   * Columns
+   *
+   * 表列信息
+   */
+  columns?: Array<GenTableColumnModel> | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Crud
+   *
+   * 是否为单表
+   */
+  crud?: boolean | null;
+  /**
+   * Functionauthor
+   *
+   * 生成功能作者
+   */
+  functionAuthor?: string | null;
+  /**
+   * Functionname
+   *
+   * 生成功能名
+   */
+  functionName?: string | null;
+  /**
+   * Genpath
+   *
+   * 生成路径（不填默认项目路径）
+   */
+  genPath?: string | null;
+  /**
+   * Gentype
+   *
+   * 生成代码方式（0zip压缩包 1自定义路径）
+   */
+  genType?: '0' | '1' | null;
+  /**
+   * Modulename
+   *
+   * 生成模块名
+   */
+  moduleName?: string | null;
+  /**
+   * Options
+   *
+   * 其它生成选项
+   */
+  options?: string | null;
+  /**
+   * Packagename
+   *
+   * 生成包路径
+   */
+  packageName?: string | null;
+  /**
+   * Parentmenuid
+   *
+   * 上级菜单ID字段
+   */
+  parentMenuId?: number | null;
+  /**
+   * Parentmenuname
+   *
+   * 上级菜单名称字段
+   */
+  parentMenuName?: string | null;
+  /**
+   * 主键信息
+   */
+  pkColumn?: GenTableColumnModel | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Sub
+   *
+   * 是否为子表
+   */
+  sub?: boolean | null;
+  /**
+   * 子表信息
+   */
+  subTable?: GenTableModelOutput | null;
+  /**
+   * Subtablefkname
+   *
+   * 子表关联的外键名
+   */
+  subTableFkName?: string | null;
+  /**
+   * Subtablename
+   *
+   * 关联子表的表名
+   */
+  subTableName?: string | null;
+  /**
+   * Tablecomment
+   *
+   * 表描述
+   */
+  tableComment?: string | null;
+  /**
+   * Tableid
+   *
+   * 编号
+   */
+  tableId?: number | null;
+  /**
+   * Tablename
+   *
+   * 表名称
+   */
+  tableName?: string | null;
+  /**
+   * Tplcategory
+   *
+   * 使用的模板（crud单表操作 tree树表操作）
+   */
+  tplCategory?: string | null;
+  /**
+   * Tplwebtype
+   *
+   * 前端模板类型（element-ui模版 element-plus模版）
+   */
+  tplWebType?: string | null;
+  /**
+   * Tree
+   *
+   * 是否为树表
+   */
+  tree?: boolean | null;
+  /**
+   * Treecode
+   *
+   * 树编码字段
+   */
+  treeCode?: string | null;
+  /**
+   * Treename
+   *
+   * 树名称字段
+   */
+  treeName?: string | null;
+  /**
+   * Treeparentcode
+   *
+   * 树父编码字段
+   */
+  treeParentCode?: string | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * GenTablePageReadModel
+ */
+export type GenTablePageReadModel = {
+  /**
+   * Items
+   */
+  items: Array<GenTableReadModel>;
+  /**
+   * Page
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   */
+  total: number;
+};
+
+/**
  * GenTableParamsModel
  *
  * 代码生成业务表参数模型
@@ -2697,6 +3608,204 @@ export type GenTableParamsModel = {
 };
 
 /**
+ * GenTableReadModel
+ *
+ * Public table configuration response.
+ */
+export type GenTableReadModel = {
+  /**
+   * Businessname
+   *
+   * 生成业务名
+   */
+  businessName?: string | null;
+  /**
+   * Classname
+   *
+   * 实体类名称
+   */
+  className?: string | null;
+  /**
+   * Columns
+   *
+   * 表列信息
+   */
+  columns?: Array<GenTableColumnModel> | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Crud
+   *
+   * 是否为单表
+   */
+  crud?: boolean | null;
+  /**
+   * Functionauthor
+   *
+   * 生成功能作者
+   */
+  functionAuthor?: string | null;
+  /**
+   * Functionname
+   *
+   * 生成功能名
+   */
+  functionName?: string | null;
+  /**
+   * Genpath
+   *
+   * 生成路径（不填默认项目路径）
+   */
+  genPath?: string | null;
+  /**
+   * Gentype
+   *
+   * 生成代码方式（0zip压缩包 1自定义路径）
+   */
+  genType?: '0' | '1' | null;
+  /**
+   * Modulename
+   *
+   * 生成模块名
+   */
+  moduleName?: string | null;
+  /**
+   * Options
+   *
+   * 其它生成选项
+   */
+  options?: string | null;
+  /**
+   * Packagename
+   *
+   * 生成包路径
+   */
+  packageName?: string | null;
+  /**
+   * Parentmenuid
+   *
+   * 上级菜单ID字段
+   */
+  parentMenuId?: number | null;
+  /**
+   * Parentmenuname
+   *
+   * 上级菜单名称字段
+   */
+  parentMenuName?: string | null;
+  /**
+   * 主键信息
+   */
+  pkColumn?: GenTableColumnModel | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Sub
+   *
+   * 是否为子表
+   */
+  sub?: boolean | null;
+  /**
+   * 子表信息
+   */
+  subTable?: GenTableModelOutput | null;
+  /**
+   * Subtablefkname
+   *
+   * 子表关联的外键名
+   */
+  subTableFkName?: string | null;
+  /**
+   * Subtablename
+   *
+   * 关联子表的表名
+   */
+  subTableName?: string | null;
+  /**
+   * Tablecomment
+   *
+   * 表描述
+   */
+  tableComment?: string | null;
+  /**
+   * Tableid
+   *
+   * 编号
+   */
+  tableId?: number | null;
+  /**
+   * Tablename
+   *
+   * 表名称
+   */
+  tableName?: string | null;
+  /**
+   * Tplcategory
+   *
+   * 使用的模板（crud单表操作 tree树表操作）
+   */
+  tplCategory?: string | null;
+  /**
+   * Tplwebtype
+   *
+   * 前端模板类型（element-ui模版 element-plus模版）
+   */
+  tplWebType?: string | null;
+  /**
+   * Tree
+   *
+   * 是否为树表
+   */
+  tree?: boolean | null;
+  /**
+   * Treecode
+   *
+   * 树编码字段
+   */
+  treeCode?: string | null;
+  /**
+   * Treename
+   *
+   * 树名称字段
+   */
+  treeName?: string | null;
+  /**
+   * Treeparentcode
+   *
+   * 树父编码字段
+   */
+  treeParentCode?: string | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
  * HTTPValidationError
  */
 export type HttpValidationError = {
@@ -2704,6 +3813,68 @@ export type HttpValidationError = {
    * Detail
    */
   detail?: Array<ValidationError>;
+};
+
+/**
+ * HardBreakNode
+ */
+export type HardBreakNodeInput = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & LinkMark)
+    | ({
+        type: 'bold';
+      } & BoldMark)
+    | ({
+        type: 'italic';
+      } & ItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text?: null;
+  /**
+   * Type
+   */
+  type: 'hardBreak';
+};
+
+/**
+ * HardBreakNode
+ */
+export type HardBreakNodeOutput = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & LinkMark)
+    | ({
+        type: 'bold';
+      } & BoldMark)
+    | ({
+        type: 'italic';
+      } & ItalicMark)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'hardBreak';
+};
+
+/**
+ * ItalicMark
+ */
+export type ItalicMark = {
+  /**
+   * Type
+   */
+  type: 'italic';
 };
 
 /**
@@ -3240,6 +4411,93 @@ export type KeyRotateRequestModel = {
    * Algorithm
    */
   algorithm?: string | null;
+};
+
+/**
+ * LinkAttrs
+ */
+export type LinkAttrs = {
+  /**
+   * Class
+   */
+  class: null;
+  /**
+   * Href
+   */
+  href: string;
+  /**
+   * Rel
+   */
+  rel: 'noopener noreferrer nofollow';
+  /**
+   * Target
+   */
+  target: '_blank';
+  /**
+   * Title
+   */
+  title: null;
+};
+
+/**
+ * LinkMark
+ */
+export type LinkMark = {
+  attrs: LinkAttrs;
+  /**
+   * Type
+   */
+  type: 'link';
+};
+
+/**
+ * ListItemNode
+ */
+export type ListItemNodeInput = {
+  attrs: BlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & ParagraphNodeInput)
+    | ({
+        type: 'bulletList';
+      } & BulletListNodeInput)
+    | ({
+        type: 'orderedList';
+      } & OrderedListNodeInput)
+  >;
+  /**
+   * Type
+   */
+  type: 'listItem';
+};
+
+/**
+ * ListItemNode
+ */
+export type ListItemNodeOutput = {
+  attrs: BlockAttrs;
+  /**
+   * Content
+   */
+  content: Array<
+    | ({
+        type: 'paragraph';
+      } & ParagraphNodeOutput)
+    | ({
+        type: 'bulletList';
+      } & BulletListNodeOutput)
+    | ({
+        type: 'orderedList';
+      } & OrderedListNodeOutput)
+  >;
+  /**
+   * Type
+   */
+  type: 'listItem';
 };
 
 /**
@@ -3806,6 +5064,54 @@ export type OperLogPageQueryModel = {
 };
 
 /**
+ * OrderedAttrs
+ */
+export type OrderedAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Start
+   */
+  start: number;
+  /**
+   * Type
+   */
+  type: null;
+};
+
+/**
+ * OrderedListNode
+ */
+export type OrderedListNodeInput = {
+  attrs: OrderedAttrs;
+  /**
+   * Content
+   */
+  content: Array<ListItemNodeInput>;
+  /**
+   * Type
+   */
+  type: 'orderedList';
+};
+
+/**
+ * OrderedListNode
+ */
+export type OrderedListNodeOutput = {
+  attrs: OrderedAttrs;
+  /**
+   * Content
+   */
+  content: Array<ListItemNodeOutput>;
+  /**
+   * Type
+   */
+  type: 'orderedList';
+};
+
+/**
  * PageResponseModel
  *
  * 列表分页查询返回模型
@@ -3827,6 +5133,204 @@ export type PageResponseModel = {
    * Total
    */
   total: number;
+};
+
+/**
+ * ParagraphAttrs
+ */
+export type ParagraphAttrs = {
+  /**
+   * Blockid
+   */
+  blockId: string;
+  /**
+   * Textalign
+   */
+  textAlign: null;
+};
+
+/**
+ * ParagraphNode
+ */
+export type ParagraphNodeInput = {
+  attrs: ParagraphAttrs;
+  /**
+   * Content
+   */
+  content?: Array<
+    | ({
+        type: 'text';
+      } & TextNodeInput)
+    | ({
+        type: 'hardBreak';
+      } & HardBreakNodeInput)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'paragraph';
+};
+
+/**
+ * ParagraphNode
+ */
+export type ParagraphNodeOutput = {
+  attrs: ParagraphAttrs;
+  /**
+   * Content
+   */
+  content?: Array<
+    | ({
+        type: 'text';
+      } & TextNodeOutput)
+    | ({
+        type: 'hardBreak';
+      } & HardBreakNodeOutput)
+  > | null;
+  /**
+   * Type
+   */
+  type: 'paragraph';
+};
+
+/**
+ * PostDetailReadModel
+ *
+ * Read model for post detail.
+ */
+export type PostDetailReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Postcode
+   *
+   * Post code
+   */
+  postCode?: string | null;
+  /**
+   * Postid
+   *
+   * Post id
+   */
+  postId?: number | null;
+  /**
+   * Postname
+   *
+   * Post name
+   */
+  postName?: string | null;
+  /**
+   * Postsort
+   *
+   * Post sort
+   */
+  postSort?: number | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Post status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * PostItemReadModel
+ *
+ * Read model for post list item.
+ */
+export type PostItemReadModel = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Postcode
+   *
+   * Post code
+   */
+  postCode?: string | null;
+  /**
+   * Postid
+   *
+   * Post id
+   */
+  postId?: number | null;
+  /**
+   * Postname
+   *
+   * Post name
+   */
+  postName?: string | null;
+  /**
+   * Postsort
+   *
+   * Post sort
+   */
+  postSort?: number | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Status
+   *
+   * Post status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
 };
 
 /**
@@ -3872,11 +5376,9 @@ export type PostModel = {
    */
   postSort?: number | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Status
    *
@@ -3899,8 +5401,6 @@ export type PostModel = {
 
 /**
  * PostPageQueryModel
- *
- * 岗位管理分页查询模型
  */
 export type PostPageQueryModel = {
   /**
@@ -3964,12 +5464,6 @@ export type PostPageQueryModel = {
    */
   postSort?: number | null;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Status
    *
    * 状态（0正常 1停用）
@@ -3987,6 +5481,112 @@ export type PostPageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * PostPageReadModel
+ *
+ * Read model for paged post list.
+ */
+export type PostPageReadModel = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<PostItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * ProjectCreatedModel
+ *
+ * 新建工程及同时创建的初始版本，供拓扑设计入口使用。
+ */
+export type ProjectCreatedModel = {
+  /**
+   * Createby
+   *
+   * 创建人
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * 删除标志（0代表存在 2代表删除）
+   */
+  delFlag?: string | null;
+  /**
+   * Projectcode
+   *
+   * 工程编码
+   */
+  projectCode?: string | null;
+  /**
+   * Projectdesc
+   *
+   * 工程描述
+   */
+  projectDesc?: string | null;
+  /**
+   * Projectid
+   *
+   * 工程编号
+   */
+  projectId: number;
+  /**
+   * Projectname
+   *
+   * 工程名称
+   */
+  projectName?: string | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+  /**
+   * Versionid
+   *
+   * 初始版本编号
+   */
+  versionId: number;
 };
 
 /**
@@ -4372,6 +5972,46 @@ export type PyInfo = {
 };
 
 /**
+ * RemarkDocument
+ */
+export type RemarkDocumentInput = {
+  /**
+   * Annotations
+   */
+  annotations: Array<unknown>;
+  /**
+   * Assets
+   */
+  assets: Array<unknown>;
+  body: DocumentBodyInput;
+  meta: DocumentMeta;
+  /**
+   * Version
+   */
+  version: 2;
+};
+
+/**
+ * RemarkDocument
+ */
+export type RemarkDocumentOutput = {
+  /**
+   * Annotations
+   */
+  annotations: Array<unknown>;
+  /**
+   * Assets
+   */
+  assets: Array<unknown>;
+  body: DocumentBodyOutput;
+  meta: DocumentMeta;
+  /**
+   * Version
+   */
+  version: 2;
+};
+
+/**
  * ResetPasswordModel
  *
  * 重置密码模型
@@ -4408,11 +6048,9 @@ export type RoleCreateModel = {
    */
   menuIds?: Array<number> | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Rolekey
    *
@@ -4470,11 +6108,111 @@ export type RoleDataScopeUpdateModel = {
 };
 
 /**
- * RoleModel
+ * RoleDetailReadModel
  *
- * 角色表对应pydantic模型
+ * Read model for role detail.
  */
-export type RoleModel = {
+export type RoleDetailReadModel = {
+  /**
+   * Admin
+   *
+   * Admin role flag
+   */
+  admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * Data scope
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * Dept check strictly
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * Menu check strictly
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Roleid
+   *
+   * Role id
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * Role key
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * Role name
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * Role sort
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * Role status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * RoleInfoModel
+ *
+ * Role projection used in nested identity and user-detail responses.
+ */
+export type RoleInfoModel = {
   /**
    * Admin
    *
@@ -4518,11 +6256,13 @@ export type RoleModel = {
    */
   menuCheckStrictly?: number | boolean | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
   /**
    * Roleid
    *
@@ -4568,17 +6308,109 @@ export type RoleModel = {
 };
 
 /**
- * RolePageQueryModel
+ * RoleItemReadModel
  *
- * 角色管理分页查询模型
+ * Read model for role list item.
  */
-export type RolePageQueryModel = {
+export type RoleItemReadModel = {
   /**
    * Admin
    *
-   * 是否为admin
+   * Admin role flag
    */
   admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * Data scope
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * Dept check strictly
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * Menu check strictly
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Roleid
+   *
+   * Role id
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * Role key
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * Role name
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * Role sort
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * Role status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * RolePageQueryModel
+ */
+export type RolePageQueryModel = {
   /**
    * Begintime
    *
@@ -4640,12 +6472,6 @@ export type RolePageQueryModel = {
    */
   pageSize?: number;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Roleid
    *
    * 角色ID
@@ -4690,6 +6516,44 @@ export type RolePageQueryModel = {
 };
 
 /**
+ * RolePageReadModel
+ *
+ * Read model for paged role list.
+ */
+export type RolePageReadModel = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<RoleItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
  * RoleStatusUpdateModel
  */
 export type RoleStatusUpdateModel = {
@@ -4724,11 +6588,9 @@ export type RoleUpdateModel = {
    */
   menuIds?: Array<number> | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Roleid
    *
@@ -4870,11 +6732,13 @@ export type SelectedRoleModel = {
    */
   menuCheckStrictly?: number | boolean | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
   /**
    * Roleid
    *
@@ -5060,6 +6924,62 @@ export type SysInfo = {
 };
 
 /**
+ * TextNode
+ */
+export type TextNodeInput = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & LinkMark)
+    | ({
+        type: 'bold';
+      } & BoldMark)
+    | ({
+        type: 'italic';
+      } & ItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Type
+   */
+  type: 'text';
+};
+
+/**
+ * TextNode
+ */
+export type TextNodeOutput = {
+  /**
+   * Marks
+   */
+  marks?: Array<
+    | ({
+        type: 'link';
+      } & LinkMark)
+    | ({
+        type: 'bold';
+      } & BoldMark)
+    | ({
+        type: 'italic';
+      } & ItalicMark)
+  > | null;
+  /**
+   * Text
+   */
+  text: string;
+  /**
+   * Type
+   */
+  type: 'text';
+};
+
+/**
  * Token
  */
 export type Token = {
@@ -5124,11 +7044,9 @@ export type UserCreateModel = {
    */
   postIds?: Array<number> | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Roleids
    *
@@ -5156,39 +7074,39 @@ export type UserCreateModel = {
 };
 
 /**
- * UserDetailModel
+ * UserDetailReadModel
  *
- * 获取用户详情信息响应模型
+ * Read model for user detail page.
  */
-export type UserDetailModel = {
+export type UserDetailReadModel = {
   /**
-   * 用户信息
+   * User info
    */
-  data?: UserInfoModel | null;
+  data?: UserInfoReadModel | null;
   /**
    * Postids
    *
-   * 岗位ID信息
+   * Selected post ids
    */
-  postIds?: Array<unknown> | null;
+  postIds?: Array<number> | null;
   /**
    * Posts
    *
-   * 岗位信息
+   * Post options
    */
-  posts: Array<PostModel | null>;
+  posts?: Array<PostItemReadModel>;
   /**
    * Roleids
    *
-   * 角色ID信息
+   * Selected role ids
    */
-  roleIds?: Array<unknown> | null;
+  roleIds?: Array<number> | null;
   /**
    * Roles
    *
-   * 角色信息
+   * Role options
    */
-  roles: Array<RoleModel | null>;
+  roles?: Array<RoleItemReadModel>;
 };
 
 /**
@@ -5284,17 +7202,19 @@ export type UserInfoModel = {
    */
   postIds?: string | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
   /**
    * Role
    *
    * 角色信息
    */
-  role?: Array<RoleModel | null> | null;
+  role?: Array<RoleInfoModel | null> | null;
   /**
    * Roleids
    *
@@ -5346,17 +7266,309 @@ export type UserInfoModel = {
 };
 
 /**
- * UserPageQueryModel
+ * UserInfoReadModel
  *
- * 用户管理分页查询模型
+ * Read model for user info payload.
+ */
+export type UserInfoReadModel = {
+  /**
+   * Avatar
+   *
+   * Avatar URL
+   */
+  avatar?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Dept
+   *
+   * Department detail
+   */
+  dept?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Deptid
+   *
+   * Department id
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * Email
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * ID card
+   */
+  idCard?: string | null;
+  /**
+   * Logindate
+   *
+   * Last login time
+   */
+  loginDate?: string | null;
+  /**
+   * Loginip
+   *
+   * Last login IP
+   */
+  loginIp?: string | null;
+  /**
+   * Nickname
+   *
+   * Nick name
+   */
+  nickName?: string | null;
+  /**
+   * Phonenumber
+   *
+   * Phone number
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * Post id string
+   */
+  postIds?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Role
+   *
+   * Role list
+   */
+  role?: Array<RoleItemReadModel>;
+  /**
+   * Roleids
+   *
+   * Role id string
+   */
+  roleIds?: string | null;
+  /**
+   * Sex
+   *
+   * Sex
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * User status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+  /**
+   * Userid
+   *
+   * User id
+   */
+  userId?: number | null;
+  /**
+   * Username
+   *
+   * User account
+   */
+  userName?: string | null;
+  /**
+   * Usertype
+   *
+   * User type
+   */
+  userType?: string | null;
+};
+
+/**
+ * UserListItemReadModel
+ *
+ * Read model for user list item.
+ */
+export type UserListItemReadModel = {
+  /**
+   * Avatar
+   *
+   * Avatar URL
+   */
+  avatar?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Dept
+   *
+   * Department detail
+   */
+  dept?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Deptid
+   *
+   * Department id
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * Email
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * ID card
+   */
+  idCard?: string | null;
+  /**
+   * Logindate
+   *
+   * Last login time
+   */
+  loginDate?: string | null;
+  /**
+   * Loginip
+   *
+   * Last login IP
+   */
+  loginIp?: string | null;
+  /**
+   * Nickname
+   *
+   * Nick name
+   */
+  nickName?: string | null;
+  /**
+   * Phonenumber
+   *
+   * Phone number
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * Post id string
+   */
+  postIds?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Remarktext
+   */
+  readonly remarkText: string;
+  /**
+   * Role
+   *
+   * Role list
+   */
+  role?: Array<RoleItemReadModel>;
+  /**
+   * Roleids
+   *
+   * Role id string
+   */
+  roleIds?: string | null;
+  /**
+   * Sex
+   *
+   * Sex
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * User status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+  /**
+   * Userid
+   *
+   * User id
+   */
+  userId?: number | null;
+  /**
+   * Username
+   *
+   * User account
+   */
+  userName?: string | null;
+  /**
+   * Usertype
+   *
+   * User type
+   */
+  userType?: string | null;
+};
+
+/**
+ * UserPageQueryModel
  */
 export type UserPageQueryModel = {
-  /**
-   * Admin
-   *
-   * 是否为admin
-   */
-  admin?: boolean | null;
   /**
    * Avatar
    *
@@ -5454,12 +7666,6 @@ export type UserPageQueryModel = {
    */
   phonenumber?: string | null;
   /**
-   * Remark
-   *
-   * 备注
-   */
-  remark?: string | null;
-  /**
    * Sex
    *
    * 用户性别（0男 1女 2未知）
@@ -5504,27 +7710,65 @@ export type UserPageQueryModel = {
 };
 
 /**
- * UserProfileModel
+ * UserPageReadModel
  *
- * 获取个人信息响应模型
+ * Read model for paged user list.
  */
-export type UserProfileModel = {
+export type UserPageReadModel = {
   /**
-   * 用户信息
+   * Hasnext
+   *
+   * Whether next page exists
    */
-  data: UserInfoModel | null;
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<UserListItemReadModel>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * UserProfileReadModel
+ *
+ * Read model for current user profile.
+ */
+export type UserProfileReadModel = {
+  /**
+   * User info
+   */
+  data?: UserInfoReadModel | null;
   /**
    * Postgroup
    *
-   * 岗位信息
+   * Post display group
    */
-  postGroup: string | null;
+  postGroup?: string | null;
   /**
    * Rolegroup
    *
-   * 角色信息
+   * Role display group
    */
-  roleGroup: string | null;
+  roleGroup?: string | null;
 };
 
 /**
@@ -5690,11 +7934,9 @@ export type UserUpdateModel = {
    */
   postIds?: Array<number> | null;
   /**
-   * Remark
-   *
    * 备注
    */
-  remark?: string | null;
+  remark?: RemarkDocumentInput | null;
   /**
    * Roleids
    *
@@ -5753,6 +7995,1975 @@ export type WsTicketRequestModel = {
    * Session Id
    */
   session_id: string;
+};
+
+/**
+ * CollectionResult[DictTypeDetailReadModel]
+ */
+export type CollectionResultDictTypeDetailReadModelWritable = {
+  /**
+   * Items
+   *
+   * Collection items
+   */
+  items: Array<DictTypeDetailReadModelWritable>;
+};
+
+/**
+ * ConfigDetailReadModel
+ *
+ * Read model for config detail.
+ */
+export type ConfigDetailReadModelWritable = {
+  /**
+   * Configid
+   *
+   * Config id
+   */
+  configId?: number | null;
+  /**
+   * Configkey
+   *
+   * Config key
+   */
+  configKey?: string | null;
+  /**
+   * Configname
+   *
+   * Config name
+   */
+  configName?: string | null;
+  /**
+   * Configtype
+   *
+   * Built-in flag
+   */
+  configType?: 'Y' | 'N' | null;
+  /**
+   * Configvalue
+   *
+   * Config value
+   */
+  configValue?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * ConfigListItemReadModel
+ *
+ * Read model for config list item.
+ */
+export type ConfigListItemReadModelWritable = {
+  /**
+   * Configid
+   *
+   * Config id
+   */
+  configId?: number | null;
+  /**
+   * Configkey
+   *
+   * Config key
+   */
+  configKey?: string | null;
+  /**
+   * Configname
+   *
+   * Config name
+   */
+  configName?: string | null;
+  /**
+   * Configtype
+   *
+   * Built-in flag
+   */
+  configType?: 'Y' | 'N' | null;
+  /**
+   * Configvalue
+   *
+   * Config value
+   */
+  configValue?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * ConfigPageReadModel
+ *
+ * Read model for paged config list.
+ */
+export type ConfigPageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<ConfigListItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * CurrentUserModel
+ */
+export type CurrentUserModelWritable = {
+  /**
+   * Permissions
+   *
+   * 权限信息
+   */
+  permissions: Array<unknown>;
+  /**
+   * Roles
+   *
+   * 角色信息
+   */
+  roles: Array<unknown>;
+  /**
+   * 用户信息
+   */
+  user: UserInfoModelWritable | null;
+};
+
+/**
+ * DictDataDetailReadModel
+ *
+ * Read model for dictionary-data detail.
+ */
+export type DictDataDetailReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Cssclass
+   *
+   * CSS class
+   */
+  cssClass?: string | null;
+  /**
+   * Dictcode
+   *
+   * Dictionary data code
+   */
+  dictCode?: number | null;
+  /**
+   * Dictlabel
+   *
+   * Label
+   */
+  dictLabel?: string | null;
+  /**
+   * Dictsort
+   *
+   * Sort order
+   */
+  dictSort?: number | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Dictvalue
+   *
+   * Value
+   */
+  dictValue?: string | null;
+  /**
+   * Isdefault
+   *
+   * Default flag
+   */
+  isDefault?: 'Y' | 'N' | null;
+  /**
+   * Listclass
+   *
+   * List class
+   */
+  listClass?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictDataItemReadModel
+ *
+ * Read model for dictionary-data item.
+ */
+export type DictDataItemReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Cssclass
+   *
+   * CSS class
+   */
+  cssClass?: string | null;
+  /**
+   * Dictcode
+   *
+   * Dictionary data code
+   */
+  dictCode?: number | null;
+  /**
+   * Dictlabel
+   *
+   * Label
+   */
+  dictLabel?: string | null;
+  /**
+   * Dictsort
+   *
+   * Sort order
+   */
+  dictSort?: number | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Dictvalue
+   *
+   * Value
+   */
+  dictValue?: string | null;
+  /**
+   * Isdefault
+   *
+   * Default flag
+   */
+  isDefault?: 'Y' | 'N' | null;
+  /**
+   * Listclass
+   *
+   * List class
+   */
+  listClass?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictDataPageReadModel
+ *
+ * Read model for paged dictionary-data list.
+ */
+export type DictDataPageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<DictDataItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * DictTypeDetailReadModel
+ *
+ * Read model for dictionary-type detail.
+ */
+export type DictTypeDetailReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Dictid
+   *
+   * Dictionary type id
+   */
+  dictId?: number | null;
+  /**
+   * Dictname
+   *
+   * Dictionary type name
+   */
+  dictName?: string | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictTypeItemReadModel
+ *
+ * Read model for dictionary-type list item.
+ */
+export type DictTypeItemReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Dictid
+   *
+   * Dictionary type id
+   */
+  dictId?: number | null;
+  /**
+   * Dictname
+   *
+   * Dictionary type name
+   */
+  dictName?: string | null;
+  /**
+   * Dicttype
+   *
+   * Dictionary type key
+   */
+  dictType?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * DictTypePageReadModel
+ *
+ * Read model for paged dictionary-type list.
+ */
+export type DictTypePageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<DictTypeItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * GenTableDetailReadModel
+ */
+export type GenTableDetailReadModelWritable = {
+  /**
+   * Columns
+   */
+  columns: Array<GenTableColumnModel>;
+  info: GenTableReadModelWritable;
+  /**
+   * Tables
+   */
+  tables: Array<GenTableReadModelWritable>;
+};
+
+/**
+ * GenTablePageReadModel
+ */
+export type GenTablePageReadModelWritable = {
+  /**
+   * Items
+   */
+  items: Array<GenTableReadModelWritable>;
+  /**
+   * Page
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   */
+  total: number;
+};
+
+/**
+ * GenTableReadModel
+ *
+ * Public table configuration response.
+ */
+export type GenTableReadModelWritable = {
+  /**
+   * Businessname
+   *
+   * 生成业务名
+   */
+  businessName?: string | null;
+  /**
+   * Classname
+   *
+   * 实体类名称
+   */
+  className?: string | null;
+  /**
+   * Columns
+   *
+   * 表列信息
+   */
+  columns?: Array<GenTableColumnModel> | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Crud
+   *
+   * 是否为单表
+   */
+  crud?: boolean | null;
+  /**
+   * Functionauthor
+   *
+   * 生成功能作者
+   */
+  functionAuthor?: string | null;
+  /**
+   * Functionname
+   *
+   * 生成功能名
+   */
+  functionName?: string | null;
+  /**
+   * Genpath
+   *
+   * 生成路径（不填默认项目路径）
+   */
+  genPath?: string | null;
+  /**
+   * Gentype
+   *
+   * 生成代码方式（0zip压缩包 1自定义路径）
+   */
+  genType?: '0' | '1' | null;
+  /**
+   * Modulename
+   *
+   * 生成模块名
+   */
+  moduleName?: string | null;
+  /**
+   * Options
+   *
+   * 其它生成选项
+   */
+  options?: string | null;
+  /**
+   * Packagename
+   *
+   * 生成包路径
+   */
+  packageName?: string | null;
+  /**
+   * Parentmenuid
+   *
+   * 上级菜单ID字段
+   */
+  parentMenuId?: number | null;
+  /**
+   * Parentmenuname
+   *
+   * 上级菜单名称字段
+   */
+  parentMenuName?: string | null;
+  /**
+   * 主键信息
+   */
+  pkColumn?: GenTableColumnModel | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Sub
+   *
+   * 是否为子表
+   */
+  sub?: boolean | null;
+  /**
+   * 子表信息
+   */
+  subTable?: GenTableModelOutput | null;
+  /**
+   * Subtablefkname
+   *
+   * 子表关联的外键名
+   */
+  subTableFkName?: string | null;
+  /**
+   * Subtablename
+   *
+   * 关联子表的表名
+   */
+  subTableName?: string | null;
+  /**
+   * Tablecomment
+   *
+   * 表描述
+   */
+  tableComment?: string | null;
+  /**
+   * Tableid
+   *
+   * 编号
+   */
+  tableId?: number | null;
+  /**
+   * Tablename
+   *
+   * 表名称
+   */
+  tableName?: string | null;
+  /**
+   * Tplcategory
+   *
+   * 使用的模板（crud单表操作 tree树表操作）
+   */
+  tplCategory?: string | null;
+  /**
+   * Tplwebtype
+   *
+   * 前端模板类型（element-ui模版 element-plus模版）
+   */
+  tplWebType?: string | null;
+  /**
+   * Tree
+   *
+   * 是否为树表
+   */
+  tree?: boolean | null;
+  /**
+   * Treecode
+   *
+   * 树编码字段
+   */
+  treeCode?: string | null;
+  /**
+   * Treename
+   *
+   * 树名称字段
+   */
+  treeName?: string | null;
+  /**
+   * Treeparentcode
+   *
+   * 树父编码字段
+   */
+  treeParentCode?: string | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * PostDetailReadModel
+ *
+ * Read model for post detail.
+ */
+export type PostDetailReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Postcode
+   *
+   * Post code
+   */
+  postCode?: string | null;
+  /**
+   * Postid
+   *
+   * Post id
+   */
+  postId?: number | null;
+  /**
+   * Postname
+   *
+   * Post name
+   */
+  postName?: string | null;
+  /**
+   * Postsort
+   *
+   * Post sort
+   */
+  postSort?: number | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Post status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * PostItemReadModel
+ *
+ * Read model for post list item.
+ */
+export type PostItemReadModelWritable = {
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Postcode
+   *
+   * Post code
+   */
+  postCode?: string | null;
+  /**
+   * Postid
+   *
+   * Post id
+   */
+  postId?: number | null;
+  /**
+   * Postname
+   *
+   * Post name
+   */
+  postName?: string | null;
+  /**
+   * Postsort
+   *
+   * Post sort
+   */
+  postSort?: number | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Status
+   *
+   * Post status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * PostPageReadModel
+ *
+ * Read model for paged post list.
+ */
+export type PostPageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<PostItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * RoleDetailReadModel
+ *
+ * Read model for role detail.
+ */
+export type RoleDetailReadModelWritable = {
+  /**
+   * Admin
+   *
+   * Admin role flag
+   */
+  admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * Data scope
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * Dept check strictly
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * Menu check strictly
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Roleid
+   *
+   * Role id
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * Role key
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * Role name
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * Role sort
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * Role status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * RoleInfoModel
+ *
+ * Role projection used in nested identity and user-detail responses.
+ */
+export type RoleInfoModelWritable = {
+  /**
+   * Admin
+   *
+   * 是否为admin
+   */
+  admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * 删除标志（0代表存在 2代表删除）
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * 部门树选择项是否关联显示
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * 菜单树选择项是否关联显示
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * 角色权限字符串
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * 角色名称
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * 显示顺序
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * 角色状态（0正常 1停用）
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * RoleItemReadModel
+ *
+ * Read model for role list item.
+ */
+export type RoleItemReadModelWritable = {
+  /**
+   * Admin
+   *
+   * Admin role flag
+   */
+  admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * Data scope
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * Dept check strictly
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * Menu check strictly
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Roleid
+   *
+   * Role id
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * Role key
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * Role name
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * Role sort
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * Role status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * RolePageReadModel
+ *
+ * Read model for paged role list.
+ */
+export type RolePageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<RoleItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * SelectedRoleModel
+ *
+ * 是否选择角色模型
+ */
+export type SelectedRoleModelWritable = {
+  /**
+   * Admin
+   *
+   * 是否为admin
+   */
+  admin?: boolean | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Datascope
+   *
+   * 数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）
+   */
+  dataScope?: string | null;
+  /**
+   * Delflag
+   *
+   * 删除标志（0代表存在 2代表删除）
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Deptcheckstrictly
+   *
+   * 部门树选择项是否关联显示
+   */
+  deptCheckStrictly?: number | boolean | null;
+  /**
+   * Flag
+   *
+   * 选择标识
+   */
+  flag?: boolean | null;
+  /**
+   * Menucheckstrictly
+   *
+   * 菜单树选择项是否关联显示
+   */
+  menuCheckStrictly?: number | boolean | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Roleid
+   *
+   * 角色ID
+   */
+  roleId?: number | null;
+  /**
+   * Rolekey
+   *
+   * 角色权限字符串
+   */
+  roleKey?: string | null;
+  /**
+   * Rolename
+   *
+   * 角色名称
+   */
+  roleName?: string | null;
+  /**
+   * Rolesort
+   *
+   * 显示顺序
+   */
+  roleSort?: number | null;
+  /**
+   * Status
+   *
+   * 角色状态（0正常 1停用）
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+};
+
+/**
+ * UserDetailReadModel
+ *
+ * Read model for user detail page.
+ */
+export type UserDetailReadModelWritable = {
+  /**
+   * User info
+   */
+  data?: UserInfoReadModelWritable | null;
+  /**
+   * Postids
+   *
+   * Selected post ids
+   */
+  postIds?: Array<number> | null;
+  /**
+   * Posts
+   *
+   * Post options
+   */
+  posts?: Array<PostItemReadModelWritable>;
+  /**
+   * Roleids
+   *
+   * Selected role ids
+   */
+  roleIds?: Array<number> | null;
+  /**
+   * Roles
+   *
+   * Role options
+   */
+  roles?: Array<RoleItemReadModelWritable>;
+};
+
+/**
+ * UserInfoModel
+ */
+export type UserInfoModelWritable = {
+  /**
+   * Admin
+   *
+   * 是否为admin
+   */
+  admin?: boolean | null;
+  /**
+   * Avatar
+   *
+   * 头像地址
+   */
+  avatar?: string | null;
+  /**
+   * Createby
+   *
+   * 创建者
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * 删除标志（0代表存在 2代表删除）
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * 部门信息
+   */
+  dept?: DeptModel | null;
+  /**
+   * Deptid
+   *
+   * 部门ID
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * 用户邮箱
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * 身份证号
+   */
+  idCard?: string | null;
+  /**
+   * Logindate
+   *
+   * 最后登录时间
+   */
+  loginDate?: string | null;
+  /**
+   * Loginip
+   *
+   * 最后登录IP
+   */
+  loginIp?: string | null;
+  /**
+   * Nickname
+   *
+   * 用户昵称
+   */
+  nickName?: string | null;
+  /**
+   * Password
+   *
+   * 密码
+   */
+  password?: string | null;
+  /**
+   * Phonenumber
+   *
+   * 手机号码
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * 岗位ID信息
+   */
+  postIds?: string | null;
+  /**
+   * 备注
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Role
+   *
+   * 角色信息
+   */
+  role?: Array<RoleInfoModelWritable | null> | null;
+  /**
+   * Roleids
+   *
+   * 角色ID信息
+   */
+  roleIds?: string | null;
+  /**
+   * Sex
+   *
+   * 用户性别（0男 1女 2未知）
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * 帐号状态（0正常 1停用）
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+  /**
+   * Userid
+   *
+   * 用户ID
+   */
+  userId?: number | null;
+  /**
+   * Username
+   *
+   * 用户账号
+   */
+  userName?: string | null;
+  /**
+   * Usertype
+   *
+   * 用户类型（00系统用户）
+   */
+  userType?: string | null;
+};
+
+/**
+ * UserInfoReadModel
+ *
+ * Read model for user info payload.
+ */
+export type UserInfoReadModelWritable = {
+  /**
+   * Avatar
+   *
+   * Avatar URL
+   */
+  avatar?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Dept
+   *
+   * Department detail
+   */
+  dept?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Deptid
+   *
+   * Department id
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * Email
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * ID card
+   */
+  idCard?: string | null;
+  /**
+   * Logindate
+   *
+   * Last login time
+   */
+  loginDate?: string | null;
+  /**
+   * Loginip
+   *
+   * Last login IP
+   */
+  loginIp?: string | null;
+  /**
+   * Nickname
+   *
+   * Nick name
+   */
+  nickName?: string | null;
+  /**
+   * Phonenumber
+   *
+   * Phone number
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * Post id string
+   */
+  postIds?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Role
+   *
+   * Role list
+   */
+  role?: Array<RoleItemReadModelWritable>;
+  /**
+   * Roleids
+   *
+   * Role id string
+   */
+  roleIds?: string | null;
+  /**
+   * Sex
+   *
+   * Sex
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * User status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+  /**
+   * Userid
+   *
+   * User id
+   */
+  userId?: number | null;
+  /**
+   * Username
+   *
+   * User account
+   */
+  userName?: string | null;
+  /**
+   * Usertype
+   *
+   * User type
+   */
+  userType?: string | null;
+};
+
+/**
+ * UserListItemReadModel
+ *
+ * Read model for user list item.
+ */
+export type UserListItemReadModelWritable = {
+  /**
+   * Avatar
+   *
+   * Avatar URL
+   */
+  avatar?: string | null;
+  /**
+   * Createby
+   *
+   * Creator
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * Create time
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * Delete flag
+   */
+  delFlag?: '0' | '2' | null;
+  /**
+   * Dept
+   *
+   * Department detail
+   */
+  dept?: {
+    [key: string]: unknown;
+  } | null;
+  /**
+   * Deptid
+   *
+   * Department id
+   */
+  deptId?: number | null;
+  /**
+   * Email
+   *
+   * Email
+   */
+  email?: string | null;
+  /**
+   * Idcard
+   *
+   * ID card
+   */
+  idCard?: string | null;
+  /**
+   * Logindate
+   *
+   * Last login time
+   */
+  loginDate?: string | null;
+  /**
+   * Loginip
+   *
+   * Last login IP
+   */
+  loginIp?: string | null;
+  /**
+   * Nickname
+   *
+   * Nick name
+   */
+  nickName?: string | null;
+  /**
+   * Phonenumber
+   *
+   * Phone number
+   */
+  phonenumber?: string | null;
+  /**
+   * Postids
+   *
+   * Post id string
+   */
+  postIds?: string | null;
+  /**
+   * Remark
+   */
+  remark?: RemarkDocumentOutput | null;
+  /**
+   * Role
+   *
+   * Role list
+   */
+  role?: Array<RoleItemReadModelWritable>;
+  /**
+   * Roleids
+   *
+   * Role id string
+   */
+  roleIds?: string | null;
+  /**
+   * Sex
+   *
+   * Sex
+   */
+  sex?: '0' | '1' | '2' | null;
+  /**
+   * Status
+   *
+   * User status
+   */
+  status?: '0' | '1' | null;
+  /**
+   * Updateby
+   *
+   * Updater
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * Update time
+   */
+  updateTime?: string | null;
+  /**
+   * Userid
+   *
+   * User id
+   */
+  userId?: number | null;
+  /**
+   * Username
+   *
+   * User account
+   */
+  userName?: string | null;
+  /**
+   * Usertype
+   *
+   * User type
+   */
+  userType?: string | null;
+};
+
+/**
+ * UserPageReadModel
+ *
+ * Read model for paged user list.
+ */
+export type UserPageReadModelWritable = {
+  /**
+   * Hasnext
+   *
+   * Whether next page exists
+   */
+  hasNext?: boolean | null;
+  /**
+   * Items
+   *
+   * Current page items
+   */
+  items?: Array<UserListItemReadModelWritable>;
+  /**
+   * Page
+   *
+   * Current page number
+   */
+  page?: number | null;
+  /**
+   * Pagesize
+   *
+   * Page size
+   */
+  pageSize?: number | null;
+  /**
+   * Total
+   *
+   * Total records
+   */
+  total?: number;
+};
+
+/**
+ * UserProfileReadModel
+ *
+ * Read model for current user profile.
+ */
+export type UserProfileReadModelWritable = {
+  /**
+   * User info
+   */
+  data?: UserInfoReadModelWritable | null;
+  /**
+   * Postgroup
+   *
+   * Post display group
+   */
+  postGroup?: string | null;
+  /**
+   * Rolegroup
+   *
+   * Role display group
+   */
+  roleGroup?: string | null;
+};
+
+/**
+ * UserRoleResponseModel
+ *
+ * 用户角色关联管理列表返回模型
+ */
+export type UserRoleResponseModelWritable = {
+  /**
+   * Roles
+   *
+   * 角色信息
+   */
+  roles?: Array<SelectedRoleModelWritable | null>;
+  /**
+   * 用户信息
+   */
+  user: UserInfoModelWritable;
 };
 
 export type JwksWellKnownJwksJsonGetData = {
@@ -8315,8 +12526,11 @@ export type AddSystemProjectProjectPostResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  201: ProjectCreatedModel;
 };
+
+export type AddSystemProjectProjectPostResponse =
+  AddSystemProjectProjectPostResponses[keyof AddSystemProjectProjectPostResponses];
 
 export type EditSystemProjectProjectPutData = {
   body: ProjectModel;
@@ -10233,12 +14447,6 @@ export type GetSystemConfigListSystemConfigListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -10280,7 +14488,7 @@ export type GetSystemConfigListSystemConfigListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: ConfigPageReadModel;
 };
 
 export type GetSystemConfigListSystemConfigListGetResponse =
@@ -10355,11 +14563,115 @@ export type QueryDetailSystemConfigSystemConfigConfigIdGetResponses = {
   /**
    * Successful Response
    */
-  200: ConfigModel;
+  200: ConfigDetailReadModel;
 };
 
 export type QueryDetailSystemConfigSystemConfigConfigIdGetResponse =
   QueryDetailSystemConfigSystemConfigConfigIdGetResponses[keyof QueryDetailSystemConfigSystemConfigConfigIdGetResponses];
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteData = {
+  body?: never;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query: {
+    /**
+     * Expectedrevision
+     */
+    expectedRevision: number;
+  };
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteError =
+  RemoveDashboardSystemDashboardScopeKeyDeleteErrors[keyof RemoveDashboardSystemDashboardScopeKeyDeleteErrors];
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetData = {
+  body?: never;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query?: never;
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetError =
+  LoadDashboardSystemDashboardScopeKeyGetErrors[keyof LoadDashboardSystemDashboardScopeKeyGetErrors];
+
+export type LoadDashboardSystemDashboardScopeKeyGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutData = {
+  body: DashboardSaveModel;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query?: never;
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutError =
+  SaveDashboardSystemDashboardScopeKeyPutErrors[keyof SaveDashboardSystemDashboardScopeKeyPutErrors];
+
+export type SaveDashboardSystemDashboardScopeKeyPutResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
 
 export type AddSystemDeptSystemDeptPostData = {
   body: DeptCreateModel;
@@ -10819,12 +15131,6 @@ export type GetSystemDictDataListSystemDictDataListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -10866,7 +15172,7 @@ export type GetSystemDictDataListSystemDictDataListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: DictDataPageReadModel;
 };
 
 export type GetSystemDictDataListSystemDictDataListGetResponse =
@@ -10956,7 +15262,7 @@ export type QueryDetailSystemDictDataSystemDictDataDictCodeGetResponses = {
   /**
    * Successful Response
    */
-  200: DictDataModel;
+  200: DictDataDetailReadModel;
 };
 
 export type QueryDetailSystemDictDataSystemDictDataDictCodeGetResponse =
@@ -11087,12 +15393,6 @@ export type GetSystemDictTypeListSystemDictTypeListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -11134,7 +15434,7 @@ export type GetSystemDictTypeListSystemDictTypeListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: DictTypePageReadModel;
 };
 
 export type GetSystemDictTypeListSystemDictTypeListGetResponse =
@@ -11151,7 +15451,7 @@ export type QuerySystemDictTypeOptionsSystemDictTypeOptionselectGetResponses = {
   /**
    * Successful Response
    */
-  200: CollectionResultDictTypeModel;
+  200: CollectionResultDictTypeDetailReadModel;
 };
 
 export type QuerySystemDictTypeOptionsSystemDictTypeOptionselectGetResponse =
@@ -11226,7 +15526,7 @@ export type QueryDetailSystemDictTypeSystemDictTypeDictIdGetResponses = {
   /**
    * Successful Response
    */
-  200: DictTypeModel;
+  200: DictTypeDetailReadModel;
 };
 
 export type QueryDetailSystemDictTypeSystemDictTypeDictIdGetResponse =
@@ -11910,12 +16210,6 @@ export type GetSystemPostListSystemPostListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -11957,7 +16251,7 @@ export type GetSystemPostListSystemPostListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: PostPageReadModel;
 };
 
 export type GetSystemPostListSystemPostListGetResponse =
@@ -12018,7 +16312,7 @@ export type QueryDetailSystemPostSystemPostPostIdGetResponses = {
   /**
    * Successful Response
    */
-  200: PostModel;
+  200: PostDetailReadModel;
 };
 
 export type QueryDetailSystemPostSystemPostPostIdGetResponse =
@@ -12418,7 +16712,7 @@ export type AddSystemRoleSystemRolePostResponses = {
   /**
    * Successful Response
    */
-  201: RoleModel;
+  201: RoleDetailReadModel;
 };
 
 export type AddSystemRoleSystemRolePostResponse =
@@ -12445,7 +16739,7 @@ export type EditSystemRoleSystemRolePutResponses = {
   /**
    * Successful Response
    */
-  200: RoleModel;
+  200: RoleDetailReadModel;
 };
 
 export type EditSystemRoleSystemRolePutResponse =
@@ -12569,18 +16863,6 @@ export type GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData = {
      * 更新时间
      */
     updateTime?: string | null;
-    /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
-     * Admin
-     *
-     * 是否为admin
-     */
-    admin?: boolean | null;
     /**
      * Roleid
      *
@@ -12823,18 +17105,6 @@ export type GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
-     * Admin
-     *
-     * 是否为admin
-     */
-    admin?: boolean | null;
-    /**
      * Roleid
      *
      * 角色ID
@@ -12897,7 +17167,7 @@ export type ResetSystemRoleStatusSystemRoleChangeStatusPutResponses = {
   /**
    * Successful Response
    */
-  200: RoleModel;
+  200: RoleDetailReadModel;
 };
 
 export type ResetSystemRoleStatusSystemRoleChangeStatusPutResponse =
@@ -12924,7 +17194,7 @@ export type EditSystemRoleDatascopeSystemRoleDataScopePutResponses = {
   /**
    * Successful Response
    */
-  200: RoleModel;
+  200: RoleDetailReadModel;
 };
 
 export type EditSystemRoleDatascopeSystemRoleDataScopePutResponse =
@@ -13066,18 +17336,6 @@ export type GetSystemRoleListSystemRoleListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
-     * Admin
-     *
-     * 是否为admin
-     */
-    admin?: boolean | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -13119,7 +17377,7 @@ export type GetSystemRoleListSystemRoleListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: RolePageReadModel;
 };
 
 export type GetSystemRoleListSystemRoleListGetResponse =
@@ -13180,7 +17438,7 @@ export type QueryDetailSystemRoleSystemRoleRoleIdGetResponses = {
   /**
    * Successful Response
    */
-  200: RoleModel;
+  200: RoleDetailReadModel;
 };
 
 export type QueryDetailSystemRoleSystemRoleRoleIdGetResponse =
@@ -13260,7 +17518,7 @@ export type QueryDetailSystemUserSystemUserGetResponses = {
   /**
    * Successful Response
    */
-  200: UserDetailModel;
+  200: UserDetailReadModel;
 };
 
 export type QueryDetailSystemUserSystemUserGetResponse =
@@ -13549,18 +17807,6 @@ export type GetSystemUserListSystemUserListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
-     * Admin
-     *
-     * 是否为admin
-     */
-    admin?: boolean | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -13602,7 +17848,7 @@ export type GetSystemUserListSystemUserListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: UserPageReadModel;
 };
 
 export type GetSystemUserListSystemUserListGetResponse =
@@ -13619,7 +17865,7 @@ export type QueryDetailSystemUserProfileSystemUserProfileGetResponses = {
   /**
    * Successful Response
    */
-  200: UserProfileModel;
+  200: UserProfileReadModel;
 };
 
 export type QueryDetailSystemUserProfileSystemUserProfileGetResponse =
@@ -13776,7 +18022,7 @@ export type QueryDetailSystemUserSystemUserUserIdGetResponses = {
   /**
    * Successful Response
    */
-  200: UserDetailModel;
+  200: UserDetailReadModel;
 };
 
 export type QueryDetailSystemUserSystemUserUserIdGetResponse =
@@ -13988,12 +18234,6 @@ export type GetGenDbTableListToolGenDbListGetData = {
      * 更新时间
      */
     updateTime?: string | null;
-    /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
     /**
      * Begintime
      *
@@ -14225,12 +18465,6 @@ export type GetGenTableListToolGenListGetData = {
      */
     updateTime?: string | null;
     /**
-     * Remark
-     *
-     * 备注
-     */
-    remark?: string | null;
-    /**
      * Begintime
      *
      * 开始时间
@@ -14272,7 +18506,7 @@ export type GetGenTableListToolGenListGetResponses = {
   /**
    * Successful Response
    */
-  200: PageResponseModel;
+  200: GenTablePageReadModel;
 };
 
 export type GetGenTableListToolGenListGetResponse =
@@ -14391,5 +18625,8 @@ export type QueryDetailGenTableToolGenTableIdGetResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  200: GenTableDetailReadModel;
 };
+
+export type QueryDetailGenTableToolGenTableIdGetResponse =
+  QueryDetailGenTableToolGenTableIdGetResponses[keyof QueryDetailGenTableToolGenTableIdGetResponses];

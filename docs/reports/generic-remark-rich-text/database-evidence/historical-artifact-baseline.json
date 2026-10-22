@@ -1,0 +1,9 @@
+{
+  "path": "db_artifacts/releases/20260404_001_initial-baseline/managed-data.yaml",
+  "declaredCanonicalChecksum": "7cc63022f35a8ee16528e3b605c45a10a8a115ebac7bc8bae8b0581b35df1b62",
+  "actualCanonicalChecksum": "e45f4dd6b6020ce89371b64213dbda26fe2dc2bb569375589467d1ae4514dbfd",
+  "currentBytesSha256": "5058ec23008784044302d57c6a143e89e32cacb4875303adf8dee3dcc6058b21",
+  "baseline262ec420BytesSha256": "5058ec23008784044302d57c6a143e89e32cacb4875303adf8dee3dcc6058b21",
+  "originalBytesUnchanged": true,
+  "capabilityMetadataPresent": false
+}

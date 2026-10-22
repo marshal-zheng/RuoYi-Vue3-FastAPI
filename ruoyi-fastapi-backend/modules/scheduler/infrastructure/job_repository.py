@@ -25,6 +25,12 @@ class JobRepository(BaseRepository[JobDO]):
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
+    async def find_for_update(self, job_id: int) -> JobDO | None:
+        # Current read after waiting for another operation, including under MySQL REPEATABLE READ.
+        stmt = select(JobDO).where(JobDO.job_id == job_id).with_for_update().execution_options(populate_existing=True)
+        result = await self.db.execute(stmt)
+        return result.scalars().first()
+
     async def find_by_info(
         self,
         job_name: Optional[str] = None,

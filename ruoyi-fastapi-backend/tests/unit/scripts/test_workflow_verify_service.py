@@ -141,8 +141,8 @@ def _write_seed_data_tree(seed_data_dir: Path) -> None:
 
 
 def _write_entrypoints(project_root: Path, *, start_script_body: str | None = None) -> None:
-    (project_root / 'scripts').mkdir(parents=True, exist_ok=True)
-    (project_root / 'scripts' / 'start.sh').write_text(
+    (project_root.parent / 'scripts').mkdir(parents=True, exist_ok=True)
+    (project_root.parent / 'scripts' / 'start.sh').write_text(
         start_script_body
         or '\n'.join(
             (
@@ -155,7 +155,7 @@ def _write_entrypoints(project_root: Path, *, start_script_body: str | None = No
         + '\n',
         encoding='utf-8',
     )
-    backend_root = project_root / 'ruoyi-fastapi-backend'
+    backend_root = project_root
     (backend_root / 'scripts').mkdir(parents=True, exist_ok=True)
     (backend_root / 'docker-entrypoint.sh').write_text(
         '\n'.join(

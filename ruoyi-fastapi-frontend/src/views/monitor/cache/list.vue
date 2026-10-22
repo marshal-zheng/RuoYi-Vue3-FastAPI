@@ -210,7 +210,7 @@ function refreshCacheKeys() {
 /** 清理指定键名缓存 */
 const { run: handleClearCacheKey, pending: handleClearCacheKeyPending } = useOperation(
   async (cacheKey) => {
-    await clearCacheKey(cacheKey).then(() => {
+    await clearCacheKey(nowCacheName.value, cacheKey).then(() => {
       getCacheKeys();
     });
   }

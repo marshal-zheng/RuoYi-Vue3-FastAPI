@@ -183,7 +183,7 @@ describe('mock contract coverage registry', () => {
   it('keeps the committed registry aligned with shared/openapi.json', () => {
     const report = buildMockContractReport({ cwd: process.cwd() });
     expect(report.artifact.path).toBe('shared/openapi.json');
-    expect(report.artifact.operationCount).toBe(244);
+    expect(report.artifact.operationCount).toBe(247);
     expect(report.entries).toHaveLength(report.artifact.operationCount);
     expect(report.summary.byStatus['mock-handled']).toBeGreaterThan(0);
     expect(report.summary.byStatus.missing).toBeGreaterThan(0);

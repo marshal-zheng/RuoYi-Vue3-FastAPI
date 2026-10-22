@@ -61,6 +61,14 @@ const writeSessionValue = (key: string, value: string): void => {
   storage.removeItem(key);
 };
 
+let securityTokenVersion = 0;
+let securitySessionVersion = 0;
+let securitySessionController = new AbortController();
+
+export const getSecurityTokenVersion = (): number => securityTokenVersion;
+export const getSecuritySessionVersion = (): number => securitySessionVersion;
+export const getSecuritySessionSignal = (): AbortSignal => securitySessionController.signal;
+
 let memoryToken = readSessionValue(ACCESS_TOKEN_SESSION_KEY);
 let memoryCsrfToken = readSessionValue(CSRF_TOKEN_SESSION_KEY) || readCookieValue(CSRF_COOKIE_NAME);
 
@@ -69,25 +77,21 @@ export function getToken(): string | undefined {
 }
 
 export function setToken(token: string): string {
+  if (memoryToken !== (token || '')) securityTokenVersion++;
   memoryToken = token || '';
   writeSessionValue(ACCESS_TOKEN_SESSION_KEY, memoryToken);
   return memoryToken;
 }
 
 export function removeToken(): void {
-  memoryToken = '';
-  memoryCsrfToken = '';
-  writeSessionValue(ACCESS_TOKEN_SESSION_KEY, '');
-  writeSessionValue(CSRF_TOKEN_SESSION_KEY, '');
+  clearSecurityTokens();
 }
 
 export function getCsrfToken(): string | undefined {
-  if (!memoryCsrfToken) {
-    const cookieCsrf = readCookieValue(CSRF_COOKIE_NAME);
-    if (cookieCsrf) {
-      memoryCsrfToken = cookieCsrf;
-      writeSessionValue(CSRF_TOKEN_SESSION_KEY, memoryCsrfToken);
-    }
+  const cookieCsrf = readCookieValue(CSRF_COOKIE_NAME);
+  if (cookieCsrf && cookieCsrf !== memoryCsrfToken) {
+    memoryCsrfToken = cookieCsrf;
+    writeSessionValue(CSRF_TOKEN_SESSION_KEY, memoryCsrfToken);
   }
   return memoryCsrfToken || undefined;
 }
@@ -99,6 +103,10 @@ export function setCsrfToken(token: string): string {
 }
 
 export function clearSecurityTokens(): void {
+  securityTokenVersion++;
+  securitySessionVersion++;
+  securitySessionController.abort();
+  securitySessionController = new AbortController();
   memoryToken = '';
   memoryCsrfToken = '';
   writeSessionValue(ACCESS_TOKEN_SESSION_KEY, '');

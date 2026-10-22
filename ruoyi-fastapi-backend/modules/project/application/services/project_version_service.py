@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Optional
 from exceptions.exception import (
-    ServiceException,
     ValidationException,
     ResourceNotFoundException,
     ResourceConflictException,
@@ -92,7 +91,7 @@ class ProjectVersionService:
 
         # 检查版本是否已固化
         if version.is_locked == LockStatusEnum.LOCKED.value:
-            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, user_message='固化版本不允许编辑')
+            raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message='固化版本不允许编辑')
 
         # 检查版本号是否唯一
         if page_object.version_number and page_object.version_number != version.version_number:
@@ -100,7 +99,7 @@ class ProjectVersionService:
                 version.project_id, page_object.version_number, page_object.version_id
             )
             if not is_unique:
-                raise ServiceException(user_message=f'版本号 {page_object.version_number} 已存在')
+                raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message=f'版本号 {page_object.version_number} 已存在')
 
         # 更新版本信息
         update_data = page_object.model_dump(exclude_unset=True)
@@ -135,9 +134,9 @@ class ProjectVersionService:
         for version_id in version_id_list:
             version = await self.version_repo.find_by_id(version_id)
             if not version:
-                raise ServiceException(user_message=f'版本ID {version_id} 不存在或已删除')
+                raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message=f'版本ID {version_id} 不存在或已删除')
             if version.is_locked == LockStatusEnum.LOCKED.value:
-                raise ServiceException(user_message=f'版本 {version.version_name} 已固化，不允许删除')
+                raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message=f'版本 {version.version_name} 已固化，不允许删除')
             versions.append(version)
             project_delete_map[version.project_id] = project_delete_map.get(version.project_id, 0) + 1
 
@@ -146,7 +145,7 @@ class ProjectVersionService:
         for project_id, delete_count in project_delete_map.items():
             total_count = project_counts.get(project_id, 0)
             if total_count - delete_count < 1:
-                raise ServiceException(user_message=f'项目ID {project_id} 至少需要保留一个版本，无法全部删除')
+                raise ResourceConflictException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message=f'项目ID {project_id} 至少需要保留一个版本，无法全部删除')
 
         await self.version_repo.soft_delete_batch(version_id_list, page_object.update_by or '')
         return CrudResponseModel(is_success=True, message='删除成功')
@@ -162,7 +161,11 @@ class ProjectVersionService:
         if version:
             result = CamelCaseUtil.transform_result(version)
         else:
-            result = CamelCaseUtil.transform_result({})
+            raise ResourceNotFoundException(
+                user_message='工程版本不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'version_id={version_id} not found',
+            )
 
         return result
 

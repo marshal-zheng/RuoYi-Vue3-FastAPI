@@ -12,7 +12,6 @@ from config.database import AsyncSessionLocal
 from config.env import CacheConfig
 from config.get_redis import RedisUtil
 from config.get_scheduler import SchedulerUtil
-from utils.count_cache import init_count_cache
 from ports import IRedisClient
 from utils.log_util import logger
 from utils.query_cache import init_query_cache
@@ -64,12 +63,10 @@ class AppContainer:
             'redis': ProviderHealth(),
             'scheduler': ProviderHealth(),
             'query_cache': ProviderHealth(),
-            'count_cache': ProviderHealth(),
         }
         self._redis_client: Optional[IRedisClient] = None
         self._scheduler_started: bool = False
         self._query_cache: Any = None
-        self._count_cache: Any = None
 
     @property
     def redis_client(self) -> Optional[IRedisClient]:
@@ -78,10 +75,6 @@ class AppContainer:
     @property
     def query_cache(self) -> Any:
         return self._query_cache
-
-    @property
-    def count_cache(self) -> Any:
-        return self._count_cache
 
     def validate_bindings(self) -> None:
         required = {
@@ -206,17 +199,6 @@ class AppContainer:
                 detail='enabled' if CacheConfig.query_cache_enabled else 'disabled',
             )
 
-            self._count_cache = init_count_cache(
-                redis_client=redis_client if CacheConfig.count_cache_enabled else None,
-                default_ttl=CacheConfig.count_cache_default_ttl,
-                key_prefix=CacheConfig.count_cache_key_prefix,
-                enabled=CacheConfig.count_cache_enabled,
-            )
-            self._provider_health['count_cache'] = ProviderHealth(
-                initialized=True,
-                healthy=True,
-                detail='enabled' if CacheConfig.count_cache_enabled else 'disabled',
-            )
         except Exception as exc:
             if isinstance(exc, ContainerInitializationError):
                 raise
@@ -268,12 +250,6 @@ class AppContainer:
             healthy=True,
             detail='closed',
         )
-        self._count_cache = None
-        self._provider_health['count_cache'] = ProviderHealth(
-            initialized=False,
-            healthy=True,
-            detail='closed',
-        )
 
     def provider_health_summary(self) -> dict[str, dict[str, Any]]:
         return {name: health.to_dict() for name, health in self._provider_health.items()}
@@ -282,16 +258,13 @@ class AppContainer:
         redis_state = self._provider_health['redis']
         scheduler_state = self._provider_health['scheduler']
         query_cache_state = self._provider_health['query_cache']
-        count_cache_state = self._provider_health['count_cache']
         scheduler_ready = scheduler_state.healthy or scheduler_state.detail == 'disabled_in_test_mode'
         query_cache_ready = query_cache_state.healthy and query_cache_state.initialized
-        count_cache_ready = count_cache_state.healthy and count_cache_state.initialized
         return (
             redis_state.initialized
             and redis_state.healthy
             and scheduler_ready
             and query_cache_ready
-            and count_cache_ready
         )
 
     def export_dependency_graph(self, output_format: str = 'dot') -> str:

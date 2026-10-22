@@ -17,13 +17,7 @@ if TYPE_CHECKING:
 
 
 def _to_post_item(raw: Any) -> PostItemReadModel:
-    if hasattr(raw, 'model_dump'):
-        payload = raw.model_dump(by_alias=False)
-    elif isinstance(raw, dict):
-        payload = raw
-    else:
-        payload = {}
-    return PostItemReadModel.model_validate(payload)
+    return PostItemReadModel.model_validate(raw)
 
 
 class GetPostListQueryHandler(IQueryHandler[GetPostListQuery, PostPageReadModel]):
@@ -63,8 +57,6 @@ class GetPostDetailQueryHandler(IQueryHandler[GetPostDetailQuery, PostDetailRead
 
     async def handle(self, request: GetPostDetailQuery) -> PostDetailReadModel:
         detail_result = await self._post_service.post_detail_services(request.post_id)
-        if detail_result is None:
-            return PostDetailReadModel()
 
         if hasattr(detail_result, 'model_dump'):
             payload = detail_result.model_dump(by_alias=False)

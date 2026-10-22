@@ -23,6 +23,7 @@ vi.mock('@/router', async () => {
   const { createMemoryHistory, createRouter } = await import('vue-router');
   return {
     default: createRouter({ history: createMemoryHistory(), routes: [] }),
+    Layout: {},
     constantRoutes: [],
     dynamicRoutes: [],
   };

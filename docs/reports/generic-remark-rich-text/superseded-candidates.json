@@ -1,0 +1,33 @@
+[
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.tgz",
+    "sha256": "13233f3d07acc05c44effccda22ff08542e2cc409d7106cf51b942266261ff01",
+    "status": "superseded-own-candidate-removed"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.1.tgz",
+    "sha256": "2b9e640425065bd5dfa711fdead5caf87e82fa4bd5db916ae1f57f095144e992",
+    "status": "superseded-own-candidate-removed"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.2.tgz",
+    "sha256": "08b9609c3829e2dc17696233052981ae08e82fcbe191586f40366910ce7754ff",
+    "status": "superseded-own-candidate-removed"
+  },
+  {
+    "file": "zxio-theme-compiler-1.0.0-remark-a.20261022.tgz",
+    "sha256": "3b74f116341c4c991b2081ecb2f5ca90093859c01098495b2004b4639216231c",
+    "status": "superseded-own-candidate-removed"
+  },
+  {
+    "file": "zxio-theme-compiler-1.0.0-remark-a.20261022.1.tgz",
+    "sha256": "0702973b14c9aa86037b79fa2b97fce2ffee76d6203464bbc6d841255dfba41b",
+    "status": "superseded-own-candidate-removed"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.3.tgz",
+    "sha256": "488ba07bc021622efa282fab9a063136acf3c48e252908b0c65d0ee26dd9443b",
+    "status": "superseded-own-candidate-removed",
+    "reason": "controlled over-limit draft rehydration fix in .4"
+  }
+]

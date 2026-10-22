@@ -13,6 +13,7 @@ import {
   type ComponentCustomProperties,
 } from 'vue';
 import { handleTree } from '@/utils/ruoyi';
+import { mockRemark } from '@/mocks/data/remark';
 import ConfigDlg from '@/views/system/config/components/ConfigDlg.vue';
 import DictDlg from '@/views/system/dict/components/DictDlg.vue';
 import RoleFormDrawer from '@/views/system/role/components/RoleFormDrawer.vue';
@@ -30,6 +31,7 @@ const api = vi.hoisted(() => ({
   roleDept: vi.fn(),
   write: vi.fn(),
   feedback: vi.fn(),
+  discard: vi.fn(),
   httpFeedback: vi.fn(),
 }));
 vi.mock('@/api/system/config', () => ({
@@ -64,7 +66,11 @@ vi.mock('@/utils/http', () => ({ presentRequestError: api.httpFeedback }));
 vi.mock('@/utils/dict', () => ({
   useDict: () => ({ sys_yes_no: [], sys_normal_disable: [] }),
 }));
-vi.mock('element-plus', () => ({ ElMessage: { error: api.feedback } }));
+vi.mock('element-plus', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('element-plus')>()),
+  ElMessage: { error: api.feedback },
+  ElMessageBox: { confirm: api.discard },
+}));
 vi.mock('@/utils/feedback/presenter', () => ({
   presentProblemFeedback: api.feedback,
   resolveFeedbackOptions: (value: unknown) => value,
@@ -373,7 +379,7 @@ for (const item of cases)
       expect(e.modal().props('okDisabled')).toBe(true);
       expect(await e.modal().props('confirm')({})).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
-      expect(api.feedback).toHaveBeenCalledExactlyOnceWith(error.message);
+      expect(api.feedback).not.toHaveBeenCalled();
       const retry = e.wrapper.findAll('button').find((button) => button.text() === '重试');
       expect(retry).toBeDefined();
       await retry!.trigger('click');
@@ -508,7 +514,7 @@ for (const item of cases.filter((item) => item.name === 'role' || item.name === 
     expect(selected.getCheckedKeys()).toEqual([99]);
   });
 
-  it(`${item.name} keeps a reopened editor when the previous write finishes`, async () => {
+  it(`${item.name} protects the current editor while the previous write finishes`, async () => {
     const e = editor(item.component);
     await e.exposed.open(11);
     let complete!: () => void;
@@ -519,6 +525,14 @@ for (const item of cases.filter((item) => item.name === 'role' || item.name === 
     );
     const saving = e.modal().props('confirm')(e.model());
     await e.exposed.open(22);
+    if (item.name === 'role') {
+      expect(e.model().roleId).toBe(11);
+      complete();
+      expect(await saving).toBe(true);
+      await e.exposed.open(22);
+      expect(e.model().roleId).toBe(22);
+      return;
+    }
     complete();
     expect(await saving).toBe(false);
     expect(e.modal().props('modelValue')).toBe(true);
@@ -526,3 +540,20 @@ for (const item of cases.filter((item) => item.name === 'role' || item.name === 
     expect(e.wrapper.emitted('success')).toBeUndefined();
   });
 }
+
+for (const name of ['config', 'dict'])
+  it(`${name} protects a document draft on close and replacement`, async () => {
+    const item = cases.find((candidate) => candidate.name === name)!;
+    const e = editor(item.component);
+    await e.exposed.open(11);
+    e.model().remark = mockRemark('未保存的格式与正文😀', 'guard');
+    api.discard.mockRejectedValue(new Error('继续编辑'));
+    await e.exposed.open(22);
+    expect(item.read).toHaveBeenCalledTimes(1);
+    expect(e.model()[item.id]).toBe(11);
+    await (e.wrapper.vm as unknown as { close: () => Promise<void> }).close();
+    expect(e.modal().props('modelValue')).toBe(true);
+    api.discard.mockResolvedValueOnce(undefined);
+    await e.exposed.open(22);
+    expect(e.model()[item.id]).toBe(22);
+  });

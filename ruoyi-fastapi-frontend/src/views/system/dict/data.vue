@@ -27,7 +27,6 @@
               >新增</ZxButton
             >
             <ZxButton
-              type="success"
               icon="Edit"
               :disabled="single"
               @click="handleUpdate"
@@ -35,6 +34,7 @@
               >修改</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -43,14 +43,10 @@
               :loading="handleDeletePending"
               >删除</ZxButton
             >
-            <ZxButton
-              type="warning"
-              icon="Download"
-              @click="handleExport"
-              v-hasPermi="['system:dict:export']"
+            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:dict:export']"
               >导出</ZxButton
             >
-            <ZxButton type="warning" icon="Close" @click="handleClose">关闭</ZxButton>
+            <ZxButton icon="Close" @click="handleClose">关闭</ZxButton>
           </template>
           <template #filters>
             <DictTypeSelect
@@ -117,9 +113,14 @@
           <el-table-column
             label="备注"
             align="center"
-            prop="remark"
+            prop="remarkText"
             :show-overflow-tooltip="true"
-          />
+            ><template #default="scope"
+              ><RemarkDisplay
+                :value="scope.row.remark"
+                :text="scope.row.remarkText"
+                summary /></template
+          ></el-table-column>
           <el-table-column label="创建时间" align="center" prop="createTime" width="180">
             <template #default="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -129,17 +130,20 @@
             label="操作"
             align="center"
             width="160"
+            fixed="right"
             class-name="small-padding fixed-width"
           >
             <template #default="scope">
               <ZxButton
-                type="text"
+                link
+                type="primary"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:dict:edit']"
                 >修改</ZxButton
               >
               <ZxButton
-                type="text"
+                type="danger"
+                link
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:dict:remove']"
                 :loading="handleDeletePending"
@@ -204,8 +208,8 @@
             }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <zx-input v-model="form.remark" type="textarea" placeholder="请输入内容"></zx-input>
+        <el-form-item data-form-full label="备注" prop="remark">
+          <RemarkEditor v-if="open" ref="remarkRef" :key="remarkSession" v-model="form.remark" />
         </el-form-item> </FormGrid
     ></el-form>
     <template #footer>
@@ -224,8 +228,13 @@
 </template>
 
 <script setup name="Data">
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
+import { readRemark } from '@/components/ui/Remark/contract';
 import { ref, reactive, computed, toRef, toRefs, getCurrentInstance, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { ElMessageBox } from 'element-plus';
 import { useEditorRead } from '@/utils/editor-read';
 import { useOperation } from '@/utils/operation';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
@@ -238,6 +247,8 @@ import { useDictTypeDetailQuery } from '@/queries/system/use-dict-query';
 import { listData, getData } from '@/api/system/dict/data';
 
 const { proxy } = getCurrentInstance();
+const { remarkRef, remarkRule } = useRemarkField();
+const remarkSession = ref(0);
 const { sys_normal_disable } = proxy.useDict('sys_normal_disable');
 
 const gridListRef = ref();
@@ -267,6 +278,7 @@ const listClassOptions = ref([
 
 const data = reactive({
   rules: {
+    remark: [remarkRule],
     dictLabel: [{ required: true, message: '数据标签不能为空', trigger: 'blur' }],
     dictValue: [{ required: true, message: '数据键值不能为空', trigger: 'blur' }],
     dictSort: [{ required: true, message: '数据顺序不能为空', trigger: 'blur' }],
@@ -280,6 +292,7 @@ let requestedId;
 let editorScope = queryScope.value;
 const dataDialog = useFormDialog({
   columns: 1,
+  onBeforeClose: canDiscard,
   loading: detailLoading,
   formRef: dataRef,
   title: computed(() => title.value),
@@ -313,18 +326,48 @@ const { loadData: loadDictData, status: listStatus } = useDictManagementList(
 );
 
 // Type changes (including rename invalidation) drive this request-mode list's filter once.
-watch(defaultDictType, (type) => {
-  if (!type) return;
-  initialState.value = {
-    ...initialState.value,
-    query: { ...initialState.value.query, dictType: type },
-  };
-  gridListRef.value?.updateState('query.dictType', type);
-  refreshList();
-});
+watch(
+  defaultDictType,
+  (type) => {
+    if (!type) return;
+    initialState.value = {
+      ...initialState.value,
+      query: { ...initialState.value.query, dictType: type },
+    };
+    gridListRef.value?.updateState('query.dictType', type);
+    refreshList();
+  },
+  { immediate: true }
+);
 
 /** 取消按钮 */
-function cancel() {
+let opening = 0;
+let discardPending;
+function canDiscard() {
+  if (submitFormPending.value) return Promise.resolve(false);
+  if (!dataDialog.isDirty.value && remarkRef.value?.validate() !== false)
+    return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const data = form.value;
+  const decision = ElMessageBox.confirm('字典数据尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(() => data === form.value && !submitFormPending.value)
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function cancel() {
+  opening++;
+  if (!(await canDiscard())) return;
+  retireEditor();
+}
+function retireEditor() {
   cancelRead();
   open.value = false;
   reset();
@@ -339,7 +382,7 @@ function reset() {
     listClass: 'default',
     dictSort: 0,
     status: '0',
-    remark: undefined,
+    remark: null,
   };
   proxy.resetForm('dataRef');
 }
@@ -384,13 +427,16 @@ function handleUpdate(row) {
     /* 当前读取已负责反馈。 */
   });
 }
-function openEditor(id) {
+async function openEditor(id) {
+  const intent = ++opening;
+  if (open.value && !(await canDiscard())) return;
+  if (intent !== opening) return;
+  remarkSession.value++;
   editorScope = queryScope.value;
   requestedId = id;
   return runRead(async (read) => {
     reset();
-    form.value.dictCode = id;
-    form.value.dictType = defaultDictType.value;
+    form.value = { ...form.value, dictCode: id, dictType: defaultDictType.value };
     title.value = id ? '修改字典数据' : '添加字典数据';
     open.value = true;
     dataDialog.setDisabled(true);
@@ -398,9 +444,12 @@ function openEditor(id) {
       dataDialog.setDisabled(false);
       return;
     }
-    const detail = await getData(id, { signal: read.signal, silentError: true });
+    const detail = await getData(id, {
+      signal: read.signal,
+      silentError: true,
+    });
     if (!read.isCurrent()) return;
-    form.value = detail;
+    form.value = { ...detail, remark: readRemark(detail.remark) };
     dataDialog.setDisabled(false);
   });
 }
@@ -422,12 +471,14 @@ const { run: submitForm, pending: submitFormPending } = useOperation(async () =>
 
   if (valid && editorScope === queryScope.value) {
     const scope = queryScope.value;
+    const payload = { ...form.value };
+    delete payload.remarkText;
     if (form.value.dictCode != undefined) {
-      await updateData(form.value).then(() => {
+      await updateData(payload).then(() => {
         if (scope === queryScope.value) open.value = false;
       });
     } else {
-      await addData(form.value).then(() => {
+      await addData(payload).then(() => {
         if (scope === queryScope.value) open.value = false;
       });
     }
@@ -458,7 +509,8 @@ function handleExport() {
 watch(
   queryScope,
   () => {
-    cancel();
+    opening++;
+    retireEditor();
     gridListRef.value?.updateState('list', []);
     ids.value = [];
     single.value = true;

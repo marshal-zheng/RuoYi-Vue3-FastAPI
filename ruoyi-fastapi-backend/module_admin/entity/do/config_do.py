@@ -1,5 +1,5 @@
-from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import JSON, Column, Integer, String
+
 from module_admin.entity.do.base import LegacyBaseModel
 from module_admin.entity.do.enums import YesNoEnum
 
@@ -16,4 +16,4 @@ class ConfigDO(LegacyBaseModel):
     config_key = Column(String(100), nullable=True, default='', comment='参数键名')
     config_value = Column(String(500), nullable=True, default='', comment='参数键值')
     config_type = Column(String(1), nullable=True, default=YesNoEnum.NO.value, comment='系统内置（Y是 N否）')
-    remark = Column(String(500), nullable=True, default=None, comment='备注')
+    remark = Column(JSON(none_as_null=True), nullable=True, default=None, comment='备注文档')

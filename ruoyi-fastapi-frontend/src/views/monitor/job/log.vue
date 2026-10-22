@@ -54,8 +54,8 @@
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
-          type="danger"
           plain
+          type="danger"
           icon="Delete"
           :disabled="multiple"
           @click="handleDelete"
@@ -66,8 +66,8 @@
       </el-col>
       <el-col :span="1.5">
         <el-button
-          type="danger"
           plain
+          type="danger"
           icon="Delete"
           @click="handleClean"
           v-hasPermi="['monitor:job:remove']"
@@ -76,17 +76,12 @@
         >
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="Download"
-          @click="handleExport"
-          v-hasPermi="['monitor:job:export']"
+        <el-button icon="Download" @click="handleExport" v-hasPermi="['monitor:job:export']"
           >导出</el-button
         >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="Close" @click="handleClose">关闭</el-button>
+        <el-button icon="Close" @click="handleClose">关闭</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>

@@ -1,0 +1,95 @@
+{
+  "scope": "repository-external copy with fresh formal bundle and isolated database; unrelated generated revision is not delivered",
+  "database": "ruoyi_remark_delivery_5c3b721c90",
+  "privateArtifactDirectory": "/var/folders/80/8sfxkvmx2l755p0cgcrkv3740000gn/T/remark-delivery-jr1b1e4_",
+  "commands": [
+    {
+      "command": "db.py finalize --message 备注文档JSON交付演练",
+      "exitCode": 0,
+      "logSha256": "ccb8d9fedfa8550c4cae979246c4085f386950bb4bbc27cb362e94f8e7f9a64d",
+      "metrics": {
+        "schema_drift": "unknown",
+        "managed_data_drift": "unknown",
+        "visibility_drift": "unknown",
+        "pending_release_bundle": "unknown",
+        "formal_head_before": "20261022_remark_v2",
+        "schema_revision": "d72f1e1f6df8",
+        "bundle_id": "20261022_001_json",
+        "finalize_validation": "passed",
+        "finalize_cleanup": "done"
+      }
+    },
+    {
+      "command": "db.py deploy --revision head",
+      "exitCode": 0,
+      "logSha256": "77541da82c912f354edb8335a4fe31f8b43405fb5d4339539711f4c6bdebe497",
+      "metrics": {
+        "schema_drift": "unknown",
+        "managed_data_drift": "unknown",
+        "visibility_drift": "unknown",
+        "pending_release_bundle": "unknown",
+        "schema_deploy_result": "success",
+        "managed_data_deploy_status": "success",
+        "postcondition_verify_status": "success",
+        "failed_step": "none"
+      }
+    },
+    {
+      "command": "db.py bootstrap-seed --env dev",
+      "exitCode": 0,
+      "logSha256": "92661d0bbf891fe2f6fa1cd190021d2e687f93c582344530dcb0563b55f901c0",
+      "metrics": {}
+    },
+    {
+      "command": "db.py dev-sync",
+      "exitCode": 0,
+      "logSha256": "9cb85e4cee844097b40c6180a43463ea53ddde6ad2744a0400323024d9019a37",
+      "metrics": {
+        "schema_drift": "unknown",
+        "managed_data_drift": "unknown",
+        "visibility_drift": "unknown",
+        "pending_release_bundle": "unknown",
+        "managed_data_applied_operations": "0",
+        "managed_data_skipped_operations": "0",
+        "metadata_updated_objects": "293",
+        "metadata_deactivated_objects": "0",
+        "postcondition_verify_status": "success",
+        "dev_sync_result": "success",
+        "failed_step": "none"
+      }
+    },
+    {
+      "command": "db.py dev-sync",
+      "exitCode": 0,
+      "logSha256": "eb94b6e64d8bbfb2584c7ede14d753cef4297ddd7eaa4a79c14ba86b3138bf59",
+      "metrics": {
+        "schema_drift": "unknown",
+        "managed_data_drift": "unknown",
+        "visibility_drift": "unknown",
+        "pending_release_bundle": "unknown",
+        "managed_data_applied_operations": "0",
+        "managed_data_skipped_operations": "0",
+        "metadata_updated_objects": "0",
+        "metadata_deactivated_objects": "0",
+        "postcondition_verify_status": "success",
+        "dev_sync_result": "success",
+        "failed_step": "none"
+      }
+    },
+    {
+      "command": "db.py verify --ci",
+      "exitCode": 0,
+      "logSha256": "10ad0131e2f8c68871159a54addb0e8bbae3990446edc481c425c75dcec39273",
+      "metrics": {
+        "remark_verification": "complete",
+        "remark_schema_fingerprint": "6c04b1edd322b627ccf81ceb071495f21e64e780460ffe3353a0044cd397cbd0",
+        "schema_drift": "clean",
+        "managed_data_drift": "clean",
+        "visibility_drift": "clean",
+        "pending_release_bundle": "none",
+        "failed_step": "none",
+        "verify_result": "passed"
+      }
+    }
+  ]
+}

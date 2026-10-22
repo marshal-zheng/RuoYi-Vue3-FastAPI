@@ -1,6 +1,6 @@
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from config.error_codes import ErrorCode
@@ -13,6 +13,7 @@ from exceptions.exception import (
 from module_admin.entity.do.config_do import ConfigDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
+from modules.system.application.read_models.config_read_models import ConfigDetailReadModel
 from modules.system.infrastructure.config_repository import ConfigRepository  # noqa: F401 - test patch target
 from ports import IConfigRepository, IRedisClient
 from utils.common_util import CamelCaseUtil
@@ -57,7 +58,9 @@ class ConfigService:
                 begin_time=query_object.begin_time,
                 end_time=query_object.end_time,
             )
-            config_list_result = config_list_result.items if hasattr(config_list_result, 'items') else config_list_result
+            config_list_result = (
+                config_list_result.items if hasattr(config_list_result, 'items') else config_list_result
+            )
 
         return config_list_result
 
@@ -138,12 +141,6 @@ class ConfigService:
         """
         edit_config = page_object.model_dump(exclude_unset=True)
         config_info = await self.config_detail_services(page_object.config_id)
-        if not config_info.config_id:
-            raise ResourceNotFoundException(
-                user_message='参数配置不存在',
-                error_code=ErrorCode.DICT_NOT_FOUND,
-                developer_message=f'Config not found: config_id={page_object.config_id}',
-            )
 
         if not await self.check_config_key_unique_services(page_object):
             raise ResourceConflictException(
@@ -181,12 +178,6 @@ class ConfigService:
         delete_config_key_list = []
         for config_id in config_id_list:
             config_info = await self.config_detail_services(int(config_id))
-            if not config_info.config_id:
-                raise ResourceNotFoundException(
-                    user_message='参数配置不存在',
-                    error_code=ErrorCode.CONFIG_NOT_FOUND,
-                    developer_message=f'Config not found: config_id={config_id}',
-                )
             if config_info.config_type == CommonConstant.YES:
                 raise BusinessException(
                     user_message=f'内置参数【{config_info.config_key}】不能删除',
@@ -210,9 +201,13 @@ class ConfigService:
         """
         config = await self.config_repo.find_by_id(config_id)
         if config:
-            result = ConfigModel(**CamelCaseUtil.transform_result(config))
+            result = ConfigDetailReadModel(**CamelCaseUtil.transform_result(config))
         else:
-            result = ConfigModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='参数配置不存在',
+                error_code=ErrorCode.CONFIG_NOT_FOUND,
+                developer_message=f'config_id={config_id} not found',
+            )
 
         return result
 
@@ -243,7 +238,11 @@ class ConfigService:
                 item['configType'] = '是'
             else:
                 item['configType'] = '否'
-        binary_data = ExcelUtil.export_list2excel(config_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in config_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data
 

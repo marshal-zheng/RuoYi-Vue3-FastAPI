@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from sqlalchemy import delete, select
 
+from common.remark_document_v1 import plain_to_remark
 from config.database import AsyncSessionLocal
 from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.do.post_do import PostDO
@@ -227,6 +228,10 @@ class SeedDataManager:
                 'update_by': '',
             }
 
+            if entity in {'posts', 'roles', 'users'}:
+                item_data_with_audit['remark'] = plain_to_remark(
+                    item_data.get('remark'), identity_key=f'{model.__tablename__}:{item_data[pk_field]}:remark'
+                )
             instance = model(**item_data_with_audit)
             self.session.add(instance)
             count += 1
@@ -259,7 +264,11 @@ class SeedDataManager:
         now = datetime.now()
         count = 0
 
-        for user_data in users_data:
+        for source_user in users_data:
+            user_data = dict(source_user)
+            user_data['remark'] = plain_to_remark(
+                user_data.get('remark'), identity_key=f'sys_user:{user_data["user_id"]}:remark'
+            )
             # Hash the password
             plain_password = user_data.pop('password', 'admin123')
             hashed_password = PwdUtil.get_password_hash(plain_password)

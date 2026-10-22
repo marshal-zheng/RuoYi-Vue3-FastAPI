@@ -12,6 +12,7 @@
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -21,6 +22,7 @@
               >删除</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               @click="handleClean"
@@ -38,7 +40,6 @@
               >解锁</ZxButton
             >
             <ZxButton
-              type="warning"
               icon="Download"
               @click="() => handleExport(query)"
               v-hasPermi="['monitor:logininfor:export']"

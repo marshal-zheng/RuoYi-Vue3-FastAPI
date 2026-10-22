@@ -2,21 +2,23 @@
 Unit tests for config service.
 """
 
-import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from modules.system.application.services.config_service import ConfigService
-from module_admin.entity.do.config_do import ConfigDO
-from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
+import pytest
+
+from common.remark_document_v1 import plain_to_remark
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from exceptions.exception import (
-    ValidationException,
-    ResourceNotFoundException,
+    BusinessException,
     ResourceConflictException,
-    BusinessException
+    ResourceNotFoundException,
+    ValidationException,
 )
+from module_admin.entity.do.config_do import ConfigDO
+from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
+from modules.system.application.services.config_service import ConfigService
 
 
 @pytest.fixture
@@ -137,9 +139,8 @@ class TestConfigServiceQuery:
             mock_repo = MockRepo.return_value
             mock_repo.find_by_id = AsyncMock(return_value=None)
             
-            result = await ConfigService(mock_repo, mock_db).config_detail_services(999)
-            
-            assert result.config_id is None
+            with pytest.raises(ResourceNotFoundException):
+                await ConfigService(mock_repo, mock_db).config_detail_services(999)
 
 
 class TestConfigServiceCache:
@@ -317,7 +318,10 @@ class TestConfigServiceUpdate:
     @pytest.mark.asyncio
     async def test_edit_config_not_found(self, mock_redis, mock_db):
         """Test editing non-existent config."""
-        with patch.object(ConfigService, 'config_detail_services', new=AsyncMock(return_value=ConfigModel())):
+        with patch.object(
+            ConfigService, 'config_detail_services',
+            new=AsyncMock(side_effect=ResourceNotFoundException(user_message='参数配置不存在'))
+        ):
             edit_config = ConfigModel(
                 config_id=999,
                 config_name='不存在',
@@ -449,7 +453,7 @@ class TestConfigServiceExport:
                 'configType': 'Y',
                 'createBy': 'admin',
                 'createTime': '2024-01-01',
-                'remark': '备注'
+                'remark': plain_to_remark('备注', identity_key='sys_config:1:remark')
             },
             {
                 'configId': 2,
@@ -459,7 +463,7 @@ class TestConfigServiceExport:
                 'configType': 'N',
                 'createBy': 'admin',
                 'createTime': '2024-01-01',
-                'remark': ''
+                'remark': None
             }
         ]
         
@@ -473,3 +477,7 @@ class TestConfigServiceExport:
             # Verify config_type was transformed
             assert config_list[0]['configType'] == '是'
             assert config_list[1]['configType'] == '否'
+            exported_rows, _mapping = mock_export.call_args.args
+            assert exported_rows[0]['remark'] == '备注'
+            assert exported_rows[1]['remark'] == ''
+            assert mock_export.call_args.kwargs == {'text_columns': {'remark'}}

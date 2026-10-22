@@ -131,10 +131,14 @@ class IDeptService(IBaseService, Protocol):
     async def check_dept_name_unique_services(self, page_object: Any) -> Any:
         """Contract for `DeptService.check_dept_name_unique_services`."""
 
-    async def add_dept_services(self, page_object: Any) -> Any:
+    async def add_dept_services(
+        self, page_object: Any, *, enforce_data_scope: bool = False, data_scope_sql: Any = 'True'
+    ) -> Any:
         """Contract for `DeptService.add_dept_services`."""
 
-    async def edit_dept_services(self, page_object: Any) -> Any:
+    async def edit_dept_services(
+        self, page_object: Any, *, enforce_data_scope: bool = False, data_scope_sql: Any = 'True'
+    ) -> Any:
         """Contract for `DeptService.edit_dept_services`."""
 
     async def delete_dept_services(self, page_object: Any) -> Any:
@@ -426,6 +430,9 @@ class IJobService(IBaseService, Protocol):
 
     async def edit_job_services(self, page_object: Any) -> Any:
         """Contract for `JobService.edit_job_services`."""
+
+    async def change_job_status_services(self, page_object: Any) -> Any:
+        """Change only the persisted job status and its schedule."""
 
     async def execute_job_once_services(self, page_object: Any) -> Any:
         """Contract for `JobService.execute_job_once_services`."""

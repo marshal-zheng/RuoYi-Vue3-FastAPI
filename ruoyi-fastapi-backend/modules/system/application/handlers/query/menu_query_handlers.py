@@ -87,6 +87,4 @@ class GetMenuDetailQueryHandler(IQueryHandler[GetMenuDetailQuery, MenuItemReadMo
 
     async def handle(self, request: GetMenuDetailQuery) -> MenuItemReadModel:
         detail_result = await self._menu_service.menu_detail_services(request.menu_id)
-        if detail_result is None:
-            return MenuItemReadModel()
         return _to_menu_item(detail_result)

@@ -9,14 +9,17 @@
 - 事务监控和日志
 - @transactional() 装饰器
 """
-from contextlib import asynccontextmanager
-from typing import Optional, Callable, Any
-from functools import wraps
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import event, text
-from utils.log_util import logger
 import asyncio
 import time
+from contextlib import asynccontextmanager
+from functools import wraps
+from typing import Any, Callable, Optional
+
+from sqlalchemy import event, text
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from utils.log_safety import safe_exception_summary
+from utils.log_util import logger
 
 
 class TransactionIsolationLevel:
@@ -96,7 +99,7 @@ class TransactionManager:
                         duration = time.time() - self._transaction_start_time
                         logger.error(
                             f"Transaction {transaction_id}: Nested transaction rolled back "
-                            f"(duration: {duration:.3f}s) - {e}"
+                            f"(duration: {duration:.3f}s) - {safe_exception_summary(e)}"
                         )
                         raise
             else:
@@ -120,7 +123,7 @@ class TransactionManager:
                     duration = time.time() - self._transaction_start_time
                     logger.error(
                         f"Transaction {transaction_id}: Joined transaction failed "
-                        f"(duration: {duration:.3f}s) - {e}"
+                        f"(duration: {duration:.3f}s) - {safe_exception_summary(e)}"
                     )
                     raise
         else:
@@ -145,7 +148,10 @@ class TransactionManager:
                     raise
                 except Exception as e:
                     duration = time.time() - self._transaction_start_time
-                    logger.error(f"Transaction {transaction_id}: Rolled back (duration: {duration:.3f}s) - {e}")
+                    logger.error(
+                        f"Transaction {transaction_id}: Rolled back "
+                        f"(duration: {duration:.3f}s) - {safe_exception_summary(e)}"
+                    )
                     raise
     
     async def _execute_with_transaction(self, trans):

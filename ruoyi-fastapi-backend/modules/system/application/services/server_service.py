@@ -79,7 +79,7 @@ class ServerService:
         io = psutil.disk_partitions()
         sys_files = []
         for i in io:
-            o = psutil.disk_usage(i.device)
+            o = psutil.disk_usage(i.mountpoint)
             disk_data = SysFiles(
                 dirName=i.device,
                 sysTypeName=i.fstype,
@@ -87,7 +87,7 @@ class ServerService:
                 total=bytes2human(o.total),
                 used=bytes2human(o.used),
                 free=bytes2human(o.free),
-                usage=f'{psutil.disk_usage(i.device).percent}%',
+                usage=f'{o.percent}%',
             )
             sys_files.append(disk_data)
 

@@ -7,10 +7,10 @@ import type {
   UserUpdateModel,
   UserProfileUpdateModel,
   UserStatusUpdateModel,
-  UserDetailModel,
+  UserDetailReadModel,
   UserInfoModel,
   UserPageQueryModel,
-  UserProfileModel,
+  UserProfileReadModel,
   UserRoleResponseModel,
 } from '@/api/_generated/types.gen';
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
@@ -51,8 +51,8 @@ export function getUser(
     url: '/system/user/' + parseStrEmpty(userId),
     method: 'get',
   };
-  if (userId === undefined || userId === '') return request<UserDetailModel>(requestConfig);
-  return requestDetail<UserDetailModel>(
+  if (userId === undefined || userId === '') return request<UserDetailReadModel>(requestConfig);
+  return requestDetail<UserDetailReadModel>(
     requestConfig,
     'userId',
     userId,
@@ -163,7 +163,7 @@ export function changeUserStatus(
 
 // 查询用户个人信息
 export function getUserProfile() {
-  return request<UserProfileModel>({
+  return request<UserProfileReadModel>({
     url: '/system/user/profile',
     method: 'get',
   });
@@ -171,7 +171,7 @@ export function getUserProfile() {
 
 // 修改用户个人信息
 export function updateUserProfile(data: UserProfileUpdateModel, options?: RequestOptions) {
-  return request<UserProfileModel>(
+  return request<UserProfileReadModel>(
     {
       url: '/system/user/profile',
       method: 'put',

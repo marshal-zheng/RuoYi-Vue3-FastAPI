@@ -32,7 +32,9 @@ from .release_bundle_service import (
     build_managed_data_payload,
     build_managed_object_snapshot,
     build_release_manifest_payload,
+    compute_payload_checksum,
 )
+from .remark_inputs import release_operation
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -226,7 +228,9 @@ def _expand_menu_dependencies(
             if parent_id <= 0 or parent_id in expanded:
                 break
             if parent_id not in menus:
-                raise ValueError(f'release selection depends on missing parent menu_id={parent_id} for menu_id={menu_id}')
+                raise ValueError(
+                    f'release selection depends on missing parent menu_id={parent_id} for menu_id={menu_id}'
+                )
             expanded.add(parent_id)
             current_menu_id = parent_id
     return expanded
@@ -252,6 +256,12 @@ async def _apply_existing_release_bundles(
 
 def _load_managed_data_plan(path: Path) -> ManagedDataPlan:
     payload = yaml.safe_load(path.read_text(encoding='utf-8')) or {}
+    bundle = yaml.safe_load((path.parent / 'bundle.yaml').read_text(encoding='utf-8')) or {}
+    expected = next(
+        (a.get('checksum') for a in bundle.get('artifacts', []) if a.get('artifact_type') == 'managed-data'), None
+    )
+    if expected != compute_payload_checksum(payload):
+        raise ValueError(f'Historical managed-data checksum mismatch: {path}')
     operations = []
     for raw_operation in payload.get('operations', []):
         if not isinstance(raw_operation, dict):
@@ -265,7 +275,7 @@ def _load_managed_data_plan(path: Path) -> ManagedDataPlan:
                 values=dict(raw_operation.get('values') or {}),
             )
         )
-    return ManagedDataPlan(operations=tuple(operations))
+    return ManagedDataPlan(operations=tuple(release_operation(operation) for operation in operations))
 
 
 def _advance_managed_scope(

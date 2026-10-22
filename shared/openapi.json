@@ -1,322 +1,6 @@
 {
   "components": {
     "schemas": {
-      "AddUserModel": {
-        "description": "新增用户模型",
-        "properties": {
-          "admin": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": false,
-            "description": "是否为admin",
-            "title": "Admin"
-          },
-          "avatar": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "头像地址",
-            "title": "Avatar"
-          },
-          "createBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建者",
-            "title": "Createby"
-          },
-          "createTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建时间",
-            "title": "Createtime"
-          },
-          "delFlag": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "2"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "删除标志（0代表存在 2代表删除）",
-            "title": "Delflag"
-          },
-          "deptId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "部门ID",
-            "title": "Deptid"
-          },
-          "email": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户邮箱",
-            "title": "Email"
-          },
-          "idCard": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "身份证号",
-            "title": "Idcard"
-          },
-          "loginDate": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "最后登录时间",
-            "title": "Logindate"
-          },
-          "loginIp": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "最后登录IP",
-            "title": "Loginip"
-          },
-          "nickName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户昵称",
-            "title": "Nickname"
-          },
-          "password": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "密码",
-            "title": "Password"
-          },
-          "phonenumber": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "手机号码",
-            "title": "Phonenumber"
-          },
-          "postIds": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": [],
-            "description": "岗位ID信息",
-            "title": "Postids"
-          },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
-          "roleIds": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": [],
-            "description": "角色ID信息",
-            "title": "Roleids"
-          },
-          "sex": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1",
-                  "2"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户性别（0男 1女 2未知）",
-            "title": "Sex"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "帐号状态（0正常 1停用）",
-            "title": "Status"
-          },
-          "type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "操作类型",
-            "title": "Type"
-          },
-          "updateBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新者",
-            "title": "Updateby"
-          },
-          "updateTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新时间",
-            "title": "Updatetime"
-          },
-          "userId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户ID",
-            "title": "Userid"
-          },
-          "userName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户账号",
-            "title": "Username"
-          },
-          "userType": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户类型（00系统用户）",
-            "title": "Usertype"
-          }
-        },
-        "title": "AddUserModel",
-        "type": "object"
-      },
       "BatchDeviceIdsModel": {
         "description": "批量设备ID模型",
         "properties": {
@@ -348,6 +32,23 @@
           }
         },
         "title": "BatchProjectIdsModel",
+        "type": "object"
+      },
+      "BlockAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "blockId"
+        ],
+        "title": "BlockAttrs",
         "type": "object"
       },
       "Body_batch_import_system_user_system_user_importData_post": {
@@ -623,6 +324,77 @@
         "title": "Body_protocol_import_preview_system_protocol_importPreview_post",
         "type": "object"
       },
+      "BoldMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "bold",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "BoldMark",
+        "type": "object"
+      },
+      "BulletListNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItemNode-Input"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "bulletList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "BulletListNode",
+        "type": "object"
+      },
+      "BulletListNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItemNode-Output"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "bulletList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "BulletListNode",
+        "type": "object"
+      },
       "CacheInfoModel": {
         "description": "缓存监控对象对应pydantic模型",
         "properties": {
@@ -884,12 +656,12 @@
         "title": "CollectionResult[DeviceCategoryOptionModel]",
         "type": "object"
       },
-      "CollectionResult_DictTypeModel_": {
+      "CollectionResult_DictTypeDetailReadModel_": {
         "properties": {
           "items": {
             "description": "Collection items",
             "items": {
-              "$ref": "#/components/schemas/DictTypeModel"
+              "$ref": "#/components/schemas/DictTypeDetailReadModel"
             },
             "title": "Items",
             "type": "array"
@@ -898,7 +670,7 @@
         "required": [
           "items"
         ],
-        "title": "CollectionResult[DictTypeModel]",
+        "title": "CollectionResult[DictTypeDetailReadModel]",
         "type": "object"
       },
       "CollectionResult_MenuModel_": {
@@ -933,6 +705,286 @@
           "items"
         ],
         "title": "CollectionResult[str]",
+        "type": "object"
+      },
+      "ConfigDetailReadModel": {
+        "description": "Read model for config detail.",
+        "properties": {
+          "configId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config id",
+            "title": "Configid"
+          },
+          "configKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config key",
+            "title": "Configkey"
+          },
+          "configName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config name",
+            "title": "Configname"
+          },
+          "configType": {
+            "anyOf": [
+              {
+                "enum": [
+                  "Y",
+                  "N"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Built-in flag",
+            "title": "Configtype"
+          },
+          "configValue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config value",
+            "title": "Configvalue"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "ConfigDetailReadModel",
+        "type": "object"
+      },
+      "ConfigListItemReadModel": {
+        "description": "Read model for config list item.",
+        "properties": {
+          "configId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config id",
+            "title": "Configid"
+          },
+          "configKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config key",
+            "title": "Configkey"
+          },
+          "configName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config name",
+            "title": "Configname"
+          },
+          "configType": {
+            "anyOf": [
+              {
+                "enum": [
+                  "Y",
+                  "N"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Built-in flag",
+            "title": "Configtype"
+          },
+          "configValue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Config value",
+            "title": "Configvalue"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "ConfigListItemReadModel",
         "type": "object"
       },
       "ConfigModel": {
@@ -1030,14 +1082,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "updateBy": {
             "anyOf": [
@@ -1069,7 +1120,6 @@
         "type": "object"
       },
       "ConfigPageQueryModel": {
-        "description": "参数配置管理分页查询模型",
         "properties": {
           "beginTime": {
             "anyOf": [
@@ -1196,18 +1246,6 @@
             "title": "Pagesize",
             "type": "integer"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "updateBy": {
             "anyOf": [
               {
@@ -1235,6 +1273,63 @@
           }
         },
         "title": "ConfigPageQueryModel",
+        "type": "object"
+      },
+      "ConfigPageReadModel": {
+        "description": "Read model for paged config list.",
+        "properties": {
+          "hasNext": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/ConfigListItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "ConfigPageReadModel",
         "type": "object"
       },
       "CpuInfo": {
@@ -1382,6 +1477,112 @@
           "user"
         ],
         "title": "CurrentUserModel",
+        "type": "object"
+      },
+      "DashboardSaveModel": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "additionalProperties": true,
+            "title": "Document",
+            "type": "object"
+          },
+          "expectedRevision": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expectedrevision"
+          }
+        },
+        "required": [
+          "document",
+          "expectedRevision"
+        ],
+        "title": "DashboardSaveModel",
+        "type": "object"
+      },
+      "DeptCreateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptName": {
+            "description": "部门名称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Deptname",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "leader": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "负责人",
+            "title": "Leader"
+          },
+          "orderNum": {
+            "description": "显示顺序",
+            "title": "Ordernum",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "父部门ID, 0为根部门",
+            "minimum": 0.0,
+            "title": "Parentid",
+            "type": "integer"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "联系电话",
+            "title": "Phone"
+          },
+          "status": {
+            "description": "部门状态(0正常 1停用)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentId",
+          "deptName",
+          "orderNum"
+        ],
+        "title": "DeptCreateModel",
         "type": "object"
       },
       "DeptModel": {
@@ -1776,6 +1977,88 @@
           }
         },
         "title": "DeptQueryModel",
+        "type": "object"
+      },
+      "DeptUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptId": {
+            "description": "部门ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Deptid",
+            "type": "integer"
+          },
+          "deptName": {
+            "description": "部门名称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Deptname",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "leader": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "负责人",
+            "title": "Leader"
+          },
+          "orderNum": {
+            "description": "显示顺序",
+            "title": "Ordernum",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "父部门ID, 0为根部门",
+            "minimum": 0.0,
+            "title": "Parentid",
+            "type": "integer"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "联系电话",
+            "title": "Phone"
+          },
+          "status": {
+            "description": "部门状态(0正常 1停用)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "deptId"
+        ],
+        "title": "DeptUpdateModel",
         "type": "object"
       },
       "DevMenuSyncRequest": {
@@ -2222,6 +2505,390 @@
         "title": "DeviceModel",
         "type": "object"
       },
+      "DictDataDetailReadModel": {
+        "description": "Read model for dictionary-data detail.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "cssClass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "CSS class",
+            "title": "Cssclass"
+          },
+          "dictCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary data code",
+            "title": "Dictcode"
+          },
+          "dictLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Label",
+            "title": "Dictlabel"
+          },
+          "dictSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sort order",
+            "title": "Dictsort"
+          },
+          "dictType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type key",
+            "title": "Dicttype"
+          },
+          "dictValue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Value",
+            "title": "Dictvalue"
+          },
+          "isDefault": {
+            "anyOf": [
+              {
+                "enum": [
+                  "Y",
+                  "N"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Default flag",
+            "title": "Isdefault"
+          },
+          "listClass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "List class",
+            "title": "Listclass"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "DictDataDetailReadModel",
+        "type": "object"
+      },
+      "DictDataItemReadModel": {
+        "description": "Read model for dictionary-data item.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "cssClass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "CSS class",
+            "title": "Cssclass"
+          },
+          "dictCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary data code",
+            "title": "Dictcode"
+          },
+          "dictLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Label",
+            "title": "Dictlabel"
+          },
+          "dictSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sort order",
+            "title": "Dictsort"
+          },
+          "dictType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type key",
+            "title": "Dicttype"
+          },
+          "dictValue": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Value",
+            "title": "Dictvalue"
+          },
+          "isDefault": {
+            "anyOf": [
+              {
+                "enum": [
+                  "Y",
+                  "N"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Default flag",
+            "title": "Isdefault"
+          },
+          "listClass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "List class",
+            "title": "Listclass"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "DictDataItemReadModel",
+        "type": "object"
+      },
       "DictDataModel": {
         "description": "字典数据表对应pydantic模型",
         "properties": {
@@ -2353,14 +3020,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "status": {
             "anyOf": [
@@ -2408,7 +3074,6 @@
         "type": "object"
       },
       "DictDataPageQueryModel": {
-        "description": "字典数据管理分页查询模型",
         "properties": {
           "beginTime": {
             "anyOf": [
@@ -2571,18 +3236,6 @@
             "title": "Pagesize",
             "type": "integer"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "status": {
             "anyOf": [
               {
@@ -2626,6 +3279,319 @@
           }
         },
         "title": "DictDataPageQueryModel",
+        "type": "object"
+      },
+      "DictDataPageReadModel": {
+        "description": "Read model for paged dictionary-data list.",
+        "properties": {
+          "hasNext": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/DictDataItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "DictDataPageReadModel",
+        "type": "object"
+      },
+      "DictTypeDetailReadModel": {
+        "description": "Read model for dictionary-type detail.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "dictId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type id",
+            "title": "Dictid"
+          },
+          "dictName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type name",
+            "title": "Dictname"
+          },
+          "dictType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type key",
+            "title": "Dicttype"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "DictTypeDetailReadModel",
+        "type": "object"
+      },
+      "DictTypeItemReadModel": {
+        "description": "Read model for dictionary-type list item.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "dictId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type id",
+            "title": "Dictid"
+          },
+          "dictName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type name",
+            "title": "Dictname"
+          },
+          "dictType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dictionary type key",
+            "title": "Dicttype"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "DictTypeItemReadModel",
         "type": "object"
       },
       "DictTypeModel": {
@@ -2695,14 +3661,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "status": {
             "anyOf": [
@@ -2750,7 +3715,6 @@
         "type": "object"
       },
       "DictTypePageQueryModel": {
-        "description": "字典类型管理分页查询模型",
         "properties": {
           "beginTime": {
             "anyOf": [
@@ -2849,18 +3813,6 @@
             "title": "Pagesize",
             "type": "integer"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "status": {
             "anyOf": [
               {
@@ -2904,6 +3856,200 @@
           }
         },
         "title": "DictTypePageQueryModel",
+        "type": "object"
+      },
+      "DictTypePageReadModel": {
+        "description": "Read model for paged dictionary-type list.",
+        "properties": {
+          "hasNext": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/DictTypeItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "DictTypePageReadModel",
+        "type": "object"
+      },
+      "DocumentBody-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/DocumentRoot-Input"
+          },
+          "format": {
+            "const": "json",
+            "title": "Format",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "content"
+        ],
+        "title": "DocumentBody",
+        "type": "object"
+      },
+      "DocumentBody-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/DocumentRoot-Output"
+          },
+          "format": {
+            "const": "json",
+            "title": "Format",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "content"
+        ],
+        "title": "DocumentBody",
+        "type": "object"
+      },
+      "DocumentMeta": {
+        "additionalProperties": false,
+        "properties": {
+          "schemaVersion": {
+            "const": "stable-block-identity/v2",
+            "title": "Schemaversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "schemaVersion"
+        ],
+        "title": "DocumentMeta",
+        "type": "object"
+      },
+      "DocumentRoot-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/BulletListNode-Input",
+                  "orderedList": "#/components/schemas/OrderedListNode-Input",
+                  "paragraph": "#/components/schemas/ParagraphNode-Input"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ParagraphNode-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/BulletListNode-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderedListNode-Input"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "doc",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "DocumentRoot",
+        "type": "object"
+      },
+      "DocumentRoot-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/BulletListNode-Output",
+                  "orderedList": "#/components/schemas/OrderedListNode-Output",
+                  "paragraph": "#/components/schemas/ParagraphNode-Output"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ParagraphNode-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/BulletListNode-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderedListNode-Output"
+                }
+              ]
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "doc",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "content"
+        ],
+        "title": "DocumentRoot",
         "type": "object"
       },
       "EditGenTableModel": {
@@ -3122,14 +4268,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "sub": {
             "anyOf": [
@@ -3146,7 +4291,7 @@
           "subTable": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/GenTableModel"
+                "$ref": "#/components/schemas/GenTableModel-Input"
               },
               {
                 "type": "null"
@@ -3313,232 +4458,6 @@
           }
         },
         "title": "EditGenTableModel",
-        "type": "object"
-      },
-      "EditJobModel": {
-        "description": "编辑定时任务模型",
-        "properties": {
-          "concurrent": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "是否并发执行（0允许 1禁止）",
-            "title": "Concurrent"
-          },
-          "createBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建者",
-            "title": "Createby"
-          },
-          "createTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建时间",
-            "title": "Createtime"
-          },
-          "cronExpression": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "cron执行表达式",
-            "title": "Cronexpression"
-          },
-          "invokeTarget": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "调用目标字符串",
-            "title": "Invoketarget"
-          },
-          "jobArgs": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "位置参数",
-            "title": "Jobargs"
-          },
-          "jobExecutor": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务执行器",
-            "title": "Jobexecutor"
-          },
-          "jobGroup": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务组名",
-            "title": "Jobgroup"
-          },
-          "jobId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务ID",
-            "title": "Jobid"
-          },
-          "jobKwargs": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "关键字参数",
-            "title": "Jobkwargs"
-          },
-          "jobName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务名称",
-            "title": "Jobname"
-          },
-          "misfirePolicy": {
-            "anyOf": [
-              {
-                "enum": [
-                  "1",
-                  "2",
-                  "3"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "计划执行错误策略（1立即执行 2执行一次 3放弃执行）",
-            "title": "Misfirepolicy"
-          },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注信息",
-            "title": "Remark"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "状态（0正常 1暂停）",
-            "title": "Status"
-          },
-          "type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "操作类型",
-            "title": "Type"
-          },
-          "updateBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新者",
-            "title": "Updateby"
-          },
-          "updateTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新时间",
-            "title": "Updatetime"
-          }
-        },
-        "title": "EditJobModel",
         "type": "object"
       },
       "EditUserModel": {
@@ -3724,14 +4643,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "role": {
             "anyOf": [
@@ -4803,7 +5721,35 @@
         "title": "GenTableColumnModel",
         "type": "object"
       },
-      "GenTableModel": {
+      "GenTableDetailReadModel": {
+        "properties": {
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/GenTableColumnModel"
+            },
+            "title": "Columns",
+            "type": "array"
+          },
+          "info": {
+            "$ref": "#/components/schemas/GenTableReadModel"
+          },
+          "tables": {
+            "items": {
+              "$ref": "#/components/schemas/GenTableReadModel"
+            },
+            "title": "Tables",
+            "type": "array"
+          }
+        },
+        "required": [
+          "info",
+          "columns",
+          "tables"
+        ],
+        "title": "GenTableDetailReadModel",
+        "type": "object"
+      },
+      "GenTableModel-Input": {
         "description": "代码生成业务表模型",
         "properties": {
           "businessName": {
@@ -5008,14 +5954,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "sub": {
             "anyOf": [
@@ -5032,7 +5977,7 @@
           "subTable": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/GenTableModel"
+                "$ref": "#/components/schemas/GenTableModel-Input"
               },
               {
                 "type": "null"
@@ -5201,6 +6146,446 @@
         "title": "GenTableModel",
         "type": "object"
       },
+      "GenTableModel-Output": {
+        "description": "代码生成业务表模型",
+        "properties": {
+          "businessName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成业务名",
+            "title": "Businessname"
+          },
+          "className": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "实体类名称",
+            "title": "Classname"
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenTableColumnModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表列信息",
+            "title": "Columns"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建者",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建时间",
+            "title": "Createtime"
+          },
+          "crud": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为单表",
+            "title": "Crud"
+          },
+          "functionAuthor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成功能作者",
+            "title": "Functionauthor"
+          },
+          "functionName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成功能名",
+            "title": "Functionname"
+          },
+          "genPath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成路径（不填默认项目路径）",
+            "title": "Genpath"
+          },
+          "genType": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成代码方式（0zip压缩包 1自定义路径）",
+            "title": "Gentype"
+          },
+          "moduleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成模块名",
+            "title": "Modulename"
+          },
+          "options": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "其它生成选项",
+            "title": "Options"
+          },
+          "packageName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成包路径",
+            "title": "Packagename"
+          },
+          "parentMenuId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "上级菜单ID字段",
+            "title": "Parentmenuid"
+          },
+          "parentMenuName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "上级菜单名称字段",
+            "title": "Parentmenuname"
+          },
+          "pkColumn": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenTableColumnModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "主键信息"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注"
+          },
+          "sub": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为子表",
+            "title": "Sub"
+          },
+          "subTable": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenTableModel-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "子表信息"
+          },
+          "subTableFkName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "子表关联的外键名",
+            "title": "Subtablefkname"
+          },
+          "subTableName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "关联子表的表名",
+            "title": "Subtablename"
+          },
+          "tableComment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表描述",
+            "title": "Tablecomment"
+          },
+          "tableId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "编号",
+            "title": "Tableid"
+          },
+          "tableName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表名称",
+            "title": "Tablename"
+          },
+          "tplCategory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "使用的模板（crud单表操作 tree树表操作）",
+            "title": "Tplcategory"
+          },
+          "tplWebType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "前端模板类型（element-ui模版 element-plus模版）",
+            "title": "Tplwebtype"
+          },
+          "tree": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为树表",
+            "title": "Tree"
+          },
+          "treeCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树编码字段",
+            "title": "Treecode"
+          },
+          "treeName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树名称字段",
+            "title": "Treename"
+          },
+          "treeParentCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树父编码字段",
+            "title": "Treeparentcode"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新者",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新时间",
+            "title": "Updatetime"
+          }
+        },
+        "title": "GenTableModel",
+        "type": "object"
+      },
+      "GenTablePageReadModel": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/GenTableReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pagesize"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total"
+        ],
+        "title": "GenTablePageReadModel",
+        "type": "object"
+      },
       "GenTableParamsModel": {
         "description": "代码生成业务表参数模型",
         "properties": {
@@ -5256,6 +6641,411 @@
         "title": "GenTableParamsModel",
         "type": "object"
       },
+      "GenTableReadModel": {
+        "description": "Public table configuration response.",
+        "properties": {
+          "businessName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成业务名",
+            "title": "Businessname"
+          },
+          "className": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "实体类名称",
+            "title": "Classname"
+          },
+          "columns": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/GenTableColumnModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表列信息",
+            "title": "Columns"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建者",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建时间",
+            "title": "Createtime"
+          },
+          "crud": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为单表",
+            "title": "Crud"
+          },
+          "functionAuthor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成功能作者",
+            "title": "Functionauthor"
+          },
+          "functionName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成功能名",
+            "title": "Functionname"
+          },
+          "genPath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成路径（不填默认项目路径）",
+            "title": "Genpath"
+          },
+          "genType": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成代码方式（0zip压缩包 1自定义路径）",
+            "title": "Gentype"
+          },
+          "moduleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成模块名",
+            "title": "Modulename"
+          },
+          "options": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "其它生成选项",
+            "title": "Options"
+          },
+          "packageName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "生成包路径",
+            "title": "Packagename"
+          },
+          "parentMenuId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "上级菜单ID字段",
+            "title": "Parentmenuid"
+          },
+          "parentMenuName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "上级菜单名称字段",
+            "title": "Parentmenuname"
+          },
+          "pkColumn": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenTableColumnModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "主键信息"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "sub": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为子表",
+            "title": "Sub"
+          },
+          "subTable": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GenTableModel-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "子表信息"
+          },
+          "subTableFkName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "子表关联的外键名",
+            "title": "Subtablefkname"
+          },
+          "subTableName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "关联子表的表名",
+            "title": "Subtablename"
+          },
+          "tableComment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表描述",
+            "title": "Tablecomment"
+          },
+          "tableId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "编号",
+            "title": "Tableid"
+          },
+          "tableName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "表名称",
+            "title": "Tablename"
+          },
+          "tplCategory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "使用的模板（crud单表操作 tree树表操作）",
+            "title": "Tplcategory"
+          },
+          "tplWebType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "前端模板类型（element-ui模版 element-plus模版）",
+            "title": "Tplwebtype"
+          },
+          "tree": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "是否为树表",
+            "title": "Tree"
+          },
+          "treeCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树编码字段",
+            "title": "Treecode"
+          },
+          "treeName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树名称字段",
+            "title": "Treename"
+          },
+          "treeParentCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "树父编码字段",
+            "title": "Treeparentcode"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新者",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新时间",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "GenTableReadModel",
+        "type": "object"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -5267,6 +7057,233 @@
           }
         },
         "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "HardBreakNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/BoldMark",
+                      "italic": "#/components/schemas/ItalicMark",
+                      "link": "#/components/schemas/LinkMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marks"
+          },
+          "text": {
+            "title": "Text",
+            "type": "null"
+          },
+          "type": {
+            "const": "hardBreak",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "HardBreakNode",
+        "type": "object"
+      },
+      "HardBreakNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/BoldMark",
+                      "italic": "#/components/schemas/ItalicMark",
+                      "link": "#/components/schemas/LinkMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marks"
+          },
+          "type": {
+            "const": "hardBreak",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "HardBreakNode",
+        "type": "object"
+      },
+      "ItalicMark": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "italic",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "title": "ItalicMark",
+        "type": "object"
+      },
+      "JobCreateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "concurrent": {
+            "description": "是否并发执行",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Concurrent",
+            "type": "string"
+          },
+          "cronExpression": {
+            "description": "Cron执行表达式",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Cronexpression",
+            "type": "string"
+          },
+          "invokeTarget": {
+            "description": "已注册调用目标",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Invoketarget",
+            "type": "string"
+          },
+          "jobArgs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逗号分隔的位置参数",
+            "title": "Jobargs"
+          },
+          "jobExecutor": {
+            "description": "任务执行器",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobexecutor",
+            "type": "string"
+          },
+          "jobGroup": {
+            "description": "任务组名",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobgroup",
+            "type": "string"
+          },
+          "jobKwargs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "JSON对象形式的关键字参数",
+            "title": "Jobkwargs"
+          },
+          "jobName": {
+            "description": "任务名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobname",
+            "type": "string"
+          },
+          "misfirePolicy": {
+            "description": "计划执行错误策略",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "title": "Misfirepolicy",
+            "type": "string"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobName",
+          "invokeTarget",
+          "cronExpression"
+        ],
+        "title": "JobCreateModel",
         "type": "object"
       },
       "JobLogPageQueryModel": {
@@ -5925,6 +7942,166 @@
         "title": "JobPageQueryModel",
         "type": "object"
       },
+      "JobRunModel": {
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "title": "JobRunModel",
+        "type": "object"
+      },
+      "JobStatusUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId",
+          "status"
+        ],
+        "title": "JobStatusUpdateModel",
+        "type": "object"
+      },
+      "JobUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "concurrent": {
+            "description": "是否并发执行",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Concurrent",
+            "type": "string"
+          },
+          "cronExpression": {
+            "description": "Cron执行表达式",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Cronexpression",
+            "type": "string"
+          },
+          "invokeTarget": {
+            "description": "已注册调用目标",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Invoketarget",
+            "type": "string"
+          },
+          "jobArgs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逗号分隔的位置参数",
+            "title": "Jobargs"
+          },
+          "jobExecutor": {
+            "description": "任务执行器",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobexecutor",
+            "type": "string"
+          },
+          "jobGroup": {
+            "description": "任务组名",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobgroup",
+            "type": "string"
+          },
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          },
+          "jobKwargs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "JSON对象形式的关键字参数",
+            "title": "Jobkwargs"
+          },
+          "jobName": {
+            "description": "任务名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobname",
+            "type": "string"
+          },
+          "misfirePolicy": {
+            "description": "计划执行错误策略",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "title": "Misfirepolicy",
+            "type": "string"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "title": "JobUpdateModel",
+        "type": "object"
+      },
       "KeyRevokeRequestModel": {
         "properties": {
           "kid": {
@@ -5954,6 +8131,151 @@
           }
         },
         "title": "KeyRotateRequestModel",
+        "type": "object"
+      },
+      "LinkAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "title": "Class",
+            "type": "null"
+          },
+          "href": {
+            "title": "Href",
+            "type": "string"
+          },
+          "rel": {
+            "const": "noopener noreferrer nofollow",
+            "title": "Rel",
+            "type": "string"
+          },
+          "target": {
+            "const": "_blank",
+            "title": "Target",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "null"
+          }
+        },
+        "required": [
+          "href",
+          "target",
+          "rel",
+          "class",
+          "title"
+        ],
+        "title": "LinkAttrs",
+        "type": "object"
+      },
+      "LinkMark": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/LinkAttrs"
+          },
+          "type": {
+            "const": "link",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "LinkMark",
+        "type": "object"
+      },
+      "ListItemNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/BulletListNode-Input",
+                  "orderedList": "#/components/schemas/OrderedListNode-Input",
+                  "paragraph": "#/components/schemas/ParagraphNode-Input"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ParagraphNode-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/BulletListNode-Input"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderedListNode-Input"
+                }
+              ]
+            },
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "listItem",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "ListItemNode",
+        "type": "object"
+      },
+      "ListItemNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/BlockAttrs"
+          },
+          "content": {
+            "items": {
+              "discriminator": {
+                "mapping": {
+                  "bulletList": "#/components/schemas/BulletListNode-Output",
+                  "orderedList": "#/components/schemas/OrderedListNode-Output",
+                  "paragraph": "#/components/schemas/ParagraphNode-Output"
+                },
+                "propertyName": "type"
+              },
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/ParagraphNode-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/BulletListNode-Output"
+                },
+                {
+                  "$ref": "#/components/schemas/OrderedListNode-Output"
+                }
+              ]
+            },
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "listItem",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "ListItemNode",
         "type": "object"
       },
       "LockProjectVersionModel": {
@@ -7019,6 +9341,91 @@
         "title": "OperLogPageQueryModel",
         "type": "object"
       },
+      "OrderedAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "start": {
+            "maximum": 1000000.0,
+            "minimum": 1.0,
+            "title": "Start",
+            "type": "integer"
+          },
+          "type": {
+            "title": "Type",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "start",
+          "type"
+        ],
+        "title": "OrderedAttrs",
+        "type": "object"
+      },
+      "OrderedListNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/OrderedAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItemNode-Input"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "orderedList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "OrderedListNode",
+        "type": "object"
+      },
+      "OrderedListNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/OrderedAttrs"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/ListItemNode-Output"
+            },
+            "minItems": 1,
+            "title": "Content",
+            "type": "array"
+          },
+          "type": {
+            "const": "orderedList",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs",
+          "content"
+        ],
+        "title": "OrderedListNode",
+        "type": "object"
+      },
       "PageResponseModel": {
         "description": "列表分页查询返回模型",
         "properties": {
@@ -7059,6 +9466,402 @@
           "total"
         ],
         "title": "PageResponseModel",
+        "type": "object"
+      },
+      "ParagraphAttrs": {
+        "additionalProperties": false,
+        "properties": {
+          "blockId": {
+            "maxLength": 64,
+            "minLength": 4,
+            "pattern": "^[a-z][a-z0-9]*_[a-z0-9]+$",
+            "title": "Blockid",
+            "type": "string"
+          },
+          "textAlign": {
+            "title": "Textalign",
+            "type": "null"
+          }
+        },
+        "required": [
+          "blockId",
+          "textAlign"
+        ],
+        "title": "ParagraphAttrs",
+        "type": "object"
+      },
+      "ParagraphNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/ParagraphAttrs"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "hardBreak": "#/components/schemas/HardBreakNode-Input",
+                      "text": "#/components/schemas/TextNode-Input"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TextNode-Input"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HardBreakNode-Input"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "type": {
+            "const": "paragraph",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "ParagraphNode",
+        "type": "object"
+      },
+      "ParagraphNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "attrs": {
+            "$ref": "#/components/schemas/ParagraphAttrs"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "hardBreak": "#/components/schemas/HardBreakNode-Output",
+                      "text": "#/components/schemas/TextNode-Output"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/TextNode-Output"
+                    },
+                    {
+                      "$ref": "#/components/schemas/HardBreakNode-Output"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content"
+          },
+          "type": {
+            "const": "paragraph",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "attrs"
+        ],
+        "title": "ParagraphNode",
+        "type": "object"
+      },
+      "PostDetailReadModel": {
+        "description": "Read model for post detail.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "postCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post code",
+            "title": "Postcode"
+          },
+          "postId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post id",
+            "title": "Postid"
+          },
+          "postName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post name",
+            "title": "Postname"
+          },
+          "postSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post sort",
+            "title": "Postsort"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "PostDetailReadModel",
+        "type": "object"
+      },
+      "PostItemReadModel": {
+        "description": "Read model for post list item.",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "postCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post code",
+            "title": "Postcode"
+          },
+          "postId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post id",
+            "title": "Postid"
+          },
+          "postName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post name",
+            "title": "Postname"
+          },
+          "postSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post sort",
+            "title": "Postsort"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "PostItemReadModel",
         "type": "object"
       },
       "PostModel": {
@@ -7140,14 +9943,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "status": {
             "anyOf": [
@@ -7195,7 +9997,6 @@
         "type": "object"
       },
       "PostPageQueryModel": {
-        "description": "岗位管理分页查询模型",
         "properties": {
           "beginTime": {
             "anyOf": [
@@ -7306,18 +10107,6 @@
             "description": "显示顺序",
             "title": "Postsort"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "status": {
             "anyOf": [
               {
@@ -7361,6 +10150,183 @@
           }
         },
         "title": "PostPageQueryModel",
+        "type": "object"
+      },
+      "PostPageReadModel": {
+        "description": "Read model for paged post list.",
+        "properties": {
+          "hasNext": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/PostItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "PostPageReadModel",
+        "type": "object"
+      },
+      "ProjectCreatedModel": {
+        "description": "新建工程及同时创建的初始版本，供拓扑设计入口使用。",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建人",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建时间",
+            "title": "Createtime"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "0",
+            "description": "删除标志（0代表存在 2代表删除）",
+            "title": "Delflag"
+          },
+          "projectCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程编码",
+            "title": "Projectcode"
+          },
+          "projectDesc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程描述",
+            "title": "Projectdesc"
+          },
+          "projectId": {
+            "description": "工程编号",
+            "title": "Projectid",
+            "type": "integer"
+          },
+          "projectName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程名称",
+            "title": "Projectname"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新者",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新时间",
+            "title": "Updatetime"
+          },
+          "versionId": {
+            "description": "初始版本编号",
+            "title": "Versionid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "projectId",
+          "versionId"
+        ],
+        "title": "ProjectCreatedModel",
         "type": "object"
       },
       "ProjectImportDataModel": {
@@ -8062,34 +11028,100 @@
         "title": "PyInfo",
         "type": "object"
       },
+      "RemarkDocument-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "annotations": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Annotations",
+            "type": "array"
+          },
+          "assets": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Assets",
+            "type": "array"
+          },
+          "body": {
+            "$ref": "#/components/schemas/DocumentBody-Input"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/DocumentMeta"
+          },
+          "version": {
+            "const": 2,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "body",
+          "annotations",
+          "assets",
+          "meta"
+        ],
+        "title": "RemarkDocument",
+        "type": "object"
+      },
+      "RemarkDocument-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "annotations": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Annotations",
+            "type": "array"
+          },
+          "assets": {
+            "items": {},
+            "maxItems": 0,
+            "title": "Assets",
+            "type": "array"
+          },
+          "body": {
+            "$ref": "#/components/schemas/DocumentBody-Output"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/DocumentMeta"
+          },
+          "version": {
+            "const": 2,
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "body",
+          "annotations",
+          "assets",
+          "meta"
+        ],
+        "title": "RemarkDocument",
+        "type": "object"
+      },
       "ResetPasswordModel": {
         "description": "重置密码模型",
         "properties": {
           "newPassword": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
             "description": "新密码",
-            "title": "Newpassword"
+            "minLength": 1,
+            "title": "Newpassword",
+            "type": "string"
           },
           "oldPassword": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
             "description": "旧密码",
-            "title": "Oldpassword"
+            "minLength": 1,
+            "title": "Oldpassword",
+            "type": "string"
           }
         },
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ],
         "title": "ResetPasswordModel",
         "type": "object"
       },
@@ -8126,14 +11158,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "roleKey": {
             "description": "角色权限字符串",
@@ -8228,8 +11259,218 @@
         "title": "RoleDataScopeUpdateModel",
         "type": "object"
       },
-      "RoleModel": {
-        "description": "角色表对应pydantic模型",
+      "RoleDetailReadModel": {
+        "description": "Read model for role detail.",
+        "properties": {
+          "admin": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Admin role flag",
+            "title": "Admin"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "dataScope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data scope",
+            "title": "Datascope"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Delete flag",
+            "title": "Delflag"
+          },
+          "deptCheckStrictly": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dept check strictly",
+            "title": "Deptcheckstrictly"
+          },
+          "menuCheckStrictly": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Menu check strictly",
+            "title": "Menucheckstrictly"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "roleId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role id",
+            "title": "Roleid"
+          },
+          "roleKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role key",
+            "title": "Rolekey"
+          },
+          "roleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role name",
+            "title": "Rolename"
+          },
+          "roleSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role sort",
+            "title": "Rolesort"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "RoleDetailReadModel",
+        "type": "object"
+      },
+      "RoleInfoModel": {
+        "description": "Role projection used in nested identity and user-detail responses.",
         "properties": {
           "admin": {
             "anyOf": [
@@ -8330,14 +11571,18 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Output"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
           },
           "roleId": {
             "anyOf": [
@@ -8429,11 +11674,14 @@
             "title": "Updatetime"
           }
         },
-        "title": "RoleModel",
+        "required": [
+          "remarkText"
+        ],
+        "title": "RoleInfoModel",
         "type": "object"
       },
-      "RolePageQueryModel": {
-        "description": "角色管理分页查询模型",
+      "RoleItemReadModel": {
+        "description": "Read model for role list item.",
         "properties": {
           "admin": {
             "anyOf": [
@@ -8444,10 +11692,206 @@
                 "type": "null"
               }
             ],
-            "default": false,
-            "description": "是否为admin",
+            "description": "Admin role flag",
             "title": "Admin"
           },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "dataScope": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data scope",
+            "title": "Datascope"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Delete flag",
+            "title": "Delflag"
+          },
+          "deptCheckStrictly": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Dept check strictly",
+            "title": "Deptcheckstrictly"
+          },
+          "menuCheckStrictly": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Menu check strictly",
+            "title": "Menucheckstrictly"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "roleId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role id",
+            "title": "Roleid"
+          },
+          "roleKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role key",
+            "title": "Rolekey"
+          },
+          "roleName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role name",
+            "title": "Rolename"
+          },
+          "roleSort": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role sort",
+            "title": "Rolesort"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "RoleItemReadModel",
+        "type": "object"
+      },
+      "RolePageQueryModel": {
+        "properties": {
           "beginTime": {
             "anyOf": [
               {
@@ -8567,18 +12011,6 @@
             "title": "Pagesize",
             "type": "integer"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "roleId": {
             "anyOf": [
               {
@@ -8672,6 +12104,63 @@
         "title": "RolePageQueryModel",
         "type": "object"
       },
+      "RolePageReadModel": {
+        "description": "Read model for paged role list.",
+        "properties": {
+          "hasNext": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/RoleItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "RolePageReadModel",
+        "type": "object"
+      },
       "RoleStatusUpdateModel": {
         "additionalProperties": false,
         "properties": {
@@ -8731,14 +12220,13 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Input"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
           },
           "roleId": {
             "description": "角色ID",
@@ -8977,14 +12465,18 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Output"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
           },
           "roleId": {
             "anyOf": [
@@ -9076,6 +12568,9 @@
             "title": "Updatetime"
           }
         },
+        "required": [
+          "remarkText"
+        ],
         "title": "SelectedRoleModel",
         "type": "object"
       },
@@ -9335,6 +12830,110 @@
         "title": "SysInfo",
         "type": "object"
       },
+      "TextNode-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/BoldMark",
+                      "italic": "#/components/schemas/ItalicMark",
+                      "link": "#/components/schemas/LinkMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marks"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "TextNode",
+        "type": "object"
+      },
+      "TextNode-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "marks": {
+            "anyOf": [
+              {
+                "items": {
+                  "discriminator": {
+                    "mapping": {
+                      "bold": "#/components/schemas/BoldMark",
+                      "italic": "#/components/schemas/ItalicMark",
+                      "link": "#/components/schemas/LinkMark"
+                    },
+                    "propertyName": "type"
+                  },
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LinkMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/BoldMark"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ItalicMark"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Marks"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "TextNode",
+        "type": "object"
+      },
       "Token": {
         "properties": {
           "accessToken": {
@@ -9355,44 +12954,199 @@
         "title": "Token",
         "type": "object"
       },
-      "UserDetailModel": {
-        "description": "获取用户详情信息响应模型",
+      "UserCreateModel": {
+        "additionalProperties": false,
         "properties": {
-          "data": {
+          "deptId": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/UserInfoModel"
+                "type": "integer"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "用户信息"
+            "description": "部门ID",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "maxLength": 18,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "身份证号",
+            "title": "Idcard"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "password": {
+            "description": "初始密码",
+            "minLength": 1,
+            "pattern": "^[^<>\"'|\\\\]+$",
+            "title": "Password",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
           },
           "postIds": {
             "anyOf": [
               {
-                "items": {},
+                "items": {
+                  "type": "integer"
+                },
                 "type": "array"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "岗位ID信息",
+            "description": "岗位ID; 未提供保留, 空数组或null清空",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Input"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "exclusiveMinimum": 0.0,
+                  "maximum": 2147483647.0,
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "角色ID; 未提供保留, 空数组或null清空",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "帐号状态",
+            "title": "Status"
+          },
+          "userName": {
+            "description": "用户账号",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nickName",
+          "userName",
+          "password"
+        ],
+        "title": "UserCreateModel",
+        "type": "object"
+      },
+      "UserDetailReadModel": {
+        "description": "Read model for user detail page.",
+        "properties": {
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserInfoReadModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User info"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Selected post ids",
             "title": "Postids"
           },
           "posts": {
-            "description": "岗位信息",
+            "description": "Post options",
             "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/PostModel"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/components/schemas/PostItemReadModel"
             },
             "title": "Posts",
             "type": "array"
@@ -9400,37 +13154,28 @@
           "roleIds": {
             "anyOf": [
               {
-                "items": {},
+                "items": {
+                  "type": "integer"
+                },
                 "type": "array"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "角色ID信息",
+            "description": "Selected role ids",
             "title": "Roleids"
           },
           "roles": {
-            "description": "角色信息",
+            "description": "Role options",
             "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/components/schemas/RoleModel"
-                },
-                {
-                  "type": "null"
-                }
-              ]
+              "$ref": "#/components/schemas/RoleItemReadModel"
             },
             "title": "Roles",
             "type": "array"
           }
         },
-        "required": [
-          "posts",
-          "roles"
-        ],
-        "title": "UserDetailModel",
+        "title": "UserDetailReadModel",
         "type": "object"
       },
       "UserInfoModel": {
@@ -9624,14 +13369,18 @@
           "remark": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/RemarkDocument-Output"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "备注",
-            "title": "Remark"
+            "description": "备注"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
           },
           "role": {
             "anyOf": [
@@ -9639,7 +13388,7 @@
                 "items": {
                   "anyOf": [
                     {
-                      "$ref": "#/components/schemas/RoleModel"
+                      "$ref": "#/components/schemas/RoleInfoModel"
                     },
                     {
                       "type": "null"
@@ -9763,25 +13512,620 @@
             "title": "Usertype"
           }
         },
+        "required": [
+          "remarkText"
+        ],
         "title": "UserInfoModel",
         "type": "object"
       },
-      "UserPageQueryModel": {
-        "description": "用户管理分页查询模型",
+      "UserInfoReadModel": {
+        "description": "Read model for user info payload.",
         "properties": {
-          "admin": {
+          "avatar": {
             "anyOf": [
               {
-                "type": "boolean"
+                "type": "string"
               },
               {
                 "type": "null"
               }
             ],
-            "default": false,
-            "description": "是否为admin",
-            "title": "Admin"
+            "description": "Avatar URL",
+            "title": "Avatar"
           },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Delete flag",
+            "title": "Delflag"
+          },
+          "dept": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Department detail",
+            "title": "Dept"
+          },
+          "deptId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Department id",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Email",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ID card",
+            "title": "Idcard"
+          },
+          "loginDate": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Last login time",
+            "title": "Logindate"
+          },
+          "loginIp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Last login IP",
+            "title": "Loginip"
+          },
+          "nickName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Nick name",
+            "title": "Nickname"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Phone number",
+            "title": "Phonenumber"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post id string",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "role": {
+            "description": "Role list",
+            "items": {
+              "$ref": "#/components/schemas/RoleItemReadModel"
+            },
+            "title": "Role",
+            "type": "array"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role id string",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sex",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          },
+          "userId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User id",
+            "title": "Userid"
+          },
+          "userName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User account",
+            "title": "Username"
+          },
+          "userType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User type",
+            "title": "Usertype"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "UserInfoReadModel",
+        "type": "object"
+      },
+      "UserListItemReadModel": {
+        "description": "Read model for user list item.",
+        "properties": {
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Avatar URL",
+            "title": "Avatar"
+          },
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Creator",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Create time",
+            "title": "Createtime"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Delete flag",
+            "title": "Delflag"
+          },
+          "dept": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Department detail",
+            "title": "Dept"
+          },
+          "deptId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Department id",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Email",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ID card",
+            "title": "Idcard"
+          },
+          "loginDate": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Last login time",
+            "title": "Logindate"
+          },
+          "loginIp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Last login IP",
+            "title": "Loginip"
+          },
+          "nickName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Nick name",
+            "title": "Nickname"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Phone number",
+            "title": "Phonenumber"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Post id string",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Output"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Remark"
+          },
+          "remarkText": {
+            "readOnly": true,
+            "title": "Remarktext",
+            "type": "string"
+          },
+          "role": {
+            "description": "Role list",
+            "items": {
+              "$ref": "#/components/schemas/RoleItemReadModel"
+            },
+            "title": "Role",
+            "type": "array"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Role id string",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Sex",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User status",
+            "title": "Status"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Updater",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Update time",
+            "title": "Updatetime"
+          },
+          "userId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User id",
+            "title": "Userid"
+          },
+          "userName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User account",
+            "title": "Username"
+          },
+          "userType": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User type",
+            "title": "Usertype"
+          }
+        },
+        "required": [
+          "remarkText"
+        ],
+        "title": "UserListItemReadModel",
+        "type": "object"
+      },
+      "UserPageQueryModel": {
+        "properties": {
           "avatar": {
             "anyOf": [
               {
@@ -9968,18 +14312,6 @@
             "description": "手机号码",
             "title": "Phonenumber"
           },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
           "sex": {
             "anyOf": [
               {
@@ -10078,19 +14410,76 @@
         "title": "UserPageQueryModel",
         "type": "object"
       },
-      "UserProfileModel": {
-        "description": "获取个人信息响应模型",
+      "UserPageReadModel": {
+        "description": "Read model for paged user list.",
         "properties": {
-          "data": {
+          "hasNext": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/UserInfoModel"
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
             ],
-            "description": "用户信息"
+            "description": "Whether next page exists",
+            "title": "Hasnext"
+          },
+          "items": {
+            "description": "Current page items",
+            "items": {
+              "$ref": "#/components/schemas/UserListItemReadModel"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Current page number",
+            "title": "Page"
+          },
+          "pageSize": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Page size",
+            "title": "Pagesize"
+          },
+          "total": {
+            "default": 0,
+            "description": "Total records",
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "title": "UserPageReadModel",
+        "type": "object"
+      },
+      "UserProfileReadModel": {
+        "description": "Read model for current user profile.",
+        "properties": {
+          "data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserInfoReadModel"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "User info"
           },
           "postGroup": {
             "anyOf": [
@@ -10101,7 +14490,7 @@
                 "type": "null"
               }
             ],
-            "description": "岗位信息",
+            "description": "Post display group",
             "title": "Postgroup"
           },
           "roleGroup": {
@@ -10113,16 +14502,68 @@
                 "type": "null"
               }
             ],
-            "description": "角色信息",
+            "description": "Role display group",
             "title": "Rolegroup"
           }
         },
-        "required": [
-          "data",
-          "postGroup",
-          "roleGroup"
-        ],
-        "title": "UserProfileModel",
+        "title": "UserProfileReadModel",
+        "type": "object"
+      },
+      "UserProfileUpdateModel": {
+        "additionalProperties": false,
+        "description": "The authenticated user can edit these profile fields only.",
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          }
+        },
+        "title": "UserProfileUpdateModel",
         "type": "object"
       },
       "UserRegister": {
@@ -10231,6 +14672,187 @@
           "roleIds"
         ],
         "title": "UserRolesAssignModel",
+        "type": "object"
+      },
+      "UserStatusUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "description": "帐号状态",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "userId": {
+            "description": "用户ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Userid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "userId",
+          "status"
+        ],
+        "title": "UserStatusUpdateModel",
+        "type": "object"
+      },
+      "UserUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "部门ID",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "maxLength": 18,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "身份证号",
+            "title": "Idcard"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "岗位ID; 未提供保留, 空数组或null清空",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RemarkDocument-Input"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "exclusiveMinimum": 0.0,
+                  "maximum": 2147483647.0,
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "角色ID; 未提供保留, 空数组或null清空",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "帐号状态",
+            "title": "Status"
+          },
+          "userId": {
+            "description": "用户ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Userid",
+            "type": "integer"
+          },
+          "userName": {
+            "description": "用户账号",
+            "maxLength": 30,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId"
+        ],
+        "title": "UserUpdateModel",
         "type": "object"
       },
       "ValidationError": {
@@ -12904,7 +17526,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobModel"
+                "$ref": "#/components/schemas/JobCreateModel"
               }
             }
           },
@@ -12946,7 +17568,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditJobModel"
+                "$ref": "#/components/schemas/JobUpdateModel"
               }
             }
           },
@@ -12990,7 +17612,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditJobModel"
+                "$ref": "#/components/schemas/JobStatusUpdateModel"
               }
             }
           },
@@ -13479,7 +18101,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobModel"
+                "$ref": "#/components/schemas/JobRunModel"
               }
             }
           },
@@ -15395,10 +20017,12 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectCreatedModel"
+                }
               }
             },
             "description": "Successful Response"
@@ -18911,24 +23535,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -18994,7 +23600,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/ConfigPageReadModel"
                 }
               }
             },
@@ -19110,7 +23716,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ConfigModel"
+                  "$ref": "#/components/schemas/ConfigDetailReadModel"
                 }
               }
             },
@@ -19138,6 +23744,196 @@
         ]
       }
     },
+    "/system/dashboard/{scope}/{key}": {
+      "delete": {
+        "operationId": "remove_dashboard_system_dashboard__scope___key__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expectedRevision",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "Expectedrevision",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Remove Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      },
+      "get": {
+        "operationId": "load_dashboard_system_dashboard__scope___key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Load Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      },
+      "put": {
+        "operationId": "save_dashboard_system_dashboard__scope___key__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardSaveModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Save Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      }
+    },
     "/system/dept": {
       "post": {
         "operationId": "add_system_dept_system_dept_post",
@@ -19145,7 +23941,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeptModel"
+                "$ref": "#/components/schemas/DeptCreateModel"
               }
             }
           },
@@ -19187,7 +23983,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeptModel"
+                "$ref": "#/components/schemas/DeptUpdateModel"
               }
             }
           },
@@ -20146,24 +24942,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -20229,7 +25007,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/DictDataPageReadModel"
                 }
               }
             },
@@ -20366,7 +25144,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DictDataModel"
+                  "$ref": "#/components/schemas/DictDataDetailReadModel"
                 }
               }
             },
@@ -20679,24 +25457,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -20762,7 +25522,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/DictTypePageReadModel"
                 }
               }
             },
@@ -20798,7 +25558,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CollectionResult_DictTypeModel_"
+                  "$ref": "#/components/schemas/CollectionResult_DictTypeDetailReadModel_"
                 }
               }
             },
@@ -20904,7 +25664,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/DictTypeModel"
+                  "$ref": "#/components/schemas/DictTypeDetailReadModel"
                 }
               }
             },
@@ -22432,24 +27192,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -22515,7 +27257,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/PostPageReadModel"
                 }
               }
             },
@@ -22607,7 +27349,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PostModel"
+                  "$ref": "#/components/schemas/PostDetailReadModel"
                 }
               }
             },
@@ -23414,7 +28156,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleModel"
+                  "$ref": "#/components/schemas/RoleDetailReadModel"
                 }
               }
             },
@@ -23458,7 +28200,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleModel"
+                  "$ref": "#/components/schemas/RoleDetailReadModel"
                 }
               }
             },
@@ -23846,43 +28588,6 @@
               ],
               "description": "更新时间",
               "title": "Updatetime"
-            }
-          },
-          {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
-            "description": "是否为admin",
-            "in": "query",
-            "name": "admin",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "description": "是否为admin",
-              "title": "Admin"
             }
           },
           {
@@ -24441,43 +29146,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
-            "description": "是否为admin",
-            "in": "query",
-            "name": "admin",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "description": "是否为admin",
-              "title": "Admin"
-            }
-          },
-          {
             "description": "角色ID",
             "in": "query",
             "name": "roleId",
@@ -24571,7 +29239,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleModel"
+                  "$ref": "#/components/schemas/RoleDetailReadModel"
                 }
               }
             },
@@ -24617,7 +29285,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleModel"
+                  "$ref": "#/components/schemas/RoleDetailReadModel"
                 }
               }
             },
@@ -24989,43 +29657,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
-            "description": "是否为admin",
-            "in": "query",
-            "name": "admin",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "description": "是否为admin",
-              "title": "Admin"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -25091,7 +29722,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/RolePageReadModel"
                 }
               }
             },
@@ -25183,7 +29814,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RoleModel"
+                  "$ref": "#/components/schemas/RoleDetailReadModel"
                 }
               }
             },
@@ -25218,7 +29849,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserModel"
+                "$ref": "#/components/schemas/UserCreateModel"
               }
             }
           },
@@ -25260,7 +29891,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditUserModel"
+                "$ref": "#/components/schemas/UserUpdateModel"
               }
             }
           },
@@ -25328,7 +29959,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDetailModel"
+                  "$ref": "#/components/schemas/UserDetailReadModel"
                 }
               }
             },
@@ -25449,7 +30080,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditUserModel"
+                "$ref": "#/components/schemas/UserStatusUpdateModel"
               }
             }
           },
@@ -25996,43 +30627,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
-            "description": "是否为admin",
-            "in": "query",
-            "name": "admin",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "default": false,
-              "description": "是否为admin",
-              "title": "Admin"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -26098,7 +30692,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/UserPageReadModel"
                 }
               }
             },
@@ -26134,7 +30728,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserProfileModel"
+                  "$ref": "#/components/schemas/UserProfileReadModel"
                 }
               }
             },
@@ -26157,7 +30751,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInfoModel"
+                "$ref": "#/components/schemas/UserProfileUpdateModel"
               }
             }
           },
@@ -26401,7 +30995,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserDetailModel"
+                  "$ref": "#/components/schemas/UserDetailReadModel"
                 }
               }
             },
@@ -26931,24 +31525,6 @@
               ],
               "description": "更新时间",
               "title": "Updatetime"
-            }
-          },
-          {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
             }
           },
           {
@@ -27506,24 +32082,6 @@
             }
           },
           {
-            "description": "备注",
-            "in": "query",
-            "name": "remark",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "备注",
-              "title": "Remark"
-            }
-          },
-          {
             "description": "开始时间",
             "in": "query",
             "name": "beginTime",
@@ -27589,7 +32147,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PageResponseModel"
+                  "$ref": "#/components/schemas/GenTablePageReadModel"
                 }
               }
             },
@@ -27770,7 +32328,9 @@
           "200": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/GenTableDetailReadModel"
+                }
               }
             },
             "description": "Successful Response"

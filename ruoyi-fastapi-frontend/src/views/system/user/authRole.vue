@@ -202,7 +202,7 @@ const { run: submitForm, pending: submitPending } = useOperation(async () => {
   }
 });
 const footerButtons = computed(() => [
-  { key: 'cancel', text: '关闭' },
+  { key: 'cancel', text: '关闭', variant: 'default' },
   {
     key: 'save',
     type: 'primary',

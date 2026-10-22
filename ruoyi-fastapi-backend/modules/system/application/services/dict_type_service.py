@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
+from modules.system.application.read_models.dict_read_models import DictTypeDetailReadModel
+
+if TYPE_CHECKING:
+    from module_admin.entity.vo.dict_vo import DeleteDictTypeModel, DictTypeModel, DictTypePageQueryModel
+    from ports import IDictDataRepository, IDictDataService, IDictTypeRepository, IRedisClient
+
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from config.error_codes import ErrorCode
@@ -13,8 +19,6 @@ from exceptions.exception import ResourceConflictException, ResourceNotFoundExce
 from module_admin.entity.do.dict_do import DictTypeDO
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.dict_vo import DeleteDictTypeModel, DictTypeModel, DictTypePageQueryModel
-from ports import IDictDataRepository, IDictDataService, IDictTypeRepository, IRedisClient
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.transaction_manager import transactional
@@ -86,7 +90,7 @@ class DictTypeService:
         self,
         redis: IRedisClient,
         page_object: DictTypeModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         新增字典类型信息service
@@ -118,7 +122,7 @@ class DictTypeService:
         self,
         redis: IRedisClient,
         page_object: DictTypeModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         编辑字典类型信息service
@@ -132,12 +136,6 @@ class DictTypeService:
             page_object.update_time = datetime.now()
         edit_dict_type = page_object.model_dump(exclude_unset=True)
         dict_type_info = await self.dict_type_detail_services(page_object.dict_id)
-        if not dict_type_info.dict_id:
-            raise ResourceNotFoundException(
-                user_message='字典类型不存在',
-                error_code=ErrorCode.DICT_NOT_FOUND,
-                developer_message=f'Dict type not found: dict_id={page_object.dict_id}',
-            )
 
         if not await self.check_dict_type_unique_services(page_object):
             raise ResourceConflictException(
@@ -146,8 +144,8 @@ class DictTypeService:
                 developer_message=f'Dict type already exists: dict_type={page_object.dict_type}',
             )
 
-        dict_data_list = await self.dict_data_repo.find_by_type(dict_type_info.dict_type)
         if dict_type_info.dict_type != page_object.dict_type:
+            dict_data_list = await self.dict_data_repo.find_all(filters={'dict_type': dict_type_info.dict_type})
             for dict_data in dict_data_list:
                 dict_data.dict_type = page_object.dict_type
                 dict_data.update_by = page_object.update_by
@@ -161,12 +159,11 @@ class DictTypeService:
                     setattr(db_dict_type, key, value)
             await self.dict_type_repo.update(db_dict_type)
 
-        if dict_type_info.dict_type != page_object.dict_type:
-            dict_data_result = [CamelCaseUtil.transform_result(row) for row in dict_data_list if row]
-            await redis.set(
-                f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}',
-                json.dumps(dict_data_result, ensure_ascii=False, default=str),
-            )
+        cache_keys = [
+            f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}'
+            for dict_type in dict.fromkeys((dict_type_info.dict_type, page_object.dict_type))
+        ]
+        await redis.delete(*cache_keys)
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -210,9 +207,13 @@ class DictTypeService:
         """
         dict_type = await self.dict_type_repo.find_by_id(dict_id)
         if dict_type:
-            result = DictTypeModel(**CamelCaseUtil.transform_result(dict_type))
+            result = DictTypeDetailReadModel(**CamelCaseUtil.transform_result(dict_type))
         else:
-            result = DictTypeModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='字典类型不存在',
+                error_code=ErrorCode.DICT_NOT_FOUND,
+                developer_message=f'dict_id={dict_id} not found',
+            )
 
         return result
 
@@ -240,7 +241,11 @@ class DictTypeService:
                 item['status'] = '正常'
             else:
                 item['status'] = '停用'
-        binary_data = ExcelUtil.export_list2excel(dict_type_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in dict_type_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data
 

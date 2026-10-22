@@ -90,8 +90,6 @@ class GetDeptDetailQueryHandler(IQueryHandler[GetDeptDetailQuery, DeptDetailRead
             await self._dept_service.check_dept_data_scope_services(request.dept_id, request.data_scope_sql)
 
         detail_result = await self._dept_service.dept_detail_services(request.dept_id)
-        if detail_result is None:
-            return DeptDetailReadModel()
 
         if hasattr(detail_result, 'model_dump'):
             payload = detail_result.model_dump(by_alias=False)

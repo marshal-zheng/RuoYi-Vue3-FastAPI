@@ -175,15 +175,17 @@ async def login(
     await security_service.register_user_session(
         session_id=session_id,
         token=access_token,
+        refresh_token=refresh_token,
         user_id=user_id,
         user_name=user_name,
         dept_name=dept_name,
         login_info=user.login_info,
         expires_at=int(datetime.now(UTC).timestamp()) + int(SecurityConfig.security_jwt_max_expire_seconds),
+        refresh_expires_at=int(datetime.now(UTC).timestamp()) + int(SecurityConfig.security_refresh_expire_seconds),
     )
     csrf_token, csrf_ttl = await security_service.issue_csrf_token(user_id)
 
-    await user_service.edit_user_services(query_db, EditUserModel(userId=result[0].user_id, loginDate=datetime.now(), type='status'))
+    await user_service.edit_user_services(query_db, EditUserModel(userId=result[0].user_id, loginDate=datetime.now(), type='login'))
     logger.info('登录成功')
 
     request_from_swagger = request.headers.get('referer').endswith('docs') if request.headers.get('referer') else False
@@ -220,7 +222,7 @@ async def refresh_session(request: Request):
     payload = await security_service.verify_access_token(
         refresh_token,
         audience=SecurityConfig.security_jwt_audience_api,
-        enforce_replay=True,
+        enforce_replay=False,
         expected_use='user_refresh',
         enforce_session=False,
         max_lifetime_seconds=SecurityConfig.security_refresh_expire_seconds,
@@ -260,11 +262,14 @@ async def refresh_session(request: Request):
     await security_service.register_user_session(
         session_id=session_id,
         token=access_token,
+        refresh_token=new_refresh_token,
+        previous_refresh_token=refresh_token,
         user_id=user_id,
         user_name=user_name,
         dept_name=str(dept_name) if dept_name is not None else None,
         login_info=login_info,
         expires_at=int(datetime.now(UTC).timestamp()) + int(SecurityConfig.security_jwt_max_expire_seconds),
+        refresh_expires_at=int(datetime.now(UTC).timestamp()) + int(SecurityConfig.security_refresh_expire_seconds),
     )
     csrf_token, csrf_ttl = await security_service.issue_csrf_token(user_id)
 
@@ -333,34 +338,29 @@ async def logout(
     session_id = ''
     security_service = _resolve_security_service(request)
     access_token = (token or request.cookies.get(SecurityConfig.security_access_cookie_name, '') or '').strip()
-    try:
-        if access_token:
+    refresh_token = (request.cookies.get(SecurityConfig.security_refresh_cookie_name, '') or '').strip()
+    for candidate, expected_use, lifetime in (
+        (access_token, 'user_access', SecurityConfig.security_jwt_max_expire_seconds),
+        (refresh_token, 'user_refresh', SecurityConfig.security_refresh_expire_seconds),
+    ):
+        if not candidate:
+            continue
+        try:
             payload = await security_service.verify_access_token(
-                access_token,
+                candidate,
                 audience=SecurityConfig.security_jwt_audience_api,
                 enforce_replay=False,
+                expected_use=expected_use,
                 enforce_session=False,
-                max_lifetime_seconds=SecurityConfig.security_jwt_max_expire_seconds,
+                max_lifetime_seconds=lifetime,
             )
-            session_id = str(payload.get('session_id') or payload.get('sessionId') or '')
-        if not session_id:
-            refresh_token = (request.cookies.get(SecurityConfig.security_refresh_cookie_name, '') or '').strip()
-            if refresh_token:
-                payload = await security_service.verify_access_token(
-                    refresh_token,
-                    audience=SecurityConfig.security_jwt_audience_api,
-                    enforce_replay=False,
-                    expected_use='user_refresh',
-                    enforce_session=False,
-                    max_lifetime_seconds=SecurityConfig.security_refresh_expire_seconds,
-                )
-                session_id = str(payload.get('session_id') or payload.get('sessionId') or '')
+        except AuthException:
+            continue
+        session_id = str(payload.get('session_id') or payload.get('sessionId') or '')
         if session_id:
             await security_service.revoke_user_session(session_id)
-    except Exception:
-        logger.warning('登出时token校验失败，执行无状态退出')
-    else:
-        logger.info('退出成功')
+            break
+    logger.info('退出成功')
 
     response = ResponseUtil.no_content()
     _clear_auth_cookies(response, request=request)

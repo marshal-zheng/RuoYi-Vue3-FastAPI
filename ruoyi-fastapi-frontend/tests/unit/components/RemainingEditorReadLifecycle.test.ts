@@ -10,6 +10,7 @@ import ProjectFormDialog from '@/views/project/components/ProjectFormDialog.vue'
 import ProtocolFormDrawer from '@/components/business/Protocol/ProtocolFormDrawer.vue';
 import DictData from '@/views/system/dict/data.vue';
 import { setQuerySession, endQuerySession } from '@/queries/context';
+import { mockRemark } from '@/mocks/data/remark';
 
 const api = vi.hoisted(() => ({
   menu: vi.fn(),
@@ -23,6 +24,7 @@ const api = vi.hoisted(() => ({
   write: vi.fn(),
   error: vi.fn(),
   recovery: vi.fn(),
+  discard: vi.fn(),
 }));
 vi.mock('@/api/system/menu', () => ({
   getMenu: api.menu,
@@ -64,15 +66,32 @@ vi.mock('@/api/system/dict/type', () => ({
 }));
 vi.mock('vue-router', () => ({ useRoute: () => ({ params: { dictId: 1 } }) }));
 vi.mock('@/utils/http', () => ({ presentRequestError: api.recovery }));
-vi.mock('element-plus', () => ({ ElMessage: { error: api.error } }));
+vi.mock('@zxio/schema-form/formily', () => ({
+  ZxSchemaForm: {
+    name: 'ZxSchemaForm',
+    props: ['initial', 'save'],
+    template: '<div />',
+  },
+}));
+vi.mock('element-plus', async (original) => ({
+  ...(await original<typeof import('element-plus')>()),
+  ElMessage: { error: api.error },
+  ElMessageBox: { confirm: api.discard },
+}));
 vi.mock('@/utils/feedback/presenter', () => ({
   presentProblemFeedback: api.error,
   resolveFeedbackOptions: (v: unknown) => v,
 }));
 vi.mock('@/utils/dict', () => ({
-  useDict: () => ({ sys_normal_disable: [], sys_notice_status: [], sys_notice_type: [] }),
+  useDict: () => ({
+    sys_normal_disable: Vue.ref([]),
+    sys_notice_status: [],
+    sys_notice_type: [],
+  }),
 }));
-vi.mock('@/components/ui/IconSelect/index.vue', () => ({ default: { template: '<div />' } }));
+vi.mock('@/components/ui/IconSelect/index.vue', () => ({
+  default: { template: '<div />' },
+}));
 vi.mock('@/components/business/Protocol/selector/ProtocolTypeSelector.vue', () => ({
   default: { template: '<div />' },
 }));
@@ -218,7 +237,7 @@ function editor(item: (typeof cases)[number]) {
       plugins: [[VueQueryPlugin, { queryClient }]],
       config: {
         globalProperties: {
-          useDict: () => ({ sys_normal_disable: [] }),
+          useDict: () => ({ sys_normal_disable: Vue.ref([]) }),
           resetForm: vi.fn(),
         } as unknown as Vue.ComponentCustomProperties,
       },
@@ -242,6 +261,11 @@ function editor(item: (typeof cases)[number]) {
           template: '<button :disabled="disabled"><slot /></button>',
         },
         ZxInput: true,
+        ZxSchemaForm: {
+          name: 'ZxSchemaForm',
+          props: ['initial', 'save'],
+          template: '<div />',
+        },
         ElTreeSelect: {
           name: 'ElTreeSelect',
           props: ['data'],
@@ -291,7 +315,12 @@ function editor(item: (typeof cases)[number]) {
     modal,
     open: (id?: number) =>
       item.name === 'dict data' ? setup.openEditor(id) : exposed.open(item.arg(id)),
-    model: () => modal().props('formModel') as Record<string, unknown>,
+    model: () =>
+      (item.name === 'post'
+        ? wrapper.findComponent({ name: 'ZxSchemaForm' }).exists()
+          ? wrapper.findComponent({ name: 'ZxSchemaForm' }).props('initial')
+          : {}
+        : modal().props('formModel')) as Record<string, unknown>,
     confirm: () =>
       item.name === 'dict data'
         ? setup.submitForm()
@@ -303,6 +332,23 @@ const outcome = <T>(p: Promise<T>) =>
     (value) => ({ value }),
     (error) => ({ error })
   );
+it('dict data writes omit the readonly server remark projection', async () => {
+  api.dictData.mockResolvedValueOnce({
+    ...detail(11),
+    dictCode: 11,
+    remark: null,
+    remarkText: '只读摘要',
+  });
+  const e = editor(cases.find((item) => item.name === 'dict data')!);
+  await e.open(11);
+  await e.confirm();
+  expect(api.write).toHaveBeenCalledTimes(1);
+  expect(api.write.mock.calls[0][0]).not.toHaveProperty('remarkText');
+  expect(api.write.mock.calls[0][0]).toMatchObject({
+    dictCode: 11,
+    remark: null,
+  });
+});
 beforeEach(() => {
   setQuerySession(1, [], []);
   vi.resetAllMocks();
@@ -329,13 +375,14 @@ for (const item of cases)
       expect(await e.confirm()).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
       const second = e.open(22);
+      if (item.name === 'post' || item.name === 'dict data') await Vue.nextTick();
       expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
       b.resolve(detail(22));
       await second;
       a.resolve(detail(11));
       await first;
       await Vue.nextTick();
-      expect(e.model()[item.id]).toBe(22);
+      if (item.name !== 'post') expect(e.model()[item.id]).toBe(22);
       expect(e.model()[item.field]).toBe('Record 22');
       expect(e.modal().props('loading')).toBe(false);
       expect(e.modal().props('okDisabled')).toBe(false);
@@ -399,12 +446,13 @@ for (const item of cases)
       expect(e.modal().props('okDisabled')).toBe(true);
       expect(await e.confirm()).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
-      expect(api.error).toHaveBeenCalledExactlyOnceWith(failure.message);
+      expect(api.error).not.toHaveBeenCalled();
       const retry = e.wrapper.findAll('button').find((b) => b.text() === '重试');
       expect(retry).toBeDefined();
       await retry!.trigger('click');
       await flushPromises();
-      expect(e.model()[item.id]).toBe(11);
+      if (item.name !== 'post') expect(e.model()[item.id]).toBe(11);
+      expect(item.read.mock.calls.at(-1)?.[0]).toBe(11);
       expect(e.modal().props('okDisabled')).toBe(false);
     });
     it('aborts at scope disposal without consuming late success', async () => {
@@ -437,7 +485,10 @@ for (const item of cases)
       await current;
       expect(api.recovery).toHaveBeenCalledExactlyOnceWith(
         failure,
-        expect.objectContaining({ silentError: false, feedback: { mode: 'auto' } })
+        expect.objectContaining({
+          silentError: false,
+          feedback: { mode: 'auto' },
+        })
       );
       expect(failure.config.silentError).toBe(true);
     });
@@ -459,4 +510,44 @@ it('owns menu options together with the detail and preserves root creation', asy
   await (e.wrapper.vm as unknown as { open: () => Promise<void> }).open();
   expect(e.model().parentId).toBe(0);
   expect(e.modal().props('okDisabled')).toBe(false);
+});
+
+describe('new project initial version ownership', () => {
+  it('forwards the created initial version to the topology route consumer', async () => {
+    const item = cases.find((entry) => entry.name === 'project')!;
+    const e = editor(item);
+    await e.open();
+    e.model().projectName = 'QA project';
+    api.write.mockResolvedValue({
+      projectId: 101,
+      versionId: 201,
+      projectName: 'QA project',
+    });
+    await e.confirm();
+    expect(e.wrapper.emitted('success')).toEqual([
+      [
+        {
+          mode: 'create',
+          projectId: 101,
+          versionId: 201,
+          data: { projectId: 101, versionId: 201, projectName: 'QA project' },
+        },
+      ],
+    ]);
+  });
+});
+
+it('dict data protects document drafts on cancel and record replacement', async () => {
+  const item = cases.find((candidate) => candidate.name === 'dict data')!;
+  const e = editor(item); await e.open(11);
+  e.model().remark = mockRemark('保留字典备注😀', 'dictguard');
+  api.discard.mockRejectedValue(new Error('继续编辑'));
+  await e.open(22);
+  expect(api.dictData).toHaveBeenCalledTimes(1);
+  const state = e.wrapper.vm.$.setupState as unknown as { cancel: () => Promise<void> };
+  await state.cancel();
+  expect(e.modal().props('modelValue')).toBe(true);
+  api.discard.mockResolvedValueOnce(undefined);
+  await e.open(22);
+  expect(e.model().dictCode).toBe(22);
 });

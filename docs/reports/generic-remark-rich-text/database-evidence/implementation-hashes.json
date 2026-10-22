@@ -1,0 +1,7 @@
+{
+  "scripts/data_migrations/remark_document_v2.py": "a3a6347395f0cfa291d89e2ad58bf931020335d5df974f73b1b772ba3206c222",
+  "common/remark_document_v1.py": "35a9adb01810e342f276e24b64ddf83089b01bdf9d09aa661d6d66325b408e70",
+  "alembic/versions/20261022_remark_document_v2.py": "e18cf6bdd65a45fe495876744bcfe1ac1cc7ec74f04414dae49ffba64eaf5546",
+  "scripts/db.py": "3c06c5e056831db611dc179337ffddd0b839b505cff474a0758a18b7be774b76",
+  "scripts/internal/db_workflow/alembic_revision_ids.py": "063cf1e3ee2b2e2203e965f81708bd71008bffecc2223d2af78d476d28f48e32"
+}

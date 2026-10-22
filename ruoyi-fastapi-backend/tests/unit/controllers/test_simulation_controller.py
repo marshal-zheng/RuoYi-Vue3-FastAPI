@@ -30,6 +30,7 @@ class _FakeRequest:
         self.method = 'POST'
         self.url = SimpleNamespace(path=path)
         self.path_params = {}
+        self.query_params = {}
         self._payload = payload or {}
 
     async def body(self):

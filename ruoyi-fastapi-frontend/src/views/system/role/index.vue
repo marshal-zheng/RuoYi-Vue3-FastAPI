@@ -18,7 +18,6 @@
               >新增</ZxButton
             >
             <ZxButton
-              type="success"
               icon="Edit"
               :disabled="single"
               @click="handleUpdate"
@@ -26,6 +25,7 @@
               >修改</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -34,11 +34,7 @@
               :loading="handleDeletePending"
               >删除</ZxButton
             >
-            <ZxButton
-              type="warning"
-              icon="Download"
-              @click="handleExport"
-              v-hasPermi="['system:role:export']"
+            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:role:export']"
               >导出</ZxButton
             >
           </template>
@@ -131,15 +127,17 @@
             <template #default="scope">
               <div class="op-col__wrap">
                 <ZxButton
+                  link
+                  type="primary"
                   v-if="scope.row.roleId !== 1"
-                  type="text"
                   @click="handleUpdate(scope.row)"
                   v-hasPermi="['system:role:edit']"
                   >修改</ZxButton
                 >
                 <zx-button
+                  link
+                  type="primary"
                   v-if="scope.row.roleId !== 1"
-                  type="text"
                   @click="handleAuthUser(scope.row)"
                   v-hasPermi="['system:role:edit']"
                   >分配用户</zx-button

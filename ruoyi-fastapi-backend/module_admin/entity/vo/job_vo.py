@@ -88,14 +88,6 @@ class JobPageQueryModel(JobQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class EditJobModel(JobModel):
-    """
-    编辑定时任务模型
-    """
-
-    type: Optional[str] = Field(default=None, description='操作类型')
-
-
 class DeleteJobModel(CamelModelBase):
     """
     删除定时任务模型

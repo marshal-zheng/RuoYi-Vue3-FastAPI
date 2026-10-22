@@ -1,5 +1,5 @@
 import { requestDetail } from '@/api/detail';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { HttpOffsetPage } from '@/types/http-contract';
 export type ProjectVersionRecord = Omit<ProjectVersionModel, 'versionId'> & { versionId: number };
 import type {
@@ -63,8 +63,12 @@ export function delProjectVersion(versionId: number | string) {
 }
 
 // 克隆项目版本
-export function cloneProjectVersion(data: CloneProjectVersionModel) {
+export function cloneProjectVersion(
+  data: CloneProjectVersionModel,
+  config: Pick<ExtendedAxiosRequestConfig, 'silentError'> = {}
+) {
   return request<ProjectVersionRecord>({
+    ...config,
     url: '/project/version/clone',
     method: 'post',
     data: data,

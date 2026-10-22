@@ -11,7 +11,7 @@ from openpyxl.styles import Alignment, PatternFill, Border, Side, Font, Protecti
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
 from sqlalchemy.ext.asyncio import AsyncSession
-from exceptions.exception import ServiceException, ValidationException, ResourceNotFoundException
+from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.do.protocol_do import ProtocolDO
@@ -522,7 +522,11 @@ class ProtocolService:
             if isinstance(result, dict) and 'protocolConfig' in result:
                 result['protocolConfig'] = self.__normalize_protocol_config_for_frontend(result.get('protocolConfig'))
         else:
-            result = CamelCaseUtil.transform_result({})
+            raise ResourceNotFoundException(
+                user_message='协议不存在',
+                error_code=ErrorCode.PROTOCOL_NOT_FOUND,
+                developer_message=f'protocol_id={protocol_id} not found',
+            )
 
         return result
 
@@ -1141,15 +1145,19 @@ class ProtocolService:
         :return: 导入结果
         """
         if not file or not file.filename:
-            raise ServiceException(user_message='请选择要导入的文件')
+            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, field='file', user_message='请选择要导入的文件')
 
         suffix = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
         if suffix not in ('xlsx', 'xls', 'csv', 'json'):
-            raise ServiceException(user_message='仅支持 .xlsx/.xls/.csv/.json 格式的文件')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='仅支持 .xlsx/.xls/.csv/.json 格式的文件'
+            )
 
         content = await file.read()
         if not content:
-            raise ServiceException(message='文件内容为空')
+            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, field='file', user_message='文件内容为空')
 
         # JSON 格式处理
         if suffix == 'json':
@@ -1165,7 +1173,11 @@ class ProtocolService:
             fields = self.__extract_fields(sheet_map)
 
         if not fields:
-            raise ServiceException(message='文件中未解析到任何字段，请检查模板内容')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='文件中未解析到任何字段，请检查模板内容'
+            )
 
         # 确定协议名称
         if not protocol_name:
@@ -1233,7 +1245,7 @@ class ProtocolService:
         :return: ImportResult
         """
         if not files:
-            raise ServiceException(message='请选择要导入的文件')
+            raise ValidationException(error_code=ErrorCode.INVALID_INPUT, field='file', user_message='请选择要导入的文件')
 
         success_items: List[Dict[str, Any]] = []
         failed_items: List[Dict[str, Any]] = []
@@ -1272,7 +1284,12 @@ class ProtocolService:
             df = pd.read_csv(text_io, dtype=str)
             return {'字段列表': df}
         except Exception as exc:
-            raise ServiceException(message=f'解析导入文件失败: {exc}') from exc
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='文件无法解析，请确认格式正确并重新保存后重试',
+                developer_message=f'Protocol workbook parsing failed: {exc}'
+            ) from exc
 
     @staticmethod
     def __parse_json_protocol(content: bytes) -> Dict[str, Any]:
@@ -1312,15 +1329,27 @@ class ProtocolService:
                 # 尝试 UTF-8-sig (带 BOM)
                 text_content = content.decode('utf-8-sig')
             except UnicodeDecodeError:
-                raise ServiceException(message='JSON 文件编码格式不支持，请使用 UTF-8 编码')
+                raise ValidationException(
+                    error_code=ErrorCode.INVALID_INPUT,
+                    field='file',
+                    user_message='JSON 文件编码格式不支持，请使用 UTF-8 编码'
+                )
 
         try:
             data = json.loads(text_content)
         except json.JSONDecodeError as e:
-            raise ServiceException(message=f'JSON 格式错误: {str(e)}')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message=f'JSON 格式错误: {str(e)}'
+            )
 
         if not isinstance(data, dict):
-            raise ServiceException(message='JSON 文件根节点必须是对象类型')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='JSON 文件根节点必须是对象类型'
+            )
 
         # 提取协议类型
         protocol_type = data.get('protocolType') or data.get('protocol_type') or 'LAN'
@@ -1370,7 +1399,11 @@ class ProtocolService:
 
         # 验证字段列表
         if not fields:
-            raise ServiceException(message='JSON 文件中未找到有效的字段列表（fields）')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='JSON 文件中未找到有效的字段列表（fields）'
+            )
 
         # 确保字段列表中的每个元素都是字典
         validated_fields = []
@@ -1378,7 +1411,11 @@ class ProtocolService:
             if isinstance(field, dict):
                 validated_fields.append(field)
             else:
-                raise ServiceException(message=f'字段列表第 {idx + 1} 项格式错误，必须是对象类型')
+                raise ValidationException(
+                    error_code=ErrorCode.INVALID_INPUT,
+                    field='file',
+                    user_message=f'字段列表第 {idx + 1} 项格式错误，必须是对象类型'
+                )
 
         return {'header': header, 'fields': validated_fields, 'protocolType': protocol_type}
 
@@ -1768,7 +1805,11 @@ class ProtocolService:
             if any(header in candidate.columns for header in FIELD_COLUMN_ALIASES.get('field_name', [])):
                 fields_sheet = candidate
         if fields_sheet is None:
-            raise ServiceException(message='未找到包含字段定义的工作表，请确认模板未被修改')
+            raise ValidationException(
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+                user_message='未找到包含字段定义的工作表，请确认模板未被修改'
+            )
 
         records = fields_sheet.fillna('').to_dict(orient='records')
         resolved_fields = []

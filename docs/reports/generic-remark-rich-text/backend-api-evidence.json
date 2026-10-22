@@ -1,0 +1,75 @@
+{
+  "openapi": "shared/openapi.json",
+  "sha256": "69cce0ed724fb7ce9a3d9d2d7861b511617d90af3aa7c0c14782b65efbc7ffcc",
+  "backendApiRelatedTests": 496,
+  "httpIntegrationTests": 22,
+  "commonTests": 159,
+  "openapiContractTests": 34,
+  "mysqlOrmCrudTests": 1,
+  "clientAndMockContractTests": 25,
+  "regeneratedArtifactFiles": 17,
+  "repeatedGenerationChangedFiles": [],
+  "ruffOwnedFiles": 22,
+  "ruffNewIssuesComparedToHead": 0,
+  "evidenceKind": [
+    "unit",
+    "ASGI HTTP SQLite integration",
+    "isolated real MySQL ORM",
+    "static artifact drift check"
+  ],
+  "unverified": [
+    "browser business UI",
+    "real login session",
+    "real PostgreSQL"
+  ],
+  "remarkHttpErrorTests": 6,
+  "generatorListTests": 4,
+  "generatedControllerOpenapiTests": 8,
+  "rfc9457RegressionTests": 16,
+  "lastErrorPathRegressionTests": 22,
+  "ruffBaseline": {
+    "tests/unit/services/test_config_service.py": {
+      "current": 65,
+      "head": 66
+    },
+    "exceptions/handle.py": {
+      "current": 37,
+      "head": 38,
+      "existingStatementCount": {
+        "current": 54,
+        "head": 56
+      }
+    },
+    "module_generator/service/gen_service.py": {
+      "current": 8,
+      "head": 17
+    },
+    "utils/transaction_manager.py": {
+      "current": 45,
+      "head": 46
+    },
+    "module_admin/annotation/log_annotation.py": {
+      "current": 14,
+      "head": 15
+    },
+    "utils/audit_logger.py": {
+      "current": 21,
+      "head": 22
+    }
+  },
+  "reviewFixLog": "/tmp/remark-backend-api-review-final-tests.log",
+  "errorCodes": [
+    "remark_version",
+    "remark_structure",
+    "remark_link",
+    "remark_budget",
+    "remark_readonly"
+  ],
+  "backendApiTestsExitCode": 0,
+  "privacyTests": 14,
+  "privacyAndLoggingRegressionTests": 31,
+  "privacyFinalLog": "/tmp/remark-backend-privacy-final-tests.log",
+  "privacyRedLog": "/tmp/remark-log-privacy-red.log",
+  "openapiFinalCheckLog": "/tmp/remark-openapi-privacy-check.log",
+  "openapiFinalCheckExitCode": 0
+}

@@ -3,10 +3,12 @@
 """
 from datetime import datetime
 from typing import Optional, List
-from sqlalchemy import select, update, desc, func
+from sqlalchemy import select, update, delete, desc, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module_admin.entity.do.project_do import ProjectDO
+from module_admin.entity.do.project_version_do import ProjectVersionDO
+from module_admin.entity.do.project_topology_do import ProjectTopologyDO
 from module_admin.entity.do.enums import DelFlagEnum
 from module_admin.repository.base_repository import BaseRepository
 from utils.page_util import PageUtil
@@ -96,4 +98,10 @@ class ProjectRepository(BaseRepository[ProjectDO]):
             )
         )
         result = await self.db.execute(stmt)
+        await self.db.execute(
+            update(ProjectVersionDO).where(ProjectVersionDO.project_id.in_(project_ids)).values(
+                del_flag=DelFlagEnum.DELETED.value, update_by=update_by, update_time=datetime.now()
+            )
+        )
+        await self.db.execute(delete(ProjectTopologyDO).where(ProjectTopologyDO.project_id.in_(project_ids)))
         return result.rowcount

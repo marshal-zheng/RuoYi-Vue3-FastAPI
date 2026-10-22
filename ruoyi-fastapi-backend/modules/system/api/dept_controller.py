@@ -11,6 +11,7 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.data_scope import GetDataScope
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.dept_vo import DeleteDeptModel, DeptModel, DeptQueryModel
+from module_admin.entity.vo.dept_write_vo import DeptCreateModel, DeptUpdateModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
@@ -27,7 +28,6 @@ from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
-from utils.validation_util import ValidateFields
 
 deptController = APIRouter(prefix='/system/dept', dependencies=[Depends(get_current_user)])  # noqa: N816
 
@@ -115,15 +115,16 @@ async def get_system_dept_tree_select(
 
 
 @deptController.post('', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:add'))])
-@ValidateFields(validate_model='add_dept')
 @Log(title='部门管理', business_type=BusinessType.INSERT)
 async def add_system_dept(
     request: Request,
-    add_dept: DeptModel,
+    add_dept: DeptCreateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
+    data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    add_dept = DeptModel(**add_dept.model_dump(exclude_unset=True))
     add_dept.create_by = current_user.user.user_name
     add_dept.create_time = datetime.now()
     add_dept.update_by = current_user.user.user_name
@@ -131,6 +132,8 @@ async def add_system_dept(
     add_command = AddDeptCommand(
         query_db=query_db,
         dept=add_dept,
+        enforce_data_scope=not current_user.user.admin,
+        data_scope_sql=data_scope_sql,
         redis_client=getattr(request.app.state, 'redis', None),
         operator=current_user.user.user_name,
         trace_id=request.headers.get('x-trace-id'),
@@ -154,16 +157,16 @@ async def add_system_dept(
 
 
 @deptController.put('', dependencies=[Depends(CheckUserInterfaceAuth('system:dept:edit'))])
-@ValidateFields(validate_model='edit_dept')
 @Log(title='部门管理', business_type=BusinessType.UPDATE)
 async def edit_system_dept(
     request: Request,
-    edit_dept: DeptModel,
+    edit_dept: DeptUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    edit_dept = DeptModel(**edit_dept.model_dump(exclude_unset=True))
     edit_dept.update_by = current_user.user.user_name
     edit_dept.update_time = datetime.now()
     edit_command = EditDeptCommand(

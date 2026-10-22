@@ -19,6 +19,7 @@
               >新增</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -28,18 +29,13 @@
               >删除</ZxButton
             >
             <ZxButton
-              type="default"
               icon="Download"
               :disabled="multiple"
               @click="handleBatchExport"
               v-hasPermi="['project:project:query']"
               >批量导出</ZxButton
             >
-            <ZxButton
-              type="success"
-              icon="Upload"
-              @click="handleImportClick"
-              v-hasPermi="['project:project:add']"
+            <ZxButton icon="Upload" @click="handleImportClick" v-hasPermi="['project:project:add']"
               >导入工程</ZxButton
             >
             <input
@@ -209,6 +205,7 @@
                     >详情</ZxButton
                   >
                   <ZxButton
+                    plain
                     @click.stop="handleDelete(project)"
                     v-hasPermi="['project:project:remove']"
                     type="danger"

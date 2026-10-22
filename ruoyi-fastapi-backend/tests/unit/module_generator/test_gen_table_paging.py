@@ -1,6 +1,3 @@
-from types import SimpleNamespace
-from unittest.mock import AsyncMock
-
 import pytest
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
@@ -10,17 +7,13 @@ from module_generator.repository.gen_repository import GenTableRepository
 
 
 @pytest.mark.asyncio
-async def test_imported_generator_metadata_is_counted_without_stale_shared_count(monkeypatch):
-    """A cached empty page must not hide a just-imported generator table."""
-    stale_cache = SimpleNamespace(enabled=True, get_or_load=AsyncMock(return_value=0))
-    monkeypatch.setattr('utils.page_util.get_count_cache', lambda: stale_cache)
+async def test_imported_generator_metadata_uses_current_database_count():
+    """Imported metadata must be reflected immediately in the next page total."""
     engine = create_async_engine('sqlite+aiosqlite:///:memory:')
     try:
         async with engine.begin() as connection:
             await connection.run_sync(
-                lambda sync: Base.metadata.create_all(
-                    sync, tables=[GenTableDO.__table__, GenTableColumnDO.__table__]
-                )
+                lambda sync: Base.metadata.create_all(sync, tables=[GenTableDO.__table__, GenTableColumnDO.__table__])
             )
         async with async_sessionmaker(engine, expire_on_commit=False)() as db:
             repository = GenTableRepository(db)
@@ -35,6 +28,5 @@ async def test_imported_generator_metadata_is_counted_without_stale_shared_count
             second = await repository.paginate_with_filters(page=1, page_size=10)
             assert second.total == 2
             assert len(second.items) == 2
-            stale_cache.get_or_load.assert_not_called()
     finally:
         await engine.dispose()

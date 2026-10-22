@@ -33,8 +33,11 @@
               :show-tip="false"
               v-hasPermi="['protocol:add']"
               @change="handleImportFileChange"
-            />
+            >
+              <ZxButton icon="Upload">导入协议</ZxButton>
+            </ZxUpload>
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -110,13 +113,15 @@
             <template #default="scope">
               <div class="op-col__wrap">
                 <el-button
-                  type="text"
+                  link
+                  type="primary"
                   @click="handleDetailPage(scope.row)"
                   v-hasPermi="['protocol:query']"
                   >编辑</el-button
                 >
                 <zx-button
-                  type="text"
+                  link
+                  type="primary"
                   @click="handleExport(scope.row)"
                   v-hasPermi="['protocol:export']"
                   >导出协议</zx-button

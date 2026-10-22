@@ -1,35 +1,68 @@
 <template>
-  <div class="p-4">
-    <h2 class="mb-4">MSW Mock 测试 (模式: {{ mockMode }})</h2>
-    <el-button type="primary" @click="testMock">测试 Mock 接口</el-button>
-    <el-button type="success" @click="testReal">测试真实接口 (用户列表)</el-button>
-    <pre
-      v-if="result"
-      class="mt-4 p-4 bg-zx-surface-card-fill text-zx-surface-card-on-text rounded"
-      >{{ result }}</pre
-    >
-  </div>
+  <ZxContentWrap title="数据库监控" data-testid="database-monitor" fill>
+    <template #header-right>
+      <ZxButton :loading="loading" @click="refresh">刷新监控数据</ZxButton>
+    </template>
+    <el-alert v-if="error" :title="error" type="error" :closable="false" show-icon />
+    <div v-loading="loading" class="database-monitor">
+      <el-descriptions v-if="pool" title="数据库连接池" :column="2" border>
+        <el-descriptions-item label="状态">{{ pool.message }}</el-descriptions-item>
+        <el-descriptions-item label="使用率">{{ pool.usageRate }}%</el-descriptions-item>
+        <el-descriptions-item label="常驻连接数">{{ pool.poolSize }}</el-descriptions-item>
+        <el-descriptions-item label="使用中连接">{{ pool.checkedOut }}</el-descriptions-item>
+        <el-descriptions-item label="最大容量">{{ pool.totalCapacity }}</el-descriptions-item>
+        <el-descriptions-item label="可用容量">{{ pool.available }}</el-descriptions-item>
+      </el-descriptions>
+      <el-descriptions v-if="stats" title="查询统计（本次服务启动以来）" :column="2" border>
+        <el-descriptions-item label="查询次数">{{ stats.totalQueries }}</el-descriptions-item>
+        <el-descriptions-item label="慢查询次数">{{ stats.slowQueries }}</el-descriptions-item>
+        <el-descriptions-item label="慢查询比例">{{ stats.slowQueryRate }}</el-descriptions-item>
+        <el-descriptions-item label="平均耗时">{{ stats.avgTimeMs }} ms</el-descriptions-item>
+        <el-descriptions-item label="最大耗时">{{ stats.maxTimeMs }} ms</el-descriptions-item>
+        <el-descriptions-item label="N+1 检测次数">{{
+          stats.nPlusOneDetected
+        }}</el-descriptions-item>
+      </el-descriptions>
+    </div>
+  </ZxContentWrap>
 </template>
 
-<script setup>
-import { ref } from 'vue';
-import request from '@/utils/request';
-import { resolveRuntimeConfig } from '@/mocks/runtime/mode';
+<script setup lang="ts">
+import { onMounted, onScopeDispose, ref, shallowRef } from 'vue';
+import { getDatabasePoolHealth, getDatabaseQueryStats } from '@/api/monitor/database';
+import type { DatabasePoolHealth, DatabaseQueryStats } from '@/api/monitor/database';
 
-const mockMode = resolveRuntimeConfig().mode;
-const result = ref('');
-
-async function testMock() {
-  const data = await request({ url: '/test/mock', method: 'get' });
-  result.value = JSON.stringify(data, null, 2);
+const pool = shallowRef<DatabasePoolHealth>();
+const stats = shallowRef<DatabaseQueryStats>();
+const error = ref('');
+const loading = ref(false);
+const controller = new AbortController();
+async function refresh() {
+  if (loading.value) return;
+  loading.value = true;
+  error.value = '';
+  try {
+    const [health, queries] = await Promise.all([
+      getDatabasePoolHealth(controller.signal),
+      getDatabaseQueryStats(controller.signal),
+    ]);
+    if (controller.signal.aborted) return;
+    pool.value = health;
+    stats.value = queries;
+  } catch (failure) {
+    if (!controller.signal.aborted)
+      error.value = failure instanceof Error ? failure.message : '数据库监控加载失败，请重试';
+  } finally {
+    loading.value = false;
+  }
 }
-
-async function testReal() {
-  const data = await request({
-    url: '/system/user/list',
-    method: 'get',
-    params: { page: 1, pageSize: 5 },
-  });
-  result.value = JSON.stringify(data, null, 2);
-}
+onMounted(refresh);
+onScopeDispose(() => controller.abort());
 </script>
+
+<style scoped>
+.database-monitor {
+  display: grid;
+  gap: 24px;
+}
+</style>

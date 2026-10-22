@@ -1,0 +1,355 @@
+{
+  "sourceHead": "262ec420",
+  "implementationInputSnapshot": "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9",
+  "artifacts": [
+    {
+      "path": "db_artifacts/releases/20260404_001_initial-baseline/managed-data.yaml",
+      "bytesSha256": {
+        "262ec420": "5058ec23008784044302d57c6a143e89e32cacb4875303adf8dee3dcc6058b21",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "5058ec23008784044302d57c6a143e89e32cacb4875303adf8dee3dcc6058b21",
+        "current": "5058ec23008784044302d57c6a143e89e32cacb4875303adf8dee3dcc6058b21"
+      },
+      "allBytesUnchanged": true,
+      "actualCanonicalChecksum": "e45f4dd6b6020ce89371b64213dbda26fe2dc2bb569375589467d1ae4514dbfd",
+      "declaredCanonicalChecksum": "7cc63022f35a8ee16528e3b605c45a10a8a115ebac7bc8bae8b0581b35df1b62",
+      "capabilityMetadataPresent": false
+    },
+    {
+      "path": "db_artifacts/releases/20260404_001_initial-baseline/release.manifest.yaml",
+      "bytesSha256": {
+        "262ec420": "1783c71b94ddb4be104cc8f30bd9edcefea1223311e6eede669f5fab22b1c7ab",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "1783c71b94ddb4be104cc8f30bd9edcefea1223311e6eede669f5fab22b1c7ab",
+        "current": "1783c71b94ddb4be104cc8f30bd9edcefea1223311e6eede669f5fab22b1c7ab"
+      },
+      "allBytesUnchanged": true,
+      "actualCanonicalChecksum": "4cffe9a5c02e589e4e8c4d717d4f81e258100ef6731b72287a404f35e8515d12",
+      "declaredCanonicalChecksum": "40bab74288b419686b3aa166dafcf9125c984c85c0c119c071bf8eb987380c00",
+      "capabilityMetadataPresent": false
+    },
+    {
+      "path": "db_artifacts/releases/20260404_001_initial-baseline/bundle.yaml",
+      "bytesSha256": {
+        "262ec420": "fee305d2eeb5564db462e6aef1028cb043a2e6b02cecd3182ca976f0e434735d",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "fee305d2eeb5564db462e6aef1028cb043a2e6b02cecd3182ca976f0e434735d",
+        "current": "fee305d2eeb5564db462e6aef1028cb043a2e6b02cecd3182ca976f0e434735d"
+      },
+      "allBytesUnchanged": true
+    }
+  ],
+  "criticalFunctions": [
+    {
+      "path": "scripts/internal/db_workflow/deploy_release_service.py",
+      "symbol": "_discover_bundle_files",
+      "versions": {
+        "262ec420": {
+          "line": 841,
+          "astSha256": "bf41a0cb4d80b3e25387d17db3093ef84728411c90d8ab8730c6d8bc478ab8d8"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 841,
+          "astSha256": "bf41a0cb4d80b3e25387d17db3093ef84728411c90d8ab8730c6d8bc478ab8d8"
+        },
+        "current": {
+          "line": 850,
+          "astSha256": "bf41a0cb4d80b3e25387d17db3093ef84728411c90d8ab8730c6d8bc478ab8d8"
+        }
+      },
+      "sameAsInputAST": true
+    },
+    {
+      "path": "scripts/internal/db_workflow/release_bundle_service.py",
+      "symbol": "load_capability_payload",
+      "versions": {
+        "262ec420": {
+          "line": 428,
+          "astSha256": "9e46ce9e8dfe55c3cc3d7ed8cf72f5721f96f7823b5bd5b4361b7fdd30bf249f"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 428,
+          "astSha256": "9e46ce9e8dfe55c3cc3d7ed8cf72f5721f96f7823b5bd5b4361b7fdd30bf249f"
+        },
+        "current": {
+          "line": 421,
+          "astSha256": "9e46ce9e8dfe55c3cc3d7ed8cf72f5721f96f7823b5bd5b4361b7fdd30bf249f"
+        }
+      },
+      "sameAsInputAST": true
+    },
+    {
+      "path": "scripts/internal/db_workflow/release_bundle_service.py",
+      "symbol": "compute_payload_checksum",
+      "versions": {
+        "262ec420": {
+          "line": 514,
+          "astSha256": "88c4f6c140ad755cd7e904294413c2af591bfda66fe82b0d9bf2e5b1e1002dc3"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 514,
+          "astSha256": "88c4f6c140ad755cd7e904294413c2af591bfda66fe82b0d9bf2e5b1e1002dc3"
+        },
+        "current": {
+          "line": 509,
+          "astSha256": "88c4f6c140ad755cd7e904294413c2af591bfda66fe82b0d9bf2e5b1e1002dc3"
+        }
+      },
+      "sameAsInputAST": true
+    },
+    {
+      "path": "scripts/internal/db_workflow/workflow_verify_service.py",
+      "symbol": "_validate_latest_bundle_payload",
+      "versions": {
+        "262ec420": {
+          "line": 277,
+          "astSha256": "661b2dad428b617e30abbada215bcfa978d2813170e97025d94eb75311fad07d"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 277,
+          "astSha256": "661b2dad428b617e30abbada215bcfa978d2813170e97025d94eb75311fad07d"
+        },
+        "current": {
+          "line": 284,
+          "astSha256": "661b2dad428b617e30abbada215bcfa978d2813170e97025d94eb75311fad07d"
+        }
+      },
+      "sameAsInputAST": true
+    },
+    {
+      "path": "scripts/internal/db_workflow/finalize_release_service.py",
+      "symbol": "_load_managed_data_plan",
+      "versions": {
+        "262ec420": {
+          "line": 253,
+          "astSha256": "eb28ea73bf67df813b999990f0f77eeceb5c5c28d7e43f1ba0f7dd82b43fda79"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 253,
+          "astSha256": "eb28ea73bf67df813b999990f0f77eeceb5c5c28d7e43f1ba0f7dd82b43fda79"
+        },
+        "current": {
+          "line": 257,
+          "astSha256": "a6e7f22acc04980f6aaadf271c92c606e1d7629c8b9e484947e2d145052c3593"
+        }
+      },
+      "sameAsInputAST": false
+    }
+  ],
+  "globalDriftInputFiles": [
+    {
+      "path": "alembic/versions/20260226_add_datasource_table.py",
+      "bytesSha256": {
+        "262ec420": "60fcc3cfba7ade87ed409328d1b0abeec165ab676dca3b3941b922270eb5ffa6",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "60fcc3cfba7ade87ed409328d1b0abeec165ab676dca3b3941b922270eb5ffa6",
+        "current": "60fcc3cfba7ade87ed409328d1b0abeec165ab676dca3b3941b922270eb5ffa6"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "alembic/versions/20260127_performance_indexes.py",
+      "bytesSha256": {
+        "262ec420": "f1d08a68f3d7507c81c51545ede552fb478404a49dd43039e530806f582423f6",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "f1d08a68f3d7507c81c51545ede552fb478404a49dd43039e530806f582423f6",
+        "current": "f1d08a68f3d7507c81c51545ede552fb478404a49dd43039e530806f582423f6"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "alembic/versions/20260127_add_create_time_to_logininfor.py",
+      "bytesSha256": {
+        "262ec420": "a45d2578fd04153ce7fdd62fa015196f4fd0d29e42c3452602fcdf1cd1b2d20e",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "a45d2578fd04153ce7fdd62fa015196f4fd0d29e42c3452602fcdf1cd1b2d20e",
+        "current": "a45d2578fd04153ce7fdd62fa015196f4fd0d29e42c3452602fcdf1cd1b2d20e"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "alembic/versions/20260405_extend_db_workflow_object_capability_metadata.py",
+      "bytesSha256": {
+        "262ec420": "2d63cdfda8c708161b81bc14113624c0455be2046a1d6be496fd80119ad7c3e8",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "2d63cdfda8c708161b81bc14113624c0455be2046a1d6be496fd80119ad7c3e8",
+        "current": "2d63cdfda8c708161b81bc14113624c0455be2046a1d6be496fd80119ad7c3e8"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "module_admin/entity/do/db_workflow_do.py",
+      "bytesSha256": {
+        "262ec420": "20592360d27c09c5cfc6fc74bdcf62cef9f4fadde254754c5bc9d80c05923fff",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "20592360d27c09c5cfc6fc74bdcf62cef9f4fadde254754c5bc9d80c05923fff",
+        "current": "20592360d27c09c5cfc6fc74bdcf62cef9f4fadde254754c5bc9d80c05923fff"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "module_admin/entity/do/log_do.py",
+      "bytesSha256": {
+        "262ec420": "d5b6d88504a219c2b6ba3a8648f0e92e47a1928288bd00c2055f3128895c0ee9",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "d5b6d88504a219c2b6ba3a8648f0e92e47a1928288bd00c2055f3128895c0ee9",
+        "current": "d5b6d88504a219c2b6ba3a8648f0e92e47a1928288bd00c2055f3128895c0ee9"
+      },
+      "sameAsInputBytes": true
+    },
+    {
+      "path": "events/models.py",
+      "bytesSha256": {
+        "262ec420": "375755c1ae5be0e50c2cd23bb55e22c3d3c9b7eab18cd11bd0208d3667d0c134",
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": "375755c1ae5be0e50c2cd23bb55e22c3d3c9b7eab18cd11bd0208d3667d0c134",
+        "current": "375755c1ae5be0e50c2cd23bb55e22c3d3c9b7eab18cd11bd0208d3667d0c134"
+      },
+      "sameAsInputBytes": true
+    }
+  ],
+  "ormClassesExcludingSelectedRemark": [
+    {
+      "path": "module_admin/entity/do/user_do.py",
+      "class": "UserDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 7,
+          "astSha256": "b38cb4f987ac93308d8a8a3d9ac5c9ec5fb5e2585dff62542fab11d7542a940c"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 7,
+          "astSha256": "b38cb4f987ac93308d8a8a3d9ac5c9ec5fb5e2585dff62542fab11d7542a940c"
+        },
+        "current": {
+          "line": 8,
+          "astSha256": "b38cb4f987ac93308d8a8a3d9ac5c9ec5fb5e2585dff62542fab11d7542a940c"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_admin/entity/do/role_do.py",
+      "class": "RoleDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 6,
+          "astSha256": "5963a09dd5407c9615b72b02737f23b91df911102a9d4b8fd0461fed595859a5"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 6,
+          "astSha256": "5963a09dd5407c9615b72b02737f23b91df911102a9d4b8fd0461fed595859a5"
+        },
+        "current": {
+          "line": 7,
+          "astSha256": "5963a09dd5407c9615b72b02737f23b91df911102a9d4b8fd0461fed595859a5"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_admin/entity/do/post_do.py",
+      "class": "PostDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 7,
+          "astSha256": "fc60876877cf9f67c6c58f7a7bccf090493b739f1a6a87e5a754034104efc65d"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 7,
+          "astSha256": "fc60876877cf9f67c6c58f7a7bccf090493b739f1a6a87e5a754034104efc65d"
+        },
+        "current": {
+          "line": 7,
+          "astSha256": "fc60876877cf9f67c6c58f7a7bccf090493b739f1a6a87e5a754034104efc65d"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_admin/entity/do/dict_do.py",
+      "class": "DictTypeDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 7,
+          "astSha256": "4ddd2339ca863fd3f80e6a04e04fae7ebcb6d040a2e7d00cb522999ae1da5c20"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 7,
+          "astSha256": "4ddd2339ca863fd3f80e6a04e04fae7ebcb6d040a2e7d00cb522999ae1da5c20"
+        },
+        "current": {
+          "line": 7,
+          "astSha256": "4ddd2339ca863fd3f80e6a04e04fae7ebcb6d040a2e7d00cb522999ae1da5c20"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_admin/entity/do/dict_do.py",
+      "class": "DictDataDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 23,
+          "astSha256": "674a2f41c0d0616996dde66d81ff0d74e575654e7698b80f7c56e3360ab5f80d"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 23,
+          "astSha256": "674a2f41c0d0616996dde66d81ff0d74e575654e7698b80f7c56e3360ab5f80d"
+        },
+        "current": {
+          "line": 23,
+          "astSha256": "674a2f41c0d0616996dde66d81ff0d74e575654e7698b80f7c56e3360ab5f80d"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_admin/entity/do/config_do.py",
+      "class": "ConfigDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 7,
+          "astSha256": "7e879687e912774ed0ee69a98c03d6a761736e6cb7be79161cbda33bd9a96f39"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 7,
+          "astSha256": "7e879687e912774ed0ee69a98c03d6a761736e6cb7be79161cbda33bd9a96f39"
+        },
+        "current": {
+          "line": 7,
+          "astSha256": "7e879687e912774ed0ee69a98c03d6a761736e6cb7be79161cbda33bd9a96f39"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    },
+    {
+      "path": "module_generator/entity/do/gen_do.py",
+      "class": "GenTableDO",
+      "excludedAttribute": "remark",
+      "versions": {
+        "262ec420": {
+          "line": 7,
+          "astSha256": "4ec16fee7fb4ccb3b6265bbe85e009e4888d93880eb1cbdcf648dde9f20f65db"
+        },
+        "de5a9993f17f0a2d38d46e0d1c8b5dc8a982dda9": {
+          "line": 7,
+          "astSha256": "4ec16fee7fb4ccb3b6265bbe85e009e4888d93880eb1cbdcf648dde9f20f65db"
+        },
+        "current": {
+          "line": 9,
+          "astSha256": "4ec16fee7fb4ccb3b6265bbe85e009e4888d93880eb1cbdcf648dde9f20f65db"
+        }
+      },
+      "sameAsInputRemainingClassAST": true
+    }
+  ],
+  "classification": {
+    "unchangedExistingGuards": [
+      "deploy: checksum validation before legacy adaptation",
+      "deploy/verify: required capability metadata"
+    ],
+    "newIntentionalGuard": "finalize: verify original managed-data checksum before legacy remark adaptation",
+    "newRemarkMechanism": [
+      "frozen seven-column conversion and formal revision",
+      "dev-sync/readonly/verify JSON validation and failure reporting",
+      "explicit legacy plaintext adaptation after checksum validation"
+    ]
+  }
+}

@@ -49,7 +49,8 @@ class TestMenuManagementIntegration:
     def test_menu_delete_endpoint(self, test_client):
         """Test menu deletion endpoint"""
         response = test_client.delete("/system/menu/1")
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code == 204
+        assert response.content == b''
 
 
 class TestMenuServiceIntegration:

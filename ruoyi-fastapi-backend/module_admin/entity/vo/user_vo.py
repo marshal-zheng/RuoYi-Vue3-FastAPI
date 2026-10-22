@@ -10,8 +10,9 @@ from exceptions.exception import ModelValidatorException
 from module_admin.annotation.pydantic_annotation import as_query
 from module_admin.entity.vo.base import CamelModelBase
 from module_admin.entity.vo.dept_vo import DeptModel
-from module_admin.entity.vo.post_vo import PostModel
-from module_admin.entity.vo.role_vo import RoleModel
+from module_admin.entity.vo.post_vo import PostInfoModel
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue, RemarkWriteGuard
+from module_admin.entity.vo.role_vo import RoleInfoModel, RoleModel
 
 
 class TokenData(CamelModelBase):
@@ -22,7 +23,7 @@ class TokenData(CamelModelBase):
     user_id: int | None = Field(default=None, description='用户ID')
 
 
-class UserModel(CamelModelBase):
+class UserModel(RemarkWriteGuard):
     """
     用户表对应pydantic模型
     """
@@ -48,7 +49,7 @@ class UserModel(CamelModelBase):
     create_time: datetime | None = Field(default=None, description='创建时间')
     update_by: str | None = Field(default=None, description='更新者')
     update_time: datetime | None = Field(default=None, description='更新时间')
-    remark: str | None = Field(default=None, description='备注')
+    remark: RemarkValue = Field(default=None, description='备注')
     admin: bool | None = Field(default=False, description='是否为admin')
 
     @model_validator(mode='after')
@@ -110,11 +111,11 @@ class UserPostModel(CamelModelBase):
     post_id: int | None = Field(default=None, description='岗位ID')
 
 
-class UserInfoModel(UserModel):
+class UserInfoModel(UserModel, RemarkReadProjection):
     post_ids: str | None | None = Field(default=None, description='岗位ID信息')
     role_ids: str | None | None = Field(default=None, description='角色ID信息')
     dept: DeptModel | None | None = Field(default=None, description='部门信息')
-    role: list[RoleModel | None] | None = Field(default=[], description='角色信息')
+    role: list[RoleInfoModel | None] | None = Field(default=[], description='角色信息')
 
 
 class CurrentUserModel(CamelModelBase):
@@ -134,9 +135,9 @@ class UserDetailModel(CamelModelBase):
 
     data: UserInfoModel | None | None = Field(default=None, description='用户信息')
     post_ids: list | None = Field(default=None, description='岗位ID信息')
-    posts: list[PostModel | None] = Field(description='岗位信息')
+    posts: list[PostInfoModel | None] = Field(description='岗位信息')
     role_ids: list | None = Field(default=None, description='角色ID信息')
-    roles: list[RoleModel | None] = Field(description='角色信息')
+    roles: list[RoleInfoModel | None] = Field(description='角色信息')
 
 
 class UserProfileModel(CamelModelBase):
@@ -151,7 +152,26 @@ class UserProfileModel(CamelModelBase):
     role_group: str | None = Field(description='角色信息')
 
 
-class UserQueryModel(UserModel):
+class UserQueryModel(CamelModelBase):
+    user_id: int | None = Field(default=None, description='用户ID')
+    dept_id: int | None = Field(default=None, description='部门ID')
+    user_name: str | None = Field(default=None, description='用户账号')
+    nick_name: str | None = Field(default=None, description='用户昵称')
+    user_type: str | None = Field(default=None, description='用户类型（00系统用户）')
+    email: str | None = Field(default=None, description='用户邮箱')
+    phonenumber: str | None = Field(default=None, description='手机号码')
+    id_card: str | None = Field(default=None, description='身份证号')
+    sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别（0男 1女 2未知）')
+    avatar: str | None = Field(default=None, description='头像地址')
+    password: str | None = Field(default=None, description='密码')
+    status: Literal['0', '1'] | None = Field(default=None, description='帐号状态（0正常 1停用）')
+    del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
+    login_ip: str | None = Field(default=None, description='最后登录IP')
+    login_date: datetime | None = Field(default=None, description='最后登录时间')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     用户管理不分页查询模型
     """
@@ -162,6 +182,8 @@ class UserQueryModel(UserModel):
 
 @as_query
 class UserPageQueryModel(UserQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     用户管理分页查询模型
     """
@@ -187,6 +209,12 @@ class EditUserModel(AddUserModel):
 
     role: list | None = Field(default=[], description='角色信息')
 
+    def validate_fields(self):
+        # Partial edits must validate the same supplied fields in HTTP and CQRS paths.
+        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
+            if field in self.model_fields_set:
+                getattr(self, f'get_{field}')()
+
 
 class ResetPasswordModel(CamelModelBase):
     """
@@ -195,8 +223,8 @@ class ResetPasswordModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
-    old_password: str | None = Field(default=None, description='旧密码')
-    new_password: str | None = Field(default=None, description='新密码')
+    old_password: str = Field(min_length=1, description='旧密码')
+    new_password: str = Field(min_length=1, description='新密码')
 
     @model_validator(mode='after')
     def check_new_password(self) -> 'ResetPasswordModel':
@@ -216,6 +244,12 @@ class ResetUserModel(UserModel):
     sms_code: str | None = Field(default=None, description='验证码')
     session_id: str | None = Field(default=None, description='会话id')
 
+    def validate_fields(self):
+        # Password commands do not supply a full user profile; password syntax is validated on construction.
+        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
+            if field in self.model_fields_set:
+                getattr(self, f'get_{field}')()
+
 
 class DeleteUserModel(CamelModelBase):
     """
@@ -229,7 +263,26 @@ class DeleteUserModel(CamelModelBase):
     update_time: datetime | None = Field(default=None, description='更新时间')
 
 
-class UserRoleQueryModel(UserModel):
+class UserRoleQueryModel(CamelModelBase):
+    user_id: int | None = Field(default=None, description='用户ID')
+    dept_id: int | None = Field(default=None, description='部门ID')
+    user_name: str | None = Field(default=None, description='用户账号')
+    nick_name: str | None = Field(default=None, description='用户昵称')
+    user_type: str | None = Field(default=None, description='用户类型（00系统用户）')
+    email: str | None = Field(default=None, description='用户邮箱')
+    phonenumber: str | None = Field(default=None, description='手机号码')
+    id_card: str | None = Field(default=None, description='身份证号')
+    sex: Literal['0', '1', '2'] | None = Field(default=None, description='用户性别（0男 1女 2未知）')
+    avatar: str | None = Field(default=None, description='头像地址')
+    password: str | None = Field(default=None, description='密码')
+    status: Literal['0', '1'] | None = Field(default=None, description='帐号状态（0正常 1停用）')
+    del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
+    login_ip: str | None = Field(default=None, description='最后登录IP')
+    login_date: datetime | None = Field(default=None, description='最后登录时间')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     用户角色关联管理不分页查询模型
     """
@@ -239,6 +292,7 @@ class UserRoleQueryModel(UserModel):
 
 @as_query
 class UserRolePageQueryModel(UserRoleQueryModel):
+    role_id: int | None = Field(default=None, description='角色ID')
     """
     用户角色关联管理分页查询模型
     """
@@ -247,7 +301,7 @@ class UserRolePageQueryModel(UserRoleQueryModel):
     page_size: int = Field(default=10, description='每页记录数')
 
 
-class SelectedRoleModel(RoleModel):
+class SelectedRoleModel(RoleModel, RemarkReadProjection):
     """
     是否选择角色模型
     """

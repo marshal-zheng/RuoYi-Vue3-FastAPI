@@ -5,15 +5,16 @@
 import json
 import random
 from typing import Any, Dict, Iterable, List, Optional, Set
+
 from sqlalchemy import event
-from sqlalchemy.orm import Session
 from sqlalchemy.inspection import inspect
+from sqlalchemy.orm import Session
 
 from config.env import AuditConfig
 from module_admin.entity.do.audit_log_do import AuditLogDO
-from utils.audit_context import get_audit_context, append_read_audit
+from utils.audit_context import append_read_audit, get_audit_context
+from utils.log_safety import REMARK_FIELDS, redact_document_data
 from utils.sensitive.registry import get_mask_fields
-
 
 ACTION_READ = 'READ'
 ACTION_INSERT = 'INSERT'
@@ -29,7 +30,7 @@ AUDIT_TABLES = _parse_config_set(getattr(AuditConfig, 'audit_tables', ''))
 
 
 def _get_mask_fields() -> Set[str]:
-    return get_mask_fields(getattr(AuditConfig, 'audit_mask_fields', ''))
+    return get_mask_fields(getattr(AuditConfig, 'audit_mask_fields', '')) | REMARK_FIELDS
 
 
 def _should_audit_table(table_name: Optional[str]) -> bool:
@@ -43,6 +44,7 @@ def _should_audit_table(table_name: Optional[str]) -> bool:
 
 
 def _safe_value(value: Any) -> Any:
+    value = redact_document_data(value)
     if value is None:
         return None
     if hasattr(value, 'isoformat'):

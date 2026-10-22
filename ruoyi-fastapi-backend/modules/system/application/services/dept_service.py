@@ -103,84 +103,148 @@ class DeptService:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
 
-    @transactional()
-    async def add_dept_services(self, page_object: DeptModel):
-        """
-        新增部门信息service
+    async def _resolve_parent_ancestors(
+        self,
+        parent_id: int,
+        *,
+        dept_id: int | None = None,
+        enforce_data_scope: bool = False,
+        data_scope_sql='True',
+        creating: bool = False,
+    ) -> str:
+        """Validate placement against real parent links; 0 is the virtual root."""
+        if parent_id == 0:
+            if enforce_data_scope:
+                raise PermissionException(user_message='没有权限将部门设置为根部门')
+            return '0'
 
-        :param page_object: 新增部门对象
-        :return: 新增部门校验结果
-        """
-        if not await self.check_dept_name_unique_services(page_object):
-            raise ResourceConflictException(
-                user_message=f'新增部门{page_object.dept_name}失败，部门名称已存在',
-                error_code=ErrorCode.DEPT_NOT_FOUND,
-                developer_message=f'Dept name already exists: parent_id={page_object.parent_id}, dept_name={page_object.dept_name}',
-            )
-        parent_info = await self.dept_repo.find_by_id(page_object.parent_id)
-        if not parent_info:
+        parent = await self.dept_repo.find_by_id(parent_id)
+        if parent is None:
             raise ResourceNotFoundException(
                 user_message='上级部门不存在',
                 error_code=ErrorCode.DEPT_NOT_FOUND,
-                developer_message=f'Parent dept not found: parent_id={page_object.parent_id}',
+                developer_message=f'Parent dept not found: parent_id={parent_id}',
             )
-        if parent_info.status != CommonConstant.DEPT_NORMAL:
-            raise ValidationException(
-                user_message=f'部门{parent_info.dept_name}停用，不允许新增',
-                developer_message=f'Parent dept is disabled: parent_id={page_object.parent_id}, status={parent_info.status}',
-                field='parent_id',
+        if enforce_data_scope:
+            await self.check_dept_data_scope_services(parent_id, data_scope_sql)
+        if creating and parent.status != CommonConstant.DEPT_NORMAL:
+            raise ValidationException(user_message=f'部门{parent.dept_name}停用，不允许新增', field='parent_id')
+
+        # Stored ancestors are derived data, not a trustworthy cycle check.
+        chain = []
+        visited = {dept_id} if dept_id is not None else set()
+        while parent is not None:
+            if parent.dept_id in visited:
+                raise ValidationException(
+                    user_message='上级部门不能是自己或下级部门, 部门层级不能成环', field='parent_id'
+                )
+            visited.add(parent.dept_id)
+            chain.append(parent.dept_id)
+            if parent.parent_id == 0:
+                break
+            parent = await self.dept_repo.find_by_id(parent.parent_id)
+            if parent is None:
+                raise ResourceNotFoundException(user_message='上级部门不存在', error_code=ErrorCode.DEPT_NOT_FOUND)
+        return ','.join(map(str, [0, *reversed(chain)]))
+
+    async def _check_ancestor_activation_scope(self, ancestors: str | None, data_scope_sql):
+        # Unchanged normal parents need no extra permission; only an actual status change does.
+        for ancestor_id in (ancestors or '').split(','):
+            if not ancestor_id or ancestor_id == '0':
+                continue
+            ancestor = await self.dept_repo.find_by_id(int(ancestor_id))
+            if ancestor is None:
+                raise ResourceNotFoundException(user_message='上级部门不存在', error_code=ErrorCode.DEPT_NOT_FOUND)
+            if ancestor.status != CommonConstant.DEPT_NORMAL:
+                await self.check_dept_data_scope_services(ancestor.dept_id, data_scope_sql)
+
+    @transactional()
+    async def add_dept_services(self, page_object: DeptModel, *, enforce_data_scope=False, data_scope_sql='True'):
+        """Create with server-owned identity, ancestry, and deletion state."""
+        ancestors = await self._resolve_parent_ancestors(
+            page_object.parent_id,
+            enforce_data_scope=enforce_data_scope,
+            data_scope_sql=data_scope_sql,
+            creating=True,
+        )
+        unique_query = DeptModel(parent_id=page_object.parent_id, dept_name=page_object.dept_name)
+        if not await self.check_dept_name_unique_services(unique_query):
+            raise ResourceConflictException(
+                user_message=f'新增部门{page_object.dept_name}失败，部门名称已存在',
+                error_code=ErrorCode.DEPT_NOT_FOUND,
             )
-        page_object.ancestors = f'{parent_info.ancestors},{page_object.parent_id}'
-        db_dept = DeptDO(**page_object.model_dump())
+        fields = {
+            'parent_id',
+            'dept_name',
+            'order_num',
+            'leader',
+            'phone',
+            'email',
+            'status',
+            'create_by',
+            'create_time',
+            'update_by',
+            'update_time',
+        }
+        db_dept = DeptDO(**page_object.model_dump(include=fields, exclude_unset=True), ancestors=ancestors)
         add_result = await self.dept_repo.add(db_dept)
         return CrudResponseModel(is_success=True, message='新增成功', result={'deptId': add_result.dept_id})
 
     @transactional()
-    async def edit_dept_services(self, page_object: DeptModel):
-        """
-        编辑部门信息service
+    async def edit_dept_services(self, page_object: DeptModel, *, enforce_data_scope=False, data_scope_sql='True'):
+        """Validate before updating the target and its subtree in one transaction."""
+        dept = await self.dept_repo.find_by_id(page_object.dept_id)
+        if dept is None:
+            raise ResourceNotFoundException(user_message='部门不存在', error_code=ErrorCode.DEPT_NOT_FOUND)
+        fields = {
+            'parent_id',
+            'dept_name',
+            'order_num',
+            'leader',
+            'phone',
+            'email',
+            'status',
+            'update_by',
+            'update_time',
+        }
+        changes = page_object.model_dump(include=fields, exclude_unset=True)
+        parent_id = changes.get('parent_id', dept.parent_id)
+        if parent_id != dept.parent_id:
+            changes['ancestors'] = await self._resolve_parent_ancestors(
+                parent_id,
+                dept_id=dept.dept_id,
+                enforce_data_scope=enforce_data_scope,
+                data_scope_sql=data_scope_sql,
+            )
+        elif parent_id == dept.dept_id:
+            raise ValidationException(user_message='上级部门不能是自己', field='parent_id')
 
-        :param page_object: 编辑部门对象
-        :return: 编辑部门校验结果
-        """
-        if not await self.check_dept_name_unique_services(page_object):
+        effective = DeptModel(
+            dept_id=dept.dept_id, parent_id=parent_id, dept_name=changes.get('dept_name', dept.dept_name)
+        )
+        if not await self.check_dept_name_unique_services(effective):
             raise ResourceConflictException(
-                user_message=f'修改部门{page_object.dept_name}失败，部门名称已存在',
+                user_message=f'修改部门{effective.dept_name}失败，部门名称已存在',
                 error_code=ErrorCode.DEPT_NOT_FOUND,
-                developer_message=f'Dept name already exists: parent_id={page_object.parent_id}, dept_name={page_object.dept_name}',
             )
-        elif page_object.dept_id == page_object.parent_id:
-            raise ValidationException(
-                user_message=f'修改部门{page_object.dept_name}失败，上级部门不能是自己',
-                developer_message=f'Dept cannot be its own parent: dept_id={page_object.dept_id}',
-                field='parent_id',
-            )
-        elif (
-            page_object.status == CommonConstant.DEPT_DISABLE
-            and (await self.dept_repo.count_normal_children(page_object.dept_id)) > 0
+        if changes.get('status') == CommonConstant.DEPT_DISABLE and await self.dept_repo.count_normal_children(
+            dept.dept_id
         ):
             raise ValidationException(
-                user_message=f'修改部门{page_object.dept_name}失败，该部门包含未停用的子部门',
-                developer_message=f'Dept has active children: dept_id={page_object.dept_id}',
-                field='status',
+                user_message=f'修改部门{effective.dept_name}失败，该部门包含未停用的子部门', field='status'
             )
-        new_parent_dept = await self.dept_repo.find_by_id(page_object.parent_id)
-        old_dept = await self.dept_repo.find_by_id(page_object.dept_id)
-
-        if new_parent_dept and old_dept:
-            new_ancestors = f'{new_parent_dept.ancestors},{new_parent_dept.dept_id}'
-            old_ancestors = old_dept.ancestors
-            page_object.ancestors = new_ancestors
-            await self.update_dept_children(page_object.dept_id, new_ancestors, old_ancestors)
-        edit_dept = page_object.model_dump(exclude_unset=True)
-        dept = await self.dept_repo.find_by_id(page_object.dept_id)
-        if dept:
-            for key, value in edit_dept.items():
-                if hasattr(dept, key):
-                    setattr(dept, key, value)
-            await self.dept_repo.update(dept)
-        if page_object.status == CommonConstant.DEPT_NORMAL and page_object.ancestors and page_object.ancestors != 0:
-            await self.update_parent_dept_status_normal(page_object)
+        enable_ancestors = changes.get('status', dept.status) == CommonConstant.DEPT_NORMAL and (
+            'ancestors' in changes or changes.get('status') == CommonConstant.DEPT_NORMAL
+        )
+        if enable_ancestors and enforce_data_scope:
+            await self._check_ancestor_activation_scope(changes.get('ancestors', dept.ancestors), data_scope_sql)
+        if 'ancestors' in changes:
+            await self.update_dept_children(dept.dept_id, changes['ancestors'], dept.ancestors)
+        for key, value in changes.items():
+            setattr(dept, key, value)
+        await self.dept_repo.update(dept)
+        if enable_ancestors:
+            await self.update_parent_dept_status_normal(DeptModel(ancestors=dept.ancestors))
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -315,8 +379,9 @@ class DeptService:
         :param dept: 部门对象
         :return:
         """
-        dept_id_list = dept.ancestors.split(',')
-        await self.dept_repo.update_status_normal(list(map(int, dept_id_list)))
+        dept_id_list = [int(dept_id) for dept_id in (dept.ancestors or '').split(',') if dept_id and dept_id != '0']
+        if dept_id_list:
+            await self.dept_repo.update_status_normal(dept_id_list)
 
     async def update_dept_children(self, dept_id: int, new_ancestors: str, old_ancestors: str):
         """

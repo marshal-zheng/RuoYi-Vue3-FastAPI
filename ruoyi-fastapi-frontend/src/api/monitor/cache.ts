@@ -50,9 +50,9 @@ export function clearCacheName(cacheName: string) {
 }
 
 // 清理指定键名缓存
-export function clearCacheKey(cacheKey: string) {
+export function clearCacheKey(cacheName: string, cacheKey: string) {
   return request({
-    url: '/monitor/cache/clearCacheKey/' + cacheKey,
+    url: '/monitor/cache/clearCacheKey/' + encodeURIComponent(`${cacheName}:${cacheKey}`),
     method: 'delete',
     feedback: { mode: 'auto', key: 'monitor.cache.clear' },
   });

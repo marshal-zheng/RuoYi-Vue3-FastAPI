@@ -103,3 +103,90 @@ describe('dev-menu-hot-sync', () => {
     expect(reloadDynamicRoutesMock).not.toHaveBeenCalled();
   });
 });
+
+describe('dev-menu SSE session lifecycle', () => {
+  class Source {
+    static instances: Source[] = [];
+    listeners = new Map<string, EventListener>();
+    onerror?: () => void;
+    close = vi.fn();
+    constructor() {
+      Source.instances.push(this);
+    }
+    addEventListener(name: string, handler: EventListener) {
+      this.listeners.set(name, handler);
+    }
+  }
+  beforeEach(async () => {
+    vi.resetModules();
+    vi.clearAllMocks();
+    vi.useFakeTimers();
+    configMock.isDevMenuSyncEnabled = true;
+    configMock.isDevMenuSyncSseEnabled = true;
+    configMock.isDevMenuSyncPollingEnabled = false;
+    configMock.devMenuSyncMode = 'sse';
+    getTokenMock.mockReturnValue('access');
+    getDevMenuSignatureMock.mockResolvedValue({ signature: 'stable' });
+    Source.instances = [];
+    vi.stubGlobal('EventSource', Source);
+    const { setQuerySession } = await import('@/queries/context');
+    setQuerySession('qa-sse', ['admin'], []);
+  });
+  afterEach(async () => {
+    (await import('@/plugins/dev-menu-hot-sync')).stopDevMenuHotSync();
+    (await import('@/queries/context')).endQuerySession();
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it('probes authenticated HTTP before connecting and reconnects after an error', async () => {
+    const plugin = await import('@/plugins/dev-menu-hot-sync');
+    plugin.startDevMenuHotSync();
+    await flushMicrotasks();
+    expect(getDevMenuSignatureMock).toHaveBeenCalledTimes(1);
+    expect(Source.instances).toHaveLength(1);
+    Source.instances[0].onerror?.();
+    await flushMicrotasks();
+    await vi.advanceTimersByTimeAsync(1000);
+    await flushMicrotasks();
+    expect(Source.instances[0].close).toHaveBeenCalledOnce();
+    expect(Source.instances).toHaveLength(2);
+  });
+
+  it('does not open an EventSource after a pending probe is stopped', async () => {
+    let resolve!: (value: unknown) => void;
+    getDevMenuSignatureMock.mockReturnValue(
+      new Promise((done) => {
+        resolve = done;
+      })
+    );
+    const plugin = await import('@/plugins/dev-menu-hot-sync');
+    plugin.startDevMenuHotSync();
+    plugin.stopDevMenuHotSync();
+    resolve({ signature: 'late' });
+    await flushMicrotasks();
+    expect(Source.instances).toHaveLength(0);
+  });
+
+  it('closes on logout and ignores the old source error callback', async () => {
+    const plugin = await import('@/plugins/dev-menu-hot-sync');
+    plugin.startDevMenuHotSync();
+    await flushMicrotasks();
+    const old = Source.instances[0];
+    (await import('@/queries/context')).endQuerySession();
+    getTokenMock.mockReturnValue('');
+    old.onerror?.();
+    await vi.advanceTimersByTimeAsync(60000);
+    expect(old.close).toHaveBeenCalledOnce();
+    expect(Source.instances).toHaveLength(1);
+  });
+
+  it('does not open a socket when the session probe is unauthorized', async () => {
+    getDevMenuSignatureMock.mockRejectedValue({ status: 401 });
+    const plugin = await import('@/plugins/dev-menu-hot-sync');
+    plugin.startDevMenuHotSync();
+    await flushMicrotasks();
+    expect(Source.instances).toHaveLength(0);
+  });
+});

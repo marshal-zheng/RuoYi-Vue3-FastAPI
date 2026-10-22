@@ -1,7 +1,8 @@
 import { createRouter } from 'vue-router';
-/* Layout */
-import Layout from '@/layout';
 import { createAppHistory } from '@/router/history';
+
+// Keep the router independent of the layout's permission-store imports during HMR.
+export const Layout = () => import('@/layout/index.vue');
 
 /**
  * Note: 路由配置项
@@ -217,15 +218,24 @@ export const dynamicRoutes = [
   },
 ];
 
-const router = createRouter({
-  history: createAppHistory(),
-  routes: constantRoutes,
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition;
-    }
-    return { top: 0 };
-  },
-});
+/** @type {import('vue-router').Router} */
+const router =
+  import.meta.hot?.data?.router ??
+  createRouter({
+    history: createAppHistory(),
+    routes: constantRoutes,
+    scrollBehavior(to, from, savedPosition) {
+      if (savedPosition) {
+        return savedPosition;
+      }
+      return { top: 0 };
+    },
+  });
+
+// Vite may evaluate timestamped copies during a reload. Guards, stores and the
+// mounted app must still share one router within that document.
+if (import.meta.hot?.data) {
+  import.meta.hot.data.router = router;
+}
 
 export default router;

@@ -9,7 +9,6 @@ from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from modules.system.application.services.config_service import ConfigService
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import (
@@ -24,10 +23,11 @@ from modules.system.application.queries import (
     GetConfigListQuery,
     GetConfigValueByKeyQuery,
 )
+from modules.system.application.read_models.config_read_models import ConfigDetailReadModel, ConfigPageReadModel
+from modules.system.application.services.config_service import ConfigService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
@@ -44,7 +44,7 @@ async def _load_config_detail(request: Request, *, config_id: int, mediator: Med
 
 
 @configController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:config:list'))]
+    '/list', response_model=ConfigPageReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:config:list'))]
 )
 async def get_system_config_list(
     request: Request,
@@ -194,7 +194,9 @@ async def delete_system_config(
 
 
 @configController.get(
-    '/{config_id}', response_model=ConfigModel, dependencies=[Depends(CheckUserInterfaceAuth('system:config:query'))]
+    '/{config_id}',
+    response_model=ConfigDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:config:query'))],
 )
 async def query_detail_system_config(
     request: Request,

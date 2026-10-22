@@ -6,6 +6,10 @@ from datetime import datetime
 {% endif %}
 {% endfor %}
 from fastapi import APIRouter, Depends, Form, Request
+{% if hasRemarks %}
+from common.http_contracts import {% if table.tree %}CollectionResult{% else %}PagedResult{% endif %}{{ '\n' }}
+from {{ packageName }}.entity.vo.{{ businessName }}_vo import {{ BusinessName }}ReadModel
+{% endif %}
 from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from config.enums import BusinessType
@@ -21,11 +25,17 @@ from utils.log_util import logger
 from utils.response_util import ResponseUtil
 
 
+{% if hasRemarks and (table.crud or table.sub) %}
+class {{ BusinessName }}PageReadModel(PagedResult):
+    items: list[{{ BusinessName }}ReadModel]
+
+
+{% endif %}
 {{ businessName }}Controller = APIRouter(prefix='/{{ moduleName }}/{{ businessName }}', dependencies=[Depends(LoginService.get_current_user)])
 
 
 @{{ businessName }}Controller.get(
-    '/list', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
+    '/list', {% if hasRemarks %}response_model={% if table.tree %}CollectionResult[{{ BusinessName }}ReadModel]{% else %}{{ BusinessName }}PageReadModel{% endif %}, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:list'))]
 )
 async def get_{{ moduleName }}_{{ businessName }}_list(
     request: Request,
@@ -51,7 +61,7 @@ async def get_{{ moduleName }}_{{ businessName }}_list(
     {% endif %}
 
 
-@{{ businessName }}Controller.post('', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:add'))])
+@{{ businessName }}Controller.post('', {% if hasRemarks %}response_model={{ BusinessName }}ReadModel, status_code=201, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:add'))])
 @ValidateFields(validate_model='add_{{ businessName }}')
 @Log(title='{{ functionName }}', business_type=BusinessType.INSERT)
 async def add_{{ moduleName }}_{{ businessName }}(
@@ -85,7 +95,7 @@ async def add_{{ moduleName }}_{{ businessName }}(
     )
 
 
-@{{ businessName }}Controller.put('', dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:edit'))])
+@{{ businessName }}Controller.put('', {% if hasRemarks %}response_model={{ BusinessName }}ReadModel, {% endif %}dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:edit'))])
 @ValidateFields(validate_model='edit_{{ businessName }}')
 @Log(title='{{ functionName }}', business_type=BusinessType.UPDATE)
 async def edit_{{ moduleName }}_{{ businessName }}(
@@ -113,7 +123,7 @@ async def delete_{{ moduleName }}_{{ businessName }}(request: Request, {{ pk_fie
 
 
 @{{ businessName }}Controller.get(
-    '/{% raw %}{{% endraw %}{{ pk_field }}{% raw %}}{% endraw %}', response_model={{ BusinessName }}Model, dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:query'))]
+    '/{% raw %}{{% endraw %}{{ pk_field }}{% raw %}}{% endraw %}', response_model={{ BusinessName }}{% if hasRemarks %}Read{% endif %}Model, dependencies=[Depends(CheckUserInterfaceAuth('{{ permissionPrefix }}:query'))]
 )
 async def query_detail_{{ moduleName }}_{{ businessName }}(request: Request, {{ pk_field }}: int, query_db: AsyncSession = Depends(get_db)):
     {{ businessName }}_detail_result = await {{ BusinessName }}Service.{{ businessName }}_detail_services(query_db, {{ pk_field }})

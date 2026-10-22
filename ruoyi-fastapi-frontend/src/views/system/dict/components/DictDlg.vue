@@ -25,8 +25,13 @@
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <zx-input v-model="state.data.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item data-form-full label="备注" prop="remark">
+          <RemarkEditor
+            v-if="state.visible"
+            ref="remarkRef"
+            :key="remarkSession"
+            v-model="state.data.remark"
+          />
         </el-form-item>
       </FormGrid>
     </el-form>
@@ -34,7 +39,11 @@
 </template>
 
 <script setup lang="ts">
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
+import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
 import { ref, watch } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { useEditorRead } from '@/utils/editor-read';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getType } from '@/api/system/dict/type';
@@ -53,24 +62,28 @@ interface DictForm {
   dictName: string;
   dictType: string;
   status: '0' | '1';
-  remark: string;
+  remark: RemarkValue;
 }
 
 const createMutation = useMutation({ mutationFn: dictCommands.createType, retry: false });
 const updateMutation = useMutation({ mutationFn: dictCommands.updateType, retry: false });
 const formRef = ref();
+const { remarkRef, remarkRule } = useRemarkField();
+const remarkSession = ref(0);
 const detailLoading = ref(false);
 let requestedId: number | undefined;
 let editorScope = queryScope.value;
 
 const rules = {
+  remark: [remarkRule],
   dictName: [{ required: true, message: '字典名称不能为空', trigger: 'blur' }],
   dictType: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
 };
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+const { formProps, layoutProps, state, isDirty, dialogProps, dialogEvents, open, setDisabled } =
   useFormDialog<DictForm>({
     columns: 1,
+    onBeforeClose: canDiscard,
     loading: detailLoading,
     formRef: formRef,
     title: (data: DictForm) => (data.dictId ? '修改字典类型' : '添加字典类型'),
@@ -80,7 +93,7 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       dictName: '',
       dictType: '',
       status: '0',
-      remark: '',
+      remark: null as RemarkValue,
     }),
     onConfirm: async (data: DictForm) => {
       if (detailLoading.value || loadError.value || editorScope !== queryScope.value) return false;
@@ -102,7 +115,31 @@ const {
   cancel: cancelRead,
 } = useEditorRead(() => state.visible, detailLoading);
 
-function openDialog(id?: number) {
+let opening = 0;
+let discardPending: Promise<boolean> | undefined;
+function canDiscard(): Promise<boolean> {
+  if (state.loading) return Promise.resolve(false);
+  if (!isDirty.value && remarkRef.value?.validate() !== false) return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const data = state.data;
+  const decision = ElMessageBox.confirm('字典类型尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(() => data === state.data && !state.loading)
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function openDialog(id?: number) {
+  const intent = ++opening;
+  if (state.visible && !(await canDiscard())) return;
+  if (intent !== opening) return;
+  remarkSession.value++;
   editorScope = queryScope.value;
   requestedId = id;
   return runRead(async (read) => {
@@ -119,14 +156,16 @@ function openDialog(id?: number) {
       dictName: data.dictName ?? '',
       dictType: data.dictType ?? '',
       status: data.status ?? '0',
-      remark: data.remark ?? '',
+      remark: readRemark(data.remark),
     });
     setDisabled(false);
   });
 }
-function closeDialog() {
+async function closeDialog() {
+  opening++;
+  if (!(await canDiscard())) return;
   cancelRead();
-  return close();
+  state.visible = false;
 }
 function handleRetry() {
   return openDialog(requestedId).catch(() => {
@@ -134,7 +173,21 @@ function handleRetry() {
   });
 }
 
-watch(queryScope, closeDialog, { flush: 'sync' });
+watch(
+  queryScope,
+  () => {
+    opening++;
+    cancelRead();
+    state.visible = false;
+  },
+  { flush: 'sync' }
+);
 
 defineExpose({ open: openDialog, close: closeDialog });
+watch(
+  () => state.visible,
+  (visible) => {
+    if (visible) remarkSession.value++;
+  }
+);
 </script>

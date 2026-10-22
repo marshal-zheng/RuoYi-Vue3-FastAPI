@@ -45,7 +45,7 @@ function selector(props: Record<string, unknown> = {}) {
   return wrapper;
 }
 const response = (name = '状态类型') => ({
-  items: [{ dictId: 1, dictName: name, dictType: 'sys_status', status: '0' as const }],
+  items: [{ remarkText: '', dictId: 1, dictName: name, dictType: 'sys_status', status: '0' as const }],
 });
 beforeEach(() => {
   endQuerySession();

@@ -6,7 +6,6 @@ from datetime import datetime
 from typing import Optional, List
 from sqlalchemy import select, update, func, bindparam, or_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.util import immutabledict
 
 from module_admin.entity.do.dept_do import DeptDO
 from module_admin.entity.do.user_do import UserDO
@@ -202,17 +201,18 @@ class DeptRepository(BaseRepository[DeptDO]):
         if not updates:
             return
         
+        # Core executemany avoids ORM bulk-by-primary-key rewriting and reserved column bind names.
+        table = DeptDO.__table__
         stmt = (
-            update(DeptDO)
-            .where(DeptDO.dept_id == bindparam('dept_id'))
-            .values(ancestors=bindparam('ancestors'))
+            update(table)
+            .where(table.c.dept_id == bindparam('target_dept_id'))
+            .values(ancestors=bindparam('new_ancestors'))
         )
         await self.db.execute(
             stmt,
-            updates,
-            execution_options=immutabledict({'synchronize_session': None})
+            [{'target_dept_id': row['dept_id'], 'new_ancestors': row['ancestors']} for row in updates],
         )
-    
+
     async def update_status_normal(self, dept_ids: List[int]):
         """批量更新部门状态为正常"""
         if not dept_ids:
@@ -220,7 +220,11 @@ class DeptRepository(BaseRepository[DeptDO]):
         
         stmt = (
             update(DeptDO)
-            .where(DeptDO.dept_id.in_(dept_ids))
+            .where(
+                DeptDO.dept_id.in_(dept_ids),
+                or_(DeptDO.status != StatusEnum.NORMAL.value, DeptDO.status.is_(None)),
+                not_deleted(DeptDO.del_flag),
+            )
             .values(status=StatusEnum.NORMAL.value)
         )
         await self.db.execute(stmt)

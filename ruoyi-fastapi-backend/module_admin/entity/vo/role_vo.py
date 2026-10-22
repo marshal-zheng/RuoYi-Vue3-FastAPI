@@ -7,9 +7,10 @@ from pydantic_validation_decorator import NotBlank, Size
 
 from module_admin.annotation.pydantic_annotation import as_query
 from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue, RemarkWriteGuard
 
 
-class RoleModel(CamelModelBase):
+class RoleModel(RemarkWriteGuard):
     """
     角色表对应pydantic模型
     """
@@ -32,7 +33,7 @@ class RoleModel(CamelModelBase):
     create_time: datetime | None = Field(default=None, description='创建时间')
     update_by: str | None = Field(default=None, description='更新者')
     update_time: datetime | None = Field(default=None, description='更新时间')
-    remark: str | None = Field(default=None, description='备注')
+    remark: RemarkValue = Field(default=None, description='备注')
     admin: bool | None = Field(default=False, description='是否为admin')
 
     @field_validator('menu_check_strictly', 'dept_check_strictly')
@@ -85,6 +86,10 @@ class RoleModel(CamelModelBase):
             self.get_role_sort()
 
 
+class RoleInfoModel(RoleModel, RemarkReadProjection):
+    """Role projection used in nested identity and user-detail responses."""
+
+
 class RoleMenuModel(CamelModelBase):
     """
     角色和菜单关联表对应pydantic模型
@@ -107,7 +112,23 @@ class RoleDeptModel(CamelModelBase):
     dept_id: int | None = Field(default=None, description='部门ID')
 
 
-class RoleQueryModel(RoleModel):
+class RoleQueryModel(CamelModelBase):
+    role_id: int | None = Field(default=None, description='角色ID')
+    role_name: str | None = Field(default=None, description='角色名称')
+    role_key: str | None = Field(default=None, description='角色权限字符串')
+    role_sort: int | None = Field(default=None, description='显示顺序')
+    data_scope: str | None = Field(
+        default=None,
+        description='数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限 5：仅本人数据权限）',
+    )
+    menu_check_strictly: int | bool | None = Field(default=None, description='菜单树选择项是否关联显示')
+    dept_check_strictly: int | bool | None = Field(default=None, description='部门树选择项是否关联显示')
+    status: Literal['0', '1'] | None = Field(default=None, description='角色状态（0正常 1停用）')
+    del_flag: Literal['0', '2'] | None = Field(default=None, description='删除标志（0代表存在 2代表删除）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     角色管理不分页查询模型
     """
@@ -118,6 +139,8 @@ class RoleQueryModel(RoleModel):
 
 @as_query
 class RolePageQueryModel(RoleQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     角色管理分页查询模型
     """

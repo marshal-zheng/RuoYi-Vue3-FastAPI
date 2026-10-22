@@ -42,7 +42,9 @@ class AddDeptCommandHandler(ICommandHandler[AddDeptCommand, dict[str, str]]):
     async def handle(self, request: AddDeptCommand) -> CommandResult[dict[str, str]]:
         _ensure_redis(request.redis_client)
         request.dept.validate_fields()
-        create_result = await self._dept_service.add_dept_services(request.dept)
+        create_result = await self._dept_service.add_dept_services(
+            request.dept, enforce_data_scope=request.enforce_data_scope, data_scope_sql=request.data_scope_sql
+        )
         event = build_system_event(
             event_type='system.dept.created',
             aggregate_type='dept',
@@ -73,7 +75,9 @@ class EditDeptCommandHandler(ICommandHandler[EditDeptCommand, dict[str, str]]):
         request.dept.validate_fields()
         if request.enforce_data_scope:
             await self._dept_service.check_dept_data_scope_services(request.dept.dept_id, request.data_scope_sql)
-        update_result = await self._dept_service.edit_dept_services(request.dept)
+        update_result = await self._dept_service.edit_dept_services(
+            request.dept, enforce_data_scope=request.enforce_data_scope, data_scope_sql=request.data_scope_sql
+        )
         event = build_system_event(
             event_type='system.dept.updated',
             aggregate_type='dept',

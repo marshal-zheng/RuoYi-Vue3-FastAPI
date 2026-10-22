@@ -1,7 +1,6 @@
-from typing import List
-
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode
 from exceptions.exception import ResourceConflictException, ResourceNotFoundException, ValidationException
@@ -9,6 +8,7 @@ from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.do.post_do import PostDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.post_vo import DeletePostModel, PostModel, PostPageQueryModel
+from modules.system.application.read_models.post_read_models import PostDetailReadModel
 from ports import IPostRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
@@ -109,13 +109,7 @@ class PostService:
         :return: 编辑岗位校验结果
         """
         edit_post = page_object.model_dump(exclude_unset=True)
-        post_info = await self.post_detail_services(page_object.post_id)
-        if not post_info.post_id:
-            raise ResourceNotFoundException(
-                user_message='岗位不存在',
-                error_code=ErrorCode.ROLE_NOT_FOUND,
-                developer_message=f'Post not found: post_id={page_object.post_id}',
-            )
+        await self.post_detail_services(page_object.post_id)
 
         if not await self.check_post_name_unique_services(page_object):
             raise ResourceConflictException(
@@ -175,14 +169,18 @@ class PostService:
         """
         post = await self.post_repo.find_by_id(post_id)
         if post:
-            result = PostModel(**CamelCaseUtil.transform_result(post))
+            result = PostDetailReadModel(**CamelCaseUtil.transform_result(post))
         else:
-            result = PostModel(**{})
+            raise ResourceNotFoundException(
+                user_message='岗位不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'post_id={post_id} not found',
+            )
 
         return result
 
     @staticmethod
-    async def export_post_list_services(post_list: List):
+    async def export_post_list_services(post_list: list):
         """
         导出岗位信息service
 
@@ -207,6 +205,10 @@ class PostService:
                 item['status'] = '正常'
             else:
                 item['status'] = '停用'
-        binary_data = ExcelUtil.export_list2excel(post_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in post_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data

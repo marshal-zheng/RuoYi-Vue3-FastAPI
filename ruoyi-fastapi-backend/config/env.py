@@ -302,10 +302,6 @@ class QueryCacheSettings(BaseSettings):
     query_cache_default_ttl: int = 300
     query_cache_lock_enabled: bool = True
 
-    # COUNT 缓存配置（独立于查询缓存）
-    count_cache_enabled: bool = True
-    count_cache_default_ttl: int = 600  # COUNT 缓存时间较长，因为数据量变化频率低
-    count_cache_key_prefix: str = "count_cache"
 
 
 class AuditSettings(BaseSettings):

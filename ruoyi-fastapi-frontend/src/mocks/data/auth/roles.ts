@@ -7,6 +7,8 @@ export const mockRoles = [
     roleKey: 'admin',
     roleName: '超级管理员',
     status: MOCK_STATUS.normal,
+    remark: null,
+    remarkText: '',
     permissions: ['*:*:*'],
   },
   {
@@ -14,6 +16,8 @@ export const mockRoles = [
     roleKey: 'editor',
     roleName: '编辑员',
     status: MOCK_STATUS.normal,
+    remark: null,
+    remarkText: '',
     permissions: ['system:user:query', 'system:user:add', 'system:user:edit'],
   },
 ] satisfies MockRole[];

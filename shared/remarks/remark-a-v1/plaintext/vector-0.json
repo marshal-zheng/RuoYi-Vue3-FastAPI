@@ -1,0 +1,80 @@
+{
+  "identityKey": "sys_user:1:remark",
+  "text": "  中文\r\n\r\n<p>x</p>\r{\"x\":1}\n=1+1 👨‍👩‍👧",
+  "expected": {
+    "version": 2,
+    "body": {
+      "format": "json",
+      "content": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_0060c7951c80011d5131b6beb2fe2489"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "  中文"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_c84271631bb8a42c085ff8acc8ec87c5"
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_f207487354f83f77879e25df72e2278f"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "<p>x</p>"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_e94db7746f81b8d6cbe266f645e9f11b"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "{\"x\":1}"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_2135ce1a545ca2d31fc7903688c5977d"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "=1+1 👨‍👩‍👧"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "annotations": [],
+    "assets": [],
+    "meta": {
+      "schemaVersion": "stable-block-identity/v2"
+    }
+  },
+  "literal": "  中文\n\n<p>x</p>\n{\"x\":1}\n=1+1 👨‍👩‍👧"
+}

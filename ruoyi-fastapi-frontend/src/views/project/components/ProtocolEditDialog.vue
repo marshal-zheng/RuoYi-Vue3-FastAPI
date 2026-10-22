@@ -3,10 +3,8 @@
     <MessageConfigTab ref="messageConfigRef" :port-info="currentPortInfo">
       <template #toolbar>
         <div class="toolbar-left flex items-center gap-2">
-          <zx-button type="primary" icon="Plus" size="medium" @click="handleAddField"
-            >添加字段</zx-button
-          >
-          <zx-button type="danger" icon="Delete" size="medium" @click="handleDeleteSelected"
+          <zx-button icon="Plus" size="medium" @click="handleAddField">添加字段</zx-button>
+          <zx-button plain type="danger" icon="Delete" size="medium" @click="handleDeleteSelected"
             >删除选中</zx-button
           >
         </div>

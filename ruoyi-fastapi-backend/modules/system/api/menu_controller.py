@@ -35,7 +35,7 @@ async def _load_menu_detail(request: Request, *, menu_id: int, mediator: Mediato
         request_id=request.headers.get('x-request-id'),
     )
     menu_detail_result = await mediator.query(detail_query)
-    return menu_detail_result or {}
+    return menu_detail_result
 
 
 @menuController.get('/treeselect')

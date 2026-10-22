@@ -17,6 +17,7 @@
               >新增</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"

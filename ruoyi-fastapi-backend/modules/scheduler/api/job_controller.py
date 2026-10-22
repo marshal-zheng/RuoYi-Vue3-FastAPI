@@ -1,6 +1,5 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, Form, Request
-from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
 from container.dependencies import service_provider
 from config.enums import BusinessType
@@ -10,11 +9,11 @@ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.job_vo import (
     DeleteJobLogModel,
     DeleteJobModel,
-    EditJobModel,
     JobLogPageQueryModel,
     JobModel,
     JobPageQueryModel,
 )
+from module_admin.entity.vo.job_write_vo import JobCreateModel, JobUpdateModel, JobStatusUpdateModel, JobRunModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from modules.system.application.services import DictDataService, get_dict_data_service
 from modules.scheduler.application.job_log_service import JobLogService
@@ -32,7 +31,7 @@ jobController = APIRouter(prefix='/monitor', dependencies=[Depends(LoginService.
 
 async def _load_job_detail(job_id: int, job_service: JobService):
     job_detail_result = await job_service.job_detail_services(job_id)
-    return job_detail_result or {}
+    return job_detail_result
 
 
 @jobController.get(
@@ -52,15 +51,15 @@ async def get_system_job_list(
 
 
 @jobController.post('/job', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:add'))])
-@ValidateFields(validate_model='add_job')
 @Log(title='定时任务', business_type=BusinessType.INSERT)
 async def add_system_job(
     request: Request,
-    add_job: JobModel,
+    add_job: JobCreateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
     job_service: JobService = Depends(service_provider('job_service')),
 ):
+    add_job = JobModel(**add_job.model_dump(exclude_unset=True))
     add_job.create_by = current_user.user.user_name
     add_job.create_time = datetime.now()
     add_job.update_by = current_user.user.user_name
@@ -75,15 +74,15 @@ async def add_system_job(
 
 
 @jobController.put('/job', dependencies=[Depends(CheckUserInterfaceAuth('monitor:job:edit'))])
-@ValidateFields(validate_model='edit_job')
 @Log(title='定时任务', business_type=BusinessType.UPDATE)
 async def edit_system_job(
     request: Request,
-    edit_job: EditJobModel,
+    edit_job: JobUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
     job_service: JobService = Depends(service_provider('job_service')),
 ):
+    edit_job = JobModel(**edit_job.model_dump(exclude_unset=True))
     edit_job.update_by = current_user.user.user_name
     edit_job.update_time = datetime.now()
     edit_job_result = await job_service.edit_job_services(edit_job)
@@ -97,19 +96,18 @@ async def edit_system_job(
 @Log(title='定时任务', business_type=BusinessType.UPDATE)
 async def change_system_job_status(
     request: Request,
-    change_job: EditJobModel,
+    change_job: JobStatusUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(LoginService.get_current_user),
     job_service: JobService = Depends(service_provider('job_service')),
 ):
-    edit_job = EditJobModel(
+    edit_job = JobModel(
         jobId=change_job.job_id,
         status=change_job.status,
         updateBy=current_user.user.user_name,
         updateTime=datetime.now(),
-        type='status',
     )
-    edit_job_result = await job_service.edit_job_services(edit_job)
+    edit_job_result = await job_service.change_job_status_services(edit_job)
     logger.info(edit_job_result.message)
 
     resource = await _load_job_detail(change_job.job_id, job_service)
@@ -120,18 +118,18 @@ async def change_system_job_status(
 @Log(title='定时任务', business_type=BusinessType.UPDATE)
 async def execute_system_job(
     request: Request,
-    execute_job: JobModel,
+    execute_job: JobRunModel,
     query_db: AsyncSession = Depends(get_db),
     job_service: JobService = Depends(service_provider('job_service')),
 ):
-    execute_job_result = await job_service.execute_job_once_services(execute_job)
+    execute_job_result = await job_service.execute_job_once_services(JobModel(job_id=execute_job.job_id))
     logger.info(execute_job_result.message)
 
     location = ResponseUtil.build_absolute_location(request, f'/monitor/jobLog/list?jobId={execute_job.job_id}')
     return ResponseUtil.accepted_job(
         {
             'jobId': execute_job.job_id,
-            'jobGroup': execute_job.job_group,
+            'jobGroup': execute_job_result.result['jobGroup'],
             'status': 'accepted',
         },
         location=location,

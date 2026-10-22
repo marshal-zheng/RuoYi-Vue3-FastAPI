@@ -1,3 +1,7 @@
+{% if hasRemarks %}
+from common.remark_document_v1 import remark_display_text
+from {{ packageName }}.entity.vo.{{ businessName }}_vo import {{ BusinessName }}ReadModel
+{% endif %}
 {% set pkField = pkColumn.python_field %}
 {% set pk_field = pkColumn.python_field | camel_to_snake %}
 {% set pkParentheseIndex = pkColumn.column_comment.find("（") %}
@@ -38,6 +42,12 @@ class {{ BusinessName }}Service:
         {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
         {{ businessName }}_list_result = await {{ businessName }}_repo.get_{{ businessName }}_list(query_object, is_page)
 
+        {% if hasRemarks %}
+        if is_page:
+            {{ businessName }}_list_result.items = [{{ BusinessName }}ReadModel.model_validate(row).model_dump(by_alias=True) for row in {{ businessName }}_list_result.items]
+        else:
+            {{ businessName }}_list_result = [{{ BusinessName }}ReadModel.model_validate(row).model_dump(by_alias=True) for row in {{ businessName }}_list_result]
+        {% endif %}
         return {{ businessName }}_list_result
 
     {% for column in columns %}
@@ -88,6 +98,7 @@ class {{ BusinessName }}Service:
             add_{{ businessName }} = await {{ businessName }}_repo.add_{{ businessName }}(page_object)
             if add_{{ businessName }}:
                 for sub_table in page_object.{{ subclassName }}_list:
+                    sub_table.{{ subTableFkName }} = add_{{ businessName }}.{{ pk_field }}
                     await {{ businessName }}_repo.add_{{ subTable.business_name }}(sub_table)
             created_{{ pk_field }} = add_{{ businessName }}.{{ pk_field }}
             {% else %}
@@ -127,6 +138,7 @@ class {{ BusinessName }}Service:
                 for sub_table in {{ businessName }}_info.{{ subclassName }}_list:
                     await {{ businessName }}_repo.delete_{{ subTable.business_name }}(sub_table)
                 for sub_table in page_object.{{ subclassName }}_list:
+                    sub_table.{{ subTableFkName }} = page_object.{{ pk_field }}
                     await {{ businessName }}_repo.add_{{ subTable.business_name }}(sub_table)
                 {% endif %}
                 await query_db.commit()
@@ -179,7 +191,7 @@ class {{ BusinessName }}Service:
         {{ businessName }}_repo = {{ BusinessName }}Repository(query_db)
         {{ businessName }} = await {{ businessName }}_repo.get_{{ businessName }}_detail_by_id({{ pk_field }})
         if {{ businessName }}:
-            result = {{ BusinessName }}Model(**CamelCaseUtil.transform_result({{ businessName }}))
+            result = {% if hasRemarks %}{{ BusinessName }}ReadModel.model_validate({{ businessName }}){% else %}{{ BusinessName }}Model(**CamelCaseUtil.transform_result({{ businessName }})){% endif %}{{ '\n' }}
         else:
             result = {{ BusinessName }}Model(**dict())
 
@@ -218,6 +230,10 @@ class {{ BusinessName }}Service:
             {% endif %}
             {% endfor %}
         {% endif %}
-        binary_data = ExcelUtil.export_list2excel({{ businessName }}_list, mapping_dict)
+        {% for column in remarkColumns %}
+        for item in {{ businessName }}_list:
+            item['{{ column.python_field }}'] = remark_display_text(item.get('{{ column.python_field }}'))
+        {% endfor %}
+        binary_data = ExcelUtil.export_list2excel({{ businessName }}_list, mapping_dict{% if remarkColumns %}, text_columns={% raw %}{{% endraw %}{% for column in remarkColumns %}'{{ column.python_field }}',{% endfor %}{% raw %}}{% endraw %}{% endif %})
 
         return binary_data

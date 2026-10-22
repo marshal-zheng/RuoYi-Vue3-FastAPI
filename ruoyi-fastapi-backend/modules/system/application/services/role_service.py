@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode
 from exceptions.exception import (
@@ -19,6 +20,7 @@ from module_admin.entity.vo.role_vo import (
     RolePageQueryModel,
 )
 from module_admin.entity.vo.user_vo import UserInfoModel, UserRolePageQueryModel
+from modules.system.application.read_models.role_read_models import RoleDetailReadModel
 from ports import IRoleDeptRepository, IRoleMenuRepository, IRoleRepository, IUserRepository
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
@@ -314,7 +316,7 @@ class RoleService:
         # Management details must remain available after disabling a role.
         role = await self.role_repo.find_by_id(role_id)
         if role:
-            result = RoleModel(**CamelCaseUtil.transform_result(role))
+            result = RoleDetailReadModel(**CamelCaseUtil.transform_result(role))
         else:
             raise ResourceNotFoundException(
                 user_message='角色不存在',
@@ -349,7 +351,11 @@ class RoleService:
                 item['status'] = '正常'
             else:
                 item['status'] = '停用'
-        binary_data = ExcelUtil.export_list2excel(role_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in role_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data
 

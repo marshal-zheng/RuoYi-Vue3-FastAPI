@@ -63,6 +63,7 @@ from config.env import (
     DataBaseWorkflowStatus,
     get_database_workflow_status,
 )
+from scripts.data_migrations import remark_document_v2 as remark_migration
 from scripts.internal.db_workflow.deploy_release_service import ReleaseDeployReport, execute_release_deploy
 from scripts.internal.db_workflow.dev_sync_service import DevSyncReport, execute_dev_sync
 from scripts.internal.db_workflow.finalize_release_service import finalize_release_artifacts
@@ -467,6 +468,17 @@ def _merge_pending_release_bundle(
     return 'unknown'
 
 
+def run_remark_check_command(*, report):
+    engine = remark_migration.configured_engine()
+    try:
+        with engine.connect() as connection:
+            remark_migration.inspect_database_to_report(connection, report)
+            _print_field('remark_report', str(report))
+            return 0
+    finally:
+        engine.dispose()
+
+
 def run_status_command(*, output_format: str) -> int:
     status = get_database_workflow_status()
     if output_format == 'json':
@@ -477,7 +489,7 @@ def run_status_command(*, output_format: str) -> int:
     return 0
 
 
-def run_dev_sync_command(*, invoked_by_startup: bool) -> int:
+def run_dev_sync_command(*, invoked_by_startup: bool, remark_backup_manifest=None, remark_writers_stopped=False) -> int:
     status = get_database_workflow_status()
     _print_status(status)
 
@@ -498,6 +510,8 @@ def run_dev_sync_command(*, invoked_by_startup: bool) -> int:
         workflow_status=status,
         invoked_by_startup=invoked_by_startup,
         schema_apply_runner_loader=_load_schema_apply_runner,
+        remark_backup_manifest=remark_backup_manifest,
+        remark_writers_stopped=remark_writers_stopped,
     )
     _print_dev_sync_report(report)
     return 0 if report.dev_sync_result == 'success' else 1
@@ -511,6 +525,7 @@ def run_wait_db_command(*, max_retries: int, delay: int) -> int:
 
 
 def run_bootstrap_seed_command(*, env: str, reset: bool) -> int:
+    remark_migration.verify_configured_database()
     os.environ['APP_ENV'] = env
     bootstrap_seed_module = importlib.import_module('scripts.internal.bootstrap_seed')
     bootstrap_seed_module = importlib.reload(bootstrap_seed_module)
@@ -520,12 +535,19 @@ def run_bootstrap_seed_command(*, env: str, reset: bool) -> int:
     return bootstrap_seed_module.main(argv)
 
 
-def run_deploy_command(*, revision: str) -> int:
+def run_deploy_command(*, revision: str, remark_backup_manifest=None, remark_writers_stopped=False) -> int:
     status = get_database_workflow_status()
     _print_status(status)
     _print_field('workflow_command', 'deploy')
     _print_field('deploy_revision', revision)
-    command.upgrade(_build_alembic_config(), revision)
+    alembic_config = _build_alembic_config()
+    alembic_config.attributes['upgrade_revision_table'] = True
+    alembic_config.attributes['remark_migration'] = {
+        'backup_manifest': remark_backup_manifest,
+        'writers_stopped': remark_writers_stopped,
+    }
+    command.upgrade(alembic_config, revision)
+    remark_migration.verify_configured_database()
     _print_field('schema_deploy_result', 'success')
     report = execute_release_deploy(output_root=PROJECT_ROOT / 'db_artifacts' / 'releases')
     _print_release_deploy_report(report)
@@ -539,6 +561,7 @@ def run_finalize_command(*, message: str) -> int:
     _print_field('finalize_message', message)
 
     alembic_config = _build_alembic_config()
+    alembic_config.attributes['upgrade_revision_table'] = True
     formal_heads = _get_formal_revision_heads(alembic_config)
     finalize_database, finalize_database_url = _prepare_finalize_database()
     revision_path: Path | None = None
@@ -597,6 +620,9 @@ def run_verify_command(*, ci: bool, schema_only: bool, managed_data_only: bool) 
     status = get_database_workflow_status()
     repository_inspection: WorkflowRepositoryInspection | None = None
 
+    remark_report = remark_migration.verify_configured_database()
+    _print_field('remark_verification', 'complete')
+    _print_field('remark_schema_fingerprint', remark_report.get('schemaFingerprint', 'test-adapter'))
     if not managed_data_only:
         schema_drift, schema_verify = _inspect_schema_drift()
     else:
@@ -738,7 +764,13 @@ def build_parser() -> argparse.ArgumentParser:
         action='store_true',
         help=argparse.SUPPRESS,
     )
-    dev_sync_parser.set_defaults(handler=lambda args: run_dev_sync_command(invoked_by_startup=args.invoked_by_startup))
+    dev_sync_parser.set_defaults(
+        handler=lambda args: run_dev_sync_command(
+            invoked_by_startup=args.invoked_by_startup,
+            remark_backup_manifest=args.remark_backup_manifest,
+            remark_writers_stopped=args.remark_writers_stopped,
+        )
+    )
 
     finalize_parser = subparsers.add_parser('finalize', help='Generate formal migration from current models')
     finalize_parser.add_argument('--message', required=True, help='Formal migration message')
@@ -746,7 +778,28 @@ def build_parser() -> argparse.ArgumentParser:
 
     deploy_parser = subparsers.add_parser('deploy', help='Apply formal Alembic migrations')
     deploy_parser.add_argument('--revision', default='head', help='Target Alembic revision')
-    deploy_parser.set_defaults(handler=lambda args: run_deploy_command(revision=args.revision))
+    deploy_parser.set_defaults(
+        handler=lambda args: run_deploy_command(
+            revision=args.revision,
+            remark_backup_manifest=args.remark_backup_manifest,
+            remark_writers_stopped=args.remark_writers_stopped,
+        )
+    )
+
+    for migration_parser in (dev_sync_parser, deploy_parser):
+        migration_parser.add_argument(
+            '--remark-backup-manifest', help='Target-bound verified backup manifest; does not create a backup'
+        )
+        migration_parser.add_argument(
+            '--remark-writers-stopped',
+            action='store_true',
+            help='Operator confirms all old application/import/managed writers are stopped; does not stop them',
+        )
+    check_parser = subparsers.add_parser(
+        'remark-migration-check', help='Read-only remark preflight and physical recovery state'
+    )
+    check_parser.add_argument('--report', required=True)
+    check_parser.set_defaults(handler=lambda args: run_remark_check_command(report=args.report))
 
     verify_parser = subparsers.add_parser('verify', help='Run unified workflow verification checks')
     verify_parser.add_argument('--ci', action='store_true', help='Enable CI-oriented verification output')
@@ -808,7 +861,7 @@ def main(argv: list[str] | None = None) -> int:
     except CommandError as exc:
         print(f'error={exc}')
         return 1
-    except RuntimeError as exc:
+    except (RuntimeError, ValueError) as exc:
         print(f'error={exc}')
         return 1
 

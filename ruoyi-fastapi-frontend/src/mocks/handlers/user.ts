@@ -1,3 +1,4 @@
+import { mockRemark } from '../data/remark';
 import { http, HttpResponse } from 'msw';
 
 import { createApiPath } from '../constants';
@@ -30,7 +31,8 @@ function accountToUser(account: MockAccount) {
     createTime: MOCK_REFERENCE_DATETIME,
     updateBy: null,
     updateTime: null,
-    remark: account.username === 'admin' ? '管理员' : '编辑员',
+    remark: mockRemark(account.username === 'admin' ? '管理员' : '编辑员', `user${account.userId}`),
+    remarkText: account.username === 'admin' ? '管理员' : '编辑员',
   } satisfies NonNullable<MockCurrentUserResponse['user']>;
 }
 
@@ -86,7 +88,12 @@ export function createUserHandlers(
               tokenType: 'bearer',
               token: session.token,
             } satisfies MockLoginResponse,
-            { status: 200 }
+            {
+              status: 200,
+              headers: {
+                'Set-Cookie': `ruoyi_at=${encodeURIComponent(session.token)}; Path=/; SameSite=Lax`,
+              },
+            }
           );
         },
         { strategy, tag: 'user:login' }
@@ -134,7 +141,10 @@ export function createUserHandlers(
           if (token) {
             await dataSource.auth.deleteSession(token);
           }
-          return new HttpResponse(null, { status: 204 });
+          return new HttpResponse(null, {
+            status: 204,
+            headers: { 'Set-Cookie': 'ruoyi_at=; Path=/; Max-Age=0; SameSite=Lax' },
+          });
         },
         {
           strategy,

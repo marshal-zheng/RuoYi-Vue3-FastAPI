@@ -25,7 +25,7 @@ protocolController = APIRouter(prefix='/system/protocol', tags=['协议管理'])
 
 async def _load_protocol_detail(protocol_id: int, protocol_service: ProtocolService):
     protocol_detail_result = await protocol_service.get_protocol_detail(protocol_id)
-    return protocol_detail_result or {}
+    return protocol_detail_result
 
 
 def _to_batch_contract(summary: dict) -> tuple[list[dict], dict[str, int]]:

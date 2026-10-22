@@ -13,6 +13,7 @@
               >新增</ZxButton
             > -->
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -87,6 +88,7 @@
           <el-table-column
             label="操作"
             width="300"
+            fixed="right"
             class-name="op-col"
             label-class-name="op-col__header"
           >

@@ -44,7 +44,8 @@ class TestUserManagementIntegration:
             "email": "updated@example.com"
         }
         response = test_client.put("/system/user", json=user_data)
-        assert response.status_code in [200, 401, 404, 422]
+        assert response.status_code == 403
+        assert response.json()['detail'] == '不允许操作超级管理员用户'
     
     def test_user_delete_endpoint(self, test_client):
         """Test user deletion endpoint"""
@@ -54,12 +55,14 @@ class TestUserManagementIntegration:
     def test_user_reset_password_endpoint(self, test_client):
         """Test user password reset endpoint"""
         response = test_client.put("/system/user/resetPwd", json={"userId": 1, "password": "NewPass123"})
-        assert response.status_code in [200, 401, 404, 422]
+        assert response.status_code == 403
+        assert response.json()['detail'] == '不允许操作超级管理员用户'
     
     def test_user_change_status_endpoint(self, test_client):
         """Test user status change endpoint"""
         response = test_client.put("/system/user/changeStatus", json={"userId": 1, "status": "0"})
-        assert response.status_code in [200, 401, 404, 422]
+        assert response.status_code == 403
+        assert response.json()['detail'] == '不允许操作超级管理员用户'
 
 
 class TestUserServiceIntegration:
@@ -97,7 +100,8 @@ class TestAuthenticationIntegration:
     def test_logout_endpoint(self, test_client):
         """Test logout endpoint"""
         response = test_client.post("/auth/logout")
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code == 204
+        assert response.content == b''
     
     def test_get_info_endpoint(self, test_client):
         """Test get user info endpoint"""

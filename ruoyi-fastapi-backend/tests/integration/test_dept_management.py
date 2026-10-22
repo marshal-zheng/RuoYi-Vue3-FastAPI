@@ -47,7 +47,8 @@ class TestDeptManagementIntegration:
     def test_dept_delete_endpoint(self, test_client):
         """Test department deletion endpoint"""
         response = test_client.delete("/system/dept/1")
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code == 204
+        assert response.content == b''
 
 
 class TestDeptServiceIntegration:

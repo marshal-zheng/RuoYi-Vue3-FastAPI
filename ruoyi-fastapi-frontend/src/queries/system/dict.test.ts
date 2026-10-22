@@ -71,7 +71,7 @@ describe('shared dictionary resource', () => {
     await tick();
     expect(getDicts).toHaveBeenCalledTimes(2);
     vi.mocked(getDicts).mockResolvedValue({ items: [{ dictLabel: '新值', dictValue: '0' }] });
-    vi.mocked(updateData).mockResolvedValue({ dictCode: 1 });
+    vi.mocked(updateData).mockResolvedValue({ remarkText: '', dictCode: 1 });
     await dictCommands.updateItem(captureDictCommand({ dictCode: 1, dictType: 'sys_a' }));
     await tick();
     expect(getDicts).toHaveBeenCalledTimes(4);
@@ -111,7 +111,7 @@ describe('shared dictionary resource', () => {
 
   it('returns write success even if refresh fails, and a late old-session write cannot populate the new scope', async () => {
     const old = setQuerySession(1, ['admin'], ['system:dict:edit']);
-    let finish!: (value: { dictCode: number }) => void;
+    let finish!: (value: { remarkText: string; dictCode: number }) => void;
     vi.mocked(updateData).mockImplementation(
       () =>
         new Promise((resolve) => {
@@ -124,8 +124,8 @@ describe('shared dictionary resource', () => {
     queryClient.setQueryData(dictOptions(current, 'sys_a').queryKey, [
       { label: '新账号', value: 'new-user' },
     ]);
-    finish({ dictCode: 1 });
-    await expect(save).resolves.toEqual({ dictCode: 1 });
+    finish({ remarkText: '', dictCode: 1 });
+    await expect(save).resolves.toEqual({ remarkText: '', dictCode: 1 });
     expect(queryClient.getQueryData(dictOptions(current, 'sys_a').queryKey)).toEqual([
       { label: '新账号', value: 'new-user' },
     ]);
@@ -133,7 +133,7 @@ describe('shared dictionary resource', () => {
   });
   it('rejects an old-session mutation queued offline before executing its write', async () => {
     onlineManager.setOnline(false);
-    vi.mocked(updateData).mockResolvedValue({ dictCode: 1 });
+    vi.mocked(updateData).mockResolvedValue({ remarkText: '', dictCode: 1 });
     const observer = new MutationObserver(queryClient, {
       mutationFn: dictCommands.updateItem,
       retry: false,
@@ -153,9 +153,10 @@ describe('shared dictionary resource', () => {
   it('invalidates live type choices and route metadata together after a type rename', async () => {
     const scope = setQuerySession(1, ['admin'], ['system:dict:edit']);
     vi.mocked(typeApi.optionselect).mockResolvedValue({
-      items: [{ dictId: 3, dictType: 'old_type', dictName: '类型' }],
+      items: [{ remarkText: '', dictId: 3, dictType: 'old_type', dictName: '类型' }],
     });
     vi.mocked(typeApi.getType).mockResolvedValue({
+      remarkText: '',
       dictId: 3,
       dictType: 'old_type',
       dictName: '类型',
@@ -176,14 +177,15 @@ describe('shared dictionary resource', () => {
     expect(choices.data.value?.[0].value).toBe('old_type');
     expect(detail.data.value?.dictType).toBe('old_type');
     vi.mocked(typeApi.optionselect).mockResolvedValue({
-      items: [{ dictId: 3, dictType: 'new_type', dictName: '新类型' }],
+      items: [{ remarkText: '', dictId: 3, dictType: 'new_type', dictName: '新类型' }],
     });
     vi.mocked(typeApi.getType).mockResolvedValue({
+      remarkText: '',
       dictId: 3,
       dictType: 'new_type',
       dictName: '新类型',
     });
-    vi.mocked(typeApi.updateType).mockResolvedValue({ dictId: 3 });
+    vi.mocked(typeApi.updateType).mockResolvedValue({ remarkText: '', dictId: 3 });
     await dictCommands.updateType(captureDictCommand({ dictId: 3, dictType: 'new_type' }));
     await tick();
     expect(choices.data.value?.[0].value).toBe('new_type');

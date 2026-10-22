@@ -1,0 +1,43 @@
+{
+  "version": 2,
+  "body": {
+    "format": "json",
+    "content": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "textAlign": null,
+            "blockId": "blk_a1"
+          }
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "textAlign": null,
+            "blockId": "blk_a2"
+          }
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "textAlign": null,
+            "blockId": "blk_a3"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": " "
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "annotations": [],
+  "assets": [],
+  "meta": {
+    "schemaVersion": "stable-block-identity/v2"
+  }
+}

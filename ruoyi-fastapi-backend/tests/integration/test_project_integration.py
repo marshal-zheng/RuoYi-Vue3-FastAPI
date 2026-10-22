@@ -46,7 +46,8 @@ class TestProjectIntegration:
         """Test project deletion endpoint"""
         response = test_client.delete("/project/1")
         # Should return 200, 401, or 404
-        assert response.status_code in [200, 401, 404]
+        assert response.status_code == 204
+        assert response.content == b''
     
     def test_project_export_endpoint(self, test_client):
         """Test project export endpoint"""

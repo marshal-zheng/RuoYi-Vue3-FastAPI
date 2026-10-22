@@ -6,6 +6,7 @@ from pydantic import ConfigDict, Field, model_validator
 from pydantic_validation_decorator import FieldValidationError
 
 from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkValue
 from module_admin.entity.vo.role_vo import RoleModel
 
 
@@ -18,7 +19,7 @@ class _RoleEditorFields(CamelModelBase):
     role_sort: int = Field(default=None, description='显示顺序')
     status: Literal['0', '1'] = Field(default=None, description='角色状态')
     menu_check_strictly: bool | None = Field(default=None, description='菜单树选择项是否关联显示')
-    remark: str | None = Field(default=None, description='备注')
+    remark: RemarkValue = Field(default=None, description='备注')
     menu_ids: list[int] | None = Field(default=None, description='菜单ID; 未提供保留, 空数组或null清空')
 
     @model_validator(mode='after')
