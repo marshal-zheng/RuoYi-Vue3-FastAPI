@@ -8,9 +8,12 @@ from typing import Any, Literal
 from pydantic import Field
 
 from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue
+from modules.system.application.read_models.post_read_models import PostItemReadModel  # noqa: TC001 - Pydantic schema
+from modules.system.application.read_models.role_read_models import RoleItemReadModel  # noqa: TC001 - Pydantic schema
 
 
-class UserInfoReadModel(CamelModelBase):
+class UserInfoReadModel(CamelModelBase, RemarkReadProjection):
     """Read model for user info payload."""
 
     user_id: int | None = Field(default=None, description='User id')
@@ -31,11 +34,11 @@ class UserInfoReadModel(CamelModelBase):
     create_time: datetime | None = Field(default=None, description='Create time')
     update_by: str | None = Field(default=None, description='Updater')
     update_time: datetime | None = Field(default=None, description='Update time')
-    remark: str | None = Field(default=None, description='Remark')
+    remark: RemarkValue = Field(default=None, description='Remark')
     role_ids: str | None = Field(default=None, description='Role id string')
     post_ids: str | None = Field(default=None, description='Post id string')
     dept: dict[str, Any] | None = Field(default=None, description='Department detail')
-    role: list[dict[str, Any]] = Field(default_factory=list, description='Role list')
+    role: list[RoleItemReadModel] = Field(default_factory=list, description='Role list')
 
 
 class UserListItemReadModel(UserInfoReadModel):
@@ -65,9 +68,9 @@ class UserDetailReadModel(CamelModelBase):
 
     data: UserInfoReadModel | None = Field(default=None, description='User info')
     post_ids: list[int] | None = Field(default=None, description='Selected post ids')
-    posts: list[dict[str, Any]] = Field(default_factory=list, description='Post options')
+    posts: list[PostItemReadModel] = Field(default_factory=list, description='Post options')
     role_ids: list[int] | None = Field(default=None, description='Selected role ids')
-    roles: list[dict[str, Any]] = Field(default_factory=list, description='Role options')
+    roles: list[RoleItemReadModel] = Field(default_factory=list, description='Role options')
 
 
 class UserAllocatedRoleReadModel(CamelModelBase):

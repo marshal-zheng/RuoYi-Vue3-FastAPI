@@ -109,6 +109,7 @@ const roles = Array.from({ length: 12 }, (_, i) => ({
 const users = (start: number, total = 23) => ({
   items: Array.from({ length: Math.min(10, total - start + 1) }, (_, i) => ({
     userId: start + i,
+    remarkText: '',
     userName: `user-${start + i}`,
   })),
   total,

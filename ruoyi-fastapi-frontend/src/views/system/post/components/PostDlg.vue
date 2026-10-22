@@ -29,6 +29,7 @@
         v-bind="schemaFormProps"
         :initial="session.initial"
         :create-schema="authoring.createSchema"
+        :bindings="remarkBindings"
         :assert-settled="authoring.assertSettled"
         :save="session.save"
         @saved="handleSaved(session.key)"
@@ -38,7 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, shallowRef, watch } from 'vue';
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { computed, markRaw, ref, shallowRef, watch } from 'vue';
 import { ElMessageBox } from 'element-plus';
 import type { HttpError } from '@zxio/http';
 import type { ZxDialogExpose } from '@zxio/zxui/dialog';
@@ -59,6 +61,9 @@ import {
   type PostValues,
 } from './post-form';
 
+const remarkBindings = {
+  RemarkEditor: { component: markRaw(RemarkEditor), composite: true, group: false },
+};
 const emit = defineEmits<{ (e: 'confirm'): void }>();
 const visible = ref(false);
 const requestedId = ref<number>();
@@ -91,7 +96,7 @@ let discardPending: Promise<boolean> | undefined;
 // Every dismissal path and replacement checks the same active form instance.
 function canDiscard(): Promise<boolean> {
   if (pending.value || formRef.value?.reconciliationRequired) return Promise.resolve(false);
-  if (!formRef.value?.dirty) return Promise.resolve(true);
+  if (!formRef.value?.dirty && !formRef.value?.fieldPending) return Promise.resolve(true);
   if (discardPending) return discardPending;
   const current = generation;
   const decision = ElMessageBox.confirm('岗位信息尚未保存，是否放弃本次修改？', '未保存的修改', {

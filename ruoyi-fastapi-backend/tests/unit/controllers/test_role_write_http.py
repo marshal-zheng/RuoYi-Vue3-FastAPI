@@ -11,6 +11,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
+from common.remark_document_v1 import plain_to_remark
 from config.get_db import get_db
 from exceptions.handle import handle_exception
 from module_admin.aspect.data_scope import GetDataScope
@@ -25,6 +26,10 @@ from modules.system.infrastructure.role_dept_repository import RoleDeptRepositor
 from modules.system.infrastructure.role_menu_repository import RoleMenuRepository
 from modules.system.infrastructure.role_repository import RoleRepository
 from modules.system.infrastructure.user_repository import UserRepository
+
+
+def remark(value):
+    return plain_to_remark(value, identity_key='role:fixture:remark')
 
 
 @pytest.fixture
@@ -93,7 +98,7 @@ def drawer_payload(**changes):
         'roleSort': 0,
         'status': '0',
         'menuCheckStrictly': True,
-        'remark': '',
+        'remark': None,
         'menuIds': [101, 102],
         **changes,
     }
@@ -110,10 +115,10 @@ async def snapshot(session):
 async def test_partial_edit_preserves_scalars_and_replaces_only_supplied_menus(role_write_http, menus):
     http = role_write_http
     before, _, _ = await snapshot(http.session)
-    response = await http.client.put('/system/role', json={'roleId': 20, 'remark': 'changed', **menus})
+    response = await http.client.put('/system/role', json={'roleId': 20, 'remark': remark('changed'), **menus})
     assert response.status_code == 200, response.text
     after, actual_menus, depts = await snapshot(http.session)
-    assert response.json()['remark'] == after['remark'] == 'changed'
+    assert response.json()['remark'] == after['remark'] == remark('changed')
     for field in ('role_name', 'role_key', 'role_sort', 'status', 'data_scope', 'dept_check_strictly'):
         assert after[field] == before[field]
     assert actual_menus == (set(menus['menuIds'] or []) if menus else {101})
@@ -217,7 +222,7 @@ async def test_actual_drawer_scope_status_and_delete_round_trip(role_write_http)
             roleKey='edited',
             roleSort=4,
             menuIds=[102],
-            remark='saved',
+            remark=remark('saved'),
         ),
     )
     assert response.status_code == 200, response.text
@@ -253,7 +258,9 @@ async def test_mid_write_failure_rolls_back_scalars_and_relations(role_write_htt
     http = role_write_http
     before = await snapshot(http.session)
     monkeypatch.setattr(http.service.role_menu_repo, 'add', AsyncMock(side_effect=RuntimeError('write failure')))
-    response = await http.client.put('/system/role', json={'roleId': 20, 'remark': 'must roll back', 'menuIds': [102]})
+    response = await http.client.put(
+        '/system/role', json={'roleId': 20, 'remark': remark('must roll back'), 'menuIds': [102]}
+    )
     assert response.status_code == 500, response.text
     assert await snapshot(http.session) == before
 
@@ -272,7 +279,7 @@ async def test_openapi_exposes_operation_specific_input_and_actual_resource_resp
         body = operation['requestBody']['content']['application/json']['schema']
         assert body == {'$ref': f'#/components/schemas/{name}'}
         response = operation['responses'][success_status]['content']['application/json']['schema']
-        assert response == {'$ref': '#/components/schemas/RoleModel'}
+        assert response == {'$ref': '#/components/schemas/RoleDetailReadModel'}
         assert document['components']['schemas'][name]['additionalProperties'] is False
         published = artifact['paths'][path][method]
         assert published['requestBody'] == operation['requestBody']

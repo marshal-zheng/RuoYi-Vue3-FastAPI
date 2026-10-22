@@ -1,6 +1,7 @@
 # ruff: noqa: ARG005, I001
 from __future__ import annotations
 
+import pytest
 import json
 import os
 import sqlite3
@@ -17,6 +18,13 @@ from scripts.internal.db_workflow import dev_sync_service
 from scripts.internal.db_workflow.deploy_release_service import ReleaseDeployReport, ReleaseDeployStepReport
 from scripts.internal.db_workflow.finalize_release_service import FinalizeReleaseResult
 from scripts.internal.db_workflow.workflow_verify_service import WorkflowRepositoryInspection, WorkflowVerifyStepReport
+
+
+@pytest.fixture(autouse=True)
+def isolated_remark_checks(monkeypatch):
+    # These CLI adapter tests mock Alembic/schema and use fake workflow states.
+    # Real conversion and gates are covered by the separate MySQL rehearsal.
+    monkeypatch.setattr('scripts.data_migrations.remark_document_v2.verify_configured_database', lambda: {})
 
 
 def _parse_shell_fields(output: str) -> dict[str, str]:

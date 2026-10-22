@@ -11,6 +11,7 @@ from events.runtime_context import get_event_runtime
 from middlewares.trace_middleware import TraceCtx
 from modules.system.application.contracts import CommandResult, IPipelineBehavior
 from utils.audit_context import get_audit_context, set_audit_context
+from utils.log_safety import log_safe_exception
 from utils.log_util import logger
 from utils.transaction_manager import TransactionManager
 
@@ -38,8 +39,7 @@ class CommandValidationBehavior(IPipelineBehavior[Any, CommandResult[Any]]):
             payload_items = list(request.__dict__.items())
         elif hasattr(type(request), '__slots__'):
             payload_items = [
-                (slot_name, getattr(request, slot_name, None))
-                for slot_name in getattr(type(request), '__slots__', ())
+                (slot_name, getattr(request, slot_name, None)) for slot_name in getattr(type(request), '__slots__', ())
             ]
 
         if not payload_items and hasattr(request, 'model_dump'):
@@ -125,10 +125,7 @@ class CommandEventCollectionBehavior(IPipelineBehavior[Any, CommandResult[Any]])
         metadata = dict(result.metadata or {})
         metadata.setdefault('event_count', len(events))
         if events and 'event_types' not in metadata:
-            metadata['event_types'] = [
-                getattr(event, 'event_type', type(event).__name__)
-                for event in events
-            ]
+            metadata['event_types'] = [getattr(event, 'event_type', type(event).__name__) for event in events]
 
         enqueued_count = 0
         event_runtime = get_event_runtime()
@@ -154,18 +151,22 @@ class CommandLoggingBehavior(IPipelineBehavior[Any, CommandResult[Any]]):
         started_at = time.perf_counter()
         try:
             result = await next_handler()
-        except Exception:
+        except Exception as error:
             duration_ms = round((time.perf_counter() - started_at) * 1000.0, 3)
-            logger.bind(
-                event='cqrs_command',
-                command_type=command_type,
-                operator=operator,
-                trace_id=trace_id,
-                request_id=request_id,
-                duration_ms=duration_ms,
-                success=False,
-                status='failed',
-            ).exception('cqrs_command_failed')
+            log_safe_exception(
+                logger.bind(
+                    event='cqrs_command',
+                    command_type=command_type,
+                    operator=operator,
+                    trace_id=trace_id,
+                    request_id=request_id,
+                    duration_ms=duration_ms,
+                    success=False,
+                    status='failed',
+                ),
+                'cqrs_command_failed',
+                error,
+            )
             raise
 
         duration_ms = round((time.perf_counter() - started_at) * 1000.0, 3)

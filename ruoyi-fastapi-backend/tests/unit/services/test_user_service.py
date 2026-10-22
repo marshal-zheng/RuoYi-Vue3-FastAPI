@@ -5,6 +5,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from common.remark_document_v1 import plain_to_remark
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode, ErrorType
 from exceptions.exception import PermissionException, ValidationException
@@ -141,7 +142,12 @@ def test_user_service_contract_methods_exist():
     ],
 )
 async def test_general_user_edit_optional_relations(db_session, status, updates, expected_roles, expected_posts):
-    user = UserDO(user_name='optional_edit', nick_name='Before', status=status, remark='Keep this value')
+    user = UserDO(
+        user_name='optional_edit',
+        nick_name='Before',
+        status=status,
+        remark=plain_to_remark('Keep this value', identity_key='user:fixture:remark'),
+    )
     db_session.add(user)
     await db_session.flush()
     db_session.add_all([UserRoleDO(user_id=user.user_id, role_id=20), UserPostDO(user_id=user.user_id, post_id=30)])
@@ -156,7 +162,7 @@ async def test_general_user_edit_optional_relations(db_session, status, updates,
     assert result.is_success
     assert user.nick_name == 'After'
     assert user.status == status
-    assert user.remark == 'Keep this value'
+    assert user.remark == plain_to_remark('Keep this value', identity_key='user:fixture:remark')
     assert (
         sorted(row.role_id for row in await UserRoleRepository(db_session).find_by_user_id(user.user_id))
         == expected_roles

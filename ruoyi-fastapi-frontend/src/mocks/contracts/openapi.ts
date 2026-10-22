@@ -2,7 +2,7 @@ import type {
   CurrentUserModel,
   DeptModel,
   DeviceModel,
-  DictDataModel,
+  DictDataItemReadModel,
   GetLoginUserInfoGetInfoGetResponse,
   GetSystemProjectListProjectListGetResponse,
   LoginLoginPostResponse,
@@ -11,7 +11,7 @@ import type {
   ProjectModel,
   ProjectTopologyModel,
   ProjectVersionModel,
-  RoleModel,
+  RoleItemReadModel,
   UserInfoModel,
 } from '@/api/_generated/types.gen';
 
@@ -25,7 +25,7 @@ export type MockOpenApiAccountUser = RequireOpenApiFields<
 >;
 
 export type MockOpenApiRole = RequireOpenApiFields<
-  RoleModel,
+  RoleItemReadModel,
   'roleId' | 'roleKey' | 'roleName' | 'status'
 >;
 
@@ -35,7 +35,7 @@ export type MockOpenApiMenu = RequireOpenApiFields<
 >;
 
 export type MockOpenApiDictData = RequireOpenApiFields<
-  DictDataModel,
+  DictDataItemReadModel,
   'dictCode' | 'dictType' | 'dictValue' | 'dictLabel' | 'status'
 >;
 

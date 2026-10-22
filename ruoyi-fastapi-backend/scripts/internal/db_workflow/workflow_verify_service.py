@@ -271,7 +271,14 @@ async def _analyze_release_drift_async(
             *((str(latest_manifest_path),) if latest_manifest_path else ()),
         )
 
-    return artifact_validation, bundle_chain, managed_data_drift, managed_data_details, visibility_drift, visibility_details
+    return (
+        artifact_validation,
+        bundle_chain,
+        managed_data_drift,
+        managed_data_details,
+        visibility_drift,
+        visibility_details,
+    )
 
 
 def _validate_latest_bundle_payload(  # noqa: PLR0911
@@ -321,7 +328,10 @@ def _validate_latest_bundle_payload(  # noqa: PLR0911
         )
 
     target_state_payload = managed_data_payload.get('target_state')
-    if not isinstance(target_state_payload, dict) or load_target_state_payload(target_state_payload) != formal_target_state:
+    if (
+        not isinstance(target_state_payload, dict)
+        or load_target_state_payload(target_state_payload) != formal_target_state
+    ):
         return WorkflowVerifyStepReport(
             step='artifact-validation',
             status='failed',
@@ -337,7 +347,10 @@ def _validate_latest_bundle_payload(  # noqa: PLR0911
         compiled_state=compiled_state,
         enabled_modules=declaration_bundle.release_selection.enabled_modules,
     )
-    if load_managed_object_snapshot(managed_data_payload, artifact_name=str(managed_data_path)) != expected_managed_objects:
+    if (
+        load_managed_object_snapshot(managed_data_payload, artifact_name=str(managed_data_path))
+        != expected_managed_objects
+    ):
         return WorkflowVerifyStepReport(
             step='artifact-validation',
             status='failed',
@@ -456,11 +469,11 @@ async def _load_last_successful_action_async(session_factory) -> str:
     return 'dev-sync'
 
 
-def _check_bypass_entrypoints(project_root: Path) -> WorkflowVerifyStepReport:
-    backend_root = project_root / 'ruoyi-fastapi-backend'
+def _check_bypass_entrypoints(backend_root: Path) -> WorkflowVerifyStepReport:
+    repository_root = backend_root.parent
     checks = (
         (
-            project_root / 'scripts' / 'start.sh',
+            repository_root / 'scripts' / 'start.sh',
             ('python scripts/db.py status', 'dev-sync', 'deploy'),
             ('apply_sql_updates',),
         ),

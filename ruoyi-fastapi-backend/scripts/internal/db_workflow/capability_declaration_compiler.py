@@ -9,6 +9,7 @@ from typing import Any, Literal
 
 import yaml
 
+from common.remark_document_v1 import plain_to_remark
 from modules.system.runtime.menu_registry_loader import (
     COMPONENT_PATH_PATTERN,
     FLAG_SET,
@@ -230,7 +231,9 @@ class ModuleManifestAdapter:
             menu_type = str(row.get('menu_type'))
             if menu_type not in MENU_TYPE_SET:
                 issues.append(
-                    _issue('menus', source_path, f'{prefix}.menu_type', f'menu_type must be one of {sorted(MENU_TYPE_SET)}')
+                    _issue(
+                        'menus', source_path, f'{prefix}.menu_type', f'menu_type must be one of {sorted(MENU_TYPE_SET)}'
+                    )
                 )
 
             if str(row.get('visible')) not in FLAG_SET:
@@ -240,7 +243,9 @@ class ModuleManifestAdapter:
 
             menu_name = row.get('menu_name')
             if not isinstance(menu_name, str) or not menu_name.strip():
-                issues.append(_issue('menus', source_path, f'{prefix}.menu_name', 'menu_name must be a non-empty string'))
+                issues.append(
+                    _issue('menus', source_path, f'{prefix}.menu_name', 'menu_name must be a non-empty string')
+                )
 
             if not isinstance(row.get('path'), str):
                 issues.append(_issue('menus', source_path, f'{prefix}.path', 'path must be a string'))
@@ -248,12 +253,18 @@ class ModuleManifestAdapter:
             component = row.get('component')
             if menu_type == 'C':
                 if not isinstance(component, str) or not component.strip():
-                    issues.append(_issue('menus', source_path, f'{prefix}.component', 'component is required for menu_type=C'))
+                    issues.append(
+                        _issue('menus', source_path, f'{prefix}.component', 'component is required for menu_type=C')
+                    )
                 elif not COMPONENT_PATH_PATTERN.match(component.strip()):
-                    issues.append(_issue('menus', source_path, f'{prefix}.component', 'component contains invalid characters'))
+                    issues.append(
+                        _issue('menus', source_path, f'{prefix}.component', 'component contains invalid characters')
+                    )
             elif component is not None and not isinstance(component, str):
                 issues.append(
-                    _issue('menus', source_path, f'{prefix}.component', 'component must be null or string for non-C menus')
+                    _issue(
+                        'menus', source_path, f'{prefix}.component', 'component must be null or string for non-C menus'
+                    )
                 )
 
             parent_menu_key = _normalize_identifier(row.get('parent_menu_key'))
@@ -291,13 +302,24 @@ class ModuleManifestAdapter:
 
             role_key = _normalize_identifier(row.get('role_key'))
             if role_key is None:
-                issues.append(_issue('role_grants', source_path, f'{prefix}.role_key', 'role_key must be a non-empty string'))
+                issues.append(
+                    _issue('role_grants', source_path, f'{prefix}.role_key', 'role_key must be a non-empty string')
+                )
                 continue
             if role_key in seen_role_keys:
-                issues.append(_issue('role_grants', source_path, f'{prefix}.role_key', f'duplicate role_key: {role_key}'))
+                issues.append(
+                    _issue('role_grants', source_path, f'{prefix}.role_key', f'duplicate role_key: {role_key}')
+                )
             seen_role_keys.add(role_key)
             if self.known_role_keys and role_key not in self.known_role_keys:
-                issues.append(_issue('role_grants', source_path, f'{prefix}.role_key', f'role_key not found in known roles: {role_key}'))
+                issues.append(
+                    _issue(
+                        'role_grants',
+                        source_path,
+                        f'{prefix}.role_key',
+                        f'role_key not found in known roles: {role_key}',
+                    )
+                )
 
             menu_keys = row.get('menu_keys', [])
             if not isinstance(menu_keys, list):
@@ -318,7 +340,11 @@ class ModuleManifestAdapter:
                 seen_menu_keys.add(menu_key)
                 menu_id = menu_ids_by_key.get(menu_key)
                 if menu_id is None:
-                    issues.append(_issue('role_grants', source_path, location, f'menu_key is not declared in this module: {menu_key}'))
+                    issues.append(
+                        _issue(
+                            'role_grants', source_path, location, f'menu_key is not declared in this module: {menu_key}'
+                        )
+                    )
                     continue
                 resolved_menu_ids.add(menu_id)
 
@@ -332,7 +358,9 @@ class ModuleManifestAdapter:
         payload: Any,
         issues: list[CapabilityDeclarationIssue],
     ) -> dict[str, dict[str, Any]]:
-        rows = _normalize_mapping_list(payload, domain='dict_types', source_path=source_path, location='dict_types', issues=issues)
+        rows = _normalize_mapping_list(
+            payload, domain='dict_types', source_path=source_path, location='dict_types', issues=issues
+        )
         seen_ids: set[int] = set()
         seen_keys: set[str] = set()
         result: dict[str, dict[str, Any]] = {}
@@ -341,17 +369,28 @@ class ModuleManifestAdapter:
             prefix = f'dict_types[{index}]'
             missing_fields = [field for field in ('dict_id', 'dict_name', 'dict_type', 'status') if field not in row]
             if missing_fields:
-                issues.append(_issue('dict_types', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}'))
+                issues.append(
+                    _issue('dict_types', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}')
+                )
                 continue
             normalized = _normalize_dict_type_row(row, source_path=source_path, location=prefix, issues=issues)
             if normalized is None:
                 continue
             if int(normalized['dict_id']) in seen_ids:
-                issues.append(_issue('dict_types', source_path, f'{prefix}.dict_id', f'duplicate dict_id: {normalized["dict_id"]}'))
+                issues.append(
+                    _issue(
+                        'dict_types', source_path, f'{prefix}.dict_id', f'duplicate dict_id: {normalized["dict_id"]}'
+                    )
+                )
                 continue
             if normalized['dict_type'] in seen_keys:
                 issues.append(
-                    _issue('dict_types', source_path, f'{prefix}.dict_type', f'duplicate dict_type: {normalized["dict_type"]}')
+                    _issue(
+                        'dict_types',
+                        source_path,
+                        f'{prefix}.dict_type',
+                        f'duplicate dict_type: {normalized["dict_type"]}',
+                    )
                 )
                 continue
             seen_ids.add(int(normalized['dict_id']))
@@ -368,7 +407,9 @@ class ModuleManifestAdapter:
         declared_dict_types: set[str],
         issues: list[CapabilityDeclarationIssue],
     ) -> dict[tuple[str, str], dict[str, Any]]:
-        rows = _normalize_mapping_list(payload, domain='dict_data', source_path=source_path, location='dict_data', issues=issues)
+        rows = _normalize_mapping_list(
+            payload, domain='dict_data', source_path=source_path, location='dict_data', issues=issues
+        )
         seen_codes: set[int] = set()
         seen_keys: set[tuple[str, str]] = set()
         result: dict[tuple[str, str], dict[str, Any]] = {}
@@ -376,11 +417,14 @@ class ModuleManifestAdapter:
         for index, row in rows:
             prefix = f'dict_data[{index}]'
             missing_fields = [
-                field for field in ('dict_code', 'dict_sort', 'dict_label', 'dict_value', 'dict_type', 'is_default', 'status')
+                field
+                for field in ('dict_code', 'dict_sort', 'dict_label', 'dict_value', 'dict_type', 'is_default', 'status')
                 if field not in row
             ]
             if missing_fields:
-                issues.append(_issue('dict_data', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}'))
+                issues.append(
+                    _issue('dict_data', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}')
+                )
                 continue
             normalized = _normalize_dict_data_row(row, source_path=source_path, location=prefix, issues=issues)
             if normalized is None:
@@ -388,11 +432,23 @@ class ModuleManifestAdapter:
             business_key = (normalized['dict_type'], normalized['dict_value'])
             if normalized['dict_type'] not in declared_dict_types:
                 issues.append(
-                    _issue('dict_data', source_path, f'{prefix}.dict_type', f'dict_type is not declared in this module: {normalized["dict_type"]}')
+                    _issue(
+                        'dict_data',
+                        source_path,
+                        f'{prefix}.dict_type',
+                        f'dict_type is not declared in this module: {normalized["dict_type"]}',
+                    )
                 )
                 continue
             if int(normalized['dict_code']) in seen_codes:
-                issues.append(_issue('dict_data', source_path, f'{prefix}.dict_code', f'duplicate dict_code: {normalized["dict_code"]}'))
+                issues.append(
+                    _issue(
+                        'dict_data',
+                        source_path,
+                        f'{prefix}.dict_code',
+                        f'duplicate dict_code: {normalized["dict_code"]}',
+                    )
+                )
                 continue
             if business_key in seen_keys:
                 issues.append(
@@ -416,26 +472,43 @@ class ModuleManifestAdapter:
         payload: Any,
         issues: list[CapabilityDeclarationIssue],
     ) -> dict[str, dict[str, Any]]:
-        rows = _normalize_mapping_list(payload, domain='configs', source_path=source_path, location='configs', issues=issues)
+        rows = _normalize_mapping_list(
+            payload, domain='configs', source_path=source_path, location='configs', issues=issues
+        )
         seen_ids: set[int] = set()
         seen_keys: set[str] = set()
         result: dict[str, dict[str, Any]] = {}
 
         for index, row in rows:
             prefix = f'configs[{index}]'
-            missing_fields = [field for field in ('config_id', 'config_name', 'config_key', 'config_value', 'config_type') if field not in row]
+            missing_fields = [
+                field
+                for field in ('config_id', 'config_name', 'config_key', 'config_value', 'config_type')
+                if field not in row
+            ]
             if missing_fields:
-                issues.append(_issue('configs', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}'))
+                issues.append(
+                    _issue('configs', source_path, prefix, f'missing required fields: {", ".join(missing_fields)}')
+                )
                 continue
             normalized = _normalize_config_row(row, source_path=source_path, location=prefix, issues=issues)
             if normalized is None:
                 continue
             if int(normalized['config_id']) in seen_ids:
-                issues.append(_issue('configs', source_path, f'{prefix}.config_id', f'duplicate config_id: {normalized["config_id"]}'))
+                issues.append(
+                    _issue(
+                        'configs', source_path, f'{prefix}.config_id', f'duplicate config_id: {normalized["config_id"]}'
+                    )
+                )
                 continue
             if normalized['config_key'] in seen_keys:
                 issues.append(
-                    _issue('configs', source_path, f'{prefix}.config_key', f'duplicate config_key: {normalized["config_key"]}')
+                    _issue(
+                        'configs',
+                        source_path,
+                        f'{prefix}.config_key',
+                        f'duplicate config_key: {normalized["config_key"]}',
+                    )
                 )
                 continue
             seen_ids.add(int(normalized['config_id']))
@@ -460,13 +533,17 @@ class ModuleManifestAdapter:
 
         config_key = _normalize_identifier(payload.get('config_key'))
         if config_key is None:
-            issues.append(_issue('runtime_gates', source_path, 'runtime_gate.config_key', 'config_key must be a non-empty string'))
+            issues.append(
+                _issue('runtime_gates', source_path, 'runtime_gate.config_key', 'config_key must be a non-empty string')
+            )
             return None
 
         default_enabled_raw = payload.get('default_enabled', False)
         if not isinstance(default_enabled_raw, bool):
             issues.append(
-                _issue('runtime_gates', source_path, 'runtime_gate.default_enabled', 'default_enabled must be a boolean')
+                _issue(
+                    'runtime_gates', source_path, 'runtime_gate.default_enabled', 'default_enabled must be a boolean'
+                )
             )
             return None
 
@@ -532,7 +609,9 @@ class CapabilityDeclarationCompiler:
         for draft in sorted(drafts, key=_validation_sort_key):
             for dependency in sorted(draft.dependencies):
                 if dependency == draft.module_key:
-                    issues.append(_issue('modules', draft.source_path, 'dependencies', 'module cannot depend on itself'))
+                    issues.append(
+                        _issue('modules', draft.source_path, 'dependencies', 'module cannot depend on itself')
+                    )
                 elif dependency not in declared_module_keys:
                     issues.append(
                         _issue('modules', draft.source_path, 'dependencies', f'unknown module dependency: {dependency}')
@@ -579,13 +658,23 @@ class CapabilityDeclarationCompiler:
                 dict_id = int(row['dict_id'])
                 if dict_type in dict_type_owner_by_key:
                     issues.append(
-                        _issue('dict_types', draft.source_path, dict_type, f'dict_type already owned by module {dict_type_owner_by_key[dict_type]}')
+                        _issue(
+                            'dict_types',
+                            draft.source_path,
+                            dict_type,
+                            f'dict_type already owned by module {dict_type_owner_by_key[dict_type]}',
+                        )
                     )
                 else:
                     dict_type_owner_by_key[dict_type] = draft.module_key
                 if dict_id in dict_type_owner_by_id:
                     issues.append(
-                        _issue('dict_types', draft.source_path, f'dict_id={dict_id}', f'dict_id already owned by module {dict_type_owner_by_id[dict_id]}')
+                        _issue(
+                            'dict_types',
+                            draft.source_path,
+                            f'dict_id={dict_id}',
+                            f'dict_id already owned by module {dict_type_owner_by_id[dict_id]}',
+                        )
                     )
                 else:
                     dict_type_owner_by_id[dict_id] = draft.module_key
@@ -629,13 +718,23 @@ class CapabilityDeclarationCompiler:
                 config_id = int(row['config_id'])
                 if config_key in config_owner_by_key:
                     issues.append(
-                        _issue('configs', draft.source_path, config_key, f'config_key already owned by module {config_owner_by_key[config_key]}')
+                        _issue(
+                            'configs',
+                            draft.source_path,
+                            config_key,
+                            f'config_key already owned by module {config_owner_by_key[config_key]}',
+                        )
                     )
                 else:
                     config_owner_by_key[config_key] = draft.module_key
                 if config_id in config_owner_by_id:
                     issues.append(
-                        _issue('configs', draft.source_path, f'config_id={config_id}', f'config_id already owned by module {config_owner_by_id[config_id]}')
+                        _issue(
+                            'configs',
+                            draft.source_path,
+                            f'config_id={config_id}',
+                            f'config_id already owned by module {config_owner_by_id[config_id]}',
+                        )
                     )
                 else:
                     config_owner_by_id[config_id] = draft.module_key
@@ -651,7 +750,12 @@ class CapabilityDeclarationCompiler:
                     parent_owner = menu_owner_by_key.get(parent_menu_key)
                     if parent_owner is None:
                         issues.append(
-                            _issue('menus', draft.source_path, menu_key, f'parent_menu_key is not declared: {parent_menu_key}')
+                            _issue(
+                                'menus',
+                                draft.source_path,
+                                menu_key,
+                                f'parent_menu_key is not declared: {parent_menu_key}',
+                            )
                         )
                         continue
                     if parent_id not in (0, parent_owner.menu_id):
@@ -690,7 +794,12 @@ class CapabilityDeclarationCompiler:
                     menu_owner = menu_owner_by_id.get(menu_id)
                     if menu_owner is None:
                         issues.append(
-                            _issue('role_grants', draft.source_path, role_key, f'role grant references undeclared menu_id: {menu_id}')
+                            _issue(
+                                'role_grants',
+                                draft.source_path,
+                                role_key,
+                                f'role grant references undeclared menu_id: {menu_id}',
+                            )
                         )
                         continue
                     if menu_owner.module_key != draft.module_key:
@@ -787,7 +896,9 @@ class CapabilityDeclarationCompiler:
                 ]
             }
         )
-        compiled_checksum = compute_payload_checksum(_compiled_state_payload(modules, compiled_resources, runtime_gates))
+        compiled_checksum = compute_payload_checksum(
+            _compiled_state_payload(modules, compiled_resources, runtime_gates)
+        )
 
         return CompiledCapabilityState(
             modules=modules,
@@ -804,8 +915,7 @@ def format_capability_issues(issues: list[CapabilityDeclarationIssue]) -> str:
     """Render compiler issues as one readable error string."""
 
     return '; '.join(
-        f'[{issue.domain}] {issue.source_path}:{issue.location}: {issue.message}'
-        for issue in _sorted_issues(issues)
+        f'[{issue.domain}] {issue.source_path}:{issue.location}: {issue.message}' for issue in _sorted_issues(issues)
     )
 
 
@@ -848,7 +958,9 @@ def _resources_payload(resources: CapabilityResourceState) -> dict[str, Any]:
         'menus': {str(menu_id): row for menu_id, row in sorted(resources.menus.items())},
         'role_grants': {role_key: list(menu_ids) for role_key, menu_ids in sorted(resources.role_grants.items())},
         'dict_types': dict(sorted(resources.dict_types.items())),
-        'dict_data': {f'{dict_type}:{dict_value}': row for (dict_type, dict_value), row in sorted(resources.dict_data.items())},
+        'dict_data': {
+            f'{dict_type}:{dict_value}': row for (dict_type, dict_value), row in sorted(resources.dict_data.items())
+        },
         'configs': dict(sorted(resources.configs.items())),
     }
 
@@ -856,7 +968,9 @@ def _resources_payload(resources: CapabilityResourceState) -> dict[str, Any]:
 def _sorted_resources(resources: CapabilityResourceState) -> CapabilityResourceState:
     return CapabilityResourceState(
         menus={menu_id: resources.menus[menu_id] for menu_id in sorted(resources.menus)},
-        role_grants={role_key: tuple(sorted(resources.role_grants[role_key])) for role_key in sorted(resources.role_grants)},
+        role_grants={
+            role_key: tuple(sorted(resources.role_grants[role_key])) for role_key in sorted(resources.role_grants)
+        },
         dict_types={dict_type: resources.dict_types[dict_type] for dict_type in sorted(resources.dict_types)},
         dict_data={key: resources.dict_data[key] for key in sorted(resources.dict_data)},
         configs={config_key: resources.configs[config_key] for config_key in sorted(resources.configs)},
@@ -902,13 +1016,16 @@ def _build_runtime_gate_config_row(
     default_enabled: bool,
     used_config_ids: set[int],
 ) -> dict[str, Any]:
+    config_id = _allocate_runtime_gate_config_id(config_key=config_key, used_config_ids=used_config_ids)
     return {
-        'config_id': _allocate_runtime_gate_config_id(config_key=config_key, used_config_ids=used_config_ids),
+        'config_id': config_id,
         'config_name': f'Capability Gate: {module_key}',
         'config_key': config_key,
         'config_value': 'true' if default_enabled else 'false',
         'config_type': 'Y',
-        'remark': f'Auto-generated runtime gate config for module {module_key}',
+        'remark': plain_to_remark(
+            f'Auto-generated runtime gate config for module {module_key}', identity_key=f'sys_config:{config_id}:remark'
+        ),
     }
 
 
@@ -951,7 +1068,9 @@ def _build_module_declarations(drafts: list[_ModuleDraft]) -> dict[str, ModuleCa
             resources=_sorted_resources(
                 CapabilityResourceState(
                     menus=merged_menus,
-                    role_grants={role_key: tuple(sorted(menu_ids)) for role_key, menu_ids in merged_role_grants.items()},
+                    role_grants={
+                        role_key: tuple(sorted(menu_ids)) for role_key, menu_ids in merged_role_grants.items()
+                    },
                     dict_types=merged_dict_types,
                     dict_data=merged_dict_data,
                     configs=merged_configs,
@@ -980,7 +1099,7 @@ def _detect_dependency_cycles(drafts: list[_ModuleDraft]) -> list[CapabilityDecl
         if module_key in visited:
             return
         if module_key in visiting:
-            cycle = [*trail[trail.index(module_key):], module_key]
+            cycle = [*trail[trail.index(module_key) :], module_key]
             source_path = source_path_by_module.get(module_key, Path())
             issues.append(
                 _issue('modules', source_path, module_key, f'module dependency cycle detected: {" -> ".join(cycle)}')
@@ -1003,11 +1122,7 @@ def _detect_menu_parent_cycles(
     parent_graph: dict[str, str],
 ) -> list[CapabilityDeclarationIssue]:
     issues: list[CapabilityDeclarationIssue] = []
-    source_path_by_menu_key = {
-        menu_key: draft.source_path
-        for draft in drafts
-        for menu_key in draft.menu_ids_by_key
-    }
+    source_path_by_menu_key = {menu_key: draft.source_path for draft in drafts for menu_key in draft.menu_ids_by_key}
     visiting: set[str] = set()
     visited: set[str] = set()
 
@@ -1015,7 +1130,7 @@ def _detect_menu_parent_cycles(
         if menu_key in visited:
             return
         if menu_key in visiting:
-            cycle = [*trail[trail.index(menu_key):], menu_key]
+            cycle = [*trail[trail.index(menu_key) :], menu_key]
             issues.append(
                 _issue(
                     'menus',
@@ -1112,11 +1227,15 @@ def _normalize_dict_type_row(
         return None
     dict_name = row.get('dict_name')
     if not isinstance(dict_name, str) or not dict_name.strip():
-        issues.append(_issue('dict_types', source_path, f'{location}.dict_name', 'dict_name must be a non-empty string'))
+        issues.append(
+            _issue('dict_types', source_path, f'{location}.dict_name', 'dict_name must be a non-empty string')
+        )
         return None
     dict_type = _normalize_identifier(row.get('dict_type'))
     if dict_type is None:
-        issues.append(_issue('dict_types', source_path, f'{location}.dict_type', 'dict_type must be a non-empty string'))
+        issues.append(
+            _issue('dict_types', source_path, f'{location}.dict_type', 'dict_type must be a non-empty string')
+        )
         return None
     status = str(row.get('status'))
     if status not in STATUS_FLAG_SET:
@@ -1131,7 +1250,7 @@ def _normalize_dict_type_row(
         'dict_name': dict_name.strip(),
         'dict_type': dict_type,
         'status': status,
-        'remark': '' if remark is None else remark,
+        'remark': plain_to_remark(remark, identity_key=f'sys_dict_type:{int(row["dict_id"])}:remark'),
     }
 
 
@@ -1145,7 +1264,9 @@ def _normalize_dict_data_row(
     int_fields = ('dict_code', 'dict_sort')
     for field_name in int_fields:
         if not MenuRegistryLoader._is_int_like(row.get(field_name)):
-            issues.append(_issue('dict_data', source_path, f'{location}.{field_name}', f'{field_name} must be an integer'))
+            issues.append(
+                _issue('dict_data', source_path, f'{location}.{field_name}', f'{field_name} must be an integer')
+            )
             return None
     required_text_fields = ('dict_label', 'dict_value', 'dict_type')
     normalized_text: dict[str, str] = {}
@@ -1173,7 +1294,7 @@ def _normalize_dict_data_row(
         'list_class': '' if row.get('list_class') is None else str(row.get('list_class')),
         'is_default': str(row['is_default']),
         'status': str(row['status']),
-        'remark': '' if row.get('remark') is None else str(row.get('remark')),
+        'remark': plain_to_remark(row.get('remark'), identity_key=f'sys_dict_data:{int(row["dict_code"])}:remark'),
     }
 
 
@@ -1189,7 +1310,9 @@ def _normalize_config_row(
         return None
     config_name = row.get('config_name')
     if not isinstance(config_name, str) or not config_name.strip():
-        issues.append(_issue('configs', source_path, f'{location}.config_name', 'config_name must be a non-empty string'))
+        issues.append(
+            _issue('configs', source_path, f'{location}.config_name', 'config_name must be a non-empty string')
+        )
         return None
     config_key = _normalize_identifier(row.get('config_key'))
     if config_key is None:
@@ -1209,7 +1332,7 @@ def _normalize_config_row(
         'config_key': config_key,
         'config_value': config_value,
         'config_type': config_type,
-        'remark': '' if row.get('remark') is None else str(row.get('remark')),
+        'remark': plain_to_remark(row.get('remark'), identity_key=f'sys_config:{int(row["config_id"])}:remark'),
     }
 
 

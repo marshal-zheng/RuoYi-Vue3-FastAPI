@@ -23,6 +23,7 @@ from config.database import Base  # noqa: E402
 from config.env import DataBaseConfig, DataBaseWorkflowStatus  # noqa: E402
 
 MODEL_MODULES = (
+    'module_generator.entity.do.gen_do',
     'module_admin.entity.do.user_do',
     'module_admin.entity.do.role_do',
     'module_admin.entity.do.menu_do',
@@ -72,10 +73,7 @@ def _atlas_database_url(database: str) -> str:
             f'postgres://{username}:{password}@{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{database}'
             '?sslmode=disable'
         )
-    return (
-        f'mysql://{username}:{password}@{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{database}'
-        '?charset=utf8mb4'
-    )
+    return f'mysql://{username}:{password}@{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/{database}?charset=utf8mb4'
 
 
 def _admin_sqlalchemy_url() -> tuple[str, str]:
@@ -85,8 +83,7 @@ def _admin_sqlalchemy_url() -> tuple[str, str]:
 
     if db_type == 'postgresql':
         return db_type, (
-            f'postgresql+psycopg2://{username}:{password}@'
-            f'{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/postgres'
+            f'postgresql+psycopg2://{username}:{password}@{DataBaseConfig.db_host}:{DataBaseConfig.db_port}/postgres'
         )
     if db_type == 'mysql':
         return db_type, (
@@ -133,10 +130,7 @@ def _create_database(engine_url: str, db_type: str, database: str) -> None:
         with engine.connect() as connection:
             if db_type == 'mysql':
                 connection.execute(
-                    text(
-                        f'CREATE DATABASE `{database}` '
-                        'CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci'
-                    )
+                    text(f'CREATE DATABASE `{database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci')
                 )
                 return
 
@@ -174,8 +168,7 @@ def _load_print_ddl():
         ddl_module = importlib.import_module('atlas_provider_sqlalchemy.ddl')
     except ModuleNotFoundError as exc:  # pragma: no cover - depends on local env
         raise RuntimeError(
-            'atlas-provider-sqlalchemy is not installed. '
-            'Install it in the backend virtualenv before using dev-sync.'
+            'atlas-provider-sqlalchemy is not installed. Install it in the backend virtualenv before using dev-sync.'
         ) from exc
 
     print_ddl = getattr(ddl_module, 'print_ddl', None)
@@ -207,10 +200,7 @@ def _require_atlas_binary(env: dict[str, str]) -> str:
     atlas_path = shutil.which('atlas', path=env.get('PATH'))
     if atlas_path:
         return atlas_path
-    raise RuntimeError(
-        'Atlas CLI is not installed or not available in PATH. '
-        'Install Atlas before using dev-sync.'
-    )
+    raise RuntimeError('Atlas CLI is not installed or not available in PATH. Install Atlas before using dev-sync.')
 
 
 def run_schema_apply(*, project_root: Path, workflow_status: DataBaseWorkflowStatus, invoked_by_startup: bool) -> str:

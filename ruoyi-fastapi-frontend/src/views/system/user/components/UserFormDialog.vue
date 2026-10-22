@@ -17,6 +17,7 @@
       ref="formRef"
       :model="state.data"
       :rules="formRules"
+      :disabled="detailLoading || state.disabled || state.loading || !!loadError"
       v-bind="formProps"
     >
       <FormGrid v-bind="layoutProps">
@@ -124,8 +125,13 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item data-form-full label="备注">
-          <zx-input v-model="state.data.remark" type="textarea" placeholder="请输入备注" />
+        <el-form-item data-form-full label="备注" prop="remark">
+          <RemarkEditor
+            v-if="state.visible"
+            ref="remarkRef"
+            :key="remarkSession"
+            v-model="state.data.remark"
+          />
         </el-form-item>
       </FormGrid>
     </el-form>
@@ -133,7 +139,11 @@
 </template>
 
 <script setup>
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
+import { readRemark } from '@/components/ui/Remark/contract';
 import { ref, computed, shallowRef, watch } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { useQuery } from '@tanstack/vue-query';
 import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
@@ -153,6 +163,8 @@ const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 const emit = defineEmits(['success']);
 
 const formRef = ref();
+const { remarkRef, remarkRule } = useRemarkField();
+const remarkSession = ref(0);
 const postOptions = ref([]);
 const roleOptions = ref([]);
 const detailLoading = ref(false);
@@ -161,6 +173,7 @@ const editorScope = shallowRef(null);
 const selectedDepartment = shallowRef(null);
 
 const formRules = computed(() => ({
+  remark: [remarkRule],
   userName: [
     { required: true, message: '用户名称不能为空', trigger: 'blur' },
     {
@@ -203,67 +216,75 @@ const formRules = computed(() => ({
   ],
 }));
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
-  useFormDialog({
-    columns: 2,
-    title: (data) => (data?.userId ? '修改用户' : '添加用户'),
+const {
+  formProps,
+  layoutProps,
+  state,
+  dialogProps,
+  dialogEvents,
+  open,
+  close,
+  setDisabled,
+  isDirty,
+} = useFormDialog({
+  columns: 2,
+  title: (data) => (data?.userId ? '修改用户' : '添加用户'),
 
-    okText: computed(() => (state.data.userId ? '保存' : '创建')),
-    formRef,
-    preValidate: true,
-    autoScrollToError: true,
-    autoResetForm: true,
-    loading: detailLoading,
-    defaultData: () => ({
-      userId: undefined,
-      deptId: undefined,
-      userName: '',
-      nickName: '',
-      password: '',
-      phonenumber: '',
-      email: '',
-      sex: undefined,
-      status: '0',
-      remark: '',
-      postIds: [],
-      roleIds: [],
-    }),
-    onConfirm: async (data) => {
-      const scope = editorScope.value;
-      if (
-        !state.visible ||
-        !scope ||
-        scope !== queryScope.value ||
-        detailLoading.value ||
-        loadError.value
-      )
-        return false;
-      const payload = {
-        deptId: data.deptId,
-        userName: data.userName,
-        nickName: data.nickName,
-        phonenumber: data.phonenumber,
-        email: data.email,
-        sex: data.sex,
-        status: data.status,
-        remark: data.remark,
-        postIds: data.postIds,
-        roleIds: data.roleIds,
-      };
-      if (data.userId) {
-        await userCommands.updateUser(
-          captureUserCommand({ ...payload, userId: data.userId }, scope)
-        );
-      } else {
-        await userCommands.createUser(
-          captureUserCommand({ ...payload, password: data.password }, scope)
-        );
-      }
-      if (scope !== queryScope.value || state.data !== data) return false;
-      emit('success');
-    },
-    // 错误消息已在 http 层统一处理，无需重复显示
-  });
+  okText: computed(() => (state.data.userId ? '保存' : '创建')),
+  formRef,
+  preValidate: true,
+  autoScrollToError: true,
+  autoResetForm: true,
+  onBeforeClose: canDiscard,
+  loading: detailLoading,
+  defaultData: () => ({
+    userId: undefined,
+    deptId: undefined,
+    userName: '',
+    nickName: '',
+    password: '',
+    phonenumber: '',
+    email: '',
+    sex: undefined,
+    status: '0',
+    remark: null,
+    postIds: [],
+    roleIds: [],
+  }),
+  onConfirm: async (data) => {
+    const scope = editorScope.value;
+    if (
+      !state.visible ||
+      !scope ||
+      scope !== queryScope.value ||
+      detailLoading.value ||
+      loadError.value
+    )
+      return false;
+    const payload = {
+      deptId: data.deptId,
+      userName: data.userName,
+      nickName: data.nickName,
+      phonenumber: data.phonenumber,
+      email: data.email,
+      sex: data.sex,
+      status: data.status,
+      remark: data.remark,
+      postIds: data.postIds,
+      roleIds: data.roleIds,
+    };
+    if (data.userId) {
+      await userCommands.updateUser(captureUserCommand({ ...payload, userId: data.userId }, scope));
+    } else {
+      await userCommands.createUser(
+        captureUserCommand({ ...payload, password: data.password }, scope)
+      );
+    }
+    if (scope !== queryScope.value || state.data !== data) return false;
+    emit('success');
+  },
+  // 错误消息已在 http 层统一处理，无需重复显示
+});
 
 const isEdit = computed(() => !!state.data.userId);
 
@@ -313,13 +334,51 @@ watch(
   () => {
     cancelRead();
     selectedDepartment.value = null;
-    close();
+    editorScope.value = null;
+    state.visible = false;
   },
   { flush: 'sync' }
 );
 
 /** 打开对话框；新增也需要本次打开的岗位和角色选项。 */
-function openDialog(userId) {
+let openingIntent = 0;
+let approvedClose = false;
+let discardPending;
+function canDiscard() {
+  if (approvedClose || !state.visible) return Promise.resolve(true);
+  if (state.loading) return Promise.resolve(false);
+  if (detailLoading.value || loadError.value) return Promise.resolve(true);
+  if (!isDirty.value && remarkRef.value?.validate?.() !== false) return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const data = state.data;
+  const scope = editorScope.value;
+  const decision = ElMessageBox.confirm('用户信息尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(
+      () => state.visible && state.data === data && scope === queryScope.value && !state.loading
+    )
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function openDialog(userId) {
+  const intent = ++openingIntent;
+  if (state.visible && state.loading) return;
+  if (
+    state.visible &&
+    !detailLoading.value &&
+    !loadError.value &&
+    (isDirty.value || remarkRef.value?.validate?.() === false) &&
+    !(await canDiscard())
+  )
+    return;
+  if (intent !== openingIntent) return;
   const scope = requireQueryScope();
   editorScope.value = scope;
   requestedId.value = userId;
@@ -328,14 +387,18 @@ function openDialog(userId) {
     postOptions.value = [];
     roleOptions.value = [];
     setDisabled(true);
+    remarkSession.value++;
     const response = await readUserEditor(scope, userId, read.signal);
-    if (!read.isCurrent() || scope !== queryScope.value) return;
+    if (!read.isCurrent() || intent !== openingIntent || scope !== queryScope.value) return;
     postOptions.value = response.posts || [];
     roleOptions.value = response.roles || [];
     if (userId) {
       const userData = response.data;
       if (userData.dept?.deptName) {
-        selectedDepartment.value = { id: userData.deptId, label: userData.dept.deptName };
+        selectedDepartment.value = {
+          id: userData.deptId,
+          label: userData.dept.deptName,
+        };
       }
       open({
         userId: userData.userId,
@@ -346,7 +409,7 @@ function openDialog(userId) {
         email: userData.email,
         sex: userData.sex,
         status: userData.status,
-        remark: userData.remark,
+        remark: readRemark(userData.remark),
         postIds: [...(response.postIds || [])],
         roleIds: [...(response.roleIds || [])],
       });
@@ -357,9 +420,16 @@ function openDialog(userId) {
   });
 }
 
-function closeDialog() {
+async function closeDialog() {
+  if (!(await canDiscard())) return;
+  ++openingIntent;
   cancelRead();
-  return close();
+  approvedClose = true;
+  try {
+    await close();
+  } finally {
+    approvedClose = false;
+  }
 }
 
 function handleRetry() {
@@ -383,4 +453,10 @@ function retryDepartments() {
 }
 
 defineExpose({ open: openDialog, close: closeDialog });
+watch(
+  () => state.visible,
+  (visible) => {
+    if (visible) remarkSession.value++;
+  }
+);
 </script>

@@ -1,7 +1,11 @@
 import { requestDetail } from '@/api/detail';
-export type DataRecord = Omit<DictDataModel, 'dictCode'> & { dictCode: number };
+export type DataRecord = Omit<DictDataDetailReadModel, 'dictCode'> & { dictCode: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
-import type { DictDataModel, DictDataPageQueryModel } from '@/api/_generated/types.gen';
+import type {
+  DictDataModel,
+  DictDataDetailReadModel,
+  DictDataPageQueryModel,
+} from '@/api/_generated/types.gen';
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { HttpCollection } from '@/types/http-contract';
 import type { RequestOptions } from '@zxio/http';

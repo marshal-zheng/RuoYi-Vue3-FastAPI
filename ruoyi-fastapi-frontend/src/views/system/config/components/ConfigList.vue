@@ -100,7 +100,11 @@
             <dict-tag :options="sys_yes_no" :value="scope.row.configType" />
           </template>
         </el-table-column>
-        <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" />
+        <el-table-column label="备注" prop="remarkText" :show-overflow-tooltip="true">
+          <template #default="scope"
+            ><RemarkDisplay :value="scope.row.remark" :text="scope.row.remarkText" summary
+          /></template>
+        </el-table-column>
         <el-table-column label="创建时间" prop="createTime" width="180">
           <template #default="scope">
             <span>{{ parseTime(scope.row.createTime) }}</span>
@@ -134,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import RemarkDisplay from '@/components/ui/Remark/RemarkDisplay.vue';
 import { useOperation } from '@/utils/operation';
 import type { GridListState, ZxGridListInstance } from '@zxio/zxui';
 import type { ConfigRecord } from '@/api/system/config';

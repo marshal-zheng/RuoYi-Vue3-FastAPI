@@ -1,0 +1,18 @@
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "paragraph",
+      "attrs": {
+        "textAlign": null,
+        "blockId": "blk_a1"
+      },
+      "content": [
+        {
+          "type": "text",
+          "text": "text"
+        }
+      ]
+    }
+  ]
+}

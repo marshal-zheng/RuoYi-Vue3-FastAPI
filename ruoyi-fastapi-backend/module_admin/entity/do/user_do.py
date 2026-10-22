@@ -1,6 +1,7 @@
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import JSON, Column, DateTime, Integer, String
+
 from module_admin.entity.do.base import LegacyBaseModel, RelationBaseModel
-from module_admin.entity.do.enums import UserTypeEnum, GenderEnum, StatusEnum, DelFlagEnum
+from module_admin.entity.do.enums import DelFlagEnum, GenderEnum, StatusEnum, UserTypeEnum
 from utils.sensitive import sensitive_string_with_hash
 
 
@@ -26,7 +27,7 @@ class UserDO(LegacyBaseModel):
     del_flag = Column(String(1), default=DelFlagEnum.EXIST.value, comment='删除标志（0代表存在 2代表删除）')
     login_ip = Column(String(128), default='', comment='最后登录IP')
     login_date = Column(DateTime, comment='最后登录时间')
-    remark = Column(String(500), default=None, comment='备注')
+    remark = Column(JSON(none_as_null=True), nullable=True, default=None, comment='备注文档')
 
 
 class UserRoleDO(RelationBaseModel):

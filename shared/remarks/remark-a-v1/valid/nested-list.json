@@ -1,0 +1,97 @@
+{
+  "version": 2,
+  "body": {
+    "format": "json",
+    "content": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "orderedList",
+          "attrs": {
+            "blockId": "blk_ol1",
+            "start": 3,
+            "type": null
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "attrs": {
+                "blockId": "blk_i1"
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {
+                    "textAlign": null,
+                    "blockId": "blk_p1"
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第一"
+                    }
+                  ]
+                },
+                {
+                  "type": "bulletList",
+                  "attrs": {
+                    "blockId": "blk_ul1"
+                  },
+                  "content": [
+                    {
+                      "type": "listItem",
+                      "attrs": {
+                        "blockId": "blk_i2"
+                      },
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "attrs": {
+                            "textAlign": null,
+                            "blockId": "blk_p2"
+                          },
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "子项"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "attrs": {
+                "blockId": "blk_i3"
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {
+                    "textAlign": null,
+                    "blockId": "blk_p3"
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "第二"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "annotations": [],
+  "assets": [],
+  "meta": {
+    "schemaVersion": "stable-block-identity/v2"
+  }
+}

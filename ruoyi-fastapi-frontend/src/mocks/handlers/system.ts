@@ -1,6 +1,11 @@
+import { mockRemark } from '../data/remark';
 import { http, HttpResponse } from 'msw';
 
-import type { ConfigModel, DictTypeModel, UserInfoModel } from '@/api/_generated/types.gen';
+import type {
+  ConfigDetailReadModel,
+  DictTypeDetailReadModel,
+  UserInfoModel,
+} from '@/api/_generated/types.gen';
 
 import { createApiPath } from '../constants';
 import type { MockRuntimeHandler, MockStrategy } from '../types';
@@ -19,7 +24,8 @@ const mockConfigs = [
     configValue: 'skin-blue',
     configType: 'Y',
     createBy: 'mock',
-    remark: '主框架页默认皮肤',
+    remark: mockRemark('主框架页默认皮肤', 'config1'),
+    remarkText: '主框架页默认皮肤',
   },
   {
     configId: 2,
@@ -28,9 +34,10 @@ const mockConfigs = [
     configValue: 'true',
     configType: 'Y',
     createBy: 'mock',
-    remark: '登录验证码开关',
+    remark: mockRemark('登录验证码开关', 'config2'),
+    remarkText: '登录验证码开关',
   },
-] satisfies ConfigModel[];
+] satisfies ConfigDetailReadModel[];
 
 function toPositiveNumber(value: string | null, fallback: number): number {
   const parsed = Number(value);
@@ -55,7 +62,7 @@ function includesQuery(value: unknown, query: string | null): boolean {
   return String(value ?? '').includes(query);
 }
 
-function dictTypesFromData(dicts: MockDictData[]): DictTypeModel[] {
+function dictTypesFromData(dicts: MockDictData[]): DictTypeDetailReadModel[] {
   const byType = new Map<string, MockDictData[]>();
   dicts.forEach((dict) => {
     const siblings = byType.get(dict.dictType) ?? [];
@@ -68,7 +75,8 @@ function dictTypesFromData(dicts: MockDictData[]): DictTypeModel[] {
     dictType,
     status: values.every((value) => value.status === '0') ? '0' : '1',
     createBy: 'mock',
-    remark: 'mock dict type',
+    remark: mockRemark('mock dict type', `dict${index}`),
+    remarkText: 'mock dict type',
   }));
 }
 
@@ -79,6 +87,8 @@ function roleUser(name: string, userId: number, roleId: number): UserInfoModel {
     nickName: name === 'admin' ? '若依' : '访客',
     status: '0',
     roleIds: String(roleId),
+    remark: null,
+    remarkText: '',
   };
 }
 

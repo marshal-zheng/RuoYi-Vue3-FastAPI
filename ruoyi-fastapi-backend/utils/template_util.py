@@ -1,12 +1,13 @@
 import json
 import os
 from datetime import datetime
+
 from jinja2 import Environment, FileSystemLoader
-from typing import Dict, List, Set
+
 from config.constant import GenConstant
 from config.env import DataBaseConfig
 from exceptions.exception import ServiceWarning
-from module_generator.entity.vo.gen_vo import GenTableModel, GenTableColumnModel
+from module_generator.entity.vo.gen_vo import GenTableColumnModel, GenTableModel
 from utils.common_util import CamelCaseUtil, SnakeCaseUtil
 from utils.string_util import StringUtil
 
@@ -88,6 +89,15 @@ class TemplateUtils:
             'voImportList': cls.get_vo_import_list(gen_table),
             'permissionPrefix': cls.get_permission_prefix(module_name, business_name),
             'columns': gen_table.columns,
+            'remarkColumns': [c for c in gen_table.columns if c.html_type == 'remark'],
+            'subRemarkColumns': [
+                c for c in (gen_table.sub_table.columns if gen_table.sub_table else []) if c.html_type == 'remark'
+            ],
+            'hasRemarks': any(
+                c.html_type == 'remark'
+                for t in [gen_table] + ([gen_table.sub_table] if gen_table.sub_table else [])
+                for c in (t.columns or [])
+            ),
             'table': gen_table,
             'dicts': cls.get_dicts(gen_table),
             'dbType': DataBaseConfig.db_type,
@@ -105,7 +115,7 @@ class TemplateUtils:
         return context
 
     @classmethod
-    def set_menu_context(cls, context: Dict, gen_table: GenTableModel):
+    def set_menu_context(cls, context: dict, gen_table: GenTableModel):
         """
         设置菜单上下文
 
@@ -118,7 +128,7 @@ class TemplateUtils:
         context['parentMenuId'] = cls.get_parent_menu_id(params_obj)
 
     @classmethod
-    def set_tree_context(cls, context: Dict, gen_table: GenTableModel):
+    def set_tree_context(cls, context: dict, gen_table: GenTableModel):
         """
         设置树形结构上下文
 
@@ -134,7 +144,7 @@ class TemplateUtils:
         context['expandColumn'] = cls.get_expand_column(gen_table)
 
     @classmethod
-    def set_sub_context(cls, context: Dict, gen_table: GenTableModel):
+    def set_sub_context(cls, context: dict, gen_table: GenTableModel):
         """
         设置子表上下文
 
@@ -186,7 +196,7 @@ class TemplateUtils:
         return templates
 
     @classmethod
-    def get_file_name(cls, template: List[str], gen_table: GenTableModel):
+    def get_file_name(cls, template: list[str], gen_table: GenTableModel):
         """
         根据模板生成文件名
 
@@ -294,7 +304,7 @@ class TemplateUtils:
         return column_type
 
     @classmethod
-    def merge_same_imports(cls, imports: List[str], import_start: str) -> List[str]:
+    def merge_same_imports(cls, imports: list[str], import_start: str) -> list[str]:
         """
         合并相同的导入语句
 
@@ -333,7 +343,7 @@ class TemplateUtils:
         return ', '.join(dicts)
 
     @classmethod
-    def add_dicts(cls, dicts: Set[str], columns: List[GenTableColumnModel]):
+    def add_dicts(cls, dicts: set[str], columns: list[GenTableColumnModel]):
         """
         添加字典列表
 
@@ -363,7 +373,7 @@ class TemplateUtils:
         return f'{module_name}:{business_name}'
 
     @classmethod
-    def get_parent_menu_id(cls, params_obj: Dict):
+    def get_parent_menu_id(cls, params_obj: dict):
         """
         获取上级菜单ID
 
@@ -375,7 +385,7 @@ class TemplateUtils:
         return cls.DEFAULT_PARENT_MENU_ID
 
     @classmethod
-    def get_tree_code(cls, params_obj: Dict):
+    def get_tree_code(cls, params_obj: dict):
         """
         获取树编码
 
@@ -387,7 +397,7 @@ class TemplateUtils:
         return ''
 
     @classmethod
-    def get_tree_parent_code(cls, params_obj: Dict):
+    def get_tree_parent_code(cls, params_obj: dict):
         """
         获取树父编码
 
@@ -399,7 +409,7 @@ class TemplateUtils:
         return ''
 
     @classmethod
-    def get_tree_name(cls, params_obj: Dict):
+    def get_tree_name(cls, params_obj: dict):
         """
         获取树名称
 

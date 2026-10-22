@@ -62,7 +62,8 @@ export function projectDictData(dict: MockDictData, index: number) {
     status: dict.status,
     createBy: 'mock',
     createTime: MOCK_REFERENCE_DATETIME,
-    remark: '',
+    remark: null,
+    remarkText: '',
   };
 }
 

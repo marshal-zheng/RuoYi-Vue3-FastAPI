@@ -44,7 +44,7 @@ function domain() {
 }
 const wrappers: ReturnType<typeof mount>[] = [];
 const page = (userName = 'before') => ({
-  items: [{ userId: 7, userName, status: '0' as const }],
+  items: [{ userId: 7, userName, remarkText: '', status: '0' as const }],
   total: 1,
   page: 1,
   pageSize: 10,
@@ -287,7 +287,7 @@ describe('bidirectional authorization reads', () => {
     const scope = setQuerySession(1, [], []);
     const response = {
       user: page().items[0],
-      roles: [{ roleId: 2, flag: true }],
+      roles: [{ roleId: 2, flag: true, remarkText: '' }],
     };
     vi.mocked(api.getAuthRole).mockResolvedValue(response);
     const options = userDomain.userAuthRoleOptions(scope, '7');

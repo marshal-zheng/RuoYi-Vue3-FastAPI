@@ -4,31 +4,32 @@ from pydantic import ValidationError
 from pydantic_validation_decorator import FieldValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-# 导入异常类
-from exceptions.exception import (
-    AppException,
-    ValidationException,
-    AuthException,
-    PermissionException,
-    BusinessException,
-    SystemException,
-    DatabaseException,
-    # 兼容旧代码的异常类
-    ServiceException,
-    LoginException,
-    ModelValidatorException,
-    ServiceWarning,
-)
-
-# 导入新的响应工具
-from utils.response_util import ResponseUtil
-
 # 导入错误码和消息
 from config.error_codes import ErrorCode, ErrorType
 
+# 导入异常类
+from exceptions.exception import (
+    AppException,
+    AuthException,
+    BusinessException,
+    DatabaseException,
+    LoginException,
+    ModelValidatorException,
+    PermissionException,
+    # 兼容旧代码的异常类
+    ServiceException,
+    ServiceWarning,
+    SystemException,
+    ValidationException,
+)
+from middlewares.trace_middleware import get_request_id
+from utils.log_safety import database_exception, log_safe_exception, safe_exception_summary
+
 # 导入日志和 RequestId
 from utils.log_util import logger
-from middlewares.trace_middleware import get_request_id
+
+# 导入新的响应工具
+from utils.response_util import ResponseUtil
 
 DEFAULT_ERROR_MSG = '接口异常'
 
@@ -72,8 +73,8 @@ def handle_exception(app: FastAPI):
         # 记录日志（包含完整的开发者消息）
         log_message = (
             f"[{request_id}] {exc.error_type}: "
-            f"user_message='{exc.user_message}', "
-            f"developer_message='{exc.developer_message}', "
+            f"user_message='{'系统繁忙，请稍后重试' if database_exception(exc) else exc.user_message}', "
+            f"developer_message='{safe_exception_summary(exc) if database_exception(exc) else exc.developer_message}', "
             f"error_code={exc.error_code}, "
             f"http_status={exc.http_status}"
         )
@@ -94,8 +95,8 @@ def handle_exception(app: FastAPI):
         return ResponseUtil.problem_details(
             request=request,
             http_status=exc.http_status,
-            title=exc.user_message,
-            detail=exc.user_message,
+            title='系统繁忙，请稍后重试' if database_exception(exc) else exc.user_message,
+            detail='系统繁忙，请稍后重试' if database_exception(exc) else exc.user_message,
             type_slug=_resolve_problem_type_slug(exc.error_code, exc.error_code_name),
             error_code=exc.error_code,
             errors=errors,
@@ -109,8 +110,9 @@ def handle_exception(app: FastAPI):
 
         errors = []
         for error in exc.errors():
-            loc = [str(item) for item in error.get('loc', []) if item != 'body']
-            field = ".".join(loc) if loc else "unknown"
+            loc = [str(item) for item in error.get('loc', ())]
+            # Only the transport prefix is metadata; document.body is a real field.
+            field = ".".join(loc[1:] if loc[:1] == ['body'] else loc) or "unknown"
             errors.append(
                 {
                     "field": field,
@@ -221,12 +223,11 @@ def handle_exception(app: FastAPI):
         user_message = "系统繁忙，请稍后重试"
         
         # 开发者消息：详细错误信息
-        exception_type = type(exc).__name__
-        exception_message = str(exc)
-        developer_message = f"Unhandled exception: {exception_type}: {exception_message}"
+        exception_message = safe_exception_summary(exc)
+        developer_message = f"Unhandled exception: {exception_message}"
         
         # 记录完整堆栈跟踪（仅在日志中）
-        logger.exception(f"[{request_id}] {developer_message}")
+        log_safe_exception(logger, f"[{request_id}] {developer_message}", exc)
         
         # 返回 RFC 7807 响应
         return ResponseUtil.problem_details(

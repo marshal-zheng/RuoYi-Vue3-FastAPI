@@ -106,6 +106,10 @@
       {% set comment = column.column_comment[:parentheseIndex] if parentheseIndex != -1 else column.column_comment %}
       {% if column.pk %}
       <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}" />
+      {% elif column.list and column.html_type == "remark" %}
+      <el-table-column label="{{ comment }}" prop="{{ pythonField }}Text">
+        <template #default="scope"><RemarkDisplay :value="scope.row.{{ pythonField }}" :text="scope.row.{{ pythonField }}Text" summary /></template>
+      </el-table-column>
       {% elif column.list and column.html_type == "datetime" %}
       <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}" width="180">
         <template #default="scope">
@@ -172,6 +176,10 @@
       {% elif column.html_type == "fileUpload" %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
         <file-upload v-model="form.{{ field }}"/>
+      </el-form-item>
+      {% elif column.html_type == "remark" %}
+      <el-form-item data-form-full v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
+        <RemarkEditor :key="remarkSession" :ref="el => setRemarkEditor('main:{{ field }}', el)" v-model="form.{{ field }}" />
       </el-form-item>
       {% elif column.html_type == "editor" %}
       {% set editor_component.used = true %}
@@ -254,14 +262,25 @@
           <el-button plain type="danger" icon="Delete" @click="handleDelete{{ subClassName }}">删除</el-button>
         </el-col>
       </el-row>
-      <el-table :data="{{ subclassName }}List" :row-class-name="row{{ subClassName }}Index" @selection-change="handle{{ subClassName }}SelectionChange" ref="{{ subclassName }}">
+      <el-table :data="{{ subclassName }}List" @selection-change="handle{{ subClassName }}SelectionChange" ref="{{ subclassName }}">
         <el-table-column type="selection" width="50" align="center" />
-        <el-table-column label="序号" align="center" prop="index" width="50"/>
+        <el-table-column label="序号" type="index" align="center" width="50"/>
         {% for column in subTable.columns %}
         {% set pythonField = column.python_field %}
         {% set parentheseIndex = column.column_comment.find("（") %}
         {% set comment = column.column_comment[:parentheseIndex] if parentheseIndex != -1 else column.column_comment %}
         {% if column.pk or pythonField == subTableFkclassName %}
+        {% elif (column.insert or column.edit or column.list) and column.html_type == 'remark' %}
+        <el-table-column label="{{ comment }}" prop="{{ pythonField }}Text" min-width="220">
+          <template #default="scope">
+            <RemarkEditor v-if="activeRemark?.row === scope.row && activeRemark?.field === '{{ pythonField }}'"
+              :key="remarkRowKey(scope.row) + ':{{ pythonField }}'" :ref="el => setRemarkEditor('sub:{{ pythonField }}', el)" v-model="scope.row.{{ pythonField }}" />
+            <template v-else>
+              <RemarkDisplay :value="scope.row.{{ pythonField }}" summary />
+              <el-button v-if="renderSubField(scope.row, {{ column.insert | lower }}, {{ column.edit | lower }})" @click="activateRemark(scope.row, '{{ pythonField }}')">编辑备注</el-button>
+            </template>
+          </template>
+        </el-table-column>
         {% elif column.list and column.html_type == 'input' %}
         <el-table-column label="{{ comment }}" prop="{{ pythonField }}" width="150">
           <template #default="scope">
@@ -310,6 +329,15 @@
 
 <script setup name="{{ BusinessName }}">
 import { useOperation } from "@/utils/operation";
+{% if hasRemarks %}
+import RemarkEditor from "@/components/ui/Remark/RemarkEditor.vue";
+import RemarkDisplay from "@/components/ui/Remark/RemarkDisplay.vue";
+import { readRemark } from "@/components/ui/Remark/contract";
+const remarkSession = ref(0);
+const remarkEditors = new Map();
+function setRemarkEditor(key, value) { if (value) remarkEditors.set(key, value); else remarkEditors.delete(key); }
+function validateRemarkEditors() { return [...remarkEditors.values()].every(editor => editor.validate()); }
+{% endif %}
 {% if editor_component.used %}
 import Editor from "@/components/ui/Editor/index.vue";
 {% endif %}
@@ -327,6 +355,15 @@ const { {{ dictsNoSymbol }} } = useDict({{ dicts }});
 const {{ businessName }}List = ref([]);
 {% if table.sub %}
 const {{ subclassName }}List = ref([]);
+{% if subRemarkColumns %}
+const activeRemark = shallowRef(null);
+const remarkRowKeys = new WeakMap();
+function remarkRowKey(row) { if (!remarkRowKeys.has(row)) remarkRowKeys.set(row, crypto.randomUUID()); return remarkRowKeys.get(row); }
+function activateRemark(row, field) { if (!validateRemarkEditors()) return; activeRemark.value = {row, field}; }
+function renderSubField(row, insert, edit) { return row.{{ subTable.pk_column.python_field }} == null ? insert : edit; }
+{% elif hasRemarks %}
+const activeRemark = shallowRef(null);
+{% endif %}
 {% endif %}
 const open = ref(false);
 const loading = ref(true);
@@ -358,6 +395,9 @@ const data = reactive({
     {% endfor %}
   },
   rules: {
+    {% for column in remarkColumns %}
+    {{ column.python_field }}: [{validator: (_rule, value, done) => { try { readRemark(value); done(); } catch (error) { done(error); } }, trigger: 'change'}],
+    {% endfor %}
     {% for column in columns %}
     {% if column.required %}
     {% set parentheseIndex = column.column_comment.find("（") %}
@@ -404,6 +444,13 @@ function cancel() {
 
 /** 表单重置 */
 function reset() {
+  {% if hasRemarks %}
+  remarkSession.value++;
+  remarkEditors.clear();
+  {% if table.sub %}
+  activeRemark.value = null;
+  {% endif %}
+  {% endif %}
   form.value = {
     {% for column in columns %}
     {% if column.html_type == "checkbox" %}
@@ -472,16 +519,39 @@ function handleUpdate(row) {
 
 /** 提交按钮 */
 const { run: submitForm, pending: submitting } = useOperation(async () => {
+  {% if hasRemarks %}
+  if (!validateRemarkEditors()) return;
+  {% for column in remarkColumns %}
+  form.value.{{ column.python_field }} = readRemark(form.value.{{ column.python_field }});
+  {% endfor %}
+  {% if table.sub %}
+  for (const [rowIndex, row] of {{ subclassName }}List.value.entries()) {
+    {% for column in subRemarkColumns %}
+    try { row.{{ column.python_field }} = readRemark(row.{{ column.python_field }}); }
+    catch { throw new Error(`子表第 ${rowIndex + 1} 行的 {{ column.python_field }} 备注格式或内容限制不符合要求，请检查后再保存`); }
+    {% endfor %}
+  }
+  {% endif %}
+  {% endif %}
   const valid = await proxy.$refs["{{ businessName }}Ref"].validate().catch(() => false);
     if (valid) {
       const submitData = { ...form.value };
+      {% for column in remarkColumns %}
+      delete submitData.{{ column.python_field }}Text;
+      {% endfor %}
       {% for column in columns %}
       {% if column.html_type == "checkbox" %}
       submitData.{{ column.python_field }} = submitData.{{ column.python_field }}.join(",");
       {% endif %}
       {% endfor %}
       {% if table.sub %}
-      submitData.{{ subclassName }}List = {{ subclassName }}List.value;
+      submitData.{{ subclassName }}List = {{ subclassName }}List.value.map(row => {
+        const child = {};
+        {% for column in subTable.columns %}
+        child.{{ column.python_field }} = row.{{ column.python_field }};
+        {% endfor %}
+        return child;
+      });
       {% endif %}
       if (submitData.{{ pkColumn.python_field }} != null) {
         await update{{ BusinessName }}(submitData).then(() => {
@@ -508,16 +578,13 @@ const { run: handleDelete } = useOperation(async (row) => {
 });
 
 {% if table.sub %}
-/** {{ subTable.functionName }}序号 */
-function row{{ subClassName }}Index({ row, rowIndex }) {
-  row.index = rowIndex + 1;
-}
-
 /** {{ subTable.functionName }}添加按钮操作 */
 function handleAdd{{ subClassName }}() {
   let obj = {};
   {% for column in subTable.columns %}
   {% if column.pk or column.python_field == subTableFkclassName %}
+  {% elif column.html_type == 'remark' and (column.insert or column.edit or column.list) %}
+  obj.{{ column.python_field }} = null;
   {% elif column.list and column.python_field %}
   obj.{{ column.python_field }} = "";
   {% endif %}
@@ -531,16 +598,20 @@ function handleDelete{{ subClassName }}() {
     proxy.$modal.msgError("请先选择要删除的{{ subTable.functionName }}数据");
   } else {
     const {{ subclassName }}s = {{ subclassName }}List.value;
-    const checked{{ subClassName }}s = checked{{ subClassName }}.value;
+    const checked{{ subClassName }}s = new Set(checked{{ subClassName }}.value);
     {{ subclassName }}List.value = {{ subclassName }}s.filter(function(item) {
-      return checked{{ subClassName }}s.indexOf(item.index) == -1
+      return !checked{{ subClassName }}s.has(item)
     });
+    {% if subRemarkColumns %}
+    if (activeRemark.value && checked{{ subClassName }}s.has(activeRemark.value.row)) activeRemark.value = null;
+    {% endif %}
+    checked{{ subClassName }}.value = [];
   }
 }
 
 /** 复选框选中数据 */
 function handle{{ subClassName }}SelectionChange(selection) {
-  checked{{ subClassName }}.value = selection.map(item => item.index)
+  checked{{ subClassName }}.value = selection.slice()
 }
 {% endif %}
 

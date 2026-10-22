@@ -1,6 +1,7 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import JSON, Column, Integer, String
+
 from module_admin.entity.do.base import LegacyBaseModel, RelationBaseModel
-from module_admin.entity.do.enums import DataScopeEnum, StatusEnum, DelFlagEnum
+from module_admin.entity.do.enums import DataScopeEnum, DelFlagEnum, StatusEnum
 
 
 class RoleDO(LegacyBaseModel):
@@ -23,7 +24,7 @@ class RoleDO(LegacyBaseModel):
     dept_check_strictly = Column(Integer, default=1, comment='部门树选择项是否关联显示')
     status = Column(String(1), nullable=False, default=StatusEnum.NORMAL.value, comment='角色状态（0正常 1停用）')
     del_flag = Column(String(1), default=DelFlagEnum.EXIST.value, comment='删除标志（0代表存在 2代表删除）')
-    remark = Column(String(500), default=None, comment='备注')
+    remark = Column(JSON(none_as_null=True), nullable=True, default=None, comment='备注文档')
 
 
 class RoleDeptDO(RelationBaseModel):

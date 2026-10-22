@@ -1,7 +1,11 @@
 import { requestDetail } from '@/api/detail';
-export type PostRecord = Omit<PostModel, 'postId'> & { postId: number };
+export type PostRecord = Omit<PostDetailReadModel, 'postId'> & { postId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
-import type { PostModel, PostPageQueryModel } from '@/api/_generated/types.gen';
+import type {
+  PostModel,
+  PostDetailReadModel,
+  PostPageQueryModel,
+} from '@/api/_generated/types.gen';
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询岗位列表

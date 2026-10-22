@@ -23,7 +23,9 @@ export default defineConfig({
     environment: 'jsdom',
 
     // Transform EP's ESM imports so Node's async-validator CJS default is resolved correctly.
-    server: { deps: { inline: ['element-plus'] } },
+    server: {
+      deps: { inline: ['element-plus', '@zxio/schema-form', '@formily/vue'] },
+    },
 
     // 测试文件匹配模式
     include: [

@@ -1,4 +1,5 @@
 """HTTP tests run the real lifespan with resources owned by its event loop."""
+
 from contextlib import asynccontextmanager
 
 import pytest
@@ -11,6 +12,11 @@ import server
 from config import get_db as db_module
 from config.enums import RedisInitKeyConfig
 from container import build_container
+from module_admin.entity.do.role_do import RoleDO
+from module_admin.entity.do.user_do import UserDO
+from module_admin.entity.vo.user_vo import CurrentUserModel, UserInfoModel
+from modules.identity.application.services.login_service import LoginService
+from modules.identity.ports import get_current_user
 from modules.system.application.services.capability_gate_service import CapabilityGateService
 from tests.conftest import _import_orm_models
 
@@ -28,7 +34,7 @@ def integration_app(tmp_path):
         # a different pytest loop. Separate request/background sessions use the
         # same per-test database, with normal commit/rollback semantics.
         _import_orm_models()
-        engine = create_async_engine(f"sqlite+aiosqlite:///{tmp_path / 'http.sqlite'}")
+        engine = create_async_engine(f'sqlite+aiosqlite:///{tmp_path / "http.sqlite"}')
         sessions = async_sessionmaker(engine, expire_on_commit=False, autoflush=False)
         container = build_container()
         container._session_factory = sessions
@@ -69,10 +75,38 @@ def test_client(integration_app):
         yield client
 
 
+@pytest.fixture
+async def remark_http(async_client):
+    """Remark HTTP tests share an authorized actor and isolated baseline rows."""
+    app = server.app
+
+    async def actor():
+        return CurrentUserModel(
+            permissions=['*:*:*'], roles=['admin'], user=UserInfoModel(userId=1, userName='admin', nickName='admin')
+        )
+
+    app.dependency_overrides[get_current_user] = actor
+    app.dependency_overrides[LoginService.get_current_user] = actor
+    async with app.state.container._session_factory() as session:
+        session.add_all(
+            [
+                UserDO(user_id=1, user_name='admin', nick_name='admin', password='not-used'),
+                RoleDO(role_id=1, role_name='admin', role_key='admin', role_sort=0),
+            ]
+        )
+        await session.commit()
+    yield async_client
+    app.dependency_overrides.pop(get_current_user, None)
+    app.dependency_overrides.pop(LoginService.get_current_user, None)
+
+
 @pytest_asyncio.fixture
 async def async_client(integration_app):
-    async with integration_app.router.lifespan_context(integration_app), AsyncClient(
-        transport=ASGITransport(app=integration_app, raise_app_exceptions=False),
-        base_url='http://testserver',
-    ) as client:
+    async with (
+        integration_app.router.lifespan_context(integration_app),
+        AsyncClient(
+            transport=ASGITransport(app=integration_app, raise_app_exceptions=False),
+            base_url='http://testserver',
+        ) as client,
+    ):
         yield client

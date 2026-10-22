@@ -11,15 +11,15 @@ from module_admin.aspect.interface_auth import CheckUserInterfaceAuth
 from module_admin.entity.vo.post_vo import DeletePostModel, PostModel, PostPageQueryModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from modules.identity.ports import get_current_user
-from modules.system.application.services.post_service import PostService
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.commands import AddPostCommand, DeletePostCommand, EditPostCommand
 from modules.system.application.mediator import Mediator
 from modules.system.application.queries import GetPostDetailQuery, GetPostListQuery
+from modules.system.application.read_models.post_read_models import PostDetailReadModel, PostPageReadModel
+from modules.system.application.services.post_service import PostService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
@@ -36,7 +36,7 @@ async def _load_post_detail(request: Request, *, post_id: int, mediator: Mediato
 
 
 @postController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:post:list'))]
+    '/list', response_model=PostPageReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:post:list'))]
 )
 async def get_system_post_list(
     request: Request,
@@ -143,7 +143,9 @@ async def delete_system_post(
 
 
 @postController.get(
-    '/{post_id}', response_model=PostModel, dependencies=[Depends(CheckUserInterfaceAuth('system:post:query'))]
+    '/{post_id}',
+    response_model=PostDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:post:query'))],
 )
 async def query_detail_system_post(
     request: Request,

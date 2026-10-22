@@ -2,21 +2,23 @@
 Unit tests for config service.
 """
 
-import pytest
 from datetime import datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from modules.system.application.services.config_service import ConfigService
-from module_admin.entity.do.config_do import ConfigDO
-from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
+import pytest
+
+from common.remark_document_v1 import plain_to_remark
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from exceptions.exception import (
-    ValidationException,
-    ResourceNotFoundException,
+    BusinessException,
     ResourceConflictException,
-    BusinessException
+    ResourceNotFoundException,
+    ValidationException,
 )
+from module_admin.entity.do.config_do import ConfigDO
+from module_admin.entity.vo.config_vo import ConfigModel, ConfigPageQueryModel, DeleteConfigModel
+from modules.system.application.services.config_service import ConfigService
 
 
 @pytest.fixture
@@ -451,7 +453,7 @@ class TestConfigServiceExport:
                 'configType': 'Y',
                 'createBy': 'admin',
                 'createTime': '2024-01-01',
-                'remark': '备注'
+                'remark': plain_to_remark('备注', identity_key='sys_config:1:remark')
             },
             {
                 'configId': 2,
@@ -461,7 +463,7 @@ class TestConfigServiceExport:
                 'configType': 'N',
                 'createBy': 'admin',
                 'createTime': '2024-01-01',
-                'remark': ''
+                'remark': None
             }
         ]
         
@@ -475,3 +477,7 @@ class TestConfigServiceExport:
             # Verify config_type was transformed
             assert config_list[0]['configType'] == '是'
             assert config_list[1]['configType'] == '否'
+            exported_rows, _mapping = mock_export.call_args.args
+            assert exported_rows[0]['remark'] == '备注'
+            assert exported_rows[1]['remark'] == ''
+            assert mock_export.call_args.kwargs == {'text_columns': {'remark'}}

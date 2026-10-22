@@ -1,8 +1,11 @@
 <template>
   <el-card>
-    <el-tabs v-model="activeName">
+    <el-alert v-if="loadError" :title="loadError" type="error" :closable="false"
+      ><el-button @click="loadTable">重试</el-button></el-alert
+    >
+    <el-tabs v-model="activeName" :inert="detailLoading || submitFormPending">
       <el-tab-pane label="基本信息" name="basic">
-        <basic-info-form ref="basicInfo" :info="info" />
+        <basic-info-form v-if="loaded" :key="tableSession" ref="basicInfo" :info="info" />
       </el-tab-pane>
       <el-tab-pane label="字段信息" name="columnInfo">
         <el-table ref="dragTable" :data="columns" row-key="columnId">
@@ -115,6 +118,7 @@
                 <el-option label="图片上传" value="imageUpload" />
                 <el-option label="文件上传" value="fileUpload" />
                 <el-option label="富文本控件" value="editor" />
+                <el-option label="基础富文本备注" value="remark" />
               </el-select>
             </template>
           </el-table-column>
@@ -137,7 +141,11 @@
     </el-tabs>
     <el-form label-width="100px">
       <div style="text-align: center; margin-left: -100px; margin-top: 10px">
-        <el-button type="primary" @click="submitForm()" :loading="submitFormPending"
+        <el-button
+          type="primary"
+          @click="submitForm()"
+          :loading="submitFormPending"
+          :disabled="!loaded || !!loadError"
           >提交</el-button
         >
         <el-button @click="close()">返回</el-button>
@@ -147,68 +155,150 @@
 </template>
 
 <script setup name="GenEdit">
+import { computed, getCurrentInstance, onBeforeUnmount, ref, watch } from 'vue';
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRoute } from 'vue-router';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import { readRemark } from '@/components/ui/Remark/contract';
+import { useEditorRead } from '@/utils/editor-read';
 import { useOperation } from '@/utils/operation';
-import { ElMessage } from 'element-plus';
 import { getGenTable, updateGenTable } from '@/api/tool/gen';
 import DictTypeSelect from '@/components/business/DictTypeSelect/index.vue';
 import basicInfoForm from './basicInfoForm';
 import genInfoForm from './genInfoForm';
-import { buildGenTablePayload } from './gen-config-policy';
+import { buildGenTablePayload, genTableDraftSnapshot } from './gen-config-policy';
 
 const route = useRoute();
 const { proxy } = getCurrentInstance();
-
 const activeName = ref('columnInfo');
 const tables = ref([]);
 const columns = ref([]);
-const info = ref({});
+const info = ref({ remark: null });
+const loaded = ref(false);
+const detailLoading = ref(false);
+const tableSession = ref(0);
+const baseline = ref();
+const dirty = computed(
+  () =>
+    loaded.value &&
+    baseline.value !== undefined &&
+    genTableDraftSnapshot(info.value, columns.value) !== baseline.value
+);
+const { error: loadError, run: runRead } = useEditorRead(() => true, detailLoading);
+let opening = 0;
+let discardPending;
+let savedNavigation = false;
+let returnApproval;
 
-/** 提交按钮 */
+function acceptAuthority(detail, expectedId) {
+  if (!detail?.info || String(detail.info.tableId) !== String(expectedId))
+    throw new Error('表配置详情与当前记录不一致，请重新读取核对');
+  info.value = {
+    ...detail.info,
+    tplWebType: detail.info.tplWebType || 'element-plus',
+    remark: readRemark(detail.info.remark),
+    columns: detail.columns,
+  };
+  columns.value = detail.columns;
+  tables.value = detail.tables;
+  tableSession.value++;
+  loaded.value = true;
+  baseline.value = genTableDraftSnapshot(info.value, columns.value);
+}
+
 const { run: submitForm, pending: submitFormPending } = useOperation(async () => {
-  const basicForm = proxy.$refs.basicInfo.$refs.basicInfoForm;
-  const genForm = proxy.$refs.genInfo.$refs.genInfoForm;
-  await Promise.all([basicForm, genForm].map(getFormPromise)).then(async (res) => {
-    const validateResult = res.every((item) => !!item);
-    if (validateResult) {
-      const genTable = buildGenTablePayload(info.value, columns.value);
-      await updateGenTable(genTable).then(() => {
-        close();
-      });
-    } else {
-      ElMessage.error('表单校验未通过，请重新检查提交内容');
-    }
-  });
+  if (!loaded.value || loadError.value || detailLoading.value) return;
+  const current = opening;
+  const tableId = info.value.tableId;
+  const basicForm = proxy.$refs.basicInfo?.basicInfoForm;
+  const genForm = proxy.$refs.genInfo?.$refs.genInfoForm;
+  if (!basicForm || !genForm) return;
+  const valid = (await Promise.all([basicForm, genForm].map(getFormPromise))).every(Boolean);
+  if (!valid) {
+    ElMessage.error('表单校验未通过，请重新检查提交内容');
+    return;
+  }
+  const command = JSON.parse(JSON.stringify(buildGenTablePayload(info.value, columns.value)));
+  const authority = await updateGenTable(command);
+  if (current !== opening || String(route.params.tableId) !== String(tableId)) return;
+  acceptAuthority(authority, tableId);
+  savedNavigation = true;
+  navigateBack();
 });
 
 function getFormPromise(form) {
-  return new Promise((resolve) => {
-    form.validate((res) => {
-      resolve(res);
-    });
-  });
+  return new Promise((resolve) => form.validate((valid) => resolve(valid)));
 }
-
-function close() {
-  const obj = {
+function hasPendingEdit() {
+  return !!proxy.$refs.basicInfo?.hasPendingEdit;
+}
+function canDiscard() {
+  if (savedNavigation && !dirty.value && !hasPendingEdit()) return Promise.resolve(true);
+  if (submitFormPending.value) return Promise.resolve(false);
+  if (!dirty.value && !hasPendingEdit()) return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const current = opening;
+  const decision = ElMessageBox.confirm('生成配置尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(() => current === opening && !submitFormPending.value)
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function close() {
+  if (!(await canDiscard())) return;
+  const approval = {
+    opening,
+    snapshot: genTableDraftSnapshot(info.value, columns.value),
+    pending: hasPendingEdit(),
+  };
+  returnApproval = approval;
+  try {
+    await navigateBack();
+  } finally {
+    if (returnApproval === approval) returnApproval = undefined;
+  }
+}
+function navigateBack() {
+  return proxy.$tab.closeOpenPage({
     path: '/tool/gen',
     query: { t: Date.now(), page: route.query.page },
-  };
-  proxy.$tab.closeOpenPage(obj);
+  });
 }
-
-(() => {
-  const tableId = route.params && route.params.tableId;
-  if (tableId) {
-    // 获取表详细信息
-    getGenTable(tableId).then((res) => {
-      // http 客户端已解包 payload.data，直接访问字段
-      columns.value = res.columns;
-      info.value = {
-        ...res.info,
-        columns: res.columns,
-      };
-      tables.value = res.tables;
+async function loadTable() {
+  const tableId = route.params.tableId;
+  const current = ++opening;
+  loaded.value = false;
+  baseline.value = undefined;
+  savedNavigation = false;
+  try {
+    await runRead(async (read) => {
+      if (!tableId) throw new Error('缺少表配置身份');
+      const detail = await getGenTable(tableId, { signal: read.signal, silentError: true });
+      if (!read.isCurrent() || current !== opening) return;
+      acceptAuthority(detail, tableId);
     });
+  } catch {
+    /* The read session owns the inline error and authentication feedback. */
   }
-})();
+}
+onBeforeRouteLeave(() =>
+  returnApproval?.opening === opening &&
+  returnApproval.snapshot === genTableDraftSnapshot(info.value, columns.value) &&
+  returnApproval.pending === hasPendingEdit()
+    ? true
+    : canDiscard()
+);
+onBeforeRouteUpdate((to, from) =>
+  String(to.params.tableId) === String(from.params.tableId) ? true : canDiscard()
+);
+watch(() => route.params.tableId, loadTable, { immediate: true });
+onBeforeUnmount(() => {
+  opening++;
+});
 </script>

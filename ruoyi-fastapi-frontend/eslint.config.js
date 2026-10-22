@@ -252,6 +252,14 @@ export default [
     }
   },
   
+  // The readonly remark surface admits a document before using the public safe-html renderer.
+  // Vue's processor makes its local, documented HTML directive suppression effective.
+  {
+    files: ['src/components/ui/Remark/RemarkDisplay.vue'],
+    processor: 'vue/vue',
+    rules: { 'vue/comment-directive': 'error' },
+  },
+
   // 应用 Prettier 配置
   prettierConfig
 ];

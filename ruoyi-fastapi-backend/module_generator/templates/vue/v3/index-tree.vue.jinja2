@@ -96,6 +96,10 @@
       {% set parentheseIndex = column.column_comment.find("（") %}
       {% set comment = column.column_comment[:parentheseIndex] if parentheseIndex != -1 else column.column_comment %}
       {% if column.pk %}
+      {% elif column.list and column.html_type == "remark" %}
+      <el-table-column label="{{ comment }}" prop="{{ pythonField }}Text">
+        <template #default="scope"><RemarkDisplay :value="scope.row.{{ pythonField }}" :text="scope.row.{{ pythonField }}Text" summary /></template>
+      </el-table-column>
       {% elif column.list and column.html_type == "datetime" %}
       <el-table-column label="{{ comment }}" align="center" prop="{{ pythonField }}" width="180">
         <template #default="scope">
@@ -166,6 +170,10 @@
       {% elif column.html_type == "fileUpload" %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
         <file-upload v-model="form.{{ field }}"/>
+      </el-form-item>
+      {% elif column.html_type == "remark" %}
+      <el-form-item data-form-full v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
+        <RemarkEditor :key="remarkSession" :ref="el => setRemarkEditor('main:{{ field }}', el)" v-model="form.{{ field }}" />
       </el-form-item>
       {% elif column.html_type == "editor" %}
       {% set editor_component.used = true %}
@@ -250,6 +258,15 @@
 
 <script setup name="{{ BusinessName }}">
 import { useOperation } from "@/utils/operation";
+{% if hasRemarks %}
+import RemarkEditor from "@/components/ui/Remark/RemarkEditor.vue";
+import RemarkDisplay from "@/components/ui/Remark/RemarkDisplay.vue";
+import { readRemark } from "@/components/ui/Remark/contract";
+const remarkSession = ref(0);
+const remarkEditors = new Map();
+function setRemarkEditor(key, value) { if (value) remarkEditors.set(key, value); else remarkEditors.delete(key); }
+function validateRemarkEditors() { return [...remarkEditors.values()].every(editor => editor.validate()); }
+{% endif %}
 {% if editor_component.used %}
 import Editor from "@/components/ui/Editor/index.vue";
 {% endif %}
@@ -289,6 +306,9 @@ const data = reactive({
     {% endfor %}
   },
   rules: {
+    {% for column in remarkColumns %}
+    {{ column.python_field }}: [{validator: (_rule, value, done) => { try { readRemark(value); done(); } catch (error) { done(error); } }, trigger: 'change'}],
+    {% endfor %}
     {% for column in columns %}
     {% if column.required %}
     {% set parentheseIndex = column.column_comment.find("（") %}
@@ -344,6 +364,13 @@ function cancel() {
 
 /** 表单重置 */
 function reset() {
+  {% if hasRemarks %}
+  remarkSession.value++;
+  remarkEditors.clear();
+  {% if table.sub %}
+  activeRemark.value = null;
+  {% endif %}
+  {% endif %}
   form.value = {
     {% for column in columns %}
     {% if column.html_type == "checkbox" %}
@@ -416,9 +443,25 @@ function handleUpdate(row) {
 
 /** 提交按钮 */
 const { run: submitForm, pending: submitting } = useOperation(async () => {
+  {% if hasRemarks %}
+  if (!validateRemarkEditors()) return;
+  {% for column in remarkColumns %}
+  form.value.{{ column.python_field }} = readRemark(form.value.{{ column.python_field }});
+  {% endfor %}
+  {% if table.sub %}
+  for (const row of {{ subclassName }}List.value) {
+    {% for column in subRemarkColumns %}
+    row.{{ column.python_field }} = readRemark(row.{{ column.python_field }});
+    {% endfor %}
+  }
+  {% endif %}
+  {% endif %}
   const valid = await proxy.$refs["{{ businessName }}Ref"].validate().catch(() => false);
     if (valid) {
       const submitData = { ...form.value };
+      {% for column in remarkColumns %}
+      delete submitData.{{ column.python_field }}Text;
+      {% endfor %}
       {% for column in columns %}
       {% if column.html_type == "checkbox" %}
       submitData.{{ column.python_field }} = submitData.{{ column.python_field }}.join(",");

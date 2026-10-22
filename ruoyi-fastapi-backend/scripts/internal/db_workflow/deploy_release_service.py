@@ -26,13 +26,14 @@ from .release_bundle_service import (
     load_managed_object_snapshot,
     load_target_state_payload,
 )
+from .remark_inputs import release_operation
 
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
 StepStatus = Literal['success', 'failed', 'skipped']
 ArtifactType = Literal['managed-data', 'release-manifest']
-DEFAULT_BOOTSTRAP_ROLES_PATH = Path(__file__).resolve().parent / 'seed_data' / 'base' / 'roles.yaml'
+DEFAULT_BOOTSTRAP_ROLES_PATH = Path(__file__).resolve().parents[2] / 'seed_data' / 'base' / 'roles.yaml'
 
 
 @dataclass(frozen=True)
@@ -163,7 +164,9 @@ def execute_release_deploy(
 ) -> ReleaseDeployReport:
     return asyncio.run(
         _execute_release_deploy_async(
-            output_root=Path(output_root) if output_root else Path(__file__).resolve().parents[3] / 'db_artifacts' / 'releases',
+            output_root=Path(output_root)
+            if output_root
+            else Path(__file__).resolve().parents[3] / 'db_artifacts' / 'releases',
             session_factory=session_factory,
             actor=actor,
             bootstrap_roles_path=Path(bootstrap_roles_path) if bootstrap_roles_path else DEFAULT_BOOTSTRAP_ROLES_PATH,
@@ -280,7 +283,9 @@ async def _execute_release_deploy_async(
                 artifact_updates=manifest_artifact_updates,
                 error=str(exc) if failed_step == 'release-manifest' else None,
             ),
-            postcondition_verify=ReleaseDeployStepReport(step='postcondition-verify', status='skipped', result='skipped'),
+            postcondition_verify=ReleaseDeployStepReport(
+                step='postcondition-verify', status='skipped', result='skipped'
+            ),
             deploy_result='failed',
             failed_step=failed_step,
             applied_bundle_ids=tuple(sorted({*managed_applied_bundles, *manifest_applied_bundles})),
@@ -431,18 +436,24 @@ async def _apply_release_manifest(
     current_state = await applier.load_current_state(ledger.managed_scope())
     manifest = bundle.release_manifest_payload.get('include', {})
 
-    missing_menu_ids = [menu_id for menu_id in manifest.get('menu_ids', []) if int(menu_id) not in current_state.menus_by_id]
+    missing_menu_ids = [
+        menu_id for menu_id in manifest.get('menu_ids', []) if int(menu_id) not in current_state.menus_by_id
+    ]
     if missing_menu_ids:
         raise ValueError(f'release.manifest references missing menu_ids: {missing_menu_ids}')
 
     missing_dict_types = [
-        dict_type for dict_type in manifest.get('dict_types', []) if str(dict_type).strip() not in current_state.dict_type_ids_by_key
+        dict_type
+        for dict_type in manifest.get('dict_types', [])
+        if str(dict_type).strip() not in current_state.dict_type_ids_by_key
     ]
     if missing_dict_types:
         raise ValueError(f'release.manifest references missing dict_types: {missing_dict_types}')
 
     missing_config_keys = [
-        config_key for config_key in manifest.get('config_keys', []) if str(config_key).strip() not in current_state.config_ids_by_key
+        config_key
+        for config_key in manifest.get('config_keys', [])
+        if str(config_key).strip() not in current_state.config_ids_by_key
     ]
     if missing_config_keys:
         raise ValueError(f'release.manifest references missing config_keys: {missing_config_keys}')
@@ -486,10 +497,7 @@ async def _sync_object_metadata(
     bundle_id: str,
     managed_objects: list[dict[str, Any]],
 ) -> None:
-    desired_entries = {
-        (row['object_type'], row['object_key']): row
-        for row in managed_objects
-    }
+    desired_entries = {(row['object_type'], row['object_key']): row for row in managed_objects}
     existing_rows = await _load_managed_workflow_object_rows(session)
     existing_by_identity = {(row.object_type, row.object_key): row for row in existing_rows}
     now = datetime.now()
@@ -536,15 +544,19 @@ async def _sync_object_metadata(
 
 async def _load_managed_workflow_object_rows(session: AsyncSession) -> list[DbWorkflowObjectDO]:
     return (
-        await session.execute(
-            select(DbWorkflowObjectDO).where(
-                or_(
-                    DbWorkflowObjectDO.object_domain.in_(CAPABILITY_MANAGED_OBJECT_DOMAINS),
-                    DbWorkflowObjectDO.owner_scope.in_(LEGACY_MANAGED_OBJECT_SCOPES),
+        (
+            await session.execute(
+                select(DbWorkflowObjectDO).where(
+                    or_(
+                        DbWorkflowObjectDO.object_domain.in_(CAPABILITY_MANAGED_OBJECT_DOMAINS),
+                        DbWorkflowObjectDO.owner_scope.in_(LEGACY_MANAGED_OBJECT_SCOPES),
+                    )
                 )
             )
         )
-    ).scalars().all()
+        .scalars()
+        .all()
+    )
 
 
 def _bundle_capability_metadata(bundle: _BundleFiles) -> dict[str, Any]:
@@ -557,7 +569,9 @@ def _bundle_capability_metadata(bundle: _BundleFiles) -> dict[str, Any]:
         artifact_name=str(bundle.release_manifest_file),
     )
     if managed_capability != manifest_capability:
-        raise ValueError(f'capability metadata mismatch between managed-data and release.manifest for {bundle.bundle_id}')
+        raise ValueError(
+            f'capability metadata mismatch between managed-data and release.manifest for {bundle.bundle_id}'
+        )
     return managed_capability
 
 
@@ -643,10 +657,7 @@ async def _collect_metadata_drift_objects(
     session: AsyncSession,
     managed_objects: list[dict[str, Any]],
 ) -> tuple[str, ...]:
-    desired_entries = {
-        (row['object_type'], row['object_key']): row
-        for row in managed_objects
-    }
+    desired_entries = {(row['object_type'], row['object_key']): row for row in managed_objects}
     existing_rows = await _load_managed_workflow_object_rows(session)
     existing_by_identity = {(row.object_type, row.object_key): row for row in existing_rows}
     residual_objects: set[str] = set()
@@ -747,9 +758,7 @@ async def _artifact_already_applied(
     if existing is None:
         return False
     if existing.artifact_checksum != checksum:
-        raise ValueError(
-            f'artifact history checksum mismatch for bundle_id={bundle_id}, artifact_type={artifact_type}'
-        )
+        raise ValueError(f'artifact history checksum mismatch for bundle_id={bundle_id}, artifact_type={artifact_type}')
     return existing.apply_status == 'success'
 
 
@@ -907,12 +916,14 @@ def _artifact_checksum(bundle_payload: dict[str, Any], artifact_type: ArtifactTy
 def _plan_from_payload(payload: dict[str, Any]) -> ManagedDataPlan:
     return ManagedDataPlan(
         operations=tuple(
-            ManagedDataOperation(
-                op_type=str(operation['op_type']),
-                entity_type=str(operation['entity_type']),
-                object_key=str(operation['object_key']),
-                match_fields=dict(operation.get('match_fields') or {}),
-                values=dict(operation.get('values') or {}),
+            release_operation(
+                ManagedDataOperation(
+                    op_type=str(operation['op_type']),
+                    entity_type=str(operation['entity_type']),
+                    object_key=str(operation['object_key']),
+                    match_fields=dict(operation.get('match_fields') or {}),
+                    values=dict(operation.get('values') or {}),
+                )
             )
             for operation in payload.get('operations', [])
         )

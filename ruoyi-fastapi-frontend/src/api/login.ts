@@ -2,7 +2,7 @@ export interface LoginSession {
   token: string;
   csrfToken?: string;
 }
-import type { UserInfoModel, UserDetailModel, UserRegister } from '@/api/_generated/types.gen';
+import type { UserInfoModel, UserDetailReadModel, UserRegister } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import { clampBcryptPassword } from '@/utils/password';
 import { withSessionCookieLock } from '@/utils/session';
@@ -40,7 +40,7 @@ export function register(data: UserRegister) {
   if (payload.confirmPassword) {
     payload.confirmPassword = clampBcryptPassword(payload.confirmPassword);
   }
-  return request<UserDetailModel>({
+  return request<UserDetailReadModel>({
     url: '/register',
     headers: {
       isToken: false,

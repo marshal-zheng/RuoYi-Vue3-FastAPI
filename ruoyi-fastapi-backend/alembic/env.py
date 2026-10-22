@@ -15,55 +15,32 @@ import sys
 from logging.config import fileConfig
 from urllib.parse import quote_plus
 
+from alembic.operations.ops import AlterColumnOp, ModifyTableOps
+from sqlalchemy import JSON, String, engine_from_config, pool
+
 from alembic import context
-from sqlalchemy import engine_from_config, pool, MetaData
+from scripts.data_migrations.remark_document_v2 import TARGETS
 
 # 添加项目根目录到 sys.path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 加载环境变量配置
+from config.database import Base
 from config.env import DataBaseConfig
 
-# 导入 Base 类（包含元数据）
-from config.database import Base
-
-# ============================================================================
-# 导入所有 ORM 模型
-# ============================================================================
-# 必须导入所有模型，确保 Alembic 能检测到表结构变化
-# 按模块分组导入，保持代码整洁
-
-# 用户相关模型
-from module_admin.entity.do.user_do import (  # noqa: F401
-    UserDO,
-    UserRoleDO,
-    UserPostDO,
+# 事件模型
+from events.models import (  # noqa: F401
+    EventConsumptionLogDO,
+    EventHistoryDO,
+    OutboxEventDO,
 )
 
-# 角色相关模型
-from module_admin.entity.do.role_do import (  # noqa: F401
-    RoleDO,
-    RoleMenuDO,
-    RoleDeptDO,
-)
-
-# 菜单模型
-from module_admin.entity.do.menu_do import MenuDO  # noqa: F401
-
-# 部门模型
-from module_admin.entity.do.dept_do import DeptDO  # noqa: F401
-
-# 岗位模型
-from module_admin.entity.do.post_do import PostDO  # noqa: F401
-
-# 字典模型
-from module_admin.entity.do.dict_do import (  # noqa: F401
-    DictTypeDO,
-    DictDataDO,
-)
+# 审计日志模型
+from module_admin.entity.do.audit_log_do import AuditLogDO  # noqa: F401
 
 # 配置模型
 from module_admin.entity.do.config_do import ConfigDO  # noqa: F401
+from module_admin.entity.do.dashboard_do import DashboardDO, DashboardVersionDO  # noqa: F401
 
 # 统一数据库工作流元数据模型
 from module_admin.entity.do.db_workflow_do import (  # noqa: F401
@@ -71,18 +48,18 @@ from module_admin.entity.do.db_workflow_do import (  # noqa: F401
     DbWorkflowObjectDO,
 )
 
-# 通知公告模型
-from module_admin.entity.do.notice_do import NoticeDO  # noqa: F401
-from module_admin.entity.do.dashboard_do import DashboardDO, DashboardVersionDO  # noqa: F401
+# 部门模型
+from module_admin.entity.do.dept_do import DeptDO  # noqa: F401
+from module_admin.entity.do.device_category_do import DeviceCategoryDO  # noqa: F401
 
-# 日志模型
-from module_admin.entity.do.log_do import (  # noqa: F401
-    OperLogDO,
-    LogininforDO,
+# 设备相关模型
+from module_admin.entity.do.device_do import DeviceDO  # noqa: F401
+
+# 字典模型
+from module_admin.entity.do.dict_do import (  # noqa: F401
+    DictDataDO,
+    DictTypeDO,
 )
-
-# 审计日志模型
-from module_admin.entity.do.audit_log_do import AuditLogDO  # noqa: F401
 
 # 定时任务模型
 from module_admin.entity.do.job_do import (  # noqa: F401
@@ -90,32 +67,59 @@ from module_admin.entity.do.job_do import (  # noqa: F401
     JobLogDO,
 )
 
+# 日志模型
+from module_admin.entity.do.log_do import (  # noqa: F401
+    LogininforDO,
+    OperLogDO,
+)
+
+# 菜单模型
+from module_admin.entity.do.menu_do import MenuDO  # noqa: F401
+
+# 通知公告模型
+from module_admin.entity.do.notice_do import NoticeDO  # noqa: F401
+
+# 岗位模型
+from module_admin.entity.do.post_do import PostDO  # noqa: F401
+
 # 项目相关模型
 from module_admin.entity.do.project_do import ProjectDO  # noqa: F401
-from module_admin.entity.do.project_version_do import ProjectVersionDO  # noqa: F401
 from module_admin.entity.do.project_topology_do import ProjectTopologyDO  # noqa: F401
-
-# 设备相关模型
-from module_admin.entity.do.device_do import DeviceDO  # noqa: F401
-from module_admin.entity.do.device_category_do import DeviceCategoryDO  # noqa: F401
+from module_admin.entity.do.project_version_do import ProjectVersionDO  # noqa: F401
 
 # 协议模型
 from module_admin.entity.do.protocol_do import ProtocolDO  # noqa: F401
 
-# 仿真模型
-from module_admin.entity.do.simulation_do import (  # noqa: F401
-    SimulationSessionDO,
-    SimulationMessageDO,
-    SimulationBandwidthDO,
-    SimulationAlarmDO,
+# 角色相关模型
+from module_admin.entity.do.role_do import (  # noqa: F401
+    RoleDeptDO,
+    RoleDO,
+    RoleMenuDO,
 )
 
-# 事件模型
-from events.models import (  # noqa: F401
-    OutboxEventDO,
-    EventHistoryDO,
-    EventConsumptionLogDO,
+# 仿真模型
+from module_admin.entity.do.simulation_do import (  # noqa: F401
+    SimulationAlarmDO,
+    SimulationBandwidthDO,
+    SimulationMessageDO,
+    SimulationSessionDO,
 )
+
+# ============================================================================
+# 导入所有 ORM 模型
+# ============================================================================
+# 必须导入所有模型，确保 Alembic 能检测到表结构变化
+# 按模块分组导入，保持代码整洁
+# 用户相关模型
+from module_admin.entity.do.user_do import (  # noqa: F401
+    UserDO,
+    UserPostDO,
+    UserRoleDO,
+)
+
+# 导入 Base 类（包含元数据）
+from module_generator.entity.do import gen_do  # noqa: F401
+from scripts.internal.db_workflow.alembic_revision_ids import ensure_existing_revision_capacity
 
 # ============================================================================
 # Alembic 配置
@@ -134,16 +138,37 @@ target_metadata = Base.metadata
 # 自定义命名约定（确保约束名称一致）
 # 这对于跨数据库迁移和约束管理很重要
 naming_convention = {
-    "ix": "ix_%(column_0_label)s",
-    "uq": "uq_%(table_name)s_%(column_0_name)s",
-    "ck": "ck_%(table_name)s_%(constraint_name)s",
-    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
-    "pk": "pk_%(table_name)s",
+    'ix': 'ix_%(column_0_label)s',
+    'uq': 'uq_%(table_name)s_%(column_0_name)s',
+    'ck': 'ck_%(table_name)s_%(constraint_name)s',
+    'fk': 'fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s',
+    'pk': 'pk_%(table_name)s',
 }
 
 # 应用命名约定到元数据
 if target_metadata is not None:
     target_metadata.naming_convention = naming_convention
+
+
+def guard_remark_alter(_context, _revision, directives):
+    def visit(operations):
+        for operation in operations:
+            if isinstance(operation, ModifyTableOps):
+                visit(operation.ops)
+            elif (
+                isinstance(operation, AlterColumnOp)
+                and operation.table_name in TARGETS
+                and operation.column_name == 'remark'
+                and isinstance(operation.existing_type, String)
+                and isinstance(operation.modify_type, JSON)
+            ):
+                raise RuntimeError(
+                    'Refusing bare remark string-to-JSON ALTER; run the formal remark data migration first'
+                )
+
+    for directive in directives:
+        if getattr(directive, 'upgrade_ops', None):
+            visit(directive.upgrade_ops.ops)
 
 
 def get_database_url() -> str:
@@ -237,9 +262,16 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
+        cli_command = getattr(getattr(config, 'cmd_opts', None), 'cmd', None)
+        is_upgrade = bool(config.attributes.get('upgrade_revision_table')) or (
+            isinstance(cli_command, tuple) and getattr(cli_command[0], '__name__', '') == 'upgrade'
+        )
+        if is_upgrade:
+            ensure_existing_revision_capacity(connection)
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
+            process_revision_directives=guard_remark_alter,
             compare_type=True,  # 检测字段类型变化
             compare_server_default=True,  # 检测默认值变化
             render_as_batch=True,  # 支持 SQLite 批量模式

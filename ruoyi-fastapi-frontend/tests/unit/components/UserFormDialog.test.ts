@@ -5,11 +5,12 @@ import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest';
 import { flushPromises, mount } from '@vue/test-utils';
 import { onlineManager, useQuery, VueQueryPlugin } from '@tanstack/vue-query';
 import { isAbortError } from '@zxio/http';
-import { ElOption, ElSelect, ElTreeSelect } from 'element-plus';
+import { ElOption, ElSelect, ElTreeSelect, ElMessageBox } from 'element-plus';
 import { defineComponent, h, nextTick, ref } from 'vue';
 import { addUser, deptTreeSelect, getUser, updateUser } from '@/api/system/user';
 import { updateDept } from '@/api/system/dept';
 import UserFormDialog from '@/views/system/user/components/UserFormDialog.vue';
+import { mockRemark } from '@/mocks/data/remark';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
 import { captureUserCommand, userCommands, userDetailOptions } from '@/queries/system/user';
@@ -34,9 +35,15 @@ vi.mock('@/api/system/dept', () => ({
   updateDept: vi.fn(),
   delDept: vi.fn(),
 }));
-vi.mock('@/utils/dict', () => ({ useDict: () => ({ sys_normal_disable: ref([]) }) }));
+vi.mock('@/utils/dict', () => ({
+  useDict: () => ({ sys_normal_disable: ref([]) }),
+}));
 
-const feedback = vi.hoisted(() => ({ error: vi.fn(), problem: vi.fn(), recovery: vi.fn() }));
+const feedback = vi.hoisted(() => ({
+  error: vi.fn(),
+  problem: vi.fn(),
+  recovery: vi.fn(),
+}));
 vi.mock('@/utils/http', () => ({ presentRequestError: feedback.recovery }));
 vi.mock('element-plus', async (importOriginal) => ({
   ...(await importOriginal<typeof import('element-plus')>()),
@@ -63,7 +70,10 @@ const dialogStub = defineComponent({
   },
 });
 
-type DialogApi = { open: (id?: number) => Promise<void>; close: () => Promise<void> };
+type DialogApi = {
+  open: (id?: number) => Promise<void>;
+  close: () => Promise<void>;
+};
 type UserDetail = Awaited<ReturnType<typeof getUser>>;
 function deferred() {
   let resolve!: (value: UserDetail) => void;
@@ -74,13 +84,20 @@ function deferred() {
   });
   return { promise, resolve, reject };
 }
-const detail = (id: number): UserDetail => ({
-  data: { userId: id, userName: `user_${id}`, nickName: `User ${id}`, status: '0' },
-  postIds: [id],
-  roleIds: [id],
-  posts: [],
-  roles: [],
-});
+const detail = (id: number) =>
+  ({
+    data: {
+      remarkText: '',
+      userId: id,
+      userName: `user_${id}`,
+      nickName: `User ${id}`,
+      status: '0',
+    },
+    postIds: [id],
+    roleIds: [id],
+    posts: [],
+    roles: [],
+  }) satisfies UserDetail;
 const outcome = <T>(promise: Promise<T>) =>
   promise.then(
     (value) => ({ value }),
@@ -126,7 +143,10 @@ function mountDialog(nativeTree = false) {
         ElOption: nativeTree ? false : true,
         ElRadioGroup: renderSlotStub,
         ElRadio: renderSlotStub,
-        ElAlert: { props: ['title'], template: '<aside>{{ title }}<slot /></aside>' },
+        ElAlert: {
+          props: ['title'],
+          template: '<aside>{{ title }}<slot /></aside>',
+        },
         ElButton: { template: '<button><slot /></button>' },
       },
     },
@@ -139,7 +159,9 @@ beforeEach(() => {
   queryClient.clear();
   setQuerySession(1, [], []);
   onlineManager.setOnline(true);
-  vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 1, label: '研发部' }] });
+  vi.mocked(deptTreeSelect).mockResolvedValue({
+    items: [{ id: 1, label: '研发部' }],
+  });
 });
 afterEach(() => {
   mounted.splice(0).forEach((wrapper) => wrapper.unmount());
@@ -170,7 +192,11 @@ describe('UserFormDialog', () => {
     expect(document.querySelector('.el-tree-node[data-key="9"]')).toBeNull();
     response.resolve({
       ...detail(42),
-      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '原部门' } },
+      data: {
+        ...detail(42).data,
+        deptId: 9,
+        dept: { deptId: 9, deptName: '原部门' },
+      },
     });
     await opening;
     await flushPromises();
@@ -225,11 +251,19 @@ describe('UserFormDialog', () => {
     vi.mocked(getUser)
       .mockResolvedValueOnce({
         ...detail(42),
-        data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门旧名' } },
+        data: {
+          ...detail(42).data,
+          deptId: 9,
+          dept: { deptId: 9, deptName: '停用部门旧名' },
+        },
       })
       .mockResolvedValueOnce({
         ...detail(43),
-        data: { ...detail(43).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门新名' } },
+        data: {
+          ...detail(43).data,
+          deptId: 9,
+          dept: { deptId: 9, deptName: '停用部门新名' },
+        },
       });
     const wrapper = mountDialog(true);
     const api = wrapper.vm as unknown as DialogApi;
@@ -251,10 +285,16 @@ describe('UserFormDialog', () => {
 
   it('shares department reads and follows department writes without replacing the user draft', async () => {
     const scope = setQuerySession(1, [], []);
-    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 9, label: '原部门' }] });
+    vi.mocked(deptTreeSelect).mockResolvedValue({
+      items: [{ id: 9, label: '原部门' }],
+    });
     vi.mocked(getUser).mockResolvedValue({
       ...detail(42),
-      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '原部门' } },
+      data: {
+        ...detail(42).data,
+        deptId: 9,
+        dept: { deptId: 9, deptName: '原部门' },
+      },
     });
     const shared = mount(
       defineComponent({
@@ -275,7 +315,9 @@ describe('UserFormDialog', () => {
     const model = wrapper.findComponent(dialogStub).props('formModel');
     model.nickName = '尚未保存的输入';
     vi.mocked(updateDept).mockResolvedValue({ deptId: 9, deptName: '新部门' });
-    vi.mocked(deptTreeSelect).mockResolvedValue({ items: [{ id: 9, label: '新部门' }] });
+    vi.mocked(deptTreeSelect).mockResolvedValue({
+      items: [{ id: 9, label: '新部门' }],
+    });
     await deptCommands.updateDept(captureDeptCommand({ deptId: 9, deptName: '新部门' }));
     await flushPromises();
     expect(deptTreeSelect).toHaveBeenCalledTimes(2);
@@ -294,7 +336,11 @@ describe('UserFormDialog', () => {
     vi.mocked(deptTreeSelect).mockResolvedValue({ items: [] });
     vi.mocked(getUser).mockResolvedValue({
       ...detail(42),
-      data: { ...detail(42).data, deptId: 9, dept: { deptId: 9, deptName: '停用部门' } },
+      data: {
+        ...detail(42).data,
+        deptId: 9,
+        dept: { deptId: 9, deptName: '停用部门' },
+      },
     });
     const wrapper = mountDialog();
     await (wrapper.vm as unknown as DialogApi).open(42);
@@ -340,7 +386,7 @@ describe('UserFormDialog', () => {
     const first = deferred(),
       replacement = deferred();
     vi.mocked(getUser).mockReturnValueOnce(first.promise).mockReturnValueOnce(replacement.promise);
-    vi.mocked(updateUser).mockResolvedValueOnce({ userId: 43 });
+    vi.mocked(updateUser).mockResolvedValueOnce({ userId: 43, remarkText: '' });
     const wrapper = mountDialog();
     const opening = outcome((wrapper.vm as unknown as DialogApi).open(42));
     await nextTick();
@@ -348,7 +394,10 @@ describe('UserFormDialog', () => {
     await flushPromises();
     expect(feedback.error).not.toHaveBeenCalled();
     expect(getUser).toHaveBeenCalledTimes(2);
-    replacement.resolve({ ...detail(42), data: { ...detail(42).data, nickName: 'Replacement' } });
+    replacement.resolve({
+      ...detail(42),
+      data: { ...detail(42).data, nickName: 'Replacement' },
+    });
     expect(await opening).toEqual({ value: undefined });
     const dialog = wrapper.findComponent(dialogStub);
     expect(dialog.props('formModel').nickName).toBe('Replacement');
@@ -414,7 +463,13 @@ describe('UserFormDialog', () => {
     'omits the create-only password when editing status %s',
     async (status) => {
       vi.mocked(getUser).mockResolvedValue({
-        data: { userId: 42, userName: 'edited_user', nickName: 'Before', status },
+        data: {
+          remarkText: '',
+          userId: 42,
+          userName: 'edited_user',
+          nickName: 'Before',
+          status,
+        },
         postIds: [3],
         roleIds: [2],
         posts: [],
@@ -430,7 +485,12 @@ describe('UserFormDialog', () => {
 
       const sent = vi.mocked(updateUser).mock.calls[0][0];
       expect(sent).not.toHaveProperty('password');
-      expect(sent).toMatchObject({ userId: 42, status, roleIds: [2], postIds: [3] });
+      expect(sent).toMatchObject({
+        userId: 42,
+        status,
+        roleIds: [2],
+        postIds: [3],
+      });
       expect(model.password).toBe('');
       expect(wrapper.emitted('success')).toHaveLength(1);
       expect(dialog.props('okLoading')).toBe(false);
@@ -444,7 +504,10 @@ describe('UserFormDialog', () => {
     await (wrapper.vm as unknown as { open: () => Promise<void> }).open();
     await nextTick();
     const dialog = wrapper.findComponent({ name: 'ZxDialog' });
-    Object.assign(dialog.props('formModel'), { userName: 'created_user', password: 'Create123' });
+    Object.assign(dialog.props('formModel'), {
+      userName: 'created_user',
+      password: 'Create123',
+    });
     await dialog.props('confirm')({});
 
     expect(addUser).toHaveBeenCalledWith(
@@ -475,7 +538,11 @@ describe('UserFormDialog', () => {
     a.resolve(detail(11));
     await first;
     await nextTick();
-    expect(dialog.props('formModel')).toMatchObject({ userId: 12, roleIds: [12], postIds: [12] });
+    expect(dialog.props('formModel')).toMatchObject({
+      userId: 12,
+      roleIds: [12],
+      postIds: [12],
+    });
     expect(dialog.props('loading')).toBe(false);
     expect(dialog.props('okDisabled')).toBe(false);
   });
@@ -524,7 +591,10 @@ describe('UserFormDialog', () => {
     await nextTick();
     expect(dialog.props('loading')).toBe(true);
     expect(dialog.props('formModel').nickName).toBe('');
-    current.resolve({ ...detail(11), data: { ...detail(11).data, nickName: 'Reopened' } });
+    current.resolve({
+      ...detail(11),
+      data: { ...detail(11).data, nickName: 'Reopened' },
+    });
     await next;
     await nextTick();
     expect(dialog.props('formModel').nickName).toBe('Reopened');
@@ -594,7 +664,10 @@ describe('UserFormDialog', () => {
     expect(await current).toEqual({ error: failure });
     expect(feedback.recovery).toHaveBeenCalledExactlyOnceWith(
       failure,
-      expect.objectContaining({ silentError: false, feedback: { mode: 'auto' } })
+      expect.objectContaining({
+        silentError: false,
+        feedback: { mode: 'auto' },
+      })
     );
     expect(failure.config.silentError).toBe(true);
   });
@@ -630,7 +703,51 @@ it('submits only editable user fields when the draft contains response metadata'
   });
   await dialog.props('confirm')(model);
   const payload = vi.mocked(updateUser).mock.calls[0][0];
-  expect(payload).toMatchObject({ userId: 42, nickName: 'User 42', roleIds: [42], postIds: [42] });
+  expect(payload).toMatchObject({
+    userId: 42,
+    nickName: 'User 42',
+    roleIds: [42],
+    postIds: [42],
+  });
   for (const field of ['password', 'loginIp', 'createBy', 'type', 'admin'])
     expect(payload).not.toHaveProperty(field);
+});
+
+it('protects a format-only remark draft on close and replacement, while clean authority closes directly', async () => {
+  const confirm = vi.spyOn(ElMessageBox, 'confirm').mockRejectedValue(new Error('继续编辑'));
+  try {
+    const original = mockRemark('same text', 'userguard')!;
+    vi.mocked(getUser).mockResolvedValue({
+      ...detail(42),
+      data: { ...detail(42).data, remark: original },
+    });
+    const wrapper = mountDialog();
+    const api = wrapper.vm as unknown as DialogApi;
+    await api.open(42);
+    const shell = wrapper.findComponent(dialogStub);
+    const model = shell.props('formModel') as Record<string, any>;
+    const formatted = structuredClone(original);
+    const text = formatted.body.content.content[0].content![0];
+    if (text.type !== 'text') throw new Error('Expected text fixture');
+    text.marks = [{ type: 'bold' }];
+    model.remark = formatted;
+    await nextTick();
+    await api.close();
+    expect(shell.props('modelValue')).toBe(true);
+    await api.open(43);
+    expect(model.userId).toBe(42);
+    expect(vi.mocked(getUser)).toHaveBeenCalledTimes(1);
+    expect(model.remark).toEqual(formatted);
+    confirm.mockResolvedValue(
+      Object.assign('confirm' as const, { value: '', action: 'confirm' as const })
+    );
+    await api.close();
+    expect(shell.props('modelValue')).toBe(false);
+    await api.open(42);
+    confirm.mockClear();
+    await api.close();
+    expect(confirm).not.toHaveBeenCalled();
+  } finally {
+    confirm.mockRestore();
+  }
 });

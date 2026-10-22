@@ -77,10 +77,7 @@ def upgrade() -> None:
     existing_tables = set(inspector.get_table_names())
     
     # Get all tables from metadata
-    tables_to_create = []
-    for table_name, table in Base.metadata.tables.items():
-        if table_name not in existing_tables:
-            tables_to_create.append(table)
+    tables_to_create = [table for table in Base.metadata.sorted_tables if table.name not in existing_tables]
     
     # Create only missing tables
     if tables_to_create:

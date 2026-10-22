@@ -1,25 +1,29 @@
 import inspect
 import json
 import os
-import requests
 import sys
 import time
 from datetime import datetime
+from functools import lru_cache, wraps
+from typing import Any, Callable, Literal, Optional
+
+import requests
 from fastapi import Request
 from fastapi.responses import JSONResponse, ORJSONResponse, UJSONResponse
-from functools import lru_cache, wraps
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import Any, Callable, Literal, Optional
 from user_agents import parse
+
 from config.enums import BusinessType
-from config.env import AppConfig
+from config.env import AppConfig, AuditConfig
 from config.error_codes import ErrorCode, ErrorType
 from container.wiring import get_app_container
 from exceptions.exception import AppException, LoginException, ServiceException, ServiceWarning, SystemException
 from module_admin.entity.vo.log_vo import LogininforModel, OperLogModel
 from modules.identity.application.services.login_service import LoginService
+from utils.log_safety import database_exception, log_safe_exception, redact_document_data, safe_exception_summary
 from utils.log_util import logger
 from utils.response_util import ResponseUtil
+from utils.sensitive.registry import get_mask_fields
 
 DEFAULT_ERROR_MSG = '接口异常'
 
@@ -28,8 +32,8 @@ def _problem_snapshot(request: Request, exc: AppException) -> JSONResponse:
     return ResponseUtil.problem_details(
         request=request,
         http_status=exc.http_status,
-        title=exc.user_message,
-        detail=exc.user_message,
+        title='系统繁忙，请稍后重试' if database_exception(exc) is not None else exc.user_message,
+        detail='系统繁忙，请稍后重试' if database_exception(exc) is not None else exc.user_message,
         type_slug=exc.error_code_name,
         error_code=exc.error_code,
     )
@@ -142,7 +146,12 @@ class Log:
             ):
                 payload = dict(request.query_params)
                 payload.update(await request.form())
-                oper_param = '\n'.join([f'{key}: {value}' for key, value in payload.items()])
+                oper_param = '\n'.join(
+                    f'{key}: {value}'
+                    for key, value in redact_document_data(
+                        payload, mask_fields=get_mask_fields(AuditConfig.audit_mask_fields)
+                    ).items()
+                )
             else:
                 payload = await request.body()
                 # 通过 request.path_params 直接访问路径参数
@@ -152,7 +161,10 @@ class Log:
                     oper_param.update(json.loads(str(payload, 'utf-8')))
                 if path_params:
                     oper_param.update(path_params)
-                oper_param = json.dumps(oper_param, ensure_ascii=False)
+                oper_param = json.dumps(
+                    redact_document_data(oper_param, mask_fields=get_mask_fields(AuditConfig.audit_mask_fields)),
+                    ensure_ascii=False,
+                )
             # 日志表请求参数字段长度最大为2000，因此在此处判断长度
             if len(oper_param) > 2000:
                 oper_param = '请求参数过长'
@@ -188,9 +200,9 @@ class Log:
             except AppException as exc:
                 captured_exception = exc
                 if exc.http_status >= 500:
-                    logger.error(exc.developer_message)
+                    logger.error(safe_exception_summary(exc) if database_exception(exc) else exc.developer_message)
                 else:
-                    logger.warning(exc.developer_message)
+                    logger.warning(safe_exception_summary(exc) if database_exception(exc) else exc.developer_message)
                 result = _problem_snapshot(request, exc)
             except (LoginException, ServiceWarning) as e:
                 resolved_msg = _resolve_msg(e.message, default='操作警告')
@@ -203,10 +215,10 @@ class Log:
                 captured_exception = e
                 result = _problem_snapshot(request, e)
             except Exception as e:
-                logger.exception(e)
+                log_safe_exception(logger, 'Unhandled exception in log wrapper', e)
                 captured_exception = SystemException(
                     user_message='系统繁忙，请稍后重试',
-                    developer_message=f'Unhandled exception in log wrapper: {type(e).__name__}: {e}',
+                    developer_message=f'Unhandled exception in log wrapper: {safe_exception_summary(e)}',
                     error_code=ErrorCode.SYSTEM_ERROR,
                 )
                 result = _problem_snapshot(request, captured_exception)
@@ -231,7 +243,10 @@ class Log:
                     result_dict = {}
                 else:
                     result_dict = {}
-            json_result = json.dumps(result_dict, ensure_ascii=False)
+            json_result = json.dumps(
+                redact_document_data(result_dict, mask_fields=get_mask_fields(AuditConfig.audit_mask_fields)),
+                ensure_ascii=False,
+            )
             # 根据响应结果获取响应状态及异常信息
             response_status = int(getattr(result, 'status_code', 500) or 500)
             status = 0 if 200 <= response_status < 300 else 1

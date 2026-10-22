@@ -23,6 +23,7 @@ vi.mock('@/api/system/menu', () => ({
   roleMenuTreeselect: vi.fn(),
 }));
 const detail = {
+  remarkText: '',
   roleId: 2,
   roleName: 'Operator',
   roleKey: 'operator',

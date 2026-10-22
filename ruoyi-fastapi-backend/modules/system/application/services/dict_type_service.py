@@ -3,8 +3,15 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
+from modules.system.application.read_models.dict_read_models import DictTypeDetailReadModel
+
+if TYPE_CHECKING:
+    from module_admin.entity.vo.dict_vo import DeleteDictTypeModel, DictTypeModel, DictTypePageQueryModel
+    from ports import IDictDataRepository, IDictDataService, IDictTypeRepository, IRedisClient
+
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from config.error_codes import ErrorCode
@@ -12,8 +19,6 @@ from exceptions.exception import ResourceConflictException, ResourceNotFoundExce
 from module_admin.entity.do.dict_do import DictTypeDO
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.dict_vo import DeleteDictTypeModel, DictTypeModel, DictTypePageQueryModel
-from ports import IDictDataRepository, IDictDataService, IDictTypeRepository, IRedisClient
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.transaction_manager import transactional
@@ -85,7 +90,7 @@ class DictTypeService:
         self,
         redis: IRedisClient,
         page_object: DictTypeModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         新增字典类型信息service
@@ -117,7 +122,7 @@ class DictTypeService:
         self,
         redis: IRedisClient,
         page_object: DictTypeModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         编辑字典类型信息service
@@ -202,7 +207,7 @@ class DictTypeService:
         """
         dict_type = await self.dict_type_repo.find_by_id(dict_id)
         if dict_type:
-            result = DictTypeModel(**CamelCaseUtil.transform_result(dict_type))
+            result = DictTypeDetailReadModel(**CamelCaseUtil.transform_result(dict_type))
         else:
             raise ResourceNotFoundException(
                 user_message='字典类型不存在',
@@ -236,7 +241,11 @@ class DictTypeService:
                 item['status'] = '正常'
             else:
                 item['status'] = '停用'
-        binary_data = ExcelUtil.export_list2excel(dict_type_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in dict_type_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data
 

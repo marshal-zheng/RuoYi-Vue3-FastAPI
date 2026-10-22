@@ -1,5 +1,5 @@
+import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
 import { isField } from '@formily/core';
-import type { Values } from '@zxio/schema-form';
 import type {
   BusinessContext,
   FieldIssue,
@@ -14,7 +14,7 @@ export type PostValues = {
   postCode: string;
   postSort: number;
   status: '0' | '1';
-  remark: string;
+  remark: RemarkValue;
 };
 
 export type StatusOption = { label: string; value: '0' | '1' };
@@ -91,14 +91,10 @@ export function createPostSchema(statusOptions: () => readonly StatusOption[]) {
           ],
         },
         remark: {
-          type: 'string',
+          type: 'object',
           title: '备注',
-          'x-component': 'ZxInput',
-          'x-component-props': {
-            type: 'textarea',
-            rows: 3,
-            placeholder: '请输入内容',
-          },
+          'x-component': 'RemarkEditor',
+          'x-component-props': { placeholder: '请输入内容' },
         },
       },
     };
@@ -119,12 +115,12 @@ export function initialPost(detail?: PostModel): PostValues {
     postCode: detail?.postCode ?? '',
     postSort: detail?.postSort ?? 0,
     status: detail?.status ?? '0',
-    remark: detail?.remark ?? '',
+    remark: readRemark(detail?.remark),
   };
 }
 
 /** Only editable business fields cross the write boundary; identity belongs to the session. */
-export function toPostDto(values: Values, postId?: number): PostModel {
+export function toPostDto(values: Record<string, unknown>, postId?: number): PostModel {
   const { postName, postCode, postSort, status, remark } = values;
   if (
     typeof postName !== 'string' ||
@@ -137,16 +133,22 @@ export function toPostDto(values: Values, postId?: number): PostModel {
     !Number.isInteger(postSort) ||
     postSort < 0 ||
     (status !== '0' && status !== '1') ||
-    typeof remark !== 'string'
+    remark === undefined
   ) {
     throw new Error('岗位数据格式不正确，请检查填写内容');
+  }
+  let document: RemarkValue;
+  try {
+    document = readRemark(remark);
+  } catch {
+    throw new Error('岗位数据格式不正确，请检查备注内容');
   }
   return {
     postName,
     postCode,
     postSort,
     status,
-    remark,
+    remark: document,
     ...(postId === undefined ? {} : { postId }),
   };
 }

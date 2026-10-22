@@ -45,6 +45,7 @@ beforeEach(() => {
     checkedKeys: [],
   });
   vi.mocked(dataScope).mockResolvedValue({
+      remarkText: '',
     roleId: 94,
     roleName: 'Department reader',
     roleKey: 'reader',

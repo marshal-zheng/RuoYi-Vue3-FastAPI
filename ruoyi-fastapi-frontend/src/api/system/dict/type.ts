@@ -1,7 +1,11 @@
 import { requestDetail } from '@/api/detail';
-export type TypeRecord = Omit<DictTypeModel, 'dictId'> & { dictId: number };
+export type TypeRecord = Omit<DictTypeDetailReadModel, 'dictId'> & { dictId: number };
 import type { HttpCollection, HttpOffsetPage } from '@/types/http-contract';
-import type { DictTypeModel, DictTypePageQueryModel } from '@/api/_generated/types.gen';
+import type {
+  DictTypeModel,
+  DictTypeDetailReadModel,
+  DictTypePageQueryModel,
+} from '@/api/_generated/types.gen';
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 import type { RequestOptions, QueryRequestContext } from '@zxio/http';
 
@@ -85,7 +89,7 @@ export function refreshCache(options?: RequestOptions) {
 
 // 获取字典选择框列表
 export function optionselect(context?: QueryRequestContext) {
-  return request<HttpCollection<DictTypeModel>>(
+  return request<HttpCollection<DictTypeDetailReadModel>>(
     {
       url: '/system/dict/type/optionselect',
       method: 'get',

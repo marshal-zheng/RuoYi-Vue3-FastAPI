@@ -4,8 +4,17 @@ from __future__ import annotations
 
 import json
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING
 
+from pydantic import ValidationError
+
+from modules.system.application.read_models.dict_read_models import DictDataDetailReadModel
+
+if TYPE_CHECKING:
+    from module_admin.entity.vo.dict_vo import DeleteDictDataModel, DictDataModel, DictDataPageQueryModel
+    from ports import IDictDataRepository, IDictTypeRepository, IRedisClient
+
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from config.error_codes import ErrorCode
@@ -13,8 +22,7 @@ from exceptions.exception import ResourceConflictException, ResourceNotFoundExce
 from module_admin.entity.do.dict_do import DictDataDO
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.dict_vo import DeleteDictDataModel, DictDataModel, DictDataPageQueryModel
-from ports import IDictDataRepository, IDictTypeRepository, IRedisClient
+from modules.system.application.read_models.dict_read_models import DictDataItemReadModel
 from utils.common_util import CamelCaseUtil
 from utils.excel_util import ExcelUtil
 from utils.transaction_manager import transactional
@@ -85,10 +93,14 @@ class DictDataService:
         for dict_type_obj in [item for item in dict_type_all if item.status == StatusEnum.NORMAL.value]:
             dict_type = dict_type_obj.dict_type
             dict_data_list = await self.dict_data_repo.find_by_type(dict_type)
-            dict_data = [CamelCaseUtil.transform_result(row) for row in dict_data_list if row]
+            dict_data = [
+                DictDataItemReadModel.model_validate(row).model_dump(mode='json', by_alias=True)
+                for row in dict_data_list
+                if row
+            ]
             await redis.set(
                 f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}',
-                json.dumps(dict_data, ensure_ascii=False, default=str),
+                json.dumps(dict_data, ensure_ascii=False),
             )
 
     async def query_dict_data_list_from_cache_services(self, redis: IRedisClient, dict_type: str):
@@ -103,7 +115,19 @@ class DictDataService:
         cache_key = f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}'
         dict_data_list_result = await redis.get(cache_key)
         if dict_data_list_result:
-            return json.loads(dict_data_list_result)
+            try:
+                cached = json.loads(dict_data_list_result)
+                if isinstance(cached, list) and all(
+                    isinstance(item, dict) and not isinstance(item.get('remark'), str) and 'remarkText' in item
+                    for item in cached
+                ):
+                    return [
+                        DictDataItemReadModel.model_validate(item).model_dump(mode='json', by_alias=True)
+                        for item in cached
+                    ]
+            except (json.JSONDecodeError, ValidationError, TypeError):
+                pass
+            await redis.delete(cache_key)
 
         return await self._load_dict_data_and_refresh_cache(redis, dict_type, cache_key)
 
@@ -112,8 +136,12 @@ class DictDataService:
         当缓存未命中时，从数据库加载字典数据并写回缓存
         """
         dict_data_list = await self.dict_data_repo.find_by_type(dict_type)
-        dict_data = [CamelCaseUtil.transform_result(row) for row in dict_data_list if row]
-        await redis.set(cache_key, json.dumps(dict_data, ensure_ascii=False, default=str))
+        dict_data = [
+            DictDataItemReadModel.model_validate(row).model_dump(mode='json', by_alias=True)
+            for row in dict_data_list
+            if row
+        ]
+        await redis.set(cache_key, json.dumps(dict_data, ensure_ascii=False))
         return dict_data
 
     async def check_dict_data_unique_services(self, page_object: DictDataModel):
@@ -134,7 +162,7 @@ class DictDataService:
         self,
         redis: IRedisClient,
         page_object: DictDataModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         新增字典数据信息service
@@ -153,8 +181,7 @@ class DictDataService:
                 user_message=f'新增字典数据{page_object.dict_label}失败，{page_object.dict_type}下已存在该字典数据',
                 error_code=ErrorCode.DICT_TYPE_EXISTS,
                 developer_message=(
-                    f'Dict data already exists: dict_type={page_object.dict_type}, '
-                    f'dict_label={page_object.dict_label}'
+                    f'Dict data already exists: dict_type={page_object.dict_type}, dict_label={page_object.dict_label}'
                 ),
             )
 
@@ -163,7 +190,13 @@ class DictDataService:
         dict_data_list = await self.query_dict_data_list_services(page_object.dict_type)
         await redis.set(
             f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}',
-            json.dumps(CamelCaseUtil.transform_result(dict_data_list), ensure_ascii=False, default=str),
+            json.dumps(
+                [
+                    DictDataItemReadModel.model_validate(row).model_dump(mode='json', by_alias=True)
+                    for row in dict_data_list
+                ],
+                ensure_ascii=False,
+            ),
         )
         return CrudResponseModel(is_success=True, message='新增成功', result={'dictCode': add_result.dict_code})
 
@@ -172,7 +205,7 @@ class DictDataService:
         self,
         redis: IRedisClient,
         page_object: DictDataModel,
-        operator: Optional[str] = None,
+        operator: str | None = None,
     ):
         """
         编辑字典数据信息service
@@ -192,8 +225,7 @@ class DictDataService:
                 user_message=f'新增字典数据{page_object.dict_label}失败，{page_object.dict_type}下已存在该字典数据',
                 error_code=ErrorCode.DICT_TYPE_EXISTS,
                 developer_message=(
-                    f'Dict data already exists: dict_type={page_object.dict_type}, '
-                    f'dict_label={page_object.dict_label}'
+                    f'Dict data already exists: dict_type={page_object.dict_type}, dict_label={page_object.dict_label}'
                 ),
             )
 
@@ -235,7 +267,13 @@ class DictDataService:
             dict_data_list = await self.query_dict_data_list_services(dict_type)
             await redis.set(
                 f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}',
-                json.dumps(CamelCaseUtil.transform_result(dict_data_list), ensure_ascii=False, default=str),
+                json.dumps(
+                    [
+                        DictDataItemReadModel.model_validate(row).model_dump(mode='json', by_alias=True)
+                        for row in dict_data_list
+                    ],
+                    ensure_ascii=False,
+                ),
             )
         return CrudResponseModel(is_success=True, message='删除成功')
 
@@ -248,7 +286,7 @@ class DictDataService:
         """
         dict_data = await self.dict_data_repo.find_by_code(dict_code)
         if dict_data:
-            result = DictDataModel(**CamelCaseUtil.transform_result(dict_data))
+            result = DictDataDetailReadModel(**CamelCaseUtil.transform_result(dict_data))
         else:
             raise ResourceNotFoundException(
                 user_message='字典数据不存在',
@@ -291,6 +329,10 @@ class DictDataService:
                 item['isDefault'] = '是'
             else:
                 item['isDefault'] = '否'
-        binary_data = ExcelUtil.export_list2excel(dict_data_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in dict_data_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
 
         return binary_data

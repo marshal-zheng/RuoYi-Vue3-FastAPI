@@ -1,29 +1,32 @@
 from datetime import datetime
+from typing import Literal
+
 from pydantic import ConfigDict, Field
-from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
-from typing import Literal, Optional
+
 from module_admin.annotation.pydantic_annotation import as_query
+from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkReadProjection, RemarkValue, RemarkWriteGuard
 
 
-class PostModel(CamelModelBase):
+class PostModel(RemarkWriteGuard):
     """
     岗位信息表对应pydantic模型
     """
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    post_id: Optional[int] = Field(default=None, description='岗位ID')
-    post_code: Optional[str] = Field(default=None, description='岗位编码')
-    post_name: Optional[str] = Field(default=None, description='岗位名称')
-    post_sort: Optional[int] = Field(default=None, description='显示顺序')
-    status: Optional[Literal['0', '1']] = Field(default=None, description='状态（0正常 1停用）')
-    create_by: Optional[str] = Field(default=None, description='创建者')
-    create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-    remark: Optional[str] = Field(default=None, description='备注')
+    post_id: int | None = Field(default=None, description='岗位ID')
+    post_code: str | None = Field(default=None, description='岗位编码')
+    post_name: str | None = Field(default=None, description='岗位名称')
+    post_sort: int | None = Field(default=None, description='显示顺序')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
+    remark: RemarkValue = Field(default=None, description='备注')
 
     @NotBlank(field_name='post_code', message='岗位编码不能为空')
     @Size(field_name='post_code', min_length=0, max_length=64, message='岗位编码长度不能超过64个字符')
@@ -45,17 +48,32 @@ class PostModel(CamelModelBase):
         self.get_post_sort()
 
 
-class PostQueryModel(PostModel):
+class PostInfoModel(PostModel, RemarkReadProjection):
+    """Post projection used in nested user-detail responses."""
+
+
+class PostQueryModel(CamelModelBase):
+    post_id: int | None = Field(default=None, description='岗位ID')
+    post_code: str | None = Field(default=None, description='岗位编码')
+    post_name: str | None = Field(default=None, description='岗位名称')
+    post_sort: int | None = Field(default=None, description='显示顺序')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     岗位管理不分页查询模型
     """
 
-    begin_time: Optional[str] = Field(default=None, description='开始时间')
-    end_time: Optional[str] = Field(default=None, description='结束时间')
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
 
 
 @as_query
 class PostPageQueryModel(PostQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     岗位管理分页查询模型
     """

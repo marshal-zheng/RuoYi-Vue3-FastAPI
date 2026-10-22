@@ -1,7 +1,11 @@
 import { requestDetail } from '@/api/detail';
-export type ConfigRecord = Omit<ConfigModel, 'configId'> & { configId: number };
+export type ConfigRecord = Omit<ConfigDetailReadModel, 'configId'> & { configId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
-import type { ConfigModel, ConfigPageQueryModel } from '@/api/_generated/types.gen';
+import type {
+  ConfigModel,
+  ConfigDetailReadModel,
+  ConfigPageQueryModel,
+} from '@/api/_generated/types.gen';
 import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询参数列表

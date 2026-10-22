@@ -1,28 +1,31 @@
 from datetime import datetime
+from typing import Literal
+
 from pydantic import ConfigDict, Field
-from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Pattern, Size
-from typing import Literal, Optional
+
 from module_admin.annotation.pydantic_annotation import as_query
+from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkValue, RemarkWriteGuard
 
 
-class DictTypeModel(CamelModelBase):
+class DictTypeModel(RemarkWriteGuard):
     """
     字典类型表对应pydantic模型
     """
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    dict_id: Optional[int] = Field(default=None, description='字典主键')
-    dict_name: Optional[str] = Field(default=None, description='字典名称')
-    dict_type: Optional[str] = Field(default=None, description='字典类型')
-    status: Optional[Literal['0', '1']] = Field(default=None, description='状态（0正常 1停用）')
-    create_by: Optional[str] = Field(default=None, description='创建者')
-    create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-    remark: Optional[str] = Field(default=None, description='备注')
+    dict_id: int | None = Field(default=None, description='字典主键')
+    dict_name: str | None = Field(default=None, description='字典名称')
+    dict_type: str | None = Field(default=None, description='字典类型')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
+    remark: RemarkValue = Field(default=None, description='备注')
 
     @NotBlank(field_name='dict_name', message='字典名称不能为空')
     @Size(field_name='dict_name', min_length=0, max_length=100, message='字典类型名称长度不能超过100个字符')
@@ -44,27 +47,27 @@ class DictTypeModel(CamelModelBase):
         self.get_dict_type()
 
 
-class DictDataModel(CamelModelBase):
+class DictDataModel(RemarkWriteGuard):
     """
     字典数据表对应pydantic模型
     """
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    dict_code: Optional[int] = Field(default=None, description='字典编码')
-    dict_sort: Optional[int] = Field(default=None, description='字典排序')
-    dict_label: Optional[str] = Field(default=None, description='字典标签')
-    dict_value: Optional[str] = Field(default=None, description='字典键值')
-    dict_type: Optional[str] = Field(default=None, description='字典类型')
-    css_class: Optional[str] = Field(default=None, description='样式属性（其他样式扩展）')
-    list_class: Optional[str] = Field(default=None, description='表格回显样式')
-    is_default: Optional[Literal['Y', 'N']] = Field(default=None, description='是否默认（Y是 N否）')
-    status: Optional[Literal['0', '1']] = Field(default=None, description='状态（0正常 1停用）')
-    create_by: Optional[str] = Field(default=None, description='创建者')
-    create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-    remark: Optional[str] = Field(default=None, description='备注')
+    dict_code: int | None = Field(default=None, description='字典编码')
+    dict_sort: int | None = Field(default=None, description='字典排序')
+    dict_label: str | None = Field(default=None, description='字典标签')
+    dict_value: str | None = Field(default=None, description='字典键值')
+    dict_type: str | None = Field(default=None, description='字典类型')
+    css_class: str | None = Field(default=None, description='样式属性（其他样式扩展）')
+    list_class: str | None = Field(default=None, description='表格回显样式')
+    is_default: Literal['Y', 'N'] | None = Field(default=None, description='是否默认（Y是 N否）')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
+    remark: RemarkValue = Field(default=None, description='备注')
 
     @NotBlank(field_name='dict_label', message='字典标签不能为空')
     @Size(field_name='dict_label', min_length=0, max_length=100, message='字典标签长度不能超过100个字符')
@@ -92,17 +95,27 @@ class DictDataModel(CamelModelBase):
         self.get_css_class()
 
 
-class DictTypeQueryModel(DictTypeModel):
+class DictTypeQueryModel(CamelModelBase):
+    dict_id: int | None = Field(default=None, description='字典主键')
+    dict_name: str | None = Field(default=None, description='字典名称')
+    dict_type: str | None = Field(default=None, description='字典类型')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     字典类型管理不分页查询模型
     """
 
-    begin_time: Optional[str] = Field(default=None, description='开始时间')
-    end_time: Optional[str] = Field(default=None, description='结束时间')
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
 
 
 @as_query
 class DictTypePageQueryModel(DictTypeQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     字典类型管理分页查询模型
     """
@@ -121,17 +134,32 @@ class DeleteDictTypeModel(CamelModelBase):
     dict_ids: str = Field(description='需要删除的字典主键')
 
 
-class DictDataQueryModel(DictDataModel):
+class DictDataQueryModel(CamelModelBase):
+    dict_code: int | None = Field(default=None, description='字典编码')
+    dict_sort: int | None = Field(default=None, description='字典排序')
+    dict_label: str | None = Field(default=None, description='字典标签')
+    dict_value: str | None = Field(default=None, description='字典键值')
+    dict_type: str | None = Field(default=None, description='字典类型')
+    css_class: str | None = Field(default=None, description='样式属性（其他样式扩展）')
+    list_class: str | None = Field(default=None, description='表格回显样式')
+    is_default: Literal['Y', 'N'] | None = Field(default=None, description='是否默认（Y是 N否）')
+    status: Literal['0', '1'] | None = Field(default=None, description='状态（0正常 1停用）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     字典数据管理不分页查询模型
     """
 
-    begin_time: Optional[str] = Field(default=None, description='开始时间')
-    end_time: Optional[str] = Field(default=None, description='结束时间')
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
 
 
 @as_query
 class DictDataPageQueryModel(DictDataQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     字典数据管理分页查询模型
     """

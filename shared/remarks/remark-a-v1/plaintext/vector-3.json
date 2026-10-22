@@ -1,0 +1,41 @@
+{
+  "identityKey": "sys_role:7:remark",
+  "text": "\n\t ",
+  "expected": {
+    "version": 2,
+    "body": {
+      "format": "json",
+      "content": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_df52a208643aa370271790ed45771a18"
+            }
+          },
+          {
+            "type": "paragraph",
+            "attrs": {
+              "textAlign": null,
+              "blockId": "blk_0c04156496e6122987540f506b549416"
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "\t "
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "annotations": [],
+    "assets": [],
+    "meta": {
+      "schemaVersion": "stable-block-identity/v2"
+    }
+  },
+  "literal": "\n\t "
+}

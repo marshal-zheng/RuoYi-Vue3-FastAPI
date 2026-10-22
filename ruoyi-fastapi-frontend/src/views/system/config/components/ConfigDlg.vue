@@ -28,8 +28,13 @@
             </el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <zx-input v-model="state.data.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item data-form-full label="备注" prop="remark">
+          <RemarkEditor
+            v-if="state.visible"
+            ref="remarkRef"
+            :key="remarkSession"
+            v-model="state.data.remark"
+          />
         </el-form-item>
       </FormGrid>
     </el-form>
@@ -37,7 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
+import { readRemark, type RemarkValue } from '@/components/ui/Remark/contract';
+import { ref, watch } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { useEditorRead } from '@/utils/editor-read';
 import { FormGrid, useFormDialog } from '@/components/ui/FormDialog';
 import { getConfig, addConfig, updateConfig } from '@/api/system/config';
@@ -54,22 +63,26 @@ interface ConfigForm {
   configKey: string;
   configValue: string;
   configType: 'Y' | 'N';
-  remark: string;
+  remark: RemarkValue;
 }
 
 const formRef = ref();
+const { remarkRef, remarkRule } = useRemarkField();
+const remarkSession = ref(0);
 const detailLoading = ref(false);
 let requestedId: number | undefined;
 
 const rules = {
+  remark: [remarkRule],
   configName: [{ required: true, message: '参数名称不能为空', trigger: 'blur' }],
   configKey: [{ required: true, message: '参数键名不能为空', trigger: 'blur' }],
   configValue: [{ required: true, message: '参数键值不能为空', trigger: 'blur' }],
 };
 
-const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, setDisabled } =
+const { formProps, layoutProps, state, isDirty, dialogProps, dialogEvents, open, setDisabled } =
   useFormDialog<ConfigForm>({
     columns: 1,
+    onBeforeClose: canDiscard,
     loading: detailLoading,
     formRef: formRef,
     title: (data: ConfigForm) => (data.configId ? '修改参数配置' : '添加参数配置'),
@@ -79,7 +92,7 @@ const { formProps, layoutProps, state, dialogProps, dialogEvents, open, close, s
       configKey: '',
       configValue: '',
       configType: 'Y',
-      remark: '',
+      remark: null as RemarkValue,
     }),
     onConfirm: async (data: ConfigForm) => {
       if (detailLoading.value || loadError.value) return false;
@@ -99,7 +112,31 @@ const {
   cancel: cancelRead,
 } = useEditorRead(() => state.visible, detailLoading);
 
-function openDialog(id?: number) {
+let opening = 0;
+let discardPending: Promise<boolean> | undefined;
+function canDiscard(): Promise<boolean> {
+  if (state.loading) return Promise.resolve(false);
+  if (!isDirty.value && remarkRef.value?.validate() !== false) return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const data = state.data;
+  const decision = ElMessageBox.confirm('参数配置尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(() => data === state.data && !state.loading)
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function openDialog(id?: number) {
+  const intent = ++opening;
+  if (state.visible && !(await canDiscard())) return;
+  if (intent !== opening) return;
+  remarkSession.value++;
   requestedId = id;
   return runRead(async (read) => {
     open(id ? { configId: id } : undefined);
@@ -119,14 +156,16 @@ function openDialog(id?: number) {
       configKey: data.configKey ?? '',
       configValue: data.configValue ?? '',
       configType: data.configType ?? 'N',
-      remark: data.remark ?? '',
+      remark: readRemark(data.remark),
     });
     setDisabled(false);
   });
 }
-function closeDialog() {
+async function closeDialog() {
+  opening++;
+  if (!(await canDiscard())) return;
   cancelRead();
-  return close();
+  state.visible = false;
 }
 function handleRetry() {
   return openDialog(requestedId).catch(() => {
@@ -135,4 +174,10 @@ function handleRetry() {
 }
 
 defineExpose({ open: openDialog, close: closeDialog });
+watch(
+  () => state.visible,
+  (visible) => {
+    if (visible) remarkSession.value++;
+  }
+);
 </script>

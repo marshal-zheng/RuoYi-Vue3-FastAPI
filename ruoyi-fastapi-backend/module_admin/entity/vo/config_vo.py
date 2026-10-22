@@ -1,29 +1,32 @@
 from datetime import datetime
+from typing import Literal
+
 from pydantic import ConfigDict, Field
-from module_admin.entity.vo.base import CamelModelBase
 from pydantic.alias_generators import to_camel
 from pydantic_validation_decorator import NotBlank, Size
-from typing import Literal, Optional
+
 from module_admin.annotation.pydantic_annotation import as_query
+from module_admin.entity.vo.base import CamelModelBase
+from module_admin.entity.vo.remark_vo import RemarkValue, RemarkWriteGuard
 
 
-class ConfigModel(CamelModelBase):
+class ConfigModel(RemarkWriteGuard):
     """
     参数配置表对应pydantic模型
     """
 
     model_config = ConfigDict(alias_generator=to_camel, from_attributes=True, populate_by_name=True)
 
-    config_id: Optional[int] = Field(default=None, description='参数主键')
-    config_name: Optional[str] = Field(default=None, description='参数名称')
-    config_key: Optional[str] = Field(default=None, description='参数键名')
-    config_value: Optional[str] = Field(default=None, description='参数键值')
-    config_type: Optional[Literal['Y', 'N']] = Field(default=None, description='系统内置（Y是 N否）')
-    create_by: Optional[str] = Field(default=None, description='创建者')
-    create_time: Optional[datetime] = Field(default=None, description='创建时间')
-    update_by: Optional[str] = Field(default=None, description='更新者')
-    update_time: Optional[datetime] = Field(default=None, description='更新时间')
-    remark: Optional[str] = Field(default=None, description='备注')
+    config_id: int | None = Field(default=None, description='参数主键')
+    config_name: str | None = Field(default=None, description='参数名称')
+    config_key: str | None = Field(default=None, description='参数键名')
+    config_value: str | None = Field(default=None, description='参数键值')
+    config_type: Literal['Y', 'N'] | None = Field(default=None, description='系统内置（Y是 N否）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
+    remark: RemarkValue = Field(default=None, description='备注')
 
     @NotBlank(field_name='config_key', message='参数名称不能为空')
     @Size(field_name='config_key', min_length=0, max_length=100, message='参数名称长度不能超过100个字符')
@@ -55,17 +58,28 @@ class ConfigModel(CamelModelBase):
             self.get_config_value()
 
 
-class ConfigQueryModel(ConfigModel):
+class ConfigQueryModel(CamelModelBase):
+    config_id: int | None = Field(default=None, description='参数主键')
+    config_name: str | None = Field(default=None, description='参数名称')
+    config_key: str | None = Field(default=None, description='参数键名')
+    config_value: str | None = Field(default=None, description='参数键值')
+    config_type: Literal['Y', 'N'] | None = Field(default=None, description='系统内置（Y是 N否）')
+    create_by: str | None = Field(default=None, description='创建者')
+    create_time: datetime | None = Field(default=None, description='创建时间')
+    update_by: str | None = Field(default=None, description='更新者')
+    update_time: datetime | None = Field(default=None, description='更新时间')
     """
     参数配置管理不分页查询模型
     """
 
-    begin_time: Optional[str] = Field(default=None, description='开始时间')
-    end_time: Optional[str] = Field(default=None, description='结束时间')
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
 
 
 @as_query
 class ConfigPageQueryModel(ConfigQueryModel):
+    begin_time: str | None = Field(default=None, description='开始时间')
+    end_time: str | None = Field(default=None, description='结束时间')
     """
     参数配置管理分页查询模型
     """

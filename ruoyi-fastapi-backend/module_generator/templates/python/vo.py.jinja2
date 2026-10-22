@@ -24,6 +24,11 @@
 {{ vo_import }}
 {% endfor %}
 from pydantic import BaseModel, ConfigDict, Field
+{% if hasRemarks %}
+from pydantic import computed_field
+from module_admin.entity.vo.remark_vo import RemarkValue
+from common.remark_document_v1 import remark_display_text
+{% endif %}
 from pydantic.alias_generators import to_camel
 {% if vo_field_required.has_required or sub_vo_field_required.has_required %}
 from pydantic_validation_decorator import NotBlank
@@ -42,10 +47,10 @@ class {{ BusinessName }}BaseModel(BaseModel):
     {{ functionName }}表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for column in columns %}
-    {{ column.column_name }}: Optional[{{ column.python_type }}] = Field(default=None, description='{{ column.column_comment }}')
+    {{ column.column_name }}: {% if column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ column.python_type }}]{% endif %} = Field(default=None, description='{{ column.column_comment }}')
     {% endfor %}
 
     {% for column in columns %}
@@ -75,10 +80,10 @@ class {{ BusinessName }}Model({% if table.sub %}{{ BusinessName }}BaseModel{% el
     {{ functionName }}表对应pydantic模型
     """
     {% if not table.sub %}
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for column in columns %}
-    {{ column.column_name }}: Optional[{{ column.python_type }}] = Field(default=None, description='{{ column.column_comment }}')
+    {{ column.column_name }}: {% if column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ column.python_type }}]{% endif %} = Field(default=None, description='{{ column.column_comment }}')
     {% endfor %}
     {% endif %}
     {% if table.sub %}
@@ -114,10 +119,10 @@ class {{ subTable.business_name | capitalize }}Model(BaseModel):
     {{ subTable.function_name }}表对应pydantic模型
     """
 
-    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True)
+    model_config = ConfigDict(alias_generator=to_camel, from_attributes=True{% if hasRemarks %}, populate_by_name=True, extra='forbid'{% endif %})
 
     {% for sub_column in subTable.columns %}
-    {{ sub_column.column_name }}: Optional[{{ sub_column.python_type }}] = Field(default=None, description='{{ sub_column.column_comment}}')
+    {{ sub_column.column_name }}: {% if sub_column.html_type == 'remark' %}RemarkValue{% else %}Optional[{{ sub_column.python_type }}]{% endif %} = Field(default=None, description='{{ sub_column.column_comment}}')
     {% endfor %}
 
     {% for sub_column in subTable.columns %}
@@ -142,10 +147,16 @@ class {{ subTable.business_name | capitalize }}Model(BaseModel):
 {% endif %}
 
 
-class {{ BusinessName }}QueryModel({% if table.sub %}{{ BusinessName }}BaseModel{% else %}{{ BusinessName }}Model{% endif %}):
+class {{ BusinessName }}QueryModel(BaseModel):
     """
     {{ functionName }}不分页查询模型
     """
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    {% for column in columns %}
+    {% if column.query and column.html_type != 'remark' %}
+    {{ column.column_name }}: Optional[{{ column.python_type }}] = None
+    {% endif %}
+    {% endfor %}
     {% if vo_field_daterange.has_daterange %}
     {% for column in columns %}
     {% if column.html_type == "datetime" and column.query_type == "BETWEEN" %}
@@ -176,3 +187,32 @@ class Delete{{ BusinessName }}Model(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel)
 
     {{ pk_field }}s: str = Field(description='需要删除的{{ pk_field_comment }}')
+
+{% if hasRemarks %}
+{% if table.sub %}
+class {{ subTable.business_name | capitalize }}ReadModel({{ subTable.business_name | capitalize }}Model):
+    model_config = ConfigDict(extra='ignore')
+    {% for column in subRemarkColumns %}
+    @computed_field(alias='{{ column.python_field }}Text', return_type=str)
+    @property
+    def {{ column.column_name }}_text(self) -> str:
+        return remark_display_text(self.{{ column.column_name }})
+    {% else %}
+    pass
+    {% endfor %}
+{% endif %}
+
+class {{ BusinessName }}ReadModel({{ BusinessName }}Model):
+    model_config = ConfigDict(extra='ignore')
+    {% if table.sub %}
+    {{ subclassName }}_list: Optional[List[{{ subTable.business_name | capitalize }}ReadModel]] = None
+    {% endif %}
+    {% for column in remarkColumns %}
+    @computed_field(alias='{{ column.python_field }}Text', return_type=str)
+    @property
+    def {{ column.column_name }}_text(self) -> str:
+        return remark_display_text(self.{{ column.column_name }})
+    {% else %}
+    pass
+    {% endfor %}
+{% endif %}

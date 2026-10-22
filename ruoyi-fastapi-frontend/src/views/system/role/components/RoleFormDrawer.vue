@@ -26,6 +26,7 @@
       ref="formRef"
       :model="drawer.state.data"
       :rules="formRules"
+      :disabled="drawerLoading || drawer.state.disabled || drawer.state.loading || !!loadError"
       label-position="top"
       class="role-form"
     >
@@ -83,12 +84,12 @@
           :props="{ label: 'label', children: 'children' }"
         />
       </el-form-item>
-      <el-form-item label="备注">
-        <zx-input
+      <el-form-item data-form-full label="备注" prop="remark">
+        <RemarkEditor
+          v-if="drawer.state.visible"
+          ref="remarkRef"
+          :key="remarkSession"
           v-model="drawer.state.data.remark"
-          type="textarea"
-          :rows="3"
-          placeholder="请输入内容"
         />
       </el-form-item>
     </el-form>
@@ -96,7 +97,11 @@
 </template>
 
 <script setup>
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { useRemarkField } from '@/components/ui/Remark/useRemarkField';
+import { readRemark } from '@/components/ui/Remark/contract';
 import { ref, computed, nextTick, shallowRef, watch } from 'vue';
+import { ElMessageBox } from 'element-plus';
 import { useQuery } from '@tanstack/vue-query';
 import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
@@ -115,6 +120,8 @@ const { sys_normal_disable: statusOptions } = useDict('sys_normal_disable');
 const emit = defineEmits(['success']);
 
 const formRef = ref();
+const { remarkRef, remarkRule } = useRemarkField();
+const remarkSession = ref(0);
 const menuRef = ref();
 const menuOptions = ref([]);
 const menuExpand = ref(false);
@@ -129,6 +136,7 @@ const menuEmptyText = computed(() => {
 });
 
 const formRules = {
+  remark: [remarkRule],
   roleName: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
   roleKey: [{ required: true, message: '权限字符不能为空', trigger: 'blur' }],
   roleSort: [{ required: true, message: '角色顺序不能为空', trigger: 'blur' }],
@@ -141,6 +149,7 @@ const drawer = useDrawer({
   preValidate: true,
   autoScrollToError: true,
   autoResetForm: true,
+  onBeforeClose: canDiscard,
   defaultData: () => ({
     roleId: undefined,
     roleName: '',
@@ -149,7 +158,7 @@ const drawer = useDrawer({
     status: '0',
     menuIds: [],
     menuCheckStrictly: true,
-    remark: '',
+    remark: null,
   }),
   async onConfirm() {
     const scope = editorScope.value;
@@ -238,7 +247,57 @@ function resetMenuTree() {
 }
 
 /** 打开抽屉 */
-function openDrawer(roleId) {
+let openingIntent = 0;
+let approvedClose = false;
+let discardPending;
+let menuBaseline = '';
+const currentMenus = () => JSON.stringify([...getMenuAllCheckedKeys()].sort((a, b) => a - b));
+function canDiscard() {
+  if (approvedClose || !drawer.state.visible) return Promise.resolve(true);
+  if (drawer.state.loading) return Promise.resolve(false);
+  if (drawerLoading.value || loadError.value) return Promise.resolve(true);
+  if (
+    !drawer.isDirty.value &&
+    (drawerLoading.value || currentMenus() === menuBaseline) &&
+    remarkRef.value?.validate?.() !== false
+  )
+    return Promise.resolve(true);
+  if (discardPending) return discardPending;
+  const data = drawer.state.data;
+  const scope = editorScope.value;
+  const decision = ElMessageBox.confirm('角色信息尚未保存，是否放弃本次修改？', '未保存的修改', {
+    confirmButtonText: '放弃修改',
+    cancelButtonText: '继续编辑',
+    type: 'warning',
+  })
+    .then(
+      () =>
+        drawer.state.visible &&
+        drawer.state.data === data &&
+        scope === queryScope.value &&
+        !drawer.state.loading
+    )
+    .catch(() => false)
+    .finally(() => {
+      if (discardPending === decision) discardPending = undefined;
+    });
+  discardPending = decision;
+  return decision;
+}
+async function openDrawer(roleId) {
+  const intent = ++openingIntent;
+  if (drawer.state.visible && drawer.state.loading) return;
+  if (
+    drawer.state.visible &&
+    !drawerLoading.value &&
+    !loadError.value &&
+    (drawer.isDirty.value ||
+      currentMenus() !== menuBaseline ||
+      remarkRef.value?.validate?.() === false) &&
+    !(await canDiscard())
+  )
+    return;
+  if (intent !== openingIntent) return;
   const scope = requireQueryScope();
   editorScope.value = scope;
   requestedId.value = roleId;
@@ -249,12 +308,13 @@ function openDrawer(roleId) {
     menuOptions.value = [];
     let response;
     try {
+      remarkSession.value++;
       response = await readRoleEditor(scope, roleId, read.signal);
     } catch (error) {
       if (!read.isCurrent()) return;
       throw error;
     }
-    if (!read.isCurrent() || scope !== queryScope.value) return;
+    if (!read.isCurrent() || intent !== openingIntent || scope !== queryScope.value) return;
     const { data: roleData, menus: menuRes } = response;
     if (roleId) {
       menuOptions.value = menuRes.menus || [];
@@ -265,7 +325,7 @@ function openDrawer(roleId) {
         roleSort: Number(roleData.roleSort),
         status: roleData.status,
         menuCheckStrictly: roleData.menuCheckStrictly,
-        remark: roleData.remark,
+        remark: readRemark(roleData.remark),
       });
       drawer.setDisabled(true);
       await nextTick();
@@ -275,12 +335,20 @@ function openDrawer(roleId) {
     } else {
       menuOptions.value = menuRes.menus;
     }
+    menuBaseline = currentMenus();
     drawer.setDisabled(false);
   });
 }
-function closeDrawer() {
+async function closeDrawer() {
+  if (!(await canDiscard())) return;
+  ++openingIntent;
   cancelRead();
-  return drawer.close();
+  approvedClose = true;
+  try {
+    await drawer.close();
+  } finally {
+    approvedClose = false;
+  }
 }
 function handleRetry() {
   return openDrawer(requestedId.value).catch(() => {
@@ -294,6 +362,12 @@ function retryResources() {
 }
 
 defineExpose({ open: openDrawer, close: closeDrawer });
+watch(
+  () => drawer.state.visible,
+  (visible) => {
+    if (visible) remarkSession.value++;
+  }
+);
 </script>
 
 <style scoped lang="less">

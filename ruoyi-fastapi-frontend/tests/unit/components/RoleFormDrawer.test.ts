@@ -3,8 +3,10 @@ import { mount } from '@vue/test-utils';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { queryClient } from '@/queries/client';
 import { endQuerySession, setQuerySession } from '@/queries/context';
-import { nextTick } from 'vue';
-import { ElTree } from 'element-plus';
+import { mockRemark } from '@/mocks/data/remark';
+import RemarkEditor from '@/components/ui/Remark/RemarkEditor.vue';
+import { defineComponent, h, nextTick } from 'vue';
+import { ElTree, ElMessageBox } from 'element-plus';
 import RoleFormDrawer from '@/views/system/role/components/RoleFormDrawer.vue';
 import { getRole } from '@/api/system/role';
 import { roleMenuTreeselect, treeselect } from '@/api/system/menu';
@@ -33,11 +35,21 @@ function mountDrawer() {
       components: { ElTree },
       stubs: {
         DictStatus: true,
-        ZxDrawer: {
-          ...slotStub,
+        ZxDrawer: defineComponent({
           name: 'ZxDrawer',
-          props: ['loading', 'okDisabled'],
-        },
+          inheritAttrs: false,
+          props: ['modelValue', 'formModel', 'loading', 'okDisabled'],
+          emits: ['update:modelValue', 'close'],
+          setup(_, { emit, expose, slots }) {
+            expose({
+              close: () => {
+                emit('update:modelValue', false);
+                emit('close');
+              },
+            });
+            return () => h('div', slots.default?.());
+          },
+        }),
         ElAlert: slotStub,
         ElButton: slotStub,
         ElForm: slotStub,
@@ -147,6 +159,7 @@ describe('RoleFormDrawer menu loading', () => {
 
   it('preserves the role-specific menu response when editing a role', async () => {
     vi.mocked(getRole).mockResolvedValue({
+      remarkText: '',
       roleId: 2,
       roleName: '测试角色',
       roleKey: 'test',
@@ -169,4 +182,49 @@ describe('RoleFormDrawer menu loading', () => {
     expect(drawer().props('loading')).toBe(false);
     expect(treeselect).not.toHaveBeenCalled();
   });
+});
+
+it('keeps a format-only role remark when close or another record is declined', async () => {
+  const confirm = vi.spyOn(ElMessageBox, 'confirm').mockRejectedValue(new Error('继续编辑'));
+  try {
+    const original = mockRemark('same text', 'roleguard')!;
+    vi.mocked(getRole).mockResolvedValue({
+      roleId: 2,
+      roleName: 'Role',
+      roleKey: 'role',
+      roleSort: 1,
+      status: '0',
+      remark: original,
+      remarkText: 'same text',
+    });
+    vi.mocked(roleMenuTreeselect).mockResolvedValue({
+      menus: [],
+      checkedKeys: [],
+    });
+    const wrapper = mountDrawer();
+    wrappers.push(wrapper);
+    const api = wrapper.vm as unknown as {
+      open: (id?: number) => Promise<void>;
+      close: () => Promise<void>;
+    };
+    await api.open(2);
+    const formatted = structuredClone(original);
+    const text = formatted.body.content.content[0].content![0];
+    if (text.type !== 'text') throw new Error('Expected text fixture');
+    text.marks = [{ type: 'italic' }];
+    wrapper.findComponent(RemarkEditor).vm.$emit('update:modelValue', formatted);
+    await nextTick();
+    await api.close();
+    expect(wrapper.findComponent(RemarkEditor).props('modelValue')).toEqual(formatted);
+    await api.open(3);
+    expect(vi.mocked(getRole)).toHaveBeenCalledTimes(1);
+    expect(confirm).toHaveBeenCalledTimes(2);
+    confirm.mockResolvedValue(
+      Object.assign('confirm' as const, { value: '', action: 'confirm' as const })
+    );
+    await api.close();
+    expect(wrapper.findComponent(RemarkEditor).exists()).toBe(false);
+  } finally {
+    confirm.mockRestore();
+  }
 });

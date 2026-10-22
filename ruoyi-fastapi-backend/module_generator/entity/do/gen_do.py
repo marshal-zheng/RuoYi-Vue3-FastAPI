@@ -1,6 +1,8 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+
+from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
+
 from config.database import Base
 
 
@@ -33,7 +35,7 @@ class GenTableDO(Base):
     create_time = Column(DateTime, nullable=True, default=datetime.now(), comment='创建时间')
     update_by = Column(String(64), default='', comment='更新者')
     update_time = Column(DateTime, nullable=True, default=datetime.now(), comment='更新时间')
-    remark = Column(String(500), nullable=True, default=None, comment='备注')
+    remark = Column(JSON(none_as_null=True), nullable=True, default=None, comment='备注文档')
 
     columns = relationship('GenTableColumnDO', order_by='GenTableColumnDO.sort', back_populates='tables')
 

@@ -1,3 +1,4 @@
+import { mockRemark } from '../data/remark';
 import { http, HttpResponse } from 'msw';
 
 import { createApiPath } from '../constants';
@@ -30,7 +31,8 @@ function accountToUser(account: MockAccount) {
     createTime: MOCK_REFERENCE_DATETIME,
     updateBy: null,
     updateTime: null,
-    remark: account.username === 'admin' ? '管理员' : '编辑员',
+    remark: mockRemark(account.username === 'admin' ? '管理员' : '编辑员', `user${account.userId}`),
+    remarkText: account.username === 'admin' ? '管理员' : '编辑员',
   } satisfies NonNullable<MockCurrentUserResponse['user']>;
 }
 

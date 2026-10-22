@@ -1,0 +1,83 @@
+{
+  "at": "2026-10-22T10:34:12.957639+00:00",
+  "policy": "No implementation writes or delivery into source checkouts; observed concurrent source differences require reconciliation before any future delivery. Task snapshots stay fixed.",
+  "roots": [
+    {
+      "source": "/Users/hqz/dev/RuoYi-Vue3-FastAPI",
+      "checkedPaths": 336,
+      "observedDifferences": [
+        {
+          "path": "ruoyi-fastapi-frontend/package.json",
+          "before": "42f3027aaaad1529cfbae4bd4cdbcaf5407564b75220e58530d51856e074d31e",
+          "observed": "02310a7ca05868f5fe1bac91f54c7a08f2198b1354d9a0d3c91d7c4dbfdf278e"
+        },
+        {
+          "path": "ruoyi-fastapi-frontend/src/icons/navigation.ts",
+          "before": "d4b9f2a4c16cecab2b10ce66f57aa18109e2d3d650ba3257ef14da7e05dac304",
+          "observed": "1f72ddbf986deebd3cc7e5856d87e9cca8c539230bab8a226e82c1fbc9e0cafc"
+        },
+        {
+          "path": "ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-icons-demand.20261022.tgz",
+          "before": "dbd6f545dd479ffa7d686fec9518edb365fd9f8e6b7398cf05aab7b837afd5e5",
+          "observed": null
+        },
+        {
+          "path": "ruoyi-fastapi-frontend/yarn.lock",
+          "before": "8d08cdb58d4922a16bbcaabfbd704b334d9cdfaf189f71f6b662918905438bfa",
+          "observed": "6a2b9459456378415aebf82c9ad97e28eba19475a675976be5b13d58fb39d826"
+        }
+      ]
+    },
+    {
+      "source": "/Users/hqz/Downloads/element-plus",
+      "checkedPaths": 110,
+      "observedDifferences": [
+        {
+          "path": "packages/components/capabilities/__tests__/capabilities.test.tsx",
+          "before": "33d797c96d4810bfa55abcde62666fbae219ecf12c56565b775bb664d91fa6ab",
+          "observed": "0ce8486921eb4912bbb91f9e2e625fb64f3666f90896116545977470549bdc98"
+        },
+        {
+          "path": "packages/components/search/__tests__/zx-search.test.tsx",
+          "before": "006db67557c9c48a2e54b75cf8c69da418937b85e6b4ad421e19c01a1c461a3a",
+          "observed": "dca98cd9f256dfc24d5312595702b39ba19e04d1ba7a36eadba3c09b349ea915"
+        },
+        {
+          "path": "packages/components/search/src/search.vue",
+          "before": "1d9131f025d1f9bf225d36e17afa24c4928a5df26d0ed3c3cbea484a2c063c34",
+          "observed": "5dcebffa796547441aa7901e9955d03d2d8e149a488201137f08cf4a3e564bb2"
+        },
+        {
+          "path": "packages/theme-compiler/__tests__/element-plus-adapter.test.ts",
+          "before": "d3f8e9484ee5e02e1cd93d5d52d29bbd09862b46edbc90d0ac9a18c8a52bca3b",
+          "observed": "c624033249aba26b41e51d6b0f52df0afa88d454decea61c37a07b2c08daef62"
+        },
+        {
+          "path": "packages/theme-compiler/__tests__/source-vite.test.ts",
+          "before": "5fef6a73a0c24d3a3e0c8e1a89c58a53b387831808dd32e9373b920f4452488e",
+          "observed": "969e12068f816a195e69a9a2ce53fb88b7d11eaeabc86ed7ca46e6ac6fe6783c"
+        },
+        {
+          "path": "packages/theme-compiler/src/adapters/element-plus/mapping.ts",
+          "before": "a4c630de0fff2596b191a28ca8f5a532380a76380f1d3e2b85b576aef28280d9",
+          "observed": "161d478209d92f527ffafeac93384b401c23d675a03593e8cb45d4c0aadc230e"
+        },
+        {
+          "path": "packages/theme-compiler/src/vite/source.ts",
+          "before": "6ae68b20991281ef03a56c40618672c39966589bf41d2f53346485af02bbe7cb",
+          "observed": "3bfe300a6e1a8068ba199081a349ebd23cf79fcb6a6ac8297505b9b7c92b0c1c"
+        },
+        {
+          "path": "scripts/theme-consumer/structural-policy.test.ts",
+          "before": "506895d584b4b6bbdf1f316f9f339bfef5c6a818ccade80ed9631f9af12518a1",
+          "observed": "7e8355b1467252fbd29c3aa74b7085704ab3d084b021386d677874bfa4bb3534"
+        },
+        {
+          "path": "scripts/theme-consumer/structural-policy.ts",
+          "before": "3b1c555f5bb43c63c8efbd4a24eca481514b19e638b3184f0b414a20b6fced0d",
+          "observed": "e6adc02cd5e34dd46274bc18354d6a8fa8a5797918ec815df0ae95d8cad045ea"
+        }
+      ]
+    }
+  ]
+}

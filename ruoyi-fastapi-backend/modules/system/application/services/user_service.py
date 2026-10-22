@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from xlrd.biffh import XLRDError
 from xlrd.compdoc import CompDocError
 
+from common.remark_document_v1 import remark_display_text
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode
 from exceptions.exception import (
@@ -777,7 +778,11 @@ class UserService:
                 item['sex'] = '女'
             else:
                 item['sex'] = '未知'
-        binary_data = ExcelUtil.export_list2excel(user_list, mapping_dict)
+        binary_data = ExcelUtil.export_list2excel(
+            [{**item, 'remark': remark_display_text(item.get('remark'))} for item in user_list],
+            mapping_dict,
+            text_columns={'remark'},
+        )
         return binary_data
 
     async def get_user_role_allocated_list_services(self, query_db: AsyncSession, page_object: UserRoleQueryModel):

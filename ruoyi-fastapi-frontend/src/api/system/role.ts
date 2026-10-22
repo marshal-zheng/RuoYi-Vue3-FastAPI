@@ -1,6 +1,6 @@
 import { requestDetail } from '@/api/detail';
 import type { QueryRequestContext, RequestOptions } from '@zxio/http';
-export type RoleRecord = Omit<RoleModel, 'roleId'> & { roleId: number };
+export type RoleRecord = Omit<RoleDetailReadModel, 'roleId'> & { roleId: number };
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type {
   RoleCreateModel,
@@ -12,7 +12,7 @@ import type {
   RoleUsersGrantModel,
   GetSystemAllocatedUserListSystemRoleAuthUserAllocatedListGetData,
   GetSystemUnallocatedUserListSystemRoleAuthUserUnallocatedListGetData,
-  RoleModel,
+  RoleDetailReadModel,
   RolePageQueryModel,
   UserInfoModel,
 } from '@/api/_generated/types.gen';

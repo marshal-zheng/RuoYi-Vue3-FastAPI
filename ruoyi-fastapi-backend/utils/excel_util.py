@@ -1,10 +1,10 @@
 import io
+
 import pandas as pd
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Alignment, PatternFill
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.datavalidation import DataValidation
-from typing import Dict, List
 
 
 class ExcelUtil:
@@ -13,7 +13,7 @@ class ExcelUtil:
     """
 
     @classmethod
-    def __mapping_list(cls, list_data: List, mapping_dict: Dict):
+    def __mapping_list(cls, list_data: list, mapping_dict: dict):
         """
         工具方法：将list数据中的字段名映射为对应的中文字段名
 
@@ -26,7 +26,7 @@ class ExcelUtil:
         return mapping_data
 
     @classmethod
-    def export_list2excel(cls, list_data: List, mapping_dict: Dict):
+    def export_list2excel(cls, list_data: list, mapping_dict: dict, *, text_columns=()):
         """
         工具方法：将需要导出的list数据转化为对应excel的二进制数据
 
@@ -38,12 +38,25 @@ class ExcelUtil:
         df = pd.DataFrame(mapping_data)
         binary_data = io.BytesIO()
         df.to_excel(binary_data, index=False, engine='openpyxl')
-        binary_data = binary_data.getvalue()
-
-        return binary_data
+        if text_columns:
+            binary_data.seek(0)
+            workbook = load_workbook(binary_data)
+            sheet = workbook.active
+            keys = list(mapping_dict)
+            for key in text_columns:
+                if key not in mapping_dict:
+                    raise ValueError(f'Unknown explicit Excel text column: {key}')
+                col = keys.index(key) + 1
+                for row_index, item in enumerate(list_data, 2):
+                    cell = sheet.cell(row=row_index, column=col)
+                    cell.value = item.get(key)
+                    cell.data_type = 's'
+            binary_data = io.BytesIO()
+            workbook.save(binary_data)
+        return binary_data.getvalue()
 
     @classmethod
-    def get_excel_template(cls, header_list: List, selector_header_list: List, option_list: List[Dict]):
+    def get_excel_template(cls, header_list: list, selector_header_list: list, option_list: list[dict]):
         """
         工具方法：将需要导出的list数据转化为对应excel的二进制数据
 

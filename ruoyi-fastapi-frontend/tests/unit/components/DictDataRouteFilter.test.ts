@@ -52,7 +52,7 @@ afterEach(() => {
 it('includes the route dictionary filter in the first list request when type metadata is already cached', async () => {
   const scope = setQuerySession(1, ['admin'], ['*:*:*']);
   queryClient.setQueryData(dictTypeDetailOptions(scope, 1).queryKey, {
-    dictId: 1,
+    remarkText: '', dictId: 1,
     dictType: 'sys_user_sex',
     dictName: '用户性别',
   });

@@ -260,6 +260,8 @@ def test_execute_dev_sync_applies_managed_data_and_tracks_metadata(monkeypatch, 
 
     try:
         first_report = dev_sync_service.execute_dev_sync(
+            remark_prepare_runner=lambda **_kwargs: None,
+            remark_verify_runner=lambda: None,
             project_root=tmp_path,
             workflow_status=_status(),
             invoked_by_startup=False,
@@ -267,6 +269,8 @@ def test_execute_dev_sync_applies_managed_data_and_tracks_metadata(monkeypatch, 
             session_factory=session_factory,
         )
         second_report = dev_sync_service.execute_dev_sync(
+            remark_prepare_runner=lambda **_kwargs: None,
+            remark_verify_runner=lambda: None,
             project_root=tmp_path,
             workflow_status=_status(),
             invoked_by_startup=False,
@@ -315,6 +319,8 @@ def test_execute_dev_sync_noop_path_stays_clean_and_fast(monkeypatch, tmp_path: 
 
     try:
         first_report = dev_sync_service.execute_dev_sync(
+            remark_prepare_runner=lambda **_kwargs: None,
+            remark_verify_runner=lambda: None,
             project_root=tmp_path,
             workflow_status=_status(),
             invoked_by_startup=False,
@@ -322,6 +328,8 @@ def test_execute_dev_sync_noop_path_stays_clean_and_fast(monkeypatch, tmp_path: 
             session_factory=session_factory,
         )
         second_report = dev_sync_service.execute_dev_sync(
+            remark_prepare_runner=lambda **_kwargs: None,
+            remark_verify_runner=lambda: None,
             project_root=tmp_path,
             workflow_status=_status(),
             invoked_by_startup=False,
@@ -350,6 +358,8 @@ def test_execute_dev_sync_returns_failed_report_when_declaration_is_invalid(monk
     )
 
     report = dev_sync_service.execute_dev_sync(
+        remark_prepare_runner=lambda **_kwargs: None,
+        remark_verify_runner=lambda: None,
         project_root=tmp_path,
         workflow_status=_status(),
         invoked_by_startup=False,
@@ -383,6 +393,8 @@ def test_execute_dev_sync_fails_when_postcondition_verify_detects_residual_objec
 
     try:
         report = dev_sync_service.execute_dev_sync(
+            remark_prepare_runner=lambda **_kwargs: None,
+            remark_verify_runner=lambda: None,
             project_root=tmp_path,
             workflow_status=_status(),
             invoked_by_startup=False,
@@ -415,6 +427,8 @@ def test_execute_dev_sync_returns_failed_report_when_schema_sync_fails(monkeypat
         raise RuntimeError('atlas failed')
 
     report = dev_sync_service.execute_dev_sync(
+        remark_prepare_runner=lambda **_kwargs: None,
+        remark_verify_runner=lambda: None,
         project_root=tmp_path,
         workflow_status=_status(),
         invoked_by_startup=True,
@@ -428,3 +442,29 @@ def test_execute_dev_sync_returns_failed_report_when_schema_sync_fails(monkeypat
     assert report.schema_sync.status == 'failed'
     assert report.schema_sync.error == 'atlas failed'
     assert report.managed_data.status == 'skipped'
+
+
+def test_remark_preflight_stops_before_schema_loader_and_managed_writes(monkeypatch, tmp_path):
+    monkeypatch.setattr(dev_sync_service, '_load_declaration_bundle', lambda: _bundle(tmp_path))
+    calls = []
+
+    def reject(**_kwargs):
+        calls.append('remark-preflight')
+        raise ValueError('remark-migration: stop old application/import/managed-data writers')
+
+    def schema_loader(_engine):
+        calls.append('schema-loader')
+        raise AssertionError('schema must not run after rejected migration preflight')
+
+    report = dev_sync_service.execute_dev_sync(
+        project_root=tmp_path,
+        workflow_status=_status(),
+        invoked_by_startup=True,
+        schema_apply_runner_loader=schema_loader,
+        session_factory=None,
+        remark_prepare_runner=reject,
+    )
+    assert calls == ['remark-preflight']
+    assert report.failed_step == 'remark-preflight'
+    assert report.managed_data.status == 'skipped'
+    assert report.managed_data_applied_operations == 0

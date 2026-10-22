@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from common.remark_document_v1 import plain_to_remark
 from config.constant import CommonConstant
 from config.enums import RedisInitKeyConfig
 from exceptions.exception import ResourceNotFoundException
@@ -161,16 +162,21 @@ class TestDictTypeService:
     async def test_export_dict_type_list_maps_status(self, monkeypatch):
         captured = {}
 
-        def fake_export(rows, mapping):
+        def fake_export(rows, mapping, *, text_columns):
             captured['rows'] = rows
             captured['mapping'] = mapping
+            captured['text_columns'] = text_columns
             return b'dict-type-bytes'
 
         monkeypatch.setattr('modules.system.application.services.ExcelUtil.export_list2excel', fake_export)
         service, _dict_type_repo, _dict_data_repo, _dict_data_service = build_dict_type_service()
         rows = [
-            {'dictType': 'sys_user_status', 'status': '0'},
-            {'dictType': 'sys_user_sex', 'status': '1'},
+            {
+                'dictType': 'sys_user_status',
+                'status': '0',
+                'remark': plain_to_remark('type note', identity_key='sys_dict_type:1:remark'),
+            },
+            {'dictType': 'sys_user_sex', 'status': '1', 'remark': None},
         ]
 
         data = await service.export_dict_type_list_services(rows)
@@ -179,6 +185,9 @@ class TestDictTypeService:
         assert captured['rows'][0]['status'] == '正常'
         assert captured['rows'][1]['status'] == '停用'
         assert 'dictType' in captured['mapping']
+        assert captured['rows'][0]['remark'] == 'type note'
+        assert captured['rows'][1]['remark'] == ''
+        assert captured['text_columns'] == {'remark'}
 
 
 class TestDictDataService:
@@ -259,7 +268,9 @@ class TestDictDataService:
 
     @pytest.mark.asyncio
     async def test_query_dict_data_list_from_cache_hit(self, monkeypatch):
-        payload = json.dumps([{'dictLabel': '正常', 'dictValue': '0'}], ensure_ascii=False)
+        payload = json.dumps(
+            [{'dictLabel': '正常', 'dictValue': '0', 'remark': None, 'remarkText': ''}], ensure_ascii=False
+        )
         redis = FakeRedis(payload)
         service, _dict_type_repo, _dict_data_repo = build_dict_data_service()
         loader = AsyncMock()
@@ -267,7 +278,10 @@ class TestDictDataService:
 
         result = await service.query_dict_data_list_from_cache_services(redis, 'sys_user_status')
 
-        assert result == [{'dictLabel': '正常', 'dictValue': '0'}]
+        assert result[0]['dictLabel'] == '正常'
+        assert result[0]['dictValue'] == '0'
+        assert result[0]['remark'] is None
+        assert result[0]['remarkText'] == ''
         loader.assert_not_called()
 
     @pytest.mark.asyncio
@@ -286,16 +300,22 @@ class TestDictDataService:
     async def test_export_dict_data_list_maps_status_and_is_default(self, monkeypatch):
         captured = {}
 
-        def fake_export(rows, mapping):
+        def fake_export(rows, mapping, *, text_columns):
             captured['rows'] = rows
             captured['mapping'] = mapping
+            captured['text_columns'] = text_columns
             return b'dict-data-bytes'
 
         monkeypatch.setattr('modules.system.application.services.ExcelUtil.export_list2excel', fake_export)
         service, _dict_type_repo, _dict_data_repo = build_dict_data_service()
         rows = [
-            {'dictType': 'sys_user_status', 'status': '0', 'isDefault': 'Y'},
-            {'dictType': 'sys_user_status', 'status': '1', 'isDefault': 'N'},
+            {
+                'dictType': 'sys_user_status',
+                'status': '0',
+                'isDefault': 'Y',
+                'remark': plain_to_remark('data note', identity_key='sys_dict_data:1:remark'),
+            },
+            {'dictType': 'sys_user_status', 'status': '1', 'isDefault': 'N', 'remark': None},
         ]
 
         data = await service.export_dict_data_list_services(rows)
@@ -306,3 +326,6 @@ class TestDictDataService:
         assert captured['rows'][0]['isDefault'] == '是'
         assert captured['rows'][1]['isDefault'] == '否'
         assert 'isDefault' in captured['mapping']
+        assert captured['rows'][0]['remark'] == 'data note'
+        assert captured['rows'][1]['remark'] == ''
+        assert captured['text_columns'] == {'remark'}

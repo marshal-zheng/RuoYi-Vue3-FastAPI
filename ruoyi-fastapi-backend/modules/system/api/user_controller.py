@@ -23,9 +23,7 @@ from module_admin.entity.vo.user_vo import (
     EditUserModel,
     ResetPasswordModel,
     ResetUserModel,
-    UserDetailModel,
     UserPageQueryModel,
-    UserProfileModel,
     UserRoleResponseModel,
 )
 from module_admin.entity.vo.user_write_vo import (
@@ -52,11 +50,15 @@ from modules.system.application.queries import (
     GetUserListQuery,
     GetUserProfileQuery,
 )
+from modules.system.application.read_models.user_read_models import (
+    UserDetailReadModel,
+    UserPageReadModel,
+    UserProfileReadModel,
+)
 from modules.system.application.services.user_service import UserService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import ok_page_result, require_int_value
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.pwd_util import PwdUtil
 from utils.response_util import ResponseUtil
 from utils.upload_util import UploadUtil
@@ -119,7 +121,7 @@ async def get_system_dept_tree(
 
 
 @userController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:user:list'))]
+    '/list', response_model=UserPageReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:user:list'))]
 )
 async def get_system_user_list(
     request: Request,
@@ -337,7 +339,7 @@ async def change_system_user_status(
     return ResponseUtil.ok_resource(resource)
 
 
-@userController.get('/profile', response_model=UserProfileModel)
+@userController.get('/profile', response_model=UserProfileReadModel)
 async def query_detail_system_user_profile(
     request: Request,
     query_db: AsyncSession = Depends(get_db),
@@ -356,10 +358,12 @@ async def query_detail_system_user_profile(
 
 
 @userController.get(
-    '/{user_id}', response_model=UserDetailModel, dependencies=[Depends(CheckUserInterfaceAuth('system:user:query'))]
+    '/{user_id}',
+    response_model=UserDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:user:query'))],
 )
 @userController.get(
-    '/', response_model=UserDetailModel, dependencies=[Depends(CheckUserInterfaceAuth('system:user:query'))]
+    '/', response_model=UserDetailReadModel, dependencies=[Depends(CheckUserInterfaceAuth('system:user:query'))]
 )
 async def query_detail_system_user(
     request: Request,

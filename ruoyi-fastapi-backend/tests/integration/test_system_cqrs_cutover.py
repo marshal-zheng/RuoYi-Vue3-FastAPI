@@ -6,6 +6,7 @@ import uuid
 
 import pytest
 
+from common.remark_document_v1 import plain_to_remark
 from module_admin.entity.vo.user_vo import CurrentUserModel, UserInfoModel
 from modules.identity.application.services.login_service import LoginService
 from modules.system.application.behaviors.command_behaviors import CommandEventCollectionBehavior
@@ -35,7 +36,7 @@ def _new_config_payload() -> dict[str, str]:
         'configKey': f'cqrs.cutover.{suffix}',
         'configValue': f'value-{suffix}',
         'configType': 'N',
-        'remark': 'cqrs cutover integration test',
+        'remark': plain_to_remark('cqrs cutover integration test', identity_key='config:fixture:remark'),
     }
 
 
@@ -72,9 +73,16 @@ def test_system_read_endpoints_return_success_contract(authorized_test_client, p
     request_id = response.headers.get('X-Request-Id') or response.headers.get('request-id')
     assert request_id
     assert response.headers.get_list('X-Request-Id') == [request_id]
-    assert payload == ({'items': []} if response_shape == 'collection' else {
-        'items': [], 'total': 0, 'page': 1, 'pageSize': 10,
-    })
+    assert payload == (
+        {'items': []}
+        if response_shape == 'collection'
+        else {
+            'items': [],
+            'total': 0,
+            'page': 1,
+            'pageSize': 10,
+        }
+    )
 
 
 def test_query_pipeline_emits_observation(authorized_test_client, monkeypatch):
@@ -120,10 +128,10 @@ def test_config_command_and_query_roundtrip_contract(authorized_test_client):
     create_payload = create_response.json()
     assert create_payload['configKey'] == payload['configKey']
     assert create_payload['configValue'] == payload['configValue']
-    assert create_response.headers['Location'].endswith(f"/system/config/{create_payload['configId']}")
+    assert create_response.headers['Location'].endswith(f'/system/config/{create_payload["configId"]}')
     assert create_response.headers['X-Request-Id']
 
-    query_response = authorized_test_client.get(f"/system/config/configKey/{payload['configKey']}")
+    query_response = authorized_test_client.get(f'/system/config/configKey/{payload["configKey"]}')
     assert query_response.status_code == 200
     query_payload = query_response.json()
     assert query_payload == {'configKey': payload['configKey'], 'configValue': payload['configValue']}

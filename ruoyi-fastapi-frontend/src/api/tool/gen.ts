@@ -1,22 +1,22 @@
 import { requestDetail } from '@/api/detail';
 export interface GenTableDetail {
-  info: GenTableModel;
+  info: GenTableReadModel;
   columns: GenTableColumnModel[];
-  tables: GenTableModel[];
+  tables: GenTableReadModel[];
 }
 import type { HttpOffsetPage } from '@/types/http-contract';
 import type {
   EditGenTableModel,
   GenTableColumnModel,
-  GenTableModel,
+  GenTableReadModel,
   GetGenDbTableListToolGenDbListGetData,
   GetGenTableListToolGenListGetData,
 } from '@/api/_generated/types.gen';
-import request from '@/utils/request';
+import request, { type ExtendedAxiosRequestConfig } from '@/utils/request';
 
 // 查询生成表数据
 export function listTable(query?: NonNullable<GetGenTableListToolGenListGetData['query']>) {
-  return request<HttpOffsetPage<GenTableModel>>({
+  return request<HttpOffsetPage<GenTableReadModel>>({
     url: '/tool/gen/list',
     method: 'get',
     params: query,
@@ -25,7 +25,7 @@ export function listTable(query?: NonNullable<GetGenTableListToolGenListGetData[
 
 // 查询db数据库列表
 export function listDbTable(query?: NonNullable<GetGenDbTableListToolGenDbListGetData['query']>) {
-  return request<HttpOffsetPage<GenTableModel>>({
+  return request<HttpOffsetPage<GenTableReadModel>>({
     url: '/tool/gen/db/list',
     method: 'get',
     params: query,
@@ -33,9 +33,13 @@ export function listDbTable(query?: NonNullable<GetGenDbTableListToolGenDbListGe
 }
 
 // 查询表详细信息
-export function getGenTable(tableId: number | string) {
+export function getGenTable(
+  tableId: number | string,
+  config?: Pick<ExtendedAxiosRequestConfig, 'signal' | 'silentError'>
+) {
   return requestDetail<GenTableDetail>(
     {
+      ...config,
       url: '/tool/gen/' + tableId,
       method: 'get',
     },

@@ -24,7 +24,7 @@
 
 ## 任务清单
 
-- [ ] 1. 复核七字段消费者与实施基线
+- [x] 1. 复核七字段消费者与实施基线
   - 依赖：无。
   - 读取当前 AGENTS、适用前后端约定、已确认规格和两仓状态；保存已有改动基线，按实施技能选择安全写入位置，不覆盖同期工作，不默认创建到 `.codex`。
   - 沿七字段逐项列出编辑入口、写入 DTO/内部模型、DO、读取/嵌套响应、列表、Excel、缓存、种子、脚本和生成模板；记录真实调用和无需改动项的依据。
@@ -33,7 +33,7 @@
   - 验证：七行主清单均有读写和数据源去向；范围外共享消费者列明回归点，现有失败与本轮问题可区分。
   - _需求追溯: R1.AC1, R1.AC2, R1.AC4, R7.AC5, R11.AC4, R11.AC5_
 
-- [ ] 2. 固定跨语言契约样例与边界期望
+- [x] 2. 固定跨语言契约样例与边界期望
   - 依赖：任务 1。
   - 新增 `shared/remarks/remark-a-v1/{valid,invalid,plaintext}/` 及 manifest，固定 Document v2 封套、meta、节点/标记精确属性、块 ID 与规范输出；不另建编辑器内核。
   - 覆盖 A 全部格式、hardBreak 标记、嵌套/编号列表、同标记文本合并、单空段落归 null、多空段落/空白保留、Unicode 与 CRLF/CR 归一化、HTML/JSON/公式外观字面量。
@@ -43,7 +43,7 @@
   - 验证：样例 JSON 可解析且版本明确，合法样例通过当前 ZXUI 公开 `/core`；未实现的 A 策略检查标为待实现，后续两端消费同一组向量。
   - _需求追溯: R2.AC6, R5.AC1, R5.AC2, R5.AC3, R5.AC4, R6.AC1, R6.AC2, R6.AC3, R6.AC4, R6.AC6, R9.AC2, R11.AC1_
 
-- [ ] 3. 在 ZXUI 实现基础富文本配置与一致的内容接纳
+- [x] 3. 在 ZXUI 实现基础富文本配置与一致的内容接纳
   - 依赖：任务 2。
   - 修改 `ZXUI/packages/text-editor/src/{props.ts,editor/runtime-extensions.ts,core/}` 及所属命令、粘贴、工具栏入口；新增公开 `contentProfile`、`BASIC_RICH_TEXT_PROFILE`、`contentLimits`，更新公开类型与文档。
   - 保持统一 schema 和现有 full 模式消费者；basic-rich-text 只装配 A 的交互，不启动上传、提及、协作、页式布局、AI、斜杠菜单或二进制导出服务。
@@ -53,7 +53,7 @@
   - 验证：针对各内容入口、粘贴、预算和 ID 修复补必要回归；执行共享向量，证明 A 之外无法绕过，full 模式的真实消费者不受影响。
   - _需求追溯: R1.AC4, R2.AC1, R2.AC2, R2.AC3, R2.AC4, R2.AC6, R3.AC1, R3.AC3, R3.AC5, R6.AC6, R11.AC1_
 
-- [ ] 4. 在 ZXUI 实现标准编辑字段并完成 Formily 接入探针
+- [x] 4. 在 ZXUI 实现标准编辑字段并完成 Formily 接入探针
   - 依赖：任务 3。
   - 在 text-editor 新增并公开 `ZxTextEditorField`：标准 modelValue、focus/blur、disabled/readonly、messages、id/aria、edit-state 及 focus/validate/captureEdit/restoreEdit，转接既有 documentValue。
   - null 展示合法空段落但挂载不 emit；外部回填不制造 ID/元数据变化和 dirty；清空输出 null、撤销恢复；记录会话重建清除撤销栈。
@@ -62,7 +62,7 @@
   - 验证：null/文档回填不 dirty，格式编辑会 dirty；隐藏恢复、切换记录、只读/禁用、错误 focus、中文输入及弹框链接浮层行为有可复现证据。未做真实界面验证的项保留至任务 22。
   - _需求追溯: R2.AC2, R2.AC5, R3.AC1, R3.AC3, R3.AC4, R4.AC2, R4.AC3, R4.AC4, R4.AC5, R11.AC2_
 
-- [ ] 5. 实现 Python 受限文档、稳定转换与两类文本投影
+- [x] 5. 实现 Python 受限文档、稳定转换与两类文本投影
   - 依赖：任务 2。
   - 新增 `ruoyi-fastapi-backend/common/remark_document_v1.py` 和 `module_admin/entity/vo/remark_vo.py`，落实设计的 validate_remark、plain_to_remark、remark_literal_text、remark_display_text、remark_to_storage。
   - 以判别联合和 extra forbid 定义精确封套/节点/标记；递归解析前迭代检查预算，严格整数、ID 唯一性、链接安全、控制字符和资源为空，失败走现有可定位错误协议且不回显全文。
@@ -72,7 +72,7 @@
   - 验证：同一向量的 Python/ZXUI 接纳与规范输出一致；新增拒绝、预算前置、纯文本精确相等和重复构造确定性测试；测试不把上游结构校验等同链接安全。
   - _需求追溯: R5.AC1, R5.AC2, R5.AC3, R5.AC4, R6.AC1, R6.AC2, R6.AC3, R6.AC4, R6.AC6, R7.AC3, R8.AC4, R9.AC2, R9.AC3, R11.AC1_
 
-- [ ] 6. 实现七列历史数据转换器与可恢复物理状态
+- [x] 6. 实现七列历史数据转换器与可恢复物理状态
   - 依赖：任务 5。
   - 新增 `ruoyi-fastapi-backend/scripts/data_migrations/remark_document_v2.py`，使用同步 SQLAlchemy Core 与冻结 codec，固定七表/主键清单，不导入最新业务 ORM。
   - 先只读预检类型、行数、NULL/空串、长度、控制字符、预算、临时列冲突与目标方言；输出数据库/schema 指纹、阶段、主键和备份引用，报告不含完整正文。
@@ -82,7 +82,7 @@
   - 验证：定向测试每种状态、异常冲突、摘要不符、超限、重复运行和失败定位；任何错误均保留原值/备份。真实 MySQL DDL 与恢复证据留到任务 20，不用 mock 冒充。
   - _需求追溯: R5.AC3, R9.AC1, R9.AC2, R9.AC3, R9.AC4, R9.AC5, R9.AC6, R10.AC4, R11.AC3_
 
-- [ ] 7. 在数据库统一入口先接入迁移前置保护
+- [x] 7. 在数据库统一入口先接入迁移前置保护
   - 依赖：任务 6。
   - 修改 `ruoyi-fastapi-backend/scripts/db.py`、`scripts/internal/db_workflow/dev_sync_service.py`：声明验证后、Atlas schema apply 前执行备注预检/转换；本任务先落保护，任务 8 才修改 ORM 类型。
   - 新增设计中的 remark-migration-check 只读子命令及 dev-sync/deploy 的 remark-backup-manifest、remark-writers-stopped 参数；CLI help 说明它们是前置凭据，不能自动停止其他进程。
@@ -91,7 +91,7 @@
   - 验证：调用顺序证明迁移在 schema apply 之前；缺前提或转换失败时 schema runner/受管写入完全不执行；只读命令不写库，错误能定位当前阶段与下一动作。
   - _需求追溯: R9.AC1, R9.AC6, R10.AC2, R10.AC3, R10.AC4, R11.AC3_
 
-- [ ] 8. 交付七字段 JSON 映射、metadata 与手工正式 revision
+- [x] 8. 交付七字段 JSON 映射、metadata 与手工正式 revision
   - 依赖：任务 7。
   - 修改实际 `module_admin/entity/do/{user_do,role_do,post_do,dict_do,config_do}.py` 与 `module_generator/entity/do/gen_do.py` 的七列为 `JSON(none_as_null=True)`、nullable、无随机默认；其余同名字段不动。
   - 将生成器既有模型纳入 `scripts/internal/db_workflow/schema_apply_atlas.py` 和 `alembic/env.py`；明确空库 gen_table/gen_table_column 建表完整性，不因 metadata 补登记重建已有数据。
@@ -100,7 +100,7 @@
   - 验证：MySQL/PostgreSQL DDL 编译、SQL NULL/整文档替换映射、正式 revision 链及空库结构；检查 revision 不导入最新 DTO/业务服务。尚未完成任务 9–10 时保持启动门槛关闭。
   - _需求追溯: R1.AC2, R5.AC1, R5.AC3, R5.AC5, R8.AC1, R10.AC1, R10.AC3, R10.AC5_
 
-- [ ] 9. 收敛种子、受管声明与历史发布包的写入边界
+- [x] 9. 收敛种子、受管声明与历史发布包的写入边界
   - 依赖：任务 5、任务 8。
   - 修改 `scripts/internal/bootstrap_seed.py` 与 `scripts/internal/db_workflow/capability_declaration_compiler.py`，初始用户/角色/岗位及字典类型/字典数据/配置在明确入库或编译边界转完整 JSON；声明可继续写文本。
   - 所有构造使用最终表及稳定主键的 identity_key；先规范化再计算新产物 checksum，不写时间戳或随机 ID，重复编译与迁移结果一致。
@@ -109,7 +109,7 @@
   - 验证：两次编译/同步无无意义差异，旧发布包原文件不变且可重放，受管内容修改与纯格式转换分别报告，非受管记录保真；补受影响种子夹具。
   - _需求追溯: R1.AC3, R8.AC3, R8.AC4, R8.AC5, R9.AC2, R10.AC1, R10.AC3, R11.AC3_
 
-- [ ] 10. 闭合 dev-sync、finalize、deploy 与 verify 编排
+- [x] 10. 闭合 dev-sync、finalize、deploy 与 verify 编排
   - 依赖：任务 7、任务 8、任务 9。
   - 在 `scripts/db.py` 与 `scripts/internal/db_workflow/{dev_sync_service,finalize_release_service,deploy_release_service,workflow_verify_service}.py` 完成共享前置/后置核验，避免入口各写一份转换。
   - dev-sync 固定为声明验证→转换→Atlas→受管对齐→备注后验；临时旧列未清理或任一步失败不得进入后一步。
@@ -118,7 +118,7 @@
   - 验证：更新现有 db_workflow/finalize/deploy/managed 测试；空库、旧库、JSON 库与失败重入路径有可判定结果，数据写入源全部就绪才开放后续受控集成运行。
   - _需求追溯: R8.AC3, R8.AC4, R9.AC5, R9.AC6, R10.AC1, R10.AC2, R10.AC3, R10.AC4, R11.AC3_
 
-- [ ] 11. 同步七业务写入 DTO、读取投影与事务契约
+- [x] 11. 同步七业务写入 DTO、读取投影与事务契约
   - 依赖：任务 5、任务 8、任务 10。
   - 覆盖 `module_admin/entity/vo/`、`modules/system/application/{read_models,services}/`、实际命令/查询处理器及 `module_generator/entity/vo/gen_vo.py` 和生成器服务。沿任务 1 清单改真实路径，不仅改旧通用模型。
   - remark 仅接文档/null，创建遗漏为空、更新遗漏保持、显式 null 清空；整份 JSON 替换，避免嵌套原地修改漏写。同步用户写入内部 EditUserModel，状态/权限专用接口不顺带写备注。
@@ -128,7 +128,7 @@
   - 验证：七业务创建/修改/读回契约、遗漏/清空/仅改状态、内部二次验证、嵌套读取、非法文档/无权限无写入与 GET/OpenAPI 参数；使用受控测试库，不碰日常历史库。
   - _需求追溯: R1.AC1, R1.AC3, R5.AC1, R5.AC3, R5.AC4, R5.AC5, R5.AC6, R6.AC1, R6.AC3, R6.AC5, R7.AC6, R8.AC1, R11.AC1_
 
-- [ ] 12. 改造服务端 Excel、既有导入和缓存消费者
+- [x] 12. 改造服务端 Excel、既有导入和缓存消费者
   - 依赖：任务 11。
   - 各真实导出服务从已校验文档派生 display 文本，再交 `utils/excel_util.py`；扩展显式文字列处理，保证 `= + - @` 开头仍为字符串单元格，不给原文添加可见前缀。
   - 仅在任务 1 确认已有备注列导入的入口显式 plain_to_remark；不存在则记录无需变更，不新增模板/接口。HTML、JSON 和公式外观均按字面文字。
@@ -137,7 +137,7 @@
   - 验证：实际 xlsx 读回内容/单元格类型无公式、空白换行和列表顺序正确；导入不解析字面量；刷新后关联读取不返回旧字符串、不混淆字典标签或配置值。
   - _需求追溯: R7.AC1, R7.AC3, R7.AC4, R7.AC5, R7.AC6, R8.AC5, R11.AC2_
 
-- [ ] 13. 生成 OpenAPI、客户端并收敛手写类型与 mock
+- [x] 13. 生成 OpenAPI、客户端并收敛手写类型与 mock
   - 依赖：任务 11、任务 12。
   - 通过 `ruoyi-fastapi-backend/scripts/export_openapi.py` 生成 `shared/openapi.json`，再通过 `scripts/generate-api-types.sh` 生成前端 `src/api/_generated/`；不手改生成文件，也不把 RemarkDocument 简化为 any/object。
   - 标明 remarkText readOnly，检查递归判别结构、nullable、请求必填/遗漏语义、七路径及关联响应；公开 ZXUI 文档类型由库提供，业务只做必要类型收窄。
@@ -146,7 +146,7 @@
   - 验证：重新生成无漂移，前后端契约测试及 mock:contracts/mock:overlays 通过；请求/响应样例证明 JSON 未二次编码、readonly 字段不进写 DTO。
   - _需求追溯: R1.AC3, R1.AC4, R3.AC1, R5.AC6, R8.AC5, R11.AC1_
 
-- [ ] 14. 接入公开包与统一 Remark 编辑/只读组件
+- [x] 14. 接入公开包与统一 Remark 编辑/只读组件
   - 依赖：任务 3、任务 4、任务 13。
   - 在前端 package.json/锁文件声明 `@zxio/text-editor`，经 `vite/zxui-theme-packages.ts` 现有功能包机制登记源码模式，消费 `src/theme/zx-theme-packages.ts` 的统一主题策略与公开样式出口。
   - 新增 `src/components/ui/Remark/{RemarkEditor.vue,RemarkDisplay.vue,contract.ts}`：编辑器只选择 A profile/预算及业务提示，值仍由父表单拥有；不复制内核或补写库类型。
@@ -156,7 +156,7 @@
   - 验证：源码直连 `VITE_ZXUI_LOCAL=true`、`VITE_ZXIO_REPO_ROOT=/Users/hqz/Downloads/element-plus` 下公开导入/样式有效；只读安全、Unicode 摘要、null/错误区分与无重复 emit 回归通过。实际包模式另见任务 21。
   - _需求追溯: R3.AC1, R3.AC2, R3.AC3, R3.AC4, R3.AC5, R4.AC1, R4.AC3, R4.AC4, R6.AC2, R7.AC1, R7.AC2_
 
-- [ ] 15. 迁移用户弹框与角色抽屉
+- [x] 15. 迁移用户弹框与角色抽屉
   - 依赖：任务 14。
   - 修改 `src/views/system/user/components/UserFormDialog.vue`、`src/views/system/role/components/RoleFormDrawer.vue` 及真实读取/提交适配：原字符串初值改 null，完整文档绑定，整行字段布局与原 FormInstance 不变。
   - 沿原记录身份/加载会话处理读取、快速切换、失败重试、关闭重开与未保存保护；仅用户编辑产生 dirty，换记录重建编辑器会话，不携带撤销栈。
@@ -165,7 +165,7 @@
   - 验证：用户/角色分别覆盖创建、保存重开、格式修改、清空/撤销、仅修改其他字段、加载/提交失败、取消保护及只读权限；真实界面证据汇入任务 22。
   - _需求追溯: R1.AC1, R1.AC3, R2.AC1, R2.AC2, R2.AC5, R2.AC6, R4.AC1, R4.AC3, R4.AC4, R4.AC5, R7.AC1, R7.AC2, R11.AC2_
 
-- [ ] 16. 迁移字典类型、字典数据与参数设置
+- [x] 16. 迁移字典类型、字典数据与参数设置
   - 依赖：任务 14。
   - 修改 `src/views/system/dict/components/DictDlg.vue`、`src/views/system/dict/data.vue`、`src/views/system/config/components/ConfigDlg.vue` 及真实列表/详情/提交路径，统一 RemarkEditor、null 初值和文档 DTO。
   - 原生表单遵循整行布局、单一列数策略和字段反馈，不为本次控件重复设置标签、间距或字段 span；保留既有权限与读取会话。
@@ -173,7 +173,7 @@
   - 验证：三个入口分别完成保存/重开/清空、回填不 dirty、格式编辑 dirty、快速切换、保存失败保留值；关联使用字典/配置的页面不受对象值污染。
   - _需求追溯: R1.AC1, R1.AC3, R2.AC1, R4.AC1, R4.AC3, R4.AC4, R4.AC5, R7.AC1, R7.AC2, R7.AC6, R11.AC2_
 
-- [ ] 17. 迁移岗位 Formily Schema 表单
+- [x] 17. 迁移岗位 Formily Schema 表单
   - 依赖：任务 4、任务 14。
   - 修改 `src/views/system/post/components/{PostDlg.vue,post-form.ts,post-form.test.ts}`：PostValues、initialPost、toPostDto、字段 schema 与错误映射共同改为文档/null。
   - 使用实际 Formily bindings 注册 `RemarkEditor`，对象字段无内部 properties 展开、null 初值，`composite:true, group:false`；SchemaForm 独占值与验证，业务壳不另存文档也不切换表单引擎。
@@ -181,7 +181,7 @@
   - 验证：现有岗位测试升级并覆盖对象/null 往返、回填 dirty、格式 dirty、隐藏恢复、换记录撤销隔离、失败保留与权威基线。若探针失败修所属 ZXUI 机制再继续，不能降回字符串。
   - _需求追溯: R1.AC1, R2.AC2, R2.AC5, R3.AC3, R4.AC2, R4.AC3, R4.AC4, R4.AC5, R11.AC2_
 
-- [ ] 18. 迁移生成器表配置备注
+- [x] 18. 迁移生成器表配置备注
   - 依赖：任务 14。
   - 修改 `src/views/tool/gen/basicInfoForm.vue` 及上层 `editTable.vue` 的配置读取/保存、初值、校验与脏状态，接入同一 RemarkEditor，使用任务 11 的 gen_table 文档契约。
   - 复用当前表配置身份与错误反馈；读取失败不以空文档覆盖，跨表切换销毁旧会话，保存成功重新建立权威基线。
@@ -189,7 +189,7 @@
   - 验证：表配置详情/保存/重开/清空、富文本格式、加载/提交失败与取消保护；既有生成选项及字段配置不被备注 DTO 顺带覆盖。
   - _需求追溯: R1.AC1, R1.AC3, R2.AC1, R4.AC1, R4.AC3, R4.AC4, R4.AC5, R8.AC1, R11.AC2_
 
-- [ ] 19. 交付显式 remark 代码生成与版本/主子表约束
+- [x] 19. 交付显式 remark 代码生成与版本/主子表约束
   - 依赖：任务 5、任务 13、任务 14、任务 18。
   - 在 `src/views/tool/gen/editTable.vue` 增加明确 remark 选项；后端 `module_generator/service/gen_service.py` 在保存与所有预览/下载/生成路径装配完整主子表后统一校验：Vue3、nullable JSON、合法字段用途。不能凭名称、长度或 JSON 类型自动选择。
   - Vue2 + 任意主/子 remark 字段明确拒绝并提示 Vue3；保留 Vue2 的其他字段及原 editor 职责。拒绝树身份/关联键/字符串查询等无法满足文档契约的组合，不静默退回 textarea。
@@ -199,7 +199,7 @@
   - 验证：扩展现有 `tests/unit/module_generator/test_editor_templates.py` 与前端 `tests/generator-form-contract.test.ts`，覆盖支持矩阵、主/子字段、insert/edit/list 标志、Vue2 拒绝及非备注 JSON/旧 editor 回归；实际生成的前后端代码通过解析、类型/构建与保存读回探针，不能只断言字符串片段。
   - _需求追溯: R1.AC2, R1.AC4, R3.AC1, R3.AC5, R5.AC1, R5.AC3, R5.AC6, R6.AC1, R7.AC1, R7.AC2, R7.AC3, R8.AC2, R8.AC5, R11.AC1, R11.AC2_
 
-- [ ] 20. 完成隔离 MySQL 升级、空库、故障恢复与 PostgreSQL 路径验证
+- [x] 20. 完成隔离 MySQL 升级、空库、故障恢复与 PostgreSQL 路径验证
   - 依赖：任务 6、任务 7、任务 8、任务 9、任务 10、任务 11、任务 12。
   - 使用独立数据库或可恢复副本，明确 DSN/数据库标识与禁止目标；不得把日常 ruoyi-fastapi 数据库、未授权生产或无关数据当演练库。通过统一 db.py 入口，备份正文与恢复资料置于仓库外受限位置。
   - 旧库样例覆盖七表、NULL、空串、前后空格、连续/尾部空行、中文/emoji、CRLF、HTML/JSON/公式样式文本及非受管数据；执行正式 revision 与 dev-sync 各自真实路径，逐行比对 PK、计数、SQL NULL、正文等价、摘要和列状态。
@@ -331,5 +331,21 @@
 ## 规格状态
 
 - tasks.md：按 SSD auto 自动生成；23 项任务、59/59 验收追溯、依赖拓扑与结构检查通过，已进入 `execution_ready`。
-- 实施进度：23 项均未开始；本轮未运行应用质量门禁、真实 UI 或数据库演练。
-- 下一实施入口：`executing-task docs/specs/generic-remark-rich-text`，从任务 1 的当前基线复核开始。
+- 实施进度：隔离工作区中已落地库、协议、数据库及七消费者代码，正在最终自动验证与独立审查；真实 UI 由用户接管手测（用户：你完成任务告诉我 交付到源分支我自己测），任务 22 保持未验收。进度证据见 docs/reports/generic-remark-rich-text/acceptance.md，不以代码或勾选替代验收。
+- 下一实施入口：继续最终候选包/质量门禁，汇总数据库和前端报告，独立核对59条AC；真实 UI 交由用户手测；已授权交付源分支，正在进行同期依赖保真与集成复验。发布和日常数据库迁移未请求。
+
+## 2026-10-22 交付指令与审查补项
+
+用户明确要求“你完成任务告诉我 交付到源分支我自己测”。据此继续安全合回源分支，真实 UI 归用户手工验收，不将其标为通过；未授权 computer use。任务 21 待最终交付候选和源分支复验，任务 22/23 的完整验收继续保留未完成。
+
+| 审查发现 | 已完成修复及证据 |
+| --- | --- |
+| 生成子行显示 index 泄漏写 DTO | 逐声明字段构造 DTO，真实 SFC submit→生成 VO；生成器69项通过 |
+| 生成只读模型/OpenAPI与派生名冲突 | 真实 controller OpenAPI，主/子派生字段冲突拒绝 |
+| 原生和生成配置脏状态、返回重复询问 | 生命周期67项，GenEdit独立4项，通过 |
+| 粘贴空白损失、超限删除选中文本 | 实际 clipboard HTML/text、字节拒绝保留选区，库157项通过 |
+| Formily隐藏丢IME/链接、超限重挂失败 | 所属库稳定父值、幂等退场、mounted恢复、受控草稿hydration；source/installed各31项通过 |
+| 数据库只读失败无报告、恢复列注释、新写后恢复链 | 69项含20真实MySQL +正式metadata专项；见migration报告 |
+| 数据库异常和操作/变更审计泄漏正文 | 真实HTTP及持久化审计脱敏；相关后端496项通过 |
+
+这些记录对应本轮连续只读审查中发现、修复和复验的事实，不代替独立最终结论或用户界面验收。

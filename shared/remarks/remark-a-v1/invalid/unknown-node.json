@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "body": {
+    "format": "json",
+    "content": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "textAlign": null,
+            "blockId": "blk_a1"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "text"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "annotations": [],
+  "assets": [],
+  "meta": {
+    "schemaVersion": "stable-block-identity/v2"
+  }
+}

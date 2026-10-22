@@ -1,25 +1,32 @@
 from datetime import datetime
+
 from fastapi import APIRouter, Depends, Query, Request
-from utils.validation_util import ValidateFields
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from config.enums import BusinessType
-from container.dependencies import service_provider
 from config.env import GenConfig
-from config.get_db import get_db
 from config.error_codes import ErrorCode
+from config.get_db import get_db
+from container.dependencies import service_provider
 from exceptions.exception import BusinessException
 from module_admin.annotation.log_annotation import Log
 from module_admin.aspect.interface_auth import CheckRoleInterfaceAuth, CheckUserInterfaceAuth
-from modules.identity.application.services.login_service import LoginService
 from module_admin.entity.vo.user_vo import CurrentUserModel
-from module_generator.entity.vo.gen_vo import DeleteGenTableModel, EditGenTableModel, GenTablePageQueryModel
+from module_generator.entity.vo.gen_vo import (
+    DeleteGenTableModel,
+    EditGenTableModel,
+    GenTableDetailReadModel,
+    GenTablePageQueryModel,
+    GenTablePageReadModel,
+)
 from module_generator.service.gen_service import GenTableColumnService, GenTableService
+from modules.identity.application.services.login_service import LoginService
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import extract_int_value
 from utils.log_util import logger
 from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
-
+from utils.validation_util import ValidateFields
 
 genController = APIRouter(prefix='/tool/gen', dependencies=[Depends(LoginService.get_current_user)])
 
@@ -36,7 +43,7 @@ async def _load_gen_table_detail(
 
 
 @genController.get(
-    '/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:list'))]
+    '/list', response_model=GenTablePageReadModel, dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:list'))]
 )
 async def get_gen_table_list(
     request: Request,
@@ -99,7 +106,6 @@ async def edit_gen_table(
 ):
     edit_gen_table.update_by = current_user.user.user_name
     edit_gen_table.update_time = datetime.now()
-    await gen_table_service.validate_edit(edit_gen_table)
     edit_gen_result = await gen_table_service.edit_gen_table_services(edit_gen_table)
     logger.info(edit_gen_result.message)
 
@@ -170,7 +176,7 @@ async def gen_code_local(
             user_message='代码生成失败：系统配置不允许覆盖本地文件',
             error_code=ErrorCode.CODEGEN_OVERWRITE_DISABLED,
             http_status=403,
-            developer_message=f'Code generation blocked: GenConfig.allow_overwrite is False for table {table_name}'
+            developer_message=f'Code generation blocked: GenConfig.allow_overwrite is False for table {table_name}',
         )
     gen_code_local_result = await gen_table_service.generate_code_services(table_name)
     logger.info(gen_code_local_result.message)
@@ -178,7 +184,11 @@ async def gen_code_local(
     return ResponseUtil.ok_resource(gen_code_local_result.result or {'tableName': table_name, 'status': 'generated'})
 
 
-@genController.get('/{table_id}', dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:query'))])
+@genController.get(
+    '/{table_id}',
+    response_model=GenTableDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('tool:gen:query'))],
+)
 async def query_detail_gen_table(
     request: Request,
     table_id: int,

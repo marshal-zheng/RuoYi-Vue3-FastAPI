@@ -35,6 +35,12 @@ from modules.system.application.queries import (
     GetDictTypeListQuery,
     GetDictTypeOptionsQuery,
 )
+from modules.system.application.read_models.dict_read_models import (
+    DictDataDetailReadModel,
+    DictDataPageReadModel,
+    DictTypeDetailReadModel,
+    DictTypePageReadModel,
+)
 from modules.system.application.services import (
     DictDataService,
     DictTypeService,
@@ -44,7 +50,6 @@ from modules.system.application.services import (
 from utils.common_util import bytes2file_response
 from utils.http_contract_responses import require_int_value
 from utils.log_util import logger
-from utils.page_util import PageResponseModel
 from utils.response_util import ResponseUtil
 from utils.validation_util import ValidateFields
 
@@ -70,7 +75,9 @@ async def _load_dict_data_detail(request: Request, *, dict_code: int, mediator: 
 
 
 @dictController.get(
-    '/type/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:dict:list'))]
+    '/type/list',
+    response_model=DictTypePageReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:dict:list'))],
 )
 async def get_system_dict_type_list(
     request: Request,
@@ -190,7 +197,7 @@ async def delete_system_dict_type(
     return ResponseUtil.no_content()
 
 
-@dictController.get('/type/optionselect', response_model=CollectionResult[DictTypeModel])
+@dictController.get('/type/optionselect', response_model=CollectionResult[DictTypeDetailReadModel])
 async def query_system_dict_type_options(
     request: Request,
     mediator: Mediator = Depends(provide_system_mediator),
@@ -206,7 +213,9 @@ async def query_system_dict_type_options(
 
 
 @dictController.get(
-    '/type/{dict_id}', response_model=DictTypeModel, dependencies=[Depends(CheckUserInterfaceAuth('system:dict:query'))]
+    '/type/{dict_id}',
+    response_model=DictTypeDetailReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:dict:query'))],
 )
 async def query_detail_system_dict_type(
     request: Request,
@@ -265,7 +274,9 @@ async def query_system_dict_type_data(
 
 
 @dictController.get(
-    '/data/list', response_model=PageResponseModel, dependencies=[Depends(CheckUserInterfaceAuth('system:dict:list'))]
+    '/data/list',
+    response_model=DictDataPageReadModel,
+    dependencies=[Depends(CheckUserInterfaceAuth('system:dict:list'))],
 )
 async def get_system_dict_data_list(
     request: Request,
@@ -365,7 +376,7 @@ async def delete_system_dict_data(
 
 @dictController.get(
     '/data/{dict_code}',
-    response_model=DictDataModel,
+    response_model=DictDataDetailReadModel,
     dependencies=[Depends(CheckUserInterfaceAuth('system:dict:query'))],
 )
 async def query_detail_system_dict_data(
