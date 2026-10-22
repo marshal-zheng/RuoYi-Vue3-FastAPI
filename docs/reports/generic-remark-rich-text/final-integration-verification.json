@@ -1,0 +1,138 @@
+{
+  "root": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/generic-remark-integration/ruoyi-fastapi-frontend",
+  "candidate": {
+    "path": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/generic-remark-integration/ruoyi-fastapi-frontend/vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz",
+    "source": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.worktrees/generic-remark-rich-text/ruoyi-fastapi-frontend/vendor/zxio-text-editor-1.0.0-remark-a.20261022.9.tgz",
+    "sha256": "8fa94fd6c39140c5d011581bb0b870f3aea7c82bf6d74aa4f8f616565d0ab26a",
+    "size": 12033699,
+    "version": "1.0.0-remark-a.20261022.9"
+  },
+  "commands": [
+    {
+      "name": "install",
+      "argv": [
+        "yarn",
+        "install"
+      ],
+      "env": {
+        "YARN_ENABLE_SCRIPTS": "false"
+      },
+      "log": "/tmp/remark-integration-editor9-install.log",
+      "exitCode": 0,
+      "seconds": 3.26
+    },
+    {
+      "name": "public",
+      "argv": [
+        "yarn",
+        "vitest",
+        "run",
+        "tests/unit/components/RemarkPackageDependencies.test.ts",
+        "tests/unit/components/RemarkPackageRoundtrip.test.ts",
+        "tests/unit/components/RemarkFormilyIntegration.test.ts",
+        "tests/unit/components/RemarkLinkIme.test.ts"
+      ],
+      "env": {},
+      "log": "/tmp/remark-integration-editor9-public.log",
+      "exitCode": 0,
+      "seconds": 4.43
+    },
+    {
+      "name": "types",
+      "argv": [
+        "yarn",
+        "type-check"
+      ],
+      "env": {},
+      "log": "/tmp/remark-integration-editor9-types.log",
+      "exitCode": 0,
+      "seconds": 20.72
+    },
+    {
+      "name": "lint",
+      "argv": [
+        "yarn",
+        "lint:check"
+      ],
+      "env": {},
+      "log": "/tmp/remark-integration-editor9-lint.log",
+      "exitCode": 0,
+      "seconds": 11.01
+    },
+    {
+      "name": "source-public",
+      "argv": [
+        "yarn",
+        "vitest",
+        "run",
+        "--config",
+        "vitest.remark-source.config.ts"
+      ],
+      "env": {
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus/.worktrees/generic-remark-integration"
+      },
+      "log": "/tmp/remark-integration-editor9-source-public.log",
+      "exitCode": 0,
+      "seconds": 9.57
+    },
+    {
+      "name": "source-build",
+      "argv": [
+        "yarn",
+        "build:prod"
+      ],
+      "env": {
+        "VITE_ZXUI_LOCAL": "true",
+        "VITE_ZXIO_REPO_ROOT": "/Users/hqz/Downloads/element-plus/.worktrees/generic-remark-integration"
+      },
+      "log": "/tmp/remark-integration-editor9-source-build.log",
+      "exitCode": 0,
+      "seconds": 62.11
+    },
+    {
+      "name": "installed-build",
+      "argv": [
+        "yarn",
+        "build:prod",
+        "--manifest"
+      ],
+      "env": {
+        "VITE_ZXUI_LOCAL": "false"
+      },
+      "log": "/tmp/remark-integration-editor9-installed-build.log",
+      "exitCode": 0,
+      "seconds": 40.77
+    },
+    {
+      "name": "icons",
+      "argv": [
+        "yarn",
+        "icons:check"
+      ],
+      "env": {},
+      "log": "/tmp/remark-integration-editor9-icons.log",
+      "exitCode": 0,
+      "seconds": 0.84
+    }
+  ],
+  "status": "passed",
+  "stageOrCommit": false,
+  "runtimeOverlaysUnchanged": true,
+  "manifestOnlyEditorChanged": true,
+  "installedVersions": {
+    "@zxio/zxui": "3.0.0-next.0-remark-raw.20261022.1",
+    "@zxio/schema-form": "0.1.0-remark-a.20261022.1",
+    "@zxio/text-editor": "1.0.0-remark-a.20261022.9"
+  },
+  "publicTestCount": 33,
+  "sourcePublicTestCount": 31,
+  "icons": {
+    "initial": {
+      "wholeCatalog": false,
+      "iconDefinitions": 84
+    },
+    "auditedViews": 114,
+    "deferredPicker": true,
+    "violations": []
+  }
+}

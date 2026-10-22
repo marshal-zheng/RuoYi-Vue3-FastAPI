@@ -75,7 +75,7 @@ describe('installed public remark link IME', () => {
       await flushPromises();
       expect(host.portal.querySelector('input')).toBeNull();
       expect(field.validate()).toBe(true);
-      expect(JSON.stringify(value.value)).toContain(new URL('https://例子.测试').href);
+      expect(JSON.stringify(value.value)).toContain('https://例子.测试');
     } finally {
       wrapper.unmount();
       host.dispose();

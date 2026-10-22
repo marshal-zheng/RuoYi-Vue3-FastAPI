@@ -35,5 +35,29 @@
     "sha256": "ff7e867b12426ccf25d893dd7484fe034e54892e7f89768b15f45e8eec57d624",
     "status": "superseded-own-candidate-removed",
     "reason": "link portal composition draft and key isolation fixed in .5"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.5.tgz",
+    "sha256": "42cda3aa6d7cd9528325dbcaabf16149263aa1db3f868a3a1e8adbc3d7ae3f1e",
+    "status": "superseded-own-candidate-removed",
+    "reason": "public ZXUI core imports avoid static whole icon catalog in .6"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.6.tgz",
+    "sha256": "a6e2147f5ad3f65ec3281007e5be95af1e2b68009bb50d8d8a8ee4a6b50f06cb",
+    "status": "superseded-own-candidate-isolated",
+    "reason": "final .8 adds source default build config and bounded callback refs"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.7.tgz",
+    "sha256": "5f80168d78fe2bbb464028f709a94fa1c6789a62662bf9139468b842b91ba1e5",
+    "status": "superseded-own-candidate-isolated",
+    "reason": "final .8 preserves source build realpath resolution and private callback refs; .7 generated declarations rejected for duplicate imported types"
+  },
+  {
+    "file": "zxio-text-editor-1.0.0-remark-a.20261022.8.tgz",
+    "sha256": "e4414092e8d3504a563e8938a52e075b80a29e3ca7c9215ad49797f8cca86cec",
+    "status": "superseded-own-candidate-isolated",
+    "reason": "final .9 removes inferred private component refs from new Field public declaration; eight declaration diagnostics fixed"
   }
 ]
