@@ -1,0 +1,30 @@
+{
+  "businessBase": "262ec4200f4745698d8430e9e03a851fe02d9656",
+  "zxuiCommits": [
+    "96fe6995e",
+    "0040e4736"
+  ],
+  "chartCommit": "cadc77f",
+  "artifacts": [
+    {
+      "path": "ruoyi-fastapi-frontend/vendor/zxio-zxui-3.0.0-next.0-icons-commit.20261022.tgz",
+      "bytes": 3529861,
+      "sha256": "ba2f74dd0fec0b7719a8e54a5ef85abfeb6779f2d8c22647766ed371eeeba091"
+    },
+    {
+      "path": "ruoyi-fastapi-frontend/vendor/zxio-schema-form-0.1.0-icons-commit.20261022.tgz",
+      "bytes": 92467,
+      "sha256": "0cc862ac019a415f5def5115b8c61012f79207143464b2d42d32b8e87982b3ad"
+    }
+  ],
+  "constantsOverrideIncluded": false,
+  "sourceViewClosures": 114,
+  "sourceCatalogLeaks": [],
+  "packedConsumerCatalogLeaks": [],
+  "tests": {
+    "library": 84,
+    "business": 41,
+    "post": 19
+  },
+  "published": false
+}

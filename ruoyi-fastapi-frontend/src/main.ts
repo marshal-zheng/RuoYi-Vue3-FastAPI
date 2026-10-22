@@ -30,7 +30,9 @@ import { download } from '@/utils/request';
 // svg图标
 import 'virtual:svg-icons-register';
 import SvgIcon from '@/components/ui/SvgIcon';
-import elementIcons from '@/components/ui/SvgIcon/svgicon';
+import { elementIcons } from '@/icons/element';
+import { createZxUiCapabilities } from '@zxio/zxui/core';
+import { ZxTooltipOrPopover } from '@zxio/zxui/tooltip-or-popover';
 
 import './permission'; // permission control
 import './utils/auth-feedback-boundary';
@@ -93,7 +95,10 @@ app.component('Icon', Icon);
 app.use(store);
 setupQueries(app);
 app.use(plugins);
-app.use(elementIcons);
+app.use(createZxUiCapabilities({ icons: elementIcons, tooltip: ZxTooltipOrPopover }));
+for (const [name, component] of Object.entries(elementIcons)) {
+  app.component(name, component);
+}
 app.component('svg-icon', SvgIcon);
 
 directive(app);

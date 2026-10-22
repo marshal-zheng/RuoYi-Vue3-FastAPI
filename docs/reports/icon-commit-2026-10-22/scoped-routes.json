@@ -1,0 +1,13 @@
+{
+  "initial": {
+    "wholeCatalog": false,
+    "iconDefinitions": 84
+  },
+  "auditedViews": 114,
+  "deferredPicker": true,
+  "violations": [
+    "src/views/system/post/components/PostDlg.vue",
+    "src/views/system/post/components/PostList.vue",
+    "src/views/system/post/index.vue"
+  ]
+}

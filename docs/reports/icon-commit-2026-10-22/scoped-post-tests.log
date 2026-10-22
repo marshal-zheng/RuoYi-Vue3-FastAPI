@@ -1,0 +1,33 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/.tmp/icon-commit-check/ruoyi-fastapi-frontend
+
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > routes structured server fields and leaves unstructured conflicts at form level 2ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > keeps zero sort and empty remark, while identity and audit fields cannot leak from inputs 1ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postName":" "} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postName":"名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名名"} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postCode":""} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postCode":"ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postSort":-1} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postSort":1.5} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"postSort":"0"} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"status":0} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"status":"deleted"} 0ms
+ ✓ src/views/system/post/components/post-form.test.ts > post write boundary > rejects malformed runtime values before reaching the API: {"remark":null} 0ms
+ ✓ tests/unit/api/post.feedback.test.ts > allows the save owner to suppress errors without suppressing HTTP success 2ms
+ ✓ tests/unit/api/post.feedback.test.ts > allows the save owner to suppress errors without suppressing HTTP success 0ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ tests/unit/components/PostSaveFeedback.test.ts > post save feedback ownership > lets the form own a conflict while requesting only silent HTTP errors 26ms
+ ✓ tests/unit/components/PostSaveFeedback.test.ts > post save feedback ownership > keeps field issues in the form on update 6ms
+ ✓ tests/unit/components/PostSaveFeedback.test.ts > post save feedback ownership > restores the existing authentication recovery without adding a form error 4ms
+ ✓ tests/unit/components/PostSaveFeedback.test.ts > post save feedback ownership > does not recover authentication from an aborted save 8ms
+ ✓ tests/unit/components/PostSaveFeedback.test.ts > post save feedback ownership > keeps a successful save result and the existing success channel 3ms
+
+ Test Files  3 passed (3)
+      Tests  19 passed (19)
+   Start at  10:44:44
+   Duration  5.76s (transform 3.27s, setup 2.79s, collect 4.49s, tests 63ms, environment 1.49s, prepare 158ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

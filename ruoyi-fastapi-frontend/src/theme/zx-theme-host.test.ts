@@ -22,7 +22,7 @@ vi.mock('@zxio/zxui/theme-host/precompiled', async (importOriginal) => ({
   createThemeDeploymentResolver: api.createResolver,
   bindThemePreferenceController: api.bindPreferences,
 }));
-vi.mock('@zxio/zxui/confirm-input', () => ({
+vi.mock('@zxio/zxui/core', () => ({
   createBoundConfirmInputFactory: api.createConfirm,
 }));
 

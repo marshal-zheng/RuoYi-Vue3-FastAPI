@@ -1,0 +1,45 @@
+
+ RUN  v3.2.4 /Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend
+
+ ✓ src/icons/navigation.test.ts > navigation icon choices > keeps unknown inherited name constructor as a custom SVG identifier 1ms
+ ✓ src/icons/navigation.test.ts > navigation icon choices > keeps unknown inherited name toString as a custom SVG identifier 0ms
+ ✓ src/icons/navigation.test.ts > navigation icon choices > keeps unknown inherited name __proto__ as a custom SVG identifier 0ms
+ ✓ src/icons/navigation.test.ts > navigation icon choices > keeps mapped menu names, custom protocols and empty icons 0ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > restores an uncommon saved icon without registering the complete catalog 66ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-input-number' from its component object 5ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-select' from its component object 3ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-cascader' from its component object 2ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-radio-group' from its component object 2ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-checkbox-group' from its component object 1ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-switch' from its component object 2ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-slider' from its component object 1ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-time-picker' from its component object 3ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-time-picker' from its component object 3ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-date-picker' from its component object 2ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-date-picker' from its component object 1ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-rate' from its component object 3ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-color-picker' from its component object 1ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders 'el-upload' from its component object 2ms
+ ✓ tests/generator-on-demand.test.ts > generator without a global component installer > renders picture upload icons without global icon registration 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > reads legacy identities without mutating saved fields or numeric semantics 1ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > generates a complete SFC accepted by the same source gate 34ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > keeps page generation supported and escapes string defaults 6ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > normalizes nested saved rows into full-width semantic layout 6ms
+ ✓ tests/generator-form-contract.test.ts > generator public form contract > previews a legacy input using the same component and forwards slots/model once 15ms
+Browserslist: browsers data (caniuse-lite) is 14 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values
+async-validator: [ 'name is required' ]
+
+ ✓ tests/generator-form-runtime.test.ts > complete generated form runtime > opens the generated dialog, validates real fields, resets and emits submitted values 500ms
+ ✓ src/utils/generator/html.contract.test.ts > generated rating contract > emits explicit component bindings and only the configured icon imports 1ms
+ ✓ src/utils/generator/html.contract.test.ts > generated rating contract > exports the configured maximum to the real ElRate prop 0ms
+
+ Test Files  5 passed (5)
+      Tests  28 passed (28)
+   Start at  10:13:26
+   Duration  4.69s (transform 1.67s, setup 1.64s, collect 6.83s, tests 672ms, environment 1.51s, prepare 183ms)
+
+ HTML  Report is generated
+       You can run npx vite preview --outDir tests/reports to see the test results.

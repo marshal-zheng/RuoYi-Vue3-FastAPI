@@ -1,0 +1,18 @@
+{
+  "initial": {
+    "wholeCatalog": false,
+    "iconDefinitions": 85
+  },
+  "auditedViews": 115,
+  "deferredPicker": true,
+  "violations": [
+    "src/views/project/components/SimulationResultDialog.vue",
+    "src/views/project/simulation/backupindex.vue",
+    "src/views/project/simulation/components/BandwidthChartPanel.vue",
+    "src/views/project/simulation/components/EventFormDialog.vue",
+    "src/views/project/simulation/components/SimulationReportDialog.vue",
+    "src/views/project/simulation/components/TimingLatencyPanel.vue",
+    "src/views/project/simulation/dashboard/SimulationDashboard.vue",
+    "src/views/project/simulation/index.vue"
+  ]
+}

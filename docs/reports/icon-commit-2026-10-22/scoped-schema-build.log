@@ -1,0 +1,27 @@
+
+> @zxio/schema-form@0.1.0 build /Users/hqz/Downloads/element-plus/.tmp/icon-commit-check/packages/schema-form
+> vite build && node ../../scripts/release/write-dist-package.mjs packages/schema-form --copy LICENSE && node scripts/copy-examples.mjs
+
+vite v6.4.1 building for production...
+transforming...
+✓ 32 modules transformed.
+rendering chunks...
+
+[vite:dts] Start generate declaration files...
+computing gzip size...
+dist/style.css                                                           2.26 kB │ gzip:  0.63 kB
+dist/index.mjs                                                           0.08 kB │ gzip:  0.10 kB
+dist/fields/index.mjs                                                    1.69 kB │ gzip:  0.79 kB
+dist/index-BiqhT_5-.mjs                                                  1.79 kB │ gzip:  0.76 kB
+dist/NumberTextInput.vue_vue_type_script_setup_true_lang-CQc-ilg7.mjs    4.79 kB │ gzip:  1.59 kB
+dist/formily/index.mjs                                                 100.84 kB │ gzip: 23.59 kB
+[vite:dts] Declaration files built in 4032ms.
+
+dist/style.css                                                          2.26 kB │ gzip:  0.63 kB
+dist/index.cjs                                                          0.19 kB │ gzip:  0.16 kB
+dist/index-BupWnDag.js                                                  1.84 kB │ gzip:  0.77 kB
+dist/fields/index.cjs                                                   2.01 kB │ gzip:  0.85 kB
+dist/NumberTextInput.vue_vue_type_script_setup_true_lang-D2uieC0d.js    4.77 kB │ gzip:  1.57 kB
+dist/formily/index.cjs                                                101.96 kB │ gzip: 23.57 kB
+✓ built in 4.30s
+wrote packages/schema-form/dist/package.json, copied: README.md, LICENSE

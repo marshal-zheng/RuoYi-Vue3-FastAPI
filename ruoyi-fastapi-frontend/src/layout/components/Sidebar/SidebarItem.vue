@@ -18,7 +18,12 @@
           :aria-label="onlyOneChild.meta.title"
           :class="{ 'submenu-title-noDropdown': depth === 0 }"
         >
-          <svg-icon :icon-class="onlyOneChild.meta.icon || (item.meta && item.meta.icon)" />
+          <ZxIcon
+            :icon="resolveNavigationIcon(onlyOneChild.meta.icon || item.meta?.icon)"
+            class="navigation-menu-icon"
+            size="var(--app-nav-icon-size)"
+            aria-hidden="true"
+          />
           <template #title
             ><span class="menu-title" :title="hasTitle(onlyOneChild.meta.title)">{{
               onlyOneChild.meta.title
@@ -42,7 +47,12 @@
       @keydown.space.capture="activateGroup"
     >
       <template v-if="item.meta" #title>
-        <svg-icon :icon-class="item.meta && item.meta.icon" />
+        <ZxIcon
+          :icon="resolveNavigationIcon(item.meta.icon)"
+          class="navigation-menu-icon"
+          size="var(--app-nav-icon-size)"
+          aria-hidden="true"
+        />
         <span class="menu-title" :title="hasTitle(item.meta.title)">{{ item.meta.title }}</span>
       </template>
 
@@ -62,6 +72,8 @@
 import { isExternal } from '@/utils/validate';
 import AppLink from './Link';
 import { getNormalPath } from '@/utils/ruoyi';
+import { ZxIcon } from '@zxio/zxui/core';
+import { resolveNavigationIcon } from '@/icons/navigation';
 
 const props = defineProps({
   // route object

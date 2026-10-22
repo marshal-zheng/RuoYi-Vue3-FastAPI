@@ -1,0 +1,194 @@
+{
+  "checks": [
+    {
+      "name": "普通页面有限图标注册且 Material SVG 正常",
+      "passed": true,
+      "detail": {
+        "globals": [
+          "DictTag",
+          "DictStatus",
+          "DictSelect",
+          "DictTypeSelect",
+          "Pagination",
+          "FileUpload",
+          "ImageUpload",
+          "ImagePreview",
+          "RightToolbar",
+          "Icon",
+          "Aim",
+          "ArrowLeft",
+          "Bell",
+          "CaretRight",
+          "Cellphone",
+          "CircleCheck",
+          "CircleClose",
+          "CircleCloseFilled",
+          "CirclePlus",
+          "Clock",
+          "Close",
+          "DataLine",
+          "Delete",
+          "Document",
+          "DocumentAdd",
+          "DocumentCopy",
+          "Download",
+          "Edit",
+          "FullScreen",
+          "Hide",
+          "InfoFilled",
+          "Link",
+          "Lock",
+          "MagicStick",
+          "Menu",
+          "Minus",
+          "MoreFilled",
+          "Operation",
+          "Plus",
+          "Pointer",
+          "Refresh",
+          "RefreshLeft",
+          "RefreshRight",
+          "Search",
+          "Select",
+          "Tickets",
+          "Timer",
+          "Top",
+          "TrendCharts",
+          "Unlock",
+          "Upload",
+          "User",
+          "View",
+          "Warning",
+          "WarningFilled",
+          "ZoomIn",
+          "svg-icon",
+          "RouterLink",
+          "RouterView"
+        ],
+        "width": 250,
+        "iconWidth": 24,
+        "materialUses": [
+          "#icon-material-symbols-menu_open",
+          "#icon-material-symbols-settings",
+          "#icon-material-symbols-person",
+          "#icon-material-symbols-group",
+          "#icon-material-symbols-menu",
+          "#icon-material-symbols-account_tree",
+          "#icon-material-symbols-badge",
+          "#icon-material-symbols-menu_book",
+          "#icon-material-symbols-tune",
+          "#icon-material-symbols-campaign",
+          "#icon-material-symbols-history",
+          "#icon-material-symbols-description",
+          "#icon-material-symbols-login",
+          "#icon-material-symbols-history",
+          "#icon-material-symbols-monitoring",
+          "#icon-material-symbols-devices",
+          "#icon-material-symbols-schedule",
+          "#icon-material-symbols-storage",
+          "#icon-material-symbols-dns",
+          "#icon-material-symbols-memory",
+          "#icon-material-symbols-storage",
+          "#icon-material-symbols-construction",
+          "#icon-material-symbols-design_services",
+          "#icon-material-symbols-code",
+          "#icon-material-symbols-api",
+          "#icon-material-symbols-design_services",
+          "#icon-material-symbols-view_list",
+          "#icon-material-symbols-description"
+        ],
+        "theme": "default"
+      }
+    },
+    {
+      "name": "普通页面不请求完整目录",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "动态菜单保留后端原图标标识",
+      "passed": true,
+      "detail": "system"
+    },
+    {
+      "name": "自定义菜单 SVG 选择与预览",
+      "passed": true,
+      "detail": "bug"
+    },
+    {
+      "name": "设计器打开前无完整目录请求",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "完整选择器首次打开加载293个图形",
+      "passed": true,
+      "detail": {
+        "catalogCount": 293,
+        "svgCount": 293,
+        "catalogRequests": [
+          "http://127.0.0.1/src/views/tool/build/element-catalog.ts"
+        ]
+      }
+    },
+    {
+      "name": "非常用图标预览且未全局注册",
+      "passed": true,
+      "detail": "Watermelon"
+    },
+    {
+      "name": "未知图标保持空图形",
+      "passed": true,
+      "detail": "NotAnIcon"
+    },
+    {
+      "name": "真实导出文件显式导入并绑定所选图标",
+      "passed": true,
+      "detail": {
+        "binding": "setup-maybe-ref"
+      }
+    },
+    {
+      "name": "森绿深色主题折叠导航保持",
+      "passed": true,
+      "detail": {
+        "theme": "army-pine",
+        "variant": "mode-dark__density-default__contrast-normal__motion-full__radius-default",
+        "width": 50.140625
+      }
+    },
+    {
+      "name": "展开导航图标尺寸仍消费统一配置",
+      "passed": true,
+      "detail": 24
+    },
+    {
+      "name": "TopNav 仍使用本地 Material Symbols",
+      "passed": true,
+      "detail": [
+        "#icon-material-symbols-settings",
+        "#icon-material-symbols-monitoring",
+        "#icon-material-symbols-construction",
+        "#icon-material-symbols-design_services"
+      ]
+    },
+    {
+      "name": "缓存监控真实页面加载库拥有的图表样式",
+      "passed": true,
+      "detail": [
+        {
+          "id": "/Users/hqz/Downloads/element-plus/packages/chart/style/index.css",
+          "hasStatus": true
+        }
+      ]
+    },
+    {
+      "name": "最终默认浅色布局和页面运行无异常",
+      "passed": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ],
+  "errors": []
+}

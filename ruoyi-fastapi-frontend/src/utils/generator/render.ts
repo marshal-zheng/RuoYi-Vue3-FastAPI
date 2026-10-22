@@ -25,6 +25,7 @@ import {
 } from 'element-plus';
 import { Plus } from '@element-plus/icons-vue';
 import { generatorTags, resolveGeneratorTag } from './identity';
+import { resolveGeneratorIcon } from './icons';
 import type { Component, PropType, CSSProperties, VNodeChild } from 'vue';
 
 // Saved designs keep their tag identity; preview owns the concrete components.
@@ -302,6 +303,15 @@ export default defineComponent({
 
     if (children.length > 0) {
       slot.default = () => children;
+    }
+
+    for (const values of [dataObject.props, dataObject.attrs]) {
+      for (const key of ['icon', 'prefix-icon', 'suffix-icon']) {
+        const name = values[key];
+        if (typeof name === 'string' && name) {
+          values[key] = resolveGeneratorIcon(name);
+        }
+      }
     }
 
     return h(

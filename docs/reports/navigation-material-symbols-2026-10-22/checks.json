@@ -1,0 +1,425 @@
+{
+  "checks": [
+    {
+      "name": "业务导航统一Material且符号存在",
+      "data": [
+        {
+          "href": "#icon-material-symbols-expand_more",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-dark_mode",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-person",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-expand_more",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-menu_open",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-settings",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-person",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-group",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-menu",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-account_tree",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-badge",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-menu_book",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-tune",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-campaign",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-history",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-description",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-login",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-history",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-monitoring",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-devices",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-schedule",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-storage",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-dns",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-memory",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-storage",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-construction",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-design_services",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-code",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-api",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-design_services",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-view_list",
+          "exists": true,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-description",
+          "exists": true,
+          "stroke": null
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "收起图标尺寸与居中",
+      "data": [
+        {
+          "icon": "#icon-material-symbols-settings",
+          "width": 24,
+          "cx": 24.5
+        },
+        {
+          "icon": "#icon-material-symbols-monitoring",
+          "width": 24,
+          "cx": 24.5
+        },
+        {
+          "icon": "#icon-material-symbols-construction",
+          "width": 24,
+          "cx": 24.5
+        },
+        {
+          "icon": "#icon-material-symbols-design_services",
+          "width": 24,
+          "cx": 24.5
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "Logo hover切换Material展开图标",
+      "data": {
+        "width": 24,
+        "opacity": "1",
+        "transform": "matrix(-1, 0, 0, -1, 0, 0)"
+      },
+      "passed": true
+    },
+    {
+      "name": "折叠浮层沿用同一映射且不占图标空隙",
+      "data": [
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-person"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-group"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-menu"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-account_tree"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-badge"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-menu_book"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-tune"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-campaign"
+        },
+        {
+          "display": "none",
+          "href": "#icon-material-symbols-history"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "浮层菜单正常路由",
+      "data": "http://127.0.0.1/system/role",
+      "passed": true
+    },
+    {
+      "name": "嵌套Enter与Space切换保留",
+      "data": {
+        "beforeGroup": "el-sub-menu",
+        "afterGroup": "el-sub-menu is-opened",
+        "afterSpace": "el-sub-menu"
+      },
+      "passed": true
+    },
+    {
+      "name": "折叠中途反向恢复",
+      "data": {
+        "mid": 235.625
+      },
+      "passed": true
+    },
+    {
+      "name": "菜单列表图标预览统一",
+      "data": [
+        "#icon-material-symbols-settings",
+        "#icon-material-symbols-person",
+        "#icon-material-symbols-group",
+        "#icon-material-symbols-menu",
+        "#icon-material-symbols-account_tree",
+        "#icon-material-symbols-badge",
+        "#icon-material-symbols-menu_book",
+        "#icon-material-symbols-tune",
+        "#icon-material-symbols-campaign",
+        "#icon-material-symbols-history",
+        "#icon-material-symbols-description",
+        "#icon-material-symbols-login",
+        "#icon-material-symbols-history",
+        "#icon-material-symbols-monitoring",
+        "#icon-material-symbols-devices",
+        "#icon-material-symbols-schedule",
+        "#icon-material-symbols-storage",
+        "#icon-material-symbols-dns",
+        "#icon-material-symbols-memory",
+        "#icon-material-symbols-storage",
+        "#icon-material-symbols-construction",
+        "#icon-material-symbols-design_services",
+        "#icon-material-symbols-code",
+        "#icon-material-symbols-api",
+        "#icon-material-symbols-design_services",
+        "#icon-material-symbols-view_list",
+        "#icon-material-symbols-description"
+      ],
+      "passed": true
+    },
+    {
+      "name": "菜单编辑框预览使用同一映射",
+      "data": [
+        "#icon-material-symbols-settings"
+      ],
+      "passed": true
+    },
+    {
+      "name": "选择器预览与导航一致",
+      "data": "#icon-material-symbols-settings",
+      "passed": true
+    },
+    {
+      "name": "本地Material选项可选且预览正确",
+      "data": {
+        "chosen": "material-symbols-monitoring",
+        "chosenIcon": [
+          "#icon-material-symbols-monitoring"
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "森绿深色图标继承主题且无强制描边",
+      "data": {
+        "theme": "army-pine",
+        "color": "color(srgb 0.79267 0.85737 0.82322)",
+        "fill": "color(srgb 0.79267 0.85737 0.82322)",
+        "stroke": "none"
+      },
+      "passed": true
+    },
+    {
+      "name": "统一尺寸覆盖菜单用户与箭头",
+      "data": [
+        26,
+        18,
+        28,
+        28,
+        28,
+        28
+      ],
+      "passed": true
+    },
+    {
+      "name": "TopNav与更多菜单同源且跟随尺寸",
+      "data": [
+        {
+          "href": "#icon-material-symbols-settings",
+          "width": 28,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-monitoring",
+          "width": 28,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-construction",
+          "width": 28,
+          "stroke": null
+        },
+        {
+          "href": "#icon-material-symbols-design_services",
+          "width": 28,
+          "stroke": null
+        }
+      ],
+      "passed": true
+    },
+    {
+      "name": "通用SVG线性资产仍可控制fill与stroke",
+      "data": {
+        "parent": "color(srgb 0.9181 0.9591 0.9446)",
+        "icon": "color(srgb 0.9181 0.9591 0.9446)",
+        "fill": "none",
+        "stroke": "color(srgb 0.9181 0.9591 0.9446)"
+      },
+      "passed": true
+    },
+    {
+      "name": "隐藏header恢复入口也使用Material",
+      "data": [
+        "#icon-material-symbols-menu_open",
+        "#icon-material-symbols-settings"
+      ],
+      "passed": true
+    },
+    {
+      "name": "移动图标尺寸及导航焦点正常",
+      "data": {
+        "width": 250,
+        "iconWidths": [
+          24,
+          24,
+          24,
+          24
+        ],
+        "overflow": false
+      },
+      "passed": true
+    },
+    {
+      "name": "Escape恢复移动导航入口焦点",
+      "data": "mobile-navigation-recovery",
+      "passed": true
+    },
+    {
+      "name": "减少动态效果仍生效",
+      "data": "0s",
+      "passed": true
+    },
+    {
+      "name": "真实链路无在线图标字体依赖",
+      "data": {
+        "online": [],
+        "source": [
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/components/_shared/close-icon.vue",
+          "http://127.0.0.1/@fs/Users/hqz/Downloads/element-plus/packages/shared/vue/icon.ts"
+        ],
+        "errors": []
+      },
+      "passed": true
+    }
+  ]
+}

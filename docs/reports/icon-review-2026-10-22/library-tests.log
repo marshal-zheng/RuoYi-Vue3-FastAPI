@@ -1,0 +1,11 @@
+
+ RUN  v2.1.9 /Users/hqz/Downloads/element-plus
+
+ ✓ packages/components/capabilities/__tests__/capabilities.test.tsx (10 tests) 43ms
+ ✓ packages/theme-compiler/__tests__/source-vite.test.ts (15 tests) 2056ms
+   ✓ tree-shakes unused root capabilities while retaining explicit source style bridges 1984ms
+
+ Test Files  2 passed (2)
+      Tests  25 passed (25)
+   Start at  10:19:41
+   Duration  2.67s (transform 815ms, setup 85ms, collect 1.36s, tests 2.10s, environment 84ms, prepare 59ms)

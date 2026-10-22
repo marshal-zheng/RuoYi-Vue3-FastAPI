@@ -4322,9 +4322,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-icons-commit.20261022.tgz::locator=vfadmin%40workspace%3A.":
   version: 0.1.0
-  resolution: "@zxio/schema-form@file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz#vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz::hash=f63ede&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/schema-form@file:./vendor/zxio-schema-form-0.1.0-icons-commit.20261022.tgz#./vendor/zxio-schema-form-0.1.0-icons-commit.20261022.tgz::hash=aeb8f5&locator=vfadmin%40workspace%3A."
   peerDependencies:
     "@formily/core": 2.3.7
     "@formily/reactive": 2.3.7
@@ -4342,7 +4342,7 @@ __metadata:
       optional: true
     "@formily/vue":
       optional: true
-  checksum: 10c0/bef8a6786bb012c6e4b039660bbf8c9da98a78fb9f9432ad1259e03cb6ddbbd92dee0c2eb7d24cd00101bb96301b51d9af2553be43d5f39d6eb46f63e404baf5
+  checksum: 10c0/6b435f0b16f7d451f928cdd58aab93ed9f0d6d9a5e72ba8f7a47c07b025189bce35439ca0f8bbf3a34530575e9c944468d353344e76c2da585e651e8c2f874b3
   languageName: node
   linkType: hard
 
@@ -4531,9 +4531,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-icons-commit.20261022.tgz::locator=vfadmin%40workspace%3A.":
   version: 3.0.0-next.0
-  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz#./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::hash=b2aa87&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-icons-commit.20261022.tgz#./vendor/zxio-zxui-3.0.0-next.0-icons-commit.20261022.tgz::hash=ee2a9c&locator=vfadmin%40workspace%3A."
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
     "@floating-ui/dom": "npm:^1.6.0"
@@ -4554,7 +4554,7 @@ __metadata:
   peerDependencies:
     element-plus: ^2.13.0
     vue: ^3.5.0
-  checksum: 10c0/e4b8aa76f3e11770dc4b07204b21772e0ebe96f035ddf7907717e7d5ffe1c3d65cf8840907050ea7fa196f9730073580696e33285c3130c12cbc01a20e289f70
+  checksum: 10c0/e7a1073a6b28e877e3f027a06f310f6213dc9a5564c1f017cd22a656e112f3ecfe024a40350f716dc3747db48cf497abce773d2ce63c7dd74169047de97a683d
   languageName: node
   linkType: hard
 
@@ -14043,7 +14043,7 @@ __metadata:
     "@zxio/dashboard": "file:./vendor/zxio-dashboard-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/dashboard-widgets": "file:./vendor/zxio-dashboard-widgets-0.1.0-dashboard-committed.20261019.tgz"
     "@zxio/http": "file:./vendor/zxio-http-1.0.0-query.final.20261016.tgz"
-    "@zxio/schema-form": "file:vendor/zxio-schema-form-0.1.0-formily.20261020-r2.tgz"
+    "@zxio/schema-form": "file:./vendor/zxio-schema-form-0.1.0-icons-commit.20261022.tgz"
     "@zxio/theme-air-gray": "file:./vendor/zxio-theme-air-gray-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-army-pine": "file:./vendor/zxio-theme-army-pine-1.0.0-overlay-validation.20261013.tgz"
     "@zxio/theme-compiler": "file:./vendor/zxio-theme-compiler-1.0.0-schema-pilot.20261019.tgz"
@@ -14058,7 +14058,7 @@ __metadata:
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz"
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-icons-commit.20261022.tgz"
     ajv: "npm:^8.20.0"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"

@@ -1,0 +1,30 @@
+{
+  "results": [
+    {
+      "label": "baseline",
+      "bytes": 90950,
+      "gzipBytes": 35260,
+      "materialSymbols": 0,
+      "externalIconRequests": false,
+      "modules": [
+        "virtual:svg-icons-register",
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.tmp/navigation-symbols/bundle-probe/entry.js"
+      ]
+    },
+    {
+      "label": "material",
+      "bytes": 102037,
+      "gzipBytes": 38592,
+      "materialSymbols": 31,
+      "externalIconRequests": false,
+      "modules": [
+        "virtual:svg-icons-register",
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.tmp/navigation-symbols/bundle-probe/entry.js"
+      ]
+    }
+  ],
+  "delta": {
+    "bytes": 11087,
+    "gzipBytes": 3332
+  }
+}

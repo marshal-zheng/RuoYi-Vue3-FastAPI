@@ -39,7 +39,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { ZxDialog } from "@zxio/zxui/dialog";
+import { ZxDialog } from "@zxio/zxui/core";
 import { FormGrid, useFormDialog } from "@/components/ui/FormDialog";
 
 const visible = defineModel();

@@ -1,0 +1,23 @@
+{
+  "entry": "import {useDialog,useRequiredThemePortalBinding} from '@zxio/zxui'; window.__iconReview={useDialog,useRequiredThemePortalBinding};",
+  "before": [
+    {
+      "file": "assets/entry-DnhLhIDZ.js",
+      "raw": 1184477,
+      "gzip": 370700,
+      "legacy": [
+        "/Users/hqz/dev/RuoYi-Vue3-FastAPI/ruoyi-fastapi-frontend/node_modules/@element-plus/icons-vue/dist/global.js",
+        "/Users/hqz/Downloads/element-plus/packages/components/capabilities/legacy-tooltip.ts",
+        "/Users/hqz/Downloads/element-plus/packages/components/capabilities/legacy.ts"
+      ]
+    }
+  ],
+  "after": [
+    {
+      "file": "assets/entry-At7PUlDw.js",
+      "raw": 27802,
+      "gzip": 10384,
+      "legacy": []
+    }
+  ]
+}

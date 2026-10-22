@@ -14,7 +14,7 @@ export default function createComponentImports(): PluginOption {
     dirs: [],
     dts: false,
     resolvers: [
-      ZxuiResolver({ importStyle: false }),
+      ZxuiResolver({ importStyle: false, entry: 'core' }),
       ElementPlusResolver({ importStyle: false, directives: true }),
       (name) =>
         Object.prototype.hasOwnProperty.call(elementIcons, name)

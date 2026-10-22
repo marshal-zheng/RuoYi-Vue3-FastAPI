@@ -5,9 +5,10 @@ import Hamburger from '@/components/ui/Hamburger/index.vue';
 describe('Hamburger Component', () => {
   it('renders correctly', () => {
     const { container } = render(Hamburger);
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('.hamburger');
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveClass('hamburger');
+    expect(container.querySelector('.hamburger svg')).toBeInTheDocument();
   });
 
   it('applies active class when isActive is true', () => {
@@ -16,7 +17,7 @@ describe('Hamburger Component', () => {
         isActive: true,
       },
     });
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('.hamburger');
     expect(svg).toHaveClass('is-active');
   });
 
@@ -26,7 +27,7 @@ describe('Hamburger Component', () => {
         isActive: false,
       },
     });
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('.hamburger');
     expect(svg).not.toHaveClass('is-active');
   });
 
@@ -40,7 +41,7 @@ describe('Hamburger Component', () => {
 
   it('has correct default props', () => {
     const { container } = render(Hamburger);
-    const svg = container.querySelector('svg');
+    const svg = container.querySelector('.hamburger');
     expect(svg).not.toHaveClass('is-active');
   });
 

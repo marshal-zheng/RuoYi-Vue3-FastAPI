@@ -1,14 +1,27 @@
-import { shallowMount } from '@vue/test-utils';
-import { describe, expect, it } from 'vitest';
+import { mount, shallowMount } from '@vue/test-utils';
+import { describe, expect, it, vi } from 'vitest';
 import * as ElementPlus from 'element-plus';
 import type { Component } from 'vue';
 import { Plus } from '@element-plus/icons-vue';
 import Render from '@/utils/generator/render';
 import { inputComponents, selectComponents } from '@/utils/generator/config';
+import { elementIcons } from '@/icons/element';
 
 const palette = [...inputComponents, ...selectComponents];
 
 describe('generator without a global component installer', () => {
+  it('restores an uncommon saved icon without registering the complete catalog', async () => {
+    expect(Object.hasOwn(elementIcons, 'Watermelon')).toBe(false);
+    const wrapper = mount(Render, {
+      props: { conf: { tag: 'el-button', icon: 'Watermelon' } },
+    });
+    try {
+      await vi.waitFor(() => expect(wrapper.find('button svg').exists()).toBe(true));
+      expect(Object.hasOwn(elementIcons, 'Watermelon')).toBe(false);
+    } finally {
+      wrapper.unmount();
+    }
+  });
   it.each(palette.filter(({ tag }) => tag.startsWith('el-')))(
     'renders $tag from its component object',
     (conf) => {

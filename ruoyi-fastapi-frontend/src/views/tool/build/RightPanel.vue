@@ -471,7 +471,7 @@
         </el-form>
       </el-scrollbar>
     </div>
-    <icons-dialog v-model="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
+    <icons-dialog v-if="iconsVisible" v-model="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
     <treeNode-dialog v-model="dialogVisible" @commit="addNode" />
 
   </div>
@@ -481,7 +481,8 @@
 import draggable from "vuedraggable/dist/vuedraggable.common"
 import { ElLink } from 'element-plus'
 import { isNumberStr } from '@/utils/index'
-import IconsDialog from './IconsDialog'
+import { defineAsyncComponent } from 'vue'
+const IconsDialog = defineAsyncComponent(() => import('./IconsDialog.vue'))
 import TreeNodeDialog from './TreeNodeDialog'
 import { inputComponents, selectComponents } from '@/utils/generator/config'
 

@@ -38,9 +38,9 @@
   </div>
 </template>
 <script setup>
-import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import { icons as ElementPlusIconsVue } from './element-catalog';
 import { watch, ref } from "vue";
-import { ZxDialog } from "@zxio/zxui/dialog";
+import { ZxDialog } from "@zxio/zxui/core";
 
 const iconList = ref([]);
 const originList = [];

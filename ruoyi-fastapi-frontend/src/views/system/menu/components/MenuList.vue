@@ -62,7 +62,11 @@
         ></el-table-column>
         <el-table-column prop="icon" label="图标" align="center" width="100">
           <template #default="scope">
-            <ZxIcon v-if="scope.row.icon" :icon="scope.row.icon" :size="16" />
+            <ZxIcon
+              v-if="scope.row.icon"
+              :icon="resolveNavigationIcon(scope.row.icon)"
+              :size="16"
+            />
           </template>
         </el-table-column>
         <el-table-column prop="orderNum" label="排序" width="60"></el-table-column>
@@ -124,6 +128,7 @@
 
 <script setup lang="ts" name="MenuList">
 import { useOperation } from '@/utils/operation';
+import { resolveNavigationIcon } from '@/icons/navigation';
 import type { GridListState, ZxGridListInstance, ActionItem } from '@zxio/zxui';
 import type { MenuRecord } from '@/api/system/menu';
 import type { GetSystemMenuListSystemMenuListGetData } from '@/api/_generated/types.gen';

@@ -5,7 +5,8 @@ import { compileScript, parse } from '@vue/compiler-sfc';
 import { mount, flushPromises } from '@vue/test-utils';
 import * as Vue from 'vue';
 import * as ElementPlus from 'element-plus';
-import * as ZxUi from '@zxio/zxui';
+import * as ZxUi from '@zxio/zxui/core';
+import { ZxThemeProvider } from '@zxio/zxui/theme-provider';
 import { createDefaultBrowserThemeHost } from '@zxio/zxui/theme-host';
 import defaultManifest from '@zxio/theme-default/manifest.json';
 import ts from 'typescript';
@@ -75,7 +76,7 @@ function executableGeneratedForm() {
   const modules: Record<string, unknown> = {
     vue: Vue,
     'element-plus': ElementPlus,
-    '@zxio/zxui': ZxUi,
+    '@zxio/zxui/core': ZxUi,
     '@/components/ui/FormDialog': FormDialog,
   };
   const exports: { default?: Vue.Component } = {};
@@ -128,7 +129,7 @@ describe('complete generated form runtime', () => {
     const wrapper = mount(
       Vue.defineComponent({
         setup: () => () =>
-          Vue.h(ZxUi.ZxThemeProvider, { portalTarget: () => document.body }, () =>
+          Vue.h(ZxThemeProvider, { portalTarget: () => document.body }, () =>
             Vue.h(GeneratedForm, {
               modelValue: visible.value,
               'onUpdate:modelValue': (value: boolean) => {
