@@ -63,8 +63,6 @@ class GetNoticeDetailQueryHandler(IQueryHandler[GetNoticeDetailQuery, NoticeDeta
 
     async def handle(self, request: GetNoticeDetailQuery) -> NoticeDetailReadModel:
         detail_result = await self._notice_service.notice_detail_services(request.notice_id)
-        if detail_result is None:
-            return NoticeDetailReadModel()
 
         if hasattr(detail_result, 'model_dump'):
             payload = detail_result.model_dump(by_alias=False)

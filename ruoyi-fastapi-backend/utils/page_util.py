@@ -1,14 +1,12 @@
 import math
-import logging
-from module_admin.entity.vo.base import CamelModelBase
-from sqlalchemy import func, select, Select
+from typing import List, Optional
+
+from sqlalchemy import Select, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.elements import UnaryExpression
-from typing import Optional, List
-from utils.common_util import CamelCaseUtil
-from utils.count_cache import get_count_cache, extract_table_from_query, extract_conditions_hash
 
-logger = logging.getLogger(__name__)
+from module_admin.entity.vo.base import CamelModelBase
+from utils.common_util import CamelCaseUtil
 
 
 class PageResponseModel(CamelModelBase):
@@ -55,13 +53,12 @@ class PageUtil:
 
     @classmethod
     async def paginate(
-        cls, 
-        db: AsyncSession, 
-        query: Select, 
-        page: int, 
-        page_size: int, 
+        cls,
+        db: AsyncSession,
+        query: Select,
+        page: int,
+        page_size: int,
         is_page: bool = False,
-        use_count_cache: bool = True
     ):
         """
         输入查询语句和分页信息，返回分页数据列表结果
@@ -71,13 +68,13 @@ class PageUtil:
         :param page: 当前页码
         :param page_size: 当前页面数据量
         :param is_page: 是否开启分页
-        :param use_count_cache: 是否使用 COUNT 缓存（默认启用）
         :return: 分页数据对象
         """
         query = cls._prepend_update_time_order(query)
         if is_page:
-            # 获取 COUNT 结果（优先使用缓存）
-            total = await cls._get_count_with_cache(db, query, use_count_cache)
+            # Count and items share this Session's database visibility, without cross-transaction results.
+            count_stmt = select(func.count()).select_from(query.order_by(None).subquery())
+            total = (await db.execute(count_stmt)).scalar_one()
             
             query_result = await db.execute(query.offset((page - 1) * page_size).limit(page_size))
             paginated_data = []
@@ -103,51 +100,6 @@ class PageUtil:
             result = CamelCaseUtil.transform_result(no_paginated_data)
 
         return result
-
-    @classmethod
-    async def _get_count_with_cache(cls, db: AsyncSession, query: Select, use_cache: bool) -> int:
-        """
-        获取 COUNT 结果，优先使用缓存
-        
-        Args:
-            db: 数据库会话
-            query: 查询语句
-            use_cache: 是否使用缓存
-        
-        Returns:
-            总记录数
-        """
-        count_cache = get_count_cache()
-        
-        # 如果缓存未启用或明确不使用缓存，直接查询数据库
-        if not use_cache or not count_cache.enabled:
-            count_stmt = select(func.count('*')).select_from(query.subquery())
-            result = await db.execute(count_stmt)
-            return result.scalar()
-        
-        # 提取表名和查询条件 hash
-        table_name = extract_table_from_query(query)
-        if not table_name:
-            # 无法提取表名，降级为直接查询
-            logger.debug("无法提取表名，跳过 COUNT 缓存")
-            count_stmt = select(func.count('*')).select_from(query.subquery())
-            result = await db.execute(count_stmt)
-            return result.scalar()
-        
-        query_hash = extract_conditions_hash(query)
-        
-        # 使用缓存获取 COUNT
-        async def loader():
-            count_stmt = select(func.count('*')).select_from(query.subquery())
-            result = await db.execute(count_stmt)
-            return result.scalar()
-        
-        return await count_cache.get_or_load(
-            table=table_name,
-            query_hash=query_hash,
-            loader=loader,
-            use_lock=True
-        )
 
     @classmethod
     def _prepend_update_time_order(cls, query: Select) -> Select:

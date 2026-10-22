@@ -1,6 +1,7 @@
 import json
 import asyncio
-from apscheduler.events import EVENT_ALL
+from apscheduler.events import EVENT_JOB_ERROR, EVENT_JOB_EXECUTED, EVENT_JOB_MISSED
+from apscheduler.job import Job
 from apscheduler.executors.asyncio import AsyncIOExecutor
 from apscheduler.executors.pool import ProcessPoolExecutor, ThreadPoolExecutor
 import os
@@ -23,6 +24,8 @@ from modules.scheduler.infrastructure.job_repository import JobLogRepository, Jo
 from modules.scheduler.application.job_log_service import JobLogService
 from config.job_registry import JobFunctionRegistry
 from utils.log_util import logger
+from utils.cron_util import CronUtil
+from exceptions.exception import ValidationException
 import module_task  # noqa: F401
 
 
@@ -149,7 +152,7 @@ class SchedulerUtil:
             for item in job_list:
                 cls.remove_scheduler_job(job_id=str(item.job_id))
                 cls.add_scheduler_job(item)
-        scheduler.add_listener(cls.scheduler_event_listener, EVENT_ALL)
+        scheduler.add_listener(cls.scheduler_event_listener, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR | EVENT_JOB_MISSED)
         logger.info('系统初始定时任务加载成功')
 
     @classmethod
@@ -175,143 +178,155 @@ class SchedulerUtil:
         return query_job
 
     @classmethod
-    def add_scheduler_job(cls, job_info: JobModel):
-        """
-        根据输入的任务对象信息添加任务
-
-        :param job_info: 任务对象信息
-        :return:
-        """
-        # 安全实现 - 使用函数注册表代替 eval()
+    def _job_options(cls, job_info: JobModel, *, run_once: bool = False):
         try:
             job_func = JobFunctionRegistry.get(job_info.invoke_target)
-        except ValueError as e:
-            logger.error(f'Failed to add job: {e}')
-            raise
+        except ValueError as error:
+            raise ValidationException(user_message='调用目标未注册', field='invoke_target') from error
+        try:
+            cron_valid = CronUtil.validate_cron_expression(job_info.cron_expression or '')
+        except (ValueError, TypeError) as error:
+            raise ValidationException(user_message='Cron表达式不正确', field='cron_expression') from error
+        if not cron_valid:
+            raise ValidationException(user_message='Cron表达式不正确', field='cron_expression')
+        try:
+            trigger = MyCronTrigger.from_crontab(job_info.cron_expression, timezone=scheduler.timezone)
+        except (ValueError, TypeError) as error:
+            raise ValidationException(user_message='Cron表达式无法调度', field='cron_expression') from error
+        try:
+            kwargs = json.loads(job_info.job_kwargs) if job_info.job_kwargs else {}
+            if not isinstance(kwargs, dict):
+                raise ValueError('Expected JSON object')
+        except (ValueError, TypeError) as error:
+            raise ValidationException(user_message='关键字参数必须是JSON对象', field='job_kwargs') from error
+        for alias, lookup, field in (
+            (job_info.job_group or 'default', scheduler._lookup_jobstore, 'job_group'),
+            (job_info.job_executor or 'default', scheduler._lookup_executor, 'job_executor'),
+        ):
+            try:
+                lookup(alias)
+            except KeyError as error:
+                raise ValidationException(user_message='任务组或执行器不存在', field=field) from error
+        if run_once:
+            trigger = (
+                OrTrigger(triggers=[DateTrigger(timezone=scheduler.timezone), trigger])
+                if job_info.status == '0'
+                else DateTrigger(timezone=scheduler.timezone)
+            )
+        return {
+            'func': job_func,
+            'trigger': trigger,
+            'args': tuple(job_info.job_args.split(',')) if job_info.job_args else (),
+            'kwargs': kwargs,
+            'id': str(job_info.job_id) if job_info.job_id is not None else 'validation',
+            'name': job_info.job_name,
+            'misfire_grace_time': 1000000000000 if job_info.misfire_policy == '3' else None,
+            'coalesce': job_info.misfire_policy == '2',
+            'max_instances': 3 if job_info.concurrent == '0' else 1,
+            'jobstore': job_info.job_group or 'default',
+            'executor': 'default' if iscoroutinefunction(job_func) else job_info.job_executor or 'default',
+        }
 
-        job_executor = job_info.job_executor
-        if iscoroutinefunction(job_func):
-            job_executor = 'default'
-        scheduler.add_job(
-            func=job_func,
-            trigger=MyCronTrigger.from_crontab(job_info.cron_expression),
-            args=job_info.job_args.split(',') if job_info.job_args else None,
-            kwargs=json.loads(job_info.job_kwargs) if job_info.job_kwargs else None,
-            id=str(job_info.job_id),
-            name=job_info.job_name,
-            misfire_grace_time=1000000000000 if job_info.misfire_policy == '3' else None,
-            coalesce=True if job_info.misfire_policy == '2' else False,
-            max_instances=3 if job_info.concurrent == '0' else 1,
-            jobstore=job_info.job_group,
-            executor=job_executor,
-        )
+    @classmethod
+    def validate_job(cls, job_info: JobModel):
+        options = cls._job_options(job_info)
+        try:
+            # APScheduler validates callable signatures with exactly the argument conversion used for execution.
+            Job(scheduler, **{key: value for key, value in options.items() if key != 'jobstore'})
+        except (ValueError, TypeError) as error:
+            raise ValidationException(
+                user_message='调用参数与任务函数不匹配', field='job_args', developer_message=str(error)
+            ) from error
+
+    @classmethod
+    def snapshot_scheduler_job(cls, job_id):
+        job = cls.get_scheduler_job(job_id)
+        if job is None:
+            return None
+        return {
+            'func': job.func,
+            'trigger': job.trigger,
+            'args': job.args,
+            'kwargs': dict(job.kwargs),
+            'id': job.id,
+            'name': job.name,
+            'misfire_grace_time': job.misfire_grace_time,
+            'coalesce': job.coalesce,
+            'max_instances': job.max_instances,
+            'next_run_time': job.next_run_time,
+            'jobstore': job._jobstore_alias,
+            'executor': job.executor,
+        }
+
+    @classmethod
+    def restore_scheduler_job(cls, job_id, previous):
+        cls.remove_scheduler_job(job_id)
+        if previous is not None:
+            scheduler.add_job(**previous, replace_existing=True)
+
+    @classmethod
+    def _replace_scheduler_job(cls, job_info, *, run_once=False):
+        options = cls._job_options(job_info, run_once=run_once)
+        old = cls.get_scheduler_job(job_info.job_id)
+        scheduler.add_job(**options, replace_existing=True)
+        if old is not None and old._jobstore_alias != options['jobstore']:
+            scheduler.remove_job(old.id, jobstore=old._jobstore_alias)
+
+    @classmethod
+    def add_scheduler_job(cls, job_info: JobModel):
+        cls._replace_scheduler_job(job_info)
 
     @classmethod
     def execute_scheduler_job_once(cls, job_info: JobModel):
-        """
-        根据输入的任务对象执行一次任务
-
-        :param job_info: 任务对象信息
-        :return:
-        """
-        # 安全实现 - 使用函数注册表代替 eval()
-        try:
-            job_func = JobFunctionRegistry.get(job_info.invoke_target)
-        except ValueError as e:
-            logger.error(f'Failed to execute job: {e}')
-            raise
-
-        job_executor = job_info.job_executor
-        if iscoroutinefunction(job_func):
-            job_executor = 'default'
-        job_trigger = DateTrigger()
-        if job_info.status == '0':
-            job_trigger = OrTrigger(triggers=[DateTrigger(), MyCronTrigger.from_crontab(job_info.cron_expression)])
-        scheduler.add_job(
-            func=job_func,
-            trigger=job_trigger,
-            args=job_info.job_args.split(',') if job_info.job_args else None,
-            kwargs=json.loads(job_info.job_kwargs) if job_info.job_kwargs else None,
-            id=str(job_info.job_id),
-            name=job_info.job_name,
-            misfire_grace_time=1000000000000 if job_info.misfire_policy == '3' else None,
-            coalesce=True if job_info.misfire_policy == '2' else False,
-            max_instances=3 if job_info.concurrent == '0' else 1,
-            jobstore=job_info.job_group,
-            executor=job_executor,
-        )
+        cls._replace_scheduler_job(job_info, run_once=True)
 
     @classmethod
     def remove_scheduler_job(cls, job_id: Union[str, int]):
-        """
-        根据任务id移除任务
-
-        :param job_id: 任务id
-        :return:
-        """
-        query_job = cls.get_scheduler_job(job_id=job_id)
-        if query_job:
-            scheduler.remove_job(job_id=str(job_id))
+        for job in scheduler.get_jobs():
+            if job.id == str(job_id):
+                scheduler.remove_job(job.id, jobstore=job._jobstore_alias)
 
     @classmethod
     def scheduler_event_listener(cls, event):
-        # 获取事件类型和任务ID
-        event_type = event.__class__.__name__
-        # 获取任务执行异常信息
-        status = '0'
-        exception_info = ''
-        if event_type == 'JobExecutionEvent' and event.exception:
-            exception_info = str(event.exception)
-            status = '1'
-        if hasattr(event, 'job_id'):
-            job_id = event.job_id
-            query_job = cls.get_scheduler_job(job_id=job_id)
-            if query_job:
-                query_job_info = query_job.__getstate__()
-                # 获取任务名称
-                job_name = query_job_info.get('name')
-                # 获取任务组名
-                job_group = query_job._jobstore_alias
-                # 获取任务执行器
-                job_executor = query_job_info.get('executor')
-                # 获取调用目标字符串
-                invoke_target = query_job_info.get('func')
-                # 获取调用函数位置参数
-                job_args = ','.join(query_job_info.get('args'))
-                # 获取调用函数关键字参数
-                job_kwargs = json.dumps(query_job_info.get('kwargs'))
-                # 获取任务触发器
-                job_trigger = str(query_job_info.get('trigger'))
-                # 构造日志消息
-                job_message = f'事件类型: {event_type}, 任务ID: {job_id}, 任务名称: {job_name}, 执行于{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
-                job_log = JobLogModel(
-                    jobName=job_name,
-                    jobGroup=job_group,
-                    jobExecutor=job_executor,
-                    invokeTarget=invoke_target,
-                    jobArgs=job_args,
-                    jobKwargs=job_kwargs,
-                    jobTrigger=job_trigger,
-                    jobMessage=job_message,
-                    status=status,
-                    exceptionInfo=exception_info,
-                    createTime=datetime.now(),
-                )
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    logger.warning('scheduler_event_listener 未检测到运行中的事件循环，跳过任务日志写入')
-                    return
-                task = loop.create_task(cls._persist_job_log(job_log))
-                task.add_done_callback(cls._log_async_task_exception)
+        # Registration/removal events do not represent an execution result.
+        if event.code not in (EVENT_JOB_EXECUTED, EVENT_JOB_ERROR, EVENT_JOB_MISSED):
+            return
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            logger.warning('scheduler_event_listener 未检测到运行中的事件循环，跳过任务日志写入')
+            return
+        task = loop.create_task(cls._persist_job_event(event))
+        task.add_done_callback(cls._log_async_task_exception)
 
     @classmethod
-    async def _persist_job_log(cls, job_log: JobLogModel):
-        async with AsyncSessionLocal() as session:
-            job_log_service = JobLogService(
-                job_log_repo=JobLogRepository(session),
-                query_db=session,
+    async def _persist_job_event(cls, event):
+        # A DateTrigger is removed before its execution event is delivered. Read
+        # the durable job definition instead of looking it up in the scheduler.
+        async with AsyncSessionLocal() as session, session.begin():
+            job = await JobRepository(session).find_by_id(int(event.job_id))
+            if job is None:
+                logger.warning(f'任务 {event.job_id} 已删除，跳过执行日志写入')
+                return
+            missed = event.code == EVENT_JOB_MISSED
+            exception_info = '任务错过计划执行时间' if missed else str(event.exception or '')
+            job_log = JobLogModel(
+                jobName=job.job_name,
+                jobGroup=job.job_group,
+                jobExecutor=job.job_executor,
+                invokeTarget=job.invoke_target,
+                jobArgs=job.job_args,
+                jobKwargs=job.job_kwargs,
+                jobTrigger=job.cron_expression,
+                jobMessage=(
+                    f'事件类型: {event.__class__.__name__}, 任务ID: {event.job_id}, '
+                    f'任务名称: {job.job_name}, 计划执行于{event.scheduled_run_time.isoformat()}'
+                ),
+                status='0' if event.code == EVENT_JOB_EXECUTED else '1',
+                exceptionInfo=exception_info,
+                createTime=datetime.now(),
             )
+            job_log_service = JobLogService(job_log_repo=JobLogRepository(session), query_db=session)
             await job_log_service.add_job_log_services(job_log)
 
     @staticmethod

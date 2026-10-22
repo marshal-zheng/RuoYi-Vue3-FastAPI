@@ -373,7 +373,7 @@ for (const item of cases)
       expect(e.modal().props('okDisabled')).toBe(true);
       expect(await e.modal().props('confirm')({})).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
-      expect(api.feedback).toHaveBeenCalledExactlyOnceWith(error.message);
+      expect(api.feedback).not.toHaveBeenCalled();
       const retry = e.wrapper.findAll('button').find((button) => button.text() === '重试');
       expect(retry).toBeDefined();
       await retry!.trigger('click');

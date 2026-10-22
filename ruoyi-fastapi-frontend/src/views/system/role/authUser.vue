@@ -1,7 +1,7 @@
 <template>
   <ZxContentWrap fill>
     <template #header-right>
-      <ZxButton type="warning" plain icon="Close" @click="handleClose">关闭</ZxButton>
+      <ZxButton icon="Close" @click="handleClose">关闭</ZxButton>
     </template>
 
     <ZxGridList
@@ -27,6 +27,7 @@
               >添加用户</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="CircleClose"
               :disabled="multiple || !canEdit"
@@ -92,8 +93,8 @@
             <template #default="scope">
               <div class="op-col__wrap">
                 <ZxButton
+                  type="danger"
                   link
-                  type="primary"
                   :disabled="!canSelectUser(scope.row)"
                   @click="cancelAuthUser(scope.row)"
                   v-hasPermi="['system:role:edit']"

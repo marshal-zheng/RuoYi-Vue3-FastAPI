@@ -15,7 +15,11 @@
       >
         <span class="zx-theme-preset-switch__swatch" :style="{ background: current.swatch }" />
         <span class="zx-theme-preset-switch__label">{{ current.label }}</span>
-        <ZxIcon class="zx-theme-preset-switch__caret" icon="CaretBottom" :size="12" />
+        <ZxIcon
+          class="zx-theme-preset-switch__caret"
+          :icon="navigationIcons.chevronDown"
+          size="var(--app-nav-chevron-size)"
+        />
       </button>
       <template #dropdown>
         <el-dropdown-menu>
@@ -58,7 +62,10 @@
       :aria-label="settingsStore.isDark ? '切换到浅色模式' : '切换到深色模式'"
       @click="onToggleMode"
     >
-      <ZxIcon :icon="settingsStore.isDark ? 'Sunny' : 'Moon'" :size="16" />
+      <ZxIcon
+        :icon="settingsStore.isDark ? navigationIcons.lightMode : navigationIcons.darkMode"
+        size="var(--app-nav-action-icon-size)"
+      />
     </button>
   </div>
 </template>
@@ -76,6 +83,7 @@ import {
   type ZxThemeDensity,
 } from '@/theme/zx-theme-config';
 import { ZX_THEME_PACKAGE_CHOICES } from '@/theme/zx-theme-packages';
+import { navigationIcons } from '@/icons/navigation';
 
 const settingsStore = useSettingsStore();
 const current = computed(() => zxThemeChoice(zxThemeId.value));

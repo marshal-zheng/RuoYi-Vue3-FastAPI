@@ -186,12 +186,6 @@ class DictDataService:
             page_object.update_time = datetime.now()
         edit_data_type = page_object.model_dump(exclude_unset=True)
         dict_data_info = await self.dict_data_detail_services(page_object.dict_code)
-        if not dict_data_info.dict_code:
-            raise ResourceNotFoundException(
-                user_message='字典数据不存在',
-                error_code=ErrorCode.DICT_NOT_FOUND,
-                developer_message=f'Dict data not found: dict_code={page_object.dict_code}',
-            )
 
         if not await self.check_dict_data_unique_services(page_object):
             raise ResourceConflictException(
@@ -209,11 +203,10 @@ class DictDataService:
                 if hasattr(db_dict_data, key):
                     setattr(db_dict_data, key, value)
             await self.dict_data_repo.update(db_dict_data)
-        dict_data_list = await self.query_dict_data_list_services(page_object.dict_type)
-        await redis.set(
-            f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}',
-            json.dumps(CamelCaseUtil.transform_result(dict_data_list), ensure_ascii=False, default=str),
-        )
+        for dict_type in dict.fromkeys((dict_data_info.dict_type, page_object.dict_type)):
+            await self._load_dict_data_and_refresh_cache(
+                redis, dict_type, f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}'
+            )
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -257,7 +250,11 @@ class DictDataService:
         if dict_data:
             result = DictDataModel(**CamelCaseUtil.transform_result(dict_data))
         else:
-            result = DictDataModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='字典数据不存在',
+                error_code=ErrorCode.DICT_NOT_FOUND,
+                developer_message=f'dict_code={dict_code} not found',
+            )
 
         return result
 
@@ -270,9 +267,9 @@ class DictDataService:
         """
         mapping_dict = {
             'dictCode': '字典编码',
-            'dictSort': '字典标签',
-            'dictLabel': '字典键值',
-            'dictValue': '字典排序',
+            'dictSort': '字典排序',
+            'dictLabel': '字典标签',
+            'dictValue': '字典键值',
             'dictType': '字典类型',
             'cssClass': '样式属性',
             'listClass': '表格回显样式',

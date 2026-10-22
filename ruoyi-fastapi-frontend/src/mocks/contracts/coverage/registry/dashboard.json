@@ -1,0 +1,47 @@
+[
+  {
+    "method": "DELETE",
+    "openapiPath": "/system/dashboard/{scope}/{key}",
+    "owner": "system-dashboard",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-backend/modules/system/tests/test_dashboard_persistence.py"
+    ],
+    "persistence": "real-only",
+    "reason": "Revision-safe account and scene layouts use authenticated backend storage; offline persistence is outside this pilot.",
+    "impact": "Real and fallback modes use the backend. Strict demo-offline cannot save layouts.",
+    "migrationTarget": "Add an isolated revision-aware offline repository and explicit handlers if dashboard persistence joins demo-offline scope."
+  },
+  {
+    "method": "GET",
+    "openapiPath": "/system/dashboard/{scope}/{key}",
+    "owner": "system-dashboard",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-backend/modules/system/tests/test_dashboard_persistence.py"
+    ],
+    "persistence": "real-only",
+    "reason": "Revision-safe account and scene layouts use authenticated backend storage; offline persistence is outside this pilot.",
+    "impact": "Real and fallback modes use the backend. Strict demo-offline cannot save layouts.",
+    "migrationTarget": "Add an isolated revision-aware offline repository and explicit handlers if dashboard persistence joins demo-offline scope."
+  },
+  {
+    "method": "PUT",
+    "openapiPath": "/system/dashboard/{scope}/{key}",
+    "owner": "system-dashboard",
+    "status": "real-only",
+    "critical": false,
+    "schemaStatus": "not-applicable",
+    "tests": [
+      "ruoyi-fastapi-backend/modules/system/tests/test_dashboard_persistence.py"
+    ],
+    "persistence": "real-only",
+    "reason": "Revision-safe account and scene layouts use authenticated backend storage; offline persistence is outside this pilot.",
+    "impact": "Real and fallback modes use the backend. Strict demo-offline cannot save layouts.",
+    "migrationTarget": "Add an isolated revision-aware offline repository and explicit handlers if dashboard persistence joins demo-offline scope."
+  }
+]

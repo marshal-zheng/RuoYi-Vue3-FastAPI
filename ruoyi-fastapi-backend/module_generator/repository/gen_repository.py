@@ -119,7 +119,7 @@ class GenTableRepository:
         )
         
         # Imports/deletions must be reflected immediately in the metadata list.
-        return await PageUtil.paginate(self.db, query, page, page_size, is_page, use_count_cache=False)
+        return await PageUtil.paginate(self.db, query, page, page_size, is_page)
     
     async def get_db_table_list(
         self,
@@ -239,8 +239,11 @@ class GenTableRepository:
             """
         
         query = text(query_sql).bindparams(table_names=tuple(table_names))
-        result = await self.db.execute(query)
-        return result.fetchall()
+        # Schema discovery must see DDL committed on the independent connection,
+        # rather than an earlier information_schema snapshot in the request.
+        async with self.db.bind.connect() as connection:
+            result = await connection.execute(query)
+            return result.fetchall()
     
     async def execute_sql_statements(self, sql_statements: List[Expression]) -> None:
         """
@@ -248,9 +251,12 @@ class GenTableRepository:
         
         :param sql_statements: SQL 语句 AST 列表
         """
-        for sql_statement in sql_statements:
-            sql = sql_statement.sql(dialect=DataBaseConfig.sqlglot_parse_dialect)
-            await self.db.execute(text(sql))
+        # MySQL DDL commits implicitly. Keep it off the request connection so
+        # authentication/metadata transactions and their savepoints stay valid.
+        async with self.db.bind.begin() as connection:
+            for sql_statement in sql_statements:
+                sql = sql_statement.sql(dialect=DataBaseConfig.sqlglot_parse_dialect)
+                await connection.execute(text(sql))
     
     async def add(self, gen_table_data: Dict[str, Any]) -> GenTableDO:
         """
@@ -365,8 +371,9 @@ class GenTableColumnRepository:
             """
         
         query = text(query_sql).bindparams(table_name=table_name)
-        result = await self.db.execute(query)
-        return result.fetchall()
+        async with self.db.bind.connect() as connection:
+            result = await connection.execute(query)
+            return result.fetchall()
     
     async def add(self, column_data: Dict[str, Any]) -> GenTableColumnDO:
         """

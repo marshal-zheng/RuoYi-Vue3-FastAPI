@@ -5,6 +5,7 @@ export interface LoginSession {
 import type { UserInfoModel, UserDetailModel, UserRegister } from '@/api/_generated/types.gen';
 import request from '@/utils/request';
 import { clampBcryptPassword } from '@/utils/password';
+import { withSessionCookieLock } from '@/utils/session';
 
 // 登录方法
 export function login(username: string, password: string, code: string, uuid: string) {
@@ -14,18 +15,20 @@ export function login(username: string, password: string, code: string, uuid: st
     code,
     uuid,
   });
-  return request<LoginSession>({
-    url: '/login',
-    headers: {
-      isToken: false,
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    method: 'post',
-    data,
-    skipRelogin: true,
-    silentSuccess: true,
-    feedback: { mode: 'auto' },
-  });
+  return withSessionCookieLock(() =>
+    request<LoginSession>({
+      url: '/login',
+      headers: {
+        isToken: false,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'post',
+      data,
+      skipRelogin: true,
+      silentSuccess: true,
+      feedback: { mode: 'auto' },
+    })
+  );
 }
 
 // 注册方法
@@ -51,7 +54,11 @@ export function register(data: UserRegister) {
 // 获取用户详细信息
 export function getInfo() {
   return request<{
-    user: UserInfoModel & { userId: number; userName: string; nickName: string };
+    user: UserInfoModel & {
+      userId: number;
+      userName: string;
+      nickName: string;
+    };
     roles: string[];
     permissions: string[];
   }>({
@@ -68,14 +75,17 @@ interface LogoutRequestOptions {
 }
 
 export function logout(options: LogoutRequestOptions = {}) {
-  return request<null>({
-    url: '/auth/logout',
-    method: 'post',
-    feedback: { mode: 'silent' },
-    skipRelogin: true,
-    silentError: true,
-    ...options,
-  });
+  return withSessionCookieLock(() =>
+    request<null>({
+      url: '/auth/logout',
+      isToken: false,
+      method: 'post',
+      feedback: { mode: 'silent' },
+      skipRelogin: true,
+      silentError: true,
+      ...options,
+    })
+  );
 }
 
 // 获取验证码

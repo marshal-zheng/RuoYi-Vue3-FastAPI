@@ -2,6 +2,7 @@ import type { GeneratorValue } from './types';
 import { titleCase } from '@/utils/index';
 import { trigger } from './config';
 import { normalizeGeneratorFields, resolveGeneratorColumns } from './identity';
+import { isElementIconName } from './icon-name';
 
 // 文件大小单位映射接口
 interface Units {
@@ -55,6 +56,10 @@ interface FormElement {
   labelKey?: string;
   childrenKey?: string;
   children?: FormElement[];
+  icon?: string;
+  'prefix-icon'?: string;
+  'suffix-icon'?: string;
+  'list-type'?: string;
 }
 
 // 表单配置接口
@@ -325,6 +330,7 @@ function buildexport(
 ): string {
   const names = new Set(['ElForm', 'ElFormItem', 'ElButton']);
   const zxNames = new Set<string>();
+  const iconNames = new Set<string>();
   const visit = (fields: FormElement[]) =>
     fields.forEach((field) => {
       const name = field.tag
@@ -342,7 +348,17 @@ function buildexport(
         names.add('ElCheckbox');
         names.add('ElCheckboxButton');
       }
-      if (field.tag === 'el-upload') names.add('ElMessage');
+      if (field.tag === 'el-upload') {
+        names.add('ElMessage');
+        if (field['list-type'] === 'picture-card') {
+          names.add('ElIcon');
+          iconNames.add('Plus');
+        } else iconNames.add('Upload');
+      }
+      for (const key of ['icon', 'prefix-icon', 'suffix-icon'] as const) {
+        const icon = field[key];
+        if (isElementIconName(icon)) iconNames.add(icon);
+      }
       if (field.children) visit(field.children);
     });
   visit(conf.fields);
@@ -354,7 +370,8 @@ function buildexport(
   let str = `
     import { ref, reactive, computed, watch } from 'vue'
     import { ${[...names].join(', ')} } from 'element-plus'
-    ${zxNames.size ? `import { ${[...zxNames].join(', ')} } from '@zxio/zxui'` : ''}
+    ${iconNames.size ? `import { ${[...iconNames].sort().join(', ')} } from '@element-plus/icons-vue'` : ''}
+    ${zxNames.size ? `import { ${[...zxNames].join(', ')} } from '@zxio/zxui/core'` : ''}
     ${type === 'dialog' ? "import { FormGrid, useFormDialog } from '@/components/ui/FormDialog'" : ''}
     const ${conf.formRef} = ref()
     const ${conf.formRules} = reactive({ ${rules} })

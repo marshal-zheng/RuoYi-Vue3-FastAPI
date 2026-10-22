@@ -1,6 +1,7 @@
 import type { GeneratorValue } from './types';
 import { trigger } from './config';
 import { generatorTags, normalizeGeneratorFields } from './identity';
+import { isElementIconName } from './icon-name';
 
 // 表单配置接口
 interface FormConf {
@@ -235,7 +236,7 @@ const tags: Record<string, TagFunction> = {
   'el-button': (el: FormElement): string => {
     const { disabled } = attrBuilder(el);
     const type = el.type ? `type="${el.type}"` : '';
-    const icon = el.icon ? `icon="${el.icon}"` : '';
+    const icon = isElementIconName(el.icon) ? `:icon="${el.icon}"` : '';
     const size = el.size ? `size="${el.size}"` : '';
     let child = buildElButtonChild(el);
 
@@ -247,8 +248,12 @@ const tags: Record<string, TagFunction> = {
     const maxlength = el.maxlength ? `:maxlength="${el.maxlength}"` : '';
     const showWordLimit = el['show-word-limit'] ? 'show-word-limit' : '';
     const readonly = el.readonly ? 'readonly' : '';
-    const prefixIcon = el['prefix-icon'] ? `prefix-icon='${el['prefix-icon']}'` : '';
-    const suffixIcon = el['suffix-icon'] ? `suffix-icon='${el['suffix-icon']}'` : '';
+    const prefixIcon = isElementIconName(el['prefix-icon'])
+      ? `:prefix-icon="${el['prefix-icon']}"`
+      : '';
+    const suffixIcon = isElementIconName(el['suffix-icon'])
+      ? `:suffix-icon="${el['suffix-icon']}"`
+      : '';
     const showPassword = el['show-password'] ? 'show-password' : '';
     const type = el.type ? `type="${el.type}"` : '';
     const autosize =
@@ -475,10 +480,10 @@ function buildElCheckboxGroupChild(conf: FormElement): string {
 
 function buildElUploadChild(conf: FormElement): string {
   const list: string[] = [];
-  if (conf['list-type'] === 'picture-card') list.push('<i class="el-icon-plus"></i>');
+  if (conf['list-type'] === 'picture-card') list.push('<el-icon><Plus /></el-icon>');
   else
     list.push(
-      `<el-button size="small" type="primary" icon="el-icon-upload">${conf.buttonText}</el-button>`
+      `<el-button size="small" type="primary" :icon="Upload">${conf.buttonText}</el-button>`
     );
   if (conf.showTip)
     list.push(

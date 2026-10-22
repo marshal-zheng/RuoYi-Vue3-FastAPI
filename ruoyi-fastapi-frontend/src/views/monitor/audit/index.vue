@@ -12,6 +12,7 @@
         <ZxListToolbar aria-label="列表操作与筛选">
           <template #actions>
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -21,6 +22,7 @@
               >删除</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               @click="handleClean"

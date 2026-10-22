@@ -138,12 +138,6 @@ class ConfigService:
         """
         edit_config = page_object.model_dump(exclude_unset=True)
         config_info = await self.config_detail_services(page_object.config_id)
-        if not config_info.config_id:
-            raise ResourceNotFoundException(
-                user_message='参数配置不存在',
-                error_code=ErrorCode.DICT_NOT_FOUND,
-                developer_message=f'Config not found: config_id={page_object.config_id}',
-            )
 
         if not await self.check_config_key_unique_services(page_object):
             raise ResourceConflictException(
@@ -181,12 +175,6 @@ class ConfigService:
         delete_config_key_list = []
         for config_id in config_id_list:
             config_info = await self.config_detail_services(int(config_id))
-            if not config_info.config_id:
-                raise ResourceNotFoundException(
-                    user_message='参数配置不存在',
-                    error_code=ErrorCode.CONFIG_NOT_FOUND,
-                    developer_message=f'Config not found: config_id={config_id}',
-                )
             if config_info.config_type == CommonConstant.YES:
                 raise BusinessException(
                     user_message=f'内置参数【{config_info.config_key}】不能删除',
@@ -212,7 +200,11 @@ class ConfigService:
         if config:
             result = ConfigModel(**CamelCaseUtil.transform_result(config))
         else:
-            result = ConfigModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='参数配置不存在',
+                error_code=ErrorCode.CONFIG_NOT_FOUND,
+                developer_message=f'config_id={config_id} not found',
+            )
 
         return result
 

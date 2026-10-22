@@ -97,7 +97,7 @@ class UserRepository(BaseRepository[UserDO]):
         result = await self.db.execute(stmt)
         return result.scalars().first()
 
-    async def get_user_with_relations(self, user_id: int) -> Dict[str, Any]:
+    async def get_user_with_relations(self, user_id: int, *, active_only: bool = False) -> Dict[str, Any]:
         """
         获取用户及其关联信息（部门、角色、岗位、菜单）
         
@@ -105,6 +105,7 @@ class UserRepository(BaseRepository[UserDO]):
         
         Args:
             user_id: 用户ID
+            active_only: 身份认证要求启用账号, 管理详情允许读取停用账号
         
         Returns:
             包含用户基本信息和关联信息的字典
@@ -119,10 +120,11 @@ class UserRepository(BaseRepository[UserDO]):
             ))
             .where(
                 UserDO.user_id == user_id,
-                UserDO.status == StatusEnum.NORMAL.value,
                 not_deleted(UserDO.del_flag)
             )
         )
+        if active_only:
+            user_dept_stmt = user_dept_stmt.where(UserDO.status == StatusEnum.NORMAL.value)
         user_dept_result = await self.db.execute(user_dept_stmt)
         user_dept_row = user_dept_result.first()
         

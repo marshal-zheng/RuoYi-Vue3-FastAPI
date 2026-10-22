@@ -1,16 +1,21 @@
 import io
-from collections.abc import Callable
+import struct
+import zlib
+from collections.abc import Callable, Collection
 from datetime import datetime
 from typing import Any
+from zipfile import BadZipFile
 
 import pandas as pd
 from fastapi import Request, UploadFile
+from openpyxl.utils.exceptions import InvalidFileException
 from sqlalchemy.ext.asyncio import AsyncSession
+from xlrd.biffh import XLRDError
+from xlrd.compdoc import CompDocError
 
 from config.constant import CommonConstant
 from config.error_codes import ErrorCode
 from exceptions.exception import (
-    AuthException,
     PermissionException,
     ResourceConflictException,
     ResourceNotFoundException,
@@ -44,6 +49,51 @@ from utils.excel_util import ExcelUtil
 from utils.page_util import PageResponseModel
 from utils.pwd_util import PwdUtil
 from utils.transaction_manager import transactional
+
+
+async def _read_user_import_workbook(file: UploadFile, required_headers: Collection[str]) -> pd.DataFrame:
+    try:
+        suffix = (file.filename or '').rsplit('.', 1)[-1].lower()
+        if suffix not in {'xls', 'xlsx'}:
+            raise ValidationException(
+                user_message='仅支持 XLS、XLSX 格式的用户导入文件',
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+            )
+        contents = await file.read()
+        try:
+            frame = pd.read_excel(io.BytesIO(contents), engine='xlrd' if suffix == 'xls' else 'openpyxl')
+        except (
+            ValueError,
+            BadZipFile,
+            InvalidFileException,
+            SyntaxError,  # Both stdlib and lxml XML parse errors derive from SyntaxError.
+            XLRDError,
+            CompDocError,
+            KeyError,
+            IndexError,
+            EOFError,
+            OSError,
+            struct.error,
+            zlib.error,
+        ) as exc:
+            # Only parser failures are input errors; dependency and service failures keep their classification.
+            raise ValidationException(
+                user_message='Excel 文件无法读取，可能已损坏或加密，请使用未加密的导入模板重新保存后重试',
+                developer_message=f'Invalid user import workbook: {type(exc).__name__}: {exc}',
+                error_code=ErrorCode.INVALID_INPUT,
+                field='file',
+            ) from exc
+    finally:
+        await file.close()
+    missing_headers = [header for header in required_headers if header not in frame.columns]
+    if missing_headers:
+        raise ValidationException(
+            user_message=f'导入模板不正确，缺少列：{"、".join(missing_headers)}。请下载最新模板后重试',
+            error_code=ErrorCode.INVALID_INPUT,
+            field='file',
+        )
+    return frame
 
 
 def _normalize_user_import_row(row) -> dict[str, Any]:
@@ -353,38 +403,51 @@ class UserService:
         :param query_db: orm对象
         :param page_object: 编辑用户对象
         :return: 编辑用户校验结果
+        关联字段未提供时保留, 提供空数组或 None 时清空。
         """
-        edit_user = page_object.model_dump(exclude_unset=True, exclude={'admin'})
-        if page_object.type not in {'status', 'avatar', 'pwd'}:
-            del edit_user['role_ids']
-            del edit_user['post_ids']
-            del edit_user['role']
-        if page_object.type in {'status', 'avatar', 'pwd'}:
-            del edit_user['type']
+        is_general_edit = page_object.type not in {'status', 'avatar', 'pwd', 'login'}
+        edit_fields = {
+            'dept_id',
+            'user_name',
+            'nick_name',
+            'email',
+            'phonenumber',
+            'id_card',
+            'sex',
+            'status',
+            'remark',
+        }
+        operation_fields = {
+            'profile': {'nick_name', 'email', 'phonenumber', 'sex'},
+            'status': {'status'},
+            'avatar': {'avatar'},
+            'pwd': {'password'},
+            'login': {'login_date', 'login_ip'},
+        }
+        writable = operation_fields.get(page_object.type, edit_fields) | {'update_by', 'update_time'}
+        edit_user = page_object.model_dump(exclude_unset=True, include=writable)
         user_repo = self._user_repo(query_db)
         db_user = await user_repo.get_by_id(page_object.user_id)
         if not db_user:
             raise ResourceNotFoundException(error_code=ErrorCode.USER_NOT_FOUND, user_message='用户不存在')
-        if page_object.type not in {'status', 'avatar', 'pwd'}:
+        if is_general_edit:
             await self._check_edit_user_uniqueness(query_db, page_object)
-        if db_user:
-            for key, value in edit_user.items():
-                if hasattr(db_user, key):
-                    setattr(db_user, key, value)
-            await user_repo.update(db_user)
-        if page_object.type not in {'status', 'avatar', 'pwd'}:
+        for key, value in edit_user.items():
+            if hasattr(db_user, key):
+                setattr(db_user, key, value)
+        await user_repo.update(db_user)
+        if page_object.type != 'profile' and is_general_edit and 'role_ids' in page_object.model_fields_set:
             user_role_repo = self._user_role_repo(query_db)
-            user_post_repo = self._user_post_repo(query_db)
             await user_role_repo.delete_by_user_id(page_object.user_id)
+            for role in page_object.role_ids or []:
+                db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=role)
+                await user_role_repo.add(db_user_role)
+        if page_object.type != 'profile' and is_general_edit and 'post_ids' in page_object.model_fields_set:
+            user_post_repo = self._user_post_repo(query_db)
             await user_post_repo.delete_by_user_id(page_object.user_id)
-            if page_object.role_ids:
-                for role in page_object.role_ids:
-                    db_user_role = UserRoleDO(user_id=page_object.user_id, role_id=role)
-                    await user_role_repo.add(db_user_role)
-            if page_object.post_ids:
-                for post in page_object.post_ids:
-                    db_user_post = UserPostDO(user_id=page_object.user_id, post_id=post)
-                    await user_post_repo.add(db_user_post)
+            for post in page_object.post_ids or []:
+                db_user_post = UserPostDO(user_id=page_object.user_id, post_id=post)
+                await user_post_repo.add(db_user_post)
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -497,7 +560,9 @@ class UserService:
         if page_object.old_password:
             user = (await user_repo.get_user_with_relations(user_id=page_object.user_id)).get('user_basic_info')
             if not PwdUtil.verify_password(page_object.old_password, user.password):
-                raise AuthException(error_code=ErrorCode.INVALID_PASSWORD, user_message='修改密码失败，旧密码错误')
+                raise ValidationException(
+                    error_code=ErrorCode.INVALID_PASSWORD, field='oldPassword', user_message='修改密码失败，旧密码错误'
+                )
             elif PwdUtil.verify_password(page_object.password, user.password):
                 raise ValidationException(
                     error_code=ErrorCode.INVALID_INPUT, field='password', user_message='新密码不能与旧密码相同'
@@ -547,9 +612,7 @@ class UserService:
             '用户性别': 'sex',
             '帐号状态': 'status',
         }
-        contents = await file.read()
-        df = pd.read_excel(io.BytesIO(contents))
-        await file.close()
+        df = await _read_user_import_workbook(file, header_dict)
         df.rename(columns=header_dict, inplace=True)
         results: list[dict[str, Any]] = []
         succeeded = 0

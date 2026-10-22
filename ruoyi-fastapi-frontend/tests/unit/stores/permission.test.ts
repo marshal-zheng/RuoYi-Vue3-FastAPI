@@ -42,11 +42,16 @@ const { registeredRouteNames, routeRemoverSpy, mockResolve, mockRouter, getRoute
     };
   });
 
+vi.mock('@/store/modules/user', () => ({
+  default: () => ({ getInfo: vi.fn().mockResolvedValue(undefined) }),
+}));
+
 vi.mock('@/api/menu', () => ({
   getRouters: getRoutersMock,
 }));
 vi.mock('@/router', () => ({
   default: mockRouter,
+  Layout: {},
   constantRoutes: [
     { path: '/login', name: 'Login', hidden: true },
     { path: '/index', name: 'Index', hidden: false },

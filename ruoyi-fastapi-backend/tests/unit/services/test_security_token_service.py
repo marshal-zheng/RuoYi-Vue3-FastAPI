@@ -201,7 +201,9 @@ async def test_ws_ticket_single_use():
     service = SecurityTokenService(redis)
     origin = 'http://localhost:5173'
 
-    ticket, _ = await service.issue_ws_ticket(subject='user:1', origin=origin, session_id='session-a')
+    await redis.set('sec:user_session:login-a', '{"userId":"1"}')
+    await redis.set('sec:active_session:1', 'login-a')
+    ticket, _ = await service.issue_ws_ticket(subject='user:1', origin=origin, session_id='session-a', auth_session_id='login-a')
     first = await service.consume_ws_ticket(
         ticket=ticket,
         origin=origin,
@@ -229,3 +231,29 @@ async def test_csrf_token_issue_and_validate():
     token, _ = await service.issue_csrf_token('user:1')
     assert await service.validate_csrf_token('user:1', token) is True
     assert await service.validate_csrf_token('user:1', 'bad-token') is False
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('invalidated', ['revoked', 'replaced'])
+async def test_unused_ws_ticket_cannot_restore_an_invalidated_login(invalidated):
+    redis = _RedisStub()
+    service = SecurityTokenService(redis)
+    await redis.set('sec:user_session:login-a', '{"userId":"1"}')
+    await redis.set('sec:active_session:1', 'login-a')
+    ticket, _ = await service.issue_ws_ticket(
+        subject='1', origin='http://localhost', session_id='simulation-a', auth_session_id='login-a',
+    )
+    if invalidated == 'revoked':
+        await redis.delete('sec:user_session:login-a')
+    else:
+        await redis.set('sec:active_session:1', 'login-b')
+    with pytest.raises(AuthException):
+        await service.consume_ws_ticket(ticket=ticket, origin='http://localhost', session_id='simulation-a',
+                                        request_id='qa', source_ip='127.0.0.1')
+
+
+@pytest.mark.asyncio
+async def test_ws_ticket_requires_a_live_authenticated_login():
+    service = SecurityTokenService(_RedisStub())
+    with pytest.raises(AuthException):
+        await service.issue_ws_ticket(subject='1', origin='http://localhost', session_id='simulation-a', auth_session_id='')

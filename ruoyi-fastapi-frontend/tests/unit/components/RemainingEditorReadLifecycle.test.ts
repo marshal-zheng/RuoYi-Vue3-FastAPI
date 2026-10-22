@@ -64,6 +64,13 @@ vi.mock('@/api/system/dict/type', () => ({
 }));
 vi.mock('vue-router', () => ({ useRoute: () => ({ params: { dictId: 1 } }) }));
 vi.mock('@/utils/http', () => ({ presentRequestError: api.recovery }));
+vi.mock('@zxio/schema-form/form-create', () => ({
+  ZxSchemaForm: {
+    name: 'ZxSchemaForm',
+    props: ['initial', 'save'],
+    template: '<div />',
+  },
+}));
 vi.mock('element-plus', () => ({ ElMessage: { error: api.error } }));
 vi.mock('@/utils/feedback/presenter', () => ({
   presentProblemFeedback: api.error,
@@ -242,6 +249,11 @@ function editor(item: (typeof cases)[number]) {
           template: '<button :disabled="disabled"><slot /></button>',
         },
         ZxInput: true,
+        ZxSchemaForm: {
+          name: 'ZxSchemaForm',
+          props: ['initial', 'save'],
+          template: '<div />',
+        },
         ElTreeSelect: {
           name: 'ElTreeSelect',
           props: ['data'],
@@ -291,7 +303,12 @@ function editor(item: (typeof cases)[number]) {
     modal,
     open: (id?: number) =>
       item.name === 'dict data' ? setup.openEditor(id) : exposed.open(item.arg(id)),
-    model: () => modal().props('formModel') as Record<string, unknown>,
+    model: () =>
+      (item.name === 'post'
+        ? wrapper.findComponent({ name: 'ZxSchemaForm' }).exists()
+          ? wrapper.findComponent({ name: 'ZxSchemaForm' }).props('initial')
+          : {}
+        : modal().props('formModel')) as Record<string, unknown>,
     confirm: () =>
       item.name === 'dict data'
         ? setup.submitForm()
@@ -329,13 +346,14 @@ for (const item of cases)
       expect(await e.confirm()).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
       const second = e.open(22);
+      if (item.name === 'post') await Vue.nextTick(); // Schema form awaits its discard decision first.
       expect(item.read.mock.calls[0][1]?.signal.aborted).toBe(true);
       b.resolve(detail(22));
       await second;
       a.resolve(detail(11));
       await first;
       await Vue.nextTick();
-      expect(e.model()[item.id]).toBe(22);
+      if (item.name !== 'post') expect(e.model()[item.id]).toBe(22);
       expect(e.model()[item.field]).toBe('Record 22');
       expect(e.modal().props('loading')).toBe(false);
       expect(e.modal().props('okDisabled')).toBe(false);
@@ -399,12 +417,13 @@ for (const item of cases)
       expect(e.modal().props('okDisabled')).toBe(true);
       expect(await e.confirm()).toBe(false);
       expect(api.write).not.toHaveBeenCalled();
-      expect(api.error).toHaveBeenCalledExactlyOnceWith(failure.message);
+      expect(api.error).not.toHaveBeenCalled();
       const retry = e.wrapper.findAll('button').find((b) => b.text() === '重试');
       expect(retry).toBeDefined();
       await retry!.trigger('click');
       await flushPromises();
-      expect(e.model()[item.id]).toBe(11);
+      if (item.name !== 'post') expect(e.model()[item.id]).toBe(11);
+      expect(item.read.mock.calls.at(-1)?.[0]).toBe(11);
       expect(e.modal().props('okDisabled')).toBe(false);
     });
     it('aborts at scope disposal without consuming late success', async () => {
@@ -459,4 +478,25 @@ it('owns menu options together with the detail and preserves root creation', asy
   await (e.wrapper.vm as unknown as { open: () => Promise<void> }).open();
   expect(e.model().parentId).toBe(0);
   expect(e.modal().props('okDisabled')).toBe(false);
+});
+
+describe('new project initial version ownership', () => {
+  it('forwards the created initial version to the topology route consumer', async () => {
+    const item = cases.find((entry) => entry.name === 'project')!;
+    const e = editor(item);
+    await e.open();
+    e.model().projectName = 'QA project';
+    api.write.mockResolvedValue({ projectId: 101, versionId: 201, projectName: 'QA project' });
+    await e.confirm();
+    expect(e.wrapper.emitted('success')).toEqual([
+      [
+        {
+          mode: 'create',
+          projectId: 101,
+          versionId: 201,
+          data: { projectId: 101, versionId: 201, projectName: 'QA project' },
+        },
+      ],
+    ]);
+  });
 });

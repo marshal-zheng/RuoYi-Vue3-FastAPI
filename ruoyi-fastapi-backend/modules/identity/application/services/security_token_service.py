@@ -13,6 +13,7 @@ import jwt
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ed25519, rsa
 from jwt import InvalidTokenError
+from redis.exceptions import WatchError
 
 from config.enums import RedisInitKeyConfig
 from config.env import AppConfig, SecurityConfig
@@ -378,72 +379,99 @@ class SecurityTokenService:
         if not cached_token or cached_token != token:
             raise AuthException(user_message='用户token已失效，请重新登录', developer_message='Session not active or token mismatch')
 
-        ttl = max(1, _coerce_int(payload.get('exp')) - int(_utc_now().timestamp()))
-        await self._require_redis().set(key, cached_token, ex=ttl)
-
     async def register_user_session(
         self,
         *,
         session_id: str,
         token: str,
+        refresh_token: str,
         user_id: str,
         user_name: str,
         dept_name: str | None,
         login_info: dict[str, Any] | None,
         expires_at: Any,
+        refresh_expires_at: Any,
+        previous_refresh_token: str | None = None,
     ) -> None:
         if not session_id:
             raise ValidationException(user_message='会话标识不能为空', developer_message='Missing session_id')
 
-        exp_epoch = _coerce_int(expires_at)
-        ttl = max(1, exp_epoch - int(_utc_now().timestamp()))
+        now = int(_utc_now().timestamp())
+        access_ttl = max(1, _coerce_int(expires_at) - now)
+        refresh_ttl = max(1, _coerce_int(refresh_expires_at) - now)
         redis = self._require_redis()
         token_key = f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}'
         meta_key = f'sec:user_session:{session_id}'
-        active_session_key = f'sec:active_session:{user_id}'
-
-        if not AppConfig.app_same_time_login:
-            previous_session = _to_text(await redis.get(active_session_key))
-            if previous_session and previous_session != session_id:
-                await redis.delete(
-                    f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{previous_session}',
-                    f'sec:user_session:{previous_session}',
-                )
-        await redis.set(token_key, token, ex=ttl)
-        await redis.set(active_session_key, session_id, ex=ttl)
-        await redis.set(
-            meta_key,
-            json.dumps(
-                {
-                    'sessionId': session_id,
-                    'userId': user_id,
-                    'userName': user_name,
-                    'deptName': dept_name,
-                    'loginInfo': login_info or {},
-                    'updatedAt': _utc_now().isoformat(),
-                },
-                ensure_ascii=False,
-            ),
-            ex=ttl,
+        active_key = f'sec:active_session:{user_id}'
+        metadata = json.dumps(
+            {
+                'sessionId': session_id,
+                'userId': user_id,
+                'userName': user_name,
+                'deptName': dept_name,
+                'loginInfo': login_info or {},
+                'refreshDigest': hashlib.sha256(refresh_token.encode()).hexdigest(),
+                'updatedAt': _utc_now().isoformat(),
+            },
+            ensure_ascii=False,
         )
+        # Refresh, logout and replacement login must agree on the same session.
+        # WATCH prevents a refresh from recreating a concurrently revoked session.
+        async with redis.pipeline(transaction=True) as pipe:
+            while True:
+                try:
+                    await pipe.watch(meta_key, active_key)
+                    previous_session = _to_text(await pipe.get(active_key))
+                    if previous_refresh_token is not None:
+                        raw_meta = _to_text(await pipe.get(meta_key))
+                        current = json.loads(raw_meta) if raw_meta else {}
+                        expected = hashlib.sha256(previous_refresh_token.encode()).hexdigest()
+                        if (
+                            current.get('userId') != user_id
+                            or current.get('refreshDigest') != expected
+                            or (not AppConfig.app_same_time_login and previous_session != session_id)
+                        ):
+                            raise AuthException(
+                                user_message='登录状态已失效，请重新登录',
+                                developer_message='Refresh session revoked, expired, replaced or already rotated',
+                            )
+                    pipe.multi()
+                    if not AppConfig.app_same_time_login and previous_session and previous_session != session_id:
+                        pipe.delete(
+                            f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{previous_session}',
+                            f'sec:user_session:{previous_session}',
+                        )
+                    pipe.set(token_key, token, ex=access_ttl)
+                    pipe.set(meta_key, metadata, ex=refresh_ttl)
+                    pipe.set(active_key, session_id, ex=refresh_ttl)
+                    await pipe.execute()
+                    return
+                except WatchError:
+                    continue
 
     async def revoke_user_session(self, session_id: str) -> None:
         if not session_id:
             return
         redis = self._require_redis()
         meta_key = f'sec:user_session:{session_id}'
-        raw_meta = _to_text(await redis.get(meta_key))
-        await redis.delete(
-            f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}',
-            meta_key,
-        )
-        if raw_meta:
-            try:
-                user_id = str(json.loads(raw_meta).get('userId') or '')
-            except Exception:
-                user_id = ''
-            if user_id:
-                await redis.delete(f'sec:active_session:{user_id}')
+        async with redis.pipeline(transaction=True) as pipe:
+            while True:
+                try:
+                    await pipe.watch(meta_key)
+                    raw_meta = _to_text(await pipe.get(meta_key))
+                    user_id = str(json.loads(raw_meta).get('userId') or '') if raw_meta else ''
+                    active_key = f'sec:active_session:{user_id}'
+                    if user_id:
+                        await pipe.watch(active_key)
+                    active_session = _to_text(await pipe.get(active_key)) if user_id else ''
+                    pipe.multi()
+                    pipe.delete(f'{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}', meta_key)
+                    if user_id and active_session == session_id:
+                        pipe.delete(active_key)
+                    await pipe.execute()
+                    return
+                except WatchError:
+                    continue
 
     async def extract_user_context_from_token(self, token: str) -> dict[str, Any] | None:
         try:
@@ -670,19 +698,33 @@ class SecurityTokenService:
         )
         return access, expires_in, payload
 
+    async def assert_user_session_live(self, *, session_id: str, user_id: str) -> None:
+        redis = self._require_redis()
+        raw = _to_text(await redis.get(f'sec:user_session:{session_id}')) if session_id else ''
+        metadata = json.loads(raw) if raw else {}
+        if not session_id or metadata.get('userId') != user_id:
+            raise AuthException(user_message='登录状态已失效，请重新登录', developer_message='WebSocket login session revoked or expired')
+        if not AppConfig.app_same_time_login:
+            active = _to_text(await redis.get(f'sec:active_session:{user_id}'))
+            if active != session_id:
+                raise AuthException(user_message='登录状态已失效，请重新登录', developer_message='WebSocket login session replaced')
+
     async def issue_ws_ticket(
         self,
         *,
         subject: str,
         origin: str,
         session_id: str,
+        auth_session_id: str,
     ) -> tuple[str, int]:
+        await self.assert_user_session_live(session_id=auth_session_id, user_id=subject.removeprefix('user:'))
         ttl = min(max(1, int(SecurityConfig.security_ws_ticket_ttl_seconds)), 30)
         ticket = uuid.uuid4().hex
         data = {
             'subject': subject,
             'origin': _normalize_origin(origin),
             'sessionId': session_id,
+            'authSessionId': auth_session_id,
             'createdAt': _utc_now().isoformat(),
         }
         inserted = await self._require_redis().set(
@@ -742,6 +784,10 @@ class SecurityTokenService:
 
         if data.get('sessionId') != session_id:
             raise AuthException(user_message='用户token不合法', developer_message='Ws session mismatch')
+        await self.assert_user_session_live(
+            session_id=str(data.get('authSessionId') or ''),
+            user_id=str(data.get('subject') or '').removeprefix('user:'),
+        )
         return data
 
     async def register_client_jwk(

@@ -241,6 +241,7 @@ async def issue_ws_ticket(
         subject=str(current_user.user.user_id if current_user.user else ''),
         origin=str(origin),
         session_id=payload.session_id,
+        auth_session_id=str(getattr(request.state, 'auth_session_id', '')),
     )
     return ResponseUtil.ok_resource({'wsTicket': ticket, 'expiresIn': ttl})
 

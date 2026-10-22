@@ -109,13 +109,7 @@ class PostService:
         :return: 编辑岗位校验结果
         """
         edit_post = page_object.model_dump(exclude_unset=True)
-        post_info = await self.post_detail_services(page_object.post_id)
-        if not post_info.post_id:
-            raise ResourceNotFoundException(
-                user_message='岗位不存在',
-                error_code=ErrorCode.ROLE_NOT_FOUND,
-                developer_message=f'Post not found: post_id={page_object.post_id}',
-            )
+        await self.post_detail_services(page_object.post_id)
 
         if not await self.check_post_name_unique_services(page_object):
             raise ResourceConflictException(
@@ -177,7 +171,11 @@ class PostService:
         if post:
             result = PostModel(**CamelCaseUtil.transform_result(post))
         else:
-            result = PostModel(**{})
+            raise ResourceNotFoundException(
+                user_message='岗位不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'post_id={post_id} not found',
+            )
 
         return result
 

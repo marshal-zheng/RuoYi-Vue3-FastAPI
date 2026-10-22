@@ -10,7 +10,6 @@ from module_admin.entity.do.dict_do import DictTypeDO, DictDataDO
 from module_admin.entity.do.enums import StatusEnum
 from module_admin.repository.base_repository import BaseRepository
 from utils.page_util import PageUtil
-from utils.time_format_util import list_format_datetime
 
 
 class DictTypeRepository(BaseRepository[DictTypeDO]):
@@ -47,11 +46,11 @@ class DictTypeRepository(BaseRepository[DictTypeDO]):
         result = await self.db.execute(stmt)
         return result.scalars().first()
     
-    async def find_all(self) -> List[dict]:
+    async def find_all(self) -> List[DictTypeDO]:
         """获取所有字典类型"""
         stmt = select(DictTypeDO)
         result = await self.db.execute(stmt)
-        return list_format_datetime(result.scalars().all())
+        return list(result.scalars().all())
     
     async def paginate_with_filters(
         self,
@@ -166,7 +165,7 @@ class DictDataRepository(BaseRepository[DictDataDO]):
         query = (
             select(DictDataDO)
             .where(*conditions) if conditions else select(DictDataDO)
-        ).order_by(DictDataDO.dict_sort).distinct()
+        ).order_by(DictDataDO.dict_sort, DictDataDO.dict_code).distinct()
         
         return await PageUtil.paginate(self.db, query, page, page_size, True)
     

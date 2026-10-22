@@ -137,8 +137,6 @@ class GetRoleDetailQueryHandler(IQueryHandler[GetRoleDetailQuery, RoleDetailRead
             await self._role_service.check_role_data_scope_services(str(request.role_id), request.data_scope_sql)
 
         detail_result = await self._role_service.role_detail_services(request.role_id)
-        if detail_result is None:
-            return RoleDetailReadModel()
 
         return RoleDetailReadModel.model_validate(_extract_payload(detail_result))
 

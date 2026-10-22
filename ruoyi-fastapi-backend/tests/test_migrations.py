@@ -62,17 +62,15 @@ class TestMigrationStructure:
     
     def test_migration_files_have_revision_id(self, alembic_dir):
         """测试迁移文件包含 revision ID"""
-        versions_dir = alembic_dir / "versions"
-        migration_files = list(versions_dir.glob("*.py"))
-        
-        for file in migration_files:
-            if file.name.startswith(".") or file.name == "__init__.py":
-                continue
-            
-            content = file.read_text()
-            assert "revision = " in content, f"{file} should have revision ID"
-            assert "def upgrade" in content, f"{file} should have upgrade function"
-            assert "def downgrade" in content, f"{file} should have downgrade function"
+        scripts = ScriptDirectory(str(alembic_dir))
+        revisions = list(scripts.walk_revisions())
+        files = {str(file.resolve()) for file in (alembic_dir / 'versions').glob('*.py')
+                 if not file.name.startswith('.') and file.name != '__init__.py'}
+        assert {str(Path(revision.path).resolve()) for revision in revisions} == files
+        for revision in revisions:
+            assert isinstance(revision.revision, str) and revision.revision
+            assert callable(revision.module.upgrade)
+            assert callable(revision.module.downgrade)
 
 
 class TestMigrationScripts:
@@ -157,34 +155,12 @@ class TestMigrationDependencies:
     
     def test_migration_chain_is_linear(self, alembic_dir):
         """测试迁移链是线性的（无分支）"""
-        versions_dir = alembic_dir / "versions"
-        
-        revisions = {}
-        down_revisions = {}
-        
-        for file in versions_dir.glob("*.py"):
-            if file.name.startswith(".") or file.name == "__init__.py":
-                continue
-            
-            content = file.read_text()
-            
-            # 提取 revision 和 down_revision
-            for line in content.split("\n"):
-                if line.startswith("revision = "):
-                    rev = line.split("=")[1].strip().strip("'\"")
-                    revisions[file.name] = rev
-                if line.startswith("down_revision = "):
-                    down_rev = line.split("=")[1].strip().strip("'\"")
-                    if down_rev != "None":
-                        down_revisions[file.name] = down_rev
-        
-        # 检查每个 down_revision 只被引用一次（线性链）
-        down_rev_counts = {}
-        for down_rev in down_revisions.values():
-            down_rev_counts[down_rev] = down_rev_counts.get(down_rev, 0) + 1
-        
-        for down_rev, count in down_rev_counts.items():
-            assert count == 1, f"Revision {down_rev} is referenced by multiple migrations (branch detected)"
+        scripts = ScriptDirectory(str(alembic_dir))
+        assert len(scripts.get_heads()) == 1
+        assert len(scripts.get_bases()) == 1
+        revisions = list(scripts.walk_revisions())
+        assert all(not revision.is_branch_point for revision in revisions)
+        assert all(not revision.is_merge_point for revision in revisions)
 
 
 class TestMigrationIdempotency:

@@ -5,7 +5,6 @@
         >新增用户</ZxButton
       >
       <ZxButton
-        type="success"
         icon="Edit"
         :disabled="single"
         @click="handleUpdate"
@@ -13,6 +12,7 @@
         >修改</ZxButton
       >
       <ZxButton
+        plain
         type="danger"
         icon="Delete"
         :disabled="multiple"
@@ -21,14 +21,10 @@
         :loading="handleDeletePending"
         >删除</ZxButton
       >
-      <ZxButton type="info" icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']"
+      <ZxButton icon="Upload" @click="handleImport" v-hasPermi="['system:user:import']"
         >导入</ZxButton
       >
-      <ZxButton
-        type="warning"
-        icon="Download"
-        @click="handleExport"
-        v-hasPermi="['system:user:export']"
+      <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:user:export']"
         >导出</ZxButton
       >
     </template>
@@ -52,7 +48,7 @@
             <div class="flex-1 overflow-auto" v-loading="deptStatus.loading">
               <div v-if="deptStatus.error" role="alert">
                 部门读取失败
-                <ZxButton type="text" @click="refreshDepartments">重试</ZxButton>
+                <ZxButton link type="primary" @click="refreshDepartments">重试</ZxButton>
               </div>
               <div v-else-if="deptStatus.paused" role="status">部门等待网络连接</div>
               <el-tree
@@ -204,15 +200,17 @@
                     <template #default="scope">
                       <div class="op-col__wrap">
                         <ZxButton
+                          link
+                          type="primary"
                           v-if="scope.row.userId !== 1"
-                          type="text"
                           @click="handleUpdate(scope.row)"
                           v-hasPermi="['system:user:edit']"
                           >修改</ZxButton
                         >
                         <ZxButton
+                          link
+                          type="primary"
                           v-if="scope.row.userId !== 1"
-                          type="text"
                           @click="handleAuthRole(scope.row)"
                           v-hasPermi="['system:user:edit']"
                           >分配角色</ZxButton

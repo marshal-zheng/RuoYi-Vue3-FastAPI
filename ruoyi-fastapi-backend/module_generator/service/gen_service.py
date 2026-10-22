@@ -12,11 +12,13 @@ from typing import List
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlglot import parse as sqlglot_parse
-from sqlglot.expressions import Add, Alter, Create, Delete, Drop, Expression, Insert, Table, TruncateTable, Update
+from sqlglot.errors import ParseError
+from sqlglot.expressions import Create, Expression, Schema, Table
 
 from config.constant import GenConstant
 from config.env import DataBaseConfig, GenConfig
-from exceptions.exception import ServiceException
+from config.error_codes import ErrorCode
+from exceptions.exception import ResourceConflictException, ResourceNotFoundException, ServiceException, ValidationException
 from module_admin.entity.vo.common_vo import CrudResponseModel
 from module_admin.entity.vo.user_vo import CurrentUserModel
 from module_generator.entity.vo.gen_vo import (
@@ -121,9 +123,7 @@ class GenTableService:
         :param page_object: 编辑业务表对象
         :return: 编辑业务表校验结果
         """
-        gen_table_info = await self.get_gen_table_by_id_services(page_object.table_id)
-        if not gen_table_info.table_id:
-            raise ServiceException(message='业务表不存在')
+        await self.get_gen_table_by_id_services(page_object.table_id)
 
         edit_gen_table = page_object.model_dump(exclude_unset=True, by_alias=True)
         edit_gen_table['options'] = json.dumps(edit_gen_table.get('params'))
@@ -168,6 +168,12 @@ class GenTableService:
         :return: 需要生成的业务表id对应的信息
         """
         gen_table = await self.table_repo.find_by_id(table_id)
+        if not gen_table:
+            raise ResourceNotFoundException(
+                user_message='代码生成表不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'table_id={table_id} not found',
+            )
         result = await self.set_table_from_options(GenTableModel(**CamelCaseUtil.transform_result(gen_table)))
         return result
 
@@ -189,12 +195,19 @@ class GenTableService:
         :param current_user: 当前用户信息对象
         :return: 创建表结构结果
         """
-        sql_statements = sqlglot_parse(sql, dialect=DataBaseConfig.sqlglot_parse_dialect)
+        try:
+            sql_statements = sqlglot_parse(sql, dialect=DataBaseConfig.sqlglot_parse_dialect)
+        except ParseError as exc:
+            raise ValidationException(user_message='建表语句不合法', field='sql') from exc
 
         if not self._is_valid_create_table(sql_statements):
-            raise ServiceException(message='建表语句不合法')
+            raise ValidationException(user_message='仅支持完整的 CREATE TABLE 建表语句', field='sql')
 
         table_names = self._get_table_names(sql_statements)
+        if len(set(table_names)) != len(table_names):
+            raise ValidationException(user_message='建表语句包含重复表名', field='sql')
+        if await self.get_gen_db_table_list_by_name_services(table_names):
+            raise ResourceConflictException(user_message='待创建的表已存在，请使用导入功能')
 
         # 执行建表语句
         await self.table_repo.execute_sql_statements(sql_statements)
@@ -234,17 +247,18 @@ class GenTableService:
         :param sql_statements: sql语句的ast列表
         :return: 校验结果
         """
-        validate_create = [isinstance(sql_statement, Create) for sql_statement in sql_statements]
-        validate_forbidden_keywords = [
-            isinstance(
-                sql_statement,
-                (Add, Alter, Delete, Drop, Insert, TruncateTable, Update),
-            )
-            for sql_statement in sql_statements
-        ]
-        if not any(validate_create) or any(validate_forbidden_keywords):
-            return False
-        return True
+        return bool(sql_statements) and all(
+            isinstance(statement, Create)
+            and statement.kind == 'TABLE'
+            and isinstance(statement.this, Schema)
+            and isinstance(statement.this.this, Table)
+            and not statement.this.this.db
+            and not statement.this.this.catalog
+            and bool(statement.this.expressions)
+            and statement.expression is None
+            and not statement.args.get('replace')
+            for statement in sql_statements
+        )
 
     @staticmethod
     def _get_table_names(sql_statements: List[Expression]) -> List[str]:

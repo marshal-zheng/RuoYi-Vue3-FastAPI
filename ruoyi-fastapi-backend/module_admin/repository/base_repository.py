@@ -2,18 +2,15 @@
 Repository 模式实现
 提供统一的数据访问抽象层，隔离业务逻辑和数据库操作
 """
-import logging
-from datetime import datetime
 from abc import ABC, abstractmethod
-from typing import Generic, TypeVar, List, Optional, Type, Any, Dict, Sequence
-from sqlalchemy import select, delete, func, and_, or_, inspect
+from datetime import datetime
+from typing import Any, Dict, Generic, List, Optional, Sequence, Type, TypeVar
+
+from sqlalchemy import and_, delete, func, inspect, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
-from utils.count_cache import get_count_cache
+
 from module_admin.entity.do.enums import DelFlagEnum
-
-logger = logging.getLogger(__name__)
-
 
 T = TypeVar('T')
 
@@ -102,7 +99,6 @@ class BaseRepository(IRepository[T]):
     子类可以继承并扩展特定的查询方法
     
     特性：
-    - 写操作（add/delete）后自动失效对应表的 COUNT 缓存
     - 支持软删除
     - 支持分页查询
     """
@@ -117,22 +113,7 @@ class BaseRepository(IRepository[T]):
         """
         self.db = db
         self.model_class = model_class
-        self._table_name = getattr(model_class, '__tablename__', None)
     
-    async def _invalidate_count_cache(self):
-        """
-        失效当前表的 COUNT 缓存
-        
-        在写操作后调用，确保下次分页查询能获取最新的总数
-        """
-        if not self._table_name:
-            return
-        
-        count_cache = get_count_cache()
-        if count_cache.enabled:
-            await count_cache.invalidate_table(self._table_name)
-            logger.debug(f"已失效表 '{self._table_name}' 的 COUNT 缓存")
-
     def _get_pk_columns(self) -> Sequence:
         """获取模型主键列"""
         mapper = inspect(self.model_class)
@@ -280,14 +261,10 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             添加后的实体（包含生成的ID）
-        
-        Note:
-            添加后会自动失效对应表的 COUNT 缓存
         """
         self.db.add(entity)
         await self.db.flush()
         await self.db.refresh(entity)
-        await self._invalidate_count_cache()
         return entity
     
     async def add_all(self, entities: List[T]) -> List[T]:
@@ -299,15 +276,11 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             添加后的实体列表
-        
-        Note:
-            添加后会自动失效对应表的 COUNT 缓存
         """
         self.db.add_all(entities)
         await self.db.flush()
         for entity in entities:
             await self.db.refresh(entity)
-        await self._invalidate_count_cache()
         return entities
     
     async def update(self, entity: T) -> T:
@@ -333,16 +306,10 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             是否删除成功
-        
-        Note:
-            删除后会自动失效对应表的 COUNT 缓存
         """
         stmt = delete(self.model_class).where(self._build_pk_condition(id))
         result = await self.db.execute(stmt)
-        if result.rowcount > 0:
-            await self._invalidate_count_cache()
-            return True
-        return False
+        return result.rowcount > 0
     
     async def delete_by_ids(self, ids: List[Any]) -> int:
         """
@@ -353,17 +320,12 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             删除的记录数
-        
-        Note:
-            删除后会自动失效对应表的 COUNT 缓存
         """
         if not ids:
             return 0
         pk_column = self._get_single_pk_column()
         stmt = delete(self.model_class).where(pk_column.in_(ids))
         result = await self.db.execute(stmt)
-        if result.rowcount > 0:
-            await self._invalidate_count_cache()
         return result.rowcount
     
     async def soft_delete_by_id(self, id: Any) -> bool:
@@ -375,9 +337,6 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             是否删除成功
-        
-        Note:
-            软删除后会自动失效对应表的 COUNT 缓存
         """
         entity = await self.get_by_id(id)
         if not entity:
@@ -391,7 +350,6 @@ class BaseRepository(IRepository[T]):
         else:
             return False
         await self.update(entity)
-        await self._invalidate_count_cache()
         return True
     
     async def soft_delete_by_ids(self, ids: List[Any]) -> int:
@@ -403,9 +361,6 @@ class BaseRepository(IRepository[T]):
         
         Returns:
             删除的记录数
-        
-        Note:
-            软删除后会自动失效对应表的 COUNT 缓存
         """
         count = 0
         for entity_id in ids:
@@ -422,8 +377,6 @@ class BaseRepository(IRepository[T]):
                 continue
             await self.update(entity)
             count += 1
-        if count > 0:
-            await self._invalidate_count_cache()
         return count
     
     async def count(self, filters: Optional[Dict[str, Any]] = None, include_deleted: bool = False) -> int:

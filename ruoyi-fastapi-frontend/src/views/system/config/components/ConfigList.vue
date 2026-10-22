@@ -15,7 +15,6 @@
             >新增</ZxButton
           >
           <ZxButton
-            type="success"
             icon="Edit"
             :disabled="single"
             @click="handleUpdate"
@@ -23,6 +22,7 @@
             >修改</ZxButton
           >
           <ZxButton
+            plain
             type="danger"
             icon="Delete"
             :disabled="multiple"
@@ -31,15 +31,10 @@
             :loading="handleDeletePending"
             >删除</ZxButton
           >
-          <ZxButton
-            type="warning"
-            icon="Download"
-            @click="handleExport"
-            v-hasPermi="['system:config:export']"
+          <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:config:export']"
             >导出</ZxButton
           >
           <ZxButton
-            type="danger"
             icon="Refresh"
             @click="handleRefreshCache"
             v-hasPermi="['system:config:remove']"

@@ -9,7 +9,6 @@
               >新增</ZxButton
             >
             <ZxButton
-              type="success"
               icon="Edit"
               :disabled="single"
               @click="handleUpdate"
@@ -17,6 +16,7 @@
               >修改</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -26,7 +26,6 @@
               >删除</ZxButton
             >
             <ZxButton
-              type="warning"
               icon="Download"
               @click="() => handleExport(query)"
               v-hasPermi="['system:post:export']"

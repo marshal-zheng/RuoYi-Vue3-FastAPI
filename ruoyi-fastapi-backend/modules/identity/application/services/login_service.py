@@ -365,7 +365,7 @@ class LoginService:
         user_id = int(str(user_id_raw))
 
         user_repo = self._require_user_repo()
-        query_user = await user_repo.get_user_with_relations(user_id=user_id)
+        query_user = await user_repo.get_user_with_relations(user_id=user_id, active_only=True)
         if query_user.get('user_basic_info') is None:
             logger.warning('用户token不合法')
             raise AuthException(data='', user_message='用户token不合法')
@@ -390,6 +390,7 @@ class LoginService:
                 role=CamelCaseUtil.transform_result(query_user.get('user_role_info')),
             ),
         )
+        context.state.auth_session_id = str(payload.get('session_id') or '')
         return current_user
 
     async def get_current_user_routers(self, user_id: int):
@@ -400,7 +401,7 @@ class LoginService:
         :return: 当前用户路由信息对象
         """
         user_repo = self._require_user_repo()
-        query_user = await user_repo.get_user_with_relations(user_id=user_id)
+        query_user = await user_repo.get_user_with_relations(user_id=user_id, active_only=True)
         user_router_menu = sorted(
             [
                 row

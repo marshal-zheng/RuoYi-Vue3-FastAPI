@@ -2402,6 +2402,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@scarf/scarf@npm:=1.4.0":
+  version: 1.4.0
+  resolution: "@scarf/scarf@npm:1.4.0"
+  checksum: 10c0/332118bb488e7a70eaad068fb1a33f016d30442fb0498b37a80cb425c1e741853a5de1a04dce03526ed6265481ecf744aa6e13f072178d19e6b94b19f623ae1c
+  languageName: node
+  linkType: hard
+
 "@simonwep/pickr@npm:~1.8.0":
   version: 1.8.2
   resolution: "@simonwep/pickr@npm:1.8.2"
@@ -4244,12 +4251,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/constants@npm:^1.1.0":
+"@zxio/constants@file:./vendor/zxio-constants-1.1.0-icons-demand.20261022.tgz::locator=vfadmin%40workspace%3A.":
   version: 1.1.0
-  resolution: "@zxio/constants@npm:1.1.0"
+  resolution: "@zxio/constants@file:./vendor/zxio-constants-1.1.0-icons-demand.20261022.tgz#./vendor/zxio-constants-1.1.0-icons-demand.20261022.tgz::hash=2c1612&locator=vfadmin%40workspace%3A."
   peerDependencies:
     element-plus: ">=2.0.0 <3.0.0"
-  checksum: 10c0/de95cf0dbfe560d7470507ec644eac2abae0d97209fb6181bb3f94db663c5d6ccf7faf9588190a5c11ae1cca6308547768054cc8ddfa2653a34a8b1a659a6726
+  checksum: 10c0/99fbde4682107a6ae6972101775e531f9b33022541159dedceddf608c40ebc7e5c8f4be796a37d9eae27dca57d2779603da66ea68a0f26fd8b2b0ef1661aa90e
   languageName: node
   linkType: hard
 
@@ -4531,9 +4538,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::locator=vfadmin%40workspace%3A.":
+"@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-icons-demand.20261022.tgz::locator=vfadmin%40workspace%3A.":
   version: 3.0.0-next.0
-  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz#./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz::hash=b2aa87&locator=vfadmin%40workspace%3A."
+  resolution: "@zxio/zxui@file:./vendor/zxio-zxui-3.0.0-next.0-icons-demand.20261022.tgz#./vendor/zxio-zxui-3.0.0-next.0-icons-demand.20261022.tgz::hash=56a5e1&locator=vfadmin%40workspace%3A."
   dependencies:
     "@element-plus/icons-vue": "npm:^2.3.1"
     "@floating-ui/dom": "npm:^1.6.0"
@@ -4554,7 +4561,7 @@ __metadata:
   peerDependencies:
     element-plus: ^2.13.0
     vue: ^3.5.0
-  checksum: 10c0/e4b8aa76f3e11770dc4b07204b21772e0ebe96f035ddf7907717e7d5ffe1c3d65cf8840907050ea7fa196f9730073580696e33285c3130c12cbc01a20e289f70
+  checksum: 10c0/d32d7cd2b0603b00bc9d1729d0b9d635771b09b5a839248144a42bb397fcb3138b17ae2b4520fb0558ff8f6e42415a3ed8f1312e5cc73e39bc898b5796768333
   languageName: node
   linkType: hard
 
@@ -13123,6 +13130,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"swagger-ui-dist@npm:5.33.3":
+  version: 5.33.3
+  resolution: "swagger-ui-dist@npm:5.33.3"
+  dependencies:
+    "@scarf/scarf": "npm:=1.4.0"
+  checksum: 10c0/bf20adc1f4423f2a7c3976cdb0db2b8b0aae9a1b6e6c2bfdc46655ed1b999af29845977e418667dd251c054a3bfed96bb6e148a153c0817637cfe74e08c6e7aa
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -14058,7 +14074,7 @@ __metadata:
     "@zxio/tokens": "file:./vendor/zxio-tokens-2.0.0-display.20260928.tgz"
     "@zxio/vue-grid-layout": "file:./vendor/zxio-vue-grid-layout-1.0.6-dashboard-performance-final.20261017.tgz"
     "@zxio/vue-query": "file:./vendor/zxio-vue-query-1.0.0-phase-a.final.20261016.tgz"
-    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-schema-pilot.20261019.tgz"
+    "@zxio/zxui": "file:./vendor/zxio-zxui-3.0.0-next.0-icons-demand.20261022.tgz"
     ajv: "npm:^8.20.0"
     ant-design-vue: "npm:^4.1.1"
     autoprefixer: "npm:^10.4.21"
@@ -14092,6 +14108,7 @@ __metadata:
     prettier: "npm:^3.6.2"
     sass: "npm:^1.97.3"
     splitpanes: "npm:3.1.5"
+    swagger-ui-dist: "npm:5.33.3"
     tailwindcss: "npm:^4.1.12"
     ts-node: "npm:^10.9.2"
     typescript: "npm:^5.9.2"

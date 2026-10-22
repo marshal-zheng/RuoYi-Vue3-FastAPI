@@ -68,8 +68,6 @@ class GetConfigDetailQueryHandler(IQueryHandler[GetConfigDetailQuery, ConfigDeta
 
     async def handle(self, request: GetConfigDetailQuery) -> ConfigDetailReadModel:
         detail_result = await self._config_service.config_detail_services(request.config_id)
-        if detail_result is None:
-            return ConfigDetailReadModel()
         return ConfigDetailReadModel.model_validate(detail_result.model_dump(by_alias=False))
 
 

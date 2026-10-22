@@ -29,11 +29,13 @@ class _DeptServiceStub:
         self.delete_called_with = None
         self.scope_called_with = []
 
-    async def add_dept_services(self, payload):
+    async def add_dept_services(self, payload, **scope):
+        self.add_scope = scope
         self.add_called_with = payload
         return _CrudResponse(is_success=True, message='新增成功')
 
-    async def edit_dept_services(self, payload):
+    async def edit_dept_services(self, payload, **scope):
+        self.edit_scope = scope
         self.edit_called_with = payload
         return _CrudResponse(is_success=True, message='更新成功')
 

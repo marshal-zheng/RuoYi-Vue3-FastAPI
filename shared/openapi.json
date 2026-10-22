@@ -1,322 +1,6 @@
 {
   "components": {
     "schemas": {
-      "AddUserModel": {
-        "description": "新增用户模型",
-        "properties": {
-          "admin": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": false,
-            "description": "是否为admin",
-            "title": "Admin"
-          },
-          "avatar": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "头像地址",
-            "title": "Avatar"
-          },
-          "createBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建者",
-            "title": "Createby"
-          },
-          "createTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建时间",
-            "title": "Createtime"
-          },
-          "delFlag": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "2"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "删除标志（0代表存在 2代表删除）",
-            "title": "Delflag"
-          },
-          "deptId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "部门ID",
-            "title": "Deptid"
-          },
-          "email": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户邮箱",
-            "title": "Email"
-          },
-          "idCard": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "身份证号",
-            "title": "Idcard"
-          },
-          "loginDate": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "最后登录时间",
-            "title": "Logindate"
-          },
-          "loginIp": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "最后登录IP",
-            "title": "Loginip"
-          },
-          "nickName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户昵称",
-            "title": "Nickname"
-          },
-          "password": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "密码",
-            "title": "Password"
-          },
-          "phonenumber": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "手机号码",
-            "title": "Phonenumber"
-          },
-          "postIds": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": [],
-            "description": "岗位ID信息",
-            "title": "Postids"
-          },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注",
-            "title": "Remark"
-          },
-          "roleIds": {
-            "anyOf": [
-              {
-                "items": {},
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "default": [],
-            "description": "角色ID信息",
-            "title": "Roleids"
-          },
-          "sex": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1",
-                  "2"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户性别（0男 1女 2未知）",
-            "title": "Sex"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "帐号状态（0正常 1停用）",
-            "title": "Status"
-          },
-          "type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "操作类型",
-            "title": "Type"
-          },
-          "updateBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新者",
-            "title": "Updateby"
-          },
-          "updateTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新时间",
-            "title": "Updatetime"
-          },
-          "userId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户ID",
-            "title": "Userid"
-          },
-          "userName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户账号",
-            "title": "Username"
-          },
-          "userType": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "用户类型（00系统用户）",
-            "title": "Usertype"
-          }
-        },
-        "title": "AddUserModel",
-        "type": "object"
-      },
       "BatchDeviceIdsModel": {
         "description": "批量设备ID模型",
         "properties": {
@@ -1384,6 +1068,112 @@
         "title": "CurrentUserModel",
         "type": "object"
       },
+      "DashboardSaveModel": {
+        "additionalProperties": false,
+        "properties": {
+          "document": {
+            "additionalProperties": true,
+            "title": "Document",
+            "type": "object"
+          },
+          "expectedRevision": {
+            "anyOf": [
+              {
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expectedrevision"
+          }
+        },
+        "required": [
+          "document",
+          "expectedRevision"
+        ],
+        "title": "DashboardSaveModel",
+        "type": "object"
+      },
+      "DeptCreateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptName": {
+            "description": "部门名称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Deptname",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "leader": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "负责人",
+            "title": "Leader"
+          },
+          "orderNum": {
+            "description": "显示顺序",
+            "title": "Ordernum",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "父部门ID, 0为根部门",
+            "minimum": 0.0,
+            "title": "Parentid",
+            "type": "integer"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "联系电话",
+            "title": "Phone"
+          },
+          "status": {
+            "description": "部门状态(0正常 1停用)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "parentId",
+          "deptName",
+          "orderNum"
+        ],
+        "title": "DeptCreateModel",
+        "type": "object"
+      },
       "DeptModel": {
         "description": "部门表对应pydantic模型",
         "properties": {
@@ -1776,6 +1566,88 @@
           }
         },
         "title": "DeptQueryModel",
+        "type": "object"
+      },
+      "DeptUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptId": {
+            "description": "部门ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Deptid",
+            "type": "integer"
+          },
+          "deptName": {
+            "description": "部门名称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Deptname",
+            "type": "string"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "leader": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "负责人",
+            "title": "Leader"
+          },
+          "orderNum": {
+            "description": "显示顺序",
+            "title": "Ordernum",
+            "type": "integer"
+          },
+          "parentId": {
+            "description": "父部门ID, 0为根部门",
+            "minimum": 0.0,
+            "title": "Parentid",
+            "type": "integer"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "联系电话",
+            "title": "Phone"
+          },
+          "status": {
+            "description": "部门状态(0正常 1停用)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "deptId"
+        ],
+        "title": "DeptUpdateModel",
         "type": "object"
       },
       "DevMenuSyncRequest": {
@@ -3313,232 +3185,6 @@
           }
         },
         "title": "EditGenTableModel",
-        "type": "object"
-      },
-      "EditJobModel": {
-        "description": "编辑定时任务模型",
-        "properties": {
-          "concurrent": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "是否并发执行（0允许 1禁止）",
-            "title": "Concurrent"
-          },
-          "createBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建者",
-            "title": "Createby"
-          },
-          "createTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "创建时间",
-            "title": "Createtime"
-          },
-          "cronExpression": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "cron执行表达式",
-            "title": "Cronexpression"
-          },
-          "invokeTarget": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "调用目标字符串",
-            "title": "Invoketarget"
-          },
-          "jobArgs": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "位置参数",
-            "title": "Jobargs"
-          },
-          "jobExecutor": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务执行器",
-            "title": "Jobexecutor"
-          },
-          "jobGroup": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务组名",
-            "title": "Jobgroup"
-          },
-          "jobId": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务ID",
-            "title": "Jobid"
-          },
-          "jobKwargs": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "关键字参数",
-            "title": "Jobkwargs"
-          },
-          "jobName": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "任务名称",
-            "title": "Jobname"
-          },
-          "misfirePolicy": {
-            "anyOf": [
-              {
-                "enum": [
-                  "1",
-                  "2",
-                  "3"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "计划执行错误策略（1立即执行 2执行一次 3放弃执行）",
-            "title": "Misfirepolicy"
-          },
-          "remark": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "备注信息",
-            "title": "Remark"
-          },
-          "status": {
-            "anyOf": [
-              {
-                "enum": [
-                  "0",
-                  "1"
-                ],
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "状态（0正常 1暂停）",
-            "title": "Status"
-          },
-          "type": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "操作类型",
-            "title": "Type"
-          },
-          "updateBy": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新者",
-            "title": "Updateby"
-          },
-          "updateTime": {
-            "anyOf": [
-              {
-                "format": "date-time",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "description": "更新时间",
-            "title": "Updatetime"
-          }
-        },
-        "title": "EditJobModel",
         "type": "object"
       },
       "EditUserModel": {
@@ -5269,6 +4915,120 @@
         "title": "HTTPValidationError",
         "type": "object"
       },
+      "JobCreateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "concurrent": {
+            "description": "是否并发执行",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Concurrent",
+            "type": "string"
+          },
+          "cronExpression": {
+            "description": "Cron执行表达式",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Cronexpression",
+            "type": "string"
+          },
+          "invokeTarget": {
+            "description": "已注册调用目标",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Invoketarget",
+            "type": "string"
+          },
+          "jobArgs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逗号分隔的位置参数",
+            "title": "Jobargs"
+          },
+          "jobExecutor": {
+            "description": "任务执行器",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobexecutor",
+            "type": "string"
+          },
+          "jobGroup": {
+            "description": "任务组名",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobgroup",
+            "type": "string"
+          },
+          "jobKwargs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "JSON对象形式的关键字参数",
+            "title": "Jobkwargs"
+          },
+          "jobName": {
+            "description": "任务名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobname",
+            "type": "string"
+          },
+          "misfirePolicy": {
+            "description": "计划执行错误策略",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "title": "Misfirepolicy",
+            "type": "string"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobName",
+          "invokeTarget",
+          "cronExpression"
+        ],
+        "title": "JobCreateModel",
+        "type": "object"
+      },
       "JobLogPageQueryModel": {
         "description": "定时任务日志管理分页查询模型",
         "properties": {
@@ -5923,6 +5683,166 @@
           }
         },
         "title": "JobPageQueryModel",
+        "type": "object"
+      },
+      "JobRunModel": {
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "title": "JobRunModel",
+        "type": "object"
+      },
+      "JobStatusUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId",
+          "status"
+        ],
+        "title": "JobStatusUpdateModel",
+        "type": "object"
+      },
+      "JobUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "concurrent": {
+            "description": "是否并发执行",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Concurrent",
+            "type": "string"
+          },
+          "cronExpression": {
+            "description": "Cron执行表达式",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Cronexpression",
+            "type": "string"
+          },
+          "invokeTarget": {
+            "description": "已注册调用目标",
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Invoketarget",
+            "type": "string"
+          },
+          "jobArgs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "逗号分隔的位置参数",
+            "title": "Jobargs"
+          },
+          "jobExecutor": {
+            "description": "任务执行器",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobexecutor",
+            "type": "string"
+          },
+          "jobGroup": {
+            "description": "任务组名",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobgroup",
+            "type": "string"
+          },
+          "jobId": {
+            "description": "任务ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Jobid",
+            "type": "integer"
+          },
+          "jobKwargs": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "JSON对象形式的关键字参数",
+            "title": "Jobkwargs"
+          },
+          "jobName": {
+            "description": "任务名称",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Jobname",
+            "type": "string"
+          },
+          "misfirePolicy": {
+            "description": "计划执行错误策略",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "title": "Misfirepolicy",
+            "type": "string"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "status": {
+            "description": "状态(0正常 1暂停)",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "jobId"
+        ],
+        "title": "JobUpdateModel",
         "type": "object"
       },
       "KeyRevokeRequestModel": {
@@ -7363,6 +7283,126 @@
         "title": "PostPageQueryModel",
         "type": "object"
       },
+      "ProjectCreatedModel": {
+        "description": "新建工程及同时创建的初始版本，供拓扑设计入口使用。",
+        "properties": {
+          "createBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建人",
+            "title": "Createby"
+          },
+          "createTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "创建时间",
+            "title": "Createtime"
+          },
+          "delFlag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "0",
+            "description": "删除标志（0代表存在 2代表删除）",
+            "title": "Delflag"
+          },
+          "projectCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程编码",
+            "title": "Projectcode"
+          },
+          "projectDesc": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程描述",
+            "title": "Projectdesc"
+          },
+          "projectId": {
+            "description": "工程编号",
+            "title": "Projectid",
+            "type": "integer"
+          },
+          "projectName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "工程名称",
+            "title": "Projectname"
+          },
+          "updateBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新者",
+            "title": "Updateby"
+          },
+          "updateTime": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "更新时间",
+            "title": "Updatetime"
+          },
+          "versionId": {
+            "description": "初始版本编号",
+            "title": "Versionid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "projectId",
+          "versionId"
+        ],
+        "title": "ProjectCreatedModel",
+        "type": "object"
+      },
       "ProjectImportDataModel": {
         "description": "工程导入数据模型（与导出模型结构一致）",
         "properties": {
@@ -8066,30 +8106,22 @@
         "description": "重置密码模型",
         "properties": {
           "newPassword": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
             "description": "新密码",
-            "title": "Newpassword"
+            "minLength": 1,
+            "title": "Newpassword",
+            "type": "string"
           },
           "oldPassword": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
             "description": "旧密码",
-            "title": "Oldpassword"
+            "minLength": 1,
+            "title": "Oldpassword",
+            "type": "string"
           }
         },
+        "required": [
+          "oldPassword",
+          "newPassword"
+        ],
         "title": "ResetPasswordModel",
         "type": "object"
       },
@@ -9355,6 +9387,167 @@
         "title": "Token",
         "type": "object"
       },
+      "UserCreateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "部门ID",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "maxLength": 18,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "身份证号",
+            "title": "Idcard"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "password": {
+            "description": "初始密码",
+            "minLength": 1,
+            "pattern": "^[^<>\"'|\\\\]+$",
+            "title": "Password",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "岗位ID; 未提供保留, 空数组或null清空",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "exclusiveMinimum": 0.0,
+                  "maximum": 2147483647.0,
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "角色ID; 未提供保留, 空数组或null清空",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "帐号状态",
+            "title": "Status"
+          },
+          "userName": {
+            "description": "用户账号",
+            "maxLength": 30,
+            "minLength": 1,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "nickName",
+          "userName",
+          "password"
+        ],
+        "title": "UserCreateModel",
+        "type": "object"
+      },
       "UserDetailModel": {
         "description": "获取用户详情信息响应模型",
         "properties": {
@@ -10125,6 +10318,63 @@
         "title": "UserProfileModel",
         "type": "object"
       },
+      "UserProfileUpdateModel": {
+        "additionalProperties": false,
+        "description": "The authenticated user can edit these profile fields only.",
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          }
+        },
+        "title": "UserProfileUpdateModel",
+        "type": "object"
+      },
       "UserRegister": {
         "properties": {
           "code": {
@@ -10231,6 +10481,188 @@
           "roleIds"
         ],
         "title": "UserRolesAssignModel",
+        "type": "object"
+      },
+      "UserStatusUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "description": "帐号状态",
+            "enum": [
+              "0",
+              "1"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "userId": {
+            "description": "用户ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Userid",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "userId",
+          "status"
+        ],
+        "title": "UserStatusUpdateModel",
+        "type": "object"
+      },
+      "UserUpdateModel": {
+        "additionalProperties": false,
+        "properties": {
+          "deptId": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "部门ID",
+            "title": "Deptid"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "maxLength": 50,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "邮箱",
+            "title": "Email"
+          },
+          "idCard": {
+            "anyOf": [
+              {
+                "maxLength": 18,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "身份证号",
+            "title": "Idcard"
+          },
+          "nickName": {
+            "description": "用户昵称",
+            "maxLength": 30,
+            "title": "Nickname",
+            "type": "string"
+          },
+          "phonenumber": {
+            "anyOf": [
+              {
+                "maxLength": 11,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "手机号码",
+            "title": "Phonenumber"
+          },
+          "postIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "岗位ID; 未提供保留, 空数组或null清空",
+            "title": "Postids"
+          },
+          "remark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "备注",
+            "title": "Remark"
+          },
+          "roleIds": {
+            "anyOf": [
+              {
+                "items": {
+                  "exclusiveMinimum": 0.0,
+                  "maximum": 2147483647.0,
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "角色ID; 未提供保留, 空数组或null清空",
+            "title": "Roleids"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "用户性别",
+            "title": "Sex"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "enum": [
+                  "0",
+                  "1"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "帐号状态",
+            "title": "Status"
+          },
+          "userId": {
+            "description": "用户ID",
+            "exclusiveMinimum": 0.0,
+            "title": "Userid",
+            "type": "integer"
+          },
+          "userName": {
+            "description": "用户账号",
+            "maxLength": 30,
+            "title": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId"
+        ],
+        "title": "UserUpdateModel",
         "type": "object"
       },
       "ValidationError": {
@@ -12904,7 +13336,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobModel"
+                "$ref": "#/components/schemas/JobCreateModel"
               }
             }
           },
@@ -12946,7 +13378,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditJobModel"
+                "$ref": "#/components/schemas/JobUpdateModel"
               }
             }
           },
@@ -12990,7 +13422,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditJobModel"
+                "$ref": "#/components/schemas/JobStatusUpdateModel"
               }
             }
           },
@@ -13479,7 +13911,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobModel"
+                "$ref": "#/components/schemas/JobRunModel"
               }
             }
           },
@@ -15395,10 +15827,12 @@
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectCreatedModel"
+                }
               }
             },
             "description": "Successful Response"
@@ -19138,6 +19572,196 @@
         ]
       }
     },
+    "/system/dashboard/{scope}/{key}": {
+      "delete": {
+        "operationId": "remove_dashboard_system_dashboard__scope___key__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "expectedRevision",
+            "required": true,
+            "schema": {
+              "minimum": 1,
+              "title": "Expectedrevision",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Remove Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      },
+      "get": {
+        "operationId": "load_dashboard_system_dashboard__scope___key__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Load Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      },
+      "put": {
+        "operationId": "save_dashboard_system_dashboard__scope___key__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "scope",
+            "required": true,
+            "schema": {
+              "enum": [
+                "account",
+                "scene"
+              ],
+              "title": "Scope",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "key",
+            "required": true,
+            "schema": {
+              "title": "Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DashboardSaveModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "summary": "Save Dashboard",
+        "tags": [
+          "系统管理-仪表盘"
+        ]
+      }
+    },
     "/system/dept": {
       "post": {
         "operationId": "add_system_dept_system_dept_post",
@@ -19145,7 +19769,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeptModel"
+                "$ref": "#/components/schemas/DeptCreateModel"
               }
             }
           },
@@ -19187,7 +19811,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DeptModel"
+                "$ref": "#/components/schemas/DeptUpdateModel"
               }
             }
           },
@@ -25218,7 +25842,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddUserModel"
+                "$ref": "#/components/schemas/UserCreateModel"
               }
             }
           },
@@ -25260,7 +25884,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditUserModel"
+                "$ref": "#/components/schemas/UserUpdateModel"
               }
             }
           },
@@ -25449,7 +26073,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/EditUserModel"
+                "$ref": "#/components/schemas/UserStatusUpdateModel"
               }
             }
           },
@@ -26157,7 +26781,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserInfoModel"
+                "$ref": "#/components/schemas/UserProfileUpdateModel"
               }
             }
           },

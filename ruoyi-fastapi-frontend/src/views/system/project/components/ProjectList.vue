@@ -14,6 +14,7 @@
             >新增</ZxButton
           >
           <ZxButton
+            plain
             type="danger"
             :disabled="multiple"
             @click="handleDelete"

@@ -187,6 +187,12 @@ class EditUserModel(AddUserModel):
 
     role: list | None = Field(default=[], description='角色信息')
 
+    def validate_fields(self):
+        # Partial edits must validate the same supplied fields in HTTP and CQRS paths.
+        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
+            if field in self.model_fields_set:
+                getattr(self, f'get_{field}')()
+
 
 class ResetPasswordModel(CamelModelBase):
     """
@@ -195,8 +201,8 @@ class ResetPasswordModel(CamelModelBase):
 
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
 
-    old_password: str | None = Field(default=None, description='旧密码')
-    new_password: str | None = Field(default=None, description='新密码')
+    old_password: str = Field(min_length=1, description='旧密码')
+    new_password: str = Field(min_length=1, description='新密码')
 
     @model_validator(mode='after')
     def check_new_password(self) -> 'ResetPasswordModel':
@@ -215,6 +221,12 @@ class ResetUserModel(UserModel):
     old_password: str | None = Field(default=None, description='旧密码')
     sms_code: str | None = Field(default=None, description='验证码')
     session_id: str | None = Field(default=None, description='会话id')
+
+    def validate_fields(self):
+        # Password commands do not supply a full user profile; password syntax is validated on construction.
+        for field in ('user_name', 'nick_name', 'email', 'phonenumber', 'id_card'):
+            if field in self.model_fields_set:
+                getattr(self, f'get_{field}')()
 
 
 class DeleteUserModel(CamelModelBase):

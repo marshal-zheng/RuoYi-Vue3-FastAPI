@@ -73,6 +73,7 @@ from module_admin.entity.do.db_workflow_do import (  # noqa: F401
 
 # 通知公告模型
 from module_admin.entity.do.notice_do import NoticeDO  # noqa: F401
+from module_admin.entity.do.dashboard_do import DashboardDO, DashboardVersionDO  # noqa: F401
 
 # 日志模型
 from module_admin.entity.do.log_do import (  # noqa: F401

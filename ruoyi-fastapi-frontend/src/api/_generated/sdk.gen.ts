@@ -525,6 +525,9 @@ import type {
   ListFaultsSimulationSessionsSessionIdFaultsGetResponses,
   ListSigningKeysAuthKeysGetData,
   ListSigningKeysAuthKeysGetResponses,
+  LoadDashboardSystemDashboardScopeKeyGetData,
+  LoadDashboardSystemDashboardScopeKeyGetErrors,
+  LoadDashboardSystemDashboardScopeKeyGetResponses,
   LockProjectVersionProjectVersionLockPutData,
   LockProjectVersionProjectVersionLockPutErrors,
   LockProjectVersionProjectVersionLockPutResponses,
@@ -619,6 +622,9 @@ import type {
   RegisterUserRegisterPostData,
   RegisterUserRegisterPostErrors,
   RegisterUserRegisterPostResponses,
+  RemoveDashboardSystemDashboardScopeKeyDeleteData,
+  RemoveDashboardSystemDashboardScopeKeyDeleteErrors,
+  RemoveDashboardSystemDashboardScopeKeyDeleteResponses,
   RemoveEventSimulationSessionsSessionIdEventsEventIdDeleteData,
   RemoveEventSimulationSessionsSessionIdEventsEventIdDeleteErrors,
   RemoveEventSimulationSessionsSessionIdEventsEventIdDeleteResponses,
@@ -646,6 +652,9 @@ import type {
   RotateSigningKeysAuthKeysRotatePostData,
   RotateSigningKeysAuthKeysRotatePostErrors,
   RotateSigningKeysAuthKeysRotatePostResponses,
+  SaveDashboardSystemDashboardScopeKeyPutData,
+  SaveDashboardSystemDashboardScopeKeyPutErrors,
+  SaveDashboardSystemDashboardScopeKeyPutResponses,
   SaveProjectTopologyProjectTopologySavePostData,
   SaveProjectTopologyProjectTopologySavePostErrors,
   SaveProjectTopologyProjectTopologySavePostResponses,
@@ -3564,6 +3573,58 @@ export const queryDetailSystemConfigSystemConfigConfigIdGet = <
     security: [{ scheme: 'bearer', type: 'http' }],
     url: '/system/config/{config_id}',
     ...options,
+  });
+
+/**
+ * Remove Dashboard
+ */
+export const removeDashboardSystemDashboardScopeKeyDelete = <ThrowOnError extends boolean = false>(
+  options: Options<RemoveDashboardSystemDashboardScopeKeyDeleteData, ThrowOnError>
+) =>
+  (options.client ?? client).delete<
+    RemoveDashboardSystemDashboardScopeKeyDeleteResponses,
+    RemoveDashboardSystemDashboardScopeKeyDeleteErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/dashboard/{scope}/{key}',
+    ...options,
+  });
+
+/**
+ * Load Dashboard
+ */
+export const loadDashboardSystemDashboardScopeKeyGet = <ThrowOnError extends boolean = false>(
+  options: Options<LoadDashboardSystemDashboardScopeKeyGetData, ThrowOnError>
+) =>
+  (options.client ?? client).get<
+    LoadDashboardSystemDashboardScopeKeyGetResponses,
+    LoadDashboardSystemDashboardScopeKeyGetErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/dashboard/{scope}/{key}',
+    ...options,
+  });
+
+/**
+ * Save Dashboard
+ */
+export const saveDashboardSystemDashboardScopeKeyPut = <ThrowOnError extends boolean = false>(
+  options: Options<SaveDashboardSystemDashboardScopeKeyPutData, ThrowOnError>
+) =>
+  (options.client ?? client).put<
+    SaveDashboardSystemDashboardScopeKeyPutResponses,
+    SaveDashboardSystemDashboardScopeKeyPutErrors,
+    ThrowOnError
+  >({
+    security: [{ scheme: 'bearer', type: 'http' }],
+    url: '/system/dashboard/{scope}/{key}',
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
 /**

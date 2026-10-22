@@ -142,9 +142,8 @@ class TestDeptServiceQuery:
             mock_repo = MockRepo.return_value
             mock_repo.find_active_by_id = AsyncMock(return_value=None)
             
-            result = await DeptService(mock_repo, mock_db).dept_detail_services(999)
-            
-            assert result.dept_id is None
+            with pytest.raises(ResourceNotFoundException):
+                await DeptService(mock_repo, mock_db).dept_detail_services(999)
 
 
 class TestDeptServiceDataScope:
@@ -285,20 +284,11 @@ class TestDeptServiceUpdate:
     @pytest.mark.asyncio
     async def test_edit_dept_success(self, mock_db, sample_dept):
         """Test editing department successfully."""
-        parent_dept = DeptDO(
-            dept_id=0,
-            parent_id=0,
-            ancestors='0',
-            dept_name='根部门',
-            status='0',
-            del_flag='0'
-        )
-        
         with patch('modules.system.application.services.dept_service.DeptRepository') as MockRepo:
             mock_repo = MockRepo.return_value
             mock_repo.find_by_parent_and_name = AsyncMock(return_value=None)
             mock_repo.count_normal_children = AsyncMock(return_value=0)
-            mock_repo.find_by_id = AsyncMock(side_effect=[parent_dept, sample_dept, sample_dept])
+            mock_repo.find_by_id = AsyncMock(return_value=sample_dept)
             mock_repo.update = AsyncMock()
             mock_repo.find_children = AsyncMock(return_value=[])
             mock_repo.update_status_normal = AsyncMock()
@@ -320,6 +310,7 @@ class TestDeptServiceUpdate:
         """Test editing department with duplicate name."""
         with patch('modules.system.application.services.dept_service.DeptRepository') as MockRepo:
             mock_repo = MockRepo.return_value
+            mock_repo.find_by_id = AsyncMock(return_value=DeptDO(dept_id=2, parent_id=0, ancestors='0', dept_name='目标', status='0'))
             mock_repo.find_by_parent_and_name = AsyncMock(return_value=sample_dept)
             
             edit_dept = DeptModel(
@@ -336,6 +327,7 @@ class TestDeptServiceUpdate:
         """Test editing department with self as parent."""
         with patch('modules.system.application.services.dept_service.DeptRepository') as MockRepo:
             mock_repo = MockRepo.return_value
+            mock_repo.find_by_id = AsyncMock(return_value=DeptDO(dept_id=1, parent_id=0, ancestors='0', dept_name='目标', status='0'))
             mock_repo.find_by_parent_and_name = AsyncMock(return_value=None)
             
             edit_dept = DeptModel(
@@ -352,6 +344,7 @@ class TestDeptServiceUpdate:
         """Test disabling department with normal children."""
         with patch('modules.system.application.services.dept_service.DeptRepository') as MockRepo:
             mock_repo = MockRepo.return_value
+            mock_repo.find_by_id = AsyncMock(return_value=DeptDO(dept_id=1, parent_id=0, ancestors='0', dept_name='目标', status='0'))
             mock_repo.find_by_parent_and_name = AsyncMock(return_value=None)
             mock_repo.count_normal_children = AsyncMock(return_value=1)
             
@@ -467,7 +460,7 @@ class TestDeptServiceUtility:
             dept = DeptModel(dept_id=3, ancestors='0,1,2')
             await DeptService(mock_repo, mock_db).update_parent_dept_status_normal(dept)
             
-            mock_repo.update_status_normal.assert_called_once_with([0, 1, 2])
+            mock_repo.update_status_normal.assert_called_once_with([1, 2])
 
     @pytest.mark.asyncio
     async def test_update_dept_children(self, mock_db, sample_child_dept):

@@ -3,12 +3,19 @@ from config.enums import RedisInitKeyConfig
 from config.get_redis import RedisUtil
 from module_admin.entity.vo.cache_vo import CacheInfoModel, CacheMonitorModel
 from module_admin.entity.vo.common_vo import CrudResponseModel
+from ports import IRedisClient
 
 
 class CacheService:
     """
     缓存监控模块服务层
     """
+
+    @staticmethod
+    async def _namespace_keys(redis_client: IRedisClient, cache_name: str):
+        # Redis MATCH uses glob syntax; names are literal namespace prefixes.
+        prefix = ''.join(f'\\{char}' if char in '\\*?[]' else char for char in cache_name)
+        return [key async for key in redis_client.scan_iter(match=f'{prefix}:*')]
 
     async def get_cache_monitor_statistical_info_services(self, request: Request):
         """
@@ -54,7 +61,7 @@ class CacheService:
         :param cache_name: 缓存名称
         :return: 缓存键名列表信息
         """
-        cache_keys = await request.app.state.redis.keys(f'{cache_name}*')
+        cache_keys = await self._namespace_keys(request.app.state.redis, cache_name)
         cache_key_list = [key.split(':', 1)[1] for key in cache_keys if key.startswith(f'{cache_name}:')]
 
         return cache_key_list
@@ -80,7 +87,7 @@ class CacheService:
         :param cache_name: 缓存名称
         :return: 操作缓存响应信息
         """
-        cache_keys = await request.app.state.redis.keys(f'{cache_name}*')
+        cache_keys = await self._namespace_keys(request.app.state.redis, cache_name)
         if cache_keys:
             await request.app.state.redis.delete(*cache_keys)
 
@@ -94,9 +101,7 @@ class CacheService:
         :param cache_key: 缓存键名
         :return: 操作缓存响应信息
         """
-        cache_keys = await request.app.state.redis.keys(f'*{cache_key}')
-        if cache_keys:
-            await request.app.state.redis.delete(*cache_keys)
+        await request.app.state.redis.delete(cache_key)
 
         return CrudResponseModel(is_success=True, message=f'{cache_key}清除成功')
 

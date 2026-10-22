@@ -5,3 +5,8 @@
   flex-wrap: wrap;
   gap: var(--zx-semantic-spacing-control-y);
 }
+
+// This flex group owns spacing; standalone button sibling margins do not apply.
+.el-table .op-col__wrap .el-button {
+  margin: 0;
+}

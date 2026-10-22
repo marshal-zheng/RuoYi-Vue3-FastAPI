@@ -1,5 +1,5 @@
 import type { ThemeRuntimeDeploymentOutput } from '@zxio/theme-compiler/deployment';
-import { createBoundConfirmInputFactory } from '@zxio/zxui/confirm-input';
+import { createBoundConfirmInputFactory } from '@zxio/zxui/core';
 import {
   bindThemePreferenceController,
   createDefaultBrowserThemeHost,

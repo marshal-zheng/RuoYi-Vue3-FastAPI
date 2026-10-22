@@ -99,8 +99,6 @@ class GetDictTypeDetailQueryHandler(IQueryHandler[GetDictTypeDetailQuery, DictTy
 
     async def handle(self, request: GetDictTypeDetailQuery) -> DictTypeDetailReadModel:
         detail_result = await self._dict_type_service.dict_type_detail_services(request.dict_id)
-        if detail_result is None:
-            return DictTypeDetailReadModel()
 
         if hasattr(detail_result, 'model_dump'):
             payload = detail_result.model_dump(by_alias=False)
@@ -166,8 +164,6 @@ class GetDictDataDetailQueryHandler(IQueryHandler[GetDictDataDetailQuery, DictDa
 
     async def handle(self, request: GetDictDataDetailQuery) -> DictDataDetailReadModel:
         detail_result = await self._dict_data_service.dict_data_detail_services(request.dict_code)
-        if detail_result is None:
-            return DictDataDetailReadModel()
 
         if hasattr(detail_result, 'model_dump'):
             payload = detail_result.model_dump(by_alias=False)

@@ -28,7 +28,7 @@ class _DeptDataScopeCommandContext(_DeptCommandContext):
     data_scope_sql: Any = Field(default='True', description='Department data-scope SQL expression')
 
 
-class AddDeptCommand(_DeptCommandContext):
+class AddDeptCommand(_DeptDataScopeCommandContext):
     """Create department entry."""
 
     dept: DeptModel = Field(description='Department payload to create')

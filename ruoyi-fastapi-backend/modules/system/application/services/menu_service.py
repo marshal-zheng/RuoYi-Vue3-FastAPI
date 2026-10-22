@@ -167,13 +167,7 @@ class MenuService:
         :return: 编辑菜单校验结果
         """
         edit_menu = page_object.model_dump(exclude_unset=True)
-        menu_info = await self.menu_detail_services(page_object.menu_id)
-        if not menu_info.menu_id:
-            raise ResourceNotFoundException(
-                user_message='菜单不存在',
-                error_code=ErrorCode.MENU_NOT_FOUND,
-                developer_message=f'Menu not found: menu_id={page_object.menu_id}',
-            )
+        await self.menu_detail_services(page_object.menu_id)
 
         if not await self.check_menu_name_unique_services(page_object):
             raise ResourceConflictException(
@@ -252,10 +246,19 @@ class MenuService:
         cache_key = cache.build_key('menu:detail', {'menu_id': menu_id})
         cached = await cache.get(cache_key)
         if cached is not None:
-            return MenuModel(**cached)
+            if isinstance(cached, dict) and cached.get('menuId', cached.get('menu_id')) == menu_id:
+                return MenuModel(**cached)
+            await cache.delete(cache_key)
 
         menu = await self.menu_repo.find_by_id(menu_id)
-        result = MenuModel(**CamelCaseUtil.transform_result(menu)) if menu else MenuModel(**{})
+        if menu:
+            result = MenuModel(**CamelCaseUtil.transform_result(menu))
+        else:
+            raise ResourceNotFoundException(
+                user_message='菜单不存在',
+                error_code=ErrorCode.MENU_NOT_FOUND,
+                developer_message=f'menu_id={menu_id} not found',
+            )
         await cache.set(cache_key, result.model_dump(by_alias=True), CacheConfig.query_cache_default_ttl)
         return result
 

@@ -47,12 +47,9 @@
           <template #reference>
             <zx-input v-model="drawer.state.data.icon" placeholder="点击选择图标" readonly>
               <template #prepend>
-                <svg-icon
-                  v-if="drawer.state.data.icon"
-                  :icon-class="drawer.state.data.icon"
-                  style="width: 16px; height: 16px"
+                <ZxIcon
+                  :icon="resolveNavigationIcon(drawer.state.data.icon) || navigationIcons.search"
                 />
-                <el-icon v-else><Search /></el-icon>
               </template>
             </zx-input>
           </template>
@@ -211,7 +208,9 @@ import { useEditorRead } from '@/utils/editor-read';
 import { useDict } from '@/utils/dict';
 import { getMenu, addMenu, updateMenu, treeselect, type MenuTreeNode } from '@/api/system/menu';
 import { useDrawer } from '@zxio/zxui/hooks';
-import { QuestionFilled, Search } from '@element-plus/icons-vue';
+import { QuestionFilled } from '@element-plus/icons-vue';
+import { ZxIcon } from '@zxio/zxui/core';
+import { navigationIcons, resolveNavigationIcon } from '@/icons/navigation';
 import IconSelect from '@/components/ui/IconSelect/index.vue';
 
 const { sys_show_hide: sysShowHide, sys_normal_disable: sysNormalDisable } = useDict(

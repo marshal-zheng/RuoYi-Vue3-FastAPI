@@ -96,9 +96,7 @@ class NoticeService:
         :return: 编辑通知公告校验结果
         """
         edit_notice = page_object.model_dump(exclude_unset=True)
-        notice_info = await self.notice_detail_services(page_object.notice_id)
-        if not notice_info.notice_id:
-            raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='通知公告不存在')
+        await self.notice_detail_services(page_object.notice_id)
 
         if not await self.check_notice_unique_services(page_object):
             raise ResourceConflictException(
@@ -145,6 +143,10 @@ class NoticeService:
         if notice:
             result = NoticeModel(**CamelCaseUtil.transform_result(notice))
         else:
-            result = NoticeModel(**{})
+            raise ResourceNotFoundException(
+                user_message='通知公告不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'notice_id={notice_id} not found',
+            )
 
         return result

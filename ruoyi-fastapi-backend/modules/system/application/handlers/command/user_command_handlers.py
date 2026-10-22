@@ -18,11 +18,11 @@ from modules.system.application.commands.user_commands import (
 from modules.system.application.contracts import CommandResult, ICommandHandler
 from modules.system.application.event_factory import build_system_event
 from modules.system.application.handlers.command.result_data import command_result_data
+from modules.system.application.services.user_role_service import UserRoleService
 
 if TYPE_CHECKING:
     from modules.system.application.services.dept_service import DeptService
     from modules.system.application.services.role_service import RoleService
-    from modules.system.application.services.user_role_service import UserRoleService
     from modules.system.application.services.user_service import UserService
 
 
@@ -51,9 +51,14 @@ class AddUserCommandHandler(ICommandHandler[AddUserCommand, dict[str, str]]):
         request.user.validate_fields()
         if request.enforce_scope_checks:
             await self._dept_service.check_dept_data_scope_services(request.user.dept_id, request.dept_data_scope_sql)
-            role_ids = _serialize_role_ids(request.user.role_ids)
-            if role_ids:
-                await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        if request.user.role_ids:
+            await UserRoleService(self._user_service, self._role_service).check_user_roles(
+                request.query_db,
+                None,
+                request.user.role_ids,
+                enforce_scope_checks=request.enforce_scope_checks,
+                role_data_scope_sql=request.role_data_scope_sql,
+            )
         create_result = await self._user_service.add_user_services(request.query_db, request.user)
         event = build_system_event(
             event_type='system.user.created',
@@ -91,21 +96,34 @@ class EditUserCommandHandler(ICommandHandler[EditUserCommand, dict[str, str]]):
         edit_type = request.user.type or ''
         if edit_type not in {'status', 'avatar', 'pwd'}:
             request.user.validate_fields()
-        await self._user_service.check_user_allowed_services(request.user)
+        # Profile identity is supplied by the authenticated controller, including admin self-service.
+        if edit_type != 'profile':
+            await self._user_service.check_user_allowed_services(request.user)
         if request.enforce_scope_checks:
             await self._user_service.check_user_data_scope_services(
                 request.query_db,
                 request.user.user_id,
                 request.user_data_scope_sql,
             )
-            if edit_type not in {'status', 'avatar', 'pwd'}:
+            if (
+                edit_type not in {'status', 'avatar', 'pwd'}
+                and 'dept_id' in request.user.model_fields_set
+                and request.user.dept_id is not None
+            ):
                 await self._dept_service.check_dept_data_scope_services(
-                    request.user.dept_id,
-                    request.dept_data_scope_sql,
+                    request.user.dept_id, request.dept_data_scope_sql
                 )
-                role_ids = _serialize_role_ids(request.user.role_ids)
-                if role_ids:
-                    await self._role_service.check_role_data_scope_services(role_ids, request.role_data_scope_sql)
+        if (
+            edit_type not in {'profile', 'status', 'avatar', 'pwd', 'login'}
+            and 'role_ids' in request.user.model_fields_set
+        ):
+            await UserRoleService(self._user_service, self._role_service).check_user_roles(
+                request.query_db,
+                request.user.user_id,
+                request.user.role_ids,
+                enforce_scope_checks=request.enforce_scope_checks,
+                role_data_scope_sql=request.role_data_scope_sql,
+            )
         update_result = await self._user_service.edit_user_services(request.query_db, request.user)
         event = build_system_event(
             event_type='system.user.updated',
@@ -254,9 +272,3 @@ class AssignUserRolesCommandHandler(ICommandHandler[AssignUserRolesCommand, dict
             events=(event,),
             metadata=_build_metadata(request),
         )
-
-
-def _serialize_role_ids(role_ids) -> str:
-    if not role_ids:
-        return ''
-    return ','.join(str(item) for item in role_ids)

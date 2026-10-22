@@ -1,10 +1,19 @@
 import { login, logout, getInfo } from '@/api/login';
 import { defineStore } from 'pinia';
-import { clearSecurityTokens, getToken, setCsrfToken, setToken } from '@/utils/auth';
+import { AbortError } from '@zxio/http';
+import {
+  clearSecurityTokens,
+  getSecuritySessionVersion,
+  getToken,
+  setCsrfToken,
+  setToken,
+} from '@/utils/auth';
 import { isHttp, isEmpty } from '@/utils/validate';
 import { clampBcryptPassword } from '@/utils/password';
 import defAva from '@/assets/images/profile.jpg';
 import request from '@/utils/request';
+import { refreshHttpSession } from '@/utils/http';
+import { withSessionCookieLock } from '@/utils/session';
 import { endQuerySession, setQuerySession } from '@/queries/context';
 
 interface UserInfo {
@@ -47,6 +56,8 @@ const useUserStore = defineStore('user', {
     // 登录
     login(userInfo: UserInfo) {
       endQuerySession();
+      clearSecurityTokens();
+      this.token = '';
       const username = userInfo.username.trim();
       const password = clampBcryptPassword(userInfo.password);
       const code = userInfo.code;
@@ -63,11 +74,13 @@ const useUserStore = defineStore('user', {
               return;
             }
             try {
-              const csrfResp = await request<{ csrfToken?: string }>({
-                url: '/auth/csrf-token',
-                method: 'post',
-                silentSuccess: true,
-              });
+              const csrfResp = await withSessionCookieLock(() =>
+                request<{ csrfToken?: string }>({
+                  url: '/auth/csrf-token',
+                  method: 'post',
+                  silentSuccess: true,
+                })
+              );
               const csrfToken = csrfResp.csrfToken || '';
               if (csrfToken) {
                 setCsrfToken(csrfToken);
@@ -83,73 +96,44 @@ const useUserStore = defineStore('user', {
       });
     },
     // 新标签页/刷新后的会话恢复
-    restoreSession() {
-      return new Promise<boolean>((resolve) => {
-        request<{ token?: string; csrfToken?: string }>({
-          url: '/auth/refresh',
-          method: 'post',
-          isToken: false,
-          skipRelogin: true,
-          silentSuccess: true,
-          silentError: true,
-        })
-          .then((res) => {
-            const token = res.token || '';
-            if (!token) {
-              endQuerySession();
-              clearSecurityTokens();
-              this.token = '';
-              resolve(false);
-              return;
-            }
-            setToken(token);
-            this.token = token;
-            const csrfToken = res.csrfToken || '';
-            if (csrfToken) {
-              setCsrfToken(csrfToken);
-            }
-            resolve(true);
-          })
-          .catch(() => {
-            endQuerySession();
-            clearSecurityTokens();
-            this.token = '';
-            resolve(false);
-          });
-      });
+    async restoreSession(): Promise<boolean> {
+      const version = getSecuritySessionVersion();
+      try {
+        this.token = await refreshHttpSession();
+        return true;
+      } catch {
+        if (getSecuritySessionVersion() !== version) return false;
+        endQuerySession();
+        clearSecurityTokens();
+        this.token = '';
+        return false;
+      }
     },
     // 获取用户信息
-    getInfo() {
-      return new Promise((resolve, reject) => {
-        getInfo()
-          .then((res) => {
-            const user = res.user;
-            let avatar = user.avatar || '';
-            if (!isHttp(avatar)) {
-              avatar = isEmpty(avatar) ? defAva : import.meta.env.VITE_APP_BASE_API + avatar;
-            }
-            if (res.roles && res.roles.length > 0) {
-              // 验证返回的roles是否是一个非空数组
-              this.roles = res.roles;
-              this.permissions = res.permissions;
-            } else {
-              this.roles = ['ROLE_DEFAULT'];
-            }
-            this.id = user.userId;
-            this.name = user.userName;
-            this.nickName = user.nickName;
-            this.avatar = avatar;
-            setQuerySession(this.id, this.roles, this.permissions);
-            resolve(res);
-          })
-          .catch((error) => {
-            reject(error);
-          });
-      });
+    async getInfo() {
+      const sessionVersion = getSecuritySessionVersion();
+      const res = await getInfo();
+      if (sessionVersion !== getSecuritySessionVersion()) {
+        throw new AbortError({ message: '会话已切换，忽略旧的用户信息' });
+      }
+      const user = res.user;
+      let avatar = user.avatar || '';
+      if (!isHttp(avatar)) {
+        avatar = isEmpty(avatar) ? defAva : import.meta.env.VITE_APP_BASE_API + avatar;
+      }
+      this.roles = res.roles?.length ? res.roles : ['ROLE_DEFAULT'];
+      this.permissions = res.roles?.length ? res.permissions : [];
+      this.id = user.userId;
+      this.name = user.userName;
+      this.nickName = user.nickName;
+      this.avatar = avatar;
+      setQuerySession(this.id, this.roles, this.permissions);
+      return res;
     },
     // 退出系统
     logOut(options: LogoutOptions = {}) {
       endQuerySession();
+      clearSecurityTokens();
       return new Promise((resolve) => {
         logout(options)
           .catch((error) => {

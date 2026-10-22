@@ -10,8 +10,10 @@
     <el-menu-item v-for="item in topMenus" :index="item.path" :key="item.path">
       <ZxIcon
         v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
-        :icon="resolveMenuIcon(item.meta.icon)"
+        :icon="resolveNavigationIcon(item.meta.icon)"
+        class="navigation-menu-icon"
         size="var(--app-nav-icon-size)"
+        aria-hidden="true"
       />
       {{ item.meta.title }}
     </el-menu-item>
@@ -25,8 +27,16 @@ import { isHttp } from '@/utils/validate';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
 import usePermissionStore from '@/store/modules/permission';
+import { ZxIcon } from '@zxio/zxui/core';
+import { navigationIcons, resolveNavigationIcon } from '@/icons/navigation';
 
-const OverflowIcon = () => h('span', { role: 'img', 'aria-label': '更多菜单' }, '⋯');
+const OverflowIcon = () =>
+  h(ZxIcon, {
+    icon: navigationIcons.more,
+    size: 'var(--app-nav-icon-size)',
+    role: 'img',
+    'aria-label': '更多菜单',
+  });
 
 // 隐藏侧边栏路由
 const hideList = ['/index', '/user/profile'];
@@ -95,21 +105,6 @@ const activeMenu = computed(() => {
   activeRoutes(activePath);
   return activePath;
 });
-
-/**
- * 将 RuoYi 路由里的 meta.icon（如 'dashboard'）转换为 ZxIcon 识别的格式
- * 目前路由里的图标都是本地 svg，所以统一加上 'svg-icon:' 前缀
- */
-function resolveMenuIcon(icon) {
-  if (!icon) {
-    return '';
-  }
-  // 如果已经是带前缀的写法（例如 'svg-icon:xxx' 或 'custom:icon'），直接返回
-  if (typeof icon === 'string' && icon.includes(':')) {
-    return icon;
-  }
-  return `svg-icon:${icon}`;
-}
 
 function handleSelect(key) {
   const route = routers.value.find((item) => item.path === key);
@@ -219,7 +214,9 @@ function activeRoutes(key) {
 }
 
 /* 图标右间距 */
-.topmenu-container .zx-icon {
+.topmenu-container.el-menu--horizontal > .el-menu-item .navigation-menu-icon {
+  width: var(--app-nav-icon-size);
+  height: var(--app-nav-icon-size);
   margin-right: calc(var(--app-nav-space) * 1.5);
 }
 

@@ -137,9 +137,8 @@ class TestConfigServiceQuery:
             mock_repo = MockRepo.return_value
             mock_repo.find_by_id = AsyncMock(return_value=None)
             
-            result = await ConfigService(mock_repo, mock_db).config_detail_services(999)
-            
-            assert result.config_id is None
+            with pytest.raises(ResourceNotFoundException):
+                await ConfigService(mock_repo, mock_db).config_detail_services(999)
 
 
 class TestConfigServiceCache:
@@ -317,7 +316,10 @@ class TestConfigServiceUpdate:
     @pytest.mark.asyncio
     async def test_edit_config_not_found(self, mock_redis, mock_db):
         """Test editing non-existent config."""
-        with patch.object(ConfigService, 'config_detail_services', new=AsyncMock(return_value=ConfigModel())):
+        with patch.object(
+            ConfigService, 'config_detail_services',
+            new=AsyncMock(side_effect=ResourceNotFoundException(user_message='参数配置不存在'))
+        ):
             edit_config = ConfigModel(
                 config_id=999,
                 config_name='不存在',

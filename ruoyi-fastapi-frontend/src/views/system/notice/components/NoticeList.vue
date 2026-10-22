@@ -13,14 +13,11 @@
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:notice:add']"
             >新增</ZxButton
           >
-          <ZxButton
-            type="success"
-            :disabled="single"
-            @click="handleUpdate"
-            v-hasPermi="['system:notice:edit']"
+          <ZxButton :disabled="single" @click="handleUpdate" v-hasPermi="['system:notice:edit']"
             >修改</ZxButton
           >
           <ZxButton
+            plain
             type="danger"
             :disabled="multiple"
             @click="handleDelete"

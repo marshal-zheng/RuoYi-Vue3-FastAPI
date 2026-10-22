@@ -1,5 +1,9 @@
+{% set editor_component = namespace(used=false) %}
 <template>
   <ZxPageLayout class="app-container">
+    {% if dicts %}
+    <DictStatus :types="[{{ dicts }}]" />
+    {% endif %}
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
       {% for column in columns %}
       {% if column.query %}
@@ -19,14 +23,7 @@
       </el-form-item>
       {% elif (column.html_type == "select" or column.html_type == "radio") and dictType %}
       <el-form-item label="{{ comment }}" prop="{{ column.python_field }}">
-        <el-select v-model="queryParams.{{ column.python_field }}" placeholder="请选择{{ comment }}" clearable style="width: 240px">
-          <el-option
-            v-for="dict in {{ dictType }}"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+        <DictSelect dict-type="{{ dictType }}" v-model="queryParams.{{ column.python_field }}" placeholder="请选择{{ comment }}" clearable style="width: 240px" />
       </el-form-item>
       {% elif (column.html_type == "select" or column.html_type == "radio") and not dictType %}
       <el-form-item label="{{ comment }}" prop="{{ column.python_field }}">
@@ -70,7 +67,6 @@
       <el-col :span="1.5">
         <el-button
           type="primary"
-          plain
           icon="Plus"
           @click="handleAdd"
           v-hasPermi="['{{ moduleName }}:{{ businessName }}:add']"
@@ -130,13 +126,16 @@
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['{{ moduleName }}:{{ businessName }}:edit']">修改</el-button>
           <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['${moduleName}:${businessName}:add']">新增</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['{{ moduleName }}:{{ businessName }}:remove']">删除</el-button>
+          <el-button type="danger" link icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['{{ moduleName }}:{{ businessName }}:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 添加或修改{{ functionName }}对话框 -->
     <el-dialog :title="title" v-model="open" width="500px" append-to-body>
+      {% if dicts %}
+      <DictStatus :types="[{{ dicts }}]" />
+      {% endif %}
       <el-form ref="{{ businessName }}Ref" :model="form" :rules="rules" label-width="80px">
       {% for column in columns %}
       {% set field = column.python_field %}
@@ -169,23 +168,13 @@
         <file-upload v-model="form.{{ field }}"/>
       </el-form-item>
       {% elif column.html_type == "editor" %}
+      {% set editor_component.used = true %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
         <editor v-model="form.{{ field }}" :min-height="192"/>
       </el-form-item>
       {% elif column.html_type == "select" and dictType %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
-        <el-select v-model="form.{{ field }}" placeholder="请选择{{ comment }}">
-          <el-option
-            v-for="dict in {{ dictType }}"
-            :key="dict.value"
-            :label="dict.label"
-            {% if column.python_type == 'int' %}
-            :value="parseInt(dict.value)"
-            {% else %}
-            :value="dict.value"
-            {% endif %}
-          ></el-option>
-        </el-select>
+        <DictSelect dict-type="{{ dictType }}" :active="open"{% if column.python_type == 'int' %} value-type="number"{% endif %} v-model="form.{{ field }}" placeholder="请选择{{ comment }}" />
       </el-form-item>
       {% elif column.html_type == "select" and not dictType %}
       <el-form-item v-if="renderField({{ column.insert | lower }}, {{ column.edit | lower }})" label="{{ comment }}" prop="{{ field }}">
@@ -251,8 +240,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="submitForm">确 定</el-button>
-          <el-button @click="cancel">取 消</el-button>
+          <el-button type="primary" @click="submitForm" :loading="submitting">确 定</el-button>
+          <el-button  @click="cancel">取 消</el-button>
         </div>
       </template>
     </el-dialog>
@@ -260,12 +249,19 @@
 </template>
 
 <script setup name="{{ BusinessName }}">
+import { useOperation } from "@/utils/operation";
+{% if editor_component.used %}
+import Editor from "@/components/ui/Editor/index.vue";
+{% endif %}
+{% if dicts %}
+import { useDict } from "@/utils/dict";
+{% endif %}
 import { list{{ BusinessName }}, get{{ BusinessName }}, del{{ BusinessName }}, add{{ BusinessName }}, update{{ BusinessName }} } from "@/api/{{ moduleName }}/{{ businessName }}";
 
 const { proxy } = getCurrentInstance();
 {% if dicts %}
 {% set dictsNoSymbol = dicts.replace("'", "") %}
-const { {{ dictsNoSymbol }} } = proxy.useDict({{ dicts }});
+const { {{ dictsNoSymbol }} } = useDict({{ dicts }});
 {% endif %}
 
 const {{ businessName }}List = ref([]);
@@ -419,37 +415,37 @@ function handleUpdate(row) {
 }
 
 /** 提交按钮 */
-function submitForm() {
-  proxy.$refs["{{ businessName }}Ref"].validate(valid => {
+const { run: submitForm, pending: submitting } = useOperation(async () => {
+  const valid = await proxy.$refs["{{ businessName }}Ref"].validate().catch(() => false);
     if (valid) {
+      const submitData = { ...form.value };
       {% for column in columns %}
       {% if column.html_type == "checkbox" %}
-      form.value.{{ column.python_field }} = form.value.{{ column.python_field }}.join(",");
+      submitData.{{ column.python_field }} = submitData.{{ column.python_field }}.join(",");
       {% endif %}
       {% endfor %}
-      if (form.value.{{ pkColumn.python_field }} != null) {
-        update{{ BusinessName }}(form.value).then(() => {
+      if (submitData.{{ pkColumn.python_field }} != null) {
+        await update{{ BusinessName }}(submitData).then(() => {
           open.value = false;
           getList();
         });
       } else {
-        add{{ BusinessName }}(form.value).then(() => {
+        await add{{ BusinessName }}(submitData).then(() => {
           open.value = false;
           getList();
         });
       }
     }
-  });
-}
+});
 
 /** 删除按钮操作 */
-function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除{{ functionName }}编号为"' + row.{{ pkColumn.python_field }} + '"的数据项？').then(function() {
+const { run: handleDelete } = useOperation(async (row) => {
+  await proxy.$modal.confirm('是否确认删除{{ functionName }}编号为"' + row.{{ pkColumn.python_field }} + '"的数据项？').then(function() {
     return del{{ BusinessName }}(row.{{ pkColumn.python_field }});
   }).then(() => {
     getList();
   }).catch(() => {});
-}
+});
 
 /** 是否渲染字段 */
 function renderField(insert, edit) {

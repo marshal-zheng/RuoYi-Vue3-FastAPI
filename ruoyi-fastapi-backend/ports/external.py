@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Awaitable, Callable, Iterable
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterable
 from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 if TYPE_CHECKING:
@@ -36,6 +36,9 @@ class IRedisClient(Protocol):
 
     async def keys(self, pattern: str = '*') -> Iterable[str]:
         """Return keys matching pattern."""
+
+    def scan_iter(self, *, match: str = '*') -> AsyncIterator[str]:
+        """Iterate matching keys without a blocking whole-keyspace lookup."""
 
     async def info(self, section: str | None = None) -> dict[str, Any]:
         """Return redis server information."""

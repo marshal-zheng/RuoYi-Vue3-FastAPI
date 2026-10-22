@@ -48,10 +48,9 @@ class DeptModel(CamelModelBase):
         return self.email
 
     def validate_fields(self):
-        self.get_dept_name()
-        self.get_order_num()
-        self.get_phone()
-        self.get_email()
+        for field in ('dept_name', 'order_num', 'phone', 'email'):
+            if field in self.model_fields_set:
+                getattr(self, f'get_{field}')()
 
 
 @as_query

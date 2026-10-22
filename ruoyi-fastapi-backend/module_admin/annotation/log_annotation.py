@@ -48,6 +48,27 @@ def _resolve_request_service(request: Request, provider_name: str, query_db: Asy
         return None
 
 
+async def _record_log(request: Request, query_db: AsyncSession, provider_name: str, payload, *, failed=False):
+    """Failure evidence must survive rollback of the failed request."""
+    method_name = {
+        'login_log_service': 'add_login_log_services',
+        'operation_log_service': 'add_operation_log_services',
+    }[provider_name]
+    if not failed:
+        service = _resolve_request_service(request, provider_name, query_db)
+        if service is not None:
+            await getattr(service, method_name)(payload)
+        return
+    try:
+        container = get_app_container(request)
+        async with container.create_task_session() as session, session.begin():
+            service = container.resolve_service(provider_name, session)
+            await getattr(service, method_name)(payload)
+    except Exception as exc:
+        # Never replace the original business/authentication error with a log failure.
+        logger.error('Failed to persist failure log provider={}: {}', provider_name, type(exc).__name__)
+
+
 class Log:
     """
     日志装饰器
@@ -119,13 +140,14 @@ class Log:
             if content_type and (
                 'multipart/form-data' in content_type or 'application/x-www-form-urlencoded' in content_type
             ):
-                payload = await request.form()
+                payload = dict(request.query_params)
+                payload.update(await request.form())
                 oper_param = '\n'.join([f'{key}: {value}' for key, value in payload.items()])
             else:
                 payload = await request.body()
                 # 通过 request.path_params 直接访问路径参数
                 path_params = request.path_params
-                oper_param = {}
+                oper_param = dict(request.query_params)
                 if payload:
                     oper_param.update(json.loads(str(payload, 'utf-8')))
                 if path_params:
@@ -245,21 +267,15 @@ class Log:
                     )
 
                     if query_db:
-                        login_log_service = _resolve_request_service(request, 'login_log_service', query_db)
-                        if login_log_service:
-                            await login_log_service.add_login_log_services(LogininforModel(**login_log))
-                        else:
-                            logger.warning('Log decorator 无法解析 login_log_service，跳过登录日志入库')
+                        await _record_log(
+                            request, query_db, 'login_log_service', LogininforModel(**login_log),
+                            failed=captured_exception is not None,
+                        )
                     else:
                         logger.warning('Log decorator 未获取到 AsyncSession，跳过登录日志入库')
             else:
                 if not query_db:
                     logger.warning('Log decorator 未获取到 AsyncSession，跳过操作日志入库')
-                    return result
-
-                operation_log_service = _resolve_request_service(request, 'operation_log_service', query_db)
-                if not operation_log_service:
-                    logger.warning('Log decorator 无法解析 operation_log_service，跳过操作日志入库')
                     return result
 
                 current_user = await LoginService.get_current_user(request, token, query_db)
@@ -294,7 +310,10 @@ class Log:
                     operTime=oper_time,
                     costTime=int(cost_time),
                 )
-                await operation_log_service.add_operation_log_services(operation_log)
+                await _record_log(
+                    request, query_db, 'operation_log_service', operation_log,
+                    failed=captured_exception is not None,
+                )
 
             if captured_exception is not None:
                 raise captured_exception

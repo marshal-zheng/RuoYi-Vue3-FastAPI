@@ -2,14 +2,13 @@
 Shared pytest fixtures and configuration for all tests.
 """
 
-import asyncio
-from importlib import import_module
 import sys
+from collections.abc import AsyncGenerator, Generator
+from importlib import import_module
 from pathlib import Path
-from typing import AsyncGenerator, Generator
 
-import pytest
 import httpx
+import pytest
 from httpx import ASGITransport
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import StaticPool
@@ -39,10 +38,10 @@ class _PatchedAsyncClient(_OriginalAsyncClient):
 
 httpx.AsyncClient = _PatchedAsyncClient
 
-from config.env import AppConfig
-from container import AppContainer, build_container
-from module_admin.entity.do.base import LegacyBaseModel
-from module_admin.entity.do.user_do import UserDO
+from config.env import AppConfig  # noqa: E402
+from container import AppContainer, build_container  # noqa: E402
+from module_admin.entity.do.base import LegacyBaseModel  # noqa: E402
+from module_admin.entity.do.user_do import UserDO  # noqa: E402
 
 # Test database URL (SQLite in-memory)
 TEST_DATABASE_URL = 'sqlite+aiosqlite:///:memory:'
@@ -64,15 +63,7 @@ def _import_orm_models() -> None:
     import_module('events.models')
 
 
-@pytest.fixture(scope='session')
-def event_loop() -> Generator:
-    """Create event loop for async tests."""
-    loop = asyncio.get_event_loop_policy().new_event_loop()
-    yield loop
-    loop.close()
-
-
-@pytest.fixture(scope='session')
+@pytest.fixture
 async def test_engine():
     """Create test database engine."""
     _import_orm_models()
@@ -95,7 +86,7 @@ async def test_engine():
 @pytest.fixture
 async def test_db(test_engine) -> AsyncGenerator[AsyncSession, None]:
     """Create test database session with automatic rollback."""
-    TestSessionLocal = async_sessionmaker(
+    test_session_factory = async_sessionmaker(
         autocommit=False,
         autoflush=False,
         bind=test_engine,
@@ -103,7 +94,7 @@ async def test_db(test_engine) -> AsyncGenerator[AsyncSession, None]:
         class_=AsyncSession,
     )
 
-    async with TestSessionLocal() as session:
+    async with test_session_factory() as session:
         # Begin nested transaction
         await session.begin()
 
@@ -175,7 +166,7 @@ def app_container() -> Generator[AppContainer, None, None]:
 @pytest.fixture
 def app_container_in_server(app_container: AppContainer) -> Generator[AppContainer, None, None]:
     """Attach test container to FastAPI app and restore after test."""
-    from server import app
+    from server import app  # noqa: PLC0415
 
     previous_container = getattr(app.state, 'container', None)
     app.state.container = app_container

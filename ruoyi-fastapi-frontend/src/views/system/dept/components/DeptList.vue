@@ -16,7 +16,7 @@
           <ZxButton type="primary" @click="handleAdd" v-hasPermi="['system:dept:add']"
             >新增</ZxButton
           >
-          <ZxButton type="info" @click="toggleExpandAll">展开/折叠</ZxButton>
+          <ZxButton @click="toggleExpandAll">展开/折叠</ZxButton>
         </template>
         <template #filters>
           <zx-input

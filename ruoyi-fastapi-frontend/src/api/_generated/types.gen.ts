@@ -671,6 +671,22 @@ export type CurrentUserModel = {
 };
 
 /**
+ * DashboardSaveModel
+ */
+export type DashboardSaveModel = {
+  /**
+   * Document
+   */
+  document: {
+    [key: string]: unknown;
+  };
+  /**
+   * Expectedrevision
+   */
+  expectedRevision: number | null;
+};
+
+/**
  * DeptCreateModel
  */
 export type DeptCreateModel = {
@@ -3987,6 +4003,74 @@ export type PostPageQueryModel = {
    * 更新时间
    */
   updateTime?: string | null;
+};
+
+/**
+ * ProjectCreatedModel
+ *
+ * 新建工程及同时创建的初始版本，供拓扑设计入口使用。
+ */
+export type ProjectCreatedModel = {
+  /**
+   * Createby
+   *
+   * 创建人
+   */
+  createBy?: string | null;
+  /**
+   * Createtime
+   *
+   * 创建时间
+   */
+  createTime?: string | null;
+  /**
+   * Delflag
+   *
+   * 删除标志（0代表存在 2代表删除）
+   */
+  delFlag?: string | null;
+  /**
+   * Projectcode
+   *
+   * 工程编码
+   */
+  projectCode?: string | null;
+  /**
+   * Projectdesc
+   *
+   * 工程描述
+   */
+  projectDesc?: string | null;
+  /**
+   * Projectid
+   *
+   * 工程编号
+   */
+  projectId: number;
+  /**
+   * Projectname
+   *
+   * 工程名称
+   */
+  projectName?: string | null;
+  /**
+   * Updateby
+   *
+   * 更新者
+   */
+  updateBy?: string | null;
+  /**
+   * Updatetime
+   *
+   * 更新时间
+   */
+  updateTime?: string | null;
+  /**
+   * Versionid
+   *
+   * 初始版本编号
+   */
+  versionId: number;
 };
 
 /**
@@ -8315,8 +8399,11 @@ export type AddSystemProjectProjectPostResponses = {
   /**
    * Successful Response
    */
-  200: unknown;
+  201: ProjectCreatedModel;
 };
+
+export type AddSystemProjectProjectPostResponse =
+  AddSystemProjectProjectPostResponses[keyof AddSystemProjectProjectPostResponses];
 
 export type EditSystemProjectProjectPutData = {
   body: ProjectModel;
@@ -10360,6 +10447,110 @@ export type QueryDetailSystemConfigSystemConfigConfigIdGetResponses = {
 
 export type QueryDetailSystemConfigSystemConfigConfigIdGetResponse =
   QueryDetailSystemConfigSystemConfigConfigIdGetResponses[keyof QueryDetailSystemConfigSystemConfigConfigIdGetResponses];
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteData = {
+  body?: never;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query: {
+    /**
+     * Expectedrevision
+     */
+    expectedRevision: number;
+  };
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteError =
+  RemoveDashboardSystemDashboardScopeKeyDeleteErrors[keyof RemoveDashboardSystemDashboardScopeKeyDeleteErrors];
+
+export type RemoveDashboardSystemDashboardScopeKeyDeleteResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetData = {
+  body?: never;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query?: never;
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type LoadDashboardSystemDashboardScopeKeyGetError =
+  LoadDashboardSystemDashboardScopeKeyGetErrors[keyof LoadDashboardSystemDashboardScopeKeyGetErrors];
+
+export type LoadDashboardSystemDashboardScopeKeyGetResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutData = {
+  body: DashboardSaveModel;
+  path: {
+    /**
+     * Scope
+     */
+    scope: 'account' | 'scene';
+    /**
+     * Key
+     */
+    key: string;
+  };
+  query?: never;
+  url: '/system/dashboard/{scope}/{key}';
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutErrors = {
+  /**
+   * Validation Error
+   */
+  422: HttpValidationError;
+};
+
+export type SaveDashboardSystemDashboardScopeKeyPutError =
+  SaveDashboardSystemDashboardScopeKeyPutErrors[keyof SaveDashboardSystemDashboardScopeKeyPutErrors];
+
+export type SaveDashboardSystemDashboardScopeKeyPutResponses = {
+  /**
+   * Successful Response
+   */
+  200: unknown;
+};
 
 export type AddSystemDeptSystemDeptPostData = {
   body: DeptCreateModel;

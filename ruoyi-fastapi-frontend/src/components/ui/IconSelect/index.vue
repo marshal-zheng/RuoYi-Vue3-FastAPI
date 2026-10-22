@@ -8,7 +8,7 @@
       @clear="filterIcons"
       @input="filterIcons"
     >
-      <template #suffix><i class="el-icon-search el-input__icon" /></template>
+      <template #suffix><ZxIcon :icon="navigationIcons.search" /></template>
     </zx-input>
     <div class="icon-list">
       <div class="list-container">
@@ -19,7 +19,7 @@
           @click="selectedIcon(item)"
         >
           <div :class="['icon-item', { active: activeIcon === item }]">
-            <svg-icon :icon-class="item" class-name="icon" style="height: 25px; width: 16px" />
+            <ZxIcon :icon="resolveNavigationIcon(item)" class="icon" />
             <span>{{ item }}</span>
           </div>
         </div>
@@ -30,6 +30,8 @@
 
 <script setup>
 import icons from './requireIcons';
+import { ZxIcon } from '@zxio/zxui/core';
+import { navigationIcons, resolveNavigationIcon } from '@/icons/navigation';
 
 defineProps({
   activeIcon: {

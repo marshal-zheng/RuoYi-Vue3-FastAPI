@@ -24,10 +24,15 @@ from module_admin.entity.vo.user_vo import (
     ResetPasswordModel,
     ResetUserModel,
     UserDetailModel,
-    UserInfoModel,
     UserPageQueryModel,
     UserProfileModel,
     UserRoleResponseModel,
+)
+from module_admin.entity.vo.user_write_vo import (
+    UserCreateModel,
+    UserProfileUpdateModel,
+    UserStatusUpdateModel,
+    UserUpdateModel,
 )
 from modules.identity.ports import get_current_user
 from modules.system.api.dependencies import provide_system_mediator
@@ -142,13 +147,14 @@ async def get_system_user_list(
 @Log(title='用户管理', business_type=BusinessType.INSERT)
 async def add_system_user(
     request: Request,
-    add_user: AddUserModel,
+    add_user: UserCreateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     dept_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    add_user = AddUserModel(**add_user.model_dump(exclude_unset=True))
     add_user.password = PwdUtil.get_password_hash(add_user.password)
     add_user.create_by = current_user.user.user_name
     add_user.create_time = datetime.now()
@@ -186,7 +192,7 @@ async def add_system_user(
 @Log(title='用户管理', business_type=BusinessType.UPDATE)
 async def edit_system_user(
     request: Request,
-    edit_user: EditUserModel,
+    edit_user: UserUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     user_data_scope_sql: str = Depends(GetDataScope('UserDO')),
@@ -194,6 +200,7 @@ async def edit_system_user(
     role_data_scope_sql: str = Depends(GetDataScope('DeptDO')),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
+    edit_user = EditUserModel(**edit_user.model_dump(exclude_unset=True))
     edit_user.update_by = current_user.user.user_name
     edit_user.update_time = datetime.now()
     edit_command = EditUserCommand(
@@ -293,7 +300,7 @@ async def reset_system_user_pwd(
 @Log(title='用户管理', business_type=BusinessType.UPDATE)
 async def change_system_user_status(
     request: Request,
-    change_user: EditUserModel,
+    change_user: UserStatusUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     data_scope_sql: str = Depends(GetDataScope('UserDO')),
@@ -427,20 +434,18 @@ async def change_system_user_profile_avatar(
 @Log(title='个人信息', business_type=BusinessType.UPDATE)
 async def change_system_user_profile_info(
     request: Request,
-    user_info: UserInfoModel,
+    user_info: UserProfileUpdateModel,
     query_db: AsyncSession = Depends(get_db),
     current_user: CurrentUserModel = Depends(get_current_user),
     mediator: Mediator = Depends(provide_system_mediator),
 ):
     edit_user = EditUserModel(
-        **user_info.model_dump(exclude_unset=True, by_alias=True, exclude={'role_ids', 'post_ids'}),
+        **user_info.model_dump(exclude_unset=True),
         userId=current_user.user.user_id,
         userName=current_user.user.user_name,
         updateBy=current_user.user.user_name,
         updateTime=datetime.now(),
-        roleIds=current_user.user.role_ids.split(',') if current_user.user.role_ids else [],
-        postIds=current_user.user.post_ids.split(',') if current_user.user.post_ids else [],
-        role=current_user.user.role,
+        type='profile',
     )
     edit_command = EditUserCommand(
         query_db=query_db,

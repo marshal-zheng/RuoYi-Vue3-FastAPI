@@ -236,7 +236,7 @@
               </template>
             </draggable>
             <div>
-              <el-button icon="CirclePlus" style="margin-left: 8px; margin-top: 10px;" text bg type="primary"
+              <el-button icon="CirclePlus" style="margin-left: 8px; margin-top: 10px;" text bg
                 @click="addSelectItem">
                 添加选项
               </el-button>
@@ -272,7 +272,7 @@
             <el-tree v-if="activeData.dataType === 'static'" draggable :data="activeData.options" node-key="id"
               :expand-on-click-node="false" :render-content="renderContent" />
             <div v-if="activeData.dataType === 'static'">
-              <el-button icon="CirclePlus" style="margin-left: 0; margin-top: 10px;" type="primary" text bg
+              <el-button icon="CirclePlus" style="margin-left: 0; margin-top: 10px;" text bg
                 @click="addTreeItem">
                 添加父级
               </el-button>
@@ -409,7 +409,7 @@
               </el-form-item>
             </div>
             <div>
-              <el-button icon="CirclePlus" style="margin-left: 0; margin-top: 10px;" type="primary" text bg
+              <el-button icon="CirclePlus" style="margin-left: 0; margin-top: 10px;" text bg
                 @click="addReg">
                 添加规则
               </el-button>
@@ -471,7 +471,7 @@
         </el-form>
       </el-scrollbar>
     </div>
-    <icons-dialog v-model="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
+    <icons-dialog v-if="iconsVisible" v-model="iconsVisible" :current="activeData[currentIconModel]" @select="setIcon" />
     <treeNode-dialog v-model="dialogVisible" @commit="addNode" />
 
   </div>
@@ -481,7 +481,8 @@
 import draggable from "vuedraggable/dist/vuedraggable.common"
 import { ElLink } from 'element-plus'
 import { isNumberStr } from '@/utils/index'
-import IconsDialog from './IconsDialog'
+import { defineAsyncComponent } from 'vue'
+const IconsDialog = defineAsyncComponent(() => import('./IconsDialog.vue'))
 import TreeNodeDialog from './TreeNodeDialog'
 import { inputComponents, selectComponents } from '@/utils/generator/config'
 

@@ -387,17 +387,3 @@ class TestParameterizedQueryBestPractices:
         
         assert isinstance(users, list)
 
-
-@pytest.fixture
-async def db_session():
-    """
-    数据库会话 fixture
-    
-    注意：这是一个简化的 fixture
-    实际项目中应该使用 conftest.py 中的 fixture
-    """
-    from config.get_db import get_db
-    
-    async for session in get_db():
-        yield session
-        break

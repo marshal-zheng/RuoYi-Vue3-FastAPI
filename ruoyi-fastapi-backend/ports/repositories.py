@@ -365,6 +365,9 @@ class IGenTableRepository(Protocol):
 class IDictDataRepository(Protocol):
     """Protocol contract for `DictDataRepository`."""
 
+    async def find_all(self, filters: dict[str, Any] | None = None) -> list[Any]:
+        """Read all matching dictionary members, including disabled entries."""
+
     async def find_by_code(self, dict_code: int) -> Any | None:
         """Contract for `DictDataRepository.find_by_code`."""
 
@@ -463,6 +466,9 @@ class IJobRepository(Protocol):
 
     async def find_by_id(self, job_id: int) -> Any | None:
         """Contract for `JobRepository.find_by_id`."""
+
+    async def find_for_update(self, job_id: int) -> Any | None:
+        """Read the current job row for an operation, bypassing an earlier read snapshot."""
 
     async def find_by_info(
         self,
@@ -979,8 +985,8 @@ class IUserRepository(Protocol):
     async def find_by_id_card(self, id_card: str) -> Any | None:
         """Contract for `UserRepository.find_by_id_card`."""
 
-    async def get_user_with_relations(self, user_id: int) -> dict[str, Any]:
-        """Contract for `UserRepository.get_user_with_relations`."""
+    async def get_user_with_relations(self, user_id: int, *, active_only: bool = False) -> dict[str, Any]:
+        """Read non-deleted users; authentication explicitly requires active accounts."""
 
     async def paginate_with_dept(
         self,

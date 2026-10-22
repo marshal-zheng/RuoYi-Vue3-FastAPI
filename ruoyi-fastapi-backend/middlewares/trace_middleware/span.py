@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 @author: peng
 @file: span.py
@@ -6,7 +5,9 @@
 """
 
 from contextlib import asynccontextmanager
-from starlette.types import Scope, Message
+
+from starlette.types import Message, Scope
+
 from .ctx import TraceCtx
 
 
@@ -75,7 +76,10 @@ class Span:
             pass
         """
         if message['type'] == 'http.response.start':
-            headers = list(message.get('headers', []))
+            headers = [
+                (key, value) for key, value in message.get('headers', [])
+                if key.lower() not in {b'x-request-id', b'x-trace-id'}
+            ]
             request_id = TraceCtx.get_request_id()
             trace_id = TraceCtx.get_trace_id()
             if request_id:

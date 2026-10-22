@@ -27,13 +27,17 @@
           style="color: var(--top-header-avatar-text-color)"
         >
           <ZxIcon
-            icon="User"
+            :icon="navigationIcons.user"
             size="var(--app-nav-action-icon-size)"
             class="avatar-icon"
             style="color: var(--top-header-avatar-icon-color)"
           />
           <span class="avatar-name">{{ userStore.nickName }}</span>
-          <ZxIcon icon="ArrowDown" size="var(--app-nav-chevron-size)" class="ml-0" />
+          <ZxIcon
+            :icon="navigationIcons.chevronDown"
+            size="var(--app-nav-chevron-size)"
+            class="ml-0"
+          />
         </button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -63,6 +67,7 @@ import useAppStore from '@/store/modules/app';
 import useUserStore from '@/store/modules/user';
 import useSettingsStore from '@/store/modules/settings';
 import ZxThemePresetSwitch from '@/theme/ZxThemePresetSwitch.vue';
+import { navigationIcons } from '@/icons/navigation';
 
 defineProps({ breadcrumbVisible: { type: Boolean, default: true } });
 

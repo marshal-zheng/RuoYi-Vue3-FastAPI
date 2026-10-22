@@ -44,7 +44,7 @@ class _FakeProjectService:
             'projectDesc': project.project_desc,
             'updateBy': operator,
         }
-        return SimpleNamespace(message='新增成功', result={'projectId': project_id})
+        return SimpleNamespace(message='新增成功', result={'projectId': project_id, 'versionId': 201})
 
     async def edit_project(self, project, operator: str | None = None):
         self._projects[project.project_id] = {
@@ -247,6 +247,9 @@ class _FakeJobService:
         self._jobs[job.job_id] = current
         return SimpleNamespace(message='更新成功', result={'jobId': job.job_id})
 
+    async def change_job_status_services(self, job):
+        return await self.edit_job_services(job)
+
     async def job_detail_services(self, job_id: int):
         return self._jobs[job_id]
 
@@ -343,6 +346,7 @@ async def test_project_create_returns_created_resource(contract_client: AsyncCli
     assert response.headers['Location'] == 'http://testserver/project/101'
     assert response.json() == {
         'projectId': 101,
+        'versionId': 201,
         'projectName': '演示工程',
         'projectDesc': 'demo project',
         'updateBy': 'admin',

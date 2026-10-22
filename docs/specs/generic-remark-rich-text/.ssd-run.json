@@ -1,0 +1,144 @@
+{
+  "feature": "generic-remark-rich-text",
+  "autonomy": "auto-spec",
+  "phase": "handoff_or_stop",
+  "updated_at": "2026-10-22T08:41:46Z",
+  "gates": [
+    {
+      "gate": "requirements",
+      "decision": "user-approved",
+      "evidence": "用户：需求没问题，继续生成 design.md；requirements.md 审核记录。",
+      "at": "2026-10-22T08:07:41Z"
+    },
+    {
+      "gate": "design",
+      "decision": "user-approved",
+      "evidence": "用户：设计没问题，继续生成 tasks.md；本轮请求。",
+      "at": "2026-10-22T08:07:41Z"
+    },
+    {
+      "gate": "tasks",
+      "decision": "pre-approved",
+      "evidence": "用户：你直接用ssd auto啊不用我认为确定吧；按 SSD auto 映射 auto-spec，自动完成至 execution_ready。",
+      "at": "2026-10-22T08:07:41Z"
+    },
+    {
+      "gate": "design",
+      "decision": "pre-approved",
+      "evidence": "SSD auto-spec；独立设计复审第2轮PASS；59/59设计覆盖；GEN-01默认决定见Clarifications及pending_review。",
+      "at": "2026-10-22T08:25:55Z"
+    },
+    {
+      "gate": "tasks",
+      "decision": "pre-approved",
+      "evidence": "SSD auto-spec；tasks.md 23项依赖有序；59/59 AC双向追溯通过；spec-review.md记录独立设计PASS与静态验证。",
+      "at": "2026-10-22T08:36:21Z"
+    },
+    {
+      "gate": "execution",
+      "decision": "user-approved",
+      "evidence": "用户：那你新开窗口线程完成这个spec吧；授权新线程连续完成23项实现任务及所需验证/独立审查，不重复逐任务确认。",
+      "at": "2026-10-22T08:41:12Z"
+    }
+  ],
+  "clarify": {
+    "mode": "read-only-subagent",
+    "accepted_writebacks": 1,
+    "adopted_user_decisions": [
+      {
+        "id": "GEN-01",
+        "question": "生成器 Vue2 与主子表 remark 能力边界",
+        "adopted_default": "Vue3 crud/tree/sub 主字段与子字段全部覆盖，子表按需编辑；Vue2 + remark 在保存/预览/下载/生成处拒绝，不新增Vue2适配。",
+        "risk_if_wrong": "若仍需为 Vue2 项目生成富文本备注，需单独明确 Vue2 接入范围；当前该组合会被明确拒绝。",
+        "status": "pending-review"
+      }
+    ],
+    "status": "NO_CRITICAL_AMBIGUITY",
+    "target_requirements": "docs/specs/generic-remark-rich-text/requirements.md",
+    "agent": "/root/remark_spec_clarify",
+    "outstanding_high_impact_ambiguity": "none",
+    "evidence": "只读子代理扫描需求及设计，11类检查均明确；主代理复核接受，无建议、无回写、无新增产品决策。",
+    "requested_model": "inherited per user",
+    "requested_reasoning": "inherited per user",
+    "actual_model": "unavailable",
+    "actual_reasoning": "unavailable",
+    "writeback_source": "design evaluator GEN-01；主代理按 auto-spec 默认决策回写，R8.AC2 编号与正文不变。"
+  },
+  "evaluator": [
+    {
+      "target": "design.md",
+      "mode": "read-only-subagent",
+      "verdict": "fail",
+      "attempts": 1,
+      "agent": "/root/remark_design_evaluator",
+      "findings": "GEN-01：R8.AC2 的 Vue2 / 主子表能力矩阵未明确；其余58条已覆盖。主代理已补矩阵及校验，等待复审。"
+    },
+    {
+      "target": "design.md",
+      "mode": "read-only-subagent",
+      "verdict": "pass",
+      "attempts": 2,
+      "agent": "/root/remark_design_evaluator",
+      "findings": "GEN-01已关闭；59/59 AC完整覆盖；7个必需章节齐全；无剩余阻塞。仅静态设计审查。",
+      "requested_model": "inherited per user",
+      "requested_reasoning": "inherited per user",
+      "actual_model": "unavailable",
+      "actual_reasoning": "unavailable"
+    }
+  ],
+  "runtime_handoffs": [
+    {
+      "action": "launch",
+      "target": "docs/specs/generic-remark-rich-text",
+      "tracking_mode": "parent-recorded",
+      "post_launch_control": "parent-observed",
+      "evidence_boundary": "runtime-state-is-not-completion-evidence",
+      "run_ref": "codex://threads/01a162c5-7edd-7e50-9df6-67ec64b65eea",
+      "thread_ref": "01a162c5-7edd-7e50-9df6-67ec64b65eea",
+      "ledger": "none",
+      "surface": "codex-thread",
+      "adapter": "codex-app-tools",
+      "execution_mode": "local",
+      "implementation_location_policy": "isolated-worktree",
+      "isolation_proof_required": true,
+      "isolation_proof": "pending child verification",
+      "requested_reasoning": "xhigh",
+      "model": "user-configured default; no override",
+      "failure_class": "none",
+      "parent_observation_obligation": "one bounded wait_threads status check after create",
+      "next_observation_action": "checkpoint",
+      "observation_bound": "one call; timeoutMs=0",
+      "return_contract": "实施任务/证据/独立审查/未验证项/工作区与一个下一动作",
+      "next_action": "新线程执行任务1，核对基线与隔离工作区，然后连续完成spec。",
+      "at": "2026-10-22T08:41:46Z"
+    }
+  ],
+  "pending_review": [
+    {
+      "id": "GEN-01",
+      "question": "生成器 Vue2 与主子表 remark 能力边界",
+      "adopted_default": "Vue3 crud/tree/sub 主字段与子字段全部覆盖，子表按需编辑；Vue2 + remark 在保存/预览/下载/生成处拒绝，不新增Vue2适配。",
+      "risk_if_wrong": "若仍需为 Vue2 项目生成富文本备注，需单独明确 Vue2 接入范围；当前该组合会被明确拒绝。",
+      "status": "pending-review"
+    }
+  ],
+  "context": {
+    "north_star_context": "docs/README.md 的 specs 三阶段结构；未提供相关北极星或 initiative/work-item 指针。",
+    "subagent_authorization": "用户常驻指令：任何时候都授权子代理工具使用权限；当前显式启用 ssd-workflow，其 clarify 和 design evaluator 要求只读委派。",
+    "subagent_configuration": "按用户常驻指令继承主代理模型和推理强度。",
+    "preexisting_dirty_paths": 454,
+    "write_scope": "仅 docs/specs/generic-remark-rich-text；本轮不实施业务代码或执行数据库变更。",
+    "clarify_evidence": "read-only-subagent；docs/specs/generic-remark-rich-text/requirements.md；OUTSTANDING_HIGH_IMPACT_AMBIGUITY: none；主代理已接受。",
+    "execution_handoff": "新建项目内本地 Codex 线程，thinking=xhigh；应用默认模型；由执行线程按项目约定准备项目本地隔离工作区，保留当前未提交基线和未跟踪规格。"
+  },
+  "verification": {
+    "evidence": "docs/specs/generic-remark-rich-text/spec-review.md",
+    "task_count": 23,
+    "ac_count": 59,
+    "covered_acs": 59,
+    "unknown_refs": 0,
+    "missing_refs": 0,
+    "dependency_order": "pass",
+    "implementation_started": false
+  }
+}

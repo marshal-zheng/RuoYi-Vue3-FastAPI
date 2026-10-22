@@ -56,12 +56,13 @@ describe('application component imports', () => {
     );
   });
 
-  it('imports only public ZXUI leaves, EP components/directives and actual icon objects', async () => {
+  it('imports public ZXUI core components, EP components/directives and actual icon objects', async () => {
     const code = await transform(
       '<ZxInput /><ZxDialog /><el-select /><Plus /><div v-loading="busy" />'
     );
-    expect(code).toContain('@zxio/zxui/input');
-    expect(code).toContain('@zxio/zxui/dialog');
+    expect(code).toContain('@zxio/zxui/core');
+    expect(code).not.toContain('@zxio/zxui/input');
+    expect(code).not.toContain('@zxio/zxui/dialog');
     expect(code).toContain('element-plus/es');
     expect(code).toContain('ElLoadingDirective');
     expect(code).toContain('@element-plus/icons-vue');

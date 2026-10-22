@@ -20,18 +20,11 @@
               :loading="handleGenTablePending"
               >生成</ZxButton
             >
-            <ZxButton type="primary" icon="Plus" @click="openCreateTable" v-hasRole="['admin']"
-              >创建</ZxButton
-            >
-            <ZxButton
-              type="info"
-              icon="Upload"
-              @click="openImportTable"
-              v-hasPermi="['tool:gen:import']"
+            <ZxButton icon="Plus" @click="openCreateTable" v-hasRole="['admin']">创建</ZxButton>
+            <ZxButton icon="Upload" @click="openImportTable" v-hasPermi="['tool:gen:import']"
               >导入</ZxButton
             >
             <ZxButton
-              type="success"
               icon="Edit"
               :disabled="single"
               @click="handleEditTable"
@@ -39,6 +32,7 @@
               >修改</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"

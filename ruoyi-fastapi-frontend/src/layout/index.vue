@@ -48,7 +48,7 @@
         aria-label="打开布局设置"
         @click="setLayout"
       >
-        <ZxIcon icon="Setting" size="var(--app-nav-action-icon-size)" />
+        <ZxIcon :icon="navigationIcons.settings" size="var(--app-nav-action-icon-size)" />
       </ZxButton>
     </div>
     <Settings ref="settingRef" />
@@ -61,10 +61,11 @@ import Sidebar from './components/Sidebar/index.vue';
 import { AppMain, Navbar, Settings, TagsView } from './components';
 import useAppStore from '@/store/modules/app';
 import useSettingsStore from '@/store/modules/settings';
-import { ZxButton } from '@zxio/zxui/button';
-import { ZxIcon } from '@zxio/zxui/icon';
+import { ZxButton } from '@zxio/zxui/core';
+import { ZxIcon } from '@zxio/zxui/core';
 import Hamburger from '@/components/ui/Hamburger';
 import { resolveLayoutVisibility } from './policy';
+import { navigationIcons } from '@/icons/navigation';
 const route = useRoute();
 
 const settingsStore = useSettingsStore();

@@ -3,8 +3,9 @@ import { defineComponent, h } from 'vue';
 import * as icons from '@element-plus/icons-vue';
 import { describe, expect, it, vi } from 'vitest';
 import IconsDialog from '@/views/tool/build/IconsDialog.vue';
+import elementIconNames from '@/icons/element-names.json';
 
-vi.mock('@zxio/zxui/dialog', () => ({
+vi.mock('@zxio/zxui/core', () => ({
   ZxDialog: defineComponent({
     setup:
       (_props, { slots }) =>
@@ -29,6 +30,7 @@ const Input = defineComponent({
 
 describe('generator icon selection without global icon registration', () => {
   it('renders every actual icon object and preserves search and selected names', async () => {
+    expect(elementIconNames).toEqual(Object.keys(icons).sort());
     const wrapper = mount(IconsDialog, {
       props: { modelValue: true },
       global: {

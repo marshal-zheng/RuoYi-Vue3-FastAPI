@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import json
 from datetime import datetime
 from typing import Optional
 
@@ -132,12 +131,6 @@ class DictTypeService:
             page_object.update_time = datetime.now()
         edit_dict_type = page_object.model_dump(exclude_unset=True)
         dict_type_info = await self.dict_type_detail_services(page_object.dict_id)
-        if not dict_type_info.dict_id:
-            raise ResourceNotFoundException(
-                user_message='字典类型不存在',
-                error_code=ErrorCode.DICT_NOT_FOUND,
-                developer_message=f'Dict type not found: dict_id={page_object.dict_id}',
-            )
 
         if not await self.check_dict_type_unique_services(page_object):
             raise ResourceConflictException(
@@ -146,8 +139,8 @@ class DictTypeService:
                 developer_message=f'Dict type already exists: dict_type={page_object.dict_type}',
             )
 
-        dict_data_list = await self.dict_data_repo.find_by_type(dict_type_info.dict_type)
         if dict_type_info.dict_type != page_object.dict_type:
+            dict_data_list = await self.dict_data_repo.find_all(filters={'dict_type': dict_type_info.dict_type})
             for dict_data in dict_data_list:
                 dict_data.dict_type = page_object.dict_type
                 dict_data.update_by = page_object.update_by
@@ -161,12 +154,11 @@ class DictTypeService:
                     setattr(db_dict_type, key, value)
             await self.dict_type_repo.update(db_dict_type)
 
-        if dict_type_info.dict_type != page_object.dict_type:
-            dict_data_result = [CamelCaseUtil.transform_result(row) for row in dict_data_list if row]
-            await redis.set(
-                f'{RedisInitKeyConfig.SYS_DICT.key}:{page_object.dict_type}',
-                json.dumps(dict_data_result, ensure_ascii=False, default=str),
-            )
+        cache_keys = [
+            f'{RedisInitKeyConfig.SYS_DICT.key}:{dict_type}'
+            for dict_type in dict.fromkeys((dict_type_info.dict_type, page_object.dict_type))
+        ]
+        await redis.delete(*cache_keys)
         return CrudResponseModel(is_success=True, message='更新成功')
 
     @transactional()
@@ -212,7 +204,11 @@ class DictTypeService:
         if dict_type:
             result = DictTypeModel(**CamelCaseUtil.transform_result(dict_type))
         else:
-            result = DictTypeModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='字典类型不存在',
+                error_code=ErrorCode.DICT_NOT_FOUND,
+                developer_message=f'dict_id={dict_id} not found',
+            )
 
         return result
 

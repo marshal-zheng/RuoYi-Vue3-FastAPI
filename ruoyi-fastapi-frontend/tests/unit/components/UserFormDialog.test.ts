@@ -561,7 +561,7 @@ describe('UserFormDialog', () => {
     expect(dialog.props('modelValue')).toBe(true);
     expect(dialog.props('loading')).toBe(false);
     expect(dialog.props('okDisabled')).toBe(true);
-    expect(feedback.error).toHaveBeenCalledExactlyOnceWith(error.message);
+    expect(feedback.error).not.toHaveBeenCalled();
     const retry = wrapper.findAll('button').find((button) => button.text() === '重试');
     expect(retry).toBeDefined();
     await retry!.trigger('click');

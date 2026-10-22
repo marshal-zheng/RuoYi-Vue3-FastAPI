@@ -227,7 +227,10 @@ class TestRequestIdTracking:
     @pytest.mark.asyncio
     async def test_request_id_consistency(self, async_client: AsyncClient):
         """测试同一请求的 requestId 一致性"""
-        response = await async_client.get("/system/user/list")  # 未认证
+        response = await async_client.get(
+            "/system/user/list", headers={"Authorization": "Bearer invalid-token"}
+        )
+        assert response.status_code == 401
         
         data = response.json()
         request_id_body = data["requestId"]
@@ -235,6 +238,7 @@ class TestRequestIdTracking:
         
         # 响应体和响应头的 requestId 应该一致
         assert request_id_body == request_id_header
+        assert response.headers.get_list("X-Request-Id") == [request_id_body]
     
     @pytest.mark.asyncio
     async def test_different_requests_have_different_request_ids(self, async_client: AsyncClient):
@@ -242,8 +246,8 @@ class TestRequestIdTracking:
         response1 = await async_client.get("/system/user/list")
         response2 = await async_client.get("/system/role/list")
         
-        request_id1 = response1.json()["requestId"]
-        request_id2 = response2.json()["requestId"]
+        request_id1 = response1.headers["X-Request-Id"]
+        request_id2 = response2.headers["X-Request-Id"]
         
         # 不同请求应该有不同的 requestId
         assert request_id1 != request_id2

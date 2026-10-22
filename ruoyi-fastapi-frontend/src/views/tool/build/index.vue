@@ -58,7 +58,7 @@
     </div>
     <div class="center-board">
       <div class="action-bar">
-        <el-button icon="Download" type="primary" text @click="download">
+        <el-button icon="Download" text @click="download">
           导出vue文件
         </el-button>
         <el-button class="copy-btn-main" icon="DocumentCopy" type="primary" text @click="copy">

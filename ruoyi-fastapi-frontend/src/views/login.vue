@@ -243,14 +243,18 @@ const { run: handleLogin, pending: loading } = useOperation(async () => {
 });
 
 function getCode() {
-  getCodeImg().then((res) => {
-    captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
-    if (captchaEnabled.value) {
-      const imgData = res.img || '';
-      codeUrl.value = imgData.startsWith('data:') ? imgData : `data:image/gif;base64,${imgData}`;
-      loginForm.value.uuid = res.uuid;
-    }
-  });
+  return getCodeImg()
+    .then((res) => {
+      captchaEnabled.value = res.captchaEnabled === undefined ? true : res.captchaEnabled;
+      if (captchaEnabled.value) {
+        const imgData = res.img || '';
+        codeUrl.value = imgData.startsWith('data:') ? imgData : `data:image/gif;base64,${imgData}`;
+        loginForm.value.uuid = res.uuid;
+      }
+    })
+    .catch(() => {
+      // HTTP owns the failure message; the captcha remains clickable for retry.
+    });
 }
 
 function getCookie() {

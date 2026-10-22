@@ -27,7 +27,6 @@
               >新增</ZxButton
             >
             <ZxButton
-              type="success"
               icon="Edit"
               :disabled="single"
               @click="handleUpdate"
@@ -35,6 +34,7 @@
               >修改</ZxButton
             >
             <ZxButton
+              plain
               type="danger"
               icon="Delete"
               :disabled="multiple"
@@ -43,14 +43,10 @@
               :loading="handleDeletePending"
               >删除</ZxButton
             >
-            <ZxButton
-              type="warning"
-              icon="Download"
-              @click="handleExport"
-              v-hasPermi="['system:dict:export']"
+            <ZxButton icon="Download" @click="handleExport" v-hasPermi="['system:dict:export']"
               >导出</ZxButton
             >
-            <ZxButton type="warning" icon="Close" @click="handleClose">关闭</ZxButton>
+            <ZxButton icon="Close" @click="handleClose">关闭</ZxButton>
           </template>
           <template #filters>
             <DictTypeSelect
@@ -129,17 +125,20 @@
             label="操作"
             align="center"
             width="160"
+            fixed="right"
             class-name="small-padding fixed-width"
           >
             <template #default="scope">
               <ZxButton
-                type="text"
+                link
+                type="primary"
                 @click="handleUpdate(scope.row)"
                 v-hasPermi="['system:dict:edit']"
                 >修改</ZxButton
               >
               <ZxButton
-                type="text"
+                type="danger"
+                link
                 @click="handleDelete(scope.row)"
                 v-hasPermi="['system:dict:remove']"
                 :loading="handleDeletePending"
@@ -313,15 +312,19 @@ const { loadData: loadDictData, status: listStatus } = useDictManagementList(
 );
 
 // Type changes (including rename invalidation) drive this request-mode list's filter once.
-watch(defaultDictType, (type) => {
-  if (!type) return;
-  initialState.value = {
-    ...initialState.value,
-    query: { ...initialState.value.query, dictType: type },
-  };
-  gridListRef.value?.updateState('query.dictType', type);
-  refreshList();
-});
+watch(
+  defaultDictType,
+  (type) => {
+    if (!type) return;
+    initialState.value = {
+      ...initialState.value,
+      query: { ...initialState.value.query, dictType: type },
+    };
+    gridListRef.value?.updateState('query.dictType', type);
+    refreshList();
+  },
+  { immediate: true }
+);
 
 /** 取消按钮 */
 function cancel() {
@@ -398,7 +401,10 @@ function openEditor(id) {
       dataDialog.setDisabled(false);
       return;
     }
-    const detail = await getData(id, { signal: read.signal, silentError: true });
+    const detail = await getData(id, {
+      signal: read.signal,
+      silentError: true,
+    });
     if (!read.isCurrent()) return;
     form.value = detail;
     dataDialog.setDisabled(false);

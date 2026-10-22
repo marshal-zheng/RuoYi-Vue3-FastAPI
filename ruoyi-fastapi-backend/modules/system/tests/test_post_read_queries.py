@@ -1,7 +1,12 @@
 from __future__ import annotations
 
-import pytest
+from io import BytesIO
+from unittest.mock import AsyncMock
 
+import pytest
+from openpyxl import load_workbook
+
+from module_admin.entity.do.post_do import PostDO
 from module_admin.entity.vo.post_vo import PostPageQueryModel
 from modules.system.api.dependencies import provide_system_mediator
 from modules.system.application.handlers.query.post_query_handlers import (
@@ -14,6 +19,7 @@ from modules.system.application.read_models import (
     PostItemReadModel,
     PostPageReadModel,
 )
+from modules.system.application.services.post_service import PostService
 from utils.page_util import PageResponseModel
 
 
@@ -99,3 +105,22 @@ async def test_system_mediator_dispatches_post_read_queries() -> None:
     assert isinstance(list_result, PostPageReadModel)
     assert isinstance(detail_result, PostDetailReadModel)
     assert list_result.items[0].post_code == 'dev'
+
+
+@pytest.mark.asyncio
+async def test_nonpaged_orm_posts_preserve_export_fields():
+    post = PostDO(post_id=7, post_code='qa-code', post_name='QA岗位', post_sort=9, status='0')
+    service = PostService(post_repo=AsyncMock(), query_db=None)
+    service.post_repo.find_all_with_filters.return_value = [post]
+    result = await GetPostListQueryHandler(service).handle(
+        GetPostListQuery(query=PostPageQueryModel(postName='QA岗位'), is_page=False)
+    )
+    assert result.items[0].post_id == 7
+    content = await service.export_post_list_services([row.model_dump(by_alias=True) for row in result.items])
+    rows = list(load_workbook(BytesIO(content), read_only=True).active.values)
+    data = dict(zip(rows[0], rows[1], strict=True))
+    assert data['岗位编号'] == 7
+    assert data['岗位编码'] == 'qa-code'
+    assert data['岗位名称'] == 'QA岗位'
+    assert data['显示顺序'] == 9
+    assert data['状态'] == '正常'

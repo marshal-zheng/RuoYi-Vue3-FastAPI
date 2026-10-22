@@ -102,7 +102,8 @@ export default defineConfig(({ mode, command }: ConfigEnv): UserConfig => {
         // https://cn.vitejs.dev/config/#server-proxy
         [apiPrefix]: {
           target: baseUrl,
-          changeOrigin: true,
+          // Keep browser Origin/Host for CSRF and WebSocket ticket binding.
+          changeOrigin: false,
           ws: true, // 支持 WebSocket 代理
           // 将统一的 API 前缀重写为空，由后端直接处理真实路由
           rewrite: (p) => p.replace(new RegExp(`^${escapeRegExp(apiPrefix)}`), '') || '/',

@@ -74,6 +74,10 @@ class InMemoryRedisClient:
         all_keys = set(self._values.keys()) | set(self._lists.keys())
         return sorted(key for key in all_keys if fnmatch.fnmatch(key, pattern))
 
+    async def scan_iter(self, *, match: str = '*'):
+        for key in await self.keys(match):
+            yield key
+
     async def info(self, section: str | None = None) -> dict[str, Any]:
         self._purge_all_expired()
         payload = {'section': section or 'default', 'keys': len(self._values) + len(self._lists)}

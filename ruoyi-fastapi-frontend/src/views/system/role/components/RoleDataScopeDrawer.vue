@@ -127,7 +127,7 @@ const drawer = useDrawer({
       roleId: drawer.state.data.roleId,
       dataScope: drawer.state.data.dataScope,
       deptCheckStrictly: drawer.state.data.deptCheckStrictly,
-      deptIds: getDeptAllCheckedKeys(),
+      deptIds: deptRef.value?.getCheckedKeys() || [],
     };
     await roleCommands.updateDataScope(captureRoleCommand(submitData, scope));
     if (scope !== queryScope.value || drawer.state.data !== data || !drawer.state.visible)
@@ -157,13 +157,6 @@ watch(
   },
   { flush: 'sync' }
 );
-
-/** 获取所有选中的部门节点 */
-function getDeptAllCheckedKeys() {
-  const checkedKeys = deptRef.value?.getCheckedKeys() || [];
-  const halfCheckedKeys = deptRef.value?.getHalfCheckedKeys() || [];
-  return [...halfCheckedKeys, ...checkedKeys];
-}
 
 /** 选择角色权限范围触发 */
 function dataScopeSelectChange(value) {
