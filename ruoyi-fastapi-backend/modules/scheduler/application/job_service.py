@@ -1,20 +1,30 @@
+from contextlib import AsyncExitStack
+from asyncio import Lock
+from weakref import WeakValueDictionary
 from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm.attributes import flag_modified
 from typing import List
-from config.constant import CommonConstant, JobConstant
+from config.constant import CommonConstant
 from config.get_scheduler import SchedulerUtil
 from exceptions.exception import ValidationException, ResourceNotFoundException
 from config.error_codes import ErrorCode
 from module_admin.entity.do.enums import JobStatusEnum, MisfirePolicyEnum
 from module_admin.entity.do.job_do import JobDO
 from module_admin.entity.vo.common_vo import CrudResponseModel
-from module_admin.entity.vo.job_vo import DeleteJobModel, EditJobModel, JobModel, JobPageQueryModel
+from module_admin.entity.vo.job_vo import DeleteJobModel, JobModel, JobPageQueryModel
 from utils.common_util import CamelCaseUtil
-from utils.cron_util import CronUtil
 from utils.excel_util import ExcelUtil
-from utils.string_util import StringUtil
 from utils.transaction_manager import transactional
 from ports import IDictDataService, IJobRepository
+
+
+_JOB_OPERATION_LOCKS: WeakValueDictionary[int, Lock] = WeakValueDictionary()
+
+
+def _job_operation_lock(job_id: int) -> Lock:
+    # Locks live only while operations hold/wait for them; scheduling is local to this process.
+    return _JOB_OPERATION_LOCKS.setdefault(job_id, Lock())
 
 
 class JobService:
@@ -75,153 +85,156 @@ class JobService:
             return CommonConstant.NOT_UNIQUE
         return CommonConstant.UNIQUE
 
-    @transactional()
+    async def _save_job(self, page_object: JobModel, *, creating: bool = False, status_only: bool = False):
+        """Own this job write unit so DB commit errors can restore the previous schedule."""
+        fields = {
+            'job_name',
+            'job_group',
+            'job_executor',
+            'invoke_target',
+            'job_args',
+            'job_kwargs',
+            'cron_expression',
+            'misfire_policy',
+            'concurrent',
+            'status',
+            'remark',
+            'update_by',
+            'update_time',
+        }
+        changes = page_object.model_dump(include=fields, exclude_unset=True)
+        previous_record = None
+        if creating:
+            row = JobDO(**changes, **page_object.model_dump(include={'create_by', 'create_time'}, exclude_unset=True))
+            effective = JobModel(
+                **{
+                    'job_group': 'default',
+                    'job_executor': 'default',
+                    'misfire_policy': '3',
+                    'concurrent': '1',
+                    'status': '0',
+                    **changes,
+                }
+            )
+        else:
+            row = await self.job_repo.find_for_update(page_object.job_id)
+            if row is None:
+                raise ResourceNotFoundException(user_message='定时任务不存在', error_code=ErrorCode.RESOURCE_NOT_FOUND)
+            effective = JobModel(**CamelCaseUtil.transform_result(row))
+            previous_record = effective.model_dump()
+            effective = effective.model_copy(update=changes)
+        if not status_only or effective.status == JobStatusEnum.NORMAL.value:
+            SchedulerUtil.validate_job(effective)
+        if not status_only and not await self.check_job_unique_services(effective):
+            raise ValidationException(error_code=ErrorCode.RESOURCE_CONFLICT, user_message='定时任务已存在')
+
+        job_id = await self._commit_job_change(row, effective, changes, previous_record)
+        return CrudResponseModel(
+            is_success=True, message='新增成功' if creating else '更新成功', result={'jobId': job_id}
+        )
+
+    async def _restore_job_record(self, job_id, previous_record):
+        if previous_record is None:
+            await self.job_repo.delete_by_id(job_id)
+        else:
+            stored = await self.job_repo.find_by_id(job_id)
+            for key, value in previous_record.items():
+                setattr(stored, key, value)
+            # Restore the original audit timestamp even when DB precision made it compare equal.
+            flag_modified(stored, 'update_time')
+            await self.job_repo.update(stored)
+        await self.query_db.commit()
+
+    async def _commit_job_change(self, row, effective, changes, previous_record):
+        creating = previous_record is None
+        previous = None if creating else SchedulerUtil.snapshot_scheduler_job(row.job_id)
+        schedule_touched = False
+        completed = False
+        db_committed = False
+        job_id = row.job_id
+        async with AsyncExitStack() as creation_lock:
+            try:
+                if creating:
+                    row = await self.job_repo.add(row)
+                    await creation_lock.enter_async_context(_job_operation_lock(row.job_id))
+                else:
+                    for key, value in changes.items():
+                        setattr(row, key, value)
+                    await self.job_repo.update(row)
+                job_id = row.job_id
+                effective.job_id = job_id
+                # New configuration must never become executable before its database commit succeeds.
+                if isinstance(self.query_db, AsyncSession):
+                    await self.query_db.commit()
+                    db_committed = True
+                schedule_touched = True
+                if effective.status == JobStatusEnum.NORMAL.value:
+                    SchedulerUtil.add_scheduler_job(effective)
+                else:
+                    SchedulerUtil.remove_scheduler_job(job_id)
+                completed = True
+            finally:
+                if not completed:
+                    # Restore synchronously before another await can let a failed candidate execute.
+                    try:
+                        if schedule_touched:
+                            SchedulerUtil.restore_scheduler_job(job_id, previous)
+                    finally:
+                        if isinstance(self.query_db, AsyncSession):
+                            await self.query_db.rollback()
+                            if db_committed:
+                                await self._restore_job_record(job_id, previous_record)
+        return job_id
+
     async def add_job_services(self, page_object: JobModel):
-        """
-        新增定时任务信息service
+        return await self._save_job(page_object, creating=True)
 
-        :param page_object: 新增定时任务对象
-        :return: 新增定时任务校验结果
-        """
-        if not CronUtil.validate_cron_expression(page_object.cron_expression):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='cron_expression',
-                user_message=f'新增定时任务{page_object.job_name}失败，Cron表达式不正确',
-            )
-        elif StringUtil.contains_ignore_case(page_object.invoke_target, CommonConstant.LOOKUP_RMI):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='invoke_target',
-                user_message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许rmi调用',
-            )
-        elif StringUtil.contains_any_ignore_case(
-            page_object.invoke_target, [CommonConstant.LOOKUP_LDAP, CommonConstant.LOOKUP_LDAPS]
-        ):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='invoke_target',
-                user_message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许ldap(s)调用',
-            )
-        elif StringUtil.contains_any_ignore_case(
-            page_object.invoke_target, [CommonConstant.HTTP, CommonConstant.HTTPS]
-        ):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='invoke_target',
-                user_message=f'新增定时任务{page_object.job_name}失败，目标字符串不允许http(s)调用',
-            )
-        elif StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_ERROR_LIST):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='invoke_target',
-                user_message=f'新增定时任务{page_object.job_name}失败，目标字符串存在违规',
-            )
-        elif not StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_WHITE_LIST):
-            raise ValidationException(
-                error_code=ErrorCode.INVALID_INPUT,
-                field='invoke_target',
-                user_message=f'新增定时任务{page_object.job_name}失败，目标字符串不在白名单内',
-            )
-        elif not await self.check_job_unique_services(page_object):
-            raise ValidationException(
-                error_code=ErrorCode.RESOURCE_CONFLICT,
-                user_message=f'新增定时任务{page_object.job_name}失败，定时任务已存在',
-            )
+    async def edit_job_services(self, page_object: JobModel):
+        async with _job_operation_lock(page_object.job_id):
+            return await self._save_job(page_object)
 
-        db_job = JobDO(**page_object.model_dump())
-        add_job = await self.job_repo.add(db_job)
-        job_info = await self.job_detail_services(add_job.job_id)
-        if job_info.status == JobStatusEnum.NORMAL.value:
-            SchedulerUtil.add_scheduler_job(job_info=job_info)
-        return CrudResponseModel(is_success=True, message='新增成功', result={'jobId': add_job.job_id})
-
-    @transactional()
-    async def edit_job_services(self, page_object: EditJobModel):
-        """
-        编辑定时任务信息service
-
-        :param page_object: 编辑定时任务对象
-        :return: 编辑定时任务校验结果
-        """
-        edit_job = page_object.model_dump(exclude_unset=True)
-        if page_object.type == 'status':
-            del edit_job['type']
-        job_info = await self.job_detail_services(page_object.job_id)
-        if job_info:
-            if page_object.type != 'status':
-                if not CronUtil.validate_cron_expression(page_object.cron_expression):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='cron_expression',
-                        user_message=f'修改定时任务{page_object.job_name}失败，Cron表达式不正确',
+    async def change_job_status_services(self, page_object: JobModel):
+        async with _job_operation_lock(page_object.job_id):
+            # The status operation cannot mutate configuration, even for internal callers.
+            return await self._save_job(
+                JobModel(
+                    **page_object.model_dump(
+                        include={'job_id', 'status', 'update_by', 'update_time'},
+                        exclude_unset=True,
                     )
-                elif StringUtil.contains_ignore_case(page_object.invoke_target, CommonConstant.LOOKUP_RMI):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='invoke_target',
-                        user_message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许rmi调用',
-                    )
-                elif StringUtil.contains_any_ignore_case(
-                    page_object.invoke_target, [CommonConstant.LOOKUP_LDAP, CommonConstant.LOOKUP_LDAPS]
-                ):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='invoke_target',
-                        user_message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许ldap(s)调用',
-                    )
-                elif StringUtil.contains_any_ignore_case(
-                    page_object.invoke_target, [CommonConstant.HTTP, CommonConstant.HTTPS]
-                ):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='invoke_target',
-                        user_message=f'修改定时任务{page_object.job_name}失败，目标字符串不允许http(s)调用',
-                    )
-                elif StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_ERROR_LIST):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='invoke_target',
-                        user_message=f'修改定时任务{page_object.job_name}失败，目标字符串存在违规',
-                    )
-                elif not StringUtil.startswith_any_case(page_object.invoke_target, JobConstant.JOB_WHITE_LIST):
-                    raise ValidationException(
-                        error_code=ErrorCode.INVALID_INPUT,
-                        field='invoke_target',
-                        user_message=f'修改定时任务{page_object.job_name}失败，目标字符串不在白名单内',
-                    )
-                elif not await self.check_job_unique_services(page_object):
-                    raise ValidationException(
-                        error_code=ErrorCode.RESOURCE_CONFLICT,
-                        user_message=f'修改定时任务{page_object.job_name}失败，定时任务已存在',
-                    )
-
-        db_job = await self.job_repo.find_by_id(page_object.job_id)
-        if db_job:
-            for key, value in edit_job.items():
-                if hasattr(db_job, key):
-                    setattr(db_job, key, value)
-            await self.job_repo.update(db_job)
-        SchedulerUtil.remove_scheduler_job(job_id=edit_job.get('job_id'))
-        if edit_job.get('status') == JobStatusEnum.NORMAL.value:
-            job_info = await self.job_detail_services(edit_job.get('job_id'))
-            SchedulerUtil.add_scheduler_job(job_info=job_info)
-        return CrudResponseModel(is_success=True, message='更新成功', result={'jobId': page_object.job_id})
+                ),
+                status_only=True,
+            )
 
     async def execute_job_once_services(self, page_object: JobModel):
-        """
-        执行一次定时任务service
+        async with _job_operation_lock(page_object.job_id):
+            row = await self.job_repo.find_for_update(page_object.job_id)
+            if row is None:
+                raise ResourceNotFoundException(user_message='定时任务不存在', error_code=ErrorCode.RESOURCE_NOT_FOUND)
+            job_info = JobModel(**CamelCaseUtil.transform_result(row))
+            SchedulerUtil.validate_job(job_info)
+            if isinstance(self.query_db, AsyncSession):
+                await self.query_db.commit()
+            return self._execute_job_once(job_info)
 
-        :param page_object: 定时任务对象
-        :return: 执行一次定时任务结果
-        """
-        SchedulerUtil.remove_scheduler_job(job_id=page_object.job_id)
-        job_info = await self.job_detail_services(page_object.job_id)
-        if job_info:
-            SchedulerUtil.execute_scheduler_job_once(job_info=job_info)
-            return CrudResponseModel(is_success=True, message='执行成功')
-        else:
-            raise ResourceNotFoundException(error_code=ErrorCode.RESOURCE_NOT_FOUND, user_message='定时任务不存在')
+    def _execute_job_once(self, job_info: JobModel):
+        SchedulerUtil.validate_job(job_info)
+        previous = SchedulerUtil.snapshot_scheduler_job(job_info.job_id)
+        applied = False
+        try:
+            SchedulerUtil.execute_scheduler_job_once(job_info)
+            applied = True
+        finally:
+            if not applied:
+                SchedulerUtil.restore_scheduler_job(job_info.job_id, previous)
+        return CrudResponseModel(
+            is_success=True,
+            message='执行成功',
+            result={
+                'jobId': job_info.job_id,
+                'jobGroup': job_info.job_group,
+            },
+        )
 
     @transactional()
     async def delete_job_services(self, page_object: DeleteJobModel):
@@ -238,8 +251,9 @@ class JobService:
 
         job_id_list = page_object.job_ids.split(',')
         for job_id in job_id_list:
-            await self.job_repo.delete_by_id(int(job_id))
-            SchedulerUtil.remove_scheduler_job(job_id=job_id)
+            async with _job_operation_lock(int(job_id)):
+                await self.job_repo.delete_by_id(int(job_id))
+                SchedulerUtil.remove_scheduler_job(job_id=job_id)
         return CrudResponseModel(is_success=True, message='删除成功')
 
     async def job_detail_services(self, job_id: int):
@@ -253,7 +267,11 @@ class JobService:
         if job:
             result = JobModel(**CamelCaseUtil.transform_result(job))
         else:
-            result = JobModel(**dict())
+            raise ResourceNotFoundException(
+                user_message='定时任务不存在',
+                error_code=ErrorCode.RESOURCE_NOT_FOUND,
+                developer_message=f'job_id={job_id} not found',
+            )
 
         return result
 
