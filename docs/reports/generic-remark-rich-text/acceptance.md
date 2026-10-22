@@ -1,6 +1,6 @@
 # 验收追溯与交付边界
 
-状态：实现与自动验证收敛中；真实 UI 尚未验收，不能声明 23 项实施或整个 spec 已完成。所有修改保留在项目本地隔离 worktree，未交付源分支、未发布 npm、未执行日常/生产迁移。
+状态：代码与最终候选自动验证已收敛；真实 UI 尚未验收，不能声明 23 项或整个 spec 已完成。用户已授权交付源分支后自行手测；本表不将该授权当作 UI 通过。源分支事务与自动验证另见 source-delivery.md；未发布 npm、未执行日常/生产迁移。
 
 证据层级：静态=调用/契约核对；DOM=真实组件内存运行；HTTP=真实 ASGI/DI/repository 与隔离 SQLite；MySQL=本机 Docker 中一次性数据库；UI=真实用户界面交互。前四种均不能代替最后一种。
 
@@ -12,12 +12,12 @@
 | R1.AC2 | consumer-matrix.md；七表 DO/DTO、七入口、生成器显式策略 | 消费者静态矩阵；HTTP 7 项；范围外 Editor regression；界面另验；按所列层级验证；不推定界面或部署完成 |
 | R1.AC3 | consumer-matrix.md；七表 DO/DTO、七入口、生成器显式策略 | 消费者静态矩阵；HTTP 7 项；范围外 Editor regression；界面另验；按所列层级验证；不推定界面或部署完成 |
 | R1.AC4 | consumer-matrix.md；七表 DO/DTO、七入口、生成器显式策略 | 消费者静态矩阵；HTTP 7 项；范围外 Editor regression；界面另验；自动化部分有证据；真实 UI 待验 |
-| R2.AC1 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
-| R2.AC2 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
-| R2.AC3 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
-| R2.AC4 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
-| R2.AC5 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
-| R2.AC6 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 8 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC1 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC2 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC3 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC4 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC5 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
+| R2.AC6 | ZXUI text-editor/src/text-editor-field.vue、editor/basic-rich-text-extension.ts | 共享 102 vectors；Field 16 real-runtime DOM tests；真实 UI 待验；自动化部分有证据；真实 UI 待验 |
 | R3.AC1 | 公开 root/core/style、vite/zxui-theme-packages.ts、ZXUI source.ts | library-package-verification.md；源码生产构建；实际候选包门禁；按所列层级验证；不推定界面或部署完成 |
 | R3.AC2 | 公开 root/core/style、vite/zxui-theme-packages.ts、ZXUI source.ts | library-package-verification.md；源码生产构建；实际候选包门禁；按所列层级验证；不推定界面或部署完成 |
 | R3.AC3 | 公开 root/core/style、vite/zxui-theme-packages.ts、ZXUI source.ts | library-package-verification.md；源码生产构建；实际候选包门禁；按所列层级验证；不推定界面或部署完成 |

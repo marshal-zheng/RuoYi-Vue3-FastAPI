@@ -1,8 +1,8 @@
 {
   "feature": "generic-remark-rich-text",
   "autonomy": "auto-spec",
-  "phase": "implementation_validation",
-  "updated_at": "2026-10-22T10:27:27.022984+00:00",
+  "phase": "source_code_handoff_pending_manual_ui",
+  "updated_at": "2026-10-22T12:59:25.600230+00:00",
   "gates": [
     {
       "gate": "requirements",
@@ -39,6 +39,12 @@
       "decision": "user-approved",
       "evidence": "用户：那你新开窗口线程完成这个spec吧；授权新线程连续完成23项实现任务及所需验证/独立审查，不重复逐任务确认。",
       "at": "2026-10-22T08:41:12Z"
+    },
+    {
+      "gate": "source-code-delivery",
+      "decision": "user-approved",
+      "evidence": "用户：你完成任务告诉我 交付到源分支我自己测；保留UI待验状态，不将此指令伪记验收通过。",
+      "at": "2026-10-22T12:59:25.600230+00:00"
     }
   ],
   "clarify": {
@@ -127,7 +133,7 @@
     "subagent_authorization": "用户常驻指令：任何时候都授权子代理工具使用权限；当前显式启用 ssd-workflow，其 clarify 和 design evaluator 要求只读委派。",
     "subagent_configuration": "按用户常驻指令继承主代理模型和推理强度。",
     "preexisting_dirty_paths": 454,
-    "write_scope": "隔离App worktree、ZXUI宿主worktree及text-editor独立worktree；无源工作区交付/发布/生产迁移",
+    "write_scope": "已获用户授权安全交付App/ZXUI host/editor源分支；不执行computer use、npm发布或日常/生产迁移",
     "clarify_evidence": "read-only-subagent；docs/specs/generic-remark-rich-text/requirements.md；OUTSTANDING_HIGH_IMPACT_AMBIGUITY: none；主代理已接受。",
     "execution_handoff": "新建项目内本地 Codex 线程，thinking=xhigh；应用默认模型；由执行线程按项目约定准备项目本地隔离工作区，保留当前未提交基线和未跟踪规格。"
   },
@@ -140,7 +146,7 @@
     "missing_refs": 0,
     "dependency_order": "pass",
     "implementation_started": true,
-    "implementation_status": "implementation_validation;UIunverified"
+    "implementation_status": "automated-code-validation;manual-ui-user-owned;fullspec-not-complete"
   },
   "execution_context": "/Users/hqz/dev/RuoYi-Vue3-FastAPI/.git/worktrees/generic-remark-rich-text/codex-execution-context.json"
 }

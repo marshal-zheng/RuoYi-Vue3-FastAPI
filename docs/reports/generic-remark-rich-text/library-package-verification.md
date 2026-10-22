@@ -1,40 +1,33 @@
 # 编辑器库与候选包验证
 
-日期：2026-10-22。库修改保留在 ZXUI 项目本地 worktree 及其 text-editor 独立 Git 工作区；应用引用本地 tarball，没有发布 npm。真实主题、键盘焦点和七入口浏览器交互尚未验收。
+日期：2026-10-22。本轮交付本地候选及源代码，没有发布 npm。真实七入口、主题、density、浮层焦点和键盘操作由用户手测。
 
-## 候选交付物
+## 最终交付组合
 
-| 包 | 实际安装版本 | 应用 vendor 文件 SHA-256 |
+| 包 | 版本 | vendor SHA-256 |
 | --- | --- | --- |
-| @zxio/text-editor | 1.0.0-remark-a.20261022.4 | `ff7e867b12426ccf25d893dd7484fe034e54892e7f89768b15f45e8eec57d624` |
+| @zxio/text-editor | 1.0.0-remark-a.20261022.9 | `8fa94fd6c39140c5d011581bb0b870f3aea7c82bf6d74aa4f8f616565d0ab26a` |
 | @zxio/schema-form | 0.1.0-remark-a.20261022.1 | `1fadc9526ab14583a82172a88216fc126a1cf731b0479ca386be6c29c7545be2` |
+| @zxio/zxui | 3.0.0-next.0-remark-raw.20261022.1 | `9a8b2540581fdee21da846ab71e4086d97c4d17a20bb6d17495ff7b7f22fc555` |
 
-两包均以 `file:./vendor/...` 进入应用 package.json/yarn.lock。`YARN_ENABLE_SCRIPTS=false yarn install` 退出 0，随后直接读取 node_modules 包清单确认版本。旧的本轮候选与未采用的 theme-compiler 候选已移除，摘要保留在 superseded-candidates.json；既有供应包未清理。部署侧 theme-compiler 继续匹配现有主题资产；源码模式仅为 source plugin 使用 host 源码编译器，没有升级部署主题协议。
+通过 file:vendor 及 yarn.lock 安装。ZXUI组合候选保留源图标基线和源已有InputNumber raw API，来源与窄范围输入见candidate-provenance.json。应用其余依赖、resolutions和icons:check保留源当前版本。部署theme-compiler和主题资产保持原配套协议；源码plugin使用所属源码编译器。旧本轮候选隔离或移除，摘要见superseded-candidates.json，未清理既有供应包。
 
-## 库实现与回归
+## 库与字段验证
 
-公开 root/core 提供 A profile、固定预算、Document/href 接纳函数；公开 root/ui 提供 ZxTextEditorField，样式通过公开 style 消费。原完整编辑器保留自身职责，A profile 拒绝附件、非 A 节点、HTML/Markdown/raw JSON 程序化入口等越界内容。字段值为 Document/null，父表单拥有唯一正文；captureEdit/restoreEdit 只保存链接草稿与选区。composition 隐藏前先发布稳定文档，未完成链接/输入法状态参与提交阻断。
+公开root/core提供A profile、预算、Document/href接纳；root/ui提供ZxTextEditorField，公开style交付样式。父表单拥有唯一正文，capture/restore只保存交互草稿和选区；未完成输入法或链接阻止提交。已有完整编辑器保留其职责。
 
-专项复现并修复了实际 ProseMirror clipboard 路径中的两个问题：默认 HTML parser 会丢失 TAB/边界空格，超字节粘贴的空投影会删除选中内容。当前 parser 使用独立 preserveWhitespace 配置，拒绝粘贴由 handlePaste 消费，选中正文保留。普通文本连续/末尾空行及软换行保留；全局缓存 parser 未被修改。新事务位置超出旧文档时，placeholder 安全返回空值，避免粘贴触发旧位置 resolve 异常。
+最终编辑器5文件158项通过：99契约/profile、16真实runtime、43既有link/full/paste回归。共享102向量为25 valid、73 invalid、4 plaintext；99不是向量总数。覆盖实际clipboard空白与软换行、字节拒绝保留选区、清空撤销、超限typing与hide/show恢复、IME/link draft隔离、disabled和权威回填等。
 
-最新库组 **5 文件、157 tests 通过**：99 项契约/profile、15 项真实 runtime、43 项现有 link/full/paste 回归。共享 manifest 实际为 102 项，其中 25 valid、73 invalid、4 plaintext；99 项库契约测试包含 98 个文档向量和一项 profile 检查，并非 99 个向量。命令在 ZXUI task 根目录运行：
+IME测试显式使用真实Teleport，断言input属于portal且不属于Field根。此前全局teleport stub把portal原地渲染，造成合成组合事件错误进入正文监听；原失败、探针及修正证据保留，未靠改产品键盘逻辑或放宽断言消除。源产品实现完成后去除全部诊断探针。
 
-```sh
-pnpm exec vitest run --config packages/text-editor/vitest.config.mts packages/text-editor/__tests__/basic-rich-text.test.ts packages/text-editor/__tests__/basic-rich-text-runtime.test.ts packages/text-editor/__tests__/text-editor.test.tsx packages/text-editor/__tests__/link-features.test.ts packages/text-editor/__tests__/content-paste-extension.test.ts
-pnpm -C packages/text-editor build
-pnpm -C packages/text-editor pack
-```
+最终默认 `pnpm build` 在ZXUI源码依赖链接下通过，包含vue-tsc、四组Vite、声明与代码块出口边界；随后pack成功。编辑器自身tsconfig按同仓build约定显式preserveSymlinks:false。内部Icon/Button/Dialog使用公开core入口，避免legacy capabilities静态带入完整图标目录。所属Field/LinkPopup/InsertIframe显式ESLint通过；19处导入文件规则计数与输入27项相同、无新增，不声称旧库全量lint清零。
 
-日志：`/tmp/remark-library-release-tests.log`、`/tmp/remark-editor-release-build.log`、`/tmp/remark-editor-release-pack.log`。build 包含 vue-tsc、四组 Vite 构建、声明生成与公开声明/代码块出口边界检查，退出 0。新增所属文件显式 `eslint --no-ignore` 退出 0，日志 `/tmp/remark-library-release-eslint.log`。
+Vue3.5 named template ref会推导整个组件实例树进公开声明。Field、LinkPopup、InsertIframe采用私有callback ref，保持同一内部handle和交互，公开Field声明只保留字段契约。最终strict/noEmit/skipLibCheck:false公开root/core内存消费者探针，无consumer诊断、新Field诊断清零；相对.6候选27→18诊断、无新增。18项在当前原源仓ignored产物中同现，但该旧产物无75fc构建指纹，因此只作为辅助对照，不伪作精确输入基线或全库声明零错。详细JSON由独立审查报告保存。
 
-SchemaForm 的 port 幂等退休与 mounted 后恢复修复见 frontend-generator-verification.md；125 项库测试、typecheck、build 与所属文件 ESLint 通过。
+最终流水：`/tmp/remark-editor9-release.json`、`/tmp/remark-editor9-tests.log`、`/tmp/remark-editor9-source-build.log`、`/tmp/remark-editor9-owned-eslint-final.json`。首次误打包的失败.6 SHA `50976d54c5bc020e9f6e09b591df294fa23280d30775999c2a815ad8d5eda98a`已隔离，不会安装；中间声明有缺陷的.7/.8同样不交付。
 
-## 源码与安装包一致性
+SchemaForm port幂等退场、mounted恢复与单一正文责任的125项、typecheck/build/所属ESLint通过，见frontend-generator-verification.md。
 
-同一 `RemarkPackageRoundtrip.test.ts` 对全部 25 个合法文档执行公开 core 接纳、JSON 保存、公开 Field 挂载/读回、销毁后重挂、安全 HTML 投影；另有真实 Formily/native 六项探针。源码模式与正常安装包模式各 **31/31 通过**，日志分别为 `/tmp/remark-public-source-draft-roundtrip.log` 与 `/tmp/remark-public-installed-draft-roundtrip.log`。安装模式无源码 alias，未出现源码模式的 Vue ref-owner warning。
+## 实际应用与源码一致性
 
-源码 plugin 的 text-editor 公开出口及内部 #runtime source 映射专项 1/1 通过，日志 `/tmp/remark-source-plugin-focused.log`。完整 source-vite 组有一个已有 charts symlink realpath 失败，不能将专项通过写成完整组通过。源码模式生产构建及最终安装包生产构建由总验收记录汇总。
-
-以上为静态、真实组件 DOM 与构建证据；测试主题 owner/portal port 是明确的替身，不能证明真实明暗主题、density、链接浮层归属或浏览器焦点已验收。
-
-受控字段通过私有 injection context 在首次恢复时允许保留输入所超出的字符/字节/节点预算，结构/版本/meta/URL/深度与原始硬防护保持。Field首次watch立即置blocking，超限仍不可提交；公开TextEditor setDocument/setContent与外部watch仍完整预算。真实Formily超限→hide/show→完整可编辑→submit拒绝→改正可提交回归已先红后绿。最终.4的lint/157tests/build日志分别为 `/tmp/remark-library-draft-eslint.log`、`/tmp/remark-library-draft-tests.log`、`/tmp/remark-editor-draft-build.log`。
+最终9安装包公开测试33项、源码直连31项覆盖全部合法文档往返、真实Formily/native和链接IME；同版本源码与安装包生产构建、类型、lint、manifest图标审计结果见source-delivery.md及final-integration-verification.json。安装模式无源码alias，测试主题owner/portal是明确替身，不能证明真实浏览器主题或焦点已验收。
