@@ -24,6 +24,13 @@ class ProjectModel(CamelModelBase):
     del_flag: Optional[str] = Field(default='0', description='删除标志（0代表存在 2代表删除）')
 
 
+class ProjectCreatedModel(ProjectModel):
+    """新建工程及同时创建的初始版本，供拓扑设计入口使用。"""
+
+    project_id: int = Field(description='工程编号')
+    version_id: int = Field(description='初始版本编号')
+
+
 class ProjectQueryModel(ProjectModel):
     """
     工程管理不分页查询模型
